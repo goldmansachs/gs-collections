@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+  ~ Copyright 2011 Goldman Sachs & Co.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<FindBugsFilter>
+
+    <Match>
+        <Bug pattern="CN_IDIOM_NO_SUPER_CALL" />
+        <Or>
+            <!-- These are probably real bugs -->
+            <Class name="com.gs.collections.impl.list.mutable.AbstractMutableList$SubList" />
+            <Class name="com.gs.collections.impl.map.mutable.MapAdapter" />
+            <Class name="com.gs.collections.impl.map.sorted.mutable.SortedMapAdapter" />
+            <Class name="com.gs.collections.impl.list.mutable.SynchronizedMutableList" />
+            <Class name="com.gs.collections.impl.map.mutable.SynchronizedMutableMap" />
+            <Class name="com.gs.collections.impl.map.sorted.mutable.SynchronizedSortedMap" />
+            <Class name="com.gs.collections.impl.set.mutable.SynchronizedMutableSet" />
+            <Class name="com.gs.collections.impl.map.mutable.UnifiedMap" />
+            <Class name="com.gs.collections.impl.set.mutable.UnifiedSet" />
+            <Class name="com.gs.collections.impl.set.strategy.mutable.UnifiedSetWithHashingStrategy" />
+            <Class name="com.gs.collections.impl.map.strategy.mutable.UnifiedMapWithHashingStrategy" />
+            <Class name="com.gs.collections.impl.map.mutable.UnmodifiableMutableMap" />
+            <Class name="com.gs.collections.impl.map.sorted.mutable.UnmodifiableTreeMap" />
+            <Class name="com.gs.collections.impl.set.mutable.UnmodifiableMutableSet" />
+            <Class name="com.gs.collections.impl.set.sorted.mutable.SynchronizedSortedSet" />
+            <Class name="com.gs.collections.impl.set.sorted.mutable.UnmodifiableSortedSet" />
+        </Or>
+    </Match>
+
+    <Match>
+        <Bug pattern="DM_GC" />
+        <Or>
+            <Class name="com.gs.collections.impl.PerformanceTest" />
+            <Class name="com.gs.collections.impl.ParallelSerialPerformanceTest" />
+        </Or>
+    </Match>
+
+    <Match>
+        <Bug pattern="BC_BAD_CAST_TO_CONCRETE_COLLECTION" />
+        <Or>
+            <Class name="com.gs.collections.impl.list.mutable.FastList" />
+        </Or>
+    </Match>
+
+    <Match>
+        <!--EI2: May expose internal representation by incorporating reference to mutable object (EI_EXPOSE_REP2)-->
+        <!--This code stores a reference to an externally mutable object into the internal representation
+            of the object.  If instances are accessed by untrusted code, and unchecked changes to the
+            mutable object would compromise security or other important properties, you will need to
+            do something different. Storing a copy of the object is better approach in many situations.-->
+        <Bug pattern="EI_EXPOSE_REP2" />
+        <Or>
+            <!-- These are probably real bugs -->
+            <Class name="com.gs.collections.impl.math.SplitDoubleSumCombiner" />
+            <Class name="com.gs.collections.impl.math.SplitIntegerSumCombiner" />
+            <Class name="com.gs.collections.impl.parallel.ArrayProcedureFJTask" />
+        </Or>
+    </Match>
+
+    <Match>
+        <Bug pattern="EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS" />
+        <Or>
+            <Class name="com.gs.collections.impl.bag.immutable.ImmutableHashBag" />
+        </Or>
+    </Match>
+
+    <Match>
+        <!-- This is probably a real bug -->
+        <Bug pattern="MS_PKGPROTECT" />
+        <Or>
+            <Class name="com.gs.collections.impl.block.factory.Predicates" />
+        </Or>
+    </Match>
+
+    <Match>
+        <Or>
+            <Bug pattern="SE_BAD_FIELD_INNER_CLASS" />
+            <!--Se: Non-transient non-serializable instance field in serializable class (SE_BAD_FIELD)-->
+            <!--This Serializable class defines a non-primitive instance field which is neither transient,
+Serializable, or java.lang.Object, and does not appear to implement the Externalizable interface
+or the readObject() and writeObject() methods.
+Objects of this class will not be deserialized correctly if a non-Serializable object
+is stored in this field.        -->
+            <Bug pattern="SE_BAD_FIELD" />
+        </Or>
+    </Match>
+
+    <Match>
+        <Bug pattern="SE_INNER_CLASS" />
+        <Or>
+            <Class name="com.gs.collections.impl.map.mutable.UnifiedMap$KeySet" />
+            <Class name="com.gs.collections.impl.map.mutable.UnifiedMap$EntrySet" />
+            <Class name="com.gs.collections.impl.map.mutable.UnifiedMap$ValuesCollection" />
+            <Class name="com.gs.collections.impl.map.strategy.mutable.UnifiedMapWithHashingStrategy$KeySet" />
+            <Class name="com.gs.collections.impl.map.strategy.mutable.UnifiedMapWithHashingStrategy$EntrySet" />
+            <Class name="com.gs.collections.impl.map.strategy.mutable.UnifiedMapWithHashingStrategy$ValuesCollection" />
+        </Or>
+    </Match>
+
+    <Match>
+        <Bug pattern="SE_NO_SUITABLE_CONSTRUCTOR" />
+        <Or>
+            <Class name="com.gs.collections.impl.multimap.list.ImmutableListMultimapImpl" />
+            <Class name="com.gs.collections.impl.multimap.set.ImmutableSetMultimapImpl" />
+            <Class name="com.gs.collections.impl.multimap.bag.ImmutableBagMultimapImpl" />
+            <Class name="com.gs.collections.impl.multimap.set.sorted.ImmutableSortedSetMultimapImpl" />
+        </Or>
+    </Match>
+
+</FindBugsFilter>

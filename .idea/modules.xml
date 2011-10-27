@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/acceptance-tests/acceptance-tests.iml" filepath="$PROJECT_DIR$/acceptance-tests/acceptance-tests.iml" />
+      <module fileurl="file://$PROJECT_DIR$/collections/collections.iml" filepath="$PROJECT_DIR$/collections/collections.iml" />
+      <module fileurl="file://$PROJECT_DIR$/collections-api/collections-api.iml" filepath="$PROJECT_DIR$/collections-api/collections-api.iml" />
+      <module fileurl="file://$PROJECT_DIR$/collections-parent.iml" filepath="$PROJECT_DIR$/collections-parent.iml" />
+      <module fileurl="file://$PROJECT_DIR$/collections-testutils/collections-testutils.iml" filepath="$PROJECT_DIR$/collections-testutils/collections-testutils.iml" />
+      <module fileurl="file://$PROJECT_DIR$/scala-unit-tests/scala-unit-tests.iml" filepath="$PROJECT_DIR$/scala-unit-tests/scala-unit-tests.iml" />
+      <module fileurl="file://$PROJECT_DIR$/serialization-tests/serialization-tests.iml" filepath="$PROJECT_DIR$/serialization-tests/serialization-tests.iml" />
+      <module fileurl="file://$PROJECT_DIR$/unit-tests/unit-tests.iml" filepath="$PROJECT_DIR$/unit-tests/unit-tests.iml" />
+    </modules>
+  </component>
+</project>
+
