@@ -35,7 +35,6 @@ import com.gs.collections.impl.CollidingInt;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
-import gnu.trove.THashMap;
 import org.junit.Assert;
 import org.junit.Test;
 import org.slf4j.Logger;
@@ -1595,14 +1594,6 @@ public class UnifiedMapTest
         }
     }
 
-    public void perfTestTHashMapGet()
-    {
-        for (int i = 1000000; i > 10; i /= 10)
-        {
-            this.runGetTest(new THashMap<CollidingInt, String>(), "Trove THashMap", i);
-        }
-    }
-
     public void perfTestUnifiedMapCollidingGet()
     {
         this.runCollidingGetTest(new UnifiedMap<CollidingInt, String>(), "Unified Map", 1);
@@ -1615,13 +1606,6 @@ public class UnifiedMapTest
         this.runCollidingGetTest(new HashMap<CollidingInt, String>(), "JDK HashMap", 1);
         this.runCollidingGetTest(new HashMap<CollidingInt, String>(), "JDK HashMap", 2);
         this.runCollidingGetTest(new HashMap<CollidingInt, String>(), "JDK HashMap", 3);
-    }
-
-    public void perfTestTHashMapCollidingGet()
-    {
-        this.runCollidingGetTest(new THashMap<CollidingInt, String>(), "Trove THashMap", 1);
-        this.runCollidingGetTest(new THashMap<CollidingInt, String>(), "Trove THashMap", 2);
-        this.runCollidingGetTest(new THashMap<CollidingInt, String>(), "Trove THashMap", 3);
     }
 
     private void runGetTest(Map<CollidingInt, String> map, String mapName, int size)
