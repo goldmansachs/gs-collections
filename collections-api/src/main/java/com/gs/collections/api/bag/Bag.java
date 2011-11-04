@@ -73,6 +73,7 @@ public interface Bag<T>
      * @return <tt>true</tt> if the specified object is equal to this bag
      * @see Map#equals(Object)
      */
+    @Override
     boolean equals(Object object);
 
     /**
@@ -97,6 +98,7 @@ public interface Bag<T>
      * @see #equals(Object)
      * @see #equals(Object)
      */
+    @Override
     int hashCode();
 
     Bag<T> select(Predicate<? super T> predicate);

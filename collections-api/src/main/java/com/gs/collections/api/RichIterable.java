@@ -827,6 +827,7 @@ public interface RichIterable<T>
      * @return a string representation of this RichIterable
      * @since 1.0
      */
+    @Override
     String toString();
 
     /**
