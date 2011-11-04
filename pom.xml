@@ -366,19 +366,6 @@
                 </configuration>
             </plugin>
 
-            <plugin>
-                <artifactId>maven-pmd-plugin</artifactId>
-                <version>2.5</version>
-                <configuration>
-                    <targetJdk>1.5</targetJdk>
-                    <minimumTokens>50</minimumTokens>
-                    <aggregate>true</aggregate>
-                    <rulesets>
-                        <ruleset>pmd.xml</ruleset>
-                    </rulesets>
-                </configuration>
-            </plugin>
-
         </plugins>
     </reporting>
 
