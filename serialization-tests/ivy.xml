@@ -29,7 +29,7 @@
         <conf name="test" extends="runtime, compile-test" />
     </configurations>
 
-    <dependencies defaultconfmapping="*->default,sources">
+    <dependencies defaultconfmapping="*->default">
 
         <!-- compile -->
         <dependency org="com.goldmansachs"
@@ -49,7 +49,7 @@
             rev="${build.version.full}"
             conf="compile-test"
             changing="true" />
-        <dependency org="junit" name="junit" rev="${junit.version}" conf="compile-test->default" />
+        <dependency org="junit" name="junit" rev="${junit.version}" conf="compile-test" />
 
         <conflict manager="strict" />
 

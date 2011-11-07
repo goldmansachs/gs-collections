@@ -29,7 +29,7 @@
         <conf name="test" extends="runtime, compile-test" />
     </configurations>
 
-    <dependencies defaultconfmapping="*->default,sources">
+    <dependencies defaultconfmapping="*->default">
 
         <!-- compile test -->
         <dependency org="com.goldmansachs"
@@ -48,9 +48,9 @@
             conf="compile-test"
             changing="true" />
 
-        <dependency org="junit" name="junit" rev="${junit.version}" conf="compile-test->default" />
-        <dependency org="org.slf4j" name="slf4j-api" rev="${slf4j.version}" conf="compile-test->default" />
-        <dependency org="org.slf4j" name="slf4j-nop" rev="${slf4j.version}" conf="compile-test->default" />
+        <dependency org="junit" name="junit" rev="${junit.version}" conf="compile-test" />
+        <dependency org="org.slf4j" name="slf4j-api" rev="${slf4j.version}" conf="compile-test" />
+        <dependency org="org.slf4j" name="slf4j-nop" rev="${slf4j.version}" conf="compile-test" />
 
         <conflict manager="strict" />
 

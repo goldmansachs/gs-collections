@@ -40,7 +40,7 @@
         <artifact type="source" ext="jar" extra:classifier="sources" conf="sources" />
     </publications>
 
-    <dependencies defaultconfmapping="*->default,sources">
+    <dependencies defaultconfmapping="*->default">
 
         <!-- compile -->
         <dependency org="net.jcip" name="jcip-annotations" rev="${jcip.version}" conf="compile" />

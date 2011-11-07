@@ -30,7 +30,7 @@
         <conf name="test" extends="runtime, compile-test" />
     </configurations>
 
-    <dependencies defaultconfmapping="*->default,sources">
+    <dependencies defaultconfmapping="*->default">
 
         <!-- build -->
         <dependency org="org.scala-lang" name="scala-compiler" rev="${scala.version}" conf="scala" />
@@ -52,13 +52,13 @@
             conf="compile-test"
             changing="true" />
 
-        <dependency org="junit" name="junit" rev="${junit.version}" conf="compile-test->default" />
+        <dependency org="junit" name="junit" rev="${junit.version}" conf="compile-test" />
         <dependency org="org.scala-lang" name="scala-library" rev="${scala.version}" conf="compile-test->default" />
         <dependency org="net.jcip" name="jcip-annotations" rev="${jcip.version}" conf="compile-test" />
-        <dependency org="org.slf4j" name="slf4j-api" rev="${slf4j.version}" conf="compile-test->default" />
+        <dependency org="org.slf4j" name="slf4j-api" rev="${slf4j.version}" conf="compile-test" />
 
         <!-- runtime -->
-        <dependency org="org.slf4j" name="slf4j-nop" rev="${slf4j.version}" conf="runtime->default" />
+        <dependency org="org.slf4j" name="slf4j-nop" rev="${slf4j.version}" conf="runtime" />
 
         <conflict manager="strict" />
 

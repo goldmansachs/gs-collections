@@ -37,7 +37,7 @@
         <artifact conf="master" />
     </publications>
 
-    <dependencies defaultconfmapping="*->default,sources">
+    <dependencies defaultconfmapping="*->default">
 
         <!-- compile -->
         <dependency org="com.goldmansachs"
@@ -56,14 +56,14 @@
             conf="compile-test"
             changing="true" />
 
-        <dependency org="junit" name="junit" rev="${junit.version}" conf="compile->default" />
+        <dependency org="junit" name="junit" rev="${junit.version}" conf="compile" />
         <dependency org="net.jcip" name="jcip-annotations" rev="${jcip.version}" conf="compile" />
 
         <!-- compile test -->
-        <dependency org="org.slf4j" name="slf4j-api" rev="${slf4j.version}" conf="compile-test->default" />
+        <dependency org="org.slf4j" name="slf4j-api" rev="${slf4j.version}" conf="compile-test" />
 
         <!-- runtime -->
-        <dependency org="org.slf4j" name="slf4j-nop" rev="${slf4j.version}" conf="runtime->default" />
+        <dependency org="org.slf4j" name="slf4j-nop" rev="${slf4j.version}" conf="runtime" />
 
         <conflict manager="strict" />
 
