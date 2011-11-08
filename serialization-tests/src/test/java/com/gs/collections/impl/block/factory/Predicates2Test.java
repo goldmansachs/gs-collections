@@ -20,7 +20,7 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Test;
 
-public class PredicatesLiteTest
+public class Predicates2Test
 {
     @Test
     public void alwaysTrue()

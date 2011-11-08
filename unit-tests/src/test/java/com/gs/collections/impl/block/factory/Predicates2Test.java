@@ -24,7 +24,7 @@ import com.gs.collections.impl.utility.ListIterate;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class PredicatesLiteTest
+public class Predicates2Test
 {
     private static final Predicates2<Object, Object> TRUE = Predicates2.alwaysTrue();
     private static final Predicates2<Object, Object> FALSE = Predicates2.alwaysFalse();
