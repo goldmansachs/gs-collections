@@ -30,7 +30,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <slf4j.version>1.6.3</slf4j.version>
+        <slf4j.version>1.6.4</slf4j.version>
         <clover.version>3.1.0</clover.version>
         <checkstyle.version>2.7</checkstyle.version>
 
