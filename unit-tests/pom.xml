@@ -238,6 +238,12 @@
                             <rules>
                                 <DependencyConvergence />
                                 <requirePluginVersions />
+                                <requireJavaVersion>
+                                    <version>1.7.0</version>
+                                </requireJavaVersion>
+                                <requireMavenVersion>
+                                    <version>3.0.2</version>
+                                </requireMavenVersion>
                             </rules>
                         </configuration>
                         <goals>
