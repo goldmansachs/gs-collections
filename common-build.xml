@@ -277,20 +277,15 @@
         </ivy:makepom>
     </target>
 
-    <target name="-ivy-warning" unless="maven.repository.passwd">
-        <echo level="info" message="Skipping ivy-deploy: maven.repository.passwd not set." />
-    </target>
-
     <target name="ivy-deploy"
-        depends="ivy-make-pom, test, jar, source-jar, -ivy-warning"
-        if="maven.repository.passwd"
+        depends="ivy-make-pom, test, jar, source-jar"
         description="Deploy to the Maven Repository">
 
         <ivy:resolve />
 
         <ivy:publish resolver="deploy"
             pubrevision="${build.version.full}"
-            overwrite="${isDevelopment}"
+            overwrite="true"
             publishivy="false">
             <artifacts pattern="target/[artifact]-${build.version.full}(-[classifier]).[ext]" />
         </ivy:publish>
