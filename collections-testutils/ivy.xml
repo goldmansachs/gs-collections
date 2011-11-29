@@ -37,6 +37,7 @@
 
     <publications xmlns:extra="http://ant.apache.org/ivy/extra">
         <artifact conf="master" />
+        <artifact conf="pom" />
         <artifact type="source" ext="jar" extra:classifier="sources" conf="sources" />
     </publications>
 

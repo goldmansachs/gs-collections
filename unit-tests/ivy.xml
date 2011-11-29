@@ -35,6 +35,7 @@
 
     <publications>
         <artifact conf="master" />
+        <artifact conf="pom" />
     </publications>
 
     <dependencies defaultconfmapping="*->default">
