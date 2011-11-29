@@ -23,5 +23,5 @@
     <property name="testsrc.dir" location="src/test/java" />
 
     <!-- No tests to run in this module -->
-    <target name="test" description="Run the test cases" />
+    <target name="test" depends="install" description="Run the test cases" />
 </project>
