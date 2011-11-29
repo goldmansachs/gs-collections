@@ -36,9 +36,9 @@
     </configurations>
 
     <publications xmlns:extra="http://ant.apache.org/ivy/extra">
-        <artifact conf="master" />
-        <artifact conf="pom" />
-        <artifact type="source" ext="jar" extra:classifier="sources" conf="sources" />
+        <artifact />
+        <artifact type="pom" />
+        <artifact type="source" ext="jar" extra:classifier="sources" />
     </publications>
 
     <dependencies defaultconfmapping="*->default">
