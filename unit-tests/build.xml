@@ -33,7 +33,7 @@
             basedir="target/test-classes" />
     </target>
 
-    <target name="install" depends="-ivy-init, test-jar"
+    <target name="install" depends="-ivy-init, test-jar, ivy-make-pom"
         description="installs the module to the local ivy cache">
         <ivy:resolve />
         <ivy:publish resolver="local" overwrite="true" pubrevision="${build.version.full}">
