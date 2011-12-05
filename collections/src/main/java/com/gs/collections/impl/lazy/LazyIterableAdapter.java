@@ -118,4 +118,10 @@ public class LazyIterableAdapter<T>
     {
         return Iterate.toArray(this.adapted);
     }
+
+    @Override
+    public int size()
+    {
+        return Iterate.sizeOf(this.adapted);
+    }
 }
