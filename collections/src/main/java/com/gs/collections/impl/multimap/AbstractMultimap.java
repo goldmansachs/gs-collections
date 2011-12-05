@@ -19,7 +19,6 @@ package com.gs.collections.impl.multimap;
 import java.util.Collection;
 import java.util.Map;
 
-import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.bag.MutableBag;
@@ -37,7 +36,6 @@ import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.Iterate;
-import com.gs.collections.impl.utility.LazyIterate;
 import com.gs.collections.impl.utility.MapIterate;
 
 public abstract class AbstractMultimap<K, V, C extends RichIterable<V>>
@@ -95,20 +93,20 @@ public abstract class AbstractMultimap<K, V, C extends RichIterable<V>>
 
     // Views
 
-    public LazyIterable<K> keysView()
+    public RichIterable<K> keysView()
     {
-        return LazyIterate.adapt(this.getMap().keySet());
+        return this.getMap().keysView();
     }
 
     public RichIterable<RichIterable<V>> multiValuesView()
     {
-        return UnmodifiableRichIterable.of(this.getMap().collect(new Function<C, RichIterable<V>>()
+        return this.getMap().valuesView().collect(new Function<C, RichIterable<V>>()
         {
             public RichIterable<V> valueOf(C multiValue)
             {
                 return UnmodifiableRichIterable.of(multiValue);
             }
-        }));
+        });
     }
 
     public Bag<K> keyBag()
@@ -124,27 +122,27 @@ public abstract class AbstractMultimap<K, V, C extends RichIterable<V>>
         return bag;
     }
 
-    public LazyIterable<V> valuesView()
+    public RichIterable<V> valuesView()
     {
-        return LazyIterate.adapt(this.getMap().values()).flatCollect(Functions.<Iterable<V>>getPassThru());
+        return this.getMap().valuesView().flatCollect(Functions.<Iterable<V>>getPassThru());
     }
 
-    public LazyIterable<Pair<K, LazyIterable<V>>> keyMultiValuePairsView()
+    public RichIterable<Pair<K, RichIterable<V>>> keyMultiValuePairsView()
     {
-        return LazyIterate.adapt(this.getMap().entrySet()).collect(new Function<Map.Entry<K, C>, Pair<K, LazyIterable<V>>>()
+        return this.getMap().keyValuesView().collect(new Function<Pair<K, C>, Pair<K, RichIterable<V>>>()
         {
-            public Pair<K, LazyIterable<V>> valueOf(Map.Entry<K, C> entry)
+            public Pair<K, RichIterable<V>> valueOf(Pair<K, C> pair)
             {
-                return Tuples.pair(entry.getKey(), LazyIterate.adapt(entry.getValue()));
+                return Tuples.<K, RichIterable<V>>pair(pair.getOne(), UnmodifiableRichIterable.of(pair.getTwo()));
             }
         });
     }
 
-    public LazyIterable<Pair<K, V>> keyValuePairsView()
+    public RichIterable<Pair<K, V>> keyValuePairsView()
     {
-        return this.keyMultiValuePairsView().flatCollect(new Function<Pair<K, LazyIterable<V>>, Iterable<Pair<K, V>>>()
+        return this.keyMultiValuePairsView().flatCollect(new Function<Pair<K, RichIterable<V>>, Iterable<Pair<K, V>>>()
         {
-            public Iterable<Pair<K, V>> valueOf(Pair<K, LazyIterable<V>> pair)
+            public Iterable<Pair<K, V>> valueOf(Pair<K, RichIterable<V>> pair)
             {
                 return pair.getTwo().collect(new KeyValuePairFunction<V, K>(pair.getOne()));
             }

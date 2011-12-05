@@ -20,7 +20,6 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
@@ -155,12 +154,12 @@ public abstract class AbstractMutableMultimap<K, V, C extends MutableCollection<
 
     private <KK extends K, VV extends V> boolean putAllReadOnlyMultimap(Multimap<KK, VV> multimap)
     {
-        class PutProcedure implements Procedure<Pair<KK, LazyIterable<VV>>>
+        class PutProcedure implements Procedure<Pair<KK, RichIterable<VV>>>
         {
             private static final long serialVersionUID = 1L;
             private boolean changed;
 
-            public void value(Pair<KK, LazyIterable<VV>> each)
+            public void value(Pair<KK, RichIterable<VV>> each)
             {
                 this.changed |= AbstractMutableMultimap.this.putAll(each.getOne(), each.getTwo());
             }

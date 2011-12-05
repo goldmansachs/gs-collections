@@ -16,7 +16,6 @@
 
 package com.gs.collections.impl.multimap;
 
-import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.procedure.Procedure2;
@@ -187,17 +186,17 @@ public abstract class AbstractMultimapTestCase
     {
         Multimap<Integer, String> multimap = this.newMultimapWithKeysValues(1, "1", 2, "2", 3, "3");
         Assert.assertEquals(Bags.mutable.of(1, 2, 3),
-                multimap.keyMultiValuePairsView().collect(new Function<Pair<Integer, LazyIterable<String>>, Integer>()
+                multimap.keyMultiValuePairsView().collect(new Function<Pair<Integer, RichIterable<String>>, Integer>()
                 {
-                    public Integer valueOf(Pair<Integer, LazyIterable<String>> pair)
+                    public Integer valueOf(Pair<Integer, RichIterable<String>> pair)
                     {
                         return pair.getOne();
                     }
                 }).toBag());
         Assert.assertEquals(Bags.mutable.of("1", "2", "3"),
-                multimap.keyMultiValuePairsView().flatCollect(new Function<Pair<Integer, LazyIterable<String>>, LazyIterable<String>>()
+                multimap.keyMultiValuePairsView().flatCollect(new Function<Pair<Integer, RichIterable<String>>, RichIterable<String>>()
                 {
-                    public LazyIterable<String> valueOf(Pair<Integer, LazyIterable<String>> pair)
+                    public RichIterable<String> valueOf(Pair<Integer, RichIterable<String>> pair)
                     {
                         return pair.getTwo();
                     }

@@ -18,7 +18,6 @@ package com.gs.collections.api.multimap;
 
 import java.util.Collection;
 
-import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.block.function.Function0;
@@ -152,7 +151,7 @@ public interface Multimap<K, V>
     /**
      * Returns a lazy view of the unique keys.
      */
-    LazyIterable<K> keysView();
+    RichIterable<K> keysView();
 
     /**
      * Returns a {@link Bag} of keys with the count corresponding to the number of mapped values.
@@ -167,17 +166,17 @@ public interface Multimap<K, V>
     /**
      * Returns a lazy flattened view of all the values.
      */
-    LazyIterable<V> valuesView();
+    RichIterable<V> valuesView();
 
     /**
      * Returns a lazy view of the pair of a key and and a lazy view of the values mapped to that key.
      */
-    LazyIterable<Pair<K, LazyIterable<V>>> keyMultiValuePairsView();
+    RichIterable<Pair<K, RichIterable<V>>> keyMultiValuePairsView();
 
     /**
      * Returns a lazy view of all of the key/value pairs.
      */
-    LazyIterable<Pair<K, V>> keyValuePairsView();
+    RichIterable<Pair<K, V>> keyValuePairsView();
 
     /**
      * Returns a new {@link MutableMap} of keys from this Multimap to the mapped values as a {@link RichIterable}.
