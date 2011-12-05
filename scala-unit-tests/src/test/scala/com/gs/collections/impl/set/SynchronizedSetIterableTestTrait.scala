@@ -1,7 +1,7 @@
 package com.gs.collections.impl.set
 
 /*
- * Copyright 2011 Goldman Sachs & Co.
+ * Copyright 2011 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
