@@ -438,28 +438,25 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
     @Override
     public V getIfAbsentPut(K key, Function0<? extends V> function)
     {
-        V result;
         int index = this.index(key);
         Object cur = this.table[index];
 
         if (cur == null)
         {
+            V result = function.value();
             this.table[index] = this.toSentinelIfNull(key);
-            this.table[index + 1] = result = function.value();
+            this.table[index + 1] = result;
             if (++this.occupied > this.maxSize)
             {
                 this.rehash(this.table.length);
             }
+            return result;
         }
-        else if (cur != CHAINED_KEY && this.hashingStrategyEquals(this.nonSentinel(cur), key))
+        if (cur != CHAINED_KEY && this.hashingStrategyEquals(this.nonSentinel(cur), key))
         {
-            result = (V) this.table[index + 1];
+            return (V) this.table[index + 1];
         }
-        else
-        {
-            result = this.chainedGetIfAbsentPut(key, index, function);
-        }
-        return result;
+        return this.chainedGetIfAbsentPut(key, index, function);
     }
 
     private V chainedGetIfAbsentPut(K key, int index, Function0<? extends V> function)
@@ -473,8 +470,9 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
             {
                 if (chain[i] == null)
                 {
+                    result = function.value();
                     chain[i] = this.toSentinelIfNull(key);
-                    chain[i + 1] = result = function.value();
+                    chain[i + 1] = result;
                     if (++this.occupied > this.maxSize)
                     {
                         this.rehash(this.table.length);
@@ -489,11 +487,12 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
             }
             if (i == chain.length)
             {
+                result = function.value();
                 Object[] newChain = new Object[chain.length + 4];
                 System.arraycopy(chain, 0, newChain, 0, chain.length);
-                this.table[index + 1] = newChain;
                 newChain[i] = this.nonSentinel(key);
-                newChain[i + 1] = result = function.value();
+                newChain[i + 1] = result;
+                this.table[index + 1] = newChain;
                 if (++this.occupied > this.maxSize)
                 {
                     this.rehash(this.table.length);
@@ -502,11 +501,12 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
         }
         else
         {
+            result = function.value();
             Object[] newChain = new Object[4];
             newChain[0] = this.table[index];
             newChain[1] = this.table[index + 1];
             newChain[2] = this.nonSentinel(key);
-            newChain[3] = result = function.value();
+            newChain[3] = result;
             this.table[index] = CHAINED_KEY;
             this.table[index + 1] = newChain;
             if (++this.occupied > this.maxSize)

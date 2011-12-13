@@ -22,6 +22,8 @@ import java.util.Map;
 import java.util.Set;
 
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.ImmutableMap;
@@ -432,6 +434,46 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
         Assert.assertEquals("4", map.getIfAbsentPutWith(4, Functions.getToString(), 4));
         Assert.assertEquals("3", map.getIfAbsentPutWith(3, Functions.getToString(), 3));
         Verify.assertContainsKeyValue(4, "4", map);
+    }
+
+    @Test
+    public void getIfAbsentPut_block_throws()
+    {
+        final MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
+        Verify.assertThrows(RuntimeException.class, new Runnable()
+        {
+            public void run()
+            {
+                map.getIfAbsentPut(4, new Function0<String>()
+                {
+                    public String value()
+                    {
+                        throw new RuntimeException();
+                    }
+                });
+            }
+        });
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, "1", 2, "2", 3, "3"), map);
+    }
+
+    @Test
+    public void getIfAbsentPutWith_block_throws()
+    {
+        final MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
+        Verify.assertThrows(RuntimeException.class, new Runnable()
+        {
+            public void run()
+            {
+                map.getIfAbsentPutWith(4, new Function<Object, String>()
+                {
+                    public String valueOf(Object object)
+                    {
+                        throw new RuntimeException();
+                    }
+                }, null);
+            }
+        });
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, "1", 2, "2", 3, "3"), map);
     }
 
     @Test

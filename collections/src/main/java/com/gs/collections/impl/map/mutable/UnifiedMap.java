@@ -312,7 +312,6 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
     public V put(K key, V value)
     {
         Object realKey = this.toSentinelIfNull(key);
-        V result = null;
         int index = this.index(realKey);
         Object cur = this.table[index];
 
@@ -324,17 +323,15 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
             {
                 this.rehash(this.table.length);
             }
+            return null;
         }
-        else if (realKey == cur || cur.equals(realKey))
+        if (realKey == cur || cur.equals(realKey))
         {
-            result = (V) this.table[index + 1];
+            V result = (V) this.table[index + 1];
             this.table[index + 1] = value;
+            return result;
         }
-        else
-        {
-            result = this.chainedPut(realKey, index, value);
-        }
-        return result;
+        return this.chainedPut(realKey, index, value);
     }
 
     private V chainedPut(Object realKey, int index, V value)
@@ -397,28 +394,25 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
     public V getIfAbsentPut(K key, Function0<? extends V> function)
     {
         Object realKey = this.toSentinelIfNull(key);
-        V result = null;
         int index = this.index(realKey);
         Object cur = this.table[index];
 
         if (cur == null)
         {
+            V result = function.value();
             this.table[index] = realKey;
-            this.table[index + 1] = result = function.value();
+            this.table[index + 1] = result;
             if (++this.occupied > this.maxSize)
             {
                 this.rehash(this.table.length);
             }
+            return result;
         }
-        else if (realKey == cur || cur.equals(realKey))
+        if (realKey == cur || cur.equals(realKey))
         {
-            result = (V) this.table[index + 1];
+            return (V) this.table[index + 1];
         }
-        else
-        {
-            result = this.chainedGetIfAbsentPut(realKey, index, function);
-        }
-        return result;
+        return this.chainedGetIfAbsentPut(realKey, index, function);
     }
 
     private V chainedGetIfAbsentPut(Object realKey, int index, Function0<? extends V> function)
@@ -432,8 +426,9 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
             {
                 if (chain[i] == null)
                 {
+                    result = function.value();
                     chain[i] = realKey;
-                    chain[i + 1] = result = function.value();
+                    chain[i + 1] = result;
                     if (++this.occupied > this.maxSize)
                     {
                         this.rehash(this.table.length);
@@ -448,11 +443,12 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
             }
             if (i == chain.length)
             {
+                result = function.value();
                 Object[] newChain = new Object[chain.length + 4];
                 System.arraycopy(chain, 0, newChain, 0, chain.length);
-                this.table[index + 1] = newChain;
                 newChain[i] = realKey;
-                newChain[i + 1] = result = function.value();
+                newChain[i + 1] = result;
+                this.table[index + 1] = newChain;
                 if (++this.occupied > this.maxSize)
                 {
                     this.rehash(this.table.length);
@@ -461,11 +457,12 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         }
         else
         {
+            result = function.value();
             Object[] newChain = new Object[4];
             newChain[0] = this.table[index];
             newChain[1] = this.table[index + 1];
             newChain[2] = realKey;
-            newChain[3] = result = function.value();
+            newChain[3] = result;
             this.table[index] = CHAINED_KEY;
             this.table[index + 1] = newChain;
             if (++this.occupied > this.maxSize)

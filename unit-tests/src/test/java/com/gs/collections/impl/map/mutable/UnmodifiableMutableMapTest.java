@@ -292,6 +292,20 @@ public class UnmodifiableMutableMapTest extends MutableMapTestCase
 
     @Override
     @Test
+    public void getIfAbsentPut_block_throws()
+    {
+        // Not applicable for unmodifiable adapter
+    }
+
+    @Override
+    @Test
+    public void getIfAbsentPutWith_block_throws()
+    {
+        // Not applicable for unmodifiable adapter
+    }
+
+    @Override
+    @Test
     public void putAll()
     {
         final MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "One", 2, "2");

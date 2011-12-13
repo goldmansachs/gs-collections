@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
+import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.impl.block.function.PassThruFunction0;
@@ -27,6 +28,7 @@ import com.gs.collections.impl.math.IntegerSum;
 import com.gs.collections.impl.math.Sum;
 import com.gs.collections.impl.math.SumProcedure;
 import com.gs.collections.impl.parallel.BatchIterable;
+import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
 import org.junit.Assert;
 import org.junit.Test;
@@ -298,6 +300,38 @@ public class UnifiedMapTest extends UnifiedMapTestCase
             public void value(Integer each)
             {
                 map.getIfAbsentPut(each, new PassThruFunction0<Integer>(each));
+            }
+        });
+
+        Assert.assertEquals(this.mapWithCollisionsOfSize(5), map);
+    }
+
+    @Override
+    @Test
+    public void getIfAbsentPut_block_throws()
+    {
+        super.getIfAbsentPut_block_throws();
+
+        // this map is deliberately small to force a rehash to occur from the put method, in a map with a chained bucket
+        final UnifiedMap<Integer, Integer> map = UnifiedMap.newMap(2, 0.75f);
+        COLLISIONS.subList(0, 5).forEach(new Procedure<Integer>()
+        {
+            public void value(final Integer each)
+            {
+                Verify.assertThrows(RuntimeException.class, new Runnable()
+                {
+                    public void run()
+                    {
+                        map.getIfAbsentPut(each, new Function0<Integer>()
+                        {
+                            public Integer value()
+                            {
+                                throw new RuntimeException();
+                            }
+                        });
+                    }
+                });
+                map.put(each, each);
             }
         });
 
