@@ -24,7 +24,7 @@
 
     <groupId>com.goldmansachs</groupId>
     <artifactId>collections-parent</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <packaging>pom</packaging>
 

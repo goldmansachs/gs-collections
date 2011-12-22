@@ -23,7 +23,7 @@
 
     <groupId>com.goldmansachs</groupId>
     <artifactId>serialization-tests</artifactId>
-    <version>0.2-SNAPSHOT</version>
+    <version>1.0.0</version>
 
     <name>Goldman Sachs Collections Serialization Test Suite</name>
 
@@ -43,21 +43,21 @@
         <dependency>
             <groupId>com.goldmansachs</groupId>
             <artifactId>collections-api</artifactId>
-            <version>0.2-SNAPSHOT</version>
+            <version>1.0.0</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>com.goldmansachs</groupId>
             <artifactId>collections</artifactId>
-            <version>0.2-SNAPSHOT</version>
+            <version>1.0.0</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>com.goldmansachs</groupId>
             <artifactId>collections-testutils</artifactId>
-            <version>0.2-SNAPSHOT</version>
+            <version>1.0.0</version>
             <scope>test</scope>
         </dependency>
 
