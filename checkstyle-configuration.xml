@@ -1,0 +1,378 @@
+<?xml version="1.0"?>
+<!DOCTYPE module PUBLIC
+    "-//Puppy Crawl//DTD Check Configuration 1.2//EN"
+    "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
+
+<!--
+  ~ Copyright 2011 Goldman Sachs.
+  ~
+  ~ Licensed under the Apache License, Version 2.0 (the "License");
+  ~ you may not use this file except in compliance with the License.
+  ~ You may obtain a copy of the License at
+  ~
+  ~     http://www.apache.org/licenses/LICENSE-2.0
+  ~
+  ~ Unless required by applicable law or agreed to in writing, software
+  ~ distributed under the License is distributed on an "AS IS" BASIS,
+  ~ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  ~ See the License for the specific language governing permissions and
+  ~ limitations under the License.
+  -->
+
+<!-- Checkstyle is very configurable. Be sure to read the documentation at -->
+<!-- http://checkstyle.sf.net (or in your downloaded distribution). -->
+
+<!-- Most Checks are configurable, be sure to consult the documentation. -->
+
+<!-- To completely disable a check, just comment it out or delete it from the file. -->
+
+<module name="Checker">
+    <module name="SuppressionFilter">
+        <property name="file" value="checkstyle-suppressions.xml" />
+    </module>
+
+    <property name="severity" value="error" />
+
+    <!-- Checks whether files end with a new line.                        -->
+    <!-- See http://checkstyle.sf.net/config_misc.html#NewlineAtEndOfFile -->
+    <module name="NewlineAtEndOfFile">
+        <property name="lineSeparator" value="system" />
+        <property name="fileExtensions" value="java, xml" />
+    </module>
+
+    <module name="TreeWalker">
+        <property name="tabWidth" value="4" />
+
+        <property name="cacheFile" value="build/checkstyleCache" />
+
+        <!-- Checks for Naming Conventions.                  -->
+        <!-- See http://checkstyle.sf.net/config_naming.html -->
+
+        <module name="ConstantName" />
+        <module name="LocalFinalVariableName" />
+        <module name="LocalVariableName" />
+        <module name="MemberName" />
+        <module name="MethodName">
+            <property name="format" value="^[a-z][a-zA-Z0-9_]*$" />
+        </module>
+        <module name="MethodTypeParameterName">
+            <property name="format" value="^[A-Z0-9]+$" />
+        </module>
+
+        <module name="PackageName">
+            <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$" />
+        </module>
+
+        <module name="ParameterName" />
+        <module name="StaticVariableName" />
+        <module name="TypeName" />
+
+        <module name="AvoidStarImport">
+            <property name="allowStaticMemberImports" value="true" />
+        </module>
+
+        <module name="IllegalImport" />
+        <module name="RedundantImport" />
+
+        <!-- There's a bug in the implementation of UnusedImports in CheckStyle 5.3. Try it again later. -->
+        <!--<module name="UnusedImports">-->
+        <!--<property name="severity" value="warning" />-->
+        <!--</module>-->
+
+        <!-- Checks for Size Violations.                    -->
+        <!-- See http://checkstyle.sf.net/config_sizes.html -->
+        <!--
+        <module name="FileLength" />
+
+        <module name="LineLength">
+            <property name="max" value="150" />
+            <property name="tabWidth" value="4" />
+        </module>
+
+        <module name="MethodLength" />
+        -->
+
+        <!-- Effective Java Item 25 - Design method signatures carefully -->
+        <!-- Avoid long parameter lists -->
+        <!--
+        <module name="ParameterNumber">
+            <property name="max" value="3" />
+        </module>
+        -->
+
+        <!-- Checks for whitespace                               -->
+        <!-- See http://checkstyle.sf.net/config_whitespace.html -->
+        <module name="EmptyForIteratorPad">
+            <property name="option" value="space" />
+        </module>
+        <module name="MethodParamPad" />
+        <module name="NoWhitespaceAfter">
+            <property name="tokens" value="BNOT,DEC,DOT,INC,LNOT,UNARY_MINUS,UNARY_PLUS" />
+        </module>
+
+        <module name="NoWhitespaceBefore" />
+
+        <module name="OperatorWrap" />
+
+        <module name="ParenPad" />
+
+        <module name="TypecastParenPad" />
+
+        <module name="WhitespaceAfter" />
+
+        <module name="WhitespaceAround">
+            <property
+                name="tokens"
+                value="ASSIGN,BAND,BAND_ASSIGN,BOR,BOR_ASSIGN,BSR,BSR_ASSIGN,BXOR,BXOR_ASSIGN,COLON,DIV,DIV_ASSIGN,EQUAL,GE,GT,LAND,LCURLY,LE,LITERAL_ASSERT,LITERAL_CATCH,LITERAL_DO,LITERAL_ELSE,LITERAL_FINALLY,LITERAL_FOR,LITERAL_IF,LITERAL_RETURN,LITERAL_SYNCHRONIZED,LITERAL_TRY,LITERAL_WHILE,LOR,LT,MINUS,MINUS_ASSIGN,MOD,MOD_ASSIGN,NOT_EQUAL,PLUS,PLUS_ASSIGN,QUESTION,RCURLY,SL,SLIST,SL_ASSIGN,SR,SR_ASSIGN,STAR,STAR_ASSIGN,LITERAL_ASSERT,TYPE_EXTENSION_AND" />
+        </module>
+
+        <!-- Modifier Checks                                    -->
+        <!-- See http://checkstyle.sf.net/config_modifiers.html -->
+        <module name="ModifierOrder" />
+        <module name="RedundantModifier" />
+
+        <!-- Checks for blocks. You know, those {}'s         -->
+        <!-- See http://checkstyle.sf.net/config_blocks.html -->
+        <!--
+        <module name="AvoidNestedBlocks" />
+        -->
+
+        <!-- Effective Java Item 47 - Don't ignore exceptions -->
+        <!--
+        <module name="EmptyBlock">
+            <property name="tokens" value="LITERAL_CATCH" />
+        -->
+        <!-- require a comment, change to stmt to require a statement -->
+        <!--
+            <property name="option" value="text" />
+        </module>
+        -->
+
+        <module name="LeftCurly">
+            <property name="option" value="nl" />
+        </module>
+
+        <module name="NeedBraces" />
+
+        <module name="RightCurly">
+            <property name="option" value="alone" />
+        </module>
+
+        <!-- Checks for common coding problems               -->
+        <!-- See http://checkstyle.sf.net/config_coding.html -->
+        <!--
+        <module name="AvoidInlineConditionals" />
+        -->
+        <module name="DoubleCheckedLocking">
+            <property name="severity" value="warning" />
+        </module>
+
+        <module name="EmptyStatement" />
+
+        <!-- Effective Java Item 8 - Always override hashCode when you override equals -->
+        <module name="EqualsHashCode" />
+
+        <!--<module name="HiddenField">-->
+        <!--<property name="severity" value="warning" />-->
+        <!--<property name="ignoreSetter" value="true" />-->
+        <!--<property name="ignoreConstructorParameter" value="true" />-->
+        <!--</module>-->
+
+        <!-- Effective Java Item 4 - Avoid creating duplicate objects -->
+        <module name="IllegalInstantiation">
+            <property name="severity" value="warning" />
+            <property
+                name="classes"
+                value="java.lang.Boolean,java.lang.Integer,java.lang.Long,java.lang.Short,java.lang.Character,java.lang.Byte,java.util.Timer,java.util.TimerTask" />
+        </module>
+
+        <!--
+        <module name="InnerAssignment" />
+
+        <module name="MissingSwitchDefault" />
+        -->
+
+        <module name="RedundantThrows">
+            <property name="logLoadErrors" value="true" />
+            <property name="suppressLoadErrors" value="true" />
+        </module>
+
+        <module name="SimplifyBooleanExpression" />
+
+        <module name="SimplifyBooleanReturn" />
+
+        <!-- Checks for class design                         -->
+        <!-- See http://checkstyle.sf.net/config_design.html -->
+        <!-- Effective Java Item 15 - Design and document for inheritance or else prohibit it -->
+        <!--
+            the module actually implements a very strict rule, it would be interesting to know whether Joshua meant what checkstyle implements. We feel this
+            implementation is well suited as a warning, i.e. if you get error messages from this check you should be able to name a good reason to implement
+            your code the way you do it, especially if you are designing a library and not an application.
+        -->
+        <!--
+        <module name="DesignForExtension" />
+        -->
+        <module name="FinalClass" />
+
+        <module name="HideUtilityClassConstructor" />
+
+        <!-- Effective Java Item 17 - Use interfaces only to define types -->
+        <module name="InterfaceIsType">
+            <property name="severity" value="warning" />
+        </module>
+
+        <!-- Effective Java Item 12 - Make all fields private -->
+        <!--
+        <module name="VisibilityModifier" />
+        -->
+
+        <!-- Miscellaneous other checks.                   -->
+        <!-- See http://checkstyle.sf.net/config_misc.html -->
+        <module name="ArrayTypeStyle" />
+
+        <module name="Regexp">
+            <property name="illegalPattern" value="true" />
+            <property name="format" value="[ ]+$" />
+            <property name="message" value="Line has trailing spaces." />
+        </module>
+
+        <module name="Regexp">
+            <property name="illegalPattern" value="true" />
+
+            <property
+                name="format"
+                value="System\.out\.println" />
+
+            <property
+                name="message"
+                value="System.out.println." />
+        </module>
+
+        <module name="Regexp">
+            <property name="illegalPattern" value="true" />
+
+            <property
+                name="format"
+                value="System\.err\.println" />
+
+            <property
+                name="message"
+                value="System.err.println." />
+        </module>
+
+        <!-- Effective Java Item 6 - Avoid finalizers -->
+        <module name="NoFinalizer" />
+
+        <module name="EqualsAvoidNull" />
+
+        <!--
+        <module name="ArrayTrailingComma" />
+
+        <module name="ExplicitInitialization" />
+
+        <module name="FinalLocalVariable" />
+        -->
+
+        <module name="GenericWhitespace" />
+
+
+        <module name="IllegalThrows" />
+
+        <!--
+        <module name="NoClone" />
+
+        <module name="TodoComment">
+            <property name="severity" value="ignore" />
+        </module>
+        -->
+
+        <module name="UpperEll" />
+
+        <!--
+        <module name="JUnitTestCase" />
+        -->
+
+        <!-- There's a bug in the implementation of Indentation in CheckStyle 5.3. Try it again later. -->
+        <!--<module name="Indentation">-->
+        <!--<property name="severity" value="warning" />-->
+        <!--</module>-->
+
+        <!--
+        <module name="ParameterAssignment" />
+
+        <module name="IllegalType">
+            <property name="ignoredMethodNames" value="getInstance" / />
+        -->
+
+        <module name="SuperFinalize" />
+
+        <module name="SuperClone">
+            <property name="severity" value="warning" />
+        </module>
+
+        <!--<module name="StringLiteralEquality" />-->
+
+        <!--
+        <module name="ModifiedControlVariable"/>
+        -->
+
+        <module name="CovariantEquals" />
+
+        <module name="AvoidStaticImport">
+            <property name="excludes"
+                value="org.junit.Assert.*,com.gs.collections.impl.test.Verify.*,com.gs.collections.impl.factory.Iterables.*" />
+        </module>
+
+        <module name="MissingDeprecated" />
+
+        <module name="AnnotationUseStyle" />
+
+        <module name="DeclarationOrder" />
+
+        <module name="DefaultComesLast" />
+
+        <module name="FallThrough" />
+
+        <module name="ImportOrder">
+            <property name="groups" value="java,javax" />
+            <property name="separated" value="true" />
+        </module>
+
+        <module name="MultipleVariableDeclarations" />
+
+        <!-- There's a bug in the implementation of RequireThis in CheckStyle 5.3. Try it again later. -->
+        <!--<module name="RequireThis">-->
+        <!--<property name="severity" value="warning" />-->
+        <!--</module>-->
+
+        <module name="MutableException" />
+
+        <module name="PackageDeclaration" />
+
+        <!-- <module name="InnerTypeLast" /> -->
+
+        <module name="MissingOverride">
+            <property name="javaFiveCompatibility" value="true" />
+        </module>
+
+    </module>
+
+    <module name="RegexpHeader">
+        <property name="headerFile" value="java.header" />
+        <property name="multiLines" value="19" />
+        <property name="fileExtensions" value="java, scala" />
+    </module>
+
+    <module name="FileTabCharacter" />
+
+    <module name="RegexpMultiline">
+        <property name="format" value="\{\n\n" />
+        <property name="message" value="First line after opening a scope may not be blank." />
+    </module>
+
+    <module name="RegexpMultiline">
+        <property name="format" value="\n\n[ ]*\}" />
+        <property name="message" value="Last line before closing a scope bay not be blank." />
+    </module>
+
+</module>

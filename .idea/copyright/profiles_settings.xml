@@ -1,0 +1,8 @@
+<component name="CopyrightManager">
+  <settings default="Apache">
+    <module2copyright />
+    <LanguageOptions name="XML">
+      <option name="fileLocation" value="2" />
+    </LanguageOptions>
+  </settings>
+</component>
