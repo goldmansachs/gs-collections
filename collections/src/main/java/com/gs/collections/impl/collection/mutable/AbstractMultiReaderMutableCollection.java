@@ -45,8 +45,6 @@ import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
-import com.gs.collections.impl.block.factory.Comparators;
-import com.gs.collections.impl.utility.Iterate;
 
 /**
  * AbstractMultiReaderMutableCollection is a common abstraction that provides thread-safe collection behaviors.
@@ -422,7 +420,7 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         this.acquireReadLock();
         try
         {
-            return Iterate.min(this.getDelegate(), comparator);
+            return this.getDelegate().min(comparator);
         }
         finally
         {
@@ -435,7 +433,7 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         this.acquireReadLock();
         try
         {
-            return Iterate.max(this.getDelegate(), comparator);
+            return this.getDelegate().max(comparator);
         }
         finally
         {
@@ -448,7 +446,7 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         this.acquireReadLock();
         try
         {
-            return Iterate.min(this.getDelegate());
+            return this.getDelegate().min();
         }
         finally
         {
@@ -461,7 +459,7 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         this.acquireReadLock();
         try
         {
-            return Iterate.max(this.getDelegate());
+            return this.getDelegate().max();
         }
         finally
         {
@@ -474,7 +472,7 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         this.acquireReadLock();
         try
         {
-            return Iterate.min(this.getDelegate(), Comparators.byFunction(function));
+            return this.getDelegate().minBy(function);
         }
         finally
         {
@@ -487,7 +485,7 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         this.acquireReadLock();
         try
         {
-            return Iterate.max(this.getDelegate(), Comparators.byFunction(function));
+            return this.getDelegate().maxBy(function);
         }
         finally
         {
