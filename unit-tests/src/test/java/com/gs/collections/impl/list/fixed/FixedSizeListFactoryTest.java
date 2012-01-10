@@ -17,6 +17,7 @@
 package com.gs.collections.impl.list.fixed;
 
 import java.io.Serializable;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
@@ -187,6 +188,11 @@ public class FixedSizeListFactoryTest
         differentThree.add("3");
         Verify.assertNotEquals(three, differentThree);
         Verify.assertNotEquals(differentThree, three);
+
+        Assert.assertEquals(new LinkedList<String>(threeA), three);
+        Verify.assertNotEquals(new LinkedList<String>(differentThree), three);
+        Verify.assertNotEquals(new LinkedList<String>(FastList.newListWith("1", "2", "3", "4")), three);
+        Verify.assertNotEquals(new LinkedList<String>(FastList.newListWith("1", "2")), three);
     }
 
     @Test

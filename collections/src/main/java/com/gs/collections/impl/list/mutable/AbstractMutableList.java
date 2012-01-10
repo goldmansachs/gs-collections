@@ -83,6 +83,11 @@ public abstract class AbstractMutableList<T>
         }
 
         List<?> that = (List<?>) o;
+        return that instanceof RandomAccess ? randomAccessEquals(that) : nonRandomAccessEquals(that);
+    }
+
+    private boolean randomAccessEquals(List<?> that)
+    {
         if (this.size() != that.size())
         {
             return false;
@@ -95,6 +100,24 @@ public abstract class AbstractMutableList<T>
             }
         }
         return true;
+    }
+
+    private boolean nonRandomAccessEquals(List<?> that)
+    {
+        Iterator<?> iterator = that.iterator();
+        for (int i = 0; i < this.size(); i++)
+        {
+            if (!iterator.hasNext())
+            {
+                return false;
+            }
+
+            if (!Comparators.nullSafeEquals(this.get(i), iterator.next()))
+            {
+                return false;
+            }
+        }
+        return !iterator.hasNext();
     }
 
     @Override
