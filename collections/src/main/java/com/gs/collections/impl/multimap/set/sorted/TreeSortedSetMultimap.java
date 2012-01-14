@@ -86,6 +86,18 @@ public final class TreeSortedSetMultimap<K, V>
     }
 
     @Override
+    protected MutableMap<K, MutableSortedSet<V>> createMap()
+    {
+        return UnifiedMap.newMap();
+    }
+
+    @Override
+    protected MutableMap<K, MutableSortedSet<V>> createMapWithKeyCount(int keyCount)
+    {
+        return UnifiedMap.newMap(keyCount);
+    }
+
+    @Override
     protected MutableSortedSet<V> createCollection()
     {
         return new TreeSortedSet<V>(this.comparator);

@@ -29,7 +29,6 @@ import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.procedure.checked.MultimapKeyValuesSerializingProcedure;
-import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.utility.Iterate;
 
 public abstract class AbstractMutableMultimap<K, V, C extends MutableCollection<V>>
@@ -42,12 +41,17 @@ public abstract class AbstractMutableMultimap<K, V, C extends MutableCollection<
 
     protected AbstractMutableMultimap()
     {
-        this.map = UnifiedMap.newMap();
+        this.map = this.createMap();
+    }
+
+    protected AbstractMutableMultimap(MutableMap<K, C> newMap)
+    {
+        this.map = newMap;
     }
 
     protected AbstractMutableMultimap(int size)
     {
-        this.map = UnifiedMap.newMap(size);
+        this.map = this.createMapWithKeyCount(size);
     }
 
     /**
@@ -61,6 +65,10 @@ public abstract class AbstractMutableMultimap<K, V, C extends MutableCollection<
         this.putAllPairs(pairs);
     }
 
+    protected abstract MutableMap<K, C> createMap();
+
+    protected abstract MutableMap<K, C> createMapWithKeyCount(int keyCount);
+
     @Override
     protected MutableMap<K, C> getMap()
     {
@@ -69,9 +77,57 @@ public abstract class AbstractMutableMultimap<K, V, C extends MutableCollection<
 
     // Query Operations
 
+    /**
+     * Use the size method directly instead of totalSize internally so subclasses can override if necessary.
+     */
     public int size()
     {
         return this.totalSize;
+    }
+
+    /**
+     * This method is provided to allow for subclasses to provide the behavior.  It should add 1 to the value that is
+     * returned by calling size().
+     */
+    protected void incrementTotalSize()
+    {
+        this.totalSize++;
+    }
+
+    /**
+     * This method is provided to allow for subclasses to provide the behavior.  It should remove 1 from the value that is
+     * returned by calling size().
+     */
+    protected void decrementTotalSize()
+    {
+        this.totalSize--;
+    }
+
+    /**
+     * This method is provided to allow for subclasses to provide the behavior.  It should add the specified amount to
+     * the value that is returned by calling size().
+     */
+    protected void addToTotalSize(int value)
+    {
+        this.totalSize += value;
+    }
+
+    /**
+     * This method is provided to allow for subclasses to provide the behavior.  It should subtract the specified amount from
+     * the value that is returned by calling size().
+     */
+    protected void subtractFromTotalSize(int value)
+    {
+        this.totalSize -= value;
+    }
+
+    /**
+     * This method is provided to allow for subclasses to provide the behavior.  It should set the value returned by
+     * size() to 0.
+     */
+    protected void clearTotalSize()
+    {
+        this.totalSize = 0;
     }
 
     public int sizeDistinct()
@@ -81,7 +137,7 @@ public abstract class AbstractMutableMultimap<K, V, C extends MutableCollection<
 
     public boolean isEmpty()
     {
-        return this.totalSize == 0;
+        return this.size() == 0;
     }
 
     // Modification Operations
@@ -92,7 +148,7 @@ public abstract class AbstractMutableMultimap<K, V, C extends MutableCollection<
 
         if (collection.add(value))
         {
-            this.totalSize++;
+            this.incrementTotalSize();
             return true;
         }
         return false;
@@ -109,7 +165,7 @@ public abstract class AbstractMutableMultimap<K, V, C extends MutableCollection<
         boolean changed = collection.remove(value);
         if (changed)
         {
-            this.totalSize--;
+            this.decrementTotalSize();
             if (collection.isEmpty())
             {
                 this.map.remove(key);
@@ -139,7 +195,7 @@ public abstract class AbstractMutableMultimap<K, V, C extends MutableCollection<
         C collection = this.getIfAbsentPutCollection(key);
         int oldSize = collection.size();
         int newSize = Iterate.addAllTo(values, collection).size();
-        this.totalSize += newSize - oldSize;
+        this.addToTotalSize(newSize - oldSize);
         return newSize > oldSize;
     }
 
@@ -198,7 +254,7 @@ public abstract class AbstractMutableMultimap<K, V, C extends MutableCollection<
         C newValues = Iterate.addAllTo(values, this.createCollection());
         C oldValues = this.map.put(key, newValues);
         oldValues = oldValues == null ? this.createCollection() : oldValues;
-        this.totalSize += newValues.size() - oldValues.size();
+        this.addToTotalSize(newValues.size() - oldValues.size());
         return (C) oldValues.asUnmodifiable();
     }
 
@@ -206,7 +262,7 @@ public abstract class AbstractMutableMultimap<K, V, C extends MutableCollection<
     {
         C collection = this.map.remove(key);
         collection = collection == null ? this.createCollection() : collection;
-        this.totalSize -= collection.size();
+        this.subtractFromTotalSize(collection.size());
         return (C) collection.asUnmodifiable();
     }
 
@@ -218,7 +274,7 @@ public abstract class AbstractMutableMultimap<K, V, C extends MutableCollection<
             collection.clear();
         }
         this.map.clear();
-        this.totalSize = 0;
+        this.clearTotalSize();
     }
 
     // Views
@@ -263,7 +319,7 @@ public abstract class AbstractMutableMultimap<K, V, C extends MutableCollection<
     void readValuesFrom(ObjectInput in) throws IOException, ClassNotFoundException
     {
         int keyCount = in.readInt();
-        this.map = UnifiedMap.newMap(keyCount);
+        this.map = this.createMapWithKeyCount(keyCount);
         for (int k = 0; k < keyCount; k++)
         {
             K key = (K) in.readObject();
@@ -273,7 +329,7 @@ public abstract class AbstractMutableMultimap<K, V, C extends MutableCollection<
             {
                 values.add((V) in.readObject());
             }
-            this.totalSize += valuesSize;
+            this.addToTotalSize(valuesSize);
             this.map.put(key, values);
         }
     }

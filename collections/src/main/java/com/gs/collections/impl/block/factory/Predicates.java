@@ -116,7 +116,7 @@ public abstract class Predicates<T>
 
     /**
      * Creates a predicate which returns true if an object passed to accept method is within the range, inclusive
-     * of the from and to values
+     * of the from and to values.
      */
     public static <T extends Comparable<? super T>> Predicates<T> betweenInclusive(T from, T to)
     {
@@ -137,7 +137,7 @@ public abstract class Predicates<T>
 
     /**
      * Creates a predicate which returns true if an object passed to accept method is within the range, exclusive
-     * of the from and to values
+     * of the from and to values.
      */
     public static <T extends Comparable<? super T>> Predicates<T> betweenExclusive(T from, T to)
     {

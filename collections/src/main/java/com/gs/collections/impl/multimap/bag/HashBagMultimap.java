@@ -73,9 +73,21 @@ public final class HashBagMultimap<K, V>
     }
 
     @Override
+    protected MutableMap<K, MutableBag<V>> createMap()
+    {
+        return UnifiedMap.newMap();
+    }
+
+    @Override
+    protected MutableMap<K, MutableBag<V>> createMapWithKeyCount(int keyCount)
+    {
+        return UnifiedMap.newMap(keyCount);
+    }
+
+    @Override
     protected MutableBag<V> createCollection()
     {
-        return new HashBag<V>();
+        return HashBag.newBag();
     }
 
     public HashBagMultimap<K, V> newEmpty()

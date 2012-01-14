@@ -88,9 +88,21 @@ public final class FastListMultimap<K, V>
     }
 
     @Override
+    protected MutableMap<K, MutableList<V>> createMap()
+    {
+        return UnifiedMap.newMap();
+    }
+
+    @Override
+    protected MutableMap<K, MutableList<V>> createMapWithKeyCount(int keyCount)
+    {
+        return UnifiedMap.newMap(keyCount);
+    }
+
+    @Override
     protected MutableList<V> createCollection()
     {
-        return new FastList<V>(this.initialListCapacity);
+        return FastList.newList(this.initialListCapacity);
     }
 
     public void trimToSize()
