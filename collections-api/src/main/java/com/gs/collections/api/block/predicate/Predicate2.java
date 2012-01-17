@@ -19,7 +19,7 @@ package com.gs.collections.api.block.predicate;
 import java.io.Serializable;
 
 /**
- * A Predicate2 is primarily used in methods like selectWith, detectWith, rejectWith.  The first argument
+ * A Predicate2 is primarily used in methods like filterWith, findWith, filterNotWith.  The first argument
  * is the element of the collection being iterated over, and the second argument is a parameter passed into
  * the predicate from the calling method.
  */

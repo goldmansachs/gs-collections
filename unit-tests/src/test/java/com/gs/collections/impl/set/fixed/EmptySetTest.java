@@ -251,12 +251,12 @@ public class EmptySetTest extends AbstractMemoryEfficientMutableSetTestCase
         List<Object> nullsPlusOne = Collections.nCopies(set.size() + 1, null);
 
         MutableSet<Pair<String, Object>> pairs = set.zip(nulls);
-        Assert.assertEquals(set, pairs.collect(Functions.<String>firstOfPair()));
-        Assert.assertEquals(nulls, pairs.collect(Functions.<Object>secondOfPair(), Lists.mutable.of()));
+        Assert.assertEquals(set, pairs.transform(Functions.<String>firstOfPair()));
+        Assert.assertEquals(nulls, pairs.transform(Functions.<Object>secondOfPair(), Lists.mutable.of()));
 
         MutableSet<Pair<String, Object>> pairsPlusOne = set.zip(nullsPlusOne);
-        Assert.assertEquals(set, pairsPlusOne.collect(Functions.<String>firstOfPair()));
-        Assert.assertEquals(nulls, pairsPlusOne.collect(Functions.<Object>secondOfPair(), Lists.mutable.of()));
+        Assert.assertEquals(set, pairsPlusOne.transform(Functions.<String>firstOfPair()));
+        Assert.assertEquals(nulls, pairsPlusOne.transform(Functions.<Object>secondOfPair(), Lists.mutable.of()));
 
         Assert.assertEquals(
                 set.zip(nulls),
@@ -272,10 +272,10 @@ public class EmptySetTest extends AbstractMemoryEfficientMutableSetTestCase
 
         Assert.assertEquals(
                 set,
-                pairs.collect(Functions.<String>firstOfPair()));
+                pairs.transform(Functions.<String>firstOfPair()));
         Assert.assertEquals(
                 UnifiedSet.newSet(),
-                pairs.collect(Functions.<Integer>secondOfPair()));
+                pairs.transform(Functions.<Integer>secondOfPair()));
 
         Assert.assertEquals(
                 set.zipWithIndex(),

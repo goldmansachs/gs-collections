@@ -197,12 +197,12 @@ public final class MultiReaderUnifiedSet<T>
         }
     }
 
-    public <V> MutableSet<V> collect(Function<? super T, ? extends V> function)
+    public <V> MutableSet<V> transform(Function<? super T, ? extends V> function)
     {
         this.acquireReadLock();
         try
         {
-            return this.delegate.collect(function);
+            return this.delegate.transform(function);
         }
         finally
         {
@@ -210,12 +210,12 @@ public final class MultiReaderUnifiedSet<T>
         }
     }
 
-    public <V> MutableSet<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    public <V> MutableSet<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
     {
         this.acquireReadLock();
         try
         {
-            return this.delegate.flatCollect(function);
+            return this.delegate.flatTransform(function);
         }
         finally
         {
@@ -223,14 +223,14 @@ public final class MultiReaderUnifiedSet<T>
         }
     }
 
-    public <V> MutableSet<V> collectIf(
+    public <V> MutableSet<V> transformIf(
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function)
     {
         this.acquireReadLock();
         try
         {
-            return this.delegate.collectIf(predicate, function);
+            return this.delegate.transformIf(predicate, function);
         }
         finally
         {
@@ -238,14 +238,14 @@ public final class MultiReaderUnifiedSet<T>
         }
     }
 
-    public <P, V> MutableSet<V> collectWith(
+    public <P, V> MutableSet<V> transformWith(
             Function2<? super T, ? super P, ? extends V> function,
             P parameter)
     {
         this.acquireReadLock();
         try
         {
-            return this.delegate.collectWith(function, parameter);
+            return this.delegate.transformWith(function, parameter);
         }
         finally
         {
@@ -258,12 +258,12 @@ public final class MultiReaderUnifiedSet<T>
         return MultiReaderUnifiedSet.newSet();
     }
 
-    public MutableSet<T> reject(Predicate<? super T> predicate)
+    public MutableSet<T> filterNot(Predicate<? super T> predicate)
     {
         this.acquireReadLock();
         try
         {
-            return this.delegate.reject(predicate);
+            return this.delegate.filterNot(predicate);
         }
         finally
         {
@@ -271,14 +271,14 @@ public final class MultiReaderUnifiedSet<T>
         }
     }
 
-    public <P> MutableSet<T> rejectWith(
+    public <P> MutableSet<T> filterNotWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
         this.acquireReadLock();
         try
         {
-            return this.delegate.rejectWith(predicate, parameter);
+            return this.delegate.filterNotWith(predicate, parameter);
         }
         finally
         {
@@ -286,12 +286,12 @@ public final class MultiReaderUnifiedSet<T>
         }
     }
 
-    public MutableSet<T> select(Predicate<? super T> predicate)
+    public MutableSet<T> filter(Predicate<? super T> predicate)
     {
         this.acquireReadLock();
         try
         {
-            return this.delegate.select(predicate);
+            return this.delegate.filter(predicate);
         }
         finally
         {
@@ -299,14 +299,14 @@ public final class MultiReaderUnifiedSet<T>
         }
     }
 
-    public <P> MutableSet<T> selectWith(
+    public <P> MutableSet<T> filterWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
         this.acquireReadLock();
         try
         {
-            return this.delegate.selectWith(predicate, parameter);
+            return this.delegate.filterWith(predicate, parameter);
         }
         finally
         {
@@ -468,28 +468,28 @@ public final class MultiReaderUnifiedSet<T>
             return this.getDelegate().clone();
         }
 
-        public <V> MutableSet<V> collect(Function<? super T, ? extends V> function)
+        public <V> MutableSet<V> transform(Function<? super T, ? extends V> function)
         {
-            return this.getDelegate().collect(function);
+            return this.getDelegate().transform(function);
         }
 
-        public <V> MutableSet<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+        public <V> MutableSet<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
         {
-            return this.getDelegate().flatCollect(function);
+            return this.getDelegate().flatTransform(function);
         }
 
-        public <V> MutableSet<V> collectIf(
+        public <V> MutableSet<V> transformIf(
                 Predicate<? super T> predicate,
                 Function<? super T, ? extends V> function)
         {
-            return this.getDelegate().collectIf(predicate, function);
+            return this.getDelegate().transformIf(predicate, function);
         }
 
-        public <P, V> MutableSet<V> collectWith(
+        public <P, V> MutableSet<V> transformWith(
                 Function2<? super T, ? super P, ? extends V> function,
                 P parameter)
         {
-            return this.getDelegate().collectWith(function, parameter);
+            return this.getDelegate().transformWith(function, parameter);
         }
 
         public <V> MutableSetMultimap<V, T> groupBy(
@@ -509,28 +509,28 @@ public final class MultiReaderUnifiedSet<T>
             return this.getDelegate().newEmpty();
         }
 
-        public MutableSet<T> reject(Predicate<? super T> predicate)
+        public MutableSet<T> filterNot(Predicate<? super T> predicate)
         {
-            return this.getDelegate().reject(predicate);
+            return this.getDelegate().filterNot(predicate);
         }
 
-        public <P> MutableSet<T> rejectWith(
+        public <P> MutableSet<T> filterNotWith(
                 Predicate2<? super T, ? super P> predicate,
                 P parameter)
         {
-            return this.getDelegate().rejectWith(predicate, parameter);
+            return this.getDelegate().filterNotWith(predicate, parameter);
         }
 
-        public MutableSet<T> select(Predicate<? super T> predicate)
+        public MutableSet<T> filter(Predicate<? super T> predicate)
         {
-            return this.getDelegate().select(predicate);
+            return this.getDelegate().filter(predicate);
         }
 
-        public <P> MutableSet<T> selectWith(
+        public <P> MutableSet<T> filterWith(
                 Predicate2<? super T, ? super P> predicate,
                 P parameter)
         {
-            return this.getDelegate().selectWith(predicate, parameter);
+            return this.getDelegate().filterWith(predicate, parameter);
         }
 
         public PartitionMutableSet<T> partition(Predicate<? super T> predicate)

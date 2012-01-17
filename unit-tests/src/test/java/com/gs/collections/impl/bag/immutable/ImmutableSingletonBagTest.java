@@ -92,7 +92,7 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     public void injectInto()
     {
         super.injectInto();
-        Assert.assertEquals(1, new ImmutableSingletonBag<Integer>(1).injectInto(0, AddFunction.INTEGER).intValue());
+        Assert.assertEquals(1, new ImmutableSingletonBag<Integer>(1).foldLeft(0, AddFunction.INTEGER).intValue());
     }
 
     @Override
@@ -296,9 +296,9 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     {
         super.testSelectWithTarget();
         MutableList<String> target = Lists.mutable.of();
-        this.newBag().select(Predicates.alwaysFalse(), target);
+        this.newBag().filter(Predicates.alwaysFalse(), target);
         Verify.assertEmpty(target);
-        this.newBag().select(Predicates.alwaysTrue(), target);
+        this.newBag().filter(Predicates.alwaysTrue(), target);
         Verify.assertContains(VAL, target);
     }
 
@@ -308,9 +308,9 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     {
         super.testRejectWithTarget();
         MutableList<String> target = Lists.mutable.of();
-        this.newBag().reject(Predicates.alwaysTrue(), target);
+        this.newBag().filterNot(Predicates.alwaysTrue(), target);
         Verify.assertEmpty(target);
-        this.newBag().reject(Predicates.alwaysFalse(), target);
+        this.newBag().filterNot(Predicates.alwaysFalse(), target);
         Verify.assertContains(VAL, target);
     }
 
@@ -319,7 +319,7 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     public void testCollect()
     {
         super.testCollect();
-        Assert.assertEquals(Bags.immutable.of(VAL), this.newBag().collect(Functions.getToString()));
+        Assert.assertEquals(Bags.immutable.of(VAL), this.newBag().transform(Functions.getToString()));
     }
 
     @Override
@@ -328,7 +328,7 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     {
         super.testCollectWithTarget();
         MutableList<Class<?>> target = Lists.mutable.of();
-        this.newBag().collect(Functions.getToClass(), target);
+        this.newBag().transform(Functions.getToClass(), target);
         Verify.assertContains(String.class, target);
     }
 
@@ -337,8 +337,8 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     public void testCollectIf()
     {
         super.testCollectIf();
-        Assert.assertEquals(Bags.immutable.of(String.class), this.newBag().collectIf(Predicates.alwaysTrue(), Functions.getToClass()));
-        Assert.assertEquals(Bags.immutable.of(), this.newBag().collectIf(Predicates.alwaysFalse(), Functions.getToClass()));
+        Assert.assertEquals(Bags.immutable.of(String.class), this.newBag().transformIf(Predicates.alwaysTrue(), Functions.getToClass()));
+        Assert.assertEquals(Bags.immutable.of(), this.newBag().transformIf(Predicates.alwaysFalse(), Functions.getToClass()));
     }
 
     @Override
@@ -347,9 +347,9 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     {
         super.testCollectIfWithTarget();
         MutableList<Class<?>> target = Lists.mutable.of();
-        this.newBag().collectIf(Predicates.alwaysFalse(), Functions.getToClass(), target);
+        this.newBag().transformIf(Predicates.alwaysFalse(), Functions.getToClass(), target);
         Verify.assertEmpty(target);
-        this.newBag().collectIf(Predicates.alwaysTrue(), Functions.getToClass(), target);
+        this.newBag().transformIf(Predicates.alwaysTrue(), Functions.getToClass(), target);
         Verify.assertContains(String.class, target);
     }
 
@@ -358,7 +358,7 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     public void flatCollect()
     {
         super.flatCollect();
-        ImmutableBag<Integer> result = this.newBag().flatCollect(new Function<String, Iterable<Integer>>()
+        ImmutableBag<Integer> result = this.newBag().flatTransform(new Function<String, Iterable<Integer>>()
         {
             public Iterable<Integer> valueOf(String object)
             {
@@ -374,7 +374,7 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     {
         super.flatCollectWithTarget();
         MutableBag<Integer> target = Bags.mutable.of();
-        MutableBag<Integer> result = this.newBag().flatCollect(new Function<String, Iterable<Integer>>()
+        MutableBag<Integer> result = this.newBag().flatTransform(new Function<String, Iterable<Integer>>()
         {
             public Iterable<Integer> valueOf(String object)
             {
@@ -389,16 +389,16 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     public void testDetect()
     {
         super.testDetect();
-        Assert.assertEquals(VAL, this.newBag().detect(Predicates.alwaysTrue()));
-        Assert.assertNull(this.newBag().detect(Predicates.alwaysFalse()));
+        Assert.assertEquals(VAL, this.newBag().find(Predicates.alwaysTrue()));
+        Assert.assertNull(this.newBag().find(Predicates.alwaysFalse()));
     }
 
     @Test
     public void testDetectIfNone()
     {
-        Assert.assertEquals(VAL, this.newBag().detectIfNone(Predicates.alwaysTrue(), new PassThruFunction0<String>(NOT_VAL)));
+        Assert.assertEquals(VAL, this.newBag().findIfNone(Predicates.alwaysTrue(), new PassThruFunction0<String>(NOT_VAL)));
 
-        Assert.assertEquals(NOT_VAL, this.newBag().detectIfNone(Predicates.alwaysFalse(), new PassThruFunction0<String>(NOT_VAL)));
+        Assert.assertEquals(NOT_VAL, this.newBag().findIfNone(Predicates.alwaysFalse(), new PassThruFunction0<String>(NOT_VAL)));
     }
 
     @Override

@@ -23,7 +23,7 @@ import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.impl.Counter;
-import com.gs.collections.impl.lazy.iterator.FlatCollectIterator;
+import com.gs.collections.impl.lazy.iterator.FlatTransformIterator;
 import com.gs.collections.impl.utility.Iterate;
 import net.jcip.annotations.Immutable;
 
@@ -77,7 +77,7 @@ public class FlatCollectIterable<T, V>
 
     public Iterator<V> iterator()
     {
-        return new FlatCollectIterator<T, V>(this.adapted, this.function);
+        return new FlatTransformIterator<T, V>(this.adapted, this.function);
     }
 
     private static final class AdaptObjectIntProcedureToProcedure<V> implements Procedure<V>

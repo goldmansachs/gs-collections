@@ -227,14 +227,14 @@ public class ImmutableDoubletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         ImmutableMap<Integer, String> map = this.classUnderTest();
 
-        ImmutableMap<Integer, String> empty = map.select(Predicates2.alwaysFalse());
+        ImmutableMap<Integer, String> empty = map.filter(Predicates2.alwaysFalse());
         Verify.assertInstanceOf(ImmutableEmptyMap.class, empty);
 
-        ImmutableMap<Integer, String> full = map.select(Predicates2.alwaysTrue());
+        ImmutableMap<Integer, String> full = map.filter(Predicates2.alwaysTrue());
         Verify.assertInstanceOf(ImmutableDoubletonMap.class, full);
         Assert.assertEquals(map, full);
 
-        ImmutableMap<Integer, String> one = map.select(new Predicate2<Integer, String>()
+        ImmutableMap<Integer, String> one = map.filter(new Predicate2<Integer, String>()
         {
             public boolean accept(Integer argument1, String argument2)
             {
@@ -244,7 +244,7 @@ public class ImmutableDoubletonMapTest extends ImmutableMemoryEfficientMapTestCa
         Verify.assertInstanceOf(ImmutableSingletonMap.class, one);
         Assert.assertEquals(new ImmutableSingletonMap<Integer, String>(1, "1"), one);
 
-        ImmutableMap<Integer, String> two = map.select(new Predicate2<Integer, String>()
+        ImmutableMap<Integer, String> two = map.filter(new Predicate2<Integer, String>()
         {
             public boolean accept(Integer argument1, String argument2)
             {
@@ -260,14 +260,14 @@ public class ImmutableDoubletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         ImmutableMap<Integer, String> map = this.classUnderTest();
 
-        ImmutableMap<Integer, String> empty = map.reject(Predicates2.alwaysTrue());
+        ImmutableMap<Integer, String> empty = map.filterNot(Predicates2.alwaysTrue());
         Verify.assertInstanceOf(ImmutableEmptyMap.class, empty);
 
-        ImmutableMap<Integer, String> full = map.reject(Predicates2.alwaysFalse());
+        ImmutableMap<Integer, String> full = map.filterNot(Predicates2.alwaysFalse());
         Verify.assertInstanceOf(ImmutableDoubletonMap.class, full);
         Assert.assertEquals(map, full);
 
-        ImmutableMap<Integer, String> one = map.reject(new Predicate2<Integer, String>()
+        ImmutableMap<Integer, String> one = map.filterNot(new Predicate2<Integer, String>()
         {
             public boolean accept(Integer argument1, String argument2)
             {
@@ -277,7 +277,7 @@ public class ImmutableDoubletonMapTest extends ImmutableMemoryEfficientMapTestCa
         Verify.assertInstanceOf(ImmutableSingletonMap.class, one);
         Assert.assertEquals(new ImmutableSingletonMap<Integer, String>(1, "1"), one);
 
-        ImmutableMap<Integer, String> two = map.reject(new Predicate2<Integer, String>()
+        ImmutableMap<Integer, String> two = map.filterNot(new Predicate2<Integer, String>()
         {
             public boolean accept(Integer argument1, String argument2)
             {
@@ -293,10 +293,10 @@ public class ImmutableDoubletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         ImmutableMap<Integer, String> map = this.classUnderTest();
 
-        Pair<Integer, String> one = map.detect(Predicates2.alwaysTrue());
+        Pair<Integer, String> one = map.find(Predicates2.alwaysTrue());
         Assert.assertEquals(Tuples.pair(1, "1"), one);
 
-        Pair<Integer, String> two = map.detect(new Predicate2<Integer, String>()
+        Pair<Integer, String> two = map.find(new Predicate2<Integer, String>()
         {
             public boolean accept(Integer argument1, String argument2)
             {
@@ -305,7 +305,7 @@ public class ImmutableDoubletonMapTest extends ImmutableMemoryEfficientMapTestCa
         });
         Assert.assertEquals(Tuples.pair(2, "2"), two);
 
-        Assert.assertNull(map.detect(Predicates2.alwaysFalse()));
+        Assert.assertNull(map.find(Predicates2.alwaysFalse()));
     }
 
     @Override

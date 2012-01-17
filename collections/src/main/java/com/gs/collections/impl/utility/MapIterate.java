@@ -38,9 +38,9 @@ import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.CollectProcedure;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.block.procedure.CountProcedure;
+import com.gs.collections.impl.block.procedure.FilterNotProcedure;
 import com.gs.collections.impl.block.procedure.MapEntryToProcedure2;
 import com.gs.collections.impl.block.procedure.MapPutProcedure;
-import com.gs.collections.impl.block.procedure.RejectProcedure;
 import com.gs.collections.impl.block.procedure.SelectProcedure;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.MapAdapter;
@@ -50,17 +50,6 @@ import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.internal.IterableIterate;
 
 /**
- * The MapIterate class provides a few of the methods from the Smalltalk Collection Protocol.  This includes:
- * <ul>
- * <li>select: -- a.k.a. filter</li>
- * <li>reject: -- a.k.a. not-filter</li>
- * <li>collect: -- a.k.a. transform, map, tear-off</li>
- * <li>inject:into: -- closely related to reduce and fold</li>
- * <li>detect: -- a.k.a. find, search</li>
- * <li>detect:ifNone:</li>
- * <li>anySatisfy: -- a.k.a. exists</li>
- * <li>allSatisfy:</li>
- * </ul>
  * Since Maps have two data-points per entry (i.e. key and value), most of the implementations in this class
  * iterates over the values only, unless otherwise specified.
  * To iterate over the keys, use keySet() with standard {@link Iterate} methods.
@@ -209,17 +198,17 @@ public final class MapIterate
     }
 
     /**
-     * @see Iterate#select(Iterable, Predicate)
+     * @see Iterate#filter(Iterable, Predicate)
      */
-    public static <K, V> MutableList<V> select(Map<K, V> map, Predicate<? super V> predicate)
+    public static <K, V> MutableList<V> filter(Map<K, V> map, Predicate<? super V> predicate)
     {
-        return MapIterate.select(map, predicate, FastList.<V>newList());
+        return MapIterate.filter(map, predicate, FastList.<V>newList());
     }
 
     /**
-     * @see Iterate#select(Iterable, Predicate, Collection)
+     * @see Iterate#filter(Iterable, Predicate, Collection)
      */
-    public static <K, V, R extends Collection<V>> R select(
+    public static <K, V, R extends Collection<V>> R filter(
             Map<K, V> map,
             Predicate<? super V> predicate,
             R targetCollection)
@@ -244,11 +233,11 @@ public final class MapIterate
      * If the result of the evaluation is true, the map entry is moved to a result map.
      * The result map is returned containing all entries in the source map that evaluated to true.
      */
-    public static <K, V> MutableMap<K, V> selectMapOnEntry(
+    public static <K, V> MutableMap<K, V> filterMapOnEntry(
             Map<K, V> map,
             Predicate2<? super K, ? super V> predicate)
     {
-        return MapIterate.selectMapOnEntry(map, predicate, UnifiedMap.<K, V>newMap());
+        return MapIterate.filterMapOnEntry(map, predicate, UnifiedMap.<K, V>newMap());
     }
 
     /**
@@ -256,7 +245,7 @@ public final class MapIterate
      * If the result of the evaluation is true, the map entry is moved to a result map.
      * The result map is returned containing all entries in the source map that evaluated to true.
      */
-    public static <K, V, R extends Map<K, V>> R selectMapOnEntry(
+    public static <K, V, R extends Map<K, V>> R filterMapOnEntry(
             Map<K, V> map,
             final Predicate2<? super K, ? super V> predicate,
             R target)
@@ -282,7 +271,7 @@ public final class MapIterate
      * If the result of the evaluation is true, the map entry is moved to a result map.
      * The result map is returned containing all entries in the source map that evaluated to true.
      */
-    public static <K, V> MutableMap<K, V> selectMapOnKey(Map<K, V> map, final Predicate<? super K> predicate)
+    public static <K, V> MutableMap<K, V> filterMapOnKey(Map<K, V> map, final Predicate<? super K> predicate)
     {
         MutableMap<K, V> resultMap = UnifiedMap.newMap();
         final Procedure2<K, V> mapTransferProcedure = new MapPutProcedure<K, V>(resultMap);
@@ -305,7 +294,7 @@ public final class MapIterate
      * If the result of the evaluation is true, the map entry is moved to a result map.
      * The result map is returned containing all entries in the source map that evaluated to true.
      */
-    public static <K, V> MutableMap<K, V> selectMapOnValue(Map<K, V> map, final Predicate<? super V> predicate)
+    public static <K, V> MutableMap<K, V> filterMapOnValue(Map<K, V> map, final Predicate<? super V> predicate)
     {
         MutableMap<K, V> resultMap = UnifiedMap.newMap();
         final Procedure2<K, V> mapTransferProcedure = new MapPutProcedure<K, V>(resultMap);
@@ -324,22 +313,22 @@ public final class MapIterate
     }
 
     /**
-     * @see Iterate#reject(Iterable, Predicate)
+     * @see Iterate#filterNot(Iterable, Predicate)
      */
-    public static <K, V> MutableList<V> reject(Map<K, V> map, Predicate<? super V> predicate)
+    public static <K, V> MutableList<V> filterNot(Map<K, V> map, Predicate<? super V> predicate)
     {
-        return MapIterate.reject(map, predicate, FastList.<V>newList());
+        return MapIterate.filterNot(map, predicate, FastList.<V>newList());
     }
 
     /**
-     * @see Iterate#reject(Iterable, Predicate, Collection)
+     * @see Iterate#filterNot(Iterable, Predicate, Collection)
      */
-    public static <K, V, R extends Collection<V>> R reject(
+    public static <K, V, R extends Collection<V>> R filterNot(
             Map<K, V> map,
             Predicate<? super V> predicate,
             R targetCollection)
     {
-        Procedure<V> procedure = new RejectProcedure<V>(predicate, targetCollection);
+        Procedure<V> procedure = new FilterNotProcedure<V>(predicate, targetCollection);
         MapIterate.forEachValue(map, procedure);
         return targetCollection;
     }
@@ -348,18 +337,18 @@ public final class MapIterate
      * For each <em>value</em> of the map, predicate is evaluated with the element as the parameter.
      * Each element which causes predicate to evaluate to false is included in the new collection.
      */
-    public static <K, V> MutableMap<K, V> rejectMapOnEntry(
+    public static <K, V> MutableMap<K, V> filterNotMapOnEntry(
             Map<K, V> map,
             Predicate2<? super K, ? super V> predicate)
     {
-        return MapIterate.rejectMapOnEntry(map, predicate, UnifiedMap.<K, V>newMap());
+        return MapIterate.filterNotMapOnEntry(map, predicate, UnifiedMap.<K, V>newMap());
     }
 
     /**
      * For each <em>value</em> of the map, predicate is evaluated with the element as the parameter.
      * Each element which causes predicate to evaluate to false is added to the targetCollection.
      */
-    public static <K, V, R extends Map<K, V>> R rejectMapOnEntry(
+    public static <K, V, R extends Map<K, V>> R filterNotMapOnEntry(
             Map<K, V> map,
             final Predicate2<? super K, ? super V> predicate,
             final R target)
@@ -397,31 +386,31 @@ public final class MapIterate
     }
 
     /**
-     * @see Iterate#collect(Iterable, Function)
+     * @see Iterate#transform(Iterable, Function)
      */
-    public static <K, V, A> MutableList<A> collect(
+    public static <K, V, A> MutableList<A> transform(
             Map<K, V> map,
             Function<? super V, ? extends A> function)
     {
-        return collect(map, function, FastList.<A>newList(map.size()));
+        return MapIterate.transform(map, function, FastList.<A>newList(map.size()));
     }
 
     /**
      * For each value of the map, the function is evaluated with the key and value as the parameter.
      * The results of these evaluations are collected into a new UnifiedMap.
      */
-    public static <K, V, K2, V2> MutableMap<K2, V2> collect(
+    public static <K, V, K2, V2> MutableMap<K2, V2> transform(
             Map<K, V> map,
             Function2<? super K, ? super V, Pair<K2, V2>> function)
     {
-        return MapIterate.collect(map, function, UnifiedMap.<K2, V2>newMap(map.size()));
+        return MapIterate.transform(map, function, UnifiedMap.<K2, V2>newMap(map.size()));
     }
 
     /**
      * For each value of the map, the function is evaluated with the key and value as the parameter.
      * The results of these evaluations are collected into the target map.
      */
-    public static <K1, V1, K2, V2, R extends Map<K2, V2>> R collect(
+    public static <K1, V1, K2, V2, R extends Map<K2, V2>> R transform(
             Map<K1, V1> map,
             final Function2<? super K1, ? super V1, Pair<K2, V2>> function,
             final R target)
@@ -441,18 +430,18 @@ public final class MapIterate
      * For each key and value of the map, the function is evaluated with the key and value as the parameter.
      * The results of these evaluations are collected into the target map.
      */
-    public static <K, V, V2> MutableMap<K, V2> collectValues(
+    public static <K, V, V2> MutableMap<K, V2> transformValues(
             Map<K, V> map,
             Function2<? super K, ? super V, ? extends V2> function)
     {
-        return MapIterate.collectValues(map, function, UnifiedMap.<K, V2>newMap(map.size()));
+        return MapIterate.transformValues(map, function, UnifiedMap.<K, V2>newMap(map.size()));
     }
 
     /**
      * For each key and value of the map, the function is evaluated with the key and value as the parameter.
      * The results of these evaluations are collected into the target map.
      */
-    public static <K, V, V2, R extends Map<K, V2>> R collectValues(
+    public static <K, V, V2, R extends Map<K, V2>> R transformValues(
             Map<K, V> map,
             final Function2<? super K, ? super V, ? extends V2> function,
             final R target)
@@ -473,12 +462,12 @@ public final class MapIterate
      * and if true, then <code>function</code> is applied.
      * The results of these evaluations are collected into a new map.
      */
-    public static <K1, V1, K2, V2> MutableMap<K2, V2> collectIf(
+    public static <K1, V1, K2, V2> MutableMap<K2, V2> transformIf(
             Map<K1, V1> map,
             Function2<? super K1, ? super V1, Pair<K2, V2>> function,
             Predicate2<? super K1, ? super V1> predicate)
     {
-        return MapIterate.collectIf(map, function, predicate, UnifiedMap.<K2, V2>newMap());
+        return MapIterate.transformIf(map, function, predicate, UnifiedMap.<K2, V2>newMap());
     }
 
     /**
@@ -486,7 +475,7 @@ public final class MapIterate
      * and if true, then <code>function</code> is applied.
      * The results of these evaluations are collected into the target map.
      */
-    public static <K1, V1, K2, V2> MutableMap<K2, V2> collectIf(
+    public static <K1, V1, K2, V2> MutableMap<K2, V2> transformIf(
             Map<K1, V1> map,
             final Function2<? super K1, ? super V1, Pair<K2, V2>> function,
             final Predicate2<? super K1, ? super V1> predicate,
@@ -512,24 +501,24 @@ public final class MapIterate
     /**
      * For each key-value entry of a map, applies a function to each, and adds the transformed entry to a new Map.
      */
-    public static <K1, V1, K2, V2> MutableMap<K2, V2> collect(
+    public static <K1, V1, K2, V2> MutableMap<K2, V2> transform(
             Map<K1, V1> map,
             Function<? super K1, ? extends K2> keyFunction,
             Function<? super V1, ? extends V2> valueFunction)
     {
-        return MapIterate.collect(map, keyFunction, valueFunction, UnifiedMap.<K2, V2>newMap());
+        return MapIterate.transform(map, keyFunction, valueFunction, UnifiedMap.<K2, V2>newMap());
     }
 
     /**
      * For each key-value entry of a map, applies a function to each, and adds the transformed entry to the target Map.
      */
-    public static <K1, V1, K2, V2> MutableMap<K2, V2> collect(
+    public static <K1, V1, K2, V2> MutableMap<K2, V2> transform(
             Map<K1, V1> map,
             final Function<? super K1, ? extends K2> keyFunction,
             final Function<? super V1, ? extends V2> valueFunction,
             Map<K2, V2> target)
     {
-        return MapIterate.collect(map, new Function2<K1, V1, Pair<K2, V2>>()
+        return MapIterate.transform(map, new Function2<K1, V1, Pair<K2, V2>>()
         {
             public Pair<K2, V2> value(K1 key, V1 value)
             {
@@ -539,9 +528,9 @@ public final class MapIterate
     }
 
     /**
-     * @see Iterate#collect(Iterable, Function, Collection)
+     * @see Iterate#transform(Iterable, Function, Collection)
      */
-    public static <K, V, A, R extends Collection<A>> R collect(
+    public static <K, V, A, R extends Collection<A>> R transform(
             Map<K, V> map,
             Function<? super V, ? extends A> function,
             R targetCollection)
@@ -620,13 +609,13 @@ public final class MapIterate
         }
     }
 
-    public static <K, V> Pair<K, V> detect(
+    public static <K, V> Pair<K, V> find(
             Map<K, V> map,
             final Predicate2<? super K, ? super V> predicate)
     {
         if (map == null)
         {
-            throw new IllegalArgumentException("Cannot perform a detect on null");
+            throw new IllegalArgumentException("Cannot perform a find on null");
         }
 
         if (map instanceof ImmutableMap || map instanceof MutableMap)
@@ -638,9 +627,9 @@ public final class MapIterate
             }
             else
             {
-                entries = LazyIterate.adapt(map.entrySet()).collect(AbstractImmutableEntry.<K, V>getPairFunction());
+                entries = LazyIterate.adapt(map.entrySet()).transform(AbstractImmutableEntry.<K, V>getPairFunction());
             }
-            return entries.detect(new Predicate<Pair<K, V>>()
+            return entries.find(new Predicate<Pair<K, V>>()
             {
                 public boolean accept(Pair<K, V> each)
                 {
@@ -660,39 +649,39 @@ public final class MapIterate
     }
 
     /**
-     * @see Iterate#detect(Iterable, Predicate)
+     * @see Iterate#find(Iterable, Predicate)
      */
-    public static <K, V> V detect(Map<K, V> map, Predicate<? super V> predicate)
+    public static <K, V> V find(Map<K, V> map, Predicate<? super V> predicate)
     {
-        return IterableIterate.detect(map.values(), predicate);
+        return IterableIterate.find(map.values(), predicate);
     }
 
     /**
-     * @see Iterate#detectIfNone(Iterable, Predicate, Object)
+     * @see Iterate#findIfNone(Iterable, Predicate, Object)
      */
-    public static <K, V> V detectIfNone(Map<K, V> map, Predicate<? super V> predicate, V ifNone)
+    public static <K, V> V findIfNone(Map<K, V> map, Predicate<? super V> predicate, V ifNone)
     {
-        return Iterate.detectIfNone(map.values(), predicate, ifNone);
+        return Iterate.findIfNone(map.values(), predicate, ifNone);
     }
 
     /**
-     * @see Iterate#injectInto(Object, Iterable, Function2)
+     * @see Iterate#foldLeft(Object, Iterable, Function2)
      */
-    public static <K, V, IV> IV injectInto(
+    public static <K, V, IV> IV foldLeft(
             IV injectValue,
             Map<K, V> map,
             Function2<? super IV, ? super V, ? extends IV> function)
     {
-        return Iterate.injectInto(injectValue, map.values(), function);
+        return Iterate.foldLeft(injectValue, map.values(), function);
     }
 
     /**
-     * Same as {@link #injectInto(Object, Map, Function2)}, but only applies the value to the function
+     * Same as {@link #foldLeft}, but only applies the value to the function
      * if the predicate returns true for the value.
      *
-     * @see #injectInto(Object, Map, Function2)
+     * @see #foldLeft
      */
-    public static <IV, K, V> IV injectIntoIf(
+    public static <IV, K, V> IV foldLeftIf(
             IV initialValue,
             Map<K, V> map,
             final Predicate<? super V> predicate,
@@ -709,7 +698,7 @@ public final class MapIterate
                 return accumulator;
             }
         };
-        return Iterate.injectInto(initialValue, map.values(), ifFunction);
+        return Iterate.foldLeft(initialValue, map.values(), ifFunction);
     }
 
     /**

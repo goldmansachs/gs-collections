@@ -105,35 +105,35 @@ public class RandomAccessListIterateTest
     public void injectInto()
     {
         MutableList<Integer> list = Lists.fixedSize.of(1, 2, 3);
-        Assert.assertEquals(Integer.valueOf(7), RandomAccessListIterate.injectInto(1, list, AddFunction.INTEGER));
+        Assert.assertEquals(Integer.valueOf(7), RandomAccessListIterate.foldLeft(1, list, AddFunction.INTEGER));
     }
 
     @Test
     public void injectIntoInt()
     {
         MutableList<Integer> list = Lists.fixedSize.of(1, 2, 3);
-        Assert.assertEquals(7, RandomAccessListIterate.injectInto(1, list, AddFunction.INTEGER_TO_INT));
+        Assert.assertEquals(7, RandomAccessListIterate.foldLeft(1, list, AddFunction.INTEGER_TO_INT));
     }
 
     @Test
     public void injectIntoLong()
     {
         MutableList<Integer> list = Lists.fixedSize.of(1, 2, 3);
-        Assert.assertEquals(7, RandomAccessListIterate.injectInto(1, list, AddFunction.INTEGER_TO_LONG));
+        Assert.assertEquals(7, RandomAccessListIterate.foldLeft(1, list, AddFunction.INTEGER_TO_LONG));
     }
 
     @Test
     public void injectIntoDouble()
     {
         MutableList<Double> list = Lists.fixedSize.of(1.0, 2.0, 3.0);
-        Assert.assertEquals(7.0d, RandomAccessListIterate.injectInto(1.0, list, AddFunction.DOUBLE), 0.001);
+        Assert.assertEquals(7.0d, RandomAccessListIterate.foldLeft(1.0, list, AddFunction.DOUBLE), 0.001);
     }
 
     @Test
     public void injectIntoString()
     {
         MutableList<String> list = Lists.fixedSize.of("1", "2", "3");
-        Assert.assertEquals("0123", RandomAccessListIterate.injectInto("0", list, AddFunction.STRING));
+        Assert.assertEquals("0123", RandomAccessListIterate.foldLeft("0", list, AddFunction.STRING));
     }
 
     @Test
@@ -141,7 +141,7 @@ public class RandomAccessListIterateTest
     {
         MutableList<String> list = Lists.fixedSize.of("1", "12", "123");
         Function2<Integer, String, Integer> function = MaxSizeFunction.STRING;
-        Assert.assertEquals(Integer.valueOf(3), RandomAccessListIterate.injectInto(Integer.MIN_VALUE, list, function));
+        Assert.assertEquals(Integer.valueOf(3), RandomAccessListIterate.foldLeft(Integer.MIN_VALUE, list, function));
     }
 
     @Test
@@ -149,7 +149,7 @@ public class RandomAccessListIterateTest
     {
         MutableList<String> list = Lists.fixedSize.of("1", "12", "123");
         Function2<Integer, String, Integer> function = MinSizeFunction.STRING;
-        Assert.assertEquals(Integer.valueOf(1), RandomAccessListIterate.injectInto(Integer.MAX_VALUE, list, function));
+        Assert.assertEquals(Integer.valueOf(1), RandomAccessListIterate.foldLeft(Integer.MAX_VALUE, list, function));
     }
 
     @Test
@@ -157,7 +157,7 @@ public class RandomAccessListIterateTest
     {
         Assert.assertEquals(
                 iList("true", "false", "null"),
-                RandomAccessListIterate.collect(mList(true, false, null), Functions.getToString()));
+                RandomAccessListIterate.transform(mList(true, false, null), Functions.getToString()));
     }
 
     @Test
@@ -165,11 +165,11 @@ public class RandomAccessListIterateTest
     {
         Assert.assertEquals(
                 iList("true", "false", "null"),
-                RandomAccessListIterate.collect(mList(true, false, null), Functions.getToString()));
+                RandomAccessListIterate.transform(mList(true, false, null), Functions.getToString()));
 
         Assert.assertEquals(
                 iList("true", "false", "null"),
-                RandomAccessListIterate.collect(mList(true, false, null), Functions.getToString(), new ArrayList<String>()));
+                RandomAccessListIterate.transform(mList(true, false, null), Functions.getToString(), new ArrayList<String>()));
     }
 
     @Test
@@ -178,7 +178,7 @@ public class RandomAccessListIterateTest
         MutableList<MutableList<Boolean>> list = Lists.fixedSize.<MutableList<Boolean>>of(
                 Lists.fixedSize.of(true, false),
                 Lists.fixedSize.of(true, null));
-        MutableList<Boolean> newList = RandomAccessListIterate.flatCollect(list, new Function<MutableList<Boolean>, MutableList<Boolean>>()
+        MutableList<Boolean> newList = RandomAccessListIterate.flatTransform(list, new Function<MutableList<Boolean>, MutableList<Boolean>>()
         {
             public MutableList<Boolean> valueOf(MutableList<Boolean> mutableList)
             {
@@ -189,7 +189,7 @@ public class RandomAccessListIterateTest
                 FastList.newListWith(true, false, true, null),
                 newList);
 
-        MutableSet<Boolean> newSet = RandomAccessListIterate.flatCollect(list, new Function<MutableList<Boolean>, MutableSet<Boolean>>()
+        MutableSet<Boolean> newSet = RandomAccessListIterate.flatTransform(list, new Function<MutableList<Boolean>, MutableSet<Boolean>>()
         {
             public MutableSet<Boolean> valueOf(MutableList<Boolean> mutableList)
             {
@@ -345,30 +345,30 @@ public class RandomAccessListIterateTest
     public void detectWith()
     {
         MutableList<Integer> list = this.getIntegerList();
-        Assert.assertEquals(Integer.valueOf(1), RandomAccessListIterate.detectWith(list, Predicates2.equal(), 1));
+        Assert.assertEquals(Integer.valueOf(1), RandomAccessListIterate.findWith(list, Predicates2.equal(), 1));
         MutableList<Integer> list2 = Lists.fixedSize.of(1, 2, 2);
-        Assert.assertSame(list2.get(1), RandomAccessListIterate.detectWith(list2, Predicates2.equal(), 2));
+        Assert.assertSame(list2.get(1), RandomAccessListIterate.findWith(list2, Predicates2.equal(), 2));
     }
 
     @Test
     public void selectWith()
     {
         MutableList<Integer> list = this.getIntegerList();
-        Verify.assertSize(5, RandomAccessListIterate.selectWith(list, Predicates2.instanceOf(), Integer.class));
+        Verify.assertSize(5, RandomAccessListIterate.filterWith(list, Predicates2.instanceOf(), Integer.class));
     }
 
     @Test
     public void rejectWith()
     {
         MutableList<Integer> list = this.getIntegerList();
-        Verify.assertEmpty(RandomAccessListIterate.rejectWith(list, Predicates2.instanceOf(), Integer.class));
+        Verify.assertEmpty(RandomAccessListIterate.filterNotWith(list, Predicates2.instanceOf(), Integer.class));
     }
 
     @Test
     public void selectAndRejectWith()
     {
         MutableList<Integer> list = this.getIntegerList();
-        Twin<MutableList<Integer>> result = RandomAccessListIterate.selectAndRejectWith(list, Predicates2.in(), Lists.fixedSize.of(1));
+        Twin<MutableList<Integer>> result = RandomAccessListIterate.partitionWith(list, Predicates2.in(), Lists.fixedSize.of(1));
         Verify.assertSize(1, result.getOne());
         Verify.assertSize(4, result.getTwo());
     }
@@ -400,8 +400,8 @@ public class RandomAccessListIterateTest
     public void collectIf()
     {
         MutableList<Integer> integers = Lists.fixedSize.of(1, 2, 3);
-        Verify.assertContainsAll(RandomAccessListIterate.collectIf(integers, Predicates.instanceOf(Integer.class), Functions.getToString()), "1", "2", "3");
-        Verify.assertContainsAll(RandomAccessListIterate.collectIf(integers, Predicates.instanceOf(Integer.class), Functions.getToString(), new ArrayList<String>()), "1", "2", "3");
+        Verify.assertContainsAll(RandomAccessListIterate.tranformIf(integers, Predicates.instanceOf(Integer.class), Functions.getToString()), "1", "2", "3");
+        Verify.assertContainsAll(RandomAccessListIterate.tranformIf(integers, Predicates.instanceOf(Integer.class), Functions.getToString(), new ArrayList<String>()), "1", "2", "3");
     }
 
     @Test

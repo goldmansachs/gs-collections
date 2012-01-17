@@ -112,7 +112,7 @@ public class ImmutableHashBag<T>
 
     public ImmutableBag<T> newWithoutAll(Iterable<? extends T> elements)
     {
-        return this.reject(Predicates.in(elements));
+        return this.filterNot(Predicates.in(elements));
     }
 
     public int size()
@@ -243,14 +243,14 @@ public class ImmutableHashBag<T>
         this.delegate.forEachWith(procedure, parameter);
     }
 
-    public ImmutableBag<T> select(Predicate<? super T> predicate)
+    public ImmutableBag<T> filter(Predicate<? super T> predicate)
     {
-        return this.delegate.select(predicate).toImmutable();
+        return this.delegate.filter(predicate).toImmutable();
     }
 
-    public ImmutableBag<T> reject(Predicate<? super T> predicate)
+    public ImmutableBag<T> filterNot(Predicate<? super T> predicate)
     {
-        return this.delegate.reject(predicate).toImmutable();
+        return this.delegate.filterNot(predicate).toImmutable();
     }
 
     public PartitionImmutableBag<T> partition(Predicate<? super T> predicate)
@@ -258,20 +258,20 @@ public class ImmutableHashBag<T>
         return this.delegate.partition(predicate).toImmutable();
     }
 
-    public <V> ImmutableBag<V> collect(Function<? super T, ? extends V> function)
+    public <V> ImmutableBag<V> transform(Function<? super T, ? extends V> function)
     {
-        return this.delegate.collect(function).toImmutable();
+        return this.delegate.transform(function).toImmutable();
     }
 
-    public <V> ImmutableBag<V> collectIf(
+    public <V> ImmutableBag<V> transformIf(
             Predicate<? super T> predicate, Function<? super T, ? extends V> function)
     {
-        return this.delegate.collectIf(predicate, function).toImmutable();
+        return this.delegate.transformIf(predicate, function).toImmutable();
     }
 
-    public <V> ImmutableBag<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    public <V> ImmutableBag<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
     {
-        return this.delegate.flatCollect(function).toImmutable();
+        return this.delegate.flatTransform(function).toImmutable();
     }
 
     @Override
@@ -308,68 +308,68 @@ public class ImmutableHashBag<T>
     }
 
     @Override
-    public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)
+    public <R extends Collection<T>> R filter(Predicate<? super T> predicate, R target)
     {
-        return this.delegate.select(predicate, target);
+        return this.delegate.filter(predicate, target);
     }
 
     @Override
-    public <P, R extends Collection<T>> R selectWith(
+    public <P, R extends Collection<T>> R filterWith(
             Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
     {
-        return this.delegate.selectWith(predicate, parameter, targetCollection);
+        return this.delegate.filterWith(predicate, parameter, targetCollection);
     }
 
     @Override
-    public <R extends Collection<T>> R reject(Predicate<? super T> predicate, R target)
+    public <R extends Collection<T>> R filterNot(Predicate<? super T> predicate, R target)
     {
-        return this.delegate.reject(predicate, target);
+        return this.delegate.filterNot(predicate, target);
     }
 
     @Override
-    public <P, R extends Collection<T>> R rejectWith(
+    public <P, R extends Collection<T>> R filterNotWith(
             Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
     {
-        return this.delegate.rejectWith(predicate, parameter, targetCollection);
+        return this.delegate.filterNotWith(predicate, parameter, targetCollection);
     }
 
     @Override
-    public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)
+    public <V, R extends Collection<V>> R transform(Function<? super T, ? extends V> function, R target)
     {
-        return this.delegate.collect(function, target);
+        return this.delegate.transform(function, target);
     }
 
     @Override
-    public <P, V, R extends Collection<V>> R collectWith(
+    public <P, V, R extends Collection<V>> R transformWith(
             Function2<? super T, ? super P, ? extends V> function, P parameter, R targetCollection)
     {
-        return this.delegate.collectWith(function, parameter, targetCollection);
+        return this.delegate.transformWith(function, parameter, targetCollection);
     }
 
     @Override
-    public <V, R extends Collection<V>> R flatCollect(
+    public <V, R extends Collection<V>> R flatTransform(
             Function<? super T, ? extends Iterable<V>> function, R target)
     {
-        return this.delegate.flatCollect(function, target);
+        return this.delegate.flatTransform(function, target);
     }
 
     @Override
-    public <V, R extends Collection<V>> R collectIf(
+    public <V, R extends Collection<V>> R transformIf(
             Predicate<? super T> predicate, Function<? super T, ? extends V> function, R target)
     {
-        return this.delegate.collectIf(predicate, function, target);
+        return this.delegate.transformIf(predicate, function, target);
     }
 
     @Override
-    public T detect(Predicate<? super T> predicate)
+    public T find(Predicate<? super T> predicate)
     {
-        return this.delegate.detect(predicate);
+        return this.delegate.find(predicate);
     }
 
     @Override
-    public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
+    public T findIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
     {
-        return this.delegate.detectIfNone(predicate, function);
+        return this.delegate.findIfNone(predicate, function);
     }
 
     @Override
@@ -391,9 +391,9 @@ public class ImmutableHashBag<T>
     }
 
     @Override
-    public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
+    public <IV> IV foldLeft(IV initialValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
-        return this.delegate.injectInto(injectedValue, function);
+        return this.delegate.foldLeft(initialValue, function);
     }
 
     @Override

@@ -68,7 +68,7 @@ import com.gs.collections.impl.block.procedure.CountProcedure;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
-import com.gs.collections.impl.block.procedure.RejectProcedure;
+import com.gs.collections.impl.block.procedure.FilterNotProcedure;
 import com.gs.collections.impl.block.procedure.SelectProcedure;
 import com.gs.collections.impl.block.procedure.ZipWithIndexProcedure;
 import com.gs.collections.impl.factory.Lists;
@@ -649,25 +649,25 @@ public class UnifiedSet<K>
         return this.getFirst();
     }
 
-    public UnifiedSet<K> select(Predicate<? super K> predicate)
+    public UnifiedSet<K> filter(Predicate<? super K> predicate)
     {
-        return this.select(predicate, UnifiedSet.<K>newSet());
+        return this.filter(predicate, UnifiedSet.<K>newSet());
     }
 
-    public <R extends Collection<K>> R select(Predicate<? super K> predicate, R target)
+    public <R extends Collection<K>> R filter(Predicate<? super K> predicate, R target)
     {
         this.forEach(new SelectProcedure<K>(predicate, target));
         return target;
     }
 
-    public <P> UnifiedSet<K> selectWith(
+    public <P> UnifiedSet<K> filterWith(
             Predicate2<? super K, ? super P> predicate,
             P parameter)
     {
-        return this.selectWith(predicate, parameter, UnifiedSet.<K>newSet());
+        return this.filterWith(predicate, parameter, UnifiedSet.<K>newSet());
     }
 
-    public <P, R extends Collection<K>> R selectWith(
+    public <P, R extends Collection<K>> R filterWith(
             final Predicate2<? super K, ? super P> predicate,
             P parameter,
             final R targetCollection)
@@ -685,25 +685,25 @@ public class UnifiedSet<K>
         return targetCollection;
     }
 
-    public UnifiedSet<K> reject(Predicate<? super K> predicate)
+    public UnifiedSet<K> filterNot(Predicate<? super K> predicate)
     {
-        return this.reject(predicate, UnifiedSet.<K>newSet());
+        return this.filterNot(predicate, UnifiedSet.<K>newSet());
     }
 
-    public <R extends Collection<K>> R reject(Predicate<? super K> predicate, R target)
+    public <R extends Collection<K>> R filterNot(Predicate<? super K> predicate, R target)
     {
-        this.forEach(new RejectProcedure<K>(predicate, target));
+        this.forEach(new FilterNotProcedure<K>(predicate, target));
         return target;
     }
 
-    public <P> UnifiedSet<K> rejectWith(
+    public <P> UnifiedSet<K> filterNotWith(
             Predicate2<? super K, ? super P> predicate,
             P parameter)
     {
-        return this.rejectWith(predicate, parameter, UnifiedSet.<K>newSet());
+        return this.filterNotWith(predicate, parameter, UnifiedSet.<K>newSet());
     }
 
-    public <P, R extends Collection<K>> R rejectWith(
+    public <P, R extends Collection<K>> R filterNotWith(
             final Predicate2<? super K, ? super P> predicate,
             P parameter,
             final R targetCollection)
@@ -721,7 +721,7 @@ public class UnifiedSet<K>
         return targetCollection;
     }
 
-    public <P> Twin<MutableList<K>> selectAndRejectWith(
+    public <P> Twin<MutableList<K>> partitionWith(
             final Predicate2<? super K, ? super P> predicate,
             P parameter)
     {
@@ -752,35 +752,35 @@ public class UnifiedSet<K>
         IterableIterate.removeIfWith(this, predicate, parameter);
     }
 
-    public <V> UnifiedSet<V> collect(Function<? super K, ? extends V> function)
+    public <V> UnifiedSet<V> transform(Function<? super K, ? extends V> function)
     {
-        return this.collect(function, UnifiedSet.<V>newSet());
+        return this.transform(function, UnifiedSet.<V>newSet());
     }
 
-    public <V, R extends Collection<V>> R collect(Function<? super K, ? extends V> function, R target)
+    public <V, R extends Collection<V>> R transform(Function<? super K, ? extends V> function, R target)
     {
         this.forEach(new CollectProcedure<K, V>(function, target));
         return target;
     }
 
-    public <V> UnifiedSet<V> flatCollect(Function<? super K, ? extends Iterable<V>> function)
+    public <V> UnifiedSet<V> flatTransform(Function<? super K, ? extends Iterable<V>> function)
     {
-        return this.flatCollect(function, UnifiedSet.<V>newSet());
+        return this.flatTransform(function, UnifiedSet.<V>newSet());
     }
 
-    public <V, R extends Collection<V>> R flatCollect(
+    public <V, R extends Collection<V>> R flatTransform(
             Function<? super K, ? extends Iterable<V>> function, R target)
     {
         this.forEach(new FlatCollectProcedure<K, V>(function, target));
         return target;
     }
 
-    public <P, A> UnifiedSet<A> collectWith(Function2<? super K, ? super P, ? extends A> function, P parameter)
+    public <P, A> UnifiedSet<A> transformWith(Function2<? super K, ? super P, ? extends A> function, P parameter)
     {
-        return this.collectWith(function, parameter, UnifiedSet.<A>newSet());
+        return this.transformWith(function, parameter, UnifiedSet.<A>newSet());
     }
 
-    public <P, A, R extends Collection<A>> R collectWith(
+    public <P, A, R extends Collection<A>> R transformWith(
             final Function2<? super K, ? super P, ? extends A> function, P parameter, final R targetCollection)
     {
         this.forEachWith(new Procedure2<K, P>()
@@ -793,22 +793,22 @@ public class UnifiedSet<K>
         return targetCollection;
     }
 
-    public <V> UnifiedSet<V> collectIf(
+    public <V> UnifiedSet<V> transformIf(
             Predicate<? super K> predicate, Function<? super K, ? extends V> function)
     {
-        return this.collectIf(predicate, function, UnifiedSet.<V>newSet());
+        return this.transformIf(predicate, function, UnifiedSet.<V>newSet());
     }
 
-    public <V, R extends Collection<V>> R collectIf(
+    public <V, R extends Collection<V>> R transformIf(
             Predicate<? super K> predicate, Function<? super K, ? extends V> function, R target)
     {
         this.forEach(new CollectIfProcedure<K, V>(target, function, predicate));
         return target;
     }
 
-    public K detect(Predicate<? super K> predicate)
+    public K find(Predicate<? super K> predicate)
     {
-        return IterableIterate.detect(this, predicate);
+        return IterableIterate.find(this, predicate);
     }
 
     public K min(Comparator<? super K> comparator)
@@ -841,23 +841,23 @@ public class UnifiedSet<K>
         return Iterate.max(this, Comparators.byFunction(function));
     }
 
-    public K detectIfNone(Predicate<? super K> predicate, Function0<? extends K> function)
+    public K findIfNone(Predicate<? super K> predicate, Function0<? extends K> function)
     {
-        K result = this.detect(predicate);
+        K result = this.find(predicate);
         return result == null ? function.value() : result;
     }
 
-    public <P> K detectWith(Predicate2<? super K, ? super P> predicate, P parameter)
+    public <P> K findWith(Predicate2<? super K, ? super P> predicate, P parameter)
     {
-        return IterableIterate.detectWith(this, predicate, parameter);
+        return IterableIterate.findWith(this, predicate, parameter);
     }
 
-    public <P> K detectWithIfNone(
+    public <P> K findWithIfNone(
             Predicate2<? super K, ? super P> predicate,
             P parameter,
             Function0<? extends K> function)
     {
-        K result = this.detectWith(predicate, parameter);
+        K result = this.findWith(predicate, parameter);
         return result == null ? function.value() : result;
     }
 
@@ -908,32 +908,32 @@ public class UnifiedSet<K>
         return IterableIterate.allSatisfyWith(this, predicate, parameter);
     }
 
-    public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super K, ? extends IV> function)
+    public <IV> IV foldLeft(IV initialValue, Function2<? super IV, ? super K, ? extends IV> function)
     {
-        return IterableIterate.injectInto(injectedValue, this, function);
+        return IterableIterate.foldLeft(initialValue, this, function);
     }
 
-    public int injectInto(int injectedValue, IntObjectToIntFunction<? super K> function)
+    public int foldLeft(int initialValue, IntObjectToIntFunction<? super K> function)
     {
-        return IterableIterate.injectInto(injectedValue, this, function);
+        return IterableIterate.foldLeft(initialValue, this, function);
     }
 
-    public long injectInto(long injectedValue, LongObjectToLongFunction<? super K> function)
+    public long foldLeft(long initialValue, LongObjectToLongFunction<? super K> function)
     {
-        return IterableIterate.injectInto(injectedValue, this, function);
+        return IterableIterate.foldLeft(initialValue, this, function);
     }
 
-    public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super K> function)
+    public double foldLeft(double initialValue, DoubleObjectToDoubleFunction<? super K> function)
     {
-        return IterableIterate.injectInto(injectedValue, this, function);
+        return IterableIterate.foldLeft(initialValue, this, function);
     }
 
-    public <IV, P> IV injectIntoWith(
-            IV injectValue,
+    public <IV, P> IV foldLeftWith(
+            IV initialValue,
             Function3<? super IV, ? super K, ? super P, ? extends IV> function,
             P parameter)
     {
-        return IterableIterate.injectIntoWith(injectValue, this, function, parameter);
+        return IterableIterate.foldLeftWith(initialValue, this, function, parameter);
     }
 
     public MutableList<K> toList()
@@ -986,21 +986,21 @@ public class UnifiedSet<K>
             Function<? super K, ? extends NK> keyFunction,
             Function<? super K, ? extends NV> valueFunction)
     {
-        return UnifiedMap.<NK, NV>newMap(this.size()).collectKeysAndValues(this, keyFunction, valueFunction);
+        return UnifiedMap.<NK, NV>newMap(this.size()).transformKeysAndValues(this, keyFunction, valueFunction);
     }
 
     public <NK, NV> MutableSortedMap<NK, NV> toSortedMap(
             Function<? super K, ? extends NK> keyFunction,
             Function<? super K, ? extends NV> valueFunction)
     {
-        return TreeSortedMap.<NK, NV>newMap().collectKeysAndValues(this, keyFunction, valueFunction);
+        return TreeSortedMap.<NK, NV>newMap().transformKeysAndValues(this, keyFunction, valueFunction);
     }
 
     public <NK, NV> MutableSortedMap<NK, NV> toSortedMap(Comparator<? super NK> comparator,
             Function<? super K, ? extends NK> keyFunction,
             Function<? super K, ? extends NV> valueFunction)
     {
-        return TreeSortedMap.<NK, NV>newMap(comparator).collectKeysAndValues(this, keyFunction, valueFunction);
+        return TreeSortedMap.<NK, NV>newMap(comparator).transformKeysAndValues(this, keyFunction, valueFunction);
     }
 
     public LazyIterable<K> asLazy()

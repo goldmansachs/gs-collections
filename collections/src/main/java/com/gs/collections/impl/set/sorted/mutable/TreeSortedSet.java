@@ -256,15 +256,15 @@ public final class TreeSortedSet<T>
     }
 
     @Override
-    public TreeSortedSet<T> select(Predicate<? super T> predicate)
+    public TreeSortedSet<T> filter(Predicate<? super T> predicate)
     {
-        return Iterate.select(this.treeSet, predicate, this.newEmpty());
+        return Iterate.filter(this.treeSet, predicate, this.newEmpty());
     }
 
     @Override
-    public TreeSortedSet<T> reject(Predicate<? super T> predicate)
+    public TreeSortedSet<T> filterNot(Predicate<? super T> predicate)
     {
-        return Iterate.reject(this.treeSet, predicate, this.newEmpty());
+        return Iterate.filterNot(this.treeSet, predicate, this.newEmpty());
     }
 
     public PartitionMutableSortedSet<T> partition(Predicate<? super T> predicate)
@@ -273,23 +273,23 @@ public final class TreeSortedSet<T>
     }
 
     @Override
-    public <V> MutableList<V> collect(Function<? super T, ? extends V> function)
+    public <V> MutableList<V> transform(Function<? super T, ? extends V> function)
     {
-        return Iterate.collect(this.treeSet, function, FastList.<V>newList());
+        return Iterate.transform(this.treeSet, function, FastList.<V>newList());
     }
 
     @Override
-    public <V> MutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    public <V> MutableList<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
     {
-        return Iterate.flatCollect(this.treeSet, function, FastList.<V>newList());
+        return Iterate.flatTransform(this.treeSet, function, FastList.<V>newList());
     }
 
     @Override
-    public <V> MutableList<V> collectIf(
+    public <V> MutableList<V> transformIf(
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function)
     {
-        return Iterate.collectIf(this.treeSet, predicate, function, FastList.<V>newList());
+        return Iterate.tranformIf(this.treeSet, predicate, function, FastList.<V>newList());
     }
 
     public <V> TreeSortedSetMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
@@ -303,21 +303,21 @@ public final class TreeSortedSet<T>
     }
 
     @Override
-    public <P> TreeSortedSet<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> TreeSortedSet<T> filterWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return Iterate.selectWith(this.treeSet, predicate, parameter, this.newEmpty());
+        return Iterate.filterWith(this.treeSet, predicate, parameter, this.newEmpty());
     }
 
     @Override
-    public <P> TreeSortedSet<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> TreeSortedSet<T> filterNotWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return Iterate.rejectWith(this.treeSet, predicate, parameter, this.newEmpty());
+        return Iterate.filterNotWith(this.treeSet, predicate, parameter, this.newEmpty());
     }
 
     @Override
-    public <P, V> MutableList<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
+    public <P, V> MutableList<V> transformWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
     {
-        return Iterate.collectWith(this.treeSet, function, parameter, FastList.<V>newList());
+        return Iterate.transformWith(this.treeSet, function, parameter, FastList.<V>newList());
     }
 
     public <S> TreeSortedSet<Pair<T, S>> zip(Iterable<S> that)

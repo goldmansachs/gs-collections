@@ -153,63 +153,63 @@ public abstract class AbstractImmutableMap<K, V>
         throw new UnsupportedOperationException("ImmutableMap");
     }
 
-    public <K2, V2> ImmutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function)
+    public <K2, V2> ImmutableMap<K2, V2> transform(Function2<? super K, ? super V, Pair<K2, V2>> function)
     {
-        UnifiedMap<K2, V2> result = MapIterate.collect(this, function, UnifiedMap.<K2, V2>newMap());
+        UnifiedMap<K2, V2> result = MapIterate.transform(this, function, UnifiedMap.<K2, V2>newMap());
         return result.toImmutable();
     }
 
-    public <R> ImmutableMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function)
+    public <R> ImmutableMap<K, R> transformValues(Function2<? super K, ? super V, ? extends R> function)
     {
-        UnifiedMap<K, R> result = MapIterate.collectValues(this, function, UnifiedMap.<K, R>newMap(this.size()));
+        UnifiedMap<K, R> result = MapIterate.transformValues(this, function, UnifiedMap.<K, R>newMap(this.size()));
         return result.toImmutable();
     }
 
-    public ImmutableMap<K, V> select(Predicate2<? super K, ? super V> predicate)
+    public ImmutableMap<K, V> filter(Predicate2<? super K, ? super V> predicate)
     {
-        UnifiedMap<K, V> result = MapIterate.selectMapOnEntry(this, predicate, UnifiedMap.<K, V>newMap());
+        UnifiedMap<K, V> result = MapIterate.filterMapOnEntry(this, predicate, UnifiedMap.<K, V>newMap());
         return result.toImmutable();
     }
 
-    public ImmutableMap<K, V> reject(Predicate2<? super K, ? super V> predicate)
+    public ImmutableMap<K, V> filterNot(Predicate2<? super K, ? super V> predicate)
     {
-        UnifiedMap<K, V> result = MapIterate.rejectMapOnEntry(this, predicate, UnifiedMap.<K, V>newMap());
+        UnifiedMap<K, V> result = MapIterate.filterNotMapOnEntry(this, predicate, UnifiedMap.<K, V>newMap());
         return result.toImmutable();
     }
 
-    public Pair<K, V> detect(Predicate2<? super K, ? super V> predicate)
+    public Pair<K, V> find(Predicate2<? super K, ? super V> predicate)
     {
-        return MapIterate.detect(this, predicate);
+        return MapIterate.find(this, predicate);
     }
 
     @Override
-    public <R> ImmutableCollection<R> collect(Function<? super V, ? extends R> function)
+    public <R> ImmutableCollection<R> transform(Function<? super V, ? extends R> function)
     {
-        return this.collect(function, FastList.<R>newList(this.size())).toImmutable();
+        return this.transform(function, FastList.<R>newList(this.size())).toImmutable();
     }
 
     @Override
-    public <R> ImmutableCollection<R> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function)
+    public <R> ImmutableCollection<R> transformIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function)
     {
-        return this.collectIf(predicate, function, FastList.<R>newList(this.size())).toImmutable();
+        return this.transformIf(predicate, function, FastList.<R>newList(this.size())).toImmutable();
     }
 
     @Override
-    public <R> ImmutableCollection<R> flatCollect(Function<? super V, ? extends Iterable<R>> function)
+    public <R> ImmutableCollection<R> flatTransform(Function<? super V, ? extends Iterable<R>> function)
     {
-        return this.flatCollect(function, FastList.<R>newList(this.size())).toImmutable();
+        return this.flatTransform(function, FastList.<R>newList(this.size())).toImmutable();
     }
 
     @Override
-    public ImmutableCollection<V> reject(Predicate<? super V> predicate)
+    public ImmutableCollection<V> filterNot(Predicate<? super V> predicate)
     {
-        return this.reject(predicate, FastList.<V>newList(this.size())).toImmutable();
+        return this.filterNot(predicate, FastList.<V>newList(this.size())).toImmutable();
     }
 
     @Override
-    public ImmutableCollection<V> select(Predicate<? super V> predicate)
+    public ImmutableCollection<V> filter(Predicate<? super V> predicate)
     {
-        return this.select(predicate, FastList.<V>newList(this.size())).toImmutable();
+        return this.filter(predicate, FastList.<V>newList(this.size())).toImmutable();
     }
 
     public PartitionImmutableCollection<V> partition(Predicate<? super V> predicate)

@@ -120,15 +120,15 @@ public abstract class AbstractArrayAdapter<T>
     }
 
     @Override
-    public T detect(Predicate<? super T> predicate)
+    public T find(Predicate<? super T> predicate)
     {
-        return ArrayIterate.detect(this.items, predicate);
+        return ArrayIterate.find(this.items, predicate);
     }
 
     @Override
-    public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
+    public T findIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
     {
-        T result = this.detect(predicate);
+        T result = this.find(predicate);
         if (result == null)
         {
             result = function.value();
@@ -155,67 +155,67 @@ public abstract class AbstractArrayAdapter<T>
     }
 
     @Override
-    public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
+    public <IV> IV foldLeft(IV initialValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
-        return ArrayIterate.injectInto(injectedValue, this.items, function);
+        return ArrayIterate.foldLeft(initialValue, this.items, function);
     }
 
     @Override
-    public MutableList<T> select(Predicate<? super T> predicate)
+    public MutableList<T> filter(Predicate<? super T> predicate)
     {
-        return this.select(predicate, FastList.<T>newList());
+        return this.filter(predicate, FastList.<T>newList());
     }
 
     @Override
-    public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)
+    public <R extends Collection<T>> R filter(Predicate<? super T> predicate, R target)
     {
-        return ArrayIterate.select(this.items, predicate, target);
+        return ArrayIterate.filter(this.items, predicate, target);
     }
 
     @Override
-    public MutableList<T> reject(Predicate<? super T> predicate)
+    public MutableList<T> filterNot(Predicate<? super T> predicate)
     {
-        return this.reject(predicate, FastList.<T>newList());
+        return this.filterNot(predicate, FastList.<T>newList());
     }
 
     @Override
-    public <R extends Collection<T>> R reject(Predicate<? super T> predicate, R target)
+    public <R extends Collection<T>> R filterNot(Predicate<? super T> predicate, R target)
     {
-        return ArrayIterate.reject(this.items, predicate, target);
+        return ArrayIterate.filterNot(this.items, predicate, target);
     }
 
     @Override
-    public <V> MutableList<V> collect(Function<? super T, ? extends V> function)
+    public <V> MutableList<V> transform(Function<? super T, ? extends V> function)
     {
-        return this.collect(function, FastList.<V>newList(this.size()));
+        return this.transform(function, FastList.<V>newList(this.size()));
     }
 
     @Override
-    public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)
+    public <V, R extends Collection<V>> R transform(Function<? super T, ? extends V> function, R target)
     {
-        return ArrayIterate.collect(this.items, function, target);
+        return ArrayIterate.transform(this.items, function, target);
     }
 
     @Override
-    public <V> MutableList<V> collectIf(
+    public <V> MutableList<V> transformIf(
             Predicate<? super T> predicate, Function<? super T, ? extends V> function)
     {
-        return this.collectIf(predicate, function, FastList.<V>newList());
+        return this.transformIf(predicate, function, FastList.<V>newList());
     }
 
     @Override
-    public <V, R extends Collection<V>> R collectIf(
+    public <V, R extends Collection<V>> R transformIf(
             Predicate<? super T> predicate, Function<? super T, ? extends V> function, R target)
     {
-        return ArrayIterate.<T, V, R>collectIf(this.items, predicate, function, target);
+        return ArrayIterate.<T, V, R>transformIf(this.items, predicate, function, target);
     }
 
     @Override
-    public <P> Twin<MutableList<T>> selectAndRejectWith(
+    public <P> Twin<MutableList<T>> partitionWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
-        return ArrayIterate.selectAndRejectWith(this.items, predicate, parameter);
+        return ArrayIterate.partitionWith(this.items, predicate, parameter);
     }
 
     @Override
@@ -452,53 +452,53 @@ public abstract class AbstractArrayAdapter<T>
     }
 
     @Override
-    public <P> MutableList<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> MutableList<T> filterWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return this.selectWith(predicate, parameter, FastList.<T>newList());
+        return this.filterWith(predicate, parameter, FastList.<T>newList());
     }
 
     @Override
-    public <P, R extends Collection<T>> R selectWith(
+    public <P, R extends Collection<T>> R filterWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
             R targetCollection)
     {
-        return ArrayIterate.selectWith(this.items, predicate, parameter, targetCollection);
+        return ArrayIterate.filterWith(this.items, predicate, parameter, targetCollection);
     }
 
     @Override
-    public <P> MutableList<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> MutableList<T> filterNotWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return this.rejectWith(predicate, parameter, FastList.<T>newList());
+        return this.filterNotWith(predicate, parameter, FastList.<T>newList());
     }
 
     @Override
-    public <P, R extends Collection<T>> R rejectWith(
+    public <P, R extends Collection<T>> R filterNotWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
             R targetCollection)
     {
-        return ArrayIterate.rejectWith(this.items, predicate, parameter, targetCollection);
+        return ArrayIterate.filterNotWith(this.items, predicate, parameter, targetCollection);
     }
 
     @Override
-    public <P, A> MutableList<A> collectWith(Function2<? super T, ? super P, ? extends A> function, P parameter)
+    public <P, A> MutableList<A> transformWith(Function2<? super T, ? super P, ? extends A> function, P parameter)
     {
-        return this.collectWith(function, parameter, FastList.<A>newList());
+        return this.transformWith(function, parameter, FastList.<A>newList());
     }
 
     @Override
-    public <P, A, R extends Collection<A>> R collectWith(
+    public <P, A, R extends Collection<A>> R transformWith(
             Function2<? super T, ? super P, ? extends A> function, P parameter, R targetCollection)
     {
-        return ArrayIterate.collectWith(this.items, function, parameter, targetCollection);
+        return ArrayIterate.transformWith(this.items, function, parameter, targetCollection);
     }
 
     @Override
-    public <IV, P> IV injectIntoWith(
-            IV injectValue, Function3<? super IV, ? super T, ? super P, ? extends IV> function, P parameter)
+    public <IV, P> IV foldLeftWith(
+            IV initialValue, Function3<? super IV, ? super T, ? super P, ? extends IV> function, P parameter)
     {
-        return ArrayIterate.injectIntoWith(injectValue, this.items, function, parameter);
+        return ArrayIterate.foldLeftWith(initialValue, this.items, function, parameter);
     }
 
     @Override
@@ -508,18 +508,18 @@ public abstract class AbstractArrayAdapter<T>
     }
 
     @Override
-    public <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> T findWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return ArrayIterate.detectWith(this.items, predicate, parameter);
+        return ArrayIterate.findWith(this.items, predicate, parameter);
     }
 
     @Override
-    public <P> T detectWithIfNone(
+    public <P> T findWithIfNone(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
             Function0<? extends T> function)
     {
-        T result = this.detectWith(predicate, parameter);
+        T result = this.findWith(predicate, parameter);
         if (result == null)
         {
             result = function.value();

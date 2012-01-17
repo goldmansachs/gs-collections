@@ -46,11 +46,11 @@ public final class SortedSetIterables
         TreeSortedSet<MutableSortedSet<T>> sortedSetIterables = TreeSortedSet.newSet(Comparators.<T>powerSet());
         MutableSortedSet<MutableSortedSet<T>> seed = sortedSetIterables.with(innerTree);
 
-        return Iterate.injectInto(seed, set, new Function2<MutableSortedSet<MutableSortedSet<T>>, T, MutableSortedSet<MutableSortedSet<T>>>()
+        return Iterate.foldLeft(seed, set, new Function2<MutableSortedSet<MutableSortedSet<T>>, T, MutableSortedSet<MutableSortedSet<T>>>()
         {
             public MutableSortedSet<MutableSortedSet<T>> value(MutableSortedSet<MutableSortedSet<T>> accumulator, final T element)
             {
-                return accumulator.union(accumulator.collect(new Function<MutableSortedSet<T>, MutableSortedSet<T>>()
+                return accumulator.union(accumulator.transform(new Function<MutableSortedSet<T>, MutableSortedSet<T>>()
                 {
                     public MutableSortedSet<T> valueOf(MutableSortedSet<T> set)
                     {
@@ -68,7 +68,7 @@ public final class SortedSetIterables
      */
     public static <T> ImmutableSortedSet<ImmutableSortedSet<T>> immutablePowerSet(SortedSet<T> set)
     {
-        return powerSet(set).collect(new Function<MutableSortedSet<T>, ImmutableSortedSet<T>>()
+        return powerSet(set).transform(new Function<MutableSortedSet<T>, ImmutableSortedSet<T>>()
         {
             public ImmutableSortedSet<T> valueOf(MutableSortedSet<T> set)
             {

@@ -240,9 +240,9 @@ public final class StringIterate
     /**
      * For each token in a string separated by the specified separator, execute the specified Function2,
      * returning the result value from the function. For more information, see
-     * {@link Iterate#injectInto(Object, Iterable, Function2)}
+     * {@link Iterate#foldLeft(Object, Iterable, Function2)}
      */
-    public static <T, R> R injectIntoTokens(
+    public static <T, R> R foldLeft(
             String string,
             String separator,
             R injectedValue,
@@ -310,7 +310,7 @@ public final class StringIterate
      */
     public static void reverseForEach(String string, CodePointProcedure procedure)
     {
-        if (0 != string.length())
+        if (!string.isEmpty())
         {
             for (int i = string.length() - 1; i >= 0; i--)
             {
@@ -353,7 +353,7 @@ public final class StringIterate
         return count;
     }
 
-    public static String collect(String string, CharFunction function)
+    public static String transform(String string, CharFunction function)
     {
         int size = string.length();
         StringBuilder builder = new StringBuilder(size);
@@ -364,7 +364,7 @@ public final class StringIterate
         return builder.toString();
     }
 
-    public static String collect(String string, CodePointFunction function)
+    public static String transform(String string, CodePointFunction function)
     {
         int size = string.length();
         StringBuilder builder = new StringBuilder(size);
@@ -377,18 +377,18 @@ public final class StringIterate
 
     public static String englishToUpperCase(String string)
     {
-        if (anySatisfy(string, CharPredicate.IS_LOWERCASE))
+        if (StringIterate.anySatisfy(string, CharPredicate.IS_LOWERCASE))
         {
-            return collect(string, CharFunction.TO_UPPERCASE);
+            return StringIterate.transform(string, CharFunction.TO_UPPERCASE);
         }
         return string;
     }
 
     public static String englishToLowerCase(String string)
     {
-        if (anySatisfy(string, CharPredicate.IS_UPPERCASE))
+        if (StringIterate.anySatisfy(string, CharPredicate.IS_UPPERCASE))
         {
-            return collect(string, CharFunction.TO_LOWERCASE);
+            return StringIterate.transform(string, CharFunction.TO_LOWERCASE);
         }
         return string;
     }
@@ -396,7 +396,7 @@ public final class StringIterate
     /**
      * Find the first element that returns true for the specified {@code predicate}.
      */
-    public static Character detect(String string, CharPredicate predicate)
+    public static Character find(String string, CharPredicate predicate)
     {
         int size = string.length();
         for (int i = 0; i < size; i++)
@@ -414,9 +414,9 @@ public final class StringIterate
      * Find the first element that returns true for the specified {@code predicate}.  Return the default char if
      * no value is found.
      */
-    public static Character detectIfNone(String string, CharPredicate predicate, char resultIfNone)
+    public static Character findIfNone(String string, CharPredicate predicate, char resultIfNone)
     {
-        Character result = StringIterate.detect(string, predicate);
+        Character result = StringIterate.find(string, predicate);
         return result == null ? Character.valueOf(resultIfNone) : result;
     }
 
@@ -424,9 +424,9 @@ public final class StringIterate
      * Find the first element that returns true for the specified {@code predicate}.  Return the first char of the
      * default string if no value is found.
      */
-    public static Character detectIfNone(String string, CharPredicate predicate, String resultIfNone)
+    public static Character findIfNone(String string, CharPredicate predicate, String resultIfNone)
     {
-        Character result = StringIterate.detect(string, predicate);
+        Character result = StringIterate.find(string, predicate);
         return result == null ? Character.valueOf(resultIfNone.charAt(0)) : result;
     }
 
@@ -537,7 +537,7 @@ public final class StringIterate
     /**
      * @return a new string with all of the characters that return true for the specified {@code predicate}.
      */
-    public static String select(String string, CharPredicate predicate)
+    public static String filter(String string, CharPredicate predicate)
     {
         int size = string.length();
         StringBuilder buffer = new StringBuilder(string.length());
@@ -555,7 +555,7 @@ public final class StringIterate
     /**
      * @return a new string with all of the code points that return true for the specified {@code predicate}.
      */
-    public static String select(String string, CodePointPredicate predicate)
+    public static String filter(String string, CodePointPredicate predicate)
     {
         int size = string.length();
         StringBuilder buffer = new StringBuilder(string.length());
@@ -573,7 +573,7 @@ public final class StringIterate
     /**
      * @return a new string excluding all of the characters that return true for the specified {@code predicate}.
      */
-    public static String reject(String string, CharPredicate predicate)
+    public static String filterNot(String string, CharPredicate predicate)
     {
         int size = string.length();
         StringBuilder buffer = new StringBuilder(string.length());
@@ -591,7 +591,7 @@ public final class StringIterate
     /**
      * @return a new string excluding all of the code points that return true for the specified {@code predicate}.
      */
-    public static String reject(String string, CodePointPredicate predicate)
+    public static String filterNot(String string, CodePointPredicate predicate)
     {
         int size = string.length();
         StringBuilder buffer = new StringBuilder(string.length());

@@ -34,7 +34,7 @@ public final class ZipWithIndexIterator<T>
 
     public void remove()
     {
-        throw new UnsupportedOperationException("Cannot remove from a collect iterator");
+        throw new UnsupportedOperationException("Cannot remove from a zipWithIndex iterator");
     }
 
     public boolean hasNext()

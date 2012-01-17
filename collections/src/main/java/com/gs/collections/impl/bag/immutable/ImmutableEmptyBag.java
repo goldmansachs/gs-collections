@@ -203,33 +203,33 @@ final class ImmutableEmptyBag<T>
         return this;
     }
 
-    public ImmutableBag<T> select(Predicate<? super T> predicate)
+    public ImmutableBag<T> filter(Predicate<? super T> predicate)
     {
         return this;
     }
 
-    public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)
+    public <R extends Collection<T>> R filter(Predicate<? super T> predicate, R target)
     {
         return target;
     }
 
-    public <P, R extends Collection<T>> R selectWith(
+    public <P, R extends Collection<T>> R filterWith(
             Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
     {
         return targetCollection;
     }
 
-    public ImmutableBag<T> reject(Predicate<? super T> predicate)
+    public ImmutableBag<T> filterNot(Predicate<? super T> predicate)
     {
         return this;
     }
 
-    public <R extends Collection<T>> R reject(Predicate<? super T> predicate, R target)
+    public <R extends Collection<T>> R filterNot(Predicate<? super T> predicate, R target)
     {
         return target;
     }
 
-    public <P, R extends Collection<T>> R rejectWith(
+    public <P, R extends Collection<T>> R filterNotWith(
             Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
     {
         return targetCollection;
@@ -240,30 +240,30 @@ final class ImmutableEmptyBag<T>
         return PartitionHashBag.of(this, predicate).toImmutable();
     }
 
-    public <V> ImmutableBag<V> collect(Function<? super T, ? extends V> function)
+    public <V> ImmutableBag<V> transform(Function<? super T, ? extends V> function)
     {
         return (ImmutableBag<V>) INSTANCE;
     }
 
-    public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)
+    public <V, R extends Collection<V>> R transform(Function<? super T, ? extends V> function, R target)
     {
         return target;
     }
 
-    public <P, V, R extends Collection<V>> R collectWith(
+    public <P, V, R extends Collection<V>> R transformWith(
             Function2<? super T, ? super P, ? extends V> function, P parameter, R targetCollection)
     {
         return targetCollection;
     }
 
-    public <V> ImmutableBag<V> collectIf(
+    public <V> ImmutableBag<V> transformIf(
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function)
     {
         return (ImmutableBag<V>) INSTANCE;
     }
 
-    public <V, R extends Collection<V>> R collectIf(
+    public <V, R extends Collection<V>> R transformIf(
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function,
             R target)
@@ -271,12 +271,12 @@ final class ImmutableEmptyBag<T>
         return target;
     }
 
-    public <V> ImmutableBag<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    public <V> ImmutableBag<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
     {
         return (ImmutableBag<V>) INSTANCE;
     }
 
-    public <V, R extends Collection<V>> R flatCollect(
+    public <V, R extends Collection<V>> R flatTransform(
             Function<? super T, ? extends Iterable<V>> function,
             R target)
     {
@@ -307,12 +307,12 @@ final class ImmutableEmptyBag<T>
         return target;
     }
 
-    public T detect(Predicate<? super T> predicate)
+    public T find(Predicate<? super T> predicate)
     {
         return null;
     }
 
-    public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
+    public T findIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
     {
         return function.value();
     }
@@ -332,24 +332,24 @@ final class ImmutableEmptyBag<T>
         return true;
     }
 
-    public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
+    public <IV> IV foldLeft(IV initialValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
-        return injectedValue;
+        return initialValue;
     }
 
-    public int injectInto(int injectedValue, IntObjectToIntFunction<? super T> function)
+    public int foldLeft(int initialValue, IntObjectToIntFunction<? super T> function)
     {
-        return injectedValue;
+        return initialValue;
     }
 
-    public long injectInto(long injectedValue, LongObjectToLongFunction<? super T> function)
+    public long foldLeft(long initialValue, LongObjectToLongFunction<? super T> function)
     {
-        return injectedValue;
+        return initialValue;
     }
 
-    public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super T> function)
+    public double foldLeft(double initialValue, DoubleObjectToDoubleFunction<? super T> function)
     {
-        return injectedValue;
+        return initialValue;
     }
 
     public MutableList<T> toList()

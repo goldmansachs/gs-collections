@@ -141,31 +141,31 @@ public abstract class AbstractListAdapter<T>
     public abstract <V> MutableListMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
 
     @Override
-    public abstract MutableList<T> select(Predicate<? super T> predicate);
+    public abstract MutableList<T> filter(Predicate<? super T> predicate);
 
     @Override
-    public abstract MutableList<T> reject(Predicate<? super T> predicate);
+    public abstract MutableList<T> filterNot(Predicate<? super T> predicate);
 
     @Override
-    public abstract <V> MutableList<V> collect(Function<? super T, ? extends V> function);
+    public abstract <V> MutableList<V> transform(Function<? super T, ? extends V> function);
 
     @Override
-    public abstract <V> MutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
+    public abstract <V> MutableList<V> flatTransform(Function<? super T, ? extends Iterable<V>> function);
 
     @Override
-    public abstract <V> MutableList<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
+    public abstract <V> MutableList<V> transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 
     @Override
     public abstract PartitionMutableList<T> partition(Predicate<? super T> predicate);
 
     @Override
-    public abstract <P> MutableList<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+    public abstract <P> MutableList<T> filterWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     @Override
-    public abstract <P> MutableList<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+    public abstract <P> MutableList<T> filterNotWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     @Override
-    public abstract <P, V> MutableList<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
+    public abstract <P, V> MutableList<V> transformWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
 
     @Override
     public abstract <S> MutableList<Pair<T, S>> zip(Iterable<S> that);

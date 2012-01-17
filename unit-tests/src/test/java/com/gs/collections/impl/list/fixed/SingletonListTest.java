@@ -215,29 +215,29 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
     @Test
     public void select()
     {
-        Verify.assertContainsAll(newWith(1).select(Predicates.lessThan(3)), 1);
-        Verify.assertEmpty(newWith(1).select(Predicates.greaterThan(3)));
+        Verify.assertContainsAll(newWith(1).filter(Predicates.lessThan(3)), 1);
+        Verify.assertEmpty(newWith(1).filter(Predicates.greaterThan(3)));
     }
 
     @Test
     public void selectWith()
     {
-        Verify.assertContainsAll(newWith(1).selectWith(Predicates2.<Integer>lessThan(), 3), 1);
-        Verify.assertEmpty(newWith(1).selectWith(Predicates2.<Integer>greaterThan(), 3));
+        Verify.assertContainsAll(newWith(1).filterWith(Predicates2.<Integer>lessThan(), 3), 1);
+        Verify.assertEmpty(newWith(1).filterWith(Predicates2.<Integer>greaterThan(), 3));
     }
 
     @Test
     public void reject()
     {
-        Verify.assertEmpty(newWith(1).reject(Predicates.lessThan(3)));
-        Verify.assertContainsAll(newWith(1).reject(Predicates.greaterThan(3), UnifiedSet.<Integer>newSet()), 1);
+        Verify.assertEmpty(newWith(1).filterNot(Predicates.lessThan(3)));
+        Verify.assertContainsAll(newWith(1).filterNot(Predicates.greaterThan(3), UnifiedSet.<Integer>newSet()), 1);
     }
 
     @Test
     public void rejectWith()
     {
-        Verify.assertEmpty(newWith(1).rejectWith(Predicates2.<Integer>lessThan(), 3));
-        Verify.assertContainsAll(newWith(1).rejectWith(Predicates2.<Integer>greaterThan(),
+        Verify.assertEmpty(newWith(1).filterNotWith(Predicates2.<Integer>lessThan(), 3));
+        Verify.assertContainsAll(newWith(1).filterNotWith(Predicates2.<Integer>greaterThan(),
                 3,
                 UnifiedSet.<Integer>newSet()),
                 1);
@@ -246,8 +246,8 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
     @Test
     public void collect()
     {
-        Verify.assertContainsAll(newWith(1).collect(Functions.getToString()), "1");
-        Verify.assertContainsAll(newWith(1).collect(Functions.getToString(),
+        Verify.assertContainsAll(newWith(1).transform(Functions.getToString()), "1");
+        Verify.assertContainsAll(newWith(1).transform(Functions.getToString(),
                 UnifiedSet.<String>newSet()),
                 "1");
     }
@@ -263,40 +263,40 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
                         return UnifiedSet.newSetWith(object.toString());
                     }
                 };
-        Verify.assertListsEqual(FastList.newListWith("1"), newWith(1).flatCollect(function));
+        Verify.assertListsEqual(FastList.newListWith("1"), newWith(1).flatTransform(function));
         Verify.assertSetsEqual(
                 UnifiedSet.newSetWith("1"),
-                newWith(1).flatCollect(function, UnifiedSet.<String>newSet()));
+                newWith(1).flatTransform(function, UnifiedSet.<String>newSet()));
     }
 
     @Test
     public void detect()
     {
-        Assert.assertEquals(Integer.valueOf(1), newWith(1).detect(Predicates.equal(1)));
-        Assert.assertNull(newWith(1).detect(Predicates.equal(6)));
+        Assert.assertEquals(Integer.valueOf(1), newWith(1).find(Predicates.equal(1)));
+        Assert.assertNull(newWith(1).find(Predicates.equal(6)));
     }
 
     @Test
     public void detectWith()
     {
-        Assert.assertEquals(Integer.valueOf(1), newWith(1).detectWith(Predicates2.equal(), 1));
-        Assert.assertNull(newWith(1).detectWith(Predicates2.equal(), 6));
+        Assert.assertEquals(Integer.valueOf(1), newWith(1).findWith(Predicates2.equal(), 1));
+        Assert.assertNull(newWith(1).findWith(Predicates2.equal(), 6));
     }
 
     @Test
     public void detectIfNoneWithBlock()
     {
         Function0<Integer> function = new PassThruFunction0<Integer>(6);
-        Assert.assertEquals(Integer.valueOf(1), newWith(1).detectIfNone(Predicates.equal(1), function));
-        Assert.assertEquals(Integer.valueOf(6), newWith(1).detectIfNone(Predicates.equal(6), function));
+        Assert.assertEquals(Integer.valueOf(1), newWith(1).findIfNone(Predicates.equal(1), function));
+        Assert.assertEquals(Integer.valueOf(6), newWith(1).findIfNone(Predicates.equal(6), function));
     }
 
     @Test
     public void detectWithIfNone()
     {
         Function0<Integer> function = new PassThruFunction0<Integer>(6);
-        Assert.assertEquals(Integer.valueOf(1), newWith(1).detectWithIfNone(Predicates2.equal(), 1, function));
-        Assert.assertEquals(Integer.valueOf(6), newWith(1).detectWithIfNone(Predicates2.equal(), 6, function));
+        Assert.assertEquals(Integer.valueOf(1), newWith(1).findWithIfNone(Predicates2.equal(), 1, function));
+        Assert.assertEquals(Integer.valueOf(6), newWith(1).findWithIfNone(Predicates2.equal(), 6, function));
     }
 
     @Test
@@ -344,9 +344,9 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
     @Test
     public void collectIf()
     {
-        Verify.assertContainsAll(newWith(1).collectIf(Predicates.instanceOf(Integer.class),
+        Verify.assertContainsAll(newWith(1).transformIf(Predicates.instanceOf(Integer.class),
                 Functions.getToString()), "1");
-        Verify.assertContainsAll(newWith(1).collectIf(Predicates.instanceOf(Integer.class),
+        Verify.assertContainsAll(newWith(1).transformIf(Predicates.instanceOf(Integer.class),
                 Functions.getToString(),
                 FastList.<String>newList()), "1");
     }
@@ -364,10 +364,10 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
                 };
         Assert.assertEquals(
                 FastList.newListWith(2),
-                newWith(1).collectWith(addFunction, 1));
+                newWith(1).transformWith(addFunction, 1));
         Assert.assertEquals(
                 FastList.newListWith(2),
-                newWith(1).collectWith(addFunction, 1, FastList.<Integer>newList()));
+                newWith(1).transformWith(addFunction, 1, FastList.<Integer>newList()));
     }
 
     @Test
@@ -444,7 +444,7 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
     public void injectInto()
     {
         MutableList<Integer> objects = newWith(1);
-        Integer result = objects.injectInto(1, AddFunction.INTEGER);
+        Integer result = objects.foldLeft(1, AddFunction.INTEGER);
         Assert.assertEquals(Integer.valueOf(2), result);
     }
 
@@ -453,7 +453,7 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
     {
         MutableList<Integer> objects = newWith(1);
         Integer result =
-                objects.injectIntoWith(1, new Function3<Integer, Integer, Integer, Integer>()
+                objects.foldLeftWith(1, new Function3<Integer, Integer, Integer, Integer>()
                 {
                     public Integer value(Integer injectedValued, Integer item, Integer parameter)
                     {
@@ -477,7 +477,7 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
     public void selectAndRejectWith()
     {
         MutableList<Integer> objects = newWith(1);
-        Twin<MutableList<Integer>> result = objects.selectAndRejectWith(Predicates2.equal(), 1);
+        Twin<MutableList<Integer>> result = objects.partitionWith(Predicates2.equal(), 1);
         Verify.assertSize(1, result.getOne());
         Verify.assertEmpty(result.getTwo());
     }

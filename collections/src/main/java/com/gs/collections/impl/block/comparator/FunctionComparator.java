@@ -23,7 +23,7 @@ import com.gs.collections.api.block.function.Function;
 
 /**
  * Simple {@link Comparator} that uses an {@link Function}
- * to select a value from the underlying object and compare it against a known value to determine ordering.
+ * to transform a value from the underlying object and compare it against a known value to determine ordering.
  */
 public class FunctionComparator<T, V>
         implements SerializableComparator<T>

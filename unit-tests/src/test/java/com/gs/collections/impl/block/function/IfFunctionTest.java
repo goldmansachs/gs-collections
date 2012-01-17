@@ -41,7 +41,7 @@ public class IfFunctionTest
                 IntegerPredicates.isEven(),
                 Functions.getFixedValue(1),
                 Functions.getFixedValue(0));
-        MutableList<Integer> result = map.valuesView().collect(function).toList();
+        MutableList<Integer> result = map.valuesView().transform(function).toList();
 
         Assert.assertEquals(FastList.newListWith(0, 1, 0, 1, 0), result);
     }

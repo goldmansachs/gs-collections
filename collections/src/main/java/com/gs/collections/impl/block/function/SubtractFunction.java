@@ -19,7 +19,7 @@ package com.gs.collections.impl.block.function;
 import com.gs.collections.api.block.function.Function2;
 
 /**
- * Provides static Function2s which can be used by Iterate.injectInto for adding primitives or to a collection
+ * Provides static Function2s which can be used by Iterate.foldLeft for adding primitives or to a collection
  */
 public final class SubtractFunction
 {

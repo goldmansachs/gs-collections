@@ -37,7 +37,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                Iterate.collect(null, Functions.getPassThru());
+                Iterate.transform(null, Functions.getPassThru());
             }
         });
 
@@ -45,7 +45,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                ArrayIterate.collect(null, Functions.getPassThru());
+                ArrayIterate.transform(null, Functions.getPassThru());
             }
         });
     }
@@ -57,7 +57,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                Iterate.collectIf(null, null, Functions.getPassThru());
+                Iterate.transformIf(null, null, Functions.getPassThru());
             }
         });
 
@@ -65,7 +65,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                ArrayIterate.collectIf(null, null, Functions.getPassThru());
+                ArrayIterate.transformIf(null, null, Functions.getPassThru());
             }
         });
     }
@@ -77,7 +77,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                Iterate.collectWith(null, null, null);
+                Iterate.transformWith(null, null, null);
             }
         });
 
@@ -85,7 +85,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                ArrayIterate.collectWith(null, null, null);
+                ArrayIterate.transformWith(null, null, null);
             }
         });
     }
@@ -97,7 +97,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                Iterate.select(null, null);
+                Iterate.filter(null, null);
             }
         });
 
@@ -105,7 +105,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                ArrayIterate.select(null, null);
+                ArrayIterate.filter(null, null);
             }
         });
     }
@@ -117,7 +117,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                Iterate.selectAndRejectWith(null, null, null);
+                Iterate.partitionWith(null, null, null);
             }
         });
 
@@ -125,7 +125,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                ArrayIterate.selectAndRejectWith(null, null, null);
+                ArrayIterate.partitionWith(null, null, null);
             }
         });
     }
@@ -157,7 +157,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                Iterate.selectWith(null, null, null);
+                Iterate.filterWith(null, null, null);
             }
         });
 
@@ -165,7 +165,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                ArrayIterate.selectWith(null, null, null);
+                ArrayIterate.filterWith(null, null, null);
             }
         });
     }
@@ -177,7 +177,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                Iterate.detect(null, null);
+                Iterate.find(null, null);
             }
         });
 
@@ -185,7 +185,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                ArrayIterate.detect(null, null);
+                ArrayIterate.find(null, null);
             }
         });
     }
@@ -197,7 +197,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                Iterate.detectIfNone(null, null, null);
+                Iterate.findIfNone(null, null, null);
             }
         });
 
@@ -205,7 +205,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                ArrayIterate.detectIfNone(null, null, null);
+                ArrayIterate.findIfNone(null, null, null);
             }
         });
     }
@@ -217,7 +217,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                Iterate.detectWith(null, null, null);
+                Iterate.findWith(null, null, null);
             }
         });
 
@@ -225,7 +225,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                ArrayIterate.detectWith(null, null, null);
+                ArrayIterate.findWith(null, null, null);
             }
         });
     }
@@ -237,7 +237,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                Iterate.detectWithIfNone(null, null, null, null);
+                Iterate.findWithIfNone(null, null, null, null);
             }
         });
 
@@ -245,7 +245,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                ArrayIterate.detectWithIfNone(null, null, null, null);
+                ArrayIterate.findWithIfNone(null, null, null, null);
             }
         });
     }
@@ -257,7 +257,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                Iterate.detectIndex(null, null);
+                Iterate.findIndex(null, null);
             }
         });
 
@@ -265,7 +265,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                ArrayIterate.detectIndex(null, null);
+                ArrayIterate.findIndex(null, null);
             }
         });
     }
@@ -277,7 +277,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                Iterate.detectIndexWith(null, null, null);
+                Iterate.findIndexWith(null, null, null);
             }
         });
 
@@ -285,7 +285,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                ArrayIterate.detectIndexWith(null, null, null);
+                ArrayIterate.findIndexWith(null, null, null);
             }
         });
     }
@@ -297,7 +297,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                Iterate.reject(null, null);
+                Iterate.filterNot(null, null);
             }
         });
 
@@ -305,7 +305,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                ArrayIterate.reject(null, null);
+                ArrayIterate.filterNot(null, null);
             }
         });
     }
@@ -317,7 +317,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                Iterate.rejectWith(null, null, null);
+                Iterate.filterNotWith(null, null, null);
             }
         });
 
@@ -325,7 +325,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                ArrayIterate.rejectWith(null, null, null);
+                ArrayIterate.filterNotWith(null, null, null);
             }
         });
     }
@@ -337,7 +337,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                Iterate.injectInto(null, null, null);
+                Iterate.foldLeft(null, null, null);
             }
         });
 
@@ -345,7 +345,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                ArrayIterate.injectInto(null, null, null);
+                ArrayIterate.foldLeft(null, null, null);
             }
         });
     }
@@ -357,7 +357,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                Iterate.injectIntoWith(null, null, null, null);
+                Iterate.foldLeftWith(null, null, null, null);
             }
         });
 
@@ -365,7 +365,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                ArrayIterate.injectIntoWith(null, null, null, null);
+                ArrayIterate.foldLeftWith(null, null, null, null);
             }
         });
     }
@@ -519,7 +519,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                ArrayListIterate.collect(null, Functions.getPassThru());
+                ArrayListIterate.transform(null, Functions.getPassThru());
             }
         });
     }
@@ -531,7 +531,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                ListIterate.collect(null, Functions.getPassThru());
+                ListIterate.transform(null, Functions.getPassThru());
             }
         });
     }
@@ -543,7 +543,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                IterableIterate.collect(null, Functions.getPassThru());
+                IterableIterate.transform(null, Functions.getPassThru());
             }
         });
     }
@@ -555,7 +555,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                ArrayListIterate.select(null, null);
+                ArrayListIterate.filter(null, null);
             }
         });
     }
@@ -567,7 +567,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                ListIterate.select(null, null);
+                ListIterate.filter(null, null);
             }
         });
     }
@@ -579,7 +579,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                IterableIterate.select(null, null);
+                IterableIterate.filter(null, null);
             }
         });
     }
@@ -591,7 +591,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                Assert.assertNull(ArrayListIterate.detect(null, null));
+                Assert.assertNull(ArrayListIterate.find(null, null));
             }
         });
     }
@@ -603,7 +603,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                Assert.assertNull(ListIterate.detect(null, null));
+                Assert.assertNull(ListIterate.find(null, null));
             }
         });
     }
@@ -615,7 +615,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                Assert.assertNull(IterableIterate.detect(null, null));
+                Assert.assertNull(IterableIterate.find(null, null));
             }
         });
     }
@@ -627,7 +627,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                ArrayListIterate.reject(null, null);
+                ArrayListIterate.filterNot(null, null);
             }
         });
     }
@@ -639,7 +639,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                ListIterate.reject(null, null);
+                ListIterate.filterNot(null, null);
             }
         });
     }
@@ -651,7 +651,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                IterableIterate.reject(null, null);
+                IterableIterate.filterNot(null, null);
             }
         });
     }
@@ -663,7 +663,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                Assert.assertNull(ArrayListIterate.injectInto(null, null, null));
+                Assert.assertNull(ArrayListIterate.foldLeft(null, null, null));
             }
         });
     }
@@ -675,7 +675,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                Assert.assertNull(ListIterate.injectInto(null, null, null));
+                Assert.assertNull(ListIterate.foldLeft(null, null, null));
             }
         });
     }
@@ -687,7 +687,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                Assert.assertNull(IterableIterate.injectInto(null, null, null));
+                Assert.assertNull(IterableIterate.foldLeft(null, null, null));
             }
         });
     }

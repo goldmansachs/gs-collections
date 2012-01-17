@@ -44,17 +44,17 @@ public interface ImmutableSet<T>
 
     ImmutableSet<T> newWithoutAll(Iterable<? extends T> elements);
 
-    ImmutableSet<T> select(Predicate<? super T> predicate);
+    ImmutableSet<T> filter(Predicate<? super T> predicate);
 
-    ImmutableSet<T> reject(Predicate<? super T> predicate);
+    ImmutableSet<T> filterNot(Predicate<? super T> predicate);
 
     PartitionImmutableSet<T> partition(Predicate<? super T> predicate);
 
-    <V> ImmutableSet<V> collect(Function<? super T, ? extends V> function);
+    <V> ImmutableSet<V> transform(Function<? super T, ? extends V> function);
 
-    <V> ImmutableSet<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
+    <V> ImmutableSet<V> transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 
-    <V> ImmutableSet<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
+    <V> ImmutableSet<V> flatTransform(Function<? super T, ? extends Iterable<V>> function);
 
     <V> ImmutableSetMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
 

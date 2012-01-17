@@ -26,11 +26,11 @@ import com.gs.collections.api.tuple.Pair;
 public interface UnsortedMapIterable<K, V>
         extends MapIterable<K, V>
 {
-    UnsortedMapIterable<K, V> select(Predicate2<? super K, ? super V> predicate);
+    UnsortedMapIterable<K, V> filter(Predicate2<? super K, ? super V> predicate);
 
-    UnsortedMapIterable<K, V> reject(Predicate2<? super K, ? super V> predicate);
+    UnsortedMapIterable<K, V> filterNot(Predicate2<? super K, ? super V> predicate);
 
-    <R> UnsortedMapIterable<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function);
+    <R> UnsortedMapIterable<K, R> transformValues(Function2<? super K, ? super V, ? extends R> function);
 
-    <K2, V2> UnsortedMapIterable<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function);
+    <K2, V2> UnsortedMapIterable<K2, V2> transform(Function2<? super K, ? super V, Pair<K2, V2>> function);
 }

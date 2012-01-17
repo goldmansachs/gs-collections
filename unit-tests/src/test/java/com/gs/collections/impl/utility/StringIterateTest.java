@@ -50,15 +50,15 @@ public class StringIterateTest
     @Test
     public void collect()
     {
-        Assert.assertEquals("ABC", StringIterate.collect("abc", CharFunction.TO_UPPERCASE));
-        Assert.assertEquals("abc", StringIterate.collect("abc", CharFunction.TO_LOWERCASE));
+        Assert.assertEquals("ABC", StringIterate.transform("abc", CharFunction.TO_UPPERCASE));
+        Assert.assertEquals("abc", StringIterate.transform("abc", CharFunction.TO_LOWERCASE));
     }
 
     @Test
     public void collectCodePoint()
     {
-        Assert.assertEquals("ABC", StringIterate.collect("abc", CodePointFunction.TO_UPPERCASE));
-        Assert.assertEquals("abc", StringIterate.collect("abc", CodePointFunction.TO_LOWERCASE));
+        Assert.assertEquals("ABC", StringIterate.transform("abc", CodePointFunction.TO_UPPERCASE));
+        Assert.assertEquals("abc", StringIterate.transform("abc", CodePointFunction.TO_LOWERCASE));
     }
 
     @Test
@@ -94,35 +94,35 @@ public class StringIterateTest
     @Test
     public void select()
     {
-        String string = StringIterate.select("1a2a3", CharPredicate.IS_DIGIT);
+        String string = StringIterate.filter("1a2a3", CharPredicate.IS_DIGIT);
         Assert.assertEquals("123", string);
     }
 
     @Test
     public void selectCodePoint()
     {
-        String string = StringIterate.select("1a2a3", CodePointPredicate.IS_DIGIT);
+        String string = StringIterate.filter("1a2a3", CodePointPredicate.IS_DIGIT);
         Assert.assertEquals("123", string);
     }
 
     @Test
     public void detect()
     {
-        char character = StringIterate.detect("1a2a3", CharPredicate.IS_LETTER);
+        char character = StringIterate.find("1a2a3", CharPredicate.IS_LETTER);
         Assert.assertEquals('a', character);
     }
 
     @Test
     public void detectIfNone()
     {
-        char character = StringIterate.detectIfNone("123", CharPredicate.IS_LETTER, "b".charAt(0));
+        char character = StringIterate.findIfNone("123", CharPredicate.IS_LETTER, "b".charAt(0));
         Assert.assertEquals('b', character);
     }
 
     @Test
     public void detectIfNoneWithString()
     {
-        char character = StringIterate.detectIfNone("123", CharPredicate.IS_LETTER, "b");
+        char character = StringIterate.findIfNone("123", CharPredicate.IS_LETTER, "b");
         Assert.assertEquals('b', character);
     }
 
@@ -219,14 +219,14 @@ public class StringIterateTest
     @Test
     public void reject()
     {
-        String string = StringIterate.reject("1a2b3c", CharPredicate.IS_DIGIT);
+        String string = StringIterate.filterNot("1a2b3c", CharPredicate.IS_DIGIT);
         Assert.assertEquals("abc", string);
     }
 
     @Test
     public void rejectCodePoint()
     {
-        String string = StringIterate.reject("1a2b3c", CodePointPredicate.IS_DIGIT);
+        String string = StringIterate.filterNot("1a2b3c", CodePointPredicate.IS_DIGIT);
         Assert.assertEquals("abc", string);
     }
 
@@ -395,7 +395,7 @@ public class StringIterateTest
     @Test
     public void injectIntoTokens()
     {
-        Assert.assertEquals("123", StringIterate.injectIntoTokens("1,2,3", ",", null, AddFunction.STRING));
+        Assert.assertEquals("123", StringIterate.foldLeft("1,2,3", ",", null, AddFunction.STRING));
     }
 
     @Test

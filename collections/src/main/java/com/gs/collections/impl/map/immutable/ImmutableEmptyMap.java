@@ -185,31 +185,31 @@ final class ImmutableEmptyMap<K, V>
     }
 
     @Override
-    public <K2, V2> ImmutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function)
+    public <K2, V2> ImmutableMap<K2, V2> transform(Function2<? super K, ? super V, Pair<K2, V2>> function)
     {
         return Maps.immutable.of();
     }
 
     @Override
-    public <R> ImmutableMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function)
+    public <R> ImmutableMap<K, R> transformValues(Function2<? super K, ? super V, ? extends R> function)
     {
         return Maps.immutable.of();
     }
 
     @Override
-    public Pair<K, V> detect(Predicate2<? super K, ? super V> predicate)
+    public Pair<K, V> find(Predicate2<? super K, ? super V> predicate)
     {
         return null;
     }
 
     @Override
-    public ImmutableMap<K, V> reject(Predicate2<? super K, ? super V> predicate)
+    public ImmutableMap<K, V> filterNot(Predicate2<? super K, ? super V> predicate)
     {
         return this;
     }
 
     @Override
-    public ImmutableMap<K, V> select(Predicate2<? super K, ? super V> predicate)
+    public ImmutableMap<K, V> filter(Predicate2<? super K, ? super V> predicate)
     {
         return this;
     }

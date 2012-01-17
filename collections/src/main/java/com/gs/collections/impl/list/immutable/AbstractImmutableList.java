@@ -44,8 +44,8 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.procedure.CollectIfProcedure;
 import com.gs.collections.impl.block.procedure.CollectProcedure;
+import com.gs.collections.impl.block.procedure.FilterNotProcedure;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
-import com.gs.collections.impl.block.procedure.RejectProcedure;
 import com.gs.collections.impl.block.procedure.SelectProcedure;
 import com.gs.collections.impl.collection.immutable.AbstractImmutableCollection;
 import com.gs.collections.impl.factory.Lists;
@@ -189,7 +189,7 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
         return this.isEmpty() ? null : this.get(this.size() - 1);
     }
 
-    public ImmutableList<T> select(Predicate<? super T> predicate)
+    public ImmutableList<T> filter(Predicate<? super T> predicate)
     {
         MutableList<T> result = Lists.mutable.of();
         this.forEach(new SelectProcedure<T>(predicate, result));
@@ -197,28 +197,28 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
     }
 
     @Override
-    public <P, R extends Collection<T>> R selectWith(
+    public <P, R extends Collection<T>> R filterWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
             R targetCollection)
     {
-        return ListIterate.selectWith(this.castToList(), predicate, parameter, targetCollection);
+        return ListIterate.filterWith(this.castToList(), predicate, parameter, targetCollection);
     }
 
-    public ImmutableList<T> reject(Predicate<? super T> predicate)
+    public ImmutableList<T> filterNot(Predicate<? super T> predicate)
     {
         MutableList<T> result = Lists.mutable.of();
-        this.forEach(new RejectProcedure<T>(predicate, result));
+        this.forEach(new FilterNotProcedure<T>(predicate, result));
         return result.toImmutable();
     }
 
     @Override
-    public <P, R extends Collection<T>> R rejectWith(
+    public <P, R extends Collection<T>> R filterNotWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
             R targetCollection)
     {
-        return ListIterate.rejectWith(this.castToList(), predicate, parameter, targetCollection);
+        return ListIterate.filterNotWith(this.castToList(), predicate, parameter, targetCollection);
     }
 
     public PartitionImmutableList<T> partition(Predicate<? super T> predicate)
@@ -226,14 +226,14 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
         return PartitionFastList.of(this, predicate).toImmutable();
     }
 
-    public <V> ImmutableList<V> collect(Function<? super T, ? extends V> function)
+    public <V> ImmutableList<V> transform(Function<? super T, ? extends V> function)
     {
         MutableList<V> result = Lists.mutable.of();
         this.forEach(new CollectProcedure<T, V>(function, result));
         return result.toImmutable();
     }
 
-    public <V> ImmutableList<V> collectIf(
+    public <V> ImmutableList<V> transformIf(
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function)
     {
@@ -243,13 +243,13 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
     }
 
     @Override
-    public <P, V, R extends Collection<V>> R collectWith(
+    public <P, V, R extends Collection<V>> R transformWith(
             Function2<? super T, ? super P, ? extends V> function, P parameter, R targetCollection)
     {
-        return ListIterate.collectWith(this.castToList(), function, parameter, targetCollection);
+        return ListIterate.transformWith(this.castToList(), function, parameter, targetCollection);
     }
 
-    public <V> ImmutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    public <V> ImmutableList<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
     {
         MutableList<V> result = Lists.mutable.of();
         this.forEach(new FlatCollectProcedure<T, V>(function, result));
@@ -257,14 +257,14 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
     }
 
     @Override
-    public <V, R extends Collection<V>> R flatCollect(
+    public <V, R extends Collection<V>> R flatTransform(
             Function<? super T, ? extends Iterable<V>> function, R target)
     {
-        return ListIterate.flatCollect(this, function, target);
+        return ListIterate.flatTransform(this, function, target);
     }
 
     @Override
-    public T detect(Predicate<? super T> predicate)
+    public T find(Predicate<? super T> predicate)
     {
         for (int i = 0, size = this.size(); i < size; i++)
         {
@@ -318,27 +318,27 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
     }
 
     @Override
-    public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
+    public <IV> IV foldLeft(IV initialValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
-        return ListIterate.injectInto(injectedValue, this, function);
+        return ListIterate.foldLeft(initialValue, this, function);
     }
 
     @Override
-    public int injectInto(int injectedValue, IntObjectToIntFunction<? super T> function)
+    public int foldLeft(int initialValue, IntObjectToIntFunction<? super T> function)
     {
-        return ListIterate.injectInto(injectedValue, this, function);
+        return ListIterate.foldLeft(initialValue, this, function);
     }
 
     @Override
-    public long injectInto(long injectedValue, LongObjectToLongFunction<? super T> function)
+    public long foldLeft(long initialValue, LongObjectToLongFunction<? super T> function)
     {
-        return ListIterate.injectInto(injectedValue, this, function);
+        return ListIterate.foldLeft(initialValue, this, function);
     }
 
     @Override
-    public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super T> function)
+    public double foldLeft(double initialValue, DoubleObjectToDoubleFunction<? super T> function)
     {
-        return ListIterate.injectInto(injectedValue, this, function);
+        return ListIterate.foldLeft(initialValue, this, function);
     }
 
     @Override

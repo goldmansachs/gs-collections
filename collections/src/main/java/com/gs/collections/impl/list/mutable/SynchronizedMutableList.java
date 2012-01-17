@@ -140,40 +140,40 @@ public class SynchronizedMutableList<E>
     }
 
     @Override
-    public <V> MutableList<V> collect(Function<? super E, ? extends V> function)
+    public <V> MutableList<V> transform(Function<? super E, ? extends V> function)
     {
         synchronized (this.getLock())
         {
-            return this.getMutableList().collect(function);
+            return this.getMutableList().transform(function);
         }
     }
 
     @Override
-    public <V> MutableList<V> flatCollect(Function<? super E, ? extends Iterable<V>> function)
+    public <V> MutableList<V> flatTransform(Function<? super E, ? extends Iterable<V>> function)
     {
         synchronized (this.getLock())
         {
-            return this.getMutableList().flatCollect(function);
+            return this.getMutableList().flatTransform(function);
         }
     }
 
     @Override
-    public <V> MutableList<V> collectIf(
+    public <V> MutableList<V> transformIf(
             Predicate<? super E> predicate,
             Function<? super E, ? extends V> function)
     {
         synchronized (this.getLock())
         {
-            return this.getMutableList().collectIf(predicate, function);
+            return this.getMutableList().transformIf(predicate, function);
         }
     }
 
     @Override
-    public <P, V> MutableList<V> collectWith(Function2<? super E, ? super P, ? extends V> function, P parameter)
+    public <P, V> MutableList<V> transformWith(Function2<? super E, ? super P, ? extends V> function, P parameter)
     {
         synchronized (this.getLock())
         {
-            return this.getMutableList().collectWith(function, parameter);
+            return this.getMutableList().transformWith(function, parameter);
         }
     }
 
@@ -229,40 +229,40 @@ public class SynchronizedMutableList<E>
     }
 
     @Override
-    public MutableList<E> reject(Predicate<? super E> predicate)
+    public MutableList<E> filterNot(Predicate<? super E> predicate)
     {
         synchronized (this.getLock())
         {
-            return this.getMutableList().reject(predicate);
+            return this.getMutableList().filterNot(predicate);
         }
     }
 
     @Override
-    public <P> MutableList<E> rejectWith(Predicate2<? super E, ? super P> predicate, P parameter)
+    public <P> MutableList<E> filterNotWith(Predicate2<? super E, ? super P> predicate, P parameter)
     {
         synchronized (this.getLock())
         {
-            return this.getMutableList().rejectWith(predicate, parameter);
+            return this.getMutableList().filterNotWith(predicate, parameter);
         }
     }
 
     @Override
-    public MutableList<E> select(Predicate<? super E> predicate)
+    public MutableList<E> filter(Predicate<? super E> predicate)
     {
         synchronized (this.getLock())
         {
-            return this.getMutableList().select(predicate);
+            return this.getMutableList().filter(predicate);
         }
     }
 
     @Override
-    public <P> MutableList<E> selectWith(
+    public <P> MutableList<E> filterWith(
             Predicate2<? super E, ? super P> predicate,
             P parameter)
     {
         synchronized (this.getLock())
         {
-            return this.getMutableList().selectWith(predicate, parameter);
+            return this.getMutableList().filterWith(predicate, parameter);
         }
     }
 

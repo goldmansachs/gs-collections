@@ -18,18 +18,17 @@ package com.gs.collections.impl.parallel;
 
 import java.util.Collection;
 
-import com.gs.collections.impl.block.procedure.RejectProcedure;
+import com.gs.collections.impl.block.procedure.FilterNotProcedure;
 
 /**
- * Combines the results of a Collection of SelectBlocks which each hold onto a negative filtered (reject)
- * collection of results.
+ * Combines the results of a Collection of SelectBlocks which each hold onto a negative filtered collection of results.
  */
-public final class RejectProcedureCombiner<T>
-        extends AbstractPredicateBasedCombiner<T, RejectProcedure<T>>
+public final class FilterNotProcedureCombiner<T>
+        extends AbstractPredicateBasedCombiner<T, FilterNotProcedure<T>>
 {
     private static final long serialVersionUID = 1L;
 
-    public RejectProcedureCombiner(
+    public FilterNotProcedureCombiner(
             Iterable<T> sourceCollection,
             Collection<T> targetCollection,
             int initialCapacity,
@@ -38,7 +37,7 @@ public final class RejectProcedureCombiner<T>
         super(combineOne, sourceCollection, initialCapacity, targetCollection);
     }
 
-    public void combineOne(RejectProcedure<T> procedureCombine)
+    public void combineOne(FilterNotProcedure<T> procedureCombine)
     {
         this.result.addAll(procedureCombine.getCollection());
     }

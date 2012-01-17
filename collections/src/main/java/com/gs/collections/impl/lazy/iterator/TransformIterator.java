@@ -23,18 +23,18 @@ import com.gs.collections.api.block.function.Function;
 import net.jcip.annotations.Immutable;
 
 @Immutable
-public final class CollectIterator<T, V>
+public final class TransformIterator<T, V>
         implements Iterator<V>
 {
     private final Iterator<T> iterator;
     private final Function<? super T, ? extends V> function;
 
-    public CollectIterator(Iterable<T> iterable, Function<? super T, ? extends V> function)
+    public TransformIterator(Iterable<T> iterable, Function<? super T, ? extends V> function)
     {
         this(iterable.iterator(), function);
     }
 
-    public CollectIterator(Iterator<T> newIterator, Function<? super T, ? extends V> function)
+    public TransformIterator(Iterator<T> newIterator, Function<? super T, ? extends V> function)
     {
         this.iterator = newIterator;
         this.function = function;
@@ -42,7 +42,7 @@ public final class CollectIterator<T, V>
 
     public void remove()
     {
-        throw new UnsupportedOperationException("Cannot remove from a collect iterator");
+        throw new UnsupportedOperationException("Cannot remove from a transform iterator");
     }
 
     public boolean hasNext()

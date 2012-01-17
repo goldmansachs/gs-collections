@@ -93,7 +93,7 @@ public class UnmodifiableTreeMap<K, V>
         throw new UnsupportedOperationException();
     }
 
-    public <E> MutableSortedMap<K, V> collectKeysAndValues(
+    public <E> MutableSortedMap<K, V> transformKeysAndValues(
             Collection<E> collection,
             Function<? super E, ? extends K> keyFunction,
             Function<? super E, ? extends V> valueFunction)
@@ -202,7 +202,7 @@ public class UnmodifiableTreeMap<K, V>
 
     public RichIterable<Pair<K, V>> keyValuesView()
     {
-        return LazyIterate.adapt(this.entrySet()).collect(AbstractImmutableEntry.<K, V>getPairFunction());
+        return LazyIterate.adapt(this.entrySet()).transform(AbstractImmutableEntry.<K, V>getPairFunction());
     }
 
     protected MutableSortedMap<K, V> getMutableSortedMap()
@@ -255,29 +255,29 @@ public class UnmodifiableTreeMap<K, V>
         this.getMutableSortedMap().forEachWith(procedure, parameter);
     }
 
-    public <R> MutableSortedMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function)
+    public <R> MutableSortedMap<K, R> transformValues(Function2<? super K, ? super V, ? extends R> function)
     {
-        return this.getMutableSortedMap().collectValues(function);
+        return this.getMutableSortedMap().transformValues(function);
     }
 
-    public <K2, V2> MutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function)
+    public <K2, V2> MutableMap<K2, V2> transform(Function2<? super K, ? super V, Pair<K2, V2>> function)
     {
-        return this.getMutableSortedMap().collect(function);
+        return this.getMutableSortedMap().transform(function);
     }
 
-    public MutableSortedMap<K, V> select(Predicate2<? super K, ? super V> predicate)
+    public MutableSortedMap<K, V> filter(Predicate2<? super K, ? super V> predicate)
     {
-        return this.getMutableSortedMap().select(predicate);
+        return this.getMutableSortedMap().filter(predicate);
     }
 
-    public MutableSortedMap<K, V> reject(Predicate2<? super K, ? super V> predicate)
+    public MutableSortedMap<K, V> filterNot(Predicate2<? super K, ? super V> predicate)
     {
-        return this.getMutableSortedMap().reject(predicate);
+        return this.getMutableSortedMap().filterNot(predicate);
     }
 
-    public Pair<K, V> detect(Predicate2<? super K, ? super V> predicate)
+    public Pair<K, V> find(Predicate2<? super K, ? super V> predicate)
     {
-        return this.getMutableSortedMap().detect(predicate);
+        return this.getMutableSortedMap().find(predicate);
     }
 
     public boolean allSatisfy(Predicate<? super V> predicate)
@@ -382,19 +382,19 @@ public class UnmodifiableTreeMap<K, V>
         return this.getMutableSortedMap().chunk(size);
     }
 
-    public <R, C extends Collection<R>> C collect(Function<? super V, ? extends R> function, C target)
+    public <R, C extends Collection<R>> C transform(Function<? super V, ? extends R> function, C target)
     {
-        return this.getMutableSortedMap().collect(function, target);
+        return this.getMutableSortedMap().transform(function, target);
     }
 
-    public <R, C extends Collection<R>> C collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function, C target)
+    public <R, C extends Collection<R>> C transformIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function, C target)
     {
-        return this.getMutableSortedMap().collectIf(predicate, function, target);
+        return this.getMutableSortedMap().transformIf(predicate, function, target);
     }
 
-    public <P, R, C extends Collection<R>> C collectWith(Function2<? super V, ? super P, ? extends R> function, P parameter, C targetCollection)
+    public <P, R, C extends Collection<R>> C transformWith(Function2<? super V, ? super P, ? extends R> function, P parameter, C targetCollection)
     {
-        return this.getMutableSortedMap().collectWith(function, parameter, targetCollection);
+        return this.getMutableSortedMap().transformWith(function, parameter, targetCollection);
     }
 
     public boolean contains(Object object)
@@ -422,19 +422,19 @@ public class UnmodifiableTreeMap<K, V>
         return this.getMutableSortedMap().count(predicate);
     }
 
-    public V detect(Predicate<? super V> predicate)
+    public V find(Predicate<? super V> predicate)
     {
-        return this.getMutableSortedMap().detect(predicate);
+        return this.getMutableSortedMap().find(predicate);
     }
 
-    public V detectIfNone(Predicate<? super V> predicate, Function0<? extends V> function)
+    public V findIfNone(Predicate<? super V> predicate, Function0<? extends V> function)
     {
-        return this.getMutableSortedMap().detectIfNone(predicate, function);
+        return this.getMutableSortedMap().findIfNone(predicate, function);
     }
 
-    public <R, C extends Collection<R>> C flatCollect(Function<? super V, ? extends Iterable<R>> function, C target)
+    public <R, C extends Collection<R>> C flatTransform(Function<? super V, ? extends Iterable<R>> function, C target)
     {
-        return this.getMutableSortedMap().flatCollect(function, target);
+        return this.getMutableSortedMap().flatTransform(function, target);
     }
 
     public V getFirst()
@@ -467,24 +467,24 @@ public class UnmodifiableTreeMap<K, V>
         return this.getMutableSortedMap().groupByEach(function, target);
     }
 
-    public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super V, ? extends IV> function)
+    public <IV> IV foldLeft(IV initialValue, Function2<? super IV, ? super V, ? extends IV> function)
     {
-        return this.getMutableSortedMap().injectInto(injectedValue, function);
+        return this.getMutableSortedMap().foldLeft(initialValue, function);
     }
 
-    public int injectInto(int injectedValue, IntObjectToIntFunction<? super V> function)
+    public int foldLeft(int initialValue, IntObjectToIntFunction<? super V> function)
     {
-        return this.getMutableSortedMap().injectInto(injectedValue, function);
+        return this.getMutableSortedMap().foldLeft(initialValue, function);
     }
 
-    public long injectInto(long injectedValue, LongObjectToLongFunction<? super V> function)
+    public long foldLeft(long initialValue, LongObjectToLongFunction<? super V> function)
     {
-        return this.getMutableSortedMap().injectInto(injectedValue, function);
+        return this.getMutableSortedMap().foldLeft(initialValue, function);
     }
 
-    public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super V> function)
+    public double foldLeft(double initialValue, DoubleObjectToDoubleFunction<? super V> function)
     {
-        return this.getMutableSortedMap().injectInto(injectedValue, function);
+        return this.getMutableSortedMap().foldLeft(initialValue, function);
     }
 
     public String makeString()
@@ -532,24 +532,24 @@ public class UnmodifiableTreeMap<K, V>
         return this.getMutableSortedMap().minBy(function);
     }
 
-    public <R extends Collection<V>> R reject(Predicate<? super V> predicate, R target)
+    public <R extends Collection<V>> R filterNot(Predicate<? super V> predicate, R target)
     {
-        return this.getMutableSortedMap().reject(predicate, target);
+        return this.getMutableSortedMap().filterNot(predicate, target);
     }
 
-    public <P, R extends Collection<V>> R rejectWith(Predicate2<? super V, ? super P> predicate, P parameter, R targetCollection)
+    public <P, R extends Collection<V>> R filterNotWith(Predicate2<? super V, ? super P> predicate, P parameter, R targetCollection)
     {
-        return this.getMutableSortedMap().rejectWith(predicate, parameter, targetCollection);
+        return this.getMutableSortedMap().filterNotWith(predicate, parameter, targetCollection);
     }
 
-    public <R extends Collection<V>> R select(Predicate<? super V> predicate, R target)
+    public <R extends Collection<V>> R filter(Predicate<? super V> predicate, R target)
     {
-        return this.getMutableSortedMap().select(predicate, target);
+        return this.getMutableSortedMap().filter(predicate, target);
     }
 
-    public <P, R extends Collection<V>> R selectWith(Predicate2<? super V, ? super P> predicate, P parameter, R targetCollection)
+    public <P, R extends Collection<V>> R filterWith(Predicate2<? super V, ? super P> predicate, P parameter, R targetCollection)
     {
-        return this.getMutableSortedMap().selectWith(predicate, parameter, targetCollection);
+        return this.getMutableSortedMap().filterWith(predicate, parameter, targetCollection);
     }
 
     public Object[] toArray()
@@ -572,29 +572,29 @@ public class UnmodifiableTreeMap<K, V>
         return this.getMutableSortedMap().zipWithIndex(target);
     }
 
-    public <R> MutableList<R> collect(Function<? super V, ? extends R> function)
+    public <R> MutableList<R> transform(Function<? super V, ? extends R> function)
     {
-        return this.getMutableSortedMap().collect(function);
+        return this.getMutableSortedMap().transform(function);
     }
 
-    public <R> MutableList<R> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function)
+    public <R> MutableList<R> transformIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function)
     {
-        return this.getMutableSortedMap().collectIf(predicate, function);
+        return this.getMutableSortedMap().transformIf(predicate, function);
     }
 
-    public <R> MutableList<R> flatCollect(Function<? super V, ? extends Iterable<R>> function)
+    public <R> MutableList<R> flatTransform(Function<? super V, ? extends Iterable<R>> function)
     {
-        return this.getMutableSortedMap().flatCollect(function);
+        return this.getMutableSortedMap().flatTransform(function);
     }
 
-    public MutableList<V> reject(Predicate<? super V> predicate)
+    public MutableList<V> filterNot(Predicate<? super V> predicate)
     {
-        return this.getMutableSortedMap().reject(predicate);
+        return this.getMutableSortedMap().filterNot(predicate);
     }
 
-    public MutableList<V> select(Predicate<? super V> predicate)
+    public MutableList<V> filter(Predicate<? super V> predicate)
     {
-        return this.getMutableSortedMap().select(predicate);
+        return this.getMutableSortedMap().filter(predicate);
     }
 
     public PartitionMutableList<V> partition(Predicate<? super V> predicate)

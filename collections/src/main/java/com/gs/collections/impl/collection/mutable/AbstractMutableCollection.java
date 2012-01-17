@@ -82,21 +82,21 @@ public abstract class AbstractMutableCollection<T>
             Function<? super T, ? extends K> keyFunction,
             Function<? super T, ? extends V> valueFunction)
     {
-        return UnifiedMap.<K, V>newMap(this.size()).collectKeysAndValues(this, keyFunction, valueFunction);
+        return UnifiedMap.<K, V>newMap(this.size()).transformKeysAndValues(this, keyFunction, valueFunction);
     }
 
     public <K, V> MutableSortedMap<K, V> toSortedMap(
             Function<? super T, ? extends K> keyFunction,
             Function<? super T, ? extends V> valueFunction)
     {
-        return TreeSortedMap.<K, V>newMap().collectKeysAndValues(this, keyFunction, valueFunction);
+        return TreeSortedMap.<K, V>newMap().transformKeysAndValues(this, keyFunction, valueFunction);
     }
 
     public <K, V> MutableSortedMap<K, V> toSortedMap(Comparator<? super K> comparator,
             Function<? super T, ? extends K> keyFunction,
             Function<? super T, ? extends V> valueFunction)
     {
-        return TreeSortedMap.<K, V>newMap(comparator).collectKeysAndValues(this, keyFunction, valueFunction);
+        return TreeSortedMap.<K, V>newMap(comparator).transformKeysAndValues(this, keyFunction, valueFunction);
     }
 
     public LazyIterable<T> asLazy()
@@ -104,141 +104,141 @@ public abstract class AbstractMutableCollection<T>
         return LazyIterate.adapt(this);
     }
 
-    public MutableCollection<T> select(Predicate<? super T> predicate)
+    public MutableCollection<T> filter(Predicate<? super T> predicate)
     {
-        return this.select(predicate, FastList.<T>newList());
+        return this.filter(predicate, FastList.<T>newList());
     }
 
-    public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)
+    public <R extends Collection<T>> R filter(Predicate<? super T> predicate, R target)
     {
-        return IterableIterate.select(this, predicate, target);
+        return IterableIterate.filter(this, predicate, target);
     }
 
-    public <P> MutableCollection<T> selectWith(
+    public <P> MutableCollection<T> filterWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
-        return this.selectWith(predicate, parameter, FastList.<T>newList());
+        return this.filterWith(predicate, parameter, FastList.<T>newList());
     }
 
-    public <P, R extends Collection<T>> R selectWith(
+    public <P, R extends Collection<T>> R filterWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
             R targetCollection)
     {
-        return IterableIterate.selectWith(this, predicate, parameter, targetCollection);
+        return IterableIterate.filterWith(this, predicate, parameter, targetCollection);
     }
 
-    public MutableCollection<T> reject(Predicate<? super T> predicate)
+    public MutableCollection<T> filterNot(Predicate<? super T> predicate)
     {
-        return this.reject(predicate, FastList.<T>newList());
+        return this.filterNot(predicate, FastList.<T>newList());
     }
 
-    public <R extends Collection<T>> R reject(Predicate<? super T> predicate, R target)
+    public <R extends Collection<T>> R filterNot(Predicate<? super T> predicate, R target)
     {
-        return IterableIterate.reject(this, predicate, target);
+        return IterableIterate.filterNot(this, predicate, target);
     }
 
-    public <P> MutableCollection<T> rejectWith(
+    public <P> MutableCollection<T> filterNotWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
-        return this.rejectWith(predicate, parameter, FastList.<T>newList());
+        return this.filterNotWith(predicate, parameter, FastList.<T>newList());
     }
 
-    public <P, R extends Collection<T>> R rejectWith(
+    public <P, R extends Collection<T>> R filterNotWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
             R targetCollection)
     {
-        return IterableIterate.rejectWith(this, predicate, parameter, targetCollection);
+        return IterableIterate.filterNotWith(this, predicate, parameter, targetCollection);
     }
 
-    public <P> Twin<MutableList<T>> selectAndRejectWith(
+    public <P> Twin<MutableList<T>> partitionWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
-        return IterableIterate.selectAndRejectWith(this, predicate, parameter);
+        return IterableIterate.partitionWith(this, predicate, parameter);
     }
 
-    public <V> MutableCollection<V> collect(Function<? super T, ? extends V> function)
+    public <V> MutableCollection<V> transform(Function<? super T, ? extends V> function)
     {
-        return this.collect(function, Lists.mutable.<V>of());
+        return this.transform(function, Lists.mutable.<V>of());
     }
 
-    public <V, R extends Collection<V>> R collect(
+    public <V, R extends Collection<V>> R transform(
             Function<? super T, ? extends V> function,
             R target)
     {
-        return IterableIterate.collect(this, function, target);
+        return IterableIterate.transform(this, function, target);
     }
 
-    public <V> MutableCollection<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    public <V> MutableCollection<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
     {
-        return this.flatCollect(function, FastList.<V>newList());
+        return this.flatTransform(function, FastList.<V>newList());
     }
 
-    public <V, R extends Collection<V>> R flatCollect(
+    public <V, R extends Collection<V>> R flatTransform(
             Function<? super T, ? extends Iterable<V>> function,
             R target)
     {
-        return IterableIterate.flatCollect(this, function, target);
+        return IterableIterate.flatTransform(this, function, target);
     }
 
-    public <P, V> MutableCollection<V> collectWith(
+    public <P, V> MutableCollection<V> transformWith(
             Function2<? super T, ? super P, ? extends V> function,
             P parameter)
     {
-        return this.collectWith(function, parameter, FastList.<V>newList());
+        return this.transformWith(function, parameter, FastList.<V>newList());
     }
 
-    public <P, V, R extends Collection<V>> R collectWith(
+    public <P, V, R extends Collection<V>> R transformWith(
             Function2<? super T, ? super P, ? extends V> function,
             P parameter,
             R targetCollection)
     {
-        return IterableIterate.collectWith(this,
+        return IterableIterate.transformWith(this,
                 function,
                 parameter,
                 targetCollection);
     }
 
-    public <V> MutableCollection<V> collectIf(
+    public <V> MutableCollection<V> transformIf(
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function)
     {
-        return this.collectIf(predicate, function, FastList.<V>newList());
+        return this.transformIf(predicate, function, FastList.<V>newList());
     }
 
-    public <V, R extends Collection<V>> R collectIf(
+    public <V, R extends Collection<V>> R transformIf(
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function,
             R target)
     {
-        return IterableIterate.collectIf(this, predicate, function, target);
+        return IterableIterate.tranformIf(this, predicate, function, target);
     }
 
-    public T detect(Predicate<? super T> predicate)
+    public T find(Predicate<? super T> predicate)
     {
-        return IterableIterate.detect(this, predicate);
+        return IterableIterate.find(this, predicate);
     }
 
-    public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
+    public T findIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
     {
-        T result = IterableIterate.detect(this, predicate);
+        T result = IterableIterate.find(this, predicate);
         return result == null ? function.value() : result;
     }
 
-    public <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> T findWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return IterableIterate.detectWith(this, predicate, parameter);
+        return IterableIterate.findWith(this, predicate, parameter);
     }
 
-    public <P> T detectWithIfNone(Predicate2<? super T, ? super P> predicate,
+    public <P> T findWithIfNone(Predicate2<? super T, ? super P> predicate,
             P parameter,
             Function0<? extends T> function)
     {
-        T result = IterableIterate.detectWith(this, predicate, parameter);
+        T result = IterableIterate.findWith(this, predicate, parameter);
         return result == null ? function.value() : result;
     }
 
@@ -273,32 +273,32 @@ public abstract class AbstractMutableCollection<T>
         return IterableIterate.allSatisfyWith(this, predicate, parameter);
     }
 
-    public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
+    public <IV> IV foldLeft(IV initialValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
-        return IterableIterate.injectInto(injectedValue, this, function);
+        return IterableIterate.foldLeft(initialValue, this, function);
     }
 
-    public int injectInto(int injectedValue, IntObjectToIntFunction<? super T> function)
+    public int foldLeft(int initialValue, IntObjectToIntFunction<? super T> function)
     {
-        return IterableIterate.injectInto(injectedValue, this, function);
+        return IterableIterate.foldLeft(initialValue, this, function);
     }
 
-    public long injectInto(long injectedValue, LongObjectToLongFunction<? super T> function)
+    public long foldLeft(long initialValue, LongObjectToLongFunction<? super T> function)
     {
-        return IterableIterate.injectInto(injectedValue, this, function);
+        return IterableIterate.foldLeft(initialValue, this, function);
     }
 
-    public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super T> function)
+    public double foldLeft(double initialValue, DoubleObjectToDoubleFunction<? super T> function)
     {
-        return IterableIterate.injectInto(injectedValue, this, function);
+        return IterableIterate.foldLeft(initialValue, this, function);
     }
 
-    public <IV, P> IV injectIntoWith(
-            IV injectValue,
+    public <IV, P> IV foldLeftWith(
+            IV initialValue,
             Function3<? super IV, ? super T, ? super P, ? extends IV> function,
             P parameter)
     {
-        return IterableIterate.injectIntoWith(injectValue, this, function, parameter);
+        return IterableIterate.foldLeftWith(initialValue, this, function, parameter);
     }
 
     public MutableList<T> toList()

@@ -84,55 +84,55 @@ trait SynchronizedMutableCollectionTestTrait
     }
 
     @Test
-    def selectWith_synchronized
+    def filterWith_synchronized
     {
         this.assertSynchronized
         {
-            this.classUnderTest.selectWith({
+            this.classUnderTest.filterWith({
                 (_: String, _: String) => false
             }, "")
         }
     }
 
     @Test
-    def selectWith_with_target_synchronized
+    def filterWith_with_target_synchronized
     {
         this.assertSynchronized
         {
-            this.classUnderTest.selectWith({
+            this.classUnderTest.filterWith({
                 (_: String, _: String) => false
             }, "", FastList.newList[String])
         }
     }
 
     @Test
-    def rejectWith_synchronized
+    def filterNotWith_synchronized
     {
         this.assertSynchronized
         {
-            this.classUnderTest.rejectWith({
+            this.classUnderTest.filterNotWith({
                 (_: String, _: String) => true
             }, "")
         }
     }
 
     @Test
-    def rejectWith_with_target_synchronized
+    def filterNotWith_with_target_synchronized
     {
         this.assertSynchronized
         {
-            this.classUnderTest.rejectWith({
+            this.classUnderTest.filterNotWith({
                 (_: String, _: String) => true
             }, "", FastList.newList[String])
         }
     }
 
     @Test
-    def selectAndRejectWith_synchronized
+    def filterAndRejectWith_synchronized
     {
         this.assertSynchronized
         {
-            this.classUnderTest.selectAndRejectWith({
+            this.classUnderTest.partitionWith({
                 (_: String, _: String) => true
             }, "")
         }
@@ -161,22 +161,22 @@ trait SynchronizedMutableCollectionTestTrait
     }
 
     @Test
-    def collectWith_synchronized
+    def transformWith_synchronized
     {
         this.assertSynchronized
         {
-            this.classUnderTest.collectWith({
+            this.classUnderTest.transformWith({
                 (_: String, _: String) => ""
             }, "")
         }
     }
 
     @Test
-    def collectWith_with_target_synchronized
+    def transformWith_with_target_synchronized
     {
         this.assertSynchronized
         {
-            this.classUnderTest.collectWith[String, String, MutableList[String]](
+            this.classUnderTest.transformWith[String, String, MutableList[String]](
             {
                 (_: String, _: String) => ""
             },
@@ -186,22 +186,22 @@ trait SynchronizedMutableCollectionTestTrait
     }
 
     @Test
-    def detectWith_synchronized
+    def findWith_synchronized
     {
         this.assertSynchronized
         {
-            this.classUnderTest.detectWith({
+            this.classUnderTest.findWith({
                 (_: String, _: String) => true
             }, "")
         }
     }
 
     @Test
-    def detectWithIfNone_synchronized
+    def findWithIfNone_synchronized
     {
         this.assertSynchronized
         {
-            this.classUnderTest.detectWithIfNone({
+            this.classUnderTest.findWithIfNone({
                 (_: String, _: String) => true
             }, "", null)
         }
@@ -241,11 +241,11 @@ trait SynchronizedMutableCollectionTestTrait
     }
 
     @Test
-    def injectIntoWith_synchronized
+    def foldLeftWith_synchronized
     {
         this.assertSynchronized
         {
-            this.classUnderTest.injectIntoWith[String, String]("",
+            this.classUnderTest.foldLeftWith[String, String]("",
             {
                 (_: String, _: String, _: String) => ""
             }, "")

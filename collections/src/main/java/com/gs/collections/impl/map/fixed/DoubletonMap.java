@@ -246,19 +246,19 @@ final class DoubletonMap<K, V>
     }
 
     @Override
-    public FixedSizeMap<K, V> select(Predicate2<? super K, ? super V> predicate)
+    public FixedSizeMap<K, V> filter(Predicate2<? super K, ? super V> predicate)
     {
-        return this.filter(predicate);
+        return this.basicFilter(predicate);
     }
 
     @Override
-    public <R> FixedSizeMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function)
+    public <R> FixedSizeMap<K, R> transformValues(Function2<? super K, ? super V, ? extends R> function)
     {
         return Maps.fixedSize.of(this.key1, function.value(this.key1, this.value1), this.key2, function.value(this.key2, this.value2));
     }
 
     @Override
-    public <K2, V2> FixedSizeMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function)
+    public <K2, V2> FixedSizeMap<K2, V2> transform(Function2<? super K, ? super V, Pair<K2, V2>> function)
     {
         Pair<K2, V2> pair1 = function.value(this.key1, this.value1);
         Pair<K2, V2> pair2 = function.value(this.key2, this.value2);
@@ -266,13 +266,13 @@ final class DoubletonMap<K, V>
     }
 
     @Override
-    public FixedSizeMap<K, V> reject(Predicate2<? super K, ? super V> predicate)
+    public FixedSizeMap<K, V> filterNot(Predicate2<? super K, ? super V> predicate)
     {
-        return this.filter(Predicates2.not(predicate));
+        return this.basicFilter(Predicates2.not(predicate));
     }
 
     @Override
-    public Pair<K, V> detect(Predicate2<? super K, ? super V> predicate)
+    public Pair<K, V> find(Predicate2<? super K, ? super V> predicate)
     {
         if (predicate.accept(this.key1, this.value1))
         {
@@ -285,7 +285,7 @@ final class DoubletonMap<K, V>
         return null;
     }
 
-    private FixedSizeMap<K, V> filter(Predicate2<? super K, ? super V> predicate)
+    private FixedSizeMap<K, V> basicFilter(Predicate2<? super K, ? super V> predicate)
     {
         int result = 0;
 

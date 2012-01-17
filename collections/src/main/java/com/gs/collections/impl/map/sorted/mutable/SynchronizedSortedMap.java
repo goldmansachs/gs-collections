@@ -91,11 +91,11 @@ public class SynchronizedSortedMap<K, V>
         }
     }
 
-    public <E> MutableSortedMap<K, V> collectKeysAndValues(Collection<E> collection, Function<? super E, ? extends K> keyFunction, Function<? super E, ? extends V> function)
+    public <E> MutableSortedMap<K, V> transformKeysAndValues(Collection<E> collection, Function<? super E, ? extends K> keyFunction, Function<? super E, ? extends V> function)
     {
         synchronized (this.lock)
         {
-            return this.getSortedMap().collectKeysAndValues(collection, keyFunction, function);
+            return this.getSortedMap().transformKeysAndValues(collection, keyFunction, function);
         }
     }
 
@@ -199,7 +199,7 @@ public class SynchronizedSortedMap<K, V>
 
     public RichIterable<Pair<K, V>> keyValuesView()
     {
-        return LazyIterate.adapt(this.entrySet()).collect(AbstractImmutableEntry.<K, V>getPairFunction());
+        return LazyIterate.adapt(this.entrySet()).transform(AbstractImmutableEntry.<K, V>getPairFunction());
     }
 
     public MutableSet<Entry<K, V>> entrySet()
@@ -337,27 +337,27 @@ public class SynchronizedSortedMap<K, V>
         }
     }
 
-    public <R> MutableSortedMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function)
+    public <R> MutableSortedMap<K, R> transformValues(Function2<? super K, ? super V, ? extends R> function)
     {
         synchronized (this.lock)
         {
-            return this.getSortedMap().collectValues(function);
+            return this.getSortedMap().transformValues(function);
         }
     }
 
-    public MutableSortedMap<K, V> select(Predicate2<? super K, ? super V> predicate)
+    public MutableSortedMap<K, V> filter(Predicate2<? super K, ? super V> predicate)
     {
         synchronized (this.lock)
         {
-            return this.getSortedMap().select(predicate);
+            return this.getSortedMap().filter(predicate);
         }
     }
 
-    public MutableSortedMap<K, V> reject(Predicate2<? super K, ? super V> predicate)
+    public MutableSortedMap<K, V> filterNot(Predicate2<? super K, ? super V> predicate)
     {
         synchronized (this.lock)
         {
-            return this.getSortedMap().reject(predicate);
+            return this.getSortedMap().filterNot(predicate);
         }
     }
 
@@ -369,54 +369,54 @@ public class SynchronizedSortedMap<K, V>
         }
     }
 
-    public <K2, V2> MutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function)
+    public <K2, V2> MutableMap<K2, V2> transform(Function2<? super K, ? super V, Pair<K2, V2>> function)
     {
         synchronized (this.lock)
         {
-            return this.getSortedMap().collect(function);
+            return this.getSortedMap().transform(function);
         }
     }
 
-    public <R> MutableList<R> collect(Function<? super V, ? extends R> function)
+    public <R> MutableList<R> transform(Function<? super V, ? extends R> function)
     {
         synchronized (this.lock)
         {
-            return this.getSortedMap().collect(function);
+            return this.getSortedMap().transform(function);
         }
     }
 
     @Override
-    public <R> MutableList<R> collectIf(
+    public <R> MutableList<R> transformIf(
             Predicate<? super V> predicate,
             Function<? super V, ? extends R> function)
     {
         synchronized (this.lock)
         {
-            return this.getSortedMap().collectIf(predicate, function);
+            return this.getSortedMap().transformIf(predicate, function);
         }
     }
 
-    public <R> MutableList<R> flatCollect(Function<? super V, ? extends Iterable<R>> function)
+    public <R> MutableList<R> flatTransform(Function<? super V, ? extends Iterable<R>> function)
     {
         synchronized (this.lock)
         {
-            return this.getSortedMap().flatCollect(function);
+            return this.getSortedMap().flatTransform(function);
         }
     }
 
-    public MutableList<V> reject(Predicate<? super V> predicate)
+    public MutableList<V> filterNot(Predicate<? super V> predicate)
     {
         synchronized (this.lock)
         {
-            return this.getSortedMap().reject(predicate);
+            return this.getSortedMap().filterNot(predicate);
         }
     }
 
-    public MutableList<V> select(Predicate<? super V> predicate)
+    public MutableList<V> filter(Predicate<? super V> predicate)
     {
         synchronized (this.lock)
         {
-            return this.getSortedMap().select(predicate);
+            return this.getSortedMap().filter(predicate);
         }
     }
 

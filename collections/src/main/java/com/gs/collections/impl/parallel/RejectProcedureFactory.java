@@ -17,10 +17,10 @@
 package com.gs.collections.impl.parallel;
 
 import com.gs.collections.api.block.predicate.Predicate;
-import com.gs.collections.impl.block.procedure.RejectProcedure;
+import com.gs.collections.impl.block.procedure.FilterNotProcedure;
 import com.gs.collections.impl.list.mutable.FastList;
 
-public final class RejectProcedureFactory<T> implements ProcedureFactory<RejectProcedure<T>>
+public final class RejectProcedureFactory<T> implements ProcedureFactory<FilterNotProcedure<T>>
 {
     private final Predicate<? super T> predicate;
     private final int collectionSize;
@@ -31,8 +31,8 @@ public final class RejectProcedureFactory<T> implements ProcedureFactory<RejectP
         this.collectionSize = newInitialCapacity;
     }
 
-    public RejectProcedure<T> create()
+    public FilterNotProcedure<T> create()
     {
-        return new RejectProcedure<T>(this.predicate, new FastList<T>(this.collectionSize));
+        return new FilterNotProcedure<T>(this.predicate, new FastList<T>(this.collectionSize));
     }
 }

@@ -210,22 +210,22 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     @Test
     public void select()
     {
-        Verify.assertContainsAll(this.intSet.select(Predicates.lessThan(3)), 1);
-        Verify.assertEmpty(this.intSet.select(Predicates.greaterThan(3)));
+        Verify.assertContainsAll(this.intSet.filter(Predicates.lessThan(3)), 1);
+        Verify.assertEmpty(this.intSet.filter(Predicates.greaterThan(3)));
     }
 
     @Test
     public void selectWith()
     {
-        Verify.assertContainsAll(this.intSet.selectWith(Predicates2.<Integer>lessThan(), 3), 1);
-        Verify.assertEmpty(this.intSet.selectWith(Predicates2.<Integer>greaterThan(), 3));
+        Verify.assertContainsAll(this.intSet.filterWith(Predicates2.<Integer>lessThan(), 3), 1);
+        Verify.assertEmpty(this.intSet.filterWith(Predicates2.<Integer>greaterThan(), 3));
     }
 
     @Test
     public void reject()
     {
-        Verify.assertEmpty(this.intSet.reject(Predicates.lessThan(3)));
-        Verify.assertContainsAll(this.intSet.reject(
+        Verify.assertEmpty(this.intSet.filterNot(Predicates.lessThan(3)));
+        Verify.assertContainsAll(this.intSet.filterNot(
                 Predicates.greaterThan(3),
                 UnifiedSet.<Integer>newSet()),
                 1);
@@ -234,9 +234,9 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     @Test
     public void rejectWith()
     {
-        Verify.assertEmpty(this.intSet.rejectWith(Predicates2.<Integer>lessThan(), 3));
+        Verify.assertEmpty(this.intSet.filterNotWith(Predicates2.<Integer>lessThan(), 3));
         Verify.assertContainsAll(
-                this.intSet.rejectWith(
+                this.intSet.filterNotWith(
                         Predicates2.<Integer>greaterThan(),
                         3,
                         UnifiedSet.<Integer>newSet()),
@@ -254,8 +254,8 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     @Test
     public void collect()
     {
-        Verify.assertContainsAll(this.intSet.collect(Functions.getToString()), "1");
-        Verify.assertContainsAll(this.intSet.collect(Functions.getToString(), UnifiedSet.<String>newSet()),
+        Verify.assertContainsAll(this.intSet.transform(Functions.getToString()), "1");
+        Verify.assertContainsAll(this.intSet.transform(Functions.getToString(), UnifiedSet.<String>newSet()),
                 "1");
     }
 
@@ -270,32 +270,32 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
                         return UnifiedSet.newSetWith(String.valueOf(object));
                     }
                 };
-        Verify.assertSetsEqual(UnifiedSet.newSetWith("1"), this.intSet.flatCollect(function));
+        Verify.assertSetsEqual(UnifiedSet.newSetWith("1"), this.intSet.flatTransform(function));
         Verify.assertListsEqual(
                 FastList.newListWith("1"),
-                this.intSet.flatCollect(function, FastList.<String>newList()));
+                this.intSet.flatTransform(function, FastList.<String>newList()));
     }
 
     @Test
     public void detect()
     {
-        Assert.assertEquals(Integer.valueOf(1), this.intSet.detect(Predicates.equal(1)));
-        Assert.assertNull(this.intSet.detect(Predicates.equal(6)));
+        Assert.assertEquals(Integer.valueOf(1), this.intSet.find(Predicates.equal(1)));
+        Assert.assertNull(this.intSet.find(Predicates.equal(6)));
     }
 
     @Test
     public void detectWith()
     {
-        Assert.assertEquals(Integer.valueOf(1), this.intSet.detectWith(Predicates2.equal(), 1));
-        Assert.assertNull(this.intSet.detectWith(Predicates2.equal(), 6));
+        Assert.assertEquals(Integer.valueOf(1), this.intSet.findWith(Predicates2.equal(), 1));
+        Assert.assertNull(this.intSet.findWith(Predicates2.equal(), 6));
     }
 
     @Test
     public void detectIfNoneWithBlock()
     {
         Function0<Integer> function = new PassThruFunction0<Integer>(6);
-        Assert.assertEquals(Integer.valueOf(1), this.intSet.detectIfNone(Predicates.equal(1), function));
-        Assert.assertEquals(Integer.valueOf(6), this.intSet.detectIfNone(Predicates.equal(6), function));
+        Assert.assertEquals(Integer.valueOf(1), this.intSet.findIfNone(Predicates.equal(1), function));
+        Assert.assertEquals(Integer.valueOf(6), this.intSet.findIfNone(Predicates.equal(6), function));
     }
 
     @Test
@@ -343,10 +343,10 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     @Test
     public void collectIf()
     {
-        Verify.assertContainsAll(this.intSet.collectIf(
+        Verify.assertContainsAll(this.intSet.transformIf(
                 Predicates.instanceOf(Integer.class),
                 Functions.getToString()), "1");
-        Verify.assertContainsAll(this.intSet.collectIf(
+        Verify.assertContainsAll(this.intSet.transformIf(
                 Predicates.instanceOf(Integer.class),
                 Functions.getToString(),
                 FastList.<String>newList()), "1");
@@ -365,10 +365,10 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
                 };
         Assert.assertEquals(
                 UnifiedSet.newSetWith(2),
-                this.intSet.collectWith(addFunction, 1));
+                this.intSet.transformWith(addFunction, 1));
         Assert.assertEquals(
                 FastList.newListWith(2),
-                this.intSet.collectWith(addFunction, 1, FastList.<Integer>newList()));
+                this.intSet.transformWith(addFunction, 1, FastList.<Integer>newList()));
     }
 
     @Test
@@ -442,7 +442,7 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     @Test
     public void injectInto()
     {
-        Integer result = this.intSet.injectInto(1, AddFunction.INTEGER);
+        Integer result = this.intSet.foldLeft(1, AddFunction.INTEGER);
         Assert.assertEquals(Integer.valueOf(2), result);
     }
 
@@ -450,7 +450,7 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     public void injectIntoWith()
     {
         Integer result =
-                this.intSet.injectIntoWith(1,
+                this.intSet.foldLeftWith(1,
                         new Function3<Integer, Integer, Integer, Integer>()
                         {
                             public Integer value(Integer injectedValued, Integer item, Integer parameter)
@@ -475,7 +475,7 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     public void selectAndRejectWith()
     {
         Twin<MutableList<Integer>> result =
-                this.intSet.selectAndRejectWith(Predicates2.equal(), 1);
+                this.intSet.partitionWith(Predicates2.equal(), 1);
         Verify.assertSize(1, result.getOne());
         Verify.assertEmpty(result.getTwo());
     }

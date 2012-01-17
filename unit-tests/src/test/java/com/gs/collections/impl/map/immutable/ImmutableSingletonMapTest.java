@@ -260,10 +260,10 @@ public class ImmutableSingletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         ImmutableMap<Integer, String> map = this.classUnderTest();
 
-        ImmutableMap<Integer, String> empty = map.select(Predicates2.alwaysFalse());
+        ImmutableMap<Integer, String> empty = map.filter(Predicates2.alwaysFalse());
         Verify.assertInstanceOf(ImmutableEmptyMap.class, empty);
 
-        ImmutableMap<Integer, String> full = map.select(Predicates2.alwaysTrue());
+        ImmutableMap<Integer, String> full = map.filter(Predicates2.alwaysTrue());
         Verify.assertInstanceOf(ImmutableSingletonMap.class, full);
         Assert.assertEquals(map, full);
     }
@@ -273,11 +273,11 @@ public class ImmutableSingletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         ImmutableMap<Integer, String> map = this.classUnderTest();
 
-        ImmutableMap<Integer, String> empty = map.reject(Predicates2.alwaysTrue());
+        ImmutableMap<Integer, String> empty = map.filterNot(Predicates2.alwaysTrue());
         Verify.assertInstanceOf(ImmutableEmptyMap.class, empty);
         Assert.assertEquals(new ImmutableEmptyMap<Integer, String>(), empty);
 
-        ImmutableMap<Integer, String> full = map.reject(Predicates2.alwaysFalse());
+        ImmutableMap<Integer, String> full = map.filterNot(Predicates2.alwaysFalse());
         Verify.assertInstanceOf(ImmutableSingletonMap.class, full);
         Assert.assertEquals(map, full);
     }
@@ -287,10 +287,10 @@ public class ImmutableSingletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         ImmutableMap<Integer, String> map = this.classUnderTest();
 
-        Pair<Integer, String> actual = map.detect(Predicates2.alwaysTrue());
+        Pair<Integer, String> actual = map.find(Predicates2.alwaysTrue());
         Assert.assertEquals(Tuples.pair(1, "1"), actual);
 
-        Assert.assertNull(map.detect(Predicates2.alwaysFalse()));
+        Assert.assertNull(map.find(Predicates2.alwaysFalse()));
     }
 
     @Override

@@ -76,24 +76,24 @@ public class UnmodifiableMutableCollectionTest
         Assert.assertEquals(this.mutableCollection.getLast(), this.unmodifiableCollection.getLast());
         Assert.assertEquals(this.mutableCollection.count(Predicates.alwaysTrue()),
                 this.unmodifiableCollection.count(Predicates.alwaysTrue()));
-        Verify.assertSize(4, this.unmodifiableCollection.select(Predicates.alwaysTrue()));
-        Verify.assertSize(4, this.unmodifiableCollection.select(Predicates.alwaysTrue(), FastList.<String>newList()));
-        Verify.assertSize(1, this.unmodifiableCollection.selectWith(Predicates2.equal(), METALLICA));
+        Verify.assertSize(4, this.unmodifiableCollection.filter(Predicates.alwaysTrue()));
+        Verify.assertSize(4, this.unmodifiableCollection.filter(Predicates.alwaysTrue(), FastList.<String>newList()));
+        Verify.assertSize(1, this.unmodifiableCollection.filterWith(Predicates2.equal(), METALLICA));
         Verify.assertSize(1,
-                this.unmodifiableCollection.selectWith(Predicates2.equal(),
+                this.unmodifiableCollection.filterWith(Predicates2.equal(),
                         METALLICA,
                         FastList.<String>newList()));
-        Verify.assertSize(2, this.unmodifiableCollection.reject(StringPredicates.contains("p")));
+        Verify.assertSize(2, this.unmodifiableCollection.filterNot(StringPredicates.contains("p")));
         Verify.assertSize(2,
-                this.unmodifiableCollection.reject(StringPredicates.contains("p"), FastList.<String>newList()));
-        Verify.assertSize(3, this.unmodifiableCollection.rejectWith(Predicates2.equal(), METALLICA));
+                this.unmodifiableCollection.filterNot(StringPredicates.contains("p"), FastList.<String>newList()));
+        Verify.assertSize(3, this.unmodifiableCollection.filterNotWith(Predicates2.equal(), METALLICA));
         Verify.assertSize(3,
-                this.unmodifiableCollection.rejectWith(Predicates2.equal(),
+                this.unmodifiableCollection.filterNotWith(Predicates2.equal(),
                         METALLICA,
                         FastList.<String>newList()));
-        Verify.assertSize(4, this.unmodifiableCollection.collect(Functions.getStringPassThru()));
+        Verify.assertSize(4, this.unmodifiableCollection.transform(Functions.getStringPassThru()));
         Verify.assertSize(4,
-                this.unmodifiableCollection.collect(Functions.getStringPassThru(),
+                this.unmodifiableCollection.transform(Functions.getStringPassThru(),
                         FastList.<String>newList()));
 
         Function<String, Collection<String>> flattenFunction = new Function<String, Collection<String>>()
@@ -103,19 +103,19 @@ public class UnmodifiableMutableCollectionTest
                 return FastList.newListWith(object, object);
             }
         };
-        Verify.assertSize(8, this.unmodifiableCollection.flatCollect(flattenFunction));
-        Verify.assertSize(8, this.unmodifiableCollection.flatCollect(flattenFunction, FastList.<String>newList()));
+        Verify.assertSize(8, this.unmodifiableCollection.flatTransform(flattenFunction));
+        Verify.assertSize(8, this.unmodifiableCollection.flatTransform(flattenFunction, FastList.<String>newList()));
 
-        Verify.assertSize(4, this.unmodifiableCollection.collectIf(Predicates.alwaysTrue(), Functions.getStringPassThru()));
+        Verify.assertSize(4, this.unmodifiableCollection.transformIf(Predicates.alwaysTrue(), Functions.getStringPassThru()));
         Verify.assertSize(4,
-                this.unmodifiableCollection.collectIf(Predicates.alwaysTrue(),
+                this.unmodifiableCollection.transformIf(Predicates.alwaysTrue(),
                         Functions.getStringPassThru(),
                         FastList.<String>newList()));
-        Assert.assertEquals(METALLICA, this.unmodifiableCollection.detect(StringPredicates.contains("allic")));
-        Assert.assertEquals("Not found", this.unmodifiableCollection.detectIfNone(StringPredicates.contains("donna"),
+        Assert.assertEquals(METALLICA, this.unmodifiableCollection.find(StringPredicates.contains("allic")));
+        Assert.assertEquals("Not found", this.unmodifiableCollection.findIfNone(StringPredicates.contains("donna"),
                 new PassThruFunction0<String>("Not found")));
-        Assert.assertEquals(METALLICA, this.unmodifiableCollection.detectWith(Predicates2.equal(), METALLICA));
-        Assert.assertEquals("Not found", this.unmodifiableCollection.detectWithIfNone(Predicates2.equal(), "Madonna",
+        Assert.assertEquals(METALLICA, this.unmodifiableCollection.findWith(Predicates2.equal(), METALLICA));
+        Assert.assertEquals("Not found", this.unmodifiableCollection.findWithIfNone(Predicates2.equal(), "Madonna",
                 new PassThruFunction0<String>("Not found")));
         Assert.assertEquals(4, this.unmodifiableCollection.count(Predicates.alwaysTrue()));
         Assert.assertEquals(1, this.unmodifiableCollection.countWith(Predicates2.equal(), METALLICA));
@@ -237,8 +237,8 @@ public class UnmodifiableMutableCollectionTest
         };
         Assert.assertEquals(
                 FastList.newListWith(">M", ">B", ">E", ">S"),
-                this.unmodifiableCollection.collectWith(function, ">"));
-        Assert.assertEquals(FastList.newListWith("*M", "*B", "*E", "*S"), this.unmodifiableCollection.collectWith(function, "*", FastList.<String>newList()));
+                this.unmodifiableCollection.transformWith(function, ">"));
+        Assert.assertEquals(FastList.newListWith("*M", "*B", "*E", "*S"), this.unmodifiableCollection.transformWith(function, "*", FastList.<String>newList()));
     }
 
     @Test
@@ -251,7 +251,7 @@ public class UnmodifiableMutableCollectionTest
                 return injectValue + band.charAt(0);
             }
         };
-        Assert.assertEquals(">MBES", this.unmodifiableCollection.injectInto(">", function));
+        Assert.assertEquals(">MBES", this.unmodifiableCollection.foldLeft(">", function));
     }
 
     @Test
@@ -265,7 +265,7 @@ public class UnmodifiableMutableCollectionTest
                         return injectValue + band.charAt(0) + parameter;
                     }
                 };
-        Assert.assertEquals(">M*B*E*S*", this.unmodifiableCollection.injectIntoWith(">", function, "*"));
+        Assert.assertEquals(">M*B*E*S*", this.unmodifiableCollection.foldLeftWith(">", function, "*"));
     }
 
     @Test
@@ -374,7 +374,7 @@ public class UnmodifiableMutableCollectionTest
     public void selectAndRejectWith()
     {
         Twin<MutableList<String>> twin =
-                this.unmodifiableCollection.selectAndRejectWith(Predicates2.equal(), METALLICA);
+                this.unmodifiableCollection.partitionWith(Predicates2.equal(), METALLICA);
         Verify.assertSize(1, twin.getOne());
         Verify.assertSize(3, twin.getTwo());
     }

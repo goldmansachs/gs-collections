@@ -74,8 +74,8 @@ public class SetAdapterTest extends AbstractMutableSetTestCase
     public void select()
     {
         super.select();
-        Verify.assertContainsAll(this.<Integer>classUnderTest().with(1, 2, 3, 4, 5).select(Predicates.lessThan(3)), 1, 2);
-        Verify.assertContainsAll(this.<Integer>classUnderTest().with(-1, 2, 3, 4, 5).select(Predicates.lessThan(3),
+        Verify.assertContainsAll(this.<Integer>classUnderTest().with(1, 2, 3, 4, 5).filter(Predicates.lessThan(3)), 1, 2);
+        Verify.assertContainsAll(this.<Integer>classUnderTest().with(-1, 2, 3, 4, 5).filter(Predicates.lessThan(3),
                 FastList.<Integer>newList()), -1, 2);
     }
 
@@ -84,8 +84,8 @@ public class SetAdapterTest extends AbstractMutableSetTestCase
     public void reject()
     {
         super.reject();
-        Verify.assertContainsAll(this.<Integer>classUnderTest().with(1, 2, 3, 4).reject(Predicates.lessThan(3)), 3, 4);
-        Verify.assertContainsAll(this.<Integer>classUnderTest().with(1, 2, 3, 4).reject(Predicates.lessThan(3),
+        Verify.assertContainsAll(this.<Integer>classUnderTest().with(1, 2, 3, 4).filterNot(Predicates.lessThan(3)), 3, 4);
+        Verify.assertContainsAll(this.<Integer>classUnderTest().with(1, 2, 3, 4).filterNot(Predicates.lessThan(3),
                 FastList.<Integer>newList()), 3, 4);
     }
 
@@ -94,12 +94,12 @@ public class SetAdapterTest extends AbstractMutableSetTestCase
     public void collect()
     {
         super.collect();
-        Verify.assertContainsAll(this.<Integer>classUnderTest().with(1, 2, 3, 4).collect(Functions.getToString()),
+        Verify.assertContainsAll(this.<Integer>classUnderTest().with(1, 2, 3, 4).transform(Functions.getToString()),
                 "1",
                 "2",
                 "3",
                 "4");
-        Verify.assertContainsAll(this.<Integer>classUnderTest().with(1, 2, 3, 4).collect(Functions.getToString(),
+        Verify.assertContainsAll(this.<Integer>classUnderTest().with(1, 2, 3, 4).transform(Functions.getToString(),
                 FastList.<String>newList()), "1", "2", "3", "4");
     }
 
@@ -201,7 +201,7 @@ public class SetAdapterTest extends AbstractMutableSetTestCase
         //Type HashSet is important here because it's not a MutableSet
         Set<Integer> set = new HashSet<Integer>();
         MutableSet<Integer> integerSetAdapter = SetAdapter.adapt(set);
-        Verify.assertInstanceOf(MutableSet.class, integerSetAdapter.select(Predicates.alwaysTrue()));
+        Verify.assertInstanceOf(MutableSet.class, integerSetAdapter.filter(Predicates.alwaysTrue()));
     }
 
     @Test

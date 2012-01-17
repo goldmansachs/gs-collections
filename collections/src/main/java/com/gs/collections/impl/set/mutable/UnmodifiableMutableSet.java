@@ -112,27 +112,27 @@ public class UnmodifiableMutableSet<T>
     }
 
     @Override
-    public MutableSet<T> select(Predicate<? super T> predicate)
+    public MutableSet<T> filter(Predicate<? super T> predicate)
     {
-        return this.getMutableSet().select(predicate);
+        return this.getMutableSet().filter(predicate);
     }
 
     @Override
-    public <P> MutableSet<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> MutableSet<T> filterWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return this.getMutableSet().selectWith(predicate, parameter);
+        return this.getMutableSet().filterWith(predicate, parameter);
     }
 
     @Override
-    public MutableSet<T> reject(Predicate<? super T> predicate)
+    public MutableSet<T> filterNot(Predicate<? super T> predicate)
     {
-        return this.getMutableSet().reject(predicate);
+        return this.getMutableSet().filterNot(predicate);
     }
 
     @Override
-    public <P> MutableSet<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> MutableSet<T> filterNotWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return this.getMutableSet().rejectWith(predicate, parameter);
+        return this.getMutableSet().filterNotWith(predicate, parameter);
     }
 
     @Override
@@ -142,29 +142,29 @@ public class UnmodifiableMutableSet<T>
     }
 
     @Override
-    public <V> MutableSet<V> collect(Function<? super T, ? extends V> function)
+    public <V> MutableSet<V> transform(Function<? super T, ? extends V> function)
     {
-        return this.getMutableSet().collect(function);
+        return this.getMutableSet().transform(function);
     }
 
     @Override
-    public <V> MutableSet<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    public <V> MutableSet<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
     {
-        return this.getMutableSet().flatCollect(function);
+        return this.getMutableSet().flatTransform(function);
     }
 
     @Override
-    public <P, A> MutableSet<A> collectWith(Function2<? super T, ? super P, ? extends A> function, P parameter)
+    public <P, A> MutableSet<A> transformWith(Function2<? super T, ? super P, ? extends A> function, P parameter)
     {
-        return this.getMutableSet().collectWith(function, parameter);
+        return this.getMutableSet().transformWith(function, parameter);
     }
 
     @Override
-    public <V> MutableSet<V> collectIf(
+    public <V> MutableSet<V> transformIf(
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function)
     {
-        return this.getMutableSet().collectIf(predicate, function);
+        return this.getMutableSet().transformIf(predicate, function);
     }
 
     @Override

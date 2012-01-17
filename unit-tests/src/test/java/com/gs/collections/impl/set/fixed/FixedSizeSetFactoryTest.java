@@ -91,23 +91,23 @@ public class FixedSizeSetFactoryTest
         MutableSet<Key> set3 = this.setFactory.of(key, new Key("not a dupe"), duplicateKey3);
         Verify.assertSize(2, set3);
         Verify.assertContainsAll(set3, key, new Key("not a dupe"));
-        Assert.assertSame(key, set3.detect(Predicates.equal(key)));
+        Assert.assertSame(key, set3.find(Predicates.equal(key)));
 
         Key duplicateKey4 = new Key("key");
         MutableSet<Key> set4 = this.setFactory.of(key, new Key("not a dupe"), duplicateKey3, duplicateKey4);
         Verify.assertSize(2, set4);
         Verify.assertContainsAll(set4, key, new Key("not a dupe"));
-        Assert.assertSame(key, set4.detect(Predicates.equal(key)));
+        Assert.assertSame(key, set4.find(Predicates.equal(key)));
 
         MutableSet<Key> set5 = this.setFactory.of(key, new Key("not a dupe"), new Key("me neither"), duplicateKey4);
         Verify.assertSize(3, set5);
         Verify.assertContainsAll(set5, key, new Key("not a dupe"), new Key("me neither"));
-        Assert.assertSame(key, set5.detect(Predicates.equal(key)));
+        Assert.assertSame(key, set5.find(Predicates.equal(key)));
 
         MutableSet<Key> set6 = this.setFactory.of(key, duplicateKey2, duplicateKey3, duplicateKey4);
         Verify.assertSize(1, set6);
         Verify.assertContains(key, set6);
-        Assert.assertSame(key, set6.detect(Predicates.equal(key)));
+        Assert.assertSame(key, set6.find(Predicates.equal(key)));
     }
 
     @Test

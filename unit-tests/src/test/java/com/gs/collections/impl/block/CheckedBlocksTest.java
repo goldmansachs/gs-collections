@@ -518,7 +518,7 @@ public class CheckedBlocksTest
                 throw new InterruptedException();
             }
         };
-        iList("test").collect(block);
+        iList("test").transform(block);
     }
 
     @Test(expected = RuntimeException.class)
@@ -532,7 +532,7 @@ public class CheckedBlocksTest
                 throw new RuntimeException();
             }
         };
-        iList("test").collect(block);
+        iList("test").transform(block);
     }
 
     @Test
@@ -546,7 +546,7 @@ public class CheckedBlocksTest
                 return null;
             }
         };
-        iList("test").collect(block);
+        iList("test").transform(block);
     }
 
     @Test(expected = RuntimeException.class)
@@ -560,7 +560,7 @@ public class CheckedBlocksTest
                 throw new InterruptedException();
             }
         };
-        iList("test").select(block);
+        iList("test").filter(block);
     }
 
     @Test(expected = RuntimeException.class)
@@ -574,7 +574,7 @@ public class CheckedBlocksTest
                 throw new RuntimeException();
             }
         };
-        iList("test").select(block);
+        iList("test").filter(block);
     }
 
     @Test
@@ -588,7 +588,7 @@ public class CheckedBlocksTest
                 return true;
             }
         };
-        iList("test").select(block);
+        iList("test").filter(block);
     }
 
     @Test(expected = RuntimeException.class)
@@ -644,7 +644,7 @@ public class CheckedBlocksTest
                 throw new InterruptedException();
             }
         };
-        mList("test").selectWith(block, null);
+        mList("test").filterWith(block, null);
     }
 
     @Test(expected = RuntimeException.class)
@@ -658,7 +658,7 @@ public class CheckedBlocksTest
                 throw new RuntimeException();
             }
         };
-        mList("test").selectWith(block, null);
+        mList("test").filterWith(block, null);
     }
 
     @Test
@@ -672,6 +672,6 @@ public class CheckedBlocksTest
                 return true;
             }
         };
-        mList("test").selectWith(block, null);
+        mList("test").filterWith(block, null);
     }
 }

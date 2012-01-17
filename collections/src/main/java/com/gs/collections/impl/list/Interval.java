@@ -43,7 +43,7 @@ import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.procedure.CollectProcedure;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
-import com.gs.collections.impl.block.procedure.RejectProcedure;
+import com.gs.collections.impl.block.procedure.FilterNotProcedure;
 import com.gs.collections.impl.block.procedure.SelectProcedure;
 import com.gs.collections.impl.block.procedure.primitive.IntObjectProcedure;
 import com.gs.collections.impl.block.procedure.primitive.IntProcedure;
@@ -362,7 +362,7 @@ public final class Interval
      */
     private BigInteger bigIntegerProduct()
     {
-        return this.injectInto(BigInteger.valueOf(1L), new Function2<BigInteger, Integer, BigInteger>()
+        return this.foldLeft(BigInteger.valueOf(1L), new Function2<BigInteger, Integer, BigInteger>()
         {
             public BigInteger value(BigInteger result, Integer each)
             {
@@ -566,9 +566,9 @@ public final class Interval
     }
 
     @Override
-    public <R> R injectInto(R injectValue, Function2<? super R, ? super Integer, ? extends R> function)
+    public <R> R foldLeft(R initialValue, Function2<? super R, ? super Integer, ? extends R> function)
     {
-        R result = injectValue;
+        R result = initialValue;
         if (this.from <= this.to)
         {
             for (int i = this.from; i <= this.to; i += this.step)
@@ -587,9 +587,9 @@ public final class Interval
     }
 
     @Override
-    public int injectInto(int injectedValue, IntObjectToIntFunction<? super Integer> function)
+    public int foldLeft(int initialValue, IntObjectToIntFunction<? super Integer> function)
     {
-        int result = injectedValue;
+        int result = initialValue;
         if (this.from <= this.to)
         {
             for (int i = this.from; i <= this.to; i += this.step)
@@ -608,9 +608,9 @@ public final class Interval
     }
 
     @Override
-    public long injectInto(long injectedValue, LongObjectToLongFunction<? super Integer> function)
+    public long foldLeft(long initialValue, LongObjectToLongFunction<? super Integer> function)
     {
-        long result = injectedValue;
+        long result = initialValue;
         if (this.from <= this.to)
         {
             for (int i = this.from; i <= this.to; i += this.step)
@@ -629,9 +629,9 @@ public final class Interval
     }
 
     @Override
-    public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super Integer> function)
+    public double foldLeft(double initialValue, DoubleObjectToDoubleFunction<? super Integer> function)
     {
-        double result = injectedValue;
+        double result = initialValue;
         if (this.from <= this.to)
         {
             for (int i = this.from; i <= this.to; i += this.step)
@@ -656,7 +656,7 @@ public final class Interval
 
     public <R> R reverseInjectInto(R injectValue, Function2<R, Integer, R> function)
     {
-        return this.reverseThis().injectInto(injectValue, function);
+        return this.reverseThis().foldLeft(injectValue, function);
     }
 
     public <R extends Collection<Integer>> R addAllTo(R targetCollection)
@@ -666,7 +666,7 @@ public final class Interval
     }
 
     @Override
-    public <T, R extends Collection<T>> R collect(
+    public <T, R extends Collection<T>> R transform(
             Function<? super Integer, ? extends T> function,
             R target)
     {
@@ -676,7 +676,7 @@ public final class Interval
     }
 
     @Override
-    public <R extends Collection<Integer>> R select(Predicate<? super Integer> predicate, R target)
+    public <R extends Collection<Integer>> R filter(Predicate<? super Integer> predicate, R target)
     {
         SelectProcedure<Integer> procedure = new SelectProcedure<Integer>(predicate, target);
         this.forEach(procedure);
@@ -684,9 +684,9 @@ public final class Interval
     }
 
     @Override
-    public <R extends Collection<Integer>> R reject(Predicate<? super Integer> predicate, R target)
+    public <R extends Collection<Integer>> R filterNot(Predicate<? super Integer> predicate, R target)
     {
-        RejectProcedure<Integer> procedure = new RejectProcedure<Integer>(predicate, target);
+        FilterNotProcedure<Integer> procedure = new FilterNotProcedure<Integer>(predicate, target);
         this.forEach(procedure);
         return target;
     }

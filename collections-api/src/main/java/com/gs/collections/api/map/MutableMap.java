@@ -47,7 +47,7 @@ public interface MutableMap<K, V>
      * <code>collection</code>. Any entry in <code>map</code> that has the same key as an entry in <code>this</code>
      * will have it's value replaced by that in <code>map</code>.
      */
-    <E> MutableMap<K, V> collectKeysAndValues(
+    <E> MutableMap<K, V> transformKeysAndValues(
             Collection<E> collection,
             Function<? super E, ? extends K> keyFunction,
             Function<? super E, ? extends V> valueFunction);
@@ -132,23 +132,23 @@ public interface MutableMap<K, V>
      */
     MutableMap<K, V> asSynchronized();
 
-    MutableMap<K, V> select(Predicate2<? super K, ? super V> predicate);
+    MutableMap<K, V> filter(Predicate2<? super K, ? super V> predicate);
 
-    <R> MutableMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function);
+    <R> MutableMap<K, R> transformValues(Function2<? super K, ? super V, ? extends R> function);
 
-    <K2, V2> MutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function);
+    <K2, V2> MutableMap<K2, V2> transform(Function2<? super K, ? super V, Pair<K2, V2>> function);
 
-    MutableMap<K, V> reject(Predicate2<? super K, ? super V> predicate);
+    MutableMap<K, V> filterNot(Predicate2<? super K, ? super V> predicate);
 
-    <R> MutableCollection<R> collect(Function<? super V, ? extends R> function);
+    <R> MutableCollection<R> transform(Function<? super V, ? extends R> function);
 
-    <R> MutableCollection<R> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function);
+    <R> MutableCollection<R> transformIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function);
 
-    <R> MutableCollection<R> flatCollect(Function<? super V, ? extends Iterable<R>> function);
+    <R> MutableCollection<R> flatTransform(Function<? super V, ? extends Iterable<R>> function);
 
-    MutableCollection<V> reject(Predicate<? super V> predicate);
+    MutableCollection<V> filterNot(Predicate<? super V> predicate);
 
-    MutableCollection<V> select(Predicate<? super V> predicate);
+    MutableCollection<V> filter(Predicate<? super V> predicate);
 
     PartitionMutableCollection<V> partition(Predicate<? super V> predicate);
 

@@ -161,7 +161,7 @@ public abstract class AbstractMultimapTestCase
     {
         Multimap<Integer, String> multimap = this.newMultimapWithKeysValues(1, "1", 2, "2", 3, "3");
         Assert.assertEquals(Bags.mutable.of("1", "2", "3"),
-                multimap.multiValuesView().flatCollect(Functions.<RichIterable<String>>getPassThru()).toBag());
+                multimap.multiValuesView().flatTransform(Functions.<RichIterable<String>>getPassThru()).toBag());
     }
 
     @Test
@@ -186,7 +186,7 @@ public abstract class AbstractMultimapTestCase
     {
         Multimap<Integer, String> multimap = this.newMultimapWithKeysValues(1, "1", 2, "2", 3, "3");
         Assert.assertEquals(Bags.mutable.of(1, 2, 3),
-                multimap.keyMultiValuePairsView().collect(new Function<Pair<Integer, RichIterable<String>>, Integer>()
+                multimap.keyMultiValuePairsView().transform(new Function<Pair<Integer, RichIterable<String>>, Integer>()
                 {
                     public Integer valueOf(Pair<Integer, RichIterable<String>> pair)
                     {
@@ -194,7 +194,7 @@ public abstract class AbstractMultimapTestCase
                     }
                 }).toBag());
         Assert.assertEquals(Bags.mutable.of("1", "2", "3"),
-                multimap.keyMultiValuePairsView().flatCollect(new Function<Pair<Integer, RichIterable<String>>, RichIterable<String>>()
+                multimap.keyMultiValuePairsView().flatTransform(new Function<Pair<Integer, RichIterable<String>>, RichIterable<String>>()
                 {
                     public RichIterable<String> valueOf(Pair<Integer, RichIterable<String>> pair)
                     {

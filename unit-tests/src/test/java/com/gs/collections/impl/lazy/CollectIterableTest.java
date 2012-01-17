@@ -34,7 +34,7 @@ public class CollectIterableTest extends AbstractLazyIterableTestCase
     @Override
     protected LazyIterable<Integer> newWith(Integer... integers)
     {
-        return LazyIterate.collect(FastList.newListWith(integers), Functions.getIntegerPassThru());
+        return LazyIterate.transform(FastList.newListWith(integers), Functions.getIntegerPassThru());
     }
 
     @Test

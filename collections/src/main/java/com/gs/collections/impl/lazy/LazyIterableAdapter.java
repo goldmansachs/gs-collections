@@ -72,33 +72,33 @@ public class LazyIterableAdapter<T>
     }
 
     @Override
-    public LazyIterable<T> select(Predicate<? super T> predicate)
+    public LazyIterable<T> filter(Predicate<? super T> predicate)
     {
-        return LazyIterate.select(this.adapted, predicate);
+        return LazyIterate.filter(this.adapted, predicate);
     }
 
     @Override
-    public LazyIterable<T> reject(Predicate<? super T> predicate)
+    public LazyIterable<T> filterNot(Predicate<? super T> predicate)
     {
-        return LazyIterate.reject(this.adapted, predicate);
+        return LazyIterate.filterNot(this.adapted, predicate);
     }
 
     @Override
-    public <V> LazyIterable<V> collect(Function<? super T, ? extends V> function)
+    public <V> LazyIterable<V> transform(Function<? super T, ? extends V> function)
     {
-        return LazyIterate.collect(this.adapted, function);
+        return LazyIterate.transform(this.adapted, function);
     }
 
     @Override
-    public <V> LazyIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    public <V> LazyIterable<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
     {
-        return LazyIterate.flatCollect(this.adapted, function);
+        return LazyIterate.flatTransform(this.adapted, function);
     }
 
     @Override
-    public <V> LazyIterable<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
+    public <V> LazyIterable<V> transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
     {
-        return LazyIterate.collectIf(this.adapted, predicate, function);
+        return LazyIterate.transformIf(this.adapted, predicate, function);
     }
 
     @Override

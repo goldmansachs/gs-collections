@@ -153,7 +153,7 @@ final class ImmutableSingletonMap<K, V>
     }
 
     @Override
-    public ImmutableMap<K, V> select(Predicate2<? super K, ? super V> predicate)
+    public ImmutableMap<K, V> filter(Predicate2<? super K, ? super V> predicate)
     {
         if (predicate.accept(this.key1, this.value1))
         {
@@ -163,7 +163,7 @@ final class ImmutableSingletonMap<K, V>
     }
 
     @Override
-    public ImmutableMap<K, V> reject(Predicate2<? super K, ? super V> predicate)
+    public ImmutableMap<K, V> filterNot(Predicate2<? super K, ? super V> predicate)
     {
         if (predicate.accept(this.key1, this.value1))
         {
@@ -173,20 +173,20 @@ final class ImmutableSingletonMap<K, V>
     }
 
     @Override
-    public <K2, V2> ImmutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function)
+    public <K2, V2> ImmutableMap<K2, V2> transform(Function2<? super K, ? super V, Pair<K2, V2>> function)
     {
         Pair<K2, V2> pair = function.value(this.key1, this.value1);
         return Maps.immutable.of(pair.getOne(), pair.getTwo());
     }
 
     @Override
-    public <R> ImmutableMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function)
+    public <R> ImmutableMap<K, R> transformValues(Function2<? super K, ? super V, ? extends R> function)
     {
         return Maps.immutable.of(this.key1, function.value(this.key1, this.value1));
     }
 
     @Override
-    public Pair<K, V> detect(Predicate2<? super K, ? super V> predicate)
+    public Pair<K, V> find(Predicate2<? super K, ? super V> predicate)
     {
         if (predicate.accept(this.key1, this.value1))
         {

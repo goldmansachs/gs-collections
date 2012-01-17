@@ -345,7 +345,7 @@ public class UnmodifiableTreeMapTest extends MutableSortedMapTestCase
         {
             public void run()
             {
-                map.collectKeysAndValues(null, null, null);
+                map.transformKeysAndValues(null, null, null);
             }
         });
     }

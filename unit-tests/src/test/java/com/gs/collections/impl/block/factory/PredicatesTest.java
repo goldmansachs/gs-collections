@@ -455,11 +455,11 @@ public class PredicatesTest
             }
         };
         Predicates<Address> inArizona = Predicates.attributeEqual(stateAbbreviation, "AZ");
-        MutableCollection<Employee> azResidents = this.employees.select(Predicates.attributeAnySatisfy(Employee.TO_ADDRESSES, inArizona));
+        MutableCollection<Employee> azResidents = this.employees.filter(Predicates.attributeAnySatisfy(Employee.TO_ADDRESSES, inArizona));
         Assert.assertEquals(FastList.newListWith(this.alice, this.charlie), azResidents);
 
         Predicates<Address> inAlaska = Predicates.attributeEqual(stateAbbreviation, "AK");
-        MutableCollection<Employee> akResidents = this.employees.select(Predicates.attributeAnySatisfy(Employee.TO_ADDRESSES, inAlaska));
+        MutableCollection<Employee> akResidents = this.employees.filter(Predicates.attributeAnySatisfy(Employee.TO_ADDRESSES, inAlaska));
         Assert.assertEquals(FastList.newListWith(this.bob, this.diane), akResidents);
         assertToString(inArizona);
     }
@@ -467,7 +467,7 @@ public class PredicatesTest
     @Test
     public void attributeAllSatisfy()
     {
-        MutableCollection<Employee> noExtendedDependents = this.employees.select(Predicates.attributeAllSatisfy(Employee.TO_DEPENEDENTS, Dependent.IS_IMMEDIATE));
+        MutableCollection<Employee> noExtendedDependents = this.employees.filter(Predicates.attributeAllSatisfy(Employee.TO_DEPENEDENTS, Dependent.IS_IMMEDIATE));
         Assert.assertEquals(FastList.newListWith(this.bob, this.charlie), noExtendedDependents);
     }
 
@@ -527,7 +527,7 @@ public class PredicatesTest
         assertRejects(inList, "2");
         assertAccepts(Predicates.in(list1.toArray()), "1");
 
-        Assert.assertEquals(FastList.newListWith("1"), ListIterate.select(Lists.fixedSize.of("1", "2"), inList));
+        Assert.assertEquals(FastList.newListWith("1"), ListIterate.filter(Lists.fixedSize.of("1", "2"), inList));
         assertToString(inList);
     }
 
@@ -546,7 +546,7 @@ public class PredicatesTest
         assertAccepts(in, "a");
         assertRejects(in, "c");
 
-        Assert.assertEquals(FastList.newListWith("a"), ListIterate.select(Lists.fixedSize.of("a", "c"), in));
+        Assert.assertEquals(FastList.newListWith("a"), ListIterate.filter(Lists.fixedSize.of("a", "c"), in));
         assertToString(in);
     }
 
@@ -559,7 +559,7 @@ public class PredicatesTest
         assertRejects(predicate, "1");
         assertRejects(Predicates.notIn(odds.toArray()), "1");
 
-        Assert.assertEquals(FastList.newListWith("2"), ListIterate.select(Lists.fixedSize.of("1", "2"), predicate));
+        Assert.assertEquals(FastList.newListWith("2"), ListIterate.filter(Lists.fixedSize.of("1", "2"), predicate));
         assertToString(predicate);
     }
 
@@ -578,7 +578,7 @@ public class PredicatesTest
         assertAccepts(out, "C");
         assertRejects(out, "A");
 
-        Assert.assertEquals(FastList.newListWith("A"), ListIterate.reject(Lists.fixedSize.of("A", "C"), out));
+        Assert.assertEquals(FastList.newListWith("A"), ListIterate.filterNot(Lists.fixedSize.of("A", "C"), out));
         assertToString(out);
     }
 

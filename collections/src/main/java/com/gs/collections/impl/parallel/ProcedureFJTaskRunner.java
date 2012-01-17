@@ -123,7 +123,7 @@ public final class ProcedureFJTaskRunner<T, BT extends Procedure<? super T>>
     {
         if (!this.combiner.useCombineOne())
         {
-            this.combiner.combineAll(ArrayIterate.collect(this.procedures, this.procedureFunction));
+            this.combiner.combineAll(ArrayIterate.transform(this.procedures, this.procedureFunction));
         }
     }
 

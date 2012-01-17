@@ -101,17 +101,17 @@ public interface Bag<T>
     @Override
     int hashCode();
 
-    Bag<T> select(Predicate<? super T> predicate);
+    Bag<T> filter(Predicate<? super T> predicate);
 
-    Bag<T> reject(Predicate<? super T> predicate);
+    Bag<T> filterNot(Predicate<? super T> predicate);
 
     PartitionBag<T> partition(Predicate<? super T> predicate);
 
-    <V> Bag<V> collect(Function<? super T, ? extends V> function);
+    <V> Bag<V> transform(Function<? super T, ? extends V> function);
 
-    <V> Bag<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
+    <V> Bag<V> transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 
-    <V> Bag<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
+    <V> Bag<V> flatTransform(Function<? super T, ? extends Iterable<V>> function);
 
     <V> BagMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
 

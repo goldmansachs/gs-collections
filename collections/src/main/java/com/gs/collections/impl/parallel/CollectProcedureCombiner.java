@@ -21,8 +21,7 @@ import java.util.Collection;
 import com.gs.collections.impl.block.procedure.CollectProcedure;
 
 /**
- * Combines the results of a Collection of CollectBlocks which each hold onto a transformed (collect)
- * collection of results.
+ * Combines the results of a Collection of CollectBlocks which each hold onto a transformed collection of results.
  */
 public final class CollectProcedureCombiner<T, V>
         extends AbstractTransformerBasedCombiner<V, T, CollectProcedure<T, V>>

@@ -318,7 +318,7 @@ public class FunctionsTest
     {
         MutableMap<String, Integer> map = UnifiedMap.newWithKeysValues("One", 1);
         MutableSet<Map.Entry<String, Integer>> entries = SetAdapter.adapt(map.entrySet());
-        MutableSet<String> keys = entries.collect(Functions.<String>getKeyFunction());
+        MutableSet<String> keys = entries.transform(Functions.<String>getKeyFunction());
         Assert.assertEquals(UnifiedSet.newSetWith("One"), keys);
     }
 
@@ -327,7 +327,7 @@ public class FunctionsTest
     {
         MutableMap<String, Integer> map = UnifiedMap.newWithKeysValues("One", 1);
         MutableSet<Map.Entry<String, Integer>> entries = SetAdapter.adapt(map.entrySet());
-        MutableSet<Integer> values = entries.collect(Functions.<Integer>getValueFunction());
+        MutableSet<Integer> values = entries.transform(Functions.<Integer>getValueFunction());
         Assert.assertEquals(UnifiedSet.newSetWith(1), values);
     }
 
@@ -335,14 +335,14 @@ public class FunctionsTest
     public void size()
     {
         ImmutableList<ImmutableList<Integer>> list = Lists.immutable.of(Lists.immutable.of(1), Lists.immutable.of(1, 2), Lists.immutable.of(1, 2, 3));
-        ImmutableList<Integer> sizes = list.collect(Functions.getSizeOf());
+        ImmutableList<Integer> sizes = list.transform(Functions.getSizeOf());
         Assert.assertEquals(FastList.newListWith(1, 2, 3), sizes);
     }
 
     @Test
     public void squaredCollection()
     {
-        MutableCollection<Integer> squareCollection = FastList.newListWith(1, 2, 3, 4, 5).collect(Functions.squaredInteger());
+        MutableCollection<Integer> squareCollection = FastList.newListWith(1, 2, 3, 4, 5).transform(Functions.squaredInteger());
         Verify.assertContainsAll(squareCollection, 1, 4, 9, 16, 25);
     }
 

@@ -185,31 +185,31 @@ final class ImmutableEmptySortedMap<K, V>
     }
 
     @Override
-    public <K2, V2> ImmutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function)
+    public <K2, V2> ImmutableMap<K2, V2> transform(Function2<? super K, ? super V, Pair<K2, V2>> function)
     {
         return Maps.immutable.of();
     }
 
     @Override
-    public <R> ImmutableSortedMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function)
+    public <R> ImmutableSortedMap<K, R> transformValues(Function2<? super K, ? super V, ? extends R> function)
     {
         return SortedMaps.immutable.of(this.comparator);
     }
 
     @Override
-    public Pair<K, V> detect(Predicate2<? super K, ? super V> predicate)
+    public Pair<K, V> find(Predicate2<? super K, ? super V> predicate)
     {
         return null;
     }
 
     @Override
-    public ImmutableSortedMap<K, V> reject(Predicate2<? super K, ? super V> predicate)
+    public ImmutableSortedMap<K, V> filterNot(Predicate2<? super K, ? super V> predicate)
     {
         return this;
     }
 
     @Override
-    public ImmutableSortedMap<K, V> select(Predicate2<? super K, ? super V> predicate)
+    public ImmutableSortedMap<K, V> filter(Predicate2<? super K, ? super V> predicate)
     {
         return this;
     }

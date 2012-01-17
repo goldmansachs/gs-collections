@@ -62,7 +62,7 @@ public class ArrayIterateTest
         Integer[] objectArray = this.threeIntegerArray2();
         Assert.assertEquals(
                 Integer.valueOf(7),
-                ArrayIterate.injectInto(1, objectArray, AddFunction.INTEGER));
+                ArrayIterate.foldLeft(1, objectArray, AddFunction.INTEGER));
     }
 
     private Integer[] threeIntegerArray2()
@@ -76,14 +76,14 @@ public class ArrayIterateTest
         Double[] objectArray = {(double) 1, (double) 2, (double) 3};
         Assert.assertEquals(
                 new Double(1 + 1 + 2 + 3),
-                ArrayIterate.injectInto((double) 1, objectArray, AddFunction.DOUBLE));
+                ArrayIterate.foldLeft((double) 1, objectArray, AddFunction.DOUBLE));
     }
 
     @Test
     public void injectIntoString()
     {
         String[] objectArray = {"1", "2", "3"};
-        Assert.assertEquals("0123", ArrayIterate.injectInto("0", objectArray, AddFunction.STRING));
+        Assert.assertEquals("0123", ArrayIterate.foldLeft("0", objectArray, AddFunction.STRING));
     }
 
     //todo:review
@@ -92,7 +92,7 @@ public class ArrayIterateTest
     {
         String[] objectArray = this.threeStringArray();
         Assert.assertEquals(Integer.valueOf(3),
-                ArrayIterate.injectInto(Integer.MIN_VALUE, objectArray, MaxSizeFunction.STRING));
+                ArrayIterate.foldLeft(Integer.MIN_VALUE, objectArray, MaxSizeFunction.STRING));
     }
 
     private String[] threeStringArray()
@@ -107,7 +107,7 @@ public class ArrayIterateTest
         String[] objectArray = this.threeStringArray();
         Assert.assertEquals(
                 Integer.valueOf(1),
-                ArrayIterate.injectInto(Integer.MAX_VALUE, objectArray, MinSizeFunction.STRING));
+                ArrayIterate.foldLeft(Integer.MAX_VALUE, objectArray, MinSizeFunction.STRING));
     }
 
     @Test
@@ -116,7 +116,7 @@ public class ArrayIterateTest
         Boolean[] objectArray = {true, false, null};
         Assert.assertEquals(
                 iList("true", "false", "null"),
-                ArrayIterate.collect(objectArray, Functions.getToString()));
+                ArrayIterate.transform(objectArray, Functions.getToString()));
     }
 
     @Test
@@ -125,7 +125,7 @@ public class ArrayIterateTest
         Boolean[] objectArray = {true, false, null};
         Assert.assertEquals(
                 iList("true", "false", "null"),
-                ArrayIterate.collectWith(objectArray, Functions2.fromFunction(Functions.getToString()), null));
+                ArrayIterate.transformWith(objectArray, Functions2.fromFunction(Functions.getToString()), null));
     }
 
     @Test
@@ -165,7 +165,7 @@ public class ArrayIterateTest
     public void select()
     {
         Integer[] objectArray = INTEGER_ARRAY;
-        Collection<Integer> list = ArrayIterate.select(objectArray, Predicates.instanceOf(Integer.class));
+        Collection<Integer> list = ArrayIterate.filter(objectArray, Predicates.instanceOf(Integer.class));
         this.assertContainsAllIntegers(list);
     }
 
@@ -173,7 +173,7 @@ public class ArrayIterateTest
     public void selectWith()
     {
         Integer[] objectArray = INTEGER_ARRAY;
-        Collection<Integer> list = ArrayIterate.selectWith(objectArray, Predicates2.instanceOf(), Integer.class);
+        Collection<Integer> list = ArrayIterate.filterWith(objectArray, Predicates2.instanceOf(), Integer.class);
         this.assertContainsAllIntegers(list);
     }
 
@@ -205,7 +205,7 @@ public class ArrayIterateTest
     {
         Integer[] objectArray = INTEGER_ARRAY;
         Twin<MutableList<Integer>> result =
-                ArrayIterate.selectAndRejectWith(objectArray, Predicates2.<Integer>lessThan(), 3);
+                ArrayIterate.partitionWith(objectArray, Predicates2.<Integer>lessThan(), 3);
         MutableList<Integer> positive = result.getOne();
         MutableList<Integer> negative = result.getTwo();
         Verify.assertSize(2, positive);
@@ -220,7 +220,7 @@ public class ArrayIterateTest
     public void selectWithDifferentTargetCollection()
     {
         Integer[] objectArray = INTEGER_ARRAY;
-        Collection<Integer> list = ArrayIterate.select(objectArray, Predicates.instanceOf(Integer.class), new ArrayList<Integer>());
+        Collection<Integer> list = ArrayIterate.filter(objectArray, Predicates.instanceOf(Integer.class), new ArrayList<Integer>());
         this.assertContainsAllIntegers(list);
     }
 
@@ -228,7 +228,7 @@ public class ArrayIterateTest
     public void rejectDifferentTargetCollection()
     {
         Integer[] objectArray = INTEGER_ARRAY;
-        List<Integer> list = ArrayIterate.reject(objectArray, Predicates.instanceOf(Integer.class), new ArrayList<Integer>());
+        List<Integer> list = ArrayIterate.filterNot(objectArray, Predicates.instanceOf(Integer.class), new ArrayList<Integer>());
         Verify.assertSize(0, list);
     }
 
@@ -238,7 +238,7 @@ public class ArrayIterateTest
     {
         Integer[] objectArray = INTEGER_ARRAY;
         Collection<Integer> list =
-                ArrayIterate.rejectWith(objectArray, Predicates2.instanceOf(), Integer.class, new ArrayList<Integer>());
+                ArrayIterate.filterNotWith(objectArray, Predicates2.instanceOf(), Integer.class, new ArrayList<Integer>());
         Verify.assertSize(0, list);
     }
 
@@ -388,7 +388,7 @@ public class ArrayIterateTest
     public void detect()
     {
         Object[] array = this.createIntegerArray(1);
-        Assert.assertEquals(1, ArrayIterate.detect(array, new Predicate()
+        Assert.assertEquals(1, ArrayIterate.find(array, new Predicate()
         {
             public boolean accept(Object anObject)
             {
@@ -403,14 +403,14 @@ public class ArrayIterateTest
         Integer[] array = this.createIntegerArray(1);
         Assert.assertEquals(
                 Integer.valueOf(1),
-                ArrayIterate.detectWith(array, Predicates2.<Integer>lessThan(), 2));
+                ArrayIterate.findWith(array, Predicates2.<Integer>lessThan(), 2));
     }
 
     @Test
     public void detectIfNone()
     {
         Integer[] array = this.createIntegerArray(1);
-        Assert.assertEquals(Integer.valueOf(7), ArrayIterate.detectIfNone(array, new Predicate<Integer>()
+        Assert.assertEquals(Integer.valueOf(7), ArrayIterate.findIfNone(array, new Predicate<Integer>()
         {
             public boolean accept(Integer anObject)
             {
@@ -424,7 +424,7 @@ public class ArrayIterateTest
     {
         Integer[] array = this.createIntegerArray(1);
         Assert.assertEquals(Integer.valueOf(7),
-                ArrayIterate.detectWithIfNone(array, Predicates2.equal(), 2, 7));
+                ArrayIterate.findWithIfNone(array, Predicates2.equal(), 2, 7));
     }
 
     @Test
@@ -442,9 +442,9 @@ public class ArrayIterateTest
     public void indexOfPredicates()
     {
         String[] array = {"1", "2", "3", null};
-        Assert.assertEquals(0, ArrayIterate.detectIndex(array, Predicates.instanceOf(String.class)));
-        Assert.assertEquals(3, ArrayIterate.detectIndex(array, Predicates.isNull()));
-        Assert.assertEquals(0, ArrayIterate.detectIndexWith(array, Predicates2.instanceOf(), String.class));
+        Assert.assertEquals(0, ArrayIterate.findIndex(array, Predicates.instanceOf(String.class)));
+        Assert.assertEquals(3, ArrayIterate.findIndex(array, Predicates.isNull()));
+        Assert.assertEquals(0, ArrayIterate.findIndexWith(array, Predicates2.instanceOf(), String.class));
     }
 
     @Test
@@ -520,20 +520,20 @@ public class ArrayIterateTest
         MutableList<Pair<String, Object>> pairs = ArrayIterate.zip(array, nulls);
         Assert.assertEquals(
                 FastList.newListWith(array),
-                pairs.collect(Functions.<String>firstOfPair()));
+                pairs.transform(Functions.<String>firstOfPair()));
         Assert.assertEquals(
                 FastList.newListWith(nulls),
-                pairs.collect(Functions.<Object>secondOfPair(), Lists.mutable.of()));
+                pairs.transform(Functions.<Object>secondOfPair(), Lists.mutable.of()));
 
         MutableList<Pair<String, Object>> pairsPlusOne = ArrayIterate.zip(array, nullsPlusOne);
         Assert.assertEquals(
                 FastList.newListWith(array),
-                pairsPlusOne.collect(Functions.<String>firstOfPair()));
-        Assert.assertEquals(FastList.newListWith(nulls), pairsPlusOne.collect(Functions.<Object>secondOfPair(), Lists.mutable.of()));
+                pairsPlusOne.transform(Functions.<String>firstOfPair()));
+        Assert.assertEquals(FastList.newListWith(nulls), pairsPlusOne.transform(Functions.<Object>secondOfPair(), Lists.mutable.of()));
 
         MutableList<Pair<String, Object>> pairsMinusOne = ArrayIterate.zip(array, nullsMinusOne);
         Assert.assertEquals(array.length - 1, pairsMinusOne.size());
-        Assert.assertTrue(FastList.newListWith(array).containsAll(pairsMinusOne.collect(Functions.<String>firstOfPair())));
+        Assert.assertTrue(FastList.newListWith(array).containsAll(pairsMinusOne.transform(Functions.<String>firstOfPair())));
 
         Assert.assertEquals(
                 ArrayIterate.zip(array, nulls),
@@ -548,10 +548,10 @@ public class ArrayIterateTest
 
         Assert.assertEquals(
                 FastList.newListWith(array),
-                pairs.collect(Functions.<String>firstOfPair()));
+                pairs.transform(Functions.<String>firstOfPair()));
         Assert.assertEquals(
                 Interval.zeroTo(array.length - 1).toList(),
-                pairs.collect(Functions.<Integer>secondOfPair(), FastList.<Integer>newList()));
+                pairs.transform(Functions.<Integer>secondOfPair(), FastList.<Integer>newList()));
 
         Assert.assertEquals(
                 ArrayIterate.zipWithIndex(array),
@@ -563,7 +563,7 @@ public class ArrayIterateTest
     {
         String[] array = {"1", "2", "3", "4", "5", "6", "7"};
         RichIterable<RichIterable<String>> groups = ArrayIterate.chunk(array, 2);
-        RichIterable<Integer> sizes = groups.collect(new Function<RichIterable<String>, Integer>()
+        RichIterable<Integer> sizes = groups.transform(new Function<RichIterable<String>, Integer>()
         {
             public Integer valueOf(RichIterable<String> richIterable)
             {

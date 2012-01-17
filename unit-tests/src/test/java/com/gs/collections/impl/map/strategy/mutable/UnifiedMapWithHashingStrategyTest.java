@@ -144,7 +144,7 @@ public class UnifiedMapWithHashingStrategyTest extends UnifiedMapTestCase
 
         UnifiedMapWithHashingStrategy<Person, Integer> map = UnifiedMapWithHashingStrategy.newWithKeysValues(
                 LAST_NAME_HASHING_STRATEGY, JOHNDOE, 1, JANEDOE, 2, JOHNSMITH, 3, JANESMITH, 4);
-        Assert.assertEquals(UnifiedMap.newWithKeysValues(JOHNDOE, 2), map.select(new Predicate2<Person, Integer>()
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(JOHNDOE, 2), map.filter(new Predicate2<Person, Integer>()
         {
             public boolean accept(Person argument1, Integer argument2)
             {
@@ -161,7 +161,7 @@ public class UnifiedMapWithHashingStrategyTest extends UnifiedMapTestCase
 
         UnifiedMapWithHashingStrategy<Person, Integer> map = UnifiedMapWithHashingStrategy.newWithKeysValues(
                 LAST_NAME_HASHING_STRATEGY, JOHNDOE, 1, JANEDOE, 2, JOHNSMITH, 3, JANESMITH, 4);
-        Assert.assertEquals(UnifiedMap.newWithKeysValues(JOHNDOE, 2), map.reject(new Predicate2<Person, Integer>()
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(JOHNDOE, 2), map.filterNot(new Predicate2<Person, Integer>()
         {
             public boolean accept(Person argument1, Integer argument2)
             {
@@ -178,7 +178,7 @@ public class UnifiedMapWithHashingStrategyTest extends UnifiedMapTestCase
 
         UnifiedMapWithHashingStrategy<Person, Integer> map = UnifiedMapWithHashingStrategy.newWithKeysValues(
                 LAST_NAME_HASHING_STRATEGY, JOHNDOE, 1, JOHNSMITH, 2, JANEDOE, 3, JANESMITH, 4);
-        MutableMap<Integer, Person> collect = map.collect(new Function2<Person, Integer, Pair<Integer, Person>>()
+        MutableMap<Integer, Person> collect = map.transform(new Function2<Person, Integer, Pair<Integer, Person>>()
         {
             public Pair<Integer, Person> value(Person argument1, Integer argument2)
             {

@@ -40,10 +40,10 @@ import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 
 /**
- * RichIterable is an interface which extends the InternalIterable interface with several internal iterator methods, from
- * the Smalltalk Collection protocol.  These include select, reject, detect, collect, injectInto, anySatisfy,
- * allSatisfy. The API also includes converter methods to convert a RichIterable to a List (toList), to a sorted
- * List (toSortedList), to a Set (toSet), and to a Map (toMap).
+ * RichIterable is an interface which extends the InternalIterable interface with several internal iterator methods.
+ * These include filter, filterNot, find, transform, foldLeft, anySatisfy and allSatisfy. The API also includes converter
+ * methods to convert a RichIterable to a List (toList), to a sorted List (toSortedList), to a Set (toSet), and to a
+ * Map (toMap).
  *
  * @since 1.0
  */
@@ -125,11 +125,10 @@ public interface RichIterable<T>
     boolean containsAllArguments(Object... elements);
 
     /**
-     * Returns all elements of the source collection that return true when evaluating the predicate.  This method is also
-     * commonly called filter.
+     * Returns all elements of the source collection that return true when evaluating the predicate.
      * <p/>
      * <pre>e.g.
-     * return people.<b>select</b>(new Predicate&lt;Person&gt;()
+     * return people.<b>filter</b>(new Predicate&lt;Person&gt;()
      * {
      *     public boolean accept(Person person)
      *     {
@@ -140,13 +139,13 @@ public interface RichIterable<T>
      *
      * @since 1.0
      */
-    RichIterable<T> select(Predicate<? super T> predicate);
+    RichIterable<T> filter(Predicate<? super T> predicate);
 
     /**
-     * Same as the select method with one parameter but uses the specified target collection for the results.
+     * Same as the filter method with one parameter but uses the specified target collection for the results.
      * <p/>
      * <pre>e.g.
-     * return people.select(new Predicate&lt;Person&gt;()
+     * return people.filter(new Predicate&lt;Person&gt;()
      * {
      *     public boolean accept(Person person)
      *     {
@@ -156,39 +155,39 @@ public interface RichIterable<T>
      * </pre>
      * <p/>
      * <pre>e.g.
-     * return collection.select(Predicates.attributeEqual("lastName", "Smith"), new ArrayList());
+     * return collection.filter(Predicates.attributeEqual("lastName", "Smith"), new ArrayList());
      * </pre>
      *
-     * @param predicate a {@link Predicate} to use as the select criteria
-     * @param target    the Collection to append to for all elements in this {@code RichIterable} that meet select criteria {@code predicate}
-     * @return {@code target}, which contains appended elements as a result of the select criteria
-     * @see #select(Predicate)
+     * @param predicate a {@link Predicate} to use as the filter criteria
+     * @param target    the Collection to append to for all elements in this {@code RichIterable} that meet filter criteria {@code predicate}
+     * @return {@code target}, which contains appended elements as a result of the filter criteria
+     * @see #filter
      * @since 1.0
      */
-    <R extends Collection<T>> R select(Predicate<? super T> predicate, R target);
+    <R extends Collection<T>> R filter(Predicate<? super T> predicate, R target);
 
     /**
-     * Similar to {@link #select(Predicate, Collection)}, except with an evaluation parameter for the second generic argument in {@link Predicate2}.
+     * Similar to {@link #filter}, except with an evaluation parameter for the second generic argument in {@link Predicate2}.
      *
-     * @param predicate        a {@link Predicate2} to use as the select criteria
+     * @param predicate        a {@link Predicate2} to use as the filter criteria
      * @param parameter        a parameter to pass in for evaluation of the second argument {@code P} in {@code predicate}
-     * @param targetCollection the Collection to append to for all elements in this {@code RichIterable} that meet select criteria {@code predicate}
-     * @return {@code targetCollection}, which contains appended elements as a result of the select criteria
-     * @see #select(Predicate)
-     * @see #select(Predicate, Collection)
+     * @param targetCollection the Collection to append to for all elements in this {@code RichIterable} that meet filter criteria {@code predicate}
+     * @return {@code targetCollection}, which contains appended elements as a result of the filter criteria
+     * @see #filter
+     * @see #filter
      * @since 1.0
      */
-    <P, R extends Collection<T>> R selectWith(
+    <P, R extends Collection<T>> R filterWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
             R targetCollection);
 
     /**
-     * Returns all elements of the source collection that return false when evaluating of the predicate.  This method is also
-     * sometimes called filterNot and is the equivalent of calling iterable.select(Predicates.not(predicate)).
+     * Returns all elements of the source collection that return false when evaluating of the predicate.  This method is
+     * the equivalent of calling iterable.filter(Predicates.not(predicate)).
      * <p/>
      * <pre>e.g.
-     * return people.reject(new Predicate&lt;Person&gt;()
+     * return people.filterNot(new Predicate&lt;Person&gt;()
      * {
      *     public boolean accept(Person person)
      *     {
@@ -198,20 +197,20 @@ public interface RichIterable<T>
      * </pre>
      * <p/>
      * <pre>e.g.
-     * return people.reject(Predicates.attributeEqual("lastName", "Smith"));
+     * return people.filterNot(Predicates.attributeEqual("lastName", "Smith"));
      * </pre>
      *
-     * @param predicate a {@link Predicate} to use as the reject criteria
+     * @param predicate a {@link Predicate} to use as the filter criteria
      * @return a RichIterable that contains elements that cause {@link Predicate#accept(Object)} method to evaluate to false
      * @since 1.0
      */
-    RichIterable<T> reject(Predicate<? super T> predicate);
+    RichIterable<T> filterNot(Predicate<? super T> predicate);
 
     /**
-     * Same as the reject method with one parameter but uses the specified target collection for the results.
+     * Same as the filterNot method with one parameter but uses the specified target collection for the results.
      * <p/>
      * <pre>e.g.
-     * return people.reject(new Predicate&lt;Person&gt;()
+     * return people.filterNot(new Predicate&lt;Person&gt;()
      * {
      *     public boolean accept(Person person)
      *     {
@@ -220,19 +219,19 @@ public interface RichIterable<T>
      * }, Lists.mutable.of());
      * </pre>
      *
-     * @param predicate a {@link Predicate} to use as the reject criteria
+     * @param predicate a {@link Predicate} to use as the filter criteria
      * @param target    the Collection to append to for all elements in this {@code RichIterable} that cause {@code Predicate#accept(Object)} method to evaluate to false
-     * @return {@code target}, which contains appended elements as a result of the reject criteria
+     * @return {@code target}, which contains appended elements as a result of the filter criteria
      * @since 1.0
      */
-    <R extends Collection<T>> R reject(Predicate<? super T> predicate, R target);
+    <R extends Collection<T>> R filterNot(Predicate<? super T> predicate, R target);
 
     /**
-     * Similar to {@link #reject(Predicate, Collection)}, except with an evaluation parameter for the second generic argument in {@link Predicate2}.
+     * Similar to {@link #filterNot}, except with an evaluation parameter for the second generic argument in {@link Predicate2}.
      * <p/>
      * E.g. return a {@link Collection} of Person elements where the person has a height <b>greater than</b> 100cm
      * <pre>
-     * return people.reject(new Predicate2&lt;Person, Integer&gt;()
+     * return people.filterNot(new Predicate2&lt;Person, Integer&gt;()
      * {
      *     public boolean accept(Person p, Integer i)
      *     {
@@ -241,15 +240,15 @@ public interface RichIterable<T>
      * }, Integer.valueOf(100), FastList.<Person>newList());
      * </pre>
      *
-     * @param predicate        a {@link Predicate2} to use as the reject criteria
+     * @param predicate        a {@link Predicate2} to use as the filter criteria
      * @param parameter        a parameter to pass in for evaluation of the second argument {@code P} in {@code predicate}
      * @param targetCollection the Collection to append to for all elements in this {@code RichIterable} that cause {@code Predicate#accept(Object)} method to evaluate to false
-     * @return {@code targetCollection}, which contains appended elements as a result of the reject criteria
-     * @see #reject(Predicate)
-     * @see #reject(Predicate, Collection)
+     * @return {@code targetCollection}, which contains appended elements as a result of the filter criteria
+     * @see #filterNot
+     * @see #filterNot
      * @since 1.0
      */
-    <P, R extends Collection<T>> R rejectWith(
+    <P, R extends Collection<T>> R filterNotWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
             R targetCollection);
@@ -273,10 +272,10 @@ public interface RichIterable<T>
 
     /**
      * Returns a new collection with the results of applying the specified function on each element of the source
-     * collection.  This method is also commonly called transform or map.
+     * collection.
      * <p/>
      * <pre>e.g.
-     * return people.collect(new Function&lt;Person, String&gt;()
+     * return people.transform(new Function&lt;Person, String&gt;()
      * {
      *     public String valueOf(Person person)
      *     {
@@ -287,14 +286,14 @@ public interface RichIterable<T>
      *
      * @since 1.0
      */
-    <V> RichIterable<V> collect(Function<? super T, ? extends V> function);
+    <V> RichIterable<V> transform(Function<? super T, ? extends V> function);
 
     /**
-     * Same as {@link #collect(Function)}, except that the results are gathered into the specified {@code target}
+     * Same as {@link #transform}, except that the results are gathered into the specified {@code target}
      * collection.
      * <p/>
      * <pre>e.g.
-     * return people.collect(new Function&lt;Person, String&gt;()
+     * return people.transform(new Function&lt;Person, String&gt;()
      * {
      *     public String valueOf(Person person)
      *     {
@@ -303,16 +302,16 @@ public interface RichIterable<T>
      * }, Lists.mutable.of());
      * </pre>
      *
-     * @param function a {@link Function} to use as the collect transformation function
-     * @param target   the Collection to append to for all elements in this {@code RichIterable} that meet select criteria {@code function}
-     * @return {@code target}, which contains appended elements as a result of the collect transformation
-     * @see #collect(Function)
+     * @param function a {@link Function} to use as the transformation function
+     * @param target   the Collection to append to for all elements in this {@code RichIterable} that meet filter criteria {@code function}
+     * @return {@code target}, which contains appended elements as a result of the transformation
+     * @see #transform
      * @since 1.0
      */
-    <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target);
+    <V, R extends Collection<V>> R transform(Function<? super T, ? extends V> function, R target);
 
     /**
-     * Same as collectWith but with a targetCollection parameter to gather the results.
+     * Same as transformWith but with a targetCollection parameter to gather the results.
      * <p/>
      * <pre>e.g.
      * Function2<Integer, Integer, Integer> addParameterFunction =
@@ -323,16 +322,16 @@ public interface RichIterable<T>
      *          return each + parameter;
      *      }
      * };
-     * FastList.newListWith(1, 2, 3).collectWith(addParameterFunction, Integer.valueOf(1), UnifiedSet.newSet());
+     * FastList.newListWith(1, 2, 3).transformWith(addParameterFunction, Integer.valueOf(1), UnifiedSet.newSet());
      * </pre>
      *
-     * @param function         a {@link Function2} to use as the collect transformation function
+     * @param function         a {@link Function2} to use as the function
      * @param parameter        a parameter to pass in for evaluation of the second argument {@code P} in {@code function}
-     * @param targetCollection the Collection to append to for all elements in this {@code RichIterable} that meet select criteria {@code function}
-     * @return {@code targetCollection}, which contains appended elements as a result of the collect transformation
+     * @param targetCollection the Collection to append to for all elements in this {@code RichIterable} that meet filter criteria {@code function}
+     * @return {@code targetCollection}, which contains appended elements as a result of the transformation
      * @since 1.0
      */
-    <P, V, R extends Collection<V>> R collectWith(
+    <P, V, R extends Collection<V>> R transformWith(
             Function2<? super T, ? super P, ? extends V> function,
             P parameter,
             R targetCollection);
@@ -340,33 +339,33 @@ public interface RichIterable<T>
     /**
      * Returns a new collection with the results of applying the specified function on each element of the source
      * collection, but only for those elements which return true upon evaluation of the predicate.  This is the
-     * the optimized equivalent of calling iterable.select(predicate).collect(function).
+     * the optimized equivalent of calling iterable.filter(predicate).transform(function).
      * <p/>
      * <pre>e.g.
-     * Lists.mutable.of().with(1, 2, 3).collectIf(Predicates.notNull(), Functions.getToString())
+     * Lists.mutable.of().with(1, 2, 3).transformIf(Predicates.notNull(), Functions.getToString())
      * </pre>
      *
      * @since 1.0
      */
-    <V> RichIterable<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
+    <V> RichIterable<V> transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 
     /**
-     * Same as the collectIf method with two parameters but uses the specified target collection for the results.
+     * Same as the {@link #transformIf} method with two parameters but uses the specified target collection for the results.
      *
-     * @param predicate a {@link Predicate} to use as the select criteria
-     * @param function  a {@link Function} to use as the collect transformation function
-     * @param target    the Collection to append to for all elements in this {@code RichIterable} that meet the collect criteria {@code predicate}
-     * @return {@code targetCollection}, which contains appended elements as a result of the collect criteria and transformation
-     * @see #collectIf(Predicate, Function)
+     * @param predicate a {@link Predicate} to use as the filter criteria
+     * @param function  a {@link Function} to use as the transformation function
+     * @param target    the Collection to append to for all elements in this {@code RichIterable} that meet the transform criteria {@code predicate}
+     * @return {@code targetCollection}, which contains appended elements as a result of the transform criteria and transformation
+     * @see #transformIf
      * @since 1.0
      */
-    <V, R extends Collection<V>> R collectIf(
+    <V, R extends Collection<V>> R transformIf(
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function,
             R target);
 
     /**
-     * {@code flatCollect} is a special case of {@link #collect(Function)}. With {@code collect}, when the {@link Function} returns
+     * {@code flatCollect} is a special case of {@link #transform}. With {@link #transform}, when the {@link Function} returns
      * a collection, the result is a collection of collections. {@code flatCollect} outputs a single "flattened" collection
      * instead.  This method is commonly called flatMap.
      * <p/>
@@ -379,37 +378,37 @@ public interface RichIterable<T>
      * };
      * MutableList&lt;Person&gt; people = ...;
      * </pre>
-     * Using {@code collect} returns a collection of collections of addresses.
+     * Using {@code transform} returns a collection of collections of addresses.
      * <pre>
-     * MutableList&lt;List&lt;Address&gt;&gt; addresses = people.collect(addressFunction);
+     * MutableList&lt;List&lt;Address&gt;&gt; addresses = people.transform(addressFunction);
      * </pre>
-     * Using {@code flatCollect} returns a single flattened list of addresses.
+     * Using {@code flatTransform} returns a single flattened list of addresses.
      * <pre>
-     * MutableList&lt;Address&gt; addresses = people.flatCollect(addressFunction);
+     * MutableList&lt;Address&gt; addresses = people.flatTransform(addressFunction);
      * </pre>
      *
      * @param function The {@link Function} to apply
      * @return a new flattened collection produced by applying the given {@code function}
      * @since 1.0
      */
-    <V> RichIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
+    <V> RichIterable<V> flatTransform(Function<? super T, ? extends Iterable<V>> function);
 
     /**
-     * Same as flatCollect, only the results are collected into the target collection.
+     * Same as {@link #flatTransform}, only the results are collected into the target collection.
      *
      * @param function The {@link Function} to apply
      * @param target   The collection into which results should be added.
      * @return {@code target}, which will contain a flattened collection of results produced by applying the given {@code function}
-     * @see #flatCollect(Function)
+     * @see #flatTransform
      */
-    <V, R extends Collection<V>> R flatCollect(Function<? super T, ? extends Iterable<V>> function, R target);
+    <V, R extends Collection<V>> R flatTransform(Function<? super T, ? extends Iterable<V>> function, R target);
 
     /**
      * Returns the first element of the iterable for which the predicate evaluates to true or null in the case where no
-     * element returns true.  This method is commonly called find.
+     * element returns true.
      * <p/>
      * <pre>e.g.
-     * return people.detect(new Predicate&lt;Person&gt;()
+     * return people.find(new Predicate&lt;Person&gt;()
      * {
      *     public boolean value(Person person)
      *     {
@@ -420,7 +419,7 @@ public interface RichIterable<T>
      *
      * @since 1.0
      */
-    T detect(Predicate<? super T> predicate);
+    T find(Predicate<? super T> predicate);
 
     /**
      * Returns the first element of the iterable for which the predicate evaluates to true.  If no element matches
@@ -428,7 +427,7 @@ public interface RichIterable<T>
      *
      * @since 1.0
      */
-    T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function);
+    T findIfNone(Predicate<? super T> predicate, Function0<? extends T> function);
 
     /**
      * Return the total number of elements that answer true to the specified predicate.
@@ -465,39 +464,39 @@ public interface RichIterable<T>
 
     /**
      * Returns the final result of evaluating function using each element of the iterable and the previous evaluation
-     * result as the parameters. The injected value is used for the first parameter of the first evaluation, and the current
-     * item in the iterable is used as the second parameter.  This method is commonly called foldl or sometimes reduce.
+     * result as the parameters. The initial value is used for the first parameter of the first evaluation, and the current
+     * item in the iterable is used as the second parameter.
      *
      * @since 1.0
      */
-    <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function);
+    <IV> IV foldLeft(IV initialValue, Function2<? super IV, ? super T, ? extends IV> function);
 
     /**
      * Returns the final int result of evaluating function using each element of the iterable and the previous evaluation
-     * result as the parameters. The injected value is used for the first parameter of the first evaluation, and the current
+     * result as the parameters. The initial value is used for the first parameter of the first evaluation, and the current
      * item in the iterable is used as the second parameter.
      *
      * @since 1.0
      */
-    int injectInto(int injectedValue, IntObjectToIntFunction<? super T> function);
+    int foldLeft(int initialValue, IntObjectToIntFunction<? super T> function);
 
     /**
      * Returns the final long result of evaluating function using each element of the iterable and the previous evaluation
-     * result as the parameters. The injected value is used for the first parameter of the first evaluation, and the current
+     * result as the parameters. The initial value is used for the first parameter of the first evaluation, and the current
      * item in the iterable is used as the second parameter.
      *
      * @since 1.0
      */
-    long injectInto(long injectedValue, LongObjectToLongFunction<? super T> function);
+    long foldLeft(long initialValue, LongObjectToLongFunction<? super T> function);
 
     /**
      * Returns the final double result of evaluating function using each element of the iterable and the previous evaluation
-     * result as the parameters. The injected value is used for the first parameter of the first evaluation, and the current
+     * result as the parameters. The initial value is used for the first parameter of the first evaluation, and the current
      * item in the iterable is used as the second parameter.
      *
      * @since 1.0
      */
-    double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super T> function);
+    double foldLeft(double initialValue, DoubleObjectToDoubleFunction<? super T> function);
 
     /**
      * Converts the collection to a mutable MutableList implementation.

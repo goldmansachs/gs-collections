@@ -129,15 +129,15 @@ public final class ArrayListAdapter<T>
     }
 
     @Override
-    public T detect(Predicate<? super T> predicate)
+    public T find(Predicate<? super T> predicate)
     {
-        return ArrayListIterate.detect(this.delegate, predicate);
+        return ArrayListIterate.find(this.delegate, predicate);
     }
 
     @Override
-    public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
+    public T findIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
     {
-        T result = this.detect(predicate);
+        T result = this.find(predicate);
         if (result == null)
         {
             return function.value();
@@ -164,9 +164,9 @@ public final class ArrayListAdapter<T>
     }
 
     @Override
-    public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
+    public <IV> IV foldLeft(IV initialValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
-        return ArrayListIterate.injectInto(injectedValue, this.delegate, function);
+        return ArrayListIterate.foldLeft(initialValue, this.delegate, function);
     }
 
     public void forEach(int fromIndex, int toIndex, Procedure<? super T> procedure)
@@ -241,15 +241,15 @@ public final class ArrayListAdapter<T>
     }
 
     @Override
-    public ArrayListAdapter<T> select(Predicate<? super T> predicate)
+    public ArrayListAdapter<T> filter(Predicate<? super T> predicate)
     {
-        return this.wrap(ArrayListIterate.select(this.delegate, predicate));
+        return this.wrap(ArrayListIterate.filter(this.delegate, predicate));
     }
 
     @Override
-    public ArrayListAdapter<T> reject(Predicate<? super T> predicate)
+    public ArrayListAdapter<T> filterNot(Predicate<? super T> predicate)
     {
-        return this.wrap(ArrayListIterate.reject(this.delegate, predicate));
+        return this.wrap(ArrayListIterate.filterNot(this.delegate, predicate));
     }
 
     @Override
@@ -259,21 +259,21 @@ public final class ArrayListAdapter<T>
     }
 
     @Override
-    public <V> ArrayListAdapter<V> collect(Function<? super T, ? extends V> function)
+    public <V> ArrayListAdapter<V> transform(Function<? super T, ? extends V> function)
     {
-        return this.wrap(ArrayListIterate.collect(this.delegate, function));
+        return this.wrap(ArrayListIterate.transform(this.delegate, function));
     }
 
     @Override
-    public <V> ArrayListAdapter<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    public <V> ArrayListAdapter<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
     {
-        return this.wrap(ArrayListIterate.flatCollect(this.delegate, function));
+        return this.wrap(ArrayListIterate.flatTransform(this.delegate, function));
     }
 
     @Override
-    public <V> ArrayListAdapter<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
+    public <V> ArrayListAdapter<V> transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
     {
-        return this.wrap(ArrayListIterate.collectIf(this.delegate, predicate, function));
+        return this.wrap(ArrayListIterate.transformIf(this.delegate, predicate, function));
     }
 
     @Override
@@ -289,21 +289,21 @@ public final class ArrayListAdapter<T>
     }
 
     @Override
-    public <P> ArrayListAdapter<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> ArrayListAdapter<T> filterWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return this.wrap(ArrayListIterate.selectWith(this.delegate, predicate, parameter));
+        return this.wrap(ArrayListIterate.filterWith(this.delegate, predicate, parameter));
     }
 
     @Override
-    public <P> ArrayListAdapter<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> ArrayListAdapter<T> filterNotWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return this.wrap(ArrayListIterate.rejectWith(this.delegate, predicate, parameter));
+        return this.wrap(ArrayListIterate.filterNotWith(this.delegate, predicate, parameter));
     }
 
     @Override
-    public <P, A> ArrayListAdapter<A> collectWith(Function2<? super T, ? super P, ? extends A> function, P parameter)
+    public <P, A> ArrayListAdapter<A> transformWith(Function2<? super T, ? super P, ? extends A> function, P parameter)
     {
-        return this.wrap(ArrayListIterate.collectWith(this.delegate, function, parameter));
+        return this.wrap(ArrayListIterate.transformWith(this.delegate, function, parameter));
     }
 
     @Override

@@ -25,7 +25,7 @@ import com.gs.collections.impl.factory.Lists;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class FlatCollectIteratorTest
+public class FlatTransformIteratorTest
 {
     private static final Function<Object, Iterable<Object>> FUNCTION = new Function<Object, Iterable<Object>>()
     {
@@ -38,20 +38,20 @@ public class FlatCollectIteratorTest
     @Test(expected = NoSuchElementException.class)
     public void nextIfDoesntHaveAnything()
     {
-        new FlatCollectIterator<Object, Object>(Lists.immutable.of(), FUNCTION).next();
+        new FlatTransformIterator<Object, Object>(Lists.immutable.of(), FUNCTION).next();
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void removeIsUnsupported()
     {
-        new FlatCollectIterator<Object, Object>(Lists.immutable.of().iterator(), FUNCTION).remove();
+        new FlatTransformIterator<Object, Object>(Lists.immutable.of().iterator(), FUNCTION).remove();
     }
 
     @Test
     public void nextAfterEmptyIterable()
     {
         Object expected = new Object();
-        FlatCollectIterator<List<Object>, Object> flattenIterator = new FlatCollectIterator<List<Object>, Object>(
+        FlatTransformIterator<List<Object>, Object> flattenIterator = new FlatTransformIterator<List<Object>, Object>(
                 Lists.fixedSize.<List<Object>>of(
                         Lists.fixedSize.of(),
                         Lists.fixedSize.of(expected)),

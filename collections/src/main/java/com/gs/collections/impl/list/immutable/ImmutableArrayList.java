@@ -100,15 +100,15 @@ final class ImmutableArrayList<T>
     }
 
     @Override
-    public T detect(Predicate<? super T> predicate)
+    public T find(Predicate<? super T> predicate)
     {
-        return ArrayIterate.detect(this.items, predicate);
+        return ArrayIterate.find(this.items, predicate);
     }
 
     @Override
-    public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
+    public T findIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
     {
-        T result = this.detect(predicate);
+        T result = this.find(predicate);
         if (result == null)
         {
             return function.value();
@@ -135,9 +135,9 @@ final class ImmutableArrayList<T>
     }
 
     @Override
-    public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
+    public <IV> IV foldLeft(IV initialValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
-        return ArrayIterate.injectInto(injectedValue, this.items, function);
+        return ArrayIterate.foldLeft(initialValue, this.items, function);
     }
 
     public int size()

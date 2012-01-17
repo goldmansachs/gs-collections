@@ -77,17 +77,17 @@ public interface SortedSetIterable<T>
      */
     <B> LazyIterable<Pair<T, B>> cartesianProduct(SetIterable<B> set);
 
-    SortedSetIterable<T> select(Predicate<? super T> predicate);
+    SortedSetIterable<T> filter(Predicate<? super T> predicate);
 
-    SortedSetIterable<T> reject(Predicate<? super T> predicate);
+    SortedSetIterable<T> filterNot(Predicate<? super T> predicate);
 
     PartitionSortedSet<T> partition(Predicate<? super T> predicate);
 
-    <V> ListIterable<V> collect(Function<? super T, ? extends V> function);
+    <V> ListIterable<V> transform(Function<? super T, ? extends V> function);
 
-    <V> ListIterable<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
+    <V> ListIterable<V> transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 
-    <V> ListIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
+    <V> ListIterable<V> flatTransform(Function<? super T, ? extends Iterable<V>> function);
 
     <V> SortedSetMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
 

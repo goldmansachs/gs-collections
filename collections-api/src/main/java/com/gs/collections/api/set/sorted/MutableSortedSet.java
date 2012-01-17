@@ -50,23 +50,23 @@ public interface MutableSortedSet<T>
 
     MutableSortedSet<T> clone();
 
-    MutableSortedSet<T> select(Predicate<? super T> predicate);
+    MutableSortedSet<T> filter(Predicate<? super T> predicate);
 
-    <P> MutableSortedSet<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+    <P> MutableSortedSet<T> filterWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
-    MutableSortedSet<T> reject(Predicate<? super T> predicate);
+    MutableSortedSet<T> filterNot(Predicate<? super T> predicate);
 
-    <P> MutableSortedSet<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+    <P> MutableSortedSet<T> filterNotWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     PartitionMutableSortedSet<T> partition(Predicate<? super T> predicate);
 
-    <V> MutableList<V> collect(Function<? super T, ? extends V> function);
+    <V> MutableList<V> transform(Function<? super T, ? extends V> function);
 
-    <P, V> MutableList<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
+    <P, V> MutableList<V> transformWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
 
-    <V> MutableList<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
+    <V> MutableList<V> transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 
-    <V> MutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
+    <V> MutableList<V> flatTransform(Function<? super T, ? extends Iterable<V>> function);
 
     /**
      * Returns an unmodifable view of the set. The returned set will be <tt>Serializable</tt> if this set is <tt>Serializable</tt>.

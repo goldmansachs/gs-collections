@@ -233,19 +233,19 @@ public abstract class AbstractCollectionTestCase
     @Test
     public void select()
     {
-        Verify.assertContainsAll(this.newWith(1, 2, 3, 4, 5).select(Predicates.lessThan(3)), 1, 2);
-        Verify.denyContainsAny(this.newWith(-1, 2, 3, 4, 5).select(Predicates.lessThan(3)), 3, 4, 5);
+        Verify.assertContainsAll(this.newWith(1, 2, 3, 4, 5).filter(Predicates.lessThan(3)), 1, 2);
+        Verify.denyContainsAny(this.newWith(-1, 2, 3, 4, 5).filter(Predicates.lessThan(3)), 3, 4, 5);
         Verify.assertContainsAll(
-                this.newWith(1, 2, 3, 4, 5).select(Predicates.lessThan(3), UnifiedSet.<Integer>newSet()), 1, 2);
+                this.newWith(1, 2, 3, 4, 5).filter(Predicates.lessThan(3), UnifiedSet.<Integer>newSet()), 1, 2);
     }
 
     @Test
     public void selectWith()
     {
-        Verify.assertContainsAll(this.newWith(1, 2, 3, 4, 5).selectWith(Predicates2.<Integer>lessThan(), 3), 1, 2);
-        Verify.denyContainsAny(this.newWith(-1, 2, 3, 4, 5).selectWith(Predicates2.<Integer>lessThan(), 3), 3, 4, 5);
+        Verify.assertContainsAll(this.newWith(1, 2, 3, 4, 5).filterWith(Predicates2.<Integer>lessThan(), 3), 1, 2);
+        Verify.denyContainsAny(this.newWith(-1, 2, 3, 4, 5).filterWith(Predicates2.<Integer>lessThan(), 3), 3, 4, 5);
         Verify.assertContainsAll(
-                this.newWith(1, 2, 3, 4, 5).selectWith(
+                this.newWith(1, 2, 3, 4, 5).filterWith(
                         Predicates2.<Integer>lessThan(),
                         3,
                         UnifiedSet.<Integer>newSet()),
@@ -255,17 +255,17 @@ public abstract class AbstractCollectionTestCase
     @Test
     public void reject()
     {
-        Verify.assertContainsAll(this.newWith(1, 2, 3, 4).reject(Predicates.lessThan(3)), 3, 4);
+        Verify.assertContainsAll(this.newWith(1, 2, 3, 4).filterNot(Predicates.lessThan(3)), 3, 4);
         Verify.assertContainsAll(
-                this.newWith(1, 2, 3, 4).reject(Predicates.lessThan(3), UnifiedSet.<Integer>newSet()), 3, 4);
+                this.newWith(1, 2, 3, 4).filterNot(Predicates.lessThan(3), UnifiedSet.<Integer>newSet()), 3, 4);
     }
 
     @Test
     public void rejectWith()
     {
-        Verify.assertContainsAll(this.newWith(1, 2, 3, 4).rejectWith(Predicates2.<Integer>lessThan(), 3), 3, 4);
+        Verify.assertContainsAll(this.newWith(1, 2, 3, 4).filterNotWith(Predicates2.<Integer>lessThan(), 3), 3, 4);
         Verify.assertContainsAll(
-                this.newWith(1, 2, 3, 4).rejectWith(Predicates2.<Integer>lessThan(), 3, UnifiedSet.<Integer>newSet()),
+                this.newWith(1, 2, 3, 4).filterNotWith(Predicates2.<Integer>lessThan(), 3, UnifiedSet.<Integer>newSet()),
                 3, 4);
     }
 
@@ -273,10 +273,10 @@ public abstract class AbstractCollectionTestCase
     public void collect()
     {
         Verify.assertContainsAll(
-                this.newWith(1, 2, 3, 4).collect(Functions.getToString()),
+                this.newWith(1, 2, 3, 4).transform(Functions.getToString()),
                 "1", "2", "3", "4");
         Verify.assertContainsAll(
-                this.newWith(1, 2, 3, 4).collect(
+                this.newWith(1, 2, 3, 4).transform(
                         Functions.getToString(),
                         UnifiedSet.<String>newSet()), "1", "2", "3", "4");
     }
@@ -296,18 +296,18 @@ public abstract class AbstractCollectionTestCase
 
         Verify.assertListsEqual(
                 FastList.newListWith("1", "2", "3", "4"),
-                collection.flatCollect(function).toSortedList());
+                collection.flatTransform(function).toSortedList());
 
         Verify.assertSetsEqual(
                 UnifiedSet.newSetWith("1", "2", "3", "4"),
-                collection.flatCollect(function, UnifiedSet.<String>newSet()));
+                collection.flatTransform(function, UnifiedSet.<String>newSet()));
     }
 
     @Test
     public void detect()
     {
-        Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 2, 3, 4, 5).detect(Predicates.equal(3)));
-        Assert.assertNull(this.newWith(1, 2, 3, 4, 5).detect(Predicates.equal(6)));
+        Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 2, 3, 4, 5).find(Predicates.equal(3)));
+        Assert.assertNull(this.newWith(1, 2, 3, 4, 5).find(Predicates.equal(6)));
     }
 
     @Test(expected = NoSuchElementException.class)
@@ -385,16 +385,16 @@ public abstract class AbstractCollectionTestCase
     @Test
     public void detectWith()
     {
-        Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 2, 3, 4, 5).detectWith(Predicates2.equal(), 3));
-        Assert.assertNull(this.newWith(1, 2, 3, 4, 5).detectWith(Predicates2.equal(), 6));
+        Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 2, 3, 4, 5).findWith(Predicates2.equal(), 3));
+        Assert.assertNull(this.newWith(1, 2, 3, 4, 5).findWith(Predicates2.equal(), 6));
     }
 
     @Test
     public void detectIfNoneWithBlock()
     {
         Function0<Integer> function = new PassThruFunction0<Integer>(6);
-        Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 2, 3, 4, 5).detectIfNone(Predicates.equal(3), function));
-        Assert.assertEquals(Integer.valueOf(6), this.newWith(1, 2, 3, 4, 5).detectIfNone(Predicates.equal(6), function));
+        Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 2, 3, 4, 5).findIfNone(Predicates.equal(3), function));
+        Assert.assertEquals(Integer.valueOf(6), this.newWith(1, 2, 3, 4, 5).findIfNone(Predicates.equal(6), function));
     }
 
     @Test
@@ -403,13 +403,13 @@ public abstract class AbstractCollectionTestCase
         Function0<Integer> function = new PassThruFunction0<Integer>(-42);
         Assert.assertEquals(
                 Integer.valueOf(5),
-                this.newWith(1, 2, 3, 4, 5).detectWithIfNone(
+                this.newWith(1, 2, 3, 4, 5).findWithIfNone(
                         Predicates2.<Integer>greaterThan(),
                         4,
                         function));
         Assert.assertEquals(
                 Integer.valueOf(-42),
-                this.newWith(1, 2, 3, 4, 5).detectWithIfNone(
+                this.newWith(1, 2, 3, 4, 5).findWithIfNone(
                         Predicates2.<Integer>lessThan(),
                         0,
                         function));
@@ -497,12 +497,12 @@ public abstract class AbstractCollectionTestCase
     public void collectIf()
     {
         Verify.assertContainsAll(
-                this.newWith(1, 2, 3).collectIf(
+                this.newWith(1, 2, 3).transformIf(
                         Predicates.instanceOf(Integer.class),
                         Functions.getToString()),
                 "1", "2", "3");
         Verify.assertContainsAll(
-                this.newWith(1, 2, 3).collectIf(
+                this.newWith(1, 2, 3).transformIf(
                         Predicates.instanceOf(Integer.class),
                         Functions.getToString(),
                         UnifiedSet.<String>newSet()),
@@ -522,10 +522,10 @@ public abstract class AbstractCollectionTestCase
                 };
         Assert.assertEquals(
                 Bags.mutable.of(2, 3, 4),
-                this.newWith(1, 2, 3).collectWith(addFunction, 1).toBag());
+                this.newWith(1, 2, 3).transformWith(addFunction, 1).toBag());
         Assert.assertEquals(
                 Bags.mutable.of(2, 3, 4),
-                this.newWith(1, 2, 3).collectWith(addFunction, 1, FastList.<Integer>newList()).toBag());
+                this.newWith(1, 2, 3).transformWith(addFunction, 1, FastList.<Integer>newList()).toBag());
     }
 
     @Test
@@ -626,9 +626,9 @@ public abstract class AbstractCollectionTestCase
     public void injectInto()
     {
         MutableCollection<Integer> objects = this.newWith(1, 2, 3);
-        Integer result = objects.injectInto(1, AddFunction.INTEGER);
+        Integer result = objects.foldLeft(1, AddFunction.INTEGER);
         Assert.assertEquals(Integer.valueOf(7), result);
-        int sum = objects.injectInto(0, AddFunction.INTEGER_TO_INT);
+        int sum = objects.foldLeft(0, AddFunction.INTEGER_TO_INT);
         Assert.assertEquals(6, sum);
     }
 
@@ -636,9 +636,9 @@ public abstract class AbstractCollectionTestCase
     public void injectIntoInt()
     {
         MutableCollection<Integer> objects = this.newWith(1, 2, 3);
-        int result = objects.injectInto(1, AddFunction.INTEGER_TO_INT);
+        int result = objects.foldLeft(1, AddFunction.INTEGER_TO_INT);
         Assert.assertEquals(7, result);
-        int sum = objects.injectInto(0, AddFunction.INTEGER_TO_INT);
+        int sum = objects.foldLeft(0, AddFunction.INTEGER_TO_INT);
         Assert.assertEquals(6, sum);
     }
 
@@ -646,9 +646,9 @@ public abstract class AbstractCollectionTestCase
     public void injectIntoLong()
     {
         MutableCollection<Integer> objects = this.newWith(1, 2, 3);
-        long result = objects.injectInto(1, AddFunction.INTEGER_TO_LONG);
+        long result = objects.foldLeft(1, AddFunction.INTEGER_TO_LONG);
         Assert.assertEquals(7, result);
-        long sum = objects.injectInto(0, AddFunction.INTEGER_TO_LONG);
+        long sum = objects.foldLeft(0, AddFunction.INTEGER_TO_LONG);
         Assert.assertEquals(6, sum);
     }
 
@@ -656,9 +656,9 @@ public abstract class AbstractCollectionTestCase
     public void injectIntoDouble()
     {
         MutableCollection<Integer> objects = this.newWith(1, 2, 3);
-        double result = objects.injectInto(1, AddFunction.INTEGER_TO_DOUBLE);
+        double result = objects.foldLeft(1, AddFunction.INTEGER_TO_DOUBLE);
         Assert.assertEquals(7.0d, result, 0.001);
-        double sum = objects.injectInto(0, AddFunction.INTEGER_TO_DOUBLE);
+        double sum = objects.foldLeft(0, AddFunction.INTEGER_TO_DOUBLE);
         Assert.assertEquals(6.0d, sum, 0.001);
     }
 
@@ -666,7 +666,7 @@ public abstract class AbstractCollectionTestCase
     public void injectIntoWith()
     {
         MutableCollection<Integer> objects = this.newWith(1, 2, 3);
-        Integer result = objects.injectIntoWith(1, new Function3<Integer, Integer, Integer, Integer>()
+        Integer result = objects.foldLeftWith(1, new Function3<Integer, Integer, Integer, Integer>()
         {
             public Integer value(Integer injectedValued, Integer item, Integer parameter)
             {
@@ -698,7 +698,7 @@ public abstract class AbstractCollectionTestCase
     public void selectAndRejectWith()
     {
         MutableCollection<Integer> objects = this.newWith(1, 2);
-        Twin<MutableList<Integer>> result = objects.selectAndRejectWith(Predicates2.equal(), 1);
+        Twin<MutableList<Integer>> result = objects.partitionWith(Predicates2.equal(), 1);
         Verify.assertSize(1, result.getOne());
         Verify.assertSize(1, result.getTwo());
     }
@@ -944,20 +944,20 @@ public abstract class AbstractCollectionTestCase
         MutableCollection<Pair<String, Object>> pairs = collection.zip(nulls);
         Assert.assertEquals(
                 collection.toSet(),
-                pairs.collect(Functions.<String>firstOfPair()).toSet());
+                pairs.transform(Functions.<String>firstOfPair()).toSet());
         Assert.assertEquals(
                 nulls,
-                pairs.collect(Functions.<Object>secondOfPair(), Lists.mutable.of()));
+                pairs.transform(Functions.<Object>secondOfPair(), Lists.mutable.of()));
 
         MutableCollection<Pair<String, Object>> pairsPlusOne = collection.zip(nullsPlusOne);
         Assert.assertEquals(
                 collection.toSet(),
-                pairsPlusOne.collect(Functions.<String>firstOfPair()).toSet());
-        Assert.assertEquals(nulls, pairsPlusOne.collect(Functions.<Object>secondOfPair(), Lists.mutable.of()));
+                pairsPlusOne.transform(Functions.<String>firstOfPair()).toSet());
+        Assert.assertEquals(nulls, pairsPlusOne.transform(Functions.<Object>secondOfPair(), Lists.mutable.of()));
 
         MutableCollection<Pair<String, Object>> pairsMinusOne = collection.zip(nullsMinusOne);
         Assert.assertEquals(collection.size() - 1, pairsMinusOne.size());
-        Assert.assertTrue(collection.containsAll(pairsMinusOne.collect(Functions.<String>firstOfPair())));
+        Assert.assertTrue(collection.containsAll(pairsMinusOne.transform(Functions.<String>firstOfPair())));
 
         Assert.assertEquals(
                 collection.zip(nulls).toSet(),
@@ -972,10 +972,10 @@ public abstract class AbstractCollectionTestCase
 
         Assert.assertEquals(
                 collection.toSet(),
-                pairs.collect(Functions.<String>firstOfPair()).toSet());
+                pairs.transform(Functions.<String>firstOfPair()).toSet());
         Assert.assertEquals(
                 Interval.zeroTo(collection.size() - 1).toSet(),
-                pairs.collect(Functions.<Integer>secondOfPair(), UnifiedSet.<Integer>newSet()));
+                pairs.transform(Functions.<Integer>secondOfPair(), UnifiedSet.<Integer>newSet()));
 
         Assert.assertEquals(
                 collection.zipWithIndex().toSet(),
@@ -987,7 +987,7 @@ public abstract class AbstractCollectionTestCase
     {
         MutableCollection<String> collection = this.newWith("1", "2", "3", "4", "5", "6", "7");
         RichIterable<RichIterable<String>> groups = collection.chunk(2);
-        RichIterable<Integer> sizes = groups.collect(new Function<RichIterable<String>, Integer>()
+        RichIterable<Integer> sizes = groups.transform(new Function<RichIterable<String>, Integer>()
         {
             public Integer valueOf(RichIterable<String> richIterable)
             {

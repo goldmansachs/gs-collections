@@ -21,7 +21,7 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.block.predicate.Predicate;
 
-public final class SelectIterator<T>
+public final class FilterIterator<T>
         implements Iterator<T>
 {
     private static final Object NULL = new Object();
@@ -29,12 +29,12 @@ public final class SelectIterator<T>
     private final Predicate<? super T> predicate;
     private Object next = NULL;
 
-    public SelectIterator(Iterable<T> collection, Predicate<? super T> predicate)
+    public FilterIterator(Iterable<T> collection, Predicate<? super T> predicate)
     {
         this(collection.iterator(), predicate);
     }
 
-    public SelectIterator(Iterator<T> iterator, Predicate<? super T> predicate)
+    public FilterIterator(Iterator<T> iterator, Predicate<? super T> predicate)
     {
         this.iterator = iterator;
         this.predicate = predicate;
@@ -42,7 +42,7 @@ public final class SelectIterator<T>
 
     public void remove()
     {
-        throw new UnsupportedOperationException("Cannot remove from a select iterator");
+        throw new UnsupportedOperationException("Cannot remove from a filter iterator");
     }
 
     public boolean hasNext()

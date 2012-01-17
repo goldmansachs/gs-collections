@@ -49,7 +49,7 @@ public interface MutableSortedMap<K, V>
      * The key and value for each entry is determined by applying the <code>keyFunction</code> and <code>valueFunction</code> to each item in <code>collection</code>.
      * Any entry in <code>map</code> that has the same key as an entry in <code>this</code> will have it's value replaced by that in <code>map</code>.
      */
-    <E> MutableSortedMap<K, V> collectKeysAndValues(
+    <E> MutableSortedMap<K, V> transformKeysAndValues(
             Collection<E> collection,
             Function<? super E, ? extends K> keyFunction,
             Function<? super E, ? extends V> valueFunction);
@@ -142,23 +142,23 @@ public interface MutableSortedMap<K, V>
      */
     MutableSortedMap<K, V> asSynchronized();
 
-    MutableSortedMap<K, V> select(Predicate2<? super K, ? super V> predicate);
+    MutableSortedMap<K, V> filter(Predicate2<? super K, ? super V> predicate);
 
-    MutableSortedMap<K, V> reject(Predicate2<? super K, ? super V> predicate);
+    MutableSortedMap<K, V> filterNot(Predicate2<? super K, ? super V> predicate);
 
-    <K2, V2> MutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function);
+    <K2, V2> MutableMap<K2, V2> transform(Function2<? super K, ? super V, Pair<K2, V2>> function);
 
-    <R> MutableSortedMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function);
+    <R> MutableSortedMap<K, R> transformValues(Function2<? super K, ? super V, ? extends R> function);
 
-    <R> MutableList<R> collect(Function<? super V, ? extends R> function);
+    <R> MutableList<R> transform(Function<? super V, ? extends R> function);
 
-    <R> MutableList<R> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function);
+    <R> MutableList<R> transformIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function);
 
-    <R> MutableList<R> flatCollect(Function<? super V, ? extends Iterable<R>> function);
+    <R> MutableList<R> flatTransform(Function<? super V, ? extends Iterable<R>> function);
 
-    MutableList<V> reject(Predicate<? super V> predicate);
+    MutableList<V> filterNot(Predicate<? super V> predicate);
 
-    MutableList<V> select(Predicate<? super V> predicate);
+    MutableList<V> filter(Predicate<? super V> predicate);
 
     PartitionMutableList<V> partition(Predicate<? super V> predicate);
 

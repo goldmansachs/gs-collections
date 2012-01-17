@@ -120,6 +120,6 @@ public class FixedSizeMapFactoryTest
         MutableMap<Key, Integer> map3 = Maps.fixedSize.of(key, 1, new Key("not a dupe"), 2, duplicateKey3, 3);
         Verify.assertSize(2, map3);
         Verify.assertContainsAllKeyValues(map3, key, 3, new Key("not a dupe"), 2);
-        Assert.assertSame(key, map3.keysView().detect(Predicates.equal(key)));
+        Assert.assertSame(key, map3.keysView().find(Predicates.equal(key)));
     }
 }

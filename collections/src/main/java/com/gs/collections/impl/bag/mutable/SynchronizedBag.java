@@ -91,40 +91,40 @@ public class SynchronizedBag<E>
     }
 
     @Override
-    public <V> MutableBag<V> collect(Function<? super E, ? extends V> function)
+    public <V> MutableBag<V> transform(Function<? super E, ? extends V> function)
     {
         synchronized (this.getLock())
         {
-            return this.getMutableBag().collect(function);
+            return this.getMutableBag().transform(function);
         }
     }
 
     @Override
-    public <V> MutableBag<V> flatCollect(Function<? super E, ? extends Iterable<V>> function)
+    public <V> MutableBag<V> flatTransform(Function<? super E, ? extends Iterable<V>> function)
     {
         synchronized (this.getLock())
         {
-            return this.getMutableBag().flatCollect(function);
+            return this.getMutableBag().flatTransform(function);
         }
     }
 
     @Override
-    public <V> MutableBag<V> collectIf(
+    public <V> MutableBag<V> transformIf(
             Predicate<? super E> predicate,
             Function<? super E, ? extends V> function)
     {
         synchronized (this.getLock())
         {
-            return this.getMutableBag().collectIf(predicate, function);
+            return this.getMutableBag().transformIf(predicate, function);
         }
     }
 
     @Override
-    public <P, V> MutableBag<V> collectWith(Function2<? super E, ? super P, ? extends V> function, P parameter)
+    public <P, V> MutableBag<V> transformWith(Function2<? super E, ? super P, ? extends V> function, P parameter)
     {
         synchronized (this.getLock())
         {
-            return this.getMutableBag().collectWith(function, parameter);
+            return this.getMutableBag().transformWith(function, parameter);
         }
     }
 
@@ -156,38 +156,38 @@ public class SynchronizedBag<E>
     }
 
     @Override
-    public MutableBag<E> reject(Predicate<? super E> predicate)
+    public MutableBag<E> filterNot(Predicate<? super E> predicate)
     {
         synchronized (this.getLock())
         {
-            return this.getMutableBag().reject(predicate);
+            return this.getMutableBag().filterNot(predicate);
         }
     }
 
     @Override
-    public <P> MutableBag<E> rejectWith(Predicate2<? super E, ? super P> predicate, P parameter)
+    public <P> MutableBag<E> filterNotWith(Predicate2<? super E, ? super P> predicate, P parameter)
     {
         synchronized (this.getLock())
         {
-            return this.getMutableBag().rejectWith(predicate, parameter);
+            return this.getMutableBag().filterNotWith(predicate, parameter);
         }
     }
 
     @Override
-    public MutableBag<E> select(Predicate<? super E> predicate)
+    public MutableBag<E> filter(Predicate<? super E> predicate)
     {
         synchronized (this.getLock())
         {
-            return this.getMutableBag().select(predicate);
+            return this.getMutableBag().filter(predicate);
         }
     }
 
     @Override
-    public <P> MutableBag<E> selectWith(Predicate2<? super E, ? super P> predicate, P parameter)
+    public <P> MutableBag<E> filterWith(Predicate2<? super E, ? super P> predicate, P parameter)
     {
         synchronized (this.getLock())
         {
-            return this.getMutableBag().selectWith(predicate, parameter);
+            return this.getMutableBag().filterWith(predicate, parameter);
         }
     }
 

@@ -36,17 +36,17 @@ public interface ImmutableBag<T> extends Bag<T>, ImmutableCollection<T>
 
     ImmutableBag<T> newWithoutAll(Iterable<? extends T> elements);
 
-    ImmutableBag<T> select(Predicate<? super T> predicate);
+    ImmutableBag<T> filter(Predicate<? super T> predicate);
 
-    ImmutableBag<T> reject(Predicate<? super T> predicate);
+    ImmutableBag<T> filterNot(Predicate<? super T> predicate);
 
     PartitionImmutableBag<T> partition(Predicate<? super T> predicate);
 
-    <V> ImmutableBag<V> collect(Function<? super T, ? extends V> function);
+    <V> ImmutableBag<V> transform(Function<? super T, ? extends V> function);
 
-    <V> ImmutableBag<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
+    <V> ImmutableBag<V> transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 
-    <V> ImmutableBag<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
+    <V> ImmutableBag<V> flatTransform(Function<? super T, ? extends Iterable<V>> function);
 
     <V> ImmutableBagMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
 

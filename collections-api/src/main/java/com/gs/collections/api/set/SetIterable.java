@@ -93,9 +93,9 @@ public interface SetIterable<T> extends RichIterable<T>
      */
     <B> LazyIterable<Pair<T, B>> cartesianProduct(SetIterable<B> set);
 
-    SetIterable<T> select(Predicate<? super T> predicate);
+    SetIterable<T> filter(Predicate<? super T> predicate);
 
-    SetIterable<T> reject(Predicate<? super T> predicate);
+    SetIterable<T> filterNot(Predicate<? super T> predicate);
 
     PartitionSet<T> partition(Predicate<? super T> predicate);
 

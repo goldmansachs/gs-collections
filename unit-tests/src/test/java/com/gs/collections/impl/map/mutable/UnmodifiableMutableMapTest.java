@@ -327,7 +327,7 @@ public class UnmodifiableMutableMapTest extends MutableMapTestCase
         {
             public void run()
             {
-                map.collectKeysAndValues(null, null, null);
+                map.transformKeysAndValues(null, null, null);
             }
         });
     }

@@ -96,7 +96,7 @@ public abstract class AbstractMutableSortedMap<K, V> extends AbstractMapIterable
 
     public RichIterable<Pair<K, V>> keyValuesView()
     {
-        return LazyIterate.adapt(this.entrySet()).collect(AbstractImmutableEntry.<K, V>getPairFunction());
+        return LazyIterate.adapt(this.entrySet()).transform(AbstractImmutableEntry.<K, V>getPairFunction());
     }
 
     public Iterator<V> iterator()
@@ -104,65 +104,65 @@ public abstract class AbstractMutableSortedMap<K, V> extends AbstractMapIterable
         return this.values().iterator();
     }
 
-    public <K2, V2> MutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function)
+    public <K2, V2> MutableMap<K2, V2> transform(Function2<? super K, ? super V, Pair<K2, V2>> function)
     {
-        return MapIterate.collect(this, function, UnifiedMap.<K2, V2>newMap(this.size()));
+        return MapIterate.transform(this, function, UnifiedMap.<K2, V2>newMap(this.size()));
     }
 
-    public <E> MutableSortedMap<K, V> collectKeysAndValues(Collection<E> collection, Function<? super E, ? extends K> keyFunction, Function<? super E, ? extends V> valueFunction)
+    public <E> MutableSortedMap<K, V> transformKeysAndValues(Collection<E> collection, Function<? super E, ? extends K> keyFunction, Function<? super E, ? extends V> valueFunction)
     {
         Iterate.forEach(collection, new MapCollectProcedure<E, K, V>(this, keyFunction, valueFunction));
         return this;
     }
 
-    public <R> MutableSortedMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function)
+    public <R> MutableSortedMap<K, R> transformValues(Function2<? super K, ? super V, ? extends R> function)
     {
-        return MapIterate.collectValues(this, function, TreeSortedMap.<K, R>newMap(this.comparator()));
+        return MapIterate.transformValues(this, function, TreeSortedMap.<K, R>newMap(this.comparator()));
     }
 
-    public MutableSortedMap<K, V> select(Predicate2<? super K, ? super V> predicate)
+    public MutableSortedMap<K, V> filter(Predicate2<? super K, ? super V> predicate)
     {
-        return MapIterate.selectMapOnEntry(this, predicate, this.newEmpty());
+        return MapIterate.filterMapOnEntry(this, predicate, this.newEmpty());
     }
 
-    public MutableSortedMap<K, V> reject(Predicate2<? super K, ? super V> predicate)
+    public MutableSortedMap<K, V> filterNot(Predicate2<? super K, ? super V> predicate)
     {
-        return MapIterate.rejectMapOnEntry(this, predicate, this.newEmpty());
+        return MapIterate.filterNotMapOnEntry(this, predicate, this.newEmpty());
     }
 
-    public Pair<K, V> detect(Predicate2<? super K, ? super V> predicate)
+    public Pair<K, V> find(Predicate2<? super K, ? super V> predicate)
     {
-        return MapIterate.detect(this, predicate);
-    }
-
-    @Override
-    public <R> MutableList<R> collect(Function<? super V, ? extends R> function)
-    {
-        return this.collect(function, FastList.<R>newList(this.size()));
+        return MapIterate.find(this, predicate);
     }
 
     @Override
-    public <R> MutableList<R> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function)
+    public <R> MutableList<R> transform(Function<? super V, ? extends R> function)
     {
-        return this.collectIf(predicate, function, FastList.<R>newList(this.size()));
+        return this.transform(function, FastList.<R>newList(this.size()));
     }
 
     @Override
-    public <R> MutableList<R> flatCollect(Function<? super V, ? extends Iterable<R>> function)
+    public <R> MutableList<R> transformIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function)
     {
-        return this.flatCollect(function, FastList.<R>newList(this.size()));
+        return this.transformIf(predicate, function, FastList.<R>newList(this.size()));
     }
 
     @Override
-    public MutableList<V> reject(Predicate<? super V> predicate)
+    public <R> MutableList<R> flatTransform(Function<? super V, ? extends Iterable<R>> function)
     {
-        return this.reject(predicate, FastList.<V>newList(this.size()));
+        return this.flatTransform(function, FastList.<R>newList(this.size()));
     }
 
     @Override
-    public MutableList<V> select(Predicate<? super V> predicate)
+    public MutableList<V> filterNot(Predicate<? super V> predicate)
     {
-        return this.select(predicate, FastList.<V>newList(this.size()));
+        return this.filterNot(predicate, FastList.<V>newList(this.size()));
+    }
+
+    @Override
+    public MutableList<V> filter(Predicate<? super V> predicate)
+    {
+        return this.filter(predicate, FastList.<V>newList(this.size()));
     }
 
     public PartitionMutableList<V> partition(Predicate<? super V> predicate)

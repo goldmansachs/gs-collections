@@ -36,13 +36,13 @@ import net.jcip.annotations.Immutable;
 public interface ImmutableMap<K, V>
         extends UnsortedMapIterable<K, V>
 {
-    ImmutableMap<K, V> select(Predicate2<? super K, ? super V> predicate);
+    ImmutableMap<K, V> filter(Predicate2<? super K, ? super V> predicate);
 
-    <K2, V2> ImmutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function);
+    <K2, V2> ImmutableMap<K2, V2> transform(Function2<? super K, ? super V, Pair<K2, V2>> function);
 
-    <R> ImmutableMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function);
+    <R> ImmutableMap<K, R> transformValues(Function2<? super K, ? super V, ? extends R> function);
 
-    ImmutableMap<K, V> reject(Predicate2<? super K, ? super V> predicate);
+    ImmutableMap<K, V> filterNot(Predicate2<? super K, ? super V> predicate);
 
     Map<K, V> castToMap();
 
@@ -58,15 +58,15 @@ public interface ImmutableMap<K, V>
 
     MutableMap<K, V> toMap();
 
-    <R> ImmutableCollection<R> collect(Function<? super V, ? extends R> function);
+    <R> ImmutableCollection<R> transform(Function<? super V, ? extends R> function);
 
-    <R> ImmutableCollection<R> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function);
+    <R> ImmutableCollection<R> transformIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function);
 
-    <R> ImmutableCollection<R> flatCollect(Function<? super V, ? extends Iterable<R>> function);
+    <R> ImmutableCollection<R> flatTransform(Function<? super V, ? extends Iterable<R>> function);
 
-    ImmutableCollection<V> reject(Predicate<? super V> predicate);
+    ImmutableCollection<V> filterNot(Predicate<? super V> predicate);
 
-    ImmutableCollection<V> select(Predicate<? super V> predicate);
+    ImmutableCollection<V> filter(Predicate<? super V> predicate);
 
     PartitionImmutableCollection<V> partition(Predicate<? super V> predicate);
 

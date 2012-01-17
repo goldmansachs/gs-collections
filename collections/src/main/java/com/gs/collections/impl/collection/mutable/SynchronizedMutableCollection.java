@@ -425,75 +425,75 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <V> MutableCollection<V> collect(Function<? super E, ? extends V> function)
+    public <V> MutableCollection<V> transform(Function<? super E, ? extends V> function)
     {
         synchronized (this.lock)
         {
-            return this.collection.collect(function);
+            return this.collection.transform(function);
         }
     }
 
-    public <V, R extends Collection<V>> R collect(Function<? super E, ? extends V> function, R target)
+    public <V, R extends Collection<V>> R transform(Function<? super E, ? extends V> function, R target)
     {
         synchronized (this.lock)
         {
-            return this.collection.collect(function, target);
+            return this.collection.transform(function, target);
         }
     }
 
-    public <V> MutableCollection<V> flatCollect(Function<? super E, ? extends Iterable<V>> function)
+    public <V> MutableCollection<V> flatTransform(Function<? super E, ? extends Iterable<V>> function)
     {
         synchronized (this.lock)
         {
-            return this.collection.flatCollect(function);
+            return this.collection.flatTransform(function);
         }
     }
 
-    public <V, R extends Collection<V>> R flatCollect(Function<? super E, ? extends Iterable<V>> function, R target)
+    public <V, R extends Collection<V>> R flatTransform(Function<? super E, ? extends Iterable<V>> function, R target)
     {
         synchronized (this.lock)
         {
-            return this.collection.flatCollect(function, target);
+            return this.collection.flatTransform(function, target);
         }
     }
 
-    public <V> MutableCollection<V> collectIf(
+    public <V> MutableCollection<V> transformIf(
             Predicate<? super E> predicate,
             Function<? super E, ? extends V> function)
     {
         synchronized (this.lock)
         {
-            return this.collection.collectIf(predicate, function);
+            return this.collection.transformIf(predicate, function);
         }
     }
 
-    public <V, R extends Collection<V>> R collectIf(
+    public <V, R extends Collection<V>> R transformIf(
             Predicate<? super E> predicate,
             Function<? super E, ? extends V> function,
             R target)
     {
         synchronized (this.lock)
         {
-            return this.collection.collectIf(predicate, function, target);
+            return this.collection.transformIf(predicate, function, target);
         }
     }
 
-    public <P, A> MutableCollection<A> collectWith(Function2<? super E, ? super P, ? extends A> function, P parameter)
+    public <P, A> MutableCollection<A> transformWith(Function2<? super E, ? super P, ? extends A> function, P parameter)
     {
         synchronized (this.lock)
         {
-            return this.collection.collectWith(function, parameter);
+            return this.collection.transformWith(function, parameter);
         }
     }
 
-    public <P, A, R extends Collection<A>> R collectWith(
+    public <P, A, R extends Collection<A>> R transformWith(
             Function2<? super E, ? super P, ? extends A> function,
             P parameter,
             R targetCollection)
     {
         synchronized (this.lock)
         {
-            return this.collection.collectWith(function, parameter, targetCollection);
+            return this.collection.transformWith(function, parameter, targetCollection);
         }
     }
 
@@ -513,11 +513,11 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public E detect(Predicate<? super E> predicate)
+    public E find(Predicate<? super E> predicate)
     {
         synchronized (this.lock)
         {
-            return this.collection.detect(predicate);
+            return this.collection.find(predicate);
         }
     }
 
@@ -569,30 +569,30 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public E detectIfNone(Predicate<? super E> predicate, Function0<? extends E> function)
+    public E findIfNone(Predicate<? super E> predicate, Function0<? extends E> function)
     {
         synchronized (this.lock)
         {
-            return this.collection.detectIfNone(predicate, function);
+            return this.collection.findIfNone(predicate, function);
         }
     }
 
-    public <P> E detectWith(Predicate2<? super E, ? super P> predicate, P parameter)
+    public <P> E findWith(Predicate2<? super E, ? super P> predicate, P parameter)
     {
         synchronized (this.lock)
         {
-            return this.collection.detectWith(predicate, parameter);
+            return this.collection.findWith(predicate, parameter);
         }
     }
 
-    public <P> E detectWithIfNone(
+    public <P> E findWithIfNone(
             Predicate2<? super E, ? super P> predicate,
             P parameter,
             Function0<? extends E> function)
     {
         synchronized (this.lock)
         {
-            return this.collection.detectWithIfNone(predicate, parameter, function);
+            return this.collection.findWithIfNone(predicate, parameter, function);
         }
     }
 
@@ -612,46 +612,46 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super E, ? extends IV> function)
+    public <IV> IV foldLeft(IV initialValue, Function2<? super IV, ? super E, ? extends IV> function)
     {
         synchronized (this.lock)
         {
-            return this.collection.injectInto(injectedValue, function);
+            return this.collection.foldLeft(initialValue, function);
         }
     }
 
-    public int injectInto(int injectedValue, IntObjectToIntFunction<? super E> function)
+    public int foldLeft(int initialValue, IntObjectToIntFunction<? super E> function)
     {
         synchronized (this.lock)
         {
-            return this.collection.injectInto(injectedValue, function);
+            return this.collection.foldLeft(initialValue, function);
         }
     }
 
-    public long injectInto(long injectedValue, LongObjectToLongFunction<? super E> function)
+    public long foldLeft(long initialValue, LongObjectToLongFunction<? super E> function)
     {
         synchronized (this.lock)
         {
-            return this.collection.injectInto(injectedValue, function);
+            return this.collection.foldLeft(initialValue, function);
         }
     }
 
-    public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super E> function)
+    public double foldLeft(double initialValue, DoubleObjectToDoubleFunction<? super E> function)
     {
         synchronized (this.lock)
         {
-            return this.collection.injectInto(injectedValue, function);
+            return this.collection.foldLeft(initialValue, function);
         }
     }
 
-    public <IV, P> IV injectIntoWith(
-            IV injectValue,
+    public <IV, P> IV foldLeftWith(
+            IV initialValue,
             Function3<? super IV, ? super E, ? super P, ? extends IV> function,
             P parameter)
     {
         synchronized (this.lock)
         {
-            return this.collection.injectIntoWith(injectValue, function, parameter);
+            return this.collection.foldLeftWith(initialValue, function, parameter);
         }
     }
 
@@ -671,40 +671,40 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public MutableCollection<E> reject(Predicate<? super E> predicate)
+    public MutableCollection<E> filterNot(Predicate<? super E> predicate)
     {
         synchronized (this.lock)
         {
-            return this.collection.reject(predicate);
+            return this.collection.filterNot(predicate);
         }
     }
 
-    public <R extends Collection<E>> R reject(Predicate<? super E> predicate, R target)
+    public <R extends Collection<E>> R filterNot(Predicate<? super E> predicate, R target)
     {
         synchronized (this.lock)
         {
-            return this.collection.reject(predicate, target);
+            return this.collection.filterNot(predicate, target);
         }
     }
 
-    public <P> MutableCollection<E> rejectWith(
+    public <P> MutableCollection<E> filterNotWith(
             Predicate2<? super E, ? super P> predicate,
             P parameter)
     {
         synchronized (this.lock)
         {
-            return this.collection.rejectWith(predicate, parameter);
+            return this.collection.filterNotWith(predicate, parameter);
         }
     }
 
-    public <P, R extends Collection<E>> R rejectWith(
+    public <P, R extends Collection<E>> R filterNotWith(
             Predicate2<? super E, ? super P> predicate,
             P parameter,
             R targetCollection)
     {
         synchronized (this.lock)
         {
-            return this.collection.rejectWith(predicate, parameter, targetCollection);
+            return this.collection.filterNotWith(predicate, parameter, targetCollection);
         }
     }
 
@@ -724,29 +724,29 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public MutableCollection<E> select(Predicate<? super E> predicate)
+    public MutableCollection<E> filter(Predicate<? super E> predicate)
     {
         synchronized (this.lock)
         {
-            return this.collection.select(predicate);
+            return this.collection.filter(predicate);
         }
     }
 
-    public <R extends Collection<E>> R select(Predicate<? super E> predicate, R target)
+    public <R extends Collection<E>> R filter(Predicate<? super E> predicate, R target)
     {
         synchronized (this.lock)
         {
-            return this.collection.select(predicate, target);
+            return this.collection.filter(predicate, target);
         }
     }
 
-    public <P> Twin<MutableList<E>> selectAndRejectWith(
+    public <P> Twin<MutableList<E>> partitionWith(
             Predicate2<? super E, ? super P> predicate,
             P parameter)
     {
         synchronized (this.lock)
         {
-            return this.collection.selectAndRejectWith(predicate, parameter);
+            return this.collection.partitionWith(predicate, parameter);
         }
     }
 
@@ -758,24 +758,24 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <P> MutableCollection<E> selectWith(
+    public <P> MutableCollection<E> filterWith(
             Predicate2<? super E, ? super P> predicate,
             P parameter)
     {
         synchronized (this.lock)
         {
-            return this.collection.selectWith(predicate, parameter);
+            return this.collection.filterWith(predicate, parameter);
         }
     }
 
-    public <P, R extends Collection<E>> R selectWith(
+    public <P, R extends Collection<E>> R filterWith(
             Predicate2<? super E, ? super P> predicate,
             P parameter,
             R targetCollection)
     {
         synchronized (this.lock)
         {
-            return this.collection.selectWith(predicate, parameter, targetCollection);
+            return this.collection.filterWith(predicate, parameter, targetCollection);
         }
     }
 

@@ -55,7 +55,7 @@ public abstract class AbstractImmutableEmptySetTestCase extends AbstractImmutabl
     public void testDetect()
     {
         ImmutableSet<Integer> integers = this.classUnderTest();
-        Assert.assertNull(integers.detect(Predicates.equal(1)));
+        Assert.assertNull(integers.find(Predicates.equal(1)));
     }
 
     @Override
@@ -182,12 +182,12 @@ public abstract class AbstractImmutableEmptySetTestCase extends AbstractImmutabl
         List<Object> nullsPlusOne = Collections.nCopies(immutableSet.size() + 1, null);
 
         ImmutableSet<Pair<Integer, Object>> pairs = immutableSet.zip(nulls);
-        Assert.assertEquals(immutableSet, pairs.collect(Functions.<Integer>firstOfPair()));
-        Assert.assertEquals(UnifiedSet.<Object>newSet(nulls), pairs.collect(Functions.<Object>secondOfPair()));
+        Assert.assertEquals(immutableSet, pairs.transform(Functions.<Integer>firstOfPair()));
+        Assert.assertEquals(UnifiedSet.<Object>newSet(nulls), pairs.transform(Functions.<Object>secondOfPair()));
 
         ImmutableSet<Pair<Integer, Object>> pairsPlusOne = immutableSet.zip(nullsPlusOne);
-        Assert.assertEquals(immutableSet, pairsPlusOne.collect(Functions.<Integer>firstOfPair()));
-        Assert.assertEquals(UnifiedSet.<Object>newSet(nulls), pairsPlusOne.collect(Functions.<Object>secondOfPair()));
+        Assert.assertEquals(immutableSet, pairsPlusOne.transform(Functions.<Integer>firstOfPair()));
+        Assert.assertEquals(UnifiedSet.<Object>newSet(nulls), pairsPlusOne.transform(Functions.<Object>secondOfPair()));
 
         Assert.assertEquals(immutableSet.zip(nulls), immutableSet.zip(nulls, UnifiedSet.<Pair<Integer, Object>>newSet()));
     }
@@ -199,10 +199,10 @@ public abstract class AbstractImmutableEmptySetTestCase extends AbstractImmutabl
         ImmutableSet<Integer> immutableSet = this.classUnderTest();
         ImmutableSet<Pair<Integer, Integer>> pairs = immutableSet.zipWithIndex();
 
-        Assert.assertEquals(immutableSet, pairs.collect(Functions.<Integer>firstOfPair()));
+        Assert.assertEquals(immutableSet, pairs.transform(Functions.<Integer>firstOfPair()));
         Assert.assertEquals(
                 UnifiedSet.<Integer>newSet(),
-                pairs.collect(Functions.<Integer>secondOfPair()));
+                pairs.transform(Functions.<Integer>secondOfPair()));
 
         Assert.assertEquals(
                 immutableSet.zipWithIndex(),

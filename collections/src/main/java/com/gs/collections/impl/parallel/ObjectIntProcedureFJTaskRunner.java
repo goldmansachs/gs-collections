@@ -133,7 +133,7 @@ public final class ObjectIntProcedureFJTaskRunner<T, BT extends ObjectIntProcedu
     {
         if (!this.combiner.useCombineOne())
         {
-            this.combiner.combineAll(ArrayIterate.collect(this.procedures, this.procedureFunction));
+            this.combiner.combineAll(ArrayIterate.transform(this.procedures, this.procedureFunction));
         }
     }
 

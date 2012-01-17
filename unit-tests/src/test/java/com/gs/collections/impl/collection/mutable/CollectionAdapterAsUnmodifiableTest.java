@@ -43,32 +43,32 @@ public class CollectionAdapterAsUnmodifiableTest extends UnmodifiableMutableColl
     @Test
     public void select()
     {
-        Assert.assertEquals(this.getCollection().toList(), this.getCollection().select(Predicates.alwaysTrue()));
-        Verify.assertNotEquals(this.getCollection().toList(), this.getCollection().select(Predicates.alwaysFalse()));
+        Assert.assertEquals(this.getCollection().toList(), this.getCollection().filter(Predicates.alwaysTrue()));
+        Verify.assertNotEquals(this.getCollection().toList(), this.getCollection().filter(Predicates.alwaysFalse()));
     }
 
     @Override
     @Test
     public void selectWith()
     {
-        Assert.assertEquals(this.getCollection().toList(), this.getCollection().selectWith(Predicates2.alwaysTrue(), null));
-        Verify.assertNotEquals(this.getCollection().toList(), this.getCollection().selectWith(Predicates2.alwaysFalse(), null));
+        Assert.assertEquals(this.getCollection().toList(), this.getCollection().filterWith(Predicates2.alwaysTrue(), null));
+        Verify.assertNotEquals(this.getCollection().toList(), this.getCollection().filterWith(Predicates2.alwaysFalse(), null));
     }
 
     @Override
     @Test
     public void reject()
     {
-        Assert.assertEquals(this.getCollection().toList(), this.getCollection().reject(Predicates.alwaysFalse()));
-        Verify.assertNotEquals(this.getCollection().toList(), this.getCollection().reject(Predicates.alwaysTrue()));
+        Assert.assertEquals(this.getCollection().toList(), this.getCollection().filterNot(Predicates.alwaysFalse()));
+        Verify.assertNotEquals(this.getCollection().toList(), this.getCollection().filterNot(Predicates.alwaysTrue()));
     }
 
     @Override
     @Test
     public void rejectWith()
     {
-        Assert.assertEquals(this.getCollection().toList(), this.getCollection().rejectWith(Predicates2.alwaysFalse(), null));
-        Verify.assertNotEquals(this.getCollection().toList(), this.getCollection().rejectWith(Predicates2.alwaysTrue(), null));
+        Assert.assertEquals(this.getCollection().toList(), this.getCollection().filterNotWith(Predicates2.alwaysFalse(), null));
+        Verify.assertNotEquals(this.getCollection().toList(), this.getCollection().filterNotWith(Predicates2.alwaysTrue(), null));
     }
 
     @Override
@@ -84,23 +84,23 @@ public class CollectionAdapterAsUnmodifiableTest extends UnmodifiableMutableColl
     @Test
     public void collect()
     {
-        Assert.assertEquals(this.getCollection().toList(), this.getCollection().collect(Functions.getPassThru()));
-        Verify.assertNotEquals(this.getCollection().toList(), this.getCollection().collect(Functions.getToClass()));
+        Assert.assertEquals(this.getCollection().toList(), this.getCollection().transform(Functions.getPassThru()));
+        Verify.assertNotEquals(this.getCollection().toList(), this.getCollection().transform(Functions.getToClass()));
     }
 
     @Override
     @Test
     public void collectWith()
     {
-        Assert.assertEquals(this.getCollection().toList(), this.getCollection().collectWith(Functions2.fromFunction(Functions.getPassThru()), null));
-        Verify.assertNotEquals(this.getCollection().toList(), this.getCollection().collectWith(Functions2.fromFunction(Functions.getToClass()), null));
+        Assert.assertEquals(this.getCollection().toList(), this.getCollection().transformWith(Functions2.fromFunction(Functions.getPassThru()), null));
+        Verify.assertNotEquals(this.getCollection().toList(), this.getCollection().transformWith(Functions2.fromFunction(Functions.getToClass()), null));
     }
 
     @Override
     @Test
     public void collectIf()
     {
-        Assert.assertEquals(this.getCollection().toList(), this.getCollection().collectIf(Predicates.alwaysTrue(), Functions.getPassThru()));
-        Verify.assertNotEquals(this.getCollection().toList(), this.getCollection().collectIf(Predicates.alwaysFalse(), Functions.getToClass()));
+        Assert.assertEquals(this.getCollection().toList(), this.getCollection().transformIf(Predicates.alwaysTrue(), Functions.getPassThru()));
+        Verify.assertNotEquals(this.getCollection().toList(), this.getCollection().transformIf(Predicates.alwaysFalse(), Functions.getToClass()));
     }
 }

@@ -49,23 +49,23 @@ public interface MutableBag<T>
 
     boolean removeOccurrences(Object item, int occurrences);
 
-    MutableBag<T> select(Predicate<? super T> predicate);
+    MutableBag<T> filter(Predicate<? super T> predicate);
 
-    <P> MutableBag<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+    <P> MutableBag<T> filterWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
-    MutableBag<T> reject(Predicate<? super T> predicate);
+    MutableBag<T> filterNot(Predicate<? super T> predicate);
 
-    <P> MutableBag<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+    <P> MutableBag<T> filterNotWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     PartitionMutableBag<T> partition(Predicate<? super T> predicate);
 
-    <V> MutableBag<V> collect(Function<? super T, ? extends V> function);
+    <V> MutableBag<V> transform(Function<? super T, ? extends V> function);
 
-    <P, V> MutableBag<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
+    <P, V> MutableBag<V> transformWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
 
-    <V> MutableBag<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
+    <V> MutableBag<V> transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 
-    <V> MutableBag<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
+    <V> MutableBag<V> flatTransform(Function<? super T, ? extends Iterable<V>> function);
 
     <V> MutableBagMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
 

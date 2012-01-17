@@ -273,7 +273,7 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
     @Test
     public void groupByEach()
     {
-        final MutableSet<Integer> set = this.classUnderTest().collect(StringFunctions.toInteger());
+        final MutableSet<Integer> set = this.classUnderTest().transform(StringFunctions.toInteger());
 
         final MutableMultimap<Integer, Integer> expected = UnifiedSetMultimap.newMultimap();
         set.forEach(new Procedure<Integer>()
@@ -302,16 +302,16 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
         List<Object> nullsMinusOne = Collections.nCopies(set.size() - 1, null);
 
         MutableSet<Pair<String, Object>> pairs = set.zip(nulls);
-        Assert.assertEquals(set, pairs.collect(Functions.<String>firstOfPair()));
-        Assert.assertEquals(nulls, pairs.collect(Functions.<Object>secondOfPair(), Lists.mutable.of()));
+        Assert.assertEquals(set, pairs.transform(Functions.<String>firstOfPair()));
+        Assert.assertEquals(nulls, pairs.transform(Functions.<Object>secondOfPair(), Lists.mutable.of()));
 
         MutableSet<Pair<String, Object>> pairsPlusOne = set.zip(nullsPlusOne);
-        Assert.assertEquals(set, pairsPlusOne.collect(Functions.<String>firstOfPair()));
-        Assert.assertEquals(nulls, pairsPlusOne.collect(Functions.<Object>secondOfPair(), Lists.mutable.of()));
+        Assert.assertEquals(set, pairsPlusOne.transform(Functions.<String>firstOfPair()));
+        Assert.assertEquals(nulls, pairsPlusOne.transform(Functions.<Object>secondOfPair(), Lists.mutable.of()));
 
         MutableSet<Pair<String, Object>> pairsMinusOne = set.zip(nullsMinusOne);
         Assert.assertEquals(set.size() - 1, pairsMinusOne.size());
-        Assert.assertTrue(set.containsAll(pairsMinusOne.collect(Functions.<String>firstOfPair())));
+        Assert.assertTrue(set.containsAll(pairsMinusOne.transform(Functions.<String>firstOfPair())));
 
         Assert.assertEquals(
                 set.zip(nulls),
@@ -326,10 +326,10 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
 
         Assert.assertEquals(
                 set,
-                pairs.collect(Functions.<String>firstOfPair()));
+                pairs.transform(Functions.<String>firstOfPair()));
         Assert.assertEquals(
                 Interval.zeroTo(set.size() - 1).toSet(),
-                pairs.collect(Functions.<Integer>secondOfPair()));
+                pairs.transform(Functions.<Integer>secondOfPair()));
 
         Assert.assertEquals(
                 set.zipWithIndex(),
@@ -398,7 +398,7 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
     {
         MutableSet<String> set = this.classUnderTest();
         RichIterable<RichIterable<String>> chunks = set.chunk(2);
-        MutableList<Integer> sizes = chunks.collect(new Function<RichIterable<String>, Integer>()
+        MutableList<Integer> sizes = chunks.transform(new Function<RichIterable<String>, Integer>()
         {
             public Integer valueOf(RichIterable<String> richIterable)
             {
@@ -433,7 +433,7 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
         MutableSet<String> set = this.classUnderTest();
         MutableSet<String> union = set.union(UnifiedSet.newSetWith("a", "b", "c", "1"));
         Verify.assertSize(set.size() + 3, union);
-        Assert.assertTrue(union.containsAllIterable(Interval.oneTo(set.size()).collect(Functions.getToString())));
+        Assert.assertTrue(union.containsAllIterable(Interval.oneTo(set.size()).transform(Functions.getToString())));
         Verify.assertContainsAll(union, "a", "b", "c");
 
         Assert.assertEquals(set, set.union(UnifiedSet.newSetWith("1")));
@@ -445,7 +445,7 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
         MutableSet<String> set = this.classUnderTest();
         MutableSet<String> union = set.unionInto(UnifiedSet.newSetWith("a", "b", "c", "1"), UnifiedSet.<String>newSet());
         Verify.assertSize(set.size() + 3, union);
-        Assert.assertTrue(union.containsAllIterable(Interval.oneTo(set.size()).collect(Functions.getToString())));
+        Assert.assertTrue(union.containsAllIterable(Interval.oneTo(set.size()).transform(Functions.getToString())));
         Verify.assertContainsAll(union, "a", "b", "c");
 
         Assert.assertEquals(set, set.unionInto(UnifiedSet.newSetWith("1"), UnifiedSet.<String>newSet()));
@@ -497,7 +497,7 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
         MutableSet<String> set = this.classUnderTest();
         MutableSet<String> difference = set.symmetricDifference(UnifiedSet.newSetWith("2", "3", "4", "5", "not present"));
         Verify.assertContains("1", difference);
-        Assert.assertTrue(difference.containsAllIterable(Interval.fromTo(set.size() + 1, 5).collect(Functions.getToString())));
+        Assert.assertTrue(difference.containsAllIterable(Interval.fromTo(set.size() + 1, 5).transform(Functions.getToString())));
         for (int i = 2; i <= set.size(); i++)
         {
             Verify.assertNotContains(String.valueOf(i), difference);
@@ -514,7 +514,7 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
                 UnifiedSet.newSetWith("2", "3", "4", "5", "not present"),
                 UnifiedSet.<String>newSet());
         Verify.assertContains("1", difference);
-        Assert.assertTrue(difference.containsAllIterable(Interval.fromTo(set.size() + 1, 5).collect(Functions.getToString())));
+        Assert.assertTrue(difference.containsAllIterable(Interval.fromTo(set.size() + 1, 5).transform(Functions.getToString())));
         for (int i = 2; i <= set.size(); i++)
         {
             Verify.assertNotContains(String.valueOf(i), difference);
@@ -559,8 +559,8 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
         Assert.assertEquals(
                 set,
                 cartesianProduct
-                        .select(Predicates.attributeEqual(Functions.<String>secondOfPair(), "One"))
-                        .collect(Functions.<String>firstOfPair()).toSet());
+                        .filter(Predicates.attributeEqual(Functions.<String>secondOfPair(), "One"))
+                        .transform(Functions.<String>firstOfPair()).toSet());
     }
 
     @Test

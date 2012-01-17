@@ -107,9 +107,9 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
     {
         super.select();
         SortedSetAdapter<Integer> integers = this.<Integer>classUnderTest(1, 2, 3, 4, 5);
-        Verify.assertSortedSetsEqual(TreeSortedSet.<Integer>newSetWith(1, 2), integers.select(Predicates.lessThan(3)));
-        Verify.assertInstanceOf(MutableSortedSet.class, this.<Integer>classUnderTest().select(Predicates.alwaysTrue()));
-        Verify.assertSortedSetsEqual(TreeSortedSet.newSet(), this.<Object>classUnderTest().select(Predicates.alwaysTrue()));
+        Verify.assertSortedSetsEqual(TreeSortedSet.<Integer>newSetWith(1, 2), integers.filter(Predicates.lessThan(3)));
+        Verify.assertInstanceOf(MutableSortedSet.class, this.<Integer>classUnderTest().filter(Predicates.alwaysTrue()));
+        Verify.assertSortedSetsEqual(TreeSortedSet.newSet(), this.<Object>classUnderTest().filter(Predicates.alwaysTrue()));
     }
 
     @Override
@@ -118,9 +118,9 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
     {
         super.reject();
         SortedSetAdapter<Integer> integers = this.classUnderTest(Comparators.<Integer>reverseNaturalOrder(), 1, 2, 3, 4);
-        Verify.assertSortedSetsEqual(TreeSortedSet.newSetWith(Comparators.<Object>reverseNaturalOrder(), 1, 2), integers.reject(Predicates.greaterThan(2)));
-        Verify.assertInstanceOf(MutableSortedSet.class, this.<Integer>classUnderTest().select(Predicates.alwaysTrue()));
-        Verify.assertSortedSetsEqual(TreeSortedSet.newSet(), this.<Object>classUnderTest().reject(Predicates.alwaysTrue()));
+        Verify.assertSortedSetsEqual(TreeSortedSet.newSetWith(Comparators.<Object>reverseNaturalOrder(), 1, 2), integers.filterNot(Predicates.greaterThan(2)));
+        Verify.assertInstanceOf(MutableSortedSet.class, this.<Integer>classUnderTest().filter(Predicates.alwaysTrue()));
+        Verify.assertSortedSetsEqual(TreeSortedSet.newSet(), this.<Object>classUnderTest().filterNot(Predicates.alwaysTrue()));
     }
 
     @Override
@@ -129,10 +129,10 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
     {
         super.collect();
         Verify.assertListsEqual(FastList.newListWith("1", "2", "3", "4"),
-                this.<Integer>classUnderTest(1, 2, 3, 4).collect(Functions.getToString()));
-        Verify.assertListsEqual(FastList.newListWith("1", "2", "3", "4"), this.<Integer>classUnderTest(1, 2, 3, 4).collect(Functions.getToString(),
+                this.<Integer>classUnderTest(1, 2, 3, 4).transform(Functions.getToString()));
+        Verify.assertListsEqual(FastList.newListWith("1", "2", "3", "4"), this.<Integer>classUnderTest(1, 2, 3, 4).transform(Functions.getToString(),
                 FastList.<String>newList()));
-        Verify.assertInstanceOf(FastList.class, this.<Object>classUnderTest().collect(Functions.getToString()));
+        Verify.assertInstanceOf(FastList.class, this.<Object>classUnderTest().transform(Functions.getToString()));
     }
 
     @Override
@@ -246,7 +246,7 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
         //Type TreeSet is important here because it's not a MutableSet
         SortedSet<Integer> set = new TreeSet<Integer>();
         MutableSortedSet<Integer> integerSetAdapter = SortedSetAdapter.adapt(set);
-        Verify.assertInstanceOf(MutableSortedSet.class, integerSetAdapter.select(Predicates.alwaysTrue()));
+        Verify.assertInstanceOf(MutableSortedSet.class, integerSetAdapter.filter(Predicates.alwaysTrue()));
     }
 
     @Test

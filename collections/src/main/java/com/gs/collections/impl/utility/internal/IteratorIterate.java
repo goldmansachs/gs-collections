@@ -55,9 +55,9 @@ public final class IteratorIterate
     }
 
     /**
-     * @see Iterate#selectAndRejectWith(Iterable, Predicate2, Object)
+     * @see Iterate#partitionWith(Iterable, Predicate2, Object)
      */
-    public static <T, P> Twin<MutableList<T>> selectAndRejectWith(
+    public static <T, P> Twin<MutableList<T>> partitionWith(
             Iterator<T> iterator,
             Predicate2<? super T, ? super P> predicate,
             P parameter)
@@ -123,9 +123,9 @@ public final class IteratorIterate
     }
 
     /**
-     * @see Iterate#select(Iterable, Predicate, Collection)
+     * @see Iterate#filter(Iterable, Predicate, Collection)
      */
-    public static <T, R extends Collection<T>> R select(
+    public static <T, R extends Collection<T>> R filter(
             Iterator<T> iterator,
             Predicate<? super T> predicate,
             R targetCollection)
@@ -142,9 +142,9 @@ public final class IteratorIterate
     }
 
     /**
-     * @see Iterate#selectWith(Iterable, Predicate2, Object, Collection)
+     * @see Iterate#filterWith(Iterable, Predicate2, Object, Collection)
      */
-    public static <T, P, R extends Collection<T>> R selectWith(
+    public static <T, P, R extends Collection<T>> R filterWith(
             Iterator<T> iterator,
             Predicate2<? super T, ? super P> predicate,
             P injectedValue,
@@ -162,9 +162,9 @@ public final class IteratorIterate
     }
 
     /**
-     * @see Iterate#selectWith(Iterable, Predicate2, Object, Collection)
+     * @see Iterate#filterWith(Iterable, Predicate2, Object, Collection)
      */
-    public static <T, V, R extends Collection<V>> R collectIf(
+    public static <T, V, R extends Collection<V>> R transformIf(
             Iterator<T> iterator,
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function,
@@ -182,9 +182,9 @@ public final class IteratorIterate
     }
 
     /**
-     * @see Iterate#reject(Iterable, Predicate, Collection)
+     * @see Iterate#filterNot(Iterable, Predicate, Collection)
      */
-    public static <T, R extends Collection<T>> R reject(
+    public static <T, R extends Collection<T>> R filterNot(
             Iterator<T> iterator,
             Predicate<? super T> predicate,
             R targetCollection)
@@ -201,9 +201,9 @@ public final class IteratorIterate
     }
 
     /**
-     * @see Iterate#rejectWith(Iterable, Predicate2, Object, Collection)
+     * @see Iterate#filterNotWith(Iterable, Predicate2, Object, Collection)
      */
-    public static <T, P, R extends Collection<T>> R rejectWith(
+    public static <T, P, R extends Collection<T>> R filterNotWith(
             Iterator<T> iterator,
             Predicate2<? super T, ? super P> predicate,
             P parameter,
@@ -221,9 +221,9 @@ public final class IteratorIterate
     }
 
     /**
-     * @see Iterate#collect(Iterable, Function, Collection)
+     * @see Iterate#transform(Iterable, Function, Collection)
      */
-    public static <T, V, R extends Collection<V>> R collect(
+    public static <T, V, R extends Collection<V>> R transform(
             Iterator<T> iterator,
             Function<? super T, ? extends V> function,
             R targetCollection)
@@ -236,9 +236,9 @@ public final class IteratorIterate
     }
 
     /**
-     * @see Iterate#flatCollect(Iterable, Function, Collection)
+     * @see Iterate#flatTransform(Iterable, Function, Collection)
      */
-    public static <T, V, R extends Collection<V>> R flatCollect(
+    public static <T, V, R extends Collection<V>> R flatTransform(
             Iterator<T> iterator,
             Function<? super T, ? extends Iterable<V>> function,
             R targetCollection)
@@ -274,9 +274,9 @@ public final class IteratorIterate
     }
 
     /**
-     * @see Iterate#detect(Iterable, Predicate)
+     * @see Iterate#find(Iterable, Predicate)
      */
-    public static <T> T detect(Iterator<T> iterator, Predicate<? super T> predicate)
+    public static <T> T find(Iterator<T> iterator, Predicate<? super T> predicate)
     {
         while (iterator.hasNext())
         {
@@ -290,9 +290,9 @@ public final class IteratorIterate
     }
 
     /**
-     * @see Iterate#detectWith(Iterable, Predicate2, Object)
+     * @see Iterate#findWith(Iterable, Predicate2, Object)
      */
-    public static <T, IV> T detectWith(
+    public static <T, IV> T findWith(
             Iterator<T> iterator,
             Predicate2<? super T, ? super IV> predicate,
             IV injectedValue)
@@ -309,9 +309,9 @@ public final class IteratorIterate
     }
 
     /**
-     * @see Iterate#injectInto(Object, Iterable, Function2)
+     * @see Iterate#foldLeft(Object, Iterable, Function2)
      */
-    public static <T, IV> IV injectInto(
+    public static <T, IV> IV foldLeft(
             IV injectValue,
             Iterator<T> iterator,
             Function2<? super IV, ? super T, ? extends IV> function)
@@ -325,9 +325,9 @@ public final class IteratorIterate
     }
 
     /**
-     * @see Iterate#injectInto(int, Iterable, IntObjectToIntFunction)
+     * @see Iterate#foldLeft(int, Iterable, IntObjectToIntFunction)
      */
-    public static <T> int injectInto(
+    public static <T> int foldLeft(
             int injectValue,
             Iterator<T> iterator,
             IntObjectToIntFunction<? super T> function)
@@ -341,9 +341,9 @@ public final class IteratorIterate
     }
 
     /**
-     * @see Iterate#injectInto(long, Iterable, LongObjectToLongFunction)
+     * @see Iterate#foldLeft(long, Iterable, LongObjectToLongFunction)
      */
-    public static <T> long injectInto(
+    public static <T> long foldLeft(
             long injectValue,
             Iterator<T> iterator,
             LongObjectToLongFunction<? super T> function)
@@ -357,9 +357,9 @@ public final class IteratorIterate
     }
 
     /**
-     * @see Iterate#injectInto(double, Iterable, DoubleObjectToDoubleFunction)
+     * @see Iterate#foldLeft(double, Iterable, DoubleObjectToDoubleFunction)
      */
-    public static <T> double injectInto(
+    public static <T> double foldLeft(
             double injectValue,
             Iterator<T> iterator,
             DoubleObjectToDoubleFunction<? super T> function)
@@ -373,9 +373,9 @@ public final class IteratorIterate
     }
 
     /**
-     * @see Iterate#injectIntoWith(Object, Iterable, Function3, Object)
+     * @see Iterate#foldLeftWith(Object, Iterable, Function3, Object)
      */
-    public static <T, IV, P> IV injectIntoWith(IV injectValue, Iterator<T> iterator, Function3<? super IV, ? super T, ? super P, ? extends IV> function, P parameter)
+    public static <T, IV, P> IV foldLeftWith(IV injectValue, Iterator<T> iterator, Function3<? super IV, ? super T, ? super P, ? extends IV> function, P parameter)
     {
         IV result = injectValue;
         while (iterator.hasNext())
@@ -498,9 +498,9 @@ public final class IteratorIterate
     }
 
     /**
-     * @see Iterate#detectIndex(Iterable, Predicate)
+     * @see Iterate#findIndex(Iterable, Predicate)
      */
-    public static <T> int detectIndex(Iterator<T> iterator, Predicate<? super T> predicate)
+    public static <T> int findIndex(Iterator<T> iterator, Predicate<? super T> predicate)
     {
         int i = 0;
         while (iterator.hasNext())
@@ -515,9 +515,9 @@ public final class IteratorIterate
     }
 
     /**
-     * @see Iterate#detectIndexWith(Iterable, Predicate2, Object)
+     * @see Iterate#findIndexWith(Iterable, Predicate2, Object)
      */
-    public static <T, IV> int detectIndexWith(Iterator<T> iterator, Predicate2<? super T, ? super IV> predicate, IV injectedValue)
+    public static <T, IV> int findIndexWith(Iterator<T> iterator, Predicate2<? super T, ? super IV> predicate, IV injectedValue)
     {
         int i = 0;
         while (iterator.hasNext())
@@ -543,9 +543,9 @@ public final class IteratorIterate
     }
 
     /**
-     * @see Iterate#collectWith(Iterable, Function2, Object, Collection)
+     * @see Iterate#transformWith(Iterable, Function2, Object, Collection)
      */
-    public static <T, P, A, R extends Collection<A>> R collectWith(
+    public static <T, P, A, R extends Collection<A>> R transformWith(
             Iterator<T> iterator,
             Function2<? super T, ? super P, ? extends A> function,
             P parameter,

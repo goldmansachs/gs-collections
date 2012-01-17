@@ -38,15 +38,15 @@ public class LazyIterateTest
     @Test
     public void selectForEach()
     {
-        LazyIterable<Integer> select = LazyIterate.select(Interval.oneTo(5), Predicates.lessThan(5));
-        int sum = select.injectInto(0, AddFunction.INTEGER_TO_INT);
+        LazyIterable<Integer> select = LazyIterate.filter(Interval.oneTo(5), Predicates.lessThan(5));
+        int sum = select.foldLeft(0, AddFunction.INTEGER_TO_INT);
         Assert.assertEquals(10, sum);
     }
 
     @Test
     public void selectForEachWithIndex()
     {
-        LazyIterable<Integer> select = LazyIterate.select(Interval.oneTo(5), Predicates.lessThan(5));
+        LazyIterable<Integer> select = LazyIterate.filter(Interval.oneTo(5), Predicates.lessThan(5));
         final Sum sum = new IntegerSum(0);
         select.forEachWithIndex(new ObjectIntProcedure<Integer>()
         {
@@ -62,7 +62,7 @@ public class LazyIterateTest
     @Test
     public void selectIterator()
     {
-        LazyIterable<Integer> select = LazyIterate.select(Interval.oneTo(5), Predicates.lessThan(5));
+        LazyIterable<Integer> select = LazyIterate.filter(Interval.oneTo(5), Predicates.lessThan(5));
         Sum sum = new IntegerSum(0);
         for (Integer each : select)
         {
@@ -74,7 +74,7 @@ public class LazyIterateTest
     @Test
     public void selectForEachWith()
     {
-        LazyIterable<Integer> select = LazyIterate.select(Interval.oneTo(5), Predicates.lessThan(5));
+        LazyIterable<Integer> select = LazyIterate.filter(Interval.oneTo(5), Predicates.lessThan(5));
         Sum sum = new IntegerSum(0);
         select.forEachWith(new Procedure2<Integer, Sum>()
         {
@@ -89,15 +89,15 @@ public class LazyIterateTest
     @Test
     public void rejectForEach()
     {
-        LazyIterable<Integer> select = LazyIterate.reject(Interval.oneTo(5), Predicates.lessThan(5));
-        int sum = select.injectInto(0, AddFunction.INTEGER_TO_INT);
+        LazyIterable<Integer> select = LazyIterate.filterNot(Interval.oneTo(5), Predicates.lessThan(5));
+        int sum = select.foldLeft(0, AddFunction.INTEGER_TO_INT);
         Assert.assertEquals(5, sum);
     }
 
     @Test
     public void rejectForEachWithIndex()
     {
-        LazyIterable<Integer> select = LazyIterate.reject(Interval.oneTo(5), Predicates.lessThan(5));
+        LazyIterable<Integer> select = LazyIterate.filterNot(Interval.oneTo(5), Predicates.lessThan(5));
         final Sum sum = new IntegerSum(0);
         select.forEachWithIndex(new ObjectIntProcedure<Integer>()
         {
@@ -113,7 +113,7 @@ public class LazyIterateTest
     @Test
     public void rejectIterator()
     {
-        LazyIterable<Integer> select = LazyIterate.reject(Interval.oneTo(5), Predicates.lessThan(5));
+        LazyIterable<Integer> select = LazyIterate.filterNot(Interval.oneTo(5), Predicates.lessThan(5));
         Sum sum = new IntegerSum(0);
         for (Integer each : select)
         {
@@ -125,7 +125,7 @@ public class LazyIterateTest
     @Test
     public void rejectForEachWith()
     {
-        LazyIterable<Integer> select = LazyIterate.reject(Interval.oneTo(5), Predicates.lessThan(5));
+        LazyIterable<Integer> select = LazyIterate.filterNot(Interval.oneTo(5), Predicates.lessThan(5));
         Sum sum = new IntegerSum(0);
         select.forEachWith(new Procedure2<Integer, Sum>()
         {
@@ -140,7 +140,7 @@ public class LazyIterateTest
     @Test
     public void collectForEach()
     {
-        LazyIterable<String> select = LazyIterate.collect(Interval.oneTo(5), Functions.getToString());
+        LazyIterable<String> select = LazyIterate.transform(Interval.oneTo(5), Functions.getToString());
         Appendable builder = new StringBuilder();
         Procedure<String> appendProcedure = Procedures.append(builder);
         select.forEach(appendProcedure);
@@ -150,7 +150,7 @@ public class LazyIterateTest
     @Test
     public void collectForEachWithIndex()
     {
-        LazyIterable<String> select = LazyIterate.collect(Interval.oneTo(5), Functions.getToString());
+        LazyIterable<String> select = LazyIterate.transform(Interval.oneTo(5), Functions.getToString());
         final StringBuilder builder = new StringBuilder("");
         select.forEachWithIndex(new ObjectIntProcedure<String>()
         {
@@ -166,7 +166,7 @@ public class LazyIterateTest
     @Test
     public void collectIterator()
     {
-        LazyIterable<String> select = LazyIterate.collect(Interval.oneTo(5), Functions.getToString());
+        LazyIterable<String> select = LazyIterate.transform(Interval.oneTo(5), Functions.getToString());
         StringBuilder builder = new StringBuilder("");
         for (String each : select)
         {
@@ -178,7 +178,7 @@ public class LazyIterateTest
     @Test
     public void collectForEachWith()
     {
-        LazyIterable<String> select = LazyIterate.collect(Interval.oneTo(5), Functions.getToString());
+        LazyIterable<String> select = LazyIterate.transform(Interval.oneTo(5), Functions.getToString());
         StringBuilder builder = new StringBuilder("");
         select.forEachWith(new Procedure2<String, StringBuilder>()
         {
@@ -199,7 +199,7 @@ public class LazyIterateTest
         MutableList<Integer> actual2 = FastList.newList(Interval.oneTo(5)).asLazy().toList();
         MutableList<Integer> actual3 = actual2.asUnmodifiable().asLazy().toList();
         MutableList<Integer> actual4 = actual2.asSynchronized().asLazy().toList();
-        MutableList<Integer> actual5 = actual2.asLazy().select(Predicates.alwaysTrue()).toList();
+        MutableList<Integer> actual5 = actual2.asLazy().filter(Predicates.alwaysTrue()).toList();
         MutableList<Integer> actual6 = actual2.toImmutable().asLazy().toList();
         ImmutableList<Integer> actual7 = actual2.asLazy().toList().toImmutable();
         Assert.assertEquals(expected, actual0);

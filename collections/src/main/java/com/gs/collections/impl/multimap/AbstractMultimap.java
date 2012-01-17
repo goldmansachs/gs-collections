@@ -100,7 +100,7 @@ public abstract class AbstractMultimap<K, V, C extends RichIterable<V>>
 
     public RichIterable<RichIterable<V>> multiValuesView()
     {
-        return this.getMap().valuesView().collect(new Function<C, RichIterable<V>>()
+        return this.getMap().valuesView().transform(new Function<C, RichIterable<V>>()
         {
             public RichIterable<V> valueOf(C multiValue)
             {
@@ -124,12 +124,12 @@ public abstract class AbstractMultimap<K, V, C extends RichIterable<V>>
 
     public RichIterable<V> valuesView()
     {
-        return this.getMap().valuesView().flatCollect(Functions.<Iterable<V>>getPassThru());
+        return this.getMap().valuesView().flatTransform(Functions.<Iterable<V>>getPassThru());
     }
 
     public RichIterable<Pair<K, RichIterable<V>>> keyMultiValuePairsView()
     {
-        return this.getMap().keyValuesView().collect(new Function<Pair<K, C>, Pair<K, RichIterable<V>>>()
+        return this.getMap().keyValuesView().transform(new Function<Pair<K, C>, Pair<K, RichIterable<V>>>()
         {
             public Pair<K, RichIterable<V>> valueOf(Pair<K, C> pair)
             {
@@ -140,11 +140,11 @@ public abstract class AbstractMultimap<K, V, C extends RichIterable<V>>
 
     public RichIterable<Pair<K, V>> keyValuePairsView()
     {
-        return this.keyMultiValuePairsView().flatCollect(new Function<Pair<K, RichIterable<V>>, Iterable<Pair<K, V>>>()
+        return this.keyMultiValuePairsView().flatTransform(new Function<Pair<K, RichIterable<V>>, Iterable<Pair<K, V>>>()
         {
             public Iterable<Pair<K, V>> valueOf(Pair<K, RichIterable<V>> pair)
             {
-                return pair.getTwo().collect(new KeyValuePairFunction<V, K>(pair.getOne()));
+                return pair.getTwo().transform(new KeyValuePairFunction<V, K>(pair.getOne()));
             }
         });
     }

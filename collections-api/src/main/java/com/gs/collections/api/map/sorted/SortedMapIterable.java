@@ -36,15 +36,15 @@ public interface SortedMapIterable<K, V>
 {
     Comparator<? super K> comparator();
 
-    SortedMapIterable<K, V> select(Predicate2<? super K, ? super V> predicate);
+    SortedMapIterable<K, V> filter(Predicate2<? super K, ? super V> predicate);
 
-    SortedMapIterable<K, V> reject(Predicate2<? super K, ? super V> predicate);
+    SortedMapIterable<K, V> filterNot(Predicate2<? super K, ? super V> predicate);
 
-    <R> SortedMapIterable<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function);
+    <R> SortedMapIterable<K, R> transformValues(Function2<? super K, ? super V, ? extends R> function);
 
-    ListIterable<V> select(Predicate<? super V> predicate);
+    ListIterable<V> filter(Predicate<? super V> predicate);
 
-    ListIterable<V> reject(Predicate<? super V> predicate);
+    ListIterable<V> filterNot(Predicate<? super V> predicate);
 
     PartitionList<V> partition(Predicate<? super V> predicate);
 

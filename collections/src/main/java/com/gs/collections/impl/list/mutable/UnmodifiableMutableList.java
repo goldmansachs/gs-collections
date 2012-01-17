@@ -204,29 +204,29 @@ public final class UnmodifiableMutableList<T>
     }
 
     @Override
-    public <P, A> MutableList<A> collectWith(Function2<? super T, ? super P, ? extends A> function, P parameter)
+    public <P, A> MutableList<A> transformWith(Function2<? super T, ? super P, ? extends A> function, P parameter)
     {
-        return this.getMutableList().collectWith(function, parameter);
+        return this.getMutableList().transformWith(function, parameter);
     }
 
     @Override
-    public <V> MutableList<V> collect(Function<? super T, ? extends V> function)
+    public <V> MutableList<V> transform(Function<? super T, ? extends V> function)
     {
-        return this.getMutableList().collect(function);
+        return this.getMutableList().transform(function);
     }
 
     @Override
-    public <V> MutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    public <V> MutableList<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
     {
-        return this.getMutableList().flatCollect(function);
+        return this.getMutableList().flatTransform(function);
     }
 
     @Override
-    public <V> MutableList<V> collectIf(
+    public <V> MutableList<V> transformIf(
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function)
     {
-        return this.getMutableList().collectIf(predicate, function);
+        return this.getMutableList().transformIf(predicate, function);
     }
 
     @Override
@@ -242,27 +242,27 @@ public final class UnmodifiableMutableList<T>
     }
 
     @Override
-    public MutableList<T> reject(Predicate<? super T> predicate)
+    public MutableList<T> filterNot(Predicate<? super T> predicate)
     {
-        return this.getMutableList().reject(predicate);
+        return this.getMutableList().filterNot(predicate);
     }
 
     @Override
-    public <P> MutableList<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> MutableList<T> filterNotWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return this.getMutableList().rejectWith(predicate, parameter);
+        return this.getMutableList().filterNotWith(predicate, parameter);
     }
 
     @Override
-    public MutableList<T> select(Predicate<? super T> predicate)
+    public MutableList<T> filter(Predicate<? super T> predicate)
     {
-        return this.getMutableList().select(predicate);
+        return this.getMutableList().filter(predicate);
     }
 
     @Override
-    public <P> MutableList<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> MutableList<T> filterWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return this.getMutableList().selectWith(predicate, parameter);
+        return this.getMutableList().filterWith(predicate, parameter);
     }
 
     @Override

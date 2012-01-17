@@ -124,7 +124,7 @@ public interface MapIterable<K, V> extends RichIterable<V>
      * that key and value are returned in a new map.
      * <p/>
      * <pre>e.g.
-     * peopleByCity.select(new Predicate2&lt;City, Person&gt;()
+     * peopleByCity.filter(new Predicate2&lt;City, Person&gt;()
      * {
      *     public boolean value(City city, Person person)
      *     {
@@ -133,14 +133,14 @@ public interface MapIterable<K, V> extends RichIterable<V>
      * });
      * </pre>
      */
-    MapIterable<K, V> select(Predicate2<? super K, ? super V> predicate);
+    MapIterable<K, V> filter(Predicate2<? super K, ? super V> predicate);
 
     /**
      * For each key and value of the map the function is evaluated.  The results of these evaluations are returned in
      * a new map.  The map returned will use the values projected from the function rather than the original values.
      * <p/>
      * <pre>e.g.
-     * peopleByCity.collect(new Function2&lt;City, Person, String&gt;()
+     * peopleByCity.transformValues(new Function2&lt;City, Person, String&gt;()
      * {
      *     public String value(City city, Person person)
      *     {
@@ -149,14 +149,14 @@ public interface MapIterable<K, V> extends RichIterable<V>
      * });
      * </pre>
      */
-    <R> MapIterable<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function);
+    <R> MapIterable<K, R> transformValues(Function2<? super K, ? super V, ? extends R> function);
 
     /**
      * For each key and value of the map the function is evaluated.  The results of these evaluations are returned in
      * a new map.  The map returned will use the values projected from the function rather than the original values.
      * <p/>
      * <pre>e.g.
-     * peopleByCity.project(new Function2&lt;City, Person, String&gt;()
+     * peopleByCity.transform(new Function2&lt;City, Person, String&gt;()
      * {
      *     public String value(City city, Person person)
      *     {
@@ -165,14 +165,14 @@ public interface MapIterable<K, V> extends RichIterable<V>
      * });
      * </pre>
      */
-    <K2, V2> MapIterable<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function);
+    <K2, V2> MapIterable<K2, V2> transform(Function2<? super K, ? super V, Pair<K2, V2>> function);
 
     /**
      * For each key and value of the map the predicate is evaluated, if the result of the evaluation is false,
      * that key and value are returned in a new map.
      * <p/>
      * <pre>e.g.
-     * peopleByCity.reject(new Predicate2&lt;City, Person&gt;()
+     * peopleByCity.filterNot(new Predicate2&lt;City, Person&gt;()
      * {
      *     public boolean value(City city, Person person)
      *     {
@@ -181,7 +181,7 @@ public interface MapIterable<K, V> extends RichIterable<V>
      * });
      * </pre>
      */
-    MapIterable<K, V> reject(Predicate2<? super K, ? super V> predicate);
+    MapIterable<K, V> filterNot(Predicate2<? super K, ? super V> predicate);
 
     /**
      * Return the first key and value of the map for which the predicate evaluates to true when they are given
@@ -191,7 +191,7 @@ public interface MapIterable<K, V> extends RichIterable<V>
      * any key/value combination.
      * <p/>
      * <pre>e.g.
-     * peopleByCity.detect(new Predicate2&lt;City, Person&gt;()
+     * peopleByCity.find(new Predicate2&lt;City, Person&gt;()
      * {
      *     public boolean value(City city, Person person)
      *     {
@@ -200,5 +200,5 @@ public interface MapIterable<K, V> extends RichIterable<V>
      * });
      * </pre>
      */
-    Pair<K, V> detect(Predicate2<? super K, ? super V> predicate);
+    Pair<K, V> find(Predicate2<? super K, ? super V> predicate);
 }

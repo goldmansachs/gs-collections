@@ -122,7 +122,7 @@ public final class UnifiedSetWithHashingStrategyMultimap<K, V>
     {
         final MutableMap<K, ImmutableSet<V>> map = UnifiedMap.newMap();
 
-        this.map.collectValues(new Function2<K, MutableSet<V>, Object>()
+        this.map.transformValues(new Function2<K, MutableSet<V>, Object>()
         {
             public Object value(K key, MutableSet<V> set)
             {

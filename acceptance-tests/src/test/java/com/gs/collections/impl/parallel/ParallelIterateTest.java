@@ -290,7 +290,7 @@ public class ParallelIterateTest
     public void testSelect()
     {
         Collection<Integer> collection = INTEGER_LIST;
-        Collection<Integer> result = ParallelIterate.select(collection, Predicates.greaterThan(10000));
+        Collection<Integer> result = ParallelIterate.filter(collection, Predicates.greaterThan(10000));
         Verify.assertSize(10000, result);
         Verify.assertContains(20000, result);
         Verify.assertInstanceOf(List.class, result);
@@ -300,7 +300,7 @@ public class ParallelIterateTest
     public void testSelectUseCombineOne()
     {
         Collection<Integer> collection = INTEGER_LIST;
-        Collection<Integer> result = ParallelIterate.select(collection, Predicates.greaterThan(10000), true);
+        Collection<Integer> result = ParallelIterate.filter(collection, Predicates.greaterThan(10000), true);
         Verify.assertSize(10000, result);
         Verify.assertContains(20000, result);
         Verify.assertInstanceOf(List.class, result);
@@ -318,7 +318,7 @@ public class ParallelIterateTest
     public void testReject()
     {
         Collection<Integer> collection = INTEGER_LIST;
-        Collection<Integer> result = ParallelIterate.reject(collection, Predicates.greaterThan(10000));
+        Collection<Integer> result = ParallelIterate.filterNot(collection, Predicates.greaterThan(10000));
         Verify.assertSize(10000, result);
         Verify.assertContains(1, result);
         Verify.assertInstanceOf(List.class, result);
@@ -328,7 +328,7 @@ public class ParallelIterateTest
     public void testRejectUseCombineOne()
     {
         Collection<Integer> collection = INTEGER_LIST;
-        Collection<Integer> result = ParallelIterate.reject(collection, Predicates.greaterThan(10000), true);
+        Collection<Integer> result = ParallelIterate.filterNot(collection, Predicates.greaterThan(10000), true);
         Verify.assertSize(10000, result);
         Verify.assertContains(1, result);
         Verify.assertInstanceOf(List.class, result);
@@ -338,7 +338,7 @@ public class ParallelIterateTest
     public void testSelectForSet()
     {
         Collection<Integer> collection = INTEGER_SET;
-        Collection<Integer> result = ParallelIterate.select(collection, Predicates.greaterThan(10000));
+        Collection<Integer> result = ParallelIterate.filter(collection, Predicates.greaterThan(10000));
         Verify.assertSize(10000, result);
         Verify.assertInstanceOf(Set.class, result);
     }
@@ -347,7 +347,7 @@ public class ParallelIterateTest
     public void testSelectForSetToList()
     {
         Collection<Integer> collection = INTEGER_SET;
-        Collection<Integer> result = ParallelIterate.select(
+        Collection<Integer> result = ParallelIterate.filter(
                 collection,
                 Predicates.greaterThan(10000),
                 FastList.<Integer>newList(),
@@ -360,7 +360,7 @@ public class ParallelIterateTest
     public void testCollect()
     {
         Collection<Integer> collection = INTEGER_LIST;
-        Collection<String> result = ParallelIterate.collect(collection, Functions.getToString());
+        Collection<String> result = ParallelIterate.transform(collection, Functions.getToString());
         Verify.assertSize(20000, result);
         Verify.assertContains(String.valueOf(20000), result);
         Verify.assertInstanceOf(List.class, result);
@@ -370,7 +370,7 @@ public class ParallelIterateTest
     public void testCollectUseCombineOne()
     {
         Collection<Integer> collection = INTEGER_LIST;
-        Collection<String> result = ParallelIterate.collect(collection, Functions.getToString(), true);
+        Collection<String> result = ParallelIterate.transform(collection, Functions.getToString(), true);
         Verify.assertSize(20000, result);
         Verify.assertContains(String.valueOf(20000), result);
         Verify.assertInstanceOf(List.class, result);
@@ -380,7 +380,7 @@ public class ParallelIterateTest
     public void testCollectForSet()
     {
         Collection<Integer> collection = INTEGER_SET;
-        Collection<String> result = ParallelIterate.collect(collection, Functions.getToString());
+        Collection<String> result = ParallelIterate.transform(collection, Functions.getToString());
         Verify.assertSize(20000, result);
         Verify.assertContains(String.valueOf(20000), result);
         Verify.assertInstanceOf(Set.class, result);
@@ -391,7 +391,7 @@ public class ParallelIterateTest
     {
         Collection<Integer> collection = INTEGER_LIST;
         Predicate<Integer> greaterThan = Predicates.greaterThan(10000);
-        Collection<String> result = ParallelIterate.collectIf(collection, greaterThan, Functions.getToString());
+        Collection<String> result = ParallelIterate.transformIf(collection, greaterThan, Functions.getToString());
         Verify.assertSize(10000, result);
         Verify.assertNotContains(String.valueOf(9000), result);
         Verify.assertNotContains(String.valueOf(21000), result);
@@ -403,7 +403,7 @@ public class ParallelIterateTest
     {
         Collection<Integer> collection = INTEGER_SET;
         Predicate<Integer> greaterThan = Predicates.greaterThan(10000);
-        Collection<String> result = ParallelIterate.collectIf(collection, greaterThan, Functions.getToString());
+        Collection<String> result = ParallelIterate.transformIf(collection, greaterThan, Functions.getToString());
         Verify.assertSize(10000, result);
         Verify.assertNotContains(String.valueOf(9000), result);
         Verify.assertNotContains(String.valueOf(21000), result);
@@ -456,7 +456,7 @@ public class ParallelIterateTest
     public void flatCollect()
     {
         Collection<Integer> collection = INTEGER_LIST;
-        Collection<String> result = ParallelIterate.flatCollect(collection, INT_TO_TWO_STRINGS);
+        Collection<String> result = ParallelIterate.flatTransform(collection, INT_TO_TWO_STRINGS);
         Verify.assertSize(40000, result);
         Verify.assertContains(String.valueOf(20000), result);
         Verify.assertInstanceOf(List.class, result);
@@ -466,7 +466,7 @@ public class ParallelIterateTest
     public void flatCollectUseCombineOne()
     {
         Collection<Integer> collection = INTEGER_LIST;
-        Collection<String> result = ParallelIterate.flatCollect(collection, INT_TO_TWO_STRINGS, true);
+        Collection<String> result = ParallelIterate.flatTransform(collection, INT_TO_TWO_STRINGS, true);
         Verify.assertSize(40000, result);
         Verify.assertContains(String.valueOf(20000), result);
         Verify.assertInstanceOf(List.class, result);
@@ -476,7 +476,7 @@ public class ParallelIterateTest
     public void flatCollectForSet()
     {
         Collection<Integer> collection = INTEGER_SET;
-        Collection<String> result = ParallelIterate.flatCollect(collection, INT_TO_TWO_STRINGS);
+        Collection<String> result = ParallelIterate.flatTransform(collection, INT_TO_TWO_STRINGS);
         Verify.assertSize(20000, result);
         Verify.assertContains(String.valueOf(20000), result);
         Verify.assertInstanceOf(Set.class, result);

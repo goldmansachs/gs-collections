@@ -24,7 +24,7 @@ import com.gs.collections.impl.utility.Iterate;
 
 /**
  * The Predicates class can be used to build common Predicates to be used by methods such
- * as detect:, select: and reject: on the Iterate, MapIterate, and ArrayIterate classes.  Predicates supports
+ * as find, filter, and filterNot on the Iterate, MapIterate, and ArrayIterate classes.  Predicates supports
  * equals, not equals, less than, greater than, less than or equal to, greater than or equal to, in, not in
  * and, or, and several other Predicate type operations.
  */

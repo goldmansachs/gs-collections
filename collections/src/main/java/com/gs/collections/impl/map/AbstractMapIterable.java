@@ -232,29 +232,29 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
         this.valuesView().forEach(procedure);
     }
 
-    public <R> RichIterable<R> collect(Function<? super V, ? extends R> function)
+    public <R> RichIterable<R> transform(Function<? super V, ? extends R> function)
     {
-        return this.valuesView().collect(function);
+        return this.valuesView().transform(function);
     }
 
-    public <R, C extends Collection<R>> C collect(Function<? super V, ? extends R> function, C target)
+    public <R, C extends Collection<R>> C transform(Function<? super V, ? extends R> function, C target)
     {
-        return this.valuesView().collect(function, target);
+        return this.valuesView().transform(function, target);
     }
 
-    public <R> RichIterable<R> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function)
+    public <R> RichIterable<R> transformIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function)
     {
-        return this.valuesView().collectIf(predicate, function);
+        return this.valuesView().transformIf(predicate, function);
     }
 
-    public <R, C extends Collection<R>> C collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function, C target)
+    public <R, C extends Collection<R>> C transformIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function, C target)
     {
-        return this.valuesView().collectIf(predicate, function, target);
+        return this.valuesView().transformIf(predicate, function, target);
     }
 
-    public <P, R, C extends Collection<R>> C collectWith(Function2<? super V, ? super P, ? extends R> function, P parameter, C targetCollection)
+    public <P, R, C extends Collection<R>> C transformWith(Function2<? super V, ? super P, ? extends R> function, P parameter, C targetCollection)
     {
-        return this.valuesView().collectWith(function, parameter, targetCollection);
+        return this.valuesView().transformWith(function, parameter, targetCollection);
     }
 
     public boolean contains(Object object)
@@ -282,24 +282,24 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
         return this.valuesView().count(predicate);
     }
 
-    public V detect(Predicate<? super V> predicate)
+    public V find(Predicate<? super V> predicate)
     {
-        return this.valuesView().detect(predicate);
+        return this.valuesView().find(predicate);
     }
 
-    public V detectIfNone(Predicate<? super V> predicate, Function0<? extends V> function)
+    public V findIfNone(Predicate<? super V> predicate, Function0<? extends V> function)
     {
-        return this.valuesView().detectIfNone(predicate, function);
+        return this.valuesView().findIfNone(predicate, function);
     }
 
-    public <R> RichIterable<R> flatCollect(Function<? super V, ? extends Iterable<R>> function)
+    public <R> RichIterable<R> flatTransform(Function<? super V, ? extends Iterable<R>> function)
     {
-        return this.valuesView().flatCollect(function);
+        return this.valuesView().flatTransform(function);
     }
 
-    public <R, C extends Collection<R>> C flatCollect(Function<? super V, ? extends Iterable<R>> function, C target)
+    public <R, C extends Collection<R>> C flatTransform(Function<? super V, ? extends Iterable<R>> function, C target)
     {
-        return this.valuesView().flatCollect(function, target);
+        return this.valuesView().flatTransform(function, target);
     }
 
     public V getFirst()
@@ -322,24 +322,24 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
         return this.valuesView().groupByEach(function, target);
     }
 
-    public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super V, ? extends IV> function)
+    public <IV> IV foldLeft(IV initialValue, Function2<? super IV, ? super V, ? extends IV> function)
     {
-        return this.valuesView().injectInto(injectedValue, function);
+        return this.valuesView().foldLeft(initialValue, function);
     }
 
-    public int injectInto(int injectedValue, IntObjectToIntFunction<? super V> function)
+    public int foldLeft(int initialValue, IntObjectToIntFunction<? super V> function)
     {
-        return this.valuesView().injectInto(injectedValue, function);
+        return this.valuesView().foldLeft(initialValue, function);
     }
 
-    public long injectInto(long injectedValue, LongObjectToLongFunction<? super V> function)
+    public long foldLeft(long initialValue, LongObjectToLongFunction<? super V> function)
     {
-        return this.valuesView().injectInto(injectedValue, function);
+        return this.valuesView().foldLeft(initialValue, function);
     }
 
-    public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super V> function)
+    public double foldLeft(double initialValue, DoubleObjectToDoubleFunction<? super V> function)
     {
-        return this.valuesView().injectInto(injectedValue, function);
+        return this.valuesView().foldLeft(initialValue, function);
     }
 
     public String makeString()
@@ -387,34 +387,34 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
         return this.valuesView().minBy(function);
     }
 
-    public RichIterable<V> reject(Predicate<? super V> predicate)
+    public RichIterable<V> filterNot(Predicate<? super V> predicate)
     {
-        return this.valuesView().reject(predicate);
+        return this.valuesView().filterNot(predicate);
     }
 
-    public <R extends Collection<V>> R reject(Predicate<? super V> predicate, R target)
+    public <R extends Collection<V>> R filterNot(Predicate<? super V> predicate, R target)
     {
-        return this.valuesView().reject(predicate, target);
+        return this.valuesView().filterNot(predicate, target);
     }
 
-    public <P, R extends Collection<V>> R rejectWith(Predicate2<? super V, ? super P> predicate, P parameter, R targetCollection)
+    public <P, R extends Collection<V>> R filterNotWith(Predicate2<? super V, ? super P> predicate, P parameter, R targetCollection)
     {
-        return this.valuesView().rejectWith(predicate, parameter, targetCollection);
+        return this.valuesView().filterNotWith(predicate, parameter, targetCollection);
     }
 
-    public RichIterable<V> select(Predicate<? super V> predicate)
+    public RichIterable<V> filter(Predicate<? super V> predicate)
     {
-        return this.valuesView().select(predicate);
+        return this.valuesView().filter(predicate);
     }
 
-    public <R extends Collection<V>> R select(Predicate<? super V> predicate, R target)
+    public <R extends Collection<V>> R filter(Predicate<? super V> predicate, R target)
     {
-        return this.valuesView().select(predicate, target);
+        return this.valuesView().filter(predicate, target);
     }
 
-    public <P, R extends Collection<V>> R selectWith(Predicate2<? super V, ? super P> predicate, P parameter, R targetCollection)
+    public <P, R extends Collection<V>> R filterWith(Predicate2<? super V, ? super P> predicate, P parameter, R targetCollection)
     {
-        return this.valuesView().selectWith(predicate, parameter, targetCollection);
+        return this.valuesView().filterWith(predicate, parameter, targetCollection);
     }
 
     public Object[] toArray()

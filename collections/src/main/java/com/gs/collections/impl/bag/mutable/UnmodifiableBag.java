@@ -101,27 +101,27 @@ public class UnmodifiableBag<T>
     }
 
     @Override
-    public MutableBag<T> select(Predicate<? super T> predicate)
+    public MutableBag<T> filter(Predicate<? super T> predicate)
     {
-        return this.getMutableBag().select(predicate);
+        return this.getMutableBag().filter(predicate);
     }
 
     @Override
-    public <P> MutableBag<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> MutableBag<T> filterWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return this.getMutableBag().selectWith(predicate, parameter);
+        return this.getMutableBag().filterWith(predicate, parameter);
     }
 
     @Override
-    public MutableBag<T> reject(Predicate<? super T> predicate)
+    public MutableBag<T> filterNot(Predicate<? super T> predicate)
     {
-        return this.getMutableBag().reject(predicate);
+        return this.getMutableBag().filterNot(predicate);
     }
 
     @Override
-    public <P> MutableBag<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> MutableBag<T> filterNotWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return this.getMutableBag().rejectWith(predicate, parameter);
+        return this.getMutableBag().filterNotWith(predicate, parameter);
     }
 
     @Override
@@ -131,29 +131,29 @@ public class UnmodifiableBag<T>
     }
 
     @Override
-    public <V> MutableBag<V> collect(Function<? super T, ? extends V> function)
+    public <V> MutableBag<V> transform(Function<? super T, ? extends V> function)
     {
-        return this.getMutableBag().collect(function);
+        return this.getMutableBag().transform(function);
     }
 
     @Override
-    public <V> MutableBag<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    public <V> MutableBag<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
     {
-        return this.getMutableBag().flatCollect(function);
+        return this.getMutableBag().flatTransform(function);
     }
 
     @Override
-    public <P, A> MutableBag<A> collectWith(Function2<? super T, ? super P, ? extends A> function, P parameter)
+    public <P, A> MutableBag<A> transformWith(Function2<? super T, ? super P, ? extends A> function, P parameter)
     {
-        return this.getMutableBag().collectWith(function, parameter);
+        return this.getMutableBag().transformWith(function, parameter);
     }
 
     @Override
-    public <V> MutableBag<V> collectIf(
+    public <V> MutableBag<V> transformIf(
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function)
     {
-        return this.getMutableBag().collectIf(predicate, function);
+        return this.getMutableBag().transformIf(predicate, function);
     }
 
     @Override

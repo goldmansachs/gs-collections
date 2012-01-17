@@ -103,8 +103,8 @@ public class CollectionAdapterTest extends AbstractCollectionTestCase
     public void select()
     {
         super.select();
-        Verify.assertContainsAll(this.newSet().with(1, 2, 3, 4, 5).select(Predicates.lessThan(3)), 1, 2);
-        Verify.assertContainsAll(this.newSet().with(-1, 2, 3, 4, 5).select(
+        Verify.assertContainsAll(this.newSet().with(1, 2, 3, 4, 5).filter(Predicates.lessThan(3)), 1, 2);
+        Verify.assertContainsAll(this.newSet().with(-1, 2, 3, 4, 5).filter(
                 Predicates.lessThan(3),
                 FastList.<Integer>newList()), -1, 2);
     }
@@ -121,8 +121,8 @@ public class CollectionAdapterTest extends AbstractCollectionTestCase
     public void reject()
     {
         super.reject();
-        Verify.assertContainsAll(this.newSet().with(1, 2, 3, 4).reject(Predicates.lessThan(3)), 3, 4);
-        Verify.assertContainsAll(this.newSet().with(1, 2, 3, 4).reject(Predicates.lessThan(3), FastList.<Integer>newList()), 3, 4);
+        Verify.assertContainsAll(this.newSet().with(1, 2, 3, 4).filterNot(Predicates.lessThan(3)), 3, 4);
+        Verify.assertContainsAll(this.newSet().with(1, 2, 3, 4).filterNot(Predicates.lessThan(3), FastList.<Integer>newList()), 3, 4);
     }
 
     @Override
@@ -133,10 +133,10 @@ public class CollectionAdapterTest extends AbstractCollectionTestCase
 
         Assert.assertEquals(
                 UnifiedSet.newSetWith("1", "2", "3", "4"),
-                this.newSet().with(1, 2, 3, 4).collect(Functions.getToString()));
+                this.newSet().with(1, 2, 3, 4).transform(Functions.getToString()));
         Assert.assertEquals(
                 UnifiedSet.newSetWith("1", "2", "3", "4"),
-                this.newSet().with(1, 2, 3, 4).collect(
+                this.newSet().with(1, 2, 3, 4).transform(
                         Functions.getToString(),
                         UnifiedSet.<String>newSet()));
     }
@@ -158,10 +158,10 @@ public class CollectionAdapterTest extends AbstractCollectionTestCase
 
         Assert.assertEquals(
                 FastList.newListWith(1, 1, 2, 1, 2, 3, 1, 2, 3, 4),
-                this.newList().with(1, 2, 3, 4).flatCollect(function));
+                this.newList().with(1, 2, 3, 4).flatTransform(function));
         Assert.assertEquals(
                 FastList.newListWith(1, 1, 2, 1, 2, 3, 1, 2, 3, 4),
-                this.newList().with(1, 2, 3, 4).flatCollect(function));
+                this.newList().with(1, 2, 3, 4).flatTransform(function));
     }
 
     @Override

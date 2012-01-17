@@ -50,7 +50,7 @@ import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
-import com.gs.collections.impl.block.procedure.RejectProcedure;
+import com.gs.collections.impl.block.procedure.FilterNotProcedure;
 import com.gs.collections.impl.block.procedure.SelectProcedure;
 import com.gs.collections.impl.block.procedure.checked.CheckedProcedure2;
 import com.gs.collections.impl.collection.mutable.AbstractMutableCollection;
@@ -236,7 +236,7 @@ public class HashBag<T>
     }
 
     @Override
-    public MutableBag<T> select(Predicate<? super T> predicate)
+    public MutableBag<T> filter(Predicate<? super T> predicate)
     {
         SelectProcedure<T> procedure = new SelectProcedure<T>(predicate, this.newEmpty());
         this.forEach(procedure);
@@ -244,23 +244,23 @@ public class HashBag<T>
     }
 
     @Override
-    public <P> MutableBag<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> MutableBag<T> filterWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return this.selectWith(predicate, parameter, HashBag.<T>newBag());
+        return this.filterWith(predicate, parameter, HashBag.<T>newBag());
     }
 
     @Override
-    public MutableBag<T> reject(Predicate<? super T> predicate)
+    public MutableBag<T> filterNot(Predicate<? super T> predicate)
     {
-        RejectProcedure<T> procedure = new RejectProcedure<T>(predicate, this.newEmpty());
+        FilterNotProcedure<T> procedure = new FilterNotProcedure<T>(predicate, this.newEmpty());
         this.forEach(procedure);
         return (MutableBag<T>) procedure.getCollection();
     }
 
     @Override
-    public <P> MutableBag<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> MutableBag<T> filterNotWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return this.rejectWith(predicate, parameter, HashBag.<T>newBag());
+        return this.filterNotWith(predicate, parameter, HashBag.<T>newBag());
     }
 
     public PartitionMutableBag<T> partition(Predicate<? super T> predicate)
@@ -269,7 +269,7 @@ public class HashBag<T>
     }
 
     @Override
-    public <V> MutableBag<V> collect(Function<? super T, ? extends V> function)
+    public <V> MutableBag<V> transform(Function<? super T, ? extends V> function)
     {
         CollectProcedure<T, V> procedure = new CollectProcedure<T, V>(function, HashBag.<V>newBag());
         this.forEach(procedure);
@@ -277,23 +277,23 @@ public class HashBag<T>
     }
 
     @Override
-    public <P, V> MutableBag<V> collectWith(
+    public <P, V> MutableBag<V> transformWith(
             Function2<? super T, ? super P, ? extends V> function,
             P parameter)
     {
-        return this.collectWith(function, parameter, HashBag.<V>newBag());
+        return this.transformWith(function, parameter, HashBag.<V>newBag());
     }
 
     @Override
-    public <V> MutableBag<V> collectIf(
+    public <V> MutableBag<V> transformIf(
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function)
     {
-        return this.collectIf(predicate, function, HashBag.<V>newBag());
+        return this.transformIf(predicate, function, HashBag.<V>newBag());
     }
 
     @Override
-    public <V> MutableBag<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    public <V> MutableBag<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
     {
         FlatCollectProcedure<T, V> procedure = new FlatCollectProcedure<T, V>(function, HashBag.<V>newBag());
         this.forEach(procedure);
@@ -503,7 +503,7 @@ public class HashBag<T>
     @Override
     public Iterator<T> iterator()
     {
-        return this.items.keyValuesView().flatCollect(new NCopiesFunction<T>()).iterator();
+        return this.items.keyValuesView().flatTransform(new NCopiesFunction<T>()).iterator();
     }
 
     @Override

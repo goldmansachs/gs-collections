@@ -192,15 +192,15 @@ public final class SortedSetAdapter<T>
     }
 
     @Override
-    public MutableSortedSet<T> select(Predicate<? super T> predicate)
+    public MutableSortedSet<T> filter(Predicate<? super T> predicate)
     {
-        return Iterate.select(this.delegate, predicate, TreeSortedSet.<T>newSet(this.comparator()));
+        return Iterate.filter(this.delegate, predicate, TreeSortedSet.<T>newSet(this.comparator()));
     }
 
     @Override
-    public MutableSortedSet<T> reject(Predicate<? super T> predicate)
+    public MutableSortedSet<T> filterNot(Predicate<? super T> predicate)
     {
-        return Iterate.reject(this.delegate, predicate, TreeSortedSet.<T>newSet(this.comparator()));
+        return Iterate.filterNot(this.delegate, predicate, TreeSortedSet.<T>newSet(this.comparator()));
     }
 
     @Override
@@ -210,23 +210,23 @@ public final class SortedSetAdapter<T>
     }
 
     @Override
-    public <V> MutableList<V> collect(Function<? super T, ? extends V> function)
+    public <V> MutableList<V> transform(Function<? super T, ? extends V> function)
     {
-        return Iterate.collect(this.delegate, function, FastList.<V>newList());
+        return Iterate.transform(this.delegate, function, FastList.<V>newList());
     }
 
     @Override
-    public <V> MutableList<V> collectIf(
+    public <V> MutableList<V> transformIf(
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function)
     {
-        return Iterate.collectIf(this.delegate, predicate, function, FastList.<V>newList());
+        return Iterate.tranformIf(this.delegate, predicate, function, FastList.<V>newList());
     }
 
     @Override
-    public <V> MutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    public <V> MutableList<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
     {
-        return Iterate.flatCollect(this.delegate, function, FastList.<V>newList());
+        return Iterate.flatTransform(this.delegate, function, FastList.<V>newList());
     }
 
     @Override
@@ -242,21 +242,21 @@ public final class SortedSetAdapter<T>
     }
 
     @Override
-    public <P> MutableSortedSet<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> MutableSortedSet<T> filterWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return Iterate.selectWith(this.delegate, predicate, parameter, TreeSortedSet.<T>newSet(this.comparator()));
+        return Iterate.filterWith(this.delegate, predicate, parameter, TreeSortedSet.<T>newSet(this.comparator()));
     }
 
     @Override
-    public <P> MutableSortedSet<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> MutableSortedSet<T> filterNotWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return Iterate.rejectWith(this.delegate, predicate, parameter, TreeSortedSet.<T>newSet(this.comparator()));
+        return Iterate.filterNotWith(this.delegate, predicate, parameter, TreeSortedSet.<T>newSet(this.comparator()));
     }
 
     @Override
-    public <P, V> MutableList<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
+    public <P, V> MutableList<V> transformWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
     {
-        return Iterate.collectWith(this.delegate, function, parameter, FastList.<V>newList());
+        return Iterate.transformWith(this.delegate, function, parameter, FastList.<V>newList());
     }
 
     @Override

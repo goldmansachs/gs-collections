@@ -133,7 +133,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         MutableSet<String> set = this.newWith("1", "2", "3", "4");
         MutableSet<String> union = set.union(UnifiedSet.newSetWith("a", "b", "c", "1"));
         Verify.assertSize(set.size() + 3, union);
-        Assert.assertTrue(union.containsAllIterable(Interval.oneTo(set.size()).collect(Functions.getToString())));
+        Assert.assertTrue(union.containsAllIterable(Interval.oneTo(set.size()).transform(Functions.getToString())));
         Verify.assertContainsAll(union, "a", "b", "c");
 
         Assert.assertEquals(set, set.union(UnifiedSet.newSetWith("1")));
@@ -145,7 +145,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         MutableSet<String> set = this.newWith("1", "2", "3", "4");
         MutableSet<String> union = set.unionInto(UnifiedSet.newSetWith("a", "b", "c", "1"), UnifiedSet.<String>newSet());
         Verify.assertSize(set.size() + 3, union);
-        Assert.assertTrue(union.containsAllIterable(Interval.oneTo(set.size()).collect(Functions.getToString())));
+        Assert.assertTrue(union.containsAllIterable(Interval.oneTo(set.size()).transform(Functions.getToString())));
         Verify.assertContainsAll(union, "a", "b", "c");
 
         Assert.assertEquals(set, set.unionInto(UnifiedSet.newSetWith("1"), UnifiedSet.<String>newSet()));
@@ -197,7 +197,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         MutableSet<String> set = this.newWith("1", "2", "3", "4");
         MutableSet<String> difference = set.symmetricDifference(UnifiedSet.newSetWith("2", "3", "4", "5", "not present"));
         Verify.assertContains("1", difference);
-        Assert.assertTrue(difference.containsAllIterable(Interval.fromTo(set.size() + 1, 5).collect(Functions.getToString())));
+        Assert.assertTrue(difference.containsAllIterable(Interval.fromTo(set.size() + 1, 5).transform(Functions.getToString())));
         for (int i = 2; i <= set.size(); i++)
         {
             Verify.assertNotContains(String.valueOf(i), difference);
@@ -214,7 +214,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
                 UnifiedSet.newSetWith("2", "3", "4", "5", "not present"),
                 UnifiedSet.<String>newSet());
         Verify.assertContains("1", difference);
-        Assert.assertTrue(difference.containsAllIterable(Interval.fromTo(set.size() + 1, 5).collect(Functions.getToString())));
+        Assert.assertTrue(difference.containsAllIterable(Interval.fromTo(set.size() + 1, 5).transform(Functions.getToString())));
         for (int i = 2; i <= set.size(); i++)
         {
             Verify.assertNotContains(String.valueOf(i), difference);
@@ -259,8 +259,8 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         Assert.assertEquals(
                 set,
                 cartesianProduct
-                        .select(Predicates.attributeEqual(Functions.<String>secondOfPair(), "One"))
-                        .collect(Functions.<String>firstOfPair()).toSet());
+                        .filter(Predicates.attributeEqual(Functions.<String>secondOfPair(), "One"))
+                        .transform(Functions.<String>firstOfPair()).toSet());
     }
 
     @Override
@@ -275,9 +275,9 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
     public void select()
     {
         super.select();
-        Verify.assertContainsAll(this.newWith(1, 2, 3, 4, 5).select(Predicates.lessThan(3)), 1, 2);
+        Verify.assertContainsAll(this.newWith(1, 2, 3, 4, 5).filter(Predicates.lessThan(3)), 1, 2);
         Verify.assertContainsAll(
-                this.newWith(-1, 2, 3, 4, 5).select(Predicates.lessThan(3),
+                this.newWith(-1, 2, 3, 4, 5).filter(Predicates.lessThan(3),
                         FastList.<Integer>newList()), -1, 2);
     }
 
@@ -286,9 +286,9 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
     public void reject()
     {
         super.reject();
-        Verify.assertContainsAll(this.newWith(1, 2, 3, 4).reject(Predicates.lessThan(3)), 3, 4);
+        Verify.assertContainsAll(this.newWith(1, 2, 3, 4).filterNot(Predicates.lessThan(3)), 3, 4);
         Verify.assertContainsAll(
-                this.newWith(1, 2, 3, 4).reject(Predicates.lessThan(3),
+                this.newWith(1, 2, 3, 4).filterNot(Predicates.lessThan(3),
                         FastList.<Integer>newList()), 3, 4);
     }
 

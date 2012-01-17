@@ -45,9 +45,7 @@ import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.utility.Iterate;
 
 /**
- * The IterableIterate class provides a few of the methods from the Smalltalk Collection Protocol for use with general
- * Collection classes. This includes do:, select:, reject:, collect:, inject:into:, detect:, detect:ifNone:, anySatisfy:
- * and allSatisfy:
+ * The IterableIterate class provides iteration protocol methods for any Iterable instance
  */
 public final class IterableIterate
 {
@@ -57,22 +55,22 @@ public final class IterableIterate
     }
 
     /**
-     * @see Iterate#select(Iterable, Predicate)
+     * @see Iterate#filter(Iterable, Predicate)
      */
-    public static <T> MutableList<T> select(Iterable<T> iterable, Predicate<? super T> predicate)
+    public static <T> MutableList<T> filter(Iterable<T> iterable, Predicate<? super T> predicate)
     {
-        return IterableIterate.select(iterable, predicate, FastList.<T>newList());
+        return IterableIterate.filter(iterable, predicate, FastList.<T>newList());
     }
 
     /**
-     * @see Iterate#selectAndRejectWith(Iterable, Predicate2, Object)
+     * @see Iterate#partitionWith(Iterable, Predicate2, Object)
      */
-    public static <T, IV> Twin<MutableList<T>> selectAndRejectWith(
+    public static <T, IV> Twin<MutableList<T>> partitionWith(
             Iterable<T> iterable,
             Predicate2<? super T, ? super IV> predicate,
             IV injectedValue)
     {
-        return IteratorIterate.selectAndRejectWith(iterable.iterator(), predicate, injectedValue);
+        return IteratorIterate.partitionWith(iterable.iterator(), predicate, injectedValue);
     }
 
     /**
@@ -103,14 +101,14 @@ public final class IterableIterate
     }
 
     /**
-     * @see Iterate#collectIf(Iterable, Predicate, Function)
+     * @see Iterate#transformIf(Iterable, Predicate, Function)
      */
-    public static <T, V> MutableList<V> collectIf(
+    public static <T, V> MutableList<V> transformIf(
             Iterable<T> iterable,
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function)
     {
-        return IterableIterate.collectIf(iterable, predicate, function, FastList.<V>newList());
+        return IterableIterate.tranformIf(iterable, predicate, function, FastList.<V>newList());
     }
 
     public static boolean isEmpty(Iterable<?> iterable)
@@ -145,111 +143,111 @@ public final class IterableIterate
     }
 
     /**
-     * @see Iterate#select(Iterable, Predicate, Collection)
+     * @see Iterate#filter(Iterable, Predicate, Collection)
      */
-    public static <T, R extends Collection<T>> R select(
+    public static <T, R extends Collection<T>> R filter(
             Iterable<T> iterable,
             Predicate<? super T> predicate,
             R targetCollection)
     {
-        return IteratorIterate.select(iterable.iterator(), predicate, targetCollection);
+        return IteratorIterate.filter(iterable.iterator(), predicate, targetCollection);
     }
 
     /**
-     * @see Iterate#selectWith(Iterable, Predicate2, Object, Collection)
+     * @see Iterate#filterWith(Iterable, Predicate2, Object, Collection)
      */
-    public static <T, P, R extends Collection<T>> R selectWith(
+    public static <T, P, R extends Collection<T>> R filterWith(
             Iterable<T> iterable,
             Predicate2<? super T, ? super P> predicate,
             P injectedValue,
             R targetCollection)
     {
-        return IteratorIterate.selectWith(iterable.iterator(), predicate, injectedValue, targetCollection);
+        return IteratorIterate.filterWith(iterable.iterator(), predicate, injectedValue, targetCollection);
     }
 
     /**
-     * @see Iterate#collectIf(Iterable, Predicate, Function, Collection)
+     * @see Iterate#tranformIf(Iterable, Predicate, Function, Collection)
      */
-    public static <T, V, R extends Collection<V>> R collectIf(
+    public static <T, V, R extends Collection<V>> R tranformIf(
             Iterable<T> iterable,
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function,
             R targetCollection)
     {
-        return IteratorIterate.collectIf(iterable.iterator(), predicate, function, targetCollection);
+        return IteratorIterate.transformIf(iterable.iterator(), predicate, function, targetCollection);
     }
 
     /**
-     * @see Iterate#reject(Iterable, Predicate)
+     * @see Iterate#filterNot(Iterable, Predicate)
      */
-    public static <T> MutableList<T> reject(Iterable<T> collection, Predicate<? super T> predicate)
+    public static <T> MutableList<T> filterNot(Iterable<T> collection, Predicate<? super T> predicate)
     {
-        return IterableIterate.reject(collection, predicate, FastList.<T>newList());
+        return IterableIterate.filterNot(collection, predicate, FastList.<T>newList());
     }
 
     /**
-     * @see Iterate#reject(Iterable, Predicate, Collection)
+     * @see Iterate#filterNot(Iterable, Predicate, Collection)
      */
-    public static <T, R extends Collection<T>> R reject(
+    public static <T, R extends Collection<T>> R filterNot(
             Iterable<T> iterable,
             Predicate<? super T> predicate,
             R targetCollection)
     {
-        return IteratorIterate.reject(iterable.iterator(), predicate, targetCollection);
+        return IteratorIterate.filterNot(iterable.iterator(), predicate, targetCollection);
     }
 
     /**
-     * @see Iterate#rejectWith(Iterable, Predicate2, Object, Collection)
+     * @see Iterate#filterNotWith(Iterable, Predicate2, Object, Collection)
      */
-    public static <T, P, R extends Collection<T>> R rejectWith(
+    public static <T, P, R extends Collection<T>> R filterNotWith(
             Iterable<T> iterable,
             Predicate2<? super T, ? super P> predicate,
             P parameter,
             R targetCollection)
     {
-        return IteratorIterate.rejectWith(iterable.iterator(), predicate, parameter, targetCollection);
+        return IteratorIterate.filterNotWith(iterable.iterator(), predicate, parameter, targetCollection);
     }
 
     /**
-     * @see Iterate#collect(Iterable, Function)
+     * @see Iterate#transform(Iterable, Function)
      */
-    public static <T, V> MutableList<V> collect(
+    public static <T, V> MutableList<V> transform(
             Iterable<T> iterable,
             Function<? super T, ? extends V> function)
     {
-        return IterableIterate.collect(iterable, function, FastList.<V>newList());
+        return IterableIterate.transform(iterable, function, FastList.<V>newList());
     }
 
     /**
-     * @see Iterate#collect(Iterable, Function, Collection)
+     * @see Iterate#transform(Iterable, Function, Collection)
      */
-    public static <T, V, R extends Collection<V>> R collect(
+    public static <T, V, R extends Collection<V>> R transform(
             Iterable<T> iterable,
             Function<? super T, ? extends V> function,
             R targetCollection)
     {
-        return IteratorIterate.collect(iterable.iterator(), function, targetCollection);
+        return IteratorIterate.transform(iterable.iterator(), function, targetCollection);
     }
 
     /**
-     * @see Iterate#flatCollect(Iterable, Function)
+     * @see Iterate#flatTransform(Iterable, Function)
      */
-    public static <T, V> MutableList<V> flatCollect(
+    public static <T, V> MutableList<V> flatTransform(
             Iterable<T> iterable,
             Function<? super T, ? extends Iterable<V>> function)
     {
-        return IterableIterate.flatCollect(iterable, function, FastList.<V>newList());
+        return IterableIterate.flatTransform(iterable, function, FastList.<V>newList());
     }
 
     /**
-     * @see Iterate#flatCollect(Iterable, Function, Collection)
+     * @see Iterate#flatTransform(Iterable, Function, Collection)
      */
-    public static <T, V, R extends Collection<V>> R flatCollect(
+    public static <T, V, R extends Collection<V>> R flatTransform(
             Iterable<T> iterable,
             Function<? super T, ? extends Iterable<V>> function,
             R targetCollection)
     {
-        return IteratorIterate.flatCollect(iterable.iterator(), function, targetCollection);
+        return IteratorIterate.flatTransform(iterable.iterator(), function, targetCollection);
     }
 
     /**
@@ -269,78 +267,78 @@ public final class IterableIterate
     }
 
     /**
-     * @see Iterate#detect(Iterable, Predicate)
+     * @see Iterate#find(Iterable, Predicate)
      */
-    public static <T> T detect(Iterable<T> iterable, Predicate<? super T> predicate)
+    public static <T> T find(Iterable<T> iterable, Predicate<? super T> predicate)
     {
-        return IteratorIterate.detect(iterable.iterator(), predicate);
+        return IteratorIterate.find(iterable.iterator(), predicate);
     }
 
     /**
-     * @see Iterate#detectWith(Iterable, Predicate2, Object)
+     * @see Iterate#findWith(Iterable, Predicate2, Object)
      */
-    public static <T, IV> T detectWith(
+    public static <T, IV> T findWith(
             Iterable<T> iterable,
             Predicate2<? super T, ? super IV> predicate,
             IV injectedValue)
     {
-        return IteratorIterate.detectWith(iterable.iterator(), predicate, injectedValue);
+        return IteratorIterate.findWith(iterable.iterator(), predicate, injectedValue);
     }
 
     /**
-     * @see Iterate#injectInto(Object, Iterable, Function2)
+     * @see Iterate#foldLeft(Object, Iterable, Function2)
      */
-    public static <T, IV> IV injectInto(
+    public static <T, IV> IV foldLeft(
             IV injectValue,
             Iterable<T> iterable,
             Function2<? super IV, ? super T, ? extends IV> function)
     {
-        return IteratorIterate.injectInto(injectValue, iterable.iterator(), function);
+        return IteratorIterate.foldLeft(injectValue, iterable.iterator(), function);
     }
 
     /**
-     * @see Iterate#injectInto(int, Iterable, IntObjectToIntFunction)
+     * @see Iterate#foldLeft(int, Iterable, IntObjectToIntFunction)
      */
-    public static <T> int injectInto(
+    public static <T> int foldLeft(
             int injectValue,
             Iterable<T> iterable,
             IntObjectToIntFunction<? super T> function)
     {
-        return IteratorIterate.injectInto(injectValue, iterable.iterator(), function);
+        return IteratorIterate.foldLeft(injectValue, iterable.iterator(), function);
     }
 
     /**
-     * @see Iterate#injectInto(long, Iterable, LongObjectToLongFunction)
+     * @see Iterate#foldLeft(long, Iterable, LongObjectToLongFunction)
      */
-    public static <T> long injectInto(
+    public static <T> long foldLeft(
             long injectValue,
             Iterable<T> iterable,
             LongObjectToLongFunction<? super T> function)
     {
-        return IteratorIterate.injectInto(injectValue, iterable.iterator(), function);
+        return IteratorIterate.foldLeft(injectValue, iterable.iterator(), function);
     }
 
     /**
-     * @see Iterate#injectInto(double, Iterable, DoubleObjectToDoubleFunction)
+     * @see Iterate#foldLeft(double, Iterable, DoubleObjectToDoubleFunction)
      */
-    public static <T> double injectInto(
+    public static <T> double foldLeft(
             double injectValue,
             Iterable<T> iterable,
             DoubleObjectToDoubleFunction<? super T> function)
     {
-        return IteratorIterate.injectInto(injectValue, iterable.iterator(), function);
+        return IteratorIterate.foldLeft(injectValue, iterable.iterator(), function);
     }
 
     /**
-     * @see Iterate#injectIntoWith(Object, Iterable, Function3, Object)
+     * @see Iterate#foldLeftWith(Object, Iterable, Function3, Object)
      */
-    public static <T, IV, P> IV injectIntoWith(
+    public static <T, IV, P> IV foldLeftWith(
             IV injectValue,
             Iterable<T> iterable,
             Function3<? super IV, ? super T, ? super P, ? extends IV> function,
             P parameter)
     {
-        return IteratorIterate.injectIntoWith(injectValue, iterable.iterator(), function, parameter);
+        return IteratorIterate.foldLeftWith(injectValue, iterable.iterator(), function, parameter);
     }
 
     /**
@@ -412,22 +410,22 @@ public final class IterableIterate
     }
 
     /**
-     * @see Iterate#detectIndex(Iterable, Predicate)
+     * @see Iterate#findIndex(Iterable, Predicate)
      */
-    public static <T> int detectIndex(Iterable<T> iterable, Predicate<? super T> predicate)
+    public static <T> int findIndex(Iterable<T> iterable, Predicate<? super T> predicate)
     {
-        return IteratorIterate.detectIndex(iterable.iterator(), predicate);
+        return IteratorIterate.findIndex(iterable.iterator(), predicate);
     }
 
     /**
-     * @see Iterate#detectIndexWith(Iterable, Predicate2, Object)
+     * @see Iterate#findIndexWith(Iterable, Predicate2, Object)
      */
-    public static <T, IV> int detectIndexWith(
+    public static <T, IV> int findIndexWith(
             Iterable<T> iterable,
             Predicate2<? super T, ? super IV> predicate,
             IV injectedValue)
     {
-        return IteratorIterate.detectIndexWith(iterable.iterator(), predicate, injectedValue);
+        return IteratorIterate.findIndexWith(iterable.iterator(), predicate, injectedValue);
     }
 
     /**
@@ -442,26 +440,26 @@ public final class IterableIterate
     }
 
     /**
-     * @see Iterate#collectWith(Iterable, Function2, Object)
+     * @see Iterate#transformWith(Iterable, Function2, Object)
      */
-    public static <T, P, V> MutableList<V> collectWith(
+    public static <T, P, V> MutableList<V> transformWith(
             Iterable<T> iterable,
             Function2<? super T, ? super P, ? extends V> function,
             P parameter)
     {
-        return IterableIterate.collectWith(iterable, function, parameter, FastList.<V>newList());
+        return IterableIterate.transformWith(iterable, function, parameter, FastList.<V>newList());
     }
 
     /**
-     * @see Iterate#collectWith(Iterable, Function2, Object, Collection)
+     * @see Iterate#transformWith(Iterable, Function2, Object, Collection)
      */
-    public static <T, P, A, R extends Collection<A>> R collectWith(
+    public static <T, P, A, R extends Collection<A>> R transformWith(
             Iterable<T> iterable,
             Function2<? super T, ? super P, ? extends A> function,
             P parameter,
             R targetCollection)
     {
-        return IteratorIterate.collectWith(iterable.iterator(), function, parameter, targetCollection);
+        return IteratorIterate.transformWith(iterable.iterator(), function, parameter, targetCollection);
     }
 
     /**

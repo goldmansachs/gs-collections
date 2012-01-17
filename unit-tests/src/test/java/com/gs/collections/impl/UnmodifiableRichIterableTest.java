@@ -94,8 +94,8 @@ public class UnmodifiableRichIterableTest
     @Test
     public void detect()
     {
-        Assert.assertEquals(METALLICA, this.unmodifiableCollection.detect(StringPredicates.contains("allic")));
-        Assert.assertEquals("Not found", this.unmodifiableCollection.detectIfNone(StringPredicates.contains("donna"),
+        Assert.assertEquals(METALLICA, this.unmodifiableCollection.find(StringPredicates.contains("allic")));
+        Assert.assertEquals("Not found", this.unmodifiableCollection.findIfNone(StringPredicates.contains("donna"),
                 new PassThruFunction0<String>("Not found")));
     }
 
@@ -170,11 +170,11 @@ public class UnmodifiableRichIterableTest
     public void collectIf()
     {
         Assert.assertEquals(
-                this.mutableCollection.collectIf(Predicates.alwaysTrue(), Functions.getStringPassThru()),
-                this.unmodifiableCollection.collectIf(Predicates.alwaysTrue(), Functions.getStringPassThru()));
+                this.mutableCollection.transformIf(Predicates.alwaysTrue(), Functions.getStringPassThru()),
+                this.unmodifiableCollection.transformIf(Predicates.alwaysTrue(), Functions.getStringPassThru()));
         Assert.assertEquals(
-                this.mutableCollection.collectIf(Predicates.alwaysTrue(), Functions.getStringPassThru(), Lists.mutable.<String>of()),
-                this.unmodifiableCollection.collectIf(Predicates.alwaysTrue(), Functions.getStringPassThru(), Lists.mutable.<String>of()));
+                this.mutableCollection.transformIf(Predicates.alwaysTrue(), Functions.getStringPassThru(), Lists.mutable.<String>of()),
+                this.unmodifiableCollection.transformIf(Predicates.alwaysTrue(), Functions.getStringPassThru(), Lists.mutable.<String>of()));
     }
 
     @Test
@@ -188,57 +188,57 @@ public class UnmodifiableRichIterableTest
             }
         };
         Assert.assertEquals(
-                this.mutableCollection.collectWith(function, null, Lists.mutable.<String>of()),
-                this.unmodifiableCollection.collectWith(function, null, Lists.mutable.<String>of()));
+                this.mutableCollection.transformWith(function, null, Lists.mutable.<String>of()),
+                this.unmodifiableCollection.transformWith(function, null, Lists.mutable.<String>of()));
     }
 
     @Test
     public void collect()
     {
         Assert.assertEquals(
-                this.mutableCollection.collect(Functions.getStringPassThru()),
-                this.unmodifiableCollection.collect(Functions.getStringPassThru()));
+                this.mutableCollection.transform(Functions.getStringPassThru()),
+                this.unmodifiableCollection.transform(Functions.getStringPassThru()));
         Assert.assertEquals(
-                this.mutableCollection.collect(Functions.getStringPassThru(), Lists.mutable.<String>of()),
-                this.unmodifiableCollection.collect(Functions.getStringPassThru(), Lists.mutable.<String>of()));
+                this.mutableCollection.transform(Functions.getStringPassThru(), Lists.mutable.<String>of()),
+                this.unmodifiableCollection.transform(Functions.getStringPassThru(), Lists.mutable.<String>of()));
     }
 
     @Test
     public void rejectWith()
     {
         Assert.assertEquals(
-                this.mutableCollection.rejectWith(Predicates2.alwaysFalse(), null, Lists.mutable.<String>of()),
-                this.unmodifiableCollection.rejectWith(Predicates2.alwaysFalse(), null, Lists.mutable.<String>of()));
+                this.mutableCollection.filterNotWith(Predicates2.alwaysFalse(), null, Lists.mutable.<String>of()),
+                this.unmodifiableCollection.filterNotWith(Predicates2.alwaysFalse(), null, Lists.mutable.<String>of()));
     }
 
     @Test
     public void reject()
     {
         Assert.assertEquals(
-                this.mutableCollection.reject(Predicates.alwaysFalse()),
-                this.unmodifiableCollection.reject(Predicates.alwaysFalse()));
+                this.mutableCollection.filterNot(Predicates.alwaysFalse()),
+                this.unmodifiableCollection.filterNot(Predicates.alwaysFalse()));
         Assert.assertEquals(
-                this.mutableCollection.reject(Predicates.alwaysFalse(), Lists.mutable.<String>of()),
-                this.unmodifiableCollection.reject(Predicates.alwaysFalse(), Lists.mutable.<String>of()));
+                this.mutableCollection.filterNot(Predicates.alwaysFalse(), Lists.mutable.<String>of()),
+                this.unmodifiableCollection.filterNot(Predicates.alwaysFalse(), Lists.mutable.<String>of()));
     }
 
     @Test
     public void selectWith()
     {
         Assert.assertEquals(
-                this.mutableCollection.selectWith(Predicates2.alwaysTrue(), null, Lists.mutable.<String>of()),
-                this.unmodifiableCollection.selectWith(Predicates2.alwaysTrue(), null, Lists.mutable.<String>of()));
+                this.mutableCollection.filterWith(Predicates2.alwaysTrue(), null, Lists.mutable.<String>of()),
+                this.unmodifiableCollection.filterWith(Predicates2.alwaysTrue(), null, Lists.mutable.<String>of()));
     }
 
     @Test
     public void select()
     {
         Assert.assertEquals(
-                this.mutableCollection.select(Predicates.alwaysTrue()),
-                this.unmodifiableCollection.select(Predicates.alwaysTrue()));
+                this.mutableCollection.filter(Predicates.alwaysTrue()),
+                this.unmodifiableCollection.filter(Predicates.alwaysTrue()));
         Assert.assertEquals(
-                this.mutableCollection.select(Predicates.alwaysTrue(), Lists.mutable.<String>of()),
-                this.unmodifiableCollection.select(Predicates.alwaysTrue(), Lists.mutable.<String>of()));
+                this.mutableCollection.filter(Predicates.alwaysTrue(), Lists.mutable.<String>of()),
+                this.unmodifiableCollection.filter(Predicates.alwaysTrue(), Lists.mutable.<String>of()));
     }
 
     @Test
@@ -271,7 +271,7 @@ public class UnmodifiableRichIterableTest
                 return injectValue + band.charAt(0);
             }
         };
-        Assert.assertEquals(">MBES", this.unmodifiableCollection.injectInto(">", function));
+        Assert.assertEquals(">MBES", this.unmodifiableCollection.foldLeft(">", function));
     }
 
     @Test
@@ -361,20 +361,20 @@ public class UnmodifiableRichIterableTest
         RichIterable<Pair<String, Object>> pairs = this.unmodifiableCollection.zip(nulls);
         Assert.assertEquals(
                 this.unmodifiableCollection.toSet(),
-                pairs.collect(Functions.<String>firstOfPair()).toSet());
+                pairs.transform(Functions.<String>firstOfPair()).toSet());
         Assert.assertEquals(
                 nulls,
-                pairs.collect(Functions.secondOfPair(), Lists.mutable.of()));
+                pairs.transform(Functions.secondOfPair(), Lists.mutable.of()));
 
         RichIterable<Pair<String, Object>> pairsPlusOne = this.unmodifiableCollection.zip(nullsPlusOne);
         Assert.assertEquals(
                 this.unmodifiableCollection.toSet(),
-                pairsPlusOne.collect(Functions.<String>firstOfPair()).toSet());
-        Assert.assertEquals(nulls, pairsPlusOne.collect(Functions.secondOfPair(), Lists.mutable.of()));
+                pairsPlusOne.transform(Functions.<String>firstOfPair()).toSet());
+        Assert.assertEquals(nulls, pairsPlusOne.transform(Functions.secondOfPair(), Lists.mutable.of()));
 
         RichIterable<Pair<String, Object>> pairsMinusOne = this.unmodifiableCollection.zip(nullsMinusOne);
         Assert.assertEquals(this.unmodifiableCollection.size() - 1, pairsMinusOne.size());
-        Assert.assertTrue(this.unmodifiableCollection.containsAllIterable(pairsMinusOne.collect(Functions.<String>firstOfPair())));
+        Assert.assertTrue(this.unmodifiableCollection.containsAllIterable(pairsMinusOne.transform(Functions.<String>firstOfPair())));
 
         Assert.assertEquals(
                 this.unmodifiableCollection.zip(nulls).toSet(),
@@ -388,10 +388,10 @@ public class UnmodifiableRichIterableTest
 
         Assert.assertEquals(
                 this.unmodifiableCollection.toSet(),
-                pairs.collect(Functions.<String>firstOfPair()).toSet());
+                pairs.transform(Functions.<String>firstOfPair()).toSet());
         Assert.assertEquals(
                 Interval.zeroTo(this.unmodifiableCollection.size() - 1).toSet(),
-                pairs.collect(Functions.<Integer>secondOfPair(), Sets.mutable.<Integer>of()));
+                pairs.transform(Functions.<Integer>secondOfPair(), Sets.mutable.<Integer>of()));
 
         Assert.assertEquals(
                 this.unmodifiableCollection.zipWithIndex().toSet(),

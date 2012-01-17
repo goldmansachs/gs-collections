@@ -661,7 +661,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         }
     }
 
-    public <E> MutableMap<K, V> collectKeysAndValues(
+    public <E> MutableMap<K, V> transformKeysAndValues(
             Collection<E> collection,
             Function<? super E, ? extends K> keyFunction,
             Function<? super E, ? extends V> valueFunction)

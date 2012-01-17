@@ -86,7 +86,7 @@ public class MapIterateTest
     {
         MutableMap<String, Integer> map = this.getIntegerMap();
         Assert.assertEquals(Integer.valueOf(1 + 2 + 3 + 4 + 5),
-                MapIterate.injectInto(0, map, AddFunction.INTEGER));
+                MapIterate.foldLeft(0, map, AddFunction.INTEGER));
     }
 
     @Test
@@ -94,7 +94,7 @@ public class MapIterateTest
     {
         MutableMap<Integer, Integer> input = Maps.fixedSize.of(1, 10, 2, 20);
 
-        MutableMap<String, String> result = MapIterate.collect(input, Functions.getToString(), Functions.getToString());
+        MutableMap<String, String> result = MapIterate.transform(input, Functions.getToString(), Functions.getToString());
 
         Verify.assertContainsKeyValue("1", "10", result);
         Verify.assertContainsKeyValue("2", "20", result);
@@ -120,7 +120,7 @@ public class MapIterateTest
                 return currency.getCurrencyCode();
             }
         };
-        MutableMap<String, String> result = MapIterate.collect(input, countryFunction, currencyCodeFunction);
+        MutableMap<String, String> result = MapIterate.transform(input, countryFunction, currencyCodeFunction);
         Verify.assertContainsKeyValue("GB", "GBP", result);
         Verify.assertContainsKeyValue("JP", "JPY", result);
         Verify.assertSize(2, result);
@@ -131,7 +131,7 @@ public class MapIterateTest
     {
         MutableMap<Locale, Currency> input = Maps.fixedSize.of(Locale.UK, Currency.getInstance(Locale.UK), Locale.JAPAN, Currency.getInstance(Locale.JAPAN));
 
-        MutableMap<String, String> result = MapIterate.collect(input, new Function2<Locale, Currency, Pair<String, String>>()
+        MutableMap<String, String> result = MapIterate.transform(input, new Function2<Locale, Currency, Pair<String, String>>()
         {
             public Pair<String, String> value(Locale locale, Currency currency)
             {
@@ -153,7 +153,7 @@ public class MapIterateTest
                 Locale.CHINA, Currency.getInstance(Locale.GERMANY),
                 Locale.GERMANY, Currency.getInstance(Locale.CHINA));
 
-        MutableMap<String, String> result = MapIterate.collectIf(input, new Function2<Locale, Currency, Pair<String, String>>()
+        MutableMap<String, String> result = MapIterate.transformIf(input, new Function2<Locale, Currency, Pair<String, String>>()
                 {
                     public Pair<String, String> value(Locale locale, Currency currency)
                     {
@@ -230,7 +230,7 @@ public class MapIterateTest
     public void selectWithDifferentTargetCollection()
     {
         MutableMap<String, Integer> map = this.getIntegerMap();
-        Collection<Integer> results = MapIterate.select(map, Predicates.instanceOf(Integer.class), FastList.<Integer>newList());
+        Collection<Integer> results = MapIterate.filter(map, Predicates.instanceOf(Integer.class), FastList.<Integer>newList());
         Assert.assertEquals(Bags.mutable.of(1, 2, 3, 4, 5), HashBag.newBag(results));
     }
 
@@ -245,7 +245,7 @@ public class MapIterateTest
     public void rejectWithDifferentTargetCollection()
     {
         MutableMap<String, Integer> map = this.getIntegerMap();
-        MutableList<Integer> list = MapIterate.reject(map, Predicates.instanceOf(Integer.class), FastList.<Integer>newList());
+        MutableList<Integer> list = MapIterate.filterNot(map, Predicates.instanceOf(Integer.class), FastList.<Integer>newList());
         Verify.assertEmpty(list);
     }
 
@@ -257,7 +257,7 @@ public class MapIterateTest
         MutableList<Integer> list = Lists.mutable.of();
         MapIterate.forEachValue(map, CollectionAddProcedure.on(list));
         Verify.assertSize(5, list);
-        Assert.assertEquals(15, list.injectInto(0, AddFunction.INTEGER_TO_INT));
+        Assert.assertEquals(15, list.foldLeft(0, AddFunction.INTEGER_TO_INT));
     }
 
     @Test
@@ -428,7 +428,7 @@ public class MapIterateTest
                 "1", "2",
                 "2", "1",
                 "3", "3");
-        MutableMap<String, String> resultMap = MapIterate.selectMapOnEntry(map, new Predicate2<String, String>()
+        MutableMap<String, String> resultMap = MapIterate.filterMapOnEntry(map, new Predicate2<String, String>()
         {
             public boolean accept(String argument1, String argument2)
             {
@@ -447,7 +447,7 @@ public class MapIterateTest
                 "1", "2",
                 "2", "1",
                 "3", "3");
-        Collection<Map.Entry<String, String>> results = Iterate.select(map.entrySet(), new MapEntryPredicate<String, String>()
+        Collection<Map.Entry<String, String>> results = Iterate.filter(map.entrySet(), new MapEntryPredicate<String, String>()
         {
             public boolean accept(String argument1, String argument2)
             {
@@ -464,7 +464,7 @@ public class MapIterateTest
                 "1", "2",
                 "2", "1",
                 "3", "3");
-        MutableMap<String, String> resultMap = MapIterate.selectMapOnKey(map, Predicates.equal("1"));
+        MutableMap<String, String> resultMap = MapIterate.filterMapOnKey(map, Predicates.equal("1"));
         Assert.assertEquals(UnifiedMap.newWithKeysValues("1", "2"), resultMap);
     }
 
@@ -475,7 +475,7 @@ public class MapIterateTest
                 "1", "2",
                 "2", "1",
                 "3", "3");
-        MutableMap<String, String> resultMap = MapIterate.selectMapOnValue(map, Predicates.equal("1"));
+        MutableMap<String, String> resultMap = MapIterate.filterMapOnValue(map, Predicates.equal("1"));
         Assert.assertEquals(UnifiedMap.newWithKeysValues("2", "1"), resultMap);
     }
 
@@ -486,9 +486,9 @@ public class MapIterateTest
                 "1", "2",
                 "2", "1",
                 "3", "3");
-        String resultFound = MapIterate.detect(map, Predicates.equal("1"));
+        String resultFound = MapIterate.find(map, Predicates.equal("1"));
         Assert.assertEquals("1", resultFound);
-        String resultNotFound = MapIterate.detect(map, Predicates.equal("4"));
+        String resultNotFound = MapIterate.find(map, Predicates.equal("4"));
         Assert.assertNull(resultNotFound);
     }
 
@@ -499,9 +499,9 @@ public class MapIterateTest
                 "1", "2",
                 "2", "1",
                 "3", "3");
-        String resultNotFound = MapIterate.detectIfNone(map, Predicates.equal("4"), "0");
+        String resultNotFound = MapIterate.findIfNone(map, Predicates.equal("4"), "0");
         Assert.assertEquals("0", resultNotFound);
-        String resultFound = MapIterate.detectIfNone(map, Predicates.equal("1"), "0");
+        String resultFound = MapIterate.findIfNone(map, Predicates.equal("1"), "0");
         Assert.assertEquals("1", resultFound);
     }
 
@@ -548,7 +548,7 @@ public class MapIterateTest
     @Test
     public void reject()
     {
-        MutableList<Integer> result = MapIterate.reject(newLittleMap(),
+        MutableList<Integer> result = MapIterate.filterNot(newLittleMap(),
                 Predicates.greaterThanOrEqualTo(2));
         Assert.assertEquals(FastList.newListWith(1), result);
     }
@@ -577,7 +577,7 @@ public class MapIterateTest
     @Test
     public void collect()
     {
-        MutableList<String> result = MapIterate.collect(newLittleMap(), Functions.getToString());
+        MutableList<String> result = MapIterate.transform(newLittleMap(), Functions.getToString());
         Assert.assertEquals(FastList.newListWith("1", "2").toBag(), result.toBag());
     }
 
@@ -585,7 +585,7 @@ public class MapIterateTest
     public void collectIntoTarget()
     {
         MutableList<String> target = Lists.mutable.of();
-        MutableList<String> result = MapIterate.collect(newLittleMap(), Functions.getToString(), target);
+        MutableList<String> result = MapIterate.transform(newLittleMap(), Functions.getToString(), target);
         Assert.assertEquals(FastList.newListWith("1", "2").toBag(), result.toBag());
         Assert.assertSame(target, result);
     }

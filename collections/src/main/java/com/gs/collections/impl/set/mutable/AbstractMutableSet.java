@@ -65,27 +65,27 @@ public abstract class AbstractMutableSet<T>
     }
 
     @Override
-    public MutableSet<T> select(Predicate<? super T> predicate)
+    public MutableSet<T> filter(Predicate<? super T> predicate)
     {
-        return this.select(predicate, this.newEmpty());
+        return this.filter(predicate, this.newEmpty());
     }
 
     @Override
-    public <P> MutableSet<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> MutableSet<T> filterWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return this.selectWith(predicate, parameter, this.<T>newEmptySameSize());
+        return this.filterWith(predicate, parameter, this.<T>newEmptySameSize());
     }
 
     @Override
-    public MutableSet<T> reject(Predicate<? super T> predicate)
+    public MutableSet<T> filterNot(Predicate<? super T> predicate)
     {
-        return this.reject(predicate, this.<T>newEmptySameSize());
+        return this.filterNot(predicate, this.<T>newEmptySameSize());
     }
 
     @Override
-    public <P> MutableSet<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> MutableSet<T> filterNotWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return this.rejectWith(predicate, parameter, this.<T>newEmptySameSize());
+        return this.filterNotWith(predicate, parameter, this.<T>newEmptySameSize());
     }
 
     public PartitionMutableSet<T> partition(Predicate<? super T> predicate)
@@ -94,27 +94,27 @@ public abstract class AbstractMutableSet<T>
     }
 
     @Override
-    public <V> MutableSet<V> collect(Function<? super T, ? extends V> function)
+    public <V> MutableSet<V> transform(Function<? super T, ? extends V> function)
     {
-        return this.collect(function, this.<V>newEmptySameSize());
+        return this.transform(function, this.<V>newEmptySameSize());
     }
 
     @Override
-    public <V> MutableSet<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    public <V> MutableSet<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
     {
-        return this.flatCollect(function, this.<V>newEmptySameSize());
+        return this.flatTransform(function, this.<V>newEmptySameSize());
     }
 
     @Override
-    public <P, V> MutableSet<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
+    public <P, V> MutableSet<V> transformWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
     {
-        return this.collectWith(function, parameter, this.<V>newEmptySameSize());
+        return this.transformWith(function, parameter, this.<V>newEmptySameSize());
     }
 
     @Override
-    public <V> MutableSet<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
+    public <V> MutableSet<V> transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
     {
-        return this.collectIf(predicate, function, this.<V>newEmptySameSize());
+        return this.transformIf(predicate, function, this.<V>newEmptySameSize());
     }
 
     public <V> UnifiedSetMultimap<V, T> groupBy(Function<? super T, ? extends V> function)

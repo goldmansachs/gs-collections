@@ -119,7 +119,7 @@ public class ImmutableArrayBag<T>
 
     public int occurrencesOf(Object item)
     {
-        int index = ArrayIterate.detectIndexWith(this.keys, Predicates2.equal(), item);
+        int index = ArrayIterate.findIndexWith(this.keys, Predicates2.equal(), item);
         if (index > -1)
         {
             return this.counts[index];
@@ -137,7 +137,7 @@ public class ImmutableArrayBag<T>
 
     public ImmutableBag<T> newWith(T element)
     {
-        int elementIndex = ArrayIterate.detectIndexWith(this.keys, Predicates2.equal(), element);
+        int elementIndex = ArrayIterate.findIndexWith(this.keys, Predicates2.equal(), element);
         int distinctItemCount = this.sizeDistinct() + (elementIndex == -1 ? 1 : 0);
         if (distinctItemCount > MAXIMUM_USEFUL_ARRAY_BAG_SIZE)
         {
@@ -166,7 +166,7 @@ public class ImmutableArrayBag<T>
 
     public ImmutableBag<T> newWithout(T element)
     {
-        int elementIndex = ArrayIterate.detectIndexWith(this.keys, Predicates2.equal(), element);
+        int elementIndex = ArrayIterate.findIndexWith(this.keys, Predicates2.equal(), element);
         if (elementIndex > -1)
         {
             int distinctItemCount = this.sizeDistinct() - (this.counts[elementIndex] == 1 ? 1 : 0);
@@ -215,10 +215,10 @@ public class ImmutableArrayBag<T>
 
     public ImmutableBag<T> newWithoutAll(Iterable<? extends T> elements)
     {
-        return this.reject(Predicates.in(elements));
+        return this.filterNot(Predicates.in(elements));
     }
 
-    public ImmutableBag<T> select(Predicate<? super T> predicate)
+    public ImmutableBag<T> filter(Predicate<? super T> predicate)
     {
         MutableBag<T> result = new HashBag<T>();
         this.forEach(new SelectProcedure<T>(predicate, result));
@@ -227,26 +227,26 @@ public class ImmutableArrayBag<T>
     }
 
     @Override
-    public <P, R extends Collection<T>> R selectWith(
+    public <P, R extends Collection<T>> R filterWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
             R targetCollection)
     {
-        return IterableIterate.selectWith(this, predicate, parameter, targetCollection);
+        return IterableIterate.filterWith(this, predicate, parameter, targetCollection);
     }
 
-    public ImmutableBag<T> reject(Predicate<? super T> predicate)
+    public ImmutableBag<T> filterNot(Predicate<? super T> predicate)
     {
-        return this.select(Predicates.not(predicate));
+        return this.filter(Predicates.not(predicate));
     }
 
     @Override
-    public <P, R extends Collection<T>> R rejectWith(
+    public <P, R extends Collection<T>> R filterNotWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
             R targetCollection)
     {
-        return IterableIterate.rejectWith(this, predicate, parameter, targetCollection);
+        return IterableIterate.filterNotWith(this, predicate, parameter, targetCollection);
     }
 
     public PartitionImmutableBag<T> partition(Predicate<? super T> predicate)
@@ -254,7 +254,7 @@ public class ImmutableArrayBag<T>
         return PartitionHashBag.of(this, predicate).toImmutable();
     }
 
-    public <V> ImmutableBag<V> collect(Function<? super T, ? extends V> function)
+    public <V> ImmutableBag<V> transform(Function<? super T, ? extends V> function)
     {
         CollectProcedure<T, V> procedure = new CollectProcedure<T, V>(function, HashBag.<V>newBag());
         this.forEach(procedure);
@@ -262,19 +262,19 @@ public class ImmutableArrayBag<T>
     }
 
     @Override
-    public <P, V, R extends Collection<V>> R collectWith(
+    public <P, V, R extends Collection<V>> R transformWith(
             Function2<? super T, ? super P, ? extends V> function,
             P parameter,
             R targetCollection)
     {
-        return IterableIterate.collectWith(this, function, parameter, targetCollection);
+        return IterableIterate.transformWith(this, function, parameter, targetCollection);
     }
 
-    public <V> ImmutableBag<V> collectIf(
+    public <V> ImmutableBag<V> transformIf(
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function)
     {
-        return ImmutableArrayBag.copyFrom(IterableIterate.collectIf(this, predicate, function, HashBag.<V>newBag()));
+        return ImmutableArrayBag.copyFrom(IterableIterate.tranformIf(this, predicate, function, HashBag.<V>newBag()));
     }
 
     public <V> ImmutableBagMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
@@ -297,7 +297,7 @@ public class ImmutableArrayBag<T>
         return ArrayIterate.getLast(this.keys);
     }
 
-    public <V> ImmutableBag<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    public <V> ImmutableBag<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
     {
         FlatCollectProcedure<T, V> procedure = new FlatCollectProcedure<T, V>(function, HashBag.<V>newBag());
         this.forEach(procedure);

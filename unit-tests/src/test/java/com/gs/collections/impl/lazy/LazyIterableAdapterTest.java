@@ -52,7 +52,7 @@ public class LazyIterableAdapterTest extends AbstractLazyIterableTestCase
     @Test
     public void into()
     {
-        int sum = new LazyIterableAdapter<Integer>(Interval.oneTo(5)).into(FastList.<Integer>newList()).injectInto(0, AddFunction.INTEGER_TO_INT);
+        int sum = new LazyIterableAdapter<Integer>(Interval.oneTo(5)).into(FastList.<Integer>newList()).foldLeft(0, AddFunction.INTEGER_TO_INT);
         Assert.assertEquals(15, sum);
     }
 

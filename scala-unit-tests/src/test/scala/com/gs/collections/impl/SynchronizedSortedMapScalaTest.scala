@@ -86,11 +86,11 @@ class SynchronizedSortedMapScalaTest extends SynchronizedMapIterableTestTrait
     }
 
     @Test
-    def collectKeysAndValues_synchronized
+    def transformKeysAndValues_synchronized
     {
         this.assertSynchronized
         {
-            this.classUnderTest.collectKeysAndValues(FastList.newListWith[java.lang.Integer](4, 5, 6),
+            this.classUnderTest.transformKeysAndValues(FastList.newListWith[java.lang.Integer](4, 5, 6),
             {
                 _: java.lang.Integer => ""
             },

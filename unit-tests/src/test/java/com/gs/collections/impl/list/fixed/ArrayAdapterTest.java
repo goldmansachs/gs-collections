@@ -193,45 +193,45 @@ public class ArrayAdapterTest extends AbstractListTestCase
     @Test
     public void testSelect()
     {
-        Verify.assertContainsAll(this.newArrayWith(1, 2, 3, 4, 5).select(Predicates.lessThan(3)), 1, 2);
-        Verify.denyContainsAny(this.newArrayWith(-1, 2, 3, 4, 5).select(Predicates.lessThan(3)), 3, 4, 5);
-        Verify.assertContainsAll(this.newArrayWith(1, 2, 3, 4, 5).select(Predicates.lessThan(3),
+        Verify.assertContainsAll(this.newArrayWith(1, 2, 3, 4, 5).filter(Predicates.lessThan(3)), 1, 2);
+        Verify.denyContainsAny(this.newArrayWith(-1, 2, 3, 4, 5).filter(Predicates.lessThan(3)), 3, 4, 5);
+        Verify.assertContainsAll(this.newArrayWith(1, 2, 3, 4, 5).filter(Predicates.lessThan(3),
                 UnifiedSet.<Integer>newSet()), 1, 2);
     }
 
     @Test
     public void testReject()
     {
-        Verify.assertContainsAll(this.newArrayWith(1, 2, 3, 4).reject(Predicates.lessThan(3)), 3, 4);
-        Verify.assertContainsAll(this.newArrayWith(1, 2, 3, 4).reject(Predicates.lessThan(3),
+        Verify.assertContainsAll(this.newArrayWith(1, 2, 3, 4).filterNot(Predicates.lessThan(3)), 3, 4);
+        Verify.assertContainsAll(this.newArrayWith(1, 2, 3, 4).filterNot(Predicates.lessThan(3),
                 UnifiedSet.<Integer>newSet()), 3, 4);
     }
 
     @Test
     public void testCollect()
     {
-        Verify.assertContainsAll(this.newArrayWith(1, 2, 3, 4).collect(Functions.getToString()),
+        Verify.assertContainsAll(this.newArrayWith(1, 2, 3, 4).transform(Functions.getToString()),
                 "1",
                 "2",
                 "3",
                 "4");
-        Verify.assertContainsAll(this.newArrayWith(1, 2, 3, 4).collect(Functions.getToString(),
+        Verify.assertContainsAll(this.newArrayWith(1, 2, 3, 4).transform(Functions.getToString(),
                 UnifiedSet.<String>newSet()), "1", "2", "3", "4");
     }
 
     @Test
     public void testDetect()
     {
-        Assert.assertEquals(Integer.valueOf(3), this.newArrayWith(1, 2, 3, 4, 5).detect(Predicates.equal(3)));
-        Assert.assertNull(this.newArrayWith(1, 2, 3, 4, 5).detect(Predicates.equal(6)));
+        Assert.assertEquals(Integer.valueOf(3), this.newArrayWith(1, 2, 3, 4, 5).find(Predicates.equal(3)));
+        Assert.assertNull(this.newArrayWith(1, 2, 3, 4, 5).find(Predicates.equal(6)));
     }
 
     @Test
     public void testDetectIfNoneWithBlock()
     {
         Function0<Integer> function = new PassThruFunction0<Integer>(6);
-        Assert.assertEquals(Integer.valueOf(3), this.newArrayWith(1, 2, 3, 4, 5).detectIfNone(Predicates.equal(3), function));
-        Assert.assertEquals(Integer.valueOf(6), this.newArrayWith(1, 2, 3, 4, 5).detectIfNone(Predicates.equal(6), function));
+        Assert.assertEquals(Integer.valueOf(3), this.newArrayWith(1, 2, 3, 4, 5).findIfNone(Predicates.equal(3), function));
+        Assert.assertEquals(Integer.valueOf(6), this.newArrayWith(1, 2, 3, 4, 5).findIfNone(Predicates.equal(6), function));
     }
 
     @Test
@@ -309,9 +309,9 @@ public class ArrayAdapterTest extends AbstractListTestCase
     @Test
     public void testCollectIf()
     {
-        Verify.assertContainsAll(this.newArrayWith(1, 2, 3).collectIf(Predicates.instanceOf(Integer.class),
+        Verify.assertContainsAll(this.newArrayWith(1, 2, 3).transformIf(Predicates.instanceOf(Integer.class),
                 Functions.getToString()), "1", "2", "3");
-        Verify.assertContainsAll(this.newArrayWith(1, 2, 3).collectIf(Predicates.instanceOf(Integer.class),
+        Verify.assertContainsAll(this.newArrayWith(1, 2, 3).transformIf(Predicates.instanceOf(Integer.class),
                 Functions.getToString(),
                 new ArrayList<String>()), "1", "2", "3");
     }
@@ -390,7 +390,7 @@ public class ArrayAdapterTest extends AbstractListTestCase
     public void testInjectInto()
     {
         MutableList<Integer> objects = this.newArrayWith(1, 2, 3);
-        Integer result = objects.injectInto(1, AddFunction.INTEGER);
+        Integer result = objects.foldLeft(1, AddFunction.INTEGER);
         Assert.assertEquals(Integer.valueOf(7), result);
     }
 
@@ -426,7 +426,7 @@ public class ArrayAdapterTest extends AbstractListTestCase
     public void testSelectAndRejectWith()
     {
         MutableList<Integer> objects = this.newArrayWith(1, 2);
-        Twin<MutableList<Integer>> result = objects.selectAndRejectWith(Predicates2.equal(), 1);
+        Twin<MutableList<Integer>> result = objects.partitionWith(Predicates2.equal(), 1);
         Verify.assertSize(1, result.getOne());
         Verify.assertSize(1, result.getTwo());
     }
@@ -524,11 +524,11 @@ public class ArrayAdapterTest extends AbstractListTestCase
     @Test
     public void testSelectWith()
     {
-        Verify.assertContainsAll(ArrayAdapter.<Integer>newArrayWith(1, 2, 3, 4, 5).selectWith(Predicates2.<Integer>lessThan(),
+        Verify.assertContainsAll(ArrayAdapter.<Integer>newArrayWith(1, 2, 3, 4, 5).filterWith(Predicates2.<Integer>lessThan(),
                 3), 1, 2);
-        Verify.denyContainsAny(ArrayAdapter.<Integer>newArrayWith(-1, 2, 3, 4, 5).selectWith(Predicates2.<Integer>lessThan(),
+        Verify.denyContainsAny(ArrayAdapter.<Integer>newArrayWith(-1, 2, 3, 4, 5).filterWith(Predicates2.<Integer>lessThan(),
                 3), 3, 4, 5);
-        Verify.assertContainsAll(ArrayAdapter.<Integer>newArrayWith(1, 2, 3, 4, 5).selectWith(Predicates2.<Integer>lessThan(),
+        Verify.assertContainsAll(ArrayAdapter.<Integer>newArrayWith(1, 2, 3, 4, 5).filterWith(Predicates2.<Integer>lessThan(),
                 3,
                 UnifiedSet.<Integer>newSet()), 1, 2);
     }
@@ -536,10 +536,10 @@ public class ArrayAdapterTest extends AbstractListTestCase
     @Test
     public void testRejectWith()
     {
-        Verify.assertContainsAll(ArrayAdapter.<Integer>newArrayWith(1, 2, 3, 4).rejectWith(Predicates2.<Integer>lessThan(), 3),
+        Verify.assertContainsAll(ArrayAdapter.<Integer>newArrayWith(1, 2, 3, 4).filterNotWith(Predicates2.<Integer>lessThan(), 3),
                 3,
                 4);
-        Verify.assertContainsAll(ArrayAdapter.<Integer>newArrayWith(1, 2, 3, 4).rejectWith(Predicates2.<Integer>lessThan(),
+        Verify.assertContainsAll(ArrayAdapter.<Integer>newArrayWith(1, 2, 3, 4).filterNotWith(Predicates2.<Integer>lessThan(),
                 3,
                 UnifiedSet.<Integer>newSet()), 3, 4);
     }
@@ -548,15 +548,15 @@ public class ArrayAdapterTest extends AbstractListTestCase
     public void testDetectWith()
     {
         Assert.assertEquals(Integer.valueOf(3),
-                ArrayAdapter.<Integer>newArrayWith(1, 2, 3, 4, 5).detectWith(Predicates2.equal(), 3));
-        Assert.assertNull(ArrayAdapter.<Integer>newArrayWith(1, 2, 3, 4, 5).detectWith(Predicates2.equal(), 6));
+                ArrayAdapter.<Integer>newArrayWith(1, 2, 3, 4, 5).findWith(Predicates2.equal(), 3));
+        Assert.assertNull(ArrayAdapter.<Integer>newArrayWith(1, 2, 3, 4, 5).findWith(Predicates2.equal(), 6));
     }
 
     @Test
     public void testDetectWithIfNone()
     {
         MutableList<Integer> list = ArrayAdapter.newArrayWith(1, 2, 3, 4, 5);
-        Assert.assertNull(list.detectWithIfNone(Predicates2.equal(), 6, new PassThruFunction0<Integer>(null)));
+        Assert.assertNull(list.findWithIfNone(Predicates2.equal(), 6, new PassThruFunction0<Integer>(null)));
     }
 
     @Test
@@ -596,17 +596,17 @@ public class ArrayAdapterTest extends AbstractListTestCase
                 };
         Assert.assertEquals(
                 FastList.newListWith(2, 3, 4),
-                ArrayAdapter.newArrayWith(1, 2, 3).collectWith(addBlock, 1));
+                ArrayAdapter.newArrayWith(1, 2, 3).transformWith(addBlock, 1));
         Assert.assertEquals(
                 FastList.newListWith(2, 3, 4),
-                ArrayAdapter.newArrayWith(1, 2, 3).collectWith(addBlock, 1, FastList.<Integer>newList()));
+                ArrayAdapter.newArrayWith(1, 2, 3).transformWith(addBlock, 1, FastList.<Integer>newList()));
     }
 
     @Test
     public void testInjectIntoWith()
     {
         MutableList<Integer> objects = ArrayAdapter.newArrayWith(1, 2, 3);
-        Integer result = objects.injectIntoWith(1, new Function3<Integer, Integer, Integer, Integer>()
+        Integer result = objects.foldLeftWith(1, new Function3<Integer, Integer, Integer, Integer>()
         {
             public Integer value(Integer injectedValued, Integer item, Integer parameter)
             {

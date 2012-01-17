@@ -178,12 +178,12 @@ public class ImmutableEmptySortedMapTest extends ImmutableSortedMapTestCase
     public void select()
     {
         ImmutableSortedMap<Integer, String> map = this.classUnderTest();
-        ImmutableSortedMap<Integer, String> actual = map.select(Predicates2.alwaysTrue());
+        ImmutableSortedMap<Integer, String> actual = map.filter(Predicates2.alwaysTrue());
         Verify.assertInstanceOf(ImmutableEmptySortedMap.class, actual);
         Assert.assertSame(ImmutableEmptySortedMap.INSTANCE, actual);
 
         ImmutableSortedMap<Integer, String> revMap = this.classUnderTest(Comparators.<Integer>reverseNaturalOrder());
-        ImmutableSortedMap<Integer, String> revActual = revMap.select(Predicates2.alwaysTrue());
+        ImmutableSortedMap<Integer, String> revActual = revMap.filter(Predicates2.alwaysTrue());
         Verify.assertInstanceOf(ImmutableEmptySortedMap.class, revActual);
         Assert.assertSame(revMap.comparator(), revActual.comparator());
     }
@@ -193,12 +193,12 @@ public class ImmutableEmptySortedMapTest extends ImmutableSortedMapTestCase
     public void reject()
     {
         ImmutableSortedMap<Integer, String> map = this.classUnderTest();
-        ImmutableSortedMap<Integer, String> actual = map.reject(Predicates2.alwaysFalse());
+        ImmutableSortedMap<Integer, String> actual = map.filterNot(Predicates2.alwaysFalse());
         Verify.assertInstanceOf(ImmutableEmptySortedMap.class, actual);
         Assert.assertSame(ImmutableEmptySortedMap.INSTANCE, actual);
 
         ImmutableSortedMap<Integer, String> revMap = this.classUnderTest(Comparators.<Integer>reverseNaturalOrder());
-        ImmutableSortedMap<Integer, String> revActual = revMap.reject(Predicates2.alwaysTrue());
+        ImmutableSortedMap<Integer, String> revActual = revMap.filterNot(Predicates2.alwaysTrue());
         Verify.assertInstanceOf(ImmutableEmptySortedMap.class, revActual);
         Assert.assertSame(revMap.comparator(), revActual.comparator());
     }
@@ -217,8 +217,8 @@ public class ImmutableEmptySortedMapTest extends ImmutableSortedMapTestCase
                 return Tuples.pair(argument1, argument2);
             }
         };
-        ImmutableMap<Integer, String> collect = map.collect(alwaysTrueFunction);
-        ImmutableMap<Integer, String> revCollect = revMap.collect(alwaysTrueFunction);
+        ImmutableMap<Integer, String> collect = map.transform(alwaysTrueFunction);
+        ImmutableMap<Integer, String> revCollect = revMap.transform(alwaysTrueFunction);
 
         Verify.assertEmpty(collect);
         Assert.assertSame(collect, revCollect);
@@ -228,7 +228,7 @@ public class ImmutableEmptySortedMapTest extends ImmutableSortedMapTestCase
     public void detect()
     {
         ImmutableSortedMap<Integer, String> map = this.classUnderTest();
-        Assert.assertNull(map.detect(Predicates2.alwaysTrue()));
+        Assert.assertNull(map.find(Predicates2.alwaysTrue()));
     }
 
     @Test

@@ -497,7 +497,7 @@ public class UnifiedSetTest extends AbstractMutableSetTestCase
         MutableSet<Key> set3 = UnifiedSet.<Key>newSet().with(key, new Key("not a dupe"), duplicateKey3);
         Verify.assertSize(2, set3);
         Verify.assertContainsAll(set3, key, new Key("not a dupe"));
-        Assert.assertSame(key, set3.detect(Predicates.equal(key)));
+        Assert.assertSame(key, set3.find(Predicates.equal(key)));
     }
 
     @Test

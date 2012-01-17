@@ -355,9 +355,9 @@ public final class ParallelIterate
 
     /**
      * Iterate over the collection specified in parallel batches using the default values for the task size.  The
-     * ProcedureFactory can create stateful closures that will be collected and combined using the specified Combiner.
+     * ProcedureFactory can create stateful closures that will be transformed and combined using the specified Combiner.
      * <p/>
-     * <pre>e.g. The <b>ParallelIterate.select()</b> implementation
+     * <pre>e.g. The <b>ParallelIterate.filter()</b> implementation
      * <p/>
      * {@code CollectionCombiner<T, SelectProcedure<T>> combiner = CollectionCombiner.forSelect(collection);}
      * ParallelIterate.<b>forEach</b>(collection,{@code new SelectProcedureFactory<T>(predicate, taskSize), combiner, 1000);}
@@ -384,9 +384,9 @@ public final class ParallelIterate
 
     /**
      * Iterate over the collection specified in parallel batches using the default values for the task size.  The
-     * ProcedureFactory can create stateful closures that will be collected and combined using the specified Combiner.
+     * ProcedureFactory can create stateful closures that will be transformed and combined using the specified Combiner.
      * <p/>
-     * <pre>e.g. The <b>ParallelIterate.select()</b> implementation
+     * <pre>e.g. The <b>ParallelIterate.filter()</b> implementation
      * <p/>
      * int taskCount = Math.max(DEFAULT_PARALLEL_TASK_COUNT, collection.size() / DEFAULT_MIN_FORK_SIZE);
      * final int taskSize = collection.size() / taskCount / 2;
@@ -511,51 +511,51 @@ public final class ParallelIterate
     }
 
     /**
-     * Same effect as {@link Iterate#select(Iterable, Predicate)}, but executed in parallel batches.
+     * Same effect as {@link Iterate#filter(Iterable, Predicate)}, but executed in parallel batches.
      *
-     * @return The selected elements. The Collection will be of the same type as the input (List or Set)
+     * @return The filter elements. The Collection will be of the same type as the input (List or Set)
      *         and will be in the same order as the input (if it is an ordered collection).
-     * @see ParallelIterate#select(Iterable, Predicate, boolean)
+     * @see ParallelIterate#filter(Iterable, Predicate, boolean)
      */
-    public static <T> Collection<T> select(
+    public static <T> Collection<T> filter(
             Iterable<T> iterable,
             Predicate<? super T> predicate)
     {
-        return ParallelIterate.select(iterable, predicate, false);
+        return ParallelIterate.filter(iterable, predicate, false);
     }
 
     /**
-     * Same effect as {@link Iterate#select(Iterable, Predicate)}, but executed in parallel batches,
+     * Same effect as {@link Iterate#filter(Iterable, Predicate)}, but executed in parallel batches,
      * and with a potentially reordered result.
      *
      * @param allowReorderedResult If the result can be in a different order.
      *                             Allowing reordering may yield faster execution.
-     * @return The selected elements. The Collection will be of the same type (List or Set) as the input.
+     * @return The filtered elements. The Collection will be of the same type (List or Set) as the input.
      */
-    public static <T> Collection<T> select(
+    public static <T> Collection<T> filter(
             Iterable<T> iterable,
             Predicate<? super T> predicate,
             boolean allowReorderedResult)
     {
-        return ParallelIterate.select(iterable, predicate, null, allowReorderedResult);
+        return ParallelIterate.filter(iterable, predicate, null, allowReorderedResult);
     }
 
     /**
-     * Same effect as {@link Iterate#select(Iterable, Predicate)}, but executed in parallel batches,
+     * Same effect as {@link Iterate#filter(Iterable, Predicate)}, but executed in parallel batches,
      * and writing output into the specified collection.
      *
      * @param target               Where to write the output.
      * @param allowReorderedResult If the result can be in a different order.
      *                             Allowing reordering may yield faster execution.
-     * @return The 'target' collection, with the selected elements added.
+     * @return The 'target' collection, with the filtered elements added.
      */
-    public static <T, R extends Collection<T>> R select(
+    public static <T, R extends Collection<T>> R filter(
             Iterable<T> iterable,
             Predicate<? super T> predicate,
             R target,
             boolean allowReorderedResult)
     {
-        return ParallelIterate.select(
+        return ParallelIterate.filter(
                 iterable,
                 predicate,
                 target,
@@ -565,15 +565,15 @@ public final class ParallelIterate
     }
 
     /**
-     * Same effect as {@link Iterate#select(Iterable, Predicate)}, but executed in parallel batches,
+     * Same effect as {@link Iterate#filter(Iterable, Predicate)}, but executed in parallel batches,
      * and writing output into the specified collection.
      *
      * @param target               Where to write the output.
      * @param allowReorderedResult If the result can be in a different order.
      *                             Allowing reordering may yield faster execution.
-     * @return The 'target' collection, with the selected elements added.
+     * @return The 'target' collection, with the filtered elements added.
      */
-    public static <T, R extends Collection<T>> R select(
+    public static <T, R extends Collection<T>> R filter(
             Iterable<T> iterable,
             Predicate<? super T> predicate,
             R target,
@@ -613,51 +613,51 @@ public final class ParallelIterate
     }
 
     /**
-     * Same effect as {@link Iterate#reject(Iterable, Predicate)}, but executed in parallel batches.
+     * Same effect as {@link Iterate#filterNot(Iterable, Predicate)}, but executed in parallel batches.
      *
-     * @return The rejected elements. The Collection will be of the same type as the input (List or Set)
+     * @return The filtered elements. The Collection will be of the same type as the input (List or Set)
      *         and will be in the same order as the input (if it is an ordered collection).
-     * @see ParallelIterate#reject(Iterable, Predicate, boolean)
+     * @see ParallelIterate#filterNot(Iterable, Predicate, boolean)
      */
-    public static <T> Collection<T> reject(
+    public static <T> Collection<T> filterNot(
             Iterable<T> iterable,
             Predicate<? super T> predicate)
     {
-        return ParallelIterate.reject(iterable, predicate, false);
+        return ParallelIterate.filterNot(iterable, predicate, false);
     }
 
     /**
-     * Same effect as {@link Iterate#reject(Iterable, Predicate)}, but executed in parallel batches,
+     * Same effect as {@link Iterate#filterNot(Iterable, Predicate)}, but executed in parallel batches,
      * and with a potentially reordered result.
      *
      * @param allowReorderedResult If the result can be in a different order.
      *                             Allowing reordering may yield faster execution.
-     * @return The rejected elements. The Collection will be of the same type (List or Set) as the input.
+     * @return The filtered elements. The Collection will be of the same type (List or Set) as the input.
      */
-    public static <T> Collection<T> reject(
+    public static <T> Collection<T> filterNot(
             Iterable<T> iterable,
             Predicate<? super T> predicate,
             boolean allowReorderedResult)
     {
-        return ParallelIterate.reject(iterable, predicate, null, allowReorderedResult);
+        return ParallelIterate.filterNot(iterable, predicate, null, allowReorderedResult);
     }
 
     /**
-     * Same effect as {@link Iterate#reject(Iterable, Predicate)}, but executed in parallel batches,
+     * Same effect as {@link Iterate#filterNot(Iterable, Predicate)}, but executed in parallel batches,
      * and writing output into the specified collection.
      *
      * @param target               Where to write the output.
      * @param allowReorderedResult If the result can be in a different order.
      *                             Allowing reordering may yield faster execution.
-     * @return The 'target' collection, with the rejected elements added.
+     * @return The 'target' collection, with the filtered elements added.
      */
-    public static <T, R extends Collection<T>> R reject(
+    public static <T, R extends Collection<T>> R filterNot(
             Iterable<T> iterable,
             Predicate<? super T> predicate,
             R target,
             boolean allowReorderedResult)
     {
-        return ParallelIterate.reject(
+        return ParallelIterate.filterNot(
                 iterable,
                 predicate,
                 target,
@@ -666,7 +666,7 @@ public final class ParallelIterate
                 allowReorderedResult);
     }
 
-    public static <T, R extends Collection<T>> R reject(
+    public static <T, R extends Collection<T>> R filterNot(
             Iterable<T> iterable,
             Predicate<? super T> predicate,
             R target,
@@ -674,7 +674,7 @@ public final class ParallelIterate
             Executor executor,
             boolean allowReorderedResult)
     {
-        RejectProcedureCombiner<T> combiner = new RejectProcedureCombiner<T>(iterable, target, 10, allowReorderedResult);
+        FilterNotProcedureCombiner<T> combiner = new FilterNotProcedureCombiner<T>(iterable, target, 10, allowReorderedResult);
         RejectProcedureFactory<T> procedureFactory = new RejectProcedureFactory<T>(predicate, batchSize);
         ParallelIterate.forEach(
                 iterable,
@@ -705,53 +705,53 @@ public final class ParallelIterate
     }
 
     /**
-     * Same effect as {@link Iterate#collect(Iterable, Function)},
+     * Same effect as {@link Iterate#transform(Iterable, Function)},
      * but executed in parallel batches.
      *
-     * @return The collected elements. The Collection will be of the same type as the input (List or Set)
+     * @return The transformed elements. The Collection will be of the same type as the input (List or Set)
      *         and will be in the same order as the input (if it is an ordered collection).
-     * @see ParallelIterate#collect(Iterable, Function, boolean)
+     * @see ParallelIterate#transform(Iterable, Function, boolean)
      */
-    public static <T, V> Collection<V> collect(
+    public static <T, V> Collection<V> transform(
             Iterable<T> iterable,
             Function<? super T, V> function)
     {
-        return ParallelIterate.collect(iterable, function, false);
+        return ParallelIterate.transform(iterable, function, false);
     }
 
     /**
-     * Same effect as {@link Iterate#collect(Iterable, Function)}, but executed in parallel batches,
+     * Same effect as {@link Iterate#transform(Iterable, Function)}, but executed in parallel batches,
      * and with potentially reordered result.
      *
      * @param allowReorderedResult If the result can be in a different order.
      *                             Allowing reordering may yield faster execution.
-     * @return The collected elements. The Collection will be of the same type
+     * @return The transformed elements. The Collection will be of the same type
      *         (List or Set) as the input.
      */
-    public static <T, V> Collection<V> collect(
+    public static <T, V> Collection<V> transform(
             Iterable<T> iterable,
             Function<? super T, V> function,
             boolean allowReorderedResult)
     {
-        return ParallelIterate.collect(iterable, function, null, allowReorderedResult);
+        return ParallelIterate.transform(iterable, function, null, allowReorderedResult);
     }
 
     /**
-     * Same effect as {@link Iterate#collect(Iterable, Function)}, but executed in parallel batches,
+     * Same effect as {@link Iterate#transform(Iterable, Function)}, but executed in parallel batches,
      * and writing output into the specified collection.
      *
      * @param target               Where to write the output.
      * @param allowReorderedResult If the result can be in a different order.
      *                             Allowing reordering may yield faster execution.
-     * @return The 'target' collection, with the collected elements added.
+     * @return The 'target' collection, with the transformed elements added.
      */
-    public static <T, V, R extends Collection<V>> R collect(
+    public static <T, V, R extends Collection<V>> R transform(
             Iterable<T> iterable,
             Function<? super T, V> function,
             R target,
             boolean allowReorderedResult)
     {
-        return ParallelIterate.collect(
+        return ParallelIterate.transform(
                 iterable,
                 function,
                 target,
@@ -760,7 +760,7 @@ public final class ParallelIterate
                 allowReorderedResult);
     }
 
-    public static <T, V, R extends Collection<V>> R collect(
+    public static <T, V, R extends Collection<V>> R transform(
             Iterable<T> iterable,
             Function<? super T, V> function,
             R target,
@@ -782,28 +782,28 @@ public final class ParallelIterate
         return (R) combiner.getResult();
     }
 
-    public static <T, V> Collection<V> flatCollect(
+    public static <T, V> Collection<V> flatTransform(
             Iterable<T> iterable,
             Function<? super T, Collection<V>> function)
     {
-        return ParallelIterate.flatCollect(iterable, function, false);
+        return ParallelIterate.flatTransform(iterable, function, false);
     }
 
-    public static <T, V> Collection<V> flatCollect(
+    public static <T, V> Collection<V> flatTransform(
             Iterable<T> iterable,
             Function<? super T, Collection<V>> function,
             boolean allowReorderedResult)
     {
-        return ParallelIterate.flatCollect(iterable, function, null, allowReorderedResult);
+        return ParallelIterate.flatTransform(iterable, function, null, allowReorderedResult);
     }
 
-    public static <T, V, R extends Collection<V>> R flatCollect(
+    public static <T, V, R extends Collection<V>> R flatTransform(
             Iterable<T> iterable,
             Function<? super T, Collection<V>> function,
             R target,
             boolean allowReorderedResult)
     {
-        return ParallelIterate.flatCollect(
+        return ParallelIterate.flatTransform(
                 iterable,
                 function,
                 target,
@@ -812,7 +812,7 @@ public final class ParallelIterate
                 allowReorderedResult);
     }
 
-    public static <T, V, R extends Collection<V>> R flatCollect(
+    public static <T, V, R extends Collection<V>> R flatTransform(
             Iterable<T> iterable,
             Function<? super T, Collection<V>> function,
             R target,
@@ -836,56 +836,56 @@ public final class ParallelIterate
     }
 
     /**
-     * Same effect as {@link Iterate#collectIf(Iterable, Predicate, Function)},
+     * Same effect as {@link Iterate#transformIf(Iterable, Predicate, Function)},
      * but executed in parallel batches.
      *
-     * @return The collected elements. The Collection will be of the same type as the input (List or Set)
+     * @return The transformed elements. The Collection will be of the same type as the input (List or Set)
      *         and will be in the same order as the input (if it is an ordered collection).
-     * @see ParallelIterate#collectIf(Iterable, Predicate, Function, boolean)
+     * @see ParallelIterate#transformIf(Iterable, Predicate, Function, boolean)
      */
-    public static <T, V> Collection<V> collectIf(
+    public static <T, V> Collection<V> transformIf(
             Iterable<T> iterable,
             Predicate<? super T> predicate,
             Function<? super T, V> function)
     {
-        return ParallelIterate.collectIf(iterable, predicate, function, false);
+        return ParallelIterate.transformIf(iterable, predicate, function, false);
     }
 
     /**
-     * Same effect as {@link Iterate#collectIf(Iterable, Predicate, Function)},
+     * Same effect as {@link Iterate#transformIf(Iterable, Predicate, Function)},
      * but executed in parallel batches, and with potentially reordered results.
      *
      * @param allowReorderedResult If the result can be in a different order.
      *                             Allowing reordering may yield faster execution.
-     * @return The collected elements. The Collection will be of the same type
+     * @return The transformed elements. The Collection will be of the same type
      *         as the input (List or Set)
      */
-    public static <T, V> Collection<V> collectIf(
+    public static <T, V> Collection<V> transformIf(
             Iterable<T> iterable,
             Predicate<? super T> predicate,
             Function<? super T, V> function,
             boolean allowReorderedResult)
     {
-        return ParallelIterate.collectIf(iterable, predicate, function, null, allowReorderedResult);
+        return ParallelIterate.transformIf(iterable, predicate, function, null, allowReorderedResult);
     }
 
     /**
-     * Same effect as {@link Iterate#collectIf(Iterable, Predicate, Function)},
+     * Same effect as {@link Iterate#transformIf(Iterable, Predicate, Function)},
      * but executed in parallel batches, and writing output into the specified collection.
      *
      * @param target               Where to write the output.
      * @param allowReorderedResult If the result can be in a different order.
      *                             Allowing reordering may yield faster execution.
-     * @return The 'target' collection, with the collected elements added.
+     * @return The 'target' collection, with the transformed elements added.
      */
-    public static <T, V, R extends Collection<V>> R collectIf(
+    public static <T, V, R extends Collection<V>> R transformIf(
             Iterable<T> iterable,
             Predicate<? super T> predicate,
             Function<? super T, V> function,
             R target,
             boolean allowReorderedResult)
     {
-        return ParallelIterate.collectIf(
+        return ParallelIterate.transformIf(
                 iterable,
                 predicate,
                 function,
@@ -895,7 +895,7 @@ public final class ParallelIterate
                 allowReorderedResult);
     }
 
-    public static <T, V, R extends Collection<V>> R collectIf(
+    public static <T, V, R extends Collection<V>> R transformIf(
             Iterable<T> iterable,
             Predicate<? super T> predicate,
             Function<? super T, V> function,

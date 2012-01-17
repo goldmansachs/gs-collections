@@ -62,7 +62,7 @@ public final class LazyIterate
     /**
      * Creates a deferred filtering iterable for the specified iterable
      */
-    public static <T> LazyIterable<T> select(Iterable<T> iterable, Predicate<? super T> predicate)
+    public static <T> LazyIterable<T> filter(Iterable<T> iterable, Predicate<? super T> predicate)
     {
         return new SelectIterable<T>(iterable, predicate);
     }
@@ -70,7 +70,7 @@ public final class LazyIterate
     /**
      * Creates a deferred negative filtering iterable for the specified iterable
      */
-    public static <T> LazyIterable<T> reject(Iterable<T> iterable, Predicate<? super T> predicate)
+    public static <T> LazyIterable<T> filterNot(Iterable<T> iterable, Predicate<? super T> predicate)
     {
         return new RejectIterable<T>(iterable, predicate);
     }
@@ -78,7 +78,7 @@ public final class LazyIterate
     /**
      * Creates a deferred transforming iterable for the specified iterable
      */
-    public static <T, V> LazyIterable<V> collect(
+    public static <T, V> LazyIterable<V> transform(
             Iterable<T> iterable,
             Function<? super T, ? extends V> function)
     {
@@ -88,7 +88,7 @@ public final class LazyIterate
     /**
      * Creates a deferred flattening iterable for the specified iterable
      */
-    public static <T, V> LazyIterable<V> flatCollect(
+    public static <T, V> LazyIterable<V> flatTransform(
             Iterable<T> iterable,
             Function<? super T, ? extends Iterable<V>> function)
     {
@@ -98,12 +98,12 @@ public final class LazyIterate
     /**
      * Creates a deferred filtering and transforming iterable for the specified iterable
      */
-    public static <T, V> LazyIterable<V> collectIf(
+    public static <T, V> LazyIterable<V> transformIf(
             Iterable<T> iterable,
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function)
     {
-        return LazyIterate.select(iterable, predicate).collect(function);
+        return LazyIterate.filter(iterable, predicate).transform(function);
     }
 
     /**

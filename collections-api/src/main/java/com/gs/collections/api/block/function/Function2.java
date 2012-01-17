@@ -19,7 +19,7 @@ package com.gs.collections.api.block.function;
 import java.io.Serializable;
 
 /**
- * A Function2 is used by injectInto() methods. It takes the injected argument as the first argument, and the
+ * A Function2 is used by foldLeft() methods. It takes the injected argument as the first argument, and the
  * current item of the collection as the second argument, for the first item in the collection.  The result of each
  * subsequent iteration is passed in as the first argument.
  *

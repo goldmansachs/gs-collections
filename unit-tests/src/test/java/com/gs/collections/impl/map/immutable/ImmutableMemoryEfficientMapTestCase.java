@@ -70,7 +70,7 @@ public abstract class ImmutableMemoryEfficientMapTestCase extends ImmutableMapTe
     public void collectValues()
     {
         ImmutableMap<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
-        ImmutableMap<String, String> result = map.collectValues(new Function2<String, String, String>()
+        ImmutableMap<String, String> result = map.transformValues(new Function2<String, String, String>()
         {
             public String value(String argument1, String argument2)
             {
@@ -101,7 +101,7 @@ public abstract class ImmutableMemoryEfficientMapTestCase extends ImmutableMapTe
     public void collect()
     {
         ImmutableMap<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
-        ImmutableMap<Integer, String> result = map.collect(new Function2<String, String, Pair<Integer, String>>()
+        ImmutableMap<Integer, String> result = map.transform(new Function2<String, String, Pair<Integer, String>>()
         {
             public Pair<Integer, String> value(String argument1, String argument2)
             {
@@ -398,7 +398,7 @@ public abstract class ImmutableMemoryEfficientMapTestCase extends ImmutableMapTe
 
         RichIterable<RichIterable<String>> chunks = map.chunk(2).toList();
 
-        RichIterable<Integer> sizes = chunks.collect(new Function<RichIterable<String>, Integer>()
+        RichIterable<Integer> sizes = chunks.transform(new Function<RichIterable<String>, Integer>()
         {
             public Integer valueOf(RichIterable<String> object)
             {
@@ -427,8 +427,8 @@ public abstract class ImmutableMemoryEfficientMapTestCase extends ImmutableMapTe
     public void collect_value()
     {
         ImmutableMap<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3);
-        MutableSet<String> collect = map.collect(Functions.getToString()).toSet();
-        UnifiedSet<String> collectToTarget = map.collect(Functions.getToString(), UnifiedSet.<String>newSet());
+        MutableSet<String> collect = map.transform(Functions.getToString()).toSet();
+        UnifiedSet<String> collectToTarget = map.transform(Functions.getToString(), UnifiedSet.<String>newSet());
 
         switch (map.size())
         {
@@ -455,8 +455,8 @@ public abstract class ImmutableMemoryEfficientMapTestCase extends ImmutableMapTe
     {
         ImmutableMap<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3);
 
-        MutableSet<String> collect = map.collectIf(Predicates.instanceOf(Integer.class), Functions.getToString()).toSet();
-        UnifiedSet<String> collectToTarget = map.collectIf(Predicates.instanceOf(Integer.class), Functions.getToString(), UnifiedSet.<String>newSet());
+        MutableSet<String> collect = map.transformIf(Predicates.instanceOf(Integer.class), Functions.getToString()).toSet();
+        UnifiedSet<String> collectToTarget = map.transformIf(Predicates.instanceOf(Integer.class), Functions.getToString(), UnifiedSet.<String>newSet());
 
         switch (map.size())
         {
@@ -492,7 +492,7 @@ public abstract class ImmutableMemoryEfficientMapTestCase extends ImmutableMapTe
                     }
                 };
 
-        MutableBag<Integer> collectWith = map.collectWith(addFunction, 1, HashBag.<Integer>newBag());
+        MutableBag<Integer> collectWith = map.transformWith(addFunction, 1, HashBag.<Integer>newBag());
 
         switch (map.size())
         {
@@ -645,15 +645,15 @@ public abstract class ImmutableMemoryEfficientMapTestCase extends ImmutableMapTe
 
         if (map.isEmpty())
         {
-            String resultNotFound = map.detect(Predicates.alwaysTrue());
+            String resultNotFound = map.find(Predicates.alwaysTrue());
             Assert.assertNull(resultNotFound);
         }
         else
         {
-            String resultFound = map.detect(Predicates.equal("One"));
+            String resultFound = map.find(Predicates.equal("One"));
             Assert.assertEquals("One", resultFound);
 
-            String resultNotFound = map.detect(Predicates.equal("Four"));
+            String resultNotFound = map.find(Predicates.equal("Four"));
             Assert.assertNull(resultNotFound);
         }
     }
@@ -673,15 +673,15 @@ public abstract class ImmutableMemoryEfficientMapTestCase extends ImmutableMapTe
 
         if (map.isEmpty())
         {
-            String resultNotFound = map.detectIfNone(Predicates.alwaysTrue(), function);
+            String resultNotFound = map.findIfNone(Predicates.alwaysTrue(), function);
             Assert.assertEquals("Zero", resultNotFound);
         }
         else
         {
-            String resultNotFound = map.detectIfNone(Predicates.equal("Four"), function);
+            String resultNotFound = map.findIfNone(Predicates.equal("Four"), function);
             Assert.assertEquals("Zero", resultNotFound);
 
-            String resultFound = map.detectIfNone(Predicates.equal("One"), function);
+            String resultFound = map.findIfNone(Predicates.equal("One"), function);
             Assert.assertEquals("One", resultFound);
         }
     }
@@ -708,8 +708,8 @@ public abstract class ImmutableMemoryEfficientMapTestCase extends ImmutableMapTe
             }
         };
 
-        RichIterable<Character> blob = map.flatCollect(function);
-        RichIterable<Character> blobFromTarget = map.flatCollect(function, FastList.<Character>newList());
+        RichIterable<Character> blob = map.flatTransform(function);
+        RichIterable<Character> blobFromTarget = map.flatTransform(function, FastList.<Character>newList());
 
         switch (map.size())
         {
@@ -852,10 +852,10 @@ public abstract class ImmutableMemoryEfficientMapTestCase extends ImmutableMapTe
                 break;
         }
 
-        Integer actual = map.injectInto(0, AddFunction.INTEGER);
+        Integer actual = map.foldLeft(0, AddFunction.INTEGER);
         Assert.assertEquals(expectedInteger, actual);
 
-        Sum sum = map.injectInto(new IntegerSum(0), SumProcedure.number());
+        Sum sum = map.foldLeft(new IntegerSum(0), SumProcedure.number());
         Assert.assertEquals(expectedSum, sum);
     }
 
@@ -958,8 +958,8 @@ public abstract class ImmutableMemoryEfficientMapTestCase extends ImmutableMapTe
     {
         ImmutableMap<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3);
 
-        MutableSet<Integer> rejected = map.reject(IntegerPredicates.isEven()).toSet();
-        UnifiedSet<Integer> rejectedIntoTarget = map.reject(IntegerPredicates.isEven(), UnifiedSet.<Integer>newSet());
+        MutableSet<Integer> rejected = map.filterNot(IntegerPredicates.isEven()).toSet();
+        UnifiedSet<Integer> rejectedIntoTarget = map.filterNot(IntegerPredicates.isEven(), UnifiedSet.<Integer>newSet());
 
         ImmutableSet<Integer> expected = this.expectReject(map.size());
         Assert.assertEquals(expected, rejected);
@@ -990,13 +990,13 @@ public abstract class ImmutableMemoryEfficientMapTestCase extends ImmutableMapTe
         switch (map.size())
         {
             case 1:
-                Verify.assertEmpty(map.rejectWith(Predicates2.<Integer>lessThan(), 2, UnifiedSet.<Integer>newSet()));
+                Verify.assertEmpty(map.filterNotWith(Predicates2.<Integer>lessThan(), 2, UnifiedSet.<Integer>newSet()));
                 break;
             case 2:
-                Verify.assertContainsAll(map.rejectWith(Predicates2.<Integer>lessThan(), 2, UnifiedSet.<Integer>newSet()), 2);
+                Verify.assertContainsAll(map.filterNotWith(Predicates2.<Integer>lessThan(), 2, UnifiedSet.<Integer>newSet()), 2);
                 break;
             case 3:
-                Verify.assertContainsAll(map.rejectWith(Predicates2.<Integer>lessThan(), 2, UnifiedSet.<Integer>newSet()), 2, 3);
+                Verify.assertContainsAll(map.filterNotWith(Predicates2.<Integer>lessThan(), 2, UnifiedSet.<Integer>newSet()), 2, 3);
                 break;
             default:
                 Verify.assertEmpty(map);
@@ -1010,8 +1010,8 @@ public abstract class ImmutableMemoryEfficientMapTestCase extends ImmutableMapTe
         ImmutableMap<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3);
         ImmutableSet<Integer> expected = this.expectSelect(map.size());
 
-        Assert.assertEquals(expected, map.select(IntegerPredicates.isEven()).toSet());
-        Assert.assertEquals(expected, map.select(IntegerPredicates.isEven(), UnifiedSet.<Integer>newSet()));
+        Assert.assertEquals(expected, map.filter(IntegerPredicates.isEven()).toSet());
+        Assert.assertEquals(expected, map.filter(IntegerPredicates.isEven(), UnifiedSet.<Integer>newSet()));
     }
 
     private ImmutableSet<Integer> expectSelect(int size)
@@ -1037,13 +1037,13 @@ public abstract class ImmutableMemoryEfficientMapTestCase extends ImmutableMapTe
         switch (map.size())
         {
             case 1:
-                Verify.assertContainsAll(map.selectWith(Predicates2.<Integer>lessThan(), 3, UnifiedSet.<Integer>newSet()), 1);
+                Verify.assertContainsAll(map.filterWith(Predicates2.<Integer>lessThan(), 3, UnifiedSet.<Integer>newSet()), 1);
                 break;
             case 2:
-                Verify.assertContainsAll(map.selectWith(Predicates2.<Integer>lessThan(), 3, UnifiedSet.<Integer>newSet()), 1, 2);
+                Verify.assertContainsAll(map.filterWith(Predicates2.<Integer>lessThan(), 3, UnifiedSet.<Integer>newSet()), 1, 2);
                 break;
             case 3:
-                Verify.assertContainsAll(map.selectWith(Predicates2.<Integer>lessThan(), 3, UnifiedSet.<Integer>newSet()), 1, 2);
+                Verify.assertContainsAll(map.filterWith(Predicates2.<Integer>lessThan(), 3, UnifiedSet.<Integer>newSet()), 1, 2);
                 break;
             default:
                 Verify.assertEmpty(map);
@@ -1096,16 +1096,16 @@ public abstract class ImmutableMemoryEfficientMapTestCase extends ImmutableMapTe
         RichIterable<Pair<String, Object>> pairs = map.zip(nulls);
         Assert.assertEquals(
                 map.toSet(),
-                pairs.collect(Functions.<String>firstOfPair()).toSet());
+                pairs.transform(Functions.<String>firstOfPair()).toSet());
         Assert.assertEquals(
                 nulls,
-                pairs.collect(Functions.<Object>secondOfPair(), Lists.mutable.of()));
+                pairs.transform(Functions.<Object>secondOfPair(), Lists.mutable.of()));
 
         RichIterable<Pair<String, Object>> pairsPlusOne = map.zip(nullsPlusOne);
         Assert.assertEquals(
                 map.toSet(),
-                pairsPlusOne.collect(Functions.<String>firstOfPair()).toSet());
-        Assert.assertEquals(nulls, pairsPlusOne.collect(Functions.<Object>secondOfPair(), Lists.mutable.of()));
+                pairsPlusOne.transform(Functions.<String>firstOfPair()).toSet());
+        Assert.assertEquals(nulls, pairsPlusOne.transform(Functions.<Object>secondOfPair(), Lists.mutable.of()));
 
         if (map.notEmpty())
         {
@@ -1128,12 +1128,12 @@ public abstract class ImmutableMemoryEfficientMapTestCase extends ImmutableMapTe
 
         Assert.assertEquals(
                 map.toSet(),
-                pairs.collect(Functions.<String>firstOfPair()).toSet());
+                pairs.transform(Functions.<String>firstOfPair()).toSet());
         if (map.notEmpty())
         {
             Assert.assertEquals(
                     Interval.zeroTo(map.size() - 1).toSet(),
-                    pairs.collect(Functions.<Integer>secondOfPair(), UnifiedSet.<Integer>newSet()));
+                    pairs.transform(Functions.<Integer>secondOfPair(), UnifiedSet.<Integer>newSet()));
         }
 
         Assert.assertEquals(

@@ -208,12 +208,12 @@ public final class MultiReaderFastList<T>
         }
     }
 
-    public <V> MutableList<V> collect(Function<? super T, ? extends V> function)
+    public <V> MutableList<V> transform(Function<? super T, ? extends V> function)
     {
         this.acquireReadLock();
         try
         {
-            return this.delegate.collect(function);
+            return this.delegate.transform(function);
         }
         finally
         {
@@ -221,13 +221,13 @@ public final class MultiReaderFastList<T>
         }
     }
 
-    public <V> MutableList<V> flatCollect(
+    public <V> MutableList<V> flatTransform(
             Function<? super T, ? extends Iterable<V>> function)
     {
         this.acquireReadLock();
         try
         {
-            return this.delegate.flatCollect(function);
+            return this.delegate.flatTransform(function);
         }
         finally
         {
@@ -235,14 +235,14 @@ public final class MultiReaderFastList<T>
         }
     }
 
-    public <V> MutableList<V> collectIf(
+    public <V> MutableList<V> transformIf(
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function)
     {
         this.acquireReadLock();
         try
         {
-            return this.delegate.collectIf(predicate, function);
+            return this.delegate.transformIf(predicate, function);
         }
         finally
         {
@@ -250,14 +250,14 @@ public final class MultiReaderFastList<T>
         }
     }
 
-    public <P, V> MutableList<V> collectWith(
+    public <P, V> MutableList<V> transformWith(
             Function2<? super T, ? super P, ? extends V> function,
             P parameter)
     {
         this.acquireReadLock();
         try
         {
-            return this.delegate.collectWith(function, parameter);
+            return this.delegate.transformWith(function, parameter);
         }
         finally
         {
@@ -270,12 +270,12 @@ public final class MultiReaderFastList<T>
         return MultiReaderFastList.newList();
     }
 
-    public MutableList<T> reject(Predicate<? super T> predicate)
+    public MutableList<T> filterNot(Predicate<? super T> predicate)
     {
         this.acquireReadLock();
         try
         {
-            return this.delegate.reject(predicate);
+            return this.delegate.filterNot(predicate);
         }
         finally
         {
@@ -283,14 +283,14 @@ public final class MultiReaderFastList<T>
         }
     }
 
-    public <P> MutableList<T> rejectWith(
+    public <P> MutableList<T> filterNotWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
         this.acquireReadLock();
         try
         {
-            return this.delegate.rejectWith(predicate, parameter);
+            return this.delegate.filterNotWith(predicate, parameter);
         }
         finally
         {
@@ -298,12 +298,12 @@ public final class MultiReaderFastList<T>
         }
     }
 
-    public MutableList<T> select(Predicate<? super T> predicate)
+    public MutableList<T> filter(Predicate<? super T> predicate)
     {
         this.acquireReadLock();
         try
         {
-            return this.delegate.select(predicate);
+            return this.delegate.filter(predicate);
         }
         finally
         {
@@ -311,14 +311,14 @@ public final class MultiReaderFastList<T>
         }
     }
 
-    public <P> MutableList<T> selectWith(
+    public <P> MutableList<T> filterWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
         this.acquireReadLock();
         try
         {
-            return this.delegate.selectWith(predicate, parameter);
+            return this.delegate.filterWith(predicate, parameter);
         }
         finally
         {
@@ -692,28 +692,28 @@ public final class MultiReaderFastList<T>
             return this.getDelegate().clone();
         }
 
-        public <V> MutableList<V> collect(Function<? super T, ? extends V> function)
+        public <V> MutableList<V> transform(Function<? super T, ? extends V> function)
         {
-            return this.getDelegate().collect(function);
+            return this.getDelegate().transform(function);
         }
 
-        public <V> MutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+        public <V> MutableList<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
         {
-            return this.getDelegate().flatCollect(function);
+            return this.getDelegate().flatTransform(function);
         }
 
-        public <V> MutableList<V> collectIf(
+        public <V> MutableList<V> transformIf(
                 Predicate<? super T> predicate,
                 Function<? super T, ? extends V> function)
         {
-            return this.getDelegate().collectIf(predicate, function);
+            return this.getDelegate().transformIf(predicate, function);
         }
 
-        public <P, V> MutableList<V> collectWith(
+        public <P, V> MutableList<V> transformWith(
                 Function2<? super T, ? super P, ? extends V> function,
                 P parameter)
         {
-            return this.getDelegate().collectWith(function, parameter);
+            return this.getDelegate().transformWith(function, parameter);
         }
 
         public <V> MutableListMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
@@ -746,28 +746,28 @@ public final class MultiReaderFastList<T>
             return this.getDelegate().newEmpty();
         }
 
-        public MutableList<T> reject(Predicate<? super T> predicate)
+        public MutableList<T> filterNot(Predicate<? super T> predicate)
         {
-            return this.getDelegate().reject(predicate);
+            return this.getDelegate().filterNot(predicate);
         }
 
-        public <P> MutableList<T> rejectWith(
+        public <P> MutableList<T> filterNotWith(
                 Predicate2<? super T, ? super P> predicate,
                 P parameter)
         {
-            return this.getDelegate().rejectWith(predicate, parameter);
+            return this.getDelegate().filterNotWith(predicate, parameter);
         }
 
-        public MutableList<T> select(Predicate<? super T> predicate)
+        public MutableList<T> filter(Predicate<? super T> predicate)
         {
-            return this.getDelegate().select(predicate);
+            return this.getDelegate().filter(predicate);
         }
 
-        public <P> MutableList<T> selectWith(
+        public <P> MutableList<T> filterWith(
                 Predicate2<? super T, ? super P> predicate,
                 P parameter)
         {
-            return this.getDelegate().selectWith(predicate, parameter);
+            return this.getDelegate().filterWith(predicate, parameter);
         }
 
         public PartitionMutableList<T> partition(Predicate<? super T> predicate)

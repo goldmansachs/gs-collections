@@ -33,11 +33,11 @@ public interface UnsortedSetIterable<T>
      */
     UnsortedSetIterable<UnsortedSetIterable<T>> powerSet();
 
-    <V> UnsortedSetIterable<V> collect(Function<? super T, ? extends V> function);
+    <V> UnsortedSetIterable<V> transform(Function<? super T, ? extends V> function);
 
-    <V> UnsortedSetIterable<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
+    <V> UnsortedSetIterable<V> transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 
-    <V> UnsortedSetIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
+    <V> UnsortedSetIterable<V> flatTransform(Function<? super T, ? extends Iterable<V>> function);
 
     <V> SetMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
 
@@ -51,9 +51,9 @@ public interface UnsortedSetIterable<T>
 
     UnsortedSetIterable<T> symmetricDifference(SetIterable<? extends T> setB);
 
-    UnsortedSetIterable<T> select(Predicate<? super T> predicate);
+    UnsortedSetIterable<T> filter(Predicate<? super T> predicate);
 
-    UnsortedSetIterable<T> reject(Predicate<? super T> predicate);
+    UnsortedSetIterable<T> filterNot(Predicate<? super T> predicate);
 
     <S> UnsortedSetIterable<Pair<T, S>> zip(Iterable<S> that);
 

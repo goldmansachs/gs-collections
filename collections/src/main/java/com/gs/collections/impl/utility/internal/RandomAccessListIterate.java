@@ -48,8 +48,7 @@ import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.Iterate;
 
 /**
- * The ListIterate class provides a few of the methods from the Smalltalk Collection Protocol for use with ArrayLists.
- * This includes do:, select:, reject:, collect:, inject:into:, detect:, detect:ifNone:, anySatisfy: and allSatisfy:
+ * The ListIterate class provides a iteration protocol methods for List instances
  */
 public final class RandomAccessListIterate
 {
@@ -67,28 +66,28 @@ public final class RandomAccessListIterate
     }
 
     /**
-     * @see Iterate#select(Iterable, Predicate)
+     * @see Iterate#filter(Iterable, Predicate)
      */
-    public static <T> MutableList<T> select(List<T> list, Predicate<? super T> predicate)
+    public static <T> MutableList<T> filter(List<T> list, Predicate<? super T> predicate)
     {
-        return RandomAccessListIterate.select(list, predicate, FastList.<T>newList());
+        return RandomAccessListIterate.filter(list, predicate, FastList.<T>newList());
     }
 
     /**
-     * @see Iterate#selectWith(Iterable, Predicate2, Object)
+     * @see Iterate#filterWith(Iterable, Predicate2, Object)
      */
-    public static <T, IV> MutableList<T> selectWith(
+    public static <T, IV> MutableList<T> filterWith(
             List<T> list,
             Predicate2<? super T, ? super IV> predicate,
             IV injectedValue)
     {
-        return RandomAccessListIterate.selectWith(list, predicate, injectedValue, FastList.<T>newList());
+        return RandomAccessListIterate.filterWith(list, predicate, injectedValue, FastList.<T>newList());
     }
 
     /**
-     * @see Iterate#select(Iterable, Predicate, Collection)
+     * @see Iterate#filter(Iterable, Predicate, Collection)
      */
-    public static <T, R extends Collection<T>> R select(
+    public static <T, R extends Collection<T>> R filter(
             List<T> list,
             Predicate<? super T> predicate,
             R targetCollection)
@@ -106,9 +105,9 @@ public final class RandomAccessListIterate
     }
 
     /**
-     * @see Iterate#selectWith(Iterable, Predicate2, Object, Collection)
+     * @see Iterate#filterWith(Iterable, Predicate2, Object, Collection)
      */
-    public static <T, P, R extends Collection<T>> R selectWith(
+    public static <T, P, R extends Collection<T>> R filterWith(
             List<T> list,
             Predicate2<? super T, ? super P> predicate,
             P parameter,
@@ -163,20 +162,20 @@ public final class RandomAccessListIterate
     }
 
     /**
-     * @see Iterate#collectIf(Iterable, Predicate, Function)
+     * @see Iterate#transformIf(Iterable, Predicate, Function)
      */
-    public static <T, A> MutableList<A> collectIf(
+    public static <T, A> MutableList<A> tranformIf(
             List<T> list,
             Predicate<? super T> predicate,
             Function<? super T, ? extends A> function)
     {
-        return RandomAccessListIterate.collectIf(list, predicate, function, FastList.<A>newList());
+        return RandomAccessListIterate.tranformIf(list, predicate, function, FastList.<A>newList());
     }
 
     /**
-     * @see Iterate#collectIf(Iterable, Predicate, Function, Collection)
+     * @see Iterate#tranformIf(Iterable, Predicate, Function, Collection)
      */
-    public static <T, A, R extends Collection<A>> R collectIf(
+    public static <T, A, R extends Collection<A>> R tranformIf(
             List<T> list,
             Predicate<? super T> predicate,
             Function<? super T, ? extends A> function,
@@ -195,28 +194,28 @@ public final class RandomAccessListIterate
     }
 
     /**
-     * @see Iterate#reject(Iterable, Predicate)
+     * @see Iterate#filterNot(Iterable, Predicate)
      */
-    public static <T> MutableList<T> reject(List<T> list, Predicate<? super T> predicate)
+    public static <T> MutableList<T> filterNot(List<T> list, Predicate<? super T> predicate)
     {
-        return RandomAccessListIterate.reject(list, predicate, FastList.<T>newList());
+        return RandomAccessListIterate.filterNot(list, predicate, FastList.<T>newList());
     }
 
     /**
-     * @see Iterate#rejectWith(Iterable, Predicate2, Object)
+     * @see Iterate#filterNotWith(Iterable, Predicate2, Object)
      */
-    public static <T, IV> MutableList<T> rejectWith(
+    public static <T, IV> MutableList<T> filterNotWith(
             List<T> list,
             Predicate2<? super T, ? super IV> predicate,
             IV injectedValue)
     {
-        return RandomAccessListIterate.rejectWith(list, predicate, injectedValue, FastList.<T>newList());
+        return RandomAccessListIterate.filterNotWith(list, predicate, injectedValue, FastList.<T>newList());
     }
 
     /**
-     * @see Iterate#reject(Iterable, Predicate, Collection)
+     * @see Iterate#filterNot(Iterable, Predicate, Collection)
      */
-    public static <T, R extends Collection<T>> R reject(
+    public static <T, R extends Collection<T>> R filterNot(
             List<T> list,
             Predicate<? super T> predicate,
             R targetCollection)
@@ -234,9 +233,9 @@ public final class RandomAccessListIterate
     }
 
     /**
-     * @see Iterate#reject(Iterable, Predicate, Collection)
+     * @see Iterate#filterNot(Iterable, Predicate, Collection)
      */
-    public static <T, P, R extends Collection<T>> R rejectWith(
+    public static <T, P, R extends Collection<T>> R filterNotWith(
             List<T> list,
             Predicate2<? super T, ? super P> predicate,
             P parameter,
@@ -255,19 +254,19 @@ public final class RandomAccessListIterate
     }
 
     /**
-     * @see Iterate#collect(Iterable, Function)
+     * @see Iterate#transform(Iterable, Function)
      */
-    public static <T, A> MutableList<A> collect(
+    public static <T, A> MutableList<A> transform(
             List<T> list,
             Function<? super T, ? extends A> function)
     {
-        return collect(list, function, FastList.<A>newList(list.size()));
+        return transform(list, function, FastList.<A>newList(list.size()));
     }
 
     /**
-     * @see Iterate#collect(Iterable, Function, Collection)
+     * @see Iterate#transform(Iterable, Function, Collection)
      */
-    public static <T, A, R extends Collection<A>> R collect(
+    public static <T, A, R extends Collection<A>> R transform(
             List<T> list,
             Function<? super T, ? extends A> function,
             R targetCollection)
@@ -281,19 +280,19 @@ public final class RandomAccessListIterate
     }
 
     /**
-     * @see Iterate#flatCollect(Iterable, Function)
+     * @see Iterate#flatTransform(Iterable, Function)
      */
-    public static <T, A> MutableList<A> flatCollect(
+    public static <T, A> MutableList<A> flatTransform(
             List<T> list,
             Function<? super T, ? extends Iterable<A>> function)
     {
-        return flatCollect(list, function, FastList.<A>newList(list.size()));
+        return flatTransform(list, function, FastList.<A>newList(list.size()));
     }
 
     /**
-     * @see Iterate#flatCollect(Iterable, Function, Collection)
+     * @see Iterate#flatTransform(Iterable, Function, Collection)
      */
-    public static <T, A, R extends Collection<A>> R flatCollect(
+    public static <T, A, R extends Collection<A>> R flatTransform(
             List<T> list,
             Function<? super T, ? extends Iterable<A>> function,
             R targetCollection)
@@ -446,7 +445,7 @@ public final class RandomAccessListIterate
         }
     }
 
-    public static <T> T detect(List<T> list, Predicate<? super T> predicate)
+    public static <T> T find(List<T> list, Predicate<? super T> predicate)
     {
         int size = list.size();
         for (int i = 0; i < size; i++)
@@ -460,7 +459,7 @@ public final class RandomAccessListIterate
         return null;
     }
 
-    public static <T, IV> T detectWith(List<T> list, Predicate2<? super T, ? super IV> predicate, IV injectedValue)
+    public static <T, IV> T findWith(List<T> list, Predicate2<? super T, ? super IV> predicate, IV injectedValue)
     {
         int size = list.size();
         for (int i = 0; i < size; i++)
@@ -474,7 +473,7 @@ public final class RandomAccessListIterate
         return null;
     }
 
-    public static <T, IV> IV injectInto(IV injectValue, List<T> list, Function2<? super IV, ? super T, ? extends IV> function)
+    public static <T, IV> IV foldLeft(IV injectValue, List<T> list, Function2<? super IV, ? super T, ? extends IV> function)
     {
         IV result = injectValue;
         int size = list.size();
@@ -485,7 +484,7 @@ public final class RandomAccessListIterate
         return result;
     }
 
-    public static <T> int injectInto(int injectValue, List<T> list, IntObjectToIntFunction<? super T> function)
+    public static <T> int foldLeft(int injectValue, List<T> list, IntObjectToIntFunction<? super T> function)
     {
         int result = injectValue;
         int size = list.size();
@@ -496,7 +495,7 @@ public final class RandomAccessListIterate
         return result;
     }
 
-    public static <T> long injectInto(long injectValue, List<T> list, LongObjectToLongFunction<? super T> function)
+    public static <T> long foldLeft(long injectValue, List<T> list, LongObjectToLongFunction<? super T> function)
     {
         long result = injectValue;
         int size = list.size();
@@ -507,7 +506,7 @@ public final class RandomAccessListIterate
         return result;
     }
 
-    public static <T> double injectInto(double injectValue, List<T> list, DoubleObjectToDoubleFunction<? super T> function)
+    public static <T> double foldLeft(double injectValue, List<T> list, DoubleObjectToDoubleFunction<? super T> function)
     {
         double result = injectValue;
         int size = list.size();
@@ -570,7 +569,7 @@ public final class RandomAccessListIterate
         return true;
     }
 
-    public static <T, IV> Twin<MutableList<T>> selectAndRejectWith(
+    public static <T, IV> Twin<MutableList<T>> partitionWith(
             List<T> list,
             Predicate2<? super T, ? super IV> predicate,
             IV injectedValue)
@@ -644,7 +643,7 @@ public final class RandomAccessListIterate
     /**
      * Searches for the first occurence where the predicate evaluates to true.
      */
-    public static <T> int detectIndex(List<T> list, Predicate<? super T> predicate)
+    public static <T> int findIndex(List<T> list, Predicate<? super T> predicate)
     {
         int size = list.size();
         for (int i = 0; i < size; i++)
@@ -660,7 +659,7 @@ public final class RandomAccessListIterate
     /**
      * Searches for the first occurence where the predicate evaluates to true.
      */
-    public static <T, IV> int detectIndexWith(List<T> list, Predicate2<? super T, ? super IV> predicate, IV injectedValue)
+    public static <T, IV> int findIndexWith(List<T> list, Predicate2<? super T, ? super IV> predicate, IV injectedValue)
     {
         int size = list.size();
         for (int i = 0; i < size; i++)
@@ -673,7 +672,7 @@ public final class RandomAccessListIterate
         return -1;
     }
 
-    public static <T, IV, P> IV injectIntoWith(
+    public static <T, IV, P> IV foldLeftWith(
             IV injectedValue,
             List<T> list,
             Function3<? super IV, ? super T, ? super P, ? extends IV> function,
@@ -697,7 +696,7 @@ public final class RandomAccessListIterate
         }
     }
 
-    public static <T, P, A, R extends Collection<A>> R collectWith(
+    public static <T, P, A, R extends Collection<A>> R transformWith(
             List<T> list,
             Function2<? super T, ? super P, ? extends A> function,
             P parameter,

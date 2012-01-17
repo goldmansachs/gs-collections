@@ -23,7 +23,7 @@ import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.lazy.iterator.CollectIterator;
+import com.gs.collections.impl.lazy.iterator.TransformIterator;
 import com.gs.collections.impl.utility.Iterate;
 import net.jcip.annotations.Immutable;
 
@@ -60,7 +60,7 @@ public class CollectIterable<T, V>
 
     public Iterator<V> iterator()
     {
-        return new CollectIterator<T, V>(this.adapted, this.function);
+        return new TransformIterator<T, V>(this.adapted, this.function);
     }
 
     @Override

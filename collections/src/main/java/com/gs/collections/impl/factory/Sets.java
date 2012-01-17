@@ -215,12 +215,12 @@ public final class Sets
 
     private static <E> Comparator<? super E> extractComparator(Set<? extends E>... sets)
     {
-        Collection<Set<? extends E>> sortedSetCollection = ArrayIterate.select(sets, INSTANCE_OF_SORTED_SET_PREDICATE);
+        Collection<Set<? extends E>> sortedSetCollection = ArrayIterate.filter(sets, INSTANCE_OF_SORTED_SET_PREDICATE);
         if (sortedSetCollection.isEmpty())
         {
             return null;
         }
-        SortedSet<E> sortedSetWithComparator = (SortedSet<E>) Iterate.detect(sortedSetCollection, HAS_NON_NULL_COMPARATOR);
+        SortedSet<E> sortedSetWithComparator = (SortedSet<E>) Iterate.find(sortedSetCollection, HAS_NON_NULL_COMPARATOR);
         if (sortedSetWithComparator != null)
         {
             return sortedSetWithComparator.comparator();
@@ -277,11 +277,11 @@ public final class Sets
     public static <T> MutableSet<MutableSet<T>> powerSet(Set<T> set)
     {
         MutableSet<MutableSet<T>> seed = UnifiedSet.<MutableSet<T>>newSetWith(UnifiedSet.<T>newSet());
-        return Iterate.injectInto(seed, set, new Function2<MutableSet<MutableSet<T>>, T, MutableSet<MutableSet<T>>>()
+        return Iterate.foldLeft(seed, set, new Function2<MutableSet<MutableSet<T>>, T, MutableSet<MutableSet<T>>>()
         {
             public MutableSet<MutableSet<T>> value(MutableSet<MutableSet<T>> accumulator, final T element)
             {
-                return Sets.union(accumulator, accumulator.collect(new Function<MutableSet<T>, MutableSet<T>>()
+                return Sets.union(accumulator, accumulator.transform(new Function<MutableSet<T>, MutableSet<T>>()
                 {
                     public MutableSet<T> valueOf(MutableSet<T> innerSet)
                     {
@@ -294,11 +294,11 @@ public final class Sets
 
     public static <A, B> LazyIterable<Pair<A, B>> cartesianProduct(Set<A> set1, final Set<B> set2)
     {
-        return LazyIterate.flatCollect(set1, new Function<A, LazyIterable<Pair<A, B>>>()
+        return LazyIterate.flatTransform(set1, new Function<A, LazyIterable<Pair<A, B>>>()
         {
             public LazyIterable<Pair<A, B>> valueOf(final A first)
             {
-                return LazyIterate.collect(set2, new Function<B, Pair<A, B>>()
+                return LazyIterate.transform(set2, new Function<B, Pair<A, B>>()
                 {
                     public Pair<A, B> valueOf(B second)
                     {

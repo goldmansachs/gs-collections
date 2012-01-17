@@ -19,7 +19,7 @@ package com.gs.collections.api.block.function;
 import java.io.Serializable;
 
 /**
- * A Function3 is used by injectIntoWith().  In the injectIntoWith() method the block takes the injected
+ * A Function3 is used by foldLeftWith().  In the injectIntoWith() method the block takes the injected
  * argument as the first argument, the current item of the collection as the second argument, and the specified
  * parameter for the third argument. The result of each subsequent iteration is passed in as the first argument.
  */

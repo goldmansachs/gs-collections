@@ -37,7 +37,7 @@ public class SetLogicTest
     @Test
     public void inOnlyInAMutable()
     {
-        MutableSet<Integer> onlyInA = this.setA.reject(Predicates.in(this.setB), UnifiedSet.<Integer>newSet());
+        MutableSet<Integer> onlyInA = this.setA.filterNot(Predicates.in(this.setB), UnifiedSet.<Integer>newSet());
         Assert.assertEquals(UnifiedSet.newSetWith(1, 2), onlyInA);
     }
 
@@ -52,15 +52,15 @@ public class SetLogicTest
     @Test
     public void inBothAAndBMutable()
     {
-        Assert.assertEquals(UnifiedSet.newSetWith(3, 4), this.setA.select(Predicates.in(this.setB)));
+        Assert.assertEquals(UnifiedSet.newSetWith(3, 4), this.setA.filter(Predicates.in(this.setB)));
     }
 
     @Test
     public void inAOrBButNotInBoth()
     {
         MutableSet<Integer> nonOverlappingSet = UnifiedSet.newSet();
-        this.setA.select(Predicates.notIn(this.setB), nonOverlappingSet);
-        this.setB.select(Predicates.notIn(this.setA), nonOverlappingSet);
+        this.setA.filter(Predicates.notIn(this.setB), nonOverlappingSet);
+        this.setB.filter(Predicates.notIn(this.setA), nonOverlappingSet);
         Assert.assertEquals(UnifiedSet.newSetWith(1, 2, 5, 6), nonOverlappingSet);
     }
 }

@@ -45,7 +45,7 @@ public class FlatCollectIterableTest extends AbstractLazyIterableTestCase
     @Override
     protected LazyIterable<Integer> newWith(Integer... integers)
     {
-        return LazyIterate.flatCollect(FastList.newListWith(integers), new Function<Integer, Iterable<Integer>>()
+        return LazyIterate.flatTransform(FastList.newListWith(integers), new Function<Integer, Iterable<Integer>>()
         {
             public Iterable<Integer> valueOf(Integer object)
             {

@@ -51,27 +51,27 @@ public interface ImmutableSortedMap<K, V>
 
     MutableSortedMap<K, V> toSortedMap();
 
-    ImmutableSortedMap<K, V> select(Predicate2<? super K, ? super V> predicate);
+    ImmutableSortedMap<K, V> filter(Predicate2<? super K, ? super V> predicate);
 
-    <K2, V2> ImmutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function);
+    <K2, V2> ImmutableMap<K2, V2> transform(Function2<? super K, ? super V, Pair<K2, V2>> function);
 
-    ImmutableSortedMap<K, V> reject(Predicate2<? super K, ? super V> predicate);
+    ImmutableSortedMap<K, V> filterNot(Predicate2<? super K, ? super V> predicate);
 
     PartitionImmutableList<V> partition(Predicate<? super V> predicate);
 
-    <R> ImmutableSortedMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function);
+    <R> ImmutableSortedMap<K, R> transformValues(Function2<? super K, ? super V, ? extends R> function);
 
-    ImmutableList<V> select(Predicate<? super V> predicate);
+    ImmutableList<V> filter(Predicate<? super V> predicate);
 
-    ImmutableList<V> reject(Predicate<? super V> predicate);
+    ImmutableList<V> filterNot(Predicate<? super V> predicate);
 
-    <R> ImmutableList<R> collect(Function<? super V, ? extends R> function);
+    <R> ImmutableList<R> transform(Function<? super V, ? extends R> function);
 
-    <R> ImmutableList<R> collectIf(
+    <R> ImmutableList<R> transformIf(
             Predicate<? super V> predicate,
             Function<? super V, ? extends R> function);
 
-    <R> ImmutableList<R> flatCollect(Function<? super V, ? extends Iterable<R>> function);
+    <R> ImmutableList<R> flatTransform(Function<? super V, ? extends Iterable<R>> function);
 
     <S> ImmutableList<Pair<V, S>> zip(Iterable<S> that);
 

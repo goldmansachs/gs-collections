@@ -132,21 +132,21 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     public void injectInto()
     {
         MutableList<Integer> list = MultiReaderFastList.newListWith(1, 2, 3);
-        Assert.assertEquals(Integer.valueOf(7), list.injectInto(1, AddFunction.INTEGER));
+        Assert.assertEquals(Integer.valueOf(7), list.foldLeft(1, AddFunction.INTEGER));
     }
 
     @Test
     public void injectIntoDouble2()
     {
         MutableList<Double> list = MultiReaderFastList.newListWith(1.0, 2.0, 3.0);
-        Assert.assertEquals(7.0d, list.injectInto(1.0, AddFunction.DOUBLE_TO_DOUBLE), 0.001);
+        Assert.assertEquals(7.0d, list.foldLeft(1.0, AddFunction.DOUBLE_TO_DOUBLE), 0.001);
     }
 
     @Test
     public void injectIntoString()
     {
         MutableList<String> list = MultiReaderFastList.newListWith("1", "2", "3");
-        Assert.assertEquals("0123", list.injectInto("0", AddFunction.STRING));
+        Assert.assertEquals("0123", list.foldLeft("0", AddFunction.STRING));
     }
 
     @Test
@@ -154,7 +154,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     {
         MutableList<String> list = MultiReaderFastList.newListWith("1", "12", "123");
         Function2<Integer, String, Integer> function = MaxSizeFunction.STRING;
-        Assert.assertEquals(Integer.valueOf(3), list.injectInto(Integer.MIN_VALUE, function));
+        Assert.assertEquals(Integer.valueOf(3), list.foldLeft(Integer.MIN_VALUE, function));
     }
 
     @Test
@@ -162,7 +162,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     {
         MutableList<String> list = MultiReaderFastList.newListWith("1", "12", "123");
         Function2<Integer, String, Integer> function = MinSizeFunction.STRING;
-        Assert.assertEquals(Integer.valueOf(1), list.injectInto(Integer.MAX_VALUE, function));
+        Assert.assertEquals(Integer.valueOf(1), list.foldLeft(Integer.MAX_VALUE, function));
     }
 
     @Override
@@ -170,7 +170,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     public void collect()
     {
         MutableList<Boolean> list = MultiReaderFastList.newListWith(Boolean.TRUE, Boolean.FALSE, null);
-        MutableList<String> newCollection = list.collect(Functions.getToString());
+        MutableList<String> newCollection = list.transform(Functions.getToString());
         Assert.assertEquals(FastList.newListWith("true", "false", "null"), newCollection);
     }
 
@@ -223,9 +223,9 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     public void detect()
     {
         MutableList<Integer> list = this.getIntegerList();
-        Assert.assertEquals(Integer.valueOf(1), list.detect(Predicates.equal(1)));
+        Assert.assertEquals(Integer.valueOf(1), list.find(Predicates.equal(1)));
         MutableList<Integer> list2 = MultiReaderFastList.newListWith(1, 2, 2);
-        Assert.assertSame(list2.get(1), list2.detect(Predicates.equal(2)));
+        Assert.assertSame(list2.get(1), list2.find(Predicates.equal(2)));
     }
 
     @Override
@@ -233,16 +233,16 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     public void detectWith()
     {
         MutableList<Integer> list = this.getIntegerList();
-        Assert.assertEquals(Integer.valueOf(1), list.detectWith(Predicates2.equal(), 1));
+        Assert.assertEquals(Integer.valueOf(1), list.findWith(Predicates2.equal(), 1));
         MutableList<Integer> list2 = MultiReaderFastList.newListWith(1, 2, 2);
-        Assert.assertSame(list2.get(1), list2.detectWith(Predicates2.equal(), 2));
+        Assert.assertSame(list2.get(1), list2.findWith(Predicates2.equal(), 2));
     }
 
     @Test
     public void detectWithIfNone()
     {
         MutableList<Integer> list = this.getIntegerList();
-        Assert.assertNull(list.detectWithIfNone(Predicates2.equal(), 6, new PassThruFunction0<Integer>(null)));
+        Assert.assertNull(list.findWithIfNone(Predicates2.equal(), 6, new PassThruFunction0<Integer>(null)));
     }
 
     @Override
@@ -250,7 +250,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     public void select()
     {
         MutableList<Integer> list = this.getIntegerList();
-        MutableList<Integer> results = list.select(Predicates.instanceOf(Integer.class));
+        MutableList<Integer> results = list.filter(Predicates.instanceOf(Integer.class));
         Verify.assertSize(5, results);
     }
 
@@ -259,7 +259,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     public void selectWith()
     {
         MutableList<Integer> list = this.getIntegerList();
-        MutableList<Integer> results = list.selectWith(Predicates2.instanceOf(), Integer.class);
+        MutableList<Integer> results = list.filterWith(Predicates2.instanceOf(), Integer.class);
         Verify.assertSize(5, results);
     }
 
@@ -268,7 +268,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     public void rejectWith()
     {
         MutableList<Integer> list = this.getIntegerList();
-        MutableList<Integer> results = list.rejectWith(Predicates2.instanceOf(), Integer.class);
+        MutableList<Integer> results = list.filterNotWith(Predicates2.instanceOf(), Integer.class);
         Verify.assertEmpty(results);
     }
 
@@ -278,7 +278,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     {
         MutableList<Integer> list = this.getIntegerList();
         Twin<MutableList<Integer>> result =
-                list.selectAndRejectWith(Predicates2.in(), Lists.fixedSize.of(1));
+                list.partitionWith(Predicates2.in(), Lists.fixedSize.of(1));
         Verify.assertSize(1, result.getOne());
         Verify.assertSize(4, result.getTwo());
     }
@@ -345,10 +345,10 @@ public class MultiReaderFastListTest extends AbstractListTestCase
         Function0<Integer> defaultResultFunction = new PassThruFunction0<Integer>(6);
         Assert.assertEquals(
                 Integer.valueOf(3),
-                MultiReaderFastList.newListWith(1, 2, 3, 4, 5).detectIfNone(Predicates.equal(3), defaultResultFunction));
+                MultiReaderFastList.newListWith(1, 2, 3, 4, 5).findIfNone(Predicates.equal(3), defaultResultFunction));
         Assert.assertEquals(
                 Integer.valueOf(6),
-                MultiReaderFastList.newListWith(1, 2, 3, 4, 5).detectIfNone(Predicates.equal(6), defaultResultFunction));
+                MultiReaderFastList.newListWith(1, 2, 3, 4, 5).findIfNone(Predicates.equal(6), defaultResultFunction));
     }
 
     @Override
@@ -399,12 +399,12 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     {
         Assert.assertEquals(
                 FastList.newListWith("1", "2", "3"),
-                MultiReaderFastList.newListWith(1, 2, 3).collectIf(
+                MultiReaderFastList.newListWith(1, 2, 3).transformIf(
                         Predicates.instanceOf(Integer.class),
                         Functions.getToString()));
         Assert.assertEquals(
                 FastList.newListWith("1", "2", "3"),
-                MultiReaderFastList.newListWith(1, 2, 3).collectIf(
+                MultiReaderFastList.newListWith(1, 2, 3).transformIf(
                         Predicates.instanceOf(Integer.class),
                         Functions.getToString(),
                         FastList.<String>newList()));
@@ -422,9 +422,9 @@ public class MultiReaderFastListTest extends AbstractListTestCase
                         return each + parameter;
                     }
                 };
-        Verify.assertContainsAll(MultiReaderFastList.newListWith(1, 2, 3).collectWith(addZeroFunction, 0), 1, 2, 3);
+        Verify.assertContainsAll(MultiReaderFastList.newListWith(1, 2, 3).transformWith(addZeroFunction, 0), 1, 2, 3);
         Verify.assertContainsAll(
-                MultiReaderFastList.newListWith(1, 2, 3).collectWith(addZeroFunction,
+                MultiReaderFastList.newListWith(1, 2, 3).transformWith(addZeroFunction,
                         0,
                         FastList.<Integer>newList()), 1, 2, 3);
     }
@@ -434,7 +434,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     public void injectIntoWith()
     {
         MutableList<Integer> objects = MultiReaderFastList.newListWith(1, 2, 3);
-        Integer result = objects.injectIntoWith(1, new Function3<Integer, Integer, Integer, Integer>()
+        Integer result = objects.foldLeftWith(1, new Function3<Integer, Integer, Integer, Integer>()
         {
             public Integer value(Integer injectedValued, Integer item, Integer parameter)
             {
@@ -610,8 +610,8 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     @Test
     public void reject()
     {
-        Verify.assertContainsAll(this.newWith(1, 2, 3, 4).reject(Predicates.lessThan(3)), 3, 4);
-        Verify.assertContainsAll(this.newWith(1, 2, 3, 4).reject(
+        Verify.assertContainsAll(this.newWith(1, 2, 3, 4).filterNot(Predicates.lessThan(3)), 3, 4);
+        Verify.assertContainsAll(this.newWith(1, 2, 3, 4).filterNot(
                 Predicates.lessThan(3),
                 UnifiedSet.<Integer>newSet()), 3, 4);
     }

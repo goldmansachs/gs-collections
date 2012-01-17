@@ -23,8 +23,8 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.tuple.Pair;
 
 /**
- * A LazyIterable is RichIterable which will defer evaluation for certain methods like select, reject, collect, etc.
  * Any methods that do not return a LazyIterable when called will cause evaluation to be forced.
+ * A LazyIterable is RichIterable which will defer evaluation for certain methods like filte, filterNot, transform, etc.
  *
  * @since 1.0
  */
@@ -32,24 +32,24 @@ public interface LazyIterable<T>
         extends RichIterable<T>
 {
     /**
-     * Creates a deferred iterable for selecting elements from the current iterable.
+     * Creates a deferred iterable for filtering elements from the current iterable.
      */
-    LazyIterable<T> select(Predicate<? super T> predicate);
+    LazyIterable<T> filter(Predicate<? super T> predicate);
 
     /**
-     * Creates a deferred iterable for rejecting elements from the current iterable.
+     * Creates a deferred iterable for filtering out elements from the current iterable.
      */
-    LazyIterable<T> reject(Predicate<? super T> predicate);
+    LazyIterable<T> filterNot(Predicate<? super T> predicate);
 
     /**
      * Creates a deferred iterable for collecting elements from the current iterable.
      */
-    <V> LazyIterable<V> collect(Function<? super T, ? extends V> function);
+    <V> LazyIterable<V> transform(Function<? super T, ? extends V> function);
 
     /**
-     * Creates a deferred iterable for selecting and collecting elements from the current iterable.
+     * Creates a deferred iterable for filtering and transforming elements from the current iterable.
      */
-    <V> LazyIterable<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
+    <V> LazyIterable<V> transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 
     /**
      * Creates a deferred take iterable for the current iterable using the specified count as the limit.
@@ -64,7 +64,7 @@ public interface LazyIterable<T>
     /**
      * Creates a deferred flattening iterable for the current iterable.
      */
-    <V> LazyIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
+    <V> LazyIterable<V> flatTransform(Function<? super T, ? extends Iterable<V>> function);
 
     /**
      * Creates a deferred iterable that will join this iterable with the specified iterable.

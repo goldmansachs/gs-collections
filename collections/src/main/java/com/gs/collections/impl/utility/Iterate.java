@@ -189,7 +189,7 @@ public final class Iterate
      * Returns a new collection with only the elements that evaluated to true for the specified predicate.
      * <p/>
      * <pre>e.g.
-     * return Iterate.<b>select</b>(collection, new Predicate&lt;Person&gt;()
+     * return Iterate.<b>filter</b>(collection, new Predicate&lt;Person&gt;()
      * {
      *     public boolean value(Person person)
      *     {
@@ -198,61 +198,61 @@ public final class Iterate
      * });
      * </pre>
      */
-    public static <T> Collection<T> select(Iterable<T> iterable, Predicate<? super T> predicate)
+    public static <T> Collection<T> filter(Iterable<T> iterable, Predicate<? super T> predicate)
     {
         if (iterable instanceof MutableCollection)
         {
-            return ((MutableCollection<T>) iterable).select(predicate);
+            return ((MutableCollection<T>) iterable).filter(predicate);
         }
         else if (iterable instanceof ArrayList)
         {
-            return ArrayListIterate.select((ArrayList<T>) iterable, predicate);
+            return ArrayListIterate.filter((ArrayList<T>) iterable, predicate);
         }
         else if (iterable instanceof RandomAccess)
         {
-            return RandomAccessListIterate.select((List<T>) iterable, predicate);
+            return RandomAccessListIterate.filter((List<T>) iterable, predicate);
         }
         else if (iterable instanceof Collection)
         {
-            return IterableIterate.<T, Collection<T>>select(
+            return IterableIterate.<T, Collection<T>>filter(
                     iterable,
                     predicate,
                     DefaultSpeciesNewStrategy.INSTANCE.<T>speciesNew((Collection<T>) iterable));
         }
         else if (iterable != null)
         {
-            return IterableIterate.select(iterable, predicate);
+            return IterableIterate.filter(iterable, predicate);
         }
-        throw new IllegalArgumentException("Cannot perform a select on null");
+        throw new IllegalArgumentException("Cannot perform a filter on null");
     }
 
     /**
      * Returns a new collection with only elements that evaluated to true for the specified predicate and parameter.
      * <p/>
      * <pre>e.g.
-     * return Iterate.<b>selectWith</b>(integers, Predicates2.equal(), new Integer(5));
+     * return Iterate.<b>filterWith</b>(integers, Predicates2.equal(), new Integer(5));
      * </pre>
      */
-    public static <T, IV> Collection<T> selectWith(
+    public static <T, IV> Collection<T> filterWith(
             Iterable<T> iterable,
             Predicate2<? super T, ? super IV> predicate,
             IV parameter)
     {
         if (iterable instanceof MutableCollection)
         {
-            return ((MutableCollection<T>) iterable).selectWith(predicate, parameter);
+            return ((MutableCollection<T>) iterable).filterWith(predicate, parameter);
         }
         else if (iterable instanceof ArrayList)
         {
-            return ArrayListIterate.selectWith((ArrayList<T>) iterable, predicate, parameter);
+            return ArrayListIterate.filterWith((ArrayList<T>) iterable, predicate, parameter);
         }
         else if (iterable instanceof RandomAccess)
         {
-            return RandomAccessListIterate.selectWith((List<T>) iterable, predicate, parameter);
+            return RandomAccessListIterate.filterWith((List<T>) iterable, predicate, parameter);
         }
         else if (iterable instanceof Collection)
         {
-            return IterableIterate.<T, IV, Collection<T>>selectWith(
+            return IterableIterate.<T, IV, Collection<T>>filterWith(
                     iterable,
                     predicate,
                     parameter,
@@ -260,40 +260,40 @@ public final class Iterate
         }
         else if (iterable != null)
         {
-            return IterableIterate.selectWith(iterable, predicate, parameter, FastList.<T>newList());
+            return IterableIterate.filterWith(iterable, predicate, parameter, FastList.<T>newList());
         }
-        throw new IllegalArgumentException("Cannot perform a selectWith on null");
+        throw new IllegalArgumentException("Cannot perform a filterWith on null");
     }
 
     /**
      * Filters a collection into two separate collections based on a predicate returned via a Twin.
      * <p/>
      * <pre>e.g.
-     * return Iterate.<b>selectAndRejectWith</b>(lastNames, Predicates2.lessThan(), "Mason");
+     * return Iterate.<b>patitionWith</b>(lastNames, Predicates2.lessThan(), "Mason");
      * </pre>
      */
-    public static <T, IV> Twin<MutableList<T>> selectAndRejectWith(
+    public static <T, IV> Twin<MutableList<T>> partitionWith(
             Iterable<T> iterable,
             Predicate2<? super T, ? super IV> predicate,
             IV injectedValue)
     {
         if (iterable instanceof MutableCollection)
         {
-            return ((MutableCollection<T>) iterable).selectAndRejectWith(predicate, injectedValue);
+            return ((MutableCollection<T>) iterable).partitionWith(predicate, injectedValue);
         }
         else if (iterable instanceof ArrayList)
         {
-            return ArrayListIterate.selectAndRejectWith((ArrayList<T>) iterable, predicate, injectedValue);
+            return ArrayListIterate.partitionWith((ArrayList<T>) iterable, predicate, injectedValue);
         }
         else if (iterable instanceof RandomAccess)
         {
-            return RandomAccessListIterate.selectAndRejectWith((List<T>) iterable, predicate, injectedValue);
+            return RandomAccessListIterate.partitionWith((List<T>) iterable, predicate, injectedValue);
         }
         else if (iterable != null)
         {
-            return IterableIterate.selectAndRejectWith(iterable, predicate, injectedValue);
+            return IterableIterate.partitionWith(iterable, predicate, injectedValue);
         }
-        throw new IllegalArgumentException("Cannot perform a selectAndRejectWith on null");
+        throw new IllegalArgumentException("Cannot perform a partitionWith on null");
     }
 
     /**
@@ -396,28 +396,28 @@ public final class Iterate
     }
 
     /**
-     * @see RichIterable#collectIf(Predicate, Function)
+     * @see RichIterable#transformIf(Predicate, Function)
      */
-    public static <T, V> Collection<V> collectIf(
+    public static <T, V> Collection<V> transformIf(
             Iterable<T> iterable,
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function)
     {
         if (iterable instanceof MutableCollection)
         {
-            return ((MutableCollection<T>) iterable).collectIf(predicate, function);
+            return ((MutableCollection<T>) iterable).transformIf(predicate, function);
         }
         else if (iterable instanceof ArrayList)
         {
-            return ArrayListIterate.collectIf((ArrayList<T>) iterable, predicate, function);
+            return ArrayListIterate.transformIf((ArrayList<T>) iterable, predicate, function);
         }
         else if (iterable instanceof RandomAccess)
         {
-            return RandomAccessListIterate.collectIf((List<T>) iterable, predicate, function);
+            return RandomAccessListIterate.tranformIf((List<T>) iterable, predicate, function);
         }
         else if (iterable instanceof Collection)
         {
-            return IterableIterate.<T, V, Collection<V>>collectIf(
+            return IterableIterate.<T, V, Collection<V>>tranformIf(
                     iterable,
                     predicate,
                     function,
@@ -425,15 +425,15 @@ public final class Iterate
         }
         else if (iterable != null)
         {
-            return IterableIterate.collectIf(iterable, predicate, function);
+            return IterableIterate.transformIf(iterable, predicate, function);
         }
-        throw new IllegalArgumentException("Cannot perform a collectIf on null");
+        throw new IllegalArgumentException("Cannot perform a transformIf on null");
     }
 
     /**
-     * @see RichIterable#collectIf(Predicate, Function, Collection)
+     * @see RichIterable#transformIf(Predicate, Function, Collection)
      */
-    public static <T, V, R extends Collection<V>> R collectIf(
+    public static <T, V, R extends Collection<V>> R tranformIf(
             Iterable<T> iterable,
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function,
@@ -441,28 +441,28 @@ public final class Iterate
     {
         if (iterable instanceof RichIterable)
         {
-            return ((RichIterable<T>) iterable).collectIf(predicate, function, target);
+            return ((RichIterable<T>) iterable).transformIf(predicate, function, target);
         }
         else if (iterable instanceof ArrayList)
         {
-            return ArrayListIterate.collectIf((ArrayList<T>) iterable, predicate, function, target);
+            return ArrayListIterate.tranformIf((ArrayList<T>) iterable, predicate, function, target);
         }
         else if (iterable instanceof RandomAccess)
         {
-            return RandomAccessListIterate.collectIf((List<T>) iterable, predicate, function, target);
+            return RandomAccessListIterate.tranformIf((List<T>) iterable, predicate, function, target);
         }
         else if (iterable != null)
         {
-            return IterableIterate.collectIf(iterable, predicate, function, target);
+            return IterableIterate.tranformIf(iterable, predicate, function, target);
         }
-        throw new IllegalArgumentException("Cannot perform a collectIf on null");
+        throw new IllegalArgumentException("Cannot perform a transformIf on null");
     }
 
     /**
-     * Same as the select method with two parameters but uses the specified target collection
+     * Same as the filter method with two parameters but uses the specified target collection
      * <p/>
      * <pre>e.g.
-     * return Iterate.select(collection, new Predicate&lt;Person&gt;()
+     * return Iterate.filter(collection, new Predicate&lt;Person&gt;()
      * {
      *     public boolean value(Person person)
      *     {
@@ -472,37 +472,37 @@ public final class Iterate
      * </pre>
      * <p/>
      * <pre>e.g.
-     * return Iterate.select(collection, Predicates.attributeEqual("lastName", "Smith"), new ArrayList());
+     * return Iterate.filter(collection, Predicates.attributeEqual("lastName", "Smith"), new ArrayList());
      * </pre>
      */
-    public static <T, R extends Collection<T>> R select(
+    public static <T, R extends Collection<T>> R filter(
             Iterable<T> iterable,
             Predicate<? super T> predicate,
             R targetCollection)
     {
         if (iterable instanceof RichIterable)
         {
-            return ((RichIterable<T>) iterable).select(predicate, targetCollection);
+            return ((RichIterable<T>) iterable).filter(predicate, targetCollection);
         }
         else if (iterable instanceof ArrayList)
         {
-            return ArrayListIterate.select((ArrayList<T>) iterable, predicate, targetCollection);
+            return ArrayListIterate.filter((ArrayList<T>) iterable, predicate, targetCollection);
         }
         else if (iterable instanceof RandomAccess)
         {
-            return RandomAccessListIterate.select((List<T>) iterable, predicate, targetCollection);
+            return RandomAccessListIterate.filter((List<T>) iterable, predicate, targetCollection);
         }
         else if (iterable != null)
         {
-            return IterableIterate.select(iterable, predicate, targetCollection);
+            return IterableIterate.filter(iterable, predicate, targetCollection);
         }
-        throw new IllegalArgumentException("Cannot perform a select on null");
+        throw new IllegalArgumentException("Cannot perform a filter on null");
     }
 
     /**
-     * Same as the selectWith method with two parameters but uses the specified target collection.
+     * Same as the filterWith method with two parameters but uses the specified target collection.
      */
-    public static <T, P, R extends Collection<T>> R selectWith(
+    public static <T, P, R extends Collection<T>> R filterWith(
             Iterable<T> iterable,
             Predicate2<? super T, ? super P> predicate,
             P parameter,
@@ -510,21 +510,21 @@ public final class Iterate
     {
         if (iterable instanceof RichIterable)
         {
-            return ((RichIterable<T>) iterable).selectWith(predicate, parameter, targetCollection);
+            return ((RichIterable<T>) iterable).filterWith(predicate, parameter, targetCollection);
         }
         else if (iterable instanceof ArrayList)
         {
-            return ArrayListIterate.selectWith((ArrayList<T>) iterable, predicate, parameter, targetCollection);
+            return ArrayListIterate.filterWith((ArrayList<T>) iterable, predicate, parameter, targetCollection);
         }
         else if (iterable instanceof RandomAccess)
         {
-            return RandomAccessListIterate.selectWith((List<T>) iterable, predicate, parameter, targetCollection);
+            return RandomAccessListIterate.filterWith((List<T>) iterable, predicate, parameter, targetCollection);
         }
         else if (iterable != null)
         {
-            return IterableIterate.selectWith(iterable, predicate, parameter, targetCollection);
+            return IterableIterate.filterWith(iterable, predicate, parameter, targetCollection);
         }
-        throw new IllegalArgumentException("Cannot perform a selectWith on null");
+        throw new IllegalArgumentException("Cannot perform a filterWith on null");
     }
 
     /**
@@ -584,7 +584,7 @@ public final class Iterate
      * Returns all elements of the iterable that evaluate to false for the specified predicate.
      * <p/>
      * <pre>e.g.
-     * return Iterate.reject(collection, new Predicate&lt;Person&gt;()
+     * return Iterate.filterNot(collection, new Predicate&lt;Person&gt;()
      * {
      *     public boolean value(Person person)
      *     {
@@ -594,35 +594,35 @@ public final class Iterate
      * </pre>
      * <p/>
      * <pre>e.g.
-     * return Iterate.reject(collection, Predicates.attributeEqual("lastName", "Smith"));
+     * return Iterate.filterNot(collection, Predicates.attributeEqual("lastName", "Smith"));
      * </pre>
      */
-    public static <T> Collection<T> reject(Iterable<T> iterable, Predicate<? super T> predicate)
+    public static <T> Collection<T> filterNot(Iterable<T> iterable, Predicate<? super T> predicate)
     {
         if (iterable instanceof MutableCollection)
         {
-            return ((MutableCollection<T>) iterable).reject(predicate);
+            return ((MutableCollection<T>) iterable).filterNot(predicate);
         }
         else if (iterable instanceof ArrayList)
         {
-            return ArrayListIterate.reject((ArrayList<T>) iterable, predicate);
+            return ArrayListIterate.filterNot((ArrayList<T>) iterable, predicate);
         }
         else if (iterable instanceof RandomAccess)
         {
-            return RandomAccessListIterate.reject((List<T>) iterable, predicate);
+            return RandomAccessListIterate.filterNot((List<T>) iterable, predicate);
         }
         else if (iterable instanceof Collection)
         {
-            return IterableIterate.<T, Collection<T>>reject(
+            return IterableIterate.<T, Collection<T>>filterNot(
                     iterable,
                     predicate,
                     DefaultSpeciesNewStrategy.INSTANCE.<T>speciesNew((Collection<T>) iterable));
         }
         else if (iterable != null)
         {
-            return IterableIterate.reject(iterable, predicate);
+            return IterableIterate.filterNot(iterable, predicate);
         }
-        throw new IllegalArgumentException("Cannot perform a reject on null");
+        throw new IllegalArgumentException("Cannot perform a filterNot on null");
     }
 
     /**
@@ -775,26 +775,26 @@ public final class Iterate
     /**
      * Returns all elements of the iterable that evaluate to false for the specified predicate2 and parameter.
      */
-    public static <T, IV> Collection<T> rejectWith(
+    public static <T, IV> Collection<T> filterNotWith(
             Iterable<T> iterable,
             Predicate2<? super T, ? super IV> predicate,
             IV injectedValue)
     {
         if (iterable instanceof MutableCollection)
         {
-            return ((MutableCollection<T>) iterable).rejectWith(predicate, injectedValue);
+            return ((MutableCollection<T>) iterable).filterNotWith(predicate, injectedValue);
         }
         else if (iterable instanceof ArrayList)
         {
-            return ArrayListIterate.rejectWith((ArrayList<T>) iterable, predicate, injectedValue);
+            return ArrayListIterate.filterNotWith((ArrayList<T>) iterable, predicate, injectedValue);
         }
         else if (iterable instanceof RandomAccess)
         {
-            return RandomAccessListIterate.rejectWith((List<T>) iterable, predicate, injectedValue);
+            return RandomAccessListIterate.filterNotWith((List<T>) iterable, predicate, injectedValue);
         }
         else if (iterable instanceof Collection)
         {
-            return IterableIterate.<T, IV, Collection<T>>rejectWith(
+            return IterableIterate.<T, IV, Collection<T>>filterNotWith(
                     iterable,
                     predicate,
                     injectedValue,
@@ -802,16 +802,16 @@ public final class Iterate
         }
         else if (iterable != null)
         {
-            return IterableIterate.rejectWith(iterable, predicate, injectedValue, FastList.<T>newList());
+            return IterableIterate.filterNotWith(iterable, predicate, injectedValue, FastList.<T>newList());
         }
-        throw new IllegalArgumentException("Cannot perform a rejectWith on null");
+        throw new IllegalArgumentException("Cannot perform a filterNotWith on null");
     }
 
     /**
-     * Same as the reject method with two parameters but uses the specified target collection for the results.
+     * Same as the filterNot method with two parameters but uses the specified target collection for the results.
      * <p/>
      * <pre>e.g.
-     * return Iterate.reject(collection, new Predicate&lt;Person&gt;()
+     * return Iterate.filterNot(collection, new Predicate&lt;Person&gt;()
      * {
      *     public boolean value(Person person)
      *     {
@@ -820,34 +820,34 @@ public final class Iterate
      * }, FastList.newList());
      * </pre>
      */
-    public static <T, R extends Collection<T>> R reject(
+    public static <T, R extends Collection<T>> R filterNot(
             Iterable<T> iterable,
             Predicate<? super T> predicate,
             R targetCollection)
     {
         if (iterable instanceof RichIterable)
         {
-            return ((RichIterable<T>) iterable).reject(predicate, targetCollection);
+            return ((RichIterable<T>) iterable).filterNot(predicate, targetCollection);
         }
         else if (iterable instanceof ArrayList)
         {
-            return ArrayListIterate.reject((ArrayList<T>) iterable, predicate, targetCollection);
+            return ArrayListIterate.filterNot((ArrayList<T>) iterable, predicate, targetCollection);
         }
         else if (iterable instanceof RandomAccess)
         {
-            return RandomAccessListIterate.reject((List<T>) iterable, predicate, targetCollection);
+            return RandomAccessListIterate.filterNot((List<T>) iterable, predicate, targetCollection);
         }
         else if (iterable != null)
         {
-            return IterableIterate.reject(iterable, predicate, targetCollection);
+            return IterableIterate.filterNot(iterable, predicate, targetCollection);
         }
-        throw new IllegalArgumentException("Cannot perform a reject on null");
+        throw new IllegalArgumentException("Cannot perform a filterNot on null");
     }
 
     /**
-     * Same as the reject method with two parameters but uses the specified target collection.
+     * Same as the filterNotWith method with two parameters but uses the specified target collection.
      */
-    public static <T, P, R extends Collection<T>> R rejectWith(
+    public static <T, P, R extends Collection<T>> R filterNotWith(
             Iterable<T> iterable,
             Predicate2<? super T, ? super P> predicate,
             P parameter,
@@ -855,11 +855,11 @@ public final class Iterate
     {
         if (iterable instanceof RichIterable)
         {
-            return ((RichIterable<T>) iterable).rejectWith(predicate, parameter, targetCollection);
+            return ((RichIterable<T>) iterable).filterNotWith(predicate, parameter, targetCollection);
         }
         else if (iterable instanceof ArrayList)
         {
-            return ArrayListIterate.rejectWith(
+            return ArrayListIterate.filterNotWith(
                     (ArrayList<T>) iterable,
                     predicate,
                     parameter,
@@ -867,13 +867,13 @@ public final class Iterate
         }
         else if (iterable instanceof RandomAccess)
         {
-            return RandomAccessListIterate.rejectWith((List<T>) iterable, predicate, parameter, targetCollection);
+            return RandomAccessListIterate.filterNotWith((List<T>) iterable, predicate, parameter, targetCollection);
         }
         else if (iterable != null)
         {
-            return IterableIterate.rejectWith(iterable, predicate, parameter, targetCollection);
+            return IterableIterate.filterNotWith(iterable, predicate, parameter, targetCollection);
         }
-        throw new IllegalArgumentException("Cannot perform a rejectWith on null");
+        throw new IllegalArgumentException("Cannot perform a filterNotWith on null");
     }
 
     /**
@@ -904,7 +904,7 @@ public final class Iterate
      * Returns a new collection with the results of applying the specified function for each element of the iterable.
      * <p/>
      * <pre>e.g.
-     * return Iterate.collect(collection, new Function&lt;Person, String&gt;()
+     * return Iterate.transform(collection, new Function&lt;Person, String&gt;()
      * {
      *     public String value(Person person)
      *     {
@@ -913,25 +913,25 @@ public final class Iterate
      * });
      * </pre>
      */
-    public static <T, V> Collection<V> collect(
+    public static <T, V> Collection<V> transform(
             Iterable<T> iterable,
             Function<? super T, ? extends V> function)
     {
         if (iterable instanceof MutableCollection)
         {
-            return ((MutableCollection<T>) iterable).collect(function);
+            return ((MutableCollection<T>) iterable).transform(function);
         }
         else if (iterable instanceof ArrayList)
         {
-            return ArrayListIterate.collect((ArrayList<T>) iterable, function);
+            return ArrayListIterate.transform((ArrayList<T>) iterable, function);
         }
         else if (iterable instanceof RandomAccess)
         {
-            return RandomAccessListIterate.collect((List<T>) iterable, function);
+            return RandomAccessListIterate.transform((List<T>) iterable, function);
         }
         else if (iterable instanceof Collection)
         {
-            return IterableIterate.<T, V, Collection<V>>collect(
+            return IterableIterate.<T, V, Collection<V>>transform(
                     iterable,
                     function,
                     DefaultSpeciesNewStrategy.INSTANCE.<V>speciesNew(
@@ -940,33 +940,33 @@ public final class Iterate
         }
         else if (iterable != null)
         {
-            return IterableIterate.collect(iterable, function);
+            return IterableIterate.transform(iterable, function);
         }
-        throw new IllegalArgumentException("Cannot perform a collect on null");
+        throw new IllegalArgumentException("Cannot perform a transform on null");
     }
 
     /**
-     * @see RichIterable#flatCollect(Function)
+     * @see RichIterable#flatTransform(Function)
      */
-    public static <T, V> Collection<V> flatCollect(
+    public static <T, V> Collection<V> flatTransform(
             Iterable<T> iterable,
             Function<? super T, ? extends Iterable<V>> function)
     {
         if (iterable instanceof MutableCollection)
         {
-            return ((MutableCollection<T>) iterable).flatCollect(function);
+            return ((MutableCollection<T>) iterable).flatTransform(function);
         }
         else if (iterable instanceof ArrayList)
         {
-            return ArrayListIterate.flatCollect((ArrayList<T>) iterable, function);
+            return ArrayListIterate.flatTransform((ArrayList<T>) iterable, function);
         }
         else if (iterable instanceof RandomAccess)
         {
-            return RandomAccessListIterate.flatCollect((List<T>) iterable, function);
+            return RandomAccessListIterate.flatTransform((List<T>) iterable, function);
         }
         else if (iterable instanceof Collection)
         {
-            return IterableIterate.<T, V, Collection<V>>flatCollect(
+            return IterableIterate.<T, V, Collection<V>>flatTransform(
                     iterable,
                     function,
                     DefaultSpeciesNewStrategy.INSTANCE.<V>speciesNew(
@@ -975,17 +975,17 @@ public final class Iterate
         }
         else if (iterable != null)
         {
-            return IterableIterate.flatCollect(iterable, function);
+            return IterableIterate.flatTransform(iterable, function);
         }
-        throw new IllegalArgumentException("Cannot perform a flatCollect on null");
+        throw new IllegalArgumentException("Cannot perform a flatTransform on null");
     }
 
     /**
-     * Same as the collect method with two parameters, except that the results are gathered into the specified
+     * Same as the transform method with two parameters, except that the results are gathered into the specified
      * targetCollection
      * <p/>
      * <pre>e.g.
-     * return Iterate.collect(collection, new Function&lt;Person, String&gt;()
+     * return Iterate.transform(collection, new Function&lt;Person, String&gt;()
      * {
      *     public String value(Person person)
      *     {
@@ -994,80 +994,80 @@ public final class Iterate
      * }, FastList.newList());
      * </pre>
      */
-    public static <T, A, R extends Collection<A>> R collect(
+    public static <T, A, R extends Collection<A>> R transform(
             Iterable<T> iterable,
             Function<? super T, ? extends A> function,
             R targetCollection)
     {
         if (iterable instanceof RichIterable)
         {
-            return ((RichIterable<T>) iterable).collect(function, targetCollection);
+            return ((RichIterable<T>) iterable).transform(function, targetCollection);
         }
         else if (iterable instanceof ArrayList)
         {
-            return ArrayListIterate.collect((ArrayList<T>) iterable, function, targetCollection);
+            return ArrayListIterate.transform((ArrayList<T>) iterable, function, targetCollection);
         }
         else if (iterable instanceof RandomAccess)
         {
-            return RandomAccessListIterate.collect((List<T>) iterable, function, targetCollection);
+            return RandomAccessListIterate.transform((List<T>) iterable, function, targetCollection);
         }
         else if (iterable != null)
         {
-            return IterableIterate.collect(iterable, function, targetCollection);
+            return IterableIterate.transform(iterable, function, targetCollection);
         }
-        throw new IllegalArgumentException("Cannot perform a collect on null");
+        throw new IllegalArgumentException("Cannot perform a transform on null");
     }
 
     /**
-     * @see RichIterable#flatCollect(Function, Collection)
+     * @see RichIterable#flatTransform(Function, Collection)
      */
-    public static <T, A, R extends Collection<A>> R flatCollect(
+    public static <T, A, R extends Collection<A>> R flatTransform(
             Iterable<T> iterable,
             Function<? super T, ? extends Iterable<A>> function,
             R targetCollection)
     {
         if (iterable instanceof RichIterable)
         {
-            return ((RichIterable<T>) iterable).flatCollect(function, targetCollection);
+            return ((RichIterable<T>) iterable).flatTransform(function, targetCollection);
         }
         else if (iterable instanceof ArrayList)
         {
-            return ArrayListIterate.flatCollect((ArrayList<T>) iterable, function, targetCollection);
+            return ArrayListIterate.flatTransform((ArrayList<T>) iterable, function, targetCollection);
         }
         else if (iterable instanceof RandomAccess)
         {
-            return RandomAccessListIterate.flatCollect((List<T>) iterable, function, targetCollection);
+            return RandomAccessListIterate.flatTransform((List<T>) iterable, function, targetCollection);
         }
         else if (iterable != null)
         {
-            return IterableIterate.flatCollect(iterable, function, targetCollection);
+            return IterableIterate.flatTransform(iterable, function, targetCollection);
         }
-        throw new IllegalArgumentException("Cannot perform a flatCollect on null");
+        throw new IllegalArgumentException("Cannot perform a flatTransform on null");
     }
 
     /**
-     * Same as collect with a Function2 and specified parameter which is passed to the function.
+     * Same as transform with a Function2 and specified parameter which is passed to the function.
      */
-    public static <T, P, A> Collection<A> collectWith(
+    public static <T, P, A> Collection<A> transformWith(
             Iterable<T> iterable,
             Function2<? super T, ? super P, ? extends A> function,
             P parameter)
     {
         if (iterable instanceof MutableCollection)
         {
-            return ((MutableCollection<T>) iterable).collectWith(function, parameter);
+            return ((MutableCollection<T>) iterable).transformWith(function, parameter);
         }
         else if (iterable instanceof ArrayList)
         {
-            return ArrayListIterate.collectWith((ArrayList<T>) iterable, function, parameter);
+            return ArrayListIterate.transformWith((ArrayList<T>) iterable, function, parameter);
         }
         else if (iterable instanceof List<?>)
         {
-            return ListIterate.collectWith((List<T>) iterable, function, parameter);
+            return ListIterate.transformWith((List<T>) iterable, function, parameter);
         }
         else if (iterable instanceof Collection)
         {
-            return IterableIterate.<T, P, A, Collection<A>>collectWith(
+            return IterableIterate.<T, P, A, Collection<A>>transformWith(
                     iterable,
                     function,
                     parameter,
@@ -1077,15 +1077,15 @@ public final class Iterate
         }
         else if (iterable != null)
         {
-            return IterableIterate.collectWith(iterable, function, parameter);
+            return IterableIterate.transformWith(iterable, function, parameter);
         }
-        throw new IllegalArgumentException("Cannot perform a collectWith on null");
+        throw new IllegalArgumentException("Cannot perform a transformWith on null");
     }
 
     /**
-     * Same as collectWith but with a targetCollection parameter to gather the results.
+     * Same as transformWith but with a targetCollection parameter to gather the results.
      */
-    public static <T, P, A, R extends Collection<A>> R collectWith(
+    public static <T, P, A, R extends Collection<A>> R transformWith(
             Iterable<T> iterable,
             Function2<? super T, ? super P, ? extends A> function,
             P parameter,
@@ -1093,21 +1093,21 @@ public final class Iterate
     {
         if (iterable instanceof RichIterable)
         {
-            return ((RichIterable<T>) iterable).collectWith(function, parameter, targetCollection);
+            return ((RichIterable<T>) iterable).transformWith(function, parameter, targetCollection);
         }
         else if (iterable instanceof ArrayList)
         {
-            return ArrayListIterate.collectWith((ArrayList<T>) iterable, function, parameter, targetCollection);
+            return ArrayListIterate.transformWith((ArrayList<T>) iterable, function, parameter, targetCollection);
         }
         else if (iterable instanceof RandomAccess)
         {
-            return RandomAccessListIterate.collectWith((List<T>) iterable, function, parameter, targetCollection);
+            return RandomAccessListIterate.transformWith((List<T>) iterable, function, parameter, targetCollection);
         }
         else if (iterable != null)
         {
-            return IterableIterate.collectWith(iterable, function, parameter, targetCollection);
+            return IterableIterate.transformWith(iterable, function, parameter, targetCollection);
         }
-        throw new IllegalArgumentException("Cannot perform a collectWith on null");
+        throw new IllegalArgumentException("Cannot perform a transformWith on null");
     }
 
     /**
@@ -1118,7 +1118,7 @@ public final class Iterate
      */
     public static <T> Collection<T> flatten(Iterable<? extends Iterable<T>> iterable)
     {
-        return Iterate.flatCollect(iterable, Functions.<Iterable<T>>getPassThru());
+        return Iterate.flatTransform(iterable, Functions.<Iterable<T>>getPassThru());
     }
 
     /**
@@ -1126,7 +1126,7 @@ public final class Iterate
      */
     public static <T, R extends Collection<T>> R flatten(Iterable<? extends Iterable<T>> iterable, R targetCollection)
     {
-        return Iterate.flatCollect(iterable, Functions.<Iterable<T>>getPassThru(), targetCollection);
+        return Iterate.flatTransform(iterable, Functions.<Iterable<T>>getPassThru(), targetCollection);
     }
 
     /**
@@ -1228,7 +1228,7 @@ public final class Iterate
      * no element evaluates to true.
      * <p/>
      * <pre>e.g.
-     * return Iterate.detect(collection, new Predicate&lt;Person&gt;()
+     * return Iterate.find(collection, new Predicate&lt;Person&gt;()
      * {
      *     public boolean value(Person person)
      *     {
@@ -1237,25 +1237,25 @@ public final class Iterate
      * });
      * </pre>
      */
-    public static <T> T detect(Iterable<T> iterable, Predicate<? super T> predicate)
+    public static <T> T find(Iterable<T> iterable, Predicate<? super T> predicate)
     {
         if (iterable instanceof RichIterable)
         {
-            return ((RichIterable<T>) iterable).detect(predicate);
+            return ((RichIterable<T>) iterable).find(predicate);
         }
         else if (iterable instanceof ArrayList)
         {
-            return ArrayListIterate.detect((ArrayList<T>) iterable, predicate);
+            return ArrayListIterate.find((ArrayList<T>) iterable, predicate);
         }
         else if (iterable instanceof RandomAccess)
         {
-            return RandomAccessListIterate.detect((List<T>) iterable, predicate);
+            return RandomAccessListIterate.find((List<T>) iterable, predicate);
         }
         else if (iterable != null)
         {
-            return IterableIterate.detect(iterable, predicate);
+            return IterableIterate.find(iterable, predicate);
         }
-        throw new IllegalArgumentException("Cannot perform detect on null");
+        throw new IllegalArgumentException("Cannot perform find on null");
     }
 
     /**
@@ -1263,7 +1263,7 @@ public final class Iterate
      * or null if no element evaluates to true.
      * <p/>
      * <pre>e.g.
-     * Iterate.detectWith(collection, new Predicate2&lt;Person, String&gt;()
+     * Iterate.findWith(collection, new Predicate2&lt;Person, String&gt;()
      * {
      *     public boolean value(Person person, String fullName)
      *     {
@@ -1272,37 +1272,37 @@ public final class Iterate
      * }, "John Smith");
      * </pre>
      */
-    public static <T, P> T detectWith(
+    public static <T, P> T findWith(
             Iterable<T> iterable,
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
         if (iterable instanceof MutableCollection)
         {
-            return ((MutableCollection<T>) iterable).detectWith(predicate, parameter);
+            return ((MutableCollection<T>) iterable).findWith(predicate, parameter);
         }
         else if (iterable instanceof ArrayList)
         {
-            return ArrayListIterate.detectWith((ArrayList<T>) iterable, predicate, parameter);
+            return ArrayListIterate.findWith((ArrayList<T>) iterable, predicate, parameter);
         }
         else if (iterable instanceof RandomAccess)
         {
-            return RandomAccessListIterate.detectWith((List<T>) iterable, predicate, parameter);
+            return RandomAccessListIterate.findWith((List<T>) iterable, predicate, parameter);
         }
         else if (iterable != null)
         {
-            return IterableIterate.detectWith(iterable, predicate, parameter);
+            return IterableIterate.findWith(iterable, predicate, parameter);
         }
-        throw new IllegalArgumentException("Cannot perform detectWith on null");
+        throw new IllegalArgumentException("Cannot perform findWith on null");
     }
 
     /**
      * Returns the first element of the iterable that evaluates to true for the specified predicate, or returns the
      * result ifNone if no element evaluates to true.
      */
-    public static <T> T detectIfNone(Iterable<T> iterable, Predicate<? super T> predicate, T ifNone)
+    public static <T> T findIfNone(Iterable<T> iterable, Predicate<? super T> predicate, T ifNone)
     {
-        T result = Iterate.detect(iterable, predicate);
+        T result = Iterate.find(iterable, predicate);
         return result == null ? ifNone : result;
     }
 
@@ -1310,168 +1310,168 @@ public final class Iterate
      * Returns the first element of the iterable that evaluates to true for the specified predicate2 and parameter,
      * or returns the result ifNone if no element evaluates to true.
      */
-    public static <T, P> T detectWithIfNone(
+    public static <T, P> T findWithIfNone(
             Iterable<T> iterable,
             Predicate2<? super T, ? super P> predicate,
             P parameter,
             T ifNone)
     {
-        T result = Iterate.detectWith(iterable, predicate, parameter);
+        T result = Iterate.findWith(iterable, predicate, parameter);
         return result == null ? ifNone : result;
     }
 
     /**
      * Searches for the first occurrence where the predicate evaluates to true.
      */
-    public static <T> int detectIndex(Iterable<T> iterable, Predicate<? super T> predicate)
+    public static <T> int findIndex(Iterable<T> iterable, Predicate<? super T> predicate)
     {
         if (iterable instanceof ArrayList<?>)
         {
-            return ArrayListIterate.detectIndex((ArrayList<T>) iterable, predicate);
+            return ArrayListIterate.findIndex((ArrayList<T>) iterable, predicate);
         }
         else if (iterable instanceof List<?>)
         {
-            return ListIterate.detectIndex((List<T>) iterable, predicate);
+            return ListIterate.findIndex((List<T>) iterable, predicate);
         }
         else if (iterable != null)
         {
-            return IterableIterate.detectIndex(iterable, predicate);
+            return IterableIterate.findIndex(iterable, predicate);
         }
-        throw new IllegalArgumentException("Cannot perform detectIndex on null");
+        throw new IllegalArgumentException("Cannot perform findIndex on null");
     }
 
     /**
      * Searches for the first occurrence where the predicate evaluates to true.
      */
-    public static <T, P> int detectIndexWith(
+    public static <T, P> int findIndexWith(
             Iterable<T> iterable,
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
         if (iterable instanceof ArrayList<?>)
         {
-            return ArrayListIterate.detectIndexWith((ArrayList<T>) iterable, predicate, parameter);
+            return ArrayListIterate.findIndexWith((ArrayList<T>) iterable, predicate, parameter);
         }
         else if (iterable instanceof List<?>)
         {
-            return ListIterate.detectIndexWith((List<T>) iterable, predicate, parameter);
+            return ListIterate.findIndexWith((List<T>) iterable, predicate, parameter);
         }
         else if (iterable != null)
         {
-            return IterableIterate.detectIndexWith(iterable, predicate, parameter);
+            return IterableIterate.findIndexWith(iterable, predicate, parameter);
         }
-        throw new IllegalArgumentException("Cannot perform detectIndexWith on null");
+        throw new IllegalArgumentException("Cannot perform findIndexWith on null");
     }
 
     /**
-     * @see RichIterable#injectInto(Object, Function2)
+     * @see RichIterable#foldLeft(Object, Function2)
      */
-    public static <T, IV> IV injectInto(
+    public static <T, IV> IV foldLeft(
             IV injectValue,
             Iterable<T> iterable,
             Function2<? super IV, ? super T, ? extends IV> function)
     {
         if (iterable instanceof RichIterable)
         {
-            return ((RichIterable<T>) iterable).injectInto(injectValue, function);
+            return ((RichIterable<T>) iterable).foldLeft(injectValue, function);
         }
         else if (iterable instanceof ArrayList)
         {
-            return ArrayListIterate.injectInto(injectValue, (ArrayList<T>) iterable, function);
+            return ArrayListIterate.foldLeft(injectValue, (ArrayList<T>) iterable, function);
         }
         else if (iterable instanceof RandomAccess)
         {
-            return RandomAccessListIterate.injectInto(injectValue, (List<T>) iterable, function);
+            return RandomAccessListIterate.foldLeft(injectValue, (List<T>) iterable, function);
         }
         else if (iterable != null)
         {
-            return IterableIterate.injectInto(injectValue, iterable, function);
+            return IterableIterate.foldLeft(injectValue, iterable, function);
         }
-        throw new IllegalArgumentException("Cannot perform an injectInto on null");
+        throw new IllegalArgumentException("Cannot perform an foldLeft on null");
     }
 
     /**
-     * @see RichIterable#injectInto(int, IntObjectToIntFunction)
+     * @see RichIterable#foldLeft(int, IntObjectToIntFunction)
      */
-    public static <T> int injectInto(
+    public static <T> int foldLeft(
             int injectValue,
             Iterable<T> iterable,
             IntObjectToIntFunction<? super T> function)
     {
         if (iterable instanceof RichIterable)
         {
-            return ((RichIterable<T>) iterable).injectInto(injectValue, function);
+            return ((RichIterable<T>) iterable).foldLeft(injectValue, function);
         }
         else if (iterable instanceof ArrayList)
         {
-            return ArrayListIterate.injectInto(injectValue, (ArrayList<T>) iterable, function);
+            return ArrayListIterate.foldLeft(injectValue, (ArrayList<T>) iterable, function);
         }
         else if (iterable instanceof RandomAccess)
         {
-            return RandomAccessListIterate.injectInto(injectValue, (List<T>) iterable, function);
+            return RandomAccessListIterate.foldLeft(injectValue, (List<T>) iterable, function);
         }
         else if (iterable != null)
         {
-            return IterableIterate.injectInto(injectValue, iterable, function);
+            return IterableIterate.foldLeft(injectValue, iterable, function);
         }
-        throw new IllegalArgumentException("Cannot perform an injectInto on null");
+        throw new IllegalArgumentException("Cannot perform an foldLeft on null");
     }
 
     /**
-     * @see RichIterable#injectInto(long, LongObjectToLongFunction)
+     * @see RichIterable#foldLeft(long, LongObjectToLongFunction)
      */
-    public static <T> long injectInto(
+    public static <T> long foldLeft(
             long injectValue,
             Iterable<T> iterable,
             LongObjectToLongFunction<? super T> function)
     {
         if (iterable instanceof RichIterable)
         {
-            return ((RichIterable<T>) iterable).injectInto(injectValue, function);
+            return ((RichIterable<T>) iterable).foldLeft(injectValue, function);
         }
         else if (iterable instanceof ArrayList)
         {
-            return ArrayListIterate.injectInto(injectValue, (ArrayList<T>) iterable, function);
+            return ArrayListIterate.foldLeft(injectValue, (ArrayList<T>) iterable, function);
         }
         else if (iterable instanceof RandomAccess)
         {
-            return RandomAccessListIterate.injectInto(injectValue, (List<T>) iterable, function);
+            return RandomAccessListIterate.foldLeft(injectValue, (List<T>) iterable, function);
         }
         else if (iterable != null)
         {
-            return IterableIterate.injectInto(injectValue, iterable, function);
+            return IterableIterate.foldLeft(injectValue, iterable, function);
         }
-        throw new IllegalArgumentException("Cannot perform an injectInto on null");
+        throw new IllegalArgumentException("Cannot perform an foldLeft on null");
     }
 
     /**
-     * @see RichIterable#injectInto(double, DoubleObjectToDoubleFunction)
+     * @see RichIterable#foldLeft(double, DoubleObjectToDoubleFunction)
      */
-    public static <T> double injectInto(
+    public static <T> double foldLeft(
             double injectValue,
             Iterable<T> iterable,
             DoubleObjectToDoubleFunction<? super T> function)
     {
         if (iterable instanceof RichIterable)
         {
-            return ((RichIterable<T>) iterable).injectInto(injectValue, function);
+            return ((RichIterable<T>) iterable).foldLeft(injectValue, function);
         }
         else if (iterable instanceof ArrayList)
         {
-            return ArrayListIterate.injectInto(injectValue, (ArrayList<T>) iterable, function);
+            return ArrayListIterate.foldLeft(injectValue, (ArrayList<T>) iterable, function);
         }
         else if (iterable instanceof RandomAccess)
         {
-            return RandomAccessListIterate.injectInto(injectValue, (List<T>) iterable, function);
+            return RandomAccessListIterate.foldLeft(injectValue, (List<T>) iterable, function);
         }
         else if (iterable != null)
         {
-            return IterableIterate.injectInto(injectValue, iterable, function);
+            return IterableIterate.foldLeft(injectValue, iterable, function);
         }
-        throw new IllegalArgumentException("Cannot perform an injectInto on null");
+        throw new IllegalArgumentException("Cannot perform an foldLeft on null");
     }
 
-    public static <T, IV, P> IV injectIntoWith(
+    public static <T, IV, P> IV foldLeftWith(
             IV injectValue,
             Iterable<T> iterable,
             Function3<? super IV, ? super T, ? super P, ? extends IV> function,
@@ -1479,21 +1479,21 @@ public final class Iterate
     {
         if (iterable instanceof MutableCollection)
         {
-            return ((MutableCollection<T>) iterable).injectIntoWith(injectValue, function, parameter);
+            return ((MutableCollection<T>) iterable).foldLeftWith(injectValue, function, parameter);
         }
         else if (iterable instanceof ArrayList)
         {
-            return ArrayListIterate.injectIntoWith(injectValue, (ArrayList<T>) iterable, function, parameter);
+            return ArrayListIterate.foldLeftWith(injectValue, (ArrayList<T>) iterable, function, parameter);
         }
         else if (iterable instanceof RandomAccess)
         {
-            return RandomAccessListIterate.injectIntoWith(injectValue, (List<T>) iterable, function, parameter);
+            return RandomAccessListIterate.foldLeftWith(injectValue, (List<T>) iterable, function, parameter);
         }
         else if (iterable != null)
         {
-            return IterableIterate.injectIntoWith(injectValue, iterable, function, parameter);
+            return IterableIterate.foldLeftWith(injectValue, iterable, function, parameter);
         }
-        throw new IllegalArgumentException("Cannot perform an injectIntoWith on null");
+        throw new IllegalArgumentException("Cannot perform an foldLeftWith on null");
     }
 
     /**
@@ -1699,7 +1699,7 @@ public final class Iterate
         {
             return ((RichIterable<?>) iterable).contains(value);
         }
-        return IterableIterate.detectIndex(iterable, Predicates.equal(value)) > -1;
+        return IterableIterate.findIndex(iterable, Predicates.equal(value)) > -1;
     }
 
     /**

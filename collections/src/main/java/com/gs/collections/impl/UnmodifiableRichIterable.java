@@ -73,24 +73,24 @@ public class UnmodifiableRichIterable<T>
         return new UnmodifiableRichIterable<E>(iterable);
     }
 
-    public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)
+    public <R extends Collection<T>> R filter(Predicate<? super T> predicate, R target)
     {
-        return this.iterable.select(predicate, target);
+        return this.iterable.filter(predicate, target);
     }
 
-    public <P, R extends Collection<T>> R selectWith(Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
+    public <P, R extends Collection<T>> R filterWith(Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
     {
-        return this.iterable.selectWith(predicate, parameter, targetCollection);
+        return this.iterable.filterWith(predicate, parameter, targetCollection);
     }
 
-    public <R extends Collection<T>> R reject(Predicate<? super T> predicate, R target)
+    public <R extends Collection<T>> R filterNot(Predicate<? super T> predicate, R target)
     {
-        return this.iterable.reject(predicate, target);
+        return this.iterable.filterNot(predicate, target);
     }
 
-    public <P, R extends Collection<T>> R rejectWith(Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
+    public <P, R extends Collection<T>> R filterNotWith(Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
     {
-        return this.iterable.rejectWith(predicate, parameter, targetCollection);
+        return this.iterable.filterNotWith(predicate, parameter, targetCollection);
     }
 
     public PartitionIterable<T> partition(Predicate<? super T> predicate)
@@ -98,24 +98,24 @@ public class UnmodifiableRichIterable<T>
         return this.iterable.partition(predicate);
     }
 
-    public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)
+    public <V, R extends Collection<V>> R transform(Function<? super T, ? extends V> function, R target)
     {
-        return this.iterable.collect(function, target);
+        return this.iterable.transform(function, target);
     }
 
-    public <P, V, R extends Collection<V>> R collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter, R targetCollection)
+    public <P, V, R extends Collection<V>> R transformWith(Function2<? super T, ? super P, ? extends V> function, P parameter, R targetCollection)
     {
-        return this.iterable.collectWith(function, parameter, targetCollection);
+        return this.iterable.transformWith(function, parameter, targetCollection);
     }
 
-    public <V, R extends Collection<V>> R collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function, R target)
+    public <V, R extends Collection<V>> R transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function, R target)
     {
-        return this.iterable.collectIf(predicate, function, target);
+        return this.iterable.transformIf(predicate, function, target);
     }
 
-    public <V, R extends Collection<V>> R flatCollect(Function<? super T, ? extends Iterable<V>> function, R target)
+    public <V, R extends Collection<V>> R flatTransform(Function<? super T, ? extends Iterable<V>> function, R target)
     {
-        return this.iterable.flatCollect(function, target);
+        return this.iterable.flatTransform(function, target);
     }
 
     public boolean contains(Object object)
@@ -188,34 +188,34 @@ public class UnmodifiableRichIterable<T>
         return this.iterable.getLast();
     }
 
-    public RichIterable<T> select(Predicate<? super T> predicate)
+    public RichIterable<T> filter(Predicate<? super T> predicate)
     {
-        return this.iterable.select(predicate);
+        return this.iterable.filter(predicate);
     }
 
-    public RichIterable<T> reject(Predicate<? super T> predicate)
+    public RichIterable<T> filterNot(Predicate<? super T> predicate)
     {
-        return this.iterable.reject(predicate);
+        return this.iterable.filterNot(predicate);
     }
 
-    public <V> RichIterable<V> collect(Function<? super T, ? extends V> function)
+    public <V> RichIterable<V> transform(Function<? super T, ? extends V> function)
     {
-        return this.iterable.collect(function);
+        return this.iterable.transform(function);
     }
 
-    public <V> RichIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    public <V> RichIterable<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
     {
-        return this.iterable.flatCollect(function);
+        return this.iterable.flatTransform(function);
     }
 
-    public <V> RichIterable<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
+    public <V> RichIterable<V> transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
     {
-        return this.iterable.collectIf(predicate, function);
+        return this.iterable.transformIf(predicate, function);
     }
 
-    public T detect(Predicate<? super T> predicate)
+    public T find(Predicate<? super T> predicate)
     {
-        return this.iterable.detect(predicate);
+        return this.iterable.find(predicate);
     }
 
     public T min(Comparator<? super T> comparator)
@@ -248,9 +248,9 @@ public class UnmodifiableRichIterable<T>
         return this.iterable.maxBy(function);
     }
 
-    public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
+    public T findIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
     {
-        return this.iterable.detectIfNone(predicate, function);
+        return this.iterable.findIfNone(predicate, function);
     }
 
     public int count(Predicate<? super T> predicate)
@@ -268,24 +268,24 @@ public class UnmodifiableRichIterable<T>
         return this.iterable.allSatisfy(predicate);
     }
 
-    public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
+    public <IV> IV foldLeft(IV initialValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
-        return this.iterable.injectInto(injectedValue, function);
+        return this.iterable.foldLeft(initialValue, function);
     }
 
-    public int injectInto(int injectedValue, IntObjectToIntFunction<? super T> function)
+    public int foldLeft(int initialValue, IntObjectToIntFunction<? super T> function)
     {
-        return this.iterable.injectInto(injectedValue, function);
+        return this.iterable.foldLeft(initialValue, function);
     }
 
-    public long injectInto(long injectedValue, LongObjectToLongFunction<? super T> function)
+    public long foldLeft(long initialValue, LongObjectToLongFunction<? super T> function)
     {
-        return this.iterable.injectInto(injectedValue, function);
+        return this.iterable.foldLeft(initialValue, function);
     }
 
-    public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super T> function)
+    public double foldLeft(double initialValue, DoubleObjectToDoubleFunction<? super T> function)
     {
-        return this.iterable.injectInto(injectedValue, function);
+        return this.iterable.foldLeft(initialValue, function);
     }
 
     public MutableList<T> toList()

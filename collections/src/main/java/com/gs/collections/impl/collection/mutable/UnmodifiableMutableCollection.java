@@ -237,57 +237,57 @@ public class UnmodifiableMutableCollection<T>
         return this.getMutableCollection().getLast();
     }
 
-    public MutableCollection<T> select(Predicate<? super T> predicate)
+    public MutableCollection<T> filter(Predicate<? super T> predicate)
     {
-        return this.getMutableCollection().select(predicate);
+        return this.getMutableCollection().filter(predicate);
     }
 
-    public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)
+    public <R extends Collection<T>> R filter(Predicate<? super T> predicate, R target)
     {
-        return this.getMutableCollection().select(predicate, target);
+        return this.getMutableCollection().filter(predicate, target);
     }
 
-    public <P> MutableCollection<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> MutableCollection<T> filterWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return this.getMutableCollection().selectWith(predicate, parameter);
+        return this.getMutableCollection().filterWith(predicate, parameter);
     }
 
-    public <P, R extends Collection<T>> R selectWith(
+    public <P, R extends Collection<T>> R filterWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
             R targetCollection)
     {
-        return this.getMutableCollection().selectWith(predicate, parameter, targetCollection);
+        return this.getMutableCollection().filterWith(predicate, parameter, targetCollection);
     }
 
-    public MutableCollection<T> reject(Predicate<? super T> predicate)
+    public MutableCollection<T> filterNot(Predicate<? super T> predicate)
     {
-        return this.getMutableCollection().reject(predicate);
+        return this.getMutableCollection().filterNot(predicate);
     }
 
-    public <R extends Collection<T>> R reject(Predicate<? super T> predicate, R target)
+    public <R extends Collection<T>> R filterNot(Predicate<? super T> predicate, R target)
     {
-        return this.getMutableCollection().reject(predicate, target);
+        return this.getMutableCollection().filterNot(predicate, target);
     }
 
-    public <P> MutableCollection<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> MutableCollection<T> filterNotWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return this.getMutableCollection().rejectWith(predicate, parameter);
+        return this.getMutableCollection().filterNotWith(predicate, parameter);
     }
 
-    public <P, R extends Collection<T>> R rejectWith(
+    public <P, R extends Collection<T>> R filterNotWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
             R targetCollection)
     {
-        return this.getMutableCollection().rejectWith(predicate, parameter, targetCollection);
+        return this.getMutableCollection().filterNotWith(predicate, parameter, targetCollection);
     }
 
-    public <P> Twin<MutableList<T>> selectAndRejectWith(
+    public <P> Twin<MutableList<T>> partitionWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
-        return this.getMutableCollection().selectAndRejectWith(predicate, parameter);
+        return this.getMutableCollection().partitionWith(predicate, parameter);
     }
 
     public PartitionMutableCollection<T> partition(Predicate<? super T> predicate)
@@ -305,57 +305,57 @@ public class UnmodifiableMutableCollection<T>
         throw new UnsupportedOperationException();
     }
 
-    public <V> MutableCollection<V> collect(Function<? super T, ? extends V> function)
+    public <V> MutableCollection<V> transform(Function<? super T, ? extends V> function)
     {
-        return this.getMutableCollection().collect(function);
+        return this.getMutableCollection().transform(function);
     }
 
-    public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)
+    public <V, R extends Collection<V>> R transform(Function<? super T, ? extends V> function, R target)
     {
-        return this.getMutableCollection().collect(function, target);
+        return this.getMutableCollection().transform(function, target);
     }
 
-    public <V> MutableCollection<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    public <V> MutableCollection<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
     {
-        return this.getMutableCollection().flatCollect(function);
+        return this.getMutableCollection().flatTransform(function);
     }
 
-    public <V, R extends Collection<V>> R flatCollect(Function<? super T, ? extends Iterable<V>> function, R target)
+    public <V, R extends Collection<V>> R flatTransform(Function<? super T, ? extends Iterable<V>> function, R target)
     {
-        return this.getMutableCollection().flatCollect(function, target);
+        return this.getMutableCollection().flatTransform(function, target);
     }
 
-    public <P, A> MutableCollection<A> collectWith(Function2<? super T, ? super P, ? extends A> function, P parameter)
+    public <P, A> MutableCollection<A> transformWith(Function2<? super T, ? super P, ? extends A> function, P parameter)
     {
-        return this.getMutableCollection().collectWith(function, parameter);
+        return this.getMutableCollection().transformWith(function, parameter);
     }
 
-    public <P, A, R extends Collection<A>> R collectWith(
+    public <P, A, R extends Collection<A>> R transformWith(
             Function2<? super T, ? super P, ? extends A> function,
             P parameter,
             R targetCollection)
     {
-        return this.getMutableCollection().collectWith(function, parameter, targetCollection);
+        return this.getMutableCollection().transformWith(function, parameter, targetCollection);
     }
 
-    public <V> MutableCollection<V> collectIf(
+    public <V> MutableCollection<V> transformIf(
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function)
     {
-        return this.getMutableCollection().collectIf(predicate, function);
+        return this.getMutableCollection().transformIf(predicate, function);
     }
 
-    public <V, R extends Collection<V>> R collectIf(
+    public <V, R extends Collection<V>> R transformIf(
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function,
             R target)
     {
-        return this.getMutableCollection().collectIf(predicate, function, target);
+        return this.getMutableCollection().transformIf(predicate, function, target);
     }
 
-    public T detect(Predicate<? super T> predicate)
+    public T find(Predicate<? super T> predicate)
     {
-        return this.getMutableCollection().detect(predicate);
+        return this.getMutableCollection().find(predicate);
     }
 
     public T min(Comparator<? super T> comparator)
@@ -388,22 +388,22 @@ public class UnmodifiableMutableCollection<T>
         return this.getMutableCollection().maxBy(function);
     }
 
-    public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
+    public T findIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
     {
-        return this.getMutableCollection().detectIfNone(predicate, function);
+        return this.getMutableCollection().findIfNone(predicate, function);
     }
 
-    public <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> T findWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return this.getMutableCollection().detectWith(predicate, parameter);
+        return this.getMutableCollection().findWith(predicate, parameter);
     }
 
-    public <P> T detectWithIfNone(
+    public <P> T findWithIfNone(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
             Function0<? extends T> function)
     {
-        return this.getMutableCollection().detectWithIfNone(predicate, parameter, function);
+        return this.getMutableCollection().findWithIfNone(predicate, parameter, function);
     }
 
     public int count(Predicate<? super T> predicate)
@@ -436,32 +436,32 @@ public class UnmodifiableMutableCollection<T>
         return this.getMutableCollection().allSatisfyWith(predicate, parameter);
     }
 
-    public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
+    public <IV> IV foldLeft(IV initialValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
-        return this.getMutableCollection().injectInto(injectedValue, function);
+        return this.getMutableCollection().foldLeft(initialValue, function);
     }
 
-    public int injectInto(int injectedValue, IntObjectToIntFunction<? super T> function)
+    public int foldLeft(int initialValue, IntObjectToIntFunction<? super T> function)
     {
-        return this.getMutableCollection().injectInto(injectedValue, function);
+        return this.getMutableCollection().foldLeft(initialValue, function);
     }
 
-    public long injectInto(long injectedValue, LongObjectToLongFunction<? super T> function)
+    public long foldLeft(long initialValue, LongObjectToLongFunction<? super T> function)
     {
-        return this.getMutableCollection().injectInto(injectedValue, function);
+        return this.getMutableCollection().foldLeft(initialValue, function);
     }
 
-    public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super T> function)
+    public double foldLeft(double initialValue, DoubleObjectToDoubleFunction<? super T> function)
     {
-        return this.getMutableCollection().injectInto(injectedValue, function);
+        return this.getMutableCollection().foldLeft(initialValue, function);
     }
 
-    public <IV, P> IV injectIntoWith(
-            IV injectValue,
+    public <IV, P> IV foldLeftWith(
+            IV initialValue,
             Function3<? super IV, ? super T, ? super P, ? extends IV> function,
             P parameter)
     {
-        return this.getMutableCollection().injectIntoWith(injectValue, function, parameter);
+        return this.getMutableCollection().foldLeftWith(initialValue, function, parameter);
     }
 
     public MutableList<T> toList()

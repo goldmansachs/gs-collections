@@ -24,14 +24,14 @@ import com.gs.collections.api.block.procedure.Procedure;
 /**
  * Applies a predicate to an object to determine if it should be added to a target collection.
  */
-public final class RejectProcedure<T> implements Procedure<T>
+public final class FilterNotProcedure<T> implements Procedure<T>
 {
     private static final long serialVersionUID = 1L;
 
     private final Predicate<? super T> predicate;
     private final Collection<T> collection;
 
-    public RejectProcedure(Predicate<? super T> newPredicate, Collection<T> targetCollection)
+    public FilterNotProcedure(Predicate<? super T> newPredicate, Collection<T> targetCollection)
     {
         this.predicate = newPredicate;
         this.collection = targetCollection;

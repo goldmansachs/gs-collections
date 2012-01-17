@@ -140,7 +140,7 @@ public class MapAdapter<K, V>
         this.delegate.putAll(map);
     }
 
-    public <E> MutableMap<K, V> collectKeysAndValues(
+    public <E> MutableMap<K, V> transformKeysAndValues(
             Collection<E> collection,
             Function<? super E, ? extends K> keyFunction,
             Function<? super E, ? extends V> valueFunction)

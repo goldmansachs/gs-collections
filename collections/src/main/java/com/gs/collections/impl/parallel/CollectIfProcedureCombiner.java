@@ -21,8 +21,7 @@ import java.util.Collection;
 import com.gs.collections.impl.block.procedure.CollectIfProcedure;
 
 /**
- * Combines the results of a Collection of CollectIfBlocks which each hold onto a transformed and filtered (collect, if)
- * collection of results.
+ * Combines the results of a Collection of CollectIfBlocks which each hold onto a transformed and filtered collection of results.
  */
 public final class CollectIfProcedureCombiner<T, V>
         extends AbstractTransformerBasedCombiner<V, T, CollectIfProcedure<T, V>>

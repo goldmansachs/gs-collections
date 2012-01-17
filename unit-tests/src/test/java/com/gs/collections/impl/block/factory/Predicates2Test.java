@@ -203,7 +203,7 @@ public class Predicates2Test
         Assert.assertFalse(Predicates2.in().accept("2", list1));
         Assert.assertNotNull(Predicates2.in().toString());
         MutableList<String> list2 = Lists.fixedSize.of("1", "2");
-        MutableList<String> newList = ListIterate.selectWith(list2, Predicates2.in(), list1);
+        MutableList<String> newList = ListIterate.filterWith(list2, Predicates2.in(), list1);
         Assert.assertEquals(FastList.newListWith("1"), newList);
     }
 
@@ -215,7 +215,7 @@ public class Predicates2Test
         Assert.assertFalse(Predicates2.attributeIn(StringFunctions.toUpperCase()).accept("c", upperList));
         MutableList<String> lowerList = Lists.fixedSize.of("a", "c");
         MutableList<String> newList =
-                ListIterate.selectWith(lowerList, Predicates2.attributeIn(StringFunctions.toUpperCase()), upperList);
+                ListIterate.filterWith(lowerList, Predicates2.attributeIn(StringFunctions.toUpperCase()), upperList);
         Assert.assertEquals(FastList.newListWith("a"), newList);
     }
 
@@ -228,7 +228,7 @@ public class Predicates2Test
         Assert.assertFalse(Predicates2.attributeIn(Functions.getToString()).accept(3, stringInts));
         MutableList<Integer> intList = Lists.fixedSize.of(1, 3);
         MutableList<Integer> newList =
-                ListIterate.selectWith(intList, Predicates2.attributeIn(Functions.getToString()), stringInts);
+                ListIterate.filterWith(intList, Predicates2.attributeIn(Functions.getToString()), stringInts);
         Assert.assertEquals(FastList.newListWith(1), newList);
     }
 
@@ -240,7 +240,7 @@ public class Predicates2Test
         Assert.assertTrue(Predicates2.notIn().accept("2", odds));
         Assert.assertNotNull(Predicates2.notIn().toString());
         MutableList<String> list = Lists.fixedSize.of("1", "2");
-        MutableList<String> newList = ListIterate.selectWith(list, Predicates2.notIn(), odds);
+        MutableList<String> newList = ListIterate.filterWith(list, Predicates2.notIn(), odds);
         Assert.assertEquals(FastList.newListWith("2"), newList);
     }
 
@@ -252,7 +252,7 @@ public class Predicates2Test
         Assert.assertFalse(Predicates2.attributeNotIn(function).accept("A", lowerList));
         Assert.assertTrue(Predicates2.attributeNotIn(function).accept("C", lowerList));
         MutableList<String> upperList = Lists.fixedSize.of("A", "C");
-        MutableList<String> newList = ListIterate.rejectWith(upperList, Predicates2.attributeNotIn(function), lowerList);
+        MutableList<String> newList = ListIterate.filterNotWith(upperList, Predicates2.attributeNotIn(function), lowerList);
         Assert.assertEquals(FastList.newListWith("A"), newList);
     }
 

@@ -49,7 +49,7 @@ import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.CollectIfProcedure;
 import com.gs.collections.impl.block.procedure.CollectProcedure;
-import com.gs.collections.impl.block.procedure.RejectProcedure;
+import com.gs.collections.impl.block.procedure.FilterNotProcedure;
 import com.gs.collections.impl.block.procedure.SelectProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
@@ -194,69 +194,69 @@ public abstract class AbstractImmutableCollection<T> implements ImmutableCollect
             Function<? super T, ? extends K> keyFunction,
             Function<? super T, ? extends V> valueFunction)
     {
-        return UnifiedMap.<K, V>newMap(this.size()).collectKeysAndValues(this, keyFunction, valueFunction);
+        return UnifiedMap.<K, V>newMap(this.size()).transformKeysAndValues(this, keyFunction, valueFunction);
     }
 
     public <K, V> MutableSortedMap<K, V> toSortedMap(
             Function<? super T, ? extends K> keyFunction,
             Function<? super T, ? extends V> valueFunction)
     {
-        return TreeSortedMap.<K, V>newMap().collectKeysAndValues(this, keyFunction, valueFunction);
+        return TreeSortedMap.<K, V>newMap().transformKeysAndValues(this, keyFunction, valueFunction);
     }
 
     public <K, V> MutableSortedMap<K, V> toSortedMap(Comparator<? super K> comparator,
             Function<? super T, ? extends K> keyFunction,
             Function<? super T, ? extends V> valueFunction)
     {
-        return TreeSortedMap.<K, V>newMap(comparator).collectKeysAndValues(this, keyFunction, valueFunction);
+        return TreeSortedMap.<K, V>newMap(comparator).transformKeysAndValues(this, keyFunction, valueFunction);
     }
 
-    public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)
+    public <R extends Collection<T>> R filter(Predicate<? super T> predicate, R target)
     {
         this.forEach(new SelectProcedure<T>(predicate, target));
         return target;
     }
 
-    public <P, R extends Collection<T>> R selectWith(
+    public <P, R extends Collection<T>> R filterWith(
             Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
     {
-        return IterableIterate.selectWith(this, predicate, parameter, targetCollection);
+        return IterableIterate.filterWith(this, predicate, parameter, targetCollection);
     }
 
-    public <R extends Collection<T>> R reject(Predicate<? super T> predicate, R target)
+    public <R extends Collection<T>> R filterNot(Predicate<? super T> predicate, R target)
     {
-        this.forEach(new RejectProcedure<T>(predicate, target));
+        this.forEach(new FilterNotProcedure<T>(predicate, target));
         return target;
     }
 
-    public <P, R extends Collection<T>> R rejectWith(
+    public <P, R extends Collection<T>> R filterNotWith(
             Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
     {
-        return IterableIterate.rejectWith(this, predicate, parameter, targetCollection);
+        return IterableIterate.filterNotWith(this, predicate, parameter, targetCollection);
     }
 
-    public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)
+    public <V, R extends Collection<V>> R transform(Function<? super T, ? extends V> function, R target)
     {
         this.forEach(new CollectProcedure<T, V>(function, target));
         return target;
     }
 
-    public <P, V, R extends Collection<V>> R collectWith(
+    public <P, V, R extends Collection<V>> R transformWith(
             Function2<? super T, ? super P, ? extends V> function, P parameter, R targetCollection)
     {
-        return IterableIterate.collectWith(this, function, parameter, targetCollection);
+        return IterableIterate.transformWith(this, function, parameter, targetCollection);
     }
 
-    public <V, R extends Collection<V>> R collectIf(
+    public <V, R extends Collection<V>> R transformIf(
             Predicate<? super T> predicate, Function<? super T, ? extends V> function, R target)
     {
         this.forEach(new CollectIfProcedure<T, V>(target, function, predicate));
         return target;
     }
 
-    public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
+    public T findIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
     {
-        T result = this.detect(predicate);
+        T result = this.find(predicate);
         return result == null ? function.value() : result;
     }
 
@@ -295,15 +295,15 @@ public abstract class AbstractImmutableCollection<T> implements ImmutableCollect
         return LazyIterate.adapt(this);
     }
 
-    public <V, R extends Collection<V>> R flatCollect(
+    public <V, R extends Collection<V>> R flatTransform(
             Function<? super T, ? extends Iterable<V>> function, R target)
     {
-        return IterableIterate.flatCollect(this, function, target);
+        return IterableIterate.flatTransform(this, function, target);
     }
 
-    public T detect(Predicate<? super T> predicate)
+    public T find(Predicate<? super T> predicate)
     {
-        return IterableIterate.detect(this, predicate);
+        return IterableIterate.find(this, predicate);
     }
 
     public int count(Predicate<? super T> predicate)
@@ -321,24 +321,24 @@ public abstract class AbstractImmutableCollection<T> implements ImmutableCollect
         return IterableIterate.allSatisfy(this, predicate);
     }
 
-    public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
+    public <IV> IV foldLeft(IV initialValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
-        return IterableIterate.injectInto(injectedValue, this, function);
+        return IterableIterate.foldLeft(initialValue, this, function);
     }
 
-    public int injectInto(int injectedValue, IntObjectToIntFunction<? super T> function)
+    public int foldLeft(int initialValue, IntObjectToIntFunction<? super T> function)
     {
-        return IterableIterate.injectInto(injectedValue, this, function);
+        return IterableIterate.foldLeft(initialValue, this, function);
     }
 
-    public long injectInto(long injectedValue, LongObjectToLongFunction<? super T> function)
+    public long foldLeft(long initialValue, LongObjectToLongFunction<? super T> function)
     {
-        return IterableIterate.injectInto(injectedValue, this, function);
+        return IterableIterate.foldLeft(initialValue, this, function);
     }
 
-    public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super T> function)
+    public double foldLeft(double initialValue, DoubleObjectToDoubleFunction<? super T> function)
     {
-        return IterableIterate.injectInto(injectedValue, this, function);
+        return IterableIterate.foldLeft(initialValue, this, function);
     }
 
     public void forEachWithIndex(ObjectIntProcedure<? super T> objectIntProcedure)

@@ -19,17 +19,17 @@ package com.gs.collections.impl.block.procedure;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Test;
 
-public class RejectProcedureTest
+public class FilterNotProcedureTest
 {
     @Test
     public void serializedForm()
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyADdjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5wcm9jZWR1cmUuUmVqZWN0UHJv\n"
-                        + "Y2VkdXJlAAAAAAAAAAECAAJMAApjb2xsZWN0aW9udAAWTGphdmEvdXRpbC9Db2xsZWN0aW9uO0wA\n"
-                        + "CXByZWRpY2F0ZXQAMkxjb20vZ3MvY29sbGVjdGlvbnMvYXBpL2Jsb2NrL3ByZWRpY2F0ZS9QcmVk\n"
-                        + "aWNhdGU7eHBwcA==",
-                new RejectProcedure<Object>(null, null));
+                "rO0ABXNyADpjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5wcm9jZWR1cmUuRmlsdGVyTm90\n"
+                        + "UHJvY2VkdXJlAAAAAAAAAAECAAJMAApjb2xsZWN0aW9udAAWTGphdmEvdXRpbC9Db2xsZWN0aW9u\n"
+                        + "O0wACXByZWRpY2F0ZXQAMkxjb20vZ3MvY29sbGVjdGlvbnMvYXBpL2Jsb2NrL3ByZWRpY2F0ZS9Q\n"
+                        + "cmVkaWNhdGU7eHBwcA==",
+                new FilterNotProcedure<Object>(null, null));
     }
 }

@@ -72,9 +72,9 @@ final class ImmutableSingletonBag<T>
     }
 
     @Override
-    public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
+    public <IV> IV foldLeft(IV initialValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
-        return function.value(injectedValue, this.value);
+        return function.value(initialValue, this.value);
     }
 
     @Override
@@ -183,7 +183,7 @@ final class ImmutableSingletonBag<T>
         return ArrayIterate.allSatisfy(elements, Predicates.equal(this.value));
     }
 
-    public ImmutableBag<T> select(Predicate<? super T> predicate)
+    public ImmutableBag<T> filter(Predicate<? super T> predicate)
     {
         return predicate.accept(this.value)
                 ? this
@@ -191,7 +191,7 @@ final class ImmutableSingletonBag<T>
     }
 
     @Override
-    public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)
+    public <R extends Collection<T>> R filter(Predicate<? super T> predicate, R target)
     {
         if (predicate.accept(this.value))
         {
@@ -201,7 +201,7 @@ final class ImmutableSingletonBag<T>
     }
 
     @Override
-    public <P, R extends Collection<T>> R selectWith(
+    public <P, R extends Collection<T>> R filterWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
             R targetCollection)
@@ -213,24 +213,24 @@ final class ImmutableSingletonBag<T>
         return targetCollection;
     }
 
-    public ImmutableBag<T> reject(Predicate<? super T> predicate)
+    public ImmutableBag<T> filterNot(Predicate<? super T> predicate)
     {
-        return this.select(Predicates.not(predicate));
+        return this.filter(Predicates.not(predicate));
     }
 
     @Override
-    public <R extends Collection<T>> R reject(Predicate<? super T> predicate, R target)
+    public <R extends Collection<T>> R filterNot(Predicate<? super T> predicate, R target)
     {
-        return this.select(Predicates.not(predicate), target);
+        return this.filter(Predicates.not(predicate), target);
     }
 
     @Override
-    public <P, R extends Collection<T>> R rejectWith(
+    public <P, R extends Collection<T>> R filterNotWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
             R targetCollection)
     {
-        return this.selectWith(Predicates2.not(predicate), parameter, targetCollection);
+        return this.filterWith(Predicates2.not(predicate), parameter, targetCollection);
     }
 
     public PartitionImmutableBag<T> partition(Predicate<? super T> predicate)
@@ -238,12 +238,12 @@ final class ImmutableSingletonBag<T>
         return PartitionHashBag.of(this, predicate).toImmutable();
     }
 
-    public <V> ImmutableBag<V> collect(Function<? super T, ? extends V> function)
+    public <V> ImmutableBag<V> transform(Function<? super T, ? extends V> function)
     {
         return Bags.immutable.of(function.valueOf(this.value));
     }
 
-    public <V> ImmutableBag<V> collectIf(
+    public <V> ImmutableBag<V> transformIf(
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function)
     {
@@ -253,7 +253,7 @@ final class ImmutableSingletonBag<T>
     }
 
     @Override
-    public <V, R extends Collection<V>> R collectIf(
+    public <V, R extends Collection<V>> R transformIf(
             Predicate<? super T> predicate, Function<? super T, ? extends V> function, R target)
     {
         if (predicate.accept(this.value))
@@ -263,13 +263,13 @@ final class ImmutableSingletonBag<T>
         return target;
     }
 
-    public <V> ImmutableBag<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    public <V> ImmutableBag<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
     {
-        return this.<V, HashBag<V>>flatCollect(function, HashBag.<V>newBag()).toImmutable();
+        return this.<V, HashBag<V>>flatTransform(function, HashBag.<V>newBag()).toImmutable();
     }
 
     @Override
-    public <V, R extends Collection<V>> R flatCollect(
+    public <V, R extends Collection<V>> R flatTransform(
             Function<? super T, ? extends Iterable<V>> function, R target)
     {
         Iterate.addAllTo(function.valueOf(this.value), target);
@@ -277,7 +277,7 @@ final class ImmutableSingletonBag<T>
     }
 
     @Override
-    public T detect(Predicate<? super T> predicate)
+    public T find(Predicate<? super T> predicate)
     {
         return predicate.accept(this.value)
                 ? this.value
@@ -285,7 +285,7 @@ final class ImmutableSingletonBag<T>
     }
 
     @Override
-    public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
+    public T findIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
     {
         return predicate.accept(this.value)
                 ? this.value

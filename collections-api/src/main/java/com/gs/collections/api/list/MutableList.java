@@ -46,23 +46,23 @@ public interface MutableList<T>
 
     MutableList<T> clone();
 
-    MutableList<T> select(Predicate<? super T> predicate);
+    MutableList<T> filter(Predicate<? super T> predicate);
 
-    <P> MutableList<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+    <P> MutableList<T> filterWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
-    MutableList<T> reject(Predicate<? super T> predicate);
+    MutableList<T> filterNot(Predicate<? super T> predicate);
 
-    <P> MutableList<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+    <P> MutableList<T> filterNotWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     PartitionMutableList<T> partition(Predicate<? super T> predicate);
 
-    <V> MutableList<V> collect(Function<? super T, ? extends V> function);
+    <V> MutableList<V> transform(Function<? super T, ? extends V> function);
 
-    <P, V> MutableList<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
+    <P, V> MutableList<V> transformWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
 
-    <V> MutableList<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
+    <V> MutableList<V> transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 
-    <V> MutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
+    <V> MutableList<V> flatTransform(Function<? super T, ? extends Iterable<V>> function);
 
     /**
      * Sorts the internal data structure of this list and returns the list itself as a convenience.

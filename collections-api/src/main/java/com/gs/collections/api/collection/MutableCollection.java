@@ -33,8 +33,8 @@ import com.gs.collections.api.tuple.Twin;
 
 /**
  * MutableCollection is an interface which extends the base java.util.Collection interface and adds several internal
- * iterator methods, from the Smalltalk Collection protocol.  These include variations of forEach, select, reject,
- * detect, collect, injectInto, anySatisfy, allSatisfy. These include count, remove, partition, collectIf.  The API also
+ * iterator methods, from the Smalltalk Collection protocol.  These include variations of forEach, filter, filterNot,
+ * find, transform, foldLeft, anySatisfy, allSatisfy. These include count, remove, partition, transformIf.  The API also
  * includes converter methods to convert a MutableCollection to a List (toList), to a sorted List (toSortedList), to a
  * Set (toSet), and to a Map (toMap).
  * <p/>
@@ -140,7 +140,7 @@ public interface MutableCollection<T>
      * Returns a MutableCollection with all elements that evaluate to true for the specified predicate.
      * <p/>
      * <pre>e.g.
-     * return people.<b>select</b>(new Predicate&lt;Person&gt;()
+     * return people.<b>filter</b>(new Predicate&lt;Person&gt;()
      * {
      *     public boolean value(Person person)
      *     {
@@ -149,22 +149,22 @@ public interface MutableCollection<T>
      * });
      * </pre>
      */
-    MutableCollection<T> select(Predicate<? super T> predicate);
+    MutableCollection<T> filter(Predicate<? super T> predicate);
 
     /**
      * Returns a MutableCollection with all elements that evaluate to true for the specified predicate2 and parameter.
      * <p/>
      * <pre>e.g.
-     * return integers.<b>selectWith</b>(PredicatesLite.equal(), Integer.valueOf(5));
+     * return integers.<b>filterWith</b>(PredicatesLite.equal(), Integer.valueOf(5));
      * </pre>
      */
-    <P> MutableCollection<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+    <P> MutableCollection<T> filterWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     /**
      * Returns a MutableCollection with all elements that evaluate to false for the specified predicate.
      * <p/>
      * <pre>e.g.
-     * return people.reject(new Predicate&lt;Person&gt;()
+     * return people.filterNot(new Predicate&lt;Person&gt;()
      * {
      *     public boolean value(Person person)
      *     {
@@ -174,19 +174,19 @@ public interface MutableCollection<T>
      * </pre>
      * <p/>
      * <pre>e.g.
-     * return people.reject(Predicates.attributeEqual("lastName", "Smith"));
+     * return people.filterNot(Predicates.attributeEqual("lastName", "Smith"));
      * </pre>
      */
-    MutableCollection<T> reject(Predicate<? super T> predicate);
+    MutableCollection<T> filterNot(Predicate<? super T> predicate);
 
     /**
      * Returns a MutableCollection with all elements that evaluate to false for the specified predicate2 and parameter.
      * <p/>
      * <pre>e.g.
-     * return integers.<b>rejectWith</b>(PredicatesLite.equal(), Integer.valueOf(5));
+     * return integers.<b>filterNotWith</b>(PredicatesLite.equal(), Integer.valueOf(5));
      * </pre>
      */
-    <P> MutableCollection<T> rejectWith(
+    <P> MutableCollection<T> filterNotWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter);
 
@@ -194,10 +194,10 @@ public interface MutableCollection<T>
      * Filters a collection into two separate collections based on a predicate returned via a Pair.
      * <p/>
      * <pre>e.g.
-     * return lastNames.<b>selectAndRejectWith</b>(PredicatesLite.lessThan(), "Mason");
+     * return lastNames.<b>partitionWith</b>(PredicatesLite.lessThan(), "Mason");
      * </pre>
      */
-    <P> Twin<MutableList<T>> selectAndRejectWith(
+    <P> Twin<MutableList<T>> partitionWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter);
 
@@ -226,7 +226,7 @@ public interface MutableCollection<T>
      * collection.
      * <p/>
      * <pre>e.g.
-     * return people.collect(new Function&lt;Person, String&gt;()
+     * return people.transform(new Function&lt;Person, String&gt;()
      * {
      *     public String value(Person person)
      *     {
@@ -235,10 +235,10 @@ public interface MutableCollection<T>
      * });
      * </pre>
      */
-    <V> MutableCollection<V> collect(Function<? super T, ? extends V> function);
+    <V> MutableCollection<V> transform(Function<? super T, ? extends V> function);
 
     /**
-     * Same as collect with a Function2 and specified parameter which is passed to the block
+     * Same as {@link #transform} with a Function2 and specified parameter which is passed to the block
      * <p/>
      * <pre>e.g.
      * Function2<Integer, Integer, Integer> addParameterFunction =
@@ -249,10 +249,10 @@ public interface MutableCollection<T>
      *          return each + parameter;
      *      }
      * };
-     * FastList.newListWith(1, 2, 3).collectWith(addParameterFunction, Integer.valueOf(1));
+     * FastList.newListWith(1, 2, 3).transformWith(addParameterFunction, Integer.valueOf(1));
      * </pre>
      */
-    <P, V> MutableCollection<V> collectWith(
+    <P, V> MutableCollection<V> transformWith(
             Function2<? super T, ? super P, ? extends V> function,
             P parameter);
 
@@ -261,19 +261,19 @@ public interface MutableCollection<T>
      * collection, but only for elements that evaluate to true for the specified predicate.
      * <p/>
      * <pre>e.g.
-     * Lists.mutable.of().with(1, 2, 3).collectIf(Predicates.notNull(), Functions.getToString())
+     * Lists.mutable.of().with(1, 2, 3).transformIf(Predicates.notNull(), Functions.getToString())
      * </pre>
      */
-    <V> MutableCollection<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
+    <V> MutableCollection<V> transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 
-    <V> MutableCollection<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
+    <V> MutableCollection<V> flatTransform(Function<? super T, ? extends Iterable<V>> function);
 
     /**
      * Returns the first element that evaluates to true for the specified predicate2 and parameter, or null if none
      * evaluate to true.
      * <p/>
      * <pre>e.g.
-     * people.detectWith(new Predicate2&lt;Person, String&gt;()
+     * people.findWith(new Predicate2&lt;Person, String&gt;()
      * {
      *     public boolean value(Person person, String fullName)
      *     {
@@ -282,13 +282,13 @@ public interface MutableCollection<T>
      * }, "John Smith");
      * </pre>
      */
-    <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+    <P> T findWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     /**
      * Returns the first element of the collection that evaluates to true for the specified predicate2 and parameter, or
      * returns the value of evaluating the specified function.
      */
-    <P> T detectWithIfNone(
+    <P> T findWithIfNone(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
             Function0<? extends T> function);
@@ -313,8 +313,8 @@ public interface MutableCollection<T>
      */
     <P> boolean allSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
-    <IV, P> IV injectIntoWith(
-            IV injectValue,
+    <IV, P> IV foldLeftWith(
+            IV initialValue,
             Function3<? super IV, ? super T, ? super P, ? extends IV> function,
             P parameter);
 

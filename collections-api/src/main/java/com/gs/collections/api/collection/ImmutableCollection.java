@@ -39,15 +39,15 @@ public interface ImmutableCollection<T>
 
     ImmutableCollection<T> newWithoutAll(Iterable<? extends T> elements);
 
-    ImmutableCollection<T> select(Predicate<? super T> predicate);
+    ImmutableCollection<T> filter(Predicate<? super T> predicate);
 
-    ImmutableCollection<T> reject(Predicate<? super T> predicate);
+    ImmutableCollection<T> filterNot(Predicate<? super T> predicate);
 
     PartitionImmutableCollection<T> partition(Predicate<? super T> predicate);
 
-    <V> ImmutableCollection<V> collect(Function<? super T, ? extends V> function);
+    <V> ImmutableCollection<V> transform(Function<? super T, ? extends V> function);
 
-    <V> ImmutableCollection<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
+    <V> ImmutableCollection<V> transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 
     <V> ImmutableMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
 

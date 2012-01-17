@@ -22,20 +22,20 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.impl.EmptyIterator;
 
-public final class FlatCollectIterator<T, V> implements Iterator<V>
+public final class FlatTransformIterator<T, V> implements Iterator<V>
 {
     private final Iterator<T> iterator;
     private final Function<? super T, ? extends Iterable<V>> function;
     private Iterator<V> innerIterator = EmptyIterator.getInstance();
 
-    public FlatCollectIterator(
+    public FlatTransformIterator(
             Iterable<T> iterable,
             Function<? super T, ? extends Iterable<V>> newFunction)
     {
         this(iterable.iterator(), newFunction);
     }
 
-    public FlatCollectIterator(
+    public FlatTransformIterator(
             Iterator<T> newIterator,
             Function<? super T, ? extends Iterable<V>> newFunction)
     {
@@ -45,7 +45,7 @@ public final class FlatCollectIterator<T, V> implements Iterator<V>
 
     public void remove()
     {
-        throw new UnsupportedOperationException("Cannot remove from a flatCollect iterator");
+        throw new UnsupportedOperationException("Cannot remove from a flatTransform iterator");
     }
 
     public boolean hasNext()

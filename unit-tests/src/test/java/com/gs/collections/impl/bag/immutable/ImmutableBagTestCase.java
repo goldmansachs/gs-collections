@@ -198,10 +198,10 @@ public abstract class ImmutableBagTestCase
     {
         ImmutableBag<String> strings = this.newBag();
         Verify.assertContainsAll(
-                FastList.newList(strings.select(Predicates.greaterThan("0"))),
+                FastList.newList(strings.filter(Predicates.greaterThan("0"))),
                 strings.toArray());
-        Verify.assertIterableEmpty(strings.select(Predicates.lessThan("0")));
-        Verify.assertIterableSize(strings.size() - 1, strings.select(Predicates.greaterThan("1")));
+        Verify.assertIterableEmpty(strings.filter(Predicates.lessThan("0")));
+        Verify.assertIterableSize(strings.size() - 1, strings.filter(Predicates.greaterThan("1")));
     }
 
     @Test
@@ -209,47 +209,47 @@ public abstract class ImmutableBagTestCase
     {
         ImmutableBag<String> strings = this.newBag();
 
-        Verify.assertIterableEmpty(strings.select(Predicates.lessThan("0")));
+        Verify.assertIterableEmpty(strings.filter(Predicates.lessThan("0")));
 
         String argument = "thing";
         Assert.assertEquals(
                 strings,
-                strings.selectWith(new GreaterThan0Predicate2(argument), argument, FastList.<String>newList()).toBag());
+                strings.filterWith(new GreaterThan0Predicate2(argument), argument, FastList.<String>newList()).toBag());
     }
 
     @Test
     public void testSelectWithTarget()
     {
         ImmutableBag<String> strings = this.newBag();
-        Assert.assertEquals(strings, strings.select(Predicates.greaterThan("0"), FastList.<String>newList()).toBag());
-        Verify.assertEmpty(strings.select(Predicates.lessThan("0"), FastList.<String>newList()));
+        Assert.assertEquals(strings, strings.filter(Predicates.greaterThan("0"), FastList.<String>newList()).toBag());
+        Verify.assertEmpty(strings.filter(Predicates.lessThan("0"), FastList.<String>newList()));
     }
 
     @Test
     public void testReject()
     {
         ImmutableBag<String> strings = this.newBag();
-        Verify.assertIterableEmpty(strings.reject(Predicates.greaterThan("0")));
-        Assert.assertEquals(strings, strings.reject(Predicates.lessThan("0")));
-        Verify.assertIterableSize(strings.size() - 1, strings.reject(Predicates.lessThan("2")));
+        Verify.assertIterableEmpty(strings.filterNot(Predicates.greaterThan("0")));
+        Assert.assertEquals(strings, strings.filterNot(Predicates.lessThan("0")));
+        Verify.assertIterableSize(strings.size() - 1, strings.filterNot(Predicates.lessThan("2")));
     }
 
     @Test
     public void testRejectWith()
     {
         ImmutableBag<String> strings = this.newBag();
-        Assert.assertEquals(strings, strings.reject(Predicates.lessThan("0")));
+        Assert.assertEquals(strings, strings.filterNot(Predicates.lessThan("0")));
 
         String argument = "thing";
-        Verify.assertEmpty(strings.rejectWith(new GreaterThan0Predicate2(argument), argument, FastList.<String>newList()));
+        Verify.assertEmpty(strings.filterNotWith(new GreaterThan0Predicate2(argument), argument, FastList.<String>newList()));
     }
 
     @Test
     public void testRejectWithTarget()
     {
         ImmutableBag<String> strings = this.newBag();
-        Assert.assertEquals(strings, strings.reject(Predicates.lessThan("0"), FastList.<String>newList()).toBag());
-        Verify.assertEmpty(strings.reject(Predicates.greaterThan("0"), FastList.<String>newList()));
+        Assert.assertEquals(strings, strings.filterNot(Predicates.lessThan("0"), FastList.<String>newList()).toBag());
+        Verify.assertEmpty(strings.filterNot(Predicates.greaterThan("0"), FastList.<String>newList()));
     }
 
     @Test
@@ -266,7 +266,7 @@ public abstract class ImmutableBagTestCase
     @Test
     public void testCollect()
     {
-        Assert.assertEquals(this.newBag(), this.newBag().collect(Functions.getStringPassThru()));
+        Assert.assertEquals(this.newBag(), this.newBag().transform(Functions.getStringPassThru()));
     }
 
     @Test
@@ -275,7 +275,7 @@ public abstract class ImmutableBagTestCase
         ImmutableBag<String> strings = this.newBag();
 
         final String argument = "thing";
-        Assert.assertEquals(strings, strings.collectWith(new Function2<String, String, String>()
+        Assert.assertEquals(strings, strings.transformWith(new Function2<String, String, String>()
         {
             public String value(String argument1, String argument2)
             {
@@ -289,14 +289,14 @@ public abstract class ImmutableBagTestCase
     public void testCollectWithTarget()
     {
         ImmutableBag<String> strings = this.newBag();
-        Assert.assertEquals(strings, strings.collect(Functions.getStringPassThru(), HashBag.<String>newBag()));
-        Assert.assertEquals(strings, strings.collect(Functions.getStringPassThru(), FastList.<String>newList()).toBag());
+        Assert.assertEquals(strings, strings.transform(Functions.getStringPassThru(), HashBag.<String>newBag()));
+        Assert.assertEquals(strings, strings.transform(Functions.getStringPassThru(), FastList.<String>newList()).toBag());
     }
 
     @Test
     public void flatCollect()
     {
-        ImmutableBag<String> actual = this.newBag().flatCollect(new Function<String, MutableList<String>>()
+        ImmutableBag<String> actual = this.newBag().flatTransform(new Function<String, MutableList<String>>()
         {
             public MutableList<String> valueOf(String string)
             {
@@ -304,7 +304,7 @@ public abstract class ImmutableBagTestCase
             }
         });
 
-        ImmutableBag<String> expected = this.newBag().collect(Functions.getToString());
+        ImmutableBag<String> expected = this.newBag().transform(Functions.getToString());
 
         Assert.assertEquals(expected, actual);
     }
@@ -312,7 +312,7 @@ public abstract class ImmutableBagTestCase
     @Test
     public void flatCollectWithTarget()
     {
-        MutableBag<String> actual = this.newBag().flatCollect(new Function<String, MutableList<String>>()
+        MutableBag<String> actual = this.newBag().flatTransform(new Function<String, MutableList<String>>()
         {
             public MutableList<String> valueOf(String string)
             {
@@ -320,7 +320,7 @@ public abstract class ImmutableBagTestCase
             }
         }, HashBag.<String>newBag());
 
-        ImmutableBag<String> expected = this.newBag().collect(Functions.getToString());
+        ImmutableBag<String> expected = this.newBag().transform(Functions.getToString());
 
         Assert.assertEquals(expected, actual);
     }
@@ -329,8 +329,8 @@ public abstract class ImmutableBagTestCase
     public void testDetect()
     {
         ImmutableBag<String> strings = this.newBag();
-        Assert.assertEquals("1", strings.detect(Predicates.equal("1")));
-        Assert.assertNull(strings.detect(Predicates.equal(String.valueOf(this.numKeys() + 1))));
+        Assert.assertEquals("1", strings.find(Predicates.equal("1")));
+        Assert.assertNull(strings.find(Predicates.equal(String.valueOf(this.numKeys() + 1))));
     }
 
     @Test
@@ -344,22 +344,22 @@ public abstract class ImmutableBagTestCase
         ImmutableBag<Pair<String, Object>> pairs = immutableBag.zip(nulls);
         Assert.assertEquals(
                 immutableBag,
-                pairs.collect(Functions.<String>firstOfPair()));
+                pairs.transform(Functions.<String>firstOfPair()));
         Assert.assertEquals(
                 HashBag.newBag(nulls),
-                pairs.collect(Functions.<Object>secondOfPair()));
+                pairs.transform(Functions.<Object>secondOfPair()));
 
         ImmutableBag<Pair<String, Object>> pairsPlusOne = immutableBag.zip(nullsPlusOne);
         Assert.assertEquals(
                 immutableBag,
-                pairsPlusOne.collect(Functions.<String>firstOfPair()));
+                pairsPlusOne.transform(Functions.<String>firstOfPair()));
         Assert.assertEquals(
                 HashBag.newBag(nulls),
-                pairsPlusOne.collect(Functions.<Object>secondOfPair()));
+                pairsPlusOne.transform(Functions.<Object>secondOfPair()));
 
         ImmutableBag<Pair<String, Object>> pairsMinusOne = immutableBag.zip(nullsMinusOne);
         Assert.assertEquals(immutableBag.size() - 1, pairsMinusOne.size());
-        Assert.assertTrue(immutableBag.containsAllIterable(pairsMinusOne.collect(Functions.<String>firstOfPair())));
+        Assert.assertTrue(immutableBag.containsAllIterable(pairsMinusOne.transform(Functions.<String>firstOfPair())));
 
         Assert.assertEquals(immutableBag.zip(nulls), immutableBag.zip(nulls, HashBag.<Pair<String, Object>>newBag()));
     }
@@ -370,8 +370,8 @@ public abstract class ImmutableBagTestCase
         ImmutableBag<String> immutableBag = this.newBag();
         ImmutableBag<Pair<String, Integer>> pairs = immutableBag.zipWithIndex();
 
-        Assert.assertEquals(immutableBag, pairs.collect(Functions.<String>firstOfPair()));
-        Assert.assertEquals(Interval.zeroTo(immutableBag.size() - 1).toBag(), pairs.collect(Functions.<Integer>secondOfPair()));
+        Assert.assertEquals(immutableBag, pairs.transform(Functions.<String>firstOfPair()));
+        Assert.assertEquals(Interval.zeroTo(immutableBag.size() - 1).toBag(), pairs.transform(Functions.<Integer>secondOfPair()));
 
         Assert.assertEquals(immutableBag.zipWithIndex(), immutableBag.zipWithIndex(HashBag.<Pair<String, Integer>>newBag()));
     }
@@ -459,8 +459,8 @@ public abstract class ImmutableBagTestCase
     {
         ImmutableBag<String> strings = this.newBag();
         Function0<String> function = new PassThruFunction0<String>(String.valueOf(this.numKeys() + 1));
-        Assert.assertEquals("1", strings.detectIfNone(Predicates.equal("1"), function));
-        Assert.assertEquals(String.valueOf(this.numKeys() + 1), strings.detectIfNone(Predicates.equal(String.valueOf(this.numKeys() + 1)), function));
+        Assert.assertEquals("1", strings.findIfNone(Predicates.equal("1"), function));
+        Assert.assertEquals(String.valueOf(this.numKeys() + 1), strings.findIfNone(Predicates.equal(String.valueOf(this.numKeys() + 1)), function));
     }
 
     @Test
@@ -493,7 +493,7 @@ public abstract class ImmutableBagTestCase
         ImmutableBag<String> strings = this.newBag();
         Assert.assertEquals(
                 strings,
-                strings.collectIf(
+                strings.transformIf(
                         Predicates.instanceOf(String.class),
                         Functions.getStringPassThru()));
     }
@@ -504,7 +504,7 @@ public abstract class ImmutableBagTestCase
         ImmutableBag<String> strings = this.newBag();
         Assert.assertEquals(
                 strings,
-                strings.collectIf(
+                strings.transformIf(
                         Predicates.instanceOf(String.class),
                         Functions.getStringPassThru(),
                         HashBag.<String>newBag()));
@@ -559,39 +559,39 @@ public abstract class ImmutableBagTestCase
     @Test
     public void injectInto()
     {
-        ImmutableBag<Integer> integers = this.newBag().collect(StringFunctions.toInteger());
-        Integer result = integers.injectInto(0, AddFunction.INTEGER);
-        Assert.assertEquals(FastList.newList(integers).injectInto(0, AddFunction.INTEGER_TO_INT), result.intValue());
+        ImmutableBag<Integer> integers = this.newBag().transform(StringFunctions.toInteger());
+        Integer result = integers.foldLeft(0, AddFunction.INTEGER);
+        Assert.assertEquals(FastList.newList(integers).foldLeft(0, AddFunction.INTEGER_TO_INT), result.intValue());
     }
 
     @Test
     public void injectIntoInt()
     {
-        ImmutableBag<Integer> integers = this.newBag().collect(new Function<String, Integer>()
+        ImmutableBag<Integer> integers = this.newBag().transform(new Function<String, Integer>()
         {
             public Integer valueOf(String string)
             {
                 return Integer.valueOf(string);
             }
         });
-        int result = integers.injectInto(0, AddFunction.INTEGER_TO_INT);
-        Assert.assertEquals(FastList.newList(integers).injectInto(0, AddFunction.INTEGER_TO_INT), result);
+        int result = integers.foldLeft(0, AddFunction.INTEGER_TO_INT);
+        Assert.assertEquals(FastList.newList(integers).foldLeft(0, AddFunction.INTEGER_TO_INT), result);
     }
 
     @Test
     public void injectIntoLong()
     {
-        ImmutableBag<Integer> integers = this.newBag().collect(StringFunctions.toInteger());
-        long result = integers.injectInto(0, AddFunction.INTEGER_TO_LONG);
-        Assert.assertEquals(FastList.newList(integers).injectInto(0, AddFunction.INTEGER_TO_INT), result);
+        ImmutableBag<Integer> integers = this.newBag().transform(StringFunctions.toInteger());
+        long result = integers.foldLeft(0, AddFunction.INTEGER_TO_LONG);
+        Assert.assertEquals(FastList.newList(integers).foldLeft(0, AddFunction.INTEGER_TO_INT), result);
     }
 
     @Test
     public void injectIntoDouble()
     {
-        ImmutableBag<Integer> integers = this.newBag().collect(StringFunctions.toInteger());
-        double result = integers.injectInto(0, AddFunction.INTEGER_TO_DOUBLE);
-        double expected = FastList.newList(integers).injectInto(0, AddFunction.INTEGER_TO_DOUBLE);
+        ImmutableBag<Integer> integers = this.newBag().transform(StringFunctions.toInteger());
+        double result = integers.foldLeft(0, AddFunction.INTEGER_TO_DOUBLE);
+        double expected = FastList.newList(integers).foldLeft(0, AddFunction.INTEGER_TO_DOUBLE);
         Assert.assertEquals(expected, result, 0.001);
     }
 
@@ -740,7 +740,7 @@ public abstract class ImmutableBagTestCase
     {
         MutableSet<String> expectedSet = this.numKeys() == 0
                 ? UnifiedSet.<String>newSet()
-                : Interval.oneTo(this.numKeys()).collect(Functions.getToString()).toSet();
+                : Interval.oneTo(this.numKeys()).transform(Functions.getToString()).toSet();
         Assert.assertEquals(expectedSet, this.newBag().toSet());
     }
 

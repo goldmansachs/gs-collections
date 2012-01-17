@@ -44,10 +44,10 @@ class MutableAnagramTest
         val sizeOfIterable: Function[RichIterable[String], Integer] = (iterable: RichIterable[String]) => Integer.valueOf(iterable.size)
         IteratorIterate.groupBy(WORDS, (string: String) => string.sortWith(_ > _))
                 .multiValuesView
-                .select((iterable: RichIterable[String]) => iterable.size > SIZE_THRESHOLD)
+                .filter((iterable: RichIterable[String]) => iterable.size > SIZE_THRESHOLD)
                 .toSortedList(Collections.reverseOrder(Comparators.byFunction[RichIterable[String], Integer](sizeOfIterable)))
                 .asLazy
-                .collect[String]((iterable: RichIterable[String]) => iterable.size + ": " + iterable)
+                .transform[String]((iterable: RichIterable[String]) => iterable.size + ": " + iterable)
                 .forEach((string: String) => MutableAnagramTest.LOGGER.info(string))
     }
 }

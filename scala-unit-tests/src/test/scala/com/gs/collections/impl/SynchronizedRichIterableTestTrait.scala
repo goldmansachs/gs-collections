@@ -107,44 +107,44 @@ trait SynchronizedRichIterableTestTrait extends SynchronizedMutableIterableTestT
     }
 
     @Test
-    def select_synchronized
+    def filter_synchronized
     {
         this.assertSynchronized
         {
-            this.classUnderTest.select({
+            this.classUnderTest.filter({
                 _: String => false
             })
         }
     }
 
     @Test
-    def select_with_target_synchronized
+    def filter_with_target_synchronized
     {
         this.assertSynchronized
         {
-            this.classUnderTest.select({
+            this.classUnderTest.filter({
                 _: String => false
             }, FastList.newList[String])
         }
     }
 
     @Test
-    def reject_synchronized
+    def filterNot_synchronized
     {
         this.assertSynchronized
         {
-            this.classUnderTest.reject({
+            this.classUnderTest.filterNot({
                 _: String => true
             })
         }
     }
 
     @Test
-    def reject_with_target_synchronized
+    def filterNot_with_target_synchronized
     {
         this.assertSynchronized
         {
-            this.classUnderTest.reject({
+            this.classUnderTest.filterNot({
                 _: String => true
             }, null)
         }
@@ -162,22 +162,22 @@ trait SynchronizedRichIterableTestTrait extends SynchronizedMutableIterableTestT
     }
 
     @Test
-    def collect_synchronized
+    def transform_synchronized
     {
         this.assertSynchronized
         {
-            this.classUnderTest.collect({
+            this.classUnderTest.transform({
                 _: String => null
             })
         }
     }
 
     @Test
-    def collect_with_target_synchronized
+    def transform_with_target_synchronized
     {
         this.assertSynchronized
         {
-            this.classUnderTest.collect[String, MutableCollection[String]](
+            this.classUnderTest.transform[String, MutableCollection[String]](
             {
                 _: String => ""
             },
@@ -186,11 +186,11 @@ trait SynchronizedRichIterableTestTrait extends SynchronizedMutableIterableTestT
     }
 
     @Test
-    def collectIf_synchronized
+    def transformIf_synchronized
     {
         this.assertSynchronized
         {
-            this.classUnderTest.collectIf({
+            this.classUnderTest.transformIf({
                 _: String => false
             },
             {
@@ -200,11 +200,11 @@ trait SynchronizedRichIterableTestTrait extends SynchronizedMutableIterableTestT
     }
 
     @Test
-    def collectIf_with_target_synchronized
+    def transformIf_with_target_synchronized
     {
         this.assertSynchronized
         {
-            this.classUnderTest.collectIf[String, MutableCollection[String]](
+            this.classUnderTest.transformIf[String, MutableCollection[String]](
             {
                 _: String => false
             },
@@ -216,44 +216,44 @@ trait SynchronizedRichIterableTestTrait extends SynchronizedMutableIterableTestT
     }
 
     @Test
-    def flatCollect_synchronized
+    def flatTransform_synchronized
     {
         this.assertSynchronized
         {
-            this.classUnderTest.flatCollect({
+            this.classUnderTest.flatTransform({
                 _: String => FastList.newList[String]
             })
         }
     }
 
     @Test
-    def flatCollect_with_target_synchronized
+    def flatTransform_with_target_synchronized
     {
         this.assertSynchronized
         {
-            this.classUnderTest.flatCollect[String, MutableList[String]]({
+            this.classUnderTest.flatTransform[String, MutableList[String]]({
                 _: String => FastList.newList[String]
             }, FastList.newList[String])
         }
     }
 
     @Test
-    def detect_synchronized
+    def find_synchronized
     {
         this.assertSynchronized
         {
-            this.classUnderTest.detect({
+            this.classUnderTest.find({
                 _: String => false
             })
         }
     }
 
     @Test
-    def detectIfNone_synchronized
+    def findIfNone_synchronized
     {
         this.assertSynchronized
         {
-            this.classUnderTest.detectIfNone({
+            this.classUnderTest.findIfNone({
                 _: String => false
             },
             {
@@ -296,11 +296,11 @@ trait SynchronizedRichIterableTestTrait extends SynchronizedMutableIterableTestT
     }
 
     @Test
-    def injectInto_synchronized
+    def foldLeft_synchronized
     {
         this.assertSynchronized
         {
-            this.classUnderTest.injectInto[String]("",
+            this.classUnderTest.foldLeft[String]("",
             {
                 (_: String, _: String) => ""
             })

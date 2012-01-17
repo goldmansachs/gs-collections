@@ -153,11 +153,11 @@ public abstract class SynchronizedMapIterable<K, V>
 
     public abstract RichIterable<V> valuesView();
 
-    public Pair<K, V> detect(Predicate2<? super K, ? super V> predicate)
+    public Pair<K, V> find(Predicate2<? super K, ? super V> predicate)
     {
         synchronized (this.lock)
         {
-            return this.mapIterable.detect(predicate);
+            return this.mapIterable.find(predicate);
         }
     }
 
@@ -233,51 +233,51 @@ public abstract class SynchronizedMapIterable<K, V>
         }
     }
 
-    public <R extends Collection<V>> R select(Predicate<? super V> predicate, R target)
+    public <R extends Collection<V>> R filter(Predicate<? super V> predicate, R target)
     {
         synchronized (this.lock)
         {
-            return this.mapIterable.select(predicate, target);
+            return this.mapIterable.filter(predicate, target);
         }
     }
 
-    public <P, R extends Collection<V>> R selectWith(Predicate2<? super V, ? super P> predicate, P parameter, R targetCollection)
+    public <P, R extends Collection<V>> R filterWith(Predicate2<? super V, ? super P> predicate, P parameter, R targetCollection)
     {
         synchronized (this.lock)
         {
-            return this.mapIterable.selectWith(predicate, parameter, targetCollection);
+            return this.mapIterable.filterWith(predicate, parameter, targetCollection);
         }
     }
 
-    public <R extends Collection<V>> R reject(Predicate<? super V> predicate, R target)
+    public <R extends Collection<V>> R filterNot(Predicate<? super V> predicate, R target)
     {
         synchronized (this.lock)
         {
-            return this.mapIterable.reject(predicate, target);
+            return this.mapIterable.filterNot(predicate, target);
         }
     }
 
-    public <P, R extends Collection<V>> R rejectWith(Predicate2<? super V, ? super P> predicate, P parameter, R targetCollection)
+    public <P, R extends Collection<V>> R filterNotWith(Predicate2<? super V, ? super P> predicate, P parameter, R targetCollection)
     {
         synchronized (this.lock)
         {
-            return this.mapIterable.rejectWith(predicate, parameter, targetCollection);
+            return this.mapIterable.filterNotWith(predicate, parameter, targetCollection);
         }
     }
 
-    public V detect(Predicate<? super V> predicate)
+    public V find(Predicate<? super V> predicate)
     {
         synchronized (this.lock)
         {
-            return this.mapIterable.detect(predicate);
+            return this.mapIterable.find(predicate);
         }
     }
 
-    public V detectIfNone(Predicate<? super V> predicate, Function0<? extends V> function)
+    public V findIfNone(Predicate<? super V> predicate, Function0<? extends V> function)
     {
         synchronized (this.lock)
         {
-            return this.mapIterable.detectIfNone(predicate, function);
+            return this.mapIterable.findIfNone(predicate, function);
         }
     }
 
@@ -305,35 +305,35 @@ public abstract class SynchronizedMapIterable<K, V>
         }
     }
 
-    public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super V, ? extends IV> function)
+    public <IV> IV foldLeft(IV initialValue, Function2<? super IV, ? super V, ? extends IV> function)
     {
         synchronized (this.lock)
         {
-            return this.mapIterable.injectInto(injectedValue, function);
+            return this.mapIterable.foldLeft(initialValue, function);
         }
     }
 
-    public int injectInto(int injectedValue, IntObjectToIntFunction<? super V> function)
+    public int foldLeft(int initialValue, IntObjectToIntFunction<? super V> function)
     {
         synchronized (this.lock)
         {
-            return this.mapIterable.injectInto(injectedValue, function);
+            return this.mapIterable.foldLeft(initialValue, function);
         }
     }
 
-    public long injectInto(long injectedValue, LongObjectToLongFunction<? super V> function)
+    public long foldLeft(long initialValue, LongObjectToLongFunction<? super V> function)
     {
         synchronized (this.lock)
         {
-            return this.mapIterable.injectInto(injectedValue, function);
+            return this.mapIterable.foldLeft(initialValue, function);
         }
     }
 
-    public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super V> function)
+    public double foldLeft(double initialValue, DoubleObjectToDoubleFunction<? super V> function)
     {
         synchronized (this.lock)
         {
-            return this.mapIterable.injectInto(injectedValue, function);
+            return this.mapIterable.foldLeft(initialValue, function);
         }
     }
 
@@ -600,43 +600,43 @@ public abstract class SynchronizedMapIterable<K, V>
         }
     }
 
-    public <A, R extends Collection<A>> R flatCollect(Function<? super V, ? extends Iterable<A>> function, R target)
+    public <A, R extends Collection<A>> R flatTransform(Function<? super V, ? extends Iterable<A>> function, R target)
     {
         synchronized (this.lock)
         {
-            return this.mapIterable.flatCollect(function, target);
+            return this.mapIterable.flatTransform(function, target);
         }
     }
 
-    public <A, R extends Collection<A>> R collectIf(
+    public <A, R extends Collection<A>> R transformIf(
             Predicate<? super V> predicate,
             Function<? super V, ? extends A> function,
             R target)
     {
         synchronized (this.lock)
         {
-            return this.mapIterable.collectIf(predicate, function, target);
+            return this.mapIterable.transformIf(predicate, function, target);
         }
     }
 
-    public <P, A, R extends Collection<A>> R collectWith(
+    public <P, A, R extends Collection<A>> R transformWith(
             Function2<? super V, ? super P, ? extends A> function,
             P parameter,
             R targetCollection)
     {
         synchronized (this.lock)
         {
-            return this.mapIterable.collectWith(function, parameter, targetCollection);
+            return this.mapIterable.transformWith(function, parameter, targetCollection);
         }
     }
 
-    public <A, R extends Collection<A>> R collect(
+    public <A, R extends Collection<A>> R transform(
             Function<? super V, ? extends A> function,
             R target)
     {
         synchronized (this.lock)
         {
-            return this.mapIterable.collect(function, target);
+            return this.mapIterable.transform(function, target);
         }
     }
 

@@ -73,7 +73,7 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
     public void testSelect()
     {
         ImmutableBag<String> strings = this.newBag();
-        Verify.assertIterableEmpty(strings.select(Predicates.lessThan("0")));
+        Verify.assertIterableEmpty(strings.filter(Predicates.lessThan("0")));
     }
 
     @Test
@@ -81,7 +81,7 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
     public void testReject()
     {
         ImmutableBag<String> strings = this.newBag();
-        Verify.assertIterableEmpty(strings.reject(Predicates.greaterThan("0")));
+        Verify.assertIterableEmpty(strings.filterNot(Predicates.greaterThan("0")));
     }
 
     @Override
@@ -118,7 +118,7 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
     @Test
     public void testDetect()
     {
-        Assert.assertNull(this.newBag().detect(Predicates.equal("1")));
+        Assert.assertNull(this.newBag().find(Predicates.equal("1")));
     }
 
     @Override
@@ -243,18 +243,18 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
         ImmutableBag<Pair<String, Object>> pairs = immutableBag.zip(nulls);
         Assert.assertEquals(
                 immutableBag,
-                pairs.collect(Functions.<String>firstOfPair()));
+                pairs.transform(Functions.<String>firstOfPair()));
         Assert.assertEquals(
                 HashBag.newBag(nulls),
-                pairs.collect(Functions.<Object>secondOfPair()));
+                pairs.transform(Functions.<Object>secondOfPair()));
 
         ImmutableBag<Pair<String, Object>> pairsPlusOne = immutableBag.zip(nullsPlusOne);
         Assert.assertEquals(
                 immutableBag,
-                pairsPlusOne.collect(Functions.<String>firstOfPair()));
+                pairsPlusOne.transform(Functions.<String>firstOfPair()));
         Assert.assertEquals(
                 HashBag.newBag(nulls),
-                pairsPlusOne.collect(Functions.<Object>secondOfPair()));
+                pairsPlusOne.transform(Functions.<Object>secondOfPair()));
 
         Assert.assertEquals(immutableBag.zip(nulls), immutableBag.zip(nulls, HashBag.<Pair<String, Object>>newBag()));
     }
@@ -266,8 +266,8 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
         ImmutableBag<String> immutableBag = this.newBag();
         ImmutableBag<Pair<String, Integer>> pairs = immutableBag.zipWithIndex();
 
-        Assert.assertEquals(immutableBag, pairs.collect(Functions.<String>firstOfPair()));
-        Assert.assertEquals(HashBag.<Integer>newBag(), pairs.collect(Functions.<Integer>secondOfPair()));
+        Assert.assertEquals(immutableBag, pairs.transform(Functions.<String>firstOfPair()));
+        Assert.assertEquals(HashBag.<Integer>newBag(), pairs.transform(Functions.<Integer>secondOfPair()));
 
         Assert.assertEquals(immutableBag.zipWithIndex(), immutableBag.zipWithIndex(HashBag.<Pair<String, Integer>>newBag()));
     }

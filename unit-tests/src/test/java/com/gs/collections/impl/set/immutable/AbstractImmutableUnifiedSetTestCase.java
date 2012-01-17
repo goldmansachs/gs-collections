@@ -156,36 +156,36 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     @Test
     public void select()
     {
-        Assert.assertTrue(this.newSetWith(1, 2, 3, 4, 5).select(Predicates.lessThan(3)).containsAllArguments(1, 2));
-        Assert.assertFalse(this.newSetWith(-1, 2, 3, 4, 5).select(Predicates.lessThan(3)).containsAllArguments(3, 4, 5));
+        Assert.assertTrue(this.newSetWith(1, 2, 3, 4, 5).filter(Predicates.lessThan(3)).containsAllArguments(1, 2));
+        Assert.assertFalse(this.newSetWith(-1, 2, 3, 4, 5).filter(Predicates.lessThan(3)).containsAllArguments(3, 4, 5));
     }
 
     @Test
     public void reject()
     {
-        Assert.assertTrue(this.newSetWith(1, 2, 3, 4).reject(Predicates.lessThan(3)).containsAllArguments(3, 4));
+        Assert.assertTrue(this.newSetWith(1, 2, 3, 4).filterNot(Predicates.lessThan(3)).containsAllArguments(3, 4));
     }
 
     @Test
     public void collect()
     {
         Assert.assertTrue(
-                this.newSetWith(1, 2, 3, 4).collect(Functions.getToString()).containsAllArguments("1", "2", "3", "4"));
+                this.newSetWith(1, 2, 3, 4).transform(Functions.getToString()).containsAllArguments("1", "2", "3", "4"));
     }
 
     @Test
     public void detect()
     {
-        Assert.assertEquals(Integer.valueOf(3), this.newSetWith(1, 2, 3, 4, 5).detect(Predicates.equal(3)));
-        Assert.assertNull(this.newSetWith(1, 2, 3, 4, 5).detect(Predicates.equal(6)));
+        Assert.assertEquals(Integer.valueOf(3), this.newSetWith(1, 2, 3, 4, 5).find(Predicates.equal(3)));
+        Assert.assertNull(this.newSetWith(1, 2, 3, 4, 5).find(Predicates.equal(6)));
     }
 
     @Test
     public void detectIfNoneWithBlock()
     {
         Function0<Integer> function = new PassThruFunction0<Integer>(6);
-        Assert.assertEquals(Integer.valueOf(3), this.newSetWith(1, 2, 3, 4, 5).detectIfNone(Predicates.equal(3), function));
-        Assert.assertEquals(Integer.valueOf(6), this.newSetWith(1, 2, 3, 4, 5).detectIfNone(Predicates.equal(6), function));
+        Assert.assertEquals(Integer.valueOf(3), this.newSetWith(1, 2, 3, 4, 5).findIfNone(Predicates.equal(3), function));
+        Assert.assertEquals(Integer.valueOf(6), this.newSetWith(1, 2, 3, 4, 5).findIfNone(Predicates.equal(6), function));
     }
 
     @Test
@@ -211,7 +211,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     @Test
     public void collectIf()
     {
-        Assert.assertTrue(this.newSetWith(1, 2, 3).collectIf(
+        Assert.assertTrue(this.newSetWith(1, 2, 3).transformIf(
                 Predicates.instanceOf(Integer.class),
                 Functions.getToString()).containsAllArguments("1", "2", "3"));
     }
@@ -252,7 +252,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     public void injectInto()
     {
         ImmutableSet<Integer> objects = this.newSetWith(1, 2, 3);
-        Integer result = objects.injectInto(1, AddFunction.INTEGER);
+        Integer result = objects.foldLeft(1, AddFunction.INTEGER);
         Assert.assertEquals(Integer.valueOf(7), result);
     }
 
@@ -260,7 +260,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     public void injectIntoInt()
     {
         ImmutableSet<Integer> objects = this.newSetWith(1, 2, 3);
-        int result = objects.injectInto(1, AddFunction.INTEGER_TO_INT);
+        int result = objects.foldLeft(1, AddFunction.INTEGER_TO_INT);
         Assert.assertEquals(7, result);
     }
 
@@ -268,7 +268,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     public void injectIntoLong()
     {
         ImmutableSet<Integer> objects = this.newSetWith(1, 2, 3);
-        long result = objects.injectInto(1, AddFunction.INTEGER_TO_LONG);
+        long result = objects.foldLeft(1, AddFunction.INTEGER_TO_LONG);
         Assert.assertEquals(7, result);
     }
 
@@ -276,7 +276,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     public void injectIntoDouble()
     {
         ImmutableSet<Integer> objects = this.newSetWith(1, 2, 3);
-        double result = objects.injectInto(1, AddFunction.INTEGER_TO_DOUBLE);
+        double result = objects.foldLeft(1, AddFunction.INTEGER_TO_DOUBLE);
         Assert.assertEquals(7.0d, result, 0.001);
     }
 

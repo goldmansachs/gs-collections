@@ -27,7 +27,7 @@ import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class SelectIteratorTest
+public class FilterIteratorTest
 {
     private static final Predicates<Object> PREDICATE = Predicates.equal(Boolean.TRUE);
 
@@ -45,8 +45,8 @@ public class SelectIteratorTest
                 Boolean.FALSE,
                 Boolean.TRUE,
                 null);
-        this.assertElements(new SelectIterator<Boolean>(list.iterator(), PREDICATE));
-        this.assertElements(new SelectIterator<Boolean>(list, PREDICATE));
+        this.assertElements(new FilterIterator<Boolean>(list.iterator(), PREDICATE));
+        this.assertElements(new FilterIterator<Boolean>(list, PREDICATE));
     }
 
     private void assertElements(Iterator<Boolean> newIterator)
@@ -66,7 +66,7 @@ public class SelectIteratorTest
         {
             public void run()
             {
-                new SelectIterator<Object>(Lists.fixedSize.of(), Predicates.alwaysTrue()).next();
+                new FilterIterator<Object>(Lists.fixedSize.of(), Predicates.alwaysTrue()).next();
             }
         });
     }
@@ -78,7 +78,7 @@ public class SelectIteratorTest
         {
             public void run()
             {
-                new SelectIterator<Object>(Lists.fixedSize.of(), Predicates.alwaysTrue()).remove();
+                new FilterIterator<Object>(Lists.fixedSize.of(), Predicates.alwaysTrue()).remove();
             }
         });
     }

@@ -80,51 +80,51 @@ public class SynchronizedMutableMap<K, V>
         return (MutableMap<K, V>) this.getMap();
     }
 
-    public MutableMap<K, V> select(Predicate2<? super K, ? super V> predicate)
+    public MutableMap<K, V> filter(Predicate2<? super K, ? super V> predicate)
     {
         synchronized (this.lock)
         {
-            return this.getMutableMap().select(predicate);
+            return this.getMutableMap().filter(predicate);
         }
     }
 
-    public <R> MutableMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function)
+    public <R> MutableMap<K, R> transformValues(Function2<? super K, ? super V, ? extends R> function)
     {
         synchronized (this.lock)
         {
-            return this.getMutableMap().collectValues(function);
+            return this.getMutableMap().transformValues(function);
         }
     }
 
-    public <K2, V2> MutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> pairFunction)
+    public <K2, V2> MutableMap<K2, V2> transform(Function2<? super K, ? super V, Pair<K2, V2>> pairFunction)
     {
         synchronized (this.lock)
         {
-            return this.getMutableMap().collect(pairFunction);
+            return this.getMutableMap().transform(pairFunction);
         }
     }
 
-    public MutableMap<K, V> reject(Predicate2<? super K, ? super V> predicate)
+    public MutableMap<K, V> filterNot(Predicate2<? super K, ? super V> predicate)
     {
         synchronized (this.lock)
         {
-            return this.getMutableMap().reject(predicate);
+            return this.getMutableMap().filterNot(predicate);
         }
     }
 
-    public MutableCollection<V> select(Predicate<? super V> predicate)
+    public MutableCollection<V> filter(Predicate<? super V> predicate)
     {
         synchronized (this.lock)
         {
-            return this.getMutableMap().select(predicate);
+            return this.getMutableMap().filter(predicate);
         }
     }
 
-    public MutableCollection<V> reject(Predicate<? super V> predicate)
+    public MutableCollection<V> filterNot(Predicate<? super V> predicate)
     {
         synchronized (this.lock)
         {
-            return this.getMutableMap().reject(predicate);
+            return this.getMutableMap().filterNot(predicate);
         }
     }
 
@@ -152,27 +152,27 @@ public class SynchronizedMutableMap<K, V>
         }
     }
 
-    public <A> MutableCollection<A> flatCollect(Function<? super V, ? extends Iterable<A>> function)
+    public <A> MutableCollection<A> flatTransform(Function<? super V, ? extends Iterable<A>> function)
     {
         synchronized (this.lock)
         {
-            return this.getMutableMap().flatCollect(function);
+            return this.getMutableMap().flatTransform(function);
         }
     }
 
-    public <A> MutableCollection<A> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends A> function)
+    public <A> MutableCollection<A> transformIf(Predicate<? super V> predicate, Function<? super V, ? extends A> function)
     {
         synchronized (this.lock)
         {
-            return this.getMutableMap().collectIf(predicate, function);
+            return this.getMutableMap().transformIf(predicate, function);
         }
     }
 
-    public <A> MutableCollection<A> collect(Function<? super V, ? extends A> function)
+    public <A> MutableCollection<A> transform(Function<? super V, ? extends A> function)
     {
         synchronized (this.lock)
         {
-            return this.getMutableMap().collect(function);
+            return this.getMutableMap().transform(function);
         }
     }
 
@@ -200,11 +200,11 @@ public class SynchronizedMutableMap<K, V>
         }
     }
 
-    public <E> MutableMap<K, V> collectKeysAndValues(Collection<E> collection, Function<? super E, ? extends K> keyFunction, Function<? super E, ? extends V> function)
+    public <E> MutableMap<K, V> transformKeysAndValues(Collection<E> collection, Function<? super E, ? extends K> keyFunction, Function<? super E, ? extends V> function)
     {
         synchronized (this.lock)
         {
-            return this.getMutableMap().collectKeysAndValues(collection, keyFunction, function);
+            return this.getMutableMap().transformKeysAndValues(collection, keyFunction, function);
         }
     }
 
@@ -294,7 +294,7 @@ public class SynchronizedMutableMap<K, V>
         synchronized (this.lock)
         {
             Set<Entry<K, V>> entries = this.getMutableMap().entrySet();
-            Iterable<Pair<K, V>> pairs = Iterate.collect(entries, AbstractImmutableEntry.<K, V>getPairFunction());
+            Iterable<Pair<K, V>> pairs = Iterate.transform(entries, AbstractImmutableEntry.<K, V>getPairFunction());
             return LazyIterate.adapt(pairs);
         }
     }

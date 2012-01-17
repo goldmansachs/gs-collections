@@ -51,9 +51,9 @@ public class IntervalTest
     public void into()
     {
         int sum = Interval.oneTo(5)
-                .select(Predicates.lessThan(5))
+                .filter(Predicates.lessThan(5))
                 .into(FastList.<Integer>newList())
-                .injectInto(0, AddFunction.INTEGER_TO_INT);
+                .foldLeft(0, AddFunction.INTEGER_TO_INT);
         Assert.assertEquals(10, sum);
     }
 
@@ -200,21 +200,21 @@ public class IntervalTest
     public void injectIntoOnFromToByInterval()
     {
         Interval interval = Interval.oneTo(5);
-        Assert.assertEquals(Integer.valueOf(20), interval.injectInto(5, AddFunction.INTEGER));
-        Assert.assertEquals(Integer.valueOf(20), interval.reverseThis().injectInto(5, AddFunction.INTEGER));
+        Assert.assertEquals(Integer.valueOf(20), interval.foldLeft(5, AddFunction.INTEGER));
+        Assert.assertEquals(Integer.valueOf(20), interval.reverseThis().foldLeft(5, AddFunction.INTEGER));
     }
 
     @Test
     public void sumInterval()
     {
-        int sum = Interval.oneTo(5).injectInto(0, AddFunction.INTEGER_TO_INT);
+        int sum = Interval.oneTo(5).foldLeft(0, AddFunction.INTEGER_TO_INT);
         Assert.assertEquals(15, sum);
     }
 
     @Test
     public void maxInterval()
     {
-        Integer value = Interval.oneTo(5).injectInto(0, MaxFunction.INTEGER);
+        Integer value = Interval.oneTo(5).foldLeft(0, MaxFunction.INTEGER);
         Assert.assertEquals(5, value.intValue());
     }
 
@@ -230,7 +230,7 @@ public class IntervalTest
     public void collectOnFromToByInterval()
     {
         Interval interval = Interval.oneToBy(5, 2);
-        LazyIterable<String> result = interval.collect(Functions.getToString());
+        LazyIterable<String> result = interval.transform(Functions.getToString());
         Verify.assertIterableSize(3, result);
         Verify.assertContainsAll(result, "1", "5");
         Verify.assertNotContains("2", result);
@@ -240,7 +240,7 @@ public class IntervalTest
     public void collectOnFromToInterval()
     {
         Interval interval = Interval.oneTo(5);
-        LazyIterable<String> result = interval.collect(Functions.getToString());
+        LazyIterable<String> result = interval.transform(Functions.getToString());
         Verify.assertIterableSize(5, result);
         Verify.assertContainsAll(result, "1", "5");
     }
@@ -249,16 +249,16 @@ public class IntervalTest
     public void selectOnFromToInterval()
     {
         Interval interval = Interval.oneTo(5);
-        Assert.assertEquals(FastList.newListWith(2, 4), interval.select(IntegerPredicates.isEven()).toList());
-        Assert.assertEquals(FastList.newListWith(4, 2), interval.reverseThis().select(IntegerPredicates.isEven()).toList());
+        Assert.assertEquals(FastList.newListWith(2, 4), interval.filter(IntegerPredicates.isEven()).toList());
+        Assert.assertEquals(FastList.newListWith(4, 2), interval.reverseThis().filter(IntegerPredicates.isEven()).toList());
     }
 
     @Test
     public void rejectOnFromToInterval()
     {
         Interval interval = Interval.oneTo(5);
-        Assert.assertEquals(FastList.newListWith(1, 3, 5), interval.reject(IntegerPredicates.isEven()).toList());
-        Assert.assertEquals(FastList.newListWith(5, 3, 1), interval.reverseThis().reject(IntegerPredicates.isEven()).toList());
+        Assert.assertEquals(FastList.newListWith(1, 3, 5), interval.filterNot(IntegerPredicates.isEven()).toList());
+        Assert.assertEquals(FastList.newListWith(5, 3, 1), interval.reverseThis().filterNot(IntegerPredicates.isEven()).toList());
     }
 
     @Test
@@ -639,8 +639,8 @@ public class IntervalTest
         Interval interval = Interval.fromTo(10, -10).by(-5);
 
         MutableList<Integer> expected = FastList.newListWith(10, 0, -10);
-        Assert.assertEquals(expected, interval.select(IntegerPredicates.isEven()).toList());
-        Assert.assertEquals(expected, interval.select(IntegerPredicates.isEven(), FastList.<Integer>newList()));
+        Assert.assertEquals(expected, interval.filter(IntegerPredicates.isEven()).toList());
+        Assert.assertEquals(expected, interval.filter(IntegerPredicates.isEven(), FastList.<Integer>newList()));
     }
 
     @Test
@@ -649,7 +649,7 @@ public class IntervalTest
         Interval interval = Interval.fromTo(10, -10).by(-5);
 
         MutableList<Integer> expected = FastList.newListWith(5, -5);
-        Assert.assertEquals(expected, interval.reject(IntegerPredicates.isEven(), FastList.<Integer>newList()));
+        Assert.assertEquals(expected, interval.filterNot(IntegerPredicates.isEven(), FastList.<Integer>newList()));
     }
 
     @Test
@@ -658,8 +658,8 @@ public class IntervalTest
         Interval interval = Interval.fromTo(10, -10).by(-5);
 
         MutableList<String> expected = FastList.newListWith("10", "5", "0", "-5", "-10");
-        Assert.assertEquals(expected, interval.collect(Functions.getToString()).toList());
-        Assert.assertEquals(expected, interval.collect(Functions.getToString(), FastList.<String>newList()));
+        Assert.assertEquals(expected, interval.transform(Functions.getToString()).toList());
+        Assert.assertEquals(expected, interval.transform(Functions.getToString(), FastList.<String>newList()));
     }
 
     @Test

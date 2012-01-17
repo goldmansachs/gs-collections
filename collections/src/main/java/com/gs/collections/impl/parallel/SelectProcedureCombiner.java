@@ -21,8 +21,7 @@ import java.util.Collection;
 import com.gs.collections.impl.block.procedure.SelectProcedure;
 
 /**
- * Combines the results of a Collection of SelectBlocks which each hold onto a filtered (select)
- * collection of results.
+ * Combines the results of a Collection of SelectBlocks which each hold onto a filtered collection of results.
  */
 public final class SelectProcedureCombiner<T>
         extends AbstractPredicateBasedCombiner<T, SelectProcedure<T>>

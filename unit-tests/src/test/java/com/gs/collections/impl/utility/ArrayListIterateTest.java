@@ -268,7 +268,7 @@ public class ArrayListIterateTest
     {
         ArrayList<Integer> list = this.newArrayList(1, 2, 3);
         Assert.assertEquals(Integer.valueOf(1 + 1 + 2 + 3),
-                ArrayListIterate.injectInto(1, list, AddFunction.INTEGER));
+                ArrayListIterate.foldLeft(1, list, AddFunction.INTEGER));
     }
 
     @Test
@@ -279,7 +279,7 @@ public class ArrayListIterateTest
         {
             list.add(1);
         }
-        Assert.assertEquals(Integer.valueOf(102), ArrayListIterate.injectInto(1, list, AddFunction.INTEGER));
+        Assert.assertEquals(Integer.valueOf(102), ArrayListIterate.foldLeft(1, list, AddFunction.INTEGER));
     }
 
     @Test
@@ -290,7 +290,7 @@ public class ArrayListIterateTest
         list.add(2.0);
         list.add(3.0);
         Assert.assertEquals(new Double(1.0 + 1.0 + 2.0 + 3.0),
-                ArrayListIterate.injectInto(1.0, list, AddFunction.DOUBLE));
+                ArrayListIterate.foldLeft(1.0, list, AddFunction.DOUBLE));
     }
 
     @Test
@@ -300,7 +300,7 @@ public class ArrayListIterateTest
         list.add("1");
         list.add("2");
         list.add("3");
-        Assert.assertEquals("0123", ArrayListIterate.injectInto("0", list, AddFunction.STRING));
+        Assert.assertEquals("0123", ArrayListIterate.foldLeft("0", list, AddFunction.STRING));
     }
 
     @Test
@@ -310,7 +310,7 @@ public class ArrayListIterateTest
         list.add("1");
         list.add("12");
         list.add("123");
-        Assert.assertEquals(Integer.valueOf(3), ArrayListIterate.injectInto(Integer.MIN_VALUE, list, MaxSizeFunction.STRING));
+        Assert.assertEquals(Integer.valueOf(3), ArrayListIterate.foldLeft(Integer.MIN_VALUE, list, MaxSizeFunction.STRING));
     }
 
     @Test
@@ -320,7 +320,7 @@ public class ArrayListIterateTest
         list.add("1");
         list.add("12");
         list.add("123");
-        Assert.assertEquals(Integer.valueOf(1), ArrayListIterate.injectInto(Integer.MAX_VALUE, list, MinSizeFunction.STRING));
+        Assert.assertEquals(Integer.valueOf(1), ArrayListIterate.foldLeft(Integer.MAX_VALUE, list, MinSizeFunction.STRING));
     }
 
     @Test
@@ -337,7 +337,7 @@ public class ArrayListIterateTest
         list.add(Boolean.FALSE);
         list.add(Boolean.TRUE);
         list.add(null);
-        ArrayList<String> newCollection = ArrayListIterate.collect(list, Functions.getToString());
+        ArrayList<String> newCollection = ArrayListIterate.transform(list, Functions.getToString());
         //List<String> newCollection = ArrayListIterate.collect(list, ArrayListIterateTest.TO_STRING_FUNCTION);
         Verify.assertSize(10, newCollection);
         Verify.assertContainsAll(newCollection, "null", "false", "true");
@@ -347,7 +347,7 @@ public class ArrayListIterateTest
     public void testCollectOver100()
     {
         ArrayList<Integer> list = new ArrayList<Integer>(Interval.oneTo(101));
-        ArrayList<Class<?>> newCollection = ArrayListIterate.collect(list, Functions.getToClass());
+        ArrayList<Class<?>> newCollection = ArrayListIterate.transform(list, Functions.getToClass());
         Verify.assertSize(101, newCollection);
         Verify.assertContains(Integer.class, newCollection);
     }
@@ -456,73 +456,73 @@ public class ArrayListIterateTest
     public void testDetect()
     {
         ArrayList<Integer> list = this.getIntegerList();
-        Assert.assertEquals(Integer.valueOf(1), ArrayListIterate.detect(list, Predicates.equal(1)));
+        Assert.assertEquals(Integer.valueOf(1), ArrayListIterate.find(list, Predicates.equal(1)));
         //noinspection CachedNumberConstructorCall,UnnecessaryBoxing
         ArrayList<Integer> list2 =
                 this.newArrayList(1, new Integer(2), 2);  // test relies on having a unique instance of "2"
-        Assert.assertSame(list2.get(1), ArrayListIterate.detect(list2, Predicates.equal(2)));
+        Assert.assertSame(list2.get(1), ArrayListIterate.find(list2, Predicates.equal(2)));
     }
 
     @Test
     public void testDetectOver100()
     {
         ArrayList<Integer> list = new ArrayList<Integer>(Interval.oneTo(101));
-        Assert.assertEquals(Integer.valueOf(1), ArrayListIterate.detect(list, Predicates.equal(1)));
+        Assert.assertEquals(Integer.valueOf(1), ArrayListIterate.find(list, Predicates.equal(1)));
     }
 
     @Test
     public void testDetectWith()
     {
         ArrayList<Integer> list = this.getIntegerList();
-        Assert.assertEquals(Integer.valueOf(1), ArrayListIterate.detectWith(list, Predicates2.equal(), 1));
+        Assert.assertEquals(Integer.valueOf(1), ArrayListIterate.findWith(list, Predicates2.equal(), 1));
         //noinspection CachedNumberConstructorCall,UnnecessaryBoxing
         ArrayList<Integer> list2 =
                 this.newArrayList(1, new Integer(2), 2);  // test relies on having a unique instance of "2"
-        Assert.assertSame(list2.get(1), ArrayListIterate.detectWith(list2, Predicates2.equal(), 2));
+        Assert.assertSame(list2.get(1), ArrayListIterate.findWith(list2, Predicates2.equal(), 2));
     }
 
     @Test
     public void testDetectWithOver100()
     {
         ArrayList<Integer> list = new ArrayList<Integer>(Interval.oneTo(101));
-        Assert.assertEquals(Integer.valueOf(1), ArrayListIterate.detectWith(list, Predicates2.equal(), 1));
+        Assert.assertEquals(Integer.valueOf(1), ArrayListIterate.findWith(list, Predicates2.equal(), 1));
     }
 
     @Test
     public void testDetectIfNone()
     {
         ArrayList<Integer> list = this.getIntegerList();
-        Assert.assertEquals(Integer.valueOf(7), ArrayListIterate.detectIfNone(list, Predicates.equal(6), 7));
-        Assert.assertEquals(Integer.valueOf(2), ArrayListIterate.detectIfNone(list, Predicates.equal(2), 7));
+        Assert.assertEquals(Integer.valueOf(7), ArrayListIterate.findIfNone(list, Predicates.equal(6), 7));
+        Assert.assertEquals(Integer.valueOf(2), ArrayListIterate.findIfNone(list, Predicates.equal(2), 7));
     }
 
     @Test
     public void testDetectIfNoneOver100()
     {
         ArrayList<Integer> list = new ArrayList<Integer>(Interval.oneTo(101));
-        Assert.assertNull(ArrayListIterate.detectIfNone(list, Predicates.equal(102), null));
+        Assert.assertNull(ArrayListIterate.findIfNone(list, Predicates.equal(102), null));
     }
 
     @Test
     public void testDetectWithIfNone()
     {
         ArrayList<Integer> list = this.getIntegerList();
-        Assert.assertEquals(Integer.valueOf(7), ArrayListIterate.detectWithIfNone(list, Predicates2.equal(), 6, 7));
-        Assert.assertEquals(Integer.valueOf(2), ArrayListIterate.detectWithIfNone(list, Predicates2.equal(), 2, 7));
+        Assert.assertEquals(Integer.valueOf(7), ArrayListIterate.findIfWithNone(list, Predicates2.equal(), 6, 7));
+        Assert.assertEquals(Integer.valueOf(2), ArrayListIterate.findIfWithNone(list, Predicates2.equal(), 2, 7));
     }
 
     @Test
     public void testDetectWithIfNoneOver100()
     {
         ArrayList<Integer> list = new ArrayList<Integer>(Interval.oneTo(101));
-        Assert.assertNull(ArrayListIterate.detectWithIfNone(list, Predicates2.equal(), 102, null));
+        Assert.assertNull(ArrayListIterate.findIfWithNone(list, Predicates2.equal(), 102, null));
     }
 
     @Test
     public void testSelect()
     {
         ArrayList<Integer> list = this.getIntegerList();
-        ArrayList<Integer> results = ArrayListIterate.select(list, Predicates.instanceOf(Integer.class));
+        ArrayList<Integer> results = ArrayListIterate.filter(list, Predicates.instanceOf(Integer.class));
         Verify.assertSize(5, results);
     }
 
@@ -530,7 +530,7 @@ public class ArrayListIterateTest
     public void testSelectOver100()
     {
         ArrayList<Integer> list = new ArrayList<Integer>(Interval.oneTo(101));
-        ArrayList<Integer> results = ArrayListIterate.select(list, Predicates.instanceOf(Integer.class));
+        ArrayList<Integer> results = ArrayListIterate.filter(list, Predicates.instanceOf(Integer.class));
         Verify.assertSize(101, results);
     }
 
@@ -538,7 +538,7 @@ public class ArrayListIterateTest
     public void testSelectWith()
     {
         ArrayList<Integer> list = this.getIntegerList();
-        ArrayList<Integer> results = ArrayListIterate.selectWith(list, Predicates2.instanceOf(), Integer.class);
+        ArrayList<Integer> results = ArrayListIterate.filterWith(list, Predicates2.instanceOf(), Integer.class);
         Verify.assertSize(5, results);
     }
 
@@ -546,7 +546,7 @@ public class ArrayListIterateTest
     public void testSelectWithOver100()
     {
         ArrayList<Integer> list = new ArrayList<Integer>(Interval.oneTo(101));
-        ArrayList<Integer> results = ArrayListIterate.selectWith(list, Predicates2.instanceOf(), Integer.class);
+        ArrayList<Integer> results = ArrayListIterate.filterWith(list, Predicates2.instanceOf(), Integer.class);
         Verify.assertSize(101, results);
     }
 
@@ -554,7 +554,7 @@ public class ArrayListIterateTest
     public void testReject()
     {
         ArrayList<Integer> list = this.getIntegerList();
-        ArrayList<Integer> results = ArrayListIterate.reject(list, Predicates.instanceOf(Integer.class));
+        ArrayList<Integer> results = ArrayListIterate.filterNot(list, Predicates.instanceOf(Integer.class));
         Verify.assertEmpty(results);
     }
 
@@ -562,7 +562,7 @@ public class ArrayListIterateTest
     public void testRejectOver100()
     {
         ArrayList<Integer> list = new ArrayList<Integer>(Interval.oneTo(101));
-        List<Integer> results = ArrayListIterate.reject(list, Predicates.instanceOf(Integer.class));
+        List<Integer> results = ArrayListIterate.filterNot(list, Predicates.instanceOf(Integer.class));
         Verify.assertEmpty(results);
     }
 
@@ -595,11 +595,11 @@ public class ArrayListIterateTest
                 return object.getCollection();
             }
         };
-        List<Integer> results1 = ArrayListIterate.flatCollect(list, flatteningFunction);
+        List<Integer> results1 = ArrayListIterate.flatTransform(list, flatteningFunction);
         Verify.assertListsEqual(FastList.newListWith(1, 1, 2, 2), results1);
 
         MutableList<Integer> target1 = Lists.mutable.of();
-        MutableList<Integer> results2 = ArrayListIterate.flatCollect(list, flatteningFunction, target1);
+        MutableList<Integer> results2 = ArrayListIterate.flatTransform(list, flatteningFunction, target1);
         Assert.assertSame(results2, target1);
 
         Verify.assertListsEqual(FastList.newListWith(1, 1, 2, 2), results2);
@@ -609,7 +609,7 @@ public class ArrayListIterateTest
     public void testRejectWith()
     {
         ArrayList<Integer> list = this.getIntegerList();
-        ArrayList<Integer> results = ArrayListIterate.rejectWith(list, Predicates2.instanceOf(), Integer.class);
+        ArrayList<Integer> results = ArrayListIterate.filterNotWith(list, Predicates2.instanceOf(), Integer.class);
         Verify.assertEmpty(results);
     }
 
@@ -617,7 +617,7 @@ public class ArrayListIterateTest
     public void testRejectWithOver100()
     {
         ArrayList<Integer> list = new ArrayList<Integer>(Interval.oneTo(101));
-        ArrayList<Integer> results = ArrayListIterate.rejectWith(list, Predicates2.instanceOf(), Integer.class);
+        ArrayList<Integer> results = ArrayListIterate.filterNotWith(list, Predicates2.instanceOf(), Integer.class);
         Verify.assertEmpty(results);
     }
 
@@ -626,7 +626,7 @@ public class ArrayListIterateTest
     {
         ArrayList<Integer> list = this.getIntegerList();
         Twin<MutableList<Integer>> result =
-                ArrayListIterate.selectAndRejectWith(list, Predicates2.in(), Lists.immutable.of(1));
+                ArrayListIterate.partitionWith(list, Predicates2.in(), Lists.immutable.of(1));
         Verify.assertSize(1, result.getOne());
         Verify.assertSize(4, result.getTwo());
     }
@@ -636,7 +636,7 @@ public class ArrayListIterateTest
     {
         ArrayList<Integer> list = new ArrayList<Integer>(Interval.oneTo(101));
         Twin<MutableList<Integer>> result =
-                ArrayListIterate.selectAndRejectWith(list, Predicates2.in(), Lists.immutable.of(1));
+                ArrayListIterate.partitionWith(list, Predicates2.in(), Lists.immutable.of(1));
         Verify.assertSize(1, result.getOne());
         Verify.assertSize(100, result.getTwo());
     }
@@ -737,7 +737,7 @@ public class ArrayListIterateTest
     public void testCollectIfOver100()
     {
         ArrayList<Integer> list = new ArrayList<Integer>(Interval.oneTo(101));
-        ArrayList<Class<?>> result = ArrayListIterate.collectIf(list, Predicates.equal(101), Functions.getToClass());
+        ArrayList<Class<?>> result = ArrayListIterate.transformIf(list, Predicates.equal(101), Functions.getToClass());
         Assert.assertEquals(FastList.newListWith(Integer.class), result);
     }
 
@@ -745,7 +745,7 @@ public class ArrayListIterateTest
     public void testCollectWithOver100()
     {
         ArrayList<Integer> list = new ArrayList<Integer>(Interval.oneTo(101));
-        ArrayList<String> result = ArrayListIterate.collectWith(list, new Function2<Integer, Integer, String>()
+        ArrayList<String> result = ArrayListIterate.transformWith(list, new Function2<Integer, Integer, String>()
         {
             public String value(Integer argument1, Integer argument2)
             {
@@ -761,36 +761,36 @@ public class ArrayListIterateTest
     public void testDetectIndexOver100()
     {
         ArrayList<Integer> list = new ArrayList<Integer>(Interval.toReverseList(1, 101));
-        Assert.assertEquals(100, ArrayListIterate.detectIndex(list, Predicates.equal(1)));
-        Assert.assertEquals(0, Iterate.detectIndex(list, Predicates.equal(101)));
-        Assert.assertEquals(-1, Iterate.detectIndex(list, Predicates.equal(200)));
+        Assert.assertEquals(100, ArrayListIterate.findIndex(list, Predicates.equal(1)));
+        Assert.assertEquals(0, Iterate.findIndex(list, Predicates.equal(101)));
+        Assert.assertEquals(-1, Iterate.findIndex(list, Predicates.equal(200)));
     }
 
     @Test
     public void testDetectIndexSmallList()
     {
         ArrayList<Integer> list = new ArrayList<Integer>(Interval.toReverseList(1, 5));
-        Assert.assertEquals(4, ArrayListIterate.detectIndex(list, Predicates.equal(1)));
-        Assert.assertEquals(0, Iterate.detectIndex(list, Predicates.equal(5)));
-        Assert.assertEquals(-1, Iterate.detectIndex(list, Predicates.equal(10)));
+        Assert.assertEquals(4, ArrayListIterate.findIndex(list, Predicates.equal(1)));
+        Assert.assertEquals(0, Iterate.findIndex(list, Predicates.equal(5)));
+        Assert.assertEquals(-1, Iterate.findIndex(list, Predicates.equal(10)));
     }
 
     @Test
     public void testDetectIndexWithOver100()
     {
         ArrayList<Integer> list = new ArrayList<Integer>(Interval.toReverseList(1, 101));
-        Assert.assertEquals(100, Iterate.detectIndexWith(list, Predicates2.equal(), 1));
-        Assert.assertEquals(0, Iterate.detectIndexWith(list, Predicates2.equal(), 101));
-        Assert.assertEquals(-1, Iterate.detectIndexWith(list, Predicates2.equal(), 200));
+        Assert.assertEquals(100, Iterate.findIndexWith(list, Predicates2.equal(), 1));
+        Assert.assertEquals(0, Iterate.findIndexWith(list, Predicates2.equal(), 101));
+        Assert.assertEquals(-1, Iterate.findIndexWith(list, Predicates2.equal(), 200));
     }
 
     @Test
     public void testDetectIndexWithSmallList()
     {
         ArrayList<Integer> list = new ArrayList<Integer>(Interval.toReverseList(1, 5));
-        Assert.assertEquals(4, Iterate.detectIndexWith(list, Predicates2.equal(), 1));
-        Assert.assertEquals(0, Iterate.detectIndexWith(list, Predicates2.equal(), 5));
-        Assert.assertEquals(-1, Iterate.detectIndexWith(list, Predicates2.equal(), 10));
+        Assert.assertEquals(4, Iterate.findIndexWith(list, Predicates2.equal(), 1));
+        Assert.assertEquals(0, Iterate.findIndexWith(list, Predicates2.equal(), 5));
+        Assert.assertEquals(-1, Iterate.findIndexWith(list, Predicates2.equal(), 10));
     }
 
     @Test
@@ -805,7 +805,7 @@ public class ArrayListIterateTest
                 return sum.add((element.intValue() - element.intValue()) * withValue.intValue());
             }
         };
-        Sum sumOfDoubledValues = ArrayListIterate.injectIntoWith(result, this.getOver100IntegerList(), function, parameter);
+        Sum sumOfDoubledValues = ArrayListIterate.foldLeftWith(result, this.getOver100IntegerList(), function, parameter);
         Assert.assertEquals(0, sumOfDoubledValues.getValue().intValue());
     }
 
@@ -969,7 +969,7 @@ public class ArrayListIterateTest
     {
         ArrayList<Integer> list = new ArrayList<Integer>(Interval.toReverseList(1, 105));
 
-        ArrayList<Integer> result = ArrayListIterate.flatCollect(list, new CollectionWrappingFunction<Integer>(),
+        ArrayList<Integer> result = ArrayListIterate.flatTransform(list, new CollectionWrappingFunction<Integer>(),
                 new ArrayList<Integer>());
         Assert.assertEquals(105, result.get(0).intValue());
     }

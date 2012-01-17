@@ -19,20 +19,20 @@ package com.gs.collections.impl.parallel;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Test;
 
-public class RejectProcedureCombinerTest
+public class FilterNotProcedureCombinerTest
 {
     @Test
     public void serializedForm()
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyADhjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5wYXJhbGxlbC5SZWplY3RQcm9jZWR1cmVD\n"
-                        + "b21iaW5lcgAAAAAAAAABAgAAeHIAP2NvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLnBhcmFsbGVsLkFi\n"
-                        + "c3RyYWN0UHJlZGljYXRlQmFzZWRDb21iaW5lcgAAAAAAAAABAgABTAAGcmVzdWx0dAAWTGphdmEv\n"
-                        + "dXRpbC9Db2xsZWN0aW9uO3hyADpjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5wYXJhbGxlbC5BYnN0\n"
-                        + "cmFjdFByb2NlZHVyZUNvbWJpbmVyAAAAAAAAAAECAAFaAA11c2VDb21iaW5lT25leHABc3IALWNv\n"
-                        + "bS5ncy5jb2xsZWN0aW9ucy5pbXBsLmxpc3QubXV0YWJsZS5GYXN0TGlzdAAAAAAAAAABDAAAeHB3\n"
-                        + "BAAAAAB4",
-                new RejectProcedureCombiner<Object>(null, null, 1, true));
+                "rO0ABXNyADtjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5wYXJhbGxlbC5GaWx0ZXJOb3RQcm9jZWR1\n"
+                        + "cmVDb21iaW5lcgAAAAAAAAABAgAAeHIAP2NvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLnBhcmFsbGVs\n"
+                        + "LkFic3RyYWN0UHJlZGljYXRlQmFzZWRDb21iaW5lcgAAAAAAAAABAgABTAAGcmVzdWx0dAAWTGph\n"
+                        + "dmEvdXRpbC9Db2xsZWN0aW9uO3hyADpjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5wYXJhbGxlbC5B\n"
+                        + "YnN0cmFjdFByb2NlZHVyZUNvbWJpbmVyAAAAAAAAAAECAAFaAA11c2VDb21iaW5lT25leHABc3IA\n"
+                        + "LWNvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLmxpc3QubXV0YWJsZS5GYXN0TGlzdAAAAAAAAAABDAAA\n"
+                        + "eHB3BAAAAAB4",
+                new FilterNotProcedureCombiner<Object>(null, null, 1, true));
     }
 }

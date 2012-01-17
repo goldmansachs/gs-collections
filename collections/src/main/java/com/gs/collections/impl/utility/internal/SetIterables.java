@@ -147,11 +147,11 @@ public final class SetIterables
 
     private static <T> MutableSet<MutableSet<T>> powerSetWithSeed(Set<T> set, MutableSet<MutableSet<T>> seed)
     {
-        return Iterate.injectInto(seed, set, new Function2<MutableSet<MutableSet<T>>, T, MutableSet<MutableSet<T>>>()
+        return Iterate.foldLeft(seed, set, new Function2<MutableSet<MutableSet<T>>, T, MutableSet<MutableSet<T>>>()
         {
             public MutableSet<MutableSet<T>> value(MutableSet<MutableSet<T>> accumulator, final T element)
             {
-                return SetIterables.union(accumulator, accumulator.collect(new Function<MutableSet<T>, MutableSet<T>>()
+                return SetIterables.union(accumulator, accumulator.transform(new Function<MutableSet<T>, MutableSet<T>>()
                 {
                     public MutableSet<T> valueOf(MutableSet<T> innerSet)
                     {
@@ -167,7 +167,7 @@ public final class SetIterables
      */
     public static <T> ImmutableSet<ImmutableSet<T>> immutablePowerSet(Set<T> set)
     {
-        return powerSet(set).collect(new Function<MutableSet<T>, ImmutableSet<T>>()
+        return powerSet(set).transform(new Function<MutableSet<T>, ImmutableSet<T>>()
         {
             public ImmutableSet<T> valueOf(MutableSet<T> set)
             {
@@ -178,11 +178,11 @@ public final class SetIterables
 
     public static <A, B> LazyIterable<Pair<A, B>> cartesianProduct(SetIterable<A> set1, final SetIterable<B> set2)
     {
-        return LazyIterate.flatCollect(set1, new Function<A, LazyIterable<Pair<A, B>>>()
+        return LazyIterate.flatTransform(set1, new Function<A, LazyIterable<Pair<A, B>>>()
         {
             public LazyIterable<Pair<A, B>> valueOf(final A first)
             {
-                return LazyIterate.collect(set2, new Function<B, Pair<A, B>>()
+                return LazyIterate.transform(set2, new Function<B, Pair<A, B>>()
                 {
                     public Pair<A, B> valueOf(B second)
                     {

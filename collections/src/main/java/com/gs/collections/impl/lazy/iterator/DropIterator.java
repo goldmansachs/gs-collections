@@ -37,7 +37,7 @@ public final class DropIterator<T> implements Iterator<T>
 
     public DropIterator(Iterator<T> iterator, int count)
     {
-        this.delegateIterator = new SelectIterator<T>(iterator, new DropIterablePredicate<T>(count));
+        this.delegateIterator = new FilterIterator<T>(iterator, new DropIterablePredicate<T>(count));
     }
 
     public boolean hasNext()

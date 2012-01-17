@@ -177,34 +177,34 @@ public abstract class AbstractLazyIterable<T>
         return IterableIterate.getLast(this);
     }
 
-    public LazyIterable<T> select(Predicate<? super T> predicate)
+    public LazyIterable<T> filter(Predicate<? super T> predicate)
     {
-        return LazyIterate.select(this, predicate);
+        return LazyIterate.filter(this, predicate);
     }
 
-    public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)
+    public <R extends Collection<T>> R filter(Predicate<? super T> predicate, R target)
     {
-        return IterableIterate.select(this, predicate, target);
+        return IterableIterate.filter(this, predicate, target);
     }
 
-    public <P, R extends Collection<T>> R selectWith(Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
+    public <P, R extends Collection<T>> R filterWith(Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
     {
-        return IterableIterate.selectWith(this, predicate, parameter, targetCollection);
+        return IterableIterate.filterWith(this, predicate, parameter, targetCollection);
     }
 
-    public LazyIterable<T> reject(Predicate<? super T> predicate)
+    public LazyIterable<T> filterNot(Predicate<? super T> predicate)
     {
-        return LazyIterate.reject(this, predicate);
+        return LazyIterate.filterNot(this, predicate);
     }
 
-    public <R extends Collection<T>> R reject(Predicate<? super T> predicate, R target)
+    public <R extends Collection<T>> R filterNot(Predicate<? super T> predicate, R target)
     {
-        return IterableIterate.reject(this, predicate, target);
+        return IterableIterate.filterNot(this, predicate, target);
     }
 
-    public <P, R extends Collection<T>> R rejectWith(Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
+    public <P, R extends Collection<T>> R filterNotWith(Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
     {
-        return IterableIterate.rejectWith(this, predicate, parameter, targetCollection);
+        return IterableIterate.filterNotWith(this, predicate, parameter, targetCollection);
     }
 
     public PartitionMutableList<T> partition(Predicate<? super T> predicate)
@@ -212,24 +212,24 @@ public abstract class AbstractLazyIterable<T>
         return PartitionFastList.of(this, predicate);
     }
 
-    public <V> LazyIterable<V> collect(Function<? super T, ? extends V> function)
+    public <V> LazyIterable<V> transform(Function<? super T, ? extends V> function)
     {
-        return LazyIterate.collect(this, function);
+        return LazyIterate.transform(this, function);
     }
 
-    public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)
+    public <V, R extends Collection<V>> R transform(Function<? super T, ? extends V> function, R target)
     {
-        return IterableIterate.collect(this, function, target);
+        return IterableIterate.transform(this, function, target);
     }
 
-    public <P, V, R extends Collection<V>> R collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter, R targetCollection)
+    public <P, V, R extends Collection<V>> R transformWith(Function2<? super T, ? super P, ? extends V> function, P parameter, R targetCollection)
     {
-        return IterableIterate.collectWith(this, function, parameter, targetCollection);
+        return IterableIterate.transformWith(this, function, parameter, targetCollection);
     }
 
-    public <V> LazyIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    public <V> LazyIterable<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
     {
-        return LazyIterate.flatCollect(this, function);
+        return LazyIterate.flatTransform(this, function);
     }
 
     public LazyIterable<T> concatenate(Iterable<T> iterable)
@@ -237,19 +237,19 @@ public abstract class AbstractLazyIterable<T>
         return LazyIterate.concatenate(this, iterable);
     }
 
-    public <V, R extends Collection<V>> R flatCollect(Function<? super T, ? extends Iterable<V>> function, R target)
+    public <V, R extends Collection<V>> R flatTransform(Function<? super T, ? extends Iterable<V>> function, R target)
     {
-        return IterableIterate.flatCollect(this, function, target);
+        return IterableIterate.flatTransform(this, function, target);
     }
 
-    public <V> LazyIterable<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
+    public <V> LazyIterable<V> transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
     {
-        return LazyIterate.collectIf(this, predicate, function);
+        return LazyIterate.transformIf(this, predicate, function);
     }
 
-    public <V, R extends Collection<V>> R collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function, R target)
+    public <V, R extends Collection<V>> R transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function, R target)
     {
-        return IterableIterate.collectIf(this, predicate, function, target);
+        return IterableIterate.tranformIf(this, predicate, function, target);
     }
 
     public LazyIterable<T> take(int count)
@@ -262,9 +262,9 @@ public abstract class AbstractLazyIterable<T>
         return LazyIterate.drop(this, count);
     }
 
-    public T detect(Predicate<? super T> predicate)
+    public T find(Predicate<? super T> predicate)
     {
-        return IterableIterate.detect(this, predicate);
+        return IterableIterate.find(this, predicate);
     }
 
     public T min(Comparator<? super T> comparator)
@@ -297,9 +297,9 @@ public abstract class AbstractLazyIterable<T>
         return Iterate.max(this, Comparators.byFunction(function));
     }
 
-    public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
+    public T findIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
     {
-        T result = this.detect(predicate);
+        T result = this.find(predicate);
         return result == null ? function.value() : result;
     }
 
@@ -320,24 +320,24 @@ public abstract class AbstractLazyIterable<T>
         return IterableIterate.allSatisfy(this, predicate);
     }
 
-    public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
+    public <IV> IV foldLeft(IV initialValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
-        return IterableIterate.injectInto(injectedValue, this, function);
+        return IterableIterate.foldLeft(initialValue, this, function);
     }
 
-    public int injectInto(int injectedValue, IntObjectToIntFunction<? super T> function)
+    public int foldLeft(int initialValue, IntObjectToIntFunction<? super T> function)
     {
-        return IterableIterate.injectInto(injectedValue, this, function);
+        return IterableIterate.foldLeft(initialValue, this, function);
     }
 
-    public long injectInto(long injectedValue, LongObjectToLongFunction<? super T> function)
+    public long foldLeft(long initialValue, LongObjectToLongFunction<? super T> function)
     {
-        return IterableIterate.injectInto(injectedValue, this, function);
+        return IterableIterate.foldLeft(initialValue, this, function);
     }
 
-    public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super T> function)
+    public double foldLeft(double initialValue, DoubleObjectToDoubleFunction<? super T> function)
     {
-        return IterableIterate.injectInto(injectedValue, this, function);
+        return IterableIterate.foldLeft(initialValue, this, function);
     }
 
     public MutableList<T> toList()

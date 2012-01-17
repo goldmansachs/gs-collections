@@ -166,7 +166,7 @@ trait SynchronizedMapIterableTestTrait extends SynchronizedRichIterableTestTrait
     {
         this.assertSynchronized
         {
-            this.classUnderTest.select
+            this.classUnderTest.filter
             {
                 (_: String, _: String) => false
             }
@@ -178,7 +178,7 @@ trait SynchronizedMapIterableTestTrait extends SynchronizedRichIterableTestTrait
     {
         this.assertSynchronized
         {
-            this.classUnderTest.collectValues
+            this.classUnderTest.transformValues
             {
                 (_: String, _: String) => "foo"
             }
@@ -190,7 +190,7 @@ trait SynchronizedMapIterableTestTrait extends SynchronizedRichIterableTestTrait
     {
         this.assertSynchronized
         {
-            this.classUnderTest.collect
+            this.classUnderTest.transform
             {
                 (_: String, _: String) => Tuples.pair("foo", "bar")
             }
@@ -202,7 +202,7 @@ trait SynchronizedMapIterableTestTrait extends SynchronizedRichIterableTestTrait
     {
         this.assertSynchronized
         {
-            this.classUnderTest.reject
+            this.classUnderTest.filterNot
             {
                 (_: String, _: String) => false
             }
@@ -214,7 +214,7 @@ trait SynchronizedMapIterableTestTrait extends SynchronizedRichIterableTestTrait
     {
         this.assertSynchronized
         {
-            this.classUnderTest.detect
+            this.classUnderTest.find
             {
                 (_: String, _: String) => false
             }

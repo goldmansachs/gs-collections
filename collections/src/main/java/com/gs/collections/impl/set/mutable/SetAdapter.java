@@ -178,15 +178,15 @@ public final class SetAdapter<T>
     }
 
     @Override
-    public MutableSet<T> select(Predicate<? super T> predicate)
+    public MutableSet<T> filter(Predicate<? super T> predicate)
     {
-        return Iterate.select(this.delegate, predicate, UnifiedSet.<T>newSet());
+        return Iterate.filter(this.delegate, predicate, UnifiedSet.<T>newSet());
     }
 
     @Override
-    public MutableSet<T> reject(Predicate<? super T> predicate)
+    public MutableSet<T> filterNot(Predicate<? super T> predicate)
     {
-        return Iterate.reject(this.delegate, predicate, UnifiedSet.<T>newSet());
+        return Iterate.filterNot(this.delegate, predicate, UnifiedSet.<T>newSet());
     }
 
     @Override
@@ -196,23 +196,23 @@ public final class SetAdapter<T>
     }
 
     @Override
-    public <V> MutableSet<V> collect(Function<? super T, ? extends V> function)
+    public <V> MutableSet<V> transform(Function<? super T, ? extends V> function)
     {
-        return Iterate.collect(this.delegate, function, UnifiedSet.<V>newSet());
+        return Iterate.transform(this.delegate, function, UnifiedSet.<V>newSet());
     }
 
     @Override
-    public <V> MutableSet<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    public <V> MutableSet<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
     {
-        return Iterate.flatCollect(this.delegate, function, UnifiedSet.<V>newSet());
+        return Iterate.flatTransform(this.delegate, function, UnifiedSet.<V>newSet());
     }
 
     @Override
-    public <V> MutableSet<V> collectIf(
+    public <V> MutableSet<V> transformIf(
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function)
     {
-        return Iterate.collectIf(this.delegate, predicate, function, UnifiedSet.<V>newSet());
+        return Iterate.tranformIf(this.delegate, predicate, function, UnifiedSet.<V>newSet());
     }
 
     @Override
@@ -228,21 +228,21 @@ public final class SetAdapter<T>
     }
 
     @Override
-    public <P> MutableSet<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> MutableSet<T> filterWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return Iterate.selectWith(this.delegate, predicate, parameter, UnifiedSet.<T>newSet());
+        return Iterate.filterWith(this.delegate, predicate, parameter, UnifiedSet.<T>newSet());
     }
 
     @Override
-    public <P> MutableSet<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> MutableSet<T> filterNotWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return Iterate.rejectWith(this.delegate, predicate, parameter, UnifiedSet.<T>newSet());
+        return Iterate.filterNotWith(this.delegate, predicate, parameter, UnifiedSet.<T>newSet());
     }
 
     @Override
-    public <P, V> MutableSet<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
+    public <P, V> MutableSet<V> transformWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
     {
-        return Iterate.collectWith(this.delegate, function, parameter, UnifiedSet.<V>newSet());
+        return Iterate.transformWith(this.delegate, function, parameter, UnifiedSet.<V>newSet());
     }
 
     @Override

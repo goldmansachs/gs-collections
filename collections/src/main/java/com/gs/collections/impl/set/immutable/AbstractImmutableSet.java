@@ -35,7 +35,7 @@ import com.gs.collections.impl.block.procedure.CollectProcedure;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
-import com.gs.collections.impl.block.procedure.RejectProcedure;
+import com.gs.collections.impl.block.procedure.FilterNotProcedure;
 import com.gs.collections.impl.block.procedure.SelectProcedure;
 import com.gs.collections.impl.collection.immutable.AbstractImmutableCollection;
 import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
@@ -102,17 +102,17 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
 
     public abstract T getLast();
 
-    public ImmutableSet<T> select(Predicate<? super T> predicate)
+    public ImmutableSet<T> filter(Predicate<? super T> predicate)
     {
         UnifiedSet<T> result = UnifiedSet.newSet();
         this.forEach(new SelectProcedure<T>(predicate, result));
         return result.toImmutable();
     }
 
-    public ImmutableSet<T> reject(Predicate<? super T> predicate)
+    public ImmutableSet<T> filterNot(Predicate<? super T> predicate)
     {
         UnifiedSet<T> result = UnifiedSet.newSet();
-        this.forEach(new RejectProcedure<T>(predicate, result));
+        this.forEach(new FilterNotProcedure<T>(predicate, result));
         return result.toImmutable();
     }
 
@@ -121,21 +121,21 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
         return PartitionUnifiedSet.of(this, predicate).toImmutable();
     }
 
-    public <V> ImmutableSet<V> collect(Function<? super T, ? extends V> function)
+    public <V> ImmutableSet<V> transform(Function<? super T, ? extends V> function)
     {
         UnifiedSet<V> result = UnifiedSet.newSet();
         this.forEach(new CollectProcedure<T, V>(function, result));
         return result.toImmutable();
     }
 
-    public <V> ImmutableSet<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
+    public <V> ImmutableSet<V> transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
     {
         UnifiedSet<V> result = UnifiedSet.newSet();
         this.forEach(new CollectIfProcedure<T, V>(result, function, predicate));
         return result.toImmutable();
     }
 
-    public <V> ImmutableSet<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    public <V> ImmutableSet<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
     {
         UnifiedSet<V> result = UnifiedSet.newSet();
         this.forEach(new FlatCollectProcedure<T, V>(function, result));

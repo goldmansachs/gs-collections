@@ -67,7 +67,7 @@ public final class ChunkIterator<T>
 
     public void remove()
     {
-        throw new UnsupportedOperationException("Cannot remove from a collect iterator");
+        throw new UnsupportedOperationException("Cannot remove from a chunk iterator");
     }
 
     public boolean hasNext()

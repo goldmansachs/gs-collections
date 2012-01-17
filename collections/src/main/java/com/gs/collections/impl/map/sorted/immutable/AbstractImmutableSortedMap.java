@@ -143,25 +143,25 @@ public abstract class AbstractImmutableSortedMap<K, V>
     }
 
     @Override
-    public ImmutableList<V> select(Predicate<? super V> predicate)
+    public ImmutableList<V> filter(Predicate<? super V> predicate)
     {
-        return this.select(predicate, FastList.<V>newList(this.size())).toImmutable();
+        return this.filter(predicate, FastList.<V>newList(this.size())).toImmutable();
     }
 
-    public ImmutableSortedMap<K, V> select(Predicate2<? super K, ? super V> predicate)
+    public ImmutableSortedMap<K, V> filter(Predicate2<? super K, ? super V> predicate)
     {
-        return MapIterate.selectMapOnEntry(this, predicate, TreeSortedMap.<K, V>newMap(this.comparator())).toImmutable();
+        return MapIterate.filterMapOnEntry(this, predicate, TreeSortedMap.<K, V>newMap(this.comparator())).toImmutable();
     }
 
     @Override
-    public ImmutableList<V> reject(Predicate<? super V> predicate)
+    public ImmutableList<V> filterNot(Predicate<? super V> predicate)
     {
-        return this.reject(predicate, FastList.<V>newList(this.size())).toImmutable();
+        return this.filterNot(predicate, FastList.<V>newList(this.size())).toImmutable();
     }
 
-    public ImmutableSortedMap<K, V> reject(Predicate2<? super K, ? super V> predicate)
+    public ImmutableSortedMap<K, V> filterNot(Predicate2<? super K, ? super V> predicate)
     {
-        return MapIterate.rejectMapOnEntry(this, predicate, TreeSortedMap.<K, V>newMap(this.comparator())).toImmutable();
+        return MapIterate.filterNotMapOnEntry(this, predicate, TreeSortedMap.<K, V>newMap(this.comparator())).toImmutable();
     }
 
     public PartitionImmutableList<V> partition(Predicate<? super V> predicate)
@@ -170,36 +170,36 @@ public abstract class AbstractImmutableSortedMap<K, V>
     }
 
     @Override
-    public <R> ImmutableList<R> collect(Function<? super V, ? extends R> function)
+    public <R> ImmutableList<R> transform(Function<? super V, ? extends R> function)
     {
-        return this.collect(function, FastList.<R>newList(this.size())).toImmutable();
+        return this.transform(function, FastList.<R>newList(this.size())).toImmutable();
     }
 
-    public <K2, V2> ImmutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function)
+    public <K2, V2> ImmutableMap<K2, V2> transform(Function2<? super K, ? super V, Pair<K2, V2>> function)
     {
-        return MapIterate.collect(this, function, UnifiedMap.<K2, V2>newMap()).toImmutable();
-    }
-
-    @Override
-    public <R> ImmutableList<R> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function)
-    {
-        return this.collectIf(predicate, function, FastList.<R>newList(this.size())).toImmutable();
-    }
-
-    public <R> ImmutableSortedMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function)
-    {
-        return MapIterate.collectValues(this, function, TreeSortedMap.<K, R>newMap(this.comparator())).toImmutable();
-    }
-
-    public Pair<K, V> detect(Predicate2<? super K, ? super V> predicate)
-    {
-        return MapIterate.detect(this, predicate);
+        return MapIterate.transform(this, function, UnifiedMap.<K2, V2>newMap()).toImmutable();
     }
 
     @Override
-    public <R> ImmutableList<R> flatCollect(Function<? super V, ? extends Iterable<R>> function)
+    public <R> ImmutableList<R> transformIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function)
     {
-        return this.flatCollect(function, FastList.<R>newList(this.size())).toImmutable();
+        return this.transformIf(predicate, function, FastList.<R>newList(this.size())).toImmutable();
+    }
+
+    public <R> ImmutableSortedMap<K, R> transformValues(Function2<? super K, ? super V, ? extends R> function)
+    {
+        return MapIterate.transformValues(this, function, TreeSortedMap.<K, R>newMap(this.comparator())).toImmutable();
+    }
+
+    public Pair<K, V> find(Predicate2<? super K, ? super V> predicate)
+    {
+        return MapIterate.find(this, predicate);
+    }
+
+    @Override
+    public <R> ImmutableList<R> flatTransform(Function<? super V, ? extends Iterable<R>> function)
+    {
+        return this.flatTransform(function, FastList.<R>newList(this.size())).toImmutable();
     }
 
     @Override

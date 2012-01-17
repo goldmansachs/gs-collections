@@ -88,10 +88,10 @@ public class AnagramTest
     {
         MutableList<RichIterable<String>> results = this.getWords().groupBy(ALPHAGRAM_FUNCTION)
                 .multiValuesView()
-                .select(ITERABLE_SIZE_AT_THRESHOLD)
+                .filter(ITERABLE_SIZE_AT_THRESHOLD)
                 .toSortedList(DESCENDING_ITERABLE_SIZE);
         results.asLazy()
-                .collect(ITERABLE_TO_FORMATTED_STRING)
+                .transform(ITERABLE_TO_FORMATTED_STRING)
                 .forEach(LOGGING_PROCEDURE);
         Verify.assertIterableSize(SIZE_THRESHOLD, results.getLast());
     }
@@ -101,9 +101,9 @@ public class AnagramTest
     {
         MutableList<RichIterable<String>> results = this.getWords().groupBy(ALPHAGRAM_FUNCTION)
                 .multiValuesView()
-                .select(ITERABLE_SIZE_AT_THRESHOLD)
+                .filter(ITERABLE_SIZE_AT_THRESHOLD)
                 .toSortedList(DESCENDING_ITERABLE_SIZE);
-        results.collect(ITERABLE_TO_FORMATTED_STRING)
+        results.transform(ITERABLE_TO_FORMATTED_STRING)
                 .forEach(LOGGING_PROCEDURE);
         Verify.assertIterableSize(SIZE_THRESHOLD, results.getLast());
     }
@@ -120,7 +120,7 @@ public class AnagramTest
         MutableList<RichIterable<String>> results = this.getWords().groupBy(ALPHAGRAM_FUNCTION)
                 .multiValuesView()
                 .toSortedList(DESCENDING_ITERABLE_SIZE);
-        results.collectIf(ITERABLE_SIZE_AT_THRESHOLD, ITERABLE_TO_FORMATTED_STRING)
+        results.transformIf(ITERABLE_SIZE_AT_THRESHOLD, ITERABLE_TO_FORMATTED_STRING)
                 .forEach(LOGGING_PROCEDURE);
         Verify.assertIterableSize(SIZE_THRESHOLD, results.getLast());
     }
@@ -142,7 +142,7 @@ public class AnagramTest
                 .multiValuesView()
                 .toSortedList(DESCENDING_ITERABLE_SIZE);
         results.asLazy()
-                .collectIf(ITERABLE_SIZE_AT_THRESHOLD, ITERABLE_TO_FORMATTED_STRING)
+                .transformIf(ITERABLE_SIZE_AT_THRESHOLD, ITERABLE_TO_FORMATTED_STRING)
                 .forEach(LOGGING_PROCEDURE);
         Verify.assertIterableSize(SIZE_THRESHOLD, results.getLast());
     }
@@ -169,7 +169,7 @@ public class AnagramTest
             }
         });
         MutableList<MutableList<String>> results =
-                map.select(ITERABLE_SIZE_AT_THRESHOLD, Lists.mutable.<MutableList<String>>of())
+                map.filter(ITERABLE_SIZE_AT_THRESHOLD, Lists.mutable.<MutableList<String>>of())
                         .sortThis(DESCENDING_ITERABLE_SIZE);
         results.forEach(OUTPUT_FORMATTED_ITERABLE);
         Assert.assertTrue(this.listContainsTestGroupAtElementsOneOrTwo(results));

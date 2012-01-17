@@ -61,7 +61,7 @@ abstract class AbstractMemoryEfficientMutableMap<K, V>
         throw new UnsupportedOperationException();
     }
 
-    public <E> MutableMap<K, V> collectKeysAndValues(
+    public <E> MutableMap<K, V> transformKeysAndValues(
             Collection<E> collection,
             Function<? super E, ? extends K> keyFunction,
             Function<? super E, ? extends V> valueFunction)
@@ -109,14 +109,14 @@ abstract class AbstractMemoryEfficientMutableMap<K, V>
     }
 
     @Override
-    public abstract FixedSizeMap<K, V> select(Predicate2<? super K, ? super V> predicate);
+    public abstract FixedSizeMap<K, V> filter(Predicate2<? super K, ? super V> predicate);
 
     @Override
-    public abstract <R> FixedSizeMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function);
+    public abstract <R> FixedSizeMap<K, R> transformValues(Function2<? super K, ? super V, ? extends R> function);
 
     @Override
-    public abstract <K2, V2> FixedSizeMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function);
+    public abstract <K2, V2> FixedSizeMap<K2, V2> transform(Function2<? super K, ? super V, Pair<K2, V2>> function);
 
     @Override
-    public abstract FixedSizeMap<K, V> reject(Predicate2<? super K, ? super V> predicate);
+    public abstract FixedSizeMap<K, V> filterNot(Predicate2<? super K, ? super V> predicate);
 }

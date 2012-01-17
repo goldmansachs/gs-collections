@@ -45,23 +45,23 @@ public interface MutableSet<T>
 
     MutableSet<T> clone();
 
-    MutableSet<T> select(Predicate<? super T> predicate);
+    MutableSet<T> filter(Predicate<? super T> predicate);
 
-    <P> MutableSet<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+    <P> MutableSet<T> filterWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
-    MutableSet<T> reject(Predicate<? super T> predicate);
+    MutableSet<T> filterNot(Predicate<? super T> predicate);
 
-    <P> MutableSet<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+    <P> MutableSet<T> filterNotWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     PartitionMutableSet<T> partition(Predicate<? super T> predicate);
 
-    <V> MutableSet<V> collect(Function<? super T, ? extends V> function);
+    <V> MutableSet<V> transform(Function<? super T, ? extends V> function);
 
-    <P, V> MutableSet<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
+    <P, V> MutableSet<V> transformWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
 
-    <V> MutableSet<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
+    <V> MutableSet<V> transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 
-    <V> MutableSet<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
+    <V> MutableSet<V> flatTransform(Function<? super T, ? extends Iterable<V>> function);
 
     /**
      * Returns an unmodifable view of the set.

@@ -192,7 +192,7 @@ public class ImmutableEmptyMapWithHashingStrategyTest extends ImmutableMemoryEff
     public void select()
     {
         ImmutableMap<Integer, String> map = this.classUnderTest();
-        ImmutableMap<Integer, String> actual = map.select(Predicates2.alwaysTrue());
+        ImmutableMap<Integer, String> actual = map.filter(Predicates2.alwaysTrue());
         Verify.assertInstanceOf(ImmutableEmptyMapWithHashingStrategy.class, actual);
     }
 
@@ -200,7 +200,7 @@ public class ImmutableEmptyMapWithHashingStrategyTest extends ImmutableMemoryEff
     public void reject()
     {
         ImmutableMap<Integer, String> map = this.classUnderTest();
-        ImmutableMap<Integer, String> actual = map.reject(Predicates2.alwaysFalse());
+        ImmutableMap<Integer, String> actual = map.filterNot(Predicates2.alwaysFalse());
         Verify.assertInstanceOf(ImmutableEmptyMapWithHashingStrategy.class, actual);
     }
 
@@ -208,7 +208,7 @@ public class ImmutableEmptyMapWithHashingStrategyTest extends ImmutableMemoryEff
     public void detect()
     {
         ImmutableMap<Integer, String> map = this.classUnderTest();
-        Assert.assertNull(map.detect(Predicates2.alwaysTrue()));
+        Assert.assertNull(map.find(Predicates2.alwaysTrue()));
     }
 
     @Override

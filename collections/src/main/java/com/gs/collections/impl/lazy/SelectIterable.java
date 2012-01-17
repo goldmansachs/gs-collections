@@ -25,7 +25,7 @@ import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.impl.block.procedure.IfObjectIntProcedure;
 import com.gs.collections.impl.block.procedure.IfProcedure;
 import com.gs.collections.impl.block.procedure.IfProcedureWith;
-import com.gs.collections.impl.lazy.iterator.SelectIterator;
+import com.gs.collections.impl.lazy.iterator.FilterIterator;
 import com.gs.collections.impl.utility.Iterate;
 import net.jcip.annotations.Immutable;
 
@@ -62,6 +62,6 @@ public class SelectIterable<T>
 
     public Iterator<T> iterator()
     {
-        return new SelectIterator<T>(this.adapted.iterator(), this.predicate);
+        return new FilterIterator<T>(this.adapted.iterator(), this.predicate);
     }
 }

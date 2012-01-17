@@ -172,31 +172,31 @@ public final class ArrayIterate
     }
 
     /**
-     * @see Iterate#select(Iterable, Predicate)
+     * @see Iterate#filter(Iterable, Predicate)
      */
-    public static <T> MutableList<T> select(T[] objectArray, Predicate<? super T> predicate)
+    public static <T> MutableList<T> filter(T[] objectArray, Predicate<? super T> predicate)
     {
         if (objectArray == null)
         {
-            throw new IllegalArgumentException("Cannot perform a select on null");
+            throw new IllegalArgumentException("Cannot perform a filter on null");
         }
 
-        return ArrayIterate.select(objectArray, predicate, FastList.<T>newList());
+        return ArrayIterate.filter(objectArray, predicate, FastList.<T>newList());
     }
 
     /**
-     * @see Iterate#selectWith(Iterable, Predicate2, Object)
+     * @see Iterate#filterWith(Iterable, Predicate2, Object)
      */
-    public static <T, P> MutableList<T> selectWith(
+    public static <T, P> MutableList<T> filterWith(
             T[] objectArray,
             Predicate2<? super T, P> predicate,
             P parameter)
     {
         if (objectArray == null)
         {
-            throw new IllegalArgumentException("Cannot perform a selectWith on null");
+            throw new IllegalArgumentException("Cannot perform a filterWith on null");
         }
-        return ArrayIterate.selectWith(objectArray, predicate, parameter, FastList.<T>newList());
+        return ArrayIterate.filterWith(objectArray, predicate, parameter, FastList.<T>newList());
     }
 
     /**
@@ -241,15 +241,15 @@ public final class ArrayIterate
     }
 
     /**
-     * @see Iterate#selectAndRejectWith(Iterable, Predicate2, Object)
+     * @see Iterate#partitionWith(Iterable, Predicate2, Object)
      */
-    public static <T, P> Twin<MutableList<T>> selectAndRejectWith(
+    public static <T, P> Twin<MutableList<T>> partitionWith(
             T[] objectArray,
             Predicate2<? super T, ? super P> predicate, P parameter)
     {
         if (objectArray == null)
         {
-            throw new IllegalArgumentException("Cannot perform a selectAndRejectWith on null");
+            throw new IllegalArgumentException("Cannot perform a partitionWith on null");
         }
 
         MutableList<T> positiveResult = Lists.mutable.of();
@@ -283,19 +283,19 @@ public final class ArrayIterate
     }
 
     /**
-     * @see Iterate#collectIf(Iterable, Predicate, Function)
+     * @see Iterate#transformIf(Iterable, Predicate, Function)
      */
-    public static <T, A> MutableList<A> collectIf(
+    public static <T, A> MutableList<A> transformIf(
             T[] objectArray,
             Predicate<? super T> predicate,
             Function<? super T, ? extends A> function)
     {
         if (objectArray == null)
         {
-            throw new IllegalArgumentException("Cannot perform a collectIf on null");
+            throw new IllegalArgumentException("Cannot perform a transformIf on null");
         }
 
-        return ArrayIterate.<T, A, FastList<A>>collectIf(
+        return ArrayIterate.<T, A, FastList<A>>transformIf(
                 objectArray,
                 predicate,
                 function,
@@ -303,16 +303,16 @@ public final class ArrayIterate
     }
 
     /**
-     * @see Iterate#select(Iterable, Predicate, Collection)
+     * @see Iterate#filter(Iterable, Predicate, Collection)
      */
-    public static <T, R extends Collection<T>> R select(
+    public static <T, R extends Collection<T>> R filter(
             T[] objectArray,
             Predicate<? super T> predicate,
             R targetCollection)
     {
         if (objectArray == null)
         {
-            throw new IllegalArgumentException("Cannot perform a select on null");
+            throw new IllegalArgumentException("Cannot perform a filter on null");
         }
         for (T each : objectArray)
         {
@@ -325,9 +325,9 @@ public final class ArrayIterate
     }
 
     /**
-     * @see Iterate#selectWith(Iterable, Predicate2, Object, Collection)
+     * @see Iterate#filterWith(Iterable, Predicate2, Object, Collection)
      */
-    public static <T, P, R extends Collection<T>> R selectWith(
+    public static <T, P, R extends Collection<T>> R filterWith(
             T[] objectArray,
             Predicate2<? super T, ? super P> predicate,
             P parameter,
@@ -335,7 +335,7 @@ public final class ArrayIterate
     {
         if (objectArray == null)
         {
-            throw new IllegalArgumentException("Cannot perform a selectWith on null");
+            throw new IllegalArgumentException("Cannot perform a filterWith on null");
         }
         for (T each : objectArray)
         {
@@ -348,9 +348,9 @@ public final class ArrayIterate
     }
 
     /**
-     * @see Iterate#collectIf(Iterable, Predicate, Function, Collection)
+     * @see Iterate#tranformIf(Iterable, Predicate, Function, Collection)
      */
-    public static <T, A, R extends Collection<A>> R collectIf(
+    public static <T, A, R extends Collection<A>> R transformIf(
             T[] objectArray,
             Predicate<? super T> predicate,
             Function<? super T, ? extends A> function,
@@ -358,7 +358,7 @@ public final class ArrayIterate
     {
         if (objectArray == null)
         {
-            throw new IllegalArgumentException("Cannot perform a collectIf on null");
+            throw new IllegalArgumentException("Cannot perform a transformIf on null");
         }
         for (T each : objectArray)
         {
@@ -371,31 +371,31 @@ public final class ArrayIterate
     }
 
     /**
-     * @see Iterate#reject(Iterable, Predicate)
+     * @see Iterate#filterNot(Iterable, Predicate)
      */
-    public static <T> MutableList<T> reject(T[] objectArray, Predicate<? super T> predicate)
+    public static <T> MutableList<T> filterNot(T[] objectArray, Predicate<? super T> predicate)
     {
         if (objectArray == null)
         {
-            throw new IllegalArgumentException("Cannot perform a reject on null");
+            throw new IllegalArgumentException("Cannot perform a filterNot on null");
         }
 
-        return ArrayIterate.reject(objectArray, predicate, FastList.<T>newList());
+        return ArrayIterate.filterNot(objectArray, predicate, FastList.<T>newList());
     }
 
     /**
-     * @see Iterate#rejectWith(Iterable, Predicate2, Object)
+     * @see Iterate#filterNotWith(Iterable, Predicate2, Object)
      */
-    public static <T, P> MutableList<T> rejectWith(
+    public static <T, P> MutableList<T> filterNotWith(
             T[] objectArray,
             Predicate2<? super T, P> predicate,
             P parameter)
     {
         if (objectArray == null)
         {
-            throw new IllegalArgumentException("Cannot perform a rejectWith on null");
+            throw new IllegalArgumentException("Cannot perform a filerNotWith on null");
         }
-        return ArrayIterate.rejectWith(
+        return ArrayIterate.filterNotWith(
                 objectArray,
                 predicate,
                 parameter,
@@ -403,16 +403,16 @@ public final class ArrayIterate
     }
 
     /**
-     * @see Iterate#reject(Iterable, Predicate, Collection)
+     * @see Iterate#filterNot(Iterable, Predicate, Collection)
      */
-    public static <T, R extends Collection<T>> R reject(
+    public static <T, R extends Collection<T>> R filterNot(
             T[] objectArray,
             Predicate<? super T> predicate,
             R targetCollection)
     {
         if (objectArray == null)
         {
-            throw new IllegalArgumentException("Cannot perform a reject on null");
+            throw new IllegalArgumentException("Cannot perform a fitlerNot on null");
         }
         for (T each : objectArray)
         {
@@ -425,9 +425,9 @@ public final class ArrayIterate
     }
 
     /**
-     * @see Iterate#rejectWith(Iterable, Predicate2, Object, Collection)
+     * @see Iterate#filterNotWith(Iterable, Predicate2, Object, Collection)
      */
-    public static <T, P, R extends Collection<T>> R rejectWith(
+    public static <T, P, R extends Collection<T>> R filterNotWith(
             T[] objectArray,
             Predicate2<? super T, ? super P> predicate,
             P parameter,
@@ -435,7 +435,7 @@ public final class ArrayIterate
     {
         if (objectArray == null)
         {
-            throw new IllegalArgumentException("Cannot perform a rejectWith on null");
+            throw new IllegalArgumentException("Cannot perform a filterNotWith on null");
         }
         for (T each : objectArray)
         {
@@ -457,30 +457,30 @@ public final class ArrayIterate
     }
 
     /**
-     * @see Iterate#collect(Iterable, Function)
+     * @see Iterate#transform(Iterable, Function)
      */
-    public static <T, A> MutableList<A> collect(
+    public static <T, A> MutableList<A> transform(
             T[] objectArray,
             Function<? super T, A> function)
     {
         if (objectArray == null)
         {
-            throw new IllegalArgumentException("Cannot perform a collect on null");
+            throw new IllegalArgumentException("Cannot perform a transform on null");
         }
-        return ArrayIterate.collect(objectArray, function, FastList.<A>newList(objectArray.length));
+        return ArrayIterate.transform(objectArray, function, FastList.<A>newList(objectArray.length));
     }
 
     /**
-     * @see Iterate#collect(Iterable, Function, Collection)
+     * @see Iterate#transform(Iterable, Function, Collection)
      */
-    public static <T, A, R extends Collection<A>> R collect(
+    public static <T, A, R extends Collection<A>> R transform(
             T[] objectArray,
             Function<? super T, ? extends A> function,
             R targetCollection)
     {
         if (objectArray == null)
         {
-            throw new IllegalArgumentException("Cannot perform a collect on null");
+            throw new IllegalArgumentException("Cannot perform a transform on null");
         }
         for (T each : objectArray)
         {
@@ -608,13 +608,13 @@ public final class ArrayIterate
     }
 
     /**
-     * @see Iterate#detect(Iterable, Predicate)
+     * @see Iterate#find(Iterable, Predicate)
      */
-    public static <T> T detect(T[] objectArray, Predicate<? super T> predicate)
+    public static <T> T find(T[] objectArray, Predicate<? super T> predicate)
     {
         if (objectArray == null)
         {
-            throw new IllegalArgumentException("Cannot perform a detect on null");
+            throw new IllegalArgumentException("Cannot perform a find on null");
         }
         if (ArrayIterate.notEmpty(objectArray))
         {
@@ -630,16 +630,16 @@ public final class ArrayIterate
     }
 
     /**
-     * @see Iterate#detectWith(Iterable, Predicate2, Object)
+     * @see Iterate#findWith(Iterable, Predicate2, Object)
      */
-    public static <T, P> T detectWith(
+    public static <T, P> T findWith(
             T[] objectArray,
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
         if (objectArray == null)
         {
-            throw new IllegalArgumentException("Cannot perform a detectWith on null");
+            throw new IllegalArgumentException("Cannot perform a findWith on null");
         }
 
         if (ArrayIterate.notEmpty(objectArray))
@@ -656,41 +656,41 @@ public final class ArrayIterate
     }
 
     /**
-     * @see Iterate#detectIfNone(Iterable, Predicate, Object)
+     * @see Iterate#findIfNone(Iterable, Predicate, Object)
      */
-    public static <T> T detectIfNone(
+    public static <T> T findIfNone(
             T[] objectArray,
             Predicate<? super T> predicate,
             T ifNone)
     {
-        T result = ArrayIterate.detect(objectArray, predicate);
+        T result = ArrayIterate.find(objectArray, predicate);
         return result == null ? ifNone : result;
     }
 
     /**
-     * @see Iterate#detectWithIfNone(Iterable, Predicate2, Object, Object)
+     * @see Iterate#findWithIfNone(Iterable, Predicate2, Object, Object)
      */
-    public static <T, P> T detectWithIfNone(
+    public static <T, P> T findWithIfNone(
             T[] objectArray,
             Predicate2<? super T, P> predicate,
             P parameter,
             T ifNone)
     {
-        T result = ArrayIterate.detectWith(objectArray, predicate, parameter);
+        T result = ArrayIterate.findWith(objectArray, predicate, parameter);
         return result == null ? ifNone : result;
     }
 
     /**
-     * @see Iterate#injectInto(Object, Iterable, Function2)
+     * @see Iterate#foldLeft(Object, Iterable, Function2)
      */
-    public static <T, IV> IV injectInto(
+    public static <T, IV> IV foldLeft(
             IV injectValue,
             T[] objectArray,
             Function2<? super IV, ? super T, ? extends IV> function)
     {
         if (objectArray == null)
         {
-            throw new IllegalArgumentException("Cannot perform an injectInto on null");
+            throw new IllegalArgumentException("Cannot perform an foldLeft on null");
         }
         IV result = injectValue;
         if (ArrayIterate.notEmpty(objectArray))
@@ -704,16 +704,16 @@ public final class ArrayIterate
     }
 
     /**
-     * @see Iterate#injectInto(int, Iterable, IntObjectToIntFunction)
+     * @see Iterate#foldLeft(int, Iterable, IntObjectToIntFunction)
      */
-    public static <T> int injectInto(
+    public static <T> int foldLeft(
             int injectValue,
             T[] objectArray,
             IntObjectToIntFunction<? super T> function)
     {
         if (objectArray == null)
         {
-            throw new IllegalArgumentException("Cannot perform an injectInto on null");
+            throw new IllegalArgumentException("Cannot perform an foldLeft on null");
         }
         int result = injectValue;
         if (ArrayIterate.notEmpty(objectArray))
@@ -727,16 +727,16 @@ public final class ArrayIterate
     }
 
     /**
-     * @see Iterate#injectInto(long, Iterable, IntObjectToIntFunction)
+     * @see Iterate#foldLeft(long, Iterable, LongObjectToLongFunction).
      */
-    public static <T> long injectInto(
+    public static <T> long foldLeft(
             long injectValue,
             T[] objectArray,
             LongObjectToLongFunction<? super T> function)
     {
         if (objectArray == null)
         {
-            throw new IllegalArgumentException("Cannot perform an injectInto on null");
+            throw new IllegalArgumentException("Cannot perform an foldLeft on null");
         }
         long result = injectValue;
         if (ArrayIterate.notEmpty(objectArray))
@@ -808,17 +808,17 @@ public final class ArrayIterate
      */
     public static <T> int indexOf(T[] objectArray, T elem)
     {
-        return ArrayIterate.detectIndex(objectArray, Predicates.equal(elem));
+        return ArrayIterate.findIndex(objectArray, Predicates.equal(elem));
     }
 
     /**
      * Returns the first index where the predicate evaluates to true.  Returns -1 for no matches.
      */
-    public static <T> int detectIndex(T[] objectArray, Predicate<? super T> predicate)
+    public static <T> int findIndex(T[] objectArray, Predicate<? super T> predicate)
     {
         if (objectArray == null)
         {
-            throw new IllegalArgumentException("Cannot perform a detectIndex on null");
+            throw new IllegalArgumentException("Cannot perform a findIndex on null");
         }
         for (int i = 0; i < objectArray.length; i++)
         {
@@ -833,14 +833,14 @@ public final class ArrayIterate
     /**
      * Searches for the first index where the predicate evaluates to true.  Returns -1 for no matches.
      */
-    public static <T, IV> int detectIndexWith(
+    public static <T, IV> int findIndexWith(
             T[] objectArray,
             Predicate2<? super T, IV> predicate,
             IV injectedValue)
     {
         if (objectArray == null)
         {
-            throw new IllegalArgumentException("Cannot perform a detectIndexWith on null");
+            throw new IllegalArgumentException("Cannot perform a findIndexWith on null");
         }
         for (int i = 0; i < objectArray.length; i++)
         {
@@ -994,24 +994,24 @@ public final class ArrayIterate
     }
 
     /**
-     * @see Iterate#collectWith(Iterable, Function2, Object)
+     * @see Iterate#transformWith(Iterable, Function2, Object)
      */
-    public static <T, P, A> MutableList<A> collectWith(
+    public static <T, P, A> MutableList<A> transformWith(
             T[] objectArray,
             Function2<? super T, P, A> function,
             P parameter)
     {
         if (objectArray == null)
         {
-            throw new IllegalArgumentException("Cannot perform a collectWith on null");
+            throw new IllegalArgumentException("Cannot perform a transformWith on null");
         }
-        return ArrayIterate.collectWith(objectArray, function, parameter, FastList.<A>newList(objectArray.length));
+        return ArrayIterate.transformWith(objectArray, function, parameter, FastList.<A>newList(objectArray.length));
     }
 
     /**
-     * @see Iterate#collectWith(Iterable, Function2, Object, Collection)
+     * @see Iterate#transformWith(Iterable, Function2, Object, Collection)
      */
-    public static <T, P, A, R extends Collection<A>> R collectWith(
+    public static <T, P, A, R extends Collection<A>> R transformWith(
             T[] objectArray,
             Function2<? super T, ? super P, ? extends A> function,
             P parameter,
@@ -1019,7 +1019,7 @@ public final class ArrayIterate
     {
         if (objectArray == null)
         {
-            throw new IllegalArgumentException("Cannot perform a collectWith on null");
+            throw new IllegalArgumentException("Cannot perform a transformWith on null");
         }
         for (T each : objectArray)
         {
@@ -1029,9 +1029,9 @@ public final class ArrayIterate
     }
 
     /**
-     * @see Iterate#injectIntoWith(Object, Iterable, Function3, Object)
+     * @see Iterate#foldLeftWith(Object, Iterable, Function3, Object)
      */
-    public static <T, IV, P> IV injectIntoWith(
+    public static <T, IV, P> IV foldLeftWith(
             IV injectValue,
             T[] objectArray,
             Function3<? super IV, ? super T, ? super P, ? extends IV> function,
@@ -1039,7 +1039,7 @@ public final class ArrayIterate
     {
         if (objectArray == null)
         {
-            throw new IllegalArgumentException("Cannot perform an injectIntoWith on null");
+            throw new IllegalArgumentException("Cannot perform an foldLeftWith on null");
         }
         IV result = injectValue;
         if (ArrayIterate.notEmpty(objectArray))

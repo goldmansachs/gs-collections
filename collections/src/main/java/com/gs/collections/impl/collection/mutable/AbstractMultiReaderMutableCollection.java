@@ -404,12 +404,12 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
-    public T detect(Predicate<? super T> predicate)
+    public T find(Predicate<? super T> predicate)
     {
         this.acquireReadLock();
         try
         {
-            return this.getDelegate().detect(predicate);
+            return this.getDelegate().find(predicate);
         }
         finally
         {
@@ -495,14 +495,14 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
-    public T detectIfNone(
+    public T findIfNone(
             Predicate<? super T> predicate,
             Function0<? extends T> function)
     {
         this.acquireReadLock();
         try
         {
-            return this.getDelegate().detectIfNone(predicate, function);
+            return this.getDelegate().findIfNone(predicate, function);
         }
         finally
         {
@@ -510,14 +510,14 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
-    public <P> T detectWith(
+    public <P> T findWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
         this.acquireReadLock();
         try
         {
-            return this.getDelegate().detectWith(predicate, parameter);
+            return this.getDelegate().findWith(predicate, parameter);
         }
         finally
         {
@@ -525,7 +525,7 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
-    public <P> T detectWithIfNone(
+    public <P> T findWithIfNone(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
             Function0<? extends T> function)
@@ -533,7 +533,7 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         this.acquireReadLock();
         try
         {
-            return this.getDelegate().detectWithIfNone(predicate, parameter, function);
+            return this.getDelegate().findWithIfNone(predicate, parameter, function);
         }
         finally
         {
@@ -580,14 +580,14 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
-    public <P> Twin<MutableList<T>> selectAndRejectWith(
+    public <P> Twin<MutableList<T>> partitionWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
         this.acquireReadLock();
         try
         {
-            return this.getDelegate().selectAndRejectWith(predicate, parameter);
+            return this.getDelegate().partitionWith(predicate, parameter);
         }
         finally
         {
@@ -595,14 +595,14 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
-    public <V, R extends Collection<V>> R collect(
+    public <V, R extends Collection<V>> R transform(
             Function<? super T, ? extends V> function,
             R target)
     {
         this.acquireReadLock();
         try
         {
-            return this.getDelegate().collect(function, target);
+            return this.getDelegate().transform(function, target);
         }
         finally
         {
@@ -610,14 +610,14 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
-    public <V, R extends Collection<V>> R flatCollect(
+    public <V, R extends Collection<V>> R flatTransform(
             Function<? super T, ? extends Iterable<V>> function,
             R target)
     {
         this.acquireReadLock();
         try
         {
-            return this.getDelegate().flatCollect(function, target);
+            return this.getDelegate().flatTransform(function, target);
         }
         finally
         {
@@ -625,7 +625,7 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
-    public <V, R extends Collection<V>> R collectIf(
+    public <V, R extends Collection<V>> R transformIf(
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function,
             R target)
@@ -633,7 +633,7 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         this.acquireReadLock();
         try
         {
-            return this.getDelegate().collectIf(predicate, function, target);
+            return this.getDelegate().transformIf(predicate, function, target);
         }
         finally
         {
@@ -641,7 +641,7 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
-    public <P, V, R extends Collection<V>> R collectWith(
+    public <P, V, R extends Collection<V>> R transformWith(
             Function2<? super T, ? super P, ? extends V> function,
             P parameter,
             R targetCollection)
@@ -649,7 +649,7 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         this.acquireReadLock();
         try
         {
-            return this.getDelegate().collectWith(function, parameter, targetCollection);
+            return this.getDelegate().transformWith(function, parameter, targetCollection);
         }
         finally
         {
@@ -657,7 +657,7 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
-    public <P, R extends Collection<T>> R selectWith(
+    public <P, R extends Collection<T>> R filterWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
             R targetCollection)
@@ -665,7 +665,7 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         this.acquireReadLock();
         try
         {
-            return this.getDelegate().selectWith(predicate, parameter, targetCollection);
+            return this.getDelegate().filterWith(predicate, parameter, targetCollection);
         }
         finally
         {
@@ -673,14 +673,14 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
-    public <R extends Collection<T>> R reject(
+    public <R extends Collection<T>> R filterNot(
             Predicate<? super T> predicate,
             R target)
     {
         this.acquireReadLock();
         try
         {
-            return this.getDelegate().reject(predicate, target);
+            return this.getDelegate().filterNot(predicate, target);
         }
         finally
         {
@@ -688,7 +688,7 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
-    public <P, R extends Collection<T>> R rejectWith(
+    public <P, R extends Collection<T>> R filterNotWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
             R targetCollection)
@@ -696,7 +696,7 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         this.acquireReadLock();
         try
         {
-            return this.getDelegate().rejectWith(predicate, parameter, targetCollection);
+            return this.getDelegate().filterNotWith(predicate, parameter, targetCollection);
         }
         finally
         {
@@ -704,12 +704,12 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
-    public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)
+    public <R extends Collection<T>> R filter(Predicate<? super T> predicate, R target)
     {
         this.acquireReadLock();
         try
         {
-            return this.getDelegate().select(predicate, target);
+            return this.getDelegate().filter(predicate, target);
         }
         finally
         {
@@ -717,14 +717,14 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
-    public <IV> IV injectInto(
-            IV injectedValue,
+    public <IV> IV foldLeft(
+            IV initialValue,
             Function2<? super IV, ? super T, ? extends IV> function)
     {
         this.acquireReadLock();
         try
         {
-            return this.getDelegate().injectInto(injectedValue, function);
+            return this.getDelegate().foldLeft(initialValue, function);
         }
         finally
         {
@@ -732,12 +732,12 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
-    public int injectInto(int injectedValue, IntObjectToIntFunction<? super T> function)
+    public int foldLeft(int initialValue, IntObjectToIntFunction<? super T> function)
     {
         this.acquireReadLock();
         try
         {
-            return this.getDelegate().injectInto(injectedValue, function);
+            return this.getDelegate().foldLeft(initialValue, function);
         }
         finally
         {
@@ -745,12 +745,12 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
-    public long injectInto(long injectedValue, LongObjectToLongFunction<? super T> function)
+    public long foldLeft(long initialValue, LongObjectToLongFunction<? super T> function)
     {
         this.acquireReadLock();
         try
         {
-            return this.getDelegate().injectInto(injectedValue, function);
+            return this.getDelegate().foldLeft(initialValue, function);
         }
         finally
         {
@@ -758,12 +758,12 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
-    public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super T> function)
+    public double foldLeft(double initialValue, DoubleObjectToDoubleFunction<? super T> function)
     {
         this.acquireReadLock();
         try
         {
-            return this.getDelegate().injectInto(injectedValue, function);
+            return this.getDelegate().foldLeft(initialValue, function);
         }
         finally
         {
@@ -771,15 +771,15 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
-    public <IV, P> IV injectIntoWith(
-            IV injectValue,
+    public <IV, P> IV foldLeftWith(
+            IV initialValue,
             Function3<? super IV, ? super T, ? super P, ? extends IV> function,
             P parameter)
     {
         this.acquireReadLock();
         try
         {
-            return this.getDelegate().injectIntoWith(injectValue, function, parameter);
+            return this.getDelegate().foldLeftWith(initialValue, function, parameter);
         }
         finally
         {
@@ -1301,34 +1301,34 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
             return this.delegate.toSortedSetBy(function);
         }
 
-        public <V, R extends Collection<V>> R collect(
+        public <V, R extends Collection<V>> R transform(
                 Function<? super T, ? extends V> function,
                 R target)
         {
-            return this.delegate.collect(function, target);
+            return this.delegate.transform(function, target);
         }
 
-        public <V, R extends Collection<V>> R flatCollect(
+        public <V, R extends Collection<V>> R flatTransform(
                 Function<? super T, ? extends Iterable<V>> function,
                 R target)
         {
-            return this.delegate.flatCollect(function, target);
+            return this.delegate.flatTransform(function, target);
         }
 
-        public <V, R extends Collection<V>> R collectIf(
+        public <V, R extends Collection<V>> R transformIf(
                 Predicate<? super T> predicate,
                 Function<? super T, ? extends V> function,
                 R target)
         {
-            return this.delegate.collectIf(predicate, function, target);
+            return this.delegate.transformIf(predicate, function, target);
         }
 
-        public <P, V, R extends Collection<V>> R collectWith(
+        public <P, V, R extends Collection<V>> R transformWith(
                 Function2<? super T, ? super P, ? extends V> function,
                 P parameter,
                 R targetCollection)
         {
-            return this.delegate.collectWith(function, parameter, targetCollection);
+            return this.delegate.transformWith(function, parameter, targetCollection);
         }
 
         public <V, R extends MutableMultimap<V, T>> R groupBy(
@@ -1355,9 +1355,9 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
             return this.delegate.countWith(predicate, parameter);
         }
 
-        public T detect(Predicate<? super T> predicate)
+        public T find(Predicate<? super T> predicate)
         {
-            return this.delegate.detect(predicate);
+            return this.delegate.find(predicate);
         }
 
         public T min(Comparator<? super T> comparator)
@@ -1390,22 +1390,22 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
             return this.delegate.maxBy(function);
         }
 
-        public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
+        public T findIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
         {
-            return this.delegate.detectIfNone(predicate, function);
+            return this.delegate.findIfNone(predicate, function);
         }
 
-        public <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+        public <P> T findWith(Predicate2<? super T, ? super P> predicate, P parameter)
         {
-            return this.delegate.detectWith(predicate, parameter);
+            return this.delegate.findWith(predicate, parameter);
         }
 
-        public <P> T detectWithIfNone(
+        public <P> T findWithIfNone(
                 Predicate2<? super T, ? super P> predicate,
                 P parameter,
                 Function0<? extends T> function)
         {
-            return this.delegate.detectWithIfNone(predicate, parameter, function);
+            return this.delegate.findWithIfNone(predicate, parameter, function);
         }
 
         public T getFirst()
@@ -1418,34 +1418,34 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
             return this.delegate.getLast();
         }
 
-        public <IV> IV injectInto(
-                IV injectedValue,
+        public <IV> IV foldLeft(
+                IV initialValue,
                 Function2<? super IV, ? super T, ? extends IV> function)
         {
-            return this.delegate.injectInto(injectedValue, function);
+            return this.delegate.foldLeft(initialValue, function);
         }
 
-        public int injectInto(int injectedValue, IntObjectToIntFunction<? super T> function)
+        public int foldLeft(int initialValue, IntObjectToIntFunction<? super T> function)
         {
-            return this.delegate.injectInto(injectedValue, function);
+            return this.delegate.foldLeft(initialValue, function);
         }
 
-        public long injectInto(long injectedValue, LongObjectToLongFunction<? super T> function)
+        public long foldLeft(long initialValue, LongObjectToLongFunction<? super T> function)
         {
-            return this.delegate.injectInto(injectedValue, function);
+            return this.delegate.foldLeft(initialValue, function);
         }
 
-        public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super T> function)
+        public double foldLeft(double initialValue, DoubleObjectToDoubleFunction<? super T> function)
         {
-            return this.delegate.injectInto(injectedValue, function);
+            return this.delegate.foldLeft(initialValue, function);
         }
 
-        public <IV, P> IV injectIntoWith(
-                IV injectValue,
+        public <IV, P> IV foldLeftWith(
+                IV initialValue,
                 Function3<? super IV, ? super T, ? super P, ? extends IV> function,
                 P parameter)
         {
-            return this.delegate.injectIntoWith(injectValue, function, parameter);
+            return this.delegate.foldLeftWith(initialValue, function, parameter);
         }
 
         public boolean notEmpty()
@@ -1453,17 +1453,17 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
             return this.delegate.notEmpty();
         }
 
-        public <R extends Collection<T>> R reject(Predicate<? super T> predicate, R target)
+        public <R extends Collection<T>> R filterNot(Predicate<? super T> predicate, R target)
         {
-            return this.delegate.reject(predicate, target);
+            return this.delegate.filterNot(predicate, target);
         }
 
-        public <P, R extends Collection<T>> R rejectWith(
+        public <P, R extends Collection<T>> R filterNotWith(
                 Predicate2<? super T, ? super P> predicate,
                 P parameter,
                 R targetCollection)
         {
-            return this.delegate.rejectWith(predicate, parameter, targetCollection);
+            return this.delegate.filterNotWith(predicate, parameter, targetCollection);
         }
 
         public void removeIf(Predicate<? super T> predicate)
@@ -1478,24 +1478,24 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
             this.delegate.removeIfWith(predicate, parameter);
         }
 
-        public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)
+        public <R extends Collection<T>> R filter(Predicate<? super T> predicate, R target)
         {
-            return this.delegate.select(predicate, target);
+            return this.delegate.filter(predicate, target);
         }
 
-        public <P> Twin<MutableList<T>> selectAndRejectWith(
+        public <P> Twin<MutableList<T>> partitionWith(
                 Predicate2<? super T, ? super P> predicate,
                 P parameter)
         {
-            return this.delegate.selectAndRejectWith(predicate, parameter);
+            return this.delegate.partitionWith(predicate, parameter);
         }
 
-        public <P, R extends Collection<T>> R selectWith(
+        public <P, R extends Collection<T>> R filterWith(
                 Predicate2<? super T, ? super P> predicate,
                 P parameter,
                 R targetCollection)
         {
-            return this.delegate.selectWith(predicate, parameter, targetCollection);
+            return this.delegate.filterWith(predicate, parameter, targetCollection);
         }
 
         public boolean add(T o)

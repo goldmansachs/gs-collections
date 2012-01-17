@@ -209,7 +209,7 @@ final class SingletonMap<K, V>
     }
 
     @Override
-    public FixedSizeMap<K, V> select(Predicate2<? super K, ? super V> predicate)
+    public FixedSizeMap<K, V> filter(Predicate2<? super K, ? super V> predicate)
     {
         if (predicate.accept(this.key1, this.value1))
         {
@@ -219,20 +219,20 @@ final class SingletonMap<K, V>
     }
 
     @Override
-    public <R> FixedSizeMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function)
+    public <R> FixedSizeMap<K, R> transformValues(Function2<? super K, ? super V, ? extends R> function)
     {
         return Maps.fixedSize.of(this.key1, function.value(this.key1, this.value1));
     }
 
     @Override
-    public <K2, V2> FixedSizeMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function)
+    public <K2, V2> FixedSizeMap<K2, V2> transform(Function2<? super K, ? super V, Pair<K2, V2>> function)
     {
         Pair<K2, V2> pair1 = function.value(this.key1, this.value1);
         return Maps.fixedSize.of(pair1.getOne(), pair1.getTwo());
     }
 
     @Override
-    public FixedSizeMap<K, V> reject(Predicate2<? super K, ? super V> predicate)
+    public FixedSizeMap<K, V> filterNot(Predicate2<? super K, ? super V> predicate)
     {
         if (predicate.accept(this.key1, this.value1))
         {
@@ -242,7 +242,7 @@ final class SingletonMap<K, V>
     }
 
     @Override
-    public Pair<K, V> detect(Predicate2<? super K, ? super V> predicate)
+    public Pair<K, V> find(Predicate2<? super K, ? super V> predicate)
     {
         if (predicate.accept(this.key1, this.value1))
         {

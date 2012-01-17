@@ -38,10 +38,10 @@ import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.procedure.CollectIfProcedure;
 import com.gs.collections.impl.block.procedure.CollectProcedure;
+import com.gs.collections.impl.block.procedure.FilterNotProcedure;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
-import com.gs.collections.impl.block.procedure.RejectProcedure;
 import com.gs.collections.impl.block.procedure.SelectProcedure;
 import com.gs.collections.impl.collection.immutable.AbstractImmutableCollection;
 import com.gs.collections.impl.factory.Lists;
@@ -118,17 +118,17 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
         return TreeSortedSet.newSet(this.comparator());
     }
 
-    public ImmutableSortedSet<T> select(Predicate<? super T> predicate)
+    public ImmutableSortedSet<T> filter(Predicate<? super T> predicate)
     {
         TreeSortedSet<T> result = TreeSortedSet.newSet(this.comparator());
         this.forEach(new SelectProcedure<T>(predicate, result));
         return result.toImmutable();
     }
 
-    public ImmutableSortedSet<T> reject(Predicate<? super T> predicate)
+    public ImmutableSortedSet<T> filterNot(Predicate<? super T> predicate)
     {
         TreeSortedSet<T> result = TreeSortedSet.newSet(this.comparator());
-        this.forEach(new RejectProcedure<T>(predicate, result));
+        this.forEach(new FilterNotProcedure<T>(predicate, result));
         return result.toImmutable();
     }
 
@@ -137,21 +137,21 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
         return PartitionTreeSortedSet.of(this, predicate).toImmutable();
     }
 
-    public <V> ImmutableList<V> collect(Function<? super T, ? extends V> function)
+    public <V> ImmutableList<V> transform(Function<? super T, ? extends V> function)
     {
         MutableList<V> result = Lists.mutable.of();
         this.forEach(new CollectProcedure<T, V>(function, result));
         return result.toImmutable();
     }
 
-    public <V> ImmutableList<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
+    public <V> ImmutableList<V> transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
     {
         MutableList<V> result = Lists.mutable.of();
         this.forEach(new CollectIfProcedure<T, V>(result, function, predicate));
         return result.toImmutable();
     }
 
-    public <V> ImmutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    public <V> ImmutableList<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
     {
         MutableList<V> result = Lists.mutable.of();
         this.forEach(new FlatCollectProcedure<T, V>(function, result));

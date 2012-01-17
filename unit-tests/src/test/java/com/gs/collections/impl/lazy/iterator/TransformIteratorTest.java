@@ -26,12 +26,12 @@ import org.junit.Test;
 
 import static com.gs.collections.impl.factory.Iterables.*;
 
-public class CollectIteratorTest
+public class TransformIteratorTest
 {
     @Test
     public void iterator()
     {
-        Iterator<String> iterator = new CollectIterator<Boolean, String>(iList(Boolean.TRUE), Functions.getToString());
+        Iterator<String> iterator = new TransformIterator<Boolean, String>(iList(Boolean.TRUE), Functions.getToString());
         Assert.assertTrue(iterator.hasNext());
         Assert.assertEquals("true", iterator.next());
         Assert.assertFalse(iterator.hasNext());
@@ -40,7 +40,7 @@ public class CollectIteratorTest
     @Test
     public void iteratorWithFunctionName()
     {
-        Iterator<String> iterator = new CollectIterator<Boolean, String>(iList(Boolean.TRUE), Functions.getToString());
+        Iterator<String> iterator = new TransformIterator<Boolean, String>(iList(Boolean.TRUE), Functions.getToString());
         Assert.assertTrue(iterator.hasNext());
         Assert.assertEquals("true", iterator.next());
         Assert.assertFalse(iterator.hasNext());
@@ -49,7 +49,7 @@ public class CollectIteratorTest
     @Test
     public void iteratorWithFunctionNameAndIterator()
     {
-        Iterator<String> iterator = new CollectIterator<Boolean, String>(iList(Boolean.TRUE).iterator(), Functions.getToString());
+        Iterator<String> iterator = new TransformIterator<Boolean, String>(iList(Boolean.TRUE).iterator(), Functions.getToString());
         Assert.assertTrue(iterator.hasNext());
         Assert.assertEquals("true", iterator.next());
         Assert.assertFalse(iterator.hasNext());
@@ -58,12 +58,12 @@ public class CollectIteratorTest
     @Test(expected = NoSuchElementException.class)
     public void noSuchElementException()
     {
-        new CollectIterator<Boolean, String>(Lists.mutable.<Boolean>of(), Functions.getToString()).next();
+        new TransformIterator<Boolean, String>(Lists.mutable.<Boolean>of(), Functions.getToString()).next();
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void remove()
     {
-        new CollectIterator<Boolean, String>(Lists.mutable.<Boolean>of(), Functions.getToString()).remove();
+        new TransformIterator<Boolean, String>(Lists.mutable.<Boolean>of(), Functions.getToString()).remove();
     }
 }

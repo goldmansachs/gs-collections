@@ -135,7 +135,7 @@ public class ImmutableEmptyListTest extends AbstractImmutableListTestCase
     public void testDetect()
     {
         ImmutableList<Integer> integers = this.newList();
-        Assert.assertNull(integers.detect(Predicates.equal(1)));
+        Assert.assertNull(integers.find(Predicates.equal(1)));
     }
 
     @Override
@@ -262,12 +262,12 @@ public class ImmutableEmptyListTest extends AbstractImmutableListTestCase
         List<Object> nullsPlusOne = Collections.nCopies(immutableList.size() + 1, null);
 
         ImmutableList<Pair<Integer, Object>> pairs = immutableList.zip(nulls);
-        Assert.assertEquals(immutableList, pairs.collect(Functions.<Integer>firstOfPair()));
-        Assert.assertEquals(nulls, pairs.collect(Functions.<Object>secondOfPair()));
+        Assert.assertEquals(immutableList, pairs.transform(Functions.<Integer>firstOfPair()));
+        Assert.assertEquals(nulls, pairs.transform(Functions.<Object>secondOfPair()));
 
         ImmutableList<Pair<Integer, Object>> pairsPlusOne = immutableList.zip(nullsPlusOne);
-        Assert.assertEquals(immutableList, pairsPlusOne.collect(Functions.<Integer>firstOfPair()));
-        Assert.assertEquals(nulls, pairsPlusOne.collect(Functions.<Object>secondOfPair()));
+        Assert.assertEquals(immutableList, pairsPlusOne.transform(Functions.<Integer>firstOfPair()));
+        Assert.assertEquals(nulls, pairsPlusOne.transform(Functions.<Object>secondOfPair()));
 
         Assert.assertEquals(immutableList.zip(nulls), immutableList.zip(nulls, FastList.<Pair<Integer, Object>>newList()));
     }
@@ -279,8 +279,8 @@ public class ImmutableEmptyListTest extends AbstractImmutableListTestCase
         ImmutableList<Integer> immutableList = this.newList();
         ImmutableList<Pair<Integer, Integer>> pairs = immutableList.zipWithIndex();
 
-        Assert.assertEquals(immutableList, pairs.collect(Functions.<Integer>firstOfPair()));
-        Assert.assertEquals(FastList.<Integer>newList(), pairs.collect(Functions.<Integer>secondOfPair()));
+        Assert.assertEquals(immutableList, pairs.transform(Functions.<Integer>firstOfPair()));
+        Assert.assertEquals(FastList.<Integer>newList(), pairs.transform(Functions.<Integer>secondOfPair()));
 
         Assert.assertEquals(immutableList.zipWithIndex(), immutableList.zipWithIndex(FastList.<Pair<Integer, Integer>>newList()));
     }

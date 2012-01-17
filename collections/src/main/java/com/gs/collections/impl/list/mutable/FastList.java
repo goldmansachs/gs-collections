@@ -445,13 +445,13 @@ public class FastList<T>
     }
 
     @Override
-    public FastList<T> select(Predicate<? super T> predicate)
+    public FastList<T> filter(Predicate<? super T> predicate)
     {
-        return this.select(predicate, FastList.<T>newList());
+        return this.filter(predicate, FastList.<T>newList());
     }
 
     @Override
-    public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)
+    public <R extends Collection<T>> R filter(Predicate<? super T> predicate, R target)
     {
         for (int i = 0; i < this.size; i++)
         {
@@ -464,13 +464,13 @@ public class FastList<T>
     }
 
     @Override
-    public <P> FastList<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> FastList<T> filterWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return this.selectWith(predicate, parameter, FastList.<T>newList());
+        return this.filterWith(predicate, parameter, FastList.<T>newList());
     }
 
     @Override
-    public <P, R extends Collection<T>> R selectWith(
+    public <P, R extends Collection<T>> R filterWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
             R targetCollection)
@@ -486,13 +486,13 @@ public class FastList<T>
     }
 
     @Override
-    public FastList<T> reject(Predicate<? super T> predicate)
+    public FastList<T> filterNot(Predicate<? super T> predicate)
     {
-        return this.reject(predicate, FastList.<T>newList());
+        return this.filterNot(predicate, FastList.<T>newList());
     }
 
     @Override
-    public <R extends Collection<T>> R reject(Predicate<? super T> predicate, R target)
+    public <R extends Collection<T>> R filterNot(Predicate<? super T> predicate, R target)
     {
         for (int i = 0; i < this.size; i++)
         {
@@ -505,13 +505,13 @@ public class FastList<T>
     }
 
     @Override
-    public <P> FastList<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> FastList<T> filterNotWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return this.rejectWith(predicate, parameter, FastList.<T>newList());
+        return this.filterNotWith(predicate, parameter, FastList.<T>newList());
     }
 
     @Override
-    public <P, R extends Collection<T>> R rejectWith(
+    public <P, R extends Collection<T>> R filterNotWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
             R target)
@@ -527,7 +527,7 @@ public class FastList<T>
     }
 
     @Override
-    public <P> Twin<MutableList<T>> selectAndRejectWith(
+    public <P> Twin<MutableList<T>> partitionWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
@@ -589,13 +589,13 @@ public class FastList<T>
     }
 
     @Override
-    public <V> FastList<V> collect(Function<? super T, ? extends V> function)
+    public <V> FastList<V> transform(Function<? super T, ? extends V> function)
     {
-        return this.collect(function, FastList.<V>newList(this.size()));
+        return this.transform(function, FastList.<V>newList(this.size()));
     }
 
     @Override
-    public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)
+    public <V, R extends Collection<V>> R transform(Function<? super T, ? extends V> function, R target)
     {
         for (int i = 0; i < this.size; i++)
         {
@@ -605,13 +605,13 @@ public class FastList<T>
     }
 
     @Override
-    public <V> FastList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    public <V> FastList<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
     {
-        return this.flatCollect(function, FastList.<V>newList(this.size()));
+        return this.flatTransform(function, FastList.<V>newList(this.size()));
     }
 
     @Override
-    public <V, R extends Collection<V>> R flatCollect(
+    public <V, R extends Collection<V>> R flatTransform(
             Function<? super T, ? extends Iterable<V>> function,
             R target)
     {
@@ -623,13 +623,13 @@ public class FastList<T>
     }
 
     @Override
-    public <P, V> FastList<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
+    public <P, V> FastList<V> transformWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
     {
-        return this.collectWith(function, parameter, FastList.<V>newList(this.size()));
+        return this.transformWith(function, parameter, FastList.<V>newList(this.size()));
     }
 
     @Override
-    public <P, V, R extends Collection<V>> R collectWith(
+    public <P, V, R extends Collection<V>> R transformWith(
             Function2<? super T, ? super P, ? extends V> function,
             P parameter,
             R targetCollection)
@@ -642,15 +642,15 @@ public class FastList<T>
     }
 
     @Override
-    public <V> FastList<V> collectIf(
+    public <V> FastList<V> transformIf(
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function)
     {
-        return this.collectIf(predicate, function, FastList.<V>newList());
+        return this.transformIf(predicate, function, FastList.<V>newList());
     }
 
     @Override
-    public <V, R extends Collection<V>> R collectIf(
+    public <V, R extends Collection<V>> R transformIf(
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function,
             R target)
@@ -667,7 +667,7 @@ public class FastList<T>
     }
 
     @Override
-    public T detect(Predicate<? super T> predicate)
+    public T find(Predicate<? super T> predicate)
     {
         for (int i = 0; i < this.size; i++)
         {
@@ -681,14 +681,14 @@ public class FastList<T>
     }
 
     @Override
-    public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> defaultValueBlock)
+    public T findIfNone(Predicate<? super T> predicate, Function0<? extends T> defaultValueBlock)
     {
-        T result = this.detect(predicate);
+        T result = this.find(predicate);
         return result == null ? defaultValueBlock.value() : result;
     }
 
     @Override
-    public <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> T findWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         for (int i = 0; i < this.size; i++)
         {
@@ -702,12 +702,12 @@ public class FastList<T>
     }
 
     @Override
-    public <P> T detectWithIfNone(
+    public <P> T findWithIfNone(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
             Function0<? extends T> defaultValueBlock)
     {
-        T result = this.detectWith(predicate, parameter);
+        T result = this.findWith(predicate, parameter);
         return result == null ? defaultValueBlock.value() : result;
     }
 
@@ -966,9 +966,9 @@ public class FastList<T>
     }
 
     @Override
-    public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
+    public <IV> IV foldLeft(IV initialValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
-        IV result = injectedValue;
+        IV result = initialValue;
         for (int i = 0; i < this.size; i++)
         {
             result = function.value(result, this.items[i]);
@@ -977,9 +977,9 @@ public class FastList<T>
     }
 
     @Override
-    public int injectInto(int injectedValue, IntObjectToIntFunction<? super T> function)
+    public int foldLeft(int initialValue, IntObjectToIntFunction<? super T> function)
     {
-        int result = injectedValue;
+        int result = initialValue;
         for (int i = 0; i < this.size; i++)
         {
             result = function.intValueOf(result, this.items[i]);
@@ -988,9 +988,9 @@ public class FastList<T>
     }
 
     @Override
-    public long injectInto(long injectedValue, LongObjectToLongFunction<? super T> function)
+    public long foldLeft(long initialValue, LongObjectToLongFunction<? super T> function)
     {
-        long result = injectedValue;
+        long result = initialValue;
         for (int i = 0; i < this.size; i++)
         {
             result = function.longValueOf(result, this.items[i]);
@@ -999,9 +999,9 @@ public class FastList<T>
     }
 
     @Override
-    public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super T> function)
+    public double foldLeft(double initialValue, DoubleObjectToDoubleFunction<? super T> function)
     {
-        double result = injectedValue;
+        double result = initialValue;
         for (int i = 0; i < this.size; i++)
         {
             result = function.doubleValueOf(result, this.items[i]);
@@ -1010,12 +1010,12 @@ public class FastList<T>
     }
 
     @Override
-    public <IV, P> IV injectIntoWith(
-            IV injectValue,
+    public <IV, P> IV foldLeftWith(
+            IV initialValue,
             Function3<? super IV, ? super T, ? super P, ? extends IV> function,
             P parameter)
     {
-        IV result = injectValue;
+        IV result = initialValue;
         for (int i = 0; i < this.size; i++)
         {
             result = function.value(result, this.items[i], parameter);

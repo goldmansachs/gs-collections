@@ -221,24 +221,24 @@ public class ImmutableUnifiedMapWithHashingStrategy<K, V>
     }
 
     @Override
-    public <R> ImmutableMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function)
+    public <R> ImmutableMap<K, R> transformValues(Function2<? super K, ? super V, ? extends R> function)
     {
-        MutableMap<K, R> result = MapIterate.collectValues(this, function,
+        MutableMap<K, R> result = MapIterate.transformValues(this, function,
                 UnifiedMapWithHashingStrategy.<K, R>newMap(this.delegate.hashingStrategy(), this.delegate.size()));
         return result.toImmutable();
     }
 
     @Override
-    public ImmutableMap<K, V> select(Predicate2<? super K, ? super V> predicate)
+    public ImmutableMap<K, V> filter(Predicate2<? super K, ? super V> predicate)
     {
-        MutableMap<K, V> result = MapIterate.selectMapOnEntry(this, predicate, this.delegate.newEmpty());
+        MutableMap<K, V> result = MapIterate.filterMapOnEntry(this, predicate, this.delegate.newEmpty());
         return result.toImmutable();
     }
 
     @Override
-    public ImmutableMap<K, V> reject(Predicate2<? super K, ? super V> predicate)
+    public ImmutableMap<K, V> filterNot(Predicate2<? super K, ? super V> predicate)
     {
-        MutableMap<K, V> result = MapIterate.rejectMapOnEntry(this, predicate, this.delegate.newEmpty());
+        MutableMap<K, V> result = MapIterate.filterNotMapOnEntry(this, predicate, this.delegate.newEmpty());
         return result.toImmutable();
     }
 }

@@ -143,7 +143,7 @@ public class EmptyMapTest extends AbstractMemoryEfficientMutableMapTest
     public void select()
     {
         MutableMap<String, String> map = this.classUnderTest();
-        MutableMap<String, String> actual = map.select(Predicates2.alwaysTrue());
+        MutableMap<String, String> actual = map.filter(Predicates2.alwaysTrue());
         Verify.assertInstanceOf(EmptyMap.class, actual);
     }
 
@@ -152,7 +152,7 @@ public class EmptyMapTest extends AbstractMemoryEfficientMutableMapTest
     public void reject()
     {
         MutableMap<String, String> map = this.classUnderTest();
-        MutableMap<String, String> actual = map.reject(Predicates2.alwaysFalse());
+        MutableMap<String, String> actual = map.filterNot(Predicates2.alwaysFalse());
         Verify.assertInstanceOf(EmptyMap.class, actual);
     }
 
@@ -161,7 +161,7 @@ public class EmptyMapTest extends AbstractMemoryEfficientMutableMapTest
     public void detect()
     {
         MutableMap<String, String> map = this.classUnderTest();
-        Assert.assertNull(map.detect(Predicates2.alwaysTrue()));
+        Assert.assertNull(map.find(Predicates2.alwaysTrue()));
     }
 
     @Override

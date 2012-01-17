@@ -46,7 +46,7 @@ public abstract class AbstractMemoryEfficientMutableListTestCase
 
     private MutableList<String> getNStrings()
     {
-        return Interval.oneTo(this.getSize()).collect(Functions.getToString()).toList();
+        return Interval.oneTo(this.getSize()).transform(Functions.getToString()).toList();
     }
 
     protected abstract int getSize();

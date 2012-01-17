@@ -140,17 +140,17 @@ public interface ListIterable<T>
      */
     ListIterator<T> listIterator(int index);
 
-    ListIterable<T> select(Predicate<? super T> predicate);
+    ListIterable<T> filter(Predicate<? super T> predicate);
 
-    ListIterable<T> reject(Predicate<? super T> predicate);
+    ListIterable<T> filterNot(Predicate<? super T> predicate);
 
     PartitionList<T> partition(Predicate<? super T> predicate);
 
-    <V> ListIterable<V> collect(Function<? super T, ? extends V> function);
+    <V> ListIterable<V> transform(Function<? super T, ? extends V> function);
 
-    <V> ListIterable<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
+    <V> ListIterable<V> transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 
-    <V> ListIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
+    <V> ListIterable<V> flatTransform(Function<? super T, ? extends Iterable<V>> function);
 
     <V> ListMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
 
