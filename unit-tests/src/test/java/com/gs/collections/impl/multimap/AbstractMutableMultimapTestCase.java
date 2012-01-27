@@ -17,9 +17,9 @@
 package com.gs.collections.impl.multimap;
 
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.MutableCollection;
-import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
@@ -29,7 +29,6 @@ import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
-import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
@@ -160,7 +159,7 @@ public abstract class AbstractMutableMultimapTestCase extends AbstractMultimapTe
     @Test
     public void forEachKeyValue()
     {
-        final MutableList<String> collection = Lists.mutable.of();
+        final MutableBag<String> collection = Bags.mutable.of();
         Multimap<Integer, String> multimap =
                 this.newMultimapWithKeysValues(1, "One", 2, "Two", 3, "Three");
         multimap.forEachKeyValue(new Procedure2<Integer, String>()
@@ -170,27 +169,27 @@ public abstract class AbstractMutableMultimapTestCase extends AbstractMultimapTe
                 collection.add(key + value);
             }
         });
-        Assert.assertEquals(FastList.newListWith("1One", "2Two", "3Three"), collection);
+        Assert.assertEquals(HashBag.newBagWith("1One", "2Two", "3Three"), collection);
     }
 
     @Override
     @Test
     public void forEachValue()
     {
-        MutableList<String> collection = Lists.mutable.of();
+        MutableBag<String> collection = Bags.mutable.of();
         Multimap<Integer, String> multimap = this.newMultimapWithKeysValues(1, "1", 2, "2", 3, "3");
         multimap.forEachValue(CollectionAddProcedure.on(collection));
-        Assert.assertEquals(FastList.newListWith("1", "2", "3"), collection);
+        Assert.assertEquals(HashBag.newBagWith("1", "2", "3"), collection);
     }
 
     @Override
     @Test
     public void forEachKey()
     {
-        MutableList<Integer> collection = Lists.mutable.of();
+        MutableBag<Integer> collection = Bags.mutable.of();
         Multimap<Integer, String> multimap = this.newMultimapWithKeysValues(1, "1", 2, "2", 3, "3");
         multimap.forEachKey(CollectionAddProcedure.on(collection));
-        Assert.assertEquals(FastList.newListWith(1, 2, 3), collection);
+        Assert.assertEquals(HashBag.newBagWith(1, 2, 3), collection);
     }
 
     @Test

@@ -51,6 +51,18 @@ public final class UnifiedSetMultimap<K, V>
         super(pairs);
     }
 
+    @Override
+    protected MutableMap<K, MutableSet<V>> createMap()
+    {
+        return UnifiedMap.newMap();
+    }
+
+    @Override
+    protected MutableMap<K, MutableSet<V>> createMapWithKeyCount(int keyCount)
+    {
+        return UnifiedMap.newMap(keyCount);
+    }
+
     public static <K, V> UnifiedSetMultimap<K, V> newMultimap(Multimap<? extends K, ? extends V> multimap)
     {
         return new UnifiedSetMultimap<K, V>(multimap);

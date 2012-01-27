@@ -30,7 +30,10 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ListIterable;
+import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.list.fixed.ArrayAdapter;
+import com.gs.collections.impl.multimap.list.SynchronizedPutFastListMultimap;
 import com.gs.collections.impl.utility.Iterate;
 
 import static com.gs.collections.impl.factory.Iterables.*;
@@ -914,6 +917,87 @@ public final class ParallelIterate
                 ParallelIterate.calculateTaskCount(iterable, batchSize),
                 executor);
         return (R) combiner.getResult();
+    }
+
+    /**
+     * Same effect as {@link Iterate#groupBy(Iterable, Function)},
+     * but executed in parallel batches, and writing output into a SynchronizedPutFastListMultimap.
+     */
+    public static <K, V> MutableMultimap<K, V> groupBy(
+            Iterable<V> iterable,
+            Function<? super V, ? extends K> function)
+    {
+        return ParallelIterate.groupBy(iterable, function, ParallelIterate.DEFAULT_MIN_FORK_SIZE, ParallelIterate.EXECUTOR_SERVICE);
+    }
+
+    /**
+     * Same effect as {@link Iterate#groupBy(Iterable, Function)},
+     * but executed in parallel batches, and writing output into a SynchronizedPutFastListMultimap.
+     */
+    public static <K, V, R extends MutableMultimap<K, V>> MutableMultimap<K, V> groupBy(
+            Iterable<V> iterable,
+            Function<? super V, ? extends K> function,
+            R concurrentMultimap)
+    {
+        return ParallelIterate.groupBy(iterable, function, concurrentMultimap, ParallelIterate.DEFAULT_MIN_FORK_SIZE);
+    }
+
+    /**
+     * Same effect as {@link Iterate#groupBy(Iterable, Function)},
+     * but executed in parallel batches, and writing output into a SynchronizedPutFastListMultimap.
+     */
+    public static <K, V, R extends MutableMultimap<K, V>> MutableMultimap<K, V> groupBy(
+            Iterable<V> iterable,
+            Function<? super V, ? extends K> function,
+            R concurrentMultimap,
+            int batchSize)
+    {
+        return ParallelIterate.groupBy(iterable, function, concurrentMultimap, batchSize, ParallelIterate.EXECUTOR_SERVICE);
+    }
+
+    /**
+     * Same effect as {@link Iterate#groupBy(Iterable, Function)},
+     * but executed in parallel batches, and writing output into a SynchronizedPutFastListMultimap.
+     */
+    public static <K, V> MutableMultimap<K, V> groupBy(
+            Iterable<V> iterable,
+            Function<? super V, ? extends K> function,
+            int batchSize)
+    {
+        return ParallelIterate.groupBy(iterable, function, batchSize, ParallelIterate.EXECUTOR_SERVICE);
+    }
+
+    /**
+     * Same effect as {@link Iterate#groupBy(Iterable, Function)},
+     * but executed in parallel batches, and writing output into a SynchronizedPutFastListMultimap.
+     */
+    public static <K, V> MutableMultimap<K, V> groupBy(
+            Iterable<V> iterable,
+            Function<? super V, ? extends K> function,
+            int batchSize,
+            Executor executor)
+    {
+        return ParallelIterate.groupBy(iterable, function, SynchronizedPutFastListMultimap.<K, V>newMultimap(), batchSize, executor);
+    }
+
+    /**
+     * Same effect as {@link Iterate#groupBy(Iterable, Function)},
+     * but executed in parallel batches, and writing output into a SynchronizedPutFastListMultimap.
+     */
+    public static <K, V, R extends MutableMultimap<K, V>> MutableMultimap<K, V> groupBy(
+            Iterable<V> iterable,
+            Function<? super V, ? extends K> function,
+            R concurrentMultimap,
+            int batchSize,
+            Executor executor)
+    {
+        ParallelIterate.forEach(
+                iterable,
+                new PassThruProcedureFactory<Procedure<V>>(new MultimapPutProcedure<K, V>(concurrentMultimap, function)),
+                Combiners.<Procedure<V>>passThru(),
+                batchSize,
+                executor);
+        return concurrentMultimap;
     }
 
     /**

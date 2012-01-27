@@ -1053,10 +1053,6 @@ public class FastList<T>
             return false;
         }
         List<?> list = (List<?>) otherList;
-        if (this.size() != list.size())
-        {
-            return false;
-        }
         if (otherList instanceof FastList)
         {
             return this.fastListEquals((FastList<?>) otherList);
@@ -1075,6 +1071,10 @@ public class FastList<T>
 
     private boolean fastListEquals(FastList<?> otherFastList)
     {
+        if (this.size() != otherFastList.size())
+        {
+            return false;
+        }
         Object[] otherItems = otherFastList.items;
         for (int i = 0; i < this.size; i++)
         {
@@ -1094,17 +1094,25 @@ public class FastList<T>
         for (int i = 0; i < this.size; i++)
         {
             T one = this.items[i];
+            if (!iterator.hasNext())
+            {
+                return false;
+            }
             Object two = iterator.next();
             if (!Comparators.nullSafeEquals(one, two))
             {
                 return false;
             }
         }
-        return true;
+        return !iterator.hasNext();
     }
 
     private boolean randomAccessListEquals(List<?> otherList)
     {
+        if (this.size() != otherList.size())
+        {
+            return false;
+        }
         for (int i = 0; i < this.size; i++)
         {
             T one = this.items[i];

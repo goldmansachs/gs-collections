@@ -98,6 +98,18 @@ public final class UnifiedSetWithHashingStrategyMultimap<K, V>
     }
 
     @Override
+    protected MutableMap<K, MutableSet<V>> createMap()
+    {
+        return UnifiedMap.newMap();
+    }
+
+    @Override
+    protected MutableMap<K, MutableSet<V>> createMapWithKeyCount(int keyCount)
+    {
+        return UnifiedMap.newMap(keyCount);
+    }
+
+    @Override
     protected UnifiedSetWithHashingStrategy<V> createCollection()
     {
         return UnifiedSetWithHashingStrategy.newSet(this.hashingStrategy);

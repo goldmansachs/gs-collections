@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 
+import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
@@ -30,17 +31,24 @@ import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.multimap.Multimap;
+import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.StringFunctions;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.gs.collections.impl.multimap.bag.HashBagMultimap;
+import com.gs.collections.impl.multimap.bag.SynchronizedPutHashBagMultimap;
+import com.gs.collections.impl.multimap.set.SynchronizedPutUnifiedSetMultimap;
 import com.gs.collections.impl.set.mutable.MultiReaderUnifiedSet;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.utility.ArrayIterate;
+import com.gs.collections.impl.utility.LazyIterate;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -341,6 +349,65 @@ public class ParallelIterateTest
         Verify.assertSize(200, result);
         Verify.assertContains(String.valueOf(200), result);
         Verify.assertInstanceOf(List.class, result);
+    }
+
+    @Test
+    public void groupByWithInterval()
+    {
+        LazyIterable<Integer> iterable = Interval.oneTo(1000).concatenate(Interval.oneTo(1000)).concatenate(Interval.oneTo(1000));
+        Multimap<String, Integer> expected = iterable.toBag().groupBy(Functions.getToString());
+        Multimap<String, Integer> expectedAsSet = iterable.toSet().groupBy(Functions.getToString());
+        Multimap<String, Integer> result1 = ParallelIterate.groupBy(iterable.toList(), Functions.getToString(), 100);
+        Multimap<String, Integer> result2 = ParallelIterate.groupBy(iterable.toList(), Functions.getToString());
+        Multimap<String, Integer> result3 = ParallelIterate.groupBy(iterable.toSet(), Functions.getToString(), SynchronizedPutUnifiedSetMultimap.<String, Integer>newMultimap(), 100);
+        Multimap<String, Integer> result4 = ParallelIterate.groupBy(iterable.toSet(), Functions.getToString(), SynchronizedPutUnifiedSetMultimap.<String, Integer>newMultimap());
+        Multimap<String, Integer> result5 = ParallelIterate.groupBy(iterable.toSortedSet(), Functions.getToString(), SynchronizedPutUnifiedSetMultimap.<String, Integer>newMultimap(), 100);
+        Multimap<String, Integer> result6 = ParallelIterate.groupBy(iterable.toSortedSet(), Functions.getToString(), SynchronizedPutUnifiedSetMultimap.<String, Integer>newMultimap());
+        Multimap<String, Integer> result7 = ParallelIterate.groupBy(iterable.toBag(), Functions.getToString(), SynchronizedPutHashBagMultimap.<String, Integer>newMultimap(), 100);
+        Multimap<String, Integer> result8 = ParallelIterate.groupBy(iterable.toBag(), Functions.getToString(), SynchronizedPutHashBagMultimap.<String, Integer>newMultimap());
+        Assert.assertEquals(expected, HashBagMultimap.newMultimap(result1));
+        Assert.assertEquals(expected, HashBagMultimap.newMultimap(result2));
+        Assert.assertEquals(expectedAsSet, result3);
+        Assert.assertEquals(expectedAsSet, result4);
+        Assert.assertEquals(expectedAsSet, result5);
+        Assert.assertEquals(expectedAsSet, result6);
+        Assert.assertEquals(expected, result7);
+        Assert.assertEquals(expected, result8);
+    }
+
+    @Test
+    public void groupBy()
+    {
+        FastList<String> source = FastList.newListWith("Ted", "Sally", "Mary", "Bob", "Sara");
+        Multimap<Character, String> result1 = ParallelIterate.groupBy(source, StringFunctions.firstLetter(), 1);
+        Multimap<Character, String> result2 = ParallelIterate.groupBy(Collections.synchronizedList(source), StringFunctions.firstLetter(), 1);
+        Multimap<Character, String> result3 = ParallelIterate.groupBy(Collections.synchronizedCollection(source), StringFunctions.firstLetter(), 1);
+        Multimap<Character, String> result4 = ParallelIterate.groupBy(LazyIterate.adapt(source), StringFunctions.firstLetter(), 1);
+        Multimap<Character, String> result5 = ParallelIterate.groupBy(new ArrayList<String>(source), StringFunctions.firstLetter(), 1);
+        Multimap<Character, String> result6 = ParallelIterate.groupBy(source.toSet(), StringFunctions.firstLetter(), 1);
+        Multimap<Character, String> result7 = ParallelIterate.groupBy(source.toMap(Functions.getStringPassThru(), Functions.getStringPassThru()), StringFunctions.firstLetter(), 1);
+        Multimap<Character, String> result8 = ParallelIterate.groupBy(source.toBag(), StringFunctions.firstLetter(), 1);
+        MutableMultimap<Character, String> expected = HashBagMultimap.newMultimap();
+        expected.put('T', "Ted");
+        expected.put('S', "Sally");
+        expected.put('M', "Mary");
+        expected.put('B', "Bob");
+        expected.put('S', "Sara");
+        Assert.assertEquals(expected, HashBagMultimap.newMultimap(result1));
+        Assert.assertEquals(expected, HashBagMultimap.newMultimap(result2));
+        Assert.assertEquals(expected, HashBagMultimap.newMultimap(result3));
+        Assert.assertEquals(expected, HashBagMultimap.newMultimap(result4));
+        Assert.assertEquals(expected, HashBagMultimap.newMultimap(result5));
+        Assert.assertEquals(expected, HashBagMultimap.newMultimap(result6));
+        Assert.assertEquals(expected, HashBagMultimap.newMultimap(result7));
+        Assert.assertEquals(expected, HashBagMultimap.newMultimap(result7));
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                ParallelIterate.groupBy(null, null, 1);
+            }
+        });
     }
 
     @Test
