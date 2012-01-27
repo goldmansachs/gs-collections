@@ -22,22 +22,22 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.goldmansachs</groupId>
-    <artifactId>collections-parent</artifactId>
+    <groupId>ponzu</groupId>
+    <artifactId>parent</artifactId>
     <version>1.1.0</version>
 
     <packaging>pom</packaging>
 
-    <name>Goldman Sachs Collections Parent Project</name>
+    <name>Parent Project</name>
 
-    <inceptionYear>2007</inceptionYear>
+    <inceptionYear>2011</inceptionYear>
 
     <modules>
-        <module>collections-api</module>
-        <module>collections</module>
-        <module>collections-testutils</module>
+        <module>api</module>
+        <module>impl</module>
+        <module>testutils</module>
         <module>unit-tests</module>
-        <module>serialization-tests</module>
+        <!--<module>serialization-tests</module>-->
     </modules>
 
     <properties>
@@ -422,9 +422,9 @@
             </activation>
 
             <modules>
-                <module>collections-api</module>
-                <module>collections</module>
-                <module>collections-testutils</module>
+                <module>api</module>
+                <module>impl</module>
+                <module>testutils</module>
                 <module>unit-tests</module>
                 <module>scala-unit-tests</module>
                 <module>serialization-tests</module>

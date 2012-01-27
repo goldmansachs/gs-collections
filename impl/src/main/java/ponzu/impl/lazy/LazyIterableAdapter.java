@@ -1,0 +1,127 @@
+/*
+ * Copyright 2011 Goldman Sachs.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package ponzu.impl.lazy;
+
+import java.util.Collection;
+import java.util.Iterator;
+
+import ponzu.api.LazyIterable;
+import ponzu.api.block.function.Function;
+import ponzu.api.block.predicate.Predicate;
+import ponzu.api.block.procedure.ObjectIntProcedure;
+import ponzu.api.block.procedure.Procedure;
+import ponzu.api.block.procedure.Procedure2;
+import ponzu.impl.UnmodifiableIteratorAdapter;
+import ponzu.impl.utility.Iterate;
+import ponzu.impl.utility.LazyIterate;
+import net.jcip.annotations.Immutable;
+
+/**
+ * A LazyIterableAdapter wraps any iterable with the LazyIterable interface.
+ */
+@Immutable
+public class LazyIterableAdapter<T>
+        extends AbstractLazyIterable<T>
+{
+    private final Iterable<T> adapted;
+
+    public LazyIterableAdapter(Iterable<T> newAdapted)
+    {
+        this.adapted = newAdapted;
+    }
+
+    public void forEach(Procedure<? super T> procedure)
+    {
+        Iterate.forEach(this.adapted, procedure);
+    }
+
+    public void forEachWithIndex(ObjectIntProcedure<? super T> objectIntProcedure)
+    {
+        Iterate.forEachWithIndex(this.adapted, objectIntProcedure);
+    }
+
+    public <P> void forEachWith(Procedure2<? super T, ? super P> procedure, P parameter)
+    {
+        Iterate.forEachWith(this.adapted, procedure, parameter);
+    }
+
+    public Iterator<T> iterator()
+    {
+        return new UnmodifiableIteratorAdapter<T>(this.adapted.iterator());
+    }
+
+    @Override
+    public <R extends Collection<T>> R into(R target)
+    {
+        Iterate.addAllIterable(this.adapted, target);
+        return target;
+    }
+
+    @Override
+    public LazyIterable<T> filter(Predicate<? super T> predicate)
+    {
+        return LazyIterate.filter(this.adapted, predicate);
+    }
+
+    @Override
+    public LazyIterable<T> filterNot(Predicate<? super T> predicate)
+    {
+        return LazyIterate.filterNot(this.adapted, predicate);
+    }
+
+    @Override
+    public <V> LazyIterable<V> transform(Function<? super T, ? extends V> function)
+    {
+        return LazyIterate.transform(this.adapted, function);
+    }
+
+    @Override
+    public <V> LazyIterable<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
+    {
+        return LazyIterate.flatTransform(this.adapted, function);
+    }
+
+    @Override
+    public <V> LazyIterable<V> transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
+    {
+        return LazyIterate.transformIf(this.adapted, predicate, function);
+    }
+
+    @Override
+    public LazyIterable<T> take(int count)
+    {
+        return LazyIterate.take(this.adapted, count);
+    }
+
+    @Override
+    public LazyIterable<T> drop(int count)
+    {
+        return LazyIterate.drop(this.adapted, count);
+    }
+
+    @Override
+    public Object[] toArray()
+    {
+        return Iterate.toArray(this.adapted);
+    }
+
+    @Override
+    public int size()
+    {
+        return Iterate.sizeOf(this.adapted);
+    }
+}

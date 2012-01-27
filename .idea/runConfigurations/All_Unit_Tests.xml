@@ -32,8 +32,6 @@
     <RunnerSettings RunnerId="Run" />
     <ConfigurationWrapper RunnerId="Debug" />
     <ConfigurationWrapper RunnerId="Run" />
-    <method>
-      <option name="Make" enabled="true" />
-    </method>
+    <method />
   </configuration>
 </component>

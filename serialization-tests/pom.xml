@@ -21,11 +21,11 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.goldmansachs</groupId>
+    <groupId>ponzu</groupId>
     <artifactId>serialization-tests</artifactId>
     <version>1.1.0</version>
 
-    <name>Goldman Sachs Collections Serialization Test Suite</name>
+    <name>Serialization Test Suite</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -41,22 +41,22 @@
     <dependencies>
 
         <dependency>
-            <groupId>com.goldmansachs</groupId>
-            <artifactId>collections-api</artifactId>
+            <groupId>ponzu</groupId>
+            <artifactId>api</artifactId>
             <version>1.1.0</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>com.goldmansachs</groupId>
-            <artifactId>collections</artifactId>
+            <groupId>ponzu</groupId>
+            <artifactId>impl</artifactId>
             <version>1.1.0</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
-            <groupId>com.goldmansachs</groupId>
-            <artifactId>collections-testutils</artifactId>
+            <groupId>ponzu</groupId>
+            <artifactId>testutils</artifactId>
             <version>1.1.0</version>
             <scope>test</scope>
         </dependency>

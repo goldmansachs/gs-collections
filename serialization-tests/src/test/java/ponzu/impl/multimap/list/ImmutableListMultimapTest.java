@@ -1,0 +1,40 @@
+/*
+ * Copyright 2011 Goldman Sachs.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package ponzu.impl.multimap.list;
+
+import ponzu.api.multimap.MutableMultimap;
+import ponzu.impl.multimap.ImmutableMultimapTestCase;
+
+public class ImmutableListMultimapTest
+        extends ImmutableMultimapTestCase
+{
+    @Override
+    protected MutableMultimap<String, String> createEmpty()
+    {
+        return FastListMultimap.newMultimap();
+    }
+
+    @Override
+    public String getSerializedForm()
+    {
+        return "rO0ABXNyAGdjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tdWx0aW1hcC5saXN0LkltbXV0YWJsZUxp\n"
+                + "c3RNdWx0aW1hcEltcGwkSW1tdXRhYmxlTGlzdE11bHRpbWFwU2VyaWFsaXphdGlvblByb3h5AAAA\n"
+                + "AAAAAAEMAAB4cgBEY29tLmdzLmNvbGxlY3Rpb25zLmltcGwubXVsdGltYXAuSW1tdXRhYmxlTXVs\n"
+                + "dGltYXBTZXJpYWxpemF0aW9uUHJveHkAAAAAAAAAAQwAAHhwdwQAAAACdAABQXcEAAAAA3EAfgAD\n"
+                + "dAABQnEAfgAEcQB+AAR3BAAAAAFxAH4AA3g=";
+    }
+}

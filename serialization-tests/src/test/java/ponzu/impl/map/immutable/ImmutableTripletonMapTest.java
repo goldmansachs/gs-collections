@@ -1,0 +1,35 @@
+/*
+ * Copyright 2011 Goldman Sachs.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package ponzu.impl.map.immutable;
+
+import ponzu.impl.test.Verify;
+import org.junit.Test;
+
+public class ImmutableTripletonMapTest
+{
+    @Test
+    public void serializedForm()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyADtjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAuaW1tdXRhYmxlLkltbXV0YWJsZVRy\n"
+                        + "aXBsZXRvbk1hcAAAAAAAAAABAgAGTAAEa2V5MXQAEkxqYXZhL2xhbmcvT2JqZWN0O0wABGtleTJx\n"
+                        + "AH4AAUwABGtleTNxAH4AAUwABnZhbHVlMXEAfgABTAAGdmFsdWUycQB+AAFMAAZ2YWx1ZTNxAH4A\n"
+                        + "AXhwdAABYXQAAWJ0AAFjcHBw",
+                new ImmutableTripletonMap<String, Object>("a", null, "b", null, "c", null));
+    }
+}
