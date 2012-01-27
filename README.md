@@ -2,7 +2,7 @@
 
 Ponzu is a fork of the Goldman Sachs gs-collections framework.  The main difference is that the primary iteration protocol methods have been renamed:
 
-| gs-collections |  ponzu     |
+| **gs-collections** |  **ponzu**     |
 |----------------|------------| 
 | select         | filter     |
 | reject         | filterNot  |
