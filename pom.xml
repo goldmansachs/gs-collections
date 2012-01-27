@@ -427,7 +427,7 @@
                 <module>testutils</module>
                 <module>unit-tests</module>
                 <module>scala-unit-tests</module>
-                <module>serialization-tests</module>
+                <!--<module>serialization-tests</module>-->
                 <module>acceptance-tests</module>
             </modules>
         </profile>
