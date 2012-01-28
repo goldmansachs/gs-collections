@@ -20,12 +20,13 @@ import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Comparator;
 
+import net.jcip.annotations.Immutable;
 import ponzu.api.LazyIterable;
 import ponzu.api.RichIterable;
 import ponzu.api.bag.MutableBag;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import ponzu.api.block.function.primitive.IntObjectToIntFunction;
 import ponzu.api.block.function.primitive.LongObjectToLongFunction;
@@ -58,7 +59,6 @@ import ponzu.impl.utility.ArrayIterate;
 import ponzu.impl.utility.Iterate;
 import ponzu.impl.utility.LazyIterate;
 import ponzu.impl.utility.internal.IterableIterate;
-import net.jcip.annotations.Immutable;
 
 /**
  * AbstractLazyIterable provides a base from which deferred iterables such as SelectIterable,
@@ -297,7 +297,7 @@ public abstract class AbstractLazyIterable<T>
         return Iterate.max(this, Comparators.byFunction(function));
     }
 
-    public T findIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
+    public T findIfNone(Predicate<? super T> predicate, Generator<? extends T> function)
     {
         T result = this.find(predicate);
         return result == null ? function.value() : result;

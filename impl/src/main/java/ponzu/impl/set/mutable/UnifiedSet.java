@@ -28,13 +28,14 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import net.jcip.annotations.NotThreadSafe;
 import ponzu.api.LazyIterable;
 import ponzu.api.RichIterable;
 import ponzu.api.bag.MutableBag;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
 import ponzu.api.block.function.Function3;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import ponzu.api.block.function.primitive.IntObjectToIntFunction;
 import ponzu.api.block.function.primitive.LongObjectToLongFunction;
@@ -65,10 +66,10 @@ import ponzu.impl.block.procedure.CollectIfProcedure;
 import ponzu.impl.block.procedure.CollectProcedure;
 import ponzu.impl.block.procedure.CollectionAddProcedure;
 import ponzu.impl.block.procedure.CountProcedure;
+import ponzu.impl.block.procedure.FilterNotProcedure;
 import ponzu.impl.block.procedure.FlatCollectProcedure;
 import ponzu.impl.block.procedure.MultimapEachPutProcedure;
 import ponzu.impl.block.procedure.MultimapPutProcedure;
-import ponzu.impl.block.procedure.FilterNotProcedure;
 import ponzu.impl.block.procedure.SelectProcedure;
 import ponzu.impl.block.procedure.ZipWithIndexProcedure;
 import ponzu.impl.factory.Lists;
@@ -87,7 +88,6 @@ import ponzu.impl.utility.LazyIterate;
 import ponzu.impl.utility.internal.IterableIterate;
 import ponzu.impl.utility.internal.MutableCollectionIterate;
 import ponzu.impl.utility.internal.SetIterables;
-import net.jcip.annotations.NotThreadSafe;
 
 @NotThreadSafe
 public class UnifiedSet<K>
@@ -841,7 +841,7 @@ public class UnifiedSet<K>
         return Iterate.max(this, Comparators.byFunction(function));
     }
 
-    public K findIfNone(Predicate<? super K> predicate, Function0<? extends K> function)
+    public K findIfNone(Predicate<? super K> predicate, Generator<? extends K> function)
     {
         K result = this.find(predicate);
         return result == null ? function.value() : result;
@@ -855,7 +855,7 @@ public class UnifiedSet<K>
     public <P> K findWithIfNone(
             Predicate2<? super K, ? super P> predicate,
             P parameter,
-            Function0<? extends K> function)
+            Generator<? extends K> function)
     {
         K result = this.findWith(predicate, parameter);
         return result == null ? function.value() : result;

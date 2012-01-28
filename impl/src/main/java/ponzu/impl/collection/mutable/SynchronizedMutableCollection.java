@@ -21,13 +21,15 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
 import ponzu.api.LazyIterable;
 import ponzu.api.RichIterable;
 import ponzu.api.bag.MutableBag;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
 import ponzu.api.block.function.Function3;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import ponzu.api.block.function.primitive.IntObjectToIntFunction;
 import ponzu.api.block.function.primitive.LongObjectToLongFunction;
@@ -51,8 +53,6 @@ import ponzu.impl.block.factory.Comparators;
 import ponzu.impl.set.sorted.mutable.TreeSortedSet;
 import ponzu.impl.utility.LazyIterate;
 import ponzu.impl.utility.internal.IterableIterate;
-import net.jcip.annotations.GuardedBy;
-import net.jcip.annotations.ThreadSafe;
 
 /**
  * A synchronized view of a collection.
@@ -569,7 +569,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public E findIfNone(Predicate<? super E> predicate, Function0<? extends E> function)
+    public E findIfNone(Predicate<? super E> predicate, Generator<? extends E> function)
     {
         synchronized (this.lock)
         {
@@ -588,7 +588,7 @@ public class SynchronizedMutableCollection<E>
     public <P> E findWithIfNone(
             Predicate2<? super E, ? super P> predicate,
             P parameter,
-            Function0<? extends E> function)
+            Generator<? extends E> function)
     {
         synchronized (this.lock)
         {

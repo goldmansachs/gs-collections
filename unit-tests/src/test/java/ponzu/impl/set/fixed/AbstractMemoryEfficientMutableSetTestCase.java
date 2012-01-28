@@ -21,6 +21,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.junit.Assert;
+import org.junit.Test;
 import ponzu.api.LazyIterable;
 import ponzu.api.RichIterable;
 import ponzu.api.bag.MutableBag;
@@ -38,7 +40,7 @@ import ponzu.api.set.UnsortedSetIterable;
 import ponzu.api.tuple.Pair;
 import ponzu.impl.block.factory.Comparators;
 import ponzu.impl.block.factory.Functions;
-import ponzu.impl.block.factory.Functions0;
+import ponzu.impl.block.factory.Generators;
 import ponzu.impl.block.factory.IntegerPredicates;
 import ponzu.impl.block.factory.Predicates;
 import ponzu.impl.block.factory.StringFunctions;
@@ -53,8 +55,6 @@ import ponzu.impl.set.mutable.UnifiedSet;
 import ponzu.impl.set.mutable.UnmodifiableMutableSet;
 import ponzu.impl.test.Verify;
 import ponzu.impl.utility.Iterate;
-import org.junit.Assert;
-import org.junit.Test;
 
 import static ponzu.impl.factory.Iterables.*;
 
@@ -266,7 +266,7 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
         MutableMap<Boolean, RichIterable<String>> actualMap = multimap.toMap();
         int halfSize = this.classUnderTest().size() / 2;
         boolean odd = this.classUnderTest().size() % 2 != 0;
-        Assert.assertEquals(halfSize, Iterate.sizeOf(actualMap.getIfAbsent(false, Functions0.<String>newFastList())));
+        Assert.assertEquals(halfSize, Iterate.sizeOf(actualMap.getIfAbsent(false, Generators.<String>newFastList())));
         Assert.assertEquals(halfSize + (odd ? 1 : 0), Iterate.sizeOf(actualMap.get(true)));
     }
 

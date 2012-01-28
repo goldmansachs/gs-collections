@@ -16,10 +16,10 @@
 
 package ponzu.impl.block.factory;
 
-import ponzu.impl.test.Verify;
 import org.junit.Test;
+import ponzu.impl.test.Verify;
 
-public class Functions0Test
+public class GeneratorsTest
 {
     @Test
     public void newFastList()
@@ -28,7 +28,7 @@ public class Functions0Test
                 1L,
                 "rO0ABXNyAERjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9uczAk\n"
                         + "TmV3RmFzdExpc3RGdW5jdGlvbgAAAAAAAAABAgAAeHA=",
-                Functions0.newFastList());
+                Generators.newFastList());
     }
 
     @Test
@@ -38,7 +38,7 @@ public class Functions0Test
                 1L,
                 "rO0ABXNyAEZjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9uczAk\n"
                         + "TmV3VW5pZmllZFNldEZ1bmN0aW9uAAAAAAAAAAECAAB4cA==",
-                Functions0.newUnifiedSet());
+                Generators.newUnifiedSet());
     }
 
     @Test
@@ -48,7 +48,7 @@ public class Functions0Test
                 1L,
                 "rO0ABXNyAENjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9uczAk\n"
                         + "TmV3SGFzaEJhZ0Z1bmN0aW9uAAAAAAAAAAECAAB4cA==",
-                Functions0.newHashBag());
+                Generators.newHashBag());
     }
 
     @Test
@@ -58,6 +58,6 @@ public class Functions0Test
                 1L,
                 "rO0ABXNyAEZjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9uczAk\n"
                         + "TmV3VW5pZmllZE1hcEZ1bmN0aW9uAAAAAAAAAAECAAB4cA==",
-                Functions0.newUnifiedMap());
+                Generators.newUnifiedMap());
     }
 }

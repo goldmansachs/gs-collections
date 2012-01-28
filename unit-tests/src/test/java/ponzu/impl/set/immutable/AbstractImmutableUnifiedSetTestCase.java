@@ -20,7 +20,9 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.Iterator;
 
-import ponzu.api.block.function.Function0;
+import org.junit.Assert;
+import org.junit.Test;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.procedure.ObjectIntProcedure;
 import ponzu.api.block.procedure.Procedure2;
 import ponzu.api.list.MutableList;
@@ -32,7 +34,7 @@ import ponzu.api.set.sorted.MutableSortedSet;
 import ponzu.impl.block.factory.Functions;
 import ponzu.impl.block.factory.Predicates;
 import ponzu.impl.block.function.AddFunction;
-import ponzu.impl.block.function.PassThruFunction0;
+import ponzu.impl.block.function.Constant;
 import ponzu.impl.block.procedure.CollectionAddProcedure;
 import ponzu.impl.factory.Lists;
 import ponzu.impl.factory.Sets;
@@ -43,8 +45,6 @@ import ponzu.impl.set.mutable.UnifiedSet;
 import ponzu.impl.set.sorted.mutable.TreeSortedSet;
 import ponzu.impl.test.SerializeTestHelper;
 import ponzu.impl.test.Verify;
-import org.junit.Assert;
-import org.junit.Test;
 
 public abstract class AbstractImmutableUnifiedSetTestCase
 {
@@ -183,7 +183,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     @Test
     public void detectIfNoneWithBlock()
     {
-        Function0<Integer> function = new PassThruFunction0<Integer>(6);
+        Generator<Integer> function = new Constant<Integer>(6);
         Assert.assertEquals(Integer.valueOf(3), this.newSetWith(1, 2, 3, 4, 5).findIfNone(Predicates.equal(3), function));
         Assert.assertEquals(Integer.valueOf(6), this.newSetWith(1, 2, 3, 4, 5).findIfNone(Predicates.equal(6), function));
     }

@@ -22,9 +22,11 @@ import java.util.Currency;
 import java.util.Locale;
 import java.util.Map;
 
+import org.junit.Assert;
+import org.junit.Test;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.predicate.Predicate2;
 import ponzu.api.list.MutableList;
 import ponzu.api.map.MutableMap;
@@ -45,8 +47,6 @@ import ponzu.impl.map.mutable.UnifiedMap;
 import ponzu.impl.set.sorted.mutable.TreeSortedSet;
 import ponzu.impl.test.Verify;
 import ponzu.impl.tuple.Tuples;
-import org.junit.Assert;
-import org.junit.Test;
 
 public class MapIterateTest
 {
@@ -300,7 +300,7 @@ public class MapIterateTest
     public void getIfAbsentPut()
     {
         MutableMap<String, String> map = UnifiedMap.newMap();
-        Function0<String> function = new Function0<String>()
+        Generator<String> function = new Generator<String>()
         {
             public String value()
             {
@@ -334,7 +334,7 @@ public class MapIterateTest
     {
         MutableMap<String, String> map = UnifiedMap.newMap();
         map.put("nullValueKey", null);
-        Function0<String> function = new Function0<String>()
+        Generator<String> function = new Generator<String>()
         {
             public String value()
             {
@@ -348,7 +348,7 @@ public class MapIterateTest
     public void getIfAbsent()
     {
         MutableMap<String, String> map = UnifiedMap.newMap();
-        Function0<String> function = new Function0<String>()
+        Generator<String> function = new Generator<String>()
         {
             public String value()
             {
@@ -388,7 +388,7 @@ public class MapIterateTest
     public void withNullValue()
     {
         MutableMap<String, String> map = UnifiedMap.newWithKeysValues("key", null);
-        Function0<String> function = new Function0<String>()
+        Generator<String> function = new Generator<String>()
         {
             public String value()
             {

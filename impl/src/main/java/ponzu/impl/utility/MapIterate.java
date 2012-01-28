@@ -22,8 +22,8 @@ import java.util.Map;
 
 import ponzu.api.RichIterable;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.predicate.Predicate;
 import ponzu.api.block.predicate.Predicate2;
 import ponzu.api.block.procedure.Procedure;
@@ -82,11 +82,11 @@ public final class MapIterate
 
     /**
      * Get and return the value in the Map at the specified key, or if there is no value at the key, return the result
-     * of evaluating the specified {@link Function0}, and put that value in the map at the specified key.
+     * of evaluating the specified {@link ponzu.api.block.function.Generator}, and put that value in the map at the specified key.
      * <p/>
      * This method handles the <code>null</code>-value-at-key case correctly.
      */
-    public static <K, V> V getIfAbsentPut(Map<K, V> map, K key, Function0<? extends V> instanceBlock)
+    public static <K, V> V getIfAbsentPut(Map<K, V> map, K key, Generator<? extends V> instanceBlock)
     {
         if (map instanceof MutableMap)
         {
@@ -123,9 +123,9 @@ public final class MapIterate
 
     /**
      * Get and return the value in the Map that corresponds to the specified key, or if there is no value
-     * at the key, return the result of evaluating the specified {@link Function0}.
+     * at the key, return the result of evaluating the specified {@link ponzu.api.block.function.Generator}.
      */
-    public static <K, V> V getIfAbsent(Map<K, V> map, K key, Function0<? extends V> instanceBlock)
+    public static <K, V> V getIfAbsent(Map<K, V> map, K key, Generator<? extends V> instanceBlock)
     {
         if (map instanceof UnsortedMapIterable)
         {

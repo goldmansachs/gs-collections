@@ -20,13 +20,15 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import org.junit.Assert;
+import org.junit.Test;
 import ponzu.api.LazyIterable;
 import ponzu.api.RichIterable;
 import ponzu.api.bag.Bag;
 import ponzu.api.bag.MutableBag;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.predicate.Predicate2;
 import ponzu.api.block.procedure.ObjectIntProcedure;
 import ponzu.api.block.procedure.Procedure;
@@ -46,8 +48,8 @@ import ponzu.impl.block.factory.IntegerPredicates;
 import ponzu.impl.block.factory.Predicates;
 import ponzu.impl.block.factory.Predicates2;
 import ponzu.impl.block.function.AddFunction;
+import ponzu.impl.block.function.Constant;
 import ponzu.impl.block.function.NegativeIntervalFunction;
-import ponzu.impl.block.function.PassThruFunction0;
 import ponzu.impl.block.procedure.CollectionAddProcedure;
 import ponzu.impl.factory.Bags;
 import ponzu.impl.factory.Lists;
@@ -62,8 +64,6 @@ import ponzu.impl.set.mutable.UnifiedSet;
 import ponzu.impl.set.sorted.mutable.TreeSortedSet;
 import ponzu.impl.test.Verify;
 import ponzu.impl.tuple.Tuples;
-import org.junit.Assert;
-import org.junit.Test;
 
 import static ponzu.impl.factory.Iterables.*;
 
@@ -113,8 +113,8 @@ public abstract class MapIterableTestCase
     {
         MapIterable<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
         Assert.assertNull(map.get(4));
-        Assert.assertEquals("4", map.getIfAbsent(4, new PassThruFunction0<String>("4")));
-        Assert.assertEquals("3", map.getIfAbsent(3, new PassThruFunction0<String>("3")));
+        Assert.assertEquals("4", map.getIfAbsent(4, new Constant<String>("4")));
+        Assert.assertEquals("3", map.getIfAbsent(3, new Constant<String>("3")));
         Assert.assertNull(map.get(4));
     }
 
@@ -557,7 +557,7 @@ public abstract class MapIterableTestCase
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
 
-        Function0<String> function = new Function0<String>()
+        Generator<String> function = new Generator<String>()
         {
             public String value()
             {

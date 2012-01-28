@@ -19,6 +19,9 @@ package ponzu.impl.collection.mutable;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import ponzu.api.RichIterable;
 import ponzu.api.block.function.Function;
 import ponzu.api.block.function.Function2;
@@ -38,16 +41,13 @@ import ponzu.impl.block.factory.IntegerPredicates;
 import ponzu.impl.block.factory.Predicates;
 import ponzu.impl.block.factory.Predicates2;
 import ponzu.impl.block.factory.StringPredicates;
-import ponzu.impl.block.function.PassThruFunction0;
+import ponzu.impl.block.function.Constant;
 import ponzu.impl.factory.Lists;
 import ponzu.impl.list.mutable.FastList;
 import ponzu.impl.map.mutable.UnifiedMap;
 import ponzu.impl.multimap.list.FastListMultimap;
 import ponzu.impl.set.sorted.mutable.TreeSortedSet;
 import ponzu.impl.test.Verify;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * JUnit test for {@link UnmodifiableMutableCollection}.
@@ -113,10 +113,10 @@ public class UnmodifiableMutableCollectionTest
                         FastList.<String>newList()));
         Assert.assertEquals(METALLICA, this.unmodifiableCollection.find(StringPredicates.contains("allic")));
         Assert.assertEquals("Not found", this.unmodifiableCollection.findIfNone(StringPredicates.contains("donna"),
-                new PassThruFunction0<String>("Not found")));
+                new Constant<String>("Not found")));
         Assert.assertEquals(METALLICA, this.unmodifiableCollection.findWith(Predicates2.equal(), METALLICA));
         Assert.assertEquals("Not found", this.unmodifiableCollection.findWithIfNone(Predicates2.equal(), "Madonna",
-                new PassThruFunction0<String>("Not found")));
+                new Constant<String>("Not found")));
         Assert.assertEquals(4, this.unmodifiableCollection.count(Predicates.alwaysTrue()));
         Assert.assertEquals(1, this.unmodifiableCollection.countWith(Predicates2.equal(), METALLICA));
         Assert.assertTrue(this.unmodifiableCollection.anySatisfy(StringPredicates.contains("allic")));

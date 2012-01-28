@@ -29,10 +29,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.RandomAccess;
 
+import net.jcip.annotations.NotThreadSafe;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
 import ponzu.api.block.function.Function3;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import ponzu.api.block.function.primitive.IntObjectToIntFunction;
 import ponzu.api.block.function.primitive.LongObjectToLongFunction;
@@ -52,7 +53,6 @@ import ponzu.impl.utility.ArrayListIterate;
 import ponzu.impl.utility.Iterate;
 import ponzu.impl.utility.ListIterate;
 import ponzu.impl.utility.internal.InternalArrayIterate;
-import net.jcip.annotations.NotThreadSafe;
 
 /**
  * FastList is an attempt to provide the same functionality as ArrayList without the support for concurrent
@@ -681,7 +681,7 @@ public class FastList<T>
     }
 
     @Override
-    public T findIfNone(Predicate<? super T> predicate, Function0<? extends T> defaultValueBlock)
+    public T findIfNone(Predicate<? super T> predicate, Generator<? extends T> defaultValueBlock)
     {
         T result = this.find(predicate);
         return result == null ? defaultValueBlock.value() : result;
@@ -705,7 +705,7 @@ public class FastList<T>
     public <P> T findWithIfNone(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
-            Function0<? extends T> defaultValueBlock)
+            Generator<? extends T> defaultValueBlock)
     {
         T result = this.findWith(predicate, parameter);
         return result == null ? defaultValueBlock.value() : result;

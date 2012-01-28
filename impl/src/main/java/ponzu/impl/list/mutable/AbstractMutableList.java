@@ -27,9 +27,9 @@ import java.util.NoSuchElementException;
 import java.util.RandomAccess;
 
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
 import ponzu.api.block.function.Function3;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.function.primitive.IntObjectToIntFunction;
 import ponzu.api.block.function.primitive.LongObjectToLongFunction;
 import ponzu.api.block.predicate.Predicate;
@@ -303,7 +303,7 @@ public abstract class AbstractMutableList<T>
     }
 
     @Override
-    public T findIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
+    public T findIfNone(Predicate<? super T> predicate, Generator<? extends T> function)
     {
         T result = ListIterate.find(this, predicate);
         return result == null ? function.value() : result;
@@ -355,7 +355,7 @@ public abstract class AbstractMutableList<T>
     public <P> T findWithIfNone(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
-            Function0<? extends T> function)
+            Generator<? extends T> function)
     {
         T result = ListIterate.findWith(this, predicate, parameter);
         return result == null ? function.value() : result;

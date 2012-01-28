@@ -22,9 +22,11 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.concurrent.atomic.AtomicReference;
 
-import ponzu.api.block.function.Function0;
+import org.junit.Assert;
+import org.junit.Test;
 import ponzu.api.block.function.Function2;
 import ponzu.api.block.function.Function3;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.predicate.Predicate2;
 import ponzu.api.block.procedure.ObjectIntProcedure;
 import ponzu.api.block.procedure.Procedure;
@@ -39,9 +41,9 @@ import ponzu.impl.block.factory.ObjectIntProcedures;
 import ponzu.impl.block.factory.Predicates;
 import ponzu.impl.block.factory.Predicates2;
 import ponzu.impl.block.function.AddFunction;
+import ponzu.impl.block.function.Constant;
 import ponzu.impl.block.function.MaxSizeFunction;
 import ponzu.impl.block.function.MinSizeFunction;
-import ponzu.impl.block.function.PassThruFunction0;
 import ponzu.impl.block.procedure.CollectionAddProcedure;
 import ponzu.impl.factory.Lists;
 import ponzu.impl.factory.Sets;
@@ -53,8 +55,6 @@ import ponzu.impl.test.SerializeTestHelper;
 import ponzu.impl.test.Verify;
 import ponzu.impl.tuple.Tuples;
 import ponzu.impl.utility.ListIterate;
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  * JUnit test for {@link MultiReaderFastList}.
@@ -242,7 +242,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     public void detectWithIfNone()
     {
         MutableList<Integer> list = this.getIntegerList();
-        Assert.assertNull(list.findWithIfNone(Predicates2.equal(), 6, new PassThruFunction0<Integer>(null)));
+        Assert.assertNull(list.findWithIfNone(Predicates2.equal(), 6, new Constant<Integer>(null)));
     }
 
     @Override
@@ -342,7 +342,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     @Test
     public void detectIfNoneWithBlock()
     {
-        Function0<Integer> defaultResultFunction = new PassThruFunction0<Integer>(6);
+        Generator<Integer> defaultResultFunction = new Constant<Integer>(6);
         Assert.assertEquals(
                 Integer.valueOf(3),
                 MultiReaderFastList.newListWith(1, 2, 3, 4, 5).findIfNone(Predicates.equal(3), defaultResultFunction));

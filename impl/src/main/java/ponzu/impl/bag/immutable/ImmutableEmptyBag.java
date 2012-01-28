@@ -23,14 +23,15 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import net.jcip.annotations.Immutable;
 import ponzu.api.LazyIterable;
 import ponzu.api.RichIterable;
 import ponzu.api.bag.Bag;
 import ponzu.api.bag.ImmutableBag;
 import ponzu.api.bag.MutableBag;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import ponzu.api.block.function.primitive.IntObjectToIntFunction;
 import ponzu.api.block.function.primitive.LongObjectToLongFunction;
@@ -63,7 +64,6 @@ import ponzu.impl.set.sorted.mutable.TreeSortedSet;
 import ponzu.impl.utility.ArrayIterate;
 import ponzu.impl.utility.Iterate;
 import ponzu.impl.utility.LazyIterate;
-import net.jcip.annotations.Immutable;
 
 /**
  * This is a zero element {@link ImmutableBag} which is created by calling the Bags.immutable.of().
@@ -312,7 +312,7 @@ final class ImmutableEmptyBag<T>
         return null;
     }
 
-    public T findIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
+    public T findIfNone(Predicate<? super T> predicate, Generator<? extends T> function)
     {
         return function.value();
     }

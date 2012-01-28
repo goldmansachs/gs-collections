@@ -19,12 +19,14 @@ package ponzu.impl.map.fixed;
 import java.util.Collections;
 import java.util.List;
 
+import org.junit.Assert;
+import org.junit.Test;
 import ponzu.api.LazyIterable;
 import ponzu.api.RichIterable;
 import ponzu.api.bag.MutableBag;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.procedure.Procedure;
 import ponzu.api.list.MutableList;
 import ponzu.api.map.FixedSizeMap;
@@ -59,8 +61,6 @@ import ponzu.impl.multimap.list.FastListMultimap;
 import ponzu.impl.set.mutable.UnifiedSet;
 import ponzu.impl.test.Verify;
 import ponzu.impl.tuple.Tuples;
-import org.junit.Assert;
-import org.junit.Test;
 
 import static ponzu.impl.factory.Iterables.*;
 
@@ -758,7 +758,7 @@ public abstract class AbstractMemoryEfficientMutableMapTest
     {
         MutableMap<String, String> map = this.classUnderTest();
 
-        Function0<String> function = new Function0<String>()
+        Generator<String> function = new Generator<String>()
         {
             public String value()
             {

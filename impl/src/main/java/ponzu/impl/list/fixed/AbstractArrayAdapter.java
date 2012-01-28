@@ -26,9 +26,9 @@ import java.util.ListIterator;
 import java.util.RandomAccess;
 
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
 import ponzu.api.block.function.Function3;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.predicate.Predicate;
 import ponzu.api.block.predicate.Predicate2;
 import ponzu.api.block.procedure.ObjectIntProcedure;
@@ -126,7 +126,7 @@ public abstract class AbstractArrayAdapter<T>
     }
 
     @Override
-    public T findIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
+    public T findIfNone(Predicate<? super T> predicate, Generator<? extends T> function)
     {
         T result = this.find(predicate);
         if (result == null)
@@ -517,7 +517,7 @@ public abstract class AbstractArrayAdapter<T>
     public <P> T findWithIfNone(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
-            Function0<? extends T> function)
+            Generator<? extends T> function)
     {
         T result = this.findWith(predicate, parameter);
         if (result == null)

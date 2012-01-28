@@ -20,7 +20,7 @@ import java.util.Collection;
 
 import ponzu.api.RichIterable;
 import ponzu.api.bag.Bag;
-import ponzu.api.block.function.Function0;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.procedure.Procedure;
 import ponzu.api.block.procedure.Procedure2;
 import ponzu.api.map.MutableMap;
@@ -188,7 +188,7 @@ public interface Multimap<K, V>
      *
      * @param collectionFactory used to create the collections that hold the values and affects the return type
      */
-    <R extends Collection<V>> MutableMap<K, R> toMap(Function0<R> collectionFactory);
+    <R extends Collection<V>> MutableMap<K, R> toMap(Generator<R> collectionFactory);
 
     /**
      * Compares the specified object with this Multimap for equality.

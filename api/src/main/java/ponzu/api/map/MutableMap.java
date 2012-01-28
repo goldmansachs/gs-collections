@@ -20,8 +20,8 @@ import java.util.Collection;
 import java.util.Map;
 
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.predicate.Predicate;
 import ponzu.api.block.predicate.Predicate2;
 import ponzu.api.collection.MutableCollection;
@@ -64,7 +64,7 @@ public interface MutableMap<K, V>
      * Get and return the value in the Map at the specified key.  Alternatively, if there is no value in the map at the key,
      * return the result of evaluating the specified Function0, and put that value in the map at the specified key.
      */
-    V getIfAbsentPut(K key, Function0<? extends V> function);
+    V getIfAbsentPut(K key, Generator<? extends V> function);
 
     /**
      * Get and return the value in the Map at the specified key.  Alternatively, if there is no value in the map for that key

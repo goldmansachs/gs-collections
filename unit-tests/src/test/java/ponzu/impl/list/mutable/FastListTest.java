@@ -26,11 +26,13 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
+import org.junit.Assert;
+import org.junit.Test;
 import ponzu.api.LazyIterable;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
 import ponzu.api.block.function.Function3;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.predicate.Predicate2;
 import ponzu.api.block.procedure.ObjectIntProcedure;
 import ponzu.api.block.procedure.Procedure;
@@ -43,9 +45,9 @@ import ponzu.impl.block.factory.Predicates;
 import ponzu.impl.block.factory.Predicates2;
 import ponzu.impl.block.factory.Procedures;
 import ponzu.impl.block.function.AddFunction;
+import ponzu.impl.block.function.Constant;
 import ponzu.impl.block.function.MaxSizeFunction;
 import ponzu.impl.block.function.MinSizeFunction;
-import ponzu.impl.block.function.PassThruFunction0;
 import ponzu.impl.block.procedure.CollectionAddProcedure;
 import ponzu.impl.block.procedure.CountProcedure;
 import ponzu.impl.factory.Bags;
@@ -62,8 +64,6 @@ import ponzu.impl.test.Verify;
 import ponzu.impl.tuple.Tuples;
 import ponzu.impl.utility.LazyIterate;
 import ponzu.impl.utility.ListIterate;
-import org.junit.Assert;
-import org.junit.Test;
 
 import static ponzu.impl.factory.Iterables.*;
 
@@ -274,7 +274,7 @@ public class FastListTest extends AbstractListTestCase
     public void testDetectWithIfNone()
     {
         MutableList<Integer> list = Interval.toReverseList(1, 5);
-        Assert.assertNull(list.findWithIfNone(Predicates2.equal(), 6, new PassThruFunction0<Integer>(null)));
+        Assert.assertNull(list.findWithIfNone(Predicates2.equal(), 6, new Constant<Integer>(null)));
     }
 
     @Override
@@ -374,7 +374,7 @@ public class FastListTest extends AbstractListTestCase
     @Test
     public void detectIfNoneWithBlock()
     {
-        Function0<Integer> defaultResultFunction = new PassThruFunction0<Integer>(6);
+        Generator<Integer> defaultResultFunction = new Constant<Integer>(6);
         Assert.assertEquals(
                 Integer.valueOf(3),
                 FastList.newListWith(1, 2, 3, 4, 5).findIfNone(Predicates.equal(3), defaultResultFunction));

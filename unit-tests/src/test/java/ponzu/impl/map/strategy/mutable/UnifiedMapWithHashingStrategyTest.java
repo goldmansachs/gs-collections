@@ -22,16 +22,18 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.junit.Assert;
+import org.junit.Test;
 import ponzu.api.block.HashingStrategy;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.predicate.Predicate2;
 import ponzu.api.block.procedure.Procedure;
 import ponzu.api.block.procedure.Procedure2;
 import ponzu.api.map.MutableMap;
 import ponzu.api.tuple.Pair;
 import ponzu.impl.block.factory.HashingStrategies;
-import ponzu.impl.block.function.PassThruFunction0;
+import ponzu.impl.block.function.Constant;
 import ponzu.impl.list.mutable.FastList;
 import ponzu.impl.map.mutable.UnifiedMap;
 import ponzu.impl.map.mutable.UnifiedMapTestCase;
@@ -44,8 +46,6 @@ import ponzu.impl.set.mutable.UnifiedSet;
 import ponzu.impl.test.Verify;
 import ponzu.impl.tuple.ImmutableEntry;
 import ponzu.impl.tuple.Tuples;
-import org.junit.Assert;
-import org.junit.Test;
 
 public class UnifiedMapWithHashingStrategyTest extends UnifiedMapTestCase
 {
@@ -622,7 +622,7 @@ public class UnifiedMapWithHashingStrategyTest extends UnifiedMapTestCase
         {
             public void value(Integer each)
             {
-                map.getIfAbsentPut(each, new PassThruFunction0<Integer>(each));
+                map.getIfAbsentPut(each, new Constant<Integer>(each));
             }
         });
 
@@ -631,7 +631,7 @@ public class UnifiedMapWithHashingStrategyTest extends UnifiedMapTestCase
         //Testing getting element present in chain
         UnifiedMapWithHashingStrategy<Integer, Integer> map2 = UnifiedMapWithHashingStrategy.newWithKeysValues(
                 INTEGER_HASHING_STRATEGY, COLLISION_1, 1, COLLISION_2, 2, COLLISION_3, 3, COLLISION_4, 4);
-        Assert.assertEquals(2, map2.getIfAbsentPut(COLLISION_2, new Function0<Integer>()
+        Assert.assertEquals(2, map2.getIfAbsentPut(COLLISION_2, new Generator<Integer>()
         {
             public Integer value()
             {
@@ -643,7 +643,7 @@ public class UnifiedMapWithHashingStrategyTest extends UnifiedMapTestCase
         //Testing rehashing while creating a new chained key
         UnifiedMapWithHashingStrategy<Integer, Integer> map3 = UnifiedMapWithHashingStrategy.<Integer, Integer>newMap(
                 INTEGER_HASHING_STRATEGY, 2, 0.75f).withKeysValues(COLLISION_1, 1, 2, 2, 3, 3);
-        Assert.assertEquals(4, map3.getIfAbsentPut(COLLISION_2, new PassThruFunction0<Integer>(4)).intValue());
+        Assert.assertEquals(4, map3.getIfAbsentPut(COLLISION_2, new Constant<Integer>(4)).intValue());
     }
 
     @Test

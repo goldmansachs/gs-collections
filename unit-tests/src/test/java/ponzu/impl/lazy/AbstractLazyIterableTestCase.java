@@ -20,11 +20,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.junit.Assert;
+import org.junit.Test;
 import ponzu.api.LazyIterable;
 import ponzu.api.RichIterable;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
+import ponzu.api.block.function.Generator;
 import ponzu.api.list.MutableList;
 import ponzu.api.map.MutableMap;
 import ponzu.api.map.sorted.MutableSortedMap;
@@ -40,8 +42,8 @@ import ponzu.impl.block.factory.IntegerPredicates;
 import ponzu.impl.block.factory.Predicates;
 import ponzu.impl.block.factory.Predicates2;
 import ponzu.impl.block.function.AddFunction;
+import ponzu.impl.block.function.Constant;
 import ponzu.impl.block.function.NegativeIntervalFunction;
-import ponzu.impl.block.function.PassThruFunction0;
 import ponzu.impl.factory.Bags;
 import ponzu.impl.factory.Lists;
 import ponzu.impl.list.Interval;
@@ -52,8 +54,6 @@ import ponzu.impl.multimap.list.FastListMultimap;
 import ponzu.impl.set.mutable.UnifiedSet;
 import ponzu.impl.set.sorted.mutable.TreeSortedSet;
 import ponzu.impl.test.Verify;
-import org.junit.Assert;
-import org.junit.Test;
 
 import static ponzu.impl.factory.Iterables.*;
 
@@ -300,7 +300,7 @@ public abstract class AbstractLazyIterableTestCase
     @Test
     public void detectIfNoneWithBlock()
     {
-        Function0<Integer> function = new PassThruFunction0<Integer>(9);
+        Generator<Integer> function = new Constant<Integer>(9);
         Assert.assertEquals(Integer.valueOf(3), this.lazyIterable.findIfNone(Predicates.equal(3), function));
         Assert.assertEquals(Integer.valueOf(9), this.lazyIterable.findIfNone(Predicates.equal(8), function));
     }

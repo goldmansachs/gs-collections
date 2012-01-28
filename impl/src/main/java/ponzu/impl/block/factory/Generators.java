@@ -17,7 +17,7 @@
 package ponzu.impl.block.factory;
 
 import ponzu.api.bag.MutableBag;
-import ponzu.api.block.function.Function0;
+import ponzu.api.block.function.Generator;
 import ponzu.api.list.MutableList;
 import ponzu.api.map.MutableMap;
 import ponzu.api.set.MutableSet;
@@ -26,39 +26,39 @@ import ponzu.impl.factory.Lists;
 import ponzu.impl.factory.Maps;
 import ponzu.impl.factory.Sets;
 
-public final class Functions0
+public final class Generators
 {
     private static final NewFastListFunction<?> NEW_FAST_LIST_FUNCTION = new NewFastListFunction();
     private static final NewUnifiedSetFunction<?> NEW_UNIFIED_SET_FUNCTION = new NewUnifiedSetFunction();
     private static final NewHashBagFunction<?> NEW_HASH_BAG_FUNCTION = new NewHashBagFunction();
     private static final NewUnifiedMapFunction<?, ?> NEW_UNIFIED_MAP_FUNCTION = new NewUnifiedMapFunction();
 
-    private Functions0()
+    private Generators()
     {
         // Utility Class
     }
 
-    public static <T> Function0<MutableList<T>> newFastList()
+    public static <T> Generator<MutableList<T>> newFastList()
     {
-        return (Function0<MutableList<T>>) NEW_FAST_LIST_FUNCTION;
+        return (Generator<MutableList<T>>) NEW_FAST_LIST_FUNCTION;
     }
 
-    public static <T> Function0<MutableSet<T>> newUnifiedSet()
+    public static <T> Generator<MutableSet<T>> newUnifiedSet()
     {
-        return (Function0<MutableSet<T>>) NEW_UNIFIED_SET_FUNCTION;
+        return (Generator<MutableSet<T>>) NEW_UNIFIED_SET_FUNCTION;
     }
 
-    public static <T> Function0<MutableBag<T>> newHashBag()
+    public static <T> Generator<MutableBag<T>> newHashBag()
     {
-        return (Function0<MutableBag<T>>) NEW_HASH_BAG_FUNCTION;
+        return (Generator<MutableBag<T>>) NEW_HASH_BAG_FUNCTION;
     }
 
-    public static <K, V> Function0<MutableMap<K, V>> newUnifiedMap()
+    public static <K, V> Generator<MutableMap<K, V>> newUnifiedMap()
     {
-        return (Function0<MutableMap<K, V>>) NEW_UNIFIED_MAP_FUNCTION;
+        return (Generator<MutableMap<K, V>>) NEW_UNIFIED_MAP_FUNCTION;
     }
 
-    private static final class NewFastListFunction<T> implements Function0<MutableList<T>>
+    private static final class NewFastListFunction<T> implements Generator<MutableList<T>>
     {
         private static final long serialVersionUID = 1L;
 
@@ -68,7 +68,7 @@ public final class Functions0
         }
     }
 
-    private static final class NewUnifiedMapFunction<K, V> implements Function0<MutableMap<K, V>>
+    private static final class NewUnifiedMapFunction<K, V> implements Generator<MutableMap<K, V>>
     {
         private static final long serialVersionUID = 1L;
 
@@ -78,7 +78,7 @@ public final class Functions0
         }
     }
 
-    private static final class NewUnifiedSetFunction<T> implements Function0<MutableSet<T>>
+    private static final class NewUnifiedSetFunction<T> implements Generator<MutableSet<T>>
     {
         private static final long serialVersionUID = 1L;
 
@@ -88,7 +88,7 @@ public final class Functions0
         }
     }
 
-    private static final class NewHashBagFunction<T> implements Function0<MutableBag<T>>
+    private static final class NewHashBagFunction<T> implements Generator<MutableBag<T>>
     {
         private static final long serialVersionUID = 1L;
 

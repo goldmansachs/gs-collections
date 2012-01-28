@@ -18,8 +18,9 @@ package ponzu.impl.block;
 
 import java.io.IOException;
 
+import org.junit.Test;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.predicate.Predicate;
 import ponzu.api.block.predicate.Predicate2;
 import ponzu.api.block.procedure.ObjectIntProcedure;
@@ -27,8 +28,8 @@ import ponzu.api.block.procedure.Procedure;
 import ponzu.api.block.procedure.Procedure2;
 import ponzu.api.map.MutableMap;
 import ponzu.impl.block.function.checked.CheckedFunction;
-import ponzu.impl.block.function.checked.CheckedFunction0;
 import ponzu.impl.block.function.checked.CheckedFunction2;
+import ponzu.impl.block.function.checked.CheckedGenerator;
 import ponzu.impl.block.predicate.checked.CheckedPredicate;
 import ponzu.impl.block.predicate.checked.CheckedPredicate2;
 import ponzu.impl.block.procedure.checked.CheckedObjectIntProcedure;
@@ -38,7 +39,6 @@ import ponzu.impl.map.mutable.UnifiedMap;
 import ponzu.impl.test.Verify;
 import ponzu.impl.utility.ListIterate;
 import ponzu.impl.utility.MapIterate;
-import org.junit.Test;
 
 import static ponzu.impl.factory.Iterables.*;
 
@@ -93,7 +93,7 @@ public class CheckedBlocksTest
         {
             public void run()
             {
-                CheckedFunction0<String> function = new CheckedFunction0<String>()
+                CheckedGenerator<String> function = new CheckedGenerator<String>()
                 {
                     @Override
                     public String safeValue() throws IOException
@@ -113,7 +113,7 @@ public class CheckedBlocksTest
         {
             public void run()
             {
-                CheckedFunction0<String> function = new CheckedFunction0<String>()
+                CheckedGenerator<String> function = new CheckedGenerator<String>()
                 {
                     @Override
                     public String safeValue()
@@ -383,7 +383,7 @@ public class CheckedBlocksTest
     @Test(expected = RuntimeException.class)
     public void codeBlockFailure()
     {
-        Function0<Object> function = new CheckedFunction0<Object>()
+        Generator<Object> function = new CheckedGenerator<Object>()
         {
             @Override
             public Object safeValue() throws InterruptedException
@@ -398,7 +398,7 @@ public class CheckedBlocksTest
     @Test(expected = RuntimeException.class)
     public void codeBlockRuntimeException()
     {
-        Function0<Object> function = new CheckedFunction0<Object>()
+        Generator<Object> function = new CheckedGenerator<Object>()
         {
             @Override
             public Object safeValue()
@@ -413,7 +413,7 @@ public class CheckedBlocksTest
     @Test
     public void codeBlockSuccess()
     {
-        Function0<Object> function = new CheckedFunction0<Object>()
+        Generator<Object> function = new CheckedGenerator<Object>()
         {
             @Override
             public Object safeValue()

@@ -20,9 +20,9 @@ import java.util.Collection;
 
 import ponzu.api.RichIterable;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
 import ponzu.api.block.function.Function3;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.predicate.Predicate;
 import ponzu.api.block.predicate.Predicate2;
 import ponzu.api.list.MutableList;
@@ -291,7 +291,7 @@ public interface MutableCollection<T>
     <P> T findWithIfNone(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
-            Function0<? extends T> function);
+            Generator<? extends T> function);
 
     /**
      * Returns the total number of elements that evaluate to true for the specified predicate.

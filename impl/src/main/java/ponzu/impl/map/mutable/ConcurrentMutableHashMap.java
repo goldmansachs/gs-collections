@@ -26,7 +26,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.procedure.ObjectIntProcedure;
 import ponzu.api.block.procedure.Procedure;
 import ponzu.api.block.procedure.Procedure2;
@@ -252,7 +252,7 @@ public final class ConcurrentMutableHashMap<K, V>
     }
 
     @Override
-    public V getIfAbsentPut(K key, Function0<? extends V> function)
+    public V getIfAbsentPut(K key, Generator<? extends V> function)
     {
         V result = this.delegate.get(key);
         if (result == null)
@@ -278,7 +278,7 @@ public final class ConcurrentMutableHashMap<K, V>
     }
 
     @Override
-    public V getIfAbsent(K key, Function0<? extends V> function)
+    public V getIfAbsent(K key, Generator<? extends V> function)
     {
         V result = this.delegate.get(key);
         if (result == null)

@@ -25,8 +25,8 @@ import ponzu.api.LazyIterable;
 import ponzu.api.RichIterable;
 import ponzu.api.bag.MutableBag;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import ponzu.api.block.function.primitive.IntObjectToIntFunction;
 import ponzu.api.block.function.primitive.LongObjectToLongFunction;
@@ -101,7 +101,7 @@ public class UnmodifiableTreeMap<K, V>
         throw new UnsupportedOperationException();
     }
 
-    public V getIfAbsentPut(K key, Function0<? extends V> function)
+    public V getIfAbsentPut(K key, Generator<? extends V> function)
     {
         V result = this.get(key);
         if (this.isAbsent(result, key))
@@ -129,7 +129,7 @@ public class UnmodifiableTreeMap<K, V>
         return result == null && !this.containsKey(key);
     }
 
-    public V getIfAbsent(K key, Function0<? extends V> function)
+    public V getIfAbsent(K key, Generator<? extends V> function)
     {
         V result = this.get(key);
         if (this.isAbsent(result, key))
@@ -427,7 +427,7 @@ public class UnmodifiableTreeMap<K, V>
         return this.getMutableSortedMap().find(predicate);
     }
 
-    public V findIfNone(Predicate<? super V> predicate, Function0<? extends V> function)
+    public V findIfNone(Predicate<? super V> predicate, Generator<? extends V> function)
     {
         return this.getMutableSortedMap().findIfNone(predicate, function);
     }

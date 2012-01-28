@@ -20,6 +20,10 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 
+import org.junit.Assert;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import ponzu.api.RichIterable;
 import ponzu.api.block.function.Function;
 import ponzu.api.block.predicate.Predicate;
@@ -28,7 +32,7 @@ import ponzu.api.list.MutableList;
 import ponzu.api.map.MutableMap;
 import ponzu.impl.block.factory.Comparators;
 import ponzu.impl.block.factory.Functions;
-import ponzu.impl.block.factory.Functions0;
+import ponzu.impl.block.factory.Generators;
 import ponzu.impl.block.factory.Predicates;
 import ponzu.impl.block.factory.Procedures;
 import ponzu.impl.block.function.primitive.IntegerFunctionImpl;
@@ -37,10 +41,6 @@ import ponzu.impl.factory.Lists;
 import ponzu.impl.list.mutable.FastList;
 import ponzu.impl.map.mutable.UnifiedMap;
 import ponzu.impl.test.Verify;
-import org.junit.Assert;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * This class tests various algorithms for calculating anagrams from a list of words.
@@ -165,7 +165,7 @@ public class AnagramTest
         {
             public void value(String word)
             {
-                map.getIfAbsentPut(new Alphagram(word), Functions0.<String>newFastList()).add(word);
+                map.getIfAbsentPut(new Alphagram(word), Generators.<String>newFastList()).add(word);
             }
         });
         MutableList<MutableList<String>> results =

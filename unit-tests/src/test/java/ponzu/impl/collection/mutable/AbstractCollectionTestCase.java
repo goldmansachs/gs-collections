@@ -21,12 +21,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.junit.Assert;
+import org.junit.Test;
 import ponzu.api.RichIterable;
 import ponzu.api.bag.MutableBag;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
 import ponzu.api.block.function.Function3;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.procedure.ObjectIntProcedure;
 import ponzu.api.block.procedure.Procedure2;
 import ponzu.api.collection.ImmutableCollection;
@@ -47,8 +49,8 @@ import ponzu.impl.block.factory.IntegerPredicates;
 import ponzu.impl.block.factory.Predicates;
 import ponzu.impl.block.factory.Predicates2;
 import ponzu.impl.block.function.AddFunction;
+import ponzu.impl.block.function.Constant;
 import ponzu.impl.block.function.NegativeIntervalFunction;
-import ponzu.impl.block.function.PassThruFunction0;
 import ponzu.impl.block.procedure.CollectionAddProcedure;
 import ponzu.impl.factory.Bags;
 import ponzu.impl.factory.Lists;
@@ -59,8 +61,6 @@ import ponzu.impl.map.sorted.mutable.TreeSortedMap;
 import ponzu.impl.set.mutable.UnifiedSet;
 import ponzu.impl.set.sorted.mutable.TreeSortedSet;
 import ponzu.impl.test.Verify;
-import org.junit.Assert;
-import org.junit.Test;
 
 import static ponzu.impl.factory.Iterables.*;
 
@@ -392,7 +392,7 @@ public abstract class AbstractCollectionTestCase
     @Test
     public void detectIfNoneWithBlock()
     {
-        Function0<Integer> function = new PassThruFunction0<Integer>(6);
+        Generator<Integer> function = new Constant<Integer>(6);
         Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 2, 3, 4, 5).findIfNone(Predicates.equal(3), function));
         Assert.assertEquals(Integer.valueOf(6), this.newWith(1, 2, 3, 4, 5).findIfNone(Predicates.equal(6), function));
     }
@@ -400,7 +400,7 @@ public abstract class AbstractCollectionTestCase
     @Test
     public void detectWithIfNoneBlock()
     {
-        Function0<Integer> function = new PassThruFunction0<Integer>(-42);
+        Generator<Integer> function = new Constant<Integer>(-42);
         Assert.assertEquals(
                 Integer.valueOf(5),
                 this.newWith(1, 2, 3, 4, 5).findWithIfNone(

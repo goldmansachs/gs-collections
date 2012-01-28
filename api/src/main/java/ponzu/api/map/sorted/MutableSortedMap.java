@@ -20,8 +20,8 @@ import java.util.Collection;
 import java.util.SortedMap;
 
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.predicate.Predicate;
 import ponzu.api.block.predicate.Predicate2;
 import ponzu.api.collection.MutableCollection;
@@ -67,7 +67,7 @@ public interface MutableSortedMap<K, V>
      * at the key, return the result of evaluating the specified Function0, and put that value in the
      * map at the specified key.
      */
-    V getIfAbsentPut(K key, Function0<? extends V> function);
+    V getIfAbsentPut(K key, Generator<? extends V> function);
 
     /**
      * Return the value in the Map that corresponds to the specified key, or if there is no value

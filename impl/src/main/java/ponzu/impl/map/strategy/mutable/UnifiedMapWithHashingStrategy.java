@@ -30,9 +30,10 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import net.jcip.annotations.NotThreadSafe;
 import ponzu.api.block.HashingStrategy;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.procedure.ObjectIntProcedure;
 import ponzu.api.block.procedure.Procedure;
 import ponzu.api.block.procedure.Procedure2;
@@ -53,7 +54,6 @@ import ponzu.impl.set.strategy.mutable.UnifiedSetWithHashingStrategy;
 import ponzu.impl.tuple.ImmutableEntry;
 import ponzu.impl.utility.ArrayIterate;
 import ponzu.impl.utility.Iterate;
-import net.jcip.annotations.NotThreadSafe;
 
 /**
  * The core collections in Java get used all over the place. Unfortunately, most of them are not as good as they could be.
@@ -436,7 +436,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
     }
 
     @Override
-    public V getIfAbsentPut(K key, Function0<? extends V> function)
+    public V getIfAbsentPut(K key, Generator<? extends V> function)
     {
         int index = this.index(key);
         Object cur = this.table[index];
@@ -459,7 +459,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
         return this.chainedGetIfAbsentPut(key, index, function);
     }
 
-    private V chainedGetIfAbsentPut(K key, int index, Function0<? extends V> function)
+    private V chainedGetIfAbsentPut(K key, int index, Generator<? extends V> function)
     {
         V result = null;
         if (this.table[index] == CHAINED_KEY)

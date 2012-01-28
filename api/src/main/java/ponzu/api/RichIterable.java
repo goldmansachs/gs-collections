@@ -22,8 +22,8 @@ import java.util.NoSuchElementException;
 
 import ponzu.api.bag.MutableBag;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import ponzu.api.block.function.primitive.IntObjectToIntFunction;
 import ponzu.api.block.function.primitive.LongObjectToLongFunction;
@@ -427,7 +427,7 @@ public interface RichIterable<T>
      *
      * @since 1.0
      */
-    T findIfNone(Predicate<? super T> predicate, Function0<? extends T> function);
+    T findIfNone(Predicate<? super T> predicate, Generator<? extends T> function);
 
     /**
      * Return the total number of elements that answer true to the specified predicate.

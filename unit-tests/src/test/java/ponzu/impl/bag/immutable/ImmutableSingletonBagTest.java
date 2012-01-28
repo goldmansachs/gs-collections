@@ -18,6 +18,8 @@ package ponzu.impl.bag.immutable;
 
 import java.util.Iterator;
 
+import org.junit.Assert;
+import org.junit.Test;
 import ponzu.api.bag.Bag;
 import ponzu.api.bag.ImmutableBag;
 import ponzu.api.bag.MutableBag;
@@ -31,7 +33,7 @@ import ponzu.impl.block.factory.Comparators;
 import ponzu.impl.block.factory.Functions;
 import ponzu.impl.block.factory.Predicates;
 import ponzu.impl.block.function.AddFunction;
-import ponzu.impl.block.function.PassThruFunction0;
+import ponzu.impl.block.function.Constant;
 import ponzu.impl.factory.Bags;
 import ponzu.impl.factory.Lists;
 import ponzu.impl.factory.Maps;
@@ -40,8 +42,6 @@ import ponzu.impl.map.mutable.UnifiedMap;
 import ponzu.impl.multimap.bag.HashBagMultimap;
 import ponzu.impl.set.mutable.UnifiedSet;
 import ponzu.impl.test.Verify;
-import org.junit.Assert;
-import org.junit.Test;
 
 public class ImmutableSingletonBagTest extends ImmutableBagTestCase
 {
@@ -396,9 +396,9 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     @Test
     public void testDetectIfNone()
     {
-        Assert.assertEquals(VAL, this.newBag().findIfNone(Predicates.alwaysTrue(), new PassThruFunction0<String>(NOT_VAL)));
+        Assert.assertEquals(VAL, this.newBag().findIfNone(Predicates.alwaysTrue(), new Constant<String>(NOT_VAL)));
 
-        Assert.assertEquals(NOT_VAL, this.newBag().findIfNone(Predicates.alwaysFalse(), new PassThruFunction0<String>(NOT_VAL)));
+        Assert.assertEquals(NOT_VAL, this.newBag().findIfNone(Predicates.alwaysFalse(), new Constant<String>(NOT_VAL)));
     }
 
     @Override

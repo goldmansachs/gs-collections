@@ -16,44 +16,44 @@
 
 package ponzu.impl.block.function;
 
+import org.junit.Assert;
+import org.junit.Test;
 import ponzu.impl.bag.mutable.HashBag;
-import ponzu.impl.block.factory.Functions0;
+import ponzu.impl.block.factory.Generators;
 import ponzu.impl.factory.Bags;
 import ponzu.impl.factory.Lists;
 import ponzu.impl.list.mutable.FastList;
 import ponzu.impl.map.mutable.UnifiedMap;
 import ponzu.impl.set.mutable.UnifiedSet;
 import ponzu.impl.test.Verify;
-import org.junit.Assert;
-import org.junit.Test;
 
 public class Functions0Test
 {
     @Test
     public void newFastList()
     {
-        Assert.assertEquals(Lists.mutable.of(), Functions0.newFastList().value());
-        Verify.assertInstanceOf(FastList.class, Functions0.newFastList().value());
+        Assert.assertEquals(Lists.mutable.of(), Generators.newFastList().value());
+        Verify.assertInstanceOf(FastList.class, Generators.newFastList().value());
     }
 
     @Test
     public void newUnifiedSet()
     {
-        Assert.assertEquals(UnifiedSet.newSet(), Functions0.newUnifiedSet().value());
-        Verify.assertInstanceOf(UnifiedSet.class, Functions0.newUnifiedSet().value());
+        Assert.assertEquals(UnifiedSet.newSet(), Generators.newUnifiedSet().value());
+        Verify.assertInstanceOf(UnifiedSet.class, Generators.newUnifiedSet().value());
     }
 
     @Test
     public void newHashBag()
     {
-        Assert.assertEquals(Bags.mutable.of(), Functions0.newHashBag().value());
-        Verify.assertInstanceOf(HashBag.class, Functions0.newHashBag().value());
+        Assert.assertEquals(Bags.mutable.of(), Generators.newHashBag().value());
+        Verify.assertInstanceOf(HashBag.class, Generators.newHashBag().value());
     }
 
     @Test
     public void newUnifiedMap()
     {
-        Assert.assertEquals(UnifiedMap.newMap(), Functions0.newUnifiedMap().value());
-        Verify.assertInstanceOf(UnifiedMap.class, Functions0.newUnifiedMap().value());
+        Assert.assertEquals(UnifiedMap.newMap(), Generators.newUnifiedMap().value());
+        Verify.assertInstanceOf(UnifiedMap.class, Generators.newUnifiedMap().value());
     }
 }

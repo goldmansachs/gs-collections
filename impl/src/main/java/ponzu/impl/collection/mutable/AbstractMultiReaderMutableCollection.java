@@ -25,9 +25,9 @@ import ponzu.api.LazyIterable;
 import ponzu.api.RichIterable;
 import ponzu.api.bag.MutableBag;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
 import ponzu.api.block.function.Function3;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import ponzu.api.block.function.primitive.IntObjectToIntFunction;
 import ponzu.api.block.function.primitive.LongObjectToLongFunction;
@@ -495,7 +495,7 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
 
     public T findIfNone(
             Predicate<? super T> predicate,
-            Function0<? extends T> function)
+            Generator<? extends T> function)
     {
         this.acquireReadLock();
         try
@@ -526,7 +526,7 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
     public <P> T findWithIfNone(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
-            Function0<? extends T> function)
+            Generator<? extends T> function)
     {
         this.acquireReadLock();
         try
@@ -1388,7 +1388,7 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
             return this.delegate.maxBy(function);
         }
 
-        public T findIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
+        public T findIfNone(Predicate<? super T> predicate, Generator<? extends T> function)
         {
             return this.delegate.findIfNone(predicate, function);
         }
@@ -1401,7 +1401,7 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         public <P> T findWithIfNone(
                 Predicate2<? super T, ? super P> predicate,
                 P parameter,
-                Function0<? extends T> function)
+                Generator<? extends T> function)
         {
             return this.delegate.findWithIfNone(predicate, parameter, function);
         }

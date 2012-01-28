@@ -14,26 +14,31 @@
  * limitations under the License.
  */
 
-package ponzu.impl.block.function;
+package ponzu.impl.block.function.checked;
 
-import ponzu.api.block.function.Function0;
+import ponzu.api.block.function.Generator;
 
-/**
- * A passthru Function0 which returns the value specified.
- */
-public final class PassThruFunction0<T>
-        implements Function0<T>
+public abstract class CheckedGenerator<R>
+        implements Generator<R>
 {
     private static final long serialVersionUID = 1L;
-    private final T result;
 
-    public PassThruFunction0(T newResult)
+    public final R value()
     {
-        this.result = newResult;
+        try
+        {
+            return this.safeValue();
+        }
+        catch (RuntimeException e)
+        {
+            throw e;
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Checked exception caught in Function0", e);
+        }
     }
 
-    public T value()
-    {
-        return this.result;
-    }
+    @SuppressWarnings("ProhibitedExceptionDeclared")
+    public abstract R safeValue() throws Exception;
 }

@@ -24,8 +24,8 @@ import ponzu.api.LazyIterable;
 import ponzu.api.RichIterable;
 import ponzu.api.bag.MutableBag;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import ponzu.api.block.function.primitive.IntObjectToIntFunction;
 import ponzu.api.block.function.primitive.LongObjectToLongFunction;
@@ -82,7 +82,7 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
         return result == null && !this.containsKey(key);
     }
 
-    public V getIfAbsent(K key, Function0<? extends V> function)
+    public V getIfAbsent(K key, Generator<? extends V> function)
     {
         V result = this.get(key);
         if (this.isAbsent(result, key))
@@ -287,7 +287,7 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
         return this.valuesView().find(predicate);
     }
 
-    public V findIfNone(Predicate<? super V> predicate, Function0<? extends V> function)
+    public V findIfNone(Predicate<? super V> predicate, Generator<? extends V> function)
     {
         return this.valuesView().findIfNone(predicate, function);
     }

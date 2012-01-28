@@ -22,8 +22,10 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.junit.Assert;
+import org.junit.Test;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.procedure.ObjectIntProcedure;
 import ponzu.api.block.procedure.Procedure2;
 import ponzu.api.list.ImmutableList;
@@ -35,7 +37,7 @@ import ponzu.impl.block.factory.Functions;
 import ponzu.impl.block.factory.ObjectIntProcedures;
 import ponzu.impl.block.factory.Predicates;
 import ponzu.impl.block.function.AddFunction;
-import ponzu.impl.block.function.PassThruFunction0;
+import ponzu.impl.block.function.Constant;
 import ponzu.impl.block.procedure.CollectionAddProcedure;
 import ponzu.impl.factory.Lists;
 import ponzu.impl.list.Interval;
@@ -44,8 +46,6 @@ import ponzu.impl.set.mutable.UnifiedSet;
 import ponzu.impl.set.sorted.mutable.TreeSortedSet;
 import ponzu.impl.test.Verify;
 import ponzu.impl.utility.ListIterate;
-import org.junit.Assert;
-import org.junit.Test;
 
 public abstract class AbstractImmutableListTestCase
 {
@@ -407,7 +407,7 @@ public abstract class AbstractImmutableListTestCase
     public void testDetectIfNoneWithBlock()
     {
         ImmutableList<Integer> integers = this.newList();
-        Function0<Integer> function = new PassThruFunction0<Integer>(integers.size() + 1);
+        Generator<Integer> function = new Constant<Integer>(integers.size() + 1);
         Assert.assertEquals(Integer.valueOf(1), integers.findIfNone(Predicates.equal(1), function));
         Assert.assertEquals(Integer.valueOf(integers.size() + 1), integers.findIfNone(Predicates.equal(integers.size() + 1), function));
     }

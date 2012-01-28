@@ -14,32 +14,20 @@
  * limitations under the License.
  */
 
-package ponzu.impl.block.function.checked;
+package ponzu.impl.block.function;
 
-import ponzu.impl.test.Verify;
 import org.junit.Test;
+import ponzu.impl.test.Verify;
 
-public class CheckedFunction0Test
+public class ConstantTest
 {
-    private static final CheckedFunction0 CHECKED_FUNCTION_0 = new CheckedFunction0()
-    {
-        private static final long serialVersionUID = 1L;
-
-        @Override
-        public Object safeValue() throws Exception
-        {
-            return null;
-        }
-    };
-
     @Test
     public void serializedForm()
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyAEVjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mdW5jdGlvbi5jaGVja2VkLkNo\n"
-                        + "ZWNrZWRGdW5jdGlvbjBUZXN0JDEAAAAAAAAAAQIAAHhyAD9jb20uZ3MuY29sbGVjdGlvbnMuaW1w\n"
-                        + "bC5ibG9jay5mdW5jdGlvbi5jaGVja2VkLkNoZWNrZWRGdW5jdGlvbjAAAAAAAAAAAQIAAHhw",
-                CHECKED_FUNCTION_0);
+                "rO0ABXNyADhjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mdW5jdGlvbi5QYXNzVGhydUZ1\n"
+                        + "bmN0aW9uMAAAAAAAAAABAgABTAAGcmVzdWx0dAASTGphdmEvbGFuZy9PYmplY3Q7eHBw",
+                new Constant<Object>(null));
     }
 }

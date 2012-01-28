@@ -21,8 +21,8 @@ import java.util.Iterator;
 
 import ponzu.api.RichIterable;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.predicate.Predicate;
 import ponzu.api.block.predicate.Predicate2;
 import ponzu.api.block.procedure.ObjectIntProcedure;
@@ -104,7 +104,7 @@ public abstract class AbstractMutableMap<K, V> extends AbstractMapIterable<K, V>
         return LazyIterate.adapt(this.entrySet()).transform(AbstractImmutableEntry.<K, V>getPairFunction());
     }
 
-    public V getIfAbsentPut(K key, Function0<? extends V> function)
+    public V getIfAbsentPut(K key, Generator<? extends V> function)
     {
         V result = this.get(key);
         if (this.isAbsent(result, key))

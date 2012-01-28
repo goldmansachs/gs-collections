@@ -20,8 +20,8 @@ import java.util.Map;
 
 import ponzu.api.RichIterable;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.predicate.Predicate2;
 import ponzu.api.block.procedure.Procedure;
 import ponzu.api.block.procedure.Procedure2;
@@ -90,7 +90,7 @@ public interface MapIterable<K, V> extends RichIterable<V>
      * Return the value in the Map that corresponds to the specified key, or if there is no value at the key, return the
      * result of evaluating the specified Function0.
      */
-    V getIfAbsent(K key, Function0<? extends V> function);
+    V getIfAbsent(K key, Generator<? extends V> function);
 
     /**
      * Return the value in the Map that corresponds to the specified key, or if there is no value at the key, return the

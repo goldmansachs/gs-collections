@@ -22,6 +22,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 
+import org.junit.Assert;
+import org.junit.Test;
 import ponzu.api.block.function.Function;
 import ponzu.api.block.function.Function2;
 import ponzu.api.block.predicate.Predicate2;
@@ -38,7 +40,7 @@ import ponzu.impl.block.factory.Comparators;
 import ponzu.impl.block.factory.Functions;
 import ponzu.impl.block.factory.IntegerPredicates;
 import ponzu.impl.block.factory.Predicates;
-import ponzu.impl.block.function.PassThruFunction0;
+import ponzu.impl.block.function.Constant;
 import ponzu.impl.block.procedure.CollectionAddProcedure;
 import ponzu.impl.factory.Lists;
 import ponzu.impl.list.Interval;
@@ -53,8 +55,6 @@ import ponzu.impl.test.Verify;
 import ponzu.impl.test.domain.Key;
 import ponzu.impl.tuple.ImmutableEntry;
 import ponzu.impl.tuple.Tuples;
-import org.junit.Assert;
-import org.junit.Test;
 
 import static ponzu.impl.factory.Iterables.*;
 
@@ -728,8 +728,8 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
     {
         MutableSortedMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
         Assert.assertNull(map.get(4));
-        Assert.assertEquals("4", map.getIfAbsentPut(4, new PassThruFunction0<String>("4")));
-        Assert.assertEquals("3", map.getIfAbsentPut(3, new PassThruFunction0<String>("3")));
+        Assert.assertEquals("4", map.getIfAbsentPut(4, new Constant<String>("4")));
+        Assert.assertEquals("3", map.getIfAbsentPut(3, new Constant<String>("3")));
         Verify.assertContainsKeyValue(4, "4", map);
     }
 

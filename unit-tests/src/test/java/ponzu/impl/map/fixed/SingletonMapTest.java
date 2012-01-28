@@ -18,6 +18,8 @@ package ponzu.impl.map.fixed;
 
 import java.util.Map;
 
+import org.junit.Assert;
+import org.junit.Test;
 import ponzu.api.block.procedure.ObjectIntProcedure;
 import ponzu.api.block.procedure.Procedure2;
 import ponzu.api.list.MutableList;
@@ -27,7 +29,7 @@ import ponzu.api.tuple.Pair;
 import ponzu.api.tuple.Twin;
 import ponzu.impl.block.factory.Functions;
 import ponzu.impl.block.factory.Predicates2;
-import ponzu.impl.block.function.PassThruFunction0;
+import ponzu.impl.block.function.Constant;
 import ponzu.impl.block.procedure.CollectionAddProcedure;
 import ponzu.impl.factory.Lists;
 import ponzu.impl.factory.Maps;
@@ -35,8 +37,6 @@ import ponzu.impl.list.mutable.FastList;
 import ponzu.impl.map.mutable.UnifiedMap;
 import ponzu.impl.test.Verify;
 import ponzu.impl.tuple.Tuples;
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  * JUnit test for {@link SingletonMap}.
@@ -185,10 +185,10 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
         {
             public void run()
             {
-                map.getIfAbsentPut(4, new PassThruFunction0<String>("4"));
+                map.getIfAbsentPut(4, new Constant<String>("4"));
             }
         });
-        Assert.assertEquals("1", map.getIfAbsentPut(1, new PassThruFunction0<String>("1")));
+        Assert.assertEquals("1", map.getIfAbsentPut(1, new Constant<String>("1")));
     }
 
     @Override
@@ -212,8 +212,8 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     {
         MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "1");
         Assert.assertNull(map.get(4));
-        Assert.assertEquals("4", map.getIfAbsent(4, new PassThruFunction0<String>("4")));
-        Assert.assertEquals("1", map.getIfAbsent(1, new PassThruFunction0<String>("1")));
+        Assert.assertEquals("4", map.getIfAbsent(4, new Constant<String>("4")));
+        Assert.assertEquals("1", map.getIfAbsent(1, new Constant<String>("1")));
         Assert.assertEquals(UnifiedMap.newWithKeysValues(1, "1"), map);
     }
 

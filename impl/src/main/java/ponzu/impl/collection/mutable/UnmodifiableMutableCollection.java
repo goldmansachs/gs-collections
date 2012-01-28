@@ -25,9 +25,9 @@ import ponzu.api.LazyIterable;
 import ponzu.api.RichIterable;
 import ponzu.api.bag.MutableBag;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
 import ponzu.api.block.function.Function3;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import ponzu.api.block.function.primitive.IntObjectToIntFunction;
 import ponzu.api.block.function.primitive.LongObjectToLongFunction;
@@ -388,7 +388,7 @@ public class UnmodifiableMutableCollection<T>
         return this.getMutableCollection().maxBy(function);
     }
 
-    public T findIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
+    public T findIfNone(Predicate<? super T> predicate, Generator<? extends T> function)
     {
         return this.getMutableCollection().findIfNone(predicate, function);
     }
@@ -401,7 +401,7 @@ public class UnmodifiableMutableCollection<T>
     public <P> T findWithIfNone(
             Predicate2<? super T, ? super P> predicate,
             P parameter,
-            Function0<? extends T> function)
+            Generator<? extends T> function)
     {
         return this.getMutableCollection().findWithIfNone(predicate, parameter, function);
     }

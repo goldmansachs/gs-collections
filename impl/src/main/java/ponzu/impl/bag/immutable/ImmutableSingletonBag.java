@@ -25,8 +25,8 @@ import java.util.NoSuchElementException;
 import ponzu.api.bag.Bag;
 import ponzu.api.bag.ImmutableBag;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.predicate.Predicate;
 import ponzu.api.block.predicate.Predicate2;
 import ponzu.api.block.procedure.ObjectIntProcedure;
@@ -285,7 +285,7 @@ final class ImmutableSingletonBag<T>
     }
 
     @Override
-    public T findIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
+    public T findIfNone(Predicate<? super T> predicate, Generator<? extends T> function)
     {
         return predicate.accept(this.value)
                 ? this.value

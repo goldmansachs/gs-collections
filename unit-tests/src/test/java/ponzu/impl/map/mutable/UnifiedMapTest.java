@@ -20,18 +20,18 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
-import ponzu.api.block.function.Function0;
+import org.junit.Assert;
+import org.junit.Test;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.procedure.Procedure;
 import ponzu.api.map.MutableMap;
-import ponzu.impl.block.function.PassThruFunction0;
+import ponzu.impl.block.function.Constant;
 import ponzu.impl.math.IntegerSum;
 import ponzu.impl.math.Sum;
 import ponzu.impl.math.SumProcedure;
 import ponzu.impl.parallel.BatchIterable;
 import ponzu.impl.test.Verify;
 import ponzu.impl.tuple.Tuples;
-import org.junit.Assert;
-import org.junit.Test;
 
 public class UnifiedMapTest extends UnifiedMapTestCase
 {
@@ -299,7 +299,7 @@ public class UnifiedMapTest extends UnifiedMapTestCase
         {
             public void value(Integer each)
             {
-                map.getIfAbsentPut(each, new PassThruFunction0<Integer>(each));
+                map.getIfAbsentPut(each, new Constant<Integer>(each));
             }
         });
 
@@ -322,7 +322,7 @@ public class UnifiedMapTest extends UnifiedMapTestCase
                 {
                     public void run()
                     {
-                        map.getIfAbsentPut(each, new Function0<Integer>()
+                        map.getIfAbsentPut(each, new Generator<Integer>()
                         {
                             public Integer value()
                             {

@@ -19,11 +19,11 @@ package ponzu.impl.lazy.iterator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import net.jcip.annotations.Immutable;
 import ponzu.api.RichIterable;
-import ponzu.api.block.function.Function0;
+import ponzu.api.block.function.Generator;
 import ponzu.api.collection.MutableCollection;
 import ponzu.impl.factory.Lists;
-import net.jcip.annotations.Immutable;
 
 @Immutable
 public final class ChunkIterator<T>
@@ -31,7 +31,7 @@ public final class ChunkIterator<T>
 {
     private final Iterator<T> iterator;
     private final int size;
-    private final Function0<MutableCollection<T>> speciesNewStrategy;
+    private final Generator<MutableCollection<T>> speciesNewStrategy;
 
     public ChunkIterator(final Iterable<T> iterable, int size)
     {
@@ -45,7 +45,7 @@ public final class ChunkIterator<T>
 
         if (iterable instanceof MutableCollection)
         {
-            this.speciesNewStrategy = new Function0<MutableCollection<T>>()
+            this.speciesNewStrategy = new Generator<MutableCollection<T>>()
             {
                 public MutableCollection<T> value()
                 {
@@ -55,7 +55,7 @@ public final class ChunkIterator<T>
         }
         else
         {
-            this.speciesNewStrategy = new Function0<MutableCollection<T>>()
+            this.speciesNewStrategy = new Generator<MutableCollection<T>>()
             {
                 public MutableCollection<T> value()
                 {

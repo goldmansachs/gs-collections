@@ -23,6 +23,8 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.SortedMap;
 
+import org.junit.Assert;
+import org.junit.Test;
 import ponzu.api.block.function.Function2;
 import ponzu.api.block.predicate.Predicate2;
 import ponzu.api.block.procedure.ObjectIntProcedure;
@@ -35,7 +37,7 @@ import ponzu.api.map.sorted.MutableSortedMap;
 import ponzu.api.tuple.Pair;
 import ponzu.impl.block.factory.Comparators;
 import ponzu.impl.block.factory.Functions;
-import ponzu.impl.block.function.PassThruFunction0;
+import ponzu.impl.block.function.Constant;
 import ponzu.impl.block.procedure.CollectionAddProcedure;
 import ponzu.impl.factory.Lists;
 import ponzu.impl.factory.Maps;
@@ -45,8 +47,6 @@ import ponzu.impl.map.mutable.UnifiedMap;
 import ponzu.impl.map.sorted.mutable.TreeSortedMap;
 import ponzu.impl.test.Verify;
 import ponzu.impl.tuple.Tuples;
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  * JUnit test for {@link ImmutableSortedMap}.
@@ -239,10 +239,10 @@ public abstract class ImmutableSortedMapTestCase
 
         // Absent key behavior
         ImmutableSortedMap<Integer, String> classUnderTest = this.classUnderTest();
-        Assert.assertEquals(absentValue, classUnderTest.getIfAbsent(absentKey, new PassThruFunction0<String>(absentValue)));
+        Assert.assertEquals(absentValue, classUnderTest.getIfAbsent(absentKey, new Constant<String>(absentValue)));
 
         // Present key behavior
-        Assert.assertEquals("1", classUnderTest.getIfAbsent(1, new PassThruFunction0<String>(absentValue)));
+        Assert.assertEquals("1", classUnderTest.getIfAbsent(1, new Constant<String>(absentValue)));
 
         // Still unchanged
         Assert.assertEquals(this.equalUnifiedMap(), classUnderTest);

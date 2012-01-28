@@ -23,8 +23,8 @@ import java.util.List;
 import java.util.RandomAccess;
 
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.predicate.Predicate;
 import ponzu.api.block.predicate.Predicate2;
 import ponzu.api.block.procedure.ObjectIntProcedure;
@@ -145,7 +145,7 @@ public final class ListAdapter<T>
     }
 
     @Override
-    public T findIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
+    public T findIfNone(Predicate<? super T> predicate, Generator<? extends T> function)
     {
         T result = this.find(predicate);
         return result == null ? function.value() : result;

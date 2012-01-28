@@ -19,6 +19,8 @@ package ponzu.impl.map.sorted.immutable;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
 
+import org.junit.Assert;
+import org.junit.Test;
 import ponzu.api.block.function.Function2;
 import ponzu.api.map.ImmutableMap;
 import ponzu.api.map.sorted.ImmutableSortedMap;
@@ -27,15 +29,13 @@ import ponzu.impl.block.factory.Comparators;
 import ponzu.impl.block.factory.Functions;
 import ponzu.impl.block.factory.Predicates;
 import ponzu.impl.block.factory.Predicates2;
-import ponzu.impl.block.function.PassThruFunction0;
+import ponzu.impl.block.function.Constant;
 import ponzu.impl.factory.Lists;
 import ponzu.impl.factory.SortedMaps;
 import ponzu.impl.map.sorted.ImmutableSortedMapTestCase;
 import ponzu.impl.test.SerializeTestHelper;
 import ponzu.impl.test.Verify;
 import ponzu.impl.tuple.Tuples;
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  * JUnit test for {@link ImmutableEmptySortedMap}.
@@ -93,7 +93,7 @@ public class ImmutableEmptySortedMapTest extends ImmutableSortedMapTestCase
 
         // Absent key behavior
         ImmutableSortedMap<Integer, String> classUnderTest = this.classUnderTest();
-        Assert.assertEquals(absentValue, classUnderTest.getIfAbsent(absentKey, new PassThruFunction0<String>(absentValue)));
+        Assert.assertEquals(absentValue, classUnderTest.getIfAbsent(absentKey, new Constant<String>(absentValue)));
 
         // Still unchanged
         Assert.assertEquals(this.equalUnifiedMap(), classUnderTest);

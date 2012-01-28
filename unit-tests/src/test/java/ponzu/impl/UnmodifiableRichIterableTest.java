@@ -21,6 +21,9 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import ponzu.api.RichIterable;
 import ponzu.api.block.function.Function;
 import ponzu.api.block.function.Function2;
@@ -35,7 +38,7 @@ import ponzu.impl.block.factory.Functions;
 import ponzu.impl.block.factory.Predicates;
 import ponzu.impl.block.factory.Predicates2;
 import ponzu.impl.block.factory.StringPredicates;
-import ponzu.impl.block.function.PassThruFunction0;
+import ponzu.impl.block.function.Constant;
 import ponzu.impl.factory.Lists;
 import ponzu.impl.factory.Sets;
 import ponzu.impl.factory.SortedSets;
@@ -43,9 +46,6 @@ import ponzu.impl.list.Interval;
 import ponzu.impl.multimap.list.FastListMultimap;
 import ponzu.impl.test.Verify;
 import ponzu.impl.utility.StringIterate;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 
 /**
  * JUnit test for {@link UnmodifiableRichIterable}.
@@ -96,7 +96,7 @@ public class UnmodifiableRichIterableTest
     {
         Assert.assertEquals(METALLICA, this.unmodifiableCollection.find(StringPredicates.contains("allic")));
         Assert.assertEquals("Not found", this.unmodifiableCollection.findIfNone(StringPredicates.contains("donna"),
-                new PassThruFunction0<String>("Not found")));
+                new Constant<String>("Not found")));
     }
 
     @Test

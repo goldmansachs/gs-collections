@@ -31,8 +31,8 @@ import ponzu.api.bag.Bag;
 import ponzu.api.bag.ImmutableBag;
 import ponzu.api.bag.MutableBag;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.predicate.Predicate;
 import ponzu.api.block.predicate.Predicate2;
 import ponzu.api.block.procedure.ObjectIntProcedure;
@@ -47,10 +47,10 @@ import ponzu.api.tuple.Pair;
 import ponzu.impl.Counter;
 import ponzu.impl.block.procedure.CollectProcedure;
 import ponzu.impl.block.procedure.CollectionAddProcedure;
+import ponzu.impl.block.procedure.FilterNotProcedure;
 import ponzu.impl.block.procedure.FlatCollectProcedure;
 import ponzu.impl.block.procedure.MultimapEachPutProcedure;
 import ponzu.impl.block.procedure.MultimapPutProcedure;
-import ponzu.impl.block.procedure.FilterNotProcedure;
 import ponzu.impl.block.procedure.SelectProcedure;
 import ponzu.impl.block.procedure.checked.CheckedProcedure2;
 import ponzu.impl.collection.mutable.AbstractMutableCollection;
@@ -75,7 +75,7 @@ public class HashBag<T>
         extends AbstractMutableCollection<T>
         implements Externalizable, MutableBag<T>
 {
-    private static final Function0<Counter> NEW_COUNTER_BLOCK = new Function0<Counter>()
+    private static final Generator<Counter> NEW_COUNTER_BLOCK = new Generator<Counter>()
     {
         public Counter value()
         {

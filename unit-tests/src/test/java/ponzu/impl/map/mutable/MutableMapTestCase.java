@@ -21,9 +21,11 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 
+import org.junit.Assert;
+import org.junit.Test;
 import ponzu.api.bag.MutableBag;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.procedure.Procedure2;
 import ponzu.api.list.MutableList;
 import ponzu.api.map.ImmutableMap;
@@ -34,7 +36,7 @@ import ponzu.api.tuple.Pair;
 import ponzu.impl.block.factory.Functions;
 import ponzu.impl.block.factory.IntegerPredicates;
 import ponzu.impl.block.factory.Predicates;
-import ponzu.impl.block.function.PassThruFunction0;
+import ponzu.impl.block.function.Constant;
 import ponzu.impl.factory.Bags;
 import ponzu.impl.list.mutable.FastList;
 import ponzu.impl.map.MapIterableTestCase;
@@ -44,8 +46,6 @@ import ponzu.impl.test.Verify;
 import ponzu.impl.test.domain.Key;
 import ponzu.impl.tuple.ImmutableEntry;
 import ponzu.impl.tuple.Tuples;
-import org.junit.Assert;
-import org.junit.Test;
 
 import static ponzu.impl.factory.Iterables.*;
 
@@ -421,8 +421,8 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
     {
         MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
         Assert.assertNull(map.get(4));
-        Assert.assertEquals("4", map.getIfAbsentPut(4, new PassThruFunction0<String>("4")));
-        Assert.assertEquals("3", map.getIfAbsentPut(3, new PassThruFunction0<String>("3")));
+        Assert.assertEquals("4", map.getIfAbsentPut(4, new Constant<String>("4")));
+        Assert.assertEquals("3", map.getIfAbsentPut(3, new Constant<String>("3")));
         Verify.assertContainsKeyValue(4, "4", map);
     }
 
@@ -444,7 +444,7 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
         {
             public void run()
             {
-                map.getIfAbsentPut(4, new Function0<String>()
+                map.getIfAbsentPut(4, new Generator<String>()
                 {
                     public String value()
                     {

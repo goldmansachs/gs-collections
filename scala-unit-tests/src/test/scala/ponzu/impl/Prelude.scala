@@ -17,9 +17,9 @@
 package ponzu.impl
 
 import java.util.Comparator
-import ponzu.api.block.function.{Function, Function0, Function2, Function3}
-import ponzu.api.block.predicate.{Predicate2, Predicate}
-import ponzu.api.block.procedure.{ObjectIntProcedure, Procedure2, Procedure}
+import ponzu.api.block.function.{Generator, Function, Function2, Function3}
+import ponzu.api.block.predicate.{Predicate, Predicate2}
+import ponzu.api.block.procedure.{ObjectIntProcedure, Procedure, Procedure2}
 
 object Prelude
 {
@@ -83,7 +83,7 @@ object Prelude
         }
 
     implicit def closure2CodeBlock[T](closure: () => T) =
-        new Function0[T]
+        new Generator[T]
         {
             def value = closure()
         }

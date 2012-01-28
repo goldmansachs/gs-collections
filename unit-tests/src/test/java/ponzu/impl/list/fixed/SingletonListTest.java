@@ -19,10 +19,12 @@ package ponzu.impl.list.fixed;
 import java.util.Collections;
 import java.util.Iterator;
 
+import org.junit.Assert;
+import org.junit.Test;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
 import ponzu.api.block.function.Function3;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.procedure.ObjectIntProcedure;
 import ponzu.api.block.procedure.Procedure2;
 import ponzu.api.list.MutableList;
@@ -34,15 +36,13 @@ import ponzu.impl.block.factory.Functions;
 import ponzu.impl.block.factory.Predicates;
 import ponzu.impl.block.factory.Predicates2;
 import ponzu.impl.block.function.AddFunction;
-import ponzu.impl.block.function.PassThruFunction0;
+import ponzu.impl.block.function.Constant;
 import ponzu.impl.block.procedure.CollectionAddProcedure;
 import ponzu.impl.factory.Lists;
 import ponzu.impl.list.mutable.FastList;
 import ponzu.impl.list.mutable.SynchronizedMutableList;
 import ponzu.impl.set.mutable.UnifiedSet;
 import ponzu.impl.test.Verify;
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  * JUnit test for {@link SingletonList}.
@@ -286,7 +286,7 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
     @Test
     public void detectIfNoneWithBlock()
     {
-        Function0<Integer> function = new PassThruFunction0<Integer>(6);
+        Generator<Integer> function = new Constant<Integer>(6);
         Assert.assertEquals(Integer.valueOf(1), newWith(1).findIfNone(Predicates.equal(1), function));
         Assert.assertEquals(Integer.valueOf(6), newWith(1).findIfNone(Predicates.equal(6), function));
     }
@@ -294,7 +294,7 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
     @Test
     public void detectWithIfNone()
     {
-        Function0<Integer> function = new PassThruFunction0<Integer>(6);
+        Generator<Integer> function = new Constant<Integer>(6);
         Assert.assertEquals(Integer.valueOf(1), newWith(1).findWithIfNone(Predicates2.equal(), 1, function));
         Assert.assertEquals(Integer.valueOf(6), newWith(1).findWithIfNone(Predicates2.equal(), 6, function));
     }

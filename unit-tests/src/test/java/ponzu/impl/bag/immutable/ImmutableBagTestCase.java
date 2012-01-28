@@ -21,12 +21,14 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.junit.Assert;
+import org.junit.Test;
 import ponzu.api.LazyIterable;
 import ponzu.api.bag.ImmutableBag;
 import ponzu.api.bag.MutableBag;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.predicate.Predicate2;
 import ponzu.api.block.procedure.Procedure2;
 import ponzu.api.list.MutableList;
@@ -44,7 +46,7 @@ import ponzu.impl.block.factory.ObjectIntProcedures;
 import ponzu.impl.block.factory.Predicates;
 import ponzu.impl.block.factory.StringFunctions;
 import ponzu.impl.block.function.AddFunction;
-import ponzu.impl.block.function.PassThruFunction0;
+import ponzu.impl.block.function.Constant;
 import ponzu.impl.block.procedure.CollectionAddProcedure;
 import ponzu.impl.factory.Bags;
 import ponzu.impl.factory.Lists;
@@ -54,8 +56,6 @@ import ponzu.impl.multimap.bag.HashBagMultimap;
 import ponzu.impl.set.mutable.UnifiedSet;
 import ponzu.impl.test.Verify;
 import ponzu.impl.utility.StringIterate;
-import org.junit.Assert;
-import org.junit.Test;
 
 public abstract class ImmutableBagTestCase
 {
@@ -458,7 +458,7 @@ public abstract class ImmutableBagTestCase
     public void testDetectIfNoneWithBlock()
     {
         ImmutableBag<String> strings = this.newBag();
-        Function0<String> function = new PassThruFunction0<String>(String.valueOf(this.numKeys() + 1));
+        Generator<String> function = new Constant<String>(String.valueOf(this.numKeys() + 1));
         Assert.assertEquals("1", strings.findIfNone(Predicates.equal("1"), function));
         Assert.assertEquals(String.valueOf(this.numKeys() + 1), strings.findIfNone(Predicates.equal(String.valueOf(this.numKeys() + 1)), function));
     }

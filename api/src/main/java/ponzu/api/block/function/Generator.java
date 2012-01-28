@@ -14,20 +14,16 @@
  * limitations under the License.
  */
 
-package ponzu.impl.block.function;
+package ponzu.api.block.function;
 
-import ponzu.impl.test.Verify;
-import org.junit.Test;
+import java.io.Serializable;
 
-public class PassThruFunction0Test
+/**
+ * Function0 is a zero argument lambda.  It can be stored in a variable or passed as a parameter and executed
+ * by calling the value method.
+ */
+public interface Generator<R>
+        extends Serializable
 {
-    @Test
-    public void serializedForm()
-    {
-        Verify.assertSerializedForm(
-                1L,
-                "rO0ABXNyADhjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mdW5jdGlvbi5QYXNzVGhydUZ1\n"
-                        + "bmN0aW9uMAAAAAAAAAABAgABTAAGcmVzdWx0dAASTGphdmEvbGFuZy9PYmplY3Q7eHBw",
-                new PassThruFunction0<Object>(null));
-    }
+    R value();
 }

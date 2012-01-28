@@ -18,14 +18,14 @@ package ponzu.impl.map.immutable;
 
 import java.util.NoSuchElementException;
 
+import org.junit.Assert;
+import org.junit.Test;
 import ponzu.api.map.ImmutableMap;
 import ponzu.impl.block.factory.Functions;
 import ponzu.impl.block.factory.Predicates;
 import ponzu.impl.block.factory.Predicates2;
-import ponzu.impl.block.function.PassThruFunction0;
+import ponzu.impl.block.function.Constant;
 import ponzu.impl.test.Verify;
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  * JUnit test for {@link ImmutableEmptyMap}.
@@ -77,7 +77,7 @@ public class ImmutableEmptyMapTest extends ImmutableMemoryEfficientMapTestCase
 
         // Absent key behavior
         ImmutableMap<Integer, String> classUnderTest = this.classUnderTest();
-        Assert.assertEquals(absentValue, classUnderTest.getIfAbsent(absentKey, new PassThruFunction0<String>(absentValue)));
+        Assert.assertEquals(absentValue, classUnderTest.getIfAbsent(absentKey, new Constant<String>(absentValue)));
 
         // Still unchanged
         Assert.assertEquals(this.equalUnifiedMap(), classUnderTest);

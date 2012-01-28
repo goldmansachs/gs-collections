@@ -16,6 +16,8 @@
 
 package ponzu.impl.multimap;
 
+import org.junit.Assert;
+import org.junit.Test;
 import ponzu.api.RichIterable;
 import ponzu.api.bag.MutableBag;
 import ponzu.api.block.procedure.Procedure2;
@@ -25,15 +27,13 @@ import ponzu.api.multimap.Multimap;
 import ponzu.api.multimap.MutableMultimap;
 import ponzu.api.set.MutableSet;
 import ponzu.impl.bag.mutable.HashBag;
-import ponzu.impl.block.factory.Functions0;
+import ponzu.impl.block.factory.Generators;
 import ponzu.impl.block.procedure.CollectionAddProcedure;
 import ponzu.impl.factory.Bags;
 import ponzu.impl.factory.Lists;
 import ponzu.impl.map.mutable.UnifiedMap;
 import ponzu.impl.set.mutable.UnifiedSet;
 import ponzu.impl.test.Verify;
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  * Helper class for testing {@link Multimap}s
@@ -309,7 +309,7 @@ public abstract class AbstractMutableMultimapTestCase extends AbstractMultimapTe
         MutableMap<String, RichIterable<Integer>> expected = UnifiedMap.newMap();
         expected.put("One", UnifiedSet.newSetWith(1));
         expected.put("Two", UnifiedSet.newSetWith(2, 2));
-        MutableMap<String, MutableSet<Integer>> map = multimap.toMap(Functions0.<Integer>newUnifiedSet());
+        MutableMap<String, MutableSet<Integer>> map = multimap.toMap(Generators.<Integer>newUnifiedSet());
         Assert.assertEquals(expected, map);
     }
 

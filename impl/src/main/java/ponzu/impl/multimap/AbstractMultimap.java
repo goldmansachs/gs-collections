@@ -23,7 +23,7 @@ import ponzu.api.RichIterable;
 import ponzu.api.bag.Bag;
 import ponzu.api.bag.MutableBag;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.predicate.Predicate;
 import ponzu.api.block.procedure.Procedure;
 import ponzu.api.block.procedure.Procedure2;
@@ -56,9 +56,9 @@ public abstract class AbstractMultimap<K, V, C extends RichIterable<V>>
      */
     protected abstract C createCollection();
 
-    protected Function0<C> createCollectionBlock()
+    protected Generator<C> createCollectionBlock()
     {
-        return new Function0<C>()
+        return new Generator<C>()
         {
             public C value()
             {
@@ -232,7 +232,7 @@ public abstract class AbstractMultimap<K, V, C extends RichIterable<V>>
         });
     }
 
-    public <R extends Collection<V>> MutableMap<K, R> toMap(final Function0<R> collectionFactory)
+    public <R extends Collection<V>> MutableMap<K, R> toMap(final Generator<R> collectionFactory)
     {
         final MutableMap<K, R> result = UnifiedMap.newMap();
         this.getMap().forEachKeyValue(new Procedure2<K, C>()

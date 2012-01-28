@@ -14,16 +14,27 @@
  * limitations under the License.
  */
 
-package ponzu.api.block.function;
+package ponzu.impl.block.function;
 
-import java.io.Serializable;
+import ponzu.api.block.function.Generator;
 
 /**
- * Function0 is a zero argument lambda.  It can be stored in a variable or passed as a parameter and executed
- * by calling the value method.
+ * A generator which always returns the value specified.
  */
-public interface Function0<R>
-        extends Serializable
+public final class Constant<T>
+        implements Generator<T>
 {
-    R value();
+    private static final long serialVersionUID = 1L;
+    private final T result;
+
+    public Constant(T value)
+    {
+        this.result = value;
+    }
+
+    @Override
+    public T value()
+    {
+        return this.result;
+    }
 }

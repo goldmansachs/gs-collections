@@ -21,11 +21,12 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 
+import net.jcip.annotations.Immutable;
 import ponzu.api.RichIterable;
 import ponzu.api.block.HashingStrategy;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Function0;
 import ponzu.api.block.function.Function2;
+import ponzu.api.block.function.Generator;
 import ponzu.api.block.predicate.Predicate2;
 import ponzu.api.block.procedure.ObjectIntProcedure;
 import ponzu.api.block.procedure.Procedure;
@@ -37,7 +38,6 @@ import ponzu.impl.factory.Maps;
 import ponzu.impl.factory.Sets;
 import ponzu.impl.map.immutable.AbstractImmutableMap;
 import ponzu.impl.utility.LazyIterate;
-import net.jcip.annotations.Immutable;
 
 /**
  * This is a zero element {@link ImmutableUnifiedMapWithHashingStrategy} which is created by calling
@@ -173,7 +173,7 @@ final class ImmutableEmptyMapWithHashingStrategy<K, V>
     }
 
     @Override
-    public V getIfAbsent(K key, Function0<? extends V> function)
+    public V getIfAbsent(K key, Generator<? extends V> function)
     {
         return function.value();
     }
