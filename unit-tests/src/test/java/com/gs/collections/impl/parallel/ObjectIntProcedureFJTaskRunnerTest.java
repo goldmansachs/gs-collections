@@ -126,10 +126,10 @@ public class ObjectIntProcedureFJTaskRunnerTest
     {
         public ObjectIntProcedure<Integer> create()
         {
-            return this.getPassThroughProcedureWithInt();
+            return this.getPassThroughObjectIntProcedure();
         }
 
-        private ObjectIntProcedure<Integer> getPassThroughProcedureWithInt()
+        private ObjectIntProcedure<Integer> getPassThroughObjectIntProcedure()
         {
             return ObjectIntProcedures.fromProcedure(DoNothingProcedure.DO_NOTHING);
         }

@@ -74,7 +74,7 @@ public class CheckedProcedureTest
     }
 
     @Test
-    public void checkedProcedureWithInt()
+    public void checkedObjectIntProcedure()
     {
         boolean success = false;
         try

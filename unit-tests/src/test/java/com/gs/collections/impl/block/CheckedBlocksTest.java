@@ -167,7 +167,7 @@ public class CheckedBlocksTest
     }
 
     @Test
-    public void checkedProcedureWithIntCheckedException()
+    public void checkedObjectIntProcedureCheckedException()
     {
         Verify.assertThrowsWithCause(RuntimeException.class, IOException.class, new Runnable()
         {
@@ -187,7 +187,7 @@ public class CheckedBlocksTest
     }
 
     @Test
-    public void checkedProcedureWithIntRuntimeException()
+    public void checkedObjectIntProcedureRuntimeException()
     {
         Verify.assertThrows(LocalException.class, new Runnable()
         {
@@ -467,7 +467,7 @@ public class CheckedBlocksTest
     }
 
     @Test(expected = RuntimeException.class)
-    public void procedureWithIntFailure()
+    public void objectIntProcedureFailure()
     {
         ObjectIntProcedure<Object> block = new CheckedObjectIntProcedure<Object>()
         {
@@ -481,7 +481,7 @@ public class CheckedBlocksTest
     }
 
     @Test(expected = RuntimeException.class)
-    public void procedureWithIntRuntimeException()
+    public void objectIntProcedureRuntimeException()
     {
         ObjectIntProcedure<Object> block = new CheckedObjectIntProcedure<Object>()
         {
@@ -495,7 +495,7 @@ public class CheckedBlocksTest
     }
 
     @Test
-    public void procedureWithIntSuccess()
+    public void objectIntProcedureSuccess()
     {
         ObjectIntProcedure<Object> block = new CheckedObjectIntProcedure<Object>()
         {

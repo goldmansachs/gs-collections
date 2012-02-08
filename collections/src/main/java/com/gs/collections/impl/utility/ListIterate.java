@@ -323,7 +323,7 @@ public final class ListIterate
     }
 
     /**
-     * Interates over the section of the list covered by the specified indexes.  The indexes are both inclusive.  If the
+     * Iterates over the section of the list covered by the specified indexes.  The indexes are both inclusive.  If the
      * from is less than the to, the list is iterated in forward order. If the from is greater than the to, then the
      * list is iterated in the reverse order.
      * <p/>
@@ -371,15 +371,15 @@ public final class ListIterate
     }
 
     /**
-     * Interates over the section of the list covered by the specified indexes.  The indexes are both inclusive.  If the
+     * Iterates over the section of the list covered by the specified indexes.  The indexes are both inclusive.  If the
      * from is less than the to, the list is iterated in forward order. If the from is greater than the to, then the
-     * list is iterated in the reverse order. The index passed into the ProcedureWithInt is the actual index of the
+     * list is iterated in the reverse order. The index passed into the ObjectIntProcedure is the actual index of the
      * range.
      * <p/>
      * <p/>
      * <pre>e.g.
      * MutableList<People> people = FastList.newListWith(ted, mary, bob, sally);
-     * ListIterate.forEachWithIndex(people, 0, 1, new ProcedureWithInt<Person>()
+     * ListIterate.forEachWithIndex(people, 0, 1, new ObjectIntProcedure<Person>()
      * {
      *     public void value(Person person, int index)
      *     {

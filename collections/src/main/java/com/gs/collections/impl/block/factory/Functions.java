@@ -285,11 +285,11 @@ public final class Functions
     }
 
     /**
-     * Bind the input of a ProcedureWithInt to the result of an function, returning a new ProcedureWithInt.
+     * Bind the input of a ObjectIntProcedure to the result of an function, returning a new ObjectIntProcedure.
      *
-     * @param delegate The ProcedureWithInt to delegate the invocation to.
+     * @param delegate The ObjectIntProcedure to delegate the invocation to.
      * @param function The Function that will create the input for the delegate
-     * @return A new ProcedureWithInt
+     * @return A new ObjectIntProcedure
      */
     public static <T1, T2> ObjectIntProcedure<T1> bind(
             final ObjectIntProcedure<? super T2> delegate,

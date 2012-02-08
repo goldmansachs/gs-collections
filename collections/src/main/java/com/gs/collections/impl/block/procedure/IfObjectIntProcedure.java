@@ -22,7 +22,7 @@ import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.impl.Counter;
 
 /**
- * A conditional ProcedureWithInt that effectively filters which objects should be used
+ * A conditional ObjectIntProcedure that effectively filters which objects should be used
  */
 public final class IfObjectIntProcedure<T>
         implements Procedure<T>

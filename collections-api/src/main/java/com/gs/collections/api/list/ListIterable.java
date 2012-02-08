@@ -64,7 +64,7 @@ public interface ListIterable<T>
      * <p/>
      * <pre>e.g.
      * ListIterable<People> people = FastList.newListWith(ted, mary, bob, sally)
-     * people.forEachWithIndex(0, 1, new ProcedureWithInt<Person>()
+     * people.forEachWithIndex(0, 1, new ObjectIntProcedure<Person>()
      * {
      *     public void value(Person person, int index)
      *     {

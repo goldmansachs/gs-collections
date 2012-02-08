@@ -73,12 +73,12 @@ public final class ParallelIterate
 
     /**
      * Iterate over the collection specified, in parallel batches using default runtime parameter values.  The
-     * {@code ProcedureWithInt} used must be stateless, or use concurrent aware objects if they are to be shared.
+     * {@code ObjectIntProcedure} used must be stateless, or use concurrent aware objects if they are to be shared.
      * <p/>
      * e.g.
      * <pre>
      * {@code final Map<Integer,Object> chm = new ConcurrentHashMap<Integer,Object>();}
-     * ParallelIterate.<b>forEachWithIndex</b>(collection, new ProcedureWithInt()
+     * ParallelIterate.<b>forEachWithIndex</b>(collection, new ObjectIntProcedure()
      * {
      *     public void value(Object object, int index)
      *     {
@@ -96,12 +96,12 @@ public final class ParallelIterate
 
     /**
      * Iterate over the collection specified in parallel batches using the default runtime parameters.  The
-     * ProcedureWithInt used must be stateless, or use concurrent aware objects if they are to be shared.  The code
+     * ObjectIntProcedure used must be stateless, or use concurrent aware objects if they are to be shared.  The code
      * is executed against the specified executor.
      * <p/>
      * <pre>e.g.
      * {@code final Map<Integer,Object> chm = new ConcurrentHashMap<Integer,Object>();}
-     * ParallelIterate.<b>forEachWithIndex</b>(collection, new ProcedureWithInt()
+     * ParallelIterate.<b>forEachWithIndex</b>(collection, new ObjectIntProcedure()
      * {
      *     public void value(Object object, int index)
      *     {
@@ -124,7 +124,7 @@ public final class ParallelIterate
 
     /**
      * Iterate over the collection specified in parallel batches.  The
-     * ProcedureWithInt used must be stateless, or use concurrent aware objects if they are to be shared.  The
+     * ObjectIntProcedure used must be stateless, or use concurrent aware objects if they are to be shared.  The
      * specified minimum fork size and task count are used instead of the default values.
      *
      * @param minForkSize Only run in parallel if input collection is longer than this.

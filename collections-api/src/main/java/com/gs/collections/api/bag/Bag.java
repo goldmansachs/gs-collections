@@ -81,7 +81,7 @@ public interface Bag<T>
      * <p/>
      * <pre>
      * final IntegerSum sum = new IntegerSum(0);
-     * this.forEachWithOccurrences(new ProcedureWithInt<T>()
+     * this.forEachWithOccurrences(new ObjectIntProcedure<T>()
      * {
      *     public void value(T each, int count)
      *     {

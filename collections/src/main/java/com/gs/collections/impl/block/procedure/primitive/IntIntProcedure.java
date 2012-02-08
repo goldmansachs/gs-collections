@@ -19,13 +19,10 @@ package com.gs.collections.impl.block.procedure.primitive;
 import java.io.Serializable;
 
 /**
- * A IntProcedureWithInt is a two argument Closure which has no return argument and takes an int as a first and second
- * argument.  The second argument is usually the index of the current element of a collection.
- *
- * @deprecated since 1.2 use {@link IntIntProcedure}
+ * An IntIntProcedure is a two argument Closure which has no return argument and takes an int as the first and
+ * second arguments.
  */
-@Deprecated
-public interface IntProcedureWithInt extends Serializable
+public interface IntIntProcedure extends Serializable
 {
     void value(int each, int index);
 }

@@ -19,7 +19,7 @@ package com.gs.collections.impl.parallel;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 
 /**
- * This class acts as a no op factory for a ProcedureWithInt which gets passed in and returned out.
+ * This class acts as a no op factory for a ObjectIntProcedure which gets passed in and returned out.
  */
 public final class PassThruObjectIntProcedureFactory<BT extends ObjectIntProcedure<?>> implements ObjectIntProcedureFactory<BT>
 {
