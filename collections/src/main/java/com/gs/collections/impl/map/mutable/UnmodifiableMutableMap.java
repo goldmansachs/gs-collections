@@ -592,27 +592,27 @@ public class UnmodifiableMutableMap<K, V>
 
     public <R> MutableCollection<R> collect(Function<? super V, ? extends R> function)
     {
-        return this.getMutableMap().collect(function).toList();
+        return this.getMutableMap().collect(function);
     }
 
     public <R> MutableCollection<R> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function)
     {
-        return this.getMutableMap().collectIf(predicate, function).toList();
+        return this.getMutableMap().collectIf(predicate, function);
     }
 
     public <R> MutableCollection<R> flatCollect(Function<? super V, ? extends Iterable<R>> function)
     {
-        return this.getMutableMap().flatCollect(function).toList();
+        return this.getMutableMap().flatCollect(function);
     }
 
     public MutableCollection<V> reject(Predicate<? super V> predicate)
     {
-        return this.getMutableMap().reject(predicate).toList();
+        return this.getMutableMap().reject(predicate);
     }
 
     public MutableCollection<V> select(Predicate<? super V> predicate)
     {
-        return this.getMutableMap().select(predicate).toList();
+        return this.getMutableMap().select(predicate);
     }
 
     public PartitionMutableCollection<V> partition(Predicate<? super V> predicate)
@@ -622,11 +622,11 @@ public class UnmodifiableMutableMap<K, V>
 
     public <S> MutableCollection<Pair<V, S>> zip(Iterable<S> that)
     {
-        return this.getMutableMap().zip(that).toList();
+        return this.getMutableMap().zip(that);
     }
 
     public MutableCollection<Pair<V, Integer>> zipWithIndex()
     {
-        return this.getMutableMap().zipWithIndex().toList();
+        return this.getMutableMap().zipWithIndex();
     }
 }
