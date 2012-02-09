@@ -23,7 +23,6 @@ import net.jcip.annotations.Immutable;
 @Immutable
 public class PartitionImmutableSetImpl<T> implements PartitionImmutableSet<T>
 {
-
     private final ImmutableSet<T> selected;
     private final ImmutableSet<T> rejected;
 
