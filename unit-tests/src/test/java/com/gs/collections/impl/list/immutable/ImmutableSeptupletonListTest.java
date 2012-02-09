@@ -21,7 +21,7 @@ import com.gs.collections.api.list.ImmutableList;
 public class ImmutableSeptupletonListTest extends AbstractImmutableListTestCase
 {
     @Override
-    protected ImmutableList<Integer> newList()
+    protected ImmutableList<Integer> classUnderTest()
     {
         return new ImmutableSeptupletonList<Integer>(1, 2, 3, 4, 5, 6, 7);
     }

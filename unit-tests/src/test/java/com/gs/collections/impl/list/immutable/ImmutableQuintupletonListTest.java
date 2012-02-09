@@ -21,7 +21,7 @@ import com.gs.collections.api.list.ImmutableList;
 public class ImmutableQuintupletonListTest extends AbstractImmutableListTestCase
 {
     @Override
-    protected ImmutableList<Integer> newList()
+    protected ImmutableList<Integer> classUnderTest()
     {
         return new ImmutableQuintupletonList<Integer>(1, 2, 3, 4, 5);
     }

@@ -17,44 +17,45 @@
 package com.gs.collections.impl.set.immutable;
 
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
-import java.util.NoSuchElementException;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.collection.ImmutableCollection;
+import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
-import com.gs.collections.api.partition.set.PartitionImmutableSet;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.UnsortedSetIterable;
-import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
-import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
-import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
-import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
+import com.gs.collections.impl.collection.immutable.AbstractImmutableCollectionTestCase;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
-import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
-public abstract class AbstractImmutableSetTestCase
+public abstract class AbstractImmutableSetTestCase extends AbstractImmutableCollectionTestCase
 {
+    @Override
     protected abstract ImmutableSet<Integer> classUnderTest();
+
+    @Override
+    protected <T> MutableSet<T> newMutable()
+    {
+        return UnifiedSet.newSet();
+    }
 
     @Test
     public void testEqualsAndHashCode()
@@ -140,108 +141,58 @@ public abstract class AbstractImmutableSetTestCase
     @Test
     public void testForEachWith()
     {
-        final MutableSet<Integer> result = UnifiedSet.newSet();
-        ImmutableSet<Integer> set = this.classUnderTest();
-        set.forEachWith(new Procedure2<Integer, Integer>()
+        final MutableCollection<Integer> result = UnifiedSet.newSet();
+        this.classUnderTest().forEachWith(new Procedure2<Integer, Integer>()
         {
             public void value(Integer argument1, Integer argument2)
             {
                 result.add(argument1 + argument2);
             }
         }, 0);
-        Assert.assertEquals(set, result);
+        Assert.assertEquals(this.classUnderTest(), result);
     }
 
     @Test
     public void testForEachWithIndex()
     {
-        final MutableSet<Integer> result = UnifiedSet.newSet();
-        ImmutableSet<Integer> integers = this.classUnderTest();
-        integers.forEachWithIndex(new ObjectIntProcedure<Integer>()
+        final MutableCollection<Integer> result = UnifiedSet.newSet();
+        this.classUnderTest().forEachWithIndex(new ObjectIntProcedure<Integer>()
         {
             public void value(Integer object, int index)
             {
                 result.add(object);
             }
         });
-        Assert.assertEquals(integers, result);
-    }
-
-    @Test
-    public void testSelect()
-    {
-        ImmutableSet<Integer> integers = this.classUnderTest();
-        Assert.assertEquals(integers, integers.select(Predicates.lessThan(integers.size() + 1)));
-        Verify.assertIterableEmpty(integers.select(Predicates.greaterThan(integers.size())));
+        Assert.assertEquals(this.classUnderTest(), result);
     }
 
     @Test
     public void testSelectWithTarget()
     {
-        ImmutableSet<Integer> integers = this.classUnderTest();
+        ImmutableCollection<Integer> integers = this.classUnderTest();
         Assert.assertEquals(integers, integers.select(Predicates.lessThan(integers.size() + 1), UnifiedSet.<Integer>newSet()));
         Verify.assertEmpty(integers.select(Predicates.greaterThan(integers.size()), FastList.<Integer>newList()));
     }
 
     @Test
-    public void testReject()
-    {
-        ImmutableSet<Integer> integers = this.classUnderTest();
-        Verify.assertIterableEmpty(integers.reject(Predicates.lessThan(integers.size() + 1)));
-        Assert.assertEquals(integers, integers.reject(Predicates.greaterThan(integers.size())));
-    }
-
-    @Test
     public void testRejectWithTarget()
     {
-        ImmutableSet<Integer> integers = this.classUnderTest();
+        ImmutableCollection<Integer> integers = this.classUnderTest();
         Verify.assertEmpty(integers.reject(Predicates.lessThan(integers.size() + 1), FastList.<Integer>newList()));
         Assert.assertEquals(integers, integers.reject(Predicates.greaterThan(integers.size()), UnifiedSet.<Integer>newSet()));
     }
 
     @Test
-    public void partition()
-    {
-        ImmutableSet<Integer> integers = this.classUnderTest();
-        PartitionImmutableSet<Integer> partition = integers.partition(Predicates.lessThan(integers.size() + 1));
-        Assert.assertEquals(integers, partition.getSelected());
-        Verify.assertIterableEmpty(partition.getRejected());
-    }
-
-    @Test
-    public void testCollect()
-    {
-        ImmutableSet<Integer> integers = this.classUnderTest();
-        Assert.assertEquals(integers, integers.collect(Functions.getIntegerPassThru()));
-    }
-
-    @Test
     public void testCollectWithTarget()
     {
-        ImmutableSet<Integer> integers = this.classUnderTest();
+        ImmutableCollection<Integer> integers = this.classUnderTest();
         Assert.assertEquals(integers, integers.collect(Functions.getIntegerPassThru(), UnifiedSet.<Integer>newSet()));
-    }
-
-    @Test
-    public void flatCollect()
-    {
-        ImmutableSet<String> actual = this.classUnderTest().flatCollect(new Function<Integer, MutableList<String>>()
-        {
-            public MutableList<String> valueOf(Integer integer)
-            {
-                return Lists.fixedSize.of(String.valueOf(integer));
-            }
-        });
-
-        ImmutableSet<String> expected = this.classUnderTest().collect(Functions.getToString());
-
-        Assert.assertEquals(expected, actual);
     }
 
     @Test
     public void flatCollectWithTarget()
     {
-        MutableSet<String> actual = this.classUnderTest().flatCollect(new Function<Integer, MutableList<String>>()
+        MutableCollection<String> actual = this.classUnderTest().flatCollect(new Function<Integer, MutableList<String>>()
         {
             public MutableList<String> valueOf(Integer integer)
             {
@@ -249,7 +200,7 @@ public abstract class AbstractImmutableSetTestCase
             }
         }, UnifiedSet.<String>newSet());
 
-        ImmutableSet<String> expected = this.classUnderTest().collect(Functions.getToString());
+        ImmutableCollection<String> expected = this.classUnderTest().collect(Functions.getToString());
 
         Assert.assertEquals(expected, actual);
     }
@@ -257,46 +208,40 @@ public abstract class AbstractImmutableSetTestCase
     @Test
     public void zip()
     {
-        ImmutableSet<Integer> immutableSet = this.classUnderTest();
-        List<Object> nulls = Collections.nCopies(immutableSet.size(), null);
-        List<Object> nullsPlusOne = Collections.nCopies(immutableSet.size() + 1, null);
-        List<Object> nullsMinusOne = Collections.nCopies(immutableSet.size() - 1, null);
+        ImmutableCollection<Integer> immutableCollection = this.classUnderTest();
+        List<Object> nulls = Collections.nCopies(immutableCollection.size(), null);
+        List<Object> nullsPlusOne = Collections.nCopies(immutableCollection.size() + 1, null);
+        List<Object> nullsMinusOne = Collections.nCopies(immutableCollection.size() - 1, null);
 
-        ImmutableSet<Pair<Integer, Object>> pairs = immutableSet.zip(nulls);
-        Assert.assertEquals(immutableSet, pairs.collect(Functions.<Integer>firstOfPair()));
+        ImmutableCollection<Pair<Integer, Object>> pairs = immutableCollection.zip(nulls);
+        Assert.assertEquals(immutableCollection, pairs.collect(Functions.<Integer>firstOfPair()));
         Assert.assertEquals(UnifiedSet.<Object>newSet(nulls), pairs.collect(Functions.<Object>secondOfPair()));
 
-        ImmutableSet<Pair<Integer, Object>> pairsPlusOne = immutableSet.zip(nullsPlusOne);
-        Assert.assertEquals(immutableSet, pairsPlusOne.collect(Functions.<Integer>firstOfPair()));
+        ImmutableCollection<Pair<Integer, Object>> pairsPlusOne = immutableCollection.zip(nullsPlusOne);
+        Assert.assertEquals(immutableCollection, pairsPlusOne.collect(Functions.<Integer>firstOfPair()));
         Assert.assertEquals(UnifiedSet.<Object>newSet(nulls), pairsPlusOne.collect(Functions.<Object>secondOfPair()));
 
-        ImmutableSet<Pair<Integer, Object>> pairsMinusOne = immutableSet.zip(nullsMinusOne);
-        Assert.assertEquals(immutableSet.size() - 1, pairsMinusOne.size());
-        Assert.assertTrue(immutableSet.containsAllIterable(pairsMinusOne.collect(Functions.<Integer>firstOfPair())));
+        ImmutableCollection<Pair<Integer, Object>> pairsMinusOne = immutableCollection.zip(nullsMinusOne);
+        Assert.assertEquals(immutableCollection.size() - 1, pairsMinusOne.size());
+        Assert.assertTrue(immutableCollection.containsAllIterable(pairsMinusOne.collect(Functions.<Integer>firstOfPair())));
 
-        Assert.assertEquals(immutableSet.zip(nulls), immutableSet.zip(nulls, UnifiedSet.<Pair<Integer, Object>>newSet()));
+        Assert.assertEquals(immutableCollection.zip(nulls), immutableCollection.zip(nulls, UnifiedSet.<Pair<Integer, Object>>newSet()));
     }
 
     @Test
     public void zipWithIndex()
     {
-        ImmutableSet<Integer> immutableSet = this.classUnderTest();
-        ImmutableSet<Pair<Integer, Integer>> pairs = immutableSet.zipWithIndex();
+        ImmutableCollection<Integer> immutableCollection = this.classUnderTest();
+        ImmutableCollection<Pair<Integer, Integer>> pairs = immutableCollection.zipWithIndex();
 
-        Assert.assertEquals(immutableSet, pairs.collect(Functions.<Integer>firstOfPair()));
+        Assert.assertEquals(immutableCollection, pairs.collect(Functions.<Integer>firstOfPair()));
         Assert.assertEquals(
-                Interval.zeroTo(immutableSet.size() - 1).toSet(),
+                Interval.zeroTo(immutableCollection.size() - 1).toSet(),
                 pairs.collect(Functions.<Integer>secondOfPair()));
 
         Assert.assertEquals(
-                immutableSet.zipWithIndex(),
-                immutableSet.zipWithIndex(UnifiedSet.<Pair<Integer, Integer>>newSet()));
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void chunk_zero_throws()
-    {
-        this.classUnderTest().chunk(0);
+                immutableCollection.zipWithIndex(),
+                immutableCollection.zipWithIndex(UnifiedSet.<Pair<Integer, Integer>>newSet()));
     }
 
     @Test
@@ -307,157 +252,19 @@ public abstract class AbstractImmutableSetTestCase
     }
 
     @Test
-    public void testDetect()
-    {
-        ImmutableSet<Integer> integers = this.classUnderTest();
-        Assert.assertEquals(Integer.valueOf(1), integers.detect(Predicates.equal(1)));
-        Assert.assertNull(integers.detect(Predicates.equal(integers.size() + 1)));
-    }
-
-    @Test
-    public void testDetectIfNoneWithBlock()
-    {
-        ImmutableSet<Integer> integers = this.classUnderTest();
-        Function0<Integer> function = new PassThruFunction0<Integer>(integers.size() + 1);
-        Assert.assertEquals(Integer.valueOf(1), integers.detectIfNone(Predicates.equal(1), function));
-        Assert.assertEquals(Integer.valueOf(integers.size() + 1), integers.detectIfNone(Predicates.equal(integers.size() + 1), function));
-    }
-
-    @Test
-    public void testAllSatisfy()
-    {
-        ImmutableSet<Integer> integers = this.classUnderTest();
-        Assert.assertTrue(integers.allSatisfy(Predicates.instanceOf(Integer.class)));
-        Assert.assertFalse(integers.allSatisfy(Predicates.equal(0)));
-    }
-
-    @Test
-    public void testAnySatisfy()
-    {
-        ImmutableSet<Integer> integers = this.classUnderTest();
-        Assert.assertFalse(integers.anySatisfy(Predicates.instanceOf(String.class)));
-        Assert.assertTrue(integers.anySatisfy(Predicates.instanceOf(Integer.class)));
-    }
-
-    @Test
-    public void testCount()
-    {
-        ImmutableSet<Integer> integers = this.classUnderTest();
-        Assert.assertEquals(integers.size(), integers.count(Predicates.instanceOf(Integer.class)));
-        Assert.assertEquals(0, integers.count(Predicates.instanceOf(String.class)));
-    }
-
-    @Test
-    public void testCollectIf()
-    {
-        ImmutableSet<Integer> integers = this.classUnderTest();
-        Assert.assertEquals(integers, integers.collectIf(Predicates.instanceOf(Integer.class),
-                Functions.getIntegerPassThru()));
-    }
-
-    @Test
     public void testCollectIfWithTarget()
     {
-        ImmutableSet<Integer> integers = this.classUnderTest();
+        ImmutableCollection<Integer> integers = this.classUnderTest();
         Assert.assertEquals(integers, integers.collectIf(Predicates.instanceOf(Integer.class),
                 Functions.getIntegerPassThru(), UnifiedSet.<Integer>newSet()));
     }
 
     @Test
-    public void testGetFirst()
-    {
-        ImmutableSet<Integer> integers = this.classUnderTest();
-        Assert.assertEquals(Integer.valueOf(1), integers.getFirst());
-    }
-
-    @Test
-    public void testGetLast()
-    {
-        ImmutableSet<Integer> integers = this.classUnderTest();
-        Assert.assertEquals(Integer.valueOf(integers.size()), integers.getLast());
-    }
-
-    @Test
-    public void testIsEmpty()
-    {
-        ImmutableSet<Integer> set = this.classUnderTest();
-        Assert.assertFalse(set.isEmpty());
-        Assert.assertTrue(set.notEmpty());
-    }
-
-    @Test
-    public void testIterator()
-    {
-        ImmutableSet<Integer> integers = this.classUnderTest();
-        final Iterator<Integer> iterator = integers.iterator();
-        for (int i = 0; iterator.hasNext(); i++)
-        {
-            Integer integer = iterator.next();
-            Assert.assertEquals(i + 1, integer.intValue());
-        }
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
-        {
-            public void run()
-            {
-                iterator.next();
-            }
-        });
-    }
-
-    @Test
-    public void testInjectInto()
-    {
-        ImmutableSet<Integer> integers = this.classUnderTest();
-        Integer result = integers.injectInto(0, AddFunction.INTEGER);
-        Assert.assertEquals(FastList.newList(integers).injectInto(0, AddFunction.INTEGER_TO_INT), result.intValue());
-    }
-
-    @Test
-    public void testToArray()
-    {
-        ImmutableSet<Integer> integers = this.classUnderTest();
-        MutableList<Integer> copy = FastList.newList(integers);
-        Assert.assertArrayEquals(integers.toArray(), copy.toArray());
-        Assert.assertArrayEquals(integers.toArray(new Integer[integers.size()]), copy.toArray(new Integer[integers.size()]));
-    }
-
-    @Test
-    public void testToString()
-    {
-        Assert.assertEquals(FastList.newList(this.classUnderTest()).toString(), this.classUnderTest().toString());
-    }
-
-    @Test
-    public void testMakeString()
-    {
-        Assert.assertEquals(FastList.newList(this.classUnderTest()).makeString(), this.classUnderTest().makeString());
-    }
-
-    @Test
-    public void testAppendString()
-    {
-        Appendable builder = new StringBuilder();
-        this.classUnderTest().appendString(builder);
-        Assert.assertEquals(FastList.newList(this.classUnderTest()).makeString(), builder.toString());
-    }
-
-    @Test
     public void toList()
     {
-        ImmutableSet<Integer> integers = this.classUnderTest();
+        ImmutableCollection<Integer> integers = this.classUnderTest();
         MutableList<Integer> list = integers.toList();
         Verify.assertEqualsAndHashCode(FastList.newList(integers), list);
-    }
-
-    @Test
-    public void toSortedList()
-    {
-        ImmutableSet<Integer> integers = this.classUnderTest();
-        MutableList<Integer> copy = FastList.newList(integers);
-        MutableList<Integer> list = integers.toSortedList(Collections.<Integer>reverseOrder());
-        Assert.assertEquals(copy.sortThis(Collections.<Integer>reverseOrder()), list);
-        MutableList<Integer> list2 = integers.toSortedList();
-        Assert.assertEquals(copy.sortThis(), list2);
     }
 
     @Test
@@ -466,190 +273,6 @@ public abstract class AbstractImmutableSetTestCase
         ImmutableSet<Integer> integers = this.classUnderTest();
         MutableList<Integer> list = integers.toSortedListBy(Functions.getToString());
         Assert.assertEquals(this.classUnderTest().toList(), list);
-    }
-
-    @Test
-    public void toSortedSet()
-    {
-        ImmutableSet<Integer> integers = this.classUnderTest();
-        MutableSortedSet<Integer> set = integers.toSortedSet();
-        Verify.assertListsEqual(integers.toSortedList(), set.toList());
-    }
-
-    @Test
-    public void toSortedSetWithComparator()
-    {
-        ImmutableSet<Integer> integers = this.classUnderTest();
-        MutableSortedSet<Integer> set = integers.toSortedSet(Collections.<Integer>reverseOrder());
-        Assert.assertEquals(integers.toSet(), set);
-        Assert.assertEquals(integers.toSortedList(Comparators.<Integer>reverseNaturalOrder()), set.toList());
-    }
-
-    @Test
-    public void toSortedSetBy()
-    {
-        ImmutableSet<Integer> integers = this.classUnderTest();
-        MutableSortedSet<Integer> set = integers.toSortedSetBy(Functions.getToString());
-        Verify.assertSortedSetsEqual(TreeSortedSet.newSet(integers), set);
-    }
-
-    @Test
-    public void testForLoop()
-    {
-        ImmutableSet<Integer> set = this.classUnderTest();
-        for (Integer each : set)
-        {
-            Assert.assertNotNull(each);
-        }
-    }
-
-    @Test
-    public void testIteratorRemove()
-    {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                AbstractImmutableSetTestCase.this.classUnderTest().iterator().remove();
-            }
-        });
-    }
-
-    @Test
-    public void testAdd()
-    {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                AbstractImmutableSetTestCase.this.classUnderTest().castToSet().add(1);
-            }
-        });
-    }
-
-    @Test
-    public void testRemove()
-    {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                AbstractImmutableSetTestCase.this.classUnderTest().castToSet().remove(Integer.valueOf(1));
-            }
-        });
-    }
-
-    @Test
-    public void testClear()
-    {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                AbstractImmutableSetTestCase.this.classUnderTest().castToSet().clear();
-            }
-        });
-    }
-
-    @Test
-    public void testRemoveAll()
-    {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                AbstractImmutableSetTestCase.this.classUnderTest().castToSet().removeAll(Lists.fixedSize.of());
-            }
-        });
-    }
-
-    @Test
-    public void testRetainAll()
-    {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                AbstractImmutableSetTestCase.this.classUnderTest().castToSet().retainAll(Lists.fixedSize.of());
-            }
-        });
-    }
-
-    @Test
-    public void testAddAll()
-    {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                AbstractImmutableSetTestCase.this.classUnderTest().castToSet().addAll(Lists.fixedSize.<Integer>of());
-            }
-        });
-    }
-
-    private ImmutableSet<Integer> classUnderTestWithNull()
-    {
-        return this.classUnderTest().reject(Predicates.equal(1)).newWith(null);
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void min_null_throws()
-    {
-        this.classUnderTestWithNull().min(Comparators.naturalOrder());
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void max_null_throws()
-    {
-        this.classUnderTestWithNull().max(Comparators.naturalOrder());
-    }
-
-    @Test
-    public void min()
-    {
-        Assert.assertEquals(Integer.valueOf(1), this.classUnderTest().min(Comparators.naturalOrder()));
-    }
-
-    @Test
-    public void max()
-    {
-        Assert.assertEquals(Integer.valueOf(1), this.classUnderTest().max(Comparators.reverse(Comparators.naturalOrder())));
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void min_null_throws_without_comparator()
-    {
-        this.classUnderTestWithNull().min();
-    }
-
-    @Test(expected = NullPointerException.class)
-    public void max_null_throws_without_comparator()
-    {
-        this.classUnderTestWithNull().max();
-    }
-
-    @Test
-    public void min_without_comparator()
-    {
-        Assert.assertEquals(Integer.valueOf(1), this.classUnderTest().min());
-    }
-
-    @Test
-    public void max_without_comparator()
-    {
-        Assert.assertEquals(Integer.valueOf(this.classUnderTest().size()), this.classUnderTest().max());
-    }
-
-    @Test
-    public void minBy()
-    {
-        Assert.assertEquals(Integer.valueOf(1), this.classUnderTest().minBy(Functions.getToString()));
-    }
-
-    @Test
-    public void maxBy()
-    {
-        Assert.assertEquals(Integer.valueOf(this.classUnderTest().size()), this.classUnderTest().maxBy(Functions.getToString()));
     }
 
     @Test

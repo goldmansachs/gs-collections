@@ -21,7 +21,7 @@ import com.gs.collections.api.list.ImmutableList;
 public class ImmutableNonupletonListTest extends AbstractImmutableListTestCase
 {
     @Override
-    protected ImmutableList<Integer> newList()
+    protected ImmutableList<Integer> classUnderTest()
     {
         return new ImmutableNonupletonList<Integer>(1, 2, 3, 4, 5, 6, 7, 8, 9);
     }

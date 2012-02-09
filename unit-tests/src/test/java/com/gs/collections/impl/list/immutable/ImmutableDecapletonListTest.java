@@ -26,7 +26,7 @@ import org.junit.Test;
 public class ImmutableDecapletonListTest extends AbstractImmutableListTestCase
 {
     @Override
-    protected ImmutableList<Integer> newList()
+    protected ImmutableList<Integer> classUnderTest()
     {
         return new ImmutableDecapletonList<Integer>(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
     }
@@ -36,7 +36,7 @@ public class ImmutableDecapletonListTest extends AbstractImmutableListTestCase
     public void toSortedSetBy()
     {
         MutableList<Integer> expected = TreeSortedSet.newSetWith("1", "2", "3", "4", "5", "6", "7", "8", "9", "10").collect(Functions.getStringToInteger());
-        MutableList<Integer> sortedList = this.newList().toSortedSetBy(Functions.getToString()).toList();
+        MutableList<Integer> sortedList = this.classUnderTest().toSortedSetBy(Functions.getToString()).toList();
         Verify.assertListsEqual(expected, sortedList);
     }
 }
