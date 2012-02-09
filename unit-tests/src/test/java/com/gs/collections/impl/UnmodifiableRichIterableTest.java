@@ -262,7 +262,7 @@ public class UnmodifiableRichIterableTest
     }
 
     @Test
-    public void testIntejectInto()
+    public void testInjectInto()
     {
         Function2<String, String, String> function = new Function2<String, String, String>()
         {
