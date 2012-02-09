@@ -33,11 +33,11 @@ public class MultimapKeyValuesSerializingProcedure<K, V>
     }
 
     @Override
-    public void safeValue(K key, RichIterable<V> collection) throws IOException
+    public void safeValue(K key, RichIterable<V> iterable) throws IOException
     {
         this.out.writeObject(key);
-        this.out.writeInt(collection.size());
-        collection.forEach(new CheckedProcedure<V>()
+        this.out.writeInt(iterable.size());
+        iterable.forEach(new CheckedProcedure<V>()
         {
             @Override
             public void safeValue(V object) throws IOException

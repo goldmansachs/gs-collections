@@ -182,9 +182,9 @@ public final class IterableIterate
     /**
      * @see Iterate#reject(Iterable, Predicate)
      */
-    public static <T> MutableList<T> reject(Iterable<T> collection, Predicate<? super T> predicate)
+    public static <T> MutableList<T> reject(Iterable<T> iterable, Predicate<? super T> predicate)
     {
-        return IterableIterate.reject(collection, predicate, FastList.<T>newList());
+        return IterableIterate.reject(iterable, predicate, FastList.<T>newList());
     }
 
     /**

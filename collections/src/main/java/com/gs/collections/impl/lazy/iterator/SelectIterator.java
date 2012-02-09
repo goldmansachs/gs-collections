@@ -29,9 +29,9 @@ public final class SelectIterator<T>
     private final Predicate<? super T> predicate;
     private Object next = NULL;
 
-    public SelectIterator(Iterable<T> collection, Predicate<? super T> predicate)
+    public SelectIterator(Iterable<T> iterable, Predicate<? super T> predicate)
     {
-        this(collection.iterator(), predicate);
+        this(iterable.iterator(), predicate);
     }
 
     public SelectIterator(Iterator<T> iterator, Predicate<? super T> predicate)
