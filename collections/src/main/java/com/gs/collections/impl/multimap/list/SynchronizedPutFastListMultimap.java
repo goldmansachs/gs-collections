@@ -17,7 +17,6 @@
 package com.gs.collections.impl.multimap.list;
 
 import java.io.Externalizable;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
@@ -42,7 +41,6 @@ public final class SynchronizedPutFastListMultimap<K, V>
         implements MutableListMultimap<K, V>, Externalizable
 {
     private static final long serialVersionUID = 42L;
-    private final AtomicInteger atomicTotalSize = new AtomicInteger(0);
 
     public SynchronizedPutFastListMultimap()
     {
