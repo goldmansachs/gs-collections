@@ -3,7 +3,7 @@
 GS Collections is a collections framework for Java. It has JDK-compatible List, Set and Map implementations with a rich API and set of utility classes that work with any JDK compatible Collections, Arrays, Maps or Strings. The iteration protocol was inspired by the Smalltalk collection framework.
 
 ## Download
-[Version 1.1.0](https://github.com/downloads/goldmansachs/gs-collections/gs-collections-1.1.0.zip)
+[Version 1.2.0](https://github.com/downloads/goldmansachs/gs-collections/gs-collections-1.2.0.zip)
 [Older releases](https://github.com/goldmansachs/gs-collections/downloads)
 
 ## Quick Example
@@ -16,6 +16,7 @@ System.out.println("Comma separated, sorted last names: " + sortedLastNames.make
 ```
 
 Person.TO_LAST_NAME is defined as a constant Function in the Person class.
+
 ```java
 public static final Function<Person, String> TO_LAST_NAME = new Function<Person, String>()
 {
@@ -46,11 +47,11 @@ We currently do all development in an internal Subversion repository and are not
 
 ## FAQ
 ### Why is Goldman Sachs open-sourcing GS Collections?
-A few reasons:
+
 * We believe that GS Collections offers a significant advantage over existing solutions. We hope others will benefit from it.
 * We believe in the power of the technical community to help improve GS Collections.
 * Technology is a huge part of what we do at Goldman Sachs. GS Collections exemplifies our commitment to technology.
-* We use open source software in many of our operations. We have benefited from the work of others and we’d like to give something back.
+* We use open source software in many of our operations. We have benefited from the work of others and we'd like to give something back.
 
 ### Does Goldman Sachs use GS Collections?
 Yes, we use GS Collections in many of our internal applications.
