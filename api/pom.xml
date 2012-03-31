@@ -24,7 +24,7 @@
     <groupId>ponzu</groupId>
     <artifactId>api</artifactId>
     <version>1.1.0</version>
-    <packaging>bundle</packaging>
+    <packaging>jar</packaging>
 
     <name>API</name>
 
