@@ -53,6 +53,13 @@ public class ImmutableUnifiedMapWithHashingStrategy<K, V>
         this.delegate = UnifiedMapWithHashingStrategy.newMap(delegate);
     }
 
+    public ImmutableUnifiedMapWithHashingStrategy(
+            HashingStrategy<? super K> hashingStrategy,
+            Pair<K, V>... pairs)
+    {
+        this.delegate = UnifiedMapWithHashingStrategy.newMapWith(hashingStrategy, pairs);
+    }
+
     @Override
     public boolean equals(Object o)
     {

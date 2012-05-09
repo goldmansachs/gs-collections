@@ -46,6 +46,11 @@ public class ImmutableUnifiedMap<K, V>
         this.delegate = UnifiedMap.newMap(delegate);
     }
 
+    public ImmutableUnifiedMap(Pair<K, V>... pairs)
+    {
+        this(UnifiedMap.newMapWith(pairs));
+    }
+
     @Override
     public boolean equals(Object o)
     {

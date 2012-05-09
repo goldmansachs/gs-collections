@@ -20,6 +20,7 @@ import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.map.MapIterableTestCase;
 import com.gs.collections.impl.map.strategy.mutable.UnifiedMapWithHashingStrategy;
+import com.gs.collections.impl.tuple.Tuples;
 
 public class ImmutableUnifiedMapWithHashingStrategy2Test extends MapIterableTestCase
 {
@@ -50,7 +51,7 @@ public class ImmutableUnifiedMapWithHashingStrategy2Test extends MapIterableTest
     protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
     {
         return new ImmutableUnifiedMapWithHashingStrategy<K, V>(
-                UnifiedMapWithHashingStrategy.<K, V>newWithKeysValues(HashingStrategies.nullSafeHashingStrategy(
-                        HashingStrategies.<K>defaultStrategy()), key1, value1, key2, value2, key3, value3, key4, value4));
+                UnifiedMapWithHashingStrategy.<K, V>newMapWith(HashingStrategies.nullSafeHashingStrategy(
+                        HashingStrategies.<K>defaultStrategy()), Tuples.pair(key1, value1), Tuples.pair(key2, value2), Tuples.pair(key3, value3), Tuples.pair(key4, value4)));
     }
 }
