@@ -1967,4 +1967,46 @@ public class IterateTest
             return StringIterate.asUppercaseSet(name);
         }
     }
+
+    @Test
+    public void makeString()
+    {
+        this.iterables.forEach(new Procedure<Iterable<Integer>>()
+        {
+            public void value(Iterable<Integer> each)
+            {
+                String result = Iterate.makeString(each);
+                Assert.assertEquals("1, 2, 3, 4, 5", result);
+            }
+        });
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.makeString(null);
+            }
+        });
+    }
+
+    @Test
+    public void appendString()
+    {
+        this.iterables.forEach(new Procedure<Iterable<Integer>>()
+        {
+            public void value(Iterable<Integer> each)
+            {
+                StringBuilder stringBuilder = new StringBuilder();
+                Iterate.appendString(each, stringBuilder);
+                String result = stringBuilder.toString();
+                Assert.assertEquals("1, 2, 3, 4, 5", result);
+            }
+        });
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.appendString(null, new StringBuilder());
+            }
+        });
+    }
 }

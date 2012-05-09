@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.utility;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
@@ -1218,5 +1219,80 @@ public final class ArrayIterate
             targetCollection.add(Tuples.pair(array[i], i));
         }
         return targetCollection;
+    }
+
+    /**
+     * @see Iterate#makeString(Iterable)
+     */
+    public static <T> String makeString(T[] array)
+    {
+        return ArrayIterate.makeString(array, ", ");
+    }
+
+    /**
+     * @see Iterate#makeString(Iterable, String)
+     */
+    public static <T> String makeString(T[] array, String separator)
+    {
+        return ArrayIterate.makeString(array, "", separator, "");
+    }
+
+    /**
+     * @see Iterate#makeString(Iterable, String, String, String)
+     */
+    public static <T> String makeString(T[] array, String start, String separator, String end)
+    {
+        Appendable stringBuilder = new StringBuilder();
+        ArrayIterate.appendString(array, stringBuilder, start, separator, end);
+        return stringBuilder.toString();
+    }
+
+    /**
+     * @see Iterate#appendString(Iterable, Appendable)
+     */
+    public static <T> void appendString(T[] array, Appendable appendable)
+    {
+        ArrayIterate.appendString(array, appendable, ", ");
+    }
+
+    /**
+     * @see Iterate#appendString(Iterable, Appendable, String)
+     */
+    public static <T> void appendString(T[] array, Appendable appendable, String separator)
+    {
+        ArrayIterate.appendString(array, appendable, "", separator, "");
+    }
+
+    /**
+     * @see Iterate#appendString(Iterable, Appendable, String, String, String)
+     */
+    public static <T> void appendString(
+            T[] array,
+            Appendable appendable,
+            String start,
+            String separator,
+            String end)
+    {
+        try
+        {
+            appendable.append(start);
+
+            if (array.length > 0)
+            {
+                appendable.append(String.valueOf(array[0]));
+
+                for (int i = 1, size = array.length; i < size; i++)
+                {
+                    appendable.append(separator);
+                    appendable.append(String.valueOf(array[i]));
+                }
+            }
+
+            appendable.append(end);
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 }

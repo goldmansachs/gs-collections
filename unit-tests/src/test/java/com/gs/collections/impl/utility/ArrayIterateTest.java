@@ -586,4 +586,20 @@ public class ArrayIterateTest
         String[] array = {"1", "2", "3", "4", "5", "6", "7"};
         Assert.assertEquals(FastList.newListWith(array), ArrayIterate.chunk(array, 10).getFirst());
     }
+
+    @Test
+    public void makeString()
+    {
+        String[] array = {"1", "2", "3", "4", "5"};
+        Assert.assertEquals("1, 2, 3, 4, 5", ArrayIterate.makeString(array));
+    }
+
+    @Test
+    public void appendString()
+    {
+        String[] array = {"1", "2", "3", "4", "5"};
+        StringBuilder stringBuilder = new StringBuilder();
+        ArrayIterate.appendString(array, stringBuilder);
+        Assert.assertEquals("1, 2, 3, 4, 5", stringBuilder.toString());
+    }
 }

@@ -2025,4 +2025,74 @@ public final class Iterate
         }
         throw new IllegalArgumentException("Cannot perform a chunk on null");
     }
+
+    /**
+     * @see RichIterable#makeString()
+     */
+    public static <T> String makeString(Iterable<T> iterable)
+    {
+        return Iterate.makeString(iterable, ", ");
+    }
+
+    /**
+     * @see RichIterable#makeString(String)
+     */
+    public static <T> String makeString(Iterable<T> iterable, String separator)
+    {
+        return Iterate.makeString(iterable, "", separator, "");
+    }
+
+    /**
+     * @see RichIterable#makeString(String, String, String)
+     */
+    public static <T> String makeString(Iterable<T> iterable, String start, String separator, String end)
+    {
+        Appendable stringBuilder = new StringBuilder();
+        Iterate.appendString(iterable, stringBuilder, start, separator, end);
+        return stringBuilder.toString();
+    }
+
+    /**
+     * @see RichIterable#appendString(Appendable)
+     */
+    public static <T> void appendString(Iterable<T> iterable, Appendable appendable)
+    {
+        Iterate.appendString(iterable, appendable, ", ");
+    }
+
+    /**
+     * @see RichIterable#appendString(Appendable, String)
+     */
+    public static <T> void appendString(Iterable<T> iterable, Appendable appendable, String separator)
+    {
+        Iterate.appendString(iterable, appendable, "", separator, "");
+    }
+
+    /**
+     * @see RichIterable#appendString(Appendable, String, String, String)
+     */
+    public static <T> void appendString(
+            Iterable<T> iterable,
+            Appendable appendable,
+            String start,
+            String separator,
+            String end)
+    {
+        if (iterable instanceof MutableCollection)
+        {
+            ((MutableCollection<T>) iterable).appendString(appendable, start, separator, end);
+        }
+        else if (iterable instanceof RandomAccess)
+        {
+            RandomAccessListIterate.appendString((List<T>) iterable, appendable, start, separator, end);
+        }
+        else if (iterable != null)
+        {
+            IterableIterate.appendString(iterable, appendable, start, separator, end);
+        }
+        else
+        {
+            throw new IllegalArgumentException("Cannot perform an appendString on null");
+        }
+    }
 }
