@@ -21,7 +21,9 @@ import java.util.Map;
 
 import com.gs.collections.api.factory.map.sorted.MutableSortedMapFactory;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
+import net.jcip.annotations.Immutable;
 
+@Immutable
 public final class MutableSortedMapFactoryImpl implements MutableSortedMapFactory
 {
     public <K, V> MutableSortedMap<K, V> of()

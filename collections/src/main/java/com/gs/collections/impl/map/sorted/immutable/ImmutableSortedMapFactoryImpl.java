@@ -22,7 +22,9 @@ import java.util.SortedMap;
 import com.gs.collections.api.factory.map.sorted.ImmutableSortedMapFactory;
 import com.gs.collections.api.map.sorted.ImmutableSortedMap;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
+import net.jcip.annotations.Immutable;
 
+@Immutable
 public final class ImmutableSortedMapFactoryImpl implements ImmutableSortedMapFactory
 {
     public <K, V> ImmutableSortedMap<K, V> of()

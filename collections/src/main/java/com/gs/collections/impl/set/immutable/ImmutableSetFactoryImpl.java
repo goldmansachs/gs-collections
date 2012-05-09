@@ -20,7 +20,9 @@ import com.gs.collections.api.factory.set.ImmutableSetFactory;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.utility.Iterate;
+import net.jcip.annotations.Immutable;
 
+@Immutable
 public final class ImmutableSetFactoryImpl implements ImmutableSetFactory
 {
     public <T> ImmutableSet<T> of()

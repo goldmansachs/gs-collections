@@ -18,7 +18,9 @@ package com.gs.collections.impl.map.mutable;
 
 import com.gs.collections.api.factory.map.MutableMapFactory;
 import com.gs.collections.api.map.MutableMap;
+import net.jcip.annotations.Immutable;
 
+@Immutable
 public final class MutableMapFactoryImpl implements MutableMapFactory
 {
     public <K, V> MutableMap<K, V> of()

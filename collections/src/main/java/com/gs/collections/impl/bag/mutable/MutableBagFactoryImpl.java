@@ -18,7 +18,9 @@ package com.gs.collections.impl.bag.mutable;
 
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.factory.bag.MutableBagFactory;
+import net.jcip.annotations.Immutable;
 
+@Immutable
 public final class MutableBagFactoryImpl implements MutableBagFactory
 {
     public <T> MutableBag<T> of()

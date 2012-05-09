@@ -19,7 +19,9 @@ package com.gs.collections.impl.map.fixed;
 import com.gs.collections.api.factory.map.FixedSizeMapFactory;
 import com.gs.collections.api.map.FixedSizeMap;
 import com.gs.collections.impl.block.factory.Comparators;
+import net.jcip.annotations.Immutable;
 
+@Immutable
 public class FixedSizeMapFactoryImpl implements FixedSizeMapFactory
 {
     private static final FixedSizeMap<?, ?> EMPTY_MAP = new EmptyMap();

@@ -19,7 +19,9 @@ package com.gs.collections.impl.bag.immutable;
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.factory.bag.ImmutableBagFactory;
 import com.gs.collections.impl.utility.Iterate;
+import net.jcip.annotations.Immutable;
 
+@Immutable
 public final class ImmutableBagFactoryImpl implements ImmutableBagFactory
 {
     public <T> ImmutableBag<T> of()

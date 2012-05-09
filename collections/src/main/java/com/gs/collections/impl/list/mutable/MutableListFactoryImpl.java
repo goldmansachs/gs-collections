@@ -18,7 +18,9 @@ package com.gs.collections.impl.list.mutable;
 
 import com.gs.collections.api.factory.list.MutableListFactory;
 import com.gs.collections.api.list.MutableList;
+import net.jcip.annotations.Immutable;
 
+@Immutable
 public final class MutableListFactoryImpl implements MutableListFactory
 {
     public <T> MutableList<T> of()

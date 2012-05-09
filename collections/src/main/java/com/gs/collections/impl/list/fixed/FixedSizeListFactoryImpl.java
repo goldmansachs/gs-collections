@@ -19,7 +19,9 @@ package com.gs.collections.impl.list.fixed;
 import com.gs.collections.api.factory.list.FixedSizeListFactory;
 import com.gs.collections.api.list.FixedSizeList;
 import com.gs.collections.impl.utility.Iterate;
+import net.jcip.annotations.Immutable;
 
+@Immutable
 public class FixedSizeListFactoryImpl implements FixedSizeListFactory
 {
     private static final FixedSizeList<?> EMPTY_LIST = new EmptyList();

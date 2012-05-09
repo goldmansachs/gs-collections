@@ -19,7 +19,9 @@ package com.gs.collections.impl.list.immutable;
 import com.gs.collections.api.factory.list.ImmutableListFactory;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.impl.utility.Iterate;
+import net.jcip.annotations.Immutable;
 
+@Immutable
 public final class ImmutableListFactoryImpl implements ImmutableListFactory
 {
     public <T> ImmutableList<T> of()

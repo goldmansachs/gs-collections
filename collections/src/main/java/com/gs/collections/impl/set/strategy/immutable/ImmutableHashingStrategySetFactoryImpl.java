@@ -20,7 +20,9 @@ import com.gs.collections.api.block.HashingStrategy;
 import com.gs.collections.api.factory.set.strategy.ImmutableHashingStrategySetFactory;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.impl.utility.Iterate;
+import net.jcip.annotations.Immutable;
 
+@Immutable
 public final class ImmutableHashingStrategySetFactoryImpl implements ImmutableHashingStrategySetFactory
 {
     public <T> ImmutableSet<T> of(HashingStrategy<? super T> hashingStrategy)

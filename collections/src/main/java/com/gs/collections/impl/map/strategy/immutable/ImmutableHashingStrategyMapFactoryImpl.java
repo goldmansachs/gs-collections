@@ -21,7 +21,9 @@ import com.gs.collections.api.factory.map.strategy.ImmutableHashingStrategyMapFa
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.impl.map.strategy.mutable.UnifiedMapWithHashingStrategy;
+import net.jcip.annotations.Immutable;
 
+@Immutable
 public final class ImmutableHashingStrategyMapFactoryImpl implements ImmutableHashingStrategyMapFactory
 {
     public <K, V> ImmutableMap<K, V> of(HashingStrategy<? super K> hashingStrategy)

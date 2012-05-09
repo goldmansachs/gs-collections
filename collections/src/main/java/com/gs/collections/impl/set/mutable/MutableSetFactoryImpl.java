@@ -18,7 +18,9 @@ package com.gs.collections.impl.set.mutable;
 
 import com.gs.collections.api.factory.set.MutableSetFactory;
 import com.gs.collections.api.set.MutableSet;
+import net.jcip.annotations.Immutable;
 
+@Immutable
 public final class MutableSetFactoryImpl implements MutableSetFactory
 {
     public <T> MutableSet<T> of()

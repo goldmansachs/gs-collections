@@ -22,7 +22,9 @@ import java.util.SortedSet;
 import com.gs.collections.api.factory.set.sorted.ImmutableSortedSetFactory;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
 import com.gs.collections.impl.utility.Iterate;
+import net.jcip.annotations.Immutable;
 
+@Immutable
 public final class ImmutableSortedSetFactoryImpl implements ImmutableSortedSetFactory
 {
     public <T> ImmutableSortedSet<T> of()

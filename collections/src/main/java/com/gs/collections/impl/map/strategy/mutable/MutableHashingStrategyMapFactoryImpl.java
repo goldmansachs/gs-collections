@@ -19,7 +19,9 @@ package com.gs.collections.impl.map.strategy.mutable;
 import com.gs.collections.api.block.HashingStrategy;
 import com.gs.collections.api.factory.map.strategy.MutableHashingStrategyMapFactory;
 import com.gs.collections.api.map.MutableMap;
+import net.jcip.annotations.Immutable;
 
+@Immutable
 public final class MutableHashingStrategyMapFactoryImpl implements MutableHashingStrategyMapFactory
 {
     public <K, V> MutableMap<K, V> of(HashingStrategy<? super K> hashingStrategy)

@@ -19,7 +19,9 @@ package com.gs.collections.impl.set.strategy.mutable;
 import com.gs.collections.api.block.HashingStrategy;
 import com.gs.collections.api.factory.set.strategy.MutableHashingStrategySetFactory;
 import com.gs.collections.api.set.MutableSet;
+import net.jcip.annotations.Immutable;
 
+@Immutable
 public final class MutableHashingStrategySetFactoryImpl implements MutableHashingStrategySetFactory
 {
     public <T> MutableSet<T> of(HashingStrategy<? super T> hashingStrategy)

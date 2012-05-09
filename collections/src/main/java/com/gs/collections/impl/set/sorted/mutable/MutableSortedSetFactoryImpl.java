@@ -20,7 +20,9 @@ import java.util.Comparator;
 
 import com.gs.collections.api.factory.set.sorted.MutableSortedSetFactory;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
+import net.jcip.annotations.Immutable;
 
+@Immutable
 public final class MutableSortedSetFactoryImpl implements MutableSortedSetFactory
 {
     public <T> MutableSortedSet<T> of()

@@ -23,7 +23,9 @@ import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
+import net.jcip.annotations.Immutable;
 
+@Immutable
 public final class ImmutableMapFactoryImpl implements ImmutableMapFactory
 {
     public <K, V> ImmutableMap<K, V> of()

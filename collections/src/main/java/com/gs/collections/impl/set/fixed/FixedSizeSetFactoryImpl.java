@@ -21,7 +21,9 @@ import com.gs.collections.api.set.FixedSizeSet;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
+import net.jcip.annotations.Immutable;
 
+@Immutable
 public class FixedSizeSetFactoryImpl implements FixedSizeSetFactory
 {
     private static final FixedSizeSet<?> EMPTY_SET = new EmptySet();
