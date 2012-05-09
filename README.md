@@ -40,7 +40,7 @@ public static final Function<Person, String> TO_LAST_NAME = new Function<Person,
 ## Documentation
 The best way to learn about GS Collections is to dive into the [code kata](https://github.com/goldmansachs/gs-collections-kata). The kata is a fun way to learn idiomatic GS Collections usage and hone your skills through practice. New concepts are introduced in the [slides](https://github.com/downloads/goldmansachs/gs-collections-kata/GS%20Collections%20Training%20Session%20and%20Kata%201.0.0.pdf), with coding exercises at the end of each section. The exercises are set up as a unit tests which fail. Your task is to make them pass, using GS Collections.
 
-For more comprehensive documentation, take a look at the [Reference Guide](https://github.com/downloads/goldmansachs/gs-collections/GS%20Collections%20Reference%20Guide%201.0.0.pdf).
+For more comprehensive documentation, take a look at the [Reference Guide](https://github.com/downloads/goldmansachs/gs-collections/GS%20Collections%20Reference%20Guide%201.2.0.pdf).
 
 ## Contributions
 We currently do all development in an internal Subversion repository and are not prepared to take external contributions. However, we watch the [issue tracker](https://github.com/goldmansachs/gs-collections/issues) for bug reports and feature requests.
