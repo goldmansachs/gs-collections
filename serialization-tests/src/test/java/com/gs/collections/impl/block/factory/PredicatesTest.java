@@ -481,4 +481,31 @@ public class PredicatesTest
                         + "bGxlY3Rpb25zL2FwaS9ibG9jay9wcmVkaWNhdGUvUHJlZGljYXRlO3hwcA==",
                 Predicates.synchronizedEach(null));
     }
+
+    @Test
+    public void subClass()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAEJjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlByZWRpY2F0ZXMk\n"
+                        + "U3ViY2xhc3NQcmVkaWNhdGUAAAAAAAAAAQIAAUwABmFDbGFzc3QAEUxqYXZhL2xhbmcvQ2xhc3M7\n"
+                        + "eHIAMGNvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLmJsb2NrLmZhY3RvcnkuUHJlZGljYXRlcwAAAAAA\n"
+                        + "AAABAgAAeHB2cgAQamF2YS5sYW5nLk9iamVjdAAAAAAAAAAAAAAAeHA=",
+                Predicates.subClass(Object.class)
+        );
+    }
+
+    @Test
+    public void superClass()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAERjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlByZWRpY2F0ZXMk\n"
+                        + "U3VwZXJjbGFzc1ByZWRpY2F0ZQAAAAAAAAABAgABTAAGYUNsYXNzdAARTGphdmEvbGFuZy9DbGFz\n"
+                        + "czt4cgAwY29tLmdzLmNvbGxlY3Rpb25zLmltcGwuYmxvY2suZmFjdG9yeS5QcmVkaWNhdGVzAAAA\n"
+                        + "AAAAAAECAAB4cHZyABBqYXZhLmxhbmcuT2JqZWN0AAAAAAAAAAAAAAB4cA==",
+                Predicates.superClass(Object.class)
+        );
+    }
 }
+

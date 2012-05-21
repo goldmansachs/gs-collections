@@ -429,6 +429,16 @@ public abstract class Predicates<T>
         return Predicates.<T>or(this, op);
     }
 
+    public static Predicates<Class<?>> subClass(Class<?> aClass)
+    {
+        return new SubclassPredicate(aClass);
+    }
+
+    public static Predicates<Class<?>> superClass(Class<?> aClass)
+    {
+        return new SuperclassPredicate(aClass);
+    }
+
     private static final class PredicateAdapter<T>
             extends Predicates<T>
     {
@@ -1241,6 +1251,40 @@ public abstract class Predicates<T>
             {
                 return this.predicate.accept(each);
             }
+        }
+    }
+
+    private static final class SubclassPredicate extends Predicates<Class<?>>
+    {
+        private static final long serialVersionUID = 1L;
+
+        private final Class<?> aClass;
+
+        private SubclassPredicate(Class<?> aClass)
+        {
+            this.aClass = aClass;
+        }
+
+        public boolean accept(Class<?> each)
+        {
+            return this.aClass.isAssignableFrom(each);
+        }
+    }
+
+    private static final class SuperclassPredicate extends Predicates<Class<?>>
+    {
+        private static final long serialVersionUID = 1L;
+
+        private final Class<?> aClass;
+
+        private SuperclassPredicate(Class<?> aClass)
+        {
+            this.aClass = aClass;
+        }
+
+        public boolean accept(Class<?> each)
+        {
+            return each.isAssignableFrom(this.aClass);
         }
     }
 }

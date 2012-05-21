@@ -789,6 +789,24 @@ public class PredicatesTest
         assertToString(Predicates.attributeNotNull(Functions.<String>firstOfPair()));
     }
 
+    @Test
+    public void subClass()
+    {
+        Predicates<Class<?>> subClass = Predicates.subClass(Number.class);
+        Assert.assertTrue(subClass.accept(Integer.class));
+        Assert.assertFalse(subClass.accept(Object.class));
+        Assert.assertTrue(subClass.accept(Number.class));
+    }
+
+    @Test
+    public void superClass()
+    {
+        Predicates<Class<?>> superClass = Predicates.superClass(Number.class);
+        Assert.assertFalse(superClass.accept(Integer.class));
+        Assert.assertTrue(superClass.accept(Object.class));
+        Assert.assertTrue(superClass.accept(Number.class));
+    }
+
     public static final class Employee
     {
         public static final Function<Employee, MutableList<Address>> TO_ADDRESSES = new Function<Employee, MutableList<Address>>()
