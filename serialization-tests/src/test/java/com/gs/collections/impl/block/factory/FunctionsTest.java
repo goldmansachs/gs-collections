@@ -269,4 +269,15 @@ public class FunctionsTest
                         + "ZWNvbmRPZlBhaXJGdW5jdGlvbgAAAAAAAAABAgAAeHA=",
                 Functions.<Object>secondOfPair());
     }
+
+    @Test
+    public void classForName()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAERjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9ucyRD\n"
+                        + "bGFzc0Zvck5hbWVGdW5jdGlvbgAAAAAAAAABAgAAeHIAPmNvbS5ncy5jb2xsZWN0aW9ucy5pbXBs\n"
+                        + "LmJsb2NrLmZ1bmN0aW9uLmNoZWNrZWQuQ2hlY2tlZEZ1bmN0aW9uAAAAAAAAAAECAAB4cA==",
+                Functions.classForName());
+    }
 }

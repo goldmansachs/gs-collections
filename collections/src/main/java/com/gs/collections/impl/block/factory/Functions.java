@@ -33,6 +33,7 @@ import com.gs.collections.impl.block.comparator.primitive.IntFunctionComparator;
 import com.gs.collections.impl.block.comparator.primitive.LongFunctionComparator;
 import com.gs.collections.impl.block.function.CaseFunction;
 import com.gs.collections.impl.block.function.IfFunction;
+import com.gs.collections.impl.block.function.checked.CheckedFunction;
 import com.gs.collections.impl.block.function.primitive.IntegerFunctionImpl;
 import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.Iterate;
@@ -56,6 +57,7 @@ public final class Functions
     private static final Function<Iterable<?>, Integer> SIZE_FUNCTION = new SizeFunction();
     private static final FirstOfPairFunction<?> FIRST_OF_PAIR_FUNCTION = new FirstOfPairFunction();
     private static final SecondOfPairFunction<?> SECOND_OF_PAIR_FUNCTION = new SecondOfPairFunction();
+    private static final CheckedFunction<String, Class<?>> CLASS_FOR_NAME = new ClassForNameFunction();
 
     private Functions()
     {
@@ -383,6 +385,11 @@ public final class Functions
         return new SynchronizedFunction<T, V>(function);
     }
 
+    public static Function<String, Class<?>> classForName()
+    {
+        return CLASS_FOR_NAME;
+    }
+
     private static final class FirstNotNullFunction<T, V> implements Function<T, V>
     {
         private static final long serialVersionUID = 1L;
@@ -676,6 +683,17 @@ public final class Functions
         public T valueOf(Pair<?, T> pair)
         {
             return pair.getTwo();
+        }
+    }
+
+    private static class ClassForNameFunction extends CheckedFunction<String, Class<?>>
+    {
+        private static final long serialVersionUID = 1L;
+
+        @Override
+        public Class<?> safeValueOf(String className) throws ClassNotFoundException
+        {
+            return Class.forName(className);
         }
     }
 }

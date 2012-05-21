@@ -355,4 +355,11 @@ public class FunctionsTest
         Object expected2 = new Object();
         Assert.assertSame(expected2, Functions.withDefault(Functions.getFixedValue(expected2), expected).valueOf(new Object()));
     }
+
+    @Test
+    public void classForName()
+    {
+        Class<?> objectClass = Functions.classForName().valueOf("java.lang.Object");
+        Assert.assertSame(Object.class, objectClass);
+    }
 }
