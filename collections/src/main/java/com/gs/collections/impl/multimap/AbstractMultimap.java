@@ -41,6 +41,14 @@ import com.gs.collections.impl.utility.MapIterate;
 public abstract class AbstractMultimap<K, V, C extends RichIterable<V>>
         implements Multimap<K, V>
 {
+    private static final Function<AbstractMultimap<?, ?, ?>, ?> CREATE_COLLECTION_BLOCK = new Function<AbstractMultimap<?, ?, ?>, RichIterable<?>>()
+    {
+        public RichIterable<?> valueOf(AbstractMultimap<?, ?, ?> multimap)
+        {
+            return multimap.createCollection();
+        }
+    };
+
     protected abstract MutableMap<K, C> getMap();
 
     /**
@@ -56,15 +64,9 @@ public abstract class AbstractMultimap<K, V, C extends RichIterable<V>>
      */
     protected abstract C createCollection();
 
-    protected Function0<C> createCollectionBlock()
+    protected Function<AbstractMultimap<K, V, C>, C> createCollectionBlock()
     {
-        return new Function0<C>()
-        {
-            public C value()
-            {
-                return AbstractMultimap.this.createCollection();
-            }
-        };
+        return (Function<AbstractMultimap<K, V, C>, C>) (Function<?, ?>) CREATE_COLLECTION_BLOCK;
     }
 
     // Query Operations

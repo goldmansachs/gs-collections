@@ -21,6 +21,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.MutableCollection;
@@ -281,12 +282,12 @@ public abstract class AbstractMutableMultimap<K, V, C extends MutableCollection<
 
     public C get(K key)
     {
-        return (C) this.map.getIfAbsent(key, this.createCollectionBlock()).asUnmodifiable();
+        return (C) this.map.getIfAbsentWith(key, this.createCollectionBlock(), this).asUnmodifiable();
     }
 
     private C getIfAbsentPutCollection(K key)
     {
-        return this.map.getIfAbsentPut(key, this.createCollectionBlock());
+        return this.map.getIfAbsentPutWith(key, this.createCollectionBlock(), this);
     }
 
     public MutableMap<K, RichIterable<V>> toMap()

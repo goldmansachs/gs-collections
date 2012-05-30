@@ -100,6 +100,6 @@ public abstract class AbstractSynchronizedPutMultimap<K, V, C extends MutableCol
 
     private C getIfAbsentPutCollection(K key)
     {
-        return this.map.getIfAbsentPut(key, this.createCollectionBlock());
+        return this.map.getIfAbsentPutWith(key, this.createCollectionBlock(), this);
     }
 }

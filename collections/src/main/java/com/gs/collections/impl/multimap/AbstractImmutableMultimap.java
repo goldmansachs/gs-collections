@@ -20,6 +20,7 @@ import java.io.InvalidClassException;
 import java.io.ObjectStreamException;
 
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.map.MutableMap;
@@ -88,7 +89,7 @@ public abstract class AbstractImmutableMultimap<K, V, C extends ImmutableCollect
 
     public C get(K key)
     {
-        return this.map.getIfAbsent(key, this.createCollectionBlock());
+        return this.map.getIfAbsentWith(key, this.createCollectionBlock(), this);
     }
 
     public MutableMap<K, RichIterable<V>> toMap()
