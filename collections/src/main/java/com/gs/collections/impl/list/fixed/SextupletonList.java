@@ -28,7 +28,7 @@ import com.gs.collections.impl.block.factory.Comparators;
 import net.jcip.annotations.NotThreadSafe;
 
 /**
- * This is a four element immutable List which is created by calling Lists.fixedSize.of(one, two, three, four).
+ * This is a six element immutable List which is created by calling Lists.fixedSize.of(one, two, three, four, five, six).
  */
 @NotThreadSafe
 final class SextupletonList<T>
