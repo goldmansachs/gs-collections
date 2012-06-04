@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -417,21 +417,21 @@ public final class ParallelIterate
     {
         if (Iterate.notEmpty(iterable))
         {
-            if ((iterable instanceof RandomAccess || iterable instanceof ListIterable)
-                    && iterable instanceof List)
+            if (iterable instanceof BatchIterable)
             {
-                ParallelIterate.forEachInListOnExecutor(
-                        (List<T>) iterable,
+                ParallelIterate.forEachInBatchWithExecutor(
+                        (BatchIterable<T>) iterable,
                         procedureFactory,
                         combiner,
                         minForkSize,
                         taskCount,
                         executor);
             }
-            else if (iterable instanceof BatchIterable)
+            else if ((iterable instanceof RandomAccess || iterable instanceof ListIterable)
+                    && iterable instanceof List)
             {
-                ParallelIterate.forEachInBatchWithExecutor(
-                        (BatchIterable<T>) iterable,
+                ParallelIterate.forEachInListOnExecutor(
+                        (List<T>) iterable,
                         procedureFactory,
                         combiner,
                         minForkSize,
@@ -584,8 +584,8 @@ public final class ParallelIterate
             Executor executor,
             boolean allowReorderedResult)
     {
-        SelectProcedureCombiner<T> combiner = new SelectProcedureCombiner<T>(iterable, target, 10, allowReorderedResult);
-        SelectProcedureFactory<T> procedureFactory = new SelectProcedureFactory<T>(predicate, batchSize);
+        FastListSelectProcedureCombiner<T> combiner = new FastListSelectProcedureCombiner<T>(iterable, target, 10, allowReorderedResult);
+        FastListSelectProcedureFactory<T> procedureFactory = new FastListSelectProcedureFactory<T>(predicate, batchSize);
         ParallelIterate.forEach(
                 iterable,
                 procedureFactory,
@@ -610,7 +610,7 @@ public final class ParallelIterate
         return Math.max(2, batchIterable.getBatchCount(batchSize));
     }
 
-    private static <T> int calculateTaskCount(int size, int batchSize)
+    private static int calculateTaskCount(int size, int batchSize)
     {
         return Math.max(2, size / batchSize);
     }
@@ -677,8 +677,8 @@ public final class ParallelIterate
             Executor executor,
             boolean allowReorderedResult)
     {
-        RejectProcedureCombiner<T> combiner = new RejectProcedureCombiner<T>(iterable, target, 10, allowReorderedResult);
-        RejectProcedureFactory<T> procedureFactory = new RejectProcedureFactory<T>(predicate, batchSize);
+        FastListRejectProcedureCombiner<T> combiner = new FastListRejectProcedureCombiner<T>(iterable, target, 10, allowReorderedResult);
+        FastListRejectProcedureFactory<T> procedureFactory = new FastListRejectProcedureFactory<T>(predicate, batchSize);
         ParallelIterate.forEach(
                 iterable,
                 procedureFactory,
@@ -696,14 +696,24 @@ public final class ParallelIterate
      */
     public static <T> int count(Iterable<T> iterable, Predicate<? super T> predicate)
     {
+        return ParallelIterate.count(iterable, predicate, ParallelIterate.DEFAULT_MIN_FORK_SIZE, ParallelIterate.EXECUTOR_SERVICE);
+    }
+
+    /**
+     * Same effect as {@link Iterate#count(Iterable, Predicate)}, but executed in parallel batches.
+     *
+     * @return The number of elements which satisfy the predicate.
+     */
+    public static <T> int count(Iterable<T> iterable, Predicate<? super T> predicate, int batchSize, Executor executor)
+    {
         CountCombiner<T> combiner = new CountCombiner<T>();
         CountProcedureFactory<T> procedureFactory = new CountProcedureFactory<T>(predicate);
         ParallelIterate.forEach(
                 iterable,
                 procedureFactory,
                 combiner,
-                ParallelIterate.DEFAULT_MIN_FORK_SIZE,
-                ParallelIterate.EXECUTOR_SERVICE);
+                batchSize,
+                executor);
         return combiner.getCount();
     }
 
@@ -772,9 +782,9 @@ public final class ParallelIterate
             boolean allowReorderedResult)
     {
         int size = Iterate.sizeOf(iterable);
-        CollectProcedureCombiner<T, V> combiner = new CollectProcedureCombiner<T, V>(iterable, target, size, allowReorderedResult);
+        FastListCollectProcedureCombiner<T, V> combiner = new FastListCollectProcedureCombiner<T, V>(iterable, target, size, allowReorderedResult);
         int taskCount = ParallelIterate.calculateTaskCount(size, batchSize);
-        CollectProcedureFactory<T, V> procedureFactory = new CollectProcedureFactory<T, V>(function, size / taskCount);
+        FastListCollectProcedureFactory<T, V> procedureFactory = new FastListCollectProcedureFactory<T, V>(function, size / taskCount);
         ParallelIterate.forEach(
                 iterable,
                 procedureFactory,
@@ -907,8 +917,8 @@ public final class ParallelIterate
             Executor executor,
             boolean allowReorderedResult)
     {
-        CollectIfProcedureCombiner<T, V> combiner = new CollectIfProcedureCombiner<T, V>(iterable, target, 10, allowReorderedResult);
-        CollectIfProcedureFactory<T, V> procedureFactory = new CollectIfProcedureFactory<T, V>(function, predicate, batchSize);
+        FastListCollectIfProcedureCombiner<T, V> combiner = new FastListCollectIfProcedureCombiner<T, V>(iterable, target, 10, allowReorderedResult);
+        FastListCollectIfProcedureFactory<T, V> procedureFactory = new FastListCollectIfProcedureFactory<T, V>(function, predicate, batchSize);
         ParallelIterate.forEach(
                 iterable,
                 procedureFactory,

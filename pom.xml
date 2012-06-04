@@ -429,6 +429,7 @@
                 <module>scala-unit-tests</module>
                 <module>serialization-tests</module>
                 <module>acceptance-tests</module>
+                <module>performance-tests</module>
             </modules>
         </profile>
 

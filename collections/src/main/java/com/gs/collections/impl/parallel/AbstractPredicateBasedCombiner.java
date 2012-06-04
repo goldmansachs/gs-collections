@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,12 +17,17 @@
 package com.gs.collections.impl.parallel;
 
 import java.util.Collection;
-import java.util.List;
 
+import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.list.ListIterable;
+import com.gs.collections.api.set.SetIterable;
+import com.gs.collections.api.set.sorted.SortedSetIterable;
+import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.list.mutable.CompositeFastList;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.utility.internal.DefaultSpeciesNewStrategy;
 
 public abstract class AbstractPredicateBasedCombiner<T, BT extends Procedure<T>>
@@ -51,14 +56,22 @@ public abstract class AbstractPredicateBasedCombiner<T, BT extends Procedure<T>>
         {
             return targetCollection;
         }
-        if (sourceCollection instanceof List)
+        if (sourceCollection instanceof ListIterable)
         {
             return new CompositeFastList<T>();
         }
-        if (sourceCollection instanceof UnifiedSet)
+        if (sourceCollection instanceof SortedSetIterable)
+        {
+            return TreeSortedSet.newSet(((SortedSetIterable) sourceCollection).comparator());
+        }
+        if (sourceCollection instanceof SetIterable)
         {
             this.setCombineOne(true);
             return UnifiedSet.newSet(initialCapacity);
+        }
+        if (sourceCollection instanceof Bag)
+        {
+            return HashBag.newBag();
         }
         return this.createResultForCollection(sourceCollection, initialCapacity);
     }

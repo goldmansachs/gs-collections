@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,36 +20,48 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.StringFunctions;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
+import com.gs.collections.impl.list.mutable.ArrayListAdapter;
+import com.gs.collections.impl.list.mutable.CompositeFastList;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.ListAdapter;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.multimap.bag.SynchronizedPutHashBagMultimap;
 import com.gs.collections.impl.multimap.set.SynchronizedPutUnifiedSetMultimap;
-import com.gs.collections.impl.set.mutable.MultiReaderUnifiedSet;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.impl.set.strategy.mutable.UnifiedSetWithHashingStrategy;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.LazyIterate;
+import org.junit.After;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 public class ParallelIterateTest
@@ -70,9 +82,6 @@ public class ParallelIterateTest
         }
     };
 
-    private static final MutableSet<Integer> INTEGER_SET = Interval.oneTo(200).toSet();
-    private static final MutableList<Integer> INTEGER_LIST = Interval.oneTo(200).toList();
-
     private static final Function<Integer, Collection<String>> INT_TO_TWO_STRINGS = new Function<Integer, Collection<String>>()
     {
         public Collection<String> valueOf(Integer integer)
@@ -81,8 +90,55 @@ public class ParallelIterateTest
         }
     };
 
-    private int count;
-    private final MutableSet<String> threadNames = MultiReaderUnifiedSet.newSet();
+    private ImmutableList<RichIterable<Integer>> iterables;
+    private final ExecutorService executor = Executors.newFixedThreadPool(2);
+
+    @Before
+    public void setUp()
+    {
+        Interval interval = Interval.oneTo(200);
+        this.iterables = Lists.immutable.of(
+                interval.toList(),
+                interval.toList().asUnmodifiable(),
+                interval.toList().asSynchronized(),
+                interval.toList().toImmutable(),
+                interval.toSet(),
+                interval.toSet().asUnmodifiable(),
+                interval.toSet().asSynchronized(),
+                interval.toSet().toImmutable(),
+                interval.toBag(),
+                interval.toBag().asUnmodifiable(),
+                interval.toBag().asSynchronized(),
+                interval.toBag().toImmutable(),
+                interval.toSortedSet(),
+                interval.toSortedSet().asUnmodifiable(),
+                interval.toSortedSet().asSynchronized(),
+                interval.toSortedSet().toImmutable(),
+                interval.toMap(Functions.<Integer>getPassThru(), Functions.<Integer>getPassThru()),
+                interval.toMap(Functions.<Integer>getPassThru(), Functions.<Integer>getPassThru()).asUnmodifiable(),
+                interval.toMap(Functions.<Integer>getPassThru(), Functions.<Integer>getPassThru()).asSynchronized(),
+                interval.toMap(Functions.<Integer>getPassThru(), Functions.<Integer>getPassThru()).toImmutable(),
+                new CompositeFastList<Integer>().withAll(interval.toList()),
+                new CompositeFastList<Integer>().withAll(interval.toList()).asUnmodifiable(),
+                new CompositeFastList<Integer>().withAll(interval.toList()).asSynchronized(),
+                ArrayListAdapter.<Integer>newList().withAll(interval),
+                ArrayListAdapter.<Integer>newList().withAll(interval).asUnmodifiable(),
+                ArrayListAdapter.<Integer>newList().withAll(interval).asSynchronized(),
+                ListAdapter.<Integer>adapt(new LinkedList<Integer>()).withAll(interval),
+                ListAdapter.<Integer>adapt(new LinkedList<Integer>()).withAll(interval).asUnmodifiable(),
+                ListAdapter.<Integer>adapt(new LinkedList<Integer>()).withAll(interval).asSynchronized(),
+                UnifiedSetWithHashingStrategy.<Integer>newSet(HashingStrategies.defaultStrategy()).withAll(interval),
+                UnifiedSetWithHashingStrategy.<Integer>newSet(HashingStrategies.defaultStrategy()).withAll(interval).asUnmodifiable(),
+                UnifiedSetWithHashingStrategy.<Integer>newSet(HashingStrategies.defaultStrategy()).withAll(interval).asSynchronized(),
+                UnifiedSetWithHashingStrategy.<Integer>newSet(HashingStrategies.defaultStrategy()).withAll(interval).toImmutable()
+        );
+    }
+
+    @After
+    public void tearDown()
+    {
+        this.executor.shutdown();
+    }
 
     @Test
     public void testForEachUsingSet()
@@ -174,6 +230,45 @@ public class ParallelIterateTest
     }
 
     @Test
+    public void testForEachImmutable()
+    {
+        IntegerSum sum1 = new IntegerSum(0);
+        ImmutableList<Integer> list1 = Lists.immutable.ofAll(createIntegerList(16));
+        ParallelIterate.forEach(list1, new SumProcedure(sum1), new SumCombiner(sum1), 1, list1.size() / 2);
+        Assert.assertEquals(16, sum1.getSum());
+
+        IntegerSum sum2 = new IntegerSum(0);
+        ImmutableList<Integer> list2 = Lists.immutable.ofAll(createIntegerList(7));
+        ParallelIterate.forEach(list2, new SumProcedure(sum2), new SumCombiner(sum2));
+        Assert.assertEquals(7, sum2.getSum());
+
+        IntegerSum sum3 = new IntegerSum(0);
+        ImmutableList<Integer> list3 = Lists.immutable.ofAll(createIntegerList(15));
+        ParallelIterate.forEach(list3, new SumProcedure(sum3), new SumCombiner(sum3), 1, list3.size() / 2);
+        Assert.assertEquals(15, sum3.getSum());
+
+        IntegerSum sum4 = new IntegerSum(0);
+        ImmutableList<Integer> list4 = Lists.immutable.ofAll(createIntegerList(35));
+        ParallelIterate.forEach(list4, new SumProcedure(sum4), new SumCombiner(sum4));
+        Assert.assertEquals(35, sum4.getSum());
+
+        IntegerSum sum5 = new IntegerSum(0);
+        ImmutableList<Integer> list5 = FastList.newList(list4).toImmutable();
+        ParallelIterate.forEach(list5, new SumProcedure(sum5), new SumCombiner(sum5));
+        Assert.assertEquals(35, sum5.getSum());
+
+        IntegerSum sum6 = new IntegerSum(0);
+        ImmutableList<Integer> list6 = Lists.immutable.ofAll(createIntegerList(40));
+        ParallelIterate.forEach(list6, new SumProcedure(sum6), new SumCombiner(sum6), 1, list6.size() / 2);
+        Assert.assertEquals(40, sum6.getSum());
+
+        IntegerSum sum7 = new IntegerSum(0);
+        ImmutableList<Integer> list7 = FastList.newList(list6).toImmutable();
+        ParallelIterate.forEach(list7, new SumProcedure(sum7), new SumCombiner(sum7), 1, list6.size() / 2);
+        Assert.assertEquals(40, sum7.getSum());
+    }
+
+    @Test
     public void testForEachWithException()
     {
         Verify.assertThrows(RuntimeException.class, new Runnable()
@@ -211,6 +306,22 @@ public class ParallelIterateTest
     {
         final Integer[] array = new Integer[200];
         FastList<Integer> list = (FastList<Integer>) Interval.oneTo(200).toList();
+        Assert.assertTrue(ArrayIterate.allSatisfy(array, Predicates.isNull()));
+        ParallelIterate.forEachWithIndex(list, new ObjectIntProcedure<Integer>()
+        {
+            public void value(Integer each, int index)
+            {
+                array[index] = each;
+            }
+        }, 10, 10);
+        Assert.assertArrayEquals(array, list.toArray(new Integer[]{}));
+    }
+
+    @Test
+    public void testForEachWithIndexToArrayUsingImmutableList()
+    {
+        final Integer[] array = new Integer[200];
+        ImmutableList<Integer> list = Interval.oneTo(200).toList().toImmutable();
         Assert.assertTrue(ArrayIterate.allSatisfy(array, Predicates.isNull()));
         ParallelIterate.forEachWithIndex(list, new ObjectIntProcedure<Integer>()
         {
@@ -272,83 +383,135 @@ public class ParallelIterateTest
     }
 
     @Test
-    public void testSelect()
+    public void select()
     {
-        Collection<Integer> collection = INTEGER_LIST;
-        Collection<Integer> result = ParallelIterate.select(collection, Predicates.greaterThan(100));
-        Verify.assertSize(100, result);
-        Verify.assertContains(200, result);
-        Verify.assertInstanceOf(List.class, result);
+        this.iterables.forEach(new Procedure<RichIterable<Integer>>()
+        {
+            public void value(RichIterable<Integer> each)
+            {
+                ParallelIterateTest.this.basicSelect(each);
+            }
+        });
+    }
+
+    private void basicSelect(RichIterable<Integer> iterable)
+    {
+        Collection<Integer> actual1 = ParallelIterate.select(iterable, Predicates.greaterThan(100));
+        Collection<Integer> actual2 = ParallelIterate.select(iterable, Predicates.greaterThan(100), HashBag.<Integer>newBag(), 3, this.executor, true);
+        Collection<Integer> actual3 = ParallelIterate.select(iterable, Predicates.greaterThan(100), true);
+        RichIterable<Integer> expected = iterable.select(Predicates.greaterThan(100));
+        Assert.assertEquals(expected.getClass().getSimpleName() + '/' + actual1.getClass().getSimpleName(), expected, actual1);
+        Assert.assertEquals(expected.getClass().getSimpleName() + '/' + actual2.getClass().getSimpleName(), expected.toBag(), actual2);
+        Assert.assertEquals(expected.getClass().getSimpleName() + '/' + actual3.getClass().getSimpleName(), expected, actual3);
     }
 
     @Test
-    public void testSelectUseCombineOne()
+    public void selectSortedSet()
     {
-        Collection<Integer> collection = INTEGER_LIST;
-        Collection<Integer> result = ParallelIterate.select(collection, Predicates.greaterThan(100), true);
-        Verify.assertSize(100, result);
-        Verify.assertContains(200, result);
-        Verify.assertInstanceOf(List.class, result);
+        RichIterable<Integer> iterable = Interval.oneTo(200).toSortedSet();
+        Collection<Integer> actual1 = ParallelIterate.select(iterable, Predicates.greaterThan(100));
+        Collection<Integer> actual2 = ParallelIterate.select(iterable, Predicates.greaterThan(100), true);
+        RichIterable<Integer> expected = iterable.select(Predicates.greaterThan(100));
+        Assert.assertSame(expected.getClass(), actual1.getClass());
+        Assert.assertSame(expected.getClass(), actual2.getClass());
+        Assert.assertEquals(expected.getClass().getSimpleName() + '/' + actual1.getClass().getSimpleName(), expected, actual1);
+        Assert.assertEquals(expected.getClass().getSimpleName() + '/' + actual2.getClass().getSimpleName(), expected, actual2);
     }
 
     @Test
-    public void testCount()
+    public void count()
     {
-        Collection<Integer> collection = INTEGER_LIST;
-        int result = ParallelIterate.count(collection, Predicates.greaterThan(100));
-        Assert.assertEquals(100, result);
+        this.iterables.forEach(new Procedure<RichIterable<Integer>>()
+        {
+            public void value(RichIterable<Integer> each)
+            {
+                ParallelIterateTest.this.basicCount(each);
+            }
+        });
+    }
+
+    private void basicCount(RichIterable<Integer> iterable)
+    {
+        int actual1 = ParallelIterate.count(iterable, Predicates.greaterThan(100));
+        int actual2 = ParallelIterate.count(iterable, Predicates.greaterThan(100), 6, this.executor);
+        Assert.assertEquals(100, actual1);
+        Assert.assertEquals(100, actual2);
     }
 
     @Test
-    public void testReject()
+    public void reject()
     {
-        Collection<Integer> collection = INTEGER_LIST;
-        Collection<Integer> result = ParallelIterate.reject(collection, Predicates.greaterThan(100));
-        Verify.assertSize(100, result);
-        Verify.assertContains(1, result);
-        Verify.assertInstanceOf(List.class, result);
+        this.iterables.forEach(new Procedure<RichIterable<Integer>>()
+        {
+            public void value(RichIterable<Integer> each)
+            {
+                ParallelIterateTest.this.basicReject(each);
+            }
+        });
+    }
+
+    private void basicReject(RichIterable<Integer> iterable)
+    {
+        Collection<Integer> actual1 = ParallelIterate.reject(iterable, Predicates.greaterThan(100));
+        Collection<Integer> actual2 = ParallelIterate.reject(iterable, Predicates.greaterThan(100), HashBag.<Integer>newBag(), 3, this.executor, true);
+        Collection<Integer> actual3 = ParallelIterate.reject(iterable, Predicates.greaterThan(100), true);
+        RichIterable<Integer> expected = iterable.reject(Predicates.greaterThan(100));
+        Assert.assertEquals(expected.getClass().getSimpleName() + '/' + actual1.getClass().getSimpleName(), expected, actual1);
+        Assert.assertEquals(expected.getClass().getSimpleName() + '/' + actual2.getClass().getSimpleName(), expected.toBag(), actual2);
+        Assert.assertEquals(expected.getClass().getSimpleName() + '/' + actual3.getClass().getSimpleName(), expected, actual3);
     }
 
     @Test
-    public void testRejectUseCombineOne()
+    public void collect()
     {
-        Collection<Integer> collection = INTEGER_LIST;
-        Collection<Integer> result = ParallelIterate.reject(collection, Predicates.greaterThan(100), true);
-        Verify.assertSize(100, result);
-        Verify.assertContains(1, result);
-        Verify.assertInstanceOf(List.class, result);
+        this.iterables.forEach(new Procedure<RichIterable<Integer>>()
+        {
+            public void value(RichIterable<Integer> each)
+            {
+                ParallelIterateTest.this.basicCollect(each);
+            }
+        });
+    }
+
+    private void basicCollect(RichIterable<Integer> iterable)
+    {
+        Collection<String> actual1 = ParallelIterate.collect(iterable, Functions.getToString());
+        Collection<String> actual2 = ParallelIterate.collect(iterable, Functions.getToString(), HashBag.<String>newBag(), 3, this.executor, false);
+        Collection<String> actual3 = ParallelIterate.collect(iterable, Functions.getToString(), true);
+        RichIterable<String> expected = iterable.collect(Functions.getToString());
+        Verify.assertSize(200, actual1);
+        Verify.assertContains(String.valueOf(200), actual1);
+        Assert.assertEquals(expected.getClass().getSimpleName() + '/' + actual1.getClass().getSimpleName(), expected, actual1);
+        Assert.assertEquals(expected.getClass().getSimpleName() + '/' + actual2.getClass().getSimpleName(), expected.toBag(), actual2);
+        Assert.assertEquals(expected.getClass().getSimpleName() + '/' + actual3.getClass().getSimpleName(), expected.toBag(), HashBag.newBag(actual3));
     }
 
     @Test
-    public void testSelectForSet()
+    public void collectIf()
     {
-        Collection<Integer> collection = INTEGER_SET;
-        Collection<Integer> result = ParallelIterate.select(collection, Predicates.greaterThan(100));
-        Verify.assertSize(100, result);
-        Verify.assertInstanceOf(Set.class, result);
+        this.iterables.forEach(new Procedure<RichIterable<Integer>>()
+        {
+            public void value(RichIterable<Integer> each)
+            {
+                ParallelIterateTest.this.basicCollectIf(each);
+            }
+        });
     }
 
-    @Test
-    public void testSelectForSetToList()
+    private void basicCollectIf(RichIterable<Integer> collection)
     {
-        Collection<Integer> collection = INTEGER_SET;
-        Collection<Integer> result = ParallelIterate.select(
-                collection,
-                Predicates.greaterThan(100),
-                FastList.<Integer>newList(),
-                true);
-        Verify.assertSize(100, result);
-        Verify.assertInstanceOf(List.class, result);
-    }
-
-    @Test
-    public void testCollect()
-    {
-        Collection<Integer> collection = INTEGER_LIST;
-        Collection<String> result = ParallelIterate.collect(collection, Functions.getToString());
-        Verify.assertSize(200, result);
-        Verify.assertContains(String.valueOf(200), result);
-        Verify.assertInstanceOf(List.class, result);
+        Predicate<Integer> greaterThan = Predicates.greaterThan(100);
+        Collection<String> actual1 = ParallelIterate.collectIf(collection, greaterThan, Functions.getToString());
+        Collection<String> actual2 = ParallelIterate.collectIf(collection, greaterThan, Functions.getToString(), HashBag.<String>newBag(), 3, this.executor, true);
+        Collection<String> actual3 = ParallelIterate.collectIf(collection, greaterThan, Functions.getToString(), HashBag.<String>newBag(), 3, this.executor, true);
+        Bag<String> expected = collection.collectIf(greaterThan, Functions.getToString()).toBag();
+        Verify.assertSize(100, actual1);
+        Verify.assertNotContains(String.valueOf(90), actual1);
+        Verify.assertNotContains(String.valueOf(210), actual1);
+        Verify.assertContains(String.valueOf(159), actual1);
+        Assert.assertEquals(expected.getClass().getSimpleName() + '/' + actual1.getClass().getSimpleName(), expected, HashBag.newBag(actual1));
+        Assert.assertEquals(expected.getClass().getSimpleName() + '/' + actual2.getClass().getSimpleName(), expected, actual2);
+        Assert.assertEquals(expected.getClass().getSimpleName() + '/' + actual3.getClass().getSimpleName(), expected, actual3);
     }
 
     @Test
@@ -365,8 +528,10 @@ public class ParallelIterateTest
         Multimap<String, Integer> result6 = ParallelIterate.groupBy(iterable.toSortedSet(), Functions.getToString(), SynchronizedPutUnifiedSetMultimap.<String, Integer>newMultimap());
         Multimap<String, Integer> result7 = ParallelIterate.groupBy(iterable.toBag(), Functions.getToString(), SynchronizedPutHashBagMultimap.<String, Integer>newMultimap(), 100);
         Multimap<String, Integer> result8 = ParallelIterate.groupBy(iterable.toBag(), Functions.getToString(), SynchronizedPutHashBagMultimap.<String, Integer>newMultimap());
+        Multimap<String, Integer> result9 = ParallelIterate.groupBy(iterable.toList().toImmutable(), Functions.getToString());
         Assert.assertEquals(expected, HashBagMultimap.newMultimap(result1));
         Assert.assertEquals(expected, HashBagMultimap.newMultimap(result2));
+        Assert.assertEquals(expected, HashBagMultimap.newMultimap(result9));
         Assert.assertEquals(expectedAsSet, result3);
         Assert.assertEquals(expectedAsSet, result4);
         Assert.assertEquals(expectedAsSet, result5);
@@ -387,6 +552,7 @@ public class ParallelIterateTest
         Multimap<Character, String> result6 = ParallelIterate.groupBy(source.toSet(), StringFunctions.firstLetter(), 1);
         Multimap<Character, String> result7 = ParallelIterate.groupBy(source.toMap(Functions.getStringPassThru(), Functions.getStringPassThru()), StringFunctions.firstLetter(), 1);
         Multimap<Character, String> result8 = ParallelIterate.groupBy(source.toBag(), StringFunctions.firstLetter(), 1);
+        Multimap<Character, String> result9 = ParallelIterate.groupBy(source.toImmutable(), StringFunctions.firstLetter(), 1);
         MutableMultimap<Character, String> expected = HashBagMultimap.newMultimap();
         expected.put('T', "Ted");
         expected.put('S', "Sally");
@@ -400,7 +566,8 @@ public class ParallelIterateTest
         Assert.assertEquals(expected, HashBagMultimap.newMultimap(result5));
         Assert.assertEquals(expected, HashBagMultimap.newMultimap(result6));
         Assert.assertEquals(expected, HashBagMultimap.newMultimap(result7));
-        Assert.assertEquals(expected, HashBagMultimap.newMultimap(result7));
+        Assert.assertEquals(expected, HashBagMultimap.newMultimap(result8));
+        Assert.assertEquals(expected, HashBagMultimap.newMultimap(result9));
         Verify.assertThrows(IllegalArgumentException.class, new Runnable()
         {
             public void run()
@@ -408,50 +575,6 @@ public class ParallelIterateTest
                 ParallelIterate.groupBy(null, null, 1);
             }
         });
-    }
-
-    @Test
-    public void testCollectUseCombineOne()
-    {
-        Collection<Integer> collection = INTEGER_LIST;
-        Collection<String> result = ParallelIterate.collect(collection, Functions.getToString(), true);
-        Verify.assertSize(200, result);
-        Verify.assertContains(String.valueOf(200), result);
-        Verify.assertInstanceOf(List.class, result);
-    }
-
-    @Test
-    public void testCollectForSet()
-    {
-        Collection<Integer> collection = INTEGER_SET;
-        Collection<String> result = ParallelIterate.collect(collection, Functions.getToString());
-        Verify.assertSize(200, result);
-        Verify.assertContains(String.valueOf(200), result);
-        Verify.assertInstanceOf(Set.class, result);
-    }
-
-    @Test
-    public void testCollectIf()
-    {
-        Collection<Integer> collection = INTEGER_LIST;
-        Predicate<Integer> greaterThan = Predicates.greaterThan(100);
-        Collection<String> result = ParallelIterate.collectIf(collection, greaterThan, Functions.getToString());
-        Verify.assertSize(100, result);
-        Verify.assertNotContains(String.valueOf(90), result);
-        Verify.assertNotContains(String.valueOf(210), result);
-        Verify.assertContains(String.valueOf(159), result);
-    }
-
-    @Test
-    public void testCollectIfForSet()
-    {
-        Collection<Integer> collection = INTEGER_SET;
-        Predicate<Integer> greaterThan = Predicates.greaterThan(100);
-        Collection<String> result = ParallelIterate.collectIf(collection, greaterThan, Functions.getToString());
-        Verify.assertSize(100, result);
-        Verify.assertNotContains(String.valueOf(90), result);
-        Verify.assertNotContains(String.valueOf(210), result);
-        Verify.assertContains(String.valueOf(159), result);
     }
 
     private static List<Integer> createIntegerList(int size)
@@ -462,31 +585,26 @@ public class ParallelIterateTest
     @Test
     public void flatCollect()
     {
-        Collection<Integer> collection = INTEGER_LIST;
-        Collection<String> result = ParallelIterate.flatCollect(collection, INT_TO_TWO_STRINGS);
-        Verify.assertSize(400, result);
-        Verify.assertContains(String.valueOf(200), result);
-        Verify.assertInstanceOf(List.class, result);
+        this.iterables.forEach(new Procedure<RichIterable<Integer>>()
+        {
+            public void value(RichIterable<Integer> each)
+            {
+                ParallelIterateTest.this.basicFlatCollect(each);
+            }
+        });
     }
 
-    @Test
-    public void flatCollectUseCombineOne()
+    private void basicFlatCollect(RichIterable<Integer> iterable)
     {
-        Collection<Integer> collection = INTEGER_LIST;
-        Collection<String> result = ParallelIterate.flatCollect(collection, INT_TO_TWO_STRINGS, true);
-        Verify.assertSize(400, result);
-        Verify.assertContains(String.valueOf(200), result);
-        Verify.assertInstanceOf(List.class, result);
-    }
-
-    @Test
-    public void flatCollectForSet()
-    {
-        Collection<Integer> collection = INTEGER_SET;
-        Collection<String> result = ParallelIterate.flatCollect(collection, INT_TO_TWO_STRINGS);
-        Verify.assertSize(200, result);
-        Verify.assertContains(String.valueOf(200), result);
-        Verify.assertInstanceOf(Set.class, result);
+        Collection<String> actual1 = ParallelIterate.flatCollect(iterable, INT_TO_TWO_STRINGS);
+        Collection<String> actual2 = ParallelIterate.flatCollect(iterable, INT_TO_TWO_STRINGS, HashBag.<String>newBag(), 3, this.executor, false);
+        Collection<String> actual3 = ParallelIterate.flatCollect(iterable, INT_TO_TWO_STRINGS, true);
+        RichIterable<String> expected1 = iterable.flatCollect(INT_TO_TWO_STRINGS);
+        RichIterable<String> expected2 = iterable.flatCollect(INT_TO_TWO_STRINGS, HashBag.<String>newBag());
+        Verify.assertContains(String.valueOf(200), actual1);
+        Assert.assertEquals(expected1.getClass().getSimpleName() + '/' + actual1.getClass().getSimpleName(), expected1, actual1);
+        Assert.assertEquals(expected2.getClass().getSimpleName() + '/' + actual2.getClass().getSimpleName(), expected2, actual2);
+        Assert.assertEquals(expected1.getClass().getSimpleName() + '/' + actual3.getClass().getSimpleName(), expected1, actual3);
     }
 
     public static final class IntegerSum

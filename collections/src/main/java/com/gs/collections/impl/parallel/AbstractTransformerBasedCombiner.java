@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,9 +17,13 @@
 package com.gs.collections.impl.parallel;
 
 import java.util.Collection;
-import java.util.List;
 
+import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.list.ListIterable;
+import com.gs.collections.api.set.SetIterable;
+import com.gs.collections.api.set.sorted.SortedSetIterable;
+import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.list.mutable.CompositeFastList;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -44,14 +48,22 @@ public abstract class AbstractTransformerBasedCombiner<V, T, BT extends Procedur
         {
             return targetCollection;
         }
-        if (sourceIterable instanceof List)
+        if (sourceIterable instanceof ListIterable)
         {
             return new CompositeFastList<V>();
         }
-        if (sourceIterable instanceof UnifiedSet)
+        if (sourceIterable instanceof SortedSetIterable)
+        {
+            return FastList.newList();
+        }
+        if (sourceIterable instanceof SetIterable)
         {
             this.setCombineOne(true);
             return UnifiedSet.newSet(initialCapacity);
+        }
+        if (sourceIterable instanceof Bag)
+        {
+            return HashBag.newBag(initialCapacity);
         }
         return this.createResultForCollection(sourceIterable, initialCapacity);
     }

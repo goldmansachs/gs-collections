@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -246,7 +246,7 @@ public class UnifiedSet<K>
         // number of collisions (approximately 8 at default load factor).
         int h = key.hashCode();
         h ^= (h >>> 20) ^ (h >>> 12);
-        h = h ^ (h >>> 7) ^ (h >>> 4);
+        h ^= (h >>> 7) ^ (h >>> 4);
         return h & (this.table.length - 1);
     }
 
@@ -1085,6 +1085,10 @@ public class UnifiedSet<K>
 
     public boolean addAllIterable(Iterable<? extends K> iterable)
     {
+        if (Iterate.isEmpty(iterable))
+        {
+            return false;
+        }
         if (iterable instanceof UnifiedSet)
         {
             return this.copySet((UnifiedSet<?>) iterable);
@@ -2169,7 +2173,7 @@ public class UnifiedSet<K>
             {
                 return null;
             }
-            else if (eq(bucket.one, realKey))
+            if (eq(bucket.one, realKey))
             {
                 return bucket.one;
             }
@@ -2177,7 +2181,7 @@ public class UnifiedSet<K>
             {
                 return null;
             }
-            else if (eq(bucket.two, realKey))
+            if (eq(bucket.two, realKey))
             {
                 return bucket.two;
             }
@@ -2190,7 +2194,7 @@ public class UnifiedSet<K>
             {
                 return null;
             }
-            else if (eq(bucket.three, realKey))
+            if (eq(bucket.three, realKey))
             {
                 return bucket.three;
             }

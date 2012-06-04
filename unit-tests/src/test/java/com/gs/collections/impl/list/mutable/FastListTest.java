@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -107,6 +107,14 @@ public class FastListTest extends AbstractListTestCase
     public void newEmpty()
     {
         Verify.assertInstanceOf(FastList.class, FastList.newList().newEmpty());
+    }
+
+    @Test
+    public void constructorWithCollection()
+    {
+        List expected = new ArrayList<Integer>(Interval.oneTo(20));
+        FastList<Integer> actual = new FastList<Integer>(expected);
+        Assert.assertEquals(expected, actual);
     }
 
     @Test
@@ -1094,6 +1102,21 @@ public class FastListTest extends AbstractListTestCase
         Verify.assertStartsWith(integers2.sortThis(Collections.<Integer>reverseOrder()), 9, 8, 7, 6, 5, 4, 3, 2, 1);
         FastList<Integer> integers3 = this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9);
         Verify.assertStartsWith(integers3.sortThis(), 1, 2, 3, 4, 5, 6, 7, 8, 9);
+    }
+
+    @Test
+    public void testSort()
+    {
+        for (int i = 1; i < 25; i++)
+        {
+            FastList<Integer> actual = FastList.newList(Interval.oneTo(i));
+            for (int j = 0; j < 3; j++)
+            {
+                Collections.shuffle(actual);
+                Assert.assertEquals(Interval.oneTo(i), actual.sortThis());
+                Assert.assertEquals(Interval.oneTo(i).reverseThis(), actual.sortThis(Collections.<Integer>reverseOrder()));
+            }
+        }
     }
 
     @Test

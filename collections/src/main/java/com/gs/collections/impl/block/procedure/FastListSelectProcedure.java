@@ -16,35 +16,38 @@
 
 package com.gs.collections.impl.block.procedure;
 
-import java.util.Collection;
-
-import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.impl.list.mutable.FastList;
 
 /**
- * Applies a function to an object and adds the result to a target collection.
+ * Applies a predicate to an object to determine if it should be added to a target fastList.
+ *
+ * @since 1.0
  */
-public final class CollectProcedure<T, V> implements Procedure<T>
+public final class FastListSelectProcedure<T> implements Procedure<T>
 {
     private static final long serialVersionUID = 1L;
 
-    private final Function<? super T, ? extends V> function;
-    private final Collection<V> collection;
+    private final Predicate<? super T> predicate;
+    private final FastList<T> fastList;
 
-    public CollectProcedure(Function<? super T, ? extends V> function, Collection<V> targetCollection)
+    public FastListSelectProcedure(Predicate<? super T> newPredicate, FastList<T> targetCollection)
     {
-        this.function = function;
-        this.collection = targetCollection;
+        this.predicate = newPredicate;
+        this.fastList = targetCollection;
     }
 
     public void value(T object)
     {
-        V value = this.function.valueOf(object);
-        this.collection.add(value);
+        if (this.predicate.accept(object))
+        {
+            this.fastList.add(object);
+        }
     }
 
-    public Collection<V> getCollection()
+    public FastList<T> getFastList()
     {
-        return this.collection;
+        return this.fastList;
     }
 }

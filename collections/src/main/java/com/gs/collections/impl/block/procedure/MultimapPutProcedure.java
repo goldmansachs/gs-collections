@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -48,6 +48,7 @@ public final class MultimapPutProcedure<K, V> implements Procedure<V>
 
     public void value(V each)
     {
-        this.multimap.put(this.keyFunction.valueOf(each), each);
+        K key = this.keyFunction.valueOf(each);
+        this.multimap.put(key, each);
     }
 }

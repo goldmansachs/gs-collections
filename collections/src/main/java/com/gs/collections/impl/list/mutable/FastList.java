@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,6 +46,13 @@ import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
+import com.gs.collections.impl.block.procedure.CountProcedure;
+import com.gs.collections.impl.block.procedure.FastListCollectIfProcedure;
+import com.gs.collections.impl.block.procedure.FastListCollectProcedure;
+import com.gs.collections.impl.block.procedure.FastListRejectProcedure;
+import com.gs.collections.impl.block.procedure.FastListSelectProcedure;
+import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
+import com.gs.collections.impl.parallel.BatchIterable;
 import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.ArrayListIterate;
@@ -64,7 +71,7 @@ import net.jcip.annotations.NotThreadSafe;
 @NotThreadSafe
 public class FastList<T>
         extends AbstractMutableList<T>
-        implements Externalizable, RandomAccess
+        implements Externalizable, RandomAccess, BatchIterable<T>
 {
     private static final long serialVersionUID = 1L;
     private static final Object[] DEFAULT_SIZED_EMPTY_ARRAY = {};
@@ -162,6 +169,115 @@ public class FastList<T>
     {
         ListIterate.rangeCheck(from, to, this.size);
         InternalArrayIterate.forEachWithIndexWithoutChecks(this.items, from, to, objectIntProcedure);
+    }
+
+    public void batchForEach(Procedure<? super T> procedure, int sectionIndex, int sectionCount)
+    {
+        int sectionSize = this.size() / sectionCount;
+        int start = sectionSize * sectionIndex;
+        int end = sectionIndex == sectionCount - 1 ? this.size() : start + sectionSize;
+        if (procedure instanceof FastListSelectProcedure)
+        {
+            this.batchFastListSelect(start, end, (FastListSelectProcedure<T>) procedure);
+        }
+        else if (procedure instanceof FastListCollectProcedure)
+        {
+            this.batchFastListCollect(start, end, (FastListCollectProcedure<T, ?>) procedure);
+        }
+        else if (procedure instanceof FastListCollectIfProcedure)
+        {
+            this.batchFastListCollectIf(start, end, (FastListCollectIfProcedure<T, ?>) procedure);
+        }
+        else if (procedure instanceof CountProcedure)
+        {
+            this.batchCount(start, end, (CountProcedure<T>) procedure);
+        }
+        else if (procedure instanceof FastListRejectProcedure)
+        {
+            this.batchReject(start, end, (FastListRejectProcedure<T>) procedure);
+        }
+        else if (procedure instanceof MultimapPutProcedure)
+        {
+            this.batchGroupBy(start, end, (MultimapPutProcedure<?, T>) procedure);
+        }
+        else
+        {
+            for (int i = start; i < end; i++)
+            {
+                procedure.value(this.items[i]);
+            }
+        }
+    }
+
+    /**
+     * Implemented to avoid megamorphic call on castProcedure
+     */
+    private void batchGroupBy(int start, int end, MultimapPutProcedure<?, T> castProcedure)
+    {
+        for (int i = start; i < end; i++)
+        {
+            castProcedure.value(this.items[i]);
+        }
+    }
+
+    /**
+     * Implemented to avoid megamorphic call on castProcedure
+     */
+    private void batchReject(int start, int end, FastListRejectProcedure<T> castProcedure)
+    {
+        for (int i = start; i < end; i++)
+        {
+            castProcedure.value(this.items[i]);
+        }
+    }
+
+    /**
+     * Implemented to avoid megamorphic call on castProcedure
+     */
+    private void batchCount(int start, int end, CountProcedure<T> castProcedure)
+    {
+        for (int i = start; i < end; i++)
+        {
+            castProcedure.value(this.items[i]);
+        }
+    }
+
+    /**
+     * Implemented to avoid megamorphic call on castProcedure
+     */
+    private void batchFastListCollectIf(int start, int end, FastListCollectIfProcedure<T, ?> castProcedure)
+    {
+        for (int i = start; i < end; i++)
+        {
+            castProcedure.value(this.items[i]);
+        }
+    }
+
+    /**
+     * Implemented to avoid megamorphic call on castProcedure
+     */
+    private void batchFastListCollect(int start, int end, FastListCollectProcedure<T, ?> castProcedure)
+    {
+        for (int i = start; i < end; i++)
+        {
+            castProcedure.value(this.items[i]);
+        }
+    }
+
+    /**
+     * Implemented to avoid megamorphic call on castProcedure
+     */
+    private void batchFastListSelect(int start, int end, FastListSelectProcedure<T> castProcedure)
+    {
+        for (int i = start; i < end; i++)
+        {
+            castProcedure.value(this.items[i]);
+        }
+    }
+
+    public int getBatchCount(int batchSize)
+    {
+        return Math.max(1, this.size() / batchSize);
     }
 
     public <E> E[] toArray(E[] array, int sourceFromIndex, int sourceToIndex, int destinationIndex)
@@ -419,9 +535,10 @@ public class FastList<T>
     {
         for (int i = 0; i < this.size; i++)
         {
-            if (predicate.accept(this.items[i]))
+            T item = this.items[i];
+            if (predicate.accept(item))
             {
-                procedure.value(this.items[i]);
+                procedure.value(item);
             }
         }
     }
@@ -455,9 +572,10 @@ public class FastList<T>
     {
         for (int i = 0; i < this.size; i++)
         {
-            if (predicate.accept(this.items[i]))
+            T item = this.items[i];
+            if (predicate.accept(item))
             {
-                target.add(this.items[i]);
+                target.add(item);
             }
         }
         return target;
@@ -477,9 +595,10 @@ public class FastList<T>
     {
         for (int i = 0; i < this.size; i++)
         {
-            if (predicate.accept(this.items[i], parameter))
+            T item = this.items[i];
+            if (predicate.accept(item, parameter))
             {
-                targetCollection.add(this.items[i]);
+                targetCollection.add(item);
             }
         }
         return targetCollection;
@@ -496,9 +615,10 @@ public class FastList<T>
     {
         for (int i = 0; i < this.size; i++)
         {
-            if (!predicate.accept(this.items[i]))
+            T item = this.items[i];
+            if (!predicate.accept(item))
             {
-                target.add(this.items[i]);
+                target.add(item);
             }
         }
         return target;
@@ -518,9 +638,10 @@ public class FastList<T>
     {
         for (int i = 0; i < this.size; i++)
         {
-            if (!predicate.accept(this.items[i], parameter))
+            T item = this.items[i];
+            if (!predicate.accept(item, parameter))
             {
-                target.add(this.items[i]);
+                target.add(item);
             }
         }
         return target;
@@ -547,12 +668,13 @@ public class FastList<T>
         int currentFilledIndex = 0;
         for (int i = 0; i < this.size; i++)
         {
-            if (!predicate.accept(this.items[i]))
+            T item = this.items[i];
+            if (!predicate.accept(item))
             {
                 // keep it
                 if (currentFilledIndex != i)
                 {
-                    this.items[currentFilledIndex] = this.items[i];
+                    this.items[currentFilledIndex] = item;
                 }
                 currentFilledIndex++;
             }
@@ -575,12 +697,13 @@ public class FastList<T>
         int currentFilledIndex = 0;
         for (int i = 0; i < this.size; i++)
         {
-            if (!predicate.accept(this.items[i], parameter))
+            T item = this.items[i];
+            if (!predicate.accept(item, parameter))
             {
                 // keep it
                 if (currentFilledIndex != i)
                 {
-                    this.items[currentFilledIndex] = this.items[i];
+                    this.items[currentFilledIndex] = item;
                 }
                 currentFilledIndex++;
             }
