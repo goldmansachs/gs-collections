@@ -89,6 +89,7 @@ public class SerialParallelPerformanceTest
     private static final Function<String, Alphagram> ALPHAGRAM_FUNCTION =
             new Function<String, Alphagram>()
             {
+                @SuppressWarnings("ClassEscapesDefinedScope")
                 public Alphagram valueOf(String value)
                 {
                     return new Alphagram(value);
