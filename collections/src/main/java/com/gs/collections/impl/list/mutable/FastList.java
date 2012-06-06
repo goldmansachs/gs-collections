@@ -1187,28 +1187,31 @@ public class FastList<T>
         return this.regularListEquals(list);
     }
 
-    public boolean equals(FastList<?> otherList)
-    {
-        return this.size() == otherList.size() && this.fastListEquals(otherList);
-    }
-
-    private boolean fastListEquals(FastList<?> otherFastList)
+    public boolean fastListEquals(FastList<?> otherFastList)
     {
         if (this.size() != otherFastList.size())
         {
             return false;
         }
-        Object[] otherItems = otherFastList.items;
         for (int i = 0; i < this.size; i++)
         {
             T one = this.items[i];
-            Object two = otherItems[i];
+            Object two = otherFastList.items[i];
             if (!Comparators.nullSafeEquals(one, two))
             {
                 return false;
             }
         }
         return true;
+    }
+
+    /**
+     * @deprecated in 1.3
+     */
+    @Deprecated
+    public boolean equals(FastList<?> otherList)
+    {
+        return this.fastListEquals(otherList);
     }
 
     private boolean regularListEquals(List<?> otherList)

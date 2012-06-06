@@ -16,7 +16,9 @@
 
 package com.gs.collections.impl.list.immutable;
 
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 import com.gs.collections.api.block.function.Function;
@@ -56,10 +58,43 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     public void testEqualsAndHashCode()
     {
         ImmutableList<Integer> immutable = this.classUnderTest();
-        MutableList<Integer> mutable = FastList.newList(immutable);
-        Verify.assertEqualsAndHashCode(immutable, mutable);
+        MutableList<Integer> mutable1 = FastList.newList(immutable);
+        ImmutableList<Integer> immutable1 = mutable1.toImmutable();
+        List<Integer> mutable2 = new LinkedList<Integer>(mutable1);
+        List<Integer> mutable3 = new ArrayList<Integer>(mutable1);
+        Verify.assertEqualsAndHashCode(mutable1, immutable);
+        Verify.assertEqualsAndHashCode(immutable1, immutable);
+        Verify.assertEqualsAndHashCode(mutable2, immutable);
+        Verify.assertEqualsAndHashCode(mutable3, immutable);
         Verify.assertPostSerializedEqualsAndHashCode(immutable);
-        Verify.assertNotEquals(immutable, UnifiedSet.newSet(mutable));
+        Verify.assertNotEquals(immutable, UnifiedSet.newSet(mutable1));
+        mutable1.add(null);
+        mutable2.add(null);
+        mutable3.add(null);
+        Verify.assertNotEquals(mutable1, immutable);
+        Verify.assertNotEquals(mutable2, immutable);
+        Verify.assertNotEquals(mutable3, immutable);
+        mutable1.remove(null);
+        mutable2.remove(null);
+        mutable3.remove(null);
+        Verify.assertEqualsAndHashCode(mutable1, immutable);
+        Verify.assertEqualsAndHashCode(mutable2, immutable);
+        Verify.assertEqualsAndHashCode(mutable3, immutable);
+        if (immutable.size() > 2)
+        {
+            mutable1.set(2, null);
+            mutable2.set(2, null);
+            mutable3.set(2, null);
+            Verify.assertNotEquals(mutable1, immutable);
+            Verify.assertNotEquals(mutable2, immutable);
+            Verify.assertNotEquals(mutable3, immutable);
+            mutable1.remove(2);
+            mutable2.remove(2);
+            mutable3.remove(2);
+            Verify.assertNotEquals(mutable1, immutable);
+            Verify.assertNotEquals(mutable2, immutable);
+            Verify.assertNotEquals(mutable3, immutable);
+        }
     }
 
     @Test

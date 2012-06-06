@@ -59,7 +59,6 @@ import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Comparators;
-import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.procedure.CollectIfProcedure;
 import com.gs.collections.impl.block.procedure.CollectProcedure;
@@ -1302,19 +1301,12 @@ public class UnifiedSet<K>
         {
             return true;
         }
-
-        if (!(object instanceof Set))
+        if (object instanceof Set)
         {
-            return false;
+            Set<?> other = (Set<?>) object;
+            return this.size() == other.size() && this.containsAll(other);
         }
-
-        Set<?> other = (Set<?>) object;
-        if (this.size() != other.size())
-        {
-            return false;
-        }
-
-        return Iterate.allSatisfy(other, Predicates.in(this));
+        return false;
     }
 
     @Override

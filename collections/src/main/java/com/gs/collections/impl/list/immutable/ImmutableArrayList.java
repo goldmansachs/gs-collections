@@ -21,6 +21,7 @@ import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
+import java.util.List;
 import java.util.RandomAccess;
 
 import com.gs.collections.api.block.function.Function0;
@@ -29,6 +30,7 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
+import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.CountProcedure;
 import com.gs.collections.impl.block.procedure.FastListCollectIfProcedure;
@@ -65,6 +67,86 @@ final class ImmutableArrayList<T>
     public static <E> ImmutableArrayList<E> newListWith(E... elements)
     {
         return new ImmutableArrayList<E>(elements.clone());
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int hashCode = 1;
+        int localSize = this.size();
+        for (int i = 0; i < localSize; i++)
+        {
+            T item = this.items[i];
+            hashCode = 31 * hashCode + (item == null ? 0 : item.hashCode());
+        }
+        return hashCode;
+    }
+
+    @Override
+    public boolean equals(Object otherList)
+    {
+        if (otherList == this)
+        {
+            return true;
+        }
+        if (!(otherList instanceof List))
+        {
+            return false;
+        }
+        List<?> list = (List<?>) otherList;
+        if (otherList instanceof ImmutableArrayList)
+        {
+            return this.immutableArrayListEquals((ImmutableArrayList<?>) otherList);
+        }
+        if (list instanceof RandomAccess)
+        {
+            return this.randomAccessListEquals(list);
+        }
+        return this.regularListEquals(list);
+    }
+
+    public boolean immutableArrayListEquals(ImmutableArrayList<?> otherList)
+    {
+        return Arrays.equals(this.items, otherList.items);
+    }
+
+    @Override
+    protected boolean randomAccessListEquals(List<?> otherList)
+    {
+        if (this.size() != otherList.size())
+        {
+            return false;
+        }
+        for (int i = 0; i < this.size(); i++)
+        {
+            T one = this.items[i];
+            Object two = otherList.get(i);
+            if (!Comparators.nullSafeEquals(one, two))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    protected boolean regularListEquals(List<?> otherList)
+    {
+        Iterator<?> iterator = otherList.iterator();
+        for (int i = 0; i < this.size(); i++)
+        {
+            T one = this.items[i];
+            if (!iterator.hasNext())
+            {
+                return false;
+            }
+            Object two = iterator.next();
+            if (!Comparators.nullSafeEquals(one, two))
+            {
+                return false;
+            }
+        }
+        return !iterator.hasNext();
     }
 
     @Override

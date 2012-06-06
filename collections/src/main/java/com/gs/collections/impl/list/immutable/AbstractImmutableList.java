@@ -80,11 +80,7 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
         {
             return false;
         }
-        List<T> list = (List<T>) otherList;
-        if (this.size() != list.size())
-        {
-            return false;
-        }
+        List<?> list = (List<?>) otherList;
         if (list instanceof RandomAccess)
         {
             return this.randomAccessListEquals(list);
@@ -92,8 +88,12 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
         return this.regularListEquals(list);
     }
 
-    private boolean randomAccessListEquals(List<T> otherList)
+    protected boolean randomAccessListEquals(List<?> otherList)
     {
+        if (this.size() != otherList.size())
+        {
+            return false;
+        }
         int localSize = this.size();
         for (int i = 0; i < localSize; i++)
         {
@@ -107,20 +107,23 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
         return true;
     }
 
-    private boolean regularListEquals(List<T> otherList)
+    protected boolean regularListEquals(List<?> otherList)
     {
-        Iterator<T> iterator = otherList.iterator();
-        int localSize = this.size();
-        for (int i = 0; i < localSize; i++)
+        Iterator<?> iterator = otherList.iterator();
+        for (int i = 0; i < this.size(); i++)
         {
             T one = this.get(i);
+            if (!iterator.hasNext())
+            {
+                return false;
+            }
             Object two = iterator.next();
             if (!Comparators.nullSafeEquals(one, two))
             {
                 return false;
             }
         }
-        return true;
+        return !iterator.hasNext();
     }
 
     @Override

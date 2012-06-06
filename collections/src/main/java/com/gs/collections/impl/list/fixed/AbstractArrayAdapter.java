@@ -384,15 +384,10 @@ public abstract class AbstractArrayAdapter<T>
         {
             return false;
         }
-
-        List<T> list = (List<T>) otherList;
-        if (this.size() != list.size())
-        {
-            return false;
-        }
+        List<?> list = (List<?>) otherList;
         if (otherList instanceof AbstractArrayAdapter)
         {
-            return this.sameTypeEquals((AbstractArrayAdapter<T>) otherList);
+            return this.abstractArrayAdapterEquals((AbstractArrayAdapter<?>) otherList);
         }
         if (otherList instanceof RandomAccess)
         {
@@ -401,36 +396,41 @@ public abstract class AbstractArrayAdapter<T>
         return this.regularListEquals(list);
     }
 
-    private boolean sameTypeEquals(AbstractArrayAdapter<?> abstractArrayAdapter)
+    public boolean abstractArrayAdapterEquals(AbstractArrayAdapter<?> otherList)
     {
-        return Arrays.equals(this.items, abstractArrayAdapter.items);
+        return Arrays.equals(this.items, otherList.items);
     }
 
-    private boolean regularListEquals(List<T> otherList)
+    private boolean regularListEquals(List<?> otherList)
     {
-        T[] localItems = this.items;
-        Iterator<T> iterator = otherList.iterator();
-        int size = this.items.length;
-        for (int i = 0; i < size; i++)
+        Iterator<?> iterator = otherList.iterator();
+        for (int i = 0; i < this.size(); i++)
         {
-            T one = localItems[i];
-            T two = iterator.next();
+            T one = this.items[i];
+            if (!iterator.hasNext())
+            {
+                return false;
+            }
+            Object two = iterator.next();
             if (!Comparators.nullSafeEquals(one, two))
             {
                 return false;
             }
         }
-        return true;
+        return !iterator.hasNext();
     }
 
-    private boolean randomAccessListEquals(List<T> otherList)
+    private boolean randomAccessListEquals(List<?> otherList)
     {
-        T[] localItems = this.items;
+        if (this.size() != otherList.size())
+        {
+            return false;
+        }
         int n = this.items.length;
         for (int i = 0; i < n; i++)
         {
-            T one = localItems[i];
-            T two = otherList.get(i);
+            Object one = this.items[i];
+            Object two = otherList.get(i);
             if (!Comparators.nullSafeEquals(one, two))
             {
                 return false;
