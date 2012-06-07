@@ -16,10 +16,12 @@
 
 package com.gs.collections.impl.list.immutable;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
@@ -37,7 +39,6 @@ import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.AddToList;
-import com.gs.collections.impl.list.mutable.ArrayListAdapter;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -322,18 +323,49 @@ public class ImmutableArrayListTest
     @Test
     public void equalsAndHashCode()
     {
-        ImmutableArrayList<Integer> array1 = ImmutableArrayList.newListWith(1, 2, 3, 4);
-        ImmutableArrayList<Integer> array2 = ImmutableArrayList.newListWith(1, 2, 3, 4);
-        ImmutableArrayList<Integer> array3 = ImmutableArrayList.newListWith(2, 3, 4);
-        Verify.assertNotEquals(array1, null);
-        Verify.assertEqualsAndHashCode(array1, array1);
-        Verify.assertEqualsAndHashCode(array1, array2);
-        Verify.assertNotEquals(array2, array3);
-        FastList<Integer> fastList = FastList.newList(array1);
-        Verify.assertEqualsAndHashCode(array1, fastList);
-        Assert.assertEquals(array1, new LinkedList<Integer>(fastList));
-        Assert.assertEquals(array1, ArrayListAdapter.<Integer>newList().with(1, 2, 3, 4));
-        Verify.assertEqualsAndHashCode(array1, FastList.<Integer>newList().with(1, 2, 3, 4));
+        ImmutableList<Integer> immutable1 = ImmutableArrayList.newList(FastList.newListWith(1, 2, 3, 4));
+        ImmutableList<Integer> immutable2 = ImmutableArrayList.newListWith(1, 2, 3, 4);
+        ImmutableList<Integer> immutable3 = ImmutableArrayList.newListWith(1, 2, 3);
+        ImmutableList<Integer> immutable4 = ImmutableArrayList.newListWith(0, 1, 2, 3);
+        ImmutableList<Integer> immutable5 = ImmutableArrayList.newListWith(1, 2, 3, 4, 5);
+        MutableList<Integer> mutable1 = FastList.newList(immutable1);
+        ImmutableList<Integer> immutableCopy = mutable1.toImmutable();
+        List<Integer> mutable2 = new LinkedList<Integer>(mutable1);
+        List<Integer> mutable3 = new ArrayList<Integer>(mutable1);
+        Verify.assertEqualsAndHashCode(immutable1, immutable2);
+        Verify.assertNotEquals(immutable1, immutable3);
+        Verify.assertNotEquals(immutable1, immutable4);
+        Verify.assertNotEquals(immutable1, immutable5);
+        Verify.assertEqualsAndHashCode(mutable1, immutable1);
+        Verify.assertEqualsAndHashCode(immutableCopy, immutable1);
+        Verify.assertEqualsAndHashCode(mutable2, immutable1);
+        Verify.assertEqualsAndHashCode(mutable3, immutable1);
+        Verify.assertPostSerializedEqualsAndHashCode(immutable1);
+        Verify.assertNotEquals(immutable1, UnifiedSet.newSet(mutable1));
+        mutable1.add(null);
+        mutable2.add(null);
+        mutable3.add(null);
+        Verify.assertNotEquals(mutable1, immutable1);
+        Verify.assertNotEquals(mutable2, immutable1);
+        Verify.assertNotEquals(mutable3, immutable1);
+        mutable1.remove(null);
+        mutable2.remove(null);
+        mutable3.remove(null);
+        Verify.assertEqualsAndHashCode(mutable1, immutable1);
+        Verify.assertEqualsAndHashCode(mutable2, immutable1);
+        Verify.assertEqualsAndHashCode(mutable3, immutable1);
+        mutable1.set(2, null);
+        mutable2.set(2, null);
+        mutable3.set(2, null);
+        Verify.assertNotEquals(mutable1, immutable1);
+        Verify.assertNotEquals(mutable2, immutable1);
+        Verify.assertNotEquals(mutable3, immutable1);
+        mutable1.remove(2);
+        mutable2.remove(2);
+        mutable3.remove(2);
+        Verify.assertNotEquals(mutable1, immutable1);
+        Verify.assertNotEquals(mutable2, immutable1);
+        Verify.assertNotEquals(mutable3, immutable1);
     }
 
     @Test
