@@ -26,6 +26,7 @@ import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
+import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
@@ -728,7 +729,7 @@ public final class ArrayIterate
     }
 
     /**
-     * @see Iterate#injectInto(long, Iterable, IntObjectToIntFunction)
+     * @see Iterate#injectInto(long, Iterable, LongObjectToLongFunction)
      */
     public static <T> long injectInto(
             long injectValue,
@@ -745,6 +746,29 @@ public final class ArrayIterate
             for (T each : objectArray)
             {
                 result = function.longValueOf(result, each);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * @see Iterate#injectInto(double, Iterable, DoubleObjectToDoubleFunction)
+     */
+    public static <T> double injectInto(
+            double injectValue,
+            T[] objectArray,
+            DoubleObjectToDoubleFunction<? super T> function)
+    {
+        if (objectArray == null)
+        {
+            throw new IllegalArgumentException("Cannot perform an injectInto on null");
+        }
+        double result = injectValue;
+        if (ArrayIterate.notEmpty(objectArray))
+        {
+            for (T each : objectArray)
+            {
+                result = function.doubleValueOf(result, each);
             }
         }
         return result;

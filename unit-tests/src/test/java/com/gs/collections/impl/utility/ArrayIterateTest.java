@@ -23,12 +23,16 @@ import java.util.List;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
+import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
+import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Functions;
@@ -77,6 +81,168 @@ public class ArrayIterateTest
         Assert.assertEquals(
                 new Double(1 + 1 + 2 + 3),
                 ArrayIterate.injectInto((double) 1, objectArray, AddFunction.DOUBLE));
+    }
+
+    @Test
+    public void injectIntoPrimitives()
+    {
+        double doubleActual = ArrayIterate.injectInto(1.0d, new Double[]{1.0d, 2.0d, 3.0d}, new DoubleObjectToDoubleFunction<Double>()
+        {
+            public double doubleValueOf(double doubleParameter, Double objectParameter)
+            {
+                return doubleParameter + objectParameter;
+            }
+        });
+        Assert.assertEquals(7.0, doubleActual, 0.000001);
+        long longActual = ArrayIterate.injectInto(1L, new Long[]{1L, 2L, 3L}, new LongObjectToLongFunction<Long>()
+        {
+            public long longValueOf(long longParameter, Long objectParameter)
+            {
+                return longParameter + objectParameter;
+            }
+        });
+        Assert.assertEquals(7L, longActual);
+        int intActual = ArrayIterate.injectInto(1, new Integer[]{1, 2, 3}, new IntObjectToIntFunction<Integer>()
+        {
+            public int intValueOf(int intParameter, Integer objectParameter)
+            {
+                return intParameter + objectParameter;
+            }
+        });
+        Assert.assertEquals(7, intActual);
+    }
+
+    @Test
+    public void injectIntoThrowsOnNullArgument()
+    {
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                ArrayIterate.injectInto((int) 0, null, new IntObjectToIntFunction<Object>()
+                {
+                    public int intValueOf(int intParameter, Object objectParameter)
+                    {
+                        return 0;
+                    }
+                });
+            }
+        });
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                ArrayIterate.injectInto(0L, null, new LongObjectToLongFunction<Object>()
+                {
+                    public long longValueOf(long longParameter, Object objectParameter)
+                    {
+                        return 0;
+                    }
+                });
+            }
+        });
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                ArrayIterate.injectInto((double) 0, null, new DoubleObjectToDoubleFunction<Object>()
+                {
+                    public double doubleValueOf(double doubleParameter, Object objectParameter)
+                    {
+                        return 0.0;
+                    }
+                });
+            }
+        });
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                ArrayIterate.injectInto(null, null, null);
+            }
+        });
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void allSatisfyThrowsOnNullArgument()
+    {
+        ArrayIterate.allSatisfy(null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void allSatisfyWithThrowsOnNullArgument()
+    {
+        ArrayIterate.allSatisfyWith(null, null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void anySatisfyThrowsOnNullArgument()
+    {
+        ArrayIterate.anySatisfy(null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void anySatisfyWithThrowsOnNullArgument()
+    {
+        ArrayIterate.anySatisfyWith(null, null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void selectThrowsOnNullArgument()
+    {
+        ArrayIterate.select(null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void selectWithThrowsOnNullArgument()
+    {
+        ArrayIterate.selectWith(null, null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void rejectThrowsOnNullArgument()
+    {
+        ArrayIterate.reject(null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void rejectWithThrowsOnNullArgument()
+    {
+        ArrayIterate.rejectWith(null, null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void collectThrowsOnNullArgument()
+    {
+        ArrayIterate.collect(null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void collectWithThrowsOnNullArgument()
+    {
+        ArrayIterate.collectWith(null, null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void forEachThrowsOnNullArgument()
+    {
+        ArrayIterate.forEach(null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void forEachWithIndexThrowsOnNullArgument()
+    {
+        ArrayIterate.forEachWithIndex(null, null);
+    }
+
+    @Test
+    public void partition()
+    {
+        PartitionIterable<Integer> result =
+                ArrayIterate.partition(new Integer[]{1, 2, 3, 4, 5}, Predicates.greaterThan(3));
+        Assert.assertEquals(iBag(4, 5), result.getSelected().toBag());
+        Assert.assertEquals(iBag(1, 2, 3), result.getRejected().toBag());
+
     }
 
     @Test
@@ -404,19 +570,16 @@ public class ArrayIterateTest
         Assert.assertEquals(
                 Integer.valueOf(1),
                 ArrayIterate.detectWith(array, Predicates2.<Integer>lessThan(), 2));
+        Assert.assertNull(
+                ArrayIterate.detectWith(new Integer[0], Predicates2.<Integer>lessThan(), 2));
     }
 
     @Test
     public void detectIfNone()
     {
         Integer[] array = this.createIntegerArray(1);
-        Assert.assertEquals(Integer.valueOf(7), ArrayIterate.detectIfNone(array, new Predicate<Integer>()
-        {
-            public boolean accept(Integer anObject)
-            {
-                return anObject == 2;
-            }
-        }, 7));
+        Assert.assertEquals(Integer.valueOf(7), ArrayIterate.detectIfNone(array, Predicates.equal(2), 7));
+        Assert.assertEquals(Integer.valueOf(1), ArrayIterate.detectIfNone(array, Predicates.equal(1), 7));
     }
 
     @Test

@@ -19,6 +19,7 @@ package com.gs.collections.impl.utility;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Currency;
+import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
@@ -160,12 +161,12 @@ public class MapIterateTest
                         return Tuples.pair(locale.getDisplayCountry() + ':' + currency.getCurrencyCode(), currency.getCurrencyCode());
                     }
                 }, new Predicate2<Locale, Currency>()
-        {
-            public boolean accept(Locale locale, Currency currency)
-            {
-                return Currency.getInstance(locale).equals(currency);
-            }
-        }
+                {
+                    public boolean accept(Locale locale, Currency currency)
+                    {
+                        return Currency.getInstance(locale).equals(currency);
+                    }
+                }
         );
 
         Verify.assertContainsKeyValue("United Kingdom:GBP", "GBP", result);
@@ -299,18 +300,24 @@ public class MapIterateTest
     @Test
     public void getIfAbsentPut()
     {
-        MutableMap<String, String> map = UnifiedMap.newMap();
+        MutableMap<String, String> unifiedMap = UnifiedMap.newMap();
+        Map<String, String> hashMap = new HashMap<String, String>();
         Function0<String> function = new Function0<String>()
         {
             public String value()
             {
                 //noinspection RedundantStringConstructorCall
-                return new String("aValue");  // deliberate copy of "aValue" for testing purposes
+                return new String("value");  // deliberate copy of "value" for testing purposes
             }
         };
-        String value1 = MapIterate.getIfAbsentPut(map, "key", function);
-        String value2 = MapIterate.getIfAbsentPut(map, "key", function);
+        String value1 = MapIterate.getIfAbsentPut(unifiedMap, "key", function);
+        String value2 = MapIterate.getIfAbsentPut(unifiedMap, "key", function);
+        Assert.assertEquals("value", value1);
         Assert.assertSame(value1, value2);
+        String value3 = MapIterate.getIfAbsentPut(hashMap, "key", function);
+        String value4 = MapIterate.getIfAbsentPut(hashMap, "key", function);
+        Assert.assertEquals("value", value3);
+        Assert.assertSame(value3, value4);
     }
 
     @Test
@@ -347,7 +354,8 @@ public class MapIterateTest
     @Test
     public void getIfAbsent()
     {
-        MutableMap<String, String> map = UnifiedMap.newMap();
+        MutableMap<String, String> unifiedMap = UnifiedMap.newMapWith(Tuples.pair("key1", "key1Value"));
+        Map<String, String> hashMap = new HashMap<String, String>(unifiedMap);
         Function0<String> function = new Function0<String>()
         {
             public String value()
@@ -356,10 +364,16 @@ public class MapIterateTest
                 return new String("value");  // a deliberate copy of the string
             }
         };
-        String value1 = MapIterate.getIfAbsent(map, "key", function);
-        String value2 = MapIterate.getIfAbsent(map, "key", function);
-        Assert.assertNotNull(value1);
+        String value1 = MapIterate.getIfAbsent(unifiedMap, "key", function);
+        String value2 = MapIterate.getIfAbsent(unifiedMap, "key", function);
+        String value3 = MapIterate.getIfAbsent(hashMap, "key", function);
+        Assert.assertEquals("value", value1);
+        Assert.assertEquals("value", value2);
+        Assert.assertEquals("value", value3);
         Assert.assertNotSame(value1, value2);
+        Assert.assertNotSame(value1, value3);
+        Assert.assertEquals("key1Value", MapIterate.getIfAbsent(hashMap, "key1", function));
+        Assert.assertEquals("key1Value", MapIterate.getIfAbsent(unifiedMap, "key1", function));
     }
 
     @Test
@@ -375,13 +389,15 @@ public class MapIterateTest
     @Test
     public void getIfAbsentWith()
     {
-        MutableMap<String, Integer> map = UnifiedMap.newMap();
-        this.populateIntegerMap(map);
-        String key = "six";
+        MutableMap<String, Integer> unifiedMap = UnifiedMap.newMap();
+        this.populateIntegerMap(unifiedMap);
+        Map<String, Integer> hashMap = new HashMap<String, Integer>(unifiedMap);
         Function<Integer, Integer> function = Functions.getPassThru();
-        Integer object = 6;
-        Integer result = MapIterate.getIfAbsentWith(map, key, function, object);
-        Assert.assertEquals(result, object);
+        Integer ifAbsentValue = Integer.valueOf(6);
+        Assert.assertEquals(ifAbsentValue, MapIterate.getIfAbsentWith(unifiedMap, "six", function, ifAbsentValue));
+        Assert.assertEquals(Integer.valueOf(5), MapIterate.getIfAbsentWith(unifiedMap, "5", function, ifAbsentValue));
+        Assert.assertEquals(ifAbsentValue, MapIterate.getIfAbsentWith(hashMap, "six", function, ifAbsentValue));
+        Assert.assertEquals(Integer.valueOf(5), MapIterate.getIfAbsentWith(hashMap, "5", function, ifAbsentValue));
     }
 
     @Test
@@ -416,9 +432,10 @@ public class MapIterateTest
                 return anObject.toUpperCase();
             }
         };
-        MutableMap<String, String> map = UnifiedMap.newWithKeysValues("test", "test");
-        String upper = MapIterate.ifPresentApply(map, "test", function);
-        Assert.assertEquals("TEST", upper);
+        MutableMap<String, String> unifiedMap = UnifiedMap.newWithKeysValues("testKey", "testValue");
+        Map<String, String> hashMap = new HashMap<String, String>(unifiedMap);
+        Assert.assertEquals("TESTVALUE", MapIterate.ifPresentApply(unifiedMap, "testKey", function));
+        Assert.assertEquals("TESTVALUE", MapIterate.ifPresentApply(hashMap, "testKey", function));
     }
 
     @Test
