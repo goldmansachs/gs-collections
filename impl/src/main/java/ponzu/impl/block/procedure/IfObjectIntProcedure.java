@@ -22,7 +22,7 @@ import ponzu.api.block.procedure.Procedure;
 import ponzu.impl.Counter;
 
 /**
- * A conditional ProcedureWithInt that effectively filters which objects should be used
+ * A conditional ObjectIntProcedure that effectively filters which objects should be used
  */
 public final class IfObjectIntProcedure<T>
         implements Procedure<T>

@@ -21,7 +21,7 @@ import ponzu.api.list.ImmutableList;
 public class ImmutableOctupletonListTest extends AbstractImmutableListTestCase
 {
     @Override
-    protected ImmutableList<Integer> newList()
+    protected ImmutableList<Integer> classUnderTest()
     {
         return new ImmutableOctupletonList<Integer>(1, 2, 3, 4, 5, 6, 7, 8);
     }

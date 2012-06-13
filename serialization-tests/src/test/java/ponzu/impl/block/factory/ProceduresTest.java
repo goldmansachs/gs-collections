@@ -63,6 +63,6 @@ public class ProceduresTest
                         + "T2JqZWN0SW50UHJvY2VkdXJlQWRhcHRlcgAAAAAAAAABAgACSQAFY291bnRMABJvYmplY3RJbnRQ\n"
                         + "cm9jZWR1cmV0ADtMY29tL2dzL2NvbGxlY3Rpb25zL2FwaS9ibG9jay9wcm9jZWR1cmUvT2JqZWN0\n"
                         + "SW50UHJvY2VkdXJlO3hwAAAAAHA=",
-                Procedures.fromProcedureWithInt(null));
+                Procedures.fromObjectIntProcedure(null));
     }
 }

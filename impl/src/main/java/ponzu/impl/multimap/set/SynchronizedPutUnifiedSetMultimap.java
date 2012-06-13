@@ -17,7 +17,6 @@
 package ponzu.impl.multimap.set;
 
 import java.io.Externalizable;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import ponzu.api.block.procedure.Procedure;
 import ponzu.api.block.procedure.Procedure2;
@@ -41,7 +40,6 @@ public final class SynchronizedPutUnifiedSetMultimap<K, V>
         extends AbstractSynchronizedPutMultimap<K, V, MutableSet<V>> implements MutableSetMultimap<K, V>, Externalizable
 {
     private static final long serialVersionUID = 42L;
-    private final AtomicInteger atomicTotalSize = new AtomicInteger(0);
 
     public SynchronizedPutUnifiedSetMultimap()
     {

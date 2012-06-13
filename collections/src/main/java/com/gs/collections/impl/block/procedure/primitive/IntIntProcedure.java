@@ -14,24 +14,15 @@
  * limitations under the License.
  */
 
-package ponzu.impl.parallel;
+package com.gs.collections.impl.block.procedure.primitive;
 
-import ponzu.api.block.procedure.ObjectIntProcedure;
+import java.io.Serializable;
 
 /**
- * This class acts as a no op factory for a ObjectIntProcedure which gets passed in and returned out.
+ * An IntIntProcedure is a two argument Closure which has no return argument and takes an int as the first and
+ * second arguments.
  */
-public final class PassThruObjectIntProcedureFactory<BT extends ObjectIntProcedure<?>> implements ObjectIntProcedureFactory<BT>
+public interface IntIntProcedure extends Serializable
 {
-    private final BT procedure;
-
-    public PassThruObjectIntProcedureFactory(BT procedure)
-    {
-        this.procedure = procedure;
-    }
-
-    public BT create()
-    {
-        return this.procedure;
-    }
+    void value(int each, int index);
 }

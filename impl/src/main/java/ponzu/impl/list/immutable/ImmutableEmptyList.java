@@ -16,9 +16,11 @@
 
 package ponzu.impl.list.immutable;
 
+import java.io.IOException;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.RandomAccess;
 
@@ -40,6 +42,7 @@ final class ImmutableEmptyList<T>
         implements Serializable, RandomAccess
 {
     static final ImmutableList<?> INSTANCE = new ImmutableEmptyList();
+    private static final PartitionImmutableList<?> EMPTY = PartitionFastList.of(FastList.newList(), null).toImmutable();
 
     private static final long serialVersionUID = 1L;
 
@@ -78,6 +81,11 @@ final class ImmutableEmptyList<T>
     }
 
     public void forEach(Procedure<? super T> procedure)
+    {
+    }
+
+    @Override
+    public void reverseForEach(Procedure<? super T> procedure)
     {
     }
 
@@ -154,5 +162,242 @@ final class ImmutableEmptyList<T>
     public <R extends Collection<Pair<T, Integer>>> R zipWithIndex(R target)
     {
         return target;
+    }
+
+    @Override
+    public ImmutableList<T> filter(Predicate<? super T> predicate)
+    {
+        return this;
+    }
+
+    @Override
+    public <P, R extends Collection<T>> R filterWith(Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
+    {
+        return targetCollection;
+    }
+
+    @Override
+    public ImmutableList<T> filterNot(Predicate<? super T> predicate)
+    {
+        return this;
+    }
+
+    @Override
+    public <P, R extends Collection<T>> R filterNotWith(Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
+    {
+        return targetCollection;
+    }
+
+    @Override
+    public PartitionImmutableList<T> partition(Predicate<? super T> predicate)
+    {
+        return (PartitionImmutableList<T>) EMPTY;
+    }
+
+    @Override
+    public <V> ImmutableList<V> transform(Function<? super T, ? extends V> function)
+    {
+        return Lists.immutable.of();
+    }
+
+    @Override
+    public <V> ImmutableList<V> transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
+    {
+        return Lists.immutable.of();
+    }
+
+    @Override
+    public <P, V, R extends Collection<V>> R transformWith(Function2<? super T, ? super P, ? extends V> function, P parameter, R targetCollection)
+    {
+        return targetCollection;
+    }
+
+    @Override
+    public <V> ImmutableList<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
+    {
+        return Lists.immutable.of();
+    }
+
+    @Override
+    public <V, R extends Collection<V>> R flatTransform(Function<? super T, ? extends Iterable<V>> function, R targetCollection)
+    {
+        return targetCollection;
+    }
+
+    @Override
+    public T find(Predicate<? super T> predicate)
+    {
+        return null;
+    }
+
+    @Override
+    public int count(Predicate<? super T> predicate)
+    {
+        return 0;
+    }
+
+    @Override
+    public boolean anySatisfy(Predicate<? super T> predicate)
+    {
+        return false;
+    }
+
+    @Override
+    public boolean allSatisfy(Predicate<? super T> predicate)
+    {
+        return true;
+    }
+
+    @Override
+    public <IV> IV foldLeft(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
+    {
+        return injectedValue;
+    }
+
+    @Override
+    public int foldLeft(int injectedValue, IntObjectToIntFunction<? super T> intObjectToIntFunction)
+    {
+        return injectedValue;
+    }
+
+    @Override
+    public long foldLeft(long injectedValue, LongObjectToLongFunction<? super T> longObjectToLongFunction)
+    {
+        return injectedValue;
+    }
+
+    @Override
+    public double foldLeft(double injectedValue, DoubleObjectToDoubleFunction<? super T> doubleObjectToDoubleFunction)
+    {
+        return injectedValue;
+    }
+
+    @Override
+    public T getFirst()
+    {
+        return null;
+    }
+
+    @Override
+    public T getLast()
+    {
+        return null;
+    }
+
+    @Override
+    public int indexOf(Object object)
+    {
+        return -1;
+    }
+
+    @Override
+    public boolean equals(Object otherList)
+    {
+        if (otherList == this)
+        {
+            return true;
+        }
+        if (!(otherList instanceof List))
+        {
+            return false;
+        }
+        List<T> list = (List<T>) otherList;
+        return list.isEmpty();
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return 1;
+    }
+
+    @Override
+    public boolean isEmpty()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean notEmpty()
+    {
+        return false;
+    }
+
+    @Override
+    public <R extends Collection<T>> R filter(Predicate<? super T> predicate, R target)
+    {
+        return target;
+    }
+
+    @Override
+    public <R extends Collection<T>> R filterNot(Predicate<? super T> predicate, R target)
+    {
+        return target;
+    }
+
+    @Override
+    public <V, R extends Collection<V>> R transform(Function<? super T, ? extends V> function, R target)
+    {
+        return target;
+    }
+
+    @Override
+    public <V, R extends Collection<V>> R transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function, R target)
+    {
+        return target;
+    }
+
+    @Override
+    public T findIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
+    {
+        return function.value();
+    }
+
+    @Override
+    public String toString()
+    {
+        return "[]";
+    }
+
+    @Override
+    public String makeString()
+    {
+        return "";
+    }
+
+    @Override
+    public String makeString(String separator)
+    {
+        return "";
+    }
+
+    @Override
+    public String makeString(String start, String separator, String end)
+    {
+        return start + end;
+    }
+
+    @Override
+    public void appendString(Appendable appendable)
+    {
+    }
+
+    @Override
+    public void appendString(Appendable appendable, String separator)
+    {
+    }
+
+    @Override
+    public void appendString(Appendable appendable, String start, String separator, String end)
+    {
+        try
+        {
+            appendable.append(start);
+            appendable.append(end);
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 }

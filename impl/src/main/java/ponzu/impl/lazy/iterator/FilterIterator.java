@@ -29,9 +29,9 @@ public final class FilterIterator<T>
     private final Predicate<? super T> predicate;
     private Object next = NULL;
 
-    public FilterIterator(Iterable<T> collection, Predicate<? super T> predicate)
+    public FilterIterator(Iterable<T> iterable, Predicate<? super T> predicate)
     {
-        this(collection.iterator(), predicate);
+        this(iterable.iterator(), predicate);
     }
 
     public FilterIterator(Iterator<T> iterator, Predicate<? super T> predicate)

@@ -22,7 +22,7 @@ import org.junit.Test;
 public class ImmutableSingletonListTest extends AbstractImmutableListTestCase
 {
     @Override
-    protected ImmutableList<Integer> newList()
+    protected ImmutableList<Integer> classUnderTest()
     {
         return new ImmutableSingletonList<Integer>(1);
     }

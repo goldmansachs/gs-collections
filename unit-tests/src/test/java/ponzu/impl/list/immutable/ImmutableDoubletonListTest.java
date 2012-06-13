@@ -21,7 +21,7 @@ import ponzu.api.list.ImmutableList;
 public class ImmutableDoubletonListTest extends AbstractImmutableListTestCase
 {
     @Override
-    protected ImmutableList<Integer> newList()
+    protected ImmutableList<Integer> classUnderTest()
     {
         return new ImmutableDoubletonList<Integer>(1, 2);
     }

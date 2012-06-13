@@ -21,7 +21,7 @@ import ponzu.api.list.ImmutableList;
 public class ImmutableQuadrupletonListTest extends AbstractImmutableListTestCase
 {
     @Override
-    protected ImmutableList<Integer> newList()
+    protected ImmutableList<Integer> classUnderTest()
     {
         return new ImmutableQuadrupletonList<Integer>(1, 2, 3, 4);
     }

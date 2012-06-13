@@ -187,7 +187,7 @@ public final class CompositeFastList<E>
         }
         else
         {
-            this.optimizedForwardForEach(Procedures.fromProcedureWithInt(objectIntProcedure), fromIndex, toIndex);
+            this.optimizedForwardForEach(Procedures.fromObjectIntProcedure(objectIntProcedure), fromIndex, toIndex);
         }
     }
 

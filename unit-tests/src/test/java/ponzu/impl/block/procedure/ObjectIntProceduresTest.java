@@ -25,7 +25,7 @@ import org.junit.Test;
 public class ObjectIntProceduresTest
 {
     @Test
-    public void fromProcedureWithInt()
+    public void fromObjectIntProcedure()
     {
         CollectionAddProcedure<Integer> procedure = CollectionAddProcedure.on(FastList.<Integer>newList());
         ObjectIntProcedure<Integer> objectIntProcedure = ObjectIntProcedures.fromProcedure(procedure);

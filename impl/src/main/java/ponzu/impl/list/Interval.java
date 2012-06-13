@@ -379,28 +379,43 @@ public final class Interval
         }
     }
 
-    public void forEachWithIndex(IntProcedureWithInt procedureWithInt1)
+    /**
+     * @deprecated since 1.2 - Use {@link #forEachWithIndex(IntIntProcedure)}
+     */
+    @Deprecated
+    public void forEachWithIndex(final IntProcedureWithInt procedureWithInt)
+    {
+        this.forEachWithIndex(new IntIntProcedure()
+        {
+            public void value(int each, int index)
+            {
+                procedureWithInt.value(each, index);
+            }
+        });
+    }
+
+    public void forEachWithIndex(IntIntProcedure procedure)
     {
         int index = 0;
         if (this.from <= this.to)
         {
             for (int i = this.from; i <= this.to; i += this.step)
             {
-                procedureWithInt1.value(i, index++);
+                procedure.value(i, index++);
             }
         }
         else
         {
             for (int i = this.from; i >= this.to; i += this.step)
             {
-                procedureWithInt1.value(i, index++);
+                procedure.value(i, index++);
             }
         }
     }
 
     public void forEachWithIndex(final ObjectIntProcedure<? super Integer> objectIntProcedure)
     {
-        this.forEachWithIndex(new IntProcedureWithInt()
+        this.forEachWithIndex(new IntIntProcedure()
         {
             public void value(int each, int index)
             {
@@ -801,7 +816,7 @@ public final class Interval
     public int[] toIntArray()
     {
         final int[] result = new int[this.size()];
-        this.forEachWithIndex(new IntProcedureWithInt()
+        this.forEachWithIndex(new IntIntProcedure()
         {
             public void value(int each, int index)
             {

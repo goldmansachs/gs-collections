@@ -622,11 +622,11 @@ public class UnmodifiableMutableMap<K, V>
 
     public <S> MutableCollection<Pair<V, S>> zip(Iterable<S> that)
     {
-        return this.getMutableMap().zip(that).toList();
+        return this.getMutableMap().zip(that);
     }
 
     public MutableCollection<Pair<V, Integer>> zipWithIndex()
     {
-        return this.getMutableMap().zipWithIndex().toList();
+        return this.getMutableMap().zipWithIndex();
     }
 }

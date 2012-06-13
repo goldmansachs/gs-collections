@@ -438,7 +438,7 @@ public final class ArrayListIterate
     /**
      * Iterates over the section of the list covered by the specified indexes.  The indexes are both inclusive.  If the
      * from is less than the to, the list is iterated in forward order. If the from is greater than the to, then the
-     * list is iterated in the reverse order. The index passed into the ProcedureWithInt is the actual index of the
+     * list is iterated in the reverse order. The index passed into the ObjectIntProcedure is the actual index of the
      * range.
      * <p/>
      * <p/>

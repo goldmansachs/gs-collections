@@ -24,7 +24,7 @@
 
     <groupId>ponzu</groupId>
     <artifactId>parent</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.0-SNAPSHOT</version>
 
     <packaging>pom</packaging>
 
@@ -37,7 +37,7 @@
         <module>impl</module>
         <module>testutils</module>
         <module>unit-tests</module>
-        <!--<module>serialization-tests</module>-->
+        <module>serialization-tests</module>
     </modules>
 
     <properties>
@@ -427,7 +427,7 @@
                 <module>testutils</module>
                 <module>unit-tests</module>
                 <module>scala-unit-tests</module>
-                <!--<module>serialization-tests</module>-->
+                <module>serialization-tests</module>
                 <module>acceptance-tests</module>
             </modules>
         </profile>
