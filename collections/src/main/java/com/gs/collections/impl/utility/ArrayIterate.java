@@ -377,11 +377,6 @@ public final class ArrayIterate
      */
     public static <T> MutableList<T> reject(T[] objectArray, Predicate<? super T> predicate)
     {
-        if (objectArray == null)
-        {
-            throw new IllegalArgumentException("Cannot perform a reject on null");
-        }
-
         return ArrayIterate.reject(objectArray, predicate, FastList.<T>newList());
     }
 
@@ -1082,7 +1077,7 @@ public final class ArrayIterate
      */
     public static <T> MutableList<T> take(T[] array, int count)
     {
-        return ArrayIterate.take(array, count, FastList.<T>newList(count));
+        return ArrayIterate.take(array, count, FastList.<T>newList(Math.max(0, count)));
     }
 
     /**

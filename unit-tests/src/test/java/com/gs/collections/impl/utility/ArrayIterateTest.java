@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.utility;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -28,6 +29,7 @@ import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
+import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
@@ -194,9 +196,21 @@ public class ArrayIterateTest
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void selectWithTargetThrowsOnNullArgument()
+    {
+        ArrayIterate.select(null, null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void selectWithThrowsOnNullArgument()
     {
         ArrayIterate.selectWith(null, null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void selectWithWithTargetThrowsOnNullArgument()
+    {
+        ArrayIterate.selectWith(null, null, null, null);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -206,9 +220,21 @@ public class ArrayIterateTest
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void rejectWithTargetThrowsOnNullArgument()
+    {
+        ArrayIterate.reject(null, null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void rejectWithThrowsOnNullArgument()
     {
         ArrayIterate.rejectWith(null, null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void rejectWithWithTargetThrowsOnNullArgument()
+    {
+        ArrayIterate.rejectWith(null, null, null, null);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -218,9 +244,33 @@ public class ArrayIterateTest
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void collectIfThrowsOnNullArgument()
+    {
+        ArrayIterate.collectIf(null, null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void collectWithTargetThrowsOnNullArgument()
+    {
+        ArrayIterate.collect(null, null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void collectIfWithTargetThrowsOnNullArgument()
+    {
+        ArrayIterate.collectIf(null, null, null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void collectWithThrowsOnNullArgument()
     {
         ArrayIterate.collectWith(null, null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void collectWithWithTargetThrowsOnNullArgument()
+    {
+        ArrayIterate.collectWith(null, null, null, null);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -230,9 +280,21 @@ public class ArrayIterateTest
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void forEachWithFromToThrowsOnNullArgument()
+    {
+        ArrayIterate.forEach(null, 0, 0, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void forEachWithIndexThrowsOnNullArgument()
     {
         ArrayIterate.forEachWithIndex(null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void forEachWithIndexWithFromToThrowsOnNullArgument()
+    {
+        ArrayIterate.forEachWithIndex(null, 0, 0, null);
     }
 
     @Test
@@ -336,6 +398,14 @@ public class ArrayIterateTest
     }
 
     @Test
+    public void reject()
+    {
+        Integer[] objectArray = INTEGER_ARRAY;
+        Collection<Integer> list = ArrayIterate.reject(objectArray, Predicates.instanceOf(String.class));
+        this.assertContainsAllIntegers(list);
+    }
+
+    @Test
     public void selectWith()
     {
         Integer[] objectArray = INTEGER_ARRAY;
@@ -361,9 +431,9 @@ public class ArrayIterateTest
     @Test
     public void countWith()
     {
-        Object[] objectArray = INTEGER_ARRAY;
-        int count = ArrayIterate.countWith(objectArray, Predicates2.instanceOf(), Integer.class);
-        Assert.assertEquals(5, count);
+        Assert.assertEquals(5, ArrayIterate.countWith(INTEGER_ARRAY, Predicates2.instanceOf(), Integer.class));
+        Assert.assertEquals(0, ArrayIterate.countWith(new Integer[]{}, Predicates2.instanceOf(), Integer.class));
+        Assert.assertEquals(1, ArrayIterate.countWith(new Object[]{"test", null, Integer.valueOf(2)}, Predicates2.instanceOf(), Integer.class));
     }
 
     @Test
@@ -398,18 +468,25 @@ public class ArrayIterateTest
         Verify.assertSize(0, list);
     }
 
-    //todo: further review
     @Test
     public void rejectWith()
     {
         Integer[] objectArray = INTEGER_ARRAY;
         Collection<Integer> list =
-                ArrayIterate.rejectWith(objectArray, Predicates2.instanceOf(), Integer.class, new ArrayList<Integer>());
+                ArrayIterate.rejectWith(objectArray, Predicates2.instanceOf(), Integer.class);
         Verify.assertSize(0, list);
     }
 
     @Test
-    public void asHashMap()
+    public void collectIf()
+    {
+        Object[] integers = Lists.fixedSize.of(1, 2, 3).toArray();
+        Verify.assertContainsAll(ArrayIterate.collectIf(integers, Predicates.instanceOf(Integer.class), Functions.getToString()), "1", "2", "3");
+        Verify.assertContainsAll(ArrayIterate.collectIf(integers, Predicates.instanceOf(Integer.class), Functions.getToString(), FastList.<String>newList()), "1", "2", "3");
+    }
+
+    @Test
+    public void toMap()
     {
         Integer[] objectArray = INTEGER_ARRAY;
         MutableMap<String, Integer> map = ArrayIterate.toMap(objectArray, Functions.getToString());
@@ -525,6 +602,25 @@ public class ArrayIterateTest
                         "2", "b",
                         "3", "c"),
                 map);
+        ArrayIterate.forEachInBoth(null, null, new Procedure2<Object, Object>()
+        {
+            public void value(Object argument1, Object argument2)
+            {
+                Assert.fail();
+            }
+        });
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void forEachInBothThrowsOnDifferentLengthArrays()
+    {
+        ArrayIterate.forEachInBoth(new Integer[]{1, 2, 3}, new Integer[]{1, 2}, new Procedure2<Integer, Integer>()
+        {
+            public void value(Integer argument1, Integer argument2)
+            {
+                Assert.fail();
+            }
+        });
     }
 
     @Test
@@ -621,7 +717,7 @@ public class ArrayIterateTest
     @Test(expected = IllegalArgumentException.class)
     public void take_negative_throws()
     {
-        ListIterate.take(Interval.zeroTo(0), -1);
+        ArrayIterate.take(Interval.zeroTo(0).toArray(), -1);
     }
 
     @Test
@@ -635,7 +731,7 @@ public class ArrayIterateTest
     @Test(expected = IllegalArgumentException.class)
     public void drop_negative_throws()
     {
-        ListIterate.drop(Interval.zeroTo(0), -1);
+        ArrayIterate.drop(Interval.zeroTo(0).toArray(), -1);
     }
 
     @Test
@@ -764,5 +860,27 @@ public class ArrayIterateTest
         StringBuilder stringBuilder = new StringBuilder();
         ArrayIterate.appendString(array, stringBuilder);
         Assert.assertEquals("1, 2, 3, 4, 5", stringBuilder.toString());
+    }
+
+    @Test(expected = RuntimeException.class)
+    public void appendStringThrowsIOException()
+    {
+        ArrayIterate.appendString(new String[]{"1", "2", "3"}, new Appendable()
+        {
+            public Appendable append(CharSequence csq) throws IOException
+            {
+                throw new IOException();
+            }
+
+            public Appendable append(CharSequence csq, int start, int end) throws IOException
+            {
+                throw new IOException();
+            }
+
+            public Appendable append(char c) throws IOException
+            {
+                throw new IOException();
+            }
+        });
     }
 }
