@@ -425,15 +425,15 @@ public final class ListIterate
         {
             throw new IndexOutOfBoundsException("From index: " + from);
         }
-        else if (to < 0)
+        if (to < 0)
         {
             throw new IndexOutOfBoundsException("To index: " + to);
         }
-        else if (from >= size)
+        if (from >= size)
         {
             throw new IndexOutOfBoundsException("From index: " + from + " Size: " + size);
         }
-        else if (to >= size)
+        if (to >= size)
         {
             throw new IndexOutOfBoundsException("To index: " + to + " Size: " + size);
         }
