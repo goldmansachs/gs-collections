@@ -870,6 +870,20 @@ public abstract class AbstractCollectionTestCase
     }
 
     @Test
+    public void makeStringWithSeparator()
+    {
+        MutableCollection<Object> collection = this.<Object>newWith(1, 2, 3);
+        Assert.assertEquals(collection.toString(), '[' + collection.makeString(", ") + ']');
+    }
+
+    @Test
+    public void makeStringWithSeparatorAndStartAndEnd()
+    {
+        MutableCollection<Object> collection = this.<Object>newWith(1, 2, 3);
+        Assert.assertEquals(collection.toString(), collection.makeString("[", ", ", "]"));
+    }
+
+    @Test
     public void appendString()
     {
         MutableCollection<Object> collection = this.<Object>newWith(1, 2, 3);
@@ -877,6 +891,24 @@ public abstract class AbstractCollectionTestCase
         Appendable builder = new StringBuilder();
         collection.appendString(builder);
         Assert.assertEquals(collection.toString(), '[' + builder.toString() + ']');
+    }
+
+    @Test
+    public void appendStringWithSeparator()
+    {
+        MutableCollection<Object> collection = this.<Object>newWith(1, 2, 3);
+        Appendable builder = new StringBuilder();
+        collection.appendString(builder, ", ");
+        Assert.assertEquals(collection.toString(), '[' + builder.toString() + ']');
+    }
+
+    @Test
+    public void appendStringWithSeparatorAndStartAndEnd()
+    {
+        MutableCollection<Object> collection = this.<Object>newWith(1, 2, 3);
+        Appendable builder = new StringBuilder();
+        collection.appendString(builder, "[", ", ", "]");
+        Assert.assertEquals(collection.toString(), builder.toString());
     }
 
     @Test
