@@ -23,6 +23,7 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -186,21 +187,12 @@ public class MapIterateTest
     }
 
     @Test
-    public void toSortedSet()
+    public void toSortedList_with_comparator()
     {
         MutableMap<String, Integer> integers = this.getIntegerMap();
-        MutableSortedSet<Integer> set = integers.toSortedSet();
-        Verify.assertSortedSetsEqual(TreeSortedSet.newSet(integers.values()), set);
-    }
-
-    @Test
-    public void toSortedSet_with_comparator()
-    {
-        MutableMap<String, Integer> integers = this.getIntegerMap();
-        MutableSortedSet<Integer> set = integers.toSortedSet(Collections.<Integer>reverseOrder());
-        MutableSortedSet<Integer> expected = TreeSortedSet.newSet(Collections.<Integer>reverseOrder());
-        expected.addAll(integers.values());
-        Verify.assertSortedSetsEqual(expected, set);
+        MutableList<Integer> list = MapIterate.toSortedList(integers, Collections.<Integer>reverseOrder());
+        MutableList<Integer> expected = FastList.newList(integers.values()).sortThis(Collections.<Integer>reverseOrder());
+        Assert.assertEquals(expected, list);
     }
 
     @Test
@@ -257,8 +249,28 @@ public class MapIterateTest
         map.putAll(this.getIntegerMap());
         MutableList<Integer> list = Lists.mutable.of();
         MapIterate.forEachValue(map, CollectionAddProcedure.on(list));
-        Verify.assertSize(5, list);
-        Assert.assertEquals(15, list.injectInto(0, AddFunction.INTEGER_TO_INT));
+        MapIterate.forEachValue(new HashMap<String, Integer>(map), CollectionAddProcedure.on(list));
+        MapIterate.forEachValue(new HashMap<String, Integer>(), CollectionAddProcedure.on(list));
+        Verify.assertSize(10, list);
+        Assert.assertEquals(30, list.injectInto(0, AddFunction.INTEGER_TO_INT));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void forEachValueThrowsOnNull()
+    {
+        MapIterate.forEachValue(null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void forEachKeyThrowsOnNull()
+    {
+        MapIterate.forEachKey(null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void forEachKeyValueThrowsOnNull()
+    {
+        MapIterate.forEachKeyValue(null, null);
     }
 
     @Test
@@ -273,10 +285,11 @@ public class MapIterateTest
     {
         MutableMap<String, Integer> map = UnifiedMap.newMap();
         map.putAll(this.getIntegerMap());
-        MutableList<String> list = Lists.mutable.of();
-        MapIterate.forEachKey(map, CollectionAddProcedure.on(list));
-        Verify.assertSize(5, list);
-        Verify.assertContainsAll(list, "1", "5");
+        MutableBag<String> bag = Bags.mutable.of();
+        MapIterate.forEachKey(map, CollectionAddProcedure.on(bag));
+        MapIterate.forEachKey(new HashMap<String, Integer>(map), CollectionAddProcedure.on(bag));
+        MapIterate.forEachKey(new HashMap<String, Integer>(), CollectionAddProcedure.on(bag));
+        Assert.assertEquals(HashBag.newBagWith("1", "1", "2", "2", "3", "3", "4", "4", "5", "5"), bag);
     }
 
     @Test
@@ -458,6 +471,34 @@ public class MapIterateTest
     }
 
     @Test
+    public void rejectMapOnEntry()
+    {
+        MutableMap<String, String> map = UnifiedMap.newWithKeysValues(
+                "1", "2",
+                "2", "1",
+                "3", "3");
+        MutableMap<String, String> resultMap = MapIterate.rejectMapOnEntry(map, new Predicate2<String, String>()
+        {
+            public boolean accept(String argument1, String argument2)
+            {
+                return "1".equals(argument1) || "1".equals(argument2);
+            }
+        });
+        Verify.assertSize(1, resultMap);
+        Verify.assertContainsKeyValue("3", "3", resultMap);
+    }
+
+    @Test
+    public void select()
+    {
+        MutableMap<String, String> map = UnifiedMap.newWithKeysValues(
+                "1", "2",
+                "2", "1",
+                "3", "3");
+        Assert.assertEquals(FastList.newListWith("1"), MapIterate.select(map, Predicates.equal("1")));
+    }
+
+    @Test
     public void selectMapEntries()
     {
         MutableMap<String, String> map = UnifiedMap.newWithKeysValues(
@@ -507,6 +548,12 @@ public class MapIterateTest
         Assert.assertEquals("1", resultFound);
         String resultNotFound = MapIterate.detect(map, Predicates.equal("4"));
         Assert.assertNull(resultNotFound);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void detectThrowsOnNull()
+    {
+        MapIterate.detect(null, (Predicate2<? super Object, ? super Object>) null);
     }
 
     @Test
@@ -596,6 +643,19 @@ public class MapIterateTest
     {
         MutableList<String> result = MapIterate.collect(newLittleMap(), Functions.getToString());
         Assert.assertEquals(FastList.newListWith("1", "2").toBag(), result.toBag());
+    }
+
+    @Test
+    public void collectValues()
+    {
+        MutableMap<Character, String> result = MapIterate.collectValues(newLittleMap(), new Function2<Character, Integer, String>()
+        {
+            public String value(Character argument1, Integer argument2)
+            {
+                return argument2.toString();
+            }
+        });
+        Assert.assertEquals(UnifiedMap.newWithKeysValues('a', "1", 'b', "2").toBag(), result.toBag());
     }
 
     @Test
