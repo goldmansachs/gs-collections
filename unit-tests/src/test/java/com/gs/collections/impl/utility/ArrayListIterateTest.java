@@ -274,12 +274,34 @@ public class ArrayListIterateTest
     @Test
     public void testInjectIntoOver100()
     {
-        ArrayList<Integer> list = new ArrayList<Integer>();
-        for (int i = 0; i < 101; i++)
-        {
-            list.add(1);
-        }
+        ArrayList<Integer> list = this.oneHundredAndOneOnes();
         Assert.assertEquals(Integer.valueOf(102), ArrayListIterate.injectInto(1, list, AddFunction.INTEGER));
+    }
+
+    @Test
+    public void testInjectIntoDoubleOver100()
+    {
+        ArrayList<Integer> list = this.oneHundredAndOneOnes();
+        Assert.assertEquals(102.0, ArrayListIterate.injectInto(1.0d, list, AddFunction.INTEGER_TO_DOUBLE), 0.0001);
+    }
+
+    private ArrayList<Integer> oneHundredAndOneOnes()
+    {
+        return new ArrayList<Integer>(Collections.nCopies(101, 1));
+    }
+
+    @Test
+    public void testInjectIntoIntegerOver100()
+    {
+        ArrayList<Integer> list = this.oneHundredAndOneOnes();
+        Assert.assertEquals(102, ArrayListIterate.injectInto(1, list, AddFunction.INTEGER_TO_INT));
+    }
+
+    @Test
+    public void testInjectIntoLongOver100()
+    {
+        ArrayList<Integer> list = this.oneHundredAndOneOnes();
+        Assert.assertEquals(102, ArrayListIterate.injectInto(1L, list, AddFunction.INTEGER_TO_LONG));
     }
 
     @Test
@@ -289,7 +311,7 @@ public class ArrayListIterateTest
         list.add(1.0);
         list.add(2.0);
         list.add(3.0);
-        Assert.assertEquals(new Double(1.0 + 1.0 + 2.0 + 3.0),
+        Assert.assertEquals(new Double(7.0),
                 ArrayListIterate.injectInto(1.0, list, AddFunction.DOUBLE));
     }
 
