@@ -1166,6 +1166,21 @@ public final class Verify extends Assert
     }
 
     /**
+     * Assert that the given <code>unexpectedString</code> is <em>not</em> contained within the <code>stringToSearch</code>.
+     */
+    public static void assertNotContains(String unexpectedString, String stringToSearch)
+    {
+        try
+        {
+            assertNotContains("string", unexpectedString, stringToSearch);
+        }
+        catch (AssertionError e)
+        {
+            throwMangledException(e);
+        }
+    }
+
+    /**
      * Assert that the given <code>stringToFind</code> is contained within the <code>stringToSearch</code>.
      */
     public static void assertContains(String stringName, String stringToFind, String stringToSearch)
@@ -1178,11 +1193,35 @@ public final class Verify extends Assert
             if (!stringToSearch.contains(stringToFind))
             {
                 Assert.fail(stringName
-                        + " did not "
-                        + "contain stringToFind:<"
+                        + " did not contain stringToFind:<"
                         + stringToFind
-                        + "> "
-                        + "in stringToSearch:<"
+                        + "> in stringToSearch:<"
+                        + stringToSearch
+                        + '>');
+            }
+        }
+        catch (AssertionError e)
+        {
+            throwMangledException(e);
+        }
+    }
+
+    /**
+     * Assert that the given <code>unexpectedString</code> is <em>not</em> contained within the <code>stringToSearch</code>.
+     */
+    public static void assertNotContains(String stringName, String unexpectedString, String stringToSearch)
+    {
+        try
+        {
+            Assert.assertNotNull("unexpectedString should not be null", unexpectedString);
+            Assert.assertNotNull("stringToSearch should not be null", stringToSearch);
+
+            if (stringToSearch.contains(unexpectedString))
+            {
+                Assert.fail(stringName
+                        + " contains unexpectedString:<"
+                        + unexpectedString
+                        + "> in stringToSearch:<"
                         + stringToSearch
                         + '>');
             }
@@ -1285,7 +1324,7 @@ public final class Verify extends Assert
     }
 
     /**
-     * Assert that the given {@link Map} contains all of the given keys and values
+     * Assert that the given {@link Map} contains all of the given keys and values.
      */
     public static void assertContainsAllKeyValues(Map<?, ?> actualMap, Object... keyValues)
     {
@@ -1300,7 +1339,7 @@ public final class Verify extends Assert
     }
 
     /**
-     * Assert that the given {@link Map} contains all of the given keys and values
+     * Assert that the given {@link Map} contains all of the given keys and values.
      */
     public static void assertContainsAllKeyValues(
             String mapName,
@@ -1327,7 +1366,7 @@ public final class Verify extends Assert
     }
 
     /**
-     * Assert that the given {@link ImmutableMap} contains all of the given keys and values
+     * Assert that the given {@link ImmutableMap} contains all of the given keys and values.
      */
     public static void assertContainsAllKeyValues(ImmutableMap<?, ?> actualImmutableMap, Object... keyValues)
     {
@@ -1342,7 +1381,7 @@ public final class Verify extends Assert
     }
 
     /**
-     * Assert that the given {@link ImmutableMap} contains all of the given keys and values
+     * Assert that the given {@link ImmutableMap} contains all of the given keys and values.
      */
     public static void assertContainsAllKeyValues(
             String immutableMapName,
@@ -2617,7 +2656,7 @@ public final class Verify extends Assert
     }
 
     /**
-     * Asserts that a value is negative
+     * Asserts that a value is negative.
      */
     public static void assertNegative(int value)
     {
@@ -2632,7 +2671,7 @@ public final class Verify extends Assert
     }
 
     /**
-     * Asserts that a value is positive
+     * Asserts that a value is positive.
      */
     public static void assertPositive(int value)
     {
@@ -2647,7 +2686,7 @@ public final class Verify extends Assert
     }
 
     /**
-     * Asserts that a value is positive
+     * Asserts that a value is positive.
      */
     public static void assertZero(int value)
     {
