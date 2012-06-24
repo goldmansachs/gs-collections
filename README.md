@@ -10,6 +10,15 @@ Ponzu is a fork of the Goldman Sachs gs-collections framework.  The main differe
 | collect        | transform  |
 | injectInto     | foldLeft   |
 
+In addition, the following have also been renamed:
+
+| **gs-collections** |  **ponzu**     |
+|----------------|------------| 
+| Function0         | Generator     |
+| Functions0        | Generators    |
+| PassThruFunction0 | Constant      |
+| CheckedFunction0  | CheckedGenerator |
+
 # Licensing
 
 Please see the file called LICENSE-2.0.txt
