@@ -21,6 +21,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.junit.Assert;
+import org.junit.Test;
 import ponzu.api.set.ImmutableSet;
 import ponzu.api.set.MutableSet;
 import ponzu.api.tuple.Pair;
@@ -30,8 +32,6 @@ import ponzu.impl.block.factory.Predicates;
 import ponzu.impl.factory.Lists;
 import ponzu.impl.set.mutable.UnifiedSet;
 import ponzu.impl.test.Verify;
-import org.junit.Assert;
-import org.junit.Test;
 
 public abstract class AbstractImmutableEmptySetTestCase extends AbstractImmutableSetTestCase
 {
@@ -52,7 +52,7 @@ public abstract class AbstractImmutableEmptySetTestCase extends AbstractImmutabl
 
     @Override
     @Test
-    public void testDetect()
+    public void testFind()
     {
         ImmutableSet<Integer> integers = this.classUnderTest();
         Assert.assertNull(integers.find(Predicates.equal(1)));

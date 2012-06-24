@@ -19,28 +19,25 @@ package ponzu.impl.list.immutable;
 import java.util.Collections;
 import java.util.List;
 
+import com.gs.collections.impl.collection.immutable.AbstractImmutableCollectionTestCase;
 import org.junit.Assert;
 import org.junit.Test;
 import ponzu.api.block.function.Function;
-import ponzu.api.block.function.Generator;
 import ponzu.api.block.procedure.ObjectIntProcedure;
 import ponzu.api.block.procedure.Procedure2;
+import ponzu.api.collection.ImmutableCollection;
+import ponzu.api.collection.MutableCollection;
 import ponzu.api.list.ImmutableList;
 import ponzu.api.list.MutableList;
-import ponzu.api.set.sorted.MutableSortedSet;
 import ponzu.api.tuple.Pair;
-import ponzu.impl.block.factory.Comparators;
 import ponzu.impl.block.factory.Functions;
 import ponzu.impl.block.factory.ObjectIntProcedures;
 import ponzu.impl.block.factory.Predicates;
-import ponzu.impl.block.function.AddFunction;
-import ponzu.impl.block.function.Constant;
 import ponzu.impl.block.procedure.CollectionAddProcedure;
 import ponzu.impl.factory.Lists;
 import ponzu.impl.list.Interval;
 import ponzu.impl.list.mutable.FastList;
 import ponzu.impl.set.mutable.UnifiedSet;
-import ponzu.impl.set.sorted.mutable.TreeSortedSet;
 import ponzu.impl.test.Verify;
 import ponzu.impl.utility.ListIterate;
 
@@ -115,6 +112,7 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
         final ImmutableList<Integer> list = this.classUnderTest();
         Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
         {
+            @Override
             public void run()
             {
                 list.get(list.size() + 1);
@@ -122,6 +120,7 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
         });
         Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
         {
+            @Override
             public void run()
             {
                 list.get(-1);
@@ -177,6 +176,7 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
         final MutableCollection<Integer> result = Lists.mutable.of();
         this.classUnderTest().forEachWith(new Procedure2<Integer, Integer>()
         {
+            @Override
             public void value(Integer argument1, Integer argument2)
             {
                 result.add(argument1 + argument2);
@@ -191,6 +191,7 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
         final MutableList<Integer> result = Lists.mutable.of();
         this.classUnderTest().forEachWithIndex(new ObjectIntProcedure<Integer>()
         {
+            @Override
             public void value(Integer object, int index)
             {
                 result.add(object + index);
@@ -198,6 +199,7 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
         });
         result.forEachWithIndex(new ObjectIntProcedure<Integer>()
         {
+            @Override
             public void value(Integer object, int index)
             {
                 Assert.assertEquals(object, result.set(index, object - index));
@@ -210,7 +212,7 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     public void testSelectWithTarget()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
-        Assert.assertEquals(integers, integers.fileter(Predicates.lessThan(integers.size() + 1), FastList.<Integer>newList()));
+        Assert.assertEquals(integers, integers.filter(Predicates.lessThan(integers.size() + 1), FastList.<Integer>newList()));
         Verify.assertEmpty(integers.filter(Predicates.greaterThan(integers.size()), FastList.<Integer>newList()));
     }
 
@@ -234,6 +236,7 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     {
         MutableCollection<String> actual = this.classUnderTest().flatTransform(new Function<Integer, MutableList<String>>()
         {
+            @Override
             public MutableList<String> valueOf(Integer integer)
             {
                 return Lists.fixedSize.of(String.valueOf(integer));
@@ -255,11 +258,11 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
 
         ImmutableCollection<Pair<Integer, Object>> pairs = immutableCollection.zip(nulls);
         Assert.assertEquals(immutableCollection, pairs.transform(Functions.<Integer>firstOfPair()));
-        Assert.assertEquals(nulls, pairs.collect(Functions.<Object>secondOfPair()));
+        Assert.assertEquals(nulls, pairs.transform(Functions.<Object>secondOfPair()));
 
         ImmutableCollection<Pair<Integer, Object>> pairsPlusOne = immutableCollection.zip(nullsPlusOne);
         Assert.assertEquals(immutableCollection, pairsPlusOne.transform(Functions.<Integer>firstOfPair()));
-        Assert.assertEquals(nulls, pairsPlusOne.collect(Functions.<Object>secondOfPair()));
+        Assert.assertEquals(nulls, pairsPlusOne.transform(Functions.<Object>secondOfPair()));
 
         ImmutableCollection<Pair<Integer, Object>> pairsMinusOne = immutableCollection.zip(nullsMinusOne);
         Assert.assertEquals(immutableCollection.size() - 1, pairsMinusOne.size());
@@ -319,6 +322,7 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     {
         Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
         {
+            @Override
             public void run()
             {
                 AbstractImmutableListTestCase.this.classUnderTest().castToList().remove(1);
@@ -331,6 +335,7 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     {
         Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
         {
+            @Override
             public void run()
             {
                 AbstractImmutableListTestCase.this.classUnderTest().castToList().set(0, 1);
@@ -343,6 +348,7 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     {
         Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
         {
+            @Override
             public void run()
             {
                 AbstractImmutableListTestCase.this.classUnderTest().castToList().add(0, 1);
@@ -355,6 +361,7 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     {
         Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
         {
+            @Override
             public void run()
             {
                 AbstractImmutableListTestCase.this.classUnderTest().castToList().addAll(0, Lists.fixedSize.<Integer>of());
@@ -367,6 +374,7 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     {
         Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
         {
+            @Override
             public void run()
             {
                 AbstractImmutableListTestCase.this.classUnderTest().castToList().subList(0, 1);
@@ -379,6 +387,7 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     {
         Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
         {
+            @Override
             public void run()
             {
                 AbstractImmutableListTestCase.this.classUnderTest().castToList().listIterator().hasPrevious();
@@ -391,6 +400,7 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     {
         Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
         {
+            @Override
             public void run()
             {
                 AbstractImmutableListTestCase.this.classUnderTest().castToList().listIterator().previous();
@@ -403,6 +413,7 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     {
         Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
         {
+            @Override
             public void run()
             {
                 AbstractImmutableListTestCase.this.classUnderTest().castToList().listIterator().previousIndex();
@@ -415,6 +426,7 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     {
         Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
         {
+            @Override
             public void run()
             {
                 AbstractImmutableListTestCase.this.classUnderTest().castToList().listIterator().previousIndex();
@@ -427,6 +439,7 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     {
         Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
         {
+            @Override
             public void run()
             {
                 AbstractImmutableListTestCase.this.classUnderTest().castToList().listIterator().remove();
@@ -439,6 +452,7 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     {
         Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
         {
+            @Override
             public void run()
             {
                 AbstractImmutableListTestCase.this.classUnderTest().castToList().listIterator(0);

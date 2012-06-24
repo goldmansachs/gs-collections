@@ -14,20 +14,15 @@
  * limitations under the License.
  */
 
-package ponzu.impl.set.sorted.mutable;
+package ponzu.impl.block.procedure.primitive;
 
-import ponzu.impl.test.Verify;
-import org.junit.Test;
+import java.io.Serializable;
 
-public class TreeSortedSetTest
+/**
+ * An IntIntProcedure is a two argument Closure which has no return argument and takes an int as the first and
+ * second arguments.
+ */
+public interface IntIntProcedure extends Serializable
 {
-    @Test
-    public void serializedForm()
-    {
-        Verify.assertSerializedForm(
-                1L,
-                "rO0ABXNyADhjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQuc29ydGVkLm11dGFibGUuVHJlZVNv\n"
-                        + "cnRlZFNldAAAAAAAAAABDAAAeHBwdwQAAAAAeA==",
-                new TreeSortedSet<Object>());
-    }
+    void value(int each, int index);
 }

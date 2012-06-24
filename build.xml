@@ -71,7 +71,6 @@
         <file name="collections-testutils" />
         <file name="unit-tests" />
         <file name="scala-unit-tests" />
-        <file name="serialization-tests" />
         <file name="acceptance-tests" />
     </filelist>
 

@@ -21,30 +21,30 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.api.block.function.Function2;
-import com.gs.collections.api.collection.ImmutableCollection;
-import com.gs.collections.api.collection.MutableCollection;
-import com.gs.collections.api.list.MutableList;
-import com.gs.collections.api.partition.PartitionImmutableCollection;
-import com.gs.collections.api.set.sorted.MutableSortedSet;
-import com.gs.collections.impl.block.factory.Comparators;
-import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.block.factory.IntegerPredicates;
-import com.gs.collections.impl.block.factory.Predicates;
-import com.gs.collections.impl.block.factory.Predicates2;
-import com.gs.collections.impl.block.function.AddFunction;
-import com.gs.collections.impl.block.function.PassThruFunction0;
-import com.gs.collections.impl.factory.Lists;
-import com.gs.collections.impl.list.mutable.FastList;
-import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
-import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
+import ponzu.api.RichIterable;
+import ponzu.api.block.function.Function;
+import ponzu.api.block.function.Function2;
+import ponzu.api.block.function.Generator;
+import ponzu.api.collection.ImmutableCollection;
+import ponzu.api.collection.MutableCollection;
+import ponzu.api.list.MutableList;
+import ponzu.api.partition.PartitionImmutableCollection;
+import ponzu.api.set.sorted.MutableSortedSet;
+import ponzu.impl.block.factory.Comparators;
+import ponzu.impl.block.factory.Functions;
+import ponzu.impl.block.factory.IntegerPredicates;
+import ponzu.impl.block.factory.Predicates;
+import ponzu.impl.block.factory.Predicates2;
+import ponzu.impl.block.function.AddFunction;
+import ponzu.impl.block.function.Constant;
+import ponzu.impl.factory.Lists;
+import ponzu.impl.list.mutable.FastList;
+import ponzu.impl.set.sorted.mutable.TreeSortedSet;
+import ponzu.impl.test.Verify;
 
-import static com.gs.collections.impl.factory.Iterables.*;
+import static ponzu.impl.factory.Iterables.*;
 
 public abstract class AbstractImmutableCollectionTestCase
 {
@@ -53,21 +53,21 @@ public abstract class AbstractImmutableCollectionTestCase
     protected abstract <T> MutableCollection<T> newMutable();
 
     @Test
-    public void selectWith()
+    public void filterWith()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         Assert.assertEquals(
-                this.<Integer>newMutable().with(101).withAll(integers).select(IntegerPredicates.isOdd()),
-                integers.selectWith(Predicates2.in(), iList(1, 3, 5, 7, 9), this.<Integer>newMutable().with(101)));
+                this.<Integer>newMutable().with(101).withAll(integers).filter(IntegerPredicates.isOdd()),
+                integers.filterWith(Predicates2.in(), iList(1, 3, 5, 7, 9), this.<Integer>newMutable().with(101)));
     }
 
     @Test
-    public void rejectWith()
+    public void filterNotWith()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         Assert.assertEquals(
-                this.<Integer>newMutable().with(100).withAll(integers).reject(IntegerPredicates.isOdd()),
-                integers.rejectWith(Predicates2.in(), iList(1, 3, 5, 7, 9), this.<Integer>newMutable().with(100)));
+                this.<Integer>newMutable().with(100).withAll(integers).filterNot(IntegerPredicates.isOdd()),
+                integers.filterNotWith(Predicates2.in(), iList(1, 3, 5, 7, 9), this.<Integer>newMutable().with(100)));
     }
 
     @Test
@@ -76,28 +76,30 @@ public abstract class AbstractImmutableCollectionTestCase
         ImmutableCollection<Integer> integers = this.classUnderTest();
         PartitionImmutableCollection<Integer> partition = integers.partition(IntegerPredicates.isOdd());
         Assert.assertEquals(
-                integers.select(IntegerPredicates.isOdd()),
+                integers.filter(IntegerPredicates.isOdd()),
                 partition.getSelected());
         Assert.assertEquals(
-                integers.select(IntegerPredicates.isEven()),
+                integers.filter(IntegerPredicates.isEven()),
                 partition.getRejected());
     }
 
     @Test
-    public void collectWith()
+    public void transformWith()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
 
-        MutableCollection<String> expected = this.<String>newMutable().with("?").withAll(integers.collect(new Function<Integer, String>()
+        MutableCollection<String> expected = this.<String>newMutable().with("?").withAll(integers.transform(new Function<Integer, String>()
         {
+            @Override
             public String valueOf(Integer object)
             {
                 return object + "!";
             }
         }));
 
-        MutableCollection<String> actual = integers.collectWith(new Function2<Integer, String, String>()
+        MutableCollection<String> actual = integers.transformWith(new Function2<Integer, String, String>()
         {
+            @Override
             public String value(Integer argument1, String argument2)
             {
                 return argument1 + argument2;
@@ -108,35 +110,35 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void testInjectInto()
+    public void testFoldLeft()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
-        Integer result = integers.injectInto(0, AddFunction.INTEGER);
-        Assert.assertEquals(FastList.newList(integers).injectInto(0, AddFunction.INTEGER_TO_INT), result.intValue());
+        Integer result = integers.foldLeft(0, AddFunction.INTEGER);
+        Assert.assertEquals(FastList.newList(integers).foldLeft(0, AddFunction.INTEGER_TO_INT), result.intValue());
     }
 
     @Test
-    public void injectIntoInt()
+    public void foldLeftInt()
     {
         Assert.assertEquals(
-                this.classUnderTest().injectInto(0, AddFunction.INTEGER).longValue(),
-                this.classUnderTest().injectInto(0, AddFunction.INTEGER_TO_INT));
+                this.classUnderTest().foldLeft(0, AddFunction.INTEGER).longValue(),
+                this.classUnderTest().foldLeft(0, AddFunction.INTEGER_TO_INT));
     }
 
     @Test
-    public void injectIntoLong()
+    public void foldLeftLong()
     {
         Assert.assertEquals(
-                this.classUnderTest().injectInto(0, AddFunction.INTEGER).longValue(),
-                this.classUnderTest().injectInto(0, AddFunction.INTEGER_TO_LONG));
+                this.classUnderTest().foldLeft(0, AddFunction.INTEGER).longValue(),
+                this.classUnderTest().foldLeft(0, AddFunction.INTEGER_TO_LONG));
     }
 
     @Test
-    public void injectIntoDouble()
+    public void foldLeftDouble()
     {
         Assert.assertEquals(
-                this.classUnderTest().injectInto(0, AddFunction.INTEGER).doubleValue(),
-                this.classUnderTest().injectInto(0, AddFunction.INTEGER_TO_DOUBLE),
+                this.classUnderTest().foldLeft(0, AddFunction.INTEGER).doubleValue(),
+                this.classUnderTest().foldLeft(0, AddFunction.INTEGER_TO_DOUBLE),
                 0.0);
     }
 
@@ -171,40 +173,41 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void testSelect()
+    public void testFilter()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
-        Assert.assertEquals(integers, integers.select(Predicates.lessThan(integers.size() + 1)));
-        Verify.assertIterableEmpty(integers.select(Predicates.greaterThan(integers.size())));
+        Assert.assertEquals(integers, integers.filter(Predicates.lessThan(integers.size() + 1)));
+        Verify.assertIterableEmpty(integers.filter(Predicates.greaterThan(integers.size())));
     }
 
     @Test
-    public void testReject()
+    public void testFilterNot()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
-        Verify.assertIterableEmpty(integers.reject(Predicates.lessThan(integers.size() + 1)));
-        Assert.assertEquals(integers, integers.reject(Predicates.greaterThan(integers.size())));
+        Verify.assertIterableEmpty(integers.filterNot(Predicates.lessThan(integers.size() + 1)));
+        Assert.assertEquals(integers, integers.filterNot(Predicates.greaterThan(integers.size())));
     }
 
     @Test
-    public void testCollect()
+    public void testTransform()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
-        Assert.assertEquals(integers, integers.collect(Functions.getIntegerPassThru()));
+        Assert.assertEquals(integers, integers.transform(Functions.getIntegerPassThru()));
     }
 
     @Test
     public void flatCollect()
     {
-        RichIterable<String> actual = this.classUnderTest().flatCollect(new Function<Integer, MutableList<String>>()
+        RichIterable<String> actual = this.classUnderTest().flatTransform(new Function<Integer, MutableList<String>>()
         {
+            @Override
             public MutableList<String> valueOf(Integer integer)
             {
                 return Lists.fixedSize.of(String.valueOf(integer));
             }
         });
 
-        ImmutableCollection<String> expected = this.classUnderTest().collect(Functions.getToString());
+        ImmutableCollection<String> expected = this.classUnderTest().transform(Functions.getToString());
 
         Assert.assertEquals(expected, actual);
     }
@@ -216,20 +219,20 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void testDetect()
+    public void testFind()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
-        Assert.assertEquals(Integer.valueOf(1), integers.detect(Predicates.equal(1)));
-        Assert.assertNull(integers.detect(Predicates.equal(integers.size() + 1)));
+        Assert.assertEquals(Integer.valueOf(1), integers.find(Predicates.equal(1)));
+        Assert.assertNull(integers.find(Predicates.equal(integers.size() + 1)));
     }
 
     @Test
-    public void testDetectIfNoneWithBlock()
+    public void testFindIfNoneWithBlock()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
-        Function0<Integer> function = new PassThruFunction0<Integer>(integers.size() + 1);
-        Assert.assertEquals(Integer.valueOf(1), integers.detectIfNone(Predicates.equal(1), function));
-        Assert.assertEquals(Integer.valueOf(integers.size() + 1), integers.detectIfNone(Predicates.equal(integers.size() + 1), function));
+        Generator<Integer> function = new Constant<Integer>(integers.size() + 1);
+        Assert.assertEquals(Integer.valueOf(1), integers.findIfNone(Predicates.equal(1), function));
+        Assert.assertEquals(Integer.valueOf(integers.size() + 1), integers.findIfNone(Predicates.equal(integers.size() + 1), function));
     }
 
     @Test
@@ -260,7 +263,7 @@ public abstract class AbstractImmutableCollectionTestCase
     public void testCollectIf()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
-        Assert.assertEquals(integers, integers.collectIf(Predicates.instanceOf(Integer.class),
+        Assert.assertEquals(integers, integers.transformIf(Predicates.instanceOf(Integer.class),
                 Functions.getIntegerPassThru()));
     }
 
@@ -298,6 +301,7 @@ public abstract class AbstractImmutableCollectionTestCase
         }
         Verify.assertThrows(NoSuchElementException.class, new Runnable()
         {
+            @Override
             public void run()
             {
                 iterator.next();
@@ -362,7 +366,7 @@ public abstract class AbstractImmutableCollectionTestCase
 
     private ImmutableCollection<Integer> classUnderTestWithNull()
     {
-        return this.classUnderTest().reject(Predicates.equal(1)).newWith(null);
+        return this.classUnderTest().filterNot(Predicates.equal(1)).newWith(null);
     }
 
     @Test(expected = NullPointerException.class)
@@ -430,6 +434,7 @@ public abstract class AbstractImmutableCollectionTestCase
     {
         Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
         {
+            @Override
             public void run()
             {
                 AbstractImmutableCollectionTestCase.this.classUnderTest().iterator().remove();
@@ -442,6 +447,7 @@ public abstract class AbstractImmutableCollectionTestCase
     {
         Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
         {
+            @Override
             public void run()
             {
                 ((Collection<Integer>) AbstractImmutableCollectionTestCase.this.classUnderTest()).add(1);
@@ -454,6 +460,7 @@ public abstract class AbstractImmutableCollectionTestCase
     {
         Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
         {
+            @Override
             public void run()
             {
                 ((Collection<Integer>) AbstractImmutableCollectionTestCase.this.classUnderTest()).remove(Integer.valueOf(1));
@@ -466,6 +473,7 @@ public abstract class AbstractImmutableCollectionTestCase
     {
         Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
         {
+            @Override
             public void run()
             {
                 ((Collection<Integer>) AbstractImmutableCollectionTestCase.this.classUnderTest()).clear();
@@ -478,6 +486,7 @@ public abstract class AbstractImmutableCollectionTestCase
     {
         Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
         {
+            @Override
             public void run()
             {
                 ((Collection<Integer>) AbstractImmutableCollectionTestCase.this.classUnderTest()).removeAll(Lists.fixedSize.of());
@@ -490,6 +499,7 @@ public abstract class AbstractImmutableCollectionTestCase
     {
         Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
         {
+            @Override
             public void run()
             {
                 ((Collection<Integer>) AbstractImmutableCollectionTestCase.this.classUnderTest()).retainAll(Lists.fixedSize.of());
@@ -502,6 +512,7 @@ public abstract class AbstractImmutableCollectionTestCase
     {
         Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
         {
+            @Override
             public void run()
             {
                 ((Collection<Integer>) AbstractImmutableCollectionTestCase.this.classUnderTest()).addAll(Lists.fixedSize.<Integer>of());

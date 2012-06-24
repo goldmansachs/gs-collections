@@ -45,6 +45,7 @@ import ponzu.impl.block.procedure.CollectProcedure;
 import ponzu.impl.block.procedure.CollectionAddProcedure;
 import ponzu.impl.block.procedure.FilterNotProcedure;
 import ponzu.impl.block.procedure.SelectProcedure;
+import ponzu.impl.block.procedure.primitive.IntIntProcedure;
 import ponzu.impl.block.procedure.primitive.IntObjectProcedure;
 import ponzu.impl.block.procedure.primitive.IntProcedure;
 import ponzu.impl.block.procedure.primitive.IntProcedureWithInt;
@@ -364,6 +365,7 @@ public final class Interval
     {
         return this.foldLeft(BigInteger.valueOf(1L), new Function2<BigInteger, Integer, BigInteger>()
         {
+            @Override
             public BigInteger value(BigInteger result, Integer each)
             {
                 return result.multiply(BigInteger.valueOf(each.longValue()));
@@ -380,13 +382,15 @@ public final class Interval
     }
 
     /**
-     * @deprecated since 1.2 - Use {@link #forEachWithIndex(IntIntProcedure)}
+     * Use {@link #forEachWithIndex(IntIntProcedure)}.
+     * @deprecated since 1.2 - Use {@link #forEachWithIndex(IntIntProcedure)}.
      */
     @Deprecated
     public void forEachWithIndex(final IntProcedureWithInt procedureWithInt)
     {
         this.forEachWithIndex(new IntIntProcedure()
         {
+            @Override
             public void value(int each, int index)
             {
                 procedureWithInt.value(each, index);
@@ -413,10 +417,12 @@ public final class Interval
         }
     }
 
+    @Override
     public void forEachWithIndex(final ObjectIntProcedure<? super Integer> objectIntProcedure)
     {
         this.forEachWithIndex(new IntIntProcedure()
         {
+            @Override
             public void value(int each, int index)
             {
                 objectIntProcedure.value(each, index);
@@ -442,10 +448,12 @@ public final class Interval
         }
     }
 
+    @Override
     public <P> void forEachWith(final Procedure2<? super Integer, ? super P> procedure, P parameter)
     {
         this.forEachWith(new IntObjectProcedure<P>()
         {
+            @Override
             public void value(int each, P parameter)
             {
                 procedure.value(each, parameter);
@@ -471,10 +479,12 @@ public final class Interval
         }
     }
 
+    @Override
     public void forEach(final Procedure<? super Integer> procedure)
     {
         this.forEach(new IntProcedure()
         {
+            @Override
             public void value(int each)
             {
                 procedure.value(each);
@@ -523,6 +533,7 @@ public final class Interval
     {
         executor.execute(new Runnable()
         {
+            @Override
             public void run()
             {
                 try
@@ -802,6 +813,7 @@ public final class Interval
         final Integer[] result = new Integer[this.size()];
         this.forEachWithIndex(new ObjectIntProcedure<Integer>()
         {
+            @Override
             public void value(Integer each, int index)
             {
                 result[index] = each;
@@ -811,13 +823,14 @@ public final class Interval
     }
 
     /**
-     * Converts the interval to an Integer array
+     * Converts the interval to an Integer array.
      */
     public int[] toIntArray()
     {
         final int[] result = new int[this.size()];
         this.forEachWithIndex(new IntIntProcedure()
         {
+            @Override
             public void value(int each, int index)
             {
                 result[index] = each;
@@ -832,6 +845,7 @@ public final class Interval
         return "Interval from: " + this.from + " to: " + this.to + " step: " + this.step + " size: " + this.size();
     }
 
+    @Override
     public Iterator<Integer> iterator()
     {
         return new IntegerIterator();
@@ -841,6 +855,7 @@ public final class Interval
     {
         private int current = Interval.this.from;
 
+        @Override
         public boolean hasNext()
         {
             if (Interval.this.from <= Interval.this.to)
@@ -850,6 +865,7 @@ public final class Interval
             return this.current >= Interval.this.to;
         }
 
+        @Override
         public Integer next()
         {
             if (this.hasNext())
@@ -861,6 +877,7 @@ public final class Interval
             throw new NoSuchElementException();
         }
 
+        @Override
         public void remove()
         {
             throw new UnsupportedOperationException("Cannot remove a value from an Interval");
@@ -921,6 +938,7 @@ public final class Interval
         }
     }
 
+    @Override
     public Integer get(int index)
     {
         this.checkBounds("index", index);
@@ -948,6 +966,7 @@ public final class Interval
         return (int) Math.max((long) this.from + (long) this.step * (long) index, this.to);
     }
 
+    @Override
     public int indexOf(Object object)
     {
         if (!(object instanceof Integer))
@@ -969,6 +988,7 @@ public final class Interval
         return -1;
     }
 
+    @Override
     public int lastIndexOf(Object object)
     {
         return this.indexOf(object);
@@ -998,68 +1018,81 @@ public final class Interval
         return bag;
     }
 
+    @Override
     public boolean add(Integer integer)
     {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public boolean remove(Object o)
     {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     @SuppressWarnings("TypeParameterExtendsFinalClass")
     public boolean addAll(Collection<? extends Integer> collection)
     {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     @SuppressWarnings("TypeParameterExtendsFinalClass")
     public boolean addAll(int index, Collection<? extends Integer> collection)
     {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public boolean removeAll(Collection<?> collection)
     {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public boolean retainAll(Collection<?> collection)
     {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public void clear()
     {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Integer set(int index, Integer element)
     {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public void add(int index, Integer element)
     {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public Integer remove(int index)
     {
         throw new UnsupportedOperationException();
     }
 
+    @Override
     public ListIterator<Integer> listIterator()
     {
         return new MutableListIterator<Integer>(this, 0);
     }
 
+    @Override
     public ListIterator<Integer> listIterator(int index)
     {
         return new MutableListIterator<Integer>(this, index);
     }
 
+    @Override
     public Interval subList(int fromIndex, int toIndex)
     {
         return Interval.fromToBy(this.get(fromIndex), this.get(toIndex - 1), this.step);

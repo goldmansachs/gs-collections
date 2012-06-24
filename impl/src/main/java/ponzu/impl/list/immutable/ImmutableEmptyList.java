@@ -24,14 +24,24 @@ import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.RandomAccess;
 
+import net.jcip.annotations.Immutable;
 import ponzu.api.block.function.Function;
+import ponzu.api.block.function.Function2;
+import ponzu.api.block.function.Generator;
+import ponzu.api.block.function.primitive.DoubleObjectToDoubleFunction;
+import ponzu.api.block.function.primitive.IntObjectToIntFunction;
+import ponzu.api.block.function.primitive.LongObjectToLongFunction;
+import ponzu.api.block.predicate.Predicate;
+import ponzu.api.block.predicate.Predicate2;
 import ponzu.api.block.procedure.ObjectIntProcedure;
 import ponzu.api.block.procedure.Procedure;
 import ponzu.api.block.procedure.Procedure2;
 import ponzu.api.list.ImmutableList;
+import ponzu.api.partition.list.PartitionImmutableList;
 import ponzu.api.tuple.Pair;
 import ponzu.impl.factory.Lists;
-import net.jcip.annotations.Immutable;
+import ponzu.impl.list.mutable.FastList;
+import ponzu.impl.partition.list.PartitionFastList;
 
 /**
  * This is a zero element {@link ImmutableList} which is created by calling the Lists.immutable.of() method.
@@ -63,6 +73,7 @@ final class ImmutableEmptyList<T>
         return this;
     }
 
+    @Override
     public int size()
     {
         return 0;
@@ -80,6 +91,7 @@ final class ImmutableEmptyList<T>
         throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + this.size());
     }
 
+    @Override
     public void forEach(Procedure<? super T> procedure)
     {
     }
@@ -99,6 +111,7 @@ final class ImmutableEmptyList<T>
     {
     }
 
+    @Override
     public ImmutableList<T> newWith(T newItem)
     {
         return Lists.immutable.of(newItem);
@@ -348,7 +361,7 @@ final class ImmutableEmptyList<T>
     }
 
     @Override
-    public T findIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
+    public T findIfNone(Predicate<? super T> predicate, Generator<? extends T> function)
     {
         return function.value();
     }

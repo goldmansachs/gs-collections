@@ -149,6 +149,7 @@ public interface MutableCollection<T>
      * });
      * </pre>
      */
+    @Override
     MutableCollection<T> filter(Predicate<? super T> predicate);
 
     /**
@@ -177,6 +178,7 @@ public interface MutableCollection<T>
      * return people.filterNot(Predicates.attributeEqual("lastName", "Smith"));
      * </pre>
      */
+    @Override
     MutableCollection<T> filterNot(Predicate<? super T> predicate);
 
     /**
@@ -201,6 +203,7 @@ public interface MutableCollection<T>
             Predicate2<? super T, ? super P> predicate,
             P parameter);
 
+    @Override
     PartitionMutableCollection<T> partition(Predicate<? super T> predicate);
 
     /**
@@ -235,6 +238,7 @@ public interface MutableCollection<T>
      * });
      * </pre>
      */
+    @Override
     <V> MutableCollection<V> transform(Function<? super T, ? extends V> function);
 
     /**
@@ -264,8 +268,10 @@ public interface MutableCollection<T>
      * Lists.mutable.of().with(1, 2, 3).transformIf(Predicates.notNull(), Functions.getToString())
      * </pre>
      */
+    @Override
     <V> MutableCollection<V> transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 
+    @Override
     <V> MutableCollection<V> flatTransform(Function<? super T, ? extends Iterable<V>> function);
 
     /**
@@ -386,12 +392,17 @@ public interface MutableCollection<T>
      */
     ImmutableCollection<T> toImmutable();
 
+    @Override
     <V> MutableMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
 
+    @Override
     <V> MutableMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
 
-    <S> MutableCollection<Pair<T, S>> zip(Iterable<S> that);
+    @Override
+    <S> MutableCollection<Pair<T, S>>
+    zip(Iterable<S> that);
 
+    @Override
     MutableCollection<Pair<T, Integer>> zipWithIndex();
 
     /**

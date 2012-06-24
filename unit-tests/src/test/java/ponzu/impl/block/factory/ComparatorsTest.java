@@ -23,7 +23,10 @@ import java.text.SimpleDateFormat;
 import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
+import org.junit.Assert;
+import org.junit.Test;
 import ponzu.api.block.SerializableComparator;
 import ponzu.api.block.function.Function;
 import ponzu.api.list.MutableList;
@@ -33,8 +36,6 @@ import ponzu.impl.list.mutable.FastList;
 import ponzu.impl.test.Verify;
 import ponzu.impl.test.domain.Person;
 import ponzu.impl.tuple.Tuples;
-import org.junit.Assert;
-import org.junit.Test;
 
 import static ponzu.impl.factory.Iterables.*;
 
@@ -247,9 +248,9 @@ public class ComparatorsTest
     @Test
     public void specializedComparator()
     {
-        OneOfEach february = new OneOfEach(Timestamp.valueOf("2004-02-12 22:20:30"));
-        OneOfEach april = new OneOfEach(Timestamp.valueOf("2004-04-12 22:20:30"));
-        OneOfEach december = new OneOfEach(Timestamp.valueOf("2004-12-12 22:20:30"));
+        OneOfEach february = new OneOfEach(Timestamp.valueOf("2004-02-12 22:20:30")); // Thursday
+        OneOfEach april = new OneOfEach(Timestamp.valueOf("2004-04-12 22:20:30"));    // Monday
+        OneOfEach december = new OneOfEach(Timestamp.valueOf("2004-12-12 22:20:30")); // Sunday
 
         Comparator<OneOfEach> comparator = Comparators.byFunction(OneOfEach.TO_DATE_VALUE, new FancyDateComparator());
 
@@ -280,8 +281,9 @@ public class ComparatorsTest
         private static final String FANCY_DATE_FORMAT = "EEE, MMM d, ''yy";
         private static final long serialVersionUID = 1L;
 
-        private final DateFormat formatter = new SimpleDateFormat(FANCY_DATE_FORMAT);
+        private final DateFormat formatter = new SimpleDateFormat(FANCY_DATE_FORMAT, Locale.US);
 
+        @Override
         public int compare(Date o1, Date o2)
         {
             String date1 = this.formatter.format(o1);

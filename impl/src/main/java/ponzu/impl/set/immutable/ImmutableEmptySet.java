@@ -24,15 +24,26 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
 
+import net.jcip.annotations.Immutable;
 import ponzu.api.block.function.Function;
+import ponzu.api.block.function.Function2;
+import ponzu.api.block.function.Generator;
+import ponzu.api.block.function.primitive.DoubleObjectToDoubleFunction;
+import ponzu.api.block.function.primitive.IntObjectToIntFunction;
+import ponzu.api.block.function.primitive.LongObjectToLongFunction;
+import ponzu.api.block.predicate.Predicate;
+import ponzu.api.block.predicate.Predicate2;
 import ponzu.api.block.procedure.ObjectIntProcedure;
 import ponzu.api.block.procedure.Procedure;
 import ponzu.api.block.procedure.Procedure2;
+import ponzu.api.multimap.MutableMultimap;
+import ponzu.api.partition.set.PartitionImmutableSet;
 import ponzu.api.set.ImmutableSet;
 import ponzu.api.tuple.Pair;
 import ponzu.impl.EmptyIterator;
 import ponzu.impl.factory.Sets;
-import net.jcip.annotations.Immutable;
+import ponzu.impl.partition.set.PartitionUnifiedSet;
+import ponzu.impl.set.mutable.UnifiedSet;
 
 /**
  * This is a zero element {@link ImmutableSet} which is created by calling the Sets.immutable.of() method.
@@ -92,6 +103,7 @@ final class ImmutableEmptySet<T>
         return this;
     }
 
+    @Override
     public int size()
     {
         return 0;
@@ -103,6 +115,7 @@ final class ImmutableEmptySet<T>
         return false;
     }
 
+    @Override
     public void forEach(Procedure<? super T> procedure)
     {
     }
@@ -202,7 +215,7 @@ final class ImmutableEmptySet<T>
     }
 
     @Override
-    public ImmutableSet<T> filterNote(Predicate<? super T> predicate)
+    public ImmutableSet<T> filterNot(Predicate<? super T> predicate)
     {
         return this;
     }
@@ -298,7 +311,7 @@ final class ImmutableEmptySet<T>
     }
 
     @Override
-    public T findIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
+    public T findIfNone(Predicate<? super T> predicate, Generator<? extends T> function)
     {
         return function.value();
     }

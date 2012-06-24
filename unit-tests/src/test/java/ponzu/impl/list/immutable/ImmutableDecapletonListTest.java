@@ -16,12 +16,12 @@
 
 package ponzu.impl.list.immutable;
 
+import org.junit.Test;
 import ponzu.api.list.ImmutableList;
 import ponzu.api.list.MutableList;
 import ponzu.impl.block.factory.Functions;
 import ponzu.impl.set.sorted.mutable.TreeSortedSet;
 import ponzu.impl.test.Verify;
-import org.junit.Test;
 
 public class ImmutableDecapletonListTest extends AbstractImmutableListTestCase
 {
@@ -36,7 +36,7 @@ public class ImmutableDecapletonListTest extends AbstractImmutableListTestCase
     public void toSortedSetBy()
     {
         MutableList<Integer> expected = TreeSortedSet.newSetWith("1", "2", "3", "4", "5", "6", "7", "8", "9", "10").transform(Functions.getStringToInteger());
-        MutableList<Integer> sortedList = this.newList().toSortedSetBy(Functions.getToString()).toList();
+        MutableList<Integer> sortedList = this.classUnderTest().toSortedSetBy(Functions.getToString()).toList();
         Verify.assertListsEqual(expected, sortedList);
     }
 }

@@ -37,7 +37,6 @@
         <module>impl</module>
         <module>testutils</module>
         <module>unit-tests</module>
-        <module>serialization-tests</module>
     </modules>
 
     <properties>
@@ -427,7 +426,6 @@
                 <module>testutils</module>
                 <module>unit-tests</module>
                 <module>scala-unit-tests</module>
-                <module>serialization-tests</module>
                 <module>acceptance-tests</module>
             </modules>
         </profile>

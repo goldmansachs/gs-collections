@@ -20,6 +20,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import org.junit.Assert;
+import org.junit.Test;
 import ponzu.api.list.ImmutableList;
 import ponzu.api.list.MutableList;
 import ponzu.api.tuple.Pair;
@@ -33,8 +35,6 @@ import ponzu.impl.list.Interval;
 import ponzu.impl.list.mutable.FastList;
 import ponzu.impl.set.mutable.UnifiedSet;
 import ponzu.impl.test.Verify;
-import org.junit.Assert;
-import org.junit.Test;
 
 public class ImmutableEmptyListTest extends AbstractImmutableListTestCase
 {
@@ -132,10 +132,10 @@ public class ImmutableEmptyListTest extends AbstractImmutableListTestCase
 
     @Override
     @Test
-    public void testDetect()
+    public void testFind()
     {
         ImmutableList<Integer> integers = this.classUnderTest();
-        Assert.assertNull(integers.detect(Predicates.equal(1)));
+        Assert.assertNull(integers.find(Predicates.equal(1)));
     }
 
     @Override
