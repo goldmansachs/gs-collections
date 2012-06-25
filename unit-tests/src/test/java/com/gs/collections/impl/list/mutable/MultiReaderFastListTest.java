@@ -1012,30 +1012,32 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     }
 
     @Override
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
     public void listIterator()
     {
-        final MultiReaderFastList<Integer> integers = this.newWith(1, 2, 3, 4);
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                integers.listIterator();
-            }
-        });
+        MultiReaderFastList<Integer> integers = this.newWith(1, 2, 3, 4);
+        integers.listIterator();
     }
 
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
     public void listIteratorWithIndex()
     {
-        final MultiReaderFastList<Integer> integers = this.newWith(1, 2, 3, 4);
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                integers.listIterator(2);
-            }
-        });
+        MultiReaderFastList<Integer> integers = this.newWith(1, 2, 3, 4);
+        integers.listIterator(2);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void listIteratorIndexTooSmall()
+    {
+        this.newWith(1).listIterator(-1);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void listIteratorIndexTooBig()
+    {
+        this.newWith(1).listIterator(2);
     }
 
     @Test

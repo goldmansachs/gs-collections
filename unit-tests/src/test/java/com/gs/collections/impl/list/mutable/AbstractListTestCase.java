@@ -575,6 +575,24 @@ public abstract class AbstractListTestCase
         Verify.assertContainsAll(list, "A", "D");
     }
 
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void subListFromOutOfBoundsException()
+    {
+        this.newWith(1).subList(-1, 0);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void subListToGreaterThanSizeException()
+    {
+        this.newWith(1).subList(0, 2);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void subListFromGreaterThanToException()
+    {
+        this.newWith(1).subList(1, 0);
+    }
+
     @Test
     public void testGetWithIndexOutOfBoundsException()
     {
@@ -619,6 +637,18 @@ public abstract class AbstractListTestCase
             sum += each.intValue();
         }
         Assert.assertEquals(20, sum);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void listIteratorIndexTooSmall()
+    {
+        this.newWith(1).listIterator(-1);
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void listIteratorIndexTooBig()
+    {
+        this.newWith(1).listIterator(2);
     }
 
     @Override
