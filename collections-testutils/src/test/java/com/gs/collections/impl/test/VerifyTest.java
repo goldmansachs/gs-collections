@@ -30,6 +30,7 @@ import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.tuple.Tuples;
 import org.junit.Assert;
@@ -80,7 +81,7 @@ public class VerifyTest
     }
 
     @Test
-    public void assertEndsWith()
+    public void assertEndsWithArray()
     {
         Verify.assertEndsWith(new Integer[]{1, 2, 3, 4}, 3, 4);
         Verify.assertError(AssertionError.class, new Runnable()
@@ -88,6 +89,310 @@ public class VerifyTest
             public void run()
             {
                 Verify.assertEndsWith(new Integer[]{1, 2, 3, 4}, 3, 2);
+            }
+        });
+    }
+
+    @Test
+    public void assertStartsWithArray()
+    {
+        Verify.assertStartsWith(new Integer[]{1, 2, 3, 4}, 1, 2);
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertStartsWith(new Integer[]{1, 2, 3, 4}, 3, 2);
+            }
+        });
+    }
+
+    @Test
+    public void assertStartsWithList()
+    {
+        Verify.assertStartsWith(FastList.newListWith(1, 2, 3, 4), 1, 2);
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertStartsWith(FastList.newListWith(1, 2, 3, 4), 3, 2);
+            }
+        });
+    }
+
+    @Test
+    public void assertEndsWithList()
+    {
+        Verify.assertEndsWith(FastList.newListWith(1, 2, 3, 4), 3, 4);
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertEndsWith(FastList.newListWith(1, 2, 3, 4), 3, 2);
+            }
+        });
+    }
+
+    @Test
+    public void assertNotEqualsString()
+    {
+        Verify.assertNotEquals("yes", "no");
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertNotEquals("yes", "yes");
+            }
+        });
+    }
+
+    @Test
+    public void assertNotEqualsDouble()
+    {
+        Verify.assertNotEquals(0.5d, 0.6d, 0.0001);
+        Verify.assertNotEquals("message", 0.5d, 0.6d, 0.0001);
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertNotEquals(0.5d, 0.5d, 0.0001);
+            }
+        });
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertNotEquals("message", 0.5d, 0.5d, 0.0001);
+            }
+        });
+    }
+
+    @Test
+    public void assertNotEqualsFloat()
+    {
+        Verify.assertNotEquals(0.5f, 0.6f, 0.0001f);
+        Verify.assertNotEquals("message", 0.5f, 0.6f, 0.0001f);
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertNotEquals(0.5f, 0.5f, 0.0001f);
+            }
+        });
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertNotEquals("message", 0.5f, 0.5f, 0.0001f);
+            }
+        });
+    }
+
+    @Test
+    public void assertNotEqualsLong()
+    {
+        Verify.assertNotEquals(5L, 6L);
+        Verify.assertNotEquals("message", 5L, 6L);
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertNotEquals(5L, 5L);
+            }
+        });
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertNotEquals("message", 5L, 5L);
+            }
+        });
+    }
+
+    @Test
+    public void assertNotEqualsBoolean()
+    {
+        Verify.assertNotEquals(true, false);
+        Verify.assertNotEquals("message", true, false);
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertNotEquals(true, true);
+            }
+        });
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertNotEquals("message", true, true);
+            }
+        });
+    }
+
+    @Test
+    public void assertNotEqualsByte()
+    {
+        Verify.assertNotEquals((byte) 1, (byte) 2);
+        Verify.assertNotEquals("message", (byte) 1, (byte) 2);
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertNotEquals((byte) 1, (byte) 1);
+            }
+        });
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertNotEquals("message", (byte) 1, (byte) 1);
+            }
+        });
+    }
+
+    @Test
+    public void assertNotEqualsChar()
+    {
+        Verify.assertNotEquals((char) 1, (char) 2);
+        Verify.assertNotEquals("message", (char) 1, (char) 2);
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertNotEquals((char) 1, (char) 1);
+            }
+        });
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertNotEquals("message", (char) 1, (byte) 1);
+            }
+        });
+    }
+
+    @Test
+    public void assertNotEqualsShort()
+    {
+        Verify.assertNotEquals((short) 1, (short) 2);
+        Verify.assertNotEquals("message", (short) 1, (short) 2);
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertNotEquals((short) 1, (short) 1);
+            }
+        });
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertNotEquals("message", (short) 1, (short) 1);
+            }
+        });
+    }
+
+    @Test
+    public void assertNotEqualsInt()
+    {
+        Verify.assertNotEquals((int) 1, (int) 2);
+        Verify.assertNotEquals("message", (int) 1, (int) 2);
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertNotEquals((int) 1, (int) 1);
+            }
+        });
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertNotEquals("message", (int) 1, (int) 1);
+            }
+        });
+    }
+
+    @Test
+    public void assertNotContainsString()
+    {
+        Verify.assertNotContains("1", "0");
+        Verify.assertNotContains("message", "1", "0");
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertNotContains("1", "1");
+            }
+        });
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertNotContains("message", "1", "1");
+            }
+        });
+    }
+
+    @Test
+    public void assertListsEqual()
+    {
+        Verify.assertListsEqual(FastList.newListWith(1, 2, 3), FastList.newListWith(1, 2, 3));
+        Verify.assertListsEqual("message", FastList.newListWith(1, 2, 3), FastList.newListWith(1, 2, 3));
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertListsEqual(FastList.newListWith(1, 2, 3), FastList.newListWith(1, 2));
+            }
+        });
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertListsEqual("message", FastList.newListWith(1, 2, 3), FastList.newListWith(1, 2));
+            }
+        });
+    }
+
+    @Test
+    public void assertSetsEqual()
+    {
+        Verify.assertSetsEqual(UnifiedSet.newSetWith(1, 2, 3), UnifiedSet.newSetWith(1, 2, 3));
+        Verify.assertSetsEqual("message", UnifiedSet.newSetWith(1, 2, 3), UnifiedSet.newSetWith(1, 2, 3));
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertSetsEqual(UnifiedSet.newSetWith(1, 2, 3), UnifiedSet.newSetWith(1, 2));
+            }
+        });
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertSetsEqual("message", UnifiedSet.newSetWith(1, 2, 3), UnifiedSet.newSetWith(1, 2));
+            }
+        });
+    }
+
+    @Test
+    public void assertMapsEqual()
+    {
+        Verify.assertMapsEqual(UnifiedMap.newWithKeysValues(1, 1, 2, 2), UnifiedMap.newWithKeysValues(1, 1, 2, 2));
+        Verify.assertMapsEqual("message", UnifiedMap.newWithKeysValues(1, 1, 2, 2), UnifiedMap.newWithKeysValues(1, 1, 2, 2));
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertMapsEqual(UnifiedMap.newWithKeysValues(1, 1, 2, 2), UnifiedMap.newWithKeysValues(1, 1, 2, 2, 3, 3));
+            }
+        });
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertMapsEqual("message", UnifiedMap.newWithKeysValues(1, 1, 2, 2), UnifiedMap.newWithKeysValues(1, 1, 2, 2, 3, 3));
             }
         });
     }
