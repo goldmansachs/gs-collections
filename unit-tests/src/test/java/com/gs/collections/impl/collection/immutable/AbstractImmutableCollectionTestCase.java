@@ -25,6 +25,10 @@ import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
@@ -138,6 +142,73 @@ public abstract class AbstractImmutableCollectionTestCase
                 this.classUnderTest().injectInto(0, AddFunction.INTEGER).doubleValue(),
                 this.classUnderTest().injectInto(0, AddFunction.INTEGER_TO_DOUBLE),
                 0.0);
+    }
+
+    @Test
+    public void injectIntoFloat()
+    {
+        Assert.assertEquals(
+                this.classUnderTest().injectInto(0, AddFunction.INTEGER).floatValue(),
+                this.classUnderTest().injectInto(0, AddFunction.INTEGER_TO_FLOAT),
+                0.0);
+    }
+
+    @Test
+    public void sumFloat()
+    {
+        Assert.assertEquals(
+                this.classUnderTest().injectInto(0, AddFunction.INTEGER_TO_FLOAT),
+                this.classUnderTest().sumOf(new FloatFunction<Integer>()
+                {
+                    public float floatValueOf(Integer integer)
+                    {
+                        return integer.floatValue();
+                    }
+                }),
+                0.0);
+    }
+
+    @Test
+    public void sumDouble()
+    {
+        Assert.assertEquals(
+                this.classUnderTest().injectInto(0, AddFunction.INTEGER_TO_DOUBLE),
+                this.classUnderTest().sumOf(new DoubleFunction<Integer>()
+                {
+                    public double doubleValueOf(Integer integer)
+                    {
+                        return integer.doubleValue();
+                    }
+                }),
+                0.0);
+    }
+
+    @Test
+    public void sumInteger()
+    {
+        Assert.assertEquals(
+                this.classUnderTest().injectInto(0, AddFunction.INTEGER_TO_INT),
+                this.classUnderTest().sumOf(new IntFunction<Integer>()
+                {
+                    public int intValueOf(Integer integer)
+                    {
+                        return integer;
+                    }
+                }));
+    }
+
+    @Test
+    public void sumLong()
+    {
+        Assert.assertEquals(
+                this.classUnderTest().injectInto(0, AddFunction.INTEGER_TO_LONG),
+                this.classUnderTest().sumOf(new LongFunction<Integer>()
+                {
+                    public long longValueOf(Integer integer)
+                    {
+                        return integer.longValue();
+                    }
+                }));
     }
 
     @Test

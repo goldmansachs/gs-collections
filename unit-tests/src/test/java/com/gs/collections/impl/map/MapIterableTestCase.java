@@ -27,6 +27,10 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -699,6 +703,102 @@ public abstract class MapIterableTestCase
 
         Sum sum = map.injectInto(new IntegerSum(0), SumProcedure.number());
         Assert.assertEquals(new IntegerSum(10), sum);
+    }
+
+    @Test
+    public void injectIntoInt()
+    {
+        MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
+
+        int actual = map.injectInto(0, AddFunction.INTEGER_TO_INT);
+        Assert.assertEquals(10, actual);
+    }
+
+    @Test
+    public void injectIntoLong()
+    {
+        MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
+
+        long actual = map.injectInto(0, AddFunction.INTEGER_TO_LONG);
+        Assert.assertEquals(10, actual);
+    }
+
+    @Test
+    public void injectIntoFloat()
+    {
+        MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
+
+        float actual = map.injectInto(0, AddFunction.INTEGER_TO_FLOAT);
+        Assert.assertEquals(10.0F, actual, 0.01);
+    }
+
+    @Test
+    public void injectIntoDouble()
+    {
+        MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
+
+        double actual = map.injectInto(0, AddFunction.INTEGER_TO_DOUBLE);
+        Assert.assertEquals(10.0d, actual, 0.01);
+    }
+
+    @Test
+    public void sumInt()
+    {
+        MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
+
+        int actual = map.sumOf(new IntFunction<Integer>()
+        {
+            public int intValueOf(Integer integer)
+            {
+                return integer;
+            }
+        });
+        Assert.assertEquals(10, actual);
+    }
+
+    @Test
+    public void sumLong()
+    {
+        MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
+
+        long actual = map.sumOf(new LongFunction<Integer>()
+        {
+            public long longValueOf(Integer integer)
+            {
+                return integer.longValue();
+            }
+        });
+        Assert.assertEquals(10, actual);
+    }
+
+    @Test
+    public void sumFloat()
+    {
+        MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
+
+        float actual = map.sumOf(new FloatFunction<Integer>()
+        {
+            public float floatValueOf(Integer integer)
+            {
+                return integer.floatValue();
+            }
+        });
+        Assert.assertEquals(10.0F, actual, 0.01);
+    }
+
+    @Test
+    public void sumDouble()
+    {
+        MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
+
+        double actual = map.sumOf(new DoubleFunction<Integer>()
+        {
+            public double doubleValueOf(Integer integer)
+            {
+                return integer.doubleValue();
+            }
+        });
+        Assert.assertEquals(10.0d, actual, 0.01);
     }
 
     @Test

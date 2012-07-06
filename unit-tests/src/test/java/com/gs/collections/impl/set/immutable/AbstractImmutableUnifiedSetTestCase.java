@@ -21,6 +21,10 @@ import java.util.HashSet;
 import java.util.Iterator;
 
 import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.MutableList;
@@ -278,6 +282,70 @@ public abstract class AbstractImmutableUnifiedSetTestCase
         ImmutableSet<Integer> objects = this.newSetWith(1, 2, 3);
         double result = objects.injectInto(1, AddFunction.INTEGER_TO_DOUBLE);
         Assert.assertEquals(7.0d, result, 0.001);
+    }
+
+    @Test
+    public void injectIntoFloat()
+    {
+        ImmutableSet<Integer> objects = this.newSetWith(1, 2, 3);
+        float result = objects.injectInto(1, AddFunction.INTEGER_TO_FLOAT);
+        Assert.assertEquals(7.0d, result, 0.001);
+    }
+
+    @Test
+    public void sumFloat()
+    {
+        ImmutableSet<Integer> objects = this.newSetWith(1, 2, 3);
+        float actual = objects.sumOf(new FloatFunction<Integer>()
+        {
+            public float floatValueOf(Integer integer)
+            {
+                return integer.floatValue();
+            }
+        });
+        Assert.assertEquals(6.0f, actual, 0.001);
+    }
+
+    @Test
+    public void sumDouble()
+    {
+        ImmutableSet<Integer> objects = this.newSetWith(1, 2, 3);
+        double actual = objects.sumOf(new DoubleFunction<Integer>()
+        {
+            public double doubleValueOf(Integer integer)
+            {
+                return integer.doubleValue();
+            }
+        });
+        Assert.assertEquals(6.0d, actual, 0.001);
+    }
+
+    @Test
+    public void sumInteger()
+    {
+        ImmutableSet<Integer> objects = this.newSetWith(1, 2, 3);
+        int actual = objects.sumOf(new IntFunction<Integer>()
+        {
+            public int intValueOf(Integer integer)
+            {
+                return integer;
+            }
+        });
+        Assert.assertEquals(6, actual);
+    }
+
+    @Test
+    public void sumLong()
+    {
+        ImmutableSet<Integer> objects = this.newSetWith(1, 2, 3);
+        long actual = objects.sumOf(new LongFunction<Integer>()
+        {
+            public long longValueOf(Integer integer)
+            {
+                return integer.longValue();
+            }
+        });
+        Assert.assertEquals(6, actual);
     }
 
     @Test

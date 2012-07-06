@@ -24,8 +24,13 @@ import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.FloatObjectToFloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
@@ -373,6 +378,22 @@ public final class IteratorIterate
     }
 
     /**
+     * @see Iterate#injectInto(float, Iterable, FloatObjectToFloatFunction)
+     */
+    public static <T> float injectInto(
+            float injectValue,
+            Iterator<T> iterator,
+            FloatObjectToFloatFunction<? super T> function)
+    {
+        float result = injectValue;
+        while (iterator.hasNext())
+        {
+            result = function.floatValueOf(result, iterator.next());
+        }
+        return result;
+    }
+
+    /**
      * @see Iterate#injectIntoWith(Object, Iterable, Function3, Object)
      */
     public static <T, IV, P> IV injectIntoWith(IV injectValue, Iterator<T> iterator, Function3<? super IV, ? super T, ? super P, ? extends IV> function, P parameter)
@@ -697,5 +718,45 @@ public final class IteratorIterate
             iterator.next();
         }
         return iterator;
+    }
+
+    public static <T> int sumOf(Iterator<T> iterator, IntFunction<? super T> function)
+    {
+        int sum = 0;
+        while (iterator.hasNext())
+        {
+            sum += function.intValueOf(iterator.next());
+        }
+        return sum;
+    }
+
+    public static <T> long sumOf(Iterator<T> iterator, LongFunction<? super T> function)
+    {
+        long sum = 0L;
+        while (iterator.hasNext())
+        {
+            sum += function.longValueOf(iterator.next());
+        }
+        return sum;
+    }
+
+    public static <T> float sumOf(Iterator<T> iterator, FloatFunction<? super T> function)
+    {
+        float sum = 0.0f;
+        while (iterator.hasNext())
+        {
+            sum += function.floatValueOf(iterator.next());
+        }
+        return sum;
+    }
+
+    public static <T> double sumOf(Iterator<T> iterator, DoubleFunction<? super T> function)
+    {
+        double sum = 0.0d;
+        while (iterator.hasNext())
+        {
+            sum += function.doubleValueOf(iterator.next());
+        }
+        return sum;
     }
 }

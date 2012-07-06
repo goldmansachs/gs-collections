@@ -28,8 +28,13 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.FloatObjectToFloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
@@ -641,6 +646,46 @@ public class SynchronizedMutableCollection<E>
         synchronized (this.lock)
         {
             return this.collection.injectInto(injectedValue, function);
+        }
+    }
+
+    public float injectInto(float injectedValue, FloatObjectToFloatFunction<? super E> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.injectInto(injectedValue, function);
+        }
+    }
+
+    public int sumOf(IntFunction<? super E> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.sumOf(function);
+        }
+    }
+
+    public float sumOf(FloatFunction<? super E> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.sumOf(function);
+        }
+    }
+
+    public long sumOf(LongFunction<? super E> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.sumOf(function);
+        }
+    }
+
+    public double sumOf(DoubleFunction<? super E> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.sumOf(function);
         }
     }
 

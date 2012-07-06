@@ -33,8 +33,13 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.FloatObjectToFloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
@@ -1128,6 +1133,61 @@ public class FastList<T>
         for (int i = 0; i < this.size; i++)
         {
             result = function.doubleValueOf(result, this.items[i]);
+        }
+        return result;
+    }
+
+    @Override
+    public float injectInto(float injectedValue, FloatObjectToFloatFunction<? super T> function)
+    {
+        float result = injectedValue;
+        for (int i = 0; i < this.size; i++)
+        {
+            result = function.floatValueOf(result, this.items[i]);
+        }
+        return result;
+    }
+
+    @Override
+    public int sumOf(IntFunction<? super T> function)
+    {
+        int result = 0;
+        for (int i = 0; i < this.size; i++)
+        {
+            result += function.intValueOf(this.items[i]);
+        }
+        return result;
+    }
+
+    @Override
+    public long sumOf(LongFunction<? super T> function)
+    {
+        long result = 0L;
+        for (int i = 0; i < this.size; i++)
+        {
+            result += function.longValueOf(this.items[i]);
+        }
+        return result;
+    }
+
+    @Override
+    public float sumOf(FloatFunction<? super T> function)
+    {
+        float result = 0.0f;
+        for (int i = 0; i < this.size; i++)
+        {
+            result += function.floatValueOf(this.items[i]);
+        }
+        return result;
+    }
+
+    @Override
+    public double sumOf(DoubleFunction<? super T> function)
+    {
+        double result = 0.0d;
+        for (int i = 0; i < this.size; i++)
+        {
+            result += function.doubleValueOf(this.items[i]);
         }
         return result;
     }

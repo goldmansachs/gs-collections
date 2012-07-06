@@ -26,8 +26,13 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.FloatObjectToFloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
@@ -340,6 +345,31 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
     public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super V> function)
     {
         return this.valuesView().injectInto(injectedValue, function);
+    }
+
+    public float injectInto(float injectedValue, FloatObjectToFloatFunction<? super V> function)
+    {
+        return this.valuesView().injectInto(injectedValue, function);
+    }
+
+    public int sumOf(IntFunction<? super V> function)
+    {
+        return this.valuesView().sumOf(function);
+    }
+
+    public float sumOf(FloatFunction<? super V> function)
+    {
+        return this.valuesView().sumOf(function);
+    }
+
+    public long sumOf(LongFunction<? super V> function)
+    {
+        return this.valuesView().sumOf(function);
+    }
+
+    public double sumOf(DoubleFunction<? super V> function)
+    {
+        return this.valuesView().sumOf(function);
     }
 
     public String makeString()

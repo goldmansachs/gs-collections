@@ -27,6 +27,10 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.MutableList;
@@ -593,6 +597,75 @@ public abstract class ImmutableBagTestCase
         double result = integers.injectInto(0, AddFunction.INTEGER_TO_DOUBLE);
         double expected = FastList.newList(integers).injectInto(0, AddFunction.INTEGER_TO_DOUBLE);
         Assert.assertEquals(expected, result, 0.001);
+    }
+
+    @Test
+    public void injectIntoFloat()
+    {
+        ImmutableBag<Integer> integers = this.newBag().collect(StringFunctions.toInteger());
+        float result = integers.injectInto(0, AddFunction.INTEGER_TO_FLOAT);
+        float expected = FastList.newList(integers).injectInto(0, AddFunction.INTEGER_TO_FLOAT);
+        Assert.assertEquals(expected, result, 0.001);
+    }
+
+    @Test
+    public void sumFloat()
+    {
+        ImmutableBag<Integer> integers = this.newBag().collect(StringFunctions.toInteger());
+        float result = integers.sumOf(new FloatFunction<Integer>()
+        {
+            public float floatValueOf(Integer integer)
+            {
+                return integer.floatValue();
+            }
+        });
+        float expected = FastList.newList(integers).injectInto(0, AddFunction.INTEGER_TO_FLOAT);
+        Assert.assertEquals(expected, result, 0.001);
+    }
+
+    @Test
+    public void sumDouble()
+    {
+        ImmutableBag<Integer> integers = this.newBag().collect(StringFunctions.toInteger());
+        double result = integers.sumOf(new DoubleFunction<Integer>()
+        {
+            public double doubleValueOf(Integer integer)
+            {
+                return integer.doubleValue();
+            }
+        });
+        double expected = FastList.newList(integers).injectInto(0, AddFunction.INTEGER_TO_DOUBLE);
+        Assert.assertEquals(expected, result, 0.001);
+    }
+
+    @Test
+    public void sumInteger()
+    {
+        ImmutableBag<Integer> integers = this.newBag().collect(StringFunctions.toInteger());
+        int result = integers.sumOf(new IntFunction<Integer>()
+        {
+            public int intValueOf(Integer integer)
+            {
+                return integer;
+            }
+        });
+        int expected = FastList.newList(integers).injectInto(0, AddFunction.INTEGER_TO_INT);
+        Assert.assertEquals(expected, result);
+    }
+
+    @Test
+    public void sumLong()
+    {
+        ImmutableBag<Integer> integers = this.newBag().collect(StringFunctions.toInteger());
+        long result = integers.sumOf(new LongFunction<Integer>()
+        {
+            public long longValueOf(Integer integer)
+            {
+                return integer.longValue();
+            }
+        });
+        long expected = FastList.newList(integers).injectInto(0, AddFunction.INTEGER_TO_LONG);
+        Assert.assertEquals(expected, result);
     }
 
     @Test

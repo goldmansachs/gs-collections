@@ -26,8 +26,13 @@ import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.FloatObjectToFloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
@@ -329,6 +334,49 @@ public final class IterableIterate
             DoubleObjectToDoubleFunction<? super T> function)
     {
         return IteratorIterate.injectInto(injectValue, iterable.iterator(), function);
+    }
+
+    /**
+     * @see Iterate#injectInto(float, Iterable, FloatObjectToFloatFunction)
+     */
+    public static <T> float injectInto(
+            float injectValue,
+            Iterable<T> iterable,
+            FloatObjectToFloatFunction<? super T> function)
+    {
+        return IteratorIterate.injectInto(injectValue, iterable.iterator(), function);
+    }
+
+    /**
+     * @see Iterate#sumOf(Iterable, IntFunction)
+     */
+    public static <T> int sumOf(Iterable<T> iterable, IntFunction<? super T> function)
+    {
+        return IteratorIterate.sumOf(iterable.iterator(), function);
+    }
+
+    /**
+     * @see Iterate#sumOf(Iterable, LongFunction)
+     */
+    public static <T> long sumOf(Iterable<T> iterable, LongFunction<? super T> function)
+    {
+        return IteratorIterate.sumOf(iterable.iterator(), function);
+    }
+
+    /**
+     * @see Iterate#sumOf(Iterable, FloatFunction)
+     */
+    public static <T> float sumOf(Iterable<T> iterable, FloatFunction<? super T> function)
+    {
+        return IteratorIterate.sumOf(iterable.iterator(), function);
+    }
+
+    /**
+     * @see Iterate#sumOf(Iterable, DoubleFunction)
+     */
+    public static <T> double sumOf(Iterable<T> iterable, DoubleFunction<? super T> function)
+    {
+        return IteratorIterate.sumOf(iterable.iterator(), function);
     }
 
     /**

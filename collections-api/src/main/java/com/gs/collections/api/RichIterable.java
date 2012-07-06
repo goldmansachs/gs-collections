@@ -24,8 +24,13 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.FloatObjectToFloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
@@ -491,6 +496,15 @@ public interface RichIterable<T>
     long injectInto(long injectedValue, LongObjectToLongFunction<? super T> function);
 
     /**
+     * Returns the final float result of evaluating function using each element of the iterable and the previous evaluation
+     * result as the parameters. The injected value is used for the first parameter of the first evaluation, and the current
+     * item in the iterable is used as the second parameter.
+     *
+     * @since 2.0
+     */
+    float injectInto(float injectedValue, FloatObjectToFloatFunction<? super T> function);
+
+    /**
      * Returns the final double result of evaluating function using each element of the iterable and the previous evaluation
      * result as the parameters. The injected value is used for the first parameter of the first evaluation, and the current
      * item in the iterable is used as the second parameter.
@@ -663,6 +677,38 @@ public interface RichIterable<T>
      * @since 1.0
      */
     <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function);
+
+    /**
+     * Returns the final int result of evaluating function for each element of the iterable and adding the results
+     * together.
+     *
+     * @since 2.0
+     */
+    int sumOf(IntFunction<? super T> function);
+
+    /**
+     * Returns the final float result of evaluating function for each element of the iterable and adding the results
+     * together.
+     *
+     * @since 2.0
+     */
+    float sumOf(FloatFunction<? super T> function);
+
+    /**
+     * Returns the final long result of evaluating function for each element of the iterable and adding the results
+     * together.
+     *
+     * @since 2.0
+     */
+    long sumOf(LongFunction<? super T> function);
+
+    /**
+     * Returns the final double result of evaluating function for each element of the iterable and adding the results
+     * together.
+     *
+     * @since 2.0
+     */
+    double sumOf(DoubleFunction<? super T> function);
 
     /**
      * Returns a string representation of this collection by delegating to {@link #makeString(String)} and defaulting

@@ -31,8 +31,13 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.FloatObjectToFloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
@@ -350,6 +355,31 @@ final class ImmutableEmptyBag<T>
     public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super T> function)
     {
         return injectedValue;
+    }
+
+    public float injectInto(float injectedValue, FloatObjectToFloatFunction<? super T> function)
+    {
+        return injectedValue;
+    }
+
+    public int sumOf(IntFunction<? super T> function)
+    {
+        return 0;
+    }
+
+    public float sumOf(FloatFunction<? super T> function)
+    {
+        return 0.0F;
+    }
+
+    public long sumOf(LongFunction<? super T> function)
+    {
+        return 0L;
+    }
+
+    public double sumOf(DoubleFunction<? super T> function)
+    {
+        return 0.0d;
     }
 
     public MutableList<T> toList()

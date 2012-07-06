@@ -20,6 +20,7 @@ import java.util.Collection;
 
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatObjectToFloatFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 
@@ -31,9 +32,11 @@ public final class AddFunction
     public static final IntObjectToIntFunction<Integer> INTEGER_TO_INT = new AddIntegerToIntFunction();
     public static final LongObjectToLongFunction<Integer> INTEGER_TO_LONG = new AddIntegerToLongFunction();
     public static final DoubleObjectToDoubleFunction<Integer> INTEGER_TO_DOUBLE = new AddIntegerToDoubleFunction();
+    public static final FloatObjectToFloatFunction<Integer> INTEGER_TO_FLOAT = new AddIntegerToFloatFunction();
     public static final DoubleObjectToDoubleFunction<Double> DOUBLE_TO_DOUBLE = new AddDoubleToDoubleFunction();
     public static final Function2<Integer, Integer, Integer> INTEGER = new AddIntegerFunction();
     public static final Function2<Double, Double, Double> DOUBLE = new AddDoubleFunction();
+    public static final Function2<Float, Float, Float> FLOAT = new AddFloatFunction();
     public static final Function2<Long, Long, Long> LONG = new AddLongFunction();
     public static final Function2<String, String, String> STRING = new AddStringFunction();
     public static final Function2<Collection<?>, ?, Collection<?>> COLLECTION = new AddCollectionFunction();
@@ -73,6 +76,16 @@ public final class AddFunction
         }
     }
 
+    private static class AddIntegerToFloatFunction implements FloatObjectToFloatFunction<Integer>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public float floatValueOf(float floatParameter, Integer objectParameter)
+        {
+            return floatParameter + objectParameter;
+        }
+    }
+
     private static class AddDoubleToDoubleFunction implements DoubleObjectToDoubleFunction<Double>
     {
         private static final long serialVersionUID = 1L;
@@ -98,6 +111,16 @@ public final class AddFunction
         private static final long serialVersionUID = 1L;
 
         public Double value(Double argument1, Double argument2)
+        {
+            return argument1 + argument2;
+        }
+    }
+
+    private static class AddFloatFunction implements Function2<Float, Float, Float>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public Float value(Float argument1, Float argument2)
         {
             return argument1 + argument2;
         }

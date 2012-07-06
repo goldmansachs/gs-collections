@@ -32,6 +32,16 @@ public class AddFunctionTest
     }
 
     @Test
+    public void addFloat()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAENjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mdW5jdGlvbi5BZGRGdW5jdGlv\n" +
+                        "biRBZGRGbG9hdEZ1bmN0aW9uAAAAAAAAAAECAAB4cA==",
+                AddFunction.FLOAT);
+    }
+
+    @Test
     public void addInteger()
     {
         Verify.assertSerializedForm(

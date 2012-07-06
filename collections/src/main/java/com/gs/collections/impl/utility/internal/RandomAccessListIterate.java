@@ -27,8 +27,13 @@ import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.FloatObjectToFloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
@@ -514,6 +519,57 @@ public final class RandomAccessListIterate
         for (int i = 0; i < size; i++)
         {
             result = function.doubleValueOf(result, list.get(i));
+        }
+        return result;
+    }
+
+    public static <T> float injectInto(float injectValue, List<T> list, FloatObjectToFloatFunction<? super T> function)
+    {
+        float result = injectValue;
+        int size = list.size();
+        for (int i = 0; i < size; i++)
+        {
+            result = function.floatValueOf(result, list.get(i));
+        }
+        return result;
+    }
+
+    public static <T> int sumOf(List<T> list, IntFunction<? super T> function)
+    {
+        int result = 0;
+        for (int i = 0; i < list.size(); i++)
+        {
+            result += function.intValueOf(list.get(i));
+        }
+        return result;
+    }
+
+    public static <T> long sumOf(List<T> list, LongFunction<? super T> function)
+    {
+        long result = 0L;
+        for (int i = 0; i < list.size(); i++)
+        {
+            result += function.longValueOf(list.get(i));
+        }
+        return result;
+    }
+
+    public static <T> float sumOf(List<T> list, FloatFunction<? super T> function)
+    {
+        float result = 0.0f;
+        for (int i = 0; i < list.size(); i++)
+        {
+            result += function.floatValueOf(list.get(i));
+        }
+        return result;
+    }
+
+    public static <T> double sumOf(List<T> list, DoubleFunction<? super T> function)
+    {
+        double result = 0.0d;
+        for (int i = 0; i < list.size(); i++)
+        {
+            result += function.doubleValueOf(list.get(i));
         }
         return result;
     }

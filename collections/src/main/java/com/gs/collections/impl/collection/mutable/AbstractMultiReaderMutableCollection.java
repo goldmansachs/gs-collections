@@ -28,8 +28,13 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.FloatObjectToFloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
@@ -769,6 +774,71 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
+    public float injectInto(float injectedValue, FloatObjectToFloatFunction<? super T> function)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.getDelegate().injectInto(injectedValue, function);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public int sumOf(IntFunction<? super T> function)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.getDelegate().sumOf(function);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public float sumOf(FloatFunction<? super T> function)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.getDelegate().sumOf(function);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public long sumOf(LongFunction<? super T> function)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.getDelegate().sumOf(function);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public double sumOf(DoubleFunction<? super T> function)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.getDelegate().sumOf(function);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
     public <IV, P> IV injectIntoWith(
             IV injectValue,
             Function3<? super IV, ? super T, ? super P, ? extends IV> function,
@@ -1436,6 +1506,31 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super T> function)
         {
             return this.delegate.injectInto(injectedValue, function);
+        }
+
+        public float injectInto(float injectedValue, FloatObjectToFloatFunction<? super T> function)
+        {
+            return this.delegate.injectInto(injectedValue, function);
+        }
+
+        public int sumOf(IntFunction<? super T> function)
+        {
+            return this.delegate.sumOf(function);
+        }
+
+        public float sumOf(FloatFunction<? super T> function)
+        {
+            return this.delegate.sumOf(function);
+        }
+
+        public long sumOf(LongFunction<? super T> function)
+        {
+            return this.delegate.sumOf(function);
+        }
+
+        public double sumOf(DoubleFunction<? super T> function)
+        {
+            return this.delegate.sumOf(function);
         }
 
         public <IV, P> IV injectIntoWith(

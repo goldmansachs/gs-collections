@@ -31,8 +31,13 @@ import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.FloatObjectToFloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
@@ -204,22 +209,22 @@ public final class Iterate
         {
             return ((MutableCollection<T>) iterable).select(predicate);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.select((ArrayList<T>) iterable, predicate);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.select((List<T>) iterable, predicate);
         }
-        else if (iterable instanceof Collection)
+        if (iterable instanceof Collection)
         {
             return IterableIterate.<T, Collection<T>>select(
                     iterable,
                     predicate,
                     DefaultSpeciesNewStrategy.INSTANCE.<T>speciesNew((Collection<T>) iterable));
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.select(iterable, predicate);
         }
@@ -242,15 +247,15 @@ public final class Iterate
         {
             return ((MutableCollection<T>) iterable).selectWith(predicate, parameter);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.selectWith((ArrayList<T>) iterable, predicate, parameter);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.selectWith((List<T>) iterable, predicate, parameter);
         }
-        else if (iterable instanceof Collection)
+        if (iterable instanceof Collection)
         {
             return IterableIterate.<T, IV, Collection<T>>selectWith(
                     iterable,
@@ -258,7 +263,7 @@ public final class Iterate
                     parameter,
                     DefaultSpeciesNewStrategy.INSTANCE.<T>speciesNew((Collection<T>) iterable));
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.selectWith(iterable, predicate, parameter, FastList.<T>newList());
         }
@@ -281,15 +286,15 @@ public final class Iterate
         {
             return ((MutableCollection<T>) iterable).selectAndRejectWith(predicate, injectedValue);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.selectAndRejectWith((ArrayList<T>) iterable, predicate, injectedValue);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.selectAndRejectWith((List<T>) iterable, predicate, injectedValue);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.selectAndRejectWith(iterable, predicate, injectedValue);
         }
@@ -315,15 +320,15 @@ public final class Iterate
         {
             return ((RichIterable<T>) iterable).partition(predicate);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.partition((ArrayList<T>) iterable, predicate);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.partition((List<T>) iterable, predicate);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.partition(iterable, predicate);
         }
@@ -349,15 +354,15 @@ public final class Iterate
         {
             return ((RichIterable<T>) iterable).count(predicate);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.count((ArrayList<T>) iterable, predicate);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.count((List<T>) iterable, predicate);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.count(iterable, predicate);
         }
@@ -380,15 +385,15 @@ public final class Iterate
         {
             return ((MutableCollection<T>) iterable).countWith(predicate, injectedValue);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.countWith((ArrayList<T>) iterable, predicate, injectedValue);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.countWith((List<T>) iterable, predicate, injectedValue);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.countWith(iterable, predicate, injectedValue);
         }
@@ -407,15 +412,15 @@ public final class Iterate
         {
             return ((MutableCollection<T>) iterable).collectIf(predicate, function);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.collectIf((ArrayList<T>) iterable, predicate, function);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.collectIf((List<T>) iterable, predicate, function);
         }
-        else if (iterable instanceof Collection)
+        if (iterable instanceof Collection)
         {
             return IterableIterate.<T, V, Collection<V>>collectIf(
                     iterable,
@@ -423,7 +428,7 @@ public final class Iterate
                     function,
                     DefaultSpeciesNewStrategy.INSTANCE.<V>speciesNew((Collection<T>) iterable));
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.collectIf(iterable, predicate, function);
         }
@@ -443,15 +448,15 @@ public final class Iterate
         {
             return ((RichIterable<T>) iterable).collectIf(predicate, function, target);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.collectIf((ArrayList<T>) iterable, predicate, function, target);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.collectIf((List<T>) iterable, predicate, function, target);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.collectIf(iterable, predicate, function, target);
         }
@@ -484,15 +489,15 @@ public final class Iterate
         {
             return ((RichIterable<T>) iterable).select(predicate, targetCollection);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.select((ArrayList<T>) iterable, predicate, targetCollection);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.select((List<T>) iterable, predicate, targetCollection);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.select(iterable, predicate, targetCollection);
         }
@@ -512,15 +517,15 @@ public final class Iterate
         {
             return ((RichIterable<T>) iterable).selectWith(predicate, parameter, targetCollection);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.selectWith((ArrayList<T>) iterable, predicate, parameter, targetCollection);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.selectWith((List<T>) iterable, predicate, parameter, targetCollection);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.selectWith(iterable, predicate, parameter, targetCollection);
         }
@@ -541,18 +546,18 @@ public final class Iterate
         {
             return ArrayListIterate.take((ArrayList<T>) iterable, count);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.take((List<T>) iterable, count);
         }
-        else if (iterable instanceof Collection)
+        if (iterable instanceof Collection)
         {
             return IterableIterate.<T, Collection<T>>take(
                     iterable,
                     count,
                     DefaultSpeciesNewStrategy.INSTANCE.<T>speciesNew((Collection<T>) iterable, count));
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.take(iterable, count);
         }
@@ -573,7 +578,7 @@ public final class Iterate
         {
             return RandomAccessListIterate.drop((List<T>) iterable, count);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.drop(iterable, count);
         }
@@ -603,22 +608,22 @@ public final class Iterate
         {
             return ((MutableCollection<T>) iterable).reject(predicate);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.reject((ArrayList<T>) iterable, predicate);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.reject((List<T>) iterable, predicate);
         }
-        else if (iterable instanceof Collection)
+        if (iterable instanceof Collection)
         {
             return IterableIterate.<T, Collection<T>>reject(
                     iterable,
                     predicate,
                     DefaultSpeciesNewStrategy.INSTANCE.<T>speciesNew((Collection<T>) iterable));
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.reject(iterable, predicate);
         }
@@ -714,20 +719,20 @@ public final class Iterate
             mutableCollection.removeIf(predicate);
             return mutableCollection;
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.removeIf((ArrayList<T>) iterable, predicate);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.removeIf((List<T>) iterable, predicate);
         }
-        else if (iterable instanceof Collection)
+        if (iterable instanceof Collection)
         {
             IterableIterate.removeIf(iterable, predicate);
             return (Collection<T>) iterable;
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             IterableIterate.removeIf(iterable, predicate);
             // TODO: should this method return Iterable instead?  Would seem less useful if it did
@@ -750,20 +755,20 @@ public final class Iterate
             mutableCollection.removeIfWith(predicate, parameter);
             return mutableCollection;
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.removeIfWith((ArrayList<T>) iterable, predicate, parameter);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.removeIfWith((List<T>) iterable, predicate, parameter);
         }
-        else if (iterable instanceof Collection)
+        if (iterable instanceof Collection)
         {
             IterableIterate.removeIfWith(iterable, predicate, parameter);
             return (Collection<T>) iterable;
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             IterableIterate.removeIfWith(iterable, predicate, parameter);
             // TODO: should this method return Iterarable instead?  Would seem less useful if it did
@@ -784,15 +789,15 @@ public final class Iterate
         {
             return ((MutableCollection<T>) iterable).rejectWith(predicate, injectedValue);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.rejectWith((ArrayList<T>) iterable, predicate, injectedValue);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.rejectWith((List<T>) iterable, predicate, injectedValue);
         }
-        else if (iterable instanceof Collection)
+        if (iterable instanceof Collection)
         {
             return IterableIterate.<T, IV, Collection<T>>rejectWith(
                     iterable,
@@ -800,7 +805,7 @@ public final class Iterate
                     injectedValue,
                     DefaultSpeciesNewStrategy.INSTANCE.<T>speciesNew((Collection<T>) iterable));
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.rejectWith(iterable, predicate, injectedValue, FastList.<T>newList());
         }
@@ -829,15 +834,15 @@ public final class Iterate
         {
             return ((RichIterable<T>) iterable).reject(predicate, targetCollection);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.reject((ArrayList<T>) iterable, predicate, targetCollection);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.reject((List<T>) iterable, predicate, targetCollection);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.reject(iterable, predicate, targetCollection);
         }
@@ -857,7 +862,7 @@ public final class Iterate
         {
             return ((RichIterable<T>) iterable).rejectWith(predicate, parameter, targetCollection);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.rejectWith(
                     (ArrayList<T>) iterable,
@@ -865,11 +870,11 @@ public final class Iterate
                     parameter,
                     targetCollection);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.rejectWith((List<T>) iterable, predicate, parameter, targetCollection);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.rejectWith(iterable, predicate, parameter, targetCollection);
         }
@@ -921,15 +926,15 @@ public final class Iterate
         {
             return ((MutableCollection<T>) iterable).collect(function);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.collect((ArrayList<T>) iterable, function);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.collect((List<T>) iterable, function);
         }
-        else if (iterable instanceof Collection)
+        if (iterable instanceof Collection)
         {
             return IterableIterate.<T, V, Collection<V>>collect(
                     iterable,
@@ -938,7 +943,7 @@ public final class Iterate
                             (Collection<T>) iterable,
                             ((Collection<T>) iterable).size()));
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.collect(iterable, function);
         }
@@ -956,15 +961,15 @@ public final class Iterate
         {
             return ((MutableCollection<T>) iterable).flatCollect(function);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.flatCollect((ArrayList<T>) iterable, function);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.flatCollect((List<T>) iterable, function);
         }
-        else if (iterable instanceof Collection)
+        if (iterable instanceof Collection)
         {
             return IterableIterate.<T, V, Collection<V>>flatCollect(
                     iterable,
@@ -973,7 +978,7 @@ public final class Iterate
                             (Collection<T>) iterable,
                             ((Collection<T>) iterable).size()));
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.flatCollect(iterable, function);
         }
@@ -1003,15 +1008,15 @@ public final class Iterate
         {
             return ((RichIterable<T>) iterable).collect(function, targetCollection);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.collect((ArrayList<T>) iterable, function, targetCollection);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.collect((List<T>) iterable, function, targetCollection);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.collect(iterable, function, targetCollection);
         }
@@ -1030,15 +1035,15 @@ public final class Iterate
         {
             return ((RichIterable<T>) iterable).flatCollect(function, targetCollection);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.flatCollect((ArrayList<T>) iterable, function, targetCollection);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.flatCollect((List<T>) iterable, function, targetCollection);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.flatCollect(iterable, function, targetCollection);
         }
@@ -1057,15 +1062,15 @@ public final class Iterate
         {
             return ((MutableCollection<T>) iterable).collectWith(function, parameter);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.collectWith((ArrayList<T>) iterable, function, parameter);
         }
-        else if (iterable instanceof List<?>)
+        if (iterable instanceof List<?>)
         {
             return ListIterate.collectWith((List<T>) iterable, function, parameter);
         }
-        else if (iterable instanceof Collection)
+        if (iterable instanceof Collection)
         {
             return IterableIterate.<T, P, A, Collection<A>>collectWith(
                     iterable,
@@ -1075,7 +1080,7 @@ public final class Iterate
                             (Collection<T>) iterable,
                             ((Collection<T>) iterable).size()));
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.collectWith(iterable, function, parameter);
         }
@@ -1095,15 +1100,15 @@ public final class Iterate
         {
             return ((RichIterable<T>) iterable).collectWith(function, parameter, targetCollection);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.collectWith((ArrayList<T>) iterable, function, parameter, targetCollection);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.collectWith((List<T>) iterable, function, parameter, targetCollection);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.collectWith(iterable, function, parameter, targetCollection);
         }
@@ -1143,19 +1148,19 @@ public final class Iterate
         {
             return ((RichIterable<T>) iterable).getFirst();
         }
-        else if (iterable instanceof List)
+        if (iterable instanceof List)
         {
             return ListIterate.getFirst((List<T>) iterable);
         }
-        else if (iterable instanceof SortedSet && !((SortedSet<T>) iterable).isEmpty())
+        if (iterable instanceof SortedSet && !((SortedSet<T>) iterable).isEmpty())
         {
             return ((SortedSet<T>) iterable).first();
         }
-        else if (iterable instanceof Collection)
+        if (iterable instanceof Collection)
         {
             return Iterate.isEmpty(iterable) ? null : iterable.iterator().next();
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.getFirst(iterable);
         }
@@ -1204,19 +1209,19 @@ public final class Iterate
         {
             return ((RichIterable<T>) iterable).getLast();
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.getLast((List<T>) iterable);
         }
-        else if (iterable instanceof SortedSet && !((SortedSet<T>) iterable).isEmpty())
+        if (iterable instanceof SortedSet && !((SortedSet<T>) iterable).isEmpty())
         {
             return ((SortedSet<T>) iterable).last();
         }
-        else if (iterable instanceof LinkedList && !((LinkedList<T>) iterable).isEmpty())
+        if (iterable instanceof LinkedList && !((LinkedList<T>) iterable).isEmpty())
         {
             return ((LinkedList<T>) iterable).getLast();
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.getLast(iterable);
         }
@@ -1243,15 +1248,15 @@ public final class Iterate
         {
             return ((RichIterable<T>) iterable).detect(predicate);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.detect((ArrayList<T>) iterable, predicate);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.detect((List<T>) iterable, predicate);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.detect(iterable, predicate);
         }
@@ -1281,15 +1286,15 @@ public final class Iterate
         {
             return ((MutableCollection<T>) iterable).detectWith(predicate, parameter);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.detectWith((ArrayList<T>) iterable, predicate, parameter);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.detectWith((List<T>) iterable, predicate, parameter);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.detectWith(iterable, predicate, parameter);
         }
@@ -1329,11 +1334,11 @@ public final class Iterate
         {
             return ArrayListIterate.detectIndex((ArrayList<T>) iterable, predicate);
         }
-        else if (iterable instanceof List<?>)
+        if (iterable instanceof List<?>)
         {
             return ListIterate.detectIndex((List<T>) iterable, predicate);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.detectIndex(iterable, predicate);
         }
@@ -1352,11 +1357,11 @@ public final class Iterate
         {
             return ArrayListIterate.detectIndexWith((ArrayList<T>) iterable, predicate, parameter);
         }
-        else if (iterable instanceof List<?>)
+        if (iterable instanceof List<?>)
         {
             return ListIterate.detectIndexWith((List<T>) iterable, predicate, parameter);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.detectIndexWith(iterable, predicate, parameter);
         }
@@ -1375,15 +1380,15 @@ public final class Iterate
         {
             return ((RichIterable<T>) iterable).injectInto(injectValue, function);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.injectInto(injectValue, (ArrayList<T>) iterable, function);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.injectInto(injectValue, (List<T>) iterable, function);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.injectInto(injectValue, iterable, function);
         }
@@ -1402,15 +1407,15 @@ public final class Iterate
         {
             return ((RichIterable<T>) iterable).injectInto(injectValue, function);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.injectInto(injectValue, (ArrayList<T>) iterable, function);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.injectInto(injectValue, (List<T>) iterable, function);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.injectInto(injectValue, iterable, function);
         }
@@ -1429,15 +1434,15 @@ public final class Iterate
         {
             return ((RichIterable<T>) iterable).injectInto(injectValue, function);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.injectInto(injectValue, (ArrayList<T>) iterable, function);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.injectInto(injectValue, (List<T>) iterable, function);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.injectInto(injectValue, iterable, function);
         }
@@ -1456,17 +1461,124 @@ public final class Iterate
         {
             return ((RichIterable<T>) iterable).injectInto(injectValue, function);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.injectInto(injectValue, (ArrayList<T>) iterable, function);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.injectInto(injectValue, (List<T>) iterable, function);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.injectInto(injectValue, iterable, function);
+        }
+        throw new IllegalArgumentException("Cannot perform an injectInto on null");
+    }
+
+    /**
+     * @see RichIterable#injectInto(float, FloatObjectToFloatFunction)
+     */
+    public static <T> float injectInto(
+            float injectValue,
+            Iterable<T> iterable,
+            FloatObjectToFloatFunction<? super T> function)
+    {
+        if (iterable instanceof RichIterable)
+        {
+            return ((RichIterable<T>) iterable).injectInto(injectValue, function);
+        }
+        if (iterable instanceof ArrayList)
+        {
+            return ArrayListIterate.injectInto(injectValue, (ArrayList<T>) iterable, function);
+        }
+        if (iterable instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.injectInto(injectValue, (List<T>) iterable, function);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.injectInto(injectValue, iterable, function);
+        }
+        throw new IllegalArgumentException("Cannot perform an injectInto on null");
+    }
+
+    /**
+     * @see RichIterable#sumOf(IntFunction)
+     */
+    public static <T> int sumOf(Iterable<T> iterable, IntFunction<? super T> function)
+    {
+        if (iterable instanceof RichIterable)
+        {
+            return ((RichIterable<T>) iterable).sumOf(function);
+        }
+        if (iterable instanceof List)
+        {
+            return ListIterate.sumOf((List<T>) iterable, function);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.sumOf(iterable, function);
+        }
+        throw new IllegalArgumentException("Cannot perform an injectInto on null");
+    }
+
+    /**
+     * @see RichIterable#sumOf(LongFunction)
+     */
+    public static <T> long sumOf(Iterable<T> iterable, LongFunction<? super T> function)
+    {
+        if (iterable instanceof RichIterable)
+        {
+            return ((RichIterable<T>) iterable).sumOf(function);
+        }
+        if (iterable instanceof List)
+        {
+            return ListIterate.sumOf((List<T>) iterable, function);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.sumOf(iterable, function);
+        }
+        throw new IllegalArgumentException("Cannot perform an injectInto on null");
+    }
+
+    /**
+     * @see RichIterable#sumOf(FloatFunction)
+     */
+    public static <T> float sumOf(Iterable<T> iterable, FloatFunction<? super T> function)
+    {
+        if (iterable instanceof RichIterable)
+        {
+            return ((RichIterable<T>) iterable).sumOf(function);
+        }
+        if (iterable instanceof List)
+        {
+            return ListIterate.sumOf((List<T>) iterable, function);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.sumOf(iterable, function);
+        }
+        throw new IllegalArgumentException("Cannot perform an injectInto on null");
+    }
+
+    /**
+     * @see RichIterable#sumOf(DoubleFunction)
+     */
+    public static <T> double sumOf(Iterable<T> iterable, DoubleFunction<? super T> function)
+    {
+        if (iterable instanceof RichIterable)
+        {
+            return ((RichIterable<T>) iterable).sumOf(function);
+        }
+        if (iterable instanceof List)
+        {
+            return ListIterate.sumOf((List<T>) iterable, function);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.sumOf(iterable, function);
         }
         throw new IllegalArgumentException("Cannot perform an injectInto on null");
     }
@@ -1481,15 +1593,15 @@ public final class Iterate
         {
             return ((MutableCollection<T>) iterable).injectIntoWith(injectValue, function, parameter);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.injectIntoWith(injectValue, (ArrayList<T>) iterable, function, parameter);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.injectIntoWith(injectValue, (List<T>) iterable, function, parameter);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.injectIntoWith(injectValue, iterable, function, parameter);
         }
@@ -1506,15 +1618,15 @@ public final class Iterate
         {
             return ((RichIterable<T>) iterable).anySatisfy(predicate);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.anySatisfy((ArrayList<T>) iterable, predicate);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.anySatisfy((List<T>) iterable, predicate);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.anySatisfy(iterable, predicate);
         }
@@ -1534,15 +1646,15 @@ public final class Iterate
         {
             return ((MutableCollection<T>) iterable).anySatisfyWith(predicate, parameter);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.anySatisfyWith((ArrayList<T>) iterable, predicate, parameter);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.anySatisfyWith((List<T>) iterable, predicate, parameter);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.anySatisfyWith(iterable, predicate, parameter);
         }
@@ -1558,15 +1670,15 @@ public final class Iterate
         {
             return ((RichIterable<T>) iterable).allSatisfy(predicate);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.allSatisfy((ArrayList<T>) iterable, predicate);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.allSatisfy((List<T>) iterable, predicate);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.allSatisfy(iterable, predicate);
         }
@@ -1585,15 +1697,15 @@ public final class Iterate
         {
             return ((MutableCollection<T>) iterable).allSatisfyWith(predicate, parameter);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.allSatisfyWith((ArrayList<T>) iterable, predicate, parameter);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.allSatisfyWith((List<T>) iterable, predicate, parameter);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.allSatisfyWith(iterable, predicate, parameter);
         }
@@ -1678,7 +1790,7 @@ public final class Iterate
         {
             return ((Collection<?>) iterable).size();
         }
-        else if (iterable instanceof RichIterable)
+        if (iterable instanceof RichIterable)
         {
             return ((RichIterable<?>) iterable).size();
         }
@@ -1695,7 +1807,7 @@ public final class Iterate
         {
             return ((Collection<?>) iterable).contains(value);
         }
-        else if (iterable instanceof RichIterable)
+        if (iterable instanceof RichIterable)
         {
             return ((RichIterable<?>) iterable).contains(value);
         }
@@ -1753,19 +1865,19 @@ public final class Iterate
         {
             return ((MutableCollection<T>) iterable).groupBy(function);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.groupBy((ArrayList<T>) iterable, function);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.groupBy((List<T>) iterable, function);
         }
-        else if (iterable instanceof Collection)
+        if (iterable instanceof Collection)
         {
             return IterableIterate.groupBy(iterable, function, FastListMultimap.<V, T>newMultimap());
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.groupBy(iterable, function);
         }
@@ -1784,15 +1896,15 @@ public final class Iterate
         {
             return ((RichIterable<T>) iterable).groupBy(function, targetMultimap);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.groupBy((ArrayList<T>) iterable, function, targetMultimap);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.groupBy((List<T>) iterable, function, targetMultimap);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.groupBy(iterable, function, targetMultimap);
         }
@@ -1810,19 +1922,19 @@ public final class Iterate
         {
             return ((MutableCollection<T>) iterable).groupByEach(function);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.groupByEach((ArrayList<T>) iterable, function);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.groupByEach((List<T>) iterable, function);
         }
-        else if (iterable instanceof Collection)
+        if (iterable instanceof Collection)
         {
             return IterableIterate.groupByEach(iterable, function, FastListMultimap.<V, T>newMultimap());
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.groupByEach(iterable, function);
         }
@@ -1841,15 +1953,15 @@ public final class Iterate
         {
             return ((RichIterable<T>) iterable).groupByEach(function, targetCollection);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.groupByEach((ArrayList<T>) iterable, function, targetCollection);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.groupByEach((List<T>) iterable, function, targetCollection);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.groupByEach(iterable, function, targetCollection);
         }
@@ -1910,15 +2022,15 @@ public final class Iterate
         {
             return ((MutableCollection<X>) xs).zip(ys);
         }
-        else if (xs instanceof ArrayList)
+        if (xs instanceof ArrayList)
         {
             return ArrayListIterate.zip((ArrayList<X>) xs, ys);
         }
-        else if (xs instanceof RandomAccess)
+        if (xs instanceof RandomAccess)
         {
             return RandomAccessListIterate.zip((List<X>) xs, ys);
         }
-        else if (xs != null)
+        if (xs != null)
         {
             return IterableIterate.zip(xs, ys);
         }
@@ -1937,15 +2049,15 @@ public final class Iterate
         {
             return ((RichIterable<X>) xs).zip(ys, targetCollection);
         }
-        else if (xs instanceof ArrayList)
+        if (xs instanceof ArrayList)
         {
             return ArrayListIterate.zip((ArrayList<X>) xs, ys, targetCollection);
         }
-        else if (xs instanceof RandomAccess)
+        if (xs instanceof RandomAccess)
         {
             return RandomAccessListIterate.zip((List<X>) xs, ys, targetCollection);
         }
-        else if (xs != null)
+        if (xs != null)
         {
             return IterableIterate.zip(xs, ys, targetCollection);
         }
@@ -1961,15 +2073,15 @@ public final class Iterate
         {
             return ((MutableCollection<T>) iterable).zipWithIndex();
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.zipWithIndex((ArrayList<T>) iterable);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.zipWithIndex((List<T>) iterable);
         }
-        else if (iterable instanceof Collection)
+        if (iterable instanceof Collection)
         {
             return IterableIterate.<T, Collection<Pair<T, Integer>>>zipWithIndex(
                     iterable,
@@ -1977,7 +2089,7 @@ public final class Iterate
                             (Collection<T>) iterable,
                             ((Collection<T>) iterable).size()));
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.zipWithIndex(iterable);
         }
@@ -1995,15 +2107,15 @@ public final class Iterate
         {
             return ((RichIterable<T>) iterable).zipWithIndex(targetCollection);
         }
-        else if (iterable instanceof ArrayList)
+        if (iterable instanceof ArrayList)
         {
             return ArrayListIterate.zipWithIndex((ArrayList<T>) iterable, targetCollection);
         }
-        else if (iterable instanceof RandomAccess)
+        if (iterable instanceof RandomAccess)
         {
             return RandomAccessListIterate.zipWithIndex((List<T>) iterable, targetCollection);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.zipWithIndex(iterable, targetCollection);
         }
@@ -2019,7 +2131,7 @@ public final class Iterate
         {
             return ((RichIterable<T>) iterable).chunk(size);
         }
-        else if (iterable != null)
+        if (iterable != null)
         {
             return IterableIterate.chunk(iterable, size);
         }

@@ -27,6 +27,10 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.ImmutableCollection;
@@ -660,6 +664,76 @@ public abstract class AbstractCollectionTestCase
         Assert.assertEquals(7.0d, result, 0.001);
         double sum = objects.injectInto(0, AddFunction.INTEGER_TO_DOUBLE);
         Assert.assertEquals(6.0d, sum, 0.001);
+    }
+
+    @Test
+    public void injectIntoFloat()
+    {
+        MutableCollection<Integer> objects = this.newWith(1, 2, 3);
+        float result = objects.injectInto(1, AddFunction.INTEGER_TO_FLOAT);
+        Assert.assertEquals(7.0f, result, 0.001f);
+        float sum = objects.injectInto(0, AddFunction.INTEGER_TO_FLOAT);
+        Assert.assertEquals(6.0f, sum, 0.001f);
+    }
+
+    @Test
+    public void sumFloat()
+    {
+        MutableCollection<Integer> objects = this.newWith(1, 2, 3);
+        float expected = objects.injectInto(0, AddFunction.INTEGER_TO_FLOAT);
+        float actual = objects.sumOf(new FloatFunction<Integer>()
+        {
+            public float floatValueOf(Integer integer)
+            {
+                return integer.floatValue();
+            }
+        });
+        Assert.assertEquals(expected, actual, 0.001);
+    }
+
+    @Test
+    public void sumDouble()
+    {
+        MutableCollection<Integer> objects = this.newWith(1, 2, 3);
+        double expected = objects.injectInto(0, AddFunction.INTEGER_TO_DOUBLE);
+        double actual = objects.sumOf(new DoubleFunction<Integer>()
+        {
+            public double doubleValueOf(Integer integer)
+            {
+                return integer.doubleValue();
+            }
+        });
+        Assert.assertEquals(expected, actual, 0.001);
+    }
+
+    @Test
+    public void sumInteger()
+    {
+        MutableCollection<Integer> objects = this.newWith(1, 2, 3);
+        int expected = objects.injectInto(0, AddFunction.INTEGER_TO_INT);
+        int actual = objects.sumOf(new IntFunction<Integer>()
+        {
+            public int intValueOf(Integer integer)
+            {
+                return integer;
+            }
+        });
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void sumLong()
+    {
+        MutableCollection<Integer> objects = this.newWith(1, 2, 3);
+        long expected = objects.injectInto(0, AddFunction.INTEGER_TO_LONG);
+        long actual = objects.sumOf(new LongFunction<Integer>()
+        {
+            public long longValueOf(Integer integer)
+            {
+                return integer.longValue();
+            }
+        });
+        Assert.assertEquals(expected, actual);
     }
 
     @Test

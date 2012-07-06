@@ -28,6 +28,7 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatObjectToFloatFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
@@ -656,6 +657,28 @@ public final class ArrayListIterate
             for (int i = 0; i < size; i++)
             {
                 result = function.doubleValueOf(result, elements[i]);
+            }
+            return result;
+        }
+        return RandomAccessListIterate.injectInto(injectValue, list, function);
+    }
+
+    /**
+     * @see Iterate#injectInto(float, Iterable, FloatObjectToFloatFunction)
+     */
+    public static <T> float injectInto(
+            float injectValue,
+            ArrayList<T> list,
+            FloatObjectToFloatFunction<? super T> function)
+    {
+        int size = list.size();
+        if (ArrayListIterate.isOptimizableArrayList(list, size))
+        {
+            float result = injectValue;
+            T[] elements = ArrayListIterate.getInternalArray(list);
+            for (int i = 0; i < size; i++)
+            {
+                result = function.floatValueOf(result, elements[i]);
             }
             return result;
         }
