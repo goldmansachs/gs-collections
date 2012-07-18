@@ -49,6 +49,8 @@ public interface ImmutableCollection<T>
 
     <V> ImmutableCollection<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 
+    <V> ImmutableCollection<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
+
     <V> ImmutableMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
 
     <V> ImmutableMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
