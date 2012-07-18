@@ -93,6 +93,11 @@ public interface MapIterable<K, V> extends RichIterable<V>
     V getIfAbsent(K key, Function0<? extends V> function);
 
     /**
+     * Return the value in the Map that corresponds to the specified key, or if there is no value at the key, return {@code value}.
+     */
+    V getIfAbsentValue(K key, V value);
+
+    /**
      * Return the value in the Map that corresponds to the specified key, or if there is no value at the key, return the
      * result of evaluating the specified function and parameter.
      */

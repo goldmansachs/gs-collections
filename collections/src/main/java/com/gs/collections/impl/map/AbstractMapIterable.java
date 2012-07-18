@@ -90,11 +90,21 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
     public V getIfAbsent(K key, Function0<? extends V> function)
     {
         V result = this.get(key);
-        if (this.isAbsent(result, key))
+        if (!this.isAbsent(result, key))
         {
-            result = function.value();
+            return result;
         }
-        return result;
+        return function.value();
+    }
+
+    public V getIfAbsentValue(K key, V value)
+    {
+        V result = this.get(key);
+        if (!this.isAbsent(result, key))
+        {
+            return result;
+        }
+        return value;
     }
 
     public <P> V getIfAbsentWith(

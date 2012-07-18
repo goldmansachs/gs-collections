@@ -172,7 +172,7 @@ public abstract class ImmutableMapTestCase
     }
 
     @Test
-    public void getIfAbsent()
+    public void getIfAbsent_function()
     {
         Integer absentKey = this.size() + 1;
         String absentValue = String.valueOf(absentKey);
@@ -183,6 +183,23 @@ public abstract class ImmutableMapTestCase
 
         // Present key behavior
         Assert.assertEquals("1", classUnderTest.getIfAbsent(1, new PassThruFunction0<String>(absentValue)));
+
+        // Still unchanged
+        Assert.assertEquals(this.equalUnifiedMap(), classUnderTest);
+    }
+
+    @Test
+    public void getIfAbsent()
+    {
+        Integer absentKey = this.size() + 1;
+        String absentValue = String.valueOf(absentKey);
+
+        // Absent key behavior
+        ImmutableMap<Integer, String> classUnderTest = this.classUnderTest();
+        Assert.assertEquals(absentValue, classUnderTest.getIfAbsentValue(absentKey, absentValue));
+
+        // Present key behavior
+        Assert.assertEquals("1", classUnderTest.getIfAbsentValue(1, absentValue));
 
         // Still unchanged
         Assert.assertEquals(this.equalUnifiedMap(), classUnderTest);

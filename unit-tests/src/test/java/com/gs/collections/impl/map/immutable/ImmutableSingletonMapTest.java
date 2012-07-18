@@ -116,13 +116,25 @@ public class ImmutableSingletonMapTest extends ImmutableMemoryEfficientMapTestCa
 
     @Override
     @Test
+    public void getIfAbsent_function()
+    {
+        super.getIfAbsent_function();
+        ImmutableMap<Integer, String> map = this.classUnderTest();
+        Assert.assertNull(map.get(4));
+        Assert.assertEquals("4", map.getIfAbsent(4, new PassThruFunction0<String>("4")));
+        Assert.assertEquals("1", map.getIfAbsent(1, new PassThruFunction0<String>("1")));
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, "1"), map);
+    }
+
+    @Override
+    @Test
     public void getIfAbsent()
     {
         super.getIfAbsent();
         ImmutableMap<Integer, String> map = this.classUnderTest();
         Assert.assertNull(map.get(4));
-        Assert.assertEquals("4", map.getIfAbsent(4, new PassThruFunction0<String>("4")));
-        Assert.assertEquals("1", map.getIfAbsent(1, new PassThruFunction0<String>("1")));
+        Assert.assertEquals("4", map.getIfAbsentValue(4, "4"));
+        Assert.assertEquals("1", map.getIfAbsentValue(1, "1"));
         Assert.assertEquals(UnifiedMap.newWithKeysValues(1, "1"), map);
     }
 

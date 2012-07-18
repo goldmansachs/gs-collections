@@ -179,6 +179,12 @@ final class ImmutableEmptyMapWithHashingStrategy<K, V>
     }
 
     @Override
+    public V getIfAbsentValue(K key, V value)
+    {
+        return value;
+    }
+
+    @Override
     public <P> V getIfAbsentWith(
             K key,
             Function<? super P, ? extends V> function,

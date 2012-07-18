@@ -1264,6 +1264,9 @@ public abstract class AbstractMemoryEfficientMutableMapTest
     public abstract void getIfAbsentPut();
 
     @Test
+    public abstract void getIfAbsent_function();
+
+    @Test
     public abstract void getIfAbsent();
 
     @Test

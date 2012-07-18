@@ -365,11 +365,21 @@ public class EmptyMapTest extends AbstractMemoryEfficientMutableMapTest
 
     @Override
     @Test
-    public void getIfAbsent()
+    public void getIfAbsent_function()
     {
         MutableMap<Integer, String> map = new EmptyMap<Integer, String>();
         Assert.assertNull(map.get(4));
         Assert.assertEquals("4", map.getIfAbsent(4, new PassThruFunction0<String>("4")));
+        Assert.assertNull(map.get(4));
+    }
+
+    @Override
+    @Test
+    public void getIfAbsent()
+    {
+        MutableMap<Integer, String> map = new EmptyMap<Integer, String>();
+        Assert.assertNull(map.get(4));
+        Assert.assertEquals("4", map.getIfAbsentValue(4, "4"));
         Assert.assertNull(map.get(4));
     }
 

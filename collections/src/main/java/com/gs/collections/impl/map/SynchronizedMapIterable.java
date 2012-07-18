@@ -138,6 +138,14 @@ public abstract class SynchronizedMapIterable<K, V>
         }
     }
 
+    public V getIfAbsentValue(K key, V value)
+    {
+        synchronized (this.lock)
+        {
+            return this.mapIterable.getIfAbsentValue(key, value);
+        }
+    }
+
     public <P> V getIfAbsentWith(K key, Function<? super P, ? extends V> function, P parameter)
     {
         synchronized (this.lock)

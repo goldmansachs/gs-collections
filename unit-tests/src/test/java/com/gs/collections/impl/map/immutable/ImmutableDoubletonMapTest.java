@@ -85,12 +85,23 @@ public class ImmutableDoubletonMapTest extends ImmutableMemoryEfficientMapTestCa
 
     @Override
     @Test
-    public void getIfAbsent()
+    public void getIfAbsent_function()
     {
-        super.getIfAbsent();
+        super.getIfAbsent_function();
         ImmutableMap<Integer, String> map = classUnderTest();
         Assert.assertNull(map.get(4));
         Assert.assertEquals("4", map.getIfAbsent(4, new PassThruFunction0<String>("4")));
+        Assert.assertNull(map.get(4));
+    }
+
+    @Override
+    @Test
+    public void getIfAbsent()
+    {
+        super.getIfAbsent();
+        ImmutableMap<Integer, String> map = this.classUnderTest();
+        Assert.assertNull(map.get(4));
+        Assert.assertEquals("4", map.getIfAbsentValue(4, "4"));
         Assert.assertNull(map.get(4));
     }
 

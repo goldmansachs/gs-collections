@@ -70,7 +70,7 @@ public class ImmutableEmptyMapTest extends ImmutableMemoryEfficientMapTestCase
 
     @Override
     @Test
-    public void getIfAbsent()
+    public void getIfAbsent_function()
     {
         Integer absentKey = this.size() + 1;
         String absentValue = String.valueOf(absentKey);
@@ -78,6 +78,21 @@ public class ImmutableEmptyMapTest extends ImmutableMemoryEfficientMapTestCase
         // Absent key behavior
         ImmutableMap<Integer, String> classUnderTest = this.classUnderTest();
         Assert.assertEquals(absentValue, classUnderTest.getIfAbsent(absentKey, new PassThruFunction0<String>(absentValue)));
+
+        // Still unchanged
+        Assert.assertEquals(this.equalUnifiedMap(), classUnderTest);
+    }
+
+    @Override
+    @Test
+    public void getIfAbsent()
+    {
+        Integer absentKey = this.size() + 1;
+        String absentValue = String.valueOf(absentKey);
+
+        // Absent key behavior
+        ImmutableMap<Integer, String> classUnderTest = this.classUnderTest();
+        Assert.assertEquals(absentValue, classUnderTest.getIfAbsentValue(absentKey, absentValue));
 
         // Still unchanged
         Assert.assertEquals(this.equalUnifiedMap(), classUnderTest);

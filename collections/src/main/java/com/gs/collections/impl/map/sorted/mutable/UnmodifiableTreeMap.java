@@ -144,6 +144,16 @@ public class UnmodifiableTreeMap<K, V>
         return result;
     }
 
+    public V getIfAbsentValue(K key, V value)
+    {
+        V result = this.get(key);
+        if (this.isAbsent(result, key))
+        {
+            return value;
+        }
+        return result;
+    }
+
     public <P> V getIfAbsentWith(
             K key,
             Function<? super P, ? extends V> function,

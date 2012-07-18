@@ -289,6 +289,17 @@ public final class ConcurrentMutableHashMap<K, V>
     }
 
     @Override
+    public V getIfAbsentValue(K key, V value)
+    {
+        V result = this.delegate.get(key);
+        if (result == null)
+        {
+            return value;
+        }
+        return result;
+    }
+
+    @Override
     public <P> V getIfAbsentWith(K key,
             Function<? super P, ? extends V> function,
             P parameter)
