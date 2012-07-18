@@ -60,4 +60,14 @@ public class Functions0Test
                         + "TmV3VW5pZmllZE1hcEZ1bmN0aW9uAAAAAAAAAAECAAB4cA==",
                 Functions0.newUnifiedMap());
     }
+
+    @Test
+    public void value()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyADhjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mdW5jdGlvbi5QYXNzVGhydUZ1\n"
+                        + "bmN0aW9uMAAAAAAAAAABAgABTAAGcmVzdWx0dAASTGphdmEvbGFuZy9PYmplY3Q7eHBw",
+                Functions0.value(null));
+    }
 }

@@ -21,6 +21,7 @@ import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
@@ -56,6 +57,11 @@ public final class Functions0
     public static <K, V> Function0<MutableMap<K, V>> newUnifiedMap()
     {
         return (Function0<MutableMap<K, V>>) NEW_UNIFIED_MAP_FUNCTION;
+    }
+
+    public static <T> Function0<T> value(T t)
+    {
+        return new PassThruFunction0<T>(t);
     }
 
     private static final class NewFastListFunction<T> implements Function0<MutableList<T>>
