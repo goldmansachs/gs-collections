@@ -249,6 +249,23 @@ public abstract class ImmutableSortedMapTestCase
     }
 
     @Test
+    public void getIfAbsentValue()
+    {
+        Integer absentKey = this.size() + 1;
+        String absentValue = String.valueOf(absentKey);
+
+        // Absent key behavior
+        ImmutableSortedMap<Integer, String> classUnderTest = this.classUnderTest();
+        Assert.assertEquals(absentValue, classUnderTest.getIfAbsentValue(absentKey, absentValue));
+
+        // Present key behavior
+        Assert.assertEquals("1", classUnderTest.getIfAbsentValue(1, absentValue));
+
+        // Still unchanged
+        Assert.assertEquals(this.equalUnifiedMap(), classUnderTest);
+    }
+
+    @Test
     public void getIfAbsentWith()
     {
         Integer absentKey = this.size() + 1;

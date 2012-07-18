@@ -88,6 +88,8 @@ public class ImmutableEmptySortedMapTest extends ImmutableSortedMapTestCase
     @Test
     public void getIfAbsent()
     {
+        super.getIfAbsent();
+
         Integer absentKey = this.size() + 1;
         String absentValue = String.valueOf(absentKey);
 
@@ -103,6 +105,8 @@ public class ImmutableEmptySortedMapTest extends ImmutableSortedMapTestCase
     @Test
     public void getIfAbsentWith()
     {
+        super.getIfAbsentWith();
+
         Integer absentKey = this.size() + 1;
         String absentValue = String.valueOf(absentKey);
 
