@@ -18,7 +18,6 @@ package com.gs.collections.impl.multimap;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
-import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
@@ -77,66 +76,6 @@ public abstract class AbstractMutableMultimapTestCase extends AbstractMultimapTe
         Verify.assertContainsEntry(2, 2, multimap);
     }
 
-    @Override
-    @Test
-    public void testNewMultimap()
-    {
-        Multimap<Integer, Integer> multimap = this.newMultimap();
-        Verify.assertEmpty(multimap);
-        Verify.assertSize(0, multimap);
-    }
-
-    @Override
-    @Test
-    public void testNewMultimapWithKeyValue()
-    {
-        Multimap<Integer, String> multimap = this.newMultimapWithKeyValue(1, "One");
-        Verify.assertNotEmpty(multimap);
-        Verify.assertSize(1, multimap);
-        Verify.assertContainsEntry(1, "One", multimap);
-    }
-
-    @Override
-    @Test
-    public void testNewMultimapWithWith()
-    {
-        Multimap<Integer, String> multimap = this.newMultimapWithKeysValues(1, "One", 2, "Two");
-        Verify.assertNotEmpty(multimap);
-        Verify.assertSize(2, multimap);
-        Verify.assertContainsAllEntries(multimap, 1, "One", 2, "Two");
-    }
-
-    @Override
-    @Test
-    public void testNewMultimapWithWithWith()
-    {
-        Multimap<Integer, String> multimap =
-                this.newMultimapWithKeysValues(1, "One", 2, "Two", 3, "Three");
-        Verify.assertNotEmpty(multimap);
-        Verify.assertSize(3, multimap);
-        Verify.assertContainsAllEntries(multimap, 1, "One", 2, "Two", 3, "Three");
-    }
-
-    @Override
-    @Test
-    public void testNewMultimapWithWithWithWith()
-    {
-        Multimap<Integer, String> multimap =
-                this.newMultimapWithKeysValues(1, "One", 2, "Two", 3, "Three", 4, "Four");
-        Verify.assertNotEmpty(multimap);
-        Verify.assertSize(4, multimap);
-        Verify.assertContainsAllEntries(multimap, 1, "One", 2, "Two", 3, "Three", 4, "Four");
-    }
-
-    @Override
-    @Test
-    public void isEmpty()
-    {
-        Verify.assertEmpty(this.newMultimap());
-        Verify.assertNotEmpty(this.newMultimapWithKeyValue(1, 1));
-        Assert.assertTrue(this.newMultimapWithKeyValue(1, 1).notEmpty());
-    }
-
     @Test
     public void testClear()
     {
@@ -153,33 +92,6 @@ public abstract class AbstractMutableMultimapTestCase extends AbstractMultimapTe
                 this.newMultimapWithKeysValues("One", 1, "Two", 2, "Three", 3);
         multimap.removeAll("Two");
         Verify.assertContainsAllEntries(multimap, "One", 1, "Three", 3);
-    }
-
-    @Override
-    @Test
-    public void forEachKeyValue()
-    {
-        final MutableBag<String> collection = Bags.mutable.of();
-        Multimap<Integer, String> multimap =
-                this.newMultimapWithKeysValues(1, "One", 2, "Two", 3, "Three");
-        multimap.forEachKeyValue(new Procedure2<Integer, String>()
-        {
-            public void value(Integer key, String value)
-            {
-                collection.add(key + value);
-            }
-        });
-        Assert.assertEquals(HashBag.newBagWith("1One", "2Two", "3Three"), collection);
-    }
-
-    @Override
-    @Test
-    public void forEachValue()
-    {
-        MutableBag<String> collection = Bags.mutable.of();
-        Multimap<Integer, String> multimap = this.newMultimapWithKeysValues(1, "1", 2, "2", 3, "3");
-        multimap.forEachValue(CollectionAddProcedure.on(collection));
-        Assert.assertEquals(HashBag.newBagWith("1", "2", "3"), collection);
     }
 
     @Override
