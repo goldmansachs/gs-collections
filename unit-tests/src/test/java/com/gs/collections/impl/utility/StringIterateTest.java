@@ -31,6 +31,7 @@ import com.gs.collections.impl.block.procedure.primitive.CharProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CodePointProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -179,7 +180,7 @@ public class StringIterateTest
     }
 
     @Test
-    public void toSet()
+    public void csvTokensToSet()
     {
         String tokens = "Ted,Mary";
         MutableSet<String> results = StringIterate.csvTokensToSet(tokens);
@@ -245,21 +246,27 @@ public class StringIterateTest
     }
 
     @Test
-    public void occurencesOf()
+    public void occurrencesOf()
     {
-        int count = StringIterate.occurrencesOf("1a2a3", "a".charAt(0));
+        int count = StringIterate.occurrencesOf("1a2a3", 'a');
         Assert.assertEquals(2, count);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void occurrencesOf_multiple_character_string_throws()
+    {
+        StringIterate.occurrencesOf("1a2a3", "abc");
+    }
+
     @Test
-    public void occurencesOfCodePoint()
+    public void occurrencesOfCodePoint()
     {
         int count = StringIterate.occurrencesOf("1a2a3", "a".codePointAt(0));
         Assert.assertEquals(2, count);
     }
 
     @Test
-    public void occurencesOfString()
+    public void occurrencesOfString()
     {
         int count = StringIterate.occurrencesOf("1a2a3", "a");
         Assert.assertEquals(2, count);
@@ -471,5 +478,13 @@ public class StringIterateTest
     public void string()
     {
         Assert.assertEquals("Token2", StringIterate.getLastToken("Token1DelimiterToken2", "Delimiter"));
+    }
+
+    @Test
+    public void toSet()
+    {
+        Verify.assertSetsEqual(
+                UnifiedSet.newSetWith('a', 'b', 'c', 'd', 'e'),
+                StringIterate.toSet("aabcde"));
     }
 }
