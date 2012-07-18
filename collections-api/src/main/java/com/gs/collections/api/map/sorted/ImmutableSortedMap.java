@@ -65,6 +65,8 @@ public interface ImmutableSortedMap<K, V>
 
     ImmutableList<V> reject(Predicate<? super V> predicate);
 
+    <S> ImmutableList<S> selectInstancesOf(Class<S> clazz);
+
     <R> ImmutableList<R> collect(Function<? super V, ? extends R> function);
 
     <R> ImmutableList<R> collectIf(

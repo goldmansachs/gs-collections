@@ -276,6 +276,14 @@ public class IterableIterateTest
     }
 
     @Test
+    public void selectInstancesOf()
+    {
+        Iterable<Number> iterable = new IterableAdapter<Number>(FastList.<Number>newListWith(1, 2.0, 3, 4.0, 5));
+        Collection<Integer> result = Iterate.selectInstancesOf(iterable, Integer.class);
+        Assert.assertEquals(iList(1, 3, 5), result);
+    }
+
+    @Test
     public void injectIntoWith()
     {
         Sum result = new IntegerSum(0);

@@ -40,11 +40,9 @@ import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
-import com.gs.collections.impl.block.procedure.CollectProcedure;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
-import com.gs.collections.impl.block.procedure.SelectProcedure;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
@@ -218,11 +216,19 @@ public class ImmutableArrayBag<T>
         return this.reject(Predicates.in(elements));
     }
 
-    public ImmutableBag<T> select(Predicate<? super T> predicate)
+    public ImmutableBag<T> select(final Predicate<? super T> predicate)
     {
-        MutableBag<T> result = new HashBag<T>();
-        this.forEach(new SelectProcedure<T>(predicate, result));
-
+        final MutableBag<T> result = HashBag.newBag();
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int index)
+            {
+                if (predicate.accept(each))
+                {
+                    result.addOccurrences(each, index);
+                }
+            }
+        });
         return ImmutableArrayBag.copyFrom(result);
     }
 
@@ -254,11 +260,33 @@ public class ImmutableArrayBag<T>
         return PartitionHashBag.of(this, predicate).toImmutable();
     }
 
-    public <V> ImmutableBag<V> collect(Function<? super T, ? extends V> function)
+    public <S> ImmutableBag<S> selectInstancesOf(final Class<S> clazz)
     {
-        CollectProcedure<T, V> procedure = new CollectProcedure<T, V>(function, HashBag.<V>newBag());
-        this.forEach(procedure);
-        return ImmutableArrayBag.copyFrom((MutableBag<V>) procedure.getCollection());
+        final MutableBag<S> result = HashBag.newBag();
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int index)
+            {
+                if (clazz.isInstance(each))
+                {
+                    result.addOccurrences((S) each, index);
+                }
+            }
+        });
+        return ImmutableArrayBag.copyFrom(result);
+    }
+
+    public <V> ImmutableBag<V> collect(final Function<? super T, ? extends V> function)
+    {
+        final MutableBag<V> result = HashBag.newBag();
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int index)
+            {
+                result.addOccurrences(function.valueOf(each), index);
+            }
+        });
+        return ImmutableArrayBag.copyFrom(result);
     }
 
     @Override

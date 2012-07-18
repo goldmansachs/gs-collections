@@ -336,6 +336,37 @@ public final class Iterate
     }
 
     /**
+     * Returns a new collection with only the elements that are instances of the Class {@code clazz}.
+     */
+    public static <T> Collection<T> selectInstancesOf(Iterable<?> iterable, Class<T> clazz)
+    {
+        if (iterable instanceof MutableCollection)
+        {
+            return ((MutableCollection<?>) iterable).selectInstancesOf(clazz);
+        }
+        if (iterable instanceof ArrayList)
+        {
+            return ArrayListIterate.selectInstancesOf((ArrayList<?>) iterable, clazz);
+        }
+        if (iterable instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.selectInstancesOf((List<?>) iterable, clazz);
+        }
+        if (iterable instanceof Collection)
+        {
+            return IterableIterate.<T, Collection<T>>selectInstancesOf(
+                    iterable,
+                    clazz,
+                    DefaultSpeciesNewStrategy.INSTANCE.<T>speciesNew((Collection<?>) iterable));
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.selectInstancesOf(iterable, clazz);
+        }
+        throw new IllegalArgumentException("Cannot perform a selectInstancesOf on null");
+    }
+
+    /**
      * Returns the total number of elements that evaluate to true for the specified predicate.
      * <p/>
      * <pre>e.g.

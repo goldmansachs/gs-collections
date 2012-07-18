@@ -171,6 +171,26 @@ public class IterateNullTest
     }
 
     @Test
+    public void selectInstancesOf()
+    {
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.selectInstancesOf(null, null);
+            }
+        });
+
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                ArrayIterate.selectInstancesOf(null, null);
+            }
+        });
+    }
+
+    @Test
     public void detect()
     {
         Verify.assertThrows(IllegalArgumentException.class, new Runnable()

@@ -18,7 +18,6 @@ package com.gs.collections.impl.utility;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 
@@ -384,33 +383,36 @@ public class ArrayIterateTest
         Assert.assertNull(ArrayIterate.getLast(objectArray));
     }
 
-    private void assertContainsAllIntegers(Collection<Integer> collection)
-    {
-        Assert.assertEquals(FastList.newListWith(5, 4, 3, 2, 1), collection);
-    }
-
     @Test
     public void select()
     {
-        Integer[] objectArray = INTEGER_ARRAY;
-        Collection<Integer> list = ArrayIterate.select(objectArray, Predicates.instanceOf(Integer.class));
-        this.assertContainsAllIntegers(list);
+        Assert.assertEquals(
+                FastList.newListWith(5, 4, 3, 2, 1),
+                ArrayIterate.select(INTEGER_ARRAY, Predicates.instanceOf(Integer.class)));
     }
 
     @Test
     public void reject()
     {
-        Integer[] objectArray = INTEGER_ARRAY;
-        Collection<Integer> list = ArrayIterate.reject(objectArray, Predicates.instanceOf(String.class));
-        this.assertContainsAllIntegers(list);
+        Assert.assertEquals(
+                FastList.newListWith(5, 4, 3, 2, 1),
+                ArrayIterate.reject(INTEGER_ARRAY, Predicates.instanceOf(String.class)));
     }
 
     @Test
     public void selectWith()
     {
-        Integer[] objectArray = INTEGER_ARRAY;
-        Collection<Integer> list = ArrayIterate.selectWith(objectArray, Predicates2.instanceOf(), Integer.class);
-        this.assertContainsAllIntegers(list);
+        Assert.assertEquals(
+                FastList.newListWith(5, 4, 3, 2, 1),
+                ArrayIterate.selectWith(INTEGER_ARRAY, Predicates2.instanceOf(), Integer.class));
+    }
+
+    @Test
+    public void selectInstancesOf()
+    {
+        Assert.assertEquals(
+                iList(1, 3, 5),
+                ArrayIterate.selectInstancesOf(new Number[]{1, 2.0, 3, 4.0, 5}, Integer.class));
     }
 
     @Test
@@ -423,9 +425,7 @@ public class ArrayIterateTest
     @Test
     public void count()
     {
-        Integer[] objectArray = INTEGER_ARRAY;
-        int count = ArrayIterate.count(objectArray, Predicates.instanceOf(Integer.class));
-        Assert.assertEquals(5, count);
+        Assert.assertEquals(3, ArrayIterate.count(INTEGER_ARRAY, Predicates.lessThan(4)));
     }
 
     @Test
@@ -439,9 +439,8 @@ public class ArrayIterateTest
     @Test
     public void selectAndRejectWith()
     {
-        Integer[] objectArray = INTEGER_ARRAY;
         Twin<MutableList<Integer>> result =
-                ArrayIterate.selectAndRejectWith(objectArray, Predicates2.<Integer>lessThan(), 3);
+                ArrayIterate.selectAndRejectWith(INTEGER_ARRAY, Predicates2.<Integer>lessThan(), 3);
         MutableList<Integer> positive = result.getOne();
         MutableList<Integer> negative = result.getTwo();
         Verify.assertSize(2, positive);
@@ -455,26 +454,22 @@ public class ArrayIterateTest
     @Test
     public void selectWithDifferentTargetCollection()
     {
-        Integer[] objectArray = INTEGER_ARRAY;
-        Collection<Integer> list = ArrayIterate.select(objectArray, Predicates.instanceOf(Integer.class), new ArrayList<Integer>());
-        this.assertContainsAllIntegers(list);
+        Assert.assertEquals(
+                FastList.newListWith(5, 4, 3, 2, 1),
+                ArrayIterate.select(INTEGER_ARRAY, Predicates.instanceOf(Integer.class), new ArrayList<Integer>()));
     }
 
     @Test
     public void rejectDifferentTargetCollection()
     {
-        Integer[] objectArray = INTEGER_ARRAY;
-        List<Integer> list = ArrayIterate.reject(objectArray, Predicates.instanceOf(Integer.class), new ArrayList<Integer>());
-        Verify.assertSize(0, list);
+        Verify.assertEmpty(ArrayIterate.reject(INTEGER_ARRAY, Predicates.instanceOf(Integer.class), new ArrayList<Integer>()));
     }
 
     @Test
     public void rejectWith()
     {
-        Integer[] objectArray = INTEGER_ARRAY;
-        Collection<Integer> list =
-                ArrayIterate.rejectWith(objectArray, Predicates2.instanceOf(), Integer.class);
-        Verify.assertSize(0, list);
+        Verify.assertEmpty(ArrayIterate.rejectWith(INTEGER_ARRAY, Predicates2.instanceOf(), Integer.class));
+        Verify.assertEmpty(ArrayIterate.rejectWith(INTEGER_ARRAY, Predicates2.instanceOf(), Integer.class, new ArrayList<Integer>()));
     }
 
     @Test
@@ -488,8 +483,7 @@ public class ArrayIterateTest
     @Test
     public void toMap()
     {
-        Integer[] objectArray = INTEGER_ARRAY;
-        MutableMap<String, Integer> map = ArrayIterate.toMap(objectArray, Functions.getToString());
+        MutableMap<String, Integer> map = ArrayIterate.toMap(INTEGER_ARRAY, Functions.getToString());
         Verify.assertSize(5, map);
         Verify.assertContainsKeyValue("1", 1, map);
         Verify.assertContainsKeyValue("2", 2, map);
@@ -501,10 +495,9 @@ public class ArrayIterateTest
     @Test
     public void contains()
     {
-        Object[] array = INTEGER_ARRAY;
-        Assert.assertTrue(ArrayIterate.contains(array, 5));
-        Assert.assertFalse(ArrayIterate.contains(array, 6));
-        Assert.assertFalse(ArrayIterate.contains(array, null));
+        Assert.assertTrue(ArrayIterate.contains(INTEGER_ARRAY, 5));
+        Assert.assertFalse(ArrayIterate.contains(INTEGER_ARRAY, 6));
+        Assert.assertFalse(ArrayIterate.contains(INTEGER_ARRAY, null));
         Assert.assertTrue(ArrayIterate.contains(new Object[]{null}, null));
     }
 
@@ -555,8 +548,7 @@ public class ArrayIterateTest
     @Test
     public void allSatisfyWith()
     {
-        Object[] array = INTEGER_ARRAY;
-        Assert.assertTrue(ArrayIterate.allSatisfyWith(array, Predicates2.instanceOf(), Integer.class));
+        Assert.assertTrue(ArrayIterate.allSatisfyWith(INTEGER_ARRAY, Predicates2.instanceOf(), Integer.class));
     }
 
     @Test

@@ -152,6 +152,8 @@ public interface MutableMap<K, V>
 
     PartitionMutableCollection<V> partition(Predicate<? super V> predicate);
 
+    <S> MutableCollection<S> selectInstancesOf(Class<S> clazz);
+
     <S> MutableCollection<Pair<V, S>> zip(Iterable<S> that);
 
     MutableCollection<Pair<V, Integer>> zipWithIndex();

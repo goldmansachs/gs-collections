@@ -32,6 +32,7 @@ import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.UnsortedSetIterable;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
+import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.collection.mutable.AbstractCollectionAdapter;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
@@ -193,6 +194,14 @@ public final class SetAdapter<T>
     public PartitionMutableSet<T> partition(Predicate<? super T> predicate)
     {
         return PartitionUnifiedSet.of(this, predicate);
+    }
+
+    @Override
+    public <S> MutableSet<S> selectInstancesOf(Class<S> clazz)
+    {
+        MutableSet<S> result = UnifiedSet.newSet();
+        this.forEach(new SelectInstancesOfProcedure<S>(clazz, result));
+        return result;
     }
 
     @Override

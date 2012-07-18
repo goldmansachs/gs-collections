@@ -202,6 +202,28 @@ public final class ArrayIterate
     }
 
     /**
+     * @see Iterate#selectInstancesOf(Iterable, Class)
+     */
+    public static <T> MutableList<T> selectInstancesOf(Object[] objectArray, Class<T> clazz)
+    {
+        if (objectArray == null)
+        {
+            throw new IllegalArgumentException("Cannot perform a selectInstancesOf on null");
+        }
+
+        FastList<T> results = FastList.newList(objectArray.length);
+        for (Object each : objectArray)
+        {
+            if (clazz.isInstance(each))
+            {
+                results.add((T) each);
+            }
+        }
+        results.trimToSize();
+        return results;
+    }
+
+    /**
      * @see Iterate#count(Iterable, Predicate)
      */
     public static <T> int count(T[] objectArray, Predicate<? super T> predicate)

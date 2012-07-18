@@ -55,6 +55,8 @@ public interface MutableSet<T>
 
     PartitionMutableSet<T> partition(Predicate<? super T> predicate);
 
+    <S> MutableSet<S> selectInstancesOf(Class<S> clazz);
+
     <V> MutableSet<V> collect(Function<? super T, ? extends V> function);
 
     <P, V> MutableSet<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);

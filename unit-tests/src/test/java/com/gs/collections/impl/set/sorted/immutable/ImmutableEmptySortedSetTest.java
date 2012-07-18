@@ -407,6 +407,15 @@ public class ImmutableEmptySortedSetTest extends AbstractImmutableSortedSetTestC
         Assert.assertEquals(Collections.<Integer>reverseOrder(), partition.getRejected().comparator());
     }
 
+    @Test
+    public void selectInstancesOf()
+    {
+        ImmutableSortedSet<Integer> set = this.classUnderTest(Collections.<Integer>reverseOrder());
+        Verify.assertEmpty(set.castToSortedSet());
+        Verify.assertEmpty(set.selectInstancesOf(Integer.class).castToSortedSet());
+        Assert.assertEquals(Collections.<Double>reverseOrder(), set.selectInstancesOf(Double.class).comparator());
+    }
+
     @Override
     @Test
     public void toSortedSet()

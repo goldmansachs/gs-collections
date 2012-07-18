@@ -912,6 +912,13 @@ public abstract class MapIterableTestCase
     }
 
     @Test
+    public void selectInstancesOf_value()
+    {
+        MapIterable<String, Number> map = this.<String, Number>newMapWithKeysValues("1", 1, "2", 2.0, "3", 3, "4", 4.0);
+        Assert.assertEquals(iBag(1, 3), map.selectInstancesOf(Integer.class).toBag());
+    }
+
+    @Test
     public void toArray()
     {
         MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);

@@ -824,6 +824,14 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
+    public <S> MutableCollection<S> selectInstancesOf(Class<S> clazz)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.selectInstancesOf(clazz);
+        }
+    }
+
     public String makeString()
     {
         return this.makeString(", ");

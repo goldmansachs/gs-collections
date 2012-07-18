@@ -258,6 +258,11 @@ public class ImmutableHashBag<T>
         return this.delegate.partition(predicate).toImmutable();
     }
 
+    public <S> ImmutableBag<S> selectInstancesOf(Class<S> clazz)
+    {
+        return this.delegate.selectInstancesOf(clazz).toImmutable();
+    }
+
     public <V> ImmutableBag<V> collect(Function<? super T, ? extends V> function)
     {
         return this.delegate.collect(function).toImmutable();

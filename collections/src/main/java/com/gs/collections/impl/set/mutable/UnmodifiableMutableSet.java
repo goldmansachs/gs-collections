@@ -142,6 +142,12 @@ public class UnmodifiableMutableSet<T>
     }
 
     @Override
+    public <S> MutableSet<S> selectInstancesOf(Class<S> clazz)
+    {
+        return this.getMutableSet().selectInstancesOf(clazz);
+    }
+
+    @Override
     public <V> MutableSet<V> collect(Function<? super T, ? extends V> function)
     {
         return this.getMutableSet().collect(function);

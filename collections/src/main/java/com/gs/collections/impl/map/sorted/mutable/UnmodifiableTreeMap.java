@@ -642,6 +642,11 @@ public class UnmodifiableTreeMap<K, V>
         return this.getMutableSortedMap().partition(predicate);
     }
 
+    public <S> MutableList<S> selectInstancesOf(Class<S> clazz)
+    {
+        return this.getMutableSortedMap().selectInstancesOf(clazz);
+    }
+
     public <S> MutableList<Pair<V, S>> zip(Iterable<S> that)
     {
         return this.getMutableSortedMap().zip(that);

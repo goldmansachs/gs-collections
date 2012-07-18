@@ -49,6 +49,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.gs.collections.impl.factory.Iterables.*;
+
 /**
  * JUnit test for {@link UnmodifiableMutableCollection}.
  */
@@ -430,5 +432,13 @@ public class UnmodifiableMutableCollectionTest
         this.unmodifiableCollection = this.newWith("2", "4", "1", "3");
         MutableSortedSet<String> set = this.unmodifiableCollection.toSortedSetBy(Functions.getStringToInteger());
         Verify.assertSortedSetsEqual(TreeSortedSet.newSetWith("1", "2", "3", "4"), set);
+    }
+
+    @Test
+    public void selectInstancesOf()
+    {
+        MutableCollection<Number> numbers = UnmodifiableMutableCollection.of(FastList.<Number>newListWith(1, 2.0, 3, 4.0, 5));
+        Assert.assertEquals(iList(1, 3, 5), numbers.selectInstancesOf(Integer.class));
+        Assert.assertEquals(iList(1, 2.0, 3, 4.0, 5), numbers.selectInstancesOf(Number.class));
     }
 }

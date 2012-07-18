@@ -131,6 +131,12 @@ public class UnmodifiableBag<T>
     }
 
     @Override
+    public <S> MutableBag<S> selectInstancesOf(Class<S> clazz)
+    {
+        return this.getMutableBag().selectInstancesOf(clazz);
+    }
+
+    @Override
     public <V> MutableBag<V> collect(Function<? super T, ? extends V> function)
     {
         return this.getMutableBag().collect(function);

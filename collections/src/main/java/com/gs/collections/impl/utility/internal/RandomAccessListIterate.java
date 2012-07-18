@@ -132,6 +132,28 @@ public final class RandomAccessListIterate
     }
 
     /**
+     * @see Iterate#selectInstancesOf(Iterable, Class)
+     */
+    public static <T> MutableList<T> selectInstancesOf(
+            List<?> list,
+            Class<T> clazz)
+    {
+        int size = list.size();
+        FastList<T> result = FastList.newList(size);
+
+        for (int i = 0; i < size; i++)
+        {
+            Object item = list.get(i);
+            if (clazz.isInstance(item))
+            {
+                result.add((T) item);
+            }
+        }
+        result.trimToSize();
+        return result;
+    }
+
+    /**
      * @see Iterate#count(Iterable, Predicate)
      */
     public static <T> int count(

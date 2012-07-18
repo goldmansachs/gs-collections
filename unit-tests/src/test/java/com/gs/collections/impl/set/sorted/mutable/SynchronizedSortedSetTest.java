@@ -16,13 +16,17 @@
 
 package com.gs.collections.impl.set.sorted.mutable;
 
+import java.util.Comparator;
 import java.util.TreeSet;
 
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.collection.mutable.AbstractSynchronizedCollectionTestCase;
+import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
+import org.junit.Assert;
 import org.junit.Test;
 
 /**
@@ -60,5 +64,20 @@ public class SynchronizedSortedSetTest extends AbstractSynchronizedCollectionTes
     public void asUnmodifiable()
     {
         Verify.assertInstanceOf(UnmodifiableSortedSet.class, this.classUnderTest().asUnmodifiable());
+    }
+
+    @Override
+    public void selectInstancesOf()
+    {
+        MutableSortedSet<Number> numbers = new SynchronizedSortedSet<Number>(SortedSetAdapter.adapt(new TreeSet<Number>(new Comparator<Number>()
+        {
+            public int compare(Number o1, Number o2)
+            {
+                return Double.compare(o1.doubleValue(), o2.doubleValue());
+            }
+        }))).withAll(FastList.newListWith(1, 2.0, 3, 4.0, 5));
+        MutableSortedSet<Integer> integers = numbers.selectInstancesOf(Integer.class);
+        Assert.assertEquals(UnifiedSet.newSetWith(1, 3, 5), integers);
+        Assert.assertEquals(FastList.newListWith(1, 3, 5), integers.toList());
     }
 }

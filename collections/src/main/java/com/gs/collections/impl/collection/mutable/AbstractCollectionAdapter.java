@@ -234,6 +234,11 @@ public abstract class AbstractCollectionAdapter<T>
         return Iterate.reject(this.getDelegate(), predicate, target);
     }
 
+    public <S> MutableCollection<S> selectInstancesOf(Class<S> clazz)
+    {
+        return this.wrap(Iterate.selectInstancesOf(this.getDelegate(), clazz));
+    }
+
     public <V> MutableCollection<V> collect(Function<? super T, ? extends V> function)
     {
         return this.wrap(Iterate.collect(this.getDelegate(), function));

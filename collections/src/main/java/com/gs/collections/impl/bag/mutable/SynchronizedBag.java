@@ -201,6 +201,15 @@ public class SynchronizedBag<E>
     }
 
     @Override
+    public <S> MutableBag<S> selectInstancesOf(Class<S> clazz)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableBag().selectInstancesOf(clazz);
+        }
+    }
+
+    @Override
     public boolean equals(Object obj)
     {
         synchronized (this.getLock())

@@ -173,6 +173,30 @@ public final class IterableIterate
     }
 
     /**
+     * @see Iterate#selectInstancesOf(Iterable, Class)
+     */
+    public static <T> MutableList<T> selectInstancesOf(
+            Iterable<?> iterable,
+            Class<T> clazz)
+    {
+        FastList<T> result = FastList.newList();
+        IterableIterate.selectInstancesOf(iterable, clazz, result);
+        result.trimToSize();
+        return result;
+    }
+
+    /**
+     * @see Iterate#selectInstancesOf(Iterable, Class)
+     */
+    public static <T, R extends Collection<T>> R selectInstancesOf(
+            Iterable<?> iterable,
+            Class<T> clazz,
+            R targetCollection)
+    {
+        return IteratorIterate.selectInstancesOf(iterable.iterator(), clazz, targetCollection);
+    }
+
+    /**
      * @see Iterate#collectIf(Iterable, Predicate, Function, Collection)
      */
     public static <T, V, R extends Collection<V>> R collectIf(

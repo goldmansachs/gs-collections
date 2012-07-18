@@ -35,9 +35,9 @@ import org.junit.Test;
 public class CompositeIterableTest extends AbstractLazyIterableTestCase
 {
     @Override
-    protected LazyIterable<Integer> newWith(Integer... integers)
+    protected <T> LazyIterable<T> newWith(T... elements)
     {
-        return CompositeIterable.with(FastList.newListWith(integers));
+        return CompositeIterable.with(FastList.newListWith(elements));
     }
 
     @Override

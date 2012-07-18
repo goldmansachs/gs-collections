@@ -198,6 +198,14 @@ public class ImmutableArrayListTest
     }
 
     @Test
+    public void selectInstancesOf()
+    {
+        ImmutableList<Number> numbers = ImmutableArrayList.<Number>newListWith(1, 2.0, 3, 4.0, 5);
+        ImmutableList<Integer> integers = numbers.selectInstancesOf(Integer.class);
+        Assert.assertEquals(iList(1, 3, 5), integers);
+    }
+
+    @Test
     public void partition()
     {
         PartitionImmutableList<Integer> partition = this.newListWith(1, 2, 3, 4, 5).partition(Predicates.lessThan(3));

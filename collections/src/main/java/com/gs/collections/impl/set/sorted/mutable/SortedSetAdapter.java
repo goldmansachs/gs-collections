@@ -38,6 +38,7 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
+import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.collection.mutable.AbstractCollectionAdapter;
 import com.gs.collections.impl.factory.SortedSets;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -207,6 +208,14 @@ public final class SortedSetAdapter<T>
     public PartitionMutableSortedSet<T> partition(Predicate<? super T> predicate)
     {
         return PartitionTreeSortedSet.of(this, predicate);
+    }
+
+    @Override
+    public <S> MutableSortedSet<S> selectInstancesOf(Class<S> clazz)
+    {
+        TreeSortedSet<S> result = TreeSortedSet.newSet((Comparator<? super S>) this.comparator());
+        this.forEach(new SelectInstancesOfProcedure<S>(clazz, result));
+        return result;
     }
 
     @Override

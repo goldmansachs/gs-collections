@@ -53,6 +53,8 @@ public interface ImmutableSortedSet<T>
 
     PartitionImmutableSortedSet<T> partition(Predicate<? super T> predicate);
 
+    <S> ImmutableSortedSet<S> selectInstancesOf(Class<S> clazz);
+
     <V> ImmutableList<V> collect(Function<? super T, ? extends V> function);
 
     <V> ImmutableList<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);

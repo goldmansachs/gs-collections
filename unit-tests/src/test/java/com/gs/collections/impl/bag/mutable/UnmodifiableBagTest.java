@@ -31,6 +31,8 @@ import com.gs.collections.impl.tuple.Tuples;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static com.gs.collections.impl.factory.Iterables.*;
+
 /**
  * Abstract JUnit test for {@link UnmodifiableBag}.
  */
@@ -100,5 +102,13 @@ public class UnmodifiableBagTest
     public void toMapOfItemToCount()
     {
         Assert.assertEquals(UnifiedMap.newWithKeysValues("", 1), this.getCollection().toMapOfItemToCount());
+    }
+
+    @Test
+    public void selectInstancesOf()
+    {
+        MutableBag<Number> numbers = UnmodifiableBag.of(HashBag.<Number>newBagWith(1, 2.0, 3, 4.0, 5));
+        Assert.assertEquals(iBag(1, 3, 5), numbers.selectInstancesOf(Integer.class));
+        Assert.assertEquals(iBag(1, 2.0, 3, 4.0, 5), numbers.selectInstancesOf(Number.class));
     }
 }

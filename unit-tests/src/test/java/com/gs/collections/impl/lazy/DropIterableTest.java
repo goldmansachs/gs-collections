@@ -226,8 +226,8 @@ public class DropIterableTest extends AbstractLazyIterableTestCase
     }
 
     @Override
-    protected LazyIterable<Integer> newWith(Integer... integers)
+    protected <T> LazyIterable<T> newWith(T... elements)
     {
-        return LazyIterate.drop(FastList.newListWith(integers), 0);
+        return LazyIterate.drop(FastList.newListWith(elements), 0);
     }
 }

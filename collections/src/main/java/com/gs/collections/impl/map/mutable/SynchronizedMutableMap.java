@@ -136,6 +136,14 @@ public class SynchronizedMutableMap<K, V>
         }
     }
 
+    public <S> MutableCollection<S> selectInstancesOf(Class<S> clazz)
+    {
+        synchronized (this.lock)
+        {
+            return this.getMutableMap().selectInstancesOf(clazz);
+        }
+    }
+
     public <S> MutableCollection<Pair<V, S>> zip(Iterable<S> that)
     {
         synchronized (this.lock)

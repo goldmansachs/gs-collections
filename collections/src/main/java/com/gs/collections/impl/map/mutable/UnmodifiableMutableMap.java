@@ -660,6 +660,11 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().partition(predicate);
     }
 
+    public <S> MutableCollection<S> selectInstancesOf(Class<S> clazz)
+    {
+        return this.getMutableMap().selectInstancesOf(clazz);
+    }
+
     public <S> MutableCollection<Pair<V, S>> zip(Iterable<S> that)
     {
         return this.getMutableMap().zip(that);

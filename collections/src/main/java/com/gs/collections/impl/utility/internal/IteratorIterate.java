@@ -167,6 +167,25 @@ public final class IteratorIterate
     }
 
     /**
+     * @see Iterate#selectInstancesOf(Iterable, Class)
+     */
+    public static <T, R extends Collection<T>> R selectInstancesOf(
+            Iterator<?> iterator,
+            Class<T> clazz,
+            R targetCollection)
+    {
+        while (iterator.hasNext())
+        {
+            Object item = iterator.next();
+            if (clazz.isInstance(item))
+            {
+                targetCollection.add((T) item);
+            }
+        }
+        return targetCollection;
+    }
+
+    /**
      * @see Iterate#selectWith(Iterable, Predicate2, Object, Collection)
      */
     public static <T, V, R extends Collection<V>> R collectIf(

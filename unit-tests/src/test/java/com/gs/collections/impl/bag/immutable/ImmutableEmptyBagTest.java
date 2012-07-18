@@ -34,6 +34,8 @@ import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static com.gs.collections.impl.factory.Iterables.*;
+
 public class ImmutableEmptyBagTest extends ImmutableBagTestCase
 {
     @Override
@@ -90,6 +92,15 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
         PartitionImmutableBag<String> partition = this.newBag().partition(Predicates.lessThan("0"));
         Verify.assertIterableEmpty(partition.getSelected());
         Verify.assertIterableEmpty(partition.getRejected());
+    }
+
+    @Test
+    public void selectInstancesOf()
+    {
+        ImmutableBag<Number> numbers = Bags.immutable.of();
+        Assert.assertEquals(iBag(), numbers.selectInstancesOf(Integer.class));
+        Assert.assertEquals(iBag(), numbers.selectInstancesOf(Double.class));
+        Assert.assertEquals(iBag(), numbers.selectInstancesOf(Number.class));
     }
 
     @Override

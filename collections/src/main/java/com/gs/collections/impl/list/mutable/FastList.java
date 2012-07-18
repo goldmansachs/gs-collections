@@ -668,6 +668,22 @@ public class FastList<T>
     }
 
     @Override
+    public <S> FastList<S> selectInstancesOf(Class<S> clazz)
+    {
+        FastList<S> result = FastList.newList(this.size);
+        for (int i = 0; i < this.size; i++)
+        {
+            T item = this.items[i];
+            if (clazz.isInstance(item))
+            {
+                result.add((S) item);
+            }
+        }
+        result.trimToSize();
+        return result;
+    }
+
+    @Override
     public void removeIf(Predicate<? super T> predicate)
     {
         int currentFilledIndex = 0;

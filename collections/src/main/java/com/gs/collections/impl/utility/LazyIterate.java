@@ -29,6 +29,7 @@ import com.gs.collections.impl.lazy.DropIterable;
 import com.gs.collections.impl.lazy.FlatCollectIterable;
 import com.gs.collections.impl.lazy.LazyIterableAdapter;
 import com.gs.collections.impl.lazy.RejectIterable;
+import com.gs.collections.impl.lazy.SelectInstancesOfIterable;
 import com.gs.collections.impl.lazy.SelectIterable;
 import com.gs.collections.impl.lazy.TakeIterable;
 import com.gs.collections.impl.lazy.ZipIterable;
@@ -73,6 +74,11 @@ public final class LazyIterate
     public static <T> LazyIterable<T> reject(Iterable<T> iterable, Predicate<? super T> predicate)
     {
         return new RejectIterable<T>(iterable, predicate);
+    }
+
+    public static <T> LazyIterable<T> selectInstancesOf(Iterable<?> iterable, Class<T> clazz)
+    {
+        return new SelectInstancesOfIterable<T>(iterable, clazz);
     }
 
     /**

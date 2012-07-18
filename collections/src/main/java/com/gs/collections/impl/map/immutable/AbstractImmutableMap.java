@@ -32,6 +32,7 @@ import com.gs.collections.api.multimap.ImmutableMultimap;
 import com.gs.collections.api.partition.PartitionImmutableCollection;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.AbstractMapIterable;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
@@ -215,6 +216,13 @@ public abstract class AbstractImmutableMap<K, V>
     public PartitionImmutableCollection<V> partition(Predicate<? super V> predicate)
     {
         return PartitionFastList.of(this, predicate).toImmutable();
+    }
+
+    public <S> ImmutableCollection<S> selectInstancesOf(Class<S> clazz)
+    {
+        FastList<S> result = FastList.newList(this.size());
+        this.forEach(new SelectInstancesOfProcedure<S>(clazz, result));
+        return result.toImmutable();
     }
 
     @Override

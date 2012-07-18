@@ -238,6 +238,13 @@ final class ImmutableSingletonBag<T>
         return PartitionHashBag.of(this, predicate).toImmutable();
     }
 
+    public <S> ImmutableBag<S> selectInstancesOf(Class<S> clazz)
+    {
+        return clazz.isInstance(this.value)
+                ? (ImmutableBag<S>) this
+                : Bags.immutable.<S>of();
+    }
+
     public <V> ImmutableBag<V> collect(Function<? super T, ? extends V> function)
     {
         return Bags.immutable.of(function.valueOf(this.value));

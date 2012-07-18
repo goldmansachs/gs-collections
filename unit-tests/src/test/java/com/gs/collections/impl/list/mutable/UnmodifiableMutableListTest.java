@@ -30,6 +30,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import static com.gs.collections.impl.factory.Iterables.*;
+
 /**
  * JUnit test for {@link UnmodifiableMutableList}.
  */
@@ -255,5 +257,13 @@ public class UnmodifiableMutableListTest
     public void toReversed()
     {
         Assert.assertEquals(Lists.mutable.ofAll(this.unmodifiableList).toReversed(), this.unmodifiableList.toReversed());
+    }
+
+    @Test
+    public void selectInstancesOf()
+    {
+        MutableList<Number> numbers = UnmodifiableMutableList.of(FastList.<Number>newListWith(1, 2.0, 3, 4.0, 5));
+        Assert.assertEquals(iList(1, 3, 5), numbers.selectInstancesOf(Integer.class));
+        Assert.assertEquals(iList(1, 2.0, 3, 4.0, 5), numbers.selectInstancesOf(Number.class));
     }
 }

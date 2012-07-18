@@ -300,6 +300,11 @@ public class UnmodifiableMutableCollection<T>
         return this.getMutableCollection().partition(predicate);
     }
 
+    public <S> MutableCollection<S> selectInstancesOf(Class<S> clazz)
+    {
+        return this.getMutableCollection().selectInstancesOf(clazz);
+    }
+
     public void removeIf(Predicate<? super T> predicate)
     {
         throw new UnsupportedOperationException();

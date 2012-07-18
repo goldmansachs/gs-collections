@@ -35,9 +35,9 @@ public class LazyIterableAdapterTest extends AbstractLazyIterableTestCase
     private static final Logger LOGGER = LoggerFactory.getLogger(LazyIterableAdapterTest.class);
 
     @Override
-    protected LazyIterable<Integer> newWith(Integer... integers)
+    protected <T> LazyIterable<T> newWith(T... elements)
     {
-        return new LazyIterableAdapter<Integer>(FastList.newListWith(integers));
+        return new LazyIterableAdapter<T>(FastList.newListWith(elements));
     }
 
     @Test

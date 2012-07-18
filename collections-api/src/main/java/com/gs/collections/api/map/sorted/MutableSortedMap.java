@@ -162,6 +162,8 @@ public interface MutableSortedMap<K, V>
 
     PartitionMutableList<V> partition(Predicate<? super V> predicate);
 
+    <S> MutableList<S> selectInstancesOf(Class<S> clazz);
+
     <S> MutableList<Pair<V, S>> zip(Iterable<S> that);
 
     MutableList<Pair<V, Integer>> zipWithIndex();

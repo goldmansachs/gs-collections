@@ -31,6 +31,7 @@ import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.api.set.ImmutableSet;
+import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
@@ -63,14 +64,14 @@ public class CollectionAdapterTest extends AbstractCollectionTestCase
         return new CollectionAdapter<T>(new ArrayList<T>());
     }
 
-    private CollectionAdapter<Integer> newSet()
+    private <T> CollectionAdapter<T> newSet()
     {
-        return new CollectionAdapter<Integer>(UnifiedSet.<Integer>newSet());
+        return new CollectionAdapter<T>(UnifiedSet.<T>newSet());
     }
 
-    private CollectionAdapter<Integer> newList()
+    private <T> CollectionAdapter<T> newList()
     {
-        return new CollectionAdapter<Integer>(FastList.<Integer>newList());
+        return new CollectionAdapter<T>(FastList.<T>newList());
     }
 
     @Override
@@ -103,8 +104,8 @@ public class CollectionAdapterTest extends AbstractCollectionTestCase
     public void select()
     {
         super.select();
-        Verify.assertContainsAll(this.newSet().with(1, 2, 3, 4, 5).select(Predicates.lessThan(3)), 1, 2);
-        Verify.assertContainsAll(this.newSet().with(-1, 2, 3, 4, 5).select(
+        Verify.assertContainsAll(this.<Integer>newSet().with(1, 2, 3, 4, 5).select(Predicates.lessThan(3)), 1, 2);
+        Verify.assertContainsAll(this.<Integer>newSet().with(-1, 2, 3, 4, 5).select(
                 Predicates.lessThan(3),
                 FastList.<Integer>newList()), -1, 2);
     }
@@ -121,8 +122,19 @@ public class CollectionAdapterTest extends AbstractCollectionTestCase
     public void reject()
     {
         super.reject();
-        Verify.assertContainsAll(this.newSet().with(1, 2, 3, 4).reject(Predicates.lessThan(3)), 3, 4);
-        Verify.assertContainsAll(this.newSet().with(1, 2, 3, 4).reject(Predicates.lessThan(3), FastList.<Integer>newList()), 3, 4);
+        Verify.assertContainsAll(this.<Integer>newSet().with(1, 2, 3, 4).reject(Predicates.lessThan(3)), 3, 4);
+        Verify.assertContainsAll(this.<Integer>newSet().with(1, 2, 3, 4).reject(Predicates.lessThan(3), FastList.<Integer>newList()), 3, 4);
+    }
+
+    @Override
+    @Test
+    public void selectInstancesOf()
+    {
+        super.selectInstancesOf();
+
+        MutableCollection<Number> numbers = this.<Number>newSet().with(1, 2.0, 3, 4.0, 5);
+        MutableCollection<Integer> integers = numbers.selectInstancesOf(Integer.class);
+        Assert.assertEquals(HashBag.newBagWith(1, 3, 5), integers.toBag());
     }
 
     @Override
@@ -158,10 +170,10 @@ public class CollectionAdapterTest extends AbstractCollectionTestCase
 
         Assert.assertEquals(
                 FastList.newListWith(1, 1, 2, 1, 2, 3, 1, 2, 3, 4),
-                this.newList().with(1, 2, 3, 4).flatCollect(function));
+                this.<Integer>newList().with(1, 2, 3, 4).flatCollect(function));
         Assert.assertEquals(
                 FastList.newListWith(1, 1, 2, 1, 2, 3, 1, 2, 3, 4),
-                this.newList().with(1, 2, 3, 4).flatCollect(function));
+                this.<Integer>newList().with(1, 2, 3, 4).flatCollect(function));
     }
 
     @Override
@@ -169,9 +181,9 @@ public class CollectionAdapterTest extends AbstractCollectionTestCase
     public void equalsAndHashCode()
     {
         super.equalsAndHashCode();
-        MutableCollection<Integer> list1 = this.newList().with(1, 2, 3);
-        MutableCollection<Integer> list2 = this.newList().with(1, 2, 3);
-        MutableCollection<Integer> list3 = this.newList().with(2, 3, 4);
+        MutableCollection<Integer> list1 = this.<Integer>newList().with(1, 2, 3);
+        MutableCollection<Integer> list2 = this.<Integer>newList().with(1, 2, 3);
+        MutableCollection<Integer> list3 = this.<Integer>newList().with(2, 3, 4);
         Verify.assertEqualsAndHashCode(list1, list2);
         Verify.assertNotEquals(list1, null);
         Verify.assertNotEquals(list2, list3);
@@ -180,14 +192,14 @@ public class CollectionAdapterTest extends AbstractCollectionTestCase
     @Test
     public void newListWithSize()
     {
-        Collection<Integer> collection = this.newList().with(1, 2, 3);
+        Collection<Integer> collection = this.<Integer>newList().with(1, 2, 3);
         Verify.assertContainsAll(collection, 1, 2, 3);
     }
 
     @Test
     public void serialization()
     {
-        MutableCollection<Integer> collection = this.newList().with(1, 2, 3, 4, 5);
+        MutableCollection<Integer> collection = this.<Integer>newList().with(1, 2, 3, 4, 5);
         MutableCollection<Integer> deserializedCollection = SerializeTestHelper.serializeDeserialize(collection);
         Verify.assertSize(5, deserializedCollection);
         Verify.assertContainsAll(deserializedCollection, 1, 2, 3, 4, 5);

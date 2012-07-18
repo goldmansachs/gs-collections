@@ -45,13 +45,10 @@ import com.gs.collections.api.partition.bag.PartitionMutableBag;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.Counter;
-import com.gs.collections.impl.block.procedure.CollectProcedure;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
-import com.gs.collections.impl.block.procedure.RejectProcedure;
-import com.gs.collections.impl.block.procedure.SelectProcedure;
 import com.gs.collections.impl.block.procedure.checked.CheckedProcedure2;
 import com.gs.collections.impl.collection.mutable.AbstractMutableCollection;
 import com.gs.collections.impl.collection.mutable.CollectionAdapter;
@@ -66,7 +63,7 @@ import com.gs.collections.impl.utility.internal.IterableIterate;
 import com.gs.collections.impl.utility.internal.SetIterate;
 
 /**
- * A HashBag is a MutableBag which uses a Map as it's underlying data store.  Each key in the Map represents some item,
+ * A HashBag is a MutableBag which uses a Map as its underlying data store.  Each key in the Map represents some item,
  * and the value in the map represents the current number of occurrences of that item.
  *
  * @since 1.0
@@ -236,11 +233,20 @@ public class HashBag<T>
     }
 
     @Override
-    public MutableBag<T> select(Predicate<? super T> predicate)
+    public MutableBag<T> select(final Predicate<? super T> predicate)
     {
-        SelectProcedure<T> procedure = new SelectProcedure<T>(predicate, this.newEmpty());
-        this.forEach(procedure);
-        return (MutableBag<T>) procedure.getCollection();
+        final MutableBag<T> result = HashBag.newBag();
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                if (predicate.accept(each))
+                {
+                    result.addOccurrences(each, occurrences);
+                }
+            }
+        });
+        return result;
     }
 
     @Override
@@ -250,11 +256,20 @@ public class HashBag<T>
     }
 
     @Override
-    public MutableBag<T> reject(Predicate<? super T> predicate)
+    public MutableBag<T> reject(final Predicate<? super T> predicate)
     {
-        RejectProcedure<T> procedure = new RejectProcedure<T>(predicate, this.newEmpty());
-        this.forEach(procedure);
-        return (MutableBag<T>) procedure.getCollection();
+        final MutableBag<T> result = HashBag.newBag();
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int index)
+            {
+                if (!predicate.accept(each))
+                {
+                    result.addOccurrences(each, index);
+                }
+            }
+        });
+        return result;
     }
 
     @Override
@@ -268,12 +283,34 @@ public class HashBag<T>
         return PartitionHashBag.of(this, predicate);
     }
 
-    @Override
-    public <V> MutableBag<V> collect(Function<? super T, ? extends V> function)
+    public <S> MutableBag<S> selectInstancesOf(final Class<S> clazz)
     {
-        CollectProcedure<T, V> procedure = new CollectProcedure<T, V>(function, HashBag.<V>newBag());
-        this.forEach(procedure);
-        return (MutableBag<V>) procedure.getCollection();
+        final MutableBag<S> result = HashBag.newBag();
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                if (clazz.isInstance(each))
+                {
+                    result.addOccurrences((S) each, occurrences);
+                }
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public <V> MutableBag<V> collect(final Function<? super T, ? extends V> function)
+    {
+        final HashBag<V> result = HashBag.<V>newBag(this.items.size());
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                result.addOccurrences(function.valueOf(each), occurrences);
+            }
+        });
+        return result;
     }
 
     @Override

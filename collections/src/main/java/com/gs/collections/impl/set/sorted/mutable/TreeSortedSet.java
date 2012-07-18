@@ -42,6 +42,7 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
+import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.block.procedure.checked.CheckedProcedure;
 import com.gs.collections.impl.collection.mutable.AbstractMutableCollection;
 import com.gs.collections.impl.factory.SortedSets;
@@ -50,6 +51,7 @@ import com.gs.collections.impl.multimap.set.sorted.TreeSortedSetMultimap;
 import com.gs.collections.impl.partition.set.sorted.PartitionTreeSortedSet;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.Iterate;
+import com.gs.collections.impl.utility.internal.IterableIterate;
 import com.gs.collections.impl.utility.internal.SetIterables;
 import com.gs.collections.impl.utility.internal.SetIterate;
 import com.gs.collections.impl.utility.internal.SortedSetIterables;
@@ -258,13 +260,13 @@ public final class TreeSortedSet<T>
     @Override
     public TreeSortedSet<T> select(Predicate<? super T> predicate)
     {
-        return Iterate.select(this.treeSet, predicate, this.newEmpty());
+        return IterableIterate.select(this.treeSet, predicate, this.newEmpty());
     }
 
     @Override
     public TreeSortedSet<T> reject(Predicate<? super T> predicate)
     {
-        return Iterate.reject(this.treeSet, predicate, this.newEmpty());
+        return IterableIterate.reject(this.treeSet, predicate, this.newEmpty());
     }
 
     public PartitionMutableSortedSet<T> partition(Predicate<? super T> predicate)
@@ -272,10 +274,17 @@ public final class TreeSortedSet<T>
         return PartitionTreeSortedSet.of(this, predicate);
     }
 
+    public <S> TreeSortedSet<S> selectInstancesOf(Class<S> clazz)
+    {
+        TreeSortedSet<S> result = (TreeSortedSet<S>) this.newEmpty();
+        this.forEach(new SelectInstancesOfProcedure<S>(clazz, result));
+        return result;
+    }
+
     @Override
     public <V> MutableList<V> collect(Function<? super T, ? extends V> function)
     {
-        return Iterate.collect(this.treeSet, function, FastList.<V>newList());
+        return IterableIterate.collect(this.treeSet, function, FastList.<V>newList());
     }
 
     @Override

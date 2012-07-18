@@ -42,6 +42,8 @@ public interface ImmutableBag<T> extends Bag<T>, ImmutableCollection<T>
 
     PartitionImmutableBag<T> partition(Predicate<? super T> predicate);
 
+    <S> ImmutableBag<S> selectInstancesOf(Class<S> clazz);
+
     <V> ImmutableBag<V> collect(Function<? super T, ? extends V> function);
 
     <V> ImmutableBag<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);

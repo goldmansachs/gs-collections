@@ -48,6 +48,8 @@ public interface SortedMapIterable<K, V>
 
     PartitionList<V> partition(Predicate<? super V> predicate);
 
+    <S> ListIterable<S> selectInstancesOf(Class<S> clazz);
+
     <S> ListIterable<Pair<V, S>> zip(Iterable<S> that);
 
     ListIterable<Pair<V, Integer>> zipWithIndex();

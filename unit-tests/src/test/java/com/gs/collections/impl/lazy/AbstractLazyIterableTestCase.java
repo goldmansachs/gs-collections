@@ -61,7 +61,7 @@ public abstract class AbstractLazyIterableTestCase
 {
     private final LazyIterable<Integer> lazyIterable = this.newWith(1, 2, 3, 4, 5, 6, 7);
 
-    protected abstract LazyIterable<Integer> newWith(Integer... integers);
+    protected abstract <T> LazyIterable<T> newWith(T... elements);
 
     @Test
     public abstract void iterator();
@@ -150,6 +150,14 @@ public abstract class AbstractLazyIterableTestCase
         PartitionIterable<Integer> partition = this.lazyIterable.partition(IntegerPredicates.isEven());
         Assert.assertEquals(iList(2, 4, 6), partition.getSelected());
         Assert.assertEquals(iList(1, 3, 5, 7), partition.getRejected());
+    }
+
+    @Test
+    public void selectInstancesOf()
+    {
+        Assert.assertEquals(
+                FastList.newListWith(1, 3, 5),
+                this.newWith(1, 2.0, 3, 4.0, 5).selectInstancesOf(Integer.class).toList());
     }
 
     @Test

@@ -36,6 +36,8 @@ public interface LazyIterable<T>
      */
     LazyIterable<T> select(Predicate<? super T> predicate);
 
+    <S> LazyIterable<S> selectInstancesOf(Class<S> clazz);
+
     /**
      * Creates a deferred iterable for rejecting elements from the current iterable.
      */

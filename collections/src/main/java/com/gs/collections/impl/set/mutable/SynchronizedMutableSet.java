@@ -229,6 +229,15 @@ public class SynchronizedMutableSet<E>
     }
 
     @Override
+    public <S> MutableSet<S> selectInstancesOf(Class<S> clazz)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableSet().selectInstancesOf(clazz);
+        }
+    }
+
+    @Override
     public boolean equals(Object obj)
     {
         synchronized (this.getLock())

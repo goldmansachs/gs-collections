@@ -33,6 +33,7 @@ import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.procedure.MapCollectProcedure;
+import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.factory.SortedMaps;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.AbstractMapIterable;
@@ -168,6 +169,14 @@ public abstract class AbstractMutableSortedMap<K, V> extends AbstractMapIterable
     public PartitionMutableList<V> partition(Predicate<? super V> predicate)
     {
         return PartitionFastList.of(this, predicate);
+    }
+
+    public <S> MutableList<S> selectInstancesOf(Class<S> clazz)
+    {
+        FastList<S> result = FastList.newList(this.size());
+        this.forEach(new SelectInstancesOfProcedure<S>(clazz, result));
+        result.trimToSize();
+        return result;
     }
 
     @Override

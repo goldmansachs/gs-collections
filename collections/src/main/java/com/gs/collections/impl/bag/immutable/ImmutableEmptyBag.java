@@ -245,6 +245,11 @@ final class ImmutableEmptyBag<T>
         return PartitionHashBag.of(this, predicate).toImmutable();
     }
 
+    public <S> ImmutableBag<S> selectInstancesOf(Class<S> clazz)
+    {
+        return (ImmutableBag<S>) INSTANCE;
+    }
+
     public <V> ImmutableBag<V> collect(Function<? super T, ? extends V> function)
     {
         return (ImmutableBag<V>) INSTANCE;

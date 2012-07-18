@@ -203,6 +203,8 @@ public interface MutableCollection<T>
 
     PartitionMutableCollection<T> partition(Predicate<? super T> predicate);
 
+    <S> MutableCollection<S> selectInstancesOf(Class<S> clazz);
+
     /**
      * Removes all elements in the collection that evaluate to true for the specified predicate.
      * <p/>

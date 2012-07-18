@@ -64,11 +64,13 @@ public interface ImmutableMap<K, V>
 
     <R> ImmutableCollection<R> flatCollect(Function<? super V, ? extends Iterable<R>> function);
 
-    ImmutableCollection<V> reject(Predicate<? super V> predicate);
-
     ImmutableCollection<V> select(Predicate<? super V> predicate);
 
+    ImmutableCollection<V> reject(Predicate<? super V> predicate);
+
     PartitionImmutableCollection<V> partition(Predicate<? super V> predicate);
+
+    <S> ImmutableCollection<S> selectInstancesOf(Class<S> clazz);
 
     <S> ImmutableCollection<Pair<V, S>> zip(Iterable<S> that);
 

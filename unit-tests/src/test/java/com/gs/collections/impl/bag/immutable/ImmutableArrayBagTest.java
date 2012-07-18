@@ -27,6 +27,8 @@ import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static com.gs.collections.impl.factory.Iterables.*;
+
 public class ImmutableArrayBagTest extends ImmutableBagTestCase
 {
     @Override
@@ -98,5 +100,13 @@ public class ImmutableArrayBagTest extends ImmutableBagTestCase
             Interval interval = Interval.oneTo(i);
             Verify.assertEqualsAndHashCode(HashBag.newBag(interval), Bags.immutable.ofAll(interval));
         }
+    }
+
+    @Test
+    public void selectInstancesOf()
+    {
+        ImmutableBag<Number> numbers = ImmutableArrayBag.<Number>newBagWith(1, 2.0, 2.0, 3, 3, 3, 4.0, 4.0, 4.0, 4.0);
+        Assert.assertEquals(iBag(1, 3, 3, 3), numbers.selectInstancesOf(Integer.class));
+        Assert.assertEquals(iBag(2.0, 2.0, 4.0, 4.0, 4.0, 4.0), numbers.selectInstancesOf(Double.class));
     }
 }

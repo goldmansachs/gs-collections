@@ -18,7 +18,10 @@ package com.gs.collections.impl.bag.immutable;
 
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.impl.test.Verify;
+import org.junit.Assert;
 import org.junit.Test;
+
+import static com.gs.collections.impl.factory.Iterables.*;
 
 public class ImmutableHashBagTest extends ImmutableBagTestCase
 {
@@ -39,5 +42,13 @@ public class ImmutableHashBagTest extends ImmutableBagTestCase
     public void testSize()
     {
         Verify.assertIterableSize(10, this.newBag());
+    }
+
+    @Test
+    public void selectInstancesOf()
+    {
+        ImmutableBag<Number> numbers = ImmutableHashBag.<Number>newBagWith(1, 2.0, 2.0, 3, 3, 3, 4.0, 4.0, 4.0, 4.0);
+        Assert.assertEquals(iBag(1, 3, 3, 3), numbers.selectInstancesOf(Integer.class));
+        Assert.assertEquals(iBag(2.0, 2.0, 4.0, 4.0, 4.0, 4.0), numbers.selectInstancesOf(Double.class));
     }
 }

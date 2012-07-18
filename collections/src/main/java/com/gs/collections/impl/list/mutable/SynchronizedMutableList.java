@@ -275,6 +275,15 @@ public class SynchronizedMutableList<E>
         }
     }
 
+    @Override
+    public <S> MutableList<S> selectInstancesOf(Class<S> clazz)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableList().selectInstancesOf(clazz);
+        }
+    }
+
     public MutableList<E> sortThis()
     {
         synchronized (this.getLock())

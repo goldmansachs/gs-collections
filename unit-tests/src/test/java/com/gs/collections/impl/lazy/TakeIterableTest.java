@@ -195,8 +195,8 @@ public class TakeIterableTest extends AbstractLazyIterableTestCase
     }
 
     @Override
-    protected LazyIterable<Integer> newWith(Integer... integers)
+    protected <T> LazyIterable<T> newWith(T... elements)
     {
-        return LazyIterate.take(FastList.newListWith(integers), integers.length);
+        return LazyIterate.take(FastList.newListWith(elements), elements.length);
     }
 }

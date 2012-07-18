@@ -32,9 +32,9 @@ import org.junit.Test;
 public class CollectIterableTest extends AbstractLazyIterableTestCase
 {
     @Override
-    protected LazyIterable<Integer> newWith(Integer... integers)
+    protected <T> LazyIterable<T> newWith(T... elements)
     {
-        return LazyIterate.collect(FastList.newListWith(integers), Functions.getIntegerPassThru());
+        return LazyIterate.collect(FastList.newListWith(elements), Functions.<T>getPassThru());
     }
 
     @Test

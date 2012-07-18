@@ -420,6 +420,14 @@ public class SynchronizedSortedMap<K, V>
         }
     }
 
+    public <S> MutableList<S> selectInstancesOf(Class<S> clazz)
+    {
+        synchronized (this.lock)
+        {
+            return this.getSortedMap().selectInstancesOf(clazz);
+        }
+    }
+
     public <S> MutableList<Pair<V, S>> zip(Iterable<S> that)
     {
         synchronized (this.lock)

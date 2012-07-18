@@ -59,6 +59,8 @@ public interface MutableBag<T>
 
     PartitionMutableBag<T> partition(Predicate<? super T> predicate);
 
+    <S> MutableBag<S> selectInstancesOf(Class<S> clazz);
+
     <V> MutableBag<V> collect(Function<? super T, ? extends V> function);
 
     <P, V> MutableBag<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);

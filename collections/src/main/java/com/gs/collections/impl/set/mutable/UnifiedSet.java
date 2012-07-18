@@ -73,6 +73,7 @@ import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.block.procedure.RejectProcedure;
+import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.block.procedure.SelectProcedure;
 import com.gs.collections.impl.block.procedure.ZipWithIndexProcedure;
 import com.gs.collections.impl.factory.Lists;
@@ -744,6 +745,13 @@ public class UnifiedSet<K>
     public PartitionMutableSet<K> partition(Predicate<? super K> predicate)
     {
         return PartitionUnifiedSet.of(this, predicate);
+    }
+
+    public <S> UnifiedSet<S> selectInstancesOf(Class<S> clazz)
+    {
+        UnifiedSet<S> result = UnifiedSet.newSet();
+        this.forEach(new SelectInstancesOfProcedure<S>(clazz, result));
+        return result;
     }
 
     public void removeIf(Predicate<? super K> predicate)

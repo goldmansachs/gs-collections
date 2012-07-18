@@ -107,6 +107,8 @@ public interface Bag<T>
 
     PartitionBag<T> partition(Predicate<? super T> predicate);
 
+    <S> Bag<S> selectInstancesOf(Class<S> clazz);
+
     <V> Bag<V> collect(Function<? super T, ? extends V> function);
 
     <V> Bag<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);

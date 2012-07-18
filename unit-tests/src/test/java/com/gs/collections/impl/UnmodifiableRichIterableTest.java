@@ -40,12 +40,15 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.factory.SortedSets;
 import com.gs.collections.impl.list.Interval;
+import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.utility.StringIterate;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
+
+import static com.gs.collections.impl.factory.Iterables.*;
 
 /**
  * JUnit test for {@link UnmodifiableRichIterable}.
@@ -492,5 +495,13 @@ public class UnmodifiableRichIterableTest
         RichIterable<Integer> integers = this.newWith(2, 4, 1, 3);
         MutableSortedSet<Integer> set = integers.toSortedSetBy(Functions.getToString());
         Verify.assertSortedSetsEqual(SortedSets.mutable.of(1, 2, 3, 4), set);
+    }
+
+    @Test
+    public void selectInstancesOf()
+    {
+        RichIterable<Number> numbers = UnmodifiableRichIterable.of(FastList.<Number>newListWith(1, 2.0, 3, 4.0, 5));
+        Assert.assertEquals(iList(1, 3, 5), numbers.selectInstancesOf(Integer.class));
+        Assert.assertEquals(iList(1, 2.0, 3, 4.0, 5), numbers.selectInstancesOf(Number.class));
     }
 }

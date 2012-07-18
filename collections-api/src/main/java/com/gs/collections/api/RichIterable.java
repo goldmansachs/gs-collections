@@ -52,7 +52,8 @@ import com.gs.collections.api.tuple.Pair;
  *
  * @since 1.0
  */
-public interface RichIterable<T>
+public interface
+        RichIterable<T>
         extends InternalIterable<T>
 {
     /**
@@ -275,6 +276,13 @@ public interface RichIterable<T>
      * @since 1.0.
      */
     PartitionIterable<T> partition(Predicate<? super T> predicate);
+
+    /**
+     * Returns all elements of the source collection that are instances of the Class {@code clazz}.
+     *
+     * @since 2.0
+     */
+    <S> RichIterable<S> selectInstancesOf(Class<S> clazz);
 
     /**
      * Returns a new collection with the results of applying the specified function on each element of the source

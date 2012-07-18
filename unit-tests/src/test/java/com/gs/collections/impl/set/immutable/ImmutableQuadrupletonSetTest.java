@@ -18,7 +18,10 @@ package com.gs.collections.impl.set.immutable;
 
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.impl.test.Verify;
+import org.junit.Assert;
 import org.junit.Test;
+
+import static com.gs.collections.impl.factory.Iterables.*;
 
 public class ImmutableQuadrupletonSetTest
         extends AbstractImmutableSetTestCase
@@ -39,5 +42,14 @@ public class ImmutableQuadrupletonSetTest
         Verify.assertSize(3, immutable.newWithout(2).castToSet());
         Verify.assertSize(3, immutable.newWithout(1).castToSet());
         Verify.assertSize(4, immutable.newWithout(0).castToSet());
+    }
+
+    @Test
+    public void selectInstanceOf()
+    {
+        ImmutableSet<Number> numbers = new ImmutableQuadrupletonSet<Number>(1, 2.0, 3, 4.0);
+        Assert.assertEquals(
+                iSet(1, 3),
+                numbers.selectInstancesOf(Integer.class));
     }
 }

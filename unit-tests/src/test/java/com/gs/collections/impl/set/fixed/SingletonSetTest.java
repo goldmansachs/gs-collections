@@ -252,6 +252,14 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     }
 
     @Test
+    public void selectInstancesOf()
+    {
+        MutableSet<Number> numbers = Sets.fixedSize.<Number>of(1);
+        Assert.assertEquals(iSet(1), numbers.selectInstancesOf(Integer.class));
+        Verify.assertEmpty(numbers.selectInstancesOf(Double.class));
+    }
+
+    @Test
     public void collect()
     {
         Verify.assertContainsAll(this.intSet.collect(Functions.getToString()), "1");

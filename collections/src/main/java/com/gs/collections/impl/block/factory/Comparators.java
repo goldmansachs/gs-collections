@@ -304,11 +304,11 @@ public final class Comparators
         {
             return Functions.toIntComparator((IntFunction) function);
         }
-        else if (function instanceof DoubleFunction)
+        if (function instanceof DoubleFunction)
         {
             return Functions.toDoubleComparator((DoubleFunction) function);
         }
-        else if (function instanceof LongFunction)
+        if (function instanceof LongFunction)
         {
             return Functions.toLongComparator((LongFunction) function);
         }

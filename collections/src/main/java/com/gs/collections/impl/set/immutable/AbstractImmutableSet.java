@@ -36,6 +36,7 @@ import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.block.procedure.RejectProcedure;
+import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.block.procedure.SelectProcedure;
 import com.gs.collections.impl.collection.immutable.AbstractImmutableCollection;
 import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
@@ -119,6 +120,13 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
     public PartitionImmutableSet<T> partition(Predicate<? super T> predicate)
     {
         return PartitionUnifiedSet.of(this, predicate).toImmutable();
+    }
+
+    public <S> ImmutableSet<S> selectInstancesOf(Class<S> clazz)
+    {
+        UnifiedSet<S> result = UnifiedSet.newSet(this.size());
+        this.forEach(new SelectInstancesOfProcedure<S>(clazz, result));
+        return result.toImmutable();
     }
 
     public <V> ImmutableSet<V> collect(Function<? super T, ? extends V> function)

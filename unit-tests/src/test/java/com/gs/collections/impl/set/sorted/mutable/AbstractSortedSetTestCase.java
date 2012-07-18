@@ -654,4 +654,19 @@ public abstract class AbstractSortedSetTestCase extends AbstractCollectionTestCa
         });
         Assert.assertTrue(subSet.add(10));
     }
+
+    @Override
+    public void selectInstancesOf()
+    {
+        MutableSortedSet<Number> numbers = this.<Number>classUnderTest(new Comparator<Number>()
+        {
+            public int compare(Number o1, Number o2)
+            {
+                return Double.compare(o1.doubleValue(), o2.doubleValue());
+            }
+        }, 1, 2.0, 3, 4.0, 5);
+        MutableSortedSet<Integer> integers = numbers.selectInstancesOf(Integer.class);
+        Assert.assertEquals(UnifiedSet.newSetWith(1, 3, 5), integers);
+        Assert.assertEquals(FastList.newListWith(1, 3, 5), integers.toList());
+    }
 }

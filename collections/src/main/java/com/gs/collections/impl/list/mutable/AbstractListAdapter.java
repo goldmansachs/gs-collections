@@ -147,6 +147,9 @@ public abstract class AbstractListAdapter<T>
     public abstract MutableList<T> reject(Predicate<? super T> predicate);
 
     @Override
+    public abstract <S> MutableList<S> selectInstancesOf(Class<S> clazz);
+
+    @Override
     public abstract <V> MutableList<V> collect(Function<? super T, ? extends V> function);
 
     @Override

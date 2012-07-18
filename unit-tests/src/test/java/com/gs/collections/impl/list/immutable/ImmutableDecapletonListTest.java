@@ -21,7 +21,10 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.test.Verify;
+import org.junit.Assert;
 import org.junit.Test;
+
+import static com.gs.collections.impl.factory.Iterables.*;
 
 public class ImmutableDecapletonListTest extends AbstractImmutableListTestCase
 {
@@ -38,5 +41,14 @@ public class ImmutableDecapletonListTest extends AbstractImmutableListTestCase
         MutableList<Integer> expected = TreeSortedSet.newSetWith("1", "2", "3", "4", "5", "6", "7", "8", "9", "10").collect(Functions.getStringToInteger());
         MutableList<Integer> sortedList = this.classUnderTest().toSortedSetBy(Functions.getToString()).toList();
         Verify.assertListsEqual(expected, sortedList);
+    }
+
+    @Test
+    public void selectInstanceOf()
+    {
+        ImmutableList<Number> numbers = new ImmutableDecapletonList<Number>(1, 2.0, 3, 4.0, 5, 6.0, 7, 8.0, 9, 10.0);
+        Assert.assertEquals(
+                iList(1, 3, 5, 7, 9),
+                numbers.selectInstancesOf(Integer.class));
     }
 }

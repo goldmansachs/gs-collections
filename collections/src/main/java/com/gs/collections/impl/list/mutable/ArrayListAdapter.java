@@ -259,6 +259,12 @@ public final class ArrayListAdapter<T>
     }
 
     @Override
+    public <S> MutableList<S> selectInstancesOf(Class<S> clazz)
+    {
+        return ArrayListIterate.selectInstancesOf(this.delegate, clazz);
+    }
+
+    @Override
     public <V> ArrayListAdapter<V> collect(Function<? super T, ? extends V> function)
     {
         return this.wrap(ArrayListIterate.collect(this.delegate, function));

@@ -327,6 +327,19 @@ public final class MultiReaderUnifiedSet<T>
         }
     }
 
+    public <S> MutableSet<S> selectInstancesOf(Class<S> clazz)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.selectInstancesOf(clazz);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
     public MutableSet<T> with(T element)
     {
         this.add(element);
@@ -536,6 +549,11 @@ public final class MultiReaderUnifiedSet<T>
         public PartitionMutableSet<T> partition(Predicate<? super T> predicate)
         {
             return this.getDelegate().partition(predicate);
+        }
+
+        public <S> MutableSet<S> selectInstancesOf(Class<S> clazz)
+        {
+            return this.getDelegate().selectInstancesOf(clazz);
         }
 
         public Iterator<T> iterator()

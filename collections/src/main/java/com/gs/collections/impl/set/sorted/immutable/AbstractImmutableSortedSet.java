@@ -42,6 +42,7 @@ import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.block.procedure.RejectProcedure;
+import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.block.procedure.SelectProcedure;
 import com.gs.collections.impl.collection.immutable.AbstractImmutableCollection;
 import com.gs.collections.impl.factory.Lists;
@@ -135,6 +136,13 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
     public PartitionImmutableSortedSet<T> partition(Predicate<? super T> predicate)
     {
         return PartitionTreeSortedSet.of(this, predicate).toImmutable();
+    }
+
+    public <S> ImmutableSortedSet<S> selectInstancesOf(Class<S> clazz)
+    {
+        TreeSortedSet<S> result = TreeSortedSet.newSet((Comparator<? super S>) this.comparator());
+        this.forEach(new SelectInstancesOfProcedure<S>(clazz, result));
+        return result.toImmutable();
     }
 
     public <V> ImmutableList<V> collect(Function<? super T, ? extends V> function)

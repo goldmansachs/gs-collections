@@ -33,9 +33,9 @@ import org.junit.Test;
 public class RejectIterableTest extends AbstractLazyIterableTestCase
 {
     @Override
-    protected LazyIterable<Integer> newWith(Integer... integers)
+    protected <T> LazyIterable<T> newWith(T... elements)
     {
-        return LazyIterate.reject(FastList.newListWith(integers), Predicates.alwaysFalse());
+        return LazyIterate.reject(FastList.newListWith(elements), Predicates.alwaysFalse());
     }
 
     @Test

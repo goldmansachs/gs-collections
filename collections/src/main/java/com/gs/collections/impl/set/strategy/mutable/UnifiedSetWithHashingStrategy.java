@@ -75,6 +75,7 @@ import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.block.procedure.RejectProcedure;
+import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.block.procedure.SelectProcedure;
 import com.gs.collections.impl.block.procedure.ZipWithIndexProcedure;
 import com.gs.collections.impl.factory.HashingStrategySets;
@@ -771,6 +772,13 @@ public class UnifiedSetWithHashingStrategy<K>
     public PartitionMutableSet<K> partition(Predicate<? super K> predicate)
     {
         return PartitionUnifiedSetWithHashingStrategy.of(this.hashingStrategy, this, predicate);
+    }
+
+    public <S> UnifiedSetWithHashingStrategy<S> selectInstancesOf(Class<S> clazz)
+    {
+        UnifiedSetWithHashingStrategy<S> result = (UnifiedSetWithHashingStrategy<S>) this.newEmpty();
+        this.forEach(new SelectInstancesOfProcedure<S>(clazz, result));
+        return result;
     }
 
     public void removeIf(Predicate<? super K> predicate)

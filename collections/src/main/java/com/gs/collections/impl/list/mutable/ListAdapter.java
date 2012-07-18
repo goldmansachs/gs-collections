@@ -260,6 +260,12 @@ public final class ListAdapter<T>
     }
 
     @Override
+    public <S> MutableList<S> selectInstancesOf(Class<S> clazz)
+    {
+        return ListIterate.selectInstancesOf(this.delegate, clazz);
+    }
+
+    @Override
     public <V> MutableList<V> collect(Function<? super T, ? extends V> function)
     {
         return ListIterate.collect(this.delegate, function, FastList.<V>newList(this.delegate.size()));

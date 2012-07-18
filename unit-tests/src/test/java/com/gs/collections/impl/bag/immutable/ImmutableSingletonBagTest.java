@@ -43,6 +43,8 @@ import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static com.gs.collections.impl.factory.Iterables.*;
+
 public class ImmutableSingletonBagTest extends ImmutableBagTestCase
 {
     private static final String VAL = "1";
@@ -543,5 +545,13 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     public void testSizeDistinct()
     {
         Assert.assertEquals(1, this.newBag().sizeDistinct());
+    }
+
+    @Test
+    public void selectInstancesOf()
+    {
+        ImmutableBag<Number> numbers = new ImmutableSingletonBag<Number>(1);
+        Assert.assertEquals(iBag(1), numbers.selectInstancesOf(Integer.class));
+        Assert.assertEquals(iBag(), numbers.selectInstancesOf(Double.class));
     }
 }

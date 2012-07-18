@@ -51,6 +51,7 @@ import com.gs.collections.impl.block.procedure.CollectIfProcedure;
 import com.gs.collections.impl.block.procedure.CollectProcedure;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
 import com.gs.collections.impl.block.procedure.RejectProcedure;
+import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.block.procedure.SelectProcedure;
 import com.gs.collections.impl.collection.immutable.AbstractImmutableCollection;
 import com.gs.collections.impl.factory.Lists;
@@ -232,6 +233,13 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
     public PartitionImmutableList<T> partition(Predicate<? super T> predicate)
     {
         return PartitionFastList.of(this, predicate).toImmutable();
+    }
+
+    public <S> ImmutableList<S> selectInstancesOf(Class<S> clazz)
+    {
+        FastList<S> result = FastList.newList(this.size());
+        this.forEach(new SelectInstancesOfProcedure<S>(clazz, result));
+        return result.toImmutable();
     }
 
     public <V> ImmutableList<V> collect(Function<? super T, ? extends V> function)

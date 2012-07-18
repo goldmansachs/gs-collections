@@ -83,6 +83,8 @@ public interface SortedSetIterable<T>
 
     PartitionSortedSet<T> partition(Predicate<? super T> predicate);
 
+    <S> SortedSetIterable<S> selectInstancesOf(Class<S> clazz);
+
     <V> ListIterable<V> collect(Function<? super T, ? extends V> function);
 
     <V> ListIterable<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);

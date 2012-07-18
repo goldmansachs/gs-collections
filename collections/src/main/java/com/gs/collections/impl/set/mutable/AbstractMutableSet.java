@@ -29,6 +29,7 @@ import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.UnsortedSetIterable;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.collection.mutable.AbstractMutableCollection;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
@@ -91,6 +92,13 @@ public abstract class AbstractMutableSet<T>
     public PartitionMutableSet<T> partition(Predicate<? super T> predicate)
     {
         return PartitionUnifiedSet.of(this, predicate);
+    }
+
+    public <S> MutableSet<S> selectInstancesOf(Class<S> clazz)
+    {
+        MutableSet<S> result = (MutableSet<S>) this.newEmpty();
+        this.forEach(new SelectInstancesOfProcedure<S>(clazz, result));
+        return result;
     }
 
     @Override

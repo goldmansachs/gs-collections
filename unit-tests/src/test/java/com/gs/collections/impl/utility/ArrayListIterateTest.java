@@ -588,6 +588,15 @@ public class ArrayListIterateTest
         Verify.assertEmpty(results);
     }
 
+    @Test
+    public void testSelectInstancesOfOver100()
+    {
+        ArrayList<Number> list = new ArrayList<Number>(Interval.oneTo(101));
+        list.add(102.0);
+        MutableList<Double> results = ArrayListIterate.selectInstancesOf(list, Double.class);
+        Assert.assertEquals(iList(102.0), results);
+    }
+
     public static final class CollectionCreator
     {
         private final int data;

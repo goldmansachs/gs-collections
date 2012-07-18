@@ -150,7 +150,6 @@ public class UnmodifiableMutableSetTest extends AbstractCollectionTestCase
     public void testToString()
     {
         MutableCollection<Object> collection = this.<Object>newWith(1, 2);
-        String simpleName = collection.getClass().getSimpleName();
         String string = collection.toString();
         Assert.assertTrue("[1, 2]".equals(string) || "[2, 1]".equals(string));
     }

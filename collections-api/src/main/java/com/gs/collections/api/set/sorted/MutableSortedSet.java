@@ -60,6 +60,8 @@ public interface MutableSortedSet<T>
 
     PartitionMutableSortedSet<T> partition(Predicate<? super T> predicate);
 
+    <S> MutableSortedSet<S> selectInstancesOf(Class<S> clazz);
+
     <V> MutableList<V> collect(Function<? super T, ? extends V> function);
 
     <P, V> MutableList<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);

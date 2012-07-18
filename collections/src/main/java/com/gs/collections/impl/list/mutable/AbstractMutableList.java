@@ -235,6 +235,11 @@ public abstract class AbstractMutableList<T>
         return PartitionFastList.of(this, predicate);
     }
 
+    public <S> MutableList<S> selectInstancesOf(Class<S> clazz)
+    {
+        return ListIterate.selectInstancesOf(this, clazz);
+    }
+
     @Override
     public void removeIf(Predicate<? super T> predicate)
     {

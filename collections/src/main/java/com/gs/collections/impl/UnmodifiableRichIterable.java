@@ -203,6 +203,11 @@ public class UnmodifiableRichIterable<T>
         return this.iterable.reject(predicate);
     }
 
+    public <S> RichIterable<S> selectInstancesOf(Class<S> clazz)
+    {
+        return this.iterable.selectInstancesOf(clazz);
+    }
+
     public <V> RichIterable<V> collect(Function<? super T, ? extends V> function)
     {
         return this.iterable.collect(function);

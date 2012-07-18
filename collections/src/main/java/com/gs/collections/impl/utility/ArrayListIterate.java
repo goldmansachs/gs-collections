@@ -159,6 +159,32 @@ public final class ArrayListIterate
     }
 
     /**
+     * @see Iterate#selectInstancesOf(Iterable, Class)
+     */
+    public static <T> MutableList<T> selectInstancesOf(
+            ArrayList<?> list,
+            Class<T> clazz)
+    {
+        int size = list.size();
+        FastList<T> result = FastList.newList(size);
+        if (ArrayListIterate.isOptimizableArrayList(list, size))
+        {
+            Object[] elements = ArrayListIterate.getInternalArray(list);
+            for (int i = 0; i < size; i++)
+            {
+                Object element = elements[i];
+                if (clazz.isInstance(element))
+                {
+                    result.add((T) element);
+                }
+            }
+            result.trimToSize();
+            return result;
+        }
+        return RandomAccessListIterate.selectInstancesOf(list, clazz);
+    }
+
+    /**
      * @see Iterate#count(Iterable, Predicate)
      */
     public static <T> int count(ArrayList<T> list, Predicate<? super T> predicate)

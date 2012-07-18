@@ -217,6 +217,11 @@ public abstract class AbstractLazyIterable<T>
         return PartitionFastList.of(this, predicate);
     }
 
+    public <S> LazyIterable<S> selectInstancesOf(Class<S> clazz)
+    {
+        return LazyIterate.selectInstancesOf(this, clazz);
+    }
+
     public <V> LazyIterable<V> collect(Function<? super T, ? extends V> function)
     {
         return LazyIterate.collect(this, function);

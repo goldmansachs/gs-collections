@@ -132,6 +132,20 @@ public final class ListIterate
     }
 
     /**
+     * @see Iterate#selectInstancesOf(Iterable, Class)
+     */
+    public static <T, S> MutableList<S> selectInstancesOf(
+            List<T> list,
+            Class<S> clazz)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.selectInstancesOf(list, clazz);
+        }
+        return IterableIterate.selectInstancesOf(list, clazz);
+    }
+
+    /**
      * @see Iterate#count(Iterable, Predicate)
      */
     public static <T> int count(List<T> list, Predicate<? super T> predicate)
