@@ -40,7 +40,7 @@ public final class SelectInstancesOfIterator<T>
 
     public void remove()
     {
-        throw new UnsupportedOperationException("Cannot remove from a select iterator");
+        throw new UnsupportedOperationException("Cannot remove from a selectInstances iterator");
     }
 
     public boolean hasNext()
