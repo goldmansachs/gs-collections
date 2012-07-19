@@ -21,7 +21,7 @@ import org.junit.Test;
 
 public final class LongFunctionImplTest
 {
-    private static final LongFunctionImpl LONG_FUNCTION = new LongFunctionImpl()
+    private static final LongFunctionImpl<?> LONG_FUNCTION = new LongFunctionImpl()
     {
         private static final long serialVersionUID = 1L;
 

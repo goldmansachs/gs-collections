@@ -21,7 +21,7 @@ import org.junit.Test;
 
 public class CheckedObjectIntProcedureTest
 {
-    private static final CheckedObjectIntProcedure CHECKED_OBJECT_INT_PROCEDURE = new CheckedObjectIntProcedure()
+    private static final CheckedObjectIntProcedure<?> CHECKED_OBJECT_INT_PROCEDURE = new CheckedObjectIntProcedure()
     {
         private static final long serialVersionUID = 1L;
 

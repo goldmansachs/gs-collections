@@ -74,7 +74,7 @@ public class ProceduresTest
         ImmutableList<String> expectedResults = Lists.immutable.of("zero0", "one1", "two2");
 
         final MutableList<String> actualResults = Lists.mutable.of();
-        ObjectIntProcedure objectIntProcedure = new ObjectIntProcedure<String>()
+        ObjectIntProcedure<String> objectIntProcedure = new ObjectIntProcedure<String>()
         {
             public void value(String each, int index)
             {
@@ -83,7 +83,7 @@ public class ProceduresTest
         };
 
         ImmutableList<String> numberStrings = Lists.immutable.of("zero", "one", "two");
-        Procedure procedure = Procedures.fromObjectIntProcedure(objectIntProcedure);
+        Procedure<String> procedure = Procedures.fromObjectIntProcedure(objectIntProcedure);
         numberStrings.forEach(procedure);
 
         Assert.assertEquals(expectedResults, actualResults);

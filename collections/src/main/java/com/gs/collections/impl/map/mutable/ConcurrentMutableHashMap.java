@@ -84,31 +84,31 @@ public final class ConcurrentMutableHashMap<K, V>
     @Override
     public ConcurrentMutableHashMap<K, V> withKeyValue(K key, V value)
     {
-        return (ConcurrentMutableHashMap) super.withKeyValue(key, value);
+        return (ConcurrentMutableHashMap<K, V>) super.withKeyValue(key, value);
     }
 
     @Override
     public ConcurrentMutableHashMap<K, V> withAllKeyValues(Iterable<? extends Pair<? extends K, ? extends V>> keyValues)
     {
-        return (ConcurrentMutableHashMap) super.withAllKeyValues(keyValues);
+        return (ConcurrentMutableHashMap<K, V>) super.withAllKeyValues(keyValues);
     }
 
     @Override
     public ConcurrentMutableHashMap<K, V> withAllKeyValueArguments(Pair<? extends K, ? extends V>... keyValues)
     {
-        return (ConcurrentMutableHashMap) super.withAllKeyValueArguments(keyValues);
+        return (ConcurrentMutableHashMap<K, V>) super.withAllKeyValueArguments(keyValues);
     }
 
     @Override
     public ConcurrentMutableHashMap<K, V> withoutKey(K key)
     {
-        return (ConcurrentMutableHashMap) super.withoutKey(key);
+        return (ConcurrentMutableHashMap<K, V>) super.withoutKey(key);
     }
 
     @Override
     public ConcurrentMutableHashMap<K, V> withoutAllKeys(Iterable<? extends K> keys)
     {
-        return (ConcurrentMutableHashMap) super.withoutAllKeys(keys);
+        return (ConcurrentMutableHashMap<K, V>) super.withoutAllKeys(keys);
     }
 
     @Override

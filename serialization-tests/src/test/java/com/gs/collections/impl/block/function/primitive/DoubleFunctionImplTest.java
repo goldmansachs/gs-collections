@@ -21,7 +21,7 @@ import org.junit.Test;
 
 public final class DoubleFunctionImplTest
 {
-    private static final DoubleFunctionImpl DOUBLE_FUNCTION = new DoubleFunctionImpl()
+    private static final DoubleFunctionImpl<?> DOUBLE_FUNCTION = new DoubleFunctionImpl()
     {
         private static final long serialVersionUID = 1L;
 

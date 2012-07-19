@@ -111,7 +111,7 @@ public class FastListTest extends AbstractListTestCase
     @Test
     public void constructorWithCollection()
     {
-        List expected = new ArrayList<Integer>(Interval.oneTo(20));
+        List<Integer> expected = new ArrayList<Integer>(Interval.oneTo(20));
         FastList<Integer> actual = new FastList<Integer>(expected);
         Assert.assertEquals(expected, actual);
     }

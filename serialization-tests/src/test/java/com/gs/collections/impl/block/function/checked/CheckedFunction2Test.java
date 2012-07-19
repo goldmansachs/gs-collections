@@ -21,7 +21,7 @@ import org.junit.Test;
 
 public class CheckedFunction2Test
 {
-    private static final CheckedFunction2 CHECKED_FUNCTION_2 = new CheckedFunction2()
+    private static final CheckedFunction2<?, ?, ?> CHECKED_FUNCTION_2 = new CheckedFunction2()
     {
         private static final long serialVersionUID = 1L;
 

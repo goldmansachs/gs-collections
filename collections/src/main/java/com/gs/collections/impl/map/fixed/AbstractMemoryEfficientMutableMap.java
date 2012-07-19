@@ -83,7 +83,7 @@ abstract class AbstractMemoryEfficientMutableMap<K, V>
     @Override
     public MutableMap<K, V> withAllKeyValues(Iterable<? extends Pair<? extends K, ? extends V>> keyValues)
     {
-        MutableMap map = this;
+        MutableMap<K, V> map = this;
         for (Pair<? extends K, ? extends V> keyVal : keyValues)
         {
             map = map.withKeyValue(keyVal.getOne(), keyVal.getTwo());
@@ -100,7 +100,7 @@ abstract class AbstractMemoryEfficientMutableMap<K, V>
     @Override
     public MutableMap<K, V> withoutAllKeys(Iterable<? extends K> keys)
     {
-        MutableMap map = this;
+        MutableMap<K, V> map = this;
         for (K key : keys)
         {
             map = map.withoutKey(key);

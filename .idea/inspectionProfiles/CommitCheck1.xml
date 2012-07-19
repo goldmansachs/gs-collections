@@ -716,6 +716,10 @@
       <option name="nameString" value="aa,abc,bad,bar,bar2,baz,baz1,baz2,baz3,bb,blah,bogus,bool,cc,dd,defau1t,dummy,dummy2,ee,fa1se,ff,foo,foo1,foo2,foo3,foobar,four,fred,fred1,fred2,gg,hh,hello,hello1,hello2,hello3,ii,nu11,one,silly,silly2,string,two,then,three,whi1e,var" />
     </inspection_tool>
     <inspection_tool class="RandomDoubleForRandomInteger" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="RawUseOfParameterizedType" enabled="true" level="ERROR" enabled_by_default="true">
+      <option name="ignoreObjectConstruction" value="true" />
+      <option name="ignoreTypeCasts" value="false" />
+    </inspection_tool>
     <inspection_tool class="ReadObjectAndWriteObjectPrivate" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="ReadObjectInitialization" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="ReadResolveAndWriteReplaceProtected" enabled="true" level="ERROR" enabled_by_default="true" />

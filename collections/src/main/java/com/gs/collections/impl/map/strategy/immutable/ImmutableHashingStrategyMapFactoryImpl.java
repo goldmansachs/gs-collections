@@ -79,7 +79,7 @@ public final class ImmutableHashingStrategyMapFactoryImpl implements ImmutableHa
             throw new IllegalArgumentException();
         }
 
-        UnifiedMapWithHashingStrategy mapWithHashingStrategy = (UnifiedMapWithHashingStrategy) map;
+        UnifiedMapWithHashingStrategy<K, V> mapWithHashingStrategy = (UnifiedMapWithHashingStrategy<K, V>) map;
 
         if (mapWithHashingStrategy.isEmpty())
         {

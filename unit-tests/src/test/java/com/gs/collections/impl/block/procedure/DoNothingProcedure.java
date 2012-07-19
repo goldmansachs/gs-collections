@@ -18,7 +18,7 @@ package com.gs.collections.impl.block.procedure;
 
 import com.gs.collections.api.block.procedure.Procedure;
 
-public class DoNothingProcedure implements Procedure
+public class DoNothingProcedure implements Procedure<Object>
 {
     public static final DoNothingProcedure DO_NOTHING = new DoNothingProcedure();
 

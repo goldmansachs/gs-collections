@@ -22,10 +22,10 @@ import java.util.Set;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.impl.collection.mutable.UnmodifiableMutableCollectionTestCase;
 
-public class SetAdapterAsUnmodifiableTest extends UnmodifiableMutableCollectionTestCase
+public class SetAdapterAsUnmodifiableTest extends UnmodifiableMutableCollectionTestCase<Integer>
 {
     @Override
-    protected MutableCollection<?> getCollection()
+    protected MutableCollection<Integer> getCollection()
     {
         Set<Integer> set = new HashSet<Integer>();
         set.add(1);

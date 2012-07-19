@@ -62,7 +62,7 @@ public abstract class AbstractPredicateBasedCombiner<T, BT extends Procedure<T>>
         }
         if (sourceCollection instanceof SortedSetIterable)
         {
-            return TreeSortedSet.newSet(((SortedSetIterable) sourceCollection).comparator());
+            return TreeSortedSet.newSet(((SortedSetIterable<T>) sourceCollection).comparator());
         }
         if (sourceCollection instanceof SetIterable)
         {

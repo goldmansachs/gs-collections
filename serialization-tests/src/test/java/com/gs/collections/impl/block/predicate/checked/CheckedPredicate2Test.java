@@ -21,7 +21,7 @@ import org.junit.Test;
 
 public class CheckedPredicate2Test
 {
-    private static final CheckedPredicate2 CHECKED_PREDICATE_2 = new CheckedPredicate2()
+    private static final CheckedPredicate2<?, ?> CHECKED_PREDICATE_2 = new CheckedPredicate2()
     {
         private static final long serialVersionUID = 1L;
 

@@ -302,15 +302,15 @@ public final class Comparators
     {
         if (function instanceof IntFunction)
         {
-            return Functions.toIntComparator((IntFunction) function);
+            return Functions.toIntComparator((IntFunction<T>) function);
         }
         if (function instanceof DoubleFunction)
         {
-            return Functions.toDoubleComparator((DoubleFunction) function);
+            return Functions.toDoubleComparator((DoubleFunction<T>) function);
         }
         if (function instanceof LongFunction)
         {
-            return Functions.toLongComparator((LongFunction) function);
+            return Functions.toLongComparator((LongFunction<T>) function);
         }
         return Comparators.byFunction(function, naturalOrder());
     }

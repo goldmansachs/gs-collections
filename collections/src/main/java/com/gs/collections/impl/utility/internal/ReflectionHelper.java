@@ -31,7 +31,7 @@ import com.gs.collections.impl.utility.MapIterate;
  */
 public final class ReflectionHelper
 {
-    public static final Class[] EMPTY_CLASS_ARRAY = {};
+    public static final Class<?>[] EMPTY_CLASS_ARRAY = {};
 
     /**
      * Mapping of primitive wrapper classes to primitive types

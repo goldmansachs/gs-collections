@@ -21,7 +21,7 @@ import org.junit.Test;
 
 public final class IntegerFunctionImplTest
 {
-    private static final IntegerFunctionImpl INTEGER_FUNCTION = new IntegerFunctionImpl()
+    private static final IntegerFunctionImpl<?> INTEGER_FUNCTION = new IntegerFunctionImpl()
     {
         private static final long serialVersionUID = 1L;
 

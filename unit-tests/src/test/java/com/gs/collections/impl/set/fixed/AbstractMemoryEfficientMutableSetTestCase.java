@@ -609,7 +609,7 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
         Assert.assertSame(setWithout, setWithout.withoutAll(FastList.<String>newList()));
     }
 
-    private static void assertSetType(MutableSet original, MutableSet modified)
+    private static void assertSetType(MutableSet<?> original, MutableSet<?> modified)
     {
         if (original instanceof FixedSizeSet && modified.size() < 5)
         {
