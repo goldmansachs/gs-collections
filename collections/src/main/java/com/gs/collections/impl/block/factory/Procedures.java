@@ -22,6 +22,7 @@ import java.io.PrintStream;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.impl.block.procedure.CaseProcedure;
 import com.gs.collections.impl.block.procedure.IfProcedure;
 
@@ -88,6 +89,19 @@ public final class Procedures
     public static <T> Procedure<T> synchronizedEach(Procedure<T> procedure)
     {
         return new Procedures.SynchronizedProcedure<T>(procedure);
+    }
+
+    public static <T, P> Procedure<T> bind(final Procedure2<? super T, ? super P> procedure, final P parameter)
+    {
+        return new Procedure<T>()
+        {
+            private static final long serialVersionUID = 1L;
+
+            public void value(T each)
+            {
+                procedure.value(each, parameter);
+            }
+        };
     }
 
     private static final class PrintlnProcedure<T> implements Procedure<T>

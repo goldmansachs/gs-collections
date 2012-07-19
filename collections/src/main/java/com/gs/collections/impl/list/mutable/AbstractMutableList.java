@@ -46,15 +46,19 @@ import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.collection.mutable.AbstractMutableCollection;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.factory.Stacks;
+import com.gs.collections.impl.lazy.ReverseIterable;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.partition.list.PartitionFastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.ListIterate;
 
@@ -486,6 +490,11 @@ public abstract class AbstractMutableList<T>
         return UnifiedSet.newSet(this);
     }
 
+    public MutableStack<T> toStack()
+    {
+        return Stacks.mutable.ofAll(this);
+    }
+
     @Override
     public MutableList<T> asUnmodifiable()
     {
@@ -885,6 +894,12 @@ public abstract class AbstractMutableList<T>
         }
 
         @Override
+        public MutableStack<T> toStack()
+        {
+            return ArrayStack.<T>newStack(this);
+        }
+
+        @Override
         public void forEach(Procedure<? super T> procedure)
         {
             ListIterate.forEach(this, procedure);
@@ -991,5 +1006,10 @@ public abstract class AbstractMutableList<T>
     {
         this.removeAllIterable(elements);
         return this;
+    }
+
+    public ReverseIterable<T> asReversed()
+    {
+        return ReverseIterable.adapt(this);
     }
 }

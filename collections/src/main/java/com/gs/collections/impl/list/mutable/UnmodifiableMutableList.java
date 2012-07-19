@@ -31,9 +31,11 @@ import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
+import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.collection.mutable.UnmodifiableMutableCollection;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.stack.mutable.ArrayStack;
 
 /**
  * An unmodifiable view of a list.
@@ -145,6 +147,11 @@ public final class UnmodifiableMutableList<T>
     public MutableList<T> reverseThis()
     {
         throw new UnsupportedOperationException();
+    }
+
+    public MutableStack<T> toStack()
+    {
+        return ArrayStack.<T>newStack(this.getMutableList());
     }
 
     public <V extends Comparable<? super V>> MutableList<T> sortThisBy(Function<? super T, ? extends V> function)

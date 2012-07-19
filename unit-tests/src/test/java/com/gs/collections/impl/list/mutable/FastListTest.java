@@ -29,7 +29,6 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
@@ -468,20 +467,12 @@ public class FastListTest extends AbstractListTestCase
     @Test
     public void collectWith()
     {
-        Function2<Integer, Integer, Integer> addFunction =
-                new Function2<Integer, Integer, Integer>()
-                {
-                    public Integer value(Integer each, Integer parameter)
-                    {
-                        return each + parameter;
-                    }
-                };
         Assert.assertEquals(
                 FastList.newListWith(2, 3, 4),
-                FastList.newListWith(1, 2, 3).collectWith(addFunction, 1));
+                FastList.newListWith(1, 2, 3).collectWith(AddFunction.INTEGER, 1));
         Assert.assertEquals(
                 FastList.newListWith(2, 3, 4),
-                FastList.newListWith(1, 2, 3).collectWith(addFunction, 1, FastList.<Integer>newList()));
+                FastList.newListWith(1, 2, 3).collectWith(AddFunction.INTEGER, 1, FastList.<Integer>newList()));
     }
 
     @Override

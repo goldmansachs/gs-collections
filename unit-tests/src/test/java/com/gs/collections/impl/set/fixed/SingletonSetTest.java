@@ -21,7 +21,6 @@ import java.util.Iterator;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure2;
@@ -363,20 +362,12 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     @Test
     public void collectWith()
     {
-        Function2<Integer, Integer, Integer> addFunction =
-                new Function2<Integer, Integer, Integer>()
-                {
-                    public Integer value(Integer each, Integer parameter)
-                    {
-                        return each + parameter;
-                    }
-                };
         Assert.assertEquals(
                 UnifiedSet.newSetWith(2),
-                this.intSet.collectWith(addFunction, 1));
+                this.intSet.collectWith(AddFunction.INTEGER, 1));
         Assert.assertEquals(
                 FastList.newListWith(2),
-                this.intSet.collectWith(addFunction, 1, FastList.<Integer>newList()));
+                this.intSet.collectWith(AddFunction.INTEGER, 1, FastList.<Integer>newList()));
     }
 
     @Test

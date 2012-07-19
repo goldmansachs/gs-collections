@@ -25,7 +25,6 @@ import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
@@ -525,20 +524,12 @@ public abstract class AbstractCollectionTestCase
     @Test
     public void collectWith()
     {
-        Function2<Integer, Integer, Integer> addFunction =
-                new Function2<Integer, Integer, Integer>()
-                {
-                    public Integer value(Integer each, Integer parameter)
-                    {
-                        return each + parameter;
-                    }
-                };
         Assert.assertEquals(
                 Bags.mutable.of(2, 3, 4),
-                this.newWith(1, 2, 3).collectWith(addFunction, 1).toBag());
+                this.newWith(1, 2, 3).collectWith(AddFunction.INTEGER, 1).toBag());
         Assert.assertEquals(
                 Bags.mutable.of(2, 3, 4),
-                this.newWith(1, 2, 3).collectWith(addFunction, 1, FastList.<Integer>newList()).toBag());
+                this.newWith(1, 2, 3).collectWith(AddFunction.INTEGER, 1, FastList.<Integer>newList()).toBag());
     }
 
     @Test

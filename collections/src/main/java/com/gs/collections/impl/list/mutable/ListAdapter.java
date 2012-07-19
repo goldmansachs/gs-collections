@@ -32,11 +32,13 @@ import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.partition.list.PartitionMutableList;
+import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
+import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.ListIterate;
@@ -325,5 +327,11 @@ public final class ListAdapter<T>
     public MutableList<Pair<T, Integer>> zipWithIndex()
     {
         return ListIterate.zipWithIndex(this.delegate, FastList.<Pair<T, Integer>>newList(this.delegate.size()));
+    }
+
+    @Override
+    public MutableStack<T> toStack()
+    {
+        return ArrayStack.newStack(this.delegate);
     }
 }

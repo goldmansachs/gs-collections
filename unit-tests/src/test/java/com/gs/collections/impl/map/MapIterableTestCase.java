@@ -475,16 +475,7 @@ public abstract class MapIterableTestCase
     {
         MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
 
-        Function2<Integer, Integer, Integer> addFunction =
-                new Function2<Integer, Integer, Integer>()
-                {
-                    public Integer value(Integer each, Integer parameter)
-                    {
-                        return each + parameter;
-                    }
-                };
-
-        FastList<Integer> actual = map.collectWith(addFunction, 1, FastList.<Integer>newList());
+        FastList<Integer> actual = map.collectWith(AddFunction.INTEGER, 1, FastList.<Integer>newList());
         Verify.assertContainsAll(actual, 2, 3, 4, 5);
     }
 

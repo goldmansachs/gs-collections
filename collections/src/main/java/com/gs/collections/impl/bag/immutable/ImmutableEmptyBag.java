@@ -52,6 +52,7 @@ import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.partition.bag.PartitionImmutableBag;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
+import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.EmptyIterator;
 import com.gs.collections.impl.bag.mutable.HashBag;
@@ -59,6 +60,7 @@ import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
+import com.gs.collections.impl.factory.Stacks;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
@@ -430,6 +432,11 @@ final class ImmutableEmptyBag<T>
     public MutableBag<T> toBag()
     {
         return Bags.mutable.of();
+    }
+
+    public MutableStack<T> toStack()
+    {
+        return Stacks.mutable.of();
     }
 
     public <NK, NV> MutableMap<NK, NV> toMap(

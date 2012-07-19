@@ -29,7 +29,9 @@ trait SynchronizedMutableIterableTestTrait extends SynchronizedTestTrait with In
     {
         this.assertNotSynchronized
         {
-            this.classUnderTest.iterator
+            val iterator = this.classUnderTest.iterator
+            iterator.hasNext
+            iterator.next
         }
     }
 

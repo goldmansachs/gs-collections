@@ -45,6 +45,7 @@ import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
+import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates;
@@ -59,6 +60,7 @@ import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.partition.list.PartitionFastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
+import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.LazyIterate;
@@ -428,6 +430,11 @@ public abstract class AbstractLazyIterable<T>
         MutableBag<T> bag = Bags.mutable.of();
         this.forEach(CollectionAddProcedure.on(bag));
         return bag;
+    }
+
+    public MutableStack<T> toStack()
+    {
+        return ArrayStack.newStack(this);
     }
 
     public <NK, NV> MutableMap<NK, NV> toMap(

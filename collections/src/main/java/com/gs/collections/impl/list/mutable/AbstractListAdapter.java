@@ -27,8 +27,10 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
+import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.collection.mutable.AbstractCollectionAdapter;
+import com.gs.collections.impl.stack.mutable.ArrayStack;
 
 @SuppressWarnings("AbstractMethodOverridesConcreteMethod")
 public abstract class AbstractListAdapter<T>
@@ -132,6 +134,11 @@ public abstract class AbstractListAdapter<T>
     public int hashCode()
     {
         return this.getDelegate().hashCode();
+    }
+
+    public MutableStack<T> toStack()
+    {
+        return ArrayStack.<T>newStack(this.getDelegate());
     }
 
     @Override

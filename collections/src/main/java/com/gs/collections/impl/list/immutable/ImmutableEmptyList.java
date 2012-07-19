@@ -37,8 +37,10 @@ import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.partition.list.PartitionImmutableList;
+import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.factory.Stacks;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.partition.list.PartitionFastList;
 import net.jcip.annotations.Immutable;
@@ -166,6 +168,12 @@ final class ImmutableEmptyList<T>
     public ImmutableList<Pair<T, Integer>> zipWithIndex()
     {
         return Lists.immutable.of();
+    }
+
+    @Override
+    public MutableStack<T> toStack()
+    {
+        return Stacks.mutable.of();
     }
 
     @Override

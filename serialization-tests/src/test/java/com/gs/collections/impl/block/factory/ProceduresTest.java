@@ -65,4 +65,16 @@ public class ProceduresTest
                         + "SW50UHJvY2VkdXJlO3hwAAAAAHA=",
                 Procedures.fromObjectIntProcedure(null));
     }
+
+    @Test
+    public void bind()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyADJjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlByb2NlZHVyZXMk\n"
+                        + "MQAAAAAAAAABAgACTAANdmFsJHBhcmFtZXRlcnQAEkxqYXZhL2xhbmcvT2JqZWN0O0wADXZhbCRw\n"
+                        + "cm9jZWR1cmV0ADNMY29tL2dzL2NvbGxlY3Rpb25zL2FwaS9ibG9jay9wcm9jZWR1cmUvUHJvY2Vk\n"
+                        + "dXJlMjt4cHBw",
+                Procedures.bind(null, null));
+    }
 }

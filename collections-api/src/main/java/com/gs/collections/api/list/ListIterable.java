@@ -26,6 +26,7 @@ import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.multimap.list.ListMultimap;
 import com.gs.collections.api.partition.list.PartitionList;
+import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 
 /**
@@ -139,6 +140,13 @@ public interface ListIterable<T>
      * @since 1.0.
      */
     ListIterator<T> listIterator(int index);
+
+    /**
+     * Converts the list to a mutable MutableStack implementation.
+     *
+     * @since 2.0
+     */
+    MutableStack<T> toStack();
 
     ListIterable<T> select(Predicate<? super T> predicate);
 

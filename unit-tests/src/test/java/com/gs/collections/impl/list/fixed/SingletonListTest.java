@@ -21,7 +21,6 @@ import java.util.Iterator;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
-import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure2;
@@ -354,20 +353,12 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
     @Test
     public void collectWith()
     {
-        Function2<Integer, Integer, Integer> addFunction =
-                new Function2<Integer, Integer, Integer>()
-                {
-                    public Integer value(Integer each, Integer parameter)
-                    {
-                        return each + parameter;
-                    }
-                };
         Assert.assertEquals(
                 FastList.newListWith(2),
-                newWith(1).collectWith(addFunction, 1));
+                newWith(1).collectWith(AddFunction.INTEGER, 1));
         Assert.assertEquals(
                 FastList.newListWith(2),
-                newWith(1).collectWith(addFunction, 1, FastList.<Integer>newList()));
+                newWith(1).collectWith(AddFunction.INTEGER, 1, FastList.<Integer>newList()));
     }
 
     @Test

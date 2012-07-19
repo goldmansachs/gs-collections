@@ -79,6 +79,20 @@ public class TakeIterable<T> extends AbstractLazyIterable<T>
         }
     }
 
+    @Override
+    public Object[] toArray()
+    {
+        final Object[] result = new Object[this.count];
+        this.forEachWithIndex(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int index)
+            {
+                result[index] = each;
+            }
+        });
+        return result;
+    }
+
     public Iterator<T> iterator()
     {
         return new TakeIterator<T>(this.adapted, this.count);

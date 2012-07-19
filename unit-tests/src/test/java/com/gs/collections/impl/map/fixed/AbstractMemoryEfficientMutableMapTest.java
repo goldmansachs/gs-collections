@@ -578,16 +578,7 @@ public abstract class AbstractMemoryEfficientMutableMapTest
     {
         MutableMap<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3);
 
-        Function2<Integer, Integer, Integer> addFunction =
-                new Function2<Integer, Integer, Integer>()
-                {
-                    public Integer value(Integer each, Integer parameter)
-                    {
-                        return each + parameter;
-                    }
-                };
-
-        MutableBag<Integer> collectWith = map.collectWith(addFunction, 1, HashBag.<Integer>newBag());
+        MutableBag<Integer> collectWith = map.collectWith(AddFunction.INTEGER, 1, HashBag.<Integer>newBag());
 
         switch (map.size())
         {

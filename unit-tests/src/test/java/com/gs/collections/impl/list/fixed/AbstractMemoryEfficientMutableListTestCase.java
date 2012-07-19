@@ -20,10 +20,12 @@ import java.util.Collections;
 
 import com.gs.collections.api.list.FixedSizeList;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Before;
@@ -130,5 +132,12 @@ public abstract class AbstractMemoryEfficientMutableListTestCase
         Verify.assertContainsNone(listWithout, "11", "12");
         Verify.assertInstanceOf(FixedSizeList.class, listWithout);
         Assert.assertSame(listWithout, listWithout.withoutAll(FastList.<String>newList()));
+    }
+
+    @Test
+    public void toStack()
+    {
+        MutableStack<String> stack = this.classUnderTest().toStack();
+        Assert.assertEquals(ArrayStack.newStack(this.classUnderTest()), stack);
     }
 }

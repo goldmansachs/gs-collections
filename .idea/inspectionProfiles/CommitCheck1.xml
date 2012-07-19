@@ -8,6 +8,9 @@
     <inspection_tool class="AccessStaticViaInstance" enabled="false" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="AccessToNonThreadSafeStaticFieldFromInstance" enabled="false" level="WARNING" enabled_by_default="true">
       <option name="nonThreadSafeTypes" value="java.text.DateFormat,java.util.Calendar" />
+      <option name="nonThreadSafeClasses">
+        <value />
+      </option>
     </inspection_tool>
     <inspection_tool class="AccessToStaticFieldLockedOnInstance" enabled="false" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="AmbiguousMethodCall" enabled="false" level="WARNING" enabled_by_default="true" />
@@ -53,9 +56,11 @@
     <inspection_tool class="CallToNativeMethodWhileLocked" enabled="false" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="CallToSimpleGetterInClass" enabled="false" level="WARNING" enabled_by_default="true">
       <option name="ignoreGetterCallsOnOtherObjects" value="false" />
+      <option name="onlyReportPrivateGetter" value="false" />
     </inspection_tool>
     <inspection_tool class="CallToSimpleSetterInClass" enabled="false" level="WARNING" enabled_by_default="true">
       <option name="ignoreSetterCallsOnOtherObjects" value="false" />
+      <option name="onlyReportPrivateSetter" value="false" />
     </inspection_tool>
     <inspection_tool class="CallToStringConcatCanBeReplacedByOperator" enabled="false" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="CanBeFinal" enabled="false" level="WARNING" enabled_by_default="true">
@@ -245,6 +250,7 @@
     <inspection_tool class="ExceptionCaughtLocallyJS" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="ExceptionFromCatchWhichDoesntWrap" enabled="false" level="WARNING" enabled_by_default="false">
       <option name="ignoreGetMessage" value="true" />
+      <option name="ignoreCantWrap" value="false" />
     </inspection_tool>
     <inspection_tool class="ExceptionNameDoesntEndWithException" enabled="false" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="ExtendsAnnotation" enabled="false" level="WARNING" enabled_by_default="false" />
@@ -277,6 +283,7 @@
     <inspection_tool class="FinallyBlockCannotCompleteNormally" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="ForCanBeForeach" enabled="false" level="WARNING" enabled_by_default="false">
       <option name="REPORT_INDEXED_LOOP" value="true" />
+      <option name="ignoreUntypedCollections" value="false" />
     </inspection_tool>
     <inspection_tool class="ForLoopReplaceableByWhile" enabled="false" level="WARNING" enabled_by_default="true">
       <option name="m_ignoreLoopsWithoutConditions" value="false" />
@@ -409,9 +416,7 @@
     <inspection_tool class="JSDeprecatedSymbols" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="JSDuplicatedDeclaration" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="JSShowOverridingMarkers" level="ERROR" enabled="false" />
-    <inspection_tool class="JSUndeclaredVariable" enabled="false" level="WARNING" enabled_by_default="false">
-      <option name="myCheckGlobalDefinitions" value="false" />
-    </inspection_tool>
+    <inspection_tool class="JSUndeclaredVariable" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="JSUnresolvedFunction" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="JSUnresolvedVariable" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="JSUntypedDeclaration" enabled="false" level="WARNING" enabled_by_default="false" />
@@ -541,6 +546,7 @@
     <inspection_tool class="MissingMnemonic" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="MissingOverrideAnnotation" enabled="false" level="WARNING" enabled_by_default="true">
       <option name="ignoreObjectMethods" value="true" />
+      <option name="ignoreAnonymousClassMethods" value="false" />
     </inspection_tool>
     <inspection_tool class="MissortedModifiers" enabled="false" level="WARNING" enabled_by_default="true">
       <option name="m_requireAnnotationsFirst" value="true" />
@@ -592,6 +598,9 @@
       <option name="m_ignoreNonPublicClasses" value="false" />
     </inspection_tool>
     <inspection_tool class="NonSerializableFieldInSerializableClass" enabled="false" level="INFO" enabled_by_default="true">
+      <option name="ignorableAnnotations">
+        <value />
+      </option>
       <option name="ignoreAnonymousInnerClasses" value="true" />
       <option name="superClassString" value="java.awt.Component" />
     </inspection_tool>
@@ -639,7 +648,7 @@
     <inspection_tool class="OneButtonGroup" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="OneWayWebMethod" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="OrredNotEqualExpression" enabled="false" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="OverlyComplexArithmeticExpression" enabled="true" level="ERROR" enabled_by_default="true">
+    <inspection_tool class="OverlyComplexArithmeticExpression" enabled="false" level="ERROR" enabled_by_default="false">
       <option name="m_limit" value="6" />
     </inspection_tool>
     <inspection_tool class="OverlyLargePrimitiveArrayInitializer" enabled="false" level="WARNING" enabled_by_default="true">
@@ -697,6 +706,9 @@
     <inspection_tool class="PublicConstructorInNonPublicClass" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="PublicField" enabled="true" level="ERROR" enabled_by_default="true">
       <option name="ignoreEnums" value="false" />
+      <option name="ignorableAnnotations">
+        <value />
+      </option>
     </inspection_tool>
     <inspection_tool class="PublicFieldAccessedInSynchronizedContext" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="PublicStaticArrayField" enabled="true" level="ERROR" enabled_by_default="true" />
@@ -709,7 +721,6 @@
     <inspection_tool class="ReadResolveAndWriteReplaceProtected" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="RecordStoreResource" enabled="false" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="RedundantArrayCreation" enabled="true" level="ERROR" enabled_by_default="false" />
-    <inspection_tool class="RedundantCast" enabled="true" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="RedundantImplements" enabled="true" level="ERROR" enabled_by_default="true">
       <option name="ignoreSerializable" value="false" />
       <option name="ignoreCloneable" value="false" />
@@ -1264,11 +1275,11 @@
         <constraint name="discriminator" within="" contains="" />
         <constraint name="expectedCount" within="" contains="" />
       </replaceConfiguration>
-      <replaceConfiguration name="CollectionRemoveBlock.on()" text="new CollectionRemoveBlock&lt;$type$&gt;($coll$)" recursive="false" caseInsensitive="true" type="JAVA" extension="java" reformatAccordingToStyle="false" shortenFQN="true" replacement="CollectionRemoveBlock.on($coll$)">
+      <replaceConfiguration name="CollectionRemoveBlock.on()" text="new CollectionRemoveBlock&lt;$type$&gt;($coll$)" recursive="false" caseInsensitive="true" type="JAVA" reformatAccordingToStyle="false" shortenFQN="true" replacement="CollectionRemoveBlock.on($coll$)">
         <constraint name="type" within="" contains="" />
         <constraint name="coll" within="" contains="" />
       </replaceConfiguration>
-      <replaceConfiguration name="CollectionAddBlock.on()" text="new CollectionAddBlock&lt;$type$&gt;($coll$)" recursive="false" caseInsensitive="true" type="JAVA" extension="java" reformatAccordingToStyle="false" shortenFQN="true" replacement="CollectionAddBlock.on($coll$)">
+      <replaceConfiguration name="CollectionAddBlock.on()" text="new CollectionAddBlock&lt;$type$&gt;($coll$)" recursive="false" caseInsensitive="true" type="JAVA" reformatAccordingToStyle="false" shortenFQN="true" replacement="CollectionAddBlock.on($coll$)">
         <constraint name="type" within="" contains="" />
         <constraint name="coll" within="" contains="" />
       </replaceConfiguration>

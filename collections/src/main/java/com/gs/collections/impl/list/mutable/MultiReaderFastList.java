@@ -40,9 +40,11 @@ import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
+import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.collection.mutable.AbstractMultiReaderMutableCollection;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.utility.LazyIterate;
 
 import static com.gs.collections.impl.factory.Iterables.*;
@@ -816,6 +818,11 @@ public final class MultiReaderFastList<T>
             return this;
         }
 
+        public MutableStack<T> toStack()
+        {
+            return ArrayStack.<T>newStack(this.delegate);
+        }
+
         public <V extends Comparable<? super V>> MutableList<T> sortThisBy(Function<? super T, ? extends V> function)
         {
             this.getDelegate().sortThisBy(function);
@@ -1058,6 +1065,19 @@ public final class MultiReaderFastList<T>
         finally
         {
             this.unlockWriteLock();
+        }
+    }
+
+    public MutableStack<T> toStack()
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.toStack();
+        }
+        finally
+        {
+            this.unlockReadLock();
         }
     }
 

@@ -398,6 +398,27 @@ public class VerifyTest
     }
 
     @Test
+    public void assertIterablesEqual()
+    {
+        Verify.assertIterablesEqual(FastList.newListWith(1, 2, 3), TreeSortedSet.newSetWith(1, 2, 3));
+        Verify.assertIterablesEqual("message", FastList.newListWith(1, 2, 3), TreeSortedSet.newSetWith(1, 2, 3));
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertIterablesEqual(FastList.newListWith(1, 2, 3), FastList.newListWith(1, 2));
+            }
+        });
+        Verify.assertError(AssertionError.class, new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertIterablesEqual("message", FastList.newListWith(1, 2, 3), FastList.newListWith(1, 2));
+            }
+        });
+    }
+
+    @Test
     public void assertError()
     {
         Verify.assertError(AssertionError.class, new Runnable()

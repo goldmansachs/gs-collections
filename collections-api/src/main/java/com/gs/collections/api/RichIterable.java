@@ -522,7 +522,7 @@ public interface
     double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super T> function);
 
     /**
-     * Converts the collection to a mutable MutableList implementation.
+     * Converts the collection to a MutableList implementation.
      *
      * @since 1.0
      */
@@ -536,7 +536,7 @@ public interface
     MutableList<T> toSortedList();
 
     /**
-     * Converts the collection to a mutable MutableList implementation and sorts it using the specified comparator.
+     * Converts the collection to a MutableList implementation and sorts it using the specified comparator.
      *
      * @since 1.0
      */

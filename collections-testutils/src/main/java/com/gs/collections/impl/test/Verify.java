@@ -1650,7 +1650,19 @@ public final class Verify extends Assert
         }
     }
 
-    private static void assertIterablesEqual(String iterableName, Iterable<?> expectedIterable, Iterable<?> actualIterable)
+    public static void assertIterablesEqual(Iterable<?> expectedIterable, Iterable<?> actualIterable)
+    {
+        try
+        {
+            Verify.assertIterablesEqual("iterables", expectedIterable, actualIterable);
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    public static void assertIterablesEqual(String iterableName, Iterable<?> expectedIterable, Iterable<?> actualIterable)
     {
         try
         {

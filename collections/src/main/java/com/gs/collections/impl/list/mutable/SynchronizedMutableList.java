@@ -31,6 +31,7 @@ import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
+import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.collection.mutable.SynchronizedMutableCollection;
 import com.gs.collections.impl.factory.Lists;
@@ -426,6 +427,14 @@ public class SynchronizedMutableList<E>
         {
             this.getMutableList().reverseThis();
             return this;
+        }
+    }
+
+    public MutableStack<E> toStack()
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableList().toStack();
         }
     }
 

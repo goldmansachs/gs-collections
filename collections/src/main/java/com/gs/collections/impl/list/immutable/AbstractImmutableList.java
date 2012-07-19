@@ -45,6 +45,7 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.list.ImmutableListMultimap;
 import com.gs.collections.api.partition.list.PartitionImmutableList;
+import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.procedure.CollectIfProcedure;
@@ -58,6 +59,7 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.partition.list.PartitionFastList;
+import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.ListIterate;
 import net.jcip.annotations.Immutable;
@@ -699,5 +701,10 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
     protected MutableCollection<T> newMutable(int size)
     {
         return FastList.newList(size);
+    }
+
+    public MutableStack<T> toStack()
+    {
+        return ArrayStack.<T>newStack(this);
     }
 }
