@@ -586,6 +586,14 @@ public abstract class StackIterableTestCase
                 return IntegerPredicates.isOdd().accept(Integer.parseInt(object));
             }
         }));
+
+        Assert.assertEquals(expected, stack.groupBy(new Function<String, Boolean>()
+        {
+            public Boolean valueOf(String object)
+            {
+                return IntegerPredicates.isOdd().accept(Integer.parseInt(object));
+            }
+        }, FastListMultimap.<Boolean, String>newMultimap()));
     }
 
     @Test
