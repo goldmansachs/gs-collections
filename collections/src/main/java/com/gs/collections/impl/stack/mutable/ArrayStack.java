@@ -135,81 +135,69 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
 
     public T pop()
     {
-        if (this.data.isEmpty())
-        {
-            throw new EmptyStackException();
-        }
+        this.checkEmptyStack();
         return this.data.remove(this.data.size() - 1);
     }
 
-    public ListIterable<T> pop(int count)
+    private void checkEmptyStack()
     {
         if (this.data.isEmpty())
         {
             throw new EmptyStackException();
         }
-        if (count <= 0)
-        {
-            throw new IllegalArgumentException("Count must be positive but was " + count);
-        }
-        if (this.data.size() < count)
-        {
-            throw new IllegalArgumentException("Count must be less than size: Count = " + count + " Size = " + this.data.size());
-        }
+    }
+
+    public ListIterable<T> pop(int count)
+    {
+        this.checkEmptyStack();
+        this.checkNegativeCount(count);
+        this.checkSizeLessThanCount(count);
         MutableList<T> result = FastList.newList(count);
         while (count > 0)
         {
-            result.add(this.data.remove(this.data.size() - 1));
+            result.add(this.pop());
             count--;
         }
         return result;
     }
 
-    public <V, R extends Collection<V>> R pop(int count, R targetCollection)
+    public <R extends Collection<T>> R pop(int count, R targetCollection)
     {
-        if (this.data.isEmpty())
-        {
-            throw new EmptyStackException();
-        }
-        if (count <= 0)
-        {
-            throw new IllegalArgumentException("Count must be positive but was " + count);
-        }
-        if (this.data.size() < count)
-        {
-            throw new IllegalArgumentException("Count must be less than size: Count = " + count + " Size = " + this.data.size());
-        }
+        this.checkEmptyStack();
+        this.checkNegativeCount(count);
+        this.checkSizeLessThanCount(count);
         while (count > 0)
         {
-            targetCollection.add((V) this.data.remove(this.data.size() - 1));
+            targetCollection.add(this.pop());
             count--;
         }
         return targetCollection;
     }
 
+    public <R extends MutableStack<T>> R pop(int count, R targetStack)
+    {
+        this.checkEmptyStack();
+        this.checkNegativeCount(count);
+        this.checkSizeLessThanCount(count);
+        while (count > 0)
+        {
+            targetStack.push(this.pop());
+            count--;
+        }
+        return targetStack;
+    }
+
     public T peek()
     {
-        if (this.data.isEmpty())
-        {
-            throw new EmptyStackException();
-        }
+        this.checkEmptyStack();
         return this.data.getLast();
     }
 
     public ListIterable<T> peek(int count)
     {
-        if (this.data.isEmpty())
-        {
-            throw new EmptyStackException();
-        }
-        if (count <= 0)
-        {
-            throw new IllegalArgumentException("Count must be positive but was " + count);
-        }
-        if (this.data.size() < count)
-        {
-            throw new IllegalArgumentException("Count must be less than size: Count = " + count + " Size = " + this.data.size());
-        }
+        this.checkEmptyStack();
+        this.checkNegativeCount(count);
+        this.checkSizeLessThanCount(count);
         return FastList.newList(this.asLazy().take(count));
     }
 
@@ -684,5 +672,21 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
         FastList<T> fastList = FastList.newList();
         fastList.readExternal(in);
         this.data = (FastList<T>) fastList.toReversed();
+    }
+
+    private void checkSizeLessThanCount(int count)
+    {
+        if (this.data.size() < count)
+        {
+            throw new IllegalArgumentException("Count must be less than size: Count = " + count + " Size = " + this.data.size());
+        }
+    }
+
+    private void checkNegativeCount(int count)
+    {
+        if (count <= 0)
+        {
+            throw new IllegalArgumentException("Count must be positive but was " + count);
+        }
     }
 }

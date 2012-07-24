@@ -53,7 +53,9 @@ public interface MutableStack<T> extends StackIterable<T>
 
     ListIterable<T> pop(int count);
 
-    <V, R extends Collection<V>> R pop(int count, R targetCollection);
+    <R extends Collection<T>> R pop(int count, R targetCollection);
+
+    <R extends MutableStack<T>> R pop(int count, R targetStack);
 
     MutableStack<T> asUnmodifiable();
 

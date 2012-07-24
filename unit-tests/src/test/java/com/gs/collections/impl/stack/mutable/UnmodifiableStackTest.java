@@ -126,7 +126,7 @@ public class UnmodifiableStackTest extends StackIterableTestCase
         {
             public void run()
             {
-                UnmodifiableStackTest.this.newStackFromTopToBottom(1, 2, 3).pop(3, FastList.newList());
+                UnmodifiableStackTest.this.newStackFromTopToBottom(1, 2, 3).pop(3, FastList.<Integer>newList());
             }
         });
     }

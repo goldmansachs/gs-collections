@@ -84,7 +84,12 @@ public final class UnmodifiableStack<T> implements MutableStack<T>, Serializable
         throw new UnsupportedOperationException("Cannot pop an UnmodifiableStack.");
     }
 
-    public <V, R extends Collection<V>> R pop(int count, R targetCollection)
+    public <R extends Collection<T>> R pop(int count, R targetCollection)
+    {
+        throw new UnsupportedOperationException("Cannot pop an UnmodifiableStack.");
+    }
+
+    public <R extends MutableStack<T>> R pop(int count, R targetStack)
     {
         throw new UnsupportedOperationException("Cannot pop an UnmodifiableStack.");
     }

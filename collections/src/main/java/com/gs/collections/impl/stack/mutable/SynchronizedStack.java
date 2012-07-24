@@ -100,11 +100,19 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
         }
     }
 
-    public <V, R extends Collection<V>> R pop(int count, R targetCollection)
+    public <R extends Collection<T>> R pop(int count, R targetCollection)
     {
         synchronized (this.lock)
         {
             return this.delegate.pop(count, targetCollection);
+        }
+    }
+
+    public <R extends MutableStack<T>> R pop(int count, R targetStack)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.pop(count, targetStack);
         }
     }
 
