@@ -129,6 +129,14 @@ public class UnmodifiableStackTest extends StackIterableTestCase
                 UnmodifiableStackTest.this.newStackFromTopToBottom(1, 2, 3).pop(3, FastList.<Integer>newList());
             }
         });
+
+        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
+        {
+            public void run()
+            {
+                UnmodifiableStackTest.this.newStackFromTopToBottom(1, 2, 3).pop(3, ArrayStack.<Integer>newStack());
+            }
+        });
     }
 
     @Test

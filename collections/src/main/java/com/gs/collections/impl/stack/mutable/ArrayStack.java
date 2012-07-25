@@ -63,7 +63,6 @@ import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.partition.stack.PartitionArrayStack;
 import com.gs.collections.impl.utility.LazyIterate;
-import com.gs.collections.impl.utility.ListIterate;
 
 /**
  * ArrayStack is a MutableStack which contains a FastList of data. ArrayStack iterates from top to bottom (LIFO order).
@@ -501,7 +500,7 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
 
     public void forEach(Procedure<? super T> procedure)
     {
-        ListIterate.reverseForEach(this.data, procedure);
+        this.data.reverseForEach(procedure);
     }
 
     public <P> void forEachWith(Procedure2<? super T, ? super P> procedure, P parameter)
