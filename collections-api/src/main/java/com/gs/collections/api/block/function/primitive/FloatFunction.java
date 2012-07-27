@@ -16,11 +16,14 @@
 
 package com.gs.collections.api.block.function.primitive;
 
+import java.io.Serializable;
+
 /**
- * FloatFunction is a primitive Function which may be used to reduce the overhead
- * of creating big Float objects in places where the primitive float could be used
+ * FloatFunction is a iterator Function which may be used to reduce the overhead
+ * of creating big Float objects in places where the iterator float could be used
  */
 public interface FloatFunction<T>
+        extends Serializable
 {
     float floatValueOf(T anObject);
 }

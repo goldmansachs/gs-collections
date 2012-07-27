@@ -20,7 +20,11 @@ import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Comparator;
 
+import com.gs.collections.api.DoubleIterable;
+import com.gs.collections.api.FloatIterable;
+import com.gs.collections.api.IntIterable;
 import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.LongIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
@@ -54,6 +58,10 @@ import com.gs.collections.impl.block.procedure.CountProcedure;
 import com.gs.collections.impl.block.procedure.MapCollectProcedure;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.lazy.primitive.CollectDoubleIterable;
+import com.gs.collections.impl.lazy.primitive.CollectFloatIterable;
+import com.gs.collections.impl.lazy.primitive.CollectIntIterable;
+import com.gs.collections.impl.lazy.primitive.CollectLongIterable;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
@@ -227,6 +235,26 @@ public abstract class AbstractLazyIterable<T>
     public <V> LazyIterable<V> collect(Function<? super T, ? extends V> function)
     {
         return LazyIterate.collect(this, function);
+    }
+
+    public IntIterable collectInt(IntFunction<? super T> function)
+    {
+        return new CollectIntIterable<T>(this, function);
+    }
+
+    public FloatIterable collectFloat(FloatFunction<? super T> function)
+    {
+        return new CollectFloatIterable<T>(this, function);
+    }
+
+    public DoubleIterable collectDouble(DoubleFunction<? super T> function)
+    {
+        return new CollectDoubleIterable<T>(this, function);
+    }
+
+    public LongIterable collectLong(LongFunction<? super T> function)
+    {
+        return new CollectLongIterable<T>(this, function);
     }
 
     public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)

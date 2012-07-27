@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,30 @@
  * limitations under the License.
  */
 
-package com.gs.collections.api.block.function.primitive;
+package com.gs.collections.api;
 
-import java.io.Serializable;
+import com.gs.collections.api.block.procedure.primitive.FloatProcedure;
+import com.gs.collections.api.iterator.FloatIterator;
 
-/**
- * LongFunction is a iterator Function which may be used to reduce the overhead
- * of creating big Long objects in places where the iterator long could be used
- */
-public interface LongFunction<T>
-        extends Serializable
+public interface FloatIterable
 {
-    long longValueOf(T anObject);
+    FloatIterator iterator();
+
+    void forEach(FloatProcedure procedure);
+
+    int size();
+
+    double sum();
+
+    float max();
+
+    float min();
+
+    double average();
+
+    double median();
+
+    float[] toArray();
+
+    float[] toSortedArray();
 }

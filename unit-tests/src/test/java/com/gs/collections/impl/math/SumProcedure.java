@@ -23,9 +23,9 @@ import com.gs.collections.impl.parallel.ProcedureFactory;
 
 /**
  * A multi-purpose code block factory which can be used to summarize the elements of a collection
- * either via a forEach() or injectInto() call.  SumProcedure returns optimized primitive blocks
- * for specialized primitive subclasses of Function which result in less garbage created for
- * summing primitive attributes of collections.
+ * either via a forEach() or injectInto() call.  SumProcedure returns optimized iterator blocks
+ * for specialized iterator subclasses of Function which result in less garbage created for
+ * summing iterator attributes of collections.
  */
 public class SumProcedure<T>
         implements Procedure<T>, Function2<Sum, T, Sum>, ProcedureFactory<SumProcedure<T>>

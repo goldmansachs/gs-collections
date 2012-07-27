@@ -20,7 +20,7 @@ import com.gs.collections.api.block.SerializableComparator;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 
 /**
- * A Comparator which takes a DoubleFunction to compare a primitive double value retrieved from an object.
+ * A Comparator which takes a DoubleFunction to compare a iterator double value retrieved from an object.
  */
 public class DoubleFunctionComparator<T>
         implements SerializableComparator<T>

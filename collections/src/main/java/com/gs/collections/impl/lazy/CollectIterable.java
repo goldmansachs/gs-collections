@@ -28,7 +28,7 @@ import com.gs.collections.impl.utility.Iterate;
 import net.jcip.annotations.Immutable;
 
 /**
- * A CollectIterable is an iterable that transforms a source iterable on a condition as it iterates.
+ * A CollectIterable is an iterable that transforms a source iterable using a function as it iterates.
  */
 @Immutable
 public class CollectIterable<T, V>

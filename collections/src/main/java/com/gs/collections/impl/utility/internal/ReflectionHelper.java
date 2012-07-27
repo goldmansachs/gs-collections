@@ -34,7 +34,7 @@ public final class ReflectionHelper
     public static final Class<?>[] EMPTY_CLASS_ARRAY = {};
 
     /**
-     * Mapping of primitive wrapper classes to primitive types
+     * Mapping of iterator wrapper classes to iterator types
      */
     private static final Map<Class<?>, Class<?>> WRAPPER_TO_PRIMATIVES = UnifiedMap.newMapWith(
             Tuples.<Class<?>>twin(Short.class, short.class),

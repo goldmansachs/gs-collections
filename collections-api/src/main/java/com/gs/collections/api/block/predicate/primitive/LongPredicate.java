@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,16 +14,12 @@
  * limitations under the License.
  */
 
-package com.gs.collections.api.block.function.primitive;
+package com.gs.collections.api.block.predicate.primitive;
 
 import java.io.Serializable;
 
-/**
- * LongFunction is a iterator Function which may be used to reduce the overhead
- * of creating big Long objects in places where the iterator long could be used
- */
-public interface LongFunction<T>
+public interface LongPredicate
         extends Serializable
 {
-    long longValueOf(T anObject);
+    boolean accept(long value);
 }

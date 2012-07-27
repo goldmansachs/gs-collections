@@ -19,7 +19,7 @@ package com.gs.collections.impl.block.function;
 import com.gs.collections.api.block.function.Function2;
 
 /**
- * MaxFunction contains primitive aware implementations of Max() for integers, doubles, and longs
+ * MaxFunction contains iterator aware implementations of Max() for integers, doubles, and longs
  */
 public final class MaxFunction
 {

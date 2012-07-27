@@ -16,11 +16,14 @@
 
 package com.gs.collections.api.block.function.primitive;
 
+import java.io.Serializable;
+
 /**
- * DoubleFunction is a primitive Function which may be used to reduce the overhead
- * of creating big Double objects in places where the primitive double could be used
+ * DoubleFunction is a iterator Function which may be used to reduce the overhead
+ * of creating big Double objects in places where the iterator double could be used
  */
 public interface DoubleFunction<T>
+        extends Serializable
 {
     double doubleValueOf(T anObject);
 }

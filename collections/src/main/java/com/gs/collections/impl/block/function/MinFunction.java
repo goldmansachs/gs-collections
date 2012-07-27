@@ -19,7 +19,7 @@ package com.gs.collections.impl.block.function;
 import com.gs.collections.api.block.function.Function2;
 
 /**
- * MinFunction contains primitive aware implementations of Min() for integers, doubles, and longs
+ * MinFunction contains iterator aware implementations of Min() for integers, doubles, and longs
  */
 public final class MinFunction
 {

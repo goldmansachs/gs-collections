@@ -19,6 +19,10 @@ package com.gs.collections.api;
 import java.util.Collection;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.tuple.Pair;
 
@@ -92,4 +96,24 @@ public interface LazyIterable<T>
      * Iterates over this iterable adding all elements into the target collection.
      */
     <R extends Collection<T>> R into(R target);
+
+    /**
+     * Returns a lazy IntIterable which will transform the underlying iterable data to int values based on the function.
+     */
+    IntIterable collectInt(IntFunction<? super T> function);
+
+    /**
+     * Returns a lazy FloatIterable which will transform the underlying iterable data to float values based on the function.
+     */
+    FloatIterable collectFloat(FloatFunction<? super T> function);
+
+    /**
+     * Returns a lazy LongIterable which will transform the underlying iterable data to long values based on the function.
+     */
+    LongIterable collectLong(LongFunction<? super T> function);
+
+    /**
+     * Returns a lazy DoubleIterable which will transform the underlying iterable data to double values based on the function.
+     */
+    DoubleIterable collectDouble(DoubleFunction<? super T> function);
 }

@@ -20,7 +20,7 @@ import com.gs.collections.api.block.SerializableComparator;
 import com.gs.collections.api.block.function.primitive.IntFunction;
 
 /**
- * A Comparator which takes an IntegerFunction to compare a primitive int value retrieved from an object.
+ * A Comparator which takes an IntegerFunction to compare a iterator int value retrieved from an object.
  */
 public class IntFunctionComparator<T>
         implements SerializableComparator<T>
