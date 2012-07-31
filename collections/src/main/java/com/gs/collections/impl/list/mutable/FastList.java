@@ -50,7 +50,7 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates2;
-import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
+import com.gs.collections.impl.block.factory.Procedures2;
 import com.gs.collections.impl.block.procedure.CountProcedure;
 import com.gs.collections.impl.block.procedure.FastListCollectIfProcedure;
 import com.gs.collections.impl.block.procedure.FastListCollectProcedure;
@@ -362,7 +362,7 @@ public class FastList<T>
     private void addAllCollection(Collection<? extends T> source)
     {
         this.ensureCapacity(this.size + source.size());
-        Iterate.forEach(source, CollectionAddProcedure.on(this));
+        Iterate.forEachWith(source, Procedures2.<T>addToCollection(), this);
     }
 
     @Override
@@ -1165,18 +1165,18 @@ public class FastList<T>
     }
 
     @Override
-    public int sumOf(IntFunction<? super T> function)
+    public long sumOfInt(IntFunction<? super T> function)
     {
-        int result = 0;
+        long result = 0L;
         for (int i = 0; i < this.size; i++)
         {
-            result += function.intValueOf(this.items[i]);
+            result += (long) function.intValueOf(this.items[i]);
         }
         return result;
     }
 
     @Override
-    public long sumOf(LongFunction<? super T> function)
+    public long sumOfLong(LongFunction<? super T> function)
     {
         long result = 0L;
         for (int i = 0; i < this.size; i++)
@@ -1187,18 +1187,18 @@ public class FastList<T>
     }
 
     @Override
-    public float sumOf(FloatFunction<? super T> function)
+    public double sumOfFloat(FloatFunction<? super T> function)
     {
-        float result = 0.0f;
+        double result = 0.0d;
         for (int i = 0; i < this.size; i++)
         {
-            result += function.floatValueOf(this.items[i]);
+            result += (double) function.floatValueOf(this.items[i]);
         }
         return result;
     }
 
     @Override
-    public double sumOf(DoubleFunction<? super T> function)
+    public double sumOfDouble(DoubleFunction<? super T> function)
     {
         double result = 0.0d;
         for (int i = 0; i < this.size; i++)

@@ -612,7 +612,7 @@ public abstract class ImmutableBagTestCase
     public void sumFloat()
     {
         ImmutableBag<Integer> integers = this.newBag().collect(StringFunctions.toInteger());
-        float result = integers.sumOf(new FloatFunction<Integer>()
+        double result = integers.sumOfFloat(new FloatFunction<Integer>()
         {
             public float floatValueOf(Integer integer)
             {
@@ -627,7 +627,7 @@ public abstract class ImmutableBagTestCase
     public void sumDouble()
     {
         ImmutableBag<Integer> integers = this.newBag().collect(StringFunctions.toInteger());
-        double result = integers.sumOf(new DoubleFunction<Integer>()
+        double result = integers.sumOfDouble(new DoubleFunction<Integer>()
         {
             public double doubleValueOf(Integer integer)
             {
@@ -642,7 +642,7 @@ public abstract class ImmutableBagTestCase
     public void sumInteger()
     {
         ImmutableBag<Integer> integers = this.newBag().collect(StringFunctions.toInteger());
-        int result = integers.sumOf(new IntFunction<Integer>()
+        long result = integers.sumOfInt(new IntFunction<Integer>()
         {
             public int intValueOf(Integer integer)
             {
@@ -657,7 +657,7 @@ public abstract class ImmutableBagTestCase
     public void sumLong()
     {
         ImmutableBag<Integer> integers = this.newBag().collect(StringFunctions.toInteger());
-        long result = integers.sumOf(new LongFunction<Integer>()
+        long result = integers.sumOfLong(new LongFunction<Integer>()
         {
             public long longValueOf(Integer integer)
             {

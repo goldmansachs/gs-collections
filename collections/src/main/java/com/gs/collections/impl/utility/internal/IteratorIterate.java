@@ -739,17 +739,17 @@ public final class IteratorIterate
         return iterator;
     }
 
-    public static <T> int sumOf(Iterator<T> iterator, IntFunction<? super T> function)
+    public static <T> long sumOfInt(Iterator<T> iterator, IntFunction<? super T> function)
     {
-        int sum = 0;
+        long sum = 0L;
         while (iterator.hasNext())
         {
-            sum += function.intValueOf(iterator.next());
+            sum += (long) function.intValueOf(iterator.next());
         }
         return sum;
     }
 
-    public static <T> long sumOf(Iterator<T> iterator, LongFunction<? super T> function)
+    public static <T> long sumOfLong(Iterator<T> iterator, LongFunction<? super T> function)
     {
         long sum = 0L;
         while (iterator.hasNext())
@@ -759,17 +759,17 @@ public final class IteratorIterate
         return sum;
     }
 
-    public static <T> float sumOf(Iterator<T> iterator, FloatFunction<? super T> function)
+    public static <T> double sumOfFloat(Iterator<T> iterator, FloatFunction<? super T> function)
     {
-        float sum = 0.0f;
+        double sum = 0.0d;
         while (iterator.hasNext())
         {
-            sum += function.floatValueOf(iterator.next());
+            sum += (double) function.floatValueOf(iterator.next());
         }
         return sum;
     }
 
-    public static <T> double sumOf(Iterator<T> iterator, DoubleFunction<? super T> function)
+    public static <T> double sumOfDouble(Iterator<T> iterator, DoubleFunction<? super T> function)
     {
         double sum = 0.0d;
         while (iterator.hasNext())

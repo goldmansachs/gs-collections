@@ -303,24 +303,24 @@ public class UnmodifiableRichIterable<T>
         return this.iterable.injectInto(injectedValue, function);
     }
 
-    public int sumOf(IntFunction<? super T> function)
+    public long sumOfInt(IntFunction<? super T> function)
     {
-        return this.iterable.sumOf(function);
+        return this.iterable.sumOfInt(function);
     }
 
-    public float sumOf(FloatFunction<? super T> function)
+    public double sumOfFloat(FloatFunction<? super T> function)
     {
-        return this.iterable.sumOf(function);
+        return this.iterable.sumOfFloat(function);
     }
 
-    public long sumOf(LongFunction<? super T> function)
+    public long sumOfLong(LongFunction<? super T> function)
     {
-        return this.iterable.sumOf(function);
+        return this.iterable.sumOfLong(function);
     }
 
-    public double sumOf(DoubleFunction<? super T> function)
+    public double sumOfDouble(DoubleFunction<? super T> function)
     {
-        return this.iterable.sumOf(function);
+        return this.iterable.sumOfDouble(function);
     }
 
     public MutableList<T> toList()

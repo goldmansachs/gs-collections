@@ -65,9 +65,9 @@ import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates2;
+import com.gs.collections.impl.block.factory.Procedures2;
 import com.gs.collections.impl.block.procedure.CollectIfProcedure;
 import com.gs.collections.impl.block.procedure.CollectProcedure;
-import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.block.procedure.CountProcedure;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
@@ -195,7 +195,7 @@ public class UnifiedSet<K>
         UnifiedSet<K> result = source instanceof RichIterable
                 ? UnifiedSet.<K>newSet(((RichIterable<?>) source).size())
                 : UnifiedSet.<K>newSet();
-        Iterate.forEach(source, CollectionAddProcedure.on(result));
+        Iterate.forEachWith(source, Procedures2.<K>addToCollection(), result);
         return result;
     }
 
@@ -945,24 +945,24 @@ public class UnifiedSet<K>
         return IterableIterate.injectInto(injectedValue, this, function);
     }
 
-    public int sumOf(IntFunction<? super K> function)
+    public long sumOfInt(IntFunction<? super K> function)
     {
-        return IterableIterate.sumOf(this, function);
+        return IterableIterate.sumOfInt(this, function);
     }
 
-    public float sumOf(FloatFunction<? super K> function)
+    public double sumOfFloat(FloatFunction<? super K> function)
     {
-        return IterableIterate.sumOf(this, function);
+        return IterableIterate.sumOfFloat(this, function);
     }
 
-    public long sumOf(LongFunction<? super K> function)
+    public long sumOfLong(LongFunction<? super K> function)
     {
-        return IterableIterate.sumOf(this, function);
+        return IterableIterate.sumOfLong(this, function);
     }
 
-    public double sumOf(DoubleFunction<? super K> function)
+    public double sumOfDouble(DoubleFunction<? super K> function)
     {
-        return IterableIterate.sumOf(this, function);
+        return IterableIterate.sumOfDouble(this, function);
     }
 
     public <IV, P> IV injectIntoWith(
@@ -1133,7 +1133,7 @@ public class UnifiedSet<K>
         int size = Iterate.sizeOf(iterable);
         this.ensureCapacity(size);
         int oldSize = this.size();
-        Iterate.forEach(iterable, CollectionAddProcedure.on(this));
+        Iterate.forEachWith(iterable, Procedures2.<K>addToCollection(), this);
         return this.size() != oldSize;
     }
 

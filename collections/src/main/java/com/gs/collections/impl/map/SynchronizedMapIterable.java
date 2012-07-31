@@ -358,35 +358,35 @@ public abstract class SynchronizedMapIterable<K, V>
         }
     }
 
-    public int sumOf(IntFunction<? super V> function)
+    public long sumOfInt(IntFunction<? super V> function)
     {
         synchronized (this.lock)
         {
-            return this.mapIterable.sumOf(function);
+            return this.mapIterable.sumOfInt(function);
         }
     }
 
-    public float sumOf(FloatFunction<? super V> function)
+    public double sumOfFloat(FloatFunction<? super V> function)
     {
         synchronized (this.lock)
         {
-            return this.mapIterable.sumOf(function);
+            return this.mapIterable.sumOfFloat(function);
         }
     }
 
-    public long sumOf(LongFunction<? super V> function)
+    public long sumOfLong(LongFunction<? super V> function)
     {
         synchronized (this.lock)
         {
-            return this.mapIterable.sumOf(function);
+            return this.mapIterable.sumOfLong(function);
         }
     }
 
-    public double sumOf(DoubleFunction<? super V> function)
+    public double sumOfDouble(DoubleFunction<? super V> function)
     {
         synchronized (this.lock)
         {
-            return this.mapIterable.sumOf(function);
+            return this.mapIterable.sumOfDouble(function);
         }
     }
 

@@ -525,24 +525,24 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().injectInto(injectedValue, function);
     }
 
-    public int sumOf(IntFunction<? super V> function)
+    public long sumOfInt(IntFunction<? super V> function)
     {
-        return this.getMutableMap().sumOf(function);
+        return this.getMutableMap().sumOfInt(function);
     }
 
-    public float sumOf(FloatFunction<? super V> function)
+    public double sumOfFloat(FloatFunction<? super V> function)
     {
-        return this.getMutableMap().sumOf(function);
+        return this.getMutableMap().sumOfFloat(function);
     }
 
-    public long sumOf(LongFunction<? super V> function)
+    public long sumOfLong(LongFunction<? super V> function)
     {
-        return this.getMutableMap().sumOf(function);
+        return this.getMutableMap().sumOfLong(function);
     }
 
-    public double sumOf(DoubleFunction<? super V> function)
+    public double sumOfDouble(DoubleFunction<? super V> function)
     {
-        return this.getMutableMap().sumOf(function);
+        return this.getMutableMap().sumOfDouble(function);
     }
 
     public String makeString()

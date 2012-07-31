@@ -54,7 +54,7 @@ import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
-import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
+import com.gs.collections.impl.block.factory.Procedures2;
 import com.gs.collections.impl.block.procedure.MapCollectProcedure;
 import com.gs.collections.impl.block.procedure.MaxComparatorProcedure;
 import com.gs.collections.impl.block.procedure.MinComparatorProcedure;
@@ -932,7 +932,7 @@ public final class Iterate
             return targetCollection.addAll((Collection<T>) iterable);
         }
         int oldSize = targetCollection.size();
-        Iterate.forEach(iterable, CollectionAddProcedure.on(targetCollection));
+        Iterate.forEachWith(iterable, Procedures2.<T>addToCollection(), targetCollection);
         return targetCollection.size() != oldSize;
     }
 
@@ -1535,81 +1535,81 @@ public final class Iterate
     }
 
     /**
-     * @see RichIterable#sumOf(IntFunction)
+     * @see RichIterable#sumOfInt(IntFunction)
      */
-    public static <T> int sumOf(Iterable<T> iterable, IntFunction<? super T> function)
+    public static <T> long sumOfInt(Iterable<T> iterable, IntFunction<? super T> function)
     {
         if (iterable instanceof RichIterable)
         {
-            return ((RichIterable<T>) iterable).sumOf(function);
+            return ((RichIterable<T>) iterable).sumOfInt(function);
         }
         if (iterable instanceof List)
         {
-            return ListIterate.sumOf((List<T>) iterable, function);
+            return ListIterate.sumOfInt((List<T>) iterable, function);
         }
         if (iterable != null)
         {
-            return IterableIterate.sumOf(iterable, function);
+            return IterableIterate.sumOfInt(iterable, function);
         }
         throw new IllegalArgumentException("Cannot perform an injectInto on null");
     }
 
     /**
-     * @see RichIterable#sumOf(LongFunction)
+     * @see RichIterable#sumOfLong(LongFunction)
      */
-    public static <T> long sumOf(Iterable<T> iterable, LongFunction<? super T> function)
+    public static <T> long sumOfLong(Iterable<T> iterable, LongFunction<? super T> function)
     {
         if (iterable instanceof RichIterable)
         {
-            return ((RichIterable<T>) iterable).sumOf(function);
+            return ((RichIterable<T>) iterable).sumOfLong(function);
         }
         if (iterable instanceof List)
         {
-            return ListIterate.sumOf((List<T>) iterable, function);
+            return ListIterate.sumOfLong((List<T>) iterable, function);
         }
         if (iterable != null)
         {
-            return IterableIterate.sumOf(iterable, function);
+            return IterableIterate.sumOfLong(iterable, function);
         }
         throw new IllegalArgumentException("Cannot perform an injectInto on null");
     }
 
     /**
-     * @see RichIterable#sumOf(FloatFunction)
+     * @see RichIterable#sumOfFloat(FloatFunction)
      */
-    public static <T> float sumOf(Iterable<T> iterable, FloatFunction<? super T> function)
+    public static <T> double sumOfFloat(Iterable<T> iterable, FloatFunction<? super T> function)
     {
         if (iterable instanceof RichIterable)
         {
-            return ((RichIterable<T>) iterable).sumOf(function);
+            return ((RichIterable<T>) iterable).sumOfFloat(function);
         }
         if (iterable instanceof List)
         {
-            return ListIterate.sumOf((List<T>) iterable, function);
+            return ListIterate.sumOfFloat((List<T>) iterable, function);
         }
         if (iterable != null)
         {
-            return IterableIterate.sumOf(iterable, function);
+            return IterableIterate.sumOfFloat(iterable, function);
         }
         throw new IllegalArgumentException("Cannot perform an injectInto on null");
     }
 
     /**
-     * @see RichIterable#sumOf(DoubleFunction)
+     * @see RichIterable#sumOfDouble(DoubleFunction)
      */
-    public static <T> double sumOf(Iterable<T> iterable, DoubleFunction<? super T> function)
+    public static <T> double sumOfDouble(Iterable<T> iterable, DoubleFunction<? super T> function)
     {
         if (iterable instanceof RichIterable)
         {
-            return ((RichIterable<T>) iterable).sumOf(function);
+            return ((RichIterable<T>) iterable).sumOfDouble(function);
         }
         if (iterable instanceof List)
         {
-            return ListIterate.sumOf((List<T>) iterable, function);
+            return ListIterate.sumOfDouble((List<T>) iterable, function);
         }
         if (iterable != null)
         {
-            return IterableIterate.sumOf(iterable, function);
+            return IterableIterate.sumOfDouble(iterable, function);
         }
         throw new IllegalArgumentException("Cannot perform an injectInto on null");
     }

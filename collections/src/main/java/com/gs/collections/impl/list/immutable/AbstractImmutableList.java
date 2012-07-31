@@ -366,27 +366,27 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
     }
 
     @Override
-    public int sumOf(IntFunction<? super T> function)
+    public long sumOfInt(IntFunction<? super T> function)
     {
-        return ListIterate.sumOf(this, function);
+        return ListIterate.sumOfInt(this, function);
     }
 
     @Override
-    public long sumOf(LongFunction<? super T> function)
+    public long sumOfLong(LongFunction<? super T> function)
     {
-        return ListIterate.sumOf(this, function);
+        return ListIterate.sumOfLong(this, function);
     }
 
     @Override
-    public float sumOf(FloatFunction<? super T> function)
+    public double sumOfFloat(FloatFunction<? super T> function)
     {
-        return ListIterate.sumOf(this, function);
+        return ListIterate.sumOfFloat(this, function);
     }
 
     @Override
-    public double sumOf(DoubleFunction<? super T> function)
+    public double sumOfDouble(DoubleFunction<? super T> function)
     {
-        return ListIterate.sumOf(this, function);
+        return ListIterate.sumOfDouble(this, function);
     }
 
     @Override

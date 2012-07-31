@@ -393,24 +393,24 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
         return this.data.asReversed().injectInto(injectedValue, floatObjectToFloatFunction);
     }
 
-    public int sumOf(IntFunction<? super T> intFunction)
+    public long sumOfInt(IntFunction<? super T> intFunction)
     {
-        return this.data.asReversed().sumOf(intFunction);
+        return this.data.asReversed().sumOfInt(intFunction);
     }
 
-    public float sumOf(FloatFunction<? super T> floatFunction)
+    public double sumOfFloat(FloatFunction<? super T> floatFunction)
     {
-        return this.data.asReversed().sumOf(floatFunction);
+        return this.data.asReversed().sumOfFloat(floatFunction);
     }
 
-    public long sumOf(LongFunction<? super T> longFunction)
+    public long sumOfLong(LongFunction<? super T> longFunction)
     {
-        return this.data.asReversed().sumOf(longFunction);
+        return this.data.asReversed().sumOfLong(longFunction);
     }
 
-    public double sumOf(DoubleFunction<? super T> doubleFunction)
+    public double sumOfDouble(DoubleFunction<? super T> doubleFunction)
     {
-        return this.data.asReversed().sumOf(doubleFunction);
+        return this.data.asReversed().sumOfDouble(doubleFunction);
     }
 
     public T max()

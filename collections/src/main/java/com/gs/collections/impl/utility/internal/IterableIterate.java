@@ -372,35 +372,35 @@ public final class IterableIterate
     }
 
     /**
-     * @see Iterate#sumOf(Iterable, IntFunction)
+     * @see Iterate#sumOfInt(Iterable, IntFunction)
      */
-    public static <T> int sumOf(Iterable<T> iterable, IntFunction<? super T> function)
+    public static <T> long sumOfInt(Iterable<T> iterable, IntFunction<? super T> function)
     {
-        return IteratorIterate.sumOf(iterable.iterator(), function);
+        return IteratorIterate.sumOfInt(iterable.iterator(), function);
     }
 
     /**
-     * @see Iterate#sumOf(Iterable, LongFunction)
+     * @see Iterate#sumOfLong(Iterable, LongFunction)
      */
-    public static <T> long sumOf(Iterable<T> iterable, LongFunction<? super T> function)
+    public static <T> long sumOfLong(Iterable<T> iterable, LongFunction<? super T> function)
     {
-        return IteratorIterate.sumOf(iterable.iterator(), function);
+        return IteratorIterate.sumOfLong(iterable.iterator(), function);
     }
 
     /**
-     * @see Iterate#sumOf(Iterable, FloatFunction)
+     * @see Iterate#sumOfFloat(Iterable, FloatFunction)
      */
-    public static <T> float sumOf(Iterable<T> iterable, FloatFunction<? super T> function)
+    public static <T> double sumOfFloat(Iterable<T> iterable, FloatFunction<? super T> function)
     {
-        return IteratorIterate.sumOf(iterable.iterator(), function);
+        return IteratorIterate.sumOfFloat(iterable.iterator(), function);
     }
 
     /**
-     * @see Iterate#sumOf(Iterable, DoubleFunction)
+     * @see Iterate#sumOfDouble(Iterable, DoubleFunction)
      */
-    public static <T> double sumOf(Iterable<T> iterable, DoubleFunction<? super T> function)
+    public static <T> double sumOfDouble(Iterable<T> iterable, DoubleFunction<? super T> function)
     {
-        return IteratorIterate.sumOf(iterable.iterator(), function);
+        return IteratorIterate.sumOfDouble(iterable.iterator(), function);
     }
 
     /**

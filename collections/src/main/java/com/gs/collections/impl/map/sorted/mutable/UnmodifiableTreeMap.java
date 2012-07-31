@@ -507,24 +507,24 @@ public class UnmodifiableTreeMap<K, V>
         return this.getMutableSortedMap().injectInto(injectedValue, function);
     }
 
-    public int sumOf(IntFunction<? super V> function)
+    public long sumOfInt(IntFunction<? super V> function)
     {
-        return this.getMutableSortedMap().sumOf(function);
+        return this.getMutableSortedMap().sumOfInt(function);
     }
 
-    public float sumOf(FloatFunction<? super V> function)
+    public double sumOfFloat(FloatFunction<? super V> function)
     {
-        return this.getMutableSortedMap().sumOf(function);
+        return this.getMutableSortedMap().sumOfFloat(function);
     }
 
-    public long sumOf(LongFunction<? super V> function)
+    public long sumOfLong(LongFunction<? super V> function)
     {
-        return this.getMutableSortedMap().sumOf(function);
+        return this.getMutableSortedMap().sumOfLong(function);
     }
 
-    public double sumOf(DoubleFunction<? super V> function)
+    public double sumOfDouble(DoubleFunction<? super V> function)
     {
-        return this.getMutableSortedMap().sumOf(function);
+        return this.getMutableSortedMap().sumOfDouble(function);
     }
 
     public String makeString()

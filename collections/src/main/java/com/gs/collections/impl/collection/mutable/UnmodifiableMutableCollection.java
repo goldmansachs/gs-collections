@@ -471,24 +471,24 @@ public class UnmodifiableMutableCollection<T>
         return this.getMutableCollection().injectInto(injectedValue, function);
     }
 
-    public int sumOf(IntFunction<? super T> function)
+    public long sumOfInt(IntFunction<? super T> function)
     {
-        return this.getMutableCollection().sumOf(function);
+        return this.getMutableCollection().sumOfInt(function);
     }
 
-    public float sumOf(FloatFunction<? super T> function)
+    public double sumOfFloat(FloatFunction<? super T> function)
     {
-        return this.getMutableCollection().sumOf(function);
+        return this.getMutableCollection().sumOfFloat(function);
     }
 
-    public long sumOf(LongFunction<? super T> function)
+    public long sumOfLong(LongFunction<? super T> function)
     {
-        return this.getMutableCollection().sumOf(function);
+        return this.getMutableCollection().sumOfLong(function);
     }
 
-    public double sumOf(DoubleFunction<? super T> function)
+    public double sumOfDouble(DoubleFunction<? super T> function)
     {
-        return this.getMutableCollection().sumOf(function);
+        return this.getMutableCollection().sumOfDouble(function);
     }
 
     public <IV, P> IV injectIntoWith(

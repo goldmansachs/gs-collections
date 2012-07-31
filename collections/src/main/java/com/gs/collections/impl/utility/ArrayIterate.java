@@ -43,7 +43,7 @@ import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
-import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
+import com.gs.collections.impl.block.factory.Procedures2;
 import com.gs.collections.impl.block.procedure.MapCollectProcedure;
 import com.gs.collections.impl.block.procedure.MaxComparatorProcedure;
 import com.gs.collections.impl.block.procedure.MinComparatorProcedure;
@@ -471,7 +471,7 @@ public final class ArrayIterate
      */
     public static <T, R extends Collection<T>> R addAllTo(T[] objectArray, R targetCollection)
     {
-        ArrayIterate.forEach(objectArray, CollectionAddProcedure.<T>on(targetCollection));
+        ArrayIterate.forEachWith(objectArray, Procedures2.<T>addToCollection(), targetCollection);
         return targetCollection;
     }
 

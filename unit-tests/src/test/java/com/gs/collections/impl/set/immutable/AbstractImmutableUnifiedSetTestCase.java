@@ -296,7 +296,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     public void sumFloat()
     {
         ImmutableSet<Integer> objects = this.newSetWith(1, 2, 3);
-        float actual = objects.sumOf(new FloatFunction<Integer>()
+        double actual = objects.sumOfFloat(new FloatFunction<Integer>()
         {
             public float floatValueOf(Integer integer)
             {
@@ -310,7 +310,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     public void sumDouble()
     {
         ImmutableSet<Integer> objects = this.newSetWith(1, 2, 3);
-        double actual = objects.sumOf(new DoubleFunction<Integer>()
+        double actual = objects.sumOfDouble(new DoubleFunction<Integer>()
         {
             public double doubleValueOf(Integer integer)
             {
@@ -324,7 +324,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     public void sumInteger()
     {
         ImmutableSet<Integer> objects = this.newSetWith(1, 2, 3);
-        int actual = objects.sumOf(new IntFunction<Integer>()
+        long actual = objects.sumOfInt(new IntFunction<Integer>()
         {
             public int intValueOf(Integer integer)
             {
@@ -338,7 +338,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     public void sumLong()
     {
         ImmutableSet<Integer> objects = this.newSetWith(1, 2, 3);
-        long actual = objects.sumOf(new LongFunction<Integer>()
+        long actual = objects.sumOfLong(new LongFunction<Integer>()
         {
             public long longValueOf(Integer integer)
             {

@@ -53,7 +53,7 @@ import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates;
-import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
+import com.gs.collections.impl.block.factory.Procedures2;
 import com.gs.collections.impl.block.procedure.CountProcedure;
 import com.gs.collections.impl.block.procedure.MapCollectProcedure;
 import com.gs.collections.impl.factory.Bags;
@@ -90,7 +90,7 @@ public abstract class AbstractLazyIterable<T>
 
     public <R extends Collection<T>> R into(R target)
     {
-        this.forEach(CollectionAddProcedure.on(target));
+        this.forEachWith(Procedures2.<T>addToCollection(), target);
         return target;
     }
 
@@ -385,30 +385,30 @@ public abstract class AbstractLazyIterable<T>
         return IterableIterate.injectInto(injectedValue, this, function);
     }
 
-    public int sumOf(IntFunction<? super T> function)
+    public long sumOfInt(IntFunction<? super T> function)
     {
-        return IterableIterate.sumOf(this, function);
+        return IterableIterate.sumOfInt(this, function);
     }
 
-    public float sumOf(FloatFunction<? super T> function)
+    public double sumOfFloat(FloatFunction<? super T> function)
     {
-        return IterableIterate.sumOf(this, function);
+        return IterableIterate.sumOfFloat(this, function);
     }
 
-    public long sumOf(LongFunction<? super T> function)
+    public long sumOfLong(LongFunction<? super T> function)
     {
-        return IterableIterate.sumOf(this, function);
+        return IterableIterate.sumOfLong(this, function);
     }
 
-    public double sumOf(DoubleFunction<? super T> function)
+    public double sumOfDouble(DoubleFunction<? super T> function)
     {
-        return IterableIterate.sumOf(this, function);
+        return IterableIterate.sumOfDouble(this, function);
     }
 
     public MutableList<T> toList()
     {
         MutableList<T> list = Lists.mutable.of();
-        this.forEach(CollectionAddProcedure.on(list));
+        this.forEachWith(Procedures2.<T>addToCollection(), list);
         return list;
     }
 
@@ -430,14 +430,14 @@ public abstract class AbstractLazyIterable<T>
     public MutableSortedSet<T> toSortedSet()
     {
         MutableSortedSet<T> treeSet = TreeSortedSet.newSet();
-        this.forEach(CollectionAddProcedure.on(treeSet));
+        this.forEachWith(Procedures2.<T>addToCollection(), treeSet);
         return treeSet;
     }
 
     public MutableSortedSet<T> toSortedSet(Comparator<? super T> comparator)
     {
         MutableSortedSet<T> treeSet = TreeSortedSet.newSet(comparator);
-        this.forEach(CollectionAddProcedure.on(treeSet));
+        this.forEachWith(Procedures2.<T>addToCollection(), treeSet);
         return treeSet;
     }
 
@@ -449,14 +449,14 @@ public abstract class AbstractLazyIterable<T>
     public MutableSet<T> toSet()
     {
         MutableSet<T> set = UnifiedSet.newSet();
-        this.forEach(CollectionAddProcedure.on(set));
+        this.forEachWith(Procedures2.<T>addToCollection(), set);
         return set;
     }
 
     public MutableBag<T> toBag()
     {
         MutableBag<T> bag = Bags.mutable.of();
-        this.forEach(CollectionAddProcedure.on(bag));
+        this.forEachWith(Procedures2.<T>addToCollection(), bag);
         return bag;
     }
 

@@ -351,24 +351,24 @@ public abstract class AbstractImmutableCollection<T> implements ImmutableCollect
         return IterableIterate.injectInto(injectedValue, this, function);
     }
 
-    public int sumOf(IntFunction<? super T> function)
+    public long sumOfInt(IntFunction<? super T> function)
     {
-        return IterableIterate.sumOf(this, function);
+        return IterableIterate.sumOfInt(this, function);
     }
 
-    public float sumOf(FloatFunction<? super T> function)
+    public double sumOfFloat(FloatFunction<? super T> function)
     {
-        return IterableIterate.sumOf(this, function);
+        return IterableIterate.sumOfFloat(this, function);
     }
 
-    public long sumOf(LongFunction<? super T> function)
+    public long sumOfLong(LongFunction<? super T> function)
     {
-        return IterableIterate.sumOf(this, function);
+        return IterableIterate.sumOfLong(this, function);
     }
 
-    public double sumOf(DoubleFunction<? super T> function)
+    public double sumOfDouble(DoubleFunction<? super T> function)
     {
-        return IterableIterate.sumOf(this, function);
+        return IterableIterate.sumOfDouble(this, function);
     }
 
     public void forEachWithIndex(ObjectIntProcedure<? super T> objectIntProcedure)

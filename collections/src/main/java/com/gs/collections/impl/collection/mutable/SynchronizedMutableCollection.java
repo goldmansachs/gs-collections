@@ -657,35 +657,35 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public int sumOf(IntFunction<? super E> function)
+    public long sumOfInt(IntFunction<? super E> function)
     {
         synchronized (this.lock)
         {
-            return this.collection.sumOf(function);
+            return this.collection.sumOfInt(function);
         }
     }
 
-    public float sumOf(FloatFunction<? super E> function)
+    public double sumOfFloat(FloatFunction<? super E> function)
     {
         synchronized (this.lock)
         {
-            return this.collection.sumOf(function);
+            return this.collection.sumOfFloat(function);
         }
     }
 
-    public long sumOf(LongFunction<? super E> function)
+    public long sumOfLong(LongFunction<? super E> function)
     {
         synchronized (this.lock)
         {
-            return this.collection.sumOf(function);
+            return this.collection.sumOfLong(function);
         }
     }
 
-    public double sumOf(DoubleFunction<? super E> function)
+    public double sumOfDouble(DoubleFunction<? super E> function)
     {
         synchronized (this.lock)
         {
-            return this.collection.sumOf(function);
+            return this.collection.sumOfDouble(function);
         }
     }
 

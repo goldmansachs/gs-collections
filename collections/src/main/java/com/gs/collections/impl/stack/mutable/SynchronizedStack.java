@@ -628,35 +628,35 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
         }
     }
 
-    public int sumOf(IntFunction<? super T> intFunction)
+    public long sumOfInt(IntFunction<? super T> intFunction)
     {
         synchronized (this.lock)
         {
-            return this.delegate.sumOf(intFunction);
+            return this.delegate.sumOfInt(intFunction);
         }
     }
 
-    public float sumOf(FloatFunction<? super T> floatFunction)
+    public double sumOfFloat(FloatFunction<? super T> floatFunction)
     {
         synchronized (this.lock)
         {
-            return this.delegate.sumOf(floatFunction);
+            return this.delegate.sumOfFloat(floatFunction);
         }
     }
 
-    public long sumOf(LongFunction<? super T> longFunction)
+    public long sumOfLong(LongFunction<? super T> longFunction)
     {
         synchronized (this.lock)
         {
-            return this.delegate.sumOf(longFunction);
+            return this.delegate.sumOfLong(longFunction);
         }
     }
 
-    public double sumOf(DoubleFunction<? super T> doubleFunction)
+    public double sumOfDouble(DoubleFunction<? super T> doubleFunction)
     {
         synchronized (this.lock)
         {
-            return this.delegate.sumOf(doubleFunction);
+            return this.delegate.sumOfDouble(doubleFunction);
         }
     }
 

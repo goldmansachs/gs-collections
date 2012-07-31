@@ -556,17 +556,17 @@ public final class RandomAccessListIterate
         return result;
     }
 
-    public static <T> int sumOf(List<T> list, IntFunction<? super T> function)
+    public static <T> long sumOfInt(List<T> list, IntFunction<? super T> function)
     {
-        int result = 0;
+        long result = 0;
         for (int i = 0; i < list.size(); i++)
         {
-            result += function.intValueOf(list.get(i));
+            result += (long) function.intValueOf(list.get(i));
         }
         return result;
     }
 
-    public static <T> long sumOf(List<T> list, LongFunction<? super T> function)
+    public static <T> long sumOfLong(List<T> list, LongFunction<? super T> function)
     {
         long result = 0L;
         for (int i = 0; i < list.size(); i++)
@@ -576,17 +576,17 @@ public final class RandomAccessListIterate
         return result;
     }
 
-    public static <T> float sumOf(List<T> list, FloatFunction<? super T> function)
+    public static <T> double sumOfFloat(List<T> list, FloatFunction<? super T> function)
     {
-        float result = 0.0f;
+        double result = 0.0d;
         for (int i = 0; i < list.size(); i++)
         {
-            result += function.floatValueOf(list.get(i));
+            result += (double) function.floatValueOf(list.get(i));
         }
         return result;
     }
 
-    public static <T> double sumOf(List<T> list, DoubleFunction<? super T> function)
+    public static <T> double sumOfDouble(List<T> list, DoubleFunction<? super T> function)
     {
         double result = 0.0d;
         for (int i = 0; i < list.size(); i++)

@@ -362,24 +362,24 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
         return this.valuesView().injectInto(injectedValue, function);
     }
 
-    public int sumOf(IntFunction<? super V> function)
+    public long sumOfInt(IntFunction<? super V> function)
     {
-        return this.valuesView().sumOf(function);
+        return this.valuesView().sumOfInt(function);
     }
 
-    public float sumOf(FloatFunction<? super V> function)
+    public double sumOfFloat(FloatFunction<? super V> function)
     {
-        return this.valuesView().sumOf(function);
+        return this.valuesView().sumOfFloat(function);
     }
 
-    public long sumOf(LongFunction<? super V> function)
+    public long sumOfLong(LongFunction<? super V> function)
     {
-        return this.valuesView().sumOf(function);
+        return this.valuesView().sumOfLong(function);
     }
 
-    public double sumOf(DoubleFunction<? super V> function)
+    public double sumOfDouble(DoubleFunction<? super V> function)
     {
-        return this.valuesView().sumOf(function);
+        return this.valuesView().sumOfDouble(function);
     }
 
     public String makeString()

@@ -681,7 +681,7 @@ public abstract class AbstractCollectionTestCase
     {
         MutableCollection<Integer> objects = this.newWith(1, 2, 3);
         float expected = objects.injectInto(0, AddFunction.INTEGER_TO_FLOAT);
-        float actual = objects.sumOf(new FloatFunction<Integer>()
+        double actual = objects.sumOfFloat(new FloatFunction<Integer>()
         {
             public float floatValueOf(Integer integer)
             {
@@ -696,7 +696,7 @@ public abstract class AbstractCollectionTestCase
     {
         MutableCollection<Integer> objects = this.newWith(1, 2, 3);
         double expected = objects.injectInto(0, AddFunction.INTEGER_TO_DOUBLE);
-        double actual = objects.sumOf(new DoubleFunction<Integer>()
+        double actual = objects.sumOfDouble(new DoubleFunction<Integer>()
         {
             public double doubleValueOf(Integer integer)
             {
@@ -710,8 +710,8 @@ public abstract class AbstractCollectionTestCase
     public void sumInteger()
     {
         MutableCollection<Integer> objects = this.newWith(1, 2, 3);
-        int expected = objects.injectInto(0, AddFunction.INTEGER_TO_INT);
-        int actual = objects.sumOf(new IntFunction<Integer>()
+        long expected = objects.injectInto(0L, AddFunction.INTEGER_TO_LONG);
+        long actual = objects.sumOfInt(new IntFunction<Integer>()
         {
             public int intValueOf(Integer integer)
             {
@@ -726,7 +726,7 @@ public abstract class AbstractCollectionTestCase
     {
         MutableCollection<Integer> objects = this.newWith(1, 2, 3);
         long expected = objects.injectInto(0, AddFunction.INTEGER_TO_LONG);
-        long actual = objects.sumOf(new LongFunction<Integer>()
+        long actual = objects.sumOfLong(new LongFunction<Integer>()
         {
             public long longValueOf(Integer integer)
             {

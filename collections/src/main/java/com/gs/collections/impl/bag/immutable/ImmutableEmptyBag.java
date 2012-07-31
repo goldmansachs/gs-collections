@@ -369,22 +369,22 @@ final class ImmutableEmptyBag<T>
         return injectedValue;
     }
 
-    public int sumOf(IntFunction<? super T> function)
+    public long sumOfInt(IntFunction<? super T> function)
     {
         return 0;
     }
 
-    public float sumOf(FloatFunction<? super T> function)
+    public double sumOfFloat(FloatFunction<? super T> function)
     {
         return 0.0F;
     }
 
-    public long sumOf(LongFunction<? super T> function)
+    public long sumOfLong(LongFunction<? super T> function)
     {
         return 0L;
     }
 
-    public double sumOf(DoubleFunction<? super T> function)
+    public double sumOfDouble(DoubleFunction<? super T> function)
     {
         return 0.0d;
     }

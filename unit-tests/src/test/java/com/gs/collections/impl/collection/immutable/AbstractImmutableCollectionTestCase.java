@@ -158,7 +158,7 @@ public abstract class AbstractImmutableCollectionTestCase
     {
         Assert.assertEquals(
                 this.classUnderTest().injectInto(0, AddFunction.INTEGER_TO_FLOAT),
-                this.classUnderTest().sumOf(new FloatFunction<Integer>()
+                this.classUnderTest().sumOfFloat(new FloatFunction<Integer>()
                 {
                     public float floatValueOf(Integer integer)
                     {
@@ -173,7 +173,7 @@ public abstract class AbstractImmutableCollectionTestCase
     {
         Assert.assertEquals(
                 this.classUnderTest().injectInto(0, AddFunction.INTEGER_TO_DOUBLE),
-                this.classUnderTest().sumOf(new DoubleFunction<Integer>()
+                this.classUnderTest().sumOfDouble(new DoubleFunction<Integer>()
                 {
                     public double doubleValueOf(Integer integer)
                     {
@@ -188,7 +188,7 @@ public abstract class AbstractImmutableCollectionTestCase
     {
         Assert.assertEquals(
                 this.classUnderTest().injectInto(0, AddFunction.INTEGER_TO_INT),
-                this.classUnderTest().sumOf(new IntFunction<Integer>()
+                this.classUnderTest().sumOfInt(new IntFunction<Integer>()
                 {
                     public int intValueOf(Integer integer)
                     {
@@ -202,7 +202,7 @@ public abstract class AbstractImmutableCollectionTestCase
     {
         Assert.assertEquals(
                 this.classUnderTest().injectInto(0, AddFunction.INTEGER_TO_LONG),
-                this.classUnderTest().sumOf(new LongFunction<Integer>()
+                this.classUnderTest().sumOfLong(new LongFunction<Integer>()
                 {
                     public long longValueOf(Integer integer)
                     {

@@ -787,12 +787,12 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
-    public int sumOf(IntFunction<? super T> function)
+    public long sumOfInt(IntFunction<? super T> function)
     {
         this.acquireReadLock();
         try
         {
-            return this.getDelegate().sumOf(function);
+            return this.getDelegate().sumOfInt(function);
         }
         finally
         {
@@ -800,12 +800,12 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
-    public float sumOf(FloatFunction<? super T> function)
+    public double sumOfFloat(FloatFunction<? super T> function)
     {
         this.acquireReadLock();
         try
         {
-            return this.getDelegate().sumOf(function);
+            return this.getDelegate().sumOfFloat(function);
         }
         finally
         {
@@ -813,12 +813,12 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
-    public long sumOf(LongFunction<? super T> function)
+    public long sumOfLong(LongFunction<? super T> function)
     {
         this.acquireReadLock();
         try
         {
-            return this.getDelegate().sumOf(function);
+            return this.getDelegate().sumOfLong(function);
         }
         finally
         {
@@ -826,12 +826,12 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
-    public double sumOf(DoubleFunction<? super T> function)
+    public double sumOfDouble(DoubleFunction<? super T> function)
     {
         this.acquireReadLock();
         try
         {
-            return this.getDelegate().sumOf(function);
+            return this.getDelegate().sumOfDouble(function);
         }
         finally
         {
@@ -1513,24 +1513,24 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
             return this.delegate.injectInto(injectedValue, function);
         }
 
-        public int sumOf(IntFunction<? super T> function)
+        public long sumOfInt(IntFunction<? super T> function)
         {
-            return this.delegate.sumOf(function);
+            return this.delegate.sumOfInt(function);
         }
 
-        public float sumOf(FloatFunction<? super T> function)
+        public double sumOfFloat(FloatFunction<? super T> function)
         {
-            return this.delegate.sumOf(function);
+            return this.delegate.sumOfFloat(function);
         }
 
-        public long sumOf(LongFunction<? super T> function)
+        public long sumOfLong(LongFunction<? super T> function)
         {
-            return this.delegate.sumOf(function);
+            return this.delegate.sumOfLong(function);
         }
 
-        public double sumOf(DoubleFunction<? super T> function)
+        public double sumOfDouble(DoubleFunction<? super T> function)
         {
-            return this.delegate.sumOf(function);
+            return this.delegate.sumOfDouble(function);
         }
 
         public <IV, P> IV injectIntoWith(

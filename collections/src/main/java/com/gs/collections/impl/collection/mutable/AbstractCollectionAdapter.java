@@ -194,24 +194,24 @@ public abstract class AbstractCollectionAdapter<T>
         return Iterate.injectInto(injectedValue, this.getDelegate(), function);
     }
 
-    public int sumOf(IntFunction<? super T> function)
+    public long sumOfInt(IntFunction<? super T> function)
     {
-        return Iterate.sumOf(this.getDelegate(), function);
+        return Iterate.sumOfInt(this.getDelegate(), function);
     }
 
-    public float sumOf(FloatFunction<? super T> function)
+    public double sumOfFloat(FloatFunction<? super T> function)
     {
-        return Iterate.sumOf(this.getDelegate(), function);
+        return Iterate.sumOfFloat(this.getDelegate(), function);
     }
 
-    public long sumOf(LongFunction<? super T> function)
+    public long sumOfLong(LongFunction<? super T> function)
     {
-        return Iterate.sumOf(this.getDelegate(), function);
+        return Iterate.sumOfLong(this.getDelegate(), function);
     }
 
-    public double sumOf(DoubleFunction<? super T> function)
+    public double sumOfDouble(DoubleFunction<? super T> function)
     {
-        return Iterate.sumOf(this.getDelegate(), function);
+        return Iterate.sumOfDouble(this.getDelegate(), function);
     }
 
     public MutableCollection<T> select(Predicate<? super T> predicate)

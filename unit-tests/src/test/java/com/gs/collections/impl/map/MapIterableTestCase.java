@@ -747,14 +747,14 @@ public abstract class MapIterableTestCase
     {
         MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
 
-        int actual = map.sumOf(new IntFunction<Integer>()
+        long actual = map.sumOfInt(new IntFunction<Integer>()
         {
             public int intValueOf(Integer integer)
             {
                 return integer;
             }
         });
-        Assert.assertEquals(10, actual);
+        Assert.assertEquals(10L, actual);
     }
 
     @Test
@@ -762,7 +762,7 @@ public abstract class MapIterableTestCase
     {
         MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
 
-        long actual = map.sumOf(new LongFunction<Integer>()
+        long actual = map.sumOfLong(new LongFunction<Integer>()
         {
             public long longValueOf(Integer integer)
             {
@@ -777,14 +777,14 @@ public abstract class MapIterableTestCase
     {
         MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
 
-        float actual = map.sumOf(new FloatFunction<Integer>()
+        double actual = map.sumOfFloat(new FloatFunction<Integer>()
         {
             public float floatValueOf(Integer integer)
             {
                 return integer.floatValue();
             }
         });
-        Assert.assertEquals(10.0F, actual, 0.01);
+        Assert.assertEquals(10.0d, actual, 0.01);
     }
 
     @Test
@@ -792,7 +792,7 @@ public abstract class MapIterableTestCase
     {
         MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
 
-        double actual = map.sumOf(new DoubleFunction<Integer>()
+        double actual = map.sumOfDouble(new DoubleFunction<Integer>()
         {
             public double doubleValueOf(Integer integer)
             {

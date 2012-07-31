@@ -612,40 +612,40 @@ public final class ListIterate
         return IterableIterate.injectInto(injectValue, list, function);
     }
 
-    public static <T> int sumOf(List<T> list, IntFunction<? super T> function)
+    public static <T> long sumOfInt(List<T> list, IntFunction<? super T> function)
     {
         if (list instanceof RandomAccess)
         {
-            return RandomAccessListIterate.sumOf(list, function);
+            return RandomAccessListIterate.sumOfInt(list, function);
         }
-        return IterableIterate.sumOf(list, function);
+        return IterableIterate.sumOfInt(list, function);
     }
 
-    public static <T> long sumOf(List<T> list, LongFunction<? super T> function)
+    public static <T> long sumOfLong(List<T> list, LongFunction<? super T> function)
     {
         if (list instanceof RandomAccess)
         {
-            return RandomAccessListIterate.sumOf(list, function);
+            return RandomAccessListIterate.sumOfLong(list, function);
         }
-        return IterableIterate.sumOf(list, function);
+        return IterableIterate.sumOfLong(list, function);
     }
 
-    public static <T> float sumOf(List<T> list, FloatFunction<? super T> function)
+    public static <T> double sumOfFloat(List<T> list, FloatFunction<? super T> function)
     {
         if (list instanceof RandomAccess)
         {
-            return RandomAccessListIterate.sumOf(list, function);
+            return RandomAccessListIterate.sumOfFloat(list, function);
         }
-        return IterableIterate.sumOf(list, function);
+        return IterableIterate.sumOfFloat(list, function);
     }
 
-    public static <T> double sumOf(List<T> list, DoubleFunction<? super T> function)
+    public static <T> double sumOfDouble(List<T> list, DoubleFunction<? super T> function)
     {
         if (list instanceof RandomAccess)
         {
-            return RandomAccessListIterate.sumOf(list, function);
+            return RandomAccessListIterate.sumOfDouble(list, function);
         }
-        return IterableIterate.sumOf(list, function);
+        return IterableIterate.sumOfDouble(list, function);
     }
 
     /**

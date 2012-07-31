@@ -465,7 +465,7 @@ public abstract class StackIterableTestCase
     public void sumOf()
     {
         StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3, 4);
-        Assert.assertEquals(10, stack.sumOf(new IntFunction<Integer>()
+        Assert.assertEquals(10, stack.sumOfInt(new IntFunction<Integer>()
         {
             public int intValueOf(Integer integer)
             {
@@ -473,7 +473,7 @@ public abstract class StackIterableTestCase
             }
         }));
 
-        Assert.assertEquals(10, stack.sumOf(new LongFunction<Integer>()
+        Assert.assertEquals(10, stack.sumOfLong(new LongFunction<Integer>()
         {
             public long longValueOf(Integer integer)
             {
@@ -481,7 +481,7 @@ public abstract class StackIterableTestCase
             }
         }));
 
-        Assert.assertEquals(10.0d, stack.sumOf(new DoubleFunction<Integer>()
+        Assert.assertEquals(10.0d, stack.sumOfDouble(new DoubleFunction<Integer>()
         {
             public double doubleValueOf(Integer integer)
             {
@@ -489,7 +489,7 @@ public abstract class StackIterableTestCase
             }
         }), 0.001);
 
-        Assert.assertEquals(10.0f, stack.sumOf(new FloatFunction<Integer>()
+        Assert.assertEquals(10.0f, stack.sumOfFloat(new FloatFunction<Integer>()
         {
             public float floatValueOf(Integer integer)
             {
