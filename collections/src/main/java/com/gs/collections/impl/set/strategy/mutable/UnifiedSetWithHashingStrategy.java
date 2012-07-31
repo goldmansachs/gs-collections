@@ -273,7 +273,7 @@ public class UnifiedSetWithHashingStrategy<K>
         // number of collisions (approximately 8 at default load factor).
         int h = this.hashingStrategy.computeHashCode(key);
         h ^= (h >>> 20) ^ (h >>> 12);
-        h = h ^ (h >>> 7) ^ (h >>> 4);
+        h ^= (h >>> 7) ^ (h >>> 4);
         return h & (this.table.length - 1);
     }
 
@@ -2251,7 +2251,7 @@ public class UnifiedSetWithHashingStrategy<K>
             {
                 return null;
             }
-            else if (this.existsAndEqual(bucket.one, key))
+            if (this.existsAndEqual(bucket.one, key))
             {
                 return bucket.one;
             }
@@ -2259,7 +2259,7 @@ public class UnifiedSetWithHashingStrategy<K>
             {
                 return null;
             }
-            else if (this.existsAndEqual(bucket.two, key))
+            if (this.existsAndEqual(bucket.two, key))
             {
                 return bucket.two;
             }
@@ -2272,7 +2272,7 @@ public class UnifiedSetWithHashingStrategy<K>
             {
                 return null;
             }
-            else if (this.existsAndEqual(bucket.three, key))
+            if (this.existsAndEqual(bucket.three, key))
             {
                 return bucket.three;
             }
@@ -2295,7 +2295,7 @@ public class UnifiedSetWithHashingStrategy<K>
             }
             return this.nonSentinel(key);
         }
-        else if (cur instanceof ChainedBucket || !this.eq(cur, key))
+        if (cur instanceof ChainedBucket || !this.eq(cur, key))
         {
             return this.nonSentinel(this.chainedPut(key, index));
         }

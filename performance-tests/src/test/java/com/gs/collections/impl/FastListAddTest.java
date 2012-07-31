@@ -96,7 +96,7 @@ public class FastListAddTest
     {
         for (int i = 0; i < runs; i++)
         {
-            FastList list = FastList.newList();
+            FastList<Object> list = FastList.newList();
             for (int j = 0; j < length; j++)
             {
                 list.add(objects[j]);

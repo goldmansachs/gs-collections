@@ -284,7 +284,7 @@ public final class Interval
         {
             throw new IllegalArgumentException("Cannot use a step by of 0");
         }
-        else if (from > to && stepBy > 0 || from < to && stepBy < 0)
+        if (from > to && stepBy > 0 || from < to && stepBy < 0)
         {
             throw new IllegalArgumentException("Step by is incorrect for the range");
         }

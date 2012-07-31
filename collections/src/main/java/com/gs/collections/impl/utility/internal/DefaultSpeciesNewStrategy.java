@@ -26,7 +26,7 @@ import java.util.concurrent.PriorityBlockingQueue;
 
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.impl.factory.Lists;
-import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.impl.factory.Sets;
 
 public class DefaultSpeciesNewStrategy
 {
@@ -95,9 +95,9 @@ public class DefaultSpeciesNewStrategy
         {
             return Lists.mutable.of();
         }
-        else if (collection instanceof Set)
+        if (collection instanceof Set)
         {
-            return UnifiedSet.newSet();
+            return Sets.mutable.of();
         }
         return Lists.mutable.of();
     }

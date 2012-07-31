@@ -26,7 +26,7 @@ import com.gs.collections.api.block.procedure.Procedure2;
  */
 public final class Procedures2
 {
-    public static final Procedure2 ADD_TO_COLLECTION = new AddToCollection();
+    public static final Procedure2<?, ?> ADD_TO_COLLECTION = new AddToCollection();
 
     private Procedures2()
     {

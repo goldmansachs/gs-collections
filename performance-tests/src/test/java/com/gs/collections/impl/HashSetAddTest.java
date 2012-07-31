@@ -57,14 +57,14 @@ public class HashSetAddTest
             this.runHashPut(objects, 1000000, 1);
         }
         long time = System.currentTimeMillis() - now;
-        System.out.println("HashSet, set size 1,000,000, " + type + " " + objects[0].getClass() + " puts/msec: " + 100000000 / time);
+        System.out.println("HashSet, set size 1,000,000, " + type + ' ' + objects[0].getClass() + " puts/msec: " + 100000000 / time);
     }
 
     public void runHashPut(Object[] objects, int length, int runs)
     {
         for (int i = 0; i < runs; i++)
         {
-            HashSet set = new HashSet(8);
+            HashSet<Object> set = new HashSet(8);
             for (int j = 0; j < length; j++)
             {
                 set.add(objects[j]);

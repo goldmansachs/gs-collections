@@ -290,7 +290,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         // number of collisions (approximately 8 at default load factor).
         int h = key.hashCode();
         h ^= (h >>> 20) ^ (h >>> 12);
-        h = h ^ (h >>> 7) ^ (h >>> 4);
+        h ^= (h >>> 7) ^ (h >>> 4);
         return (h & (this.table.length >> 1) - 1) << 1;
     }
 
@@ -353,7 +353,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
                     }
                     break;
                 }
-                else if (realKey == chain[i] || chain[i].equals(realKey))
+                if (realKey == chain[i] || chain[i].equals(realKey))
                 {
                     result = (V) chain[i + 1];
                     chain[i + 1] = value;
@@ -435,7 +435,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
                     }
                     break;
                 }
-                else if (realKey == chain[i] || chain[i].equals(realKey))
+                if (realKey == chain[i] || chain[i].equals(realKey))
                 {
                     result = (V) chain[i + 1];
                     break;

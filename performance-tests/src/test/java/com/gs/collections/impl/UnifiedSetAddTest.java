@@ -70,7 +70,7 @@ public class UnifiedSetAddTest
             this.runUnifiedPut(objects, 1000000, 1);
         }
         long time = System.currentTimeMillis() - now;
-        System.out.println("UnifiedSet, set size 1,000,000, " + type + " " + objects[0].getClass() + " puts/msec: " + 100000000 / time);
+        System.out.println("UnifiedSet, set size 1,000,000, " + type + ' ' + objects[0].getClass() + " puts/msec: " + 100000000 / time);
     }
 
     private void runLongUnifiedPut(String type)
@@ -101,7 +101,7 @@ public class UnifiedSetAddTest
     {
         for (int i = 0; i < runs; i++)
         {
-            UnifiedSet set = UnifiedSet.newSet(8);
+            UnifiedSet<Object> set = UnifiedSet.newSet(8);
             for (int j = 0; j < length; j++)
             {
                 set.add(objects[j]);

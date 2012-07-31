@@ -334,7 +334,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
         // number of collisions (approximately 8 at default load factor).
         int h = this.hashingStrategy.computeHashCode(key);
         h ^= (h >>> 20) ^ (h >>> 12);
-        h = h ^ (h >>> 7) ^ (h >>> 4);
+        h ^= (h >>> 7) ^ (h >>> 4);
         return (h & (this.table.length >> 1) - 1) << 1;
     }
 
@@ -398,7 +398,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
                     }
                     break;
                 }
-                else if (this.hashingStrategyEquals(this.nonSentinel(chain[i]), key))
+                if (this.hashingStrategyEquals(this.nonSentinel(chain[i]), key))
                 {
                     result = (V) chain[i + 1];
                     chain[i + 1] = value;
@@ -479,7 +479,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
                     }
                     break;
                 }
-                else if (this.hashingStrategyEquals(this.nonSentinel(chain[i]), key))
+                if (this.hashingStrategyEquals(this.nonSentinel(chain[i]), key))
                 {
                     result = (V) chain[i + 1];
                     break;

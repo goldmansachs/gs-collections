@@ -52,7 +52,7 @@ public class ArrayListAddTest
     {
         for (int i = 0; i < runs; i++)
         {
-            ArrayList list = new ArrayList();
+            ArrayList<Object> list = new ArrayList<Object>();
             for (int j = 0; j < length; j++)
             {
                 list.add(objects[j]);

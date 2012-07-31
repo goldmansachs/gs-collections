@@ -76,7 +76,7 @@ public class FastListAddAllTest
 
     private void runFastListAddAll(String type, Object[] objects)
     {
-        FastList listToAddAll = FastList.newListWith(objects);
+        FastList<Object> listToAddAll = FastList.newListWith(objects);
         for (int i = 0; i < 100; i++)
         {
             this.runFastListAddAll(listToAddAll, 100);
@@ -85,32 +85,32 @@ public class FastListAddAllTest
         {
             this.runFastListAddAll(listToAddAll, 100);
         }
-        long now = System.currentTimeMillis();
+        long now1 = System.currentTimeMillis();
         for (int i = 0; i < 100; i++)
         {
             this.runFastListAddAll(listToAddAll, 1000);
         }
-        long time = System.currentTimeMillis() - now;
-        System.out.println("FastList, list size 100,000, " + type + " addAll/msec: " + (100000 / time));
-        now = System.currentTimeMillis();
+        long time1 = System.currentTimeMillis() - now1;
+        System.out.println("FastList, list size 100,000, " + type + " addAll/msec: " + 100000 / time1);
+        long now2 = System.currentTimeMillis();
         this.runFastListAddAll(FastList.newList(Interval.oneTo(100)), 100000000);
-        time = System.currentTimeMillis() - now;
-        System.out.println("FastList, list size 100, addAll/msec: " + 100000000 / time);
-        now = System.currentTimeMillis();
+        long time2 = System.currentTimeMillis() - now2;
+        System.out.println("FastList, list size 100, addAll/msec: " + 100000000 / time2);
+        long now3 = System.currentTimeMillis();
         this.runFastListAddAll(FastList.newListWith(Integer.valueOf(1)), 1000000000);
-        time = System.currentTimeMillis() - now;
-        System.out.println("FastList, list size 1, addAll/msec: " + 1000000000 / time);
-        now = System.currentTimeMillis();
+        long time3 = System.currentTimeMillis() - now3;
+        System.out.println("FastList, list size 1, addAll/msec: " + 1000000000 / time3);
+        long now4 = System.currentTimeMillis();
         this.runFastListAddAll(FastList.newList(), 10000000000L);
-        time = System.currentTimeMillis() - now;
-        System.out.println("FastList, list size (empty), addAll/msec: " + 10000000000L / time);
+        long time4 = System.currentTimeMillis() - now4;
+        System.out.println("FastList, list size (empty), addAll/msec: " + 10000000000L / time4);
     }
 
-    public void runFastListAddAll(List objects, long runs)
+    public void runFastListAddAll(List<?> objects, long runs)
     {
         for (long l = 0; l < runs; l++)
         {
-            FastList list = FastList.newList();
+            FastList<Object> list = FastList.newList();
             list.addAll(objects);
         }
     }
