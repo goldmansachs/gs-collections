@@ -27,6 +27,7 @@ import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.function.primitive.CharFunction;
 import com.gs.collections.impl.block.function.primitive.CodePointFunction;
 import com.gs.collections.impl.block.predicate.CodePointPredicate;
@@ -36,6 +37,7 @@ import com.gs.collections.impl.block.procedure.primitive.CodePointProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.impl.tuple.Tuples;
 
 /**
  * A string is essentially an array of characters. In Smalltalk a String is a subclass of ArrayedCollection, which means
@@ -741,5 +743,10 @@ public final class StringIterate
             }
         });
         return characters;
+    }
+
+    public static Twin<String> splitAtIndex(String aString, int index)
+    {
+        return Tuples.twin(aString.substring(0, index), aString.substring(index, aString.length()));
     }
 }

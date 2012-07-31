@@ -33,6 +33,7 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
+import com.gs.collections.impl.tuple.Tuples;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -486,5 +487,33 @@ public class StringIterateTest
         Verify.assertSetsEqual(
                 UnifiedSet.newSetWith('a', 'b', 'c', 'd', 'e'),
                 StringIterate.toSet("aabcde"));
+    }
+
+    @Test
+    public void splitAtIndex()
+    {
+        final String oompaLoompa = "oompaloompa";
+
+        Assert.assertEquals(Tuples.twin("oompa", "loompa"), StringIterate.splitAtIndex(oompaLoompa, 5));
+        Assert.assertEquals(Tuples.twin("", oompaLoompa), StringIterate.splitAtIndex(oompaLoompa, 0));
+        Assert.assertEquals(Tuples.twin(oompaLoompa, ""), StringIterate.splitAtIndex(oompaLoompa, oompaLoompa.length()));
+
+        Assert.assertEquals(Tuples.twin("", ""), StringIterate.splitAtIndex("", 0));
+
+        Verify.assertThrows(StringIndexOutOfBoundsException.class, new Runnable()
+        {
+            public void run()
+            {
+                StringIterate.splitAtIndex(oompaLoompa, 17);
+            }
+        });
+
+        Verify.assertThrows(StringIndexOutOfBoundsException.class, new Runnable()
+        {
+            public void run()
+            {
+                StringIterate.splitAtIndex(oompaLoompa, -8);
+            }
+        });
     }
 }
