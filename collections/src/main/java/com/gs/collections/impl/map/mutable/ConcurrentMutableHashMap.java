@@ -41,7 +41,10 @@ import com.gs.collections.impl.utility.internal.IterableIterate;
 /**
  * A simple concurrent implementation of MutableMap which uses java.util.concurrent.ConcurrentHashMap for its underlying
  * concurrent Map implementation.
+ *
+ * @deprecated since 2.0
  */
+@Deprecated
 public final class ConcurrentMutableHashMap<K, V>
         extends AbstractMutableMap<K, V>
         implements ConcurrentMutableMap<K, V>, Serializable

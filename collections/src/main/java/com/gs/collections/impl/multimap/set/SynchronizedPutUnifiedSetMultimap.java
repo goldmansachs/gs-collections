@@ -27,7 +27,7 @@ import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
-import com.gs.collections.impl.map.mutable.ConcurrentMutableHashMap;
+import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.AbstractSynchronizedPutMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -47,7 +47,7 @@ public final class SynchronizedPutUnifiedSetMultimap<K, V>
 
     public SynchronizedPutUnifiedSetMultimap(int initialCapacity, float loadFactor, int concurrencyLevel)
     {
-        super(ConcurrentMutableHashMap.<K, MutableSet<V>>newMap(initialCapacity, loadFactor, concurrencyLevel));
+        super(ConcurrentHashMap.<K, MutableSet<V>>newMap(initialCapacity));
     }
 
     public SynchronizedPutUnifiedSetMultimap(Multimap<? extends K, ? extends V> multimap)
@@ -62,7 +62,7 @@ public final class SynchronizedPutUnifiedSetMultimap<K, V>
         {
             public void value(Pair<K, V> pair)
             {
-                put(pair.getOne(), pair.getTwo());
+                SynchronizedPutUnifiedSetMultimap.this.put(pair.getOne(), pair.getTwo());
             }
         });
     }

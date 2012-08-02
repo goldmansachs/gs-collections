@@ -20,7 +20,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.map.MutableMap;
-import com.gs.collections.impl.map.mutable.ConcurrentMutableHashMap;
+import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 
 public abstract class AbstractSynchronizedPutMultimap<K, V, C extends MutableCollection<V>> extends AbstractMutableMultimap<K, V, C>
 {
@@ -38,13 +38,13 @@ public abstract class AbstractSynchronizedPutMultimap<K, V, C extends MutableCol
     @Override
     protected MutableMap<K, C> createMap()
     {
-        return ConcurrentMutableHashMap.newMap();
+        return ConcurrentHashMap.newMap();
     }
 
     @Override
     protected MutableMap<K, C> createMapWithKeyCount(int keyCount)
     {
-        return ConcurrentMutableHashMap.newMap(keyCount);
+        return ConcurrentHashMap.newMap(keyCount);
     }
 
     @Override

@@ -28,7 +28,7 @@ import com.gs.collections.api.multimap.list.ImmutableListMultimap;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.list.mutable.FastList;
-import com.gs.collections.impl.map.mutable.ConcurrentMutableHashMap;
+import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.AbstractSynchronizedPutMultimap;
 import com.gs.collections.impl.utility.ArrayIterate;
@@ -48,7 +48,7 @@ public final class SynchronizedPutFastListMultimap<K, V>
 
     public SynchronizedPutFastListMultimap(int initialCapacity, float loadFactor, int concurrencyLevel)
     {
-        super(ConcurrentMutableHashMap.<K, MutableList<V>>newMap(initialCapacity, loadFactor, concurrencyLevel));
+        super(ConcurrentHashMap.<K, MutableList<V>>newMap(initialCapacity));
     }
 
     public SynchronizedPutFastListMultimap(Multimap<? extends K, ? extends V> multimap)

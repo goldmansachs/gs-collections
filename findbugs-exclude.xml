@@ -121,4 +121,11 @@ is stored in this field.        -->
         </Or>
     </Match>
 
+    <Match>
+        <Bug pattern="JLM_JSR166_UTILCONCURRENT_MONITORENTER" />
+        <Or>
+            <Class name="com.gs.collections.impl.map.mutable.ConcurrentHashMap" />
+        </Or>
+    </Match>
+
 </FindBugsFilter>

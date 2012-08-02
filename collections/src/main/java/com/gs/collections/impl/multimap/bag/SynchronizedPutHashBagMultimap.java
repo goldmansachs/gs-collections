@@ -28,7 +28,7 @@ import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
-import com.gs.collections.impl.map.mutable.ConcurrentMutableHashMap;
+import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.AbstractSynchronizedPutMultimap;
 import com.gs.collections.impl.utility.ArrayIterate;
@@ -47,7 +47,7 @@ public final class SynchronizedPutHashBagMultimap<K, V>
 
     public SynchronizedPutHashBagMultimap(int initialCapacity, float loadFactor, int concurrencyLevel)
     {
-        super(ConcurrentMutableHashMap.<K, MutableBag<V>>newMap(initialCapacity, loadFactor, concurrencyLevel));
+        super(ConcurrentHashMap.<K, MutableBag<V>>newMap(initialCapacity));
     }
 
     public SynchronizedPutHashBagMultimap(Multimap<? extends K, ? extends V> multimap)
@@ -61,7 +61,7 @@ public final class SynchronizedPutHashBagMultimap<K, V>
         {
             public void value(Pair<K, V> pair)
             {
-                put(pair.getOne(), pair.getTwo());
+                SynchronizedPutHashBagMultimap.this.put(pair.getOne(), pair.getTwo());
             }
         });
     }
