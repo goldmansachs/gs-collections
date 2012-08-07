@@ -156,7 +156,7 @@
                 <configuration>
                     <instructions>
                         <Export-Package>ponzu.impl.test</Export-Package>
-                        <Bundle-RequiredExecutionEnvironment>J2SE-1.5,JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
+                        <Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
                         <Import-Package>
                             net.jcip.annotations;resolution:=optional,*
                         </Import-Package>

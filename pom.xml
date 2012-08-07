@@ -237,8 +237,8 @@
                     <windowtitle>Collections - ${project.version}</windowtitle>
                     <show>public</show>
                     <links>
-                        <link>http://java.sun.com/j2se/1.5.0/docs/api/</link>
-                        <link>http://junit.sourceforge.net/javadoc/</link>
+                        <link>http://docs.oracle.com/javase/6/docs/api/</link>
+                        <link>http://docs.oracle.com/javase/6/docs/api/</link>
                     </links>
                     <destDir>${project.version}</destDir>
                 </configuration>
@@ -286,7 +286,7 @@
                     <windowtitle>Collections - ${project.version}</windowtitle>
                     <show>public</show>
                     <links>
-                        <link>http://java.sun.com/j2se/1.5.0/docs/api/</link>
+                        <link>http://docs.oracle.com/javase/6/docs/api/</link>
                         <link>http://junit.sourceforge.net/javadoc/</link>
                     </links>
                 </configuration>
