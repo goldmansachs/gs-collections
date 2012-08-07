@@ -21,14 +21,14 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
+import net.jcip.annotations.NotThreadSafe;
 import ponzu.api.block.procedure.ObjectIntProcedure;
 import ponzu.api.block.procedure.Procedure;
 import ponzu.api.block.procedure.Procedure2;
 import ponzu.impl.block.factory.Comparators;
-import net.jcip.annotations.NotThreadSafe;
 
 /**
- * This is a four element immutable List which is created by calling Lists.fixedSize.of(one, two, three, four).
+ * This is a six element immutable List which is created by calling Lists.fixedSize.of(one, two, three, four, five, six).
  */
 @NotThreadSafe
 final class SextupletonList<T>
