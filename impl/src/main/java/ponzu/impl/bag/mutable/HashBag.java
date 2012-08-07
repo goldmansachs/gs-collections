@@ -45,13 +45,13 @@ import ponzu.api.partition.bag.PartitionMutableBag;
 import ponzu.api.set.MutableSet;
 import ponzu.api.tuple.Pair;
 import ponzu.impl.Counter;
-import ponzu.impl.block.procedure.CollectProcedure;
 import ponzu.impl.block.procedure.CollectionAddProcedure;
 import ponzu.impl.block.procedure.FilterNotProcedure;
-import ponzu.impl.block.procedure.FlatCollectProcedure;
+import ponzu.impl.block.procedure.FilterProcedure;
+import ponzu.impl.block.procedure.FlatTransformProcedure;
 import ponzu.impl.block.procedure.MultimapEachPutProcedure;
 import ponzu.impl.block.procedure.MultimapPutProcedure;
-import ponzu.impl.block.procedure.SelectProcedure;
+import ponzu.impl.block.procedure.TransformProcedure;
 import ponzu.impl.block.procedure.checked.CheckedProcedure2;
 import ponzu.impl.collection.mutable.AbstractMutableCollection;
 import ponzu.impl.collection.mutable.CollectionAdapter;
@@ -238,7 +238,7 @@ public class HashBag<T>
     @Override
     public MutableBag<T> filter(Predicate<? super T> predicate)
     {
-        SelectProcedure<T> procedure = new SelectProcedure<T>(predicate, this.newEmpty());
+        FilterProcedure<T> procedure = new FilterProcedure<T>(predicate, this.newEmpty());
         this.forEach(procedure);
         return (MutableBag<T>) procedure.getCollection();
     }
@@ -271,7 +271,7 @@ public class HashBag<T>
     @Override
     public <V> MutableBag<V> transform(Function<? super T, ? extends V> function)
     {
-        CollectProcedure<T, V> procedure = new CollectProcedure<T, V>(function, HashBag.<V>newBag());
+        TransformProcedure<T, V> procedure = new TransformProcedure<T, V>(function, HashBag.<V>newBag());
         this.forEach(procedure);
         return (MutableBag<V>) procedure.getCollection();
     }
@@ -295,7 +295,7 @@ public class HashBag<T>
     @Override
     public <V> MutableBag<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
     {
-        FlatCollectProcedure<T, V> procedure = new FlatCollectProcedure<T, V>(function, HashBag.<V>newBag());
+        FlatTransformProcedure<T, V> procedure = new FlatTransformProcedure<T, V>(function, HashBag.<V>newBag());
         this.forEach(procedure);
         return (MutableBag<V>) procedure.getCollection();
     }

@@ -50,7 +50,7 @@ import ponzu.impl.block.factory.Comparators;
 import ponzu.impl.block.factory.Functions;
 import ponzu.impl.block.factory.Predicates;
 import ponzu.impl.block.procedure.CollectionAddProcedure;
-import ponzu.impl.block.procedure.MapCollectProcedure;
+import ponzu.impl.block.procedure.MapTransformProcedure;
 import ponzu.impl.block.procedure.MaxComparatorProcedure;
 import ponzu.impl.block.procedure.MinComparatorProcedure;
 import ponzu.impl.factory.Lists;
@@ -1609,7 +1609,7 @@ public final class Iterate
             Function<? super T, ? extends K> keyFunction)
     {
         MutableMap<K, T> map = UnifiedMap.newMap();
-        Iterate.forEach(iterable, new MapCollectProcedure<T, K, T>(map, keyFunction));
+        Iterate.forEach(iterable, new MapTransformProcedure<T, K, T>(map, keyFunction));
         return map;
     }
 
@@ -1634,7 +1634,7 @@ public final class Iterate
             Function<? super T, ? extends K> keyFunction,
             M map)
     {
-        Iterate.forEach(iterable, new MapCollectProcedure<T, K, V>(map, keyFunction));
+        Iterate.forEach(iterable, new MapTransformProcedure<T, K, V>(map, keyFunction));
         return map;
     }
 
@@ -1648,7 +1648,7 @@ public final class Iterate
             Function<? super T, ? extends V> valueFunction,
             M map)
     {
-        Iterate.forEach(iterable, new MapCollectProcedure<T, K, V>(map, keyFunction, valueFunction));
+        Iterate.forEach(iterable, new MapTransformProcedure<T, K, V>(map, keyFunction, valueFunction));
         return map;
     }
 

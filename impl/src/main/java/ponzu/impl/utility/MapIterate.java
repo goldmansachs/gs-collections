@@ -35,13 +35,13 @@ import ponzu.api.map.MutableMap;
 import ponzu.api.map.UnsortedMapIterable;
 import ponzu.api.tuple.Pair;
 import ponzu.impl.block.factory.Predicates;
-import ponzu.impl.block.procedure.CollectProcedure;
 import ponzu.impl.block.procedure.CollectionAddProcedure;
 import ponzu.impl.block.procedure.CountProcedure;
 import ponzu.impl.block.procedure.FilterNotProcedure;
+import ponzu.impl.block.procedure.FilterProcedure;
 import ponzu.impl.block.procedure.MapEntryToProcedure2;
 import ponzu.impl.block.procedure.MapPutProcedure;
-import ponzu.impl.block.procedure.SelectProcedure;
+import ponzu.impl.block.procedure.TransformProcedure;
 import ponzu.impl.list.mutable.FastList;
 import ponzu.impl.map.mutable.MapAdapter;
 import ponzu.impl.map.mutable.UnifiedMap;
@@ -213,7 +213,7 @@ public final class MapIterate
             Predicate<? super V> predicate,
             R targetCollection)
     {
-        Procedure<V> procedure = new SelectProcedure<V>(predicate, targetCollection);
+        Procedure<V> procedure = new FilterProcedure<V>(predicate, targetCollection);
         MapIterate.forEachValue(map, procedure);
         return targetCollection;
     }
@@ -535,7 +535,7 @@ public final class MapIterate
             Function<? super V, ? extends A> function,
             R targetCollection)
     {
-        Procedure<V> procedure = new CollectProcedure<V, A>(function, targetCollection);
+        Procedure<V> procedure = new TransformProcedure<V, A>(function, targetCollection);
         MapIterate.forEachValue(map, procedure);
         return targetCollection;
     }

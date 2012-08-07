@@ -24,6 +24,7 @@ import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.RandomAccess;
 
+import net.jcip.annotations.Immutable;
 import ponzu.api.block.function.Function;
 import ponzu.api.block.function.Function2;
 import ponzu.api.block.function.primitive.DoubleObjectToDoubleFunction;
@@ -42,11 +43,11 @@ import ponzu.api.multimap.list.ImmutableListMultimap;
 import ponzu.api.partition.list.PartitionImmutableList;
 import ponzu.api.tuple.Pair;
 import ponzu.impl.block.factory.Comparators;
-import ponzu.impl.block.procedure.CollectIfProcedure;
-import ponzu.impl.block.procedure.CollectProcedure;
 import ponzu.impl.block.procedure.FilterNotProcedure;
-import ponzu.impl.block.procedure.FlatCollectProcedure;
-import ponzu.impl.block.procedure.SelectProcedure;
+import ponzu.impl.block.procedure.FilterProcedure;
+import ponzu.impl.block.procedure.FlatTransformProcedure;
+import ponzu.impl.block.procedure.TransformIfProcedure;
+import ponzu.impl.block.procedure.TransformProcedure;
 import ponzu.impl.collection.immutable.AbstractImmutableCollection;
 import ponzu.impl.factory.Lists;
 import ponzu.impl.list.mutable.FastList;
@@ -54,7 +55,6 @@ import ponzu.impl.multimap.list.FastListMultimap;
 import ponzu.impl.partition.list.PartitionFastList;
 import ponzu.impl.utility.Iterate;
 import ponzu.impl.utility.ListIterate;
-import net.jcip.annotations.Immutable;
 
 /**
  * This class is the parent class for all ImmutableLists.  All implementations of ImmutableList must implement the List
@@ -192,7 +192,7 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
     public ImmutableList<T> filter(Predicate<? super T> predicate)
     {
         MutableList<T> result = Lists.mutable.of();
-        this.forEach(new SelectProcedure<T>(predicate, result));
+        this.forEach(new FilterProcedure<T>(predicate, result));
         return result.toImmutable();
     }
 
@@ -229,7 +229,7 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
     public <V> ImmutableList<V> transform(Function<? super T, ? extends V> function)
     {
         MutableList<V> result = Lists.mutable.of();
-        this.forEach(new CollectProcedure<T, V>(function, result));
+        this.forEach(new TransformProcedure<T, V>(function, result));
         return result.toImmutable();
     }
 
@@ -238,7 +238,7 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
             Function<? super T, ? extends V> function)
     {
         MutableList<V> result = Lists.mutable.of();
-        this.forEach(new CollectIfProcedure<T, V>(result, function, predicate));
+        this.forEach(new TransformIfProcedure<T, V>(result, function, predicate));
         return result.toImmutable();
     }
 
@@ -252,7 +252,7 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
     public <V> ImmutableList<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
     {
         MutableList<V> result = Lists.mutable.of();
-        this.forEach(new FlatCollectProcedure<T, V>(function, result));
+        this.forEach(new FlatTransformProcedure<T, V>(function, result));
         return result.toImmutable();
     }
 

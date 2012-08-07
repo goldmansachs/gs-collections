@@ -25,14 +25,14 @@ import ponzu.impl.utility.Iterate;
 /**
  * Applies a function to an object and adds the result to a target collection.
  */
-public final class FlatCollectProcedure<T, V> implements Procedure<T>
+public final class FlatTransformProcedure<T, V> implements Procedure<T>
 {
     private static final long serialVersionUID = 1L;
 
     private final Function<? super T, ? extends Iterable<V>> function;
     private final Collection<V> collection;
 
-    public FlatCollectProcedure(
+    public FlatTransformProcedure(
             Function<? super T, ? extends Iterable<V>> function,
             Collection<V> targetCollection)
     {
@@ -40,6 +40,7 @@ public final class FlatCollectProcedure<T, V> implements Procedure<T>
         this.collection = targetCollection;
     }
 
+    @Override
     public void value(T object)
     {
         Iterate.addAllIterable(this.function.valueOf(object), this.collection);

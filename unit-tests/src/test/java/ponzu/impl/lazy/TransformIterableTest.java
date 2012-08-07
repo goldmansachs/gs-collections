@@ -16,6 +16,8 @@
 
 package ponzu.impl.lazy;
 
+import org.junit.Assert;
+import org.junit.Test;
 import ponzu.api.InternalIterable;
 import ponzu.api.LazyIterable;
 import ponzu.api.block.procedure.ObjectIntProcedure;
@@ -26,10 +28,8 @@ import ponzu.impl.block.factory.Procedures;
 import ponzu.impl.list.Interval;
 import ponzu.impl.list.mutable.FastList;
 import ponzu.impl.utility.LazyIterate;
-import org.junit.Assert;
-import org.junit.Test;
 
-public class CollectIterableTest extends AbstractLazyIterableTestCase
+public class TransformIterableTest extends AbstractLazyIterableTestCase
 {
     @Override
     protected LazyIterable<Integer> newWith(Integer... integers)
@@ -40,7 +40,7 @@ public class CollectIterableTest extends AbstractLazyIterableTestCase
     @Test
     public void forEach()
     {
-        InternalIterable<String> select = new CollectIterable<Integer, String>(Interval.oneTo(5), Functions.getToString());
+        InternalIterable<String> select = new TransformIterable<Integer, String>(Interval.oneTo(5), Functions.getToString());
         Appendable builder = new StringBuilder();
         Procedure<String> appendProcedure = Procedures.append(builder);
         select.forEach(appendProcedure);
@@ -50,7 +50,7 @@ public class CollectIterableTest extends AbstractLazyIterableTestCase
     @Test
     public void forEachWithIndex()
     {
-        InternalIterable<String> select = new CollectIterable<Integer, String>(Interval.oneTo(5), Functions.getToString());
+        InternalIterable<String> select = new TransformIterable<Integer, String>(Interval.oneTo(5), Functions.getToString());
         final StringBuilder builder = new StringBuilder("");
         select.forEachWithIndex(new ObjectIntProcedure<String>()
         {
@@ -67,7 +67,7 @@ public class CollectIterableTest extends AbstractLazyIterableTestCase
     @Test
     public void iterator()
     {
-        InternalIterable<String> select = new CollectIterable<Integer, String>(Interval.oneTo(5), Functions.getToString());
+        InternalIterable<String> select = new TransformIterable<Integer, String>(Interval.oneTo(5), Functions.getToString());
         StringBuilder builder = new StringBuilder("");
         for (String each : select)
         {
@@ -79,7 +79,7 @@ public class CollectIterableTest extends AbstractLazyIterableTestCase
     @Test
     public void forEachWith()
     {
-        InternalIterable<String> select = new CollectIterable<Integer, String>(Interval.oneTo(5), Functions.getToString());
+        InternalIterable<String> select = new TransformIterable<Integer, String>(Interval.oneTo(5), Functions.getToString());
         StringBuilder builder = new StringBuilder("");
         select.forEachWith(new Procedure2<String, StringBuilder>()
         {

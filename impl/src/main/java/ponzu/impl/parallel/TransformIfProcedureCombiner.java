@@ -18,27 +18,27 @@ package ponzu.impl.parallel;
 
 import java.util.Collection;
 
-import ponzu.impl.block.procedure.CollectProcedure;
+import ponzu.impl.block.procedure.TransformIfProcedure;
 
 /**
- * Combines the results of a Collection of CollectBlocks which each hold onto a transformed collection of results.
+ * Combines the results of a Collection of CollectIfBlocks which each hold onto a transformed and filtered collection of results.
  */
-public final class CollectProcedureCombiner<T, V>
-        extends AbstractTransformerBasedCombiner<V, T, CollectProcedure<T, V>>
+public final class TransformIfProcedureCombiner<T, V>
+        extends AbstractTransformerBasedCombiner<V, T, TransformIfProcedure<T, V>>
 {
     private static final long serialVersionUID = 1L;
 
-    public CollectProcedureCombiner(
-            Iterable<T> sourceIterable,
+    public TransformIfProcedureCombiner(
+            Iterable<T> iterable,
             Collection<V> targetCollection,
             int initialCapacity,
             boolean combineOne)
     {
-        super(combineOne, targetCollection, sourceIterable, initialCapacity);
+        super(combineOne, targetCollection, iterable, initialCapacity);
     }
 
-    public void combineOne(CollectProcedure<T, V> procedure)
+    public void combineOne(TransformIfProcedure<T, V> procedureCombine)
     {
-        this.result.addAll(procedure.getCollection());
+        this.result.addAll(procedureCombine.getCollection());
     }
 }

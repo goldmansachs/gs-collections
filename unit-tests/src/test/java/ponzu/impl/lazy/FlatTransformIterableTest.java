@@ -18,6 +18,8 @@ package ponzu.impl.lazy;
 
 import java.util.Collection;
 
+import org.junit.Assert;
+import org.junit.Test;
 import ponzu.api.InternalIterable;
 import ponzu.api.LazyIterable;
 import ponzu.api.block.function.Function;
@@ -28,10 +30,8 @@ import ponzu.impl.block.factory.Procedures;
 import ponzu.impl.list.Interval;
 import ponzu.impl.list.mutable.FastList;
 import ponzu.impl.utility.LazyIterate;
-import org.junit.Assert;
-import org.junit.Test;
 
-public class FlatCollectIterableTest extends AbstractLazyIterableTestCase
+public class FlatTransformIterableTest extends AbstractLazyIterableTestCase
 {
     private static final Function<Integer, Collection<Integer>> INT_TO_INTERVAL =
             new Function<Integer, Collection<Integer>>()
@@ -57,7 +57,7 @@ public class FlatCollectIterableTest extends AbstractLazyIterableTestCase
     @Test
     public void forEach()
     {
-        InternalIterable<Integer> select = new FlatCollectIterable<Integer, Integer>(Interval.oneTo(5), INT_TO_INTERVAL);
+        InternalIterable<Integer> select = new FlatTransformIterable<Integer, Integer>(Interval.oneTo(5), INT_TO_INTERVAL);
         Appendable builder = new StringBuilder();
         Procedure<Integer> appendProcedure = Procedures.append(builder);
         select.forEach(appendProcedure);
@@ -67,7 +67,7 @@ public class FlatCollectIterableTest extends AbstractLazyIterableTestCase
     @Test
     public void forEachWithIndex()
     {
-        InternalIterable<Integer> select = new FlatCollectIterable<Integer, Integer>(Interval.oneTo(5), INT_TO_INTERVAL);
+        InternalIterable<Integer> select = new FlatTransformIterable<Integer, Integer>(Interval.oneTo(5), INT_TO_INTERVAL);
         final StringBuilder builder = new StringBuilder("");
         select.forEachWithIndex(new ObjectIntProcedure<Integer>()
         {
@@ -84,7 +84,7 @@ public class FlatCollectIterableTest extends AbstractLazyIterableTestCase
     @Test
     public void iterator()
     {
-        InternalIterable<Integer> select = new FlatCollectIterable<Integer, Integer>(Interval.oneTo(5), INT_TO_INTERVAL);
+        InternalIterable<Integer> select = new FlatTransformIterable<Integer, Integer>(Interval.oneTo(5), INT_TO_INTERVAL);
         StringBuilder builder = new StringBuilder("");
         for (Integer each : select)
         {
@@ -96,7 +96,7 @@ public class FlatCollectIterableTest extends AbstractLazyIterableTestCase
     @Test
     public void forEachWith()
     {
-        InternalIterable<Integer> select = new FlatCollectIterable<Integer, Integer>(Interval.oneTo(5), INT_TO_INTERVAL);
+        InternalIterable<Integer> select = new FlatTransformIterable<Integer, Integer>(Interval.oneTo(5), INT_TO_INTERVAL);
         StringBuilder builder = new StringBuilder("");
         select.forEachWith(new Procedure2<Integer, StringBuilder>()
         {

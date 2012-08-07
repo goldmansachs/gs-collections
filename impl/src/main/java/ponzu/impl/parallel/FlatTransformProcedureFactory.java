@@ -16,23 +16,25 @@
 
 package ponzu.impl.parallel;
 
-import ponzu.api.block.predicate.Predicate;
-import ponzu.impl.block.procedure.FilterNotProcedure;
+import java.util.Collection;
+
+import ponzu.api.block.function.Function;
+import ponzu.impl.block.procedure.FlatTransformProcedure;
 import ponzu.impl.list.mutable.FastList;
 
-public final class RejectProcedureFactory<T> implements ProcedureFactory<FilterNotProcedure<T>>
+public final class FlatTransformProcedureFactory<T, V> implements ProcedureFactory<FlatTransformProcedure<T, V>>
 {
-    private final Predicate<? super T> predicate;
     private final int collectionSize;
+    private final Function<? super T, Collection<V>> function;
 
-    public RejectProcedureFactory(Predicate<? super T> newPredicate, int newInitialCapacity)
+    public FlatTransformProcedureFactory(Function<? super T, Collection<V>> function, int newTaskSize)
     {
-        this.predicate = newPredicate;
-        this.collectionSize = newInitialCapacity;
+        this.collectionSize = newTaskSize;
+        this.function = function;
     }
 
-    public FilterNotProcedure<T> create()
+    public FlatTransformProcedure<T, V> create()
     {
-        return new FilterNotProcedure<T>(this.predicate, new FastList<T>(this.collectionSize));
+        return new FlatTransformProcedure<T, V>(this.function, new FastList<V>(this.collectionSize));
     }
 }

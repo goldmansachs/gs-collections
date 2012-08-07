@@ -17,28 +17,22 @@
 package ponzu.impl.parallel;
 
 import ponzu.api.block.function.Function;
-import ponzu.api.block.predicate.Predicate;
-import ponzu.impl.block.procedure.CollectIfProcedure;
+import ponzu.impl.block.procedure.TransformProcedure;
 import ponzu.impl.list.mutable.FastList;
 
-public final class CollectIfProcedureFactory<T, V> implements ProcedureFactory<CollectIfProcedure<T, V>>
+public final class TransformProcedureFactory<T, V> implements ProcedureFactory<TransformProcedure<T, V>>
 {
     private final int collectionSize;
     private final Function<? super T, V> function;
-    private final Predicate<? super T> predicate;
 
-    public CollectIfProcedureFactory(
-            Function<? super T, V> function,
-            Predicate<? super T> predicate,
-            int newTaskSize)
+    public TransformProcedureFactory(Function<? super T, V> function, int newTaskSize)
     {
         this.collectionSize = newTaskSize;
         this.function = function;
-        this.predicate = predicate;
     }
 
-    public CollectIfProcedure<T, V> create()
+    public TransformProcedure<T, V> create()
     {
-        return new CollectIfProcedure<T, V>(FastList.<V>newList(this.collectionSize), this.function, this.predicate);
+        return new TransformProcedure<T, V>(this.function, new FastList<V>(this.collectionSize));
     }
 }

@@ -18,31 +18,36 @@ package ponzu.impl.block.procedure;
 
 import java.util.Collection;
 
-import ponzu.api.block.function.Function;
+import ponzu.api.block.predicate.Predicate;
 import ponzu.api.block.procedure.Procedure;
 
 /**
- * Applies a function to an object and adds the result to a target collection.
+ * Applies a predicate to an object to determine if it should be added to a target collection.
+ *
+ * @since 1.0
  */
-public final class CollectProcedure<T, V> implements Procedure<T>
+public final class FilterProcedure<T> implements Procedure<T>
 {
     private static final long serialVersionUID = 1L;
 
-    private final Function<? super T, ? extends V> function;
-    private final Collection<V> collection;
+    private final Predicate<? super T> predicate;
+    private final Collection<T> collection;
 
-    public CollectProcedure(Function<? super T, ? extends V> function, Collection<V> targetCollection)
+    public FilterProcedure(Predicate<? super T> newPredicate, Collection<T> targetCollection)
     {
-        this.function = function;
+        this.predicate = newPredicate;
         this.collection = targetCollection;
     }
 
     public void value(T object)
     {
-        this.collection.add(this.function.valueOf(object));
+        if (this.predicate.accept(object))
+        {
+            this.collection.add(object);
+        }
     }
 
-    public Collection<V> getCollection()
+    public Collection<T> getCollection()
     {
         return this.collection;
     }

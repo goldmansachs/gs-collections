@@ -18,6 +18,7 @@ package ponzu.impl.lazy;
 
 import java.util.Iterator;
 
+import net.jcip.annotations.Immutable;
 import ponzu.api.block.predicate.Predicate;
 import ponzu.api.block.procedure.ObjectIntProcedure;
 import ponzu.api.block.procedure.Procedure;
@@ -28,19 +29,18 @@ import ponzu.impl.block.procedure.IfProcedure;
 import ponzu.impl.block.procedure.IfProcedureWith;
 import ponzu.impl.lazy.iterator.FilterIterator;
 import ponzu.impl.utility.Iterate;
-import net.jcip.annotations.Immutable;
 
 /**
- * A RejectIterable is an iterable that filters a source iterable on a negative condition as it iterates.
+ * A FilterNotIterable is an iterable that filters a source iterable on a negative condition as it iterates.
  */
 @Immutable
-public class RejectIterable<T>
+public class FilterNotIterable<T>
         extends AbstractLazyIterable<T>
 {
     private final Iterable<T> adapted;
     private final Predicate<? super T> predicate;
 
-    public RejectIterable(Iterable<T> newAdapted, Predicate<? super T> newPredicate)
+    public FilterNotIterable(Iterable<T> newAdapted, Predicate<? super T> newPredicate)
     {
         this.adapted = newAdapted;
         this.predicate = Predicates.not(newPredicate);

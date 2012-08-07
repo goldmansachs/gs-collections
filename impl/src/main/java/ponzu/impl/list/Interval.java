@@ -41,10 +41,10 @@ import ponzu.api.block.procedure.Procedure2;
 import ponzu.api.list.MutableList;
 import ponzu.api.set.MutableSet;
 import ponzu.impl.bag.mutable.HashBag;
-import ponzu.impl.block.procedure.CollectProcedure;
 import ponzu.impl.block.procedure.CollectionAddProcedure;
 import ponzu.impl.block.procedure.FilterNotProcedure;
-import ponzu.impl.block.procedure.SelectProcedure;
+import ponzu.impl.block.procedure.FilterProcedure;
+import ponzu.impl.block.procedure.TransformProcedure;
 import ponzu.impl.block.procedure.primitive.IntIntProcedure;
 import ponzu.impl.block.procedure.primitive.IntObjectProcedure;
 import ponzu.impl.block.procedure.primitive.IntProcedure;
@@ -696,7 +696,7 @@ public final class Interval
             Function<? super Integer, ? extends T> function,
             R target)
     {
-        CollectProcedure<Integer, T> procedure = new CollectProcedure<Integer, T>(function, target);
+        TransformProcedure<Integer, T> procedure = new TransformProcedure<Integer, T>(function, target);
         this.forEach(procedure);
         return target;
     }
@@ -704,7 +704,7 @@ public final class Interval
     @Override
     public <R extends Collection<Integer>> R filter(Predicate<? super Integer> predicate, R target)
     {
-        SelectProcedure<Integer> procedure = new SelectProcedure<Integer>(predicate, target);
+        FilterProcedure<Integer> procedure = new FilterProcedure<Integer>(predicate, target);
         this.forEach(procedure);
         return target;
     }

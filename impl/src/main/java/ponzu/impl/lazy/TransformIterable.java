@@ -18,6 +18,7 @@ package ponzu.impl.lazy;
 
 import java.util.Iterator;
 
+import net.jcip.annotations.Immutable;
 import ponzu.api.block.function.Function;
 import ponzu.api.block.procedure.ObjectIntProcedure;
 import ponzu.api.block.procedure.Procedure;
@@ -25,19 +26,18 @@ import ponzu.api.block.procedure.Procedure2;
 import ponzu.impl.block.factory.Functions;
 import ponzu.impl.lazy.iterator.TransformIterator;
 import ponzu.impl.utility.Iterate;
-import net.jcip.annotations.Immutable;
 
 /**
  * A CollectIterable is an iterable that transforms a source iterable on a condition as it iterates.
  */
 @Immutable
-public class CollectIterable<T, V>
+public class TransformIterable<T, V>
         extends AbstractLazyIterable<V>
 {
     private final Iterable<T> adapted;
     private final Function<? super T, ? extends V> function;
 
-    public CollectIterable(Iterable<T> newAdapted, Function<? super T, ? extends V> function)
+    public TransformIterable(Iterable<T> newAdapted, Function<? super T, ? extends V> function)
     {
         this.adapted = newAdapted;
         this.function = function;

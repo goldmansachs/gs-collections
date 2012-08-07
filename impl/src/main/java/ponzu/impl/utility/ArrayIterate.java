@@ -42,7 +42,7 @@ import ponzu.impl.block.factory.Comparators;
 import ponzu.impl.block.factory.Predicates;
 import ponzu.impl.block.factory.Predicates2;
 import ponzu.impl.block.procedure.CollectionAddProcedure;
-import ponzu.impl.block.procedure.MapCollectProcedure;
+import ponzu.impl.block.procedure.MapTransformProcedure;
 import ponzu.impl.block.procedure.MaxComparatorProcedure;
 import ponzu.impl.block.procedure.MinComparatorProcedure;
 import ponzu.impl.factory.Lists;
@@ -967,7 +967,7 @@ public final class ArrayIterate
             Function<? super V, K> keyFunction)
     {
         MutableMap<K, V> map = UnifiedMap.newMap();
-        Procedure<V> procedure = new MapCollectProcedure<V, K, V>(map, keyFunction);
+        Procedure<V> procedure = new MapTransformProcedure<V, K, V>(map, keyFunction);
         ArrayIterate.forEach(objectArray, procedure);
         return map;
     }

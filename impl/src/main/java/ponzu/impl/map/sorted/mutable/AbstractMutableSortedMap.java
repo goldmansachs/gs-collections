@@ -32,7 +32,7 @@ import ponzu.api.map.sorted.MutableSortedMap;
 import ponzu.api.multimap.list.MutableListMultimap;
 import ponzu.api.partition.list.PartitionMutableList;
 import ponzu.api.tuple.Pair;
-import ponzu.impl.block.procedure.MapCollectProcedure;
+import ponzu.impl.block.procedure.MapTransformProcedure;
 import ponzu.impl.factory.SortedMaps;
 import ponzu.impl.list.mutable.FastList;
 import ponzu.impl.map.AbstractMapIterable;
@@ -111,7 +111,7 @@ public abstract class AbstractMutableSortedMap<K, V> extends AbstractMapIterable
 
     public <E> MutableSortedMap<K, V> transformKeysAndValues(Collection<E> collection, Function<? super E, ? extends K> keyFunction, Function<? super E, ? extends V> valueFunction)
     {
-        Iterate.forEach(collection, new MapCollectProcedure<E, K, V>(this, keyFunction, valueFunction));
+        Iterate.forEach(collection, new MapTransformProcedure<E, K, V>(this, keyFunction, valueFunction));
         return this;
     }
 

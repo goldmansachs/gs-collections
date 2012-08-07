@@ -19,6 +19,7 @@ package ponzu.impl.set.immutable;
 import java.util.Iterator;
 import java.util.Set;
 
+import net.jcip.annotations.Immutable;
 import ponzu.api.LazyIterable;
 import ponzu.api.block.function.Function;
 import ponzu.api.block.predicate.Predicate;
@@ -30,19 +31,18 @@ import ponzu.api.set.ImmutableSet;
 import ponzu.api.set.SetIterable;
 import ponzu.api.set.UnsortedSetIterable;
 import ponzu.api.tuple.Pair;
-import ponzu.impl.block.procedure.CollectIfProcedure;
-import ponzu.impl.block.procedure.CollectProcedure;
-import ponzu.impl.block.procedure.FlatCollectProcedure;
+import ponzu.impl.block.procedure.FilterNotProcedure;
+import ponzu.impl.block.procedure.FilterProcedure;
+import ponzu.impl.block.procedure.FlatTransformProcedure;
 import ponzu.impl.block.procedure.MultimapEachPutProcedure;
 import ponzu.impl.block.procedure.MultimapPutProcedure;
-import ponzu.impl.block.procedure.FilterNotProcedure;
-import ponzu.impl.block.procedure.SelectProcedure;
+import ponzu.impl.block.procedure.TransformIfProcedure;
+import ponzu.impl.block.procedure.TransformProcedure;
 import ponzu.impl.collection.immutable.AbstractImmutableCollection;
 import ponzu.impl.multimap.set.UnifiedSetMultimap;
 import ponzu.impl.partition.set.PartitionUnifiedSet;
 import ponzu.impl.set.mutable.UnifiedSet;
 import ponzu.impl.utility.internal.SetIterables;
-import net.jcip.annotations.Immutable;
 
 /**
  * This class is the parent class for all ImmutableLists.  All implementations of ImmutableList must implement the List
@@ -105,7 +105,7 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
     public ImmutableSet<T> filter(Predicate<? super T> predicate)
     {
         UnifiedSet<T> result = UnifiedSet.newSet();
-        this.forEach(new SelectProcedure<T>(predicate, result));
+        this.forEach(new FilterProcedure<T>(predicate, result));
         return result.toImmutable();
     }
 
@@ -124,21 +124,21 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
     public <V> ImmutableSet<V> transform(Function<? super T, ? extends V> function)
     {
         UnifiedSet<V> result = UnifiedSet.newSet();
-        this.forEach(new CollectProcedure<T, V>(function, result));
+        this.forEach(new TransformProcedure<T, V>(function, result));
         return result.toImmutable();
     }
 
     public <V> ImmutableSet<V> transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
     {
         UnifiedSet<V> result = UnifiedSet.newSet();
-        this.forEach(new CollectIfProcedure<T, V>(result, function, predicate));
+        this.forEach(new TransformIfProcedure<T, V>(result, function, predicate));
         return result.toImmutable();
     }
 
     public <V> ImmutableSet<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
     {
         UnifiedSet<V> result = UnifiedSet.newSet();
-        this.forEach(new FlatCollectProcedure<T, V>(function, result));
+        this.forEach(new FlatTransformProcedure<T, V>(function, result));
         return result.toImmutable();
     }
 

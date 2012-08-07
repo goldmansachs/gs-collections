@@ -46,7 +46,7 @@ import ponzu.impl.block.factory.Comparators;
 import ponzu.impl.block.factory.Predicates;
 import ponzu.impl.block.procedure.CollectionAddProcedure;
 import ponzu.impl.block.procedure.CountProcedure;
-import ponzu.impl.block.procedure.MapCollectProcedure;
+import ponzu.impl.block.procedure.MapTransformProcedure;
 import ponzu.impl.factory.Bags;
 import ponzu.impl.factory.Lists;
 import ponzu.impl.map.mutable.UnifiedMap;
@@ -61,8 +61,8 @@ import ponzu.impl.utility.LazyIterate;
 import ponzu.impl.utility.internal.IterableIterate;
 
 /**
- * AbstractLazyIterable provides a base from which deferred iterables such as SelectIterable,
- * RejectIterable and CollectIterable can be derived.
+ * AbstractLazyIterable provides a base from which deferred iterables such as FilterIterable,
+ * FilterNotIterable and TransformIterable can be derived.
  */
 @Immutable
 public abstract class AbstractLazyIterable<T>
@@ -400,7 +400,7 @@ public abstract class AbstractLazyIterable<T>
             Function<? super T, ? extends NV> valueFunction)
     {
         UnifiedMap<NK, NV> map = UnifiedMap.newMap();
-        this.forEach(new MapCollectProcedure<T, NK, NV>(map, keyFunction, valueFunction));
+        this.forEach(new MapTransformProcedure<T, NK, NV>(map, keyFunction, valueFunction));
         return map;
     }
 
@@ -409,7 +409,7 @@ public abstract class AbstractLazyIterable<T>
             Function<? super T, ? extends NV> valueFunction)
     {
         TreeSortedMap<NK, NV> sortedMap = TreeSortedMap.newMap();
-        this.forEach(new MapCollectProcedure<T, NK, NV>(sortedMap, keyFunction, valueFunction));
+        this.forEach(new MapTransformProcedure<T, NK, NV>(sortedMap, keyFunction, valueFunction));
         return sortedMap;
     }
 
@@ -418,7 +418,7 @@ public abstract class AbstractLazyIterable<T>
             Function<? super T, ? extends NV> valueFunction)
     {
         TreeSortedMap<NK, NV> sortedMap = TreeSortedMap.newMap(comparator);
-        this.forEach(new MapCollectProcedure<T, NK, NV>(sortedMap, keyFunction, valueFunction));
+        this.forEach(new MapTransformProcedure<T, NK, NV>(sortedMap, keyFunction, valueFunction));
         return sortedMap;
     }
 

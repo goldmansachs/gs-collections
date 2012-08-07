@@ -18,6 +18,7 @@ package ponzu.impl.lazy;
 
 import java.util.Iterator;
 
+import net.jcip.annotations.Immutable;
 import ponzu.api.block.predicate.Predicate;
 import ponzu.api.block.procedure.ObjectIntProcedure;
 import ponzu.api.block.procedure.Procedure;
@@ -27,19 +28,18 @@ import ponzu.impl.block.procedure.IfProcedure;
 import ponzu.impl.block.procedure.IfProcedureWith;
 import ponzu.impl.lazy.iterator.FilterIterator;
 import ponzu.impl.utility.Iterate;
-import net.jcip.annotations.Immutable;
 
 /**
  * A SelectIterable is an iterable that filters a source iterable on a condition as it iterates.
  */
 @Immutable
-public class SelectIterable<T>
+public class FilterIterable<T>
         extends AbstractLazyIterable<T>
 {
     private final Iterable<T> adapted;
     private final Predicate<? super T> predicate;
 
-    public SelectIterable(Iterable<T> newAdapted, Predicate<? super T> newPredicate)
+    public FilterIterable(Iterable<T> newAdapted, Predicate<? super T> newPredicate)
     {
         this.adapted = newAdapted;
         this.predicate = newPredicate;

@@ -16,6 +16,8 @@
 
 package ponzu.impl.lazy;
 
+import org.junit.Assert;
+import org.junit.Test;
 import ponzu.api.InternalIterable;
 import ponzu.api.LazyIterable;
 import ponzu.api.block.procedure.ObjectIntProcedure;
@@ -27,34 +29,28 @@ import ponzu.impl.math.IntegerSum;
 import ponzu.impl.math.Sum;
 import ponzu.impl.math.SumProcedure;
 import ponzu.impl.utility.LazyIterate;
-import org.junit.Assert;
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-public class SelectIterableTest extends AbstractLazyIterableTestCase
+public class FilterNotIterableTest extends AbstractLazyIterableTestCase
 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SelectIterableTest.class);
-
     @Override
     protected LazyIterable<Integer> newWith(Integer... integers)
     {
-        return LazyIterate.filter(FastList.newListWith(integers), Predicates.alwaysTrue());
+        return LazyIterate.filterNot(FastList.newListWith(integers), Predicates.alwaysFalse());
     }
 
     @Test
     public void forEach()
     {
-        InternalIterable<Integer> select = new SelectIterable<Integer>(Interval.oneTo(5), Predicates.lessThan(5));
+        InternalIterable<Integer> select = new FilterNotIterable<Integer>(Interval.oneTo(5), Predicates.lessThan(5));
         Sum sum = new IntegerSum(0);
         select.forEach(new SumProcedure<Integer>(sum));
-        Assert.assertEquals(10, sum.getValue().intValue());
+        Assert.assertEquals(5, sum.getValue().intValue());
     }
 
     @Test
     public void forEachWithIndex()
     {
-        InternalIterable<Integer> select = new SelectIterable<Integer>(Interval.oneTo(5), Predicates.lessThan(2).or(Predicates.greaterThan(3)));
+        InternalIterable<Integer> select = new FilterNotIterable<Integer>(Interval.oneTo(5), Predicates.lessThan(2).or(Predicates.greaterThan(3)));
         final Sum sum = new IntegerSum(0);
         select.forEachWithIndex(new ObjectIntProcedure<Integer>()
         {
@@ -62,30 +58,28 @@ public class SelectIterableTest extends AbstractLazyIterableTestCase
             {
                 sum.add(object);
                 sum.add(index);
-
-                LOGGER.info("value=" + object + " index=" + index);
             }
         });
-        Assert.assertEquals(13, sum.getValue().intValue());
+        Assert.assertEquals(6, sum.getValue().intValue());
     }
 
     @Override
     @Test
     public void iterator()
     {
-        InternalIterable<Integer> select = new SelectIterable<Integer>(Interval.oneTo(5), Predicates.lessThan(5));
+        InternalIterable<Integer> select = new FilterNotIterable<Integer>(Interval.oneTo(5), Predicates.lessThan(5));
         Sum sum = new IntegerSum(0);
         for (Integer each : select)
         {
             sum.add(each);
         }
-        Assert.assertEquals(10, sum.getValue().intValue());
+        Assert.assertEquals(5, sum.getValue().intValue());
     }
 
     @Test
     public void forEachWith()
     {
-        InternalIterable<Integer> select = new SelectIterable<Integer>(Interval.oneTo(5), Predicates.lessThan(5));
+        InternalIterable<Integer> select = new FilterNotIterable<Integer>(Interval.oneTo(5), Predicates.lessThan(5));
         Sum sum = new IntegerSum(0);
         select.forEachWith(new Procedure2<Integer, Sum>()
         {
@@ -94,6 +88,6 @@ public class SelectIterableTest extends AbstractLazyIterableTestCase
                 aSum.add(each);
             }
         }, sum);
-        Assert.assertEquals(10, sum.getValue().intValue());
+        Assert.assertEquals(5, sum.getValue().intValue());
     }
 }

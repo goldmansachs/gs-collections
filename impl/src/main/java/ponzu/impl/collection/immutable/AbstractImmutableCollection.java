@@ -47,10 +47,10 @@ import ponzu.api.tuple.Pair;
 import ponzu.impl.bag.mutable.HashBag;
 import ponzu.impl.block.factory.Comparators;
 import ponzu.impl.block.factory.Predicates;
-import ponzu.impl.block.procedure.CollectIfProcedure;
-import ponzu.impl.block.procedure.CollectProcedure;
 import ponzu.impl.block.procedure.FilterNotProcedure;
-import ponzu.impl.block.procedure.SelectProcedure;
+import ponzu.impl.block.procedure.FilterProcedure;
+import ponzu.impl.block.procedure.TransformIfProcedure;
+import ponzu.impl.block.procedure.TransformProcedure;
 import ponzu.impl.factory.Lists;
 import ponzu.impl.map.mutable.UnifiedMap;
 import ponzu.impl.map.sorted.mutable.TreeSortedMap;
@@ -213,7 +213,7 @@ public abstract class AbstractImmutableCollection<T> implements ImmutableCollect
 
     public <R extends Collection<T>> R filter(Predicate<? super T> predicate, R target)
     {
-        this.forEach(new SelectProcedure<T>(predicate, target));
+        this.forEach(new FilterProcedure<T>(predicate, target));
         return target;
     }
 
@@ -237,7 +237,7 @@ public abstract class AbstractImmutableCollection<T> implements ImmutableCollect
 
     public <V, R extends Collection<V>> R transform(Function<? super T, ? extends V> function, R target)
     {
-        this.forEach(new CollectProcedure<T, V>(function, target));
+        this.forEach(new TransformProcedure<T, V>(function, target));
         return target;
     }
 
@@ -250,7 +250,7 @@ public abstract class AbstractImmutableCollection<T> implements ImmutableCollect
     public <V, R extends Collection<V>> R transformIf(
             Predicate<? super T> predicate, Function<? super T, ? extends V> function, R target)
     {
-        this.forEach(new CollectIfProcedure<T, V>(target, function, predicate));
+        this.forEach(new TransformIfProcedure<T, V>(target, function, predicate));
         return target;
     }
 

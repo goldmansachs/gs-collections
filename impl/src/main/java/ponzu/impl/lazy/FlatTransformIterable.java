@@ -18,6 +18,7 @@ package ponzu.impl.lazy;
 
 import java.util.Iterator;
 
+import net.jcip.annotations.Immutable;
 import ponzu.api.block.function.Function;
 import ponzu.api.block.procedure.ObjectIntProcedure;
 import ponzu.api.block.procedure.Procedure;
@@ -25,16 +26,15 @@ import ponzu.api.block.procedure.Procedure2;
 import ponzu.impl.Counter;
 import ponzu.impl.lazy.iterator.FlatTransformIterator;
 import ponzu.impl.utility.Iterate;
-import net.jcip.annotations.Immutable;
 
 @Immutable
-public class FlatCollectIterable<T, V>
+public class FlatTransformIterable<T, V>
         extends AbstractLazyIterable<V>
 {
     private final Iterable<T> adapted;
     private final Function<? super T, ? extends Iterable<V>> function;
 
-    public FlatCollectIterable(Iterable<T> newAdapted, Function<? super T, ? extends Iterable<V>> function)
+    public FlatTransformIterable(Iterable<T> newAdapted, Function<? super T, ? extends Iterable<V>> function)
     {
         this.adapted = newAdapted;
         this.function = function;
@@ -46,7 +46,7 @@ public class FlatCollectIterable<T, V>
         {
             public void value(T each)
             {
-                Iterate.forEach(FlatCollectIterable.this.function.valueOf(each), procedure);
+                Iterate.forEach(FlatTransformIterable.this.function.valueOf(each), procedure);
             }
         });
     }
@@ -58,7 +58,7 @@ public class FlatCollectIterable<T, V>
         {
             public void value(T each)
             {
-                Iterable<V> iterable = FlatCollectIterable.this.function.valueOf(each);
+                Iterable<V> iterable = FlatTransformIterable.this.function.valueOf(each);
                 Iterate.forEach(iterable, innerProcedure);
             }
         });
@@ -70,7 +70,7 @@ public class FlatCollectIterable<T, V>
         {
             public void value(T each)
             {
-                Iterate.forEachWith(FlatCollectIterable.this.function.valueOf(each), procedure, parameter);
+                Iterate.forEachWith(FlatTransformIterable.this.function.valueOf(each), procedure, parameter);
             }
         });
     }

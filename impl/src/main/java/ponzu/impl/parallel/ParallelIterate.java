@@ -584,8 +584,8 @@ public final class ParallelIterate
             Executor executor,
             boolean allowReorderedResult)
     {
-        SelectProcedureCombiner<T> combiner = new SelectProcedureCombiner<T>(iterable, target, 10, allowReorderedResult);
-        SelectProcedureFactory<T> procedureFactory = new SelectProcedureFactory<T>(predicate, batchSize);
+        FilterProcedureCombiner<T> combiner = new FilterProcedureCombiner<T>(iterable, target, 10, allowReorderedResult);
+        FilterProcedureFactory<T> procedureFactory = new FilterProcedureFactory<T>(predicate, batchSize);
         ParallelIterate.forEach(
                 iterable,
                 procedureFactory,
@@ -678,7 +678,7 @@ public final class ParallelIterate
             boolean allowReorderedResult)
     {
         FilterNotProcedureCombiner<T> combiner = new FilterNotProcedureCombiner<T>(iterable, target, 10, allowReorderedResult);
-        RejectProcedureFactory<T> procedureFactory = new RejectProcedureFactory<T>(predicate, batchSize);
+        FilterNotProcedureFactory<T> procedureFactory = new FilterNotProcedureFactory<T>(predicate, batchSize);
         ParallelIterate.forEach(
                 iterable,
                 procedureFactory,
@@ -772,9 +772,9 @@ public final class ParallelIterate
             boolean allowReorderedResult)
     {
         int size = Iterate.sizeOf(iterable);
-        CollectProcedureCombiner<T, V> combiner = new CollectProcedureCombiner<T, V>(iterable, target, size, allowReorderedResult);
+        TransformProcedureCombiner<T, V> combiner = new TransformProcedureCombiner<T, V>(iterable, target, size, allowReorderedResult);
         int taskCount = ParallelIterate.calculateTaskCount(size, batchSize);
-        CollectProcedureFactory<T, V> procedureFactory = new CollectProcedureFactory<T, V>(function, size / taskCount);
+        TransformProcedureFactory<T, V> procedureFactory = new TransformProcedureFactory<T, V>(function, size / taskCount);
         ParallelIterate.forEach(
                 iterable,
                 procedureFactory,
@@ -825,9 +825,9 @@ public final class ParallelIterate
     {
         int size = Iterate.sizeOf(iterable);
         int taskSize = size / ParallelIterate.DEFAULT_PARALLEL_TASK_COUNT;
-        FlatCollectProcedureCombiner<T, V> combiner =
-                new FlatCollectProcedureCombiner<T, V>(iterable, target, size, allowReorderedResult);
-        FlatCollectProcedureFactory<T, V> procedureFactory = new FlatCollectProcedureFactory<T, V>(function, taskSize);
+        FlatTransformProcedureCombiner<T, V> combiner =
+                new FlatTransformProcedureCombiner<T, V>(iterable, target, size, allowReorderedResult);
+        FlatTransformProcedureFactory<T, V> procedureFactory = new FlatTransformProcedureFactory<T, V>(function, taskSize);
         ParallelIterate.forEach(
                 iterable,
                 procedureFactory,
@@ -907,8 +907,8 @@ public final class ParallelIterate
             Executor executor,
             boolean allowReorderedResult)
     {
-        CollectIfProcedureCombiner<T, V> combiner = new CollectIfProcedureCombiner<T, V>(iterable, target, 10, allowReorderedResult);
-        CollectIfProcedureFactory<T, V> procedureFactory = new CollectIfProcedureFactory<T, V>(function, predicate, batchSize);
+        TransformIfProcedureCombiner<T, V> combiner = new TransformIfProcedureCombiner<T, V>(iterable, target, 10, allowReorderedResult);
+        TransformIfProcedureFactory<T, V> procedureFactory = new TransformIfProcedureFactory<T, V>(function, predicate, batchSize);
         ParallelIterate.forEach(
                 iterable,
                 procedureFactory,

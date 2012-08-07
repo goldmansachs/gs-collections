@@ -19,6 +19,8 @@ package ponzu.impl.set.mutable;
 import java.util.HashSet;
 import java.util.Iterator;
 
+import org.junit.Assert;
+import org.junit.Test;
 import ponzu.api.LazyIterable;
 import ponzu.api.block.HashingStrategy;
 import ponzu.api.block.predicate.Predicate;
@@ -45,8 +47,6 @@ import ponzu.impl.set.strategy.mutable.UnifiedSetWithHashingStrategy;
 import ponzu.impl.test.Verify;
 import ponzu.impl.test.domain.Key;
 import ponzu.impl.utility.ArrayIterate;
-import org.junit.Assert;
-import org.junit.Test;
 
 /**
  * JUnit test suite for {@link UnifiedSetWithHashingStrategy}.
@@ -148,7 +148,7 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractMutableSetTestCas
     {
         UnifiedSetWithHashingStrategy<Integer> integers =
                 UnifiedSetWithHashingStrategy.newSetWith(INTEGER_HASHING_STRATEGY, 1, 2, 3, 4, 5);
-        LazyIterable<Integer> select = integers.lazyReject(Predicates.lessThan(5));
+        LazyIterable<Integer> select = integers.lazyFilterNot(Predicates.lessThan(5));
         Sum sum = new IntegerSum(0);
         select.forEach(new SumProcedure<Integer>(sum));
         Assert.assertEquals(5L, sum.getValue().intValue());
@@ -159,7 +159,7 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractMutableSetTestCas
     {
         UnifiedSetWithHashingStrategy<Integer> integers =
                 UnifiedSetWithHashingStrategy.newSetWith(INTEGER_HASHING_STRATEGY, 1, 2, 3, 4, 5);
-        LazyIterable<Integer> select = integers.lazySelect(Predicates.lessThan(5));
+        LazyIterable<Integer> select = integers.lazyFilter(Predicates.lessThan(5));
         Sum sum = new IntegerSum(0);
         select.forEach(new SumProcedure<Integer>(sum));
         Assert.assertEquals(10, sum.getValue().intValue());

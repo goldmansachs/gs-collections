@@ -26,7 +26,7 @@ import ponzu.impl.block.factory.Functions;
  * MapCollectProcedure uses an Function to calculate the key for an object and puts the object with the key
  * into the specified Map.
  */
-public final class MapCollectProcedure<T, K, V> implements Procedure<T>
+public final class MapTransformProcedure<T, K, V> implements Procedure<T>
 {
     private static final long serialVersionUID = 1L;
 
@@ -34,18 +34,19 @@ public final class MapCollectProcedure<T, K, V> implements Procedure<T>
     private final Function<? super T, ? extends K> keyFunction;
     private final Function<? super T, ? extends V> valueFunction;
 
-    public MapCollectProcedure(Map<K, V> newMap, Function<? super T, ? extends K> newKeyFunction)
+    public MapTransformProcedure(Map<K, V> newMap, Function<? super T, ? extends K> newKeyFunction)
     {
         this(newMap, newKeyFunction, (Function<T, V>) Functions.getPassThru());
     }
 
-    public MapCollectProcedure(Map<K, V> newMap, Function<? super T, ? extends K> newKeyFunction, Function<? super T, ? extends V> newValueFunction)
+    public MapTransformProcedure(Map<K, V> newMap, Function<? super T, ? extends K> newKeyFunction, Function<? super T, ? extends V> newValueFunction)
     {
         this.map = newMap;
         this.keyFunction = newKeyFunction;
         this.valueFunction = newValueFunction;
     }
 
+    @Override
     public void value(T object)
     {
         this.map.put(this.keyFunction.valueOf(object), this.valueFunction.valueOf(object));

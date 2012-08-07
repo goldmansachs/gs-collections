@@ -62,15 +62,15 @@ import ponzu.impl.bag.mutable.HashBag;
 import ponzu.impl.block.factory.Comparators;
 import ponzu.impl.block.factory.Predicates;
 import ponzu.impl.block.factory.Predicates2;
-import ponzu.impl.block.procedure.CollectIfProcedure;
-import ponzu.impl.block.procedure.CollectProcedure;
 import ponzu.impl.block.procedure.CollectionAddProcedure;
 import ponzu.impl.block.procedure.CountProcedure;
 import ponzu.impl.block.procedure.FilterNotProcedure;
-import ponzu.impl.block.procedure.FlatCollectProcedure;
+import ponzu.impl.block.procedure.FilterProcedure;
+import ponzu.impl.block.procedure.FlatTransformProcedure;
 import ponzu.impl.block.procedure.MultimapEachPutProcedure;
 import ponzu.impl.block.procedure.MultimapPutProcedure;
-import ponzu.impl.block.procedure.SelectProcedure;
+import ponzu.impl.block.procedure.TransformIfProcedure;
+import ponzu.impl.block.procedure.TransformProcedure;
 import ponzu.impl.block.procedure.ZipWithIndexProcedure;
 import ponzu.impl.factory.Lists;
 import ponzu.impl.factory.Sets;
@@ -656,7 +656,7 @@ public class UnifiedSet<K>
 
     public <R extends Collection<K>> R filter(Predicate<? super K> predicate, R target)
     {
-        this.forEach(new SelectProcedure<K>(predicate, target));
+        this.forEach(new FilterProcedure<K>(predicate, target));
         return target;
     }
 
@@ -759,7 +759,7 @@ public class UnifiedSet<K>
 
     public <V, R extends Collection<V>> R transform(Function<? super K, ? extends V> function, R target)
     {
-        this.forEach(new CollectProcedure<K, V>(function, target));
+        this.forEach(new TransformProcedure<K, V>(function, target));
         return target;
     }
 
@@ -771,7 +771,7 @@ public class UnifiedSet<K>
     public <V, R extends Collection<V>> R flatTransform(
             Function<? super K, ? extends Iterable<V>> function, R target)
     {
-        this.forEach(new FlatCollectProcedure<K, V>(function, target));
+        this.forEach(new FlatTransformProcedure<K, V>(function, target));
         return target;
     }
 
@@ -802,7 +802,7 @@ public class UnifiedSet<K>
     public <V, R extends Collection<V>> R transformIf(
             Predicate<? super K> predicate, Function<? super K, ? extends V> function, R target)
     {
-        this.forEach(new CollectIfProcedure<K, V>(target, function, predicate));
+        this.forEach(new TransformIfProcedure<K, V>(target, function, predicate));
         return target;
     }
 

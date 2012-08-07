@@ -16,23 +16,23 @@
 
 package ponzu.impl.parallel;
 
-import ponzu.api.block.function.Function;
-import ponzu.impl.block.procedure.CollectProcedure;
+import ponzu.api.block.predicate.Predicate;
+import ponzu.impl.block.procedure.FilterProcedure;
 import ponzu.impl.list.mutable.FastList;
 
-public final class CollectProcedureFactory<T, V> implements ProcedureFactory<CollectProcedure<T, V>>
+public final class FilterProcedureFactory<T> implements ProcedureFactory<FilterProcedure<T>>
 {
+    private final Predicate<? super T> predicate;
     private final int collectionSize;
-    private final Function<? super T, V> function;
 
-    public CollectProcedureFactory(Function<? super T, V> function, int newTaskSize)
+    public FilterProcedureFactory(Predicate<? super T> newPredicate, int newInitialCapacity)
     {
-        this.collectionSize = newTaskSize;
-        this.function = function;
+        this.predicate = newPredicate;
+        this.collectionSize = newInitialCapacity;
     }
 
-    public CollectProcedure<T, V> create()
+    public FilterProcedure<T> create()
     {
-        return new CollectProcedure<T, V>(this.function, new FastList<V>(this.collectionSize));
+        return new FilterProcedure<T>(this.predicate, FastList.<T>newList(this.collectionSize));
     }
 }

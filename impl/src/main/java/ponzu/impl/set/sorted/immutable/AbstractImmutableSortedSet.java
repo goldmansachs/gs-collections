@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.SortedSet;
 
+import net.jcip.annotations.Immutable;
 import ponzu.api.LazyIterable;
 import ponzu.api.block.function.Function;
 import ponzu.api.block.predicate.Predicate;
@@ -36,13 +37,13 @@ import ponzu.api.set.sorted.SortedSetIterable;
 import ponzu.api.tuple.Pair;
 import ponzu.impl.block.factory.Comparators;
 import ponzu.impl.block.factory.Functions;
-import ponzu.impl.block.procedure.CollectIfProcedure;
-import ponzu.impl.block.procedure.CollectProcedure;
 import ponzu.impl.block.procedure.FilterNotProcedure;
-import ponzu.impl.block.procedure.FlatCollectProcedure;
+import ponzu.impl.block.procedure.FilterProcedure;
+import ponzu.impl.block.procedure.FlatTransformProcedure;
 import ponzu.impl.block.procedure.MultimapEachPutProcedure;
 import ponzu.impl.block.procedure.MultimapPutProcedure;
-import ponzu.impl.block.procedure.SelectProcedure;
+import ponzu.impl.block.procedure.TransformIfProcedure;
+import ponzu.impl.block.procedure.TransformProcedure;
 import ponzu.impl.collection.immutable.AbstractImmutableCollection;
 import ponzu.impl.factory.Lists;
 import ponzu.impl.multimap.set.sorted.TreeSortedSetMultimap;
@@ -51,7 +52,6 @@ import ponzu.impl.set.sorted.mutable.TreeSortedSet;
 import ponzu.impl.utility.Iterate;
 import ponzu.impl.utility.internal.SetIterables;
 import ponzu.impl.utility.internal.SortedSetIterables;
-import net.jcip.annotations.Immutable;
 
 /**
  * This class is the parent class for all ImmutableSortedSets.  All implementations of ImmutableSortedSet must implement the SortedSet
@@ -121,7 +121,7 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
     public ImmutableSortedSet<T> filter(Predicate<? super T> predicate)
     {
         TreeSortedSet<T> result = TreeSortedSet.newSet(this.comparator());
-        this.forEach(new SelectProcedure<T>(predicate, result));
+        this.forEach(new FilterProcedure<T>(predicate, result));
         return result.toImmutable();
     }
 
@@ -140,21 +140,21 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
     public <V> ImmutableList<V> transform(Function<? super T, ? extends V> function)
     {
         MutableList<V> result = Lists.mutable.of();
-        this.forEach(new CollectProcedure<T, V>(function, result));
+        this.forEach(new TransformProcedure<T, V>(function, result));
         return result.toImmutable();
     }
 
     public <V> ImmutableList<V> transformIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
     {
         MutableList<V> result = Lists.mutable.of();
-        this.forEach(new CollectIfProcedure<T, V>(result, function, predicate));
+        this.forEach(new TransformIfProcedure<T, V>(result, function, predicate));
         return result.toImmutable();
     }
 
     public <V> ImmutableList<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
     {
         MutableList<V> result = Lists.mutable.of();
-        this.forEach(new FlatCollectProcedure<T, V>(function, result));
+        this.forEach(new FlatTransformProcedure<T, V>(function, result));
         return result.toImmutable();
     }
 

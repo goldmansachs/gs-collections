@@ -40,11 +40,11 @@ import ponzu.impl.bag.mutable.HashBag;
 import ponzu.impl.block.factory.Comparators;
 import ponzu.impl.block.factory.Predicates;
 import ponzu.impl.block.factory.Predicates2;
-import ponzu.impl.block.procedure.CollectProcedure;
-import ponzu.impl.block.procedure.FlatCollectProcedure;
+import ponzu.impl.block.procedure.FilterProcedure;
+import ponzu.impl.block.procedure.FlatTransformProcedure;
 import ponzu.impl.block.procedure.MultimapEachPutProcedure;
 import ponzu.impl.block.procedure.MultimapPutProcedure;
-import ponzu.impl.block.procedure.SelectProcedure;
+import ponzu.impl.block.procedure.TransformProcedure;
 import ponzu.impl.factory.Bags;
 import ponzu.impl.map.mutable.UnifiedMap;
 import ponzu.impl.multimap.bag.HashBagMultimap;
@@ -221,7 +221,7 @@ public class ImmutableArrayBag<T>
     public ImmutableBag<T> filter(Predicate<? super T> predicate)
     {
         MutableBag<T> result = new HashBag<T>();
-        this.forEach(new SelectProcedure<T>(predicate, result));
+        this.forEach(new FilterProcedure<T>(predicate, result));
 
         return ImmutableArrayBag.copyFrom(result);
     }
@@ -256,7 +256,7 @@ public class ImmutableArrayBag<T>
 
     public <V> ImmutableBag<V> transform(Function<? super T, ? extends V> function)
     {
-        CollectProcedure<T, V> procedure = new CollectProcedure<T, V>(function, HashBag.<V>newBag());
+        TransformProcedure<T, V> procedure = new TransformProcedure<T, V>(function, HashBag.<V>newBag());
         this.forEach(procedure);
         return ImmutableArrayBag.copyFrom((MutableBag<V>) procedure.getCollection());
     }
@@ -299,7 +299,7 @@ public class ImmutableArrayBag<T>
 
     public <V> ImmutableBag<V> flatTransform(Function<? super T, ? extends Iterable<V>> function)
     {
-        FlatCollectProcedure<T, V> procedure = new FlatCollectProcedure<T, V>(function, HashBag.<V>newBag());
+        FlatTransformProcedure<T, V> procedure = new FlatTransformProcedure<T, V>(function, HashBag.<V>newBag());
         this.forEach(procedure);
         return ((MutableBag<V>) procedure.getCollection()).toImmutable();
     }

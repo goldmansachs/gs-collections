@@ -18,26 +18,27 @@ package ponzu.impl.parallel;
 
 import java.util.Collection;
 
-import ponzu.impl.block.procedure.CollectIfProcedure;
+import ponzu.impl.block.procedure.FlatTransformProcedure;
 
 /**
- * Combines the results of a Collection of CollectIfBlocks which each hold onto a transformed and filtered collection of results.
+ * Combines the results of a Collection of {@link ponzu.impl.block.procedure.FlatTransformProcedure}s which each hold onto a transformed (flatten) collection
+ * of results.
  */
-public final class CollectIfProcedureCombiner<T, V>
-        extends AbstractTransformerBasedCombiner<V, T, CollectIfProcedure<T, V>>
+public final class FlatTransformProcedureCombiner<T, V>
+        extends AbstractTransformerBasedCombiner<V, T, FlatTransformProcedure<T, V>>
 {
     private static final long serialVersionUID = 1L;
 
-    public CollectIfProcedureCombiner(
-            Iterable<T> iterable,
+    public FlatTransformProcedureCombiner(
+            Iterable<T> sourceIterable,
             Collection<V> targetCollection,
             int initialCapacity,
             boolean combineOne)
     {
-        super(combineOne, targetCollection, iterable, initialCapacity);
+        super(combineOne, targetCollection, sourceIterable, initialCapacity);
     }
 
-    public void combineOne(CollectIfProcedure<T, V> procedureCombine)
+    public void combineOne(FlatTransformProcedure<T, V> procedureCombine)
     {
         this.result.addAll(procedureCombine.getCollection());
     }

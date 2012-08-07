@@ -16,41 +16,31 @@
 
 package ponzu.impl.block.procedure;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import ponzu.api.block.function.Function;
-import ponzu.api.block.predicate.Predicate;
 import ponzu.api.block.procedure.Procedure;
 
-public final class CollectIfProcedure<T, V>
-        implements Procedure<T>
+/**
+ * Applies a function to an object and adds the result to a target collection.
+ */
+public final class TransformProcedure<T, V> implements Procedure<T>
 {
     private static final long serialVersionUID = 1L;
+
     private final Function<? super T, ? extends V> function;
-    private final Predicate<? super T> predicate;
     private final Collection<V> collection;
 
-    public CollectIfProcedure(int taskSize, Function<? super T, ? extends V> function,
-            Predicate<? super T> predicate)
-    {
-        this(new ArrayList<V>(taskSize), function, predicate);
-    }
-
-    public CollectIfProcedure(Collection<V> targetCollection, Function<? super T, ? extends V> function,
-            Predicate<? super T> predicate)
+    public TransformProcedure(Function<? super T, ? extends V> function, Collection<V> targetCollection)
     {
         this.function = function;
-        this.predicate = predicate;
         this.collection = targetCollection;
     }
 
+    @Override
     public void value(T object)
     {
-        if (this.predicate.accept(object))
-        {
-            this.collection.add(this.function.valueOf(object));
-        }
+        this.collection.add(this.function.valueOf(object));
     }
 
     public Collection<V> getCollection()

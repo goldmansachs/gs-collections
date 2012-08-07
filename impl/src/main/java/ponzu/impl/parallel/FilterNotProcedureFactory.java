@@ -14,41 +14,25 @@
  * limitations under the License.
  */
 
-package ponzu.impl.block.procedure;
-
-import java.util.Collection;
+package ponzu.impl.parallel;
 
 import ponzu.api.block.predicate.Predicate;
-import ponzu.api.block.procedure.Procedure;
+import ponzu.impl.block.procedure.FilterNotProcedure;
+import ponzu.impl.list.mutable.FastList;
 
-/**
- * Applies a predicate to an object to determine if it should be added to a target collection.
- *
- * @since 1.0
- */
-public final class SelectProcedure<T> implements Procedure<T>
+public final class FilterNotProcedureFactory<T> implements ProcedureFactory<FilterNotProcedure<T>>
 {
-    private static final long serialVersionUID = 1L;
-
     private final Predicate<? super T> predicate;
-    private final Collection<T> collection;
+    private final int collectionSize;
 
-    public SelectProcedure(Predicate<? super T> newPredicate, Collection<T> targetCollection)
+    public FilterNotProcedureFactory(Predicate<? super T> newPredicate, int newInitialCapacity)
     {
         this.predicate = newPredicate;
-        this.collection = targetCollection;
+        this.collectionSize = newInitialCapacity;
     }
 
-    public void value(T object)
+    public FilterNotProcedure<T> create()
     {
-        if (this.predicate.accept(object))
-        {
-            this.collection.add(object);
-        }
-    }
-
-    public Collection<T> getCollection()
-    {
-        return this.collection;
+        return new FilterNotProcedure<T>(this.predicate, new FastList<T>(this.collectionSize));
     }
 }

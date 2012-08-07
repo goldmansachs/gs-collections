@@ -16,25 +16,29 @@
 
 package ponzu.impl.parallel;
 
-import java.util.Collection;
-
 import ponzu.api.block.function.Function;
-import ponzu.impl.block.procedure.FlatCollectProcedure;
+import ponzu.api.block.predicate.Predicate;
+import ponzu.impl.block.procedure.TransformIfProcedure;
 import ponzu.impl.list.mutable.FastList;
 
-public final class FlatCollectProcedureFactory<T, V> implements ProcedureFactory<FlatCollectProcedure<T, V>>
+public final class TransformIfProcedureFactory<T, V> implements ProcedureFactory<TransformIfProcedure<T, V>>
 {
     private final int collectionSize;
-    private final Function<? super T, Collection<V>> function;
+    private final Function<? super T, V> function;
+    private final Predicate<? super T> predicate;
 
-    public FlatCollectProcedureFactory(Function<? super T, Collection<V>> function, int newTaskSize)
+    public TransformIfProcedureFactory(
+            Function<? super T, V> function,
+            Predicate<? super T> predicate,
+            int newTaskSize)
     {
         this.collectionSize = newTaskSize;
         this.function = function;
+        this.predicate = predicate;
     }
 
-    public FlatCollectProcedure<T, V> create()
+    public TransformIfProcedure<T, V> create()
     {
-        return new FlatCollectProcedure<T, V>(this.function, new FastList<V>(this.collectionSize));
+        return new TransformIfProcedure<T, V>(FastList.<V>newList(this.collectionSize), this.function, this.predicate);
     }
 }

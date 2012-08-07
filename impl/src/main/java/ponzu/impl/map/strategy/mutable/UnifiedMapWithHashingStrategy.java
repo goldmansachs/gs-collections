@@ -44,7 +44,7 @@ import ponzu.api.map.UnsortedMapIterable;
 import ponzu.api.tuple.Pair;
 import ponzu.impl.block.factory.Functions;
 import ponzu.impl.block.factory.Predicates;
-import ponzu.impl.block.procedure.MapCollectProcedure;
+import ponzu.impl.block.procedure.MapTransformProcedure;
 import ponzu.impl.factory.HashingStrategyMaps;
 import ponzu.impl.factory.Sets;
 import ponzu.impl.list.mutable.FastList;
@@ -155,7 +155,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
     public UnifiedMapWithHashingStrategy(HashingStrategy<? super K> hashingStrategy, Pair<K, V>... pairs)
     {
         this(hashingStrategy, Math.max(pairs.length, DEFAULT_INITIAL_CAPACITY), DEFAULT_LOAD_FACTOR);
-        ArrayIterate.forEach(pairs, new MapCollectProcedure<Pair<K, V>, K, V>(
+        ArrayIterate.forEach(pairs, new MapTransformProcedure<Pair<K, V>, K, V>(
                 this,
                 Functions.<K>firstOfPair(),
                 Functions.<V>secondOfPair()));
@@ -706,7 +706,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
             Function<? super E, ? extends K> keyFunction,
             Function<? super E, ? extends V> valueFunction)
     {
-        Iterate.forEach(collection, new MapCollectProcedure<E, K, V>(this, keyFunction, valueFunction));
+        Iterate.forEach(collection, new MapTransformProcedure<E, K, V>(this, keyFunction, valueFunction));
         return this;
     }
 

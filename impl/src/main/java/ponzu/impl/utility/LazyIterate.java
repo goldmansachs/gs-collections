@@ -23,14 +23,14 @@ import ponzu.api.block.predicate.Predicate;
 import ponzu.api.tuple.Pair;
 import ponzu.impl.factory.Lists;
 import ponzu.impl.lazy.ChunkIterable;
-import ponzu.impl.lazy.CollectIterable;
 import ponzu.impl.lazy.CompositeIterable;
 import ponzu.impl.lazy.DropIterable;
-import ponzu.impl.lazy.FlatCollectIterable;
+import ponzu.impl.lazy.FilterIterable;
+import ponzu.impl.lazy.FilterNotIterable;
+import ponzu.impl.lazy.FlatTransformIterable;
 import ponzu.impl.lazy.LazyIterableAdapter;
-import ponzu.impl.lazy.RejectIterable;
-import ponzu.impl.lazy.SelectIterable;
 import ponzu.impl.lazy.TakeIterable;
+import ponzu.impl.lazy.TransformIterable;
 import ponzu.impl.lazy.ZipIterable;
 import ponzu.impl.lazy.ZipWithIndexIterable;
 
@@ -64,7 +64,7 @@ public final class LazyIterate
      */
     public static <T> LazyIterable<T> filter(Iterable<T> iterable, Predicate<? super T> predicate)
     {
-        return new SelectIterable<T>(iterable, predicate);
+        return new FilterIterable<T>(iterable, predicate);
     }
 
     /**
@@ -72,7 +72,7 @@ public final class LazyIterate
      */
     public static <T> LazyIterable<T> filterNot(Iterable<T> iterable, Predicate<? super T> predicate)
     {
-        return new RejectIterable<T>(iterable, predicate);
+        return new FilterNotIterable<T>(iterable, predicate);
     }
 
     /**
@@ -82,7 +82,7 @@ public final class LazyIterate
             Iterable<T> iterable,
             Function<? super T, ? extends V> function)
     {
-        return new CollectIterable<T, V>(iterable, function);
+        return new TransformIterable<T, V>(iterable, function);
     }
 
     /**
@@ -92,7 +92,7 @@ public final class LazyIterate
             Iterable<T> iterable,
             Function<? super T, ? extends Iterable<V>> function)
     {
-        return new FlatCollectIterable<T, V>(iterable, function);
+        return new FlatTransformIterable<T, V>(iterable, function);
     }
 
     /**

@@ -16,20 +16,20 @@
 
 package ponzu.impl.block.procedure;
 
-import ponzu.impl.block.factory.Functions;
-import ponzu.impl.block.factory.Predicates;
 import org.junit.Assert;
 import org.junit.Test;
+import ponzu.impl.block.factory.Functions;
+import ponzu.impl.block.factory.Predicates;
 
-public class CollectIfProcedureTest
+public class TransformIfProcedureTest
 {
     private static final int THE_ANSWER = 42;
 
     @Test
     public void constructorWithSize()
     {
-        CollectIfProcedure<Integer, String> underTestTrue = new CollectIfProcedure<Integer, String>(10, Functions.getToString(), Predicates.alwaysTrue());
-        CollectIfProcedure<Integer, String> underTestFalse = new CollectIfProcedure<Integer, String>(10, Functions.getToString(), Predicates.alwaysFalse());
+        TransformIfProcedure<Integer, String> underTestTrue = new TransformIfProcedure<Integer, String>(10, Functions.getToString(), Predicates.alwaysTrue());
+        TransformIfProcedure<Integer, String> underTestFalse = new TransformIfProcedure<Integer, String>(10, Functions.getToString(), Predicates.alwaysFalse());
         underTestTrue.value(THE_ANSWER);
         underTestFalse.value(THE_ANSWER);
         Assert.assertTrue(underTestTrue.getCollection().contains("42"));

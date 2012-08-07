@@ -18,27 +18,26 @@ package ponzu.impl.parallel;
 
 import java.util.Collection;
 
-import ponzu.impl.block.procedure.FlatCollectProcedure;
+import ponzu.impl.block.procedure.FilterProcedure;
 
 /**
- * Combines the results of a Collection of {@link FlatCollectProcedure}s which each hold onto a transformed (flatten) collection
- * of results.
+ * Combines the results of a Collection of SelectBlocks which each hold onto a filtered collection of results.
  */
-public final class FlatCollectProcedureCombiner<T, V>
-        extends AbstractTransformerBasedCombiner<V, T, FlatCollectProcedure<T, V>>
+public final class FilterProcedureCombiner<T>
+        extends AbstractPredicateBasedCombiner<T, FilterProcedure<T>>
 {
     private static final long serialVersionUID = 1L;
 
-    public FlatCollectProcedureCombiner(
-            Iterable<T> sourceIterable,
-            Collection<V> targetCollection,
+    public FilterProcedureCombiner(
+            Iterable<T> sourceCollection,
+            Collection<T> targetCollection,
             int initialCapacity,
             boolean combineOne)
     {
-        super(combineOne, targetCollection, sourceIterable, initialCapacity);
+        super(combineOne, sourceCollection, initialCapacity, targetCollection);
     }
 
-    public void combineOne(FlatCollectProcedure<T, V> procedureCombine)
+    public void combineOne(FilterProcedure<T> procedureCombine)
     {
         this.result.addAll(procedureCombine.getCollection());
     }

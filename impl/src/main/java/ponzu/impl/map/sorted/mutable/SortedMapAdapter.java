@@ -28,7 +28,7 @@ import ponzu.api.map.sorted.MutableSortedMap;
 import ponzu.api.set.MutableSet;
 import ponzu.api.tuple.Pair;
 import ponzu.impl.block.factory.Functions;
-import ponzu.impl.block.procedure.MapCollectProcedure;
+import ponzu.impl.block.procedure.MapTransformProcedure;
 import ponzu.impl.collection.mutable.CollectionAdapter;
 import ponzu.impl.set.mutable.SetAdapter;
 import ponzu.impl.utility.ArrayIterate;
@@ -179,7 +179,7 @@ public class SortedMapAdapter<K, V>
 
     public MutableSortedMap<K, V> with(Pair<K, V>... pairs)
     {
-        ArrayIterate.forEach(pairs, new MapCollectProcedure<Pair<K, V>, K, V>(this, Functions.<K>firstOfPair(), Functions.<V>secondOfPair()));
+        ArrayIterate.forEach(pairs, new MapTransformProcedure<Pair<K, V>, K, V>(this, Functions.<K>firstOfPair(), Functions.<V>secondOfPair()));
         return this;
     }
 
