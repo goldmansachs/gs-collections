@@ -16,13 +16,13 @@
 
 package ponzu.impl.lazy;
 
+import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import ponzu.api.block.procedure.ObjectIntProcedure;
 import ponzu.api.block.procedure.Procedure2;
 import ponzu.api.tuple.Pair;
 import ponzu.impl.factory.Lists;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
 
 public class ZipWithIndexIterableTest
 {
@@ -47,13 +47,13 @@ public class ZipWithIndexIterableTest
         {
             public void value(Pair<Integer, Integer> each, int index)
             {
-                ZipWithIndexIterableTest.this.buffer.append("|(");
+                ZipWithIndexIterableTest.this.buffer.append("|");
                 ZipWithIndexIterableTest.this.buffer.append(each.toString());
-                ZipWithIndexIterableTest.this.buffer.append("),");
+                ZipWithIndexIterableTest.this.buffer.append(",");
                 ZipWithIndexIterableTest.this.buffer.append(index);
             }
         });
-        this.assertBufferContains("|(1:0),0|(2:1),1|(3:2),2|(4:3),3");
+        this.assertBufferContains("|(1 . 0),0|(2 . 1),1|(3 . 2),2|(4 . 3),3");
     }
 
     @Test
@@ -63,12 +63,12 @@ public class ZipWithIndexIterableTest
         {
             public void value(Pair<Integer, Integer> argument1, String argument2)
             {
-                ZipWithIndexIterableTest.this.buffer.append("|(");
+                ZipWithIndexIterableTest.this.buffer.append("|");
                 ZipWithIndexIterableTest.this.buffer.append(argument1.toString());
-                ZipWithIndexIterableTest.this.buffer.append("),");
+                ZipWithIndexIterableTest.this.buffer.append(",");
                 ZipWithIndexIterableTest.this.buffer.append(argument2);
             }
         }, "A");
-        this.assertBufferContains("|(1:0),A|(2:1),A|(3:2),A|(4:3),A");
+        this.assertBufferContains("|(1 . 0),A|(2 . 1),A|(3 . 2),A|(4 . 3),A");
     }
 }

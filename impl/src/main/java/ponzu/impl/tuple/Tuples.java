@@ -45,4 +45,9 @@ public final class Tuples
     {
         return new TwinImpl<T>(one, two);
     }
+
+    public static <T1, T2, T3> Triple<T1, T2, T3> triple(T1 one, T2 two, T3 three)
+    {
+        return new TripleImpl<T1, T2, T3>(one, two, three);
+    }
 }

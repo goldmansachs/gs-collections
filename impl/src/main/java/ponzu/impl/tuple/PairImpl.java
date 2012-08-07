@@ -39,34 +39,37 @@ class PairImpl<T1, T2>
         this.two = newTwo;
     }
 
+    @Override
     public T1 getOne()
     {
         return this.one;
     }
 
+    @Override
     public T2 getTwo()
     {
         return this.two;
     }
 
+    @Override
     public void put(Map<T1, T2> map)
     {
         map.put(this.one, this.two);
     }
 
     @Override
-    public boolean equals(Object o)
+    public boolean equals(Object obj)
     {
-        if (this == o)
+        if (this == obj)
         {
             return true;
         }
-        if (!(o instanceof Pair))
+        if (!(obj instanceof Pair))
         {
             return false;
         }
 
-        Pair<?, ?> that = (Pair<?, ?>) o;
+        Pair<?, ?> that = (Pair<?, ?>) obj;
 
         return Comparators.nullSafeEquals(this.one, that.getOne())
                 && Comparators.nullSafeEquals(this.two, that.getTwo());
@@ -83,21 +86,23 @@ class PairImpl<T1, T2>
     @Override
     public String toString()
     {
-        return this.one + ":" + this.two;
+        return String.format("(%s . %s)", this.one, this.two);
     }
 
+    @Override
     public Map.Entry<T1, T2> toEntry()
     {
         return ImmutableEntry.of(this.one, this.two);
     }
 
-    public int compareTo(Pair<T1, T2> other)
+    @Override
+    public int compareTo(Pair<T1, T2> o)
     {
-        int i = ((Comparable<T1>) this.one).compareTo(other.getOne());
+        int i = ((Comparable<T1>) this.one).compareTo(o.getOne());
         if (i != 0)
         {
             return i;
         }
-        return ((Comparable<T2>) this.two).compareTo(other.getTwo());
+        return ((Comparable<T2>) this.two).compareTo(o.getTwo());
     }
 }

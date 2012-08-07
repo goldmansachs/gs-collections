@@ -18,14 +18,14 @@ package ponzu.impl.tuple;
 
 import java.util.Map;
 
+import org.junit.Assert;
+import org.junit.Test;
 import ponzu.api.map.MutableMap;
 import ponzu.api.tuple.Pair;
 import ponzu.api.tuple.Twin;
 import ponzu.impl.block.factory.Functions;
 import ponzu.impl.map.mutable.UnifiedMap;
 import ponzu.impl.test.Verify;
-import org.junit.Assert;
-import org.junit.Test;
 
 public class TuplesTest
 {
@@ -82,7 +82,7 @@ public class TuplesTest
     {
         Pair<String, String> pair1 = Tuples.pair("1", "1");
 
-        Assert.assertEquals("1:1", pair1.toString());
+        Assert.assertEquals("(1 . 1)", pair1.toString());
     }
 
     @Test
