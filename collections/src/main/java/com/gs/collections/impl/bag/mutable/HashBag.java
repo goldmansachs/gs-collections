@@ -23,6 +23,7 @@ import java.io.ObjectOutput;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -45,8 +46,11 @@ import com.gs.collections.api.partition.bag.PartitionMutableBag;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.Counter;
+import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
+import com.gs.collections.impl.block.procedure.MaxComparatorProcedure;
+import com.gs.collections.impl.block.procedure.MinComparatorProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.block.procedure.checked.CheckedProcedure2;
@@ -302,7 +306,7 @@ public class HashBag<T>
     @Override
     public <V> MutableBag<V> collect(final Function<? super T, ? extends V> function)
     {
-        final HashBag<V> result = HashBag.<V>newBag(this.items.size());
+        final HashBag<V> result = HashBag.newBag(this.items.size());
         this.forEachWithOccurrences(new ObjectIntProcedure<T>()
         {
             public void value(T each, int occurrences)
@@ -631,6 +635,46 @@ public class HashBag<T>
     public MutableBag<Pair<T, Integer>> zipWithIndex()
     {
         return this.zipWithIndex(HashBag.<Pair<T, Integer>>newBag());
+    }
+
+    @Override
+    public T min(Comparator<? super T> comparator)
+    {
+        MinComparatorProcedure<T> comparatorProcedure = new MinComparatorProcedure<T>(comparator);
+        this.items.forEachKey(comparatorProcedure);
+        return comparatorProcedure.getResult();
+    }
+
+    @Override
+    public T max(Comparator<? super T> comparator)
+    {
+        MaxComparatorProcedure<T> comparatorProcedure = new MaxComparatorProcedure<T>(comparator);
+        this.items.forEachKey(comparatorProcedure);
+        return comparatorProcedure.getResult();
+    }
+
+    @Override
+    public T min()
+    {
+        return this.min(Comparators.naturalOrder());
+    }
+
+    @Override
+    public T max()
+    {
+        return this.max(Comparators.naturalOrder());
+    }
+
+    @Override
+    public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
+    {
+        return this.min(Comparators.fromFunctions(function));
+    }
+
+    @Override
+    public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
+    {
+        return this.max(Comparators.fromFunctions(function));
     }
 
     public void writeExternal(final ObjectOutput out) throws IOException
