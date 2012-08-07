@@ -1,4 +1,4 @@
-3# Introduction
+# Introduction
 
 Ponzu is a fork of the Goldman Sachs gs-collections framework.  The main difference is that the primary iteration protocol methods have been renamed:
 
