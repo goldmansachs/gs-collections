@@ -2,7 +2,6 @@ target
 
 # intellij files
 
-Djinn.iws
 .idea/workspace.xml
 .idea/ant.xml
 .idea/uiDesigner.xml
@@ -13,6 +12,7 @@ Djinn.iws
 .idea/scopes/scope_settings.xml
 .idea/vcs.xml
 .idea/codeStyleSettings.xml
+.idea/inspectionProfiles
 
 # eclipse files
 .project
