@@ -185,11 +185,6 @@
                 </plugin>
 
                 <plugin>
-                    <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.10</version>
-                </plugin>
-
-                <plugin>
                     <artifactId>maven-project-info-reports-plugin</artifactId>
                     <version>2.4</version>
                 </plugin>
@@ -211,18 +206,6 @@
                     <target>1.6</target>
                     <showWarnings>true</showWarnings>
                     <showDeprecation>true</showDeprecation>
-                </configuration>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <configuration>
-                    <includes>
-                        <include>**/*Test.java</include>
-                    </includes>
-                    <parallel>both</parallel>
-                    <forkMode>once</forkMode>
-                    <argLine>-XX:-OmitStackTraceInFastThrow</argLine>
                 </configuration>
             </plugin>
 
@@ -312,11 +295,6 @@
             <plugin>
                 <artifactId>maven-jxr-plugin</artifactId>
                 <version>2.3</version>
-            </plugin>
-
-            <plugin>
-                <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>2.10</version>
             </plugin>
 
             <plugin>

@@ -142,11 +142,15 @@
 
             <plugin>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.10</version>
+                <version>2.12</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.apache.maven.surefire</groupId>
+                        <artifactId>surefire-junit47</artifactId>
+                        <version>2.12</version>
+                    </dependency>
+                </dependencies>
                 <configuration>
-                    <includes>
-                        <include>**/*Test.java</include>
-                    </includes>
                     <parallel>both</parallel>
                     <forkMode>once</forkMode>
                     <argLine>-XX:-OmitStackTraceInFastThrow</argLine>

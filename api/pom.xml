@@ -103,19 +103,6 @@
             </plugin>
 
             <plugin>
-                <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.10</version>
-                <configuration>
-                    <includes>
-                        <include>**/*Test.java</include>
-                    </includes>
-                    <parallel>both</parallel>
-                    <forkMode>once</forkMode>
-                    <argLine>-XX:-OmitStackTraceInFastThrow</argLine>
-                </configuration>
-            </plugin>
-
-            <plugin>
                 <artifactId>maven-source-plugin</artifactId>
                 <version>2.1.2</version>
                 <executions>
