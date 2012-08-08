@@ -1168,10 +1168,12 @@ public final class Iterate
     /**
      * Returns the first element of a collection.  In the case of a List it is the element at the first index.  In the
      * case of any other Collection, it is the first element that would be returned during an iteration. If the
-     * Collection is null, or empty, the result is {@code null}.
+     * Collection is empty, the result is {@code null}.
      * <p/>
      * WARNING!!! The order of Sets are not guaranteed (except for TreeSets and other Ordered Set implementations), so
      * if you use this method, the first element could be any element from the Set.
+     *
+     * @throws IllegalArgumentException if the Collection is null
      */
     public static <T> T getFirst(Iterable<T> iterable)
     {
@@ -1229,10 +1231,12 @@ public final class Iterate
     /**
      * Returns the last element of a collection.  In the case of a List it is the element at the last index.  In the
      * case of any other Collection, it is the last element that would be returned during an iteration. If the
-     * Collection is null, or empty, the result is {@code null}.
+     * Collection is empty, the result is {@code null}.
      * <p/>
      * WARNING!!! The order of Sets are not guaranteed (except for TreeSets and other Ordered Set implementations), so
      * if you use this method, the last element could be any element from the Set.
+     *
+     * @throws IllegalArgumentException if the Collection is null
      */
     public static <T> T getLast(Iterable<T> iterable)
     {
