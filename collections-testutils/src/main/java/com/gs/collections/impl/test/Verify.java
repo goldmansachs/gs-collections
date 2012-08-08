@@ -2867,7 +2867,10 @@ public final class Verify extends Assert
                                 + ex.getClass().getName()
                                 + ">, expected one of type <"
                                 + expectedExceptionClass.getName()
-                                + '>',
+                                + '>'
+                                + '\n'
+                                + "Exception Message: " + ex.getMessage()
+                                + '\n',
                         expectedExceptionClass,
                         ex.getClass());
                 return;
@@ -2928,7 +2931,10 @@ public final class Verify extends Assert
                                 + ex.getClass().getName()
                                 + ">, expected one of type <"
                                 + expectedExceptionClass.getName()
-                                + '>',
+                                + '>'
+                                + '\n'
+                                + "Exception Message: " + ex.getMessage()
+                                + '\n',
                         expectedExceptionClass,
                         ex.getClass());
                 return;
