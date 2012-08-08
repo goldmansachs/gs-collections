@@ -320,7 +320,7 @@
 
         <module name="AvoidStaticImport">
             <property name="excludes"
-                value="org.junit.Assert.*,ponzu.impl.test.Verify.*,ponzu.impl.factory.Iterables.*" />
+                value="org.junit.Assert.*,com.webguys.com.webguys.ponzu.impl.test.Verify.*,com.webguys.ponzu.impls.ponzu.impl.factory.Iterables.*" />
         </module>
 
         <module name="MissingDeprecated" />

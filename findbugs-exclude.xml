@@ -22,37 +22,37 @@
         <Bug pattern="CN_IDIOM_NO_SUPER_CALL" />
         <Or>
             <!-- These are probably real bugs -->
-            <Class name="ponzu.impl.list.mutable.AbstractMutableList$SubList" />
-            <Class name="ponzu.impl.map.mutable.MapAdapter" />
-            <Class name="ponzu.impl.map.sorted.mutable.SortedMapAdapter" />
-            <Class name="ponzu.impl.list.mutable.SynchronizedMutableList" />
-            <Class name="ponzu.impl.map.mutable.SynchronizedMutableMap" />
-            <Class name="ponzu.impl.map.sorted.mutable.SynchronizedSortedMap" />
-            <Class name="ponzu.impl.set.mutable.SynchronizedMutableSet" />
-            <Class name="ponzu.impl.map.mutable.UnifiedMap" />
-            <Class name="ponzu.impl.set.mutable.UnifiedSet" />
-            <Class name="ponzu.impl.set.strategy.mutable.UnifiedSetWithHashingStrategy" />
-            <Class name="ponzu.impl.map.strategy.mutable.UnifiedMapWithHashingStrategy" />
-            <Class name="ponzu.impl.map.mutable.UnmodifiableMutableMap" />
-            <Class name="ponzu.impl.map.sorted.mutable.UnmodifiableTreeMap" />
-            <Class name="ponzu.impl.set.mutable.UnmodifiableMutableSet" />
-            <Class name="ponzu.impl.set.sorted.mutable.SynchronizedSortedSet" />
-            <Class name="ponzu.impl.set.sorted.mutable.UnmodifiableSortedSet" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.list.mutable.AbstractMutableList$SubList" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.map.mutable.MapAdapter" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.map.sorted.mutable.SortedMapAdapter" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.list.mutable.SynchronizedMutableList" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.map.mutable.SynchronizedMutableMap" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.map.sorted.mutable.SynchronizedSortedMap" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.set.mutable.SynchronizedMutableSet" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.map.mutable.UnifiedMap" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.set.mutable.UnifiedSet" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.set.strategy.mutable.UnifiedSetWithHashingStrategy" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.map.strategy.mutable.UnifiedMapWithHashingStrategy" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.map.mutable.UnmodifiableMutableMap" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.map.sorted.mutable.UnmodifiableTreeMap" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.set.mutable.UnmodifiableMutableSet" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.set.sorted.mutable.SynchronizedSortedSet" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.set.sorted.mutable.UnmodifiableSortedSet" />
         </Or>
     </Match>
 
     <Match>
         <Bug pattern="DM_GC" />
         <Or>
-            <Class name="ponzu.impl.PerformanceTest" />
-            <Class name="ponzu.impl.ParallelSerialPerformanceTest" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.PerformanceTest" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.ParallelSerialPerformanceTest" />
         </Or>
     </Match>
 
     <Match>
         <Bug pattern="BC_BAD_CAST_TO_CONCRETE_COLLECTION" />
         <Or>
-            <Class name="ponzu.impl.list.mutable.FastList" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.list.mutable.FastList" />
         </Or>
     </Match>
 
@@ -65,16 +65,16 @@
         <Bug pattern="EI_EXPOSE_REP2" />
         <Or>
             <!-- These are probably real bugs -->
-            <Class name="ponzu.impl.math.SplitDoubleSumCombiner" />
-            <Class name="ponzu.impl.math.SplitIntegerSumCombiner" />
-            <Class name="ponzu.impl.parallel.ArrayProcedureFJTask" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.math.SplitDoubleSumCombiner" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.math.SplitIntegerSumCombiner" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.parallel.ArrayProcedureFJTask" />
         </Or>
     </Match>
 
     <Match>
         <Bug pattern="EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS" />
         <Or>
-            <Class name="ponzu.impl.bag.immutable.ImmutableHashBag" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.bag.immutable.ImmutableHashBag" />
         </Or>
     </Match>
 
@@ -82,7 +82,7 @@
         <!-- This is probably a real bug -->
         <Bug pattern="MS_PKGPROTECT" />
         <Or>
-            <Class name="ponzu.impl.block.factory.Predicates" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.block.factory.Predicates" />
         </Or>
     </Match>
 
@@ -102,22 +102,22 @@ is stored in this field.        -->
     <Match>
         <Bug pattern="SE_INNER_CLASS" />
         <Or>
-            <Class name="ponzu.impl.map.mutable.UnifiedMap$KeySet" />
-            <Class name="ponzu.impl.map.mutable.UnifiedMap$EntrySet" />
-            <Class name="ponzu.impl.map.mutable.UnifiedMap$ValuesCollection" />
-            <Class name="ponzu.impl.map.strategy.mutable.UnifiedMapWithHashingStrategy$KeySet" />
-            <Class name="ponzu.impl.map.strategy.mutable.UnifiedMapWithHashingStrategy$EntrySet" />
-            <Class name="ponzu.impl.map.strategy.mutable.UnifiedMapWithHashingStrategy$ValuesCollection" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.map.mutable.UnifiedMap$KeySet" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.map.mutable.UnifiedMap$EntrySet" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.map.mutable.UnifiedMap$ValuesCollection" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.map.strategy.mutable.UnifiedMapWithHashingStrategy$KeySet" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.map.strategy.mutable.UnifiedMapWithHashingStrategy$EntrySet" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.map.strategy.mutable.UnifiedMapWithHashingStrategy$ValuesCollection" />
         </Or>
     </Match>
 
     <Match>
         <Bug pattern="SE_NO_SUITABLE_CONSTRUCTOR" />
         <Or>
-            <Class name="ponzu.impl.multimap.list.ImmutableListMultimapImpl" />
-            <Class name="ponzu.impl.multimap.set.ImmutableSetMultimapImpl" />
-            <Class name="ponzu.impl.multimap.bag.ImmutableBagMultimapImpl" />
-            <Class name="ponzu.impl.multimap.set.sorted.ImmutableSortedSetMultimapImpl" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.multimap.list.ImmutableListMultimapImpl" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.multimap.set.ImmutableSetMultimapImpl" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.multimap.bag.ImmutableBagMultimapImpl" />
+            <Class name="com.webguys.com.webguys.ponzu.impl.multimap.set.sorted.ImmutableSortedSetMultimapImpl" />
         </Or>
     </Match>
 

@@ -22,29 +22,82 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>ponzu</groupId>
-    <artifactId>parent</artifactId>
-    <version>1.2.0-SNAPSHOT</version>
-
-    <packaging>pom</packaging>
-
-    <name>Parent Project</name>
-
-    <inceptionYear>2011</inceptionYear>
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
 
     <modules>
         <module>api</module>
         <module>impl</module>
         <module>testutils</module>
-        <module>unit-tests</module>
     </modules>
+
+    <prerequisites>
+        <maven>3.0.4</maven>
+    </prerequisites>
+
+    <groupId>com.webguys.ponzu</groupId>
+    <artifactId>all</artifactId>
+    <packaging>pom</packaging>
+    <version>1.2.0-SNAPSHOT</version>
+
+    <organization>
+        <name>The WebGuys</name>
+    </organization>
+
+    <name>Ponzu Parent Project</name>
+    <description>Ponzu is a collections framework for Java. It has JDK-compatible List, Set and Map implementations
+        with a rich API and set of utility classes that work with any JDK compatible Collections, Arrays, Maps or
+        Strings.
+    </description>
+    <inceptionYear>2011</inceptionYear>
+
+    <url>https://github.com/kevinbirch/ponzu</url>
+    <scm>
+        <connection>scm:git:git://github.com/kevinbirch/ponzu.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/kevinbirch/ponzu.git</developerConnection>
+        <url>https://github.com/kevinbirch/ponzu</url>
+    </scm>
+
+    <issueManagement>
+        <url>https://github.com/kevinbirch/ponzu/issues</url>
+        <system>github</system>
+    </issueManagement>
+
+    <licenses>
+        <license>
+            <name>Apache</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>kmb</id>
+            <name>Kevin Birch</name>
+            <email>kmb@pobox.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>no</id>
+            <name>Nick Orton</name>
+            <email>nick@orton.cc</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <slf4j.version>1.6.4</slf4j.version>
         <checkstyle.version>2.8</checkstyle.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencyManagement>
@@ -333,22 +386,6 @@
         </plugins>
     </reporting>
 
-    <distributionManagement>
-
-        <repository>
-            <id>repository</id>
-            <name>releases</name>
-            <url>${repository.url}</url>
-        </repository>
-
-        <snapshotRepository>
-            <id>repository</id>
-            <name>snapshots</name>
-            <url>${repository.url}</url>
-        </snapshotRepository>
-
-    </distributionManagement>
-
     <profiles>
 
         <profile>
@@ -364,6 +401,16 @@
                 <module>unit-tests</module>
                 <module>scala-unit-tests</module>
                 <module>acceptance-tests</module>
+            </modules>
+        </profile>
+
+        <profile>
+            <id>release</id>
+
+            <modules>
+                <module>api</module>
+                <module>impl</module>
+                <module>testutils</module>
             </modules>
         </profile>
 
