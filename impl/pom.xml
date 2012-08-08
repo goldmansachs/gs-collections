@@ -30,7 +30,7 @@
 
     <groupId>com.webguys.ponzu</groupId>
     <artifactId>impl</artifactId>
-    <version>1.2.0</version>
+    <version>1.2.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <organization>
@@ -93,7 +93,7 @@
         <dependency>
             <groupId>com.webguys.ponzu</groupId>
             <artifactId>api</artifactId>
-            <version>1.2.0</version>
+            <version>1.2.1-SNAPSHOT</version>
         </dependency>
 
         <dependency>
