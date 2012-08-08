@@ -1,28 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DependencyValidationManager">
-    <option name="SKIP_IMPORT_STATEMENTS" value="false" />
-  </component>
   <component name="EntryPointsManager">
     <entry_points version="2.0" />
     <list size="2">
       <item index="0" class="java.lang.String" itemvalue="org.junit.Ignore" />
       <item index="1" class="java.lang.String" itemvalue="org.junit.Test" />
     </list>
-  </component>
-  <component name="FacetAutodetectingManager">
-    <autodetection-disabled>
-      <facet-type id="Scala">
-        <modules>
-          <module name="unit-tests" />
-        </modules>
-      </facet-type>
-      <facet-type id="scala">
-        <modules>
-          <module name="scala-unit-tests" />
-        </modules>
-      </facet-type>
-    </autodetection-disabled>
   </component>
   <component name="IdProvider" IDEtalkID="E479977A55D2FFACBB467B5E6C1F97CB" />
   <component name="JavadocGenerationManager">
@@ -48,6 +31,11 @@
         <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/acceptance-tests/pom.xml" />
       </list>
+    </option>
+    <option name="ignoredFiles">
+      <set>
+        <option value="$PROJECT_DIR$/serialization-tests/pom.xml" />
+      </set>
     </option>
   </component>
   <component name="NullableNotNullManager">
@@ -75,7 +63,7 @@
   <component name="ProjectResources">
     <default-html-doctype>http://www.w3.org/1999/xhtml</default-html-doctype>
   </component>
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_5" assert-keyword="true" jdk-15="true" project-jdk-name="1.7" project-jdk-type="JavaSDK">
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_1_6" assert-keyword="true" jdk-15="true" project-jdk-name="1.6" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/classes" />
   </component>
 </project>

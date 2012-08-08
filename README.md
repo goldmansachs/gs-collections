@@ -1,57 +1,61 @@
-# GS Collections
+# Introduction
 
-GS Collections is a collections framework for Java. It has JDK-compatible List, Set and Map implementations with a rich API and set of utility classes that work with any JDK compatible Collections, Arrays, Maps or Strings. The iteration protocol was inspired by the Smalltalk collection framework.
+Ponzu is a fork of the Goldman Sachs gs-collections framework.  The main difference is that the primary iteration protocol methods have been renamed:
 
-## Download
-[Version 1.2.0](https://github.com/downloads/goldmansachs/gs-collections/gs-collections-1.2.0.zip)
-[Older releases](https://github.com/goldmansachs/gs-collections/downloads)
+| **gs-collections** |  **ponzu**     |
+|----------------|------------| 
+| select         | filter     |
+| reject         | filterNot  |
+| detect         | find       |
+| collect        | transform  |
+| injectInto     | foldLeft   |
 
-## Quick Example
-GS Collections puts iteration methods on the container types. Lambdas are simulated using anonymous inner classes. Here's a code example that demonstrates the usual style of programming with GS Collections.
+In addition, the following have also been renamed:
 
-```java
-MutableList<Person> people = FastList.newListWith(person1, person2, person3);
-MutableList<String> sortedLastNames = people.collect(Person.TO_LAST_NAME).sortThis();
-System.out.println("Comma separated, sorted last names: " + sortedLastNames.makeString());
-```
+| **gs-collections** |  **ponzu**     |
+|----------------|------------| 
+| Function0         | Generator     |
+| Functions0        | Generators    |
+| PassThruFunction0 | Constant      |
+| CheckedFunction0  | CheckedGenerator |
 
-Person.TO_LAST_NAME is defined as a constant Function in the Person class.
+# Usage
 
-```java
-public static final Function<Person, String> TO_LAST_NAME = new Function<Person, String>()
-{
-    public String valueOf(Person person)
-    {
-        return person.lastName;
-    }
-};
-```
+To use this in your own project, add the following dependencies:
 
-## Why GS Collections?
-* Improves readability and reduces duplication of iteration code (enforces DRY/OAOO)
-* Implements several, high-level iteration patterns (select, reject, collect, inject into, etc.) on "humane" container interfaces which are extensions of the JDK interfaces
-* Provides a consistent mechanism for iterating over Collections, Arrays, Maps, and Strings
-* Provides replacements for ArrayList, HashSet, and HashMap optimized for performance and memory usage
-* Performs more "behind-the-scene" optimizations in utility classes
-* Encapsulates a lot of the structural complexity of parallel iteration and lazy evaluation
-* Adds new containers including Bag, Interval, Multimap, and immutable versions of all types
-* Has been under active development since 2005 and is a mature library
+    <dependency>
+     <groupId>com.webguys.ponzu</groupId>
+     <artifactId>api</artifactId>
+     <version>1.2.0</version>
+    </dependency>
+    
+    <dependency>
+     <groupId>com.webguys.ponzu</groupId>
+     <artifactId>impl</artifactId>
+     <version>1.2.0</version>
+    </dependency>
+    
+    If you would like to use the test utilities, add:
+    <dependency>
+     <groupId>com.webguys.ponzu</groupId>
+     <artifactId>testutils</artifactId>
+     <version>1.2.0</version>
+     <scope>test</scope>
+    </dependency>
 
-## Documentation
-The best way to learn about GS Collections is to dive into the [code kata](https://github.com/goldmansachs/gs-collections-kata). The kata is a fun way to learn idiomatic GS Collections usage and hone your skills through practice. New concepts are introduced in the [slides](https://github.com/downloads/goldmansachs/gs-collections-kata/GS%20Collections%20Training%20Session%20and%20Kata%201.0.0.pdf), with coding exercises at the end of each section. The exercises are set up as a unit tests which fail. Your task is to make them pass, using GS Collections.
+# Licensing
 
-For more comprehensive documentation, take a look at the [Reference Guide](https://github.com/downloads/goldmansachs/gs-collections/GS%20Collections%20Reference%20Guide%201.0.0.pdf).
+Please see the file called LICENSE-2.0.txt
 
-## Contributions
-We currently do all development in an internal Subversion repository and are not prepared to take external contributions. However, we watch the [issue tracker](https://github.com/goldmansachs/gs-collections/issues) for bug reports and feature requests.
+Licensed under the Apache License, Version 2.0 (the "License");
+ou may not use this file except in compliance with the License.
 
-## FAQ
-### Why is Goldman Sachs open-sourcing GS Collections?
+You may obtain a copy of the License at
 
-* We believe that GS Collections offers a significant advantage over existing solutions. We hope others will benefit from it.
-* We believe in the power of the technical community to help improve GS Collections.
-* Technology is a huge part of what we do at Goldman Sachs. GS Collections exemplifies our commitment to technology.
-* We use open source software in many of our operations. We have benefited from the work of others and we'd like to give something back.
+    http://www.apache.org/licenses/LICENSE-2.0
 
-### Does Goldman Sachs use GS Collections?
-Yes, we use GS Collections in many of our internal applications.
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.

@@ -1,0 +1,64 @@
+/*
+ * Copyright 2011 Goldman Sachs.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.webguys.ponzu.impl.lazy;
+
+import java.util.Iterator;
+
+import com.webguys.ponzu.api.block.procedure.ObjectIntProcedure;
+import com.webguys.ponzu.api.block.procedure.Procedure;
+import com.webguys.ponzu.api.block.procedure.Procedure2;
+import com.webguys.ponzu.api.tuple.Pair;
+import com.webguys.ponzu.impl.lazy.iterator.ZipIterator;
+import com.webguys.ponzu.impl.utility.internal.IterableIterate;
+import net.jcip.annotations.Immutable;
+
+/**
+ * A ZipIterable is an iterable that transforms a source iterable on a condition as it iterates.
+ */
+@Immutable
+public class ZipIterable<X, Y>
+        extends AbstractLazyIterable<Pair<X, Y>>
+{
+    private final Iterable<X> xs;
+    private final Iterable<Y> ys;
+
+    public ZipIterable(Iterable<X> xs, Iterable<Y> ys)
+    {
+        this.xs = xs;
+        this.ys = ys;
+    }
+
+    public Iterator<Pair<X, Y>> iterator()
+    {
+        return new ZipIterator<X, Y>(this.xs, this.ys);
+    }
+
+    public void forEach(Procedure<? super Pair<X, Y>> procedure)
+    {
+        IterableIterate.forEach(this, procedure);
+    }
+
+    public void forEachWithIndex(ObjectIntProcedure<? super Pair<X, Y>> objectIntProcedure)
+    {
+        IterableIterate.forEachWithIndex(this, objectIntProcedure);
+    }
+
+    public <P> void forEachWith(Procedure2<? super Pair<X, Y>, ? super P> procedure, P parameter)
+    {
+        IterableIterate.forEachWith(this, procedure, parameter);
+    }
+}

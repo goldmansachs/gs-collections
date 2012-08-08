@@ -320,7 +320,7 @@
 
         <module name="AvoidStaticImport">
             <property name="excludes"
-                value="org.junit.Assert.*,com.gs.collections.impl.test.Verify.*,com.gs.collections.impl.factory.Iterables.*" />
+                value="org.junit.Assert.*,com.webguys.com.webguys.ponzu.impl.test.Verify.*,com.webguys.ponzu.impls.ponzu.impl.factory.Iterables.*" />
         </module>
 
         <module name="MissingDeprecated" />
@@ -358,7 +358,6 @@
     </module>
 
     <module name="RegexpHeader">
-        <property name="headerFile" value="java.header" />
         <property name="multiLines" value="19" />
         <property name="fileExtensions" value="java, scala" />
     </module>

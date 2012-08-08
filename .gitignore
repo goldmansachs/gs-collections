@@ -1,1 +1,28 @@
 target
+
+# intellij files
+
+.idea/workspace.xml
+.idea/ant.xml
+.idea/uiDesigner.xml
+.idea/libraries
+.idea/dictionaries
+.idea/copyright
+.idea/inspectionProfiles
+.idea/scopes/scope_settings.xml
+.idea/vcs.xml
+.idea/codeStyleSettings.xml
+.idea/inspectionProfiles
+
+# eclipse files
+.project
+.classpath
+.settings
+.externalToolBuilders/
+maven-eclipse.xml
+
+# OS X files
+.DS_Store
+
+# backups
+*~
