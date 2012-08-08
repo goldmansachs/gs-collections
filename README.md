@@ -19,6 +19,30 @@ In addition, the following have also been renamed:
 | PassThruFunction0 | Constant      |
 | CheckedFunction0  | CheckedGenerator |
 
+# Usage
+
+To use this in your own project, add the following dependencies:
+
+<dependency>
+ <groupId>com.webguys.ponzu</groupId>
+ <artifactId>api</artifactId>
+ <version>1.2.0</version>
+</dependency>
+
+<dependency>
+ <groupId>com.webguys.ponzu</groupId>
+ <artifactId>impl</artifactId>
+ <version>1.2.0</version>
+</dependency>
+
+If you would like to use the test utilities, add:
+<dependency>
+ <groupId>com.webguys.ponzu</groupId>
+ <artifactId>testutils</artifactId>
+ <version>1.2.0</version>
+ <scope>test</scope>
+</dependency>
+
 # Licensing
 
 Please see the file called LICENSE-2.0.txt
