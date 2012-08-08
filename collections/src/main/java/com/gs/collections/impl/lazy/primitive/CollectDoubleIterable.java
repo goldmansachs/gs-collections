@@ -21,8 +21,12 @@ import java.util.Iterator;
 
 import com.gs.collections.api.DoubleIterable;
 import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
+import com.gs.collections.api.block.function.primitive.DoubleToObjectFunction;
+import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.primitive.DoublePredicate;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.DoubleProcedure;
@@ -38,7 +42,7 @@ public class CollectDoubleIterable<T>
 {
     private final LazyIterable<T> iterable;
     private final DoubleFunction<? super T> function;
-    private final DoubleFunctionToProcedure floatFunctionToProcedure = new DoubleFunctionToProcedure();
+    private final DoubleFunctionToProcedure doubleFunctionToProcedure = new DoubleFunctionToProcedure();
 
     public CollectDoubleIterable(LazyIterable<T> adapted, DoubleFunction<? super T> function)
     {
@@ -46,7 +50,7 @@ public class CollectDoubleIterable<T>
         this.function = function;
     }
 
-    public DoubleIterator iterator()
+    public DoubleIterator doubleIterator()
     {
         return new DoubleIterator()
         {
@@ -66,12 +70,50 @@ public class CollectDoubleIterable<T>
 
     public void forEach(DoubleProcedure procedure)
     {
-        this.iterable.forEachWith(this.floatFunctionToProcedure, procedure);
+        this.iterable.forEachWith(this.doubleFunctionToProcedure, procedure);
     }
 
     public int size()
     {
         return this.iterable.size();
+    }
+
+    public int count(final DoublePredicate predicate)
+    {
+        return this.iterable.count(new Predicate<T>()
+        {
+            public boolean accept(T each)
+            {
+                return predicate.accept(CollectDoubleIterable.this.function.doubleValueOf(each));
+            }
+        });
+    }
+
+    public boolean anySatisfy(final DoublePredicate predicate)
+    {
+        return this.iterable.anySatisfy(new Predicate<T>()
+        {
+            public boolean accept(T each)
+            {
+                return predicate.accept(CollectDoubleIterable.this.function.doubleValueOf(each));
+            }
+        });
+    }
+
+    public boolean allSatisfy(final DoublePredicate predicate)
+    {
+        return this.iterable.allSatisfy(new Predicate<T>()
+        {
+            public boolean accept(T each)
+            {
+                return predicate.accept(CollectDoubleIterable.this.function.doubleValueOf(each));
+            }
+        });
+    }
+
+    public <V> RichIterable<V> collect(DoubleToObjectFunction<? extends V> function)
+    {
+        return new CollectDoubleToObjectIterable<T, V>(this, function);
     }
 
     public double sum()
@@ -80,7 +122,7 @@ public class CollectDoubleIterable<T>
         {
             public double doubleValueOf(double doubleValue, T each)
             {
-                return doubleValue + (double) CollectDoubleIterable.this.function.doubleValueOf(each);
+                return doubleValue + CollectDoubleIterable.this.function.doubleValueOf(each);
             }
         });
     }
@@ -122,7 +164,7 @@ public class CollectDoubleIterable<T>
             double second = sortedArray[i - 1];
             return (first + second) / 2.0d;
         }
-        return (double) sortedArray[i];
+        return sortedArray[i];
     }
 
     public double[] toArray()

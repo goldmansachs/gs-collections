@@ -21,8 +21,12 @@ import java.util.Iterator;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.LongIterable;
+import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
+import com.gs.collections.api.block.function.primitive.LongToObjectFunction;
+import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.primitive.LongPredicate;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.LongProcedure;
@@ -46,7 +50,7 @@ public class CollectLongIterable<T>
         this.function = function;
     }
 
-    public LongIterator iterator()
+    public LongIterator longIterator()
     {
         return new LongIterator()
         {
@@ -72,6 +76,44 @@ public class CollectLongIterable<T>
     public int size()
     {
         return this.iterable.size();
+    }
+
+    public int count(final LongPredicate predicate)
+    {
+        return this.iterable.count(new Predicate<T>()
+        {
+            public boolean accept(T each)
+            {
+                return predicate.accept(CollectLongIterable.this.function.longValueOf(each));
+            }
+        });
+    }
+
+    public boolean anySatisfy(final LongPredicate predicate)
+    {
+        return this.iterable.anySatisfy(new Predicate<T>()
+        {
+            public boolean accept(T each)
+            {
+                return predicate.accept(CollectLongIterable.this.function.longValueOf(each));
+            }
+        });
+    }
+
+    public boolean allSatisfy(final LongPredicate predicate)
+    {
+        return this.iterable.allSatisfy(new Predicate<T>()
+        {
+            public boolean accept(T each)
+            {
+                return predicate.accept(CollectLongIterable.this.function.longValueOf(each));
+            }
+        });
+    }
+
+    public <V> RichIterable<V> collect(LongToObjectFunction<? extends V> function)
+    {
+        return new CollectLongToObjectIterable<T, V>(this, function);
     }
 
     public long sum()

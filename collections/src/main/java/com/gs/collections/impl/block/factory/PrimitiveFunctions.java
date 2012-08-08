@@ -28,6 +28,11 @@ public final class PrimitiveFunctions
     private static final UnboxIntegerToFloat UNBOX_INTEGER_TO_FLOAT = new UnboxIntegerToFloat();
     private static final UnboxIntegerToLong UNBOX_INTEGER_TO_LONG = new UnboxIntegerToLong();
     private static final UnboxIntegerToDouble UNBOX_INTEGER_TO_DOUBLE = new UnboxIntegerToDouble();
+    private static final UnboxDoubleToDouble UNBOX_DOUBLE_TO_DOUBLE = new UnboxDoubleToDouble();
+    private static final UnboxFloatToFloat UNBOX_FLOAT_TO_FLOAT = new UnboxFloatToFloat();
+    private static final UnboxNumberToFloat UNBOX_NUMBER_TO_FLOAT = new UnboxNumberToFloat();
+    private static final UnboxNumberToLong UNBOX_NUMBER_TO_LONG = new UnboxNumberToLong();
+    private static final UnboxNumberToDouble UNBOX_NUMBER_TO_DOUBLE = new UnboxNumberToDouble();
 
     private PrimitiveFunctions()
     {
@@ -42,6 +47,21 @@ public final class PrimitiveFunctions
     public static IntFunction<Integer> unboxIntegerToInt()
     {
         return UNBOX_INTEGER_TO_INT;
+    }
+
+    public static FloatFunction<Number> unboxNumberToFloat()
+    {
+        return UNBOX_NUMBER_TO_FLOAT;
+    }
+
+    public static LongFunction<Number> unboxNumberToLong()
+    {
+        return UNBOX_NUMBER_TO_LONG;
+    }
+
+    public static DoubleFunction<Number> unboxNumberToDouble()
+    {
+        return UNBOX_NUMBER_TO_DOUBLE;
     }
 
     public static FloatFunction<Integer> unboxIntegerToFloat()
@@ -59,10 +79,20 @@ public final class PrimitiveFunctions
         return UNBOX_INTEGER_TO_DOUBLE;
     }
 
+    public static DoubleFunction<Double> unboxDoubleToDouble()
+    {
+        return UNBOX_DOUBLE_TO_DOUBLE;
+    }
+
+    public static FloatFunction<Float> unboxFloatToFloat()
+    {
+        return UNBOX_FLOAT_TO_FLOAT;
+    }
+
     private static class UnboxNumberToInt
             implements IntFunction<Number>
     {
-        private static final long serialVersionUID = 6510193995011010233L;
+        private static final long serialVersionUID = 1L;
 
         public int intValueOf(Number number)
         {
@@ -73,7 +103,7 @@ public final class PrimitiveFunctions
     private static class UnboxIntegerToInt
             implements IntFunction<Integer>
     {
-        private static final long serialVersionUID = -2237117769427976064L;
+        private static final long serialVersionUID = 1L;
 
         public int intValueOf(Integer integer)
         {
@@ -84,7 +114,7 @@ public final class PrimitiveFunctions
     private static class UnboxIntegerToFloat
             implements FloatFunction<Integer>
     {
-        private static final long serialVersionUID = 1677416777147190512L;
+        private static final long serialVersionUID = 1L;
 
         public float floatValueOf(Integer integer)
         {
@@ -95,7 +125,7 @@ public final class PrimitiveFunctions
     private static class UnboxIntegerToLong
             implements LongFunction<Integer>
     {
-        private static final long serialVersionUID = -2245531753693069446L;
+        private static final long serialVersionUID = 1L;
 
         public long longValueOf(Integer integer)
         {
@@ -106,11 +136,65 @@ public final class PrimitiveFunctions
     private static class UnboxIntegerToDouble
             implements DoubleFunction<Integer>
     {
-        private static final long serialVersionUID = -4676486269281421901L;
+        private static final long serialVersionUID = 1L;
 
         public double doubleValueOf(Integer integer)
         {
             return integer;
+        }
+    }
+
+    private static class UnboxDoubleToDouble
+            implements DoubleFunction<Double>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public double doubleValueOf(Double aDouble)
+        {
+            return aDouble;
+        }
+    }
+
+    private static class UnboxFloatToFloat implements FloatFunction<Float>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public float floatValueOf(Float aFloat)
+        {
+            return aFloat;
+        }
+    }
+
+    private static class UnboxNumberToFloat
+            implements FloatFunction<Number>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public float floatValueOf(Number number)
+        {
+            return number.floatValue();
+        }
+    }
+
+    private static class UnboxNumberToLong
+            implements LongFunction<Number>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public long longValueOf(Number number)
+        {
+            return number.longValue();
+        }
+    }
+
+    private static class UnboxNumberToDouble
+            implements DoubleFunction<Number>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public double doubleValueOf(Number number)
+        {
+            return number.doubleValue();
         }
     }
 }

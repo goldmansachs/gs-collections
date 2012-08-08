@@ -16,16 +16,31 @@
 
 package com.gs.collections.api;
 
+import com.gs.collections.api.block.function.primitive.LongToObjectFunction;
+import com.gs.collections.api.block.predicate.primitive.LongPredicate;
 import com.gs.collections.api.block.procedure.primitive.LongProcedure;
 import com.gs.collections.api.iterator.LongIterator;
 
+/**
+ * LongIterable is an interface which is memory-optimized for long primitives.
+ * It is inspired by the interface RichIterable, and contains a subset of the internal iterator methods on RichIterable like collect, sum, etc.
+ * The API also includes an external iterator method, which returns an LongIterator. LongIterator helps iterate over the LongIterable without boxing the primitives.
+ */
 public interface LongIterable
 {
-    LongIterator iterator();
+    LongIterator longIterator();
 
     void forEach(LongProcedure procedure);
 
     int size();
+
+    int count(LongPredicate predicate);
+
+    boolean anySatisfy(LongPredicate predicate);
+
+    boolean allSatisfy(LongPredicate predicate);
+
+    <V> RichIterable<V> collect(LongToObjectFunction<? extends V> function);
 
     long sum();
 

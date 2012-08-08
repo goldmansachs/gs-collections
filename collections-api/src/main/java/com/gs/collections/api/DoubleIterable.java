@@ -16,16 +16,31 @@
 
 package com.gs.collections.api;
 
+import com.gs.collections.api.block.function.primitive.DoubleToObjectFunction;
+import com.gs.collections.api.block.predicate.primitive.DoublePredicate;
 import com.gs.collections.api.block.procedure.primitive.DoubleProcedure;
 import com.gs.collections.api.iterator.DoubleIterator;
 
+/**
+ * DoubleIterable is an interface which is memory-optimized for double primitives.
+ * It is inspired by the interface RichIterable, and contains a subset of the internal iterator methods on RichIterable like collect, sum, etc.
+ * The API also includes an external iterator method, which returns an DoubleIterator. DoubleIterator helps iterate over the DoubleIterable without boxing the primitives.
+ */
 public interface DoubleIterable
 {
-    DoubleIterator iterator();
+    DoubleIterator doubleIterator();
 
     void forEach(DoubleProcedure procedure);
 
     int size();
+
+    int count(DoublePredicate predicate);
+
+    boolean anySatisfy(DoublePredicate predicate);
+
+    boolean allSatisfy(DoublePredicate predicate);
+
+    <V> RichIterable<V> collect(DoubleToObjectFunction<? extends V> function);
 
     double sum();
 

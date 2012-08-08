@@ -50,7 +50,7 @@ public class CollectIntIterable<T>
         this.function = function;
     }
 
-    public IntIterator iterator()
+    public IntIterator intIterator()
     {
         return new IntIterator()
         {

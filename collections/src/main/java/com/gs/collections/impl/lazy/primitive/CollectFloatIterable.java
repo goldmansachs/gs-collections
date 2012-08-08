@@ -21,9 +21,13 @@ import java.util.Iterator;
 
 import com.gs.collections.api.FloatIterable;
 import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
 import com.gs.collections.api.block.function.primitive.FloatObjectToFloatFunction;
+import com.gs.collections.api.block.function.primitive.FloatToObjectFunction;
+import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.primitive.FloatPredicate;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.FloatProcedure;
@@ -47,7 +51,7 @@ public class CollectFloatIterable<T>
         this.function = function;
     }
 
-    public FloatIterator iterator()
+    public FloatIterator floatIterator()
     {
         return new FloatIterator()
         {
@@ -73,6 +77,44 @@ public class CollectFloatIterable<T>
     public int size()
     {
         return this.iterable.size();
+    }
+
+    public int count(final FloatPredicate predicate)
+    {
+        return this.iterable.count(new Predicate<T>()
+        {
+            public boolean accept(T each)
+            {
+                return predicate.accept(CollectFloatIterable.this.function.floatValueOf(each));
+            }
+        });
+    }
+
+    public boolean anySatisfy(final FloatPredicate predicate)
+    {
+        return this.iterable.anySatisfy(new Predicate<T>()
+        {
+            public boolean accept(T each)
+            {
+                return predicate.accept(CollectFloatIterable.this.function.floatValueOf(each));
+            }
+        });
+    }
+
+    public boolean allSatisfy(final FloatPredicate predicate)
+    {
+        return this.iterable.allSatisfy(new Predicate<T>()
+        {
+            public boolean accept(T each)
+            {
+                return predicate.accept(CollectFloatIterable.this.function.floatValueOf(each));
+            }
+        });
+    }
+
+    public <V> RichIterable<V> collect(FloatToObjectFunction<? extends V> function)
+    {
+        return new CollectFloatToObjectIterable<T, V>(this, function);
     }
 
     public double sum()

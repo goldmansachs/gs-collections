@@ -16,16 +16,31 @@
 
 package com.gs.collections.api;
 
+import com.gs.collections.api.block.function.primitive.FloatToObjectFunction;
+import com.gs.collections.api.block.predicate.primitive.FloatPredicate;
 import com.gs.collections.api.block.procedure.primitive.FloatProcedure;
 import com.gs.collections.api.iterator.FloatIterator;
 
+/**
+ * FloatIterable is an interface which is memory-optimized for float primitives.
+ * It is inspired by the interface RichIterable, and contains a subset of the internal iterator methods on RichIterable like collect, sum, etc.
+ * The API also includes an external iterator method, which returns an FloatIterator. FloatIterator helps iterate over the FloatIterable without boxing the primitives.
+ */
 public interface FloatIterable
 {
-    FloatIterator iterator();
+    FloatIterator floatIterator();
 
     void forEach(FloatProcedure procedure);
 
     int size();
+
+    int count(FloatPredicate predicate);
+
+    boolean anySatisfy(FloatPredicate predicate);
+
+    boolean allSatisfy(FloatPredicate predicate);
+
+    <V> RichIterable<V> collect(FloatToObjectFunction<? extends V> function);
 
     double sum();
 

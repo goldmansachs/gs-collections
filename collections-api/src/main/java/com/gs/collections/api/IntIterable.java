@@ -21,9 +21,14 @@ import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.iterator.IntIterator;
 
+/**
+ * IntIterable is an interface which is memory-optimized for integer primitives.
+ * It is inspired by the interface RichIterable, and contains a subset of the internal iterator methods on RichIterable like collect, sum, etc.
+ * The API also includes an external iterator method, which returns an IntIterator. IntIterator helps iterate over the IntIterable without boxing the primitives.
+ */
 public interface IntIterable
 {
-    IntIterator iterator();
+    IntIterator intIterator();
 
     void forEach(IntProcedure procedure);
 

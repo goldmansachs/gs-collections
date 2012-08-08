@@ -17,10 +17,13 @@
 package com.gs.collections.impl.lazy.primitive;
 
 import com.gs.collections.api.LongIterable;
+import com.gs.collections.api.block.function.primitive.LongToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.LongProcedure;
 import com.gs.collections.api.iterator.LongIterator;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
+import com.gs.collections.impl.block.factory.primitive.LongPredicates;
 import com.gs.collections.impl.list.Interval;
+import com.gs.collections.impl.list.mutable.FastList;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -32,7 +35,7 @@ public class CollectLongIterableTest
     public void iterator()
     {
         long sum = 0;
-        LongIterator iterator = this.longIterable.iterator();
+        LongIterator iterator = this.longIterable.longIterator();
         while (iterator.hasNext())
         {
             sum += iterator.next();
@@ -52,6 +55,29 @@ public class CollectLongIterableTest
             }
         });
         Assert.assertEquals(6, value[0]);
+    }
+
+    @Test
+    public void count()
+    {
+        Assert.assertEquals(1, this.longIterable.count(LongPredicates.equal(1)));
+        Assert.assertEquals(3, this.longIterable.count(LongPredicates.lessThan(4)));
+        Assert.assertEquals(2, this.longIterable.count(LongPredicates.greaterThan(1)));
+    }
+
+    @Test
+    public void anySatisfy()
+    {
+        Assert.assertTrue(this.longIterable.anySatisfy(LongPredicates.greaterThan(1)));
+        Assert.assertTrue(this.longIterable.anySatisfy(LongPredicates.equal(1)));
+        Assert.assertFalse(this.longIterable.anySatisfy(LongPredicates.greaterThan(4)));
+    }
+
+    @Test
+    public void allSatisfy()
+    {
+        Assert.assertTrue(this.longIterable.allSatisfy(LongPredicates.lessThan(4)));
+        Assert.assertFalse(this.longIterable.allSatisfy(LongPredicates.lessThan(3)));
     }
 
     @Test
@@ -95,5 +121,17 @@ public class CollectLongIterableTest
     public void testToSortedArray()
     {
         Assert.assertArrayEquals(new long[]{1, 2, 3, 4}, Interval.fromTo(4, 1).collectLong(PrimitiveFunctions.unboxIntegerToLong()).toSortedArray());
+    }
+
+    @Test
+    public void collect()
+    {
+        Assert.assertEquals(FastList.newListWith("1", "2", "3"), this.longIterable.collect(new LongToObjectFunction<Object>()
+        {
+            public String valueOf(long each)
+            {
+                return String.valueOf(each);
+            }
+        }).toList());
     }
 }

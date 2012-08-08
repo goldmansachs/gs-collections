@@ -37,7 +37,7 @@ public class CollectIntIterableTest
     public void iterator()
     {
         int sum = 0;
-        IntIterator iterator = this.intIterable.iterator();
+        IntIterator iterator = this.intIterable.intIterator();
         while (iterator.hasNext())
         {
             sum += iterator.next();

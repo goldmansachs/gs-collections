@@ -18,21 +18,21 @@ package com.gs.collections.impl.lazy.primitive;
 
 import java.util.Iterator;
 
-import com.gs.collections.api.block.function.primitive.IntToObjectFunction;
+import com.gs.collections.api.block.function.primitive.FloatToObjectFunction;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.IntProcedure;
-import com.gs.collections.api.iterator.IntIterator;
+import com.gs.collections.api.block.procedure.primitive.FloatProcedure;
+import com.gs.collections.api.iterator.FloatIterator;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
 
-public class CollectIntToObjectIterable<T, V>
+public class CollectFloatToObjectIterable<T, V>
         extends AbstractLazyIterable<V>
 {
-    private final CollectIntIterable<T> iterable;
-    private final IntToObjectFunction<? extends V> function;
+    private final CollectFloatIterable<T> iterable;
+    private final FloatToObjectFunction<? extends V> function;
 
-    public CollectIntToObjectIterable(CollectIntIterable<T> iterable, IntToObjectFunction<? extends V> function)
+    public CollectFloatToObjectIterable(CollectFloatIterable<T> iterable, FloatToObjectFunction<? extends V> function)
     {
         this.iterable = iterable;
         this.function = function;
@@ -40,35 +40,35 @@ public class CollectIntToObjectIterable<T, V>
 
     public void forEach(final Procedure<? super V> procedure)
     {
-        this.iterable.forEach(new IntProcedure()
+        this.iterable.forEach(new FloatProcedure()
         {
-            public void value(int each)
+            public void value(float each)
             {
-                procedure.value(CollectIntToObjectIterable.this.function.valueOf(each));
+                procedure.value(CollectFloatToObjectIterable.this.function.valueOf(each));
             }
         });
     }
 
     public void forEachWithIndex(final ObjectIntProcedure<? super V> objectIntProcedure)
     {
-        this.iterable.forEach(new IntProcedure()
+        this.iterable.forEach(new FloatProcedure()
         {
             private int index;
 
-            public void value(int each)
+            public void value(float each)
             {
-                objectIntProcedure.value(CollectIntToObjectIterable.this.function.valueOf(each), this.index++);
+                objectIntProcedure.value(CollectFloatToObjectIterable.this.function.valueOf(each), this.index++);
             }
         });
     }
 
     public <P> void forEachWith(final Procedure2<? super V, ? super P> procedure, final P parameter)
     {
-        this.iterable.forEach(new IntProcedure()
+        this.iterable.forEach(new FloatProcedure()
         {
-            public void value(int each)
+            public void value(float each)
             {
-                procedure.value(CollectIntToObjectIterable.this.function.valueOf(each), parameter);
+                procedure.value(CollectFloatToObjectIterable.this.function.valueOf(each), parameter);
             }
         });
     }
@@ -77,7 +77,7 @@ public class CollectIntToObjectIterable<T, V>
     {
         return new Iterator<V>()
         {
-            private final IntIterator iterator = CollectIntToObjectIterable.this.iterable.intIterator();
+            private final FloatIterator iterator = CollectFloatToObjectIterable.this.iterable.floatIterator();
 
             public boolean hasNext()
             {
@@ -86,7 +86,7 @@ public class CollectIntToObjectIterable<T, V>
 
             public V next()
             {
-                return CollectIntToObjectIterable.this.function.valueOf(this.iterator.next());
+                return CollectFloatToObjectIterable.this.function.valueOf(this.iterator.next());
             }
 
             public void remove()
