@@ -148,10 +148,14 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
 
     public ListIterable<T> pop(int count)
     {
-        this.checkEmptyStack();
         this.checkNegativeCount(count);
-        this.checkSizeLessThanCount(count);
         MutableList<T> result = FastList.newList(count);
+        if (this.checkZeroCount(count))
+        {
+            return result;
+        }
+        this.checkEmptyStack();
+        this.checkSizeLessThanCount(count);
         while (count > 0)
         {
             result.add(this.pop());
@@ -162,8 +166,12 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
 
     public <R extends Collection<T>> R pop(int count, R targetCollection)
     {
-        this.checkEmptyStack();
         this.checkNegativeCount(count);
+        if (this.checkZeroCount(count))
+        {
+            return targetCollection;
+        }
+        this.checkEmptyStack();
         this.checkSizeLessThanCount(count);
         while (count > 0)
         {
@@ -175,8 +183,12 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
 
     public <R extends MutableStack<T>> R pop(int count, R targetStack)
     {
-        this.checkEmptyStack();
         this.checkNegativeCount(count);
+        if (this.checkZeroCount(count))
+        {
+            return targetStack;
+        }
+        this.checkEmptyStack();
         this.checkSizeLessThanCount(count);
         while (count > 0)
         {
@@ -184,6 +196,16 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
             count--;
         }
         return targetStack;
+    }
+
+    public void clear()
+    {
+        this.data.clear();
+    }
+
+    private boolean checkZeroCount(int count)
+    {
+        return count == 0;
     }
 
     public T peek()
@@ -194,10 +216,22 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
 
     public ListIterable<T> peek(int count)
     {
-        this.checkEmptyStack();
         this.checkNegativeCount(count);
+        if (this.checkZeroCount(count))
+        {
+            return FastList.newList();
+        }
+        this.checkEmptyStack();
         this.checkSizeLessThanCount(count);
         return FastList.newList(this.asLazy().take(count));
+    }
+
+    public T peekAt(int index)
+    {
+        this.checkNegativeCount(index);
+        this.checkEmptyStack();
+        this.checkSizeLessThanCount(index);
+        return this.data.get(this.data.size() - 1 - index);
     }
 
     public int size()
@@ -683,7 +717,7 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
 
     private void checkNegativeCount(int count)
     {
-        if (count <= 0)
+        if (count < 0)
         {
             throw new IllegalArgumentException("Count must be positive but was " + count);
         }

@@ -116,6 +116,14 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
         }
     }
 
+    public void clear()
+    {
+        synchronized (this.lock)
+        {
+            this.delegate.clear();
+        }
+    }
+
     public void push(T item)
     {
         synchronized (this.lock)
@@ -137,6 +145,14 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
         synchronized (this.lock)
         {
             return this.delegate.peek(count);
+        }
+    }
+
+    public T peekAt(int index)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.peekAt(index);
         }
     }
 
@@ -326,10 +342,7 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
 
     public T getLast()
     {
-        synchronized (this.lock)
-        {
-            return this.delegate.getLast();
-        }
+        return this.delegate.getLast();
     }
 
     public boolean contains(Object object)

@@ -70,15 +70,6 @@ trait SynchronizedRichIterableTestTrait extends SynchronizedMutableIterableTestT
     }
 
     @Test
-    def getLast_synchronized
-    {
-        this.assertSynchronized
-        {
-            this.classUnderTest.getLast
-        }
-    }
-
-    @Test
     def contains_synchronized
     {
         this.assertSynchronized

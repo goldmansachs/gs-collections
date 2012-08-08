@@ -64,7 +64,21 @@ public interface StackIterable<T> extends RichIterable<T>
 
     StackIterable<Pair<T, Integer>> zipWithIndex();
 
+    /**
+     * @return the top of the stack.
+     */
     T peek();
+
+    /**
+     * @return a ListIterable of the number of elements specified by the count, beginning with the top of the stack.
+     */
+    ListIterable<T> peek(int count);
+
+    /**
+     * @param index the location to peek into
+     * @return the element at the specified index
+     */
+    T peekAt(int index);
 
     /**
      * Should return the same value as peek().
@@ -77,8 +91,6 @@ public interface StackIterable<T> extends RichIterable<T>
      * @throws UnsupportedOperationException
      */
     T getLast();
-
-    ListIterable<T> peek(int count);
 
     /**
      * Follows the same rules as {@link AbstractCollection#toString()} except it processes the elements

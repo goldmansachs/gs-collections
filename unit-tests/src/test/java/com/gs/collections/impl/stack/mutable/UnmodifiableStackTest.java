@@ -151,6 +151,12 @@ public class UnmodifiableStackTest extends StackIterableTestCase
         });
     }
 
+    @Test(expected = UnsupportedOperationException.class)
+    public void testClear()
+    {
+        this.newStackFromTopToBottom(1, 2, 3).clear();
+    }
+
     @Test
     public void testSelect()
     {

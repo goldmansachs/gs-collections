@@ -56,6 +56,7 @@ public abstract class MutableStackTestCase extends StackIterableTestCase
         Assert.assertEquals("3", stack.peek());
         Assert.assertEquals(this.newStackWith("1", "2", "3"), stack);
 
+        Assert.assertEquals("2", stack.peekAt(1));
         Assert.assertEquals("3", stack.pop());
         Assert.assertEquals("2", stack.peek());
         Assert.assertEquals("2", stack.pop());
@@ -81,6 +82,26 @@ public abstract class MutableStackTestCase extends StackIterableTestCase
 
         MutableStack<Integer> stack7 = this.newStackFromTopToBottom(1, 2, 3, 4);
         Assert.assertEquals(ArrayStack.<Integer>newStackFromTopToBottom(2, 1), stack7.pop(2, ArrayStack.<Integer>newStack()));
+
+        MutableStack<Integer> stack8 = this.newStackFromTopToBottom(1, 2, 3, 4);
+        Verify.assertIterableEmpty(stack8.pop(0));
+        Assert.assertEquals(ArrayStack.<Integer>newStackFromTopToBottom(1, 2, 3, 4), stack8);
+        Assert.assertEquals(FastList.newList(), stack8.peek(0));
+
+        MutableStack<Integer> stack9 = ArrayStack.newStack();
+        Assert.assertEquals(FastList.newList(), stack9.pop(0));
+        Assert.assertEquals(FastList.newList(), stack9.peek(0));
+        Assert.assertEquals(FastList.newList(), stack9.pop(0, FastList.<Integer>newList()));
+        Assert.assertEquals(ArrayStack.newStack(), stack9.pop(0, ArrayStack.<Integer>newStack()));
+    }
+
+    @Test
+    public void clear()
+    {
+        MutableStack<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
+        stack.clear();
+        Assert.assertEquals(ArrayStack.newStack(), stack);
+        Verify.assertIterableEmpty(stack);
     }
 
     @Test
@@ -138,12 +159,6 @@ public abstract class MutableStackTestCase extends StackIterableTestCase
     }
 
     @Test(expected = IllegalArgumentException.class)
-    public void pop_int_zero_throws()
-    {
-        this.newStackWith(1, 2, 3).pop(0);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
     public void pop_int_neg_throws()
     {
         this.newStackWith(1, 2, 3).pop(-1);
@@ -153,12 +168,6 @@ public abstract class MutableStackTestCase extends StackIterableTestCase
     public void pop_target_empty_throws()
     {
         this.newStackWith().pop(5, FastList.newList());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void pop_target_zero_throws()
-    {
-        this.newStackWith(1, 2, 3).pop(0, FastList.<Integer>newList());
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -177,12 +186,6 @@ public abstract class MutableStackTestCase extends StackIterableTestCase
     public void pop_targetStack_empty_throws()
     {
         this.newStackWith().pop(5, ArrayStack.newStack());
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void pop_targetStack_zero_throws()
-    {
-        this.newStackWith(1, 2, 3).pop(0, ArrayStack.<Integer>newStack());
     }
 
     @Test(expected = IllegalArgumentException.class)

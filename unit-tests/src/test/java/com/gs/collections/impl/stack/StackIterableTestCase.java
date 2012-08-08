@@ -129,6 +129,14 @@ public abstract class StackIterableTestCase
     }
 
     @Test
+    public void peekAt()
+    {
+        Assert.assertEquals("3", this.newStackWith("1", "2", "3").peekAt(0));
+        Assert.assertEquals("2", this.newStackWith("1", "2", "3").peekAt(1));
+        Assert.assertEquals("1", this.newStackWith("1", "2", "3").peekAt(2));
+    }
+
+    @Test
     public void size()
     {
         StackIterable<Integer> stack1 = this.newStackWith();

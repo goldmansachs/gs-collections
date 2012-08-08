@@ -86,6 +86,15 @@ class SynchronizedStackScalaTest extends SynchronizedRichIterableTestTrait
         }
     }
 
+    @Test
+    def clear
+    {
+        this.assertSynchronized
+        {
+            this.classUnderTest.clear
+        }
+    }
+
     @Ignore
     @Test
     def to_immutable

@@ -94,6 +94,11 @@ public final class UnmodifiableStack<T> implements MutableStack<T>, Serializable
         throw new UnsupportedOperationException("Cannot pop an UnmodifiableStack.");
     }
 
+    public void clear()
+    {
+        throw new UnsupportedOperationException("Cannot clear an UnmodifiableStack");
+    }
+
     public void push(T item)
     {
         throw new UnsupportedOperationException("Cannot push to an UnmodifiableStack.");
@@ -497,6 +502,11 @@ public final class UnmodifiableStack<T> implements MutableStack<T>, Serializable
     public ListIterable<T> peek(int count)
     {
         return this.mutableStack.peek(count);
+    }
+
+    public T peekAt(int index)
+    {
+        return this.mutableStack.peekAt(index);
     }
 
     @Override

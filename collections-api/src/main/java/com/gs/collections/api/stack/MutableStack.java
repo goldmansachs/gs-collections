@@ -47,15 +47,34 @@ public interface MutableStack<T> extends StackIterable<T>
 
     MutableStack<Pair<T, Integer>> zipWithIndex();
 
+    /**
+     * Adds an item to the top of the stack.
+     */
     void push(T item);
 
+    /**
+     * Removes and returns the top element of the stack.
+     */
     T pop();
 
+    /**
+     * Removes and returns a ListIterable of the number of elements specified by the count, beginning with the top of the stack.
+     */
     ListIterable<T> pop(int count);
 
+    /**
+     * Removes and returns a ListIterable of the number of elements specified by the count,
+     * beginning with the top of the stack and puts them into the targeted collection type.
+     */
     <R extends Collection<T>> R pop(int count, R targetCollection);
 
+    /**
+     * Removes and returns a ListIterable of the number of elements specified by the count,
+     * beginning with the top of the stack and puts them into a new stack.
+     */
     <R extends MutableStack<T>> R pop(int count, R targetStack);
+
+    void clear();
 
     MutableStack<T> asUnmodifiable();
 
