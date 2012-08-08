@@ -21,12 +21,70 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>ponzu</groupId>
+    <prerequisites>
+        <maven>3.0.4</maven>
+    </prerequisites>
+
+    <parent>
+        <groupId>org.sonatype.oss</groupId>
+        <artifactId>oss-parent</artifactId>
+        <version>7</version>
+    </parent>
+
+    <groupId>com.webguys.ponzu</groupId>
     <artifactId>impl</artifactId>
     <version>1.2.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>Main Library</name>
+    <organization>
+        <name>The WebGuys</name>
+    </organization>
+
+    <name>Ponzu Main Library</name>
+    <description>Ponzu is a collections framework for Java. It has JDK-compatible List, Set and Map implementations
+        with a rich API and set of utility classes that work with any JDK compatible Collections, Arrays, Maps or
+        Strings.
+    </description>
+    <inceptionYear>2011</inceptionYear>
+
+    <url>https://github.com/kevinbirch/ponzu</url>
+    <scm>
+        <connection>scm:git:git://github.com/kevinbirch/ponzu.git</connection>
+        <developerConnection>scm:git:ssh://git@github.com/kevinbirch/ponzu.git</developerConnection>
+        <url>https://github.com/kevinbirch/ponzu</url>
+    </scm>
+
+    <issueManagement>
+        <url>https://github.com/kevinbirch/ponzu/issues</url>
+        <system>github</system>
+    </issueManagement>
+
+    <licenses>
+        <license>
+            <name>Apache</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <id>kmb</id>
+            <name>Kevin Birch</name>
+            <email>kmb@pobox.com</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
+        <developer>
+            <id>no</id>
+            <name>Nick Orton</name>
+            <email>nick@orton.cc</email>
+            <roles>
+                <role>developer</role>
+            </roles>
+        </developer>
+    </developers>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -36,12 +94,10 @@
     <dependencies>
 
         <dependency>
-            <groupId>ponzu</groupId>
+            <groupId>com.webguys.ponzu</groupId>
             <artifactId>api</artifactId>
             <version>1.2.0-SNAPSHOT</version>
         </dependency>
-
-        <!-- External dependencies -->
 
         <dependency>
             <groupId>net.jcip</groupId>
@@ -126,7 +182,7 @@
                 <extensions>true</extensions>
                 <configuration>
                     <instructions>
-                        <Export-Package>ponzu.impl</Export-Package>
+                        <Export-Package>com.webguys.com.webguys.ponzu.impl</Export-Package>
                         <Bundle-RequiredExecutionEnvironment>JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
                         <Import-Package>
                             net.jcip.annotations;resolution:=optional,*
@@ -217,19 +273,30 @@
         </plugins>
     </build>
 
-    <distributionManagement>
+    <profiles>
+        <profile>
+            <id>release</id>
 
-        <repository>
-            <id>repository</id>
-            <name>releases</name>
-            <url>${repository.url}</url>
-        </repository>
+            <build>
 
-        <snapshotRepository>
-            <id>repository</id>
-            <name>snapshots</name>
-            <url>${repository.url}</url>
-        </snapshotRepository>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-gpg-plugin</artifactId>
+                        <version>1.4</version>
+                        <executions>
+                            <execution>
+                                <id>sign-artifacts</id>
+                                <phase>verify</phase>
+                                <goals>
+                                    <goal>sign</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
 
-    </distributionManagement>
+            </build>
+        </profile>
+    </profiles>
 </project>
