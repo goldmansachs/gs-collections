@@ -327,20 +327,14 @@ public class StringIterateTest
             }
         });
         Assert.assertEquals("c3b2a1", buffer.toString());
-    }
 
-    @Test
-    public void testReverseForEach_emptyString()
-    {
-        final StringBuffer buffer = new StringBuffer();
         StringIterate.reverseForEach("", new CharProcedure()
         {
             public void value(char character)
             {
-                buffer.append(character);
+                Assert.fail();
             }
         });
-        Assert.assertEquals("", buffer.toString());
     }
 
     @Test
@@ -355,6 +349,14 @@ public class StringIterateTest
             }
         });
         Assert.assertEquals("c3b2a1", buffer.toString());
+
+        StringIterate.reverseForEach("", new CodePointProcedure()
+        {
+            public void value(int codePoint)
+            {
+                Assert.fail();
+            }
+        });
     }
 
     @Test

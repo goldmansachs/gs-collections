@@ -218,7 +218,7 @@ public class ComparatorsTest
     @Test
     public void nullSafeCompare()
     {
-        Assert.assertEquals(0, Comparators.nullSafeCompare((Integer) null, (Integer) null));
+        Assert.assertEquals(0, Comparators.nullSafeCompare(null, null));
         Assert.assertEquals(0, Comparators.nullSafeCompare("Sheila", "Sheila"));
 
         Assert.assertTrue(Comparators.nullSafeCompare("Fred", "Jim") < 0);

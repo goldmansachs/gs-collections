@@ -59,7 +59,7 @@ public interface MapIterable<K, V> extends RichIterable<V>
     void forEachValue(Procedure<? super V> procedure);
 
     /**
-     * Calls the <code>procedure</code> with each <em>key</em> of the map.
+     * Calls the {@code procedure} with each <em>key</em> of the map.
      * <pre>
      *     final Collection&lt;Integer&gt; result = new ArrayList&lt;Integer&gt;();
      *     MutableMap&lt;Integer, String&gt; map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
@@ -70,7 +70,7 @@ public interface MapIterable<K, V> extends RichIterable<V>
     void forEachKey(Procedure<? super K> procedure);
 
     /**
-     * Calls the <code>procedure</code> with each <em>key-value</em> pair of the map.
+     * Calls the {@code procedure} with each <em>key-value</em> pair of the map.
      * <pre>
      *     final Collection&lt;String&gt; collection = new ArrayList&lt;String&gt;();
      *     MutableMap&lt;Integer, String&gt; map = this.newMapWithKeysValues(1, "One", 2, "Two", 3, "Three");

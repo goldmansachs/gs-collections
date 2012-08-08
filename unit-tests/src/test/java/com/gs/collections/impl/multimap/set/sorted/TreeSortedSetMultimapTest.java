@@ -207,7 +207,7 @@ public class TreeSortedSetMultimapTest extends AbstractMutableMultimapTestCase
     @Override
     public void testClear()
     {
-        MutableMultimap<Integer, String> multimap = this.<Integer, String>newMultimapWithKeysValues(1, "One", 2, "Two", 3, "Three");
+        MutableMultimap<Integer, String> multimap = this.newMultimapWithKeysValues(1, "One", 2, "Two", 3, "Three");
         multimap.clear();
         Verify.assertEmpty(multimap);
     }

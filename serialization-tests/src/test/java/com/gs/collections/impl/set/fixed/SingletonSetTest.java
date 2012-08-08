@@ -29,6 +29,6 @@ public class SingletonSetTest
                 1L,
                 "rO0ABXNyAC5jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQuZml4ZWQuU2luZ2xldG9uU2V0AAAA\n"
                         + "AAAAAAEMAAB4cHB4",
-                Sets.fixedSize.of((Object) null));
+                Sets.fixedSize.of(null));
     }
 }

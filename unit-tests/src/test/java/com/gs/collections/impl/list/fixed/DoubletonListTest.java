@@ -150,7 +150,7 @@ public class DoubletonListTest extends AbstractMemoryEfficientMutableListTestCas
     @Test
     public void testEqualsAndHashCode()
     {
-        MutableList<String> one = classUnderTest();
+        MutableList<String> one = this.classUnderTest();
         List<String> oneA = new ArrayList<String>(one);
         Verify.assertEqualsAndHashCode(one, oneA);
         Verify.assertPostSerializedEqualsAndHashCode(one);
@@ -160,7 +160,7 @@ public class DoubletonListTest extends AbstractMemoryEfficientMutableListTestCas
     public void testForEach()
     {
         MutableList<String> result = Lists.mutable.of();
-        MutableList<String> source = classUnderTest();
+        MutableList<String> source = this.classUnderTest();
         source.forEach(CollectionAddProcedure.<String>on(result));
         Assert.assertEquals(FastList.newListWith("1", "2"), result);
     }
@@ -170,7 +170,7 @@ public class DoubletonListTest extends AbstractMemoryEfficientMutableListTestCas
     {
         final int[] indexSum = new int[1];
         final MutableList<String> result = Lists.mutable.of();
-        MutableList<String> source = classUnderTest();
+        MutableList<String> source = this.classUnderTest();
         source.forEachWithIndex(new ObjectIntProcedure<String>()
         {
             public void value(String each, int index)

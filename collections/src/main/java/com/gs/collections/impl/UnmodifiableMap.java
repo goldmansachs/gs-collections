@@ -33,7 +33,7 @@ public class UnmodifiableMap<K, V> implements Map<K, V>, Serializable
 
     public UnmodifiableMap(Map<K, V> delegate)
     {
-        if (null == delegate)
+        if (delegate == null)
         {
             throw new NullPointerException();
         }

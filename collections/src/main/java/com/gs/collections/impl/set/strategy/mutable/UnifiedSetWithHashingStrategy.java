@@ -215,8 +215,8 @@ public class UnifiedSetWithHashingStrategy<K>
             throw new NullPointerException();
         }
         UnifiedSetWithHashingStrategy<K> result = source instanceof RichIterable<?>
-                ? UnifiedSetWithHashingStrategy.<K>newSet(hashingStrategy, ((RichIterable<?>) source).size())
-                : UnifiedSetWithHashingStrategy.<K>newSet(hashingStrategy);
+                ? UnifiedSetWithHashingStrategy.newSet(hashingStrategy, ((RichIterable<?>) source).size())
+                : UnifiedSetWithHashingStrategy.newSet(hashingStrategy);
         Iterate.forEachWith(source, Procedures2.<K>addToCollection(), result);
         return result;
     }
@@ -272,9 +272,9 @@ public class UnifiedSetWithHashingStrategy<K>
         // constant multiples at each bit position have a bounded
         // number of collisions (approximately 8 at default load factor).
         int h = this.hashingStrategy.computeHashCode(key);
-        h ^= (h >>> 20) ^ (h >>> 12);
-        h ^= (h >>> 7) ^ (h >>> 4);
-        return h & (this.table.length - 1);
+        h ^= h >>> 20 ^ h >>> 12;
+        h ^= h >>> 7 ^ h >>> 4;
+        return h & this.table.length - 1;
     }
 
     public void clear()
@@ -410,22 +410,16 @@ public class UnifiedSetWithHashingStrategy<K>
                     {
                         this.add(this.nonSentinel(bucket.zero));
                     }
-                    if (bucket.one != null)
-                    {
-                        this.add(this.nonSentinel(bucket.one));
-                    }
-                    else
+                    if (bucket.one == null)
                     {
                         break;
                     }
-                    if (bucket.two != null)
-                    {
-                        this.add(this.nonSentinel(bucket.two));
-                    }
-                    else
+                    this.add(this.nonSentinel(bucket.one));
+                    if (bucket.two == null)
                     {
                         break;
                     }
+                    this.add(this.nonSentinel(bucket.two));
                     if (bucket.three != null)
                     {
                         if (bucket.three instanceof ChainedBucket)

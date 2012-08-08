@@ -82,7 +82,7 @@ public class DefaultSpeciesNewStrategy
         Constructor<?> constructor = ReflectionHelper.getConstructor(collection.getClass(), SIZE_CONSTRUCTOR_TYPES);
         if (constructor != null)
         {
-            return (Collection<T>) ReflectionHelper.newInstance(constructor, new Object[]{size});
+            return (Collection<T>) ReflectionHelper.newInstance(constructor, size);
         }
         return this.speciesNew(collection);
     }

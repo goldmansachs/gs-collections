@@ -207,7 +207,7 @@ public abstract class AbstractArrayAdapter<T>
     public <V, R extends Collection<V>> R collectIf(
             Predicate<? super T> predicate, Function<? super T, ? extends V> function, R target)
     {
-        return ArrayIterate.<T, V, R>collectIf(this.items, predicate, function, target);
+        return ArrayIterate.collectIf(this.items, predicate, function, target);
     }
 
     @Override
@@ -233,7 +233,7 @@ public abstract class AbstractArrayAdapter<T>
     @Override
     public boolean contains(Object o)
     {
-        return this.anySatisfy(Predicates.equal((T) o));
+        return this.anySatisfy(Predicates.equal(o));
     }
 
     @Override

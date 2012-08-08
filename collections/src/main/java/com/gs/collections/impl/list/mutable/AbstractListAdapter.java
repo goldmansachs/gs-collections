@@ -71,7 +71,7 @@ public abstract class AbstractListAdapter<T>
         {
             this.swapElements(i, j);
         }
-        return (MutableList<T>) this;
+        return this;
     }
 
     protected void swapElements(int i, int j)
@@ -138,7 +138,7 @@ public abstract class AbstractListAdapter<T>
 
     public MutableStack<T> toStack()
     {
-        return ArrayStack.<T>newStack(this.getDelegate());
+        return ArrayStack.newStack(this.getDelegate());
     }
 
     @Override

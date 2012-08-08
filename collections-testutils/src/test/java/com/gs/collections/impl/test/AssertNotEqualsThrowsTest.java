@@ -76,7 +76,7 @@ public class AssertNotEqualsThrowsTest
         }
         try
         {
-            Verify.assertNotEquals((String) null, (String) null);
+            Verify.assertNotEquals(null, null);
             Assert.fail("AssertionError expected");
         }
         catch (AssertionError e)

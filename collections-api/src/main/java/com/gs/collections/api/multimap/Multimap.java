@@ -49,6 +49,7 @@ import com.gs.collections.api.tuple.Pair;
  * @param <V> the type of mapped values
  * @since 1.0
  */
+@SuppressWarnings("JavaDoc")
 public interface Multimap<K, V>
 {
     /**
@@ -71,37 +72,37 @@ public interface Multimap<K, V>
      * <p/>
      * Given a Multimap with the contents:
      * <p/>
-     * <code>{ "key1" : ["val1", "val2", "val2"], "key2" : ["val3"] }</code>
+     * {@code { "key1" : ["val1", "val2", "val2"], "key2" : ["val3"] }}
      * <p/>
      * The given procedure would be invoked with the parameters:
      * <p/>
-     * <code>[ "val1", "val2", "val2", "val3" ]</code>
+     * {@code [ "val1", "val2", "val2", "val3" ]}
      */
     void forEachValue(Procedure<? super V> procedure);
 
     /**
-     * Calls the <code>procedure</code> with each <em>key</em>.
+     * Calls the {@code procedure} with each <em>key</em>.
      * <p/>
      * Given a Multimap with the contents:
      * <p/>
-     * <code>{ "key1" : ["val1", "val2", "val2"], "key2" : ["val3"] }</code>
+     * {@code { "key1" : ["val1", "val2", "val2"], "key2" : ["val3"] }}
      * <p/>
      * The given procedure would be invoked with the parameters:
      * <p/>
-     * <code>[ "key1", "key2" ]</code>
+     * {@code [ "key1", "key2" ]}
      */
     void forEachKey(Procedure<? super K> procedure);
 
     /**
-     * Calls the <code>procedure</code> with each <em>key-value</em> pair.
+     * Calls the {@code procedure} with each <em>key-value</em> pair.
      * <p/>
      * Given a Multimap with the contents:
      * <p/>
-     * <code>{ "key1" : ["val1", "val2", "val2"], "key2" : ["val3"] }</code>
+     * {@code { "key1" : ["val1", "val2", "val2"], "key2" : ["val3"] }}
      * <p/>
      * The given procedure would be invoked with the parameters:
      * <p/>
-     * <code>[ ["key1", "val1"], ["key1", "val2"], ["key1", "val2"], ["key2", "val3"] ]</code>
+     * {@code [ ["key1", "val1"], ["key1", "val2"], ["key1", "val2"], ["key2", "val3"] ]}
      */
     void forEachKeyValue(Procedure2<K, V> procedure);
 

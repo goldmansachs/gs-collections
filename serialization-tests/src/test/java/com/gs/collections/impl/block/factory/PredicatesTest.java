@@ -16,7 +16,6 @@
 
 package com.gs.collections.impl.block.factory;
 
-import com.gs.collections.api.block.function.Function;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Test;
 
@@ -82,7 +81,7 @@ public class PredicatesTest
                         + "Y2F0ZTt4cgAwY29tLmdzLmNvbGxlY3Rpb25zLmltcGwuYmxvY2suZmFjdG9yeS5QcmVkaWNhdGVz\n"
                         + "AAAAAAAAAAECAAB4cHBzcgA7Y29tLmdzLmNvbGxlY3Rpb25zLmltcGwuYmxvY2suZmFjdG9yeS5Q\n"
                         + "cmVkaWNhdGVzJFRydWVFcXVhbHMAAAAAAAAAAQIAAHhw",
-                Predicates.ifTrue((Function<Object, Boolean>) null));
+                Predicates.ifTrue(null));
     }
 
     @Test
@@ -98,7 +97,7 @@ public class PredicatesTest
                         + "aWNhdGU7eHIAMGNvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLmJsb2NrLmZhY3RvcnkuUHJlZGljYXRl\n"
                         + "cwAAAAAAAAABAgAAeHBwc3IAPGNvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLmJsb2NrLmZhY3Rvcnku\n"
                         + "UHJlZGljYXRlcyRGYWxzZUVxdWFscwAAAAAAAAABAgAAeHA=",
-                Predicates.ifFalse((Function<Object, Boolean>) null));
+                Predicates.ifFalse(null));
     }
 
     @Test

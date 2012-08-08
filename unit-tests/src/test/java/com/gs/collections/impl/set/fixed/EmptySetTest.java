@@ -16,7 +16,6 @@
 
 package com.gs.collections.impl.set.fixed;
 
-import java.io.Serializable;
 import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
@@ -93,7 +92,7 @@ public class EmptySetTest extends AbstractMemoryEfficientMutableSetTestCase
     public void testReadResolve()
     {
         Verify.assertInstanceOf(EmptySet.class, Sets.fixedSize.of());
-        Verify.assertPostSerializedIdentity((Serializable) Sets.fixedSize.of());
+        Verify.assertPostSerializedIdentity(Sets.fixedSize.of());
     }
 
     @Override

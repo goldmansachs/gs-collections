@@ -63,7 +63,7 @@ public final class SynchronizedPutFastListMultimap<K, V>
         {
             public void value(Pair<K, V> pair)
             {
-                put(pair.getOne(), pair.getTwo());
+                SynchronizedPutFastListMultimap.this.put(pair.getOne(), pair.getTwo());
             }
         });
     }

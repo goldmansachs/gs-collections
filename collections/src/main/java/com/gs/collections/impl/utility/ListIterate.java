@@ -899,7 +899,7 @@ public final class ListIterate
         {
             return RandomAccessListIterate.drop(list, count, targetList);
         }
-        return (R) IterableIterate.drop(list, count, targetList);
+        return IterableIterate.drop(list, count, targetList);
     }
 
     /**

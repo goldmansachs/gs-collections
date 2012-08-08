@@ -120,7 +120,7 @@ public class ArrayIterateTest
         {
             public void run()
             {
-                ArrayIterate.injectInto((int) 0, null, new IntObjectToIntFunction<Object>()
+                ArrayIterate.injectInto(0, null, new IntObjectToIntFunction<Object>()
                 {
                     public int intValueOf(int intParameter, Object objectParameter)
                     {

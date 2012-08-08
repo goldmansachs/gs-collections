@@ -16,7 +16,6 @@
 
 package com.gs.collections.impl.block.factory;
 
-import com.gs.collections.api.block.function.Function;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Test;
 
@@ -56,7 +55,7 @@ public class Predicates2Test
                         + "Y29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlByZWRpY2F0ZXMyAAAAAAAAAAECAAB4cHBz\n"
                         + "cgA3Y29tLmdzLmNvbGxlY3Rpb25zLmltcGwuYmxvY2suZmFjdG9yeS5QcmVkaWNhdGVzMiRFcXVh\n"
                         + "bAAAAAAAAAABAgAAeHEAfgAD",
-                Predicates2.attributeEqual((Function<Object, Object>) null));
+                Predicates2.attributeEqual(null));
     }
 
     @Test

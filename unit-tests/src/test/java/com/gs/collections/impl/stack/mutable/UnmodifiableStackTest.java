@@ -32,17 +32,15 @@ import org.junit.Test;
 public class UnmodifiableStackTest extends StackIterableTestCase
 {
     private MutableStack<Integer> mutableStack;
-    private MutableStack<String> mutableStackString;
     private MutableStack<Integer> unmodifiableStack;
     private MutableStack<String> unmodifiableStackString;
 
     @Before
     public void setUp()
     {
-        this.mutableStack = ArrayStack.<Integer>newStackFromTopToBottom(1, 2, 3);
+        this.mutableStack = ArrayStack.newStackFromTopToBottom(1, 2, 3);
         this.unmodifiableStack = new UnmodifiableStack<Integer>(this.mutableStack);
-        this.mutableStackString = ArrayStack.<String>newStackFromTopToBottom("1", "2", "3");
-        this.unmodifiableStackString = new UnmodifiableStack<String>(this.mutableStackString);
+        this.unmodifiableStackString = new UnmodifiableStack<String>(ArrayStack.newStackFromTopToBottom("1", "2", "3"));
     }
 
     @Override
@@ -78,7 +76,7 @@ public class UnmodifiableStackTest extends StackIterableTestCase
         {
             public void run()
             {
-                newStackWith(1, 2, 3).iterator().remove();
+                UnmodifiableStackTest.this.newStackWith(1, 2, 3).iterator().remove();
             }
         });
     }

@@ -67,7 +67,7 @@ public class ImmutableDoubletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         super.forEachValue();
         MutableList<String> collection = Lists.mutable.of();
-        ImmutableMap<Integer, String> map = classUnderTest();
+        ImmutableMap<Integer, String> map = this.classUnderTest();
         map.forEachValue(CollectionAddProcedure.on(collection));
         Assert.assertEquals(FastList.newListWith("1", "2"), collection);
     }
@@ -78,7 +78,7 @@ public class ImmutableDoubletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         super.forEachKey();
         MutableList<Integer> collection = Lists.mutable.of();
-        ImmutableMap<Integer, String> map = classUnderTest();
+        ImmutableMap<Integer, String> map = this.classUnderTest();
         map.forEachKey(CollectionAddProcedure.on(collection));
         Assert.assertEquals(FastList.newListWith(1, 2), collection);
     }
@@ -88,7 +88,7 @@ public class ImmutableDoubletonMapTest extends ImmutableMemoryEfficientMapTestCa
     public void getIfAbsent_function()
     {
         super.getIfAbsent_function();
-        ImmutableMap<Integer, String> map = classUnderTest();
+        ImmutableMap<Integer, String> map = this.classUnderTest();
         Assert.assertNull(map.get(4));
         Assert.assertEquals("4", map.getIfAbsent(4, new PassThruFunction0<String>("4")));
         Assert.assertNull(map.get(4));
@@ -110,7 +110,7 @@ public class ImmutableDoubletonMapTest extends ImmutableMemoryEfficientMapTestCa
     public void ifPresentApply()
     {
         super.ifPresentApply();
-        ImmutableMap<Integer, String> map = classUnderTest();
+        ImmutableMap<Integer, String> map = this.classUnderTest();
         Assert.assertNull(map.ifPresentApply(4, Functions.<String>getPassThru()));
         Assert.assertEquals("1", map.ifPresentApply(1, Functions.<String>getPassThru()));
         Assert.assertEquals("2", map.ifPresentApply(2, Functions.<String>getPassThru()));
@@ -121,7 +121,7 @@ public class ImmutableDoubletonMapTest extends ImmutableMemoryEfficientMapTestCa
     public void notEmpty()
     {
         super.notEmpty();
-        Assert.assertTrue(classUnderTest().notEmpty());
+        Assert.assertTrue(this.classUnderTest().notEmpty());
     }
 
     @Override

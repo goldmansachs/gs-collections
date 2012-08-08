@@ -18,7 +18,6 @@ package com.gs.collections.impl.lazy.primitive;
 
 import com.gs.collections.api.InternalIterable;
 import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntToObjectFunction;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -40,7 +39,7 @@ public class CollectIntToObjectIterableTest
         return new CollectIntToObjectIterable<T, T>(
                 new CollectIntIterable(
                         ArrayAdapter.<T>adapt(elements).asLazy(),
-                        (IntFunction<T>) PrimitiveFunctions.unboxNumberToInt()),
+                        PrimitiveFunctions.unboxNumberToInt()),
                 new IntToObjectFunction<T>()
                 {
                     public T valueOf(int each)

@@ -223,11 +223,11 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractMutableSetTestCas
         {
             UnifiedSetWithHashingStrategy<Integer> unifiedSet = UnifiedSetWithHashingStrategy.<Integer>newSet(
                     INTEGER_HASHING_STRATEGY, i, 0.75f).withAll(COLLISIONS.subList(0, i));
-            if (2 == i)
+            if (i == 2)
             {
                 unifiedSet.add(Integer.valueOf(1));
             }
-            if (4 == i)
+            if (i == 4)
             {
                 unifiedSet.add(Integer.valueOf(1));
                 unifiedSet.add(Integer.valueOf(2));
@@ -436,7 +436,8 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractMutableSetTestCas
     @Test
     public void put()
     {
-        for (int i = 1, size = MORE_COLLISIONS.size(); i <= size; i++)
+        int size = MORE_COLLISIONS.size();
+        for (int i = 1; i <= size; i++)
         {
             Pool<Integer> unifiedSet = UnifiedSetWithHashingStrategy.<Integer>newSet(
                     INTEGER_HASHING_STRATEGY, 1).withAll(MORE_COLLISIONS.subList(0, i - 1));
@@ -460,11 +461,11 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractMutableSetTestCas
         for (int i = 0; i < COLLISIONS.size(); i++)
         {
             Pool<Integer> pool = UnifiedSetWithHashingStrategy.<Integer>newSet(INTEGER_HASHING_STRATEGY, i).withAll(COLLISIONS.subList(0, i));
-            if (2 == i)
+            if (i == 2)
             {
                 pool.put(Integer.valueOf(1));
             }
-            if (4 == i)
+            if (i == 4)
             {
                 pool.put(Integer.valueOf(1));
                 pool.put(Integer.valueOf(2));
@@ -661,7 +662,8 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractMutableSetTestCas
     @Test
     public void serialization()
     {
-        for (int i = 1, size = COLLISIONS.size(); i < size; i++)
+        int size = COLLISIONS.size();
+        for (int i = 1; i < size; i++)
         {
             MutableSet<Integer> set = UnifiedSetWithHashingStrategy.<Integer>newSet(
                     INTEGER_HASHING_STRATEGY, SIZE).withAll(COLLISIONS.subList(0, i));
@@ -872,7 +874,8 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractMutableSetTestCas
     {
         super.toArray();
 
-        for (int i = 1, size = COLLISIONS.size(); i < size; i++)
+        int size = COLLISIONS.size();
+        for (int i = 1; i < size; i++)
         {
             MutableSet<Integer> set = UnifiedSetWithHashingStrategy.<Integer>newSet(
                     INTEGER_HASHING_STRATEGY, SIZE).withAll(COLLISIONS.subList(0, i));
@@ -900,7 +903,8 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractMutableSetTestCas
     @Test
     public void iterator_remove()
     {
-        for (int i = 0, size = MORE_COLLISIONS.size(); i < size; i++)
+        int size = MORE_COLLISIONS.size();
+        for (int i = 0; i < size; i++)
         {
             MutableSet<Integer> actual = UnifiedSetWithHashingStrategy.<Integer>newSet(INTEGER_HASHING_STRATEGY, SIZE).withAll(MORE_COLLISIONS);
             Iterator<Integer> iterator = actual.iterator();
@@ -919,35 +923,35 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractMutableSetTestCas
         // remove the last element from within a 2-level long chain that is fully populated
         MutableSet<Integer> set = UnifiedSetWithHashingStrategy.newSetWith(
                 INTEGER_HASHING_STRATEGY, COLLISION_1, COLLISION_2, COLLISION_3, COLLISION_4, COLLISION_5, COLLISION_6, COLLISION_7);
-        Iterator<Integer> iterator = set.iterator();
+        Iterator<Integer> iterator1 = set.iterator();
         for (int i = 0; i < 7; i++)
         {
-            iterator.next();
+            iterator1.next();
         }
-        iterator.remove();
+        iterator1.remove();
         Assert.assertEquals(UnifiedSetWithHashingStrategy.newSetWith(
                 INTEGER_HASHING_STRATEGY, COLLISION_1, COLLISION_2, COLLISION_3, COLLISION_4, COLLISION_5, COLLISION_6), set);
 
         // remove the second-to-last element from a 2-level long chain that that has one empty slot
-        iterator = set.iterator();
+        Iterator<Integer> iterator2 = set.iterator();
         for (int i = 0; i < 6; i++)
         {
-            iterator.next();
+            iterator2.next();
         }
-        iterator.remove();
+        iterator2.remove();
         Assert.assertEquals(UnifiedSetWithHashingStrategy.newSetWith(
                 INTEGER_HASHING_STRATEGY, COLLISION_1, COLLISION_2, COLLISION_3, COLLISION_4, COLLISION_5), set);
 
         //Testing removing the last element in a fully populated chained bucket
         UnifiedSetWithHashingStrategy<Integer> set2 = UnifiedSetWithHashingStrategy.newSetWith(
                 INTEGER_HASHING_STRATEGY, COLLISION_1, COLLISION_2, COLLISION_3, COLLISION_4);
-        Iterator<Integer> iterator2 = set2.iterator();
+        Iterator<Integer> iterator3 = set2.iterator();
         for (int i = 0; i < 3; ++i)
         {
-            iterator2.next();
+            iterator3.next();
         }
-        iterator2.next();
-        iterator2.remove();
+        iterator3.next();
+        iterator3.remove();
         Verify.assertSetsEqual(UnifiedSet.newSetWith(COLLISION_1, COLLISION_2, COLLISION_3), set2);
     }
 

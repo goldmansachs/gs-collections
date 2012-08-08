@@ -16,7 +16,6 @@
 
 package com.gs.collections.impl.map.fixed;
 
-import java.io.Serializable;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
@@ -86,7 +85,7 @@ public class EmptyMapTest extends AbstractMemoryEfficientMutableMapTest
     public void testReadResolve()
     {
         Verify.assertInstanceOf(EmptyMap.class, Maps.fixedSize.of());
-        Verify.assertPostSerializedIdentity((Serializable) Maps.fixedSize.of());
+        Verify.assertPostSerializedIdentity(Maps.fixedSize.of());
     }
 
     @Override

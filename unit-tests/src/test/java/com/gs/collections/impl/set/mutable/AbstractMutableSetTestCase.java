@@ -450,7 +450,8 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         MutableList<Integer> collisions = MORE_COLLISIONS.clone();
         collisions.add(COLLISION_10);
 
-        for (int i = 0, size = MORE_COLLISIONS.size(); i < size; i++)
+        int size = MORE_COLLISIONS.size();
+        for (int i = 0; i < size; i++)
         {
             MutableList<Integer> list = MORE_COLLISIONS.subList(0, i);
             MutableSet<Integer> set = this.classUnderTest();
@@ -486,7 +487,8 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
     {
         super.forEach();
 
-        for (int i = 1, size = MORE_COLLISIONS.size(); i < size; i++)
+        int size = MORE_COLLISIONS.size();
+        for (int i = 1; i < size; i++)
         {
             MutableSet<Integer> set = this.classUnderTest();
             set.addAll(MORE_COLLISIONS.subList(0, i));
@@ -516,7 +518,8 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         super.forEachWith();
 
         final Object sentinel = new Object();
-        for (int i = 1, size = MORE_COLLISIONS.size(); i < size; i++)
+        int size = MORE_COLLISIONS.size();
+        for (int i = 1; i < size; i++)
         {
             MutableSet<Integer> set = this.classUnderTest();
             set.addAll(MORE_COLLISIONS.subList(0, i));
@@ -553,7 +556,8 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
     {
         super.forEachWithIndex();
 
-        for (int i = 1, size = MORE_COLLISIONS.size(); i < size; i++)
+        int size = MORE_COLLISIONS.size();
+        for (int i = 1; i < size; i++)
         {
             MutableSet<Integer> set = this.classUnderTest();
             set.addAll(MORE_COLLISIONS.subList(0, i));

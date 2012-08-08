@@ -896,7 +896,7 @@ public abstract class AbstractMutableList<T>
         @Override
         public MutableStack<T> toStack()
         {
-            return ArrayStack.<T>newStack(this);
+            return ArrayStack.newStack(this);
         }
 
         @Override

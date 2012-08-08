@@ -284,7 +284,8 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
     @Override
     public T detect(Predicate<? super T> predicate)
     {
-        for (int i = 0, size = this.size(); i < size; i++)
+        int size = this.size();
+        for (int i = 0; i < size; i++)
         {
             T item = this.get(i);
             if (predicate.accept(item))
@@ -299,7 +300,8 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
     public int count(Predicate<? super T> predicate)
     {
         int count = 0;
-        for (int i = 0, size = this.size(); i < size; i++)
+        int size = this.size();
+        for (int i = 0; i < size; i++)
         {
             if (predicate.accept(this.get(i)))
             {
@@ -312,7 +314,8 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
     @Override
     public boolean anySatisfy(Predicate<? super T> predicate)
     {
-        for (int i = 0, size = this.size(); i < size; i++)
+        int size = this.size();
+        for (int i = 0; i < size; i++)
         {
             if (predicate.accept(this.get(i)))
             {
@@ -325,7 +328,8 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
     @Override
     public boolean allSatisfy(Predicate<? super T> predicate)
     {
-        for (int i = 0, size = this.size(); i < size; i++)
+        int size = this.size();
+        for (int i = 0; i < size; i++)
         {
             if (!predicate.accept(this.get(i)))
             {
@@ -705,6 +709,6 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
 
     public MutableStack<T> toStack()
     {
-        return ArrayStack.<T>newStack(this);
+        return ArrayStack.newStack(this);
     }
 }

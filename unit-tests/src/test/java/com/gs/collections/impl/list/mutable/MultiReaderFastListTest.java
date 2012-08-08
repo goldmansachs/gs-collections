@@ -535,7 +535,9 @@ public class MultiReaderFastListTest extends AbstractListTestCase
         objects.remove(0);
         Verify.assertEmpty(objects);
         WeakReference<String> ref = new WeakReference<String>(wilma);
+        //noinspection ReuseOfLocalVariable
         fred = null;   // Deliberate null of a local variable for unit test purpose
+        //noinspection ReuseOfLocalVariable
         wilma = null;  // Deliberate null of a local variable for unit test purpose
         System.gc();
         Thread.yield();

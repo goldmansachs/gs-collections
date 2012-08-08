@@ -77,7 +77,7 @@ public final class Interval
     }
 
     /**
-     * This static <code>from</code> method allows Interval to act as a fluent builder for itself.
+     * This static {@code from} method allows Interval to act as a fluent builder for itself.
      * It works in conjunction with the instance methods {@link #to(int)} and {@link #by(int)}.
      * <p/>
      * Usage Example:
@@ -92,7 +92,7 @@ public final class Interval
     }
 
     /**
-     * This instance <code>to</code> method allows Interval to act as a fluent builder for itself.
+     * This instance {@code to} method allows Interval to act as a fluent builder for itself.
      * It works in conjunction with the static method {@link #from(int)} and instance method {@link #by(int)}.
      * <p/>
      * Usage Example:
@@ -107,7 +107,7 @@ public final class Interval
     }
 
     /**
-     * This instance <code>by</code> method allows Interval to act as a fluent builder for itself.
+     * This instance {@code by} method allows Interval to act as a fluent builder for itself.
      * It works in conjunction with the static method {@link #from(int)} and instance method {@link #to(int)}.
      * <p/>
      * Usage Example:

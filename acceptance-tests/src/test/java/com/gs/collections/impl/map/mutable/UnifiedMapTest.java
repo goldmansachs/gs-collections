@@ -1558,13 +1558,13 @@ public class UnifiedMapTest
         for (Map.Entry<CollidingInt, String> e : entrySet)
         {
             CollidingInt key = e.getKey();
-            if (key != null)
+            if (key == null)
             {
-                Assert.assertEquals(UnifiedMapTest.createVal(key.getValue()), e.getValue());
+                Assert.assertEquals(nullVal, e.getValue());
             }
             else
             {
-                Assert.assertEquals(nullVal, e.getValue());
+                Assert.assertEquals(UnifiedMapTest.createVal(key.getValue()), e.getValue());
             }
         }
 

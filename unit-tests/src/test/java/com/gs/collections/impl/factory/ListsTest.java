@@ -16,7 +16,6 @@
 
 package com.gs.collections.impl.factory;
 
-import java.io.Serializable;
 import java.util.List;
 
 import com.gs.collections.api.factory.list.FixedSizeListFactory;
@@ -125,7 +124,7 @@ public class ListsTest
     {
         Assert.assertTrue(Lists.immutable.of().isEmpty());
         Assert.assertSame(Lists.immutable.of(), Lists.immutable.of());
-        Verify.assertPostSerializedIdentity((Serializable) Lists.immutable.of());
+        Verify.assertPostSerializedIdentity(Lists.immutable.of());
     }
 
     @Test

@@ -76,7 +76,7 @@ public final class MapIterate
     }
 
     /**
-     * A null-safe check on a map to see if it isEmpty.  A null collection results in <code>true</code>.
+     * A null-safe check on a map to see if it isEmpty.  A null collection results in {@code true}.
      */
     public static boolean isEmpty(Map<?, ?> map)
     {
@@ -84,7 +84,7 @@ public final class MapIterate
     }
 
     /**
-     * A null-safe check on a map to see if it notEmpty.  A null collection results in <code>false</code>.
+     * A null-safe check on a map to see if it notEmpty.  A null collection results in {@code false}.
      */
     public static boolean notEmpty(Map<?, ?> map)
     {
@@ -95,7 +95,7 @@ public final class MapIterate
      * Get and return the value in the Map at the specified key, or if there is no value at the key, return the result
      * of evaluating the specified {@link Function0}, and put that value in the map at the specified key.
      * <p/>
-     * This method handles the <code>null</code>-value-at-key case correctly.
+     * This method handles the {@code null}-value-at-key case correctly.
      */
     public static <K, V> V getIfAbsentPut(Map<K, V> map, K key, Function0<? extends V> instanceBlock)
     {
@@ -114,7 +114,7 @@ public final class MapIterate
 
     /**
      * Get and return the value in the Map at the specified key, or if there is no value at the key, return the result
-     * of evaluating the specified {@link Function} with the <code>parameter</code>, and put that value in the map at
+     * of evaluating the specified {@link Function} with the {@code parameter}, and put that value in the map at
      * the specified key.
      */
     public static <K, V, P> V getIfAbsentPutWith(
@@ -174,7 +174,7 @@ public final class MapIterate
 
     /**
      * Get and return the value in the Map at the specified key, or if there is no value at the key, return the
-     * <code>defaultValue</code>.
+     * {@code defaultValue}.
      */
     public static <K, V> V getIfAbsentDefault(Map<K, V> map, K key, V defaultValue)
     {
@@ -470,7 +470,7 @@ public final class MapIterate
 
     /**
      * For each value of the map, the Predicate2 is evaluated with the key and value as the parameter,
-     * and if true, then <code>function</code> is applied.
+     * and if true, then {@code function} is applied.
      * The results of these evaluations are collected into a new map.
      */
     public static <K1, V1, K2, V2> MutableMap<K2, V2> collectIf(
@@ -483,7 +483,7 @@ public final class MapIterate
 
     /**
      * For each value of the map, the Predicate2 is evaluated with the key and value as the parameter,
-     * and if true, then <code>function</code> is applied.
+     * and if true, then {@code function} is applied.
      * The results of these evaluations are collected into the target map.
      */
     public static <K1, V1, K2, V2> MutableMap<K2, V2> collectIf(
@@ -552,7 +552,7 @@ public final class MapIterate
     }
 
     /**
-     * For each value of the map, <code>procedure</code> is evaluated with the value as the parameter.
+     * For each value of the map, {@code procedure} is evaluated with the value as the parameter.
      */
     public static <K, V> void forEachValue(Map<K, V> map, Procedure<? super V> procedure)
     {
@@ -575,7 +575,7 @@ public final class MapIterate
     }
 
     /**
-     * For each key of the map, <code>procedure</code> is evaluated with the key as the parameter.
+     * For each key of the map, {@code procedure} is evaluated with the key as the parameter.
      */
     public static <K, V> void forEachKey(Map<K, V> map, Procedure<? super K> procedure)
     {
@@ -598,7 +598,7 @@ public final class MapIterate
     }
 
     /**
-     * For each entry of the map, <code>procedure</code> is evaluated with the element as the parameter.
+     * For each entry of the map, {@code procedure} is evaluated with the element as the parameter.
      */
     public static <K, V> void forEachKeyValue(Map<K, V> map, Procedure2<? super K, ? super V> procedure)
     {

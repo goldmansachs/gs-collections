@@ -289,8 +289,8 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         // constant multiples at each bit position have a bounded
         // number of collisions (approximately 8 at default load factor).
         int h = key.hashCode();
-        h ^= (h >>> 20) ^ (h >>> 12);
-        h ^= (h >>> 7) ^ (h >>> 4);
+        h ^= h >>> 20 ^ h >>> 12;
+        h ^= h >>> 7 ^ h >>> 4;
         return (h & (this.table.length >> 1) - 1) << 1;
     }
 
@@ -791,7 +791,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         {
             return entries;
         }
-        if (map.size() == 0)
+        if (map.isEmpty())
         {
             return Sets.immutable.<Entry<K, V>>of().castToSet();
         }
@@ -1534,7 +1534,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
 
             Object cur = UnifiedMap.this.table[index];
             Object curValue = UnifiedMap.this.table[index + 1];
-            return cur != null && (((key == cur || cur.equals(key)) && UnifiedMap.nullSafeEquals(value, curValue))
+            return cur != null && ((key == cur || cur.equals(key)) && UnifiedMap.nullSafeEquals(value, curValue)
                     || cur == CHAINED_KEY && this.chainContainsEntry((Object[]) curValue, key, value));
         }
 
@@ -1900,7 +1900,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
             UnifiedMap<K, V> map = this.holder.get();
             if (map != null && map.containsKey(this.key))
             {
-                return (V) map.put(this.key, value);
+                return map.put(this.key, value);
             }
             return null;
         }
@@ -1951,7 +1951,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         public boolean containsAll(Collection<?> collection)
         {
             // todo: this is N^2. if c is large, we should copy the values to a set.
-            return Iterate.allSatisfy((Collection<?>) collection, Predicates.in(this));
+            return Iterate.allSatisfy(collection, Predicates.in(this));
         }
 
         public boolean isEmpty()

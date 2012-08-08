@@ -42,28 +42,6 @@ import com.gs.collections.api.tuple.Pair;
  */
 public interface StackIterable<T> extends RichIterable<T>
 {
-    void forEach(Procedure<? super T> procedure);
-
-    StackIterable<T> select(Predicate<? super T> predicate);
-
-    StackIterable<T> reject(Predicate<? super T> predicate);
-
-    PartitionStack<T> partition(Predicate<? super T> predicate);
-
-    <V> StackIterable<V> collect(Function<? super T, ? extends V> function);
-
-    <V> StackIterable<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
-
-    <V> StackIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
-
-    <V> ListMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
-
-    <V> ListMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
-
-    <S> StackIterable<Pair<T, S>> zip(Iterable<S> that);
-
-    StackIterable<Pair<T, Integer>> zipWithIndex();
-
     /**
      * @return the top of the stack.
      */
@@ -144,4 +122,24 @@ public interface StackIterable<T> extends RichIterable<T>
      * @since 2.0
      */
     MutableStack<T> toStack();
+
+    StackIterable<T> select(Predicate<? super T> predicate);
+
+    StackIterable<T> reject(Predicate<? super T> predicate);
+
+    PartitionStack<T> partition(Predicate<? super T> predicate);
+
+    <V> StackIterable<V> collect(Function<? super T, ? extends V> function);
+
+    <V> StackIterable<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
+
+    <V> StackIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
+
+    <V> ListMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
+
+    <V> ListMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
+
+    <S> StackIterable<Pair<T, S>> zip(Iterable<S> that);
+
+    StackIterable<Pair<T, Integer>> zipWithIndex();
 }

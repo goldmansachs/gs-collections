@@ -250,9 +250,9 @@ public class UnifiedSet<K>
         // constant multiples at each bit position have a bounded
         // number of collisions (approximately 8 at default load factor).
         int h = key.hashCode();
-        h ^= (h >>> 20) ^ (h >>> 12);
-        h ^= (h >>> 7) ^ (h >>> 4);
-        return h & (this.table.length - 1);
+        h ^= h >>> 20 ^ h >>> 12;
+        h ^= h >>> 7 ^ h >>> 4;
+        return h & this.table.length - 1;
     }
 
     public void clear()
@@ -385,22 +385,16 @@ public class UnifiedSet<K>
                     {
                         this.add((K) bucket.zero);
                     }
-                    if (bucket.one != null)
-                    {
-                        this.add((K) bucket.one);
-                    }
-                    else
+                    if (bucket.one == null)
                     {
                         break;
                     }
-                    if (bucket.two != null)
-                    {
-                        this.add((K) bucket.two);
-                    }
-                    else
+                    this.add((K) bucket.one);
+                    if (bucket.two == null)
                     {
                         break;
                     }
+                    this.add((K) bucket.two);
                     if (bucket.three != null)
                     {
                         if (bucket.three instanceof ChainedBucket)

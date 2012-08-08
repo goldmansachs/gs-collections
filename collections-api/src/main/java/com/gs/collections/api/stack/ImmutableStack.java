@@ -24,6 +24,12 @@ import com.gs.collections.api.tuple.Pair;
 
 public interface ImmutableStack<T> extends StackIterable<T>
 {
+    ImmutableStack<T> push(T item);
+
+    ImmutableStack<T> pop();
+
+    ImmutableStack<T> pop(int count);
+
     ImmutableStack<T> select(Predicate<? super T> predicate);
 
     ImmutableStack<T> reject(Predicate<? super T> predicate);
@@ -43,12 +49,6 @@ public interface ImmutableStack<T> extends StackIterable<T>
     <S> ImmutableStack<Pair<T, S>> zip(Iterable<S> that);
 
     ImmutableStack<Pair<T, Integer>> zipWithIndex();
-
-    ImmutableStack<T> pop();
-
-    ImmutableStack<T> pop(int count);
-
-    ImmutableStack<T> push(T item);
 
     /**
      * Size takes linear time on ImmutableStacks.

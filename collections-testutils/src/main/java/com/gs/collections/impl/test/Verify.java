@@ -124,7 +124,7 @@ public final class Verify extends Assert
      * 18 }
      * </pre>
      * <p/>
-     * <p>Without the <code>try ... catch</code> block around lines 11-13 the stack trace following a test failure
+     * <p>Without the {@code try ... catch} block around lines 11-13 the stack trace following a test failure
      * would look a little like:
      * <p/>
      * <pre>
@@ -142,7 +142,7 @@ public final class Verify extends Assert
      * is the code within the custom assert. If we were debugging the failure we would be more interested
      * in the second line of the stack trace which shows us where in our tests the assert failed.</p>
      * <p/>
-     * <p>With the <code>try ... catch</code> block around lines 11-13 the stack trace would look like the
+     * <p>With the {@code try ... catch} block around lines 11-13 the stack trace would look like the
      * following:</p>
      * <p/>
      * <pre>
@@ -1151,7 +1151,7 @@ public final class Verify extends Assert
     }
 
     /**
-     * Assert that the given <code>stringToFind</code> is contained within the <code>stringToSearch</code>.
+     * Assert that the given {@code stringToFind} is contained within the {@code stringToSearch}.
      */
     public static void assertContains(String stringToFind, String stringToSearch)
     {
@@ -1166,7 +1166,7 @@ public final class Verify extends Assert
     }
 
     /**
-     * Assert that the given <code>unexpectedString</code> is <em>not</em> contained within the <code>stringToSearch</code>.
+     * Assert that the given {@code unexpectedString} is <em>not</em> contained within the {@code stringToSearch}.
      */
     public static void assertNotContains(String unexpectedString, String stringToSearch)
     {
@@ -1181,7 +1181,7 @@ public final class Verify extends Assert
     }
 
     /**
-     * Assert that the given <code>stringToFind</code> is contained within the <code>stringToSearch</code>.
+     * Assert that the given {@code stringToFind} is contained within the {@code stringToSearch}.
      */
     public static void assertContains(String stringName, String stringToFind, String stringToSearch)
     {
@@ -1207,7 +1207,7 @@ public final class Verify extends Assert
     }
 
     /**
-     * Assert that the given <code>unexpectedString</code> is <em>not</em> contained within the <code>stringToSearch</code>.
+     * Assert that the given {@code unexpectedString} is <em>not</em> contained within the {@code stringToSearch}.
      */
     public static void assertNotContains(String stringName, String unexpectedString, String stringToSearch)
     {
@@ -1592,7 +1592,7 @@ public final class Verify extends Assert
     {
         try
         {
-            if (null == expectedSet)
+            if (expectedSet == null)
             {
                 Assert.assertNull(setName + " should be null", actualSet);
                 return;
@@ -1666,7 +1666,7 @@ public final class Verify extends Assert
     {
         try
         {
-            if (null == expectedIterable)
+            if (expectedIterable == null)
             {
                 Assert.assertNull(iterableName + " should be null", actualIterable);
                 return;
@@ -1715,7 +1715,7 @@ public final class Verify extends Assert
     {
         try
         {
-            if (null == expectedMap)
+            if (expectedMap == null)
             {
                 Assert.assertNull(mapName + " should be null", actualMap);
                 return;
@@ -2361,7 +2361,7 @@ public final class Verify extends Assert
     }
 
     /**
-     * Assert that the given <code>item</code> is at the <code>index</code> in the given {@link List}.
+     * Assert that the given {@code item} is at the {@code index} in the given {@link List}.
      */
     public static void assertItemAtIndex(Object expectedItem, int index, List<?> list)
     {
@@ -2376,7 +2376,7 @@ public final class Verify extends Assert
     }
 
     /**
-     * Assert that the given <code>item</code> is at the <code>index</code> in the given <code>array</code>.
+     * Assert that the given {@code item} is at the {@code index} in the given {@code array}.
      */
     public static void assertItemAtIndex(Object expectedItem, int index, Object[] array)
     {
@@ -2475,7 +2475,7 @@ public final class Verify extends Assert
     }
 
     /**
-     * Assert that the given <code>item</code> is at the <code>index</code> in the given {@link List}.
+     * Assert that the given {@code item} is at the {@code index} in the given {@link List}.
      */
     public static void assertItemAtIndex(
             String listName,
@@ -2503,7 +2503,7 @@ public final class Verify extends Assert
     }
 
     /**
-     * Assert that the given <code>item</code> is at the <code>index</code> in the given {@link List}.
+     * Assert that the given {@code item} is at the {@code index} in the given {@link List}.
      */
     public static void assertItemAtIndex(
             String arrayName,
@@ -2652,7 +2652,7 @@ public final class Verify extends Assert
     }
 
     /**
-     * Assert that <code>objectA</code> and <code>objectB</code> are equal (via the {@link Object#equals(Object)} method,
+     * Assert that {@code objectA} and {@code objectB} are equal (via the {@link Object#equals(Object)} method,
      * and that they both return the same {@link Object#hashCode()}.
      */
     public static void assertEqualsAndHashCode(Object objectA, Object objectB)
@@ -2713,7 +2713,7 @@ public final class Verify extends Assert
     }
 
     /**
-     * Assert that <code>objectA</code> and <code>objectB</code> are equal (via the {@link Object#equals(Object)} method,
+     * Assert that {@code objectA} and {@code objectB} are equal (via the {@link Object#equals(Object)} method,
      * and that they both return the same {@link Object#hashCode()}.
      */
     public static void assertEqualsAndHashCode(String itemNames, Object objectA, Object objectB)

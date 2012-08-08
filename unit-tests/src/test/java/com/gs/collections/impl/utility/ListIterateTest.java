@@ -541,7 +541,7 @@ public class ListIterateTest
     private void assertAllSatisfyWith(List<Integer> list)
     {
         Assert.assertTrue(ListIterate.allSatisfyWith(list, Predicates2.instanceOf(), Integer.class));
-        Predicate2<Integer, Integer> greaterThanPredicate = Predicates2.<Integer>greaterThan();
+        Predicate2<Integer, Integer> greaterThanPredicate = Predicates2.greaterThan();
         Assert.assertFalse(ListIterate.allSatisfyWith(list, greaterThanPredicate, 2));
     }
 
@@ -583,8 +583,7 @@ public class ListIterateTest
         this.assertTake(integers);
         this.assertTake(new LinkedList<Integer>(integers));
 
-        integers = Lists.fixedSize.of();
-        Verify.assertSize(0, ListIterate.take(integers, 2));
+        Verify.assertSize(0, ListIterate.take(Lists.fixedSize.of(), 2));
         Verify.assertSize(0, ListIterate.take(new LinkedList<Object>(), 2));
     }
 

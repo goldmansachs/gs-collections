@@ -16,7 +16,6 @@
 
 package com.gs.collections.impl.list.fixed;
 
-import java.io.Serializable;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.list.MutableList;
@@ -56,7 +55,7 @@ public class EmptyListTest
     public void readResolve()
     {
         Verify.assertInstanceOf(EmptyList.class, Lists.fixedSize.of());
-        Verify.assertPostSerializedIdentity((Serializable) Lists.fixedSize.of());
+        Verify.assertPostSerializedIdentity(Lists.fixedSize.of());
     }
 
     @Test

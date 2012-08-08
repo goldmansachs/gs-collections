@@ -431,7 +431,7 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
         {
             public boolean accept(String argument1, Integer argument2)
             {
-                return 1 != argument2;
+                return argument2 != 1;
             }
         });
         Verify.assertMapsEqual(UnifiedMap.newWithKeysValues("2", 3, "3", 2), select);
@@ -449,7 +449,7 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
         {
             public boolean accept(String argument1, Integer argument2)
             {
-                return 1 == argument2;
+                return argument2 == 1;
             }
         });
         Verify.assertMapsEqual(UnifiedMap.newWithKeysValues("2", 3, "3", 2), select);

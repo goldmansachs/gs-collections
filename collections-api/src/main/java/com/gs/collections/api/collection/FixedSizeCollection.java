@@ -97,26 +97,58 @@ public interface FixedSizeCollection<T>
      */
     MutableCollection<T> withoutAll(Iterable<? extends T> elements);
 
-    boolean add(T t) throws UnsupportedOperationException;
+    /**
+     * @throws UnsupportedOperationException
+     */
+    boolean add(T t);
 
-    boolean addAllIterable(Iterable<? extends T> iterable) throws UnsupportedOperationException;
+    /**
+     * @throws UnsupportedOperationException
+     */
+    boolean addAllIterable(Iterable<? extends T> iterable);
 
-    boolean addAll(Collection<? extends T> collection) throws UnsupportedOperationException;
+    /**
+     * @throws UnsupportedOperationException
+     */
+    boolean addAll(Collection<? extends T> collection);
 
-    boolean remove(Object o) throws UnsupportedOperationException;
+    /**
+     * @throws UnsupportedOperationException
+     */
+    boolean remove(Object o);
 
-    boolean removeAll(Collection<?> collection) throws UnsupportedOperationException;
+    /**
+     * @throws UnsupportedOperationException
+     */
+    boolean removeAll(Collection<?> collection);
 
-    boolean removeAllIterable(Iterable<?> iterable) throws UnsupportedOperationException;
+    /**
+     * @throws UnsupportedOperationException
+     */
+    boolean removeAllIterable(Iterable<?> iterable);
 
-    void removeIf(Predicate<? super T> predicate) throws UnsupportedOperationException;
+    /**
+     * @throws UnsupportedOperationException
+     */
+    void removeIf(Predicate<? super T> predicate);
 
-    <P> void removeIfWith(Predicate2<? super T, ? super P> predicate, P parameter)
-            throws UnsupportedOperationException;
+    /**
+     * @throws UnsupportedOperationException
+     */
+    <P> void removeIfWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
-    boolean retainAll(Collection<?> collection) throws UnsupportedOperationException;
+    /**
+     * @throws UnsupportedOperationException
+     */
+    boolean retainAll(Collection<?> collection);
 
-    boolean retainAllIterable(Iterable<?> iterable) throws UnsupportedOperationException;
+    /**
+     * @throws UnsupportedOperationException
+     */
+    boolean retainAllIterable(Iterable<?> iterable);
 
-    void clear() throws UnsupportedOperationException;
+    /**
+     * @throws UnsupportedOperationException
+     */
+    void clear();
 }

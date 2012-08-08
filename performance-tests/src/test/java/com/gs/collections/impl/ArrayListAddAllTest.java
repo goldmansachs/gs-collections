@@ -92,7 +92,7 @@ public class ArrayListAddAllTest
             this.runArrayListAddAll(listToAddAll, 1000);
         }
         long time1 = System.currentTimeMillis() - now1;
-        System.out.println("ArrayList, list size 100,000, " + type + " addAll/msec: " + (100000 / time1));
+        System.out.println("ArrayList, list size 100,000, " + type + " addAll/msec: " + 100000 / time1);
         long now2 = System.currentTimeMillis();
         this.runArrayListAddAll(new ArrayList<Object>(Interval.oneTo(100)), 100000000);
         long time2 = System.currentTimeMillis() - now2;

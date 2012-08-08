@@ -374,7 +374,7 @@ public final class SortedSetAdapter<T>
 
     public T first()
     {
-        if (this.delegate.size() == 0)
+        if (this.delegate.isEmpty())
         {
             throw new NoSuchElementException();
         }
@@ -383,7 +383,7 @@ public final class SortedSetAdapter<T>
 
     public T last()
     {
-        if (this.delegate.size() == 0)
+        if (this.delegate.isEmpty())
         {
             throw new NoSuchElementException();
         }

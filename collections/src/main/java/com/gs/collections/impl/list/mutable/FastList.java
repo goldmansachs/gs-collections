@@ -134,7 +134,7 @@ public class FastList<T>
     }
 
     /**
-     * Creates a new list using the passed <code>elements</code> argument as the backing store.
+     * Creates a new list using the passed {@code elements} argument as the backing store.
      * <p/>
      * !!! WARNING: This method uses the passed in array, so can be very unsafe if the original
      * array is held onto anywhere else. !!!
@@ -930,7 +930,7 @@ public class FastList<T>
 
     private int sizePlusFiftyPercent(int oldSize)
     {
-        return (oldSize * 3) / 2 + 1;
+        return oldSize * 3 / 2 + 1;
     }
 
     public T remove(int index)

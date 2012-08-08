@@ -366,6 +366,7 @@ public final class ParallelIterate
      * ParallelIterate.<b>forEach</b>(collection,{@code new SelectProcedureFactory<T>(predicate, taskSize), combiner, 1000);}
      * </pre>
      */
+    @SuppressWarnings("JavaDoc")
     public static <T, BT extends Procedure<? super T>> void forEach(
             Iterable<T> iterable,
             ProcedureFactory<BT> procedureFactory,
@@ -397,6 +398,7 @@ public final class ParallelIterate
      * ParallelIterate.<b>forEach</b>(collection,{@code new SelectProcedureFactory<T>(predicate, taskSize), combiner, DEFAULT_MIN_FORK_SIZE, taskCount);}
      * </pre>
      */
+    @SuppressWarnings("JavaDoc")
     public static <T, BT extends Procedure<? super T>> void forEach(
             Iterable<T> iterable,
             ProcedureFactory<BT> procedureFactory,

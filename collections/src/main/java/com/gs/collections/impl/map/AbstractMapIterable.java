@@ -63,7 +63,7 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
         }
 
         V oValue = map.get(key);
-        return oValue == value || (oValue != null && oValue.equals(value));
+        return oValue == value || oValue != null && oValue.equals(value);
     }
 
     public boolean isEmpty()

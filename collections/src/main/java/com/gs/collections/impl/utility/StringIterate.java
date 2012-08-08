@@ -312,12 +312,9 @@ public final class StringIterate
      */
     public static void reverseForEach(String string, CodePointProcedure procedure)
     {
-        if (0 != string.length())
+        for (int i = string.length() - 1; i >= 0; i--)
         {
-            for (int i = string.length() - 1; i >= 0; i--)
-            {
-                procedure.value(string.codePointAt(i));
-            }
+            procedure.value(string.codePointAt(i));
         }
     }
 

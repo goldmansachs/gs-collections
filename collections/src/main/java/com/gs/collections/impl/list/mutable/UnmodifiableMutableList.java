@@ -151,7 +151,7 @@ public final class UnmodifiableMutableList<T>
 
     public MutableStack<T> toStack()
     {
-        return ArrayStack.<T>newStack(this.getMutableList());
+        return ArrayStack.newStack(this.getMutableList());
     }
 
     public <V extends Comparable<? super V>> MutableList<T> sortThisBy(Function<? super T, ? extends V> function)

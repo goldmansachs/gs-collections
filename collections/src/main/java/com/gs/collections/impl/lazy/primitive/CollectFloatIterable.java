@@ -152,7 +152,7 @@ public class CollectFloatIterable<T>
 
     public double average()
     {
-        return (double) this.sum() / (double) this.size();
+        return this.sum() / (double) this.size();
     }
 
     public double median()

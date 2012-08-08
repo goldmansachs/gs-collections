@@ -78,7 +78,7 @@ public class CaseFunctionTest
             {
                 return true;
             }
-            if (o == null || getClass() != o.getClass())
+            if (o == null || this.getClass() != o.getClass())
             {
                 return false;
             }
@@ -97,7 +97,7 @@ public class CaseFunctionTest
         {
             int result = this.description == null ? 0 : this.description.hashCode();
             long l = Double.doubleToLongBits(this.value);
-            result = 31 * result + (int) (l ^ (l >>> 32));
+            result = 31 * result + (int) (l ^ l >>> 32);
             return result;
         }
 

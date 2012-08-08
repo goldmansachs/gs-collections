@@ -38,7 +38,7 @@ public class SynchronizedMutableListTest extends AbstractListTestCase
     {
         super.newEmpty();
 
-        Verify.assertInstanceOf(FastList.class, classUnderTest().newEmpty());
+        Verify.assertInstanceOf(FastList.class, this.classUnderTest().newEmpty());
     }
 
     @Override

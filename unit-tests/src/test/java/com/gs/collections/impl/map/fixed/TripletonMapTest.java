@@ -130,22 +130,22 @@ public class TripletonMapTest extends AbstractMemoryEfficientMutableMapTest
     public void withoutKey()
     {
         MutableMap<Integer, String> map = new TripletonMap<Integer, String>(1, "A", 2, "B", 3, "C");
-        MutableMap<Integer, String> mapWithout = map.withoutKey(4);
-        Assert.assertSame(map, mapWithout);
-        mapWithout = map.withoutKey(1);
-        Verify.assertMapsEqual(UnifiedMap.newWithKeysValues(2, "B", 3, "C"), mapWithout);
-        Verify.assertInstanceOf(DoubletonMap.class, mapWithout);
+        MutableMap<Integer, String> mapWithout1 = map.withoutKey(4);
+        Assert.assertSame(map, mapWithout1);
+        MutableMap<Integer, String> mapWithout2 = map.withoutKey(1);
+        Verify.assertMapsEqual(UnifiedMap.newWithKeysValues(2, "B", 3, "C"), mapWithout2);
+        Verify.assertInstanceOf(DoubletonMap.class, mapWithout2);
     }
 
     @Override
     public void withoutAllKeys()
     {
         MutableMap<Integer, String> map = new TripletonMap<Integer, String>(1, "A", 2, "B", 3, "C");
-        MutableMap<Integer, String> mapWithout = map.withoutAllKeys(FastList.newListWith(4, 5));
-        Assert.assertSame(map, mapWithout);
-        mapWithout = map.withoutAllKeys(FastList.newListWith(3, 4));
-        Verify.assertMapsEqual(UnifiedMap.newWithKeysValues(1, "A", 2, "B"), mapWithout);
-        Verify.assertInstanceOf(DoubletonMap.class, mapWithout);
+        MutableMap<Integer, String> mapWithout1 = map.withoutAllKeys(FastList.newListWith(4, 5));
+        Assert.assertSame(map, mapWithout1);
+        MutableMap<Integer, String> mapWithout2 = map.withoutAllKeys(FastList.newListWith(3, 4));
+        Verify.assertMapsEqual(UnifiedMap.newWithKeysValues(1, "A", 2, "B"), mapWithout2);
+        Verify.assertInstanceOf(DoubletonMap.class, mapWithout2);
     }
 
     @Override

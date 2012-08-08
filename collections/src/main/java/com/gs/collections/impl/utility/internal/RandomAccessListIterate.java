@@ -443,9 +443,11 @@ public final class RandomAccessListIterate
     {
         if (list1 != null && list2 != null)
         {
-            if (list1.size() == list2.size())
+            int size1 = list1.size();
+            int size2 = list2.size();
+            if (size1 == size2)
             {
-                for (int i = 0, size = list1.size(); i < size; i++)
+                for (int i = 0; i < size1; i++)
                 {
                     procedure.value(list1.get(i), list2.get(i));
                 }
@@ -453,9 +455,9 @@ public final class RandomAccessListIterate
             else
             {
                 throw new IllegalArgumentException("Attempt to call forEachInBoth with two Lists of different sizes :"
-                        + list1.size()
+                        + size1
                         + ':'
-                        + list2.size());
+                        + size2);
             }
         }
     }
@@ -858,7 +860,8 @@ public final class RandomAccessListIterate
             {
                 appendable.append(IterableIterate.stringValueOfItem(list, list.get(0)));
 
-                for (int i = 1, size = list.size(); i < size; i++)
+                int size = list.size();
+                for (int i = 1; i < size; i++)
                 {
                     appendable.append(separator);
                     appendable.append(IterableIterate.stringValueOfItem(list, list.get(i)));
@@ -933,7 +936,8 @@ public final class RandomAccessListIterate
         }
 
         T candidate = list.get(0);
-        for (int i = 1, size = list.size(); i < size; i++)
+        int size = list.size();
+        for (int i = 1; i < size; i++)
         {
             T next = list.get(i);
             if (comparator.compare(next, candidate) < 0)
@@ -952,7 +956,8 @@ public final class RandomAccessListIterate
         }
 
         T candidate = list.get(0);
-        for (int i = 1, size = list.size(); i < size; i++)
+        int size = list.size();
+        for (int i = 1; i < size; i++)
         {
             T next = list.get(i);
             if (comparator.compare(next, candidate) > 0)
@@ -971,7 +976,8 @@ public final class RandomAccessListIterate
         }
 
         T candidate = list.get(0);
-        for (int i = 1, size = list.size(); i < size; i++)
+        int size = list.size();
+        for (int i = 1; i < size; i++)
         {
             T next = list.get(i);
             if (((Comparable<? super T>) next).compareTo(candidate) < 0)
@@ -990,7 +996,8 @@ public final class RandomAccessListIterate
         }
 
         T candidate = list.get(0);
-        for (int i = 1, size = list.size(); i < size; i++)
+        int size = list.size();
+        for (int i = 1; i < size; i++)
         {
             T next = list.get(i);
             if (((Comparable<T>) next).compareTo(candidate) > 0)
@@ -1014,7 +1021,8 @@ public final class RandomAccessListIterate
             R target)
     {
         Iterator<Y> yIterator = iterable.iterator();
-        for (int i = 0, size = list.size(); i < size && yIterator.hasNext(); i++)
+        int size = list.size();
+        for (int i = 0; i < size && yIterator.hasNext(); i++)
         {
             target.add(Tuples.pair(list.get(i), yIterator.next()));
         }

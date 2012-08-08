@@ -54,7 +54,7 @@ public class DoubletonMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void containsValue()
     {
-        Assert.assertTrue(classUnderTest().containsValue("One"));
+        Assert.assertTrue(this.classUnderTest().containsValue("One"));
     }
 
     @Override
@@ -124,22 +124,22 @@ public class DoubletonMapTest extends AbstractMemoryEfficientMutableMapTest
     public void withoutKey()
     {
         MutableMap<Integer, String> map = new DoubletonMap<Integer, String>(1, "A", 2, "B");
-        MutableMap<Integer, String> mapWithout = map.withoutKey(3);
-        Assert.assertSame(map, mapWithout);
-        mapWithout = map.withoutKey(1);
-        Verify.assertMapsEqual(UnifiedMap.newWithKeysValues(2, "B"), mapWithout);
-        Verify.assertInstanceOf(SingletonMap.class, mapWithout);
+        MutableMap<Integer, String> mapWithout1 = map.withoutKey(3);
+        Assert.assertSame(map, mapWithout1);
+        MutableMap<Integer, String> mapWithout2 = map.withoutKey(1);
+        Verify.assertMapsEqual(UnifiedMap.newWithKeysValues(2, "B"), mapWithout2);
+        Verify.assertInstanceOf(SingletonMap.class, mapWithout2);
     }
 
     @Override
     public void withoutAllKeys()
     {
         MutableMap<Integer, String> map = new DoubletonMap<Integer, String>(1, "A", 2, "B");
-        MutableMap<Integer, String> mapWithout = map.withoutAllKeys(FastList.newListWith(3, 4));
-        Assert.assertSame(map, mapWithout);
-        mapWithout = map.withoutAllKeys(FastList.newListWith(2, 3));
-        Verify.assertMapsEqual(UnifiedMap.newWithKeysValues(1, "A"), mapWithout);
-        Verify.assertInstanceOf(SingletonMap.class, mapWithout);
+        MutableMap<Integer, String> mapWithout1 = map.withoutAllKeys(FastList.newListWith(3, 4));
+        Assert.assertSame(map, mapWithout1);
+        MutableMap<Integer, String> mapWithout2 = map.withoutAllKeys(FastList.newListWith(2, 3));
+        Verify.assertMapsEqual(UnifiedMap.newWithKeysValues(1, "A"), mapWithout2);
+        Verify.assertInstanceOf(SingletonMap.class, mapWithout2);
     }
 
     @Override

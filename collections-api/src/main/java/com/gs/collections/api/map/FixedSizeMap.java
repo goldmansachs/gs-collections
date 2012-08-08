@@ -24,13 +24,28 @@ import java.util.Map;
 public interface FixedSizeMap<K, V>
         extends MutableMap<K, V>
 {
-    void clear() throws UnsupportedOperationException;
+    /**
+     * @throws UnsupportedOperationException
+     */
+    void clear();
 
-    V put(K key, V value) throws UnsupportedOperationException;
+    /**
+     * @throws UnsupportedOperationException
+     */
+    V put(K key, V value);
 
-    void putAll(Map<? extends K, ? extends V> map) throws UnsupportedOperationException;
+    /**
+     * @throws UnsupportedOperationException
+     */
+    void putAll(Map<? extends K, ? extends V> map);
 
-    V remove(Object key) throws UnsupportedOperationException;
+    /**
+     * @throws UnsupportedOperationException
+     */
+    V remove(Object key);
 
-    V removeKey(K key) throws UnsupportedOperationException;
+    /**
+     * @throws UnsupportedOperationException
+     */
+    V removeKey(K key);
 }

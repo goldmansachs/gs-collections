@@ -799,10 +799,10 @@ public class UnifiedSetTest
     @Test
     public void testUnifiedSetAsPool()
     {
-        runUnifiedSetAsPool(0);
-        runUnifiedSetAsPool(1);
-        runUnifiedSetAsPool(2);
-        runUnifiedSetAsPool(3);
+        this.runUnifiedSetAsPool(0);
+        this.runUnifiedSetAsPool(1);
+        this.runUnifiedSetAsPool(2);
+        this.runUnifiedSetAsPool(3);
     }
 
     private void runUnifiedSetAsPool(int shift)
@@ -845,10 +845,10 @@ public class UnifiedSetTest
     @Test
     public void testUnifiedSetAsPoolRandomInput()
     {
-        runUnifiedSetAsPoolRandomInput(0);
-        runUnifiedSetAsPoolRandomInput(1);
-        runUnifiedSetAsPoolRandomInput(2);
-        runUnifiedSetAsPoolRandomInput(3);
+        this.runUnifiedSetAsPoolRandomInput(0);
+        this.runUnifiedSetAsPoolRandomInput(1);
+        this.runUnifiedSetAsPoolRandomInput(2);
+        this.runUnifiedSetAsPoolRandomInput(3);
     }
 
     private void runUnifiedSetAsPoolRandomInput(int shift)

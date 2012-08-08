@@ -19,9 +19,8 @@ package com.gs.collections.impl.utility.internal;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
-import java.util.Collections;
-import java.util.Map;
 
+import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.MapIterate;
@@ -31,12 +30,17 @@ import com.gs.collections.impl.utility.MapIterate;
  */
 public final class ReflectionHelper
 {
-    public static final Class<?>[] EMPTY_CLASS_ARRAY = {};
+    /**
+     * @deprecated in 2.0. Will become private in a future version.
+     */
+    @SuppressWarnings("rawtypes")
+    @Deprecated
+    public static final Class[] EMPTY_CLASS_ARRAY = {};
 
     /**
      * Mapping of iterator wrapper classes to iterator types
      */
-    private static final Map<Class<?>, Class<?>> WRAPPER_TO_PRIMATIVES = UnifiedMap.newMapWith(
+    private static final ImmutableMap<Class<?>, Class<?>> WRAPPER_TO_PRIMATIVES = UnifiedMap.newMapWith(
             Tuples.<Class<?>>twin(Short.class, short.class),
             Tuples.<Class<?>>twin(Boolean.class, boolean.class),
             Tuples.<Class<?>>twin(Byte.class, byte.class),
@@ -44,10 +48,9 @@ public final class ReflectionHelper
             Tuples.<Class<?>>twin(Integer.class, int.class),
             Tuples.<Class<?>>twin(Float.class, float.class),
             Tuples.<Class<?>>twin(Long.class, long.class),
-            Tuples.<Class<?>>twin(Double.class, double.class)
-    ).asUnmodifiable();
+            Tuples.<Class<?>>twin(Double.class, double.class)).toImmutable();
 
-    private static final Map<Class<?>, Class<?>> PRIMATIVES_TO_WRAPPERS = Collections.unmodifiableMap(MapIterate.reverseMapping(WRAPPER_TO_PRIMATIVES));
+    private static final ImmutableMap<Class<?>, Class<?>> PRIMATIVES_TO_WRAPPERS = MapIterate.reverseMapping(WRAPPER_TO_PRIMATIVES.castToMap()).toImmutable();
 
     private ReflectionHelper()
     {

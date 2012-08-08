@@ -106,7 +106,7 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
     public void select()
     {
         super.select();
-        SortedSetAdapter<Integer> integers = this.<Integer>classUnderTest(1, 2, 3, 4, 5);
+        SortedSetAdapter<Integer> integers = this.classUnderTest(1, 2, 3, 4, 5);
         Verify.assertSortedSetsEqual(TreeSortedSet.<Integer>newSetWith(1, 2), integers.select(Predicates.lessThan(3)));
         Verify.assertInstanceOf(MutableSortedSet.class, this.<Integer>classUnderTest().select(Predicates.alwaysTrue()));
         Verify.assertSortedSetsEqual(TreeSortedSet.newSet(), this.<Object>classUnderTest().select(Predicates.alwaysTrue()));
@@ -140,9 +140,9 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
     public void equalsAndHashCode()
     {
         super.equalsAndHashCode();
-        MutableCollection<Integer> set1 = this.<Integer>classUnderTest(1, 2, 3);
-        SortedSetAdapter<Integer> set2 = this.<Integer>classUnderTest(Collections.<Integer>reverseOrder(), 1, 2, 3);
-        MutableCollection<Integer> set3 = this.<Integer>classUnderTest(2, 3, 4);
+        MutableCollection<Integer> set1 = this.classUnderTest(1, 2, 3);
+        SortedSetAdapter<Integer> set2 = this.classUnderTest(Collections.<Integer>reverseOrder(), 1, 2, 3);
+        MutableCollection<Integer> set3 = this.classUnderTest(2, 3, 4);
         MutableSortedSet<Integer> set4 = TreeSortedSet.newSetWith(2, 3, 4);
 
         Verify.assertEqualsAndHashCode(set1, set1);

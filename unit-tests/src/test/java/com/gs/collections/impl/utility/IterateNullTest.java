@@ -437,7 +437,7 @@ public class IterateNullTest
         {
             public void run()
             {
-                Iterate.forEachWithIndex((Iterable<?>) null, null);
+                Iterate.forEachWithIndex(null, null);
             }
         });
 

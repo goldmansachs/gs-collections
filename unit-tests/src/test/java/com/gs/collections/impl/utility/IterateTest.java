@@ -32,7 +32,6 @@ import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
-import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.ImmutableList;
@@ -253,7 +252,7 @@ public class IterateTest
         {
             public void run()
             {
-                Iterate.flatCollect((Iterable<Object>) null, (Function<Object, Iterable<Object>>) null);
+                Iterate.flatCollect(null, null);
             }
         });
     }
@@ -289,7 +288,7 @@ public class IterateTest
     @Test(expected = IllegalArgumentException.class)
     public void flatCollectFromAttributesWithTarget_NullParameter()
     {
-        Iterate.flatCollect(null, (Function<Object, Iterable<Object>>) null, UnifiedSet.newSet());
+        Iterate.flatCollect(null, null, UnifiedSet.newSet());
     }
 
     @Test
@@ -316,7 +315,7 @@ public class IterateTest
     @Test
     public void flatCollectOneLevel()
     {
-        MutableList<MutableList<String>> list = Lists.mutable.<MutableList<String>>of(
+        MutableList<MutableList<String>> list = Lists.mutable.of(
                 Lists.mutable.of("One", "Two"),
                 Lists.mutable.of("Two-and-a-half", "Three", "Four"),
                 Lists.mutable.<String>of(),
@@ -328,7 +327,7 @@ public class IterateTest
     @Test
     public void flatCollectOneLevel_target()
     {
-        MutableList<MutableList<String>> list = Lists.mutable.<MutableList<String>>of(
+        MutableList<MutableList<String>> list = Lists.mutable.of(
                 Lists.mutable.of("One", "Two"),
                 Lists.mutable.of("Two-and-a-half", "Three", "Four"),
                 Lists.mutable.<String>of(),
@@ -428,7 +427,7 @@ public class IterateTest
         {
             public void run()
             {
-                Iterate.groupBy((Iterable<Object>) null, (Function<Object, Object>) null, null);
+                Iterate.groupBy(null, null, null);
             }
         });
     }
@@ -471,7 +470,7 @@ public class IterateTest
         {
             public void run()
             {
-                Iterate.groupByEach((Iterable<Object>) null, (Function<Object, Iterable<Object>>) null, null);
+                Iterate.groupByEach(null, null, null);
             }
         });
     }
@@ -810,7 +809,7 @@ public class IterateTest
         {
             public void run()
             {
-                Iterate.selectWith((Iterable<Object>) null, null, null, null);
+                Iterate.selectWith(null, null, null, null);
             }
         });
     }
@@ -850,7 +849,7 @@ public class IterateTest
         {
             public void run()
             {
-                Iterate.rejectWith((Iterable<Object>) null, null, null, null);
+                Iterate.rejectWith(null, null, null, null);
             }
         });
     }
@@ -1068,7 +1067,7 @@ public class IterateTest
         {
             public void run()
             {
-                Iterate.collectIf((Iterable<Object>) null, (Predicate<Object>) null, (Function<Object, Object>) null, null);
+                Iterate.collectIf(null, null, null, null);
             }
         });
     }
@@ -1262,7 +1261,7 @@ public class IterateTest
         {
             public void run()
             {
-                Iterate.collectWith((Iterable<Object>) null, (Function2<Object, Object, Object>) null, null, null);
+                Iterate.collectWith(null, null, null, null);
             }
         });
     }
@@ -1450,7 +1449,7 @@ public class IterateTest
         {
             public void run()
             {
-                Iterate.select((Iterable<Object>) null, null, null);
+                Iterate.select(null, null, null);
             }
         });
     }
@@ -1490,7 +1489,7 @@ public class IterateTest
         {
             public void run()
             {
-                Iterate.reject((Iterable<Object>) null, null, null);
+                Iterate.reject(null, null, null);
             }
         });
     }
@@ -1498,8 +1497,8 @@ public class IterateTest
     @Test
     public void selectInstancesOf()
     {
-        Iterable<Number> numbers1 = Collections.<Number>unmodifiableList(new ArrayList<Number>(FastList.<Number>newListWith(1, 2.0, 3, 4.0, 5)));
-        Iterable<Number> numbers2 = Collections.<Number>unmodifiableCollection(new ArrayList<Number>(FastList.<Number>newListWith(1, 2.0, 3, 4.0, 5)));
+        Iterable<Number> numbers1 = Collections.unmodifiableList(new ArrayList<Number>(FastList.<Number>newListWith(1, 2.0, 3, 4.0, 5)));
+        Iterable<Number> numbers2 = Collections.unmodifiableCollection(new ArrayList<Number>(FastList.<Number>newListWith(1, 2.0, 3, 4.0, 5)));
 
         Verify.assertContainsAll(Iterate.selectInstancesOf(numbers1, Integer.class), 1, 3, 5);
         Verify.assertContainsAll(Iterate.selectInstancesOf(numbers2, Integer.class), 1, 3, 5);
@@ -1862,7 +1861,7 @@ public class IterateTest
         {
             public void run()
             {
-                Iterate.zip((Iterable<Object>) null, (Iterable<Object>) null, null);
+                Iterate.zip(null, null, null);
             }
         });
     }
@@ -1899,7 +1898,7 @@ public class IterateTest
         {
             public void run()
             {
-                Iterate.zipWithIndex((Iterable<Object>) null, null);
+                Iterate.zipWithIndex(null, null);
             }
         });
     }

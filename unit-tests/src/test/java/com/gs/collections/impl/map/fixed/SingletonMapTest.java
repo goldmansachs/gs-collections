@@ -53,7 +53,7 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     @Test
     public void containsValue()
     {
-        Assert.assertTrue(classUnderTest().containsValue("One"));
+        Assert.assertTrue(this.classUnderTest().containsValue("One"));
     }
 
     @Override
@@ -115,22 +115,22 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     public void withoutKey()
     {
         MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "A");
-        MutableMap<Integer, String> mapWithout = map.withoutKey(2);
-        Assert.assertSame(map, mapWithout);
-        mapWithout = map.withoutKey(1);
-        Verify.assertMapsEqual(UnifiedMap.newMap(), mapWithout);
-        Verify.assertInstanceOf(EmptyMap.class, mapWithout);
+        MutableMap<Integer, String> mapWithout1 = map.withoutKey(2);
+        Assert.assertSame(map, mapWithout1);
+        MutableMap<Integer, String> mapWithout2 = map.withoutKey(1);
+        Verify.assertMapsEqual(UnifiedMap.newMap(), mapWithout2);
+        Verify.assertInstanceOf(EmptyMap.class, mapWithout2);
     }
 
     @Override
     public void withoutAllKeys()
     {
         MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "A");
-        MutableMap<Integer, String> mapWithout = map.withoutAllKeys(FastList.newListWith(2, 3));
-        Assert.assertSame(map, mapWithout);
-        mapWithout = map.withoutAllKeys(FastList.newListWith(1, 2));
-        Verify.assertMapsEqual(UnifiedMap.newMap(), mapWithout);
-        Verify.assertInstanceOf(EmptyMap.class, mapWithout);
+        MutableMap<Integer, String> mapWithout1 = map.withoutAllKeys(FastList.newListWith(2, 3));
+        Assert.assertSame(map, mapWithout1);
+        MutableMap<Integer, String> mapWithout2 = map.withoutAllKeys(FastList.newListWith(1, 2));
+        Verify.assertMapsEqual(UnifiedMap.newMap(), mapWithout2);
+        Verify.assertInstanceOf(EmptyMap.class, mapWithout2);
     }
 
     @Override

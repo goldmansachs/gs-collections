@@ -281,7 +281,7 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
 
     public <V> ArrayStack<V> collect(Function<? super T, ? extends V> function)
     {
-        return ArrayStack.<V>newStackFromTopToBottom(this.data.asReversed().collect(function));
+        return ArrayStack.newStackFromTopToBottom(this.data.asReversed().collect(function));
     }
 
     public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)
@@ -291,7 +291,7 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
 
     public <V> ArrayStack<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
     {
-        return ArrayStack.<V>newStackFromTopToBottom(this.data.asReversed().collectIf(predicate, function).toList());
+        return ArrayStack.newStackFromTopToBottom(this.data.asReversed().collectIf(predicate, function).toList());
     }
 
     public <V, R extends Collection<V>> R collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function, R target)
@@ -306,7 +306,7 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
 
     public <V> ArrayStack<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
-        return ArrayStack.<V>newStackFromTopToBottom(this.data.asReversed().flatCollect(function).toList());
+        return ArrayStack.newStackFromTopToBottom(this.data.asReversed().flatCollect(function).toList());
     }
 
     public <V, R extends Collection<V>> R flatCollect(Function<? super T, ? extends Iterable<V>> function, R target)
@@ -316,7 +316,7 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
 
     public ArrayStack<T> select(Predicate<? super T> predicate)
     {
-        return ArrayStack.<T>newStackFromTopToBottom(this.data.asReversed().select(predicate).toList());
+        return ArrayStack.newStackFromTopToBottom(this.data.asReversed().select(predicate).toList());
     }
 
     public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)
@@ -326,7 +326,7 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
 
     public <S> ArrayStack<S> selectInstancesOf(Class<S> clazz)
     {
-        return ArrayStack.<S>newStackFromTopToBottom(this.data.asReversed().selectInstancesOf(clazz).toList());
+        return ArrayStack.newStackFromTopToBottom(this.data.asReversed().selectInstancesOf(clazz).toList());
     }
 
     public <P, R extends Collection<T>> R selectWith(Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
@@ -336,7 +336,7 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
 
     public ArrayStack<T> reject(Predicate<? super T> predicate)
     {
-        return ArrayStack.<T>newStackFromTopToBottom(this.data.asReversed().reject(predicate).toList());
+        return ArrayStack.newStackFromTopToBottom(this.data.asReversed().reject(predicate).toList());
     }
 
     public <R extends Collection<T>> R reject(Predicate<? super T> predicate, R target)
@@ -366,7 +366,7 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
 
     public <S> ArrayStack<Pair<T, S>> zip(Iterable<S> that)
     {
-        return ArrayStack.<Pair<T, S>>newStackFromTopToBottom(this.data.asReversed().zip(that).toList());
+        return ArrayStack.newStackFromTopToBottom(this.data.asReversed().zip(that).toList());
     }
 
     public <S, R extends Collection<Pair<T, S>>> R zip(Iterable<S> that, R target)
@@ -654,7 +654,7 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
         {
             return true;
         }
-        if (o == null || !(o instanceof StackIterable<?>))
+        if (!(o instanceof StackIterable<?>))
         {
             return false;
         }

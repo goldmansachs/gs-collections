@@ -658,7 +658,7 @@ public abstract class StackIterableTestCase
         {
             public void value(String argument1, Integer argument2)
             {
-                builder.append(argument1 + argument2);
+                builder.append(argument1).append(argument2);
             }
         }, 0);
         Assert.assertEquals("40302010", builder.toString());
@@ -673,7 +673,7 @@ public abstract class StackIterableTestCase
         {
             public void value(String each, int index)
             {
-                builder.append(each + index);
+                builder.append(each).append(index);
             }
         });
         Assert.assertEquals("5041322314", builder.toString());

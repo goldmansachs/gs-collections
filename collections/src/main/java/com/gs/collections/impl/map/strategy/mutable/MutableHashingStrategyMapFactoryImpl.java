@@ -31,12 +31,12 @@ public final class MutableHashingStrategyMapFactoryImpl implements MutableHashin
 
     public <K, V> MutableMap<K, V> of(HashingStrategy<? super K> hashingStrategy, K key, V value)
     {
-        return UnifiedMapWithHashingStrategy.<K, V>newWithKeysValues(hashingStrategy, key, value);
+        return UnifiedMapWithHashingStrategy.newWithKeysValues(hashingStrategy, key, value);
     }
 
     public <K, V> MutableMap<K, V> of(HashingStrategy<? super K> hashingStrategy, K key1, V value1, K key2, V value2)
     {
-        return UnifiedMapWithHashingStrategy.<K, V>newWithKeysValues(
+        return UnifiedMapWithHashingStrategy.newWithKeysValues(
                 hashingStrategy,
                 key1, value1,
                 key2, value2);
@@ -48,7 +48,7 @@ public final class MutableHashingStrategyMapFactoryImpl implements MutableHashin
             K key2, V value2,
             K key3, V value3)
     {
-        return UnifiedMapWithHashingStrategy.<K, V>newWithKeysValues(
+        return UnifiedMapWithHashingStrategy.newWithKeysValues(
                 hashingStrategy,
                 key1, value1,
                 key2, value2,
@@ -62,7 +62,7 @@ public final class MutableHashingStrategyMapFactoryImpl implements MutableHashin
             K key3, V value3,
             K key4, V value4)
     {
-        return UnifiedMapWithHashingStrategy.<K, V>newWithKeysValues(
+        return UnifiedMapWithHashingStrategy.newWithKeysValues(
                 hashingStrategy,
                 key1, value1,
                 key2, value2,

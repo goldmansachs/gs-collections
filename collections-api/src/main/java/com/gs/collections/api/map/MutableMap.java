@@ -42,10 +42,10 @@ public interface MutableMap<K, V>
     MutableMap<K, V> newEmpty();
 
     /**
-     * Adds all the entries derived from <code>collection</code> to <code>this</code>. The key and value for each entry
-     * is determined by applying the <code>keyFunction</code> and <code>valueFunction</code> to each item in
-     * <code>collection</code>. Any entry in <code>map</code> that has the same key as an entry in <code>this</code>
-     * will have it's value replaced by that in <code>map</code>.
+     * Adds all the entries derived from {@code collection} to {@code this}. The key and value for each entry
+     * is determined by applying the {@code keyFunction} and {@code valueFunction} to each item in
+     * {@code collection}. Any entry in {@code map} that has the same key as an entry in {@code this}
+     * will have it's value replaced by that in {@code map}.
      */
     <E> MutableMap<K, V> collectKeysAndValues(
             Collection<E> collection,
@@ -53,7 +53,7 @@ public interface MutableMap<K, V>
             Function<? super E, ? extends V> valueFunction);
 
     /**
-     * Remove an entry from the map at the specified <code>key</code>.
+     * Remove an entry from the map at the specified {@code key}.
      *
      * @return The value removed from entry at key, or null if not found.
      * @see #remove(Object)

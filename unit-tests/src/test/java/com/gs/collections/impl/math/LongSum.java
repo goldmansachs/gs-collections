@@ -80,6 +80,6 @@ public final class LongSum
     @Override
     public int hashCode()
     {
-        return (int) (this.sum ^ (this.sum >>> 32));
+        return (int) (this.sum ^ this.sum >>> 32);
     }
 }

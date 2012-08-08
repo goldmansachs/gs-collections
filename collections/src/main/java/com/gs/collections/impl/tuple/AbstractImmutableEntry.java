@@ -75,7 +75,7 @@ public class AbstractImmutableEntry<K, V> implements Map.Entry<K, V>, Serializab
     }
 
     /**
-     * Returns a string representation of the form <code>{key}={value}</code>.
+     * Returns a string representation of the form {@code {key}={value}}.
      */
     @Override
     public String toString()

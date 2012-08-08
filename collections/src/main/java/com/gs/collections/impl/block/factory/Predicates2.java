@@ -48,12 +48,12 @@ public abstract class Predicates2<T, P>
 
     public Predicates2<T, P> and(Predicate2<? super T, ? super P> op)
     {
-        return Predicates2.<T, P>and(this, op);
+        return Predicates2.and(this, op);
     }
 
     public Predicates2<T, P> or(Predicate2<? super T, ? super P> op)
     {
-        return Predicates2.<T, P>or(this, op);
+        return Predicates2.or(this, op);
     }
 
     public static <T, P> Predicates2<T, P> not(Predicate2<T, P> predicate)

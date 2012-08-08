@@ -27,26 +27,6 @@ import com.gs.collections.api.tuple.Pair;
 
 public interface MutableStack<T> extends StackIterable<T>
 {
-    MutableStack<T> select(Predicate<? super T> predicate);
-
-    MutableStack<T> reject(Predicate<? super T> predicate);
-
-    PartitionStack<T> partition(Predicate<? super T> predicate);
-
-    <V> MutableStack<V> collect(Function<? super T, ? extends V> function);
-
-    <V> MutableStack<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
-
-    <V> MutableStack<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
-
-    <V> MutableListMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
-
-    <V> MutableListMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
-
-    <S> MutableStack<Pair<T, S>> zip(Iterable<S> that);
-
-    MutableStack<Pair<T, Integer>> zipWithIndex();
-
     /**
      * Adds an item to the top of the stack.
      */
@@ -80,7 +60,27 @@ public interface MutableStack<T> extends StackIterable<T>
 
     MutableStack<T> asSynchronized();
 
+    ImmutableStack<T> toImmutable();
+
     MutableStack<T> toStack();
 
-    ImmutableStack<T> toImmutable();
+    MutableStack<T> select(Predicate<? super T> predicate);
+
+    MutableStack<T> reject(Predicate<? super T> predicate);
+
+    PartitionStack<T> partition(Predicate<? super T> predicate);
+
+    <V> MutableStack<V> collect(Function<? super T, ? extends V> function);
+
+    <V> MutableStack<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
+
+    <V> MutableStack<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
+
+    <V> MutableListMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
+
+    <V> MutableListMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
+
+    <S> MutableStack<Pair<T, S>> zip(Iterable<S> that);
+
+    MutableStack<Pair<T, Integer>> zipWithIndex();
 }

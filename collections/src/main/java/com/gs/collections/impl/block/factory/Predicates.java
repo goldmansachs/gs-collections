@@ -421,12 +421,12 @@ public abstract class Predicates<T>
 
     public Predicates<T> and(Predicate<? super T> op)
     {
-        return Predicates.<T>and(this, op);
+        return Predicates.and(this, op);
     }
 
     public Predicates<T> or(Predicate<? super T> op)
     {
-        return Predicates.<T>or(this, op);
+        return Predicates.or(this, op);
     }
 
     public static Predicates<Class<?>> subClass(Class<?> aClass)

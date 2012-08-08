@@ -820,7 +820,7 @@ public final class MultiReaderFastList<T>
 
         public MutableStack<T> toStack()
         {
-            return ArrayStack.<T>newStack(this.delegate);
+            return ArrayStack.newStack(this.delegate);
         }
 
         public <V extends Comparable<? super V>> MutableList<T> sortThisBy(Function<? super T, ? extends V> function)

@@ -33,7 +33,7 @@ public class ChainedProcedureTest
         MutableList<String> list2 = Lists.mutable.of();
         Procedure<String> procedure1 = new CollectionAddProcedure<String>(list1);
         Procedure<String> procedure2 = new CollectionAddProcedure<String>(list2);
-        ChainedProcedure<String> chainedProcedure = ChainedProcedure.<String>with(procedure1, procedure2);
+        ChainedProcedure<String> chainedProcedure = ChainedProcedure.with(procedure1, procedure2);
 
         MutableList<String> list = FastList.newListWith("1", "2");
         Iterate.forEach(list, chainedProcedure);

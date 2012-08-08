@@ -687,7 +687,7 @@ public abstract class ImmutableMemoryEfficientMapTestCase extends ImmutableMapTe
             public Iterable<Character> valueOf(String object)
             {
                 MutableList<Character> result = Lists.mutable.of();
-                if (null != object)
+                if (object != null)
                 {
                     char[] chars = object.toCharArray();
                     for (char aChar : chars)

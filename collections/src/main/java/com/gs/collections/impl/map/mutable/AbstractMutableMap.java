@@ -265,7 +265,7 @@ public abstract class AbstractMutableMap<K, V> extends AbstractMapIterable<K, V>
         int sectionSize = map.length / sectionCount;
         int start = sectionIndex * sectionSize;
         int end = sectionIndex == sectionCount - 1 ? map.length : start + sectionSize;
-        if (0 == start % 2)
+        if (start % 2 == 0)
         {
             start++;
         }

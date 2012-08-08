@@ -46,7 +46,7 @@ public class UnmodifiableMutableListTest
     @Before
     public void setUp()
     {
-        this.mutableList = Lists.mutable.<String>of(METALLICA, "Bon Jovi", "Europe", "Scorpions");
+        this.mutableList = Lists.mutable.of(METALLICA, "Bon Jovi", "Europe", "Scorpions");
         this.unmodifiableList = UnmodifiableMutableList.of(this.mutableList);
     }
 

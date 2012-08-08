@@ -333,8 +333,8 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
         // constant multiples at each bit position have a bounded
         // number of collisions (approximately 8 at default load factor).
         int h = this.hashingStrategy.computeHashCode(key);
-        h ^= (h >>> 20) ^ (h >>> 12);
-        h ^= (h >>> 7) ^ (h >>> 4);
+        h ^= h >>> 20 ^ h >>> 12;
+        h ^= h >>> 7 ^ h >>> 4;
         return (h & (this.table.length >> 1) - 1) << 1;
     }
 
@@ -826,7 +826,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
         {
             return entries;
         }
-        if (map.size() == 0)
+        if (map.isEmpty())
         {
             return Sets.immutable.<Entry<K, V>>of().castToSet();
         }
@@ -1206,7 +1206,6 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
                 if (UnifiedMapWithHashingStrategy.this.hashingStrategyEquals(UnifiedMapWithHashingStrategy.this.nonSentinel(cur), (K) key))
                 {
                     other.put(UnifiedMapWithHashingStrategy.this.nonSentinel(cur), (V) val);
-                    return;
                 }
             }
         }
@@ -2011,7 +2010,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
         public boolean containsAll(Collection<?> collection)
         {
             // todo: this is N^2. if c is large, we should copy the values to a set.
-            return Iterate.allSatisfy((Collection<?>) collection, Predicates.in(this));
+            return Iterate.allSatisfy(collection, Predicates.in(this));
         }
 
         public boolean isEmpty()

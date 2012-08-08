@@ -295,20 +295,20 @@ public class VerifyTest
     @Test
     public void assertNotEqualsInt()
     {
-        Verify.assertNotEquals((int) 1, (int) 2);
-        Verify.assertNotEquals("message", (int) 1, (int) 2);
+        Verify.assertNotEquals(1, 2);
+        Verify.assertNotEquals("message", 1, 2);
         Verify.assertError(AssertionError.class, new Runnable()
         {
             public void run()
             {
-                Verify.assertNotEquals((int) 1, (int) 1);
+                Verify.assertNotEquals(1, 1);
             }
         });
         Verify.assertError(AssertionError.class, new Runnable()
         {
             public void run()
             {
-                Verify.assertNotEquals("message", (int) 1, (int) 1);
+                Verify.assertNotEquals("message", 1, 1);
             }
         });
     }
@@ -1320,7 +1320,7 @@ public class VerifyTest
     {
         try
         {
-            Verify.assertNotContains("foo", (Collection<?>) FastList.newListWith("foo"));
+            Verify.assertNotContains("foo", FastList.newListWith("foo"));
             Assert.fail();
         }
         catch (AssertionError ex)

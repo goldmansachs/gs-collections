@@ -319,7 +319,7 @@ public final class ArrayIterate
             throw new IllegalArgumentException("Cannot perform a collectIf on null");
         }
 
-        return ArrayIterate.<T, A, FastList<A>>collectIf(
+        return ArrayIterate.collectIf(
                 objectArray,
                 predicate,
                 function,
@@ -1322,7 +1322,8 @@ public final class ArrayIterate
             {
                 appendable.append(String.valueOf(array[0]));
 
-                for (int i = 1, size = array.length; i < size; i++)
+                int size = array.length;
+                for (int i = 1; i < size; i++)
                 {
                     appendable.append(separator);
                     appendable.append(String.valueOf(array[i]));

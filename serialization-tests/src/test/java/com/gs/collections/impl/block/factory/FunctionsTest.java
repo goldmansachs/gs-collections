@@ -18,7 +18,6 @@ package com.gs.collections.impl.block.factory;
 
 import java.util.Collection;
 
-import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Test;
@@ -194,7 +193,7 @@ public class FunctionsTest
                         + "AAAAAAAAAAECAAJMAAx2YWwkZGVsZWdhdGV0ADJMY29tL2dzL2NvbGxlY3Rpb25zL2FwaS9ibG9j\n"
                         + "ay9wcm9jZWR1cmUvUHJvY2VkdXJlO0wADHZhbCRmdW5jdGlvbnQAMExjb20vZ3MvY29sbGVjdGlv\n"
                         + "bnMvYXBpL2Jsb2NrL2Z1bmN0aW9uL0Z1bmN0aW9uO3hwcHA=",
-                Functions.bind((Procedure<Object>) null, (Function<Object, ?>) null));
+                Functions.bind((Procedure<Object>) null, null));
     }
 
     @Test

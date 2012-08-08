@@ -386,7 +386,7 @@ public class RandomAccessListIterateTest
     {
         MutableList<Integer> list = this.getIntegerList();
         Assert.assertTrue(RandomAccessListIterate.allSatisfyWith(list, Predicates2.instanceOf(), Integer.class));
-        Predicate2<Integer, Integer> greaterThanPredicate = Predicates2.<Integer>greaterThan();
+        Predicate2<Integer, Integer> greaterThanPredicate = Predicates2.greaterThan();
         Assert.assertFalse(RandomAccessListIterate.allSatisfyWith(list, greaterThanPredicate, 2));
     }
 
@@ -418,8 +418,7 @@ public class RandomAccessListIterateTest
         MutableList<Integer> integers2 = Lists.fixedSize.of();
         Verify.assertSize(0, RandomAccessListIterate.take(integers2, 2));
 
-        integers = Lists.fixedSize.of();
-        Verify.assertSize(0, RandomAccessListIterate.take(integers, 2));
+        Verify.assertSize(0, RandomAccessListIterate.take(Lists.fixedSize.of(), 2));
     }
 
     @Test(expected = IllegalArgumentException.class)
