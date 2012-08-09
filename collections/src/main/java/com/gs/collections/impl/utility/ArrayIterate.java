@@ -114,7 +114,7 @@ public final class ArrayIterate
         {
             for (int j = i; j > 0 && comparator.compare(array[j - 1], array[j]) > 0; j--)
             {
-                swapWithPrevious(array, j);
+                ArrayIterate.swapWithPrevious(array, j);
             }
         }
     }
@@ -125,7 +125,7 @@ public final class ArrayIterate
         {
             for (int j = i; j > 0 && ((Comparable<T>) array[j - 1]).compareTo(array[j]) > 0; j--)
             {
-                swapWithPrevious(array, j);
+                ArrayIterate.swapWithPrevious(array, j);
             }
         }
     }

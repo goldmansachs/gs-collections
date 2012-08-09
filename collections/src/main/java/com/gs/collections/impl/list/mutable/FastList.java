@@ -70,8 +70,16 @@ import net.jcip.annotations.NotThreadSafe;
  * FastList is an attempt to provide the same functionality as ArrayList without the support for concurrent
  * modification exceptions.  It also attempts to correct the problem with subclassing ArrayList
  * in that the data elements are protected, not private.  It is this issue that caused this class
- * to be created in the first place.  The intent was to provide internal iterators which use direct access against the
- * array of items, which is currently not possible by subclassing ArrayList.
+ * to be created in the first place.  The intent was to provide optimized internal iterators which use direct access
+ * against the array of items, which is currently not possible by subclassing ArrayList.
+ * <p/>
+ * An empty FastList created by calling the default constructor starts with a shared reference to a static
+ * empty array (DEFAULT_SIZED_EMPTY_ARRAY).  This makes empty FastLists very memory efficient.  The
+ * first call to add will lazily create an array of size 10.
+ * <p/>
+ * An empty FastList created by calling the pre-size constructor with a value of 0 (new FastList(0)) starts
+ * with a shared reference to a static  empty array (ZERO_SIZED_ARRAY).  This makes FastLists presized to 0 very
+ * memory efficient as well.  The first call to add will lazily create an array of size 1.
  */
 @NotThreadSafe
 public class FastList<T>
