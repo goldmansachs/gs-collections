@@ -27,6 +27,7 @@ import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.factory.set.FixedSizeSetFactory;
 import com.gs.collections.api.factory.set.ImmutableSetFactory;
+import com.gs.collections.api.factory.set.MutableSetFactory;
 import com.gs.collections.api.set.FixedSizeSet;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
@@ -759,6 +760,26 @@ public class SetsTest
         Verify.assertInstanceOf(ImmutableSet.class, setFactory.of(1, 2, 3, 4, 5));
         Assert.assertEquals(UnifiedSet.newSetWith(1, 2, 3, 4, 5), setFactory.ofAll(UnifiedSet.newSetWith(1, 2, 3, 4, 5)));
         Verify.assertInstanceOf(ImmutableSet.class, setFactory.ofAll(UnifiedSet.newSetWith(1, 2, 3, 4, 5)));
+    }
+
+    @Test
+    public void mutables()
+    {
+        MutableSetFactory setFactory = Sets.mutable;
+        Assert.assertEquals(UnifiedSet.newSet(), setFactory.of());
+        Verify.assertInstanceOf(MutableSet.class, setFactory.of());
+        Assert.assertEquals(UnifiedSet.newSetWith(1), setFactory.of(1));
+        Verify.assertInstanceOf(MutableSet.class, setFactory.of(1));
+        Assert.assertEquals(UnifiedSet.newSetWith(1, 2), setFactory.of(1, 2));
+        Verify.assertInstanceOf(MutableSet.class, setFactory.of(1, 2));
+        Assert.assertEquals(UnifiedSet.newSetWith(1, 2, 3), setFactory.of(1, 2, 3));
+        Verify.assertInstanceOf(MutableSet.class, setFactory.of(1, 2, 3));
+        Assert.assertEquals(UnifiedSet.newSetWith(1, 2, 3, 4), setFactory.of(1, 2, 3, 4));
+        Verify.assertInstanceOf(MutableSet.class, setFactory.of(1, 2, 3, 4));
+        Assert.assertEquals(UnifiedSet.newSetWith(1, 2, 3, 4, 5), setFactory.of(1, 2, 3, 4, 5));
+        Verify.assertInstanceOf(MutableSet.class, setFactory.of(1, 2, 3, 4, 5));
+        Assert.assertEquals(UnifiedSet.newSetWith(1, 2, 3, 4, 5), setFactory.ofAll(UnifiedSet.newSetWith(1, 2, 3, 4, 5)));
+        Verify.assertInstanceOf(MutableSet.class, setFactory.ofAll(UnifiedSet.newSetWith(1, 2, 3, 4, 5)));
     }
 
     @Test

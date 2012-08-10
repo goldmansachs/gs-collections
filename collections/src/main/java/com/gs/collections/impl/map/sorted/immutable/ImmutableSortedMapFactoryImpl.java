@@ -29,30 +29,60 @@ public final class ImmutableSortedMapFactoryImpl implements ImmutableSortedMapFa
 {
     public <K, V> ImmutableSortedMap<K, V> of()
     {
+        return this.with();
+    }
+
+    public <K, V> ImmutableSortedMap<K, V> with()
+    {
         return (ImmutableSortedMap<K, V>) ImmutableEmptySortedMap.INSTANCE;
     }
 
     public <K, V> ImmutableSortedMap<K, V> of(K key, V value)
+    {
+        return this.with(key, value);
+    }
+
+    public <K, V> ImmutableSortedMap<K, V> with(K key, V value)
     {
         return TreeSortedMap.newMapWith(key, value).toImmutable();
     }
 
     public <K, V> ImmutableSortedMap<K, V> of(K key1, V value1, K key2, V value2)
     {
+        return this.with(key1, value1, key2, value2);
+    }
+
+    public <K, V> ImmutableSortedMap<K, V> with(K key1, V value1, K key2, V value2)
+    {
         return TreeSortedMap.newMapWith(key1, value1, key2, value2).toImmutable();
     }
 
     public <K, V> ImmutableSortedMap<K, V> of(K key1, V value1, K key2, V value2, K key3, V value3)
+    {
+        return this.with(key1, value1, key2, value2, key3, value3);
+    }
+
+    public <K, V> ImmutableSortedMap<K, V> with(K key1, V value1, K key2, V value2, K key3, V value3)
     {
         return TreeSortedMap.newMapWith(key1, value1, key2, value2, key3, value3).toImmutable();
     }
 
     public <K, V> ImmutableSortedMap<K, V> of(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
     {
+        return this.with(key1, value1, key2, value2, key3, value3, key4, value4);
+    }
+
+    public <K, V> ImmutableSortedMap<K, V> with(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
+    {
         return TreeSortedMap.newMapWith(key1, value1, key2, value2, key3, value3, key4, value4).toImmutable();
     }
 
     public <K, V> ImmutableSortedMap<K, V> of(Comparator<? super K> comparator)
+    {
+        return this.with(comparator);
+    }
+
+    public <K, V> ImmutableSortedMap<K, V> with(Comparator<? super K> comparator)
     {
         if (comparator == null)
         {
@@ -63,25 +93,50 @@ public final class ImmutableSortedMapFactoryImpl implements ImmutableSortedMapFa
 
     public <K, V> ImmutableSortedMap<K, V> of(Comparator<? super K> comparator, K key, V value)
     {
+        return this.with(comparator, key, value);
+    }
+
+    public <K, V> ImmutableSortedMap<K, V> with(Comparator<? super K> comparator, K key, V value)
+    {
         return TreeSortedMap.<K, V>newMap(comparator).with(key, value).toImmutable();
     }
 
     public <K, V> ImmutableSortedMap<K, V> of(Comparator<? super K> comparator, K key1, V value1, K key2, V value2)
+    {
+        return this.with(comparator, key1, value1, key2, value2);
+    }
+
+    public <K, V> ImmutableSortedMap<K, V> with(Comparator<? super K> comparator, K key1, V value1, K key2, V value2)
     {
         return TreeSortedMap.<K, V>newMap(comparator).with(key1, value1, key2, value2).toImmutable();
     }
 
     public <K, V> ImmutableSortedMap<K, V> of(Comparator<? super K> comparator, K key1, V value1, K key2, V value2, K key3, V value3)
     {
+        return this.with(comparator, key1, value1, key2, value2, key3, value3);
+    }
+
+    public <K, V> ImmutableSortedMap<K, V> with(Comparator<? super K> comparator, K key1, V value1, K key2, V value2, K key3, V value3)
+    {
         return TreeSortedMap.<K, V>newMap(comparator).with(key1, value1, key2, value2, key3, value3).toImmutable();
     }
 
     public <K, V> ImmutableSortedMap<K, V> of(Comparator<? super K> comparator, K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
     {
+        return this.with(comparator, key1, value1, key2, value2, key3, value3, key4, value4);
+    }
+
+    public <K, V> ImmutableSortedMap<K, V> with(Comparator<? super K> comparator, K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
+    {
         return TreeSortedMap.<K, V>newMap(comparator).with(key1, value1, key2, value2, key3, value3, key4, value4).toImmutable();
     }
 
     public <K, V> ImmutableSortedMap<K, V> ofSortedMap(SortedMap<K, V> map)
+    {
+        return this.withSortedMap(map);
+    }
+
+    public <K, V> ImmutableSortedMap<K, V> withSortedMap(SortedMap<K, V> map)
     {
         if (map instanceof ImmutableSortedMap)
         {

@@ -252,6 +252,7 @@ public class IterablesTest
     public void mutableSortedMapsWithComparator()
     {
         this.assertEqualsAndInstanceOf(TreeSortedMap.newMap(Comparators.reverseNaturalOrder()), Iterables.mSortedMap(Comparators.reverseNaturalOrder()), MutableSortedMap.class);
+        this.assertEqualsAndInstanceOf(TreeSortedMap.newMap(Comparators.reverseNaturalOrder()), Iterables.mSortedMap(null), MutableSortedMap.class);
         this.assertEqualsAndInstanceOf(Interval.oneTo(1).toSortedMap(Comparators.reverseNaturalOrder(), Functions.getPassThru(), Functions.getPassThru()),
                 Iterables.mSortedMap(Comparators.reverseNaturalOrder(), 1, 1), MutableSortedMap.class);
         this.assertEqualsAndInstanceOf(Interval.oneTo(2).toSortedMap(Comparators.reverseNaturalOrder(), Functions.getPassThru(), Functions.getPassThru()),

@@ -25,15 +25,30 @@ public final class MutableSetFactoryImpl implements MutableSetFactory
 {
     public <T> MutableSet<T> of()
     {
+        return this.with();
+    }
+
+    public <T> MutableSet<T> with()
+    {
         return UnifiedSet.newSet();
     }
 
     public <T> MutableSet<T> of(T... items)
     {
+        return this.with(items);
+    }
+
+    public <T> MutableSet<T> with(T... items)
+    {
         return UnifiedSet.newSetWith(items);
     }
 
     public <T> MutableSet<T> ofAll(Iterable<? extends T> items)
+    {
+        return this.withAll(items);
+    }
+
+    public <T> MutableSet<T> withAll(Iterable<? extends T> items)
     {
         return UnifiedSet.newSet(items);
     }

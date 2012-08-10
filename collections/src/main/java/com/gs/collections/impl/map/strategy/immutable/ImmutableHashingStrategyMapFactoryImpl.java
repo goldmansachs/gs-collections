@@ -28,15 +28,33 @@ public final class ImmutableHashingStrategyMapFactoryImpl implements ImmutableHa
 {
     public <K, V> ImmutableMap<K, V> of(HashingStrategy<? super K> hashingStrategy)
     {
+        return this.with(hashingStrategy);
+    }
+
+    public <K, V> ImmutableMap<K, V> with(HashingStrategy<? super K> hashingStrategy)
+    {
         return new ImmutableEmptyMapWithHashingStrategy<K, V>(hashingStrategy);
     }
 
     public <K, V> ImmutableMap<K, V> of(HashingStrategy<? super K> hashingStrategy, K key, V value)
     {
+        return this.with(hashingStrategy, key, value);
+    }
+
+    public <K, V> ImmutableMap<K, V> with(HashingStrategy<? super K> hashingStrategy, K key, V value)
+    {
         return UnifiedMapWithHashingStrategy.<K, V>newWithKeysValues(hashingStrategy, key, value).toImmutable();
     }
 
     public <K, V> ImmutableMap<K, V> of(HashingStrategy<? super K> hashingStrategy, K key1, V value1, K key2, V value2)
+    {
+        return this.with(
+                hashingStrategy,
+                key1, value1,
+                key2, value2);
+    }
+
+    public <K, V> ImmutableMap<K, V> with(HashingStrategy<? super K> hashingStrategy, K key1, V value1, K key2, V value2)
     {
         return UnifiedMapWithHashingStrategy.<K, V>newWithKeysValues(
                 hashingStrategy,
@@ -45,6 +63,19 @@ public final class ImmutableHashingStrategyMapFactoryImpl implements ImmutableHa
     }
 
     public <K, V> ImmutableMap<K, V> of(
+            HashingStrategy<? super K> hashingStrategy,
+            K key1, V value1,
+            K key2, V value2,
+            K key3, V value3)
+    {
+        return this.with(
+                hashingStrategy,
+                key1, value1,
+                key2, value2,
+                key3, value3);
+    }
+
+    public <K, V> ImmutableMap<K, V> with(
             HashingStrategy<? super K> hashingStrategy,
             K key1, V value1,
             K key2, V value2,
@@ -64,6 +95,21 @@ public final class ImmutableHashingStrategyMapFactoryImpl implements ImmutableHa
             K key3, V value3,
             K key4, V value4)
     {
+        return this.with(
+                hashingStrategy,
+                key1, value1,
+                key2, value2,
+                key3, value3,
+                key4, value4);
+    }
+
+    public <K, V> ImmutableMap<K, V> with(
+            HashingStrategy<? super K> hashingStrategy,
+            K key1, V value1,
+            K key2, V value2,
+            K key3, V value3,
+            K key4, V value4)
+    {
         return UnifiedMapWithHashingStrategy.<K, V>newWithKeysValues(
                 hashingStrategy,
                 key1, value1,
@@ -73,6 +119,11 @@ public final class ImmutableHashingStrategyMapFactoryImpl implements ImmutableHa
     }
 
     public <K, V> ImmutableMap<K, V> ofMap(MutableMap<K, V> map)
+    {
+        return this.withMap(map);
+    }
+
+    public <K, V> ImmutableMap<K, V> withMap(MutableMap<K, V> map)
     {
         if (!(map instanceof UnifiedMapWithHashingStrategy<?, ?>))
         {

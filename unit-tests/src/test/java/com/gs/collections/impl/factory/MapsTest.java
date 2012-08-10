@@ -18,6 +18,7 @@ package com.gs.collections.impl.factory;
 
 import com.gs.collections.api.factory.map.FixedSizeMapFactory;
 import com.gs.collections.api.factory.map.ImmutableMapFactory;
+import com.gs.collections.api.factory.map.sorted.MutableSortedMapFactory;
 import com.gs.collections.api.map.FixedSizeMap;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.impl.block.factory.Predicates;
@@ -46,6 +47,17 @@ public class MapsTest
     }
 
     @Test
+    public void immutableWithDuplicateKeys()
+    {
+        ImmutableMapFactory factory = Maps.immutable;
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, 2), factory.of(1, 2));
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, 2, 1, 2), factory.of(1, 2, 1, 2));
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, 2, 3, 4, 1, 2), factory.of(1, 2, 3, 4, 1, 2));
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, 2, 1, 2, 3, 4), factory.of(1, 2, 1, 2, 3, 4));
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, 2, 3, 4, 3, 4), factory.of(1, 2, 3, 4, 3, 4));
+    }
+
+    @Test
     public void fixedSize()
     {
         FixedSizeMapFactory undertest = Maps.fixedSize;
@@ -57,6 +69,17 @@ public class MapsTest
         Verify.assertInstanceOf(FixedSizeMap.class, undertest.of(1, 2, 3, 4));
         Assert.assertEquals(UnifiedMap.newWithKeysValues(1, 2, 3, 4, 5, 6), undertest.of(1, 2, 3, 4, 5, 6));
         Verify.assertInstanceOf(FixedSizeMap.class, undertest.of(1, 2, 3, 4, 5, 6));
+    }
+
+    @Test
+    public void fixedSizeWithDuplicateKeys()
+    {
+        FixedSizeMapFactory undertest = Maps.fixedSize;
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, 2), undertest.of(1, 2));
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, 2, 1, 2), undertest.of(1, 2, 1, 2));
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, 2, 3, 4, 1, 2), undertest.of(1, 2, 3, 4, 1, 2));
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, 2, 1, 2, 3, 4), undertest.of(1, 2, 1, 2, 3, 4));
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, 2, 3, 4, 3, 4), undertest.of(1, 2, 3, 4, 3, 4));
     }
 
     @Test
@@ -114,4 +137,12 @@ public class MapsTest
         Verify.assertContainsAllKeyValues(map3, key, 3, new Key("not a dupe"), 2);
         Assert.assertSame(key, map3.keysView().detect(Predicates.equal(key)));
     }
+
+    @Test
+    public void sortedMaps()
+    {
+        MutableSortedMapFactory factory = SortedMaps.mutable;
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, 2, 3, 4), factory.ofSortedMap(UnifiedMap.newWithKeysValues(1, 2, 3, 4)));
+    }
+
 }

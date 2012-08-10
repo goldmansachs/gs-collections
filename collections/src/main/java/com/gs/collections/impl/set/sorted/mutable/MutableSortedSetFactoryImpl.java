@@ -27,30 +27,60 @@ public final class MutableSortedSetFactoryImpl implements MutableSortedSetFactor
 {
     public <T> MutableSortedSet<T> of()
     {
+        return this.with();
+    }
+
+    public <T> MutableSortedSet<T> with()
+    {
         return TreeSortedSet.newSet();
     }
 
     public <T> MutableSortedSet<T> of(T... items)
+    {
+        return this.with(items);
+    }
+
+    public <T> MutableSortedSet<T> with(T... items)
     {
         return TreeSortedSet.newSetWith(items);
     }
 
     public <T> MutableSortedSet<T> ofAll(Iterable<? extends T> items)
     {
+        return this.withAll(items);
+    }
+
+    public <T> MutableSortedSet<T> withAll(Iterable<? extends T> items)
+    {
         return TreeSortedSet.newSet(items);
     }
 
     public <T> MutableSortedSet<T> of(Comparator<? super T> comparator)
+    {
+        return this.with(comparator);
+    }
+
+    public <T> MutableSortedSet<T> with(Comparator<? super T> comparator)
     {
         return TreeSortedSet.newSet(comparator);
     }
 
     public <T> MutableSortedSet<T> of(Comparator<? super T> comparator, T... items)
     {
+        return this.with(comparator, items);
+    }
+
+    public <T> MutableSortedSet<T> with(Comparator<? super T> comparator, T... items)
+    {
         return TreeSortedSet.newSetWith(comparator, items);
     }
 
     public <T> MutableSortedSet<T> ofAll(Comparator<? super T> comparator, Iterable<? extends T> items)
+    {
+        return this.withAll(comparator, items);
+    }
+
+    public <T> MutableSortedSet<T> withAll(Comparator<? super T> comparator, Iterable<? extends T> items)
     {
         return TreeSortedSet.newSet(comparator, items);
     }

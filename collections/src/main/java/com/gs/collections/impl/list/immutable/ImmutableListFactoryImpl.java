@@ -26,60 +26,120 @@ public final class ImmutableListFactoryImpl implements ImmutableListFactory
 {
     public <T> ImmutableList<T> of()
     {
+        return this.with();
+    }
+
+    public <T> ImmutableList<T> with()
+    {
         return (ImmutableList<T>) ImmutableEmptyList.INSTANCE;
     }
 
     public <T> ImmutableList<T> of(T one)
+    {
+        return this.with(one);
+    }
+
+    public <T> ImmutableList<T> with(T one)
     {
         return new ImmutableSingletonList<T>(one);
     }
 
     public <T> ImmutableList<T> of(T one, T two)
     {
+        return this.with(one, two);
+    }
+
+    public <T> ImmutableList<T> with(T one, T two)
+    {
         return new ImmutableDoubletonList<T>(one, two);
     }
 
     public <T> ImmutableList<T> of(T one, T two, T three)
+    {
+        return this.with(one, two, three);
+    }
+
+    public <T> ImmutableList<T> with(T one, T two, T three)
     {
         return new ImmutableTripletonList<T>(one, two, three);
     }
 
     public <T> ImmutableList<T> of(T one, T two, T three, T four)
     {
+        return this.with(one, two, three, four);
+    }
+
+    public <T> ImmutableList<T> with(T one, T two, T three, T four)
+    {
         return new ImmutableQuadrupletonList<T>(one, two, three, four);
     }
 
     public <T> ImmutableList<T> of(T one, T two, T three, T four, T five)
+    {
+        return this.with(one, two, three, four, five);
+    }
+
+    public <T> ImmutableList<T> with(T one, T two, T three, T four, T five)
     {
         return new ImmutableQuintupletonList<T>(one, two, three, four, five);
     }
 
     public <T> ImmutableList<T> of(T one, T two, T three, T four, T five, T six)
     {
+        return this.with(one, two, three, four, five, six);
+    }
+
+    public <T> ImmutableList<T> with(T one, T two, T three, T four, T five, T six)
+    {
         return new ImmutableSextupletonList<T>(one, two, three, four, five, six);
     }
 
     public <T> ImmutableList<T> of(T one, T two, T three, T four, T five, T six, T seven)
+    {
+        return this.with(one, two, three, four, five, six, seven);
+    }
+
+    public <T> ImmutableList<T> with(T one, T two, T three, T four, T five, T six, T seven)
     {
         return new ImmutableSeptupletonList<T>(one, two, three, four, five, six, seven);
     }
 
     public <T> ImmutableList<T> of(T one, T two, T three, T four, T five, T six, T seven, T eight)
     {
+        return this.with(one, two, three, four, five, six, seven, eight);
+    }
+
+    public <T> ImmutableList<T> with(T one, T two, T three, T four, T five, T six, T seven, T eight)
+    {
         return new ImmutableOctupletonList<T>(one, two, three, four, five, six, seven, eight);
     }
 
     public <T> ImmutableList<T> of(T one, T two, T three, T four, T five, T six, T seven, T eight, T nine)
+    {
+        return this.with(one, two, three, four, five, six, seven, eight, nine);
+    }
+
+    public <T> ImmutableList<T> with(T one, T two, T three, T four, T five, T six, T seven, T eight, T nine)
     {
         return new ImmutableNonupletonList<T>(one, two, three, four, five, six, seven, eight, nine);
     }
 
     public <T> ImmutableList<T> of(T one, T two, T three, T four, T five, T six, T seven, T eight, T nine, T ten)
     {
+        return this.with(one, two, three, four, five, six, seven, eight, nine, ten);
+    }
+
+    public <T> ImmutableList<T> with(T one, T two, T three, T four, T five, T six, T seven, T eight, T nine, T ten)
+    {
         return new ImmutableDecapletonList<T>(one, two, three, four, five, six, seven, eight, nine, ten);
     }
 
     public <T> ImmutableList<T> of(T... items)
+    {
+        return this.with(items);
+    }
+
+    public <T> ImmutableList<T> with(T... items)
     {
         if (items == null || items.length == 0)
         {
@@ -115,6 +175,11 @@ public final class ImmutableListFactoryImpl implements ImmutableListFactory
     }
 
     public <T> ImmutableList<T> ofAll(Iterable<? extends T> items)
+    {
+        return this.withAll(items);
+    }
+
+    public <T> ImmutableList<T> withAll(Iterable<? extends T> items)
     {
         if (items instanceof ImmutableList<?>)
         {

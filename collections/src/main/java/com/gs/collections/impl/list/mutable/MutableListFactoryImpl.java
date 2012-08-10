@@ -25,15 +25,30 @@ public final class MutableListFactoryImpl implements MutableListFactory
 {
     public <T> MutableList<T> of()
     {
+        return this.with();
+    }
+
+    public <T> MutableList<T> with()
+    {
         return FastList.newList();
     }
 
     public <T> MutableList<T> of(T... items)
     {
+        return this.with(items);
+    }
+
+    public <T> MutableList<T> with(T... items)
+    {
         return FastList.newListWith(items);
     }
 
     public <T> MutableList<T> ofAll(Iterable<? extends T> iterable)
+    {
+        return this.withAll(iterable);
+    }
+
+    public <T> MutableList<T> withAll(Iterable<? extends T> iterable)
     {
         return FastList.newList(iterable);
     }

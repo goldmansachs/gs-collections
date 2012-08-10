@@ -28,15 +28,30 @@ public class FixedSizeMapFactoryImpl implements FixedSizeMapFactory
 
     public <K, V> FixedSizeMap<K, V> of()
     {
+        return this.with();
+    }
+
+    public <K, V> FixedSizeMap<K, V> with()
+    {
         return (FixedSizeMap<K, V>) EMPTY_MAP;
     }
 
     public <K, V> FixedSizeMap<K, V> of(K key, V value)
     {
+        return this.with(key, value);
+    }
+
+    public <K, V> FixedSizeMap<K, V> with(K key, V value)
+    {
         return new SingletonMap<K, V>(key, value);
     }
 
     public <K, V> FixedSizeMap<K, V> of(K key1, V value1, K key2, V value2)
+    {
+        return this.with(key1, value1, key2, value2);
+    }
+
+    public <K, V> FixedSizeMap<K, V> with(K key1, V value1, K key2, V value2)
     {
         if (Comparators.nullSafeEquals(key1, key2))
         {
@@ -46,6 +61,11 @@ public class FixedSizeMapFactoryImpl implements FixedSizeMapFactory
     }
 
     public <K, V> FixedSizeMap<K, V> of(K key1, V value1, K key2, V value2, K key3, V value3)
+    {
+        return this.with(key1, value1, key2, value2, key3, value3);
+    }
+
+    public <K, V> FixedSizeMap<K, V> with(K key1, V value1, K key2, V value2, K key3, V value3)
     {
         if (Comparators.nullSafeEquals(key1, key2) && Comparators.nullSafeEquals(key2, key3))
         {

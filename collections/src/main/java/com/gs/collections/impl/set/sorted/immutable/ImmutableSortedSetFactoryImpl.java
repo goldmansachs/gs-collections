@@ -29,10 +29,20 @@ public final class ImmutableSortedSetFactoryImpl implements ImmutableSortedSetFa
 {
     public <T> ImmutableSortedSet<T> of()
     {
+        return this.with();
+    }
+
+    public <T> ImmutableSortedSet<T> with()
+    {
         return (ImmutableSortedSet<T>) ImmutableEmptySortedSet.INSTANCE;
     }
 
     public <T> ImmutableSortedSet<T> of(T... items)
+    {
+        return this.with(items);
+    }
+
+    public <T> ImmutableSortedSet<T> with(T... items)
     {
         if (items == null || items.length == 0)
         {
@@ -44,6 +54,11 @@ public final class ImmutableSortedSetFactoryImpl implements ImmutableSortedSetFa
 
     public <T> ImmutableSortedSet<T> ofAll(Iterable<? extends T> items)
     {
+        return this.withAll(items);
+    }
+
+    public <T> ImmutableSortedSet<T> withAll(Iterable<? extends T> items)
+    {
         if (items instanceof ImmutableSortedSet<?>)
         {
             return (ImmutableSortedSet<T>) items;
@@ -54,6 +69,11 @@ public final class ImmutableSortedSetFactoryImpl implements ImmutableSortedSetFa
 
     public <T> ImmutableSortedSet<T> of(Comparator<? super T> comparator)
     {
+        return this.with(comparator);
+    }
+
+    public <T> ImmutableSortedSet<T> with(Comparator<? super T> comparator)
+    {
         if (comparator == null)
         {
             return this.of();
@@ -62,6 +82,11 @@ public final class ImmutableSortedSetFactoryImpl implements ImmutableSortedSetFa
     }
 
     public <T> ImmutableSortedSet<T> of(Comparator<? super T> comparator, T... items)
+    {
+        return this.with(comparator, items);
+    }
+
+    public <T> ImmutableSortedSet<T> with(Comparator<? super T> comparator, T... items)
     {
         if (items == null || items.length == 0)
         {
@@ -73,10 +98,20 @@ public final class ImmutableSortedSetFactoryImpl implements ImmutableSortedSetFa
 
     public <T> ImmutableSortedSet<T> ofAll(Comparator<? super T> comparator, Iterable<? extends T> items)
     {
+        return this.withAll(comparator, items);
+    }
+
+    public <T> ImmutableSortedSet<T> withAll(Comparator<? super T> comparator, Iterable<? extends T> items)
+    {
         return this.of(comparator, (T[]) Iterate.toArray(items));
     }
 
     public <T> ImmutableSortedSet<T> ofSortedSet(SortedSet<T> set)
+    {
+        return this.withSortedSet(set);
+    }
+
+    public <T> ImmutableSortedSet<T> withSortedSet(SortedSet<T> set)
     {
         if (set instanceof ImmutableSortedSet)
         {

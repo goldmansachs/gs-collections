@@ -27,15 +27,30 @@ public final class ImmutableSetFactoryImpl implements ImmutableSetFactory
 {
     public <T> ImmutableSet<T> of()
     {
+        return this.with();
+    }
+
+    public <T> ImmutableSet<T> with()
+    {
         return (ImmutableSet<T>) ImmutableEmptySet.INSTANCE;
     }
 
     public <T> ImmutableSet<T> of(T one)
     {
+        return this.with(one);
+    }
+
+    public <T> ImmutableSet<T> with(T one)
+    {
         return new ImmutableSingletonSet<T>(one);
     }
 
     public <T> ImmutableSet<T> of(T one, T two)
+    {
+        return this.with(one, two);
+    }
+
+    public <T> ImmutableSet<T> with(T one, T two)
     {
         if (Comparators.nullSafeEquals(one, two))
         {
@@ -45,6 +60,11 @@ public final class ImmutableSetFactoryImpl implements ImmutableSetFactory
     }
 
     public <T> ImmutableSet<T> of(T one, T two, T three)
+    {
+        return this.with(one, two, three);
+    }
+
+    public <T> ImmutableSet<T> with(T one, T two, T three)
     {
         if (Comparators.nullSafeEquals(one, two))
         {
@@ -62,6 +82,11 @@ public final class ImmutableSetFactoryImpl implements ImmutableSetFactory
     }
 
     public <T> ImmutableSet<T> of(T one, T two, T three, T four)
+    {
+        return this.with(one, two, three, four);
+    }
+
+    public <T> ImmutableSet<T> with(T one, T two, T three, T four)
     {
         if (Comparators.nullSafeEquals(one, two))
         {
@@ -92,6 +117,11 @@ public final class ImmutableSetFactoryImpl implements ImmutableSetFactory
 
     public <T> ImmutableSet<T> of(T... items)
     {
+        return this.with(items);
+    }
+
+    public <T> ImmutableSet<T> with(T... items)
+    {
         if (items == null || items.length == 0)
         {
             return this.of();
@@ -113,6 +143,11 @@ public final class ImmutableSetFactoryImpl implements ImmutableSetFactory
     }
 
     public <T> ImmutableSet<T> ofAll(Iterable<? extends T> items)
+    {
+        return this.withAll(items);
+    }
+
+    public <T> ImmutableSet<T> withAll(Iterable<? extends T> items)
     {
         if (items instanceof ImmutableSet<?>)
         {

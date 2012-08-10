@@ -26,15 +26,30 @@ public final class MutableHashingStrategySetFactoryImpl implements MutableHashin
 {
     public <T> MutableSet<T> of(HashingStrategy<? super T> hashingStrategy)
     {
+        return this.with(hashingStrategy);
+    }
+
+    public <T> MutableSet<T> with(HashingStrategy<? super T> hashingStrategy)
+    {
         return UnifiedSetWithHashingStrategy.newSetWith(hashingStrategy);
     }
 
     public <T> MutableSet<T> of(HashingStrategy<? super T> hashingStrategy, T... items)
     {
+        return this.with(hashingStrategy, items);
+    }
+
+    public <T> MutableSet<T> with(HashingStrategy<? super T> hashingStrategy, T... items)
+    {
         return UnifiedSetWithHashingStrategy.newSetWith(hashingStrategy, items);
     }
 
     public <T> MutableSet<T> ofAll(HashingStrategy<? super T> hashingStrategy, Iterable<? extends T> items)
+    {
+        return this.withAll(hashingStrategy, items);
+    }
+
+    public <T> MutableSet<T> withAll(HashingStrategy<? super T> hashingStrategy, Iterable<? extends T> items)
     {
         return UnifiedSetWithHashingStrategy.newSet(hashingStrategy, items);
     }

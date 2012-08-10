@@ -28,40 +28,80 @@ public class FixedSizeListFactoryImpl implements FixedSizeListFactory
 
     public <T> FixedSizeList<T> of()
     {
+        return this.with();
+    }
+
+    public <T> FixedSizeList<T> with()
+    {
         return (FixedSizeList<T>) FixedSizeListFactoryImpl.EMPTY_LIST;
     }
 
     public <T> FixedSizeList<T> of(T one)
+    {
+        return this.with(one);
+    }
+
+    public <T> FixedSizeList<T> with(T one)
     {
         return new SingletonList<T>(one);
     }
 
     public <T> FixedSizeList<T> of(T one, T two)
     {
+        return this.with(one, two);
+    }
+
+    public <T> FixedSizeList<T> with(T one, T two)
+    {
         return new DoubletonList<T>(one, two);
     }
 
     public <T> FixedSizeList<T> of(T one, T two, T three)
+    {
+        return this.with(one, two, three);
+    }
+
+    public <T> FixedSizeList<T> with(T one, T two, T three)
     {
         return new TripletonList<T>(one, two, three);
     }
 
     public <T> FixedSizeList<T> of(T one, T two, T three, T four)
     {
+        return this.with(one, two, three, four);
+    }
+
+    public <T> FixedSizeList<T> with(T one, T two, T three, T four)
+    {
         return new QuadrupletonList<T>(one, two, three, four);
     }
 
     public <T> FixedSizeList<T> of(T one, T two, T three, T four, T five)
+    {
+        return this.with(one, two, three, four, five);
+    }
+
+    public <T> FixedSizeList<T> with(T one, T two, T three, T four, T five)
     {
         return new QuintupletonList<T>(one, two, three, four, five);
     }
 
     public <T> FixedSizeList<T> of(T one, T two, T three, T four, T five, T six)
     {
+        return this.with(one, two, three, four, five, six);
+    }
+
+    public <T> FixedSizeList<T> with(T one, T two, T three, T four, T five, T six)
+    {
         return new SextupletonList<T>(one, two, three, four, five, six);
     }
 
     public <T> FixedSizeList<T> of(T... items)
+    {
+        return this.with(items);
+    }
+
+    public <T> FixedSizeList<T> with(T... items)
     {
         switch (items.length)
         {
@@ -85,6 +125,11 @@ public class FixedSizeListFactoryImpl implements FixedSizeListFactory
     }
 
     public <T> FixedSizeList<T> ofAll(Iterable<? extends T> items)
+    {
+        return this.withAll(items);
+    }
+
+    public <T> FixedSizeList<T> withAll(Iterable<? extends T> items)
     {
         return this.of((T[]) Iterate.toArray(items));
     }

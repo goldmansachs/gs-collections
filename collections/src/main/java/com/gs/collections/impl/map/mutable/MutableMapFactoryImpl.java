@@ -25,25 +25,50 @@ public final class MutableMapFactoryImpl implements MutableMapFactory
 {
     public <K, V> MutableMap<K, V> of()
     {
+        return this.with();
+    }
+
+    public <K, V> MutableMap<K, V> with()
+    {
         return UnifiedMap.newMap();
     }
 
     public <K, V> MutableMap<K, V> of(K key, V value)
+    {
+        return this.with(key, value);
+    }
+
+    public <K, V> MutableMap<K, V> with(K key, V value)
     {
         return UnifiedMap.newWithKeysValues(key, value);
     }
 
     public <K, V> MutableMap<K, V> of(K key1, V value1, K key2, V value2)
     {
+        return this.with(key1, value1, key2, value2);
+    }
+
+    public <K, V> MutableMap<K, V> with(K key1, V value1, K key2, V value2)
+    {
         return UnifiedMap.newWithKeysValues(key1, value1, key2, value2);
     }
 
     public <K, V> MutableMap<K, V> of(K key1, V value1, K key2, V value2, K key3, V value3)
     {
+        return this.with(key1, value1, key2, value2, key3, value3);
+    }
+
+    public <K, V> MutableMap<K, V> with(K key1, V value1, K key2, V value2, K key3, V value3)
+    {
         return UnifiedMap.newWithKeysValues(key1, value1, key2, value2, key3, value3);
     }
 
     public <K, V> MutableMap<K, V> of(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
+    {
+        return this.with(key1, value1, key2, value2, key3, value3, key4, value4);
+    }
+
+    public <K, V> MutableMap<K, V> with(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
     {
         return UnifiedMap.newWithKeysValues(key1, value1, key2, value2, key3, value3, key4, value4);
     }

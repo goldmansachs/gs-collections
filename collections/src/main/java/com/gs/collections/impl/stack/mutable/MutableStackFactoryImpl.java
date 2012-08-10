@@ -25,25 +25,50 @@ public final class MutableStackFactoryImpl implements MutableStackFactory
 {
     public <T> MutableStack<T> of()
     {
+        return this.with();
+    }
+
+    public <T> MutableStack<T> with()
+    {
         return ArrayStack.newStack();
     }
 
     public <T> MutableStack<T> of(T... elements)
+    {
+        return this.with(elements);
+    }
+
+    public <T> MutableStack<T> with(T... elements)
     {
         return ArrayStack.newStackWith(elements);
     }
 
     public <T> MutableStack<T> ofAll(Iterable<? extends T> elements)
     {
+        return this.withAll(elements);
+    }
+
+    public <T> MutableStack<T> withAll(Iterable<? extends T> elements)
+    {
         return ArrayStack.newStack(elements);
     }
 
     public <T> MutableStack<T> ofReversed(T... elements)
     {
+        return this.withReversed(elements);
+    }
+
+    public <T> MutableStack<T> withReversed(T... elements)
+    {
         return ArrayStack.newStackFromTopToBottom(elements);
     }
 
     public <T> MutableStack<T> ofAllReversed(Iterable<? extends T> items)
+    {
+        return this.withAllReversed(items);
+    }
+
+    public <T> MutableStack<T> withAllReversed(Iterable<? extends T> items)
     {
         return ArrayStack.newStackFromTopToBottom(items);
     }

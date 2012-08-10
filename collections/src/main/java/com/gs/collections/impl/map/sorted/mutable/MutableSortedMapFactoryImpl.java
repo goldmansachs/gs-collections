@@ -28,30 +28,60 @@ public final class MutableSortedMapFactoryImpl implements MutableSortedMapFactor
 {
     public <K, V> MutableSortedMap<K, V> of()
     {
+        return this.with();
+    }
+
+    public <K, V> MutableSortedMap<K, V> with()
+    {
         return TreeSortedMap.newMap();
     }
 
     public <K, V> MutableSortedMap<K, V> of(K key, V value)
+    {
+        return this.with(key, value);
+    }
+
+    public <K, V> MutableSortedMap<K, V> with(K key, V value)
     {
         return TreeSortedMap.newMapWith(key, value);
     }
 
     public <K, V> MutableSortedMap<K, V> of(K key1, V value1, K key2, V value2)
     {
+        return this.with(key1, value1, key2, value2);
+    }
+
+    public <K, V> MutableSortedMap<K, V> with(K key1, V value1, K key2, V value2)
+    {
         return TreeSortedMap.newMapWith(key1, value1, key2, value2);
     }
 
     public <K, V> MutableSortedMap<K, V> of(K key1, V value1, K key2, V value2, K key3, V value3)
+    {
+        return this.with(key1, value1, key2, value2, key3, value3);
+    }
+
+    public <K, V> MutableSortedMap<K, V> with(K key1, V value1, K key2, V value2, K key3, V value3)
     {
         return TreeSortedMap.newMapWith(key1, value1, key2, value2, key3, value3);
     }
 
     public <K, V> MutableSortedMap<K, V> of(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
     {
+        return this.with(key1, value1, key2, value2, key3, value3, key4, value4);
+    }
+
+    public <K, V> MutableSortedMap<K, V> with(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
+    {
         return TreeSortedMap.newMapWith(key1, value1, key2, value2, key3, value3, key4, value4);
     }
 
     public <K, V> MutableSortedMap<K, V> of(Comparator<? super K> comparator)
+    {
+        return this.with(comparator);
+    }
+
+    public <K, V> MutableSortedMap<K, V> with(Comparator<? super K> comparator)
     {
         if (comparator == null)
         {
@@ -62,25 +92,50 @@ public final class MutableSortedMapFactoryImpl implements MutableSortedMapFactor
 
     public <K, V> MutableSortedMap<K, V> of(Comparator<? super K> comparator, K key, V value)
     {
+        return this.with(comparator, key, value);
+    }
+
+    public <K, V> MutableSortedMap<K, V> with(Comparator<? super K> comparator, K key, V value)
+    {
         return TreeSortedMap.<K, V>newMap(comparator).with(key, value);
     }
 
     public <K, V> MutableSortedMap<K, V> of(Comparator<? super K> comparator, K key1, V value1, K key2, V value2)
+    {
+        return this.with(comparator, key1, value1, key2, value2);
+    }
+
+    public <K, V> MutableSortedMap<K, V> with(Comparator<? super K> comparator, K key1, V value1, K key2, V value2)
     {
         return TreeSortedMap.<K, V>newMap(comparator).with(key1, value1, key2, value2);
     }
 
     public <K, V> MutableSortedMap<K, V> of(Comparator<? super K> comparator, K key1, V value1, K key2, V value2, K key3, V value3)
     {
+        return this.with(comparator, key1, value1, key2, value2, key3, value3);
+    }
+
+    public <K, V> MutableSortedMap<K, V> with(Comparator<? super K> comparator, K key1, V value1, K key2, V value2, K key3, V value3)
+    {
         return TreeSortedMap.<K, V>newMap(comparator).with(key1, value1, key2, value2, key3, value3);
     }
 
     public <K, V> MutableSortedMap<K, V> of(Comparator<? super K> comparator, K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
     {
+        return this.with(comparator, key1, value1, key2, value2, key3, value3, key4, value4);
+    }
+
+    public <K, V> MutableSortedMap<K, V> with(Comparator<? super K> comparator, K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
+    {
         return TreeSortedMap.<K, V>newMap(comparator).with(key1, value1, key2, value2, key3, value3, key4, value4);
     }
 
     public <K, V> MutableSortedMap<K, V> ofSortedMap(Map<? extends K, ? extends V> map)
+    {
+        return this.withSortedMap(map);
+    }
+
+    public <K, V> MutableSortedMap<K, V> withSortedMap(Map<? extends K, ? extends V> map)
     {
         return TreeSortedMap.newMap(map);
     }

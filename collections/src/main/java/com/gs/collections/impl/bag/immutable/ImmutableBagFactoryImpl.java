@@ -26,15 +26,30 @@ public final class ImmutableBagFactoryImpl implements ImmutableBagFactory
 {
     public <T> ImmutableBag<T> of()
     {
+        return this.with();
+    }
+
+    public <T> ImmutableBag<T> with()
+    {
         return (ImmutableBag<T>) ImmutableEmptyBag.INSTANCE;
     }
 
     public <T> ImmutableBag<T> of(T element)
     {
+        return this.with(element);
+    }
+
+    public <T> ImmutableBag<T> with(T element)
+    {
         return new ImmutableSingletonBag<T>(element);
     }
 
     public <T> ImmutableBag<T> of(T... elements)
+    {
+        return this.with(elements);
+    }
+
+    public <T> ImmutableBag<T> with(T... elements)
     {
         if (elements == null || elements.length == 0)
         {
@@ -52,6 +67,11 @@ public final class ImmutableBagFactoryImpl implements ImmutableBagFactory
     }
 
     public <T> ImmutableBag<T> ofAll(Iterable<? extends T> items)
+    {
+        return this.withAll(items);
+    }
+
+    public <T> ImmutableBag<T> withAll(Iterable<? extends T> items)
     {
         if (items instanceof ImmutableBag<?>)
         {

@@ -27,10 +27,20 @@ public final class ImmutableHashingStrategySetFactoryImpl implements ImmutableHa
 {
     public <T> ImmutableSet<T> of(HashingStrategy<? super T> hashingStrategy)
     {
+        return this.with(hashingStrategy);
+    }
+
+    public <T> ImmutableSet<T> with(HashingStrategy<? super T> hashingStrategy)
+    {
         return new ImmutableEmptySetWithHashingStrategy<T>(hashingStrategy);
     }
 
     public <T> ImmutableSet<T> of(HashingStrategy<? super T> hashingStrategy, T... items)
+    {
+        return this.with(hashingStrategy, items);
+    }
+
+    public <T> ImmutableSet<T> with(HashingStrategy<? super T> hashingStrategy, T... items)
     {
         if (items == null || items.length == 0)
         {
@@ -41,6 +51,11 @@ public final class ImmutableHashingStrategySetFactoryImpl implements ImmutableHa
     }
 
     public <T> ImmutableSet<T> ofAll(HashingStrategy<? super T> hashingStrategy, Iterable<? extends T> items)
+    {
+        return this.withAll(hashingStrategy, items);
+    }
+
+    public <T> ImmutableSet<T> withAll(HashingStrategy<? super T> hashingStrategy, Iterable<? extends T> items)
     {
         return this.of(hashingStrategy, (T[]) Iterate.toArray(items));
     }
