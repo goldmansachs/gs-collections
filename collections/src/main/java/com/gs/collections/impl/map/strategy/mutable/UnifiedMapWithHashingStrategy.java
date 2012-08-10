@@ -56,40 +56,16 @@ import com.gs.collections.impl.utility.Iterate;
 import net.jcip.annotations.NotThreadSafe;
 
 /**
- * The core collections in Java get used all over the place. Unfortunately, most of them are not as good as they could be.
- * HashSet is probably the worst collection, with ArrayList being the best. Even ArrayList is not all that good, as the
- * FastList implementation in fwcommon has shown.
+ * UnifiedMapWithHashingStrategy stores key/value pairs in a single array, where alternate slots are keys and values.
+ * This is nicer to CPU caches as consecutive memory addresses are very cheap to access.  Entry objects are not stored in the
+ * table like in java.util.HashMap. Instead of trying to deal with collisions in the main array using Entry objects,
+ * we put a special object in the key slot and put a regular Object[] in the value slot. The array contains the key value
+ * pairs in consecutive slots, just like the main array, but it's a linear list with no hashing.
  * <p/>
- * A long time ago we gave up on HashSet and HashMap and started using the Trove collections instead (THashSet, THashMap).
- * HashMap is a real memory hog. For every put, it creates an object that wraps the key/value pair. If you've done some
- * Java memory profiling, you've probably ran into the HashMap$Entry classes that are almost always near the top.
- * THashMap doesn't suffer from the same malady. It instead uses two arrays: one to hold the keys and one to hold values.
- * <p/>
- * The HashMap implementation uses a linked list composed of the Entry objects to resolve hash bucket conflicts. So if
- * two objects hash to the same bucket, the second one is added as a link off the first one.
- * <p/>
- * With Trove, since there are no Entry objects, it's not possible to do the same for conflict resolution. Instead Trove
- * uses something called "open addressing" with double hashing. If there is a conflict, it find another bucket elsewhere
- * to put the entry in. This makes removals a bit complicated, but I'll leave the details as an exercise to the reader.
- * The cost of conflict resolution in trove is generally higher than HashMap. Finally, Trove uses prime number remainder
- * operations to find the hash bucket, which is slower than binary math operations used in HashMap. In general, HashMap
- * can have a speed advantage in get & remove (especially with JDK 1.6), but uses more memory.
- * <p/>
- * I had an idea for creating a faster map that was also lean. It was the culmination of working on sets and maps and
- * having looked at several different implementations. What would happen if we use a single array, where alternate slots
- * were keys and values? This is nicer to the CPU caches as consecutive memory addresses are very cheap to access. If
- * we do that, we won't have Entry objects, but then what about conflict resolution? I tried a couple of Trove like
- * solutions to the conflict scenario, but they turned out to be just as slow (or slower) than trove. So instead of
- * trying to fit the conflict in the main array, I borrowed the idea from HashMap but without the extra cost (that is,
- * no Entry objects). When a conflict happens, we put a special object in the key slot and put a regular Object[] in the
- * value slot. It's sortThis of like the difference between ArrayList and LinkedList. ArrayList is much faster than LinkedList
- * and arrays are even faster than ArrayList. The array contains the key value pairs in consecutive slots, just like the
- * main array, but it's a linear list with no hashing.
- * <p/>
- * The final result is a Map implementation that's faster than HashMap and leaner than Trove. The best of both implementations
- * unified together, aka UnifiedMap.
+ * The difference between UnifiedMap and UnifiedMapWithHashingStrategy is that a HashingStrategy based UnifiedMap
+ * does not rely on the hashCode or equality of the object at the key, but instead relies on a HashingStrategy
+ * implementation provided by a developer to compute the hashCode and equals for the objects stored in the map.
  */
-
 @NotThreadSafe
 public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V>
         implements Externalizable, BatchIterable<V>
