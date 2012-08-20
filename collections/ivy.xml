@@ -4,7 +4,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
 
-    <info organisation="com.goldmansachs" module="collections" />
+    <info organisation="com.goldmansachs" module="gs-collections" />
 
     <configurations>
         <conf name="default"
@@ -29,7 +29,7 @@
 
         <!-- compile -->
         <dependency org="com.goldmansachs"
-            name="collections-api"
+            name="gs-collections-api"
             rev="${build.version.full}"
             conf="compile"
             changing="true" />

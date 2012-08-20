@@ -22,7 +22,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.goldmansachs</groupId>
-    <artifactId>collections-testutils</artifactId>
+    <artifactId>gs-collections-testutils</artifactId>
     <version>1.2.0-SNAPSHOT</version>
     <packaging>bundle</packaging>
 
@@ -42,13 +42,13 @@
 
         <dependency>
             <groupId>com.goldmansachs</groupId>
-            <artifactId>collections-api</artifactId>
+            <artifactId>gs-collections-api</artifactId>
             <version>1.2.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
             <groupId>com.goldmansachs</groupId>
-            <artifactId>collections</artifactId>
+            <artifactId>gs-collections</artifactId>
             <version>1.2.0-SNAPSHOT</version>
         </dependency>
 
@@ -254,7 +254,7 @@
                     <comparisonArtifacts>
                         <comparisonArtifact>
                             <groupId>com.goldmansachs</groupId>
-                            <artifactId>collections-testutils</artifactId>
+                            <artifactId>gs-collections-testutils</artifactId>
                             <version>1.0.0</version>
                         </comparisonArtifact>
                     </comparisonArtifacts>

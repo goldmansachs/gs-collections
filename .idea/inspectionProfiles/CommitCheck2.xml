@@ -333,7 +333,7 @@
     <inspection_tool class="ExtendsObject" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="ExtendsThread" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="ExternalizableWithSerializationMethods" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="FacesModelInspection" level="ERROR" enabled="false" />
+    <inspection_tool class="FacesModelInspection" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="FallthroughInSwitchStatementJS" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="FallthruInSwitchStatement" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="FeatureEnvy" enabled="false" level="ERROR" enabled_by_default="false">
@@ -381,14 +381,14 @@
     <inspection_tool class="FtlReferencesInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="FtlTypesInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="FunctionWithInconsistentReturnsJS" enabled="false" level="ERROR" enabled_by_default="false" />
-    <inspection_tool class="GWTRemoteServiceAsyncCheck" level="ERROR" enabled="false" />
-    <inspection_tool class="GWTStyleCheck" level="ERROR" enabled="false" />
-    <inspection_tool class="GwtInconsistentI18nInterface" level="ERROR" enabled="false" />
-    <inspection_tool class="GwtInconsistentSerializableClass" level="ERROR" enabled="false" />
-    <inspection_tool class="GwtJavaScriptReferences" level="ERROR" enabled="false" />
-    <inspection_tool class="GwtMethodWithParametersInConstantsInterface" level="ERROR" enabled="false" />
-    <inspection_tool class="GwtServiceNotRegistered" level="ERROR" enabled="false" />
-    <inspection_tool class="GwtToHtmlReferences" level="ERROR" enabled="false" />
+    <inspection_tool class="GWTRemoteServiceAsyncCheck" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="GWTStyleCheck" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="GwtInconsistentI18nInterface" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="GwtInconsistentSerializableClass" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="GwtJavaScriptReferences" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="GwtMethodWithParametersInConstantsInterface" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="GwtServiceNotRegistered" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="GwtToHtmlReferences" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="HardCodedStringLiteral" enabled="false" level="ERROR" enabled_by_default="false">
       <option name="ignoreForAssertStatements" value="true" />
       <option name="ignoreForExceptionConstructors" value="true" />
@@ -404,9 +404,9 @@
     <inspection_tool class="HardcodedFileSeparators" enabled="false" level="ERROR" enabled_by_default="false">
       <option name="m_recognizeExampleMediaType" value="false" />
     </inspection_tool>
-    <inspection_tool class="HibernateConfigDomInspection" level="ERROR" enabled="false" />
-    <inspection_tool class="HibernateMappingDatasourceDomInspection" level="ERROR" enabled="false" />
-    <inspection_tool class="HibernateMappingDomInspection" level="ERROR" enabled="false" />
+    <inspection_tool class="HibernateConfigDomInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="HibernateMappingDatasourceDomInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="HibernateMappingDomInspection" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="HibernateResource" enabled="true" level="ERROR" enabled_by_default="true">
       <option name="insideTryAllowed" value="false" />
     </inspection_tool>
@@ -749,7 +749,7 @@
     <inspection_tool class="NonFinalFieldOfException" enabled="false" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="NonFinalGuard" enabled="false" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="NonFinalStaticVariableUsedInClassInitialization" enabled="false" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="NonJREEmulationClassesInClientCode" level="ERROR" enabled="false" />
+    <inspection_tool class="NonJREEmulationClassesInClientCode" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="NonJaxWsWebServices" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="NonProtectedConstructorInAbstractClass" enabled="false" level="ERROR" enabled_by_default="true">
       <option name="m_ignoreNonPublicClasses" value="false" />
@@ -762,7 +762,7 @@
       <option name="superClassString" value="java.awt.Component" />
     </inspection_tool>
     <inspection_tool class="NonSerializableObjectBoundToHttpSession" enabled="false" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="NonSerializableServiceParameters" level="ERROR" enabled="false" />
+    <inspection_tool class="NonSerializableServiceParameters" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="NonSerializableWithSerialVersionUIDField" enabled="false" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="NonSerializableWithSerializationMethods" enabled="false" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="NonShortCircuitBoolean" enabled="false" level="ERROR" enabled_by_default="true" />
@@ -1593,10 +1593,10 @@
     <inspection_tool class="StringToString" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="StringToUpperWithoutLocale" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="StringTokenizer" enabled="false" level="ERROR" enabled_by_default="false" />
-    <inspection_tool class="StrutsInspection" level="ERROR" enabled="false" />
-    <inspection_tool class="StrutsTilesInspection" level="ERROR" enabled="false" />
-    <inspection_tool class="StrutsValidatorFormInspection" level="ERROR" enabled="false" />
-    <inspection_tool class="StrutsValidatorInspection" level="ERROR" enabled="false" />
+    <inspection_tool class="StrutsInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="StrutsTilesInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="StrutsValidatorFormInspection" enabled="false" level="ERROR" enabled_by_default="false" />
+    <inspection_tool class="StrutsValidatorInspection" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="SubstringZero" enabled="false" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="SubtractionInCompareTo" enabled="false" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="Suspicious Inferred Type" enabled="false" level="ERROR" enabled_by_default="true" />
