@@ -16,7 +16,7 @@
   ~ limitations under the License.
   -->
 
-<project name="collections-testutils" default="test" basedir=".">
+<project name="gs-collections-testutils" default="test" basedir=".">
     <import file="../common-build.xml" />
 
     <property name="src.dir" location="src/main/java" />

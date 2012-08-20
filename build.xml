@@ -15,7 +15,7 @@
   ~ limitations under the License.
   -->
 
-<project name="master" default="test" xmlns:ivy="antlib:org.apache.ivy.ant">
+<project name="gs-collections-parent" default="test" xmlns:ivy="antlib:org.apache.ivy.ant">
     <description>
         A delegating master build file, which builds targets in each module
     </description>
@@ -66,9 +66,9 @@
     </target>
 
     <filelist id="modules">
-        <file name="collections-api" />
-        <file name="collections" />
-        <file name="collections-testutils" />
+        <file name="gs-collections-api" />
+        <file name="gs-collections" />
+        <file name="gs-collections-testutils" />
         <file name="unit-tests" />
         <file name="scala-unit-tests" />
         <file name="serialization-tests" />
