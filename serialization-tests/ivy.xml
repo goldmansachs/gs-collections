@@ -33,19 +33,19 @@
 
         <!-- compile -->
         <dependency org="com.goldmansachs"
-            name="collections-api"
+            name="gs-collections-api"
             rev="${build.version.full}"
             conf="compile-test"
             changing="true" />
         <dependency org="com.goldmansachs"
-            name="collections"
+            name="gs-collections"
             rev="${build.version.full}"
             conf="compile-test"
             changing="true" />
 
         <!-- compile test -->
         <dependency org="com.goldmansachs"
-            name="collections-testutils"
+            name="gs-collections-testutils"
             rev="${build.version.full}"
             conf="compile-test"
             changing="true" />

@@ -45,12 +45,12 @@
 
         <!-- compile -->
         <dependency org="com.goldmansachs"
-            name="collections-api"
+            name="gs-collections-api"
             rev="${build.version.full}"
             conf="compile"
             changing="true" />
         <dependency org="com.goldmansachs"
-            name="collections"
+            name="gs-collections"
             rev="${build.version.full}"
             conf="compile"
             changing="true" />
