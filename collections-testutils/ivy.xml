@@ -20,7 +20,7 @@
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
     xsi:noNamespaceSchemaLocation="http://incubator.apache.org/ivy/schemas/ivy.xsd">
 
-    <info organisation="com.goldmansachs" module="collections-testutils" />
+    <info organisation="com.goldmansachs" module="gs-collections-testutils" />
 
     <configurations>
         <conf name="default"
