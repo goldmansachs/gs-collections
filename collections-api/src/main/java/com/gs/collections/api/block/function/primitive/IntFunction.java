@@ -19,8 +19,8 @@ package com.gs.collections.api.block.function.primitive;
 import java.io.Serializable;
 
 /**
- * IntFunction is a iterator Function which may be used to reduce the overhead
- * of creating big Integer objects in places where the iterator int could be used.
+ * IntFunction is a primitive Function which may be used to reduce the overhead
+ * of creating big Integer objects in places where the primitive int could be used.
  */
 public interface IntFunction<T>
         extends Serializable

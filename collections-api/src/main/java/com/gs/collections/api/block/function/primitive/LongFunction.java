@@ -19,8 +19,8 @@ package com.gs.collections.api.block.function.primitive;
 import java.io.Serializable;
 
 /**
- * LongFunction is a iterator Function which may be used to reduce the overhead
- * of creating big Long objects in places where the iterator long could be used
+ * LongFunction is a primitive Function which may be used to reduce the overhead
+ * of creating big Long objects in places where the primitive long could be used
  */
 public interface LongFunction<T>
         extends Serializable
