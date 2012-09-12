@@ -509,6 +509,37 @@ public final class ArrayIterate
     }
 
     /**
+     * @see Iterate#flatCollect(Iterable, Function)
+     */
+
+    public static <T, V> MutableList<V> flatCollect(
+            T[] objectArray,
+            Function<? super T, ? extends Iterable<V>> function)
+    {
+        if (objectArray == null)
+        {
+            throw new IllegalArgumentException("Cannot perform a flatCollect on null");
+        }
+        return ArrayIterate.flatCollect(objectArray, function, FastList.<V>newList(objectArray.length));
+    }
+
+    public static <T, V, R extends Collection<V>> R flatCollect(
+            T[] objectArray,
+            Function<? super T, ? extends Iterable<V>> function,
+            R targetCollection)
+    {
+        if (objectArray == null)
+        {
+            throw new IllegalArgumentException("Cannot perform a flatCollect on null");
+        }
+        for (T each : objectArray)
+        {
+            Iterate.addAllIterable(function.valueOf(each), targetCollection);
+        }
+        return targetCollection;
+    }
+
+    /**
      * Returns the first element of an array.  This method is null safe.
      */
     public static <T> T getFirst(T[] objectArray)

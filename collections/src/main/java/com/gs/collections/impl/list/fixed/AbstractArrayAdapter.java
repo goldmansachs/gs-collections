@@ -198,7 +198,8 @@ public abstract class AbstractArrayAdapter<T>
 
     @Override
     public <V> MutableList<V> collectIf(
-            Predicate<? super T> predicate, Function<? super T, ? extends V> function)
+            Predicate<? super T> predicate,
+            Function<? super T, ? extends V> function)
     {
         return this.collectIf(predicate, function, FastList.<V>newList());
     }
@@ -208,6 +209,18 @@ public abstract class AbstractArrayAdapter<T>
             Predicate<? super T> predicate, Function<? super T, ? extends V> function, R target)
     {
         return ArrayIterate.collectIf(this.items, predicate, function, target);
+    }
+
+    @Override
+    public <V> MutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    {
+        return ArrayIterate.flatCollect(this.items, function);
+    }
+
+    @Override
+    public <V, R extends Collection<V>> R flatCollect(Function<? super T, ? extends Iterable<V>> function, R target)
+    {
+        return ArrayIterate.flatCollect(this.items, function, target);
     }
 
     @Override

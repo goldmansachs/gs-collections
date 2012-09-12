@@ -273,6 +273,18 @@ public class ArrayIterateTest
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void flatCollectThrowsOnNullArgument()
+    {
+        ArrayIterate.flatCollect(null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void flatCollectWithTargetThrowsOnNullArgument()
+    {
+        ArrayIterate.flatCollect(null, null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void forEachThrowsOnNullArgument()
     {
         ArrayIterate.forEach(null, null);
