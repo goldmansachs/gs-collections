@@ -1,0 +1,22 @@
+hashCode ::= [
+    "int": "intHashcode",
+    "long": "longHashcode",
+    "double": "doubleHashcode",
+    "float": "floatHashcode"
+]
+
+intHashcode(item) ::= <<
+<item>
+>>
+
+longHashcode(item) ::= <<
+(int) (<item> ^ <item> \>\>\> 32)
+>>
+
+floatHashcode(item) ::= <<
+Float.floatToIntBits(<item>)
+>>
+
+doubleHashcode(item) ::= <<
+(int) (Double.doubleToLongBits(<item>) ^ Double.doubleToLongBits(<item>) \>\>\> 32)
+>>

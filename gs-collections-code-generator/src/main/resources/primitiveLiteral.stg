@@ -1,0 +1,71 @@
+literal ::= [
+    "int": "intLiteral",
+    "long": "longLiteral",
+    "double": "doubleLiteral",
+    "float": "floatLiteral"
+]
+
+intLiteral(item) ::= <<
+<item>
+>>
+
+longLiteral(item) ::= <<
+<item>L
+>>
+
+floatLiteral(item) ::= <<
+<item>.0f
+>>
+
+doubleLiteral(item) ::= <<
+<item>.0
+>>
+
+wideLiteral ::= [
+    "int": "longLiteral",
+    "long": "longLiteral",
+    "double": "doubleLiteral",
+    "float": "doubleLiteral"
+]
+
+toStringLiteral ::= [
+    "int": "intLiteral",
+    "long": "intLiteral",
+    "double": "doubleLiteral",
+    "float": "doubleLiteral"
+]
+
+zero ::= [
+    "int": "0",
+    "long": "0L",
+    "double": "0.0",
+    "float": "0.0f"
+]
+
+wideZero ::= [
+    "int": "0L",
+    "long": "0L",
+    "double": "0.0",
+    "float": "0.0"
+]
+
+delta ::= [
+    "int": "",
+    "long": "",
+    "double": ", 0.0",
+    "float": ", 0.0f"
+]
+
+wideDelta ::= [
+    "int": "",
+    "long": "",
+    "double": ", 0.0",
+    "float": ", 0.0"
+]
+
+wideType ::= [
+    "int": "long",
+    "long": "long",
+    "double": "double",
+    "float": "double"
+]

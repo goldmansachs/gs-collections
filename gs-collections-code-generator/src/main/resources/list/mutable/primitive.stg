@@ -1,0 +1,623 @@
+import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveHashcode.stg"
+import "primitiveLiteral.stg"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.list.mutable.primitive;
+
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.util.Arrays;
+import java.util.NoSuchElementException;
+
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
+import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.impl.list.mutable.FastList;
+import net.jcip.annotations.NotThreadSafe;
+
+@NotThreadSafe
+public class <name>ArrayList
+        implements <name>Iterable, Externalizable
+{
+    private static final long serialVersionUID = 1L;
+    private static final <type>[] DEFAULT_SIZED_EMPTY_ARRAY = {};
+    private static final <type>[] ZERO_SIZED_ARRAY = {};
+
+    protected int size;
+    protected transient <type>[] items = DEFAULT_SIZED_EMPTY_ARRAY;
+
+    public <name>ArrayList()
+    {
+    }
+
+    public <name>ArrayList(int initialCapacity)
+    {
+        this.items = initialCapacity == 0 ? ZERO_SIZED_ARRAY : new <type>[initialCapacity];
+    }
+
+    protected <name>ArrayList(<type>[] array)
+    {
+        this.size = array.length;
+        this.items = array;
+    }
+
+    /**
+     * Creates a new list using the passed {@code elements} argument as the backing store.
+     * \<p/\>
+     * !!! WARNING: This method uses the passed in array, so can be very unsafe if the original
+     * array is held onto anywhere else. !!!
+     */
+    public static <name>ArrayList newListWith(<type>... elements)
+    {
+        return new <name>ArrayList(elements);
+    }
+
+    public static <name>ArrayList newList(<name>Iterable source)
+    {
+        return <name>ArrayList.newListWith(source.toArray());
+    }
+
+    public int size()
+    {
+        return this.size;
+    }
+
+    public boolean isEmpty()
+    {
+        return this.size == 0;
+    }
+
+    public void clear()
+    {
+        Arrays.fill(this.items, <(zero.(type))>);
+        this.size = 0;
+    }
+
+    public boolean contains(<type> value)
+    {
+        for (<type> each : this.items)
+        {
+            if (<(equals.(type))("each", "value")>)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean containsAll(<type>... source)
+    {
+        for (<type> value : source)
+        {
+            if (!this.contains(value))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public <type> get(int index)
+    {
+        if (index \< this.size)
+        {
+            return this.items[index];
+        }
+        throw this.newIndexOutOfBoundsException(index);
+    }
+
+    private IndexOutOfBoundsException newIndexOutOfBoundsException(int index)
+    {
+        return new IndexOutOfBoundsException("Index: " + index + " Size: " + this.size);
+    }
+
+    public <type> getFirst()
+    {
+        this.checkEmpty();
+        return this.items[0];
+    }
+
+    public <type> getLast()
+    {
+        this.checkEmpty();
+        return this.items[this.size() - 1];
+    }
+
+    private void checkEmpty()
+    {
+        if (this.isEmpty())
+        {
+            throw this.newIndexOutOfBoundsException(0);
+        }
+    }
+
+    public int indexOf(<type> object)
+    {
+        for (int i = 0; i \< this.size; i++)
+        {
+            if (<(equals.(type))("this.items[i]", "object")>)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int lastIndexOf(<type> object)
+    {
+        for (int i = this.size - 1; i \>= 0; i--)
+        {
+            if (<(equals.(type))("this.items[i]", "object")>)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public void trimToSize()
+    {
+        if (this.size \< this.items.length)
+        {
+            this.transferItemsToNewArrayWithCapacity(this.size);
+        }
+    }
+
+    private void transferItemsToNewArrayWithCapacity(int newCapacity)
+    {
+        this.items = this.copyItemsWithNewCapacity(newCapacity);
+    }
+
+    private <type>[] copyItemsWithNewCapacity(int newCapacity)
+    {
+        <type>[] newItems = new <type>[newCapacity];
+        System.arraycopy(this.items, 0, newItems, 0, Math.min(this.size, newCapacity));
+        return newItems;
+    }
+
+    private int sizePlusFiftyPercent(int oldSize)
+    {
+        return oldSize * 3 / 2 + 1;
+    }
+
+    public void ensureCapacity(int minCapacity)
+    {
+        int oldCapacity = this.items.length;
+        if (minCapacity \> oldCapacity)
+        {
+            int newCapacity = Math.max(this.sizePlusFiftyPercent(oldCapacity), minCapacity);
+            this.transferItemsToNewArrayWithCapacity(newCapacity);
+        }
+    }
+
+    private void ensureCapacityForAdd()
+    {
+        if (this.items == DEFAULT_SIZED_EMPTY_ARRAY)
+        {
+            this.items = new <type>[10];
+        }
+        else
+        {
+            this.transferItemsToNewArrayWithCapacity(this.sizePlusFiftyPercent(this.size));
+        }
+    }
+
+    public boolean add(<type> newItem)
+    {
+        if (this.items.length == this.size)
+        {
+            this.ensureCapacityForAdd();
+        }
+        this.items[this.size] = newItem;
+        this.size++;
+        return true;
+    }
+
+    public boolean addAll(<type>... source)
+    {
+        if (source.length \< 1)
+        {
+            return false;
+        }
+        int sourceSize = source.length;
+        int newSize = this.size + sourceSize;
+        this.ensureCapacity(newSize);
+        System.arraycopy(source, 0, this.items, this.size, sourceSize);
+        this.size = newSize;
+        return true;
+    }
+
+    private void throwOutOfBounds(int index)
+    {
+        throw this.newIndexOutOfBoundsException(index);
+    }
+
+    public void addAtIndex(int index, <type> element)
+    {
+        if (index \> -1 && index \< this.size)
+        {
+            this.addAtIndexLessThanSize(index, element);
+        }
+        else if (index == this.size)
+        {
+            this.add(element);
+        }
+        else
+        {
+            this.throwOutOfBounds(index);
+        }
+    }
+
+    private void addAtIndexLessThanSize(int index, <type> element)
+    {
+        int oldSize = this.size;
+        this.size++;
+        if (this.items.length == oldSize)
+        {
+            <type>[] newItems = new <type>[this.sizePlusFiftyPercent(oldSize)];
+            if (index \> 0)
+            {
+                System.arraycopy(this.items, 0, newItems, 0, index);
+            }
+            System.arraycopy(this.items, index, newItems, index + 1, oldSize - index);
+            this.items = newItems;
+        }
+        else
+        {
+            System.arraycopy(this.items, index, this.items, index + 1, oldSize - index);
+        }
+        this.items[index] = element;
+    }
+
+    public boolean addAllAtIndex(int index, <type>... source)
+    {
+        if (index \> this.size || index \< 0)
+        {
+            this.throwOutOfBounds(index);
+        }
+        if (source.length == 0)
+        {
+            return false;
+        }
+        int sourceSize = source.length;
+        int newSize = this.size + sourceSize;
+        this.ensureCapacity(newSize);
+        this.shiftElementsAtIndex(index, sourceSize);
+        System.arraycopy(source, 0, this.items, index, sourceSize);
+        this.size = newSize;
+        return true;
+    }
+
+    private void shiftElementsAtIndex(int index, int sourceSize)
+    {
+        int numberToMove = this.size - index;
+        if (numberToMove \> 0)
+        {
+            System.arraycopy(this.items, index, this.items, index + sourceSize, numberToMove);
+        }
+    }
+
+    public boolean remove(<type> value)
+    {
+        int index = this.indexOf(value);
+        if (index \>= 0)
+        {
+            this.removeAtIndex(index);
+            return true;
+        }
+        return false;
+    }
+
+    public <type> removeAtIndex(int index)
+    {
+        <type> previous = this.get(index);
+        int totalOffset = this.size - index - 1;
+        if (totalOffset \> 0)
+        {
+            System.arraycopy(this.items, index + 1, this.items, index, totalOffset);
+        }
+        --this.size;
+        this.items[this.size] = <zero.(type)>;
+        return previous;
+    }
+
+    public <type> set(int index, <type> element)
+    {
+        <type> previous = this.get(index);
+        this.items[index] = element;
+        return previous;
+    }
+
+    public <name>ArrayList with(<type> element1, <type> element2)
+    {
+        this.add(element1);
+        this.add(element2);
+        return this;
+    }
+
+    public <name>ArrayList with(<type> element1, <type> element2, <type> element3)
+    {
+        this.add(element1);
+        this.add(element2);
+        this.add(element3);
+        return this;
+    }
+
+    public <name>ArrayList with(<type>... elements)
+    {
+        return this.withArrayCopy(elements, 0, elements.length);
+    }
+
+    private <name>ArrayList withArrayCopy(<type>[] elements, int begin, int length)
+    {
+        this.ensureCapacity(this.size + length);
+        System.arraycopy(elements, begin, this.items, this.size, length);
+        this.size += length;
+        return this;
+    }
+
+    public <name>Iterator <type>Iterator()
+    {
+        return new Internal<name>Iterator();
+    }
+
+    public void forEach(<name>Procedure procedure)
+    {
+        for (int i = 0; i \< this.size; i++)
+        {
+            procedure.value(this.items[i]);
+        }
+    }
+
+    public int count(<name>Predicate predicate)
+    {
+        int count = 0;
+        for (int i = 0; i \< this.size; i++)
+        {
+            if (predicate.accept(this.items[i]))
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public boolean anySatisfy(<name>Predicate predicate)
+    {
+        for (int i = 0; i \< this.size; i++)
+        {
+            if (predicate.accept(this.items[i]))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean allSatisfy(<name>Predicate predicate)
+    {
+        for (int i = 0; i \< this.size; i++)
+        {
+            if (!predicate.accept(this.items[i]))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public \<V\> RichIterable\<V\> collect(<name>ToObjectFunction\<? extends V\> function)
+    {
+        FastList\<V\> target = FastList.newList(this.size);
+        for (int i = 0; i \< this.size; i++)
+        {
+            target.add(function.valueOf(this.items[i]));
+        }
+        return target;
+    }
+
+    public <type> max()
+    {
+        if (this.isEmpty())
+        {
+            throw new NoSuchElementException();
+        }
+        <type> max = this.items[0];
+        for (int i = 1; i \< this.size; i++)
+        {
+            <type> value = this.items[i];
+            if (max \< value)
+            {
+                max = value;
+            }
+        }
+        return max;
+    }
+
+    public <type> min()
+    {
+        if (this.isEmpty())
+        {
+            throw new NoSuchElementException();
+        }
+        <type> min = this.items[0];
+        for (int i = 1; i \< this.size; i++)
+        {
+            <type> value = this.items[i];
+            if (min \> value)
+            {
+                min = value;
+            }
+        }
+        return min;
+    }
+
+    public <wideType.(type)> sum()
+    {
+        <wideType.(type)> result = <wideZero.(type)>;
+        for (int i = 0; i \< this.size; i++)
+        {
+            result += this.items[i];
+        }
+        return result;
+    }
+
+    public double average()
+    {
+        return (double) this.sum() / (double) this.size();
+    }
+
+    public double median()
+    {
+        <type>[] sortedArray = this.toSortedArray();
+        int middleIndex = sortedArray.length \>\> 1;
+        if (sortedArray.length \> 1 && (sortedArray.length & 1) == 0)
+        {
+            <type> first = sortedArray[middleIndex];
+            <type> second = sortedArray[middleIndex - 1];
+            return ((double) first + (double) second) / 2.0;
+        }
+        return (double) sortedArray[middleIndex];
+    }
+
+    public <type>[] toArray()
+    {
+        <type>[] newItems = new <type>[this.size];
+        System.arraycopy(this.items, 0, newItems, 0, this.size);
+        return newItems;
+    }
+
+    public <type>[] toSortedArray()
+    {
+        <type>[] array = this.toArray();
+        Arrays.sort(array);
+        return array;
+    }
+
+    @Override
+    public boolean equals(Object otherList)
+    {
+        if (otherList == this)
+        {
+            return true;
+        }
+        if (!(otherList instanceof <name>ArrayList))
+        {
+            return false;
+        }
+        <name>ArrayList list = (<name>ArrayList) otherList;
+        if (this.size() != list.size())
+        {
+            return false;
+        }
+        for (int i = 0; i \< this.size; i++)
+        {
+            if (!(<(equals.(type))("this.items[i]", "list.items[i]")>))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int hashCode = 1;
+        for (int i = 0; i \< this.size; i++)
+        {
+            <type> item = this.items[i];
+            hashCode = 31 * hashCode + <(hashCode.(type))("item")>;
+        }
+        return hashCode;
+    }
+
+    @Override
+    public String toString()
+    {
+        if (this.isEmpty())
+        {
+            return "[]";
+        }
+        StringBuilder sb = new StringBuilder();
+        sb.append('[');
+        for (int i = 0; i \< this.size; i++)
+        {
+            if (i \> 0)
+            {
+                sb.append(',').append(' ');
+            }
+            <type> value = this.items[i];
+            sb.append(value);
+        }
+        return sb.append(']').toString();
+    }
+
+    public void writeExternal(ObjectOutput out) throws IOException
+    {
+        out.writeInt(this.size());
+        for (int i = 0; i \< this.size; i++)
+        {
+            out.write<name>(this.items[i]);
+        }
+    }
+
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
+    {
+        this.size = in.readInt();
+        this.items = new <type>[this.size];
+        for (int i = 0; i \< this.size; i++)
+        {
+            this.items[i] = in.read<name>();
+        }
+    }
+
+    private class Internal<name>Iterator implements <name>Iterator
+    {
+        /**
+         * Index of element to be returned by subsequent call to next.
+         */
+        private int currentIndex;
+
+        /**
+         * Index of element returned by most recent call to next or previous.  Reset to -1 if this element is deleted by
+         * a call to remove.
+         */
+        protected int lastIndex = -1;
+
+        public boolean hasNext()
+        {
+            return this.currentIndex != <name>ArrayList.this.size();
+        }
+
+        public <type> next()
+        {
+            try
+            {
+                <type> next = <name>ArrayList.this.items[this.currentIndex];
+                this.lastIndex = this.currentIndex;
+                this.currentIndex++;
+                return next;
+            }
+            catch (IndexOutOfBoundsException ignored)
+            {
+                throw new NoSuchElementException();
+            }
+        }
+    }
+}
+
+>>

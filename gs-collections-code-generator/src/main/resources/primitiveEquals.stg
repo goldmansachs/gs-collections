@@ -1,0 +1,18 @@
+equals ::= [
+    "int": "operatorEquals",
+    "long": "operatorEquals",
+    "double": "doubleEquals",
+    "float": "floatEquals"
+]
+
+operatorEquals(left, right) ::= <<
+<left> == <right>
+>>
+
+doubleEquals(left, right) ::= <<
+Double.doubleToLongBits(<left>) == Double.doubleToLongBits(<right>)
+>>
+
+floatEquals(left, right) ::= <<
+Float.floatToIntBits(<left>) == Float.floatToIntBits(<right>)
+>>
