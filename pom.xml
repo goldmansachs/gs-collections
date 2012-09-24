@@ -209,25 +209,6 @@
 
         <plugins>
             <plugin>
-                <groupId>com.goldmansachs</groupId>
-                <artifactId>gs-collections-code-generator-maven-plugin</artifactId>
-                <version>2.1.0-SNAPSHOT</version>
-                <executions>
-                    <execution>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <targetPath>target/generated-sources/com/gs/collections/impl/list/mutable/primitive</targetPath>
-                    <templateFileName>list/mutable/primitive.stg</templateFileName>
-                    <destinationFileSuffix>ArrayList</destinationFileSuffix>
-                </configuration>
-            </plugin>
-
-            <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
                     <source>1.5</source>

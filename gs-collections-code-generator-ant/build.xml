@@ -16,9 +16,9 @@
 
 <project name="gs-collections-code-generator-ant">
     <property name="templates" value="${basedir}/../gs-collections-code-generator/src/main/resources" />
-    <property name="collections-generated" value="${basedir}/../collections/target/generated-sources/java" />
-    <property name="collections-api-generated" value="${basedir}/../collections-api/target/generated-sources/java" />
-    <property name="unit-tests-generated" value="${basedir}/../unit-tests/target/generated-sources/java" />
+    <property name="collections-generated" value="${basedir}/../collections/target/generated-sources" />
+    <property name="collections-api-generated" value="${basedir}/../collections-api/target/generated-sources" />
+    <property name="unit-tests-generated" value="${basedir}/../unit-tests/target/generated-sources" />
 
 
     <target name="generate-sources">
