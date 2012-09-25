@@ -341,6 +341,12 @@ public class <name>ArrayList
         return previous;
     }
 
+    public <name>ArrayList with(<type> element)
+    {
+        this.add(element);
+        return this;
+    }
+
     public <name>ArrayList with(<type> element1, <type> element2)
     {
         this.add(element1);
@@ -356,8 +362,11 @@ public class <name>ArrayList
         return this;
     }
 
-    public <name>ArrayList with(<type>... elements)
+    public <name>ArrayList with(<type> element1, <type> element2, <type> element3, <type>... elements)
     {
+        this.add(element1);
+        this.add(element2);
+        this.add(element3);
         return this.withArrayCopy(elements, 0, elements.length);
     }
 
@@ -477,7 +486,7 @@ public class <name>ArrayList
 
     public double average()
     {
-        return (double) this.sum() / (double) this.size();
+        return <castSum.(type)>this.sum() / (double) this.size();
     }
 
     public double median()
@@ -488,9 +497,9 @@ public class <name>ArrayList
         {
             <type> first = sortedArray[middleIndex];
             <type> second = sortedArray[middleIndex - 1];
-            return ((double) first + (double) second) / 2.0;
+            return (<castType.(type)>first + <castType.(type)>second) / 2.0;
         }
-        return (double) sortedArray[middleIndex];
+        return <castType.(type)>sortedArray[middleIndex];
     }
 
     public <type>[] toArray()

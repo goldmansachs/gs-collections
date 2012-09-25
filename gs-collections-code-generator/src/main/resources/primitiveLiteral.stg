@@ -69,3 +69,18 @@ wideType ::= [
     "double": "double",
     "float": "double"
 ]
+
+castType ::= [
+    "int": "(double) ",
+    "long": "(double) ",
+    "double": "",
+    "float": "(double) "
+]
+
+castSum ::= [
+    "int": "(double) ",
+    "long": "(double) ",
+    "double": "",
+    "float": ""
+]
+
