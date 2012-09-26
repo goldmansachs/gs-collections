@@ -47,9 +47,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <slf4j.version>1.6.4</slf4j.version>
-        <clover.version>3.1.1</clover.version>
+        <clover.version>3.1.7</clover.version>
         <checkstyle.version>2.9.1</checkstyle.version>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
     <dependencyManagement>
@@ -190,7 +189,7 @@
 
                 <plugin>
                     <artifactId>maven-surefire-plugin</artifactId>
-                    <version>2.12</version>
+                    <version>2.12.2</version>
                 </plugin>
 
                 <plugin>
@@ -307,6 +306,12 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>versions-maven-plugin</artifactId>
+                <version>1.2</version>
+            </plugin>
         </plugins>
     </build>
 
@@ -320,7 +325,7 @@
 
             <plugin>
                 <artifactId>maven-surefire-report-plugin</artifactId>
-                <version>2.12</version>
+                <version>2.12.3</version>
             </plugin>
 
             <plugin>
