@@ -65,15 +65,6 @@ public class GsCollectionsCodeGenerator
         BufferedWriter bufferedWriter = null;
         try
         {
-            File directory = outputFile.getParentFile();
-            if (!directory.exists())
-            {
-                boolean mkdirs = directory.mkdirs();
-                if (!mkdirs)
-                {
-                    throw new RuntimeException("Failed to create directory: " + directory);
-                }
-            }
             fileWriter = new FileWriter(outputFile);
             bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter.write(data);

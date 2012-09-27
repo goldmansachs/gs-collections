@@ -115,7 +115,8 @@
                     </execution>
                 </executions>
                 <configuration>
-                    <targetPath>target/generated-sources/com/gs/collections/impl/list/mutable/primitive</targetPath>
+                    <targetPath>target/generated-sources/java/com/gs/collections/impl/list/mutable/primitive
+                    </targetPath>
                     <templateFileName>list/mutable/primitive.stg</templateFileName>
                     <destinationFileSuffix>ArrayList</destinationFileSuffix>
                 </configuration>
