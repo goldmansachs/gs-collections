@@ -1,0 +1,20 @@
+import "copyright.stg"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.api.block.predicate.primitive;
+
+import java.io.Serializable;
+
+public interface <name>Predicate
+        extends Serializable
+{
+    boolean accept(<type> value);
+}
+
+>>

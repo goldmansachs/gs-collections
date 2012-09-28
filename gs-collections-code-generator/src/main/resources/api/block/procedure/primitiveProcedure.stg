@@ -1,0 +1,23 @@
+import "copyright.stg"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.api.block.procedure.primitive;
+
+import java.io.Serializable;
+
+/**
+ * A one argument procedure that takes a primtive <type> as the argument.
+ */
+public interface <name>Procedure
+        extends Serializable
+{
+    void value(<type> each);
+}
+
+>>

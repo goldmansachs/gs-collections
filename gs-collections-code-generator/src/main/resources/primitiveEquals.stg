@@ -1,6 +1,8 @@
 equals ::= [
     "int": "operatorEquals",
     "long": "operatorEquals",
+    "short": "operatorEquals",
+    "byte": "operatorEquals",
     "double": "doubleEquals",
     "float": "floatEquals"
 ]

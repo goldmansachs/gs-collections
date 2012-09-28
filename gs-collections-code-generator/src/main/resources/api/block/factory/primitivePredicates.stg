@@ -1,0 +1,97 @@
+import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveEqualsWithDelta.stg"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.block.factory.primitive;
+
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+
+/**
+ * Provides a set of common predicates for <type> values.
+ */
+public final class <name>Predicates
+{
+    private <name>Predicates()
+    {
+        throw new AssertionError("Suppress default constructor for noninstantiability");
+    }
+
+    @SuppressWarnings("MisspelledEquals")
+    public static <name>Predicate equal(<type> expected)
+    {
+        return new Equals<name>Predicate(expected);
+    }
+
+    <(equalWithDelta.(type))(type, name)>
+
+    public static <name>Predicate lessThan(<type> expected)
+    {
+        return new LessThan<name>Predicate(expected);
+    }
+
+    public static <name>Predicate greaterThan(<type> expected)
+    {
+        return new GreaterThan<name>Predicate(expected);
+    }
+
+    private static final class Equals<name>Predicate implements <name>Predicate
+    {
+        private static final long serialVersionUID = 1L;
+        private final <type> expected;
+
+        private Equals<name>Predicate(<type> expected)
+        {
+            this.expected = expected;
+        }
+
+        public boolean accept(<type> actual)
+        {
+            return <(equals.(type))("actual", "this.expected")>;
+        }
+    }
+
+    <(equalsWithDeltaClass.(type))(type, name)>
+
+    private static final class LessThan<name>Predicate implements <name>Predicate
+    {
+        private static final long serialVersionUID = 1L;
+
+        private final <type> expected;
+
+        private LessThan<name>Predicate(<type> expected)
+        {
+            this.expected = expected;
+        }
+
+        public boolean accept(<type> actual)
+        {
+            return actual \< this.expected;
+        }
+    }
+
+    private static final class GreaterThan<name>Predicate implements <name>Predicate
+    {
+        private static final long serialVersionUID = 1L;
+
+        private final <type> expected;
+
+        private GreaterThan<name>Predicate(<type> expected)
+        {
+            this.expected = expected;
+        }
+
+        public boolean accept(<type> actual)
+        {
+            return actual \> this.expected;
+        }
+    }
+}
+
+>>

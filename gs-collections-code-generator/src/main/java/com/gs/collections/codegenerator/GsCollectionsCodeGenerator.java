@@ -44,7 +44,7 @@ public class GsCollectionsCodeGenerator
         {
             writeToFile(
                     generateSources(primitive, this.templateFileName),
-                    new File(this.targetPath, primitive.getName() + this.destinationFileSuffix + ".java"));
+                    new File(this.targetPath, primitive.getName() + this.destinationFileSuffix.replace("$primitive$", primitive.getName()) + ".java"));
         }
     }
 
@@ -84,7 +84,7 @@ public class GsCollectionsCodeGenerator
                 }
                 catch (IOException e)
                 {
-                    throw new RuntimeException("filewriter: " + e);
+                    throw new RuntimeException("Could not close filewriter: " + e);
                 }
             }
             if (bufferedWriter != null)
@@ -95,7 +95,7 @@ public class GsCollectionsCodeGenerator
                 }
                 catch (IOException e)
                 {
-                    throw new RuntimeException("bufwriter: " + e);
+                    throw new RuntimeException("Could not close bufferedwriter: " + e);
                 }
             }
         }

@@ -1,0 +1,19 @@
+import "copyright.stg"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.api.iterator;
+
+public interface <name>Iterator
+{
+    <type> next();
+
+    boolean hasNext();
+}
+
+>>

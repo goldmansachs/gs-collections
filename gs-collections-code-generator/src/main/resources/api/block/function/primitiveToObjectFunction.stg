@@ -1,0 +1,20 @@
+import "copyright.stg"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.api.block.function.primitive;
+
+import java.io.Serializable;
+
+public interface <name>ToObjectFunction\<V\>
+        extends Serializable
+{
+    V valueOf(<type> <type>Parameter);
+}
+
+>>

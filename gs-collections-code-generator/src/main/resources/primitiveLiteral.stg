@@ -1,5 +1,7 @@
 literal ::= [
     "int": "intLiteral",
+    "short": "shortLiteral",
+    "byte": "byteLiteral",
     "long": "longLiteral",
     "double": "doubleLiteral",
     "float": "floatLiteral"
@@ -7,6 +9,14 @@ literal ::= [
 
 intLiteral(item) ::= <<
 <item>
+>>
+
+shortLiteral(item) ::= <<
+(short) <item>
+>>
+
+byteLiteral(item) ::= <<
+(byte) <item>
 >>
 
 longLiteral(item) ::= <<
@@ -24,6 +34,8 @@ doubleLiteral(item) ::= <<
 wideLiteral ::= [
     "int": "longLiteral",
     "long": "longLiteral",
+    "short": "longLiteral",
+    "byte": "longLiteral",
     "double": "doubleLiteral",
     "float": "doubleLiteral"
 ]
@@ -31,12 +43,16 @@ wideLiteral ::= [
 toStringLiteral ::= [
     "int": "intLiteral",
     "long": "intLiteral",
+    "short": "intLiteral",
+    "byte": "intLiteral",
     "double": "doubleLiteral",
     "float": "doubleLiteral"
 ]
 
 zero ::= [
     "int": "0",
+    "short": "(short) 0",
+    "byte": "(byte) 0",
     "long": "0L",
     "double": "0.0",
     "float": "0.0f"
@@ -44,6 +60,8 @@ zero ::= [
 
 wideZero ::= [
     "int": "0L",
+    "short": "0L",
+    "byte": "0L",
     "long": "0L",
     "double": "0.0",
     "float": "0.0"
@@ -51,6 +69,8 @@ wideZero ::= [
 
 delta ::= [
     "int": "",
+    "short": "",
+    "byte": "",
     "long": "",
     "double": ", 0.0",
     "float": ", 0.0f"
@@ -59,12 +79,15 @@ delta ::= [
 wideDelta ::= [
     "int": "",
     "long": "",
+    "short": "",
     "double": ", 0.0",
     "float": ", 0.0"
 ]
 
 wideType ::= [
     "int": "long",
+    "short": "long",
+    "byte": "long",
     "long": "long",
     "double": "double",
     "float": "double"
@@ -73,6 +96,8 @@ wideType ::= [
 castType ::= [
     "int": "(double) ",
     "long": "(double) ",
+    "short": "(double) ",
+    "byte": "(double) ",
     "double": "",
     "float": "(double) "
 ]
@@ -80,7 +105,29 @@ castType ::= [
 castSum ::= [
     "int": "(double) ",
     "long": "(double) ",
+    "short": "(double) ",
+    "byte": "(double) ",
     "double": "",
     "float": ""
 ]
 
+castExpression ::= [
+    "int": "noCast",
+    "long": "noCast",
+    "short": "shortCast",
+    "byte": "byteCast",
+    "float": "noCast",
+    "double": "noCast"
+]
+
+noCast(item) ::= <<
+<item>
+>>
+
+shortCast(item) ::= <<
+(short) (<item>)
+>>
+
+byteCast(item) ::= <<
+(byte) (<item>)
+>>

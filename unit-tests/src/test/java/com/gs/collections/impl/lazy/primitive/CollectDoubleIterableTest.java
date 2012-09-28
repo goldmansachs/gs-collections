@@ -16,10 +16,10 @@
 
 package com.gs.collections.impl.lazy.primitive;
 
-import com.gs.collections.api.DoubleIterable;
 import com.gs.collections.api.block.function.primitive.DoubleToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.DoubleProcedure;
 import com.gs.collections.api.iterator.DoubleIterator;
+import com.gs.collections.api.primitive.DoubleIterable;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.primitive.DoublePredicates;
 import com.gs.collections.impl.list.Interval;

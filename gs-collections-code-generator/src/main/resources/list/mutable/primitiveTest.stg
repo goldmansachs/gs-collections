@@ -352,9 +352,9 @@ public class <name>ArrayListTest
     {
         Assert.assertEquals(FastList.newListWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">), this.list.collect(new <name>ToObjectFunction\<<wrapperName>\>()
         {
-            public <wrapperName> valueOf(<type> <type>Parameter)
+            public <wrapperName> valueOf(<type> parameter)
             {
-                return <type>Parameter - <(literal.(type))("1")>;
+                return <(castExpression.(type))("parameter - 1")>;
             }
         }));
     }

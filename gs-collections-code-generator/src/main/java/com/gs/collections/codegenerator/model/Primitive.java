@@ -21,7 +21,9 @@ public enum Primitive
     INT("int"),
     FLOAT("float"),
     DOUBLE("double"),
-    LONG("long");
+    LONG("long"),
+    SHORT("short"),
+    BYTE("byte");
 
     public final String type;
 

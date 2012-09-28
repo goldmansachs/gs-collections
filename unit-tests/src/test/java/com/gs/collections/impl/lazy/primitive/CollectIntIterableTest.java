@@ -18,10 +18,10 @@ package com.gs.collections.impl.lazy.primitive;
 
 import java.util.concurrent.atomic.AtomicInteger;
 
-import com.gs.collections.api.IntIterable;
 import com.gs.collections.api.block.function.primitive.IntToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.iterator.IntIterator;
+import com.gs.collections.api.primitive.IntIterable;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.primitive.IntPredicates;
 import com.gs.collections.impl.list.Interval;

@@ -20,7 +20,6 @@ import java.util.Arrays;
 import java.util.Iterator;
 
 import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.LongIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
@@ -31,6 +30,7 @@ import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.LongProcedure;
 import com.gs.collections.api.iterator.LongIterator;
+import com.gs.collections.api.primitive.LongIterable;
 import net.jcip.annotations.Immutable;
 
 /**

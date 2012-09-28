@@ -1,0 +1,24 @@
+import "copyright.stg"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name, primitive.wrapperName)>
+>>
+
+body(type, name, wrapperName) ::= <<
+<copyright()>
+
+package com.gs.collections.api.block.function.primitive;
+
+import java.io.Serializable;
+
+/**
+ * <name>Function is a primitive Function which may be used to reduce the overhead
+ * of creating big <wrapperName> objects in places where the primitive <type> could be used.
+ */
+public interface <name>Function\<T\>
+        extends Serializable
+{
+    <type> <type>ValueOf(T anObject);
+}
+
+>>

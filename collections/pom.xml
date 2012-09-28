@@ -108,18 +108,32 @@
                 <version>2.1.0-SNAPSHOT</version>
                 <executions>
                     <execution>
+                        <id>list</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
                         </goals>
+                        <configuration>
+                            <targetPath>target/generated-sources/java/com/gs/collections/impl/list/mutable/primitive
+                            </targetPath>
+                            <templateFileName>list/mutable/primitive.stg</templateFileName>
+                            <destinationFileSuffix>ArrayList</destinationFileSuffix>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>function</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <targetPath>target/generated-sources/java/com/gs/collections/impl/block/factory/primitive
+                            </targetPath>
+                            <templateFileName>api/block/factory/primitivePredicates.stg</templateFileName>
+                            <destinationFileSuffix>Predicates</destinationFileSuffix>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <targetPath>target/generated-sources/java/com/gs/collections/impl/list/mutable/primitive
-                    </targetPath>
-                    <templateFileName>list/mutable/primitive.stg</templateFileName>
-                    <destinationFileSuffix>ArrayList</destinationFileSuffix>
-                </configuration>
             </plugin>
 
             <plugin>

@@ -1,0 +1,55 @@
+import "copyright.stg"
+import "primitiveLiteral.stg"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.api.primitive;
+
+import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
+import com.gs.collections.api.iterator.<name>Iterator;
+
+/**
+ * <name>Iterable is an interface which is memory-optimized for <type> primitives.
+ * It is inspired by the interface RichIterable, and contains a subset of the internal iterator methods on RichIterable like collect, sum, etc.
+ * The API also includes an external iterator method, which returns an <name>Iterator. <name>Iterator helps iterate over the <name>Iterable without boxing the primitives.
+ */
+public interface <name>Iterable
+{
+    <name>Iterator <type>Iterator();
+
+    void forEach(<name>Procedure procedure);
+
+    int size();
+
+    int count(<name>Predicate predicate);
+
+    boolean anySatisfy(<name>Predicate predicate);
+
+    boolean allSatisfy(<name>Predicate predicate);
+
+    \<V\> RichIterable\<V\> collect(<name>ToObjectFunction\<? extends V\> function);
+
+    <(wideType.(type))> sum();
+
+    <type> max();
+
+    <type> min();
+
+    double average();
+
+    double median();
+
+    <type>[] toArray();
+
+    <type>[] toSortedArray();
+}
+
+>>
