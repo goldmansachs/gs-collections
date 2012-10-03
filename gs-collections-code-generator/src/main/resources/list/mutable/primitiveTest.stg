@@ -24,6 +24,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
+ * This file was automatically generated from template file primitiveTest.stg.
  * JUnit test for {@link <name>ArrayList}.
  */
 public class <name>ArrayListTest

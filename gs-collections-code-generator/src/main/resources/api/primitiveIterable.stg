@@ -17,6 +17,7 @@ import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 
 /**
+ * This file was automatically generated from template file primitiveIterable.stg.
  * <name>Iterable is an interface which is memory-optimized for <type> primitives.
  * It is inspired by the interface RichIterable, and contains a subset of the internal iterator methods on RichIterable like collect, sum, etc.
  * The API also includes an external iterator method, which returns an <name>Iterator. <name>Iterator helps iterate over the <name>Iterable without boxing the primitives.

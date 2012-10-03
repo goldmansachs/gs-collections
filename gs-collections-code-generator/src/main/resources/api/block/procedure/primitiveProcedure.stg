@@ -12,7 +12,8 @@ package com.gs.collections.api.block.procedure.primitive;
 import java.io.Serializable;
 
 /**
- * A one argument procedure that takes a primtive <type> as the argument.
+ * This file was automatically generated from template file primitiveProcedure.stg.
+ * A one argument procedure that takes a primitive <type> as the argument.
  */
 public interface <name>Procedure
         extends Serializable

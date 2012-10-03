@@ -1,16 +1,21 @@
 import "copyright.stg"
 
 class(primitive) ::= <<
-<body(primitive.type, primitive.name)>
+<body(primitive.type, primitive.name, primitive.wrapperName)>
 >>
 
-body(type, name) ::= <<
+body(type, name, wrapperName) ::= <<
 <copyright()>
 
 package com.gs.collections.api.block.predicate.primitive;
 
 import java.io.Serializable;
 
+/**
+ * This file was automatically generated from template file primitivePredicate.stg.
+ * <name>Predicate is a primitive Predicate which may be used to reduce the overhead
+ * of autoboxing <wrapperName> objects in places where primitive <type>s could be used.
+ */
 public interface <name>Predicate
         extends Serializable
 {

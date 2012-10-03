@@ -12,8 +12,9 @@ package com.gs.collections.api.block.function.primitive;
 import java.io.Serializable;
 
 /**
+ * This file was automatically generated from template file primitiveFunction.stg.
  * <name>Function is a primitive Function which may be used to reduce the overhead
- * of creating big <wrapperName> objects in places where the primitive <type> could be used.
+ * of autoboxing <wrapperName> objects in places where primitive <type>s could be used.
  */
 public interface <name>Function\<T\>
         extends Serializable

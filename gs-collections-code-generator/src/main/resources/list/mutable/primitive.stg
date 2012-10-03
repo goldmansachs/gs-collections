@@ -28,6 +28,10 @@ import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.impl.list.mutable.FastList;
 import net.jcip.annotations.NotThreadSafe;
 
+/**
+ * This file was automatically generated from template file primitive.stg.
+ * <name>ArrayList is similar to {@link FastList}, and is memory-optimized for <type> primitives.
+ */
 @NotThreadSafe
 public class <name>ArrayList
         implements <name>Iterable, Externalizable

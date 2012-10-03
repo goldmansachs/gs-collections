@@ -9,6 +9,10 @@ body(type, name) ::= <<
 
 package com.gs.collections.api.iterator;
 
+/**
+ * This file was automatically generated from template file primitiveIterator.stg.
+ * <name>Iterator is an iterator over a <name>Iterable.
+ */
 public interface <name>Iterator
 {
     <type> next();
