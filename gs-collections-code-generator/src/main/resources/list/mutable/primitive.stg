@@ -3,6 +3,8 @@ import "primitiveEquals.stg"
 import "primitiveHashcode.stg"
 import "primitiveLiteral.stg"
 
+fileName(primitive) ::= "<primitive.name>ArrayList"
+
 class(primitive) ::= <<
 <body(primitive.type, primitive.name)>
 >>

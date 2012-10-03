@@ -25,13 +25,12 @@ public class GsCollectionsCodeGeneratorTask extends Task
 {
     private String targetPath;
     private String templateFileName;
-    private String destinationFileSuffix;
 
     @Override
     public void execute()
     {
         GsCollectionsCodeGenerator gsCollectionsCodeGenerator =
-                new GsCollectionsCodeGenerator(new File(this.targetPath), this.templateFileName, this.destinationFileSuffix);
+                new GsCollectionsCodeGenerator(new File(this.targetPath), this.templateFileName);
         gsCollectionsCodeGenerator.generate();
     }
 
@@ -43,10 +42,5 @@ public class GsCollectionsCodeGeneratorTask extends Task
     public void setTemplateFileName(String templateFileName)
     {
         this.templateFileName = templateFileName;
-    }
-
-    public void setDestinationFileSuffix(String destinationFileSuffix)
-    {
-        this.destinationFileSuffix = destinationFileSuffix;
     }
 }

@@ -2,6 +2,8 @@ import "copyright.stg"
 import "primitiveEquals.stg"
 import "primitiveEqualsWithDelta.stg"
 
+fileName(primitive) ::= "<primitive.name>Predicates"
+
 class(primitive) ::= <<
 <body(primitive.type, primitive.name)>
 >>

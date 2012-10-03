@@ -44,12 +44,6 @@ public class GenerateMojo extends AbstractMojo
     private String templateFileName;
 
     /**
-     * @parameter
-     * @required
-     */
-    private String destinationFileSuffix;
-
-    /**
      * The Maven project to act upon.
      *
      * @parameter expression="${project}"
@@ -78,7 +72,7 @@ public class GenerateMojo extends AbstractMojo
         this.getLog().info("Writing generated code to " + this.targetPath);
 
         GsCollectionsCodeGenerator gsCollectionsCodeGenerator =
-                new GsCollectionsCodeGenerator(this.targetPath, this.templateFileName, this.destinationFileSuffix);
+                new GsCollectionsCodeGenerator(this.targetPath, this.templateFileName);
         gsCollectionsCodeGenerator.generate();
 
         if (this.test)

@@ -29,13 +29,11 @@ public class GsCollectionsCodeGenerator
 {
     private final File targetPath;
     private final String templateFileName;
-    private final String destinationFileSuffix;
 
-    public GsCollectionsCodeGenerator(File targetPath, String templateFileName, String destinationFileSuffix)
+    public GsCollectionsCodeGenerator(File targetPath, String templateFileName)
     {
         this.targetPath = targetPath;
         this.templateFileName = templateFileName;
-        this.destinationFileSuffix = destinationFileSuffix;
     }
 
     public void generate()
@@ -43,17 +41,28 @@ public class GsCollectionsCodeGenerator
         for (Primitive primitive : Primitive.values())
         {
             writeToFile(
-                    generateSources(primitive, this.templateFileName),
-                    new File(this.targetPath, primitive.getName() + this.destinationFileSuffix.replace("$primitive$", primitive.getName()) + ".java"));
+                    this.generateSources(primitive),
+                    new File(this.targetPath, this.getFileName(primitive) + ".java"));
         }
     }
 
-    private static String generateSources(Primitive primitive, String templateFileName)
+    private String getFileName(Primitive primitive)
     {
-        ST clazz = new STGroupFile(templateFileName).getInstanceOf("class");
+        ST fileName = new STGroupFile(this.templateFileName).getInstanceOf("fileName");
+        if (fileName == null)
+        {
+            throw new RuntimeException("Could not parse fileName in template file " + this.templateFileName);
+        }
+        fileName.add("primitive", primitive);
+        return fileName.render();
+    }
+
+    private String generateSources(Primitive primitive)
+    {
+        ST clazz = new STGroupFile(this.templateFileName).getInstanceOf("class");
         if (clazz == null)
         {
-            throw new RuntimeException("Could not parse template " + templateFileName);
+            throw new RuntimeException("Could not parse template " + this.templateFileName);
         }
         clazz.add("primitive", primitive);
         return clazz.render();

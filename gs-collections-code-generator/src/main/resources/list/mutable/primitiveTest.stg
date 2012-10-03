@@ -2,6 +2,8 @@ import "copyright.stg"
 import "primitiveHashcode.stg"
 import "primitiveLiteral.stg"
 
+fileName(primitive) ::= "<primitive.name>ArrayListTest"
+
 class(primitive) ::= <<
 <body(primitive.type, primitive.wrapperName, primitive.name, primitive.sum)>
 >>

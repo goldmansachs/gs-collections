@@ -1,6 +1,8 @@
 import "copyright.stg"
 import "primitiveLiteral.stg"
 
+fileName(primitive) ::= "<primitive.name>Iterable"
+
 class(primitive) ::= <<
 <body(primitive.type, primitive.name)>
 >>

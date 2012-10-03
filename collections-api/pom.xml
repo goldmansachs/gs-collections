@@ -110,7 +110,6 @@
                         <configuration>
                             <targetPath>target/generated-sources/java/com/gs/collections/api/primitive</targetPath>
                             <templateFileName>api/primitiveIterable.stg</templateFileName>
-                            <destinationFileSuffix>Iterable</destinationFileSuffix>
                         </configuration>
                     </execution>
                     <execution>
@@ -122,7 +121,6 @@
                         <configuration>
                             <targetPath>target/generated-sources/java/com/gs/collections/api/iterator</targetPath>
                             <templateFileName>api/iterator/primitiveIterator.stg</templateFileName>
-                            <destinationFileSuffix>Iterator</destinationFileSuffix>
                         </configuration>
                     </execution>
                     <execution>
@@ -135,7 +133,6 @@
                             <targetPath>target/generated-sources/java/com/gs/collections/api/block/procedure/primitive
                             </targetPath>
                             <templateFileName>api/block/procedure/primitiveProcedure.stg</templateFileName>
-                            <destinationFileSuffix>Procedure</destinationFileSuffix>
                         </configuration>
                     </execution>
                     <execution>
@@ -148,7 +145,6 @@
                             <targetPath>target/generated-sources/java/com/gs/collections/api/block/predicate/primitive
                             </targetPath>
                             <templateFileName>api/block/predicate/primitivePredicate.stg</templateFileName>
-                            <destinationFileSuffix>Predicate</destinationFileSuffix>
                         </configuration>
                     </execution>
                     <execution>
@@ -161,7 +157,6 @@
                             <targetPath>target/generated-sources/java/com/gs/collections/api/block/function/primitive
                             </targetPath>
                             <templateFileName>api/block/function/primitiveFunction.stg</templateFileName>
-                            <destinationFileSuffix>Function</destinationFileSuffix>
                         </configuration>
                     </execution>
                     <execution>
@@ -174,7 +169,6 @@
                             <targetPath>target/generated-sources/java/com/gs/collections/api/block/function/primitive
                             </targetPath>
                             <templateFileName>api/block/function/primitiveToObjectFunction.stg</templateFileName>
-                            <destinationFileSuffix>ToObjectFunction</destinationFileSuffix>
                         </configuration>
                     </execution>
                     <execution>
@@ -188,7 +182,6 @@
                             </targetPath>
                             <templateFileName>api/block/function/primitiveObjectToPrimitiveFunction.stg
                             </templateFileName>
-                            <destinationFileSuffix>ObjectTo$primitive$Function</destinationFileSuffix>
                         </configuration>
                     </execution>
                 </executions>

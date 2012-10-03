@@ -1,5 +1,7 @@
 import "copyright.stg"
 
+fileName(primitive) ::= "<primitive.name>Predicate"
+
 class(primitive) ::= <<
 <body(primitive.type, primitive.name, primitive.wrapperName)>
 >>
