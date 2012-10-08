@@ -94,9 +94,9 @@ public class <name>ArrayList
 
     public boolean contains(<type> value)
     {
-        for (<type> each : this.items)
+        for (int i = 0; i \< this.size ; i++)
         {
-            if (<(equals.(type))("each", "value")>)
+            if (<(equals.(type))("this.items[i]", "value")>)
             {
                 return true;
             }

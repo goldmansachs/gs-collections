@@ -68,6 +68,7 @@ public class <name>ArrayListTest
     {
         this.list.clear();
         Assert.assertEquals(0L, this.list.size());
+        Assert.assertFalse(this.list.contains(<(literal.(type))("0")>));
         Assert.assertFalse(this.list.contains(<(literal.(type))("1")>));
         Assert.assertFalse(this.list.contains(<(literal.(type))("2")>));
         Assert.assertFalse(this.list.contains(<(literal.(type))("3")>));
