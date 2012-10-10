@@ -1,17 +1,18 @@
 hashCode ::= [
+    "byte": "narrowHashcode",
+    "short": "narrowHashcode",
+    "char": "narrowHashcode",
     "int": "intHashcode",
     "long": "longHashcode",
-    "short": "shortHashcode",
-    "byte": "shortHashcode",
-    "double": "doubleHashcode",
-    "float": "floatHashcode"
+    "float": "floatHashcode",
+    "double": "doubleHashcode"
 ]
 
 intHashcode(item) ::= <<
 <item>
 >>
 
-shortHashcode(item) ::= <<
+narrowHashcode(item) ::= <<
 (int)<item>
 >>
 

@@ -1,32 +1,34 @@
 equalWithDelta ::= [
-    "int": "NoEqualWithDelta",
-    "long": "NoEqualWithDelta",
-    "byte": "NoEqualWithDelta",
-    "short": "NoEqualWithDelta",
-    "float": "doubleEqualWithDelta",
-    "double": "doubleEqualWithDelta"
+    "byte": "equalWithoutDelta",
+    "short": "equalWithoutDelta",
+    "char": "equalWithoutDelta",
+    "int": "equalWithoutDelta",
+    "long": "equalWithoutDelta",
+    "float": "equalWithDelta",
+    "double": "equalWithDelta"
 ]
 
 equalsWithDeltaClass ::= [
-    "int": "NoEqualWithDelta",
-    "long": "NoEqualWithDelta",
-    "byte": "NoEqualWithDelta",
-    "short": "NoEqualWithDelta",
-    "float": "doubleEqualsWithDeltaClass",
-    "double": "doubleEqualsWithDeltaClass"
+    "byte": "equalWithoutDelta",
+    "short": "equalWithoutDelta",
+    "char": "equalWithoutDelta",
+    "int": "equalWithoutDelta",
+    "long": "equalWithoutDelta",
+    "float": "equalsWithDeltaClass",
+    "double": "equalsWithDeltaClass"
 ]
 
-NoEqualWithDelta(type, name) ::= ""
+equalWithoutDelta(type, name) ::= ""
 
 
-doubleEqualWithDelta(type, name) ::= <<
+equalWithDelta(type, name) ::= <<
 public static <name>Predicate equal(<type> expected, <type> delta)
 {
     return new EqualsWithDelta<name>Predicate(expected, delta);
 }
 >>
 
-doubleEqualsWithDeltaClass(type, name) ::= <<
+equalsWithDeltaClass(type, name) ::= <<
 private static final class EqualsWithDelta<name>Predicate implements <name>Predicate
 {
     private static final long serialVersionUID = 1L;

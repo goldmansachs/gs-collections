@@ -23,7 +23,8 @@ public enum Primitive
     DOUBLE("double"),
     LONG("long"),
     SHORT("short"),
-    BYTE("byte");
+    BYTE("byte"),
+    CHAR("char");
 
     public final String type;
 
@@ -42,6 +43,10 @@ public enum Primitive
         if ("int".equals(this.type))
         {
             return "Integer";
+        }
+        if ("char".equals(this.type))
+        {
+            return "Character";
         }
         return this.getName();
     }

@@ -1,10 +1,11 @@
 equals ::= [
+    "byte": "operatorEquals",
+    "short": "operatorEquals",
+    "char": "operatorEquals",
     "int": "operatorEquals",
     "long": "operatorEquals",
-    "short": "operatorEquals",
-    "byte": "operatorEquals",
-    "double": "doubleEquals",
-    "float": "floatEquals"
+    "float": "floatEquals",
+    "double": "doubleEquals"
 ]
 
 operatorEquals(left, right) ::= <<

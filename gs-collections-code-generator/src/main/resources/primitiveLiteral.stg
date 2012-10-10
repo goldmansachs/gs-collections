@@ -1,10 +1,11 @@
 literal ::= [
-    "int": "intLiteral",
-    "short": "shortLiteral",
     "byte": "byteLiteral",
+    "short": "shortLiteral",
+    "char": "charLiteral",
+    "int": "intLiteral",
     "long": "longLiteral",
-    "double": "doubleLiteral",
-    "float": "floatLiteral"
+    "float": "floatLiteral",
+    "double": "doubleLiteral"
 ]
 
 intLiteral(item) ::= <<
@@ -17,6 +18,10 @@ shortLiteral(item) ::= <<
 
 byteLiteral(item) ::= <<
 (byte) <item>
+>>
+
+charLiteral(item) ::= <<
+(char) <item>
 >>
 
 longLiteral(item) ::= <<
@@ -32,90 +37,105 @@ doubleLiteral(item) ::= <<
 >>
 
 wideLiteral ::= [
+    "byte": "longLiteral",
+    "short": "longLiteral",
+    "char": "longLiteral",
     "int": "longLiteral",
     "long": "longLiteral",
-    "short": "longLiteral",
-    "byte": "longLiteral",
-    "double": "doubleLiteral",
-    "float": "doubleLiteral"
+    "float": "doubleLiteral",
+    "double": "doubleLiteral"
 ]
 
 toStringLiteral ::= [
+    "byte": "intLiteral",
+    "short": "intLiteral",
+    "char": "charStringLiteral",
     "int": "intLiteral",
     "long": "intLiteral",
-    "short": "intLiteral",
-    "byte": "intLiteral",
-    "double": "doubleLiteral",
-    "float": "doubleLiteral"
+    "float": "doubleLiteral",
+    "double": "doubleLiteral"
 ]
 
+charStringLiteral(item) ::= <<
+\u000<item>
+>>
+
 zero ::= [
-    "int": "0",
-    "short": "(short) 0",
     "byte": "(byte) 0",
+    "short": "(short) 0",
+    "char": "'\0'",
+    "int": "0",
     "long": "0L",
-    "double": "0.0",
-    "float": "0.0f"
+    "float": "0.0f",
+    "double": "0.0"
 ]
 
 wideZero ::= [
-    "int": "0L",
-    "short": "0L",
     "byte": "0L",
+    "short": "0L",
+    "char": "0L",
+    "int": "0L",
     "long": "0L",
-    "double": "0.0",
-    "float": "0.0"
+    "float": "0.0",
+    "double": "0.0"
 ]
 
 delta ::= [
-    "int": "",
-    "short": "",
     "byte": "",
+    "short": "",
+    "char": "",
+    "int": "",
     "long": "",
-    "double": ", 0.0",
-    "float": ", 0.0f"
+    "float": ", 0.0f",
+    "double": ", 0.0"
 ]
 
 wideDelta ::= [
+    "byte": "",
+    "short": "",
+    "char": "",
     "int": "",
     "long": "",
-    "short": "",
-    "double": ", 0.0",
-    "float": ", 0.0"
+    "float": ", 0.0",
+    "double": ", 0.0"
 ]
 
 wideType ::= [
-    "int": "long",
-    "short": "long",
     "byte": "long",
+    "short": "long",
+    "char": "long",
+    "int": "long",
     "long": "long",
-    "double": "double",
-    "float": "double"
+    "float": "double",
+    "double": "double"
 ]
 
 castType ::= [
+    "byte": "(double) ",
+    "short": "(double) ",
+    "char": "(double) ",
     "int": "(double) ",
     "long": "(double) ",
-    "short": "(double) ",
-    "byte": "(double) ",
-    "double": "",
-    "float": "(double) "
+    "float": "(double) ",
+    "double": ""
 ]
 
 castSum ::= [
+    "byte": "(double) ",
+    "short": "(double) ",
+    "char": "(double)",
     "int": "(double) ",
     "long": "(double) ",
-    "short": "(double) ",
-    "byte": "(double) ",
-    "double": "",
-    "float": ""
+    "float": "",
+    "double": ""
 ]
 
 castExpression ::= [
+    "byte": "byteCast",
+    "short": "shortCast",
+    "char": "charCast",
     "int": "noCast",
     "long": "noCast",
-    "short": "shortCast",
-    "byte": "byteCast",
     "float": "noCast",
     "double": "noCast"
 ]
@@ -130,4 +150,8 @@ shortCast(item) ::= <<
 
 byteCast(item) ::= <<
 (byte) (<item>)
+>>
+
+charCast(item) ::= <<
+(char) (<item>)
 >>
