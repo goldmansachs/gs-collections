@@ -27,11 +27,11 @@
             classpath="${compile.classpath}" />
         <generate
             targetPath="${collections-generated}/com/gs/collections/impl/list/mutable/primitive/"
-            templateFileName="${templates}/list/mutable/primitive.stg"
+            templateFileName="${templates}/list/mutable/primitiveArrayList.stg"
             destinationFileSuffix="ArrayList" />
         <generate
             targetPath="${unit-tests-generated}/com/gs/collections/impl/list/mutable/primitive/"
-            templateFileName="${templates}/list/mutable/primitiveTest.stg"
+            templateFileName="${templates}/list/mutable/primitiveArrayListTest.stg"
             destinationFileSuffix="ArrayListTest" />
     </target>
 </project>

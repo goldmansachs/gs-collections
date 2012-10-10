@@ -152,7 +152,7 @@
                 <configuration>
                     <targetPath>target/generated-test-sources/java/com/gs/collections/impl/list/mutable/primitive
                     </targetPath>
-                    <templateFileName>list/mutable/primitiveTest.stg</templateFileName>
+                    <templateFileName>list/mutable/primitiveArrayListTest.stg</templateFileName>
                     <test>true</test>
                 </configuration>
             </plugin>
