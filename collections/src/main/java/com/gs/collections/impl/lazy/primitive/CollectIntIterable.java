@@ -19,6 +19,7 @@ package com.gs.collections.impl.lazy.primitive;
 import java.util.Arrays;
 import java.util.Iterator;
 
+import com.gs.collections.api.IntIterable;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
@@ -30,7 +31,6 @@ import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.iterator.IntIterator;
-import com.gs.collections.api.primitive.IntIterable;
 import net.jcip.annotations.Immutable;
 
 /**

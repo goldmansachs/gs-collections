@@ -108,7 +108,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <targetPath>target/generated-sources/java/com/gs/collections/api/primitive</targetPath>
+                            <targetPath>target/generated-sources/java/com/gs/collections/api</targetPath>
                             <templateFileName>api/primitiveIterable.stg</templateFileName>
                         </configuration>
                     </execution>

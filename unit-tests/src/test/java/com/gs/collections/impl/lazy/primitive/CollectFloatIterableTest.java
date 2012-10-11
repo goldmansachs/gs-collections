@@ -16,10 +16,10 @@
 
 package com.gs.collections.impl.lazy.primitive;
 
+import com.gs.collections.api.FloatIterable;
 import com.gs.collections.api.block.function.primitive.FloatToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.FloatProcedure;
 import com.gs.collections.api.iterator.FloatIterator;
-import com.gs.collections.api.primitive.FloatIterable;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.primitive.FloatPredicates;
 import com.gs.collections.impl.list.Interval;

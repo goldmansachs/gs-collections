@@ -16,10 +16,10 @@
 
 package com.gs.collections.impl.lazy.primitive;
 
+import com.gs.collections.api.LongIterable;
 import com.gs.collections.api.block.function.primitive.LongToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.LongProcedure;
 import com.gs.collections.api.iterator.LongIterator;
-import com.gs.collections.api.primitive.LongIterable;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.primitive.LongPredicates;
 import com.gs.collections.impl.list.Interval;
