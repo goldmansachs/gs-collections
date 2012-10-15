@@ -128,4 +128,23 @@ is stored in this field.        -->
         </Or>
     </Match>
 
+    <!--NP: Read of unwritten field (NP_UNWRITTEN_FIELD)-->
+
+    <!--The program is dereferencing a field that does not seem to ever have a non-null value written to it.
+     Unless the field is initialized via some mechanism not seen by the analysis, dereferencing this value will
+     generate a null pointer exception.-->
+    <Match>
+        <Bug pattern="NP_UNWRITTEN_FIELD" />
+        <Class name="com.gs.collections.codegenerator.maven.GenerateMojo" />
+    </Match>
+
+    <!--UwF: Unwritten field (UWF_UNWRITTEN_FIELD)-->
+
+    <!--This field is never written.  All reads of it will return the default value. Check for errors
+    (should it have been initialized?), or remove it if it is useless.-->
+    <Match>
+        <Bug pattern="UWF_UNWRITTEN_FIELD" />
+        <Class name="com.gs.collections.codegenerator.maven.GenerateMojo" />
+    </Match>
+
 </FindBugsFilter>
