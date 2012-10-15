@@ -44,6 +44,21 @@ public final class <name>Predicates
         return new GreaterThan<name>Predicate(expected);
     }
 
+    public static <name>Predicate and(<name>Predicate one, <name>Predicate two)
+    {
+        return new And<name>Predicate(one, two);
+    }
+
+    public static <name>Predicate or(<name>Predicate one, <name>Predicate two)
+    {
+        return new Or<name>Predicate(one, two);
+    }
+
+    public static <name>Predicate not(<name>Predicate negate)
+    {
+        return new Not<name>Predicate(negate);
+    }
+
     private static final class Equals<name>Predicate implements <name>Predicate
     {
         private static final long serialVersionUID = 1L;
@@ -93,6 +108,61 @@ public final class <name>Predicates
         public boolean accept(<type> actual)
         {
             return actual \> this.expected;
+        }
+    }
+
+    private static final class And<name>Predicate implements <name>Predicate
+    {
+        private static final long serialVersionUID = 1L;
+
+        private final <name>Predicate one;
+        private final <name>Predicate two;
+
+        private And<name>Predicate(<name>Predicate one, <name>Predicate two)
+        {
+            this.one = one;
+            this.two = two;
+        }
+
+        public boolean accept(<type> actual)
+        {
+            return this.one.accept(actual) && this.two.accept(actual);
+        }
+    }
+
+    private static final class Or<name>Predicate implements <name>Predicate
+    {
+        private static final long serialVersionUID = 1L;
+
+        private final <name>Predicate one;
+        private final <name>Predicate two;
+
+        private Or<name>Predicate(<name>Predicate one, <name>Predicate two)
+        {
+            this.one = one;
+            this.two = two;
+        }
+
+        public boolean accept(<type> actual)
+        {
+            return this.one.accept(actual) || this.two.accept(actual);
+        }
+    }
+
+    private static final class Not<name>Predicate implements <name>Predicate
+    {
+        private static final long serialVersionUID = 1L;
+
+        private final <name>Predicate negate;
+
+        private Not<name>Predicate(<name>Predicate negate)
+        {
+            this.negate = negate;
+        }
+
+        public boolean accept(<type> actual)
+        {
+            return !this.negate.accept(actual);
         }
     }
 }

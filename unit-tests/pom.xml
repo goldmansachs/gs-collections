@@ -143,18 +143,32 @@
                 <version>2.1.0-SNAPSHOT</version>
                 <executions>
                     <execution>
+                        <id>list</id>
                         <phase>generate-test-sources</phase>
                         <goals>
                             <goal>generate</goal>
                         </goals>
+                        <configuration>
+                            <targetPath>target/generated-test-sources/java/com/gs/collections/impl/list/mutable/primitive
+                            </targetPath>
+                            <templateFileName>list/mutable/primitiveArrayListTest.stg</templateFileName>
+                            <test>true</test>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>factory</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <targetPath>target/generated-test-sources/java/com/gs/collections/impl/block/factory/primitive
+                            </targetPath>
+                            <templateFileName>api/block/factory/primitivePredicatesTest.stg</templateFileName>
+                            <test>true</test>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <targetPath>target/generated-test-sources/java/com/gs/collections/impl/list/mutable/primitive
-                    </targetPath>
-                    <templateFileName>list/mutable/primitiveArrayListTest.stg</templateFileName>
-                    <test>true</test>
-                </configuration>
             </plugin>
 
             <plugin>

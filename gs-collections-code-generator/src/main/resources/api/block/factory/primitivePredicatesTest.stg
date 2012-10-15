@@ -1,0 +1,69 @@
+import "copyright.stg"
+import "primitiveLiteral.stg"
+
+fileName(primitive) ::= "<primitive.name>PredicatesTest"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.block.factory.primitive;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * This file was automatically generated from template file primitivePredicatesTest.stg.
+ * Provides a set of common tests of predicates for <type> values.
+ */
+public final class <name>PredicatesTest
+{
+    @Test
+    public void testEqual()
+    {
+        Assert.assertTrue(<name>Predicates.equal(<(literal.(type))("5")>).accept(<(literal.(type))("5")>));
+        Assert.assertFalse(<name>Predicates.equal(<(literal.(type))("5")>).accept(<(literal.(type))("6")>));
+    }
+
+    @Test
+    public void testLessThan()
+    {
+        Assert.assertTrue(<name>Predicates.lessThan(<(literal.(type))("5")>).accept(<(literal.(type))("4")>));
+        Assert.assertFalse(<name>Predicates.lessThan(<(literal.(type))("5")>).accept(<(literal.(type))("6")>));
+    }
+
+    @Test
+    public void testGreaterThan()
+    {
+        Assert.assertTrue(<name>Predicates.greaterThan(<(literal.(type))("5")>).accept(<(literal.(type))("6")>));
+        Assert.assertFalse(<name>Predicates.greaterThan(<(literal.(type))("5")>).accept(<(literal.(type))("4")>));
+    }
+
+    @Test
+    public void testAnd()
+    {
+        Assert.assertTrue(<name>Predicates.and(<name>Predicates.greaterThan(<(literal.(type))("5")>), <name>Predicates.lessThan(<(literal.(type))("7")>)).accept(<(literal.(type))("6")>));
+        Assert.assertFalse(<name>Predicates.and(<name>Predicates.greaterThan(<(literal.(type))("5")>), <name>Predicates.lessThan(<(literal.(type))("7")>)).accept(<(literal.(type))("8")>));
+        Assert.assertFalse(<name>Predicates.and(<name>Predicates.greaterThan(<(literal.(type))("5")>), <name>Predicates.lessThan(<(literal.(type))("7")>)).accept(<(literal.(type))("4")>));
+    }
+
+    @Test
+    public void testOr()
+    {
+        Assert.assertFalse(<name>Predicates.or(<name>Predicates.lessThan(<(literal.(type))("5")>), <name>Predicates.greaterThan(<(literal.(type))("7")>)).accept(<(literal.(type))("6")>));
+        Assert.assertTrue(<name>Predicates.or(<name>Predicates.lessThan(<(literal.(type))("5")>), <name>Predicates.greaterThan(<(literal.(type))("7")>)).accept(<(literal.(type))("4")>));
+        Assert.assertTrue(<name>Predicates.or(<name>Predicates.lessThan(<(literal.(type))("5")>), <name>Predicates.greaterThan(<(literal.(type))("7")>)).accept(<(literal.(type))("8")>));
+    }
+
+    @Test
+    public void testNot()
+    {
+        Assert.assertFalse(<name>Predicates.not(<name>Predicates.equal(<(literal.(type))("5")>)).accept(<(literal.(type))("5")>));
+        Assert.assertTrue(<name>Predicates.not(<name>Predicates.equal(<(literal.(type))("5")>)).accept(<(literal.(type))("6")>));
+    }
+}
+
+>>
