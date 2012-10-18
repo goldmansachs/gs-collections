@@ -1729,7 +1729,7 @@ public class UnifiedSet<K>
         protected int count;
         protected int position;
         protected int chainPosition;
-        protected K lastReturned;
+        protected boolean lastReturned;
 
         public boolean hasNext()
         {
@@ -1738,7 +1738,7 @@ public class UnifiedSet<K>
 
         public void remove()
         {
-            if (this.lastReturned == null)
+            if (!this.lastReturned)
             {
                 throw new IllegalStateException("next() must be called as many times as remove()");
             }
@@ -1760,14 +1760,14 @@ public class UnifiedSet<K>
             }
             UnifiedSet.this.table[pos] = null;
             this.position = pos;
-            this.lastReturned = null;
+            this.lastReturned = false;
         }
 
         protected void removeFromChain()
         {
             ChainedBucket chain = (ChainedBucket) UnifiedSet.this.table[this.position];
             chain.remove(--this.chainPosition);
-            this.lastReturned = null;
+            this.lastReturned = false;
         }
 
         protected void removeLastFromChain(ChainedBucket bucket, int tableIndex)
@@ -1777,7 +1777,7 @@ public class UnifiedSet<K>
             {
                 UnifiedSet.this.table[tableIndex] = null;
             }
-            this.lastReturned = null;
+            this.lastReturned = false;
         }
 
         protected K nextFromChain()
@@ -1790,7 +1790,7 @@ public class UnifiedSet<K>
                 this.chainPosition = 0;
                 this.position++;
             }
-            this.lastReturned = (K) key;
+            this.lastReturned = true;
             return UnifiedSet.this.nonSentinel(key);
         }
 
@@ -1816,7 +1816,7 @@ public class UnifiedSet<K>
                 return this.nextFromChain();
             }
             this.position++;
-            this.lastReturned = (K) key;
+            this.lastReturned = true;
             return UnifiedSet.this.nonSentinel(key);
         }
     }

@@ -1348,7 +1348,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         protected int count;
         protected int position;
         protected int chainPosition;
-        protected K lastReturned;
+        protected boolean lastReturned;
 
         public boolean hasNext()
         {
@@ -1357,7 +1357,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
 
         public void remove()
         {
-            if (this.lastReturned == null)
+            if (!this.lastReturned)
             {
                 throw new IllegalStateException("next() must be called as many times as remove()");
             }
@@ -1380,7 +1380,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
             UnifiedMap.this.table[pos] = null;
             UnifiedMap.this.table[pos + 1] = null;
             this.position = pos;
-            this.lastReturned = null;
+            this.lastReturned = false;
         }
 
         protected void removeFromChain()
@@ -1397,7 +1397,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
             chain[replacePos] = null;
             chain[replacePos + 1] = null;
             this.chainPosition = pos;
-            this.lastReturned = null;
+            this.lastReturned = false;
         }
 
         protected void removeLastFromChain(Object[] chain, int tableIndex)
@@ -1417,7 +1417,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
                 chain[pos] = null;
                 chain[pos + 1] = null;
             }
-            this.lastReturned = null;
+            this.lastReturned = false;
         }
     }
 
@@ -1434,7 +1434,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
                 this.chainPosition = 0;
                 this.position += 2;
             }
-            this.lastReturned = (K) key;
+            this.lastReturned = true;
             return UnifiedMap.this.nonSentinel(key);
         }
 
@@ -1460,7 +1460,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
                 return this.nextFromChain();
             }
             this.position += 2;
-            this.lastReturned = (K) key;
+            this.lastReturned = true;
             return UnifiedMap.this.nonSentinel(key);
         }
     }
@@ -1815,7 +1815,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
                 this.chainPosition = 0;
                 this.position += 2;
             }
-            this.lastReturned = (K) key;
+            this.lastReturned = true;
             return new WeakBoundEntry<K, V>(UnifiedMap.this.nonSentinel(key), (V) value, this.holder);
         }
 
@@ -1842,7 +1842,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
                 return this.nextFromChain();
             }
             this.position += 2;
-            this.lastReturned = (K) key;
+            this.lastReturned = true;
             return new WeakBoundEntry<K, V>(UnifiedMap.this.nonSentinel(key), (V) value, this.holder);
         }
     }
@@ -2084,7 +2084,6 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         protected V nextFromChain()
         {
             Object[] chain = (Object[]) UnifiedMap.this.table[this.position + 1];
-            Object key = chain[this.chainPosition];
             Object val = chain[this.chainPosition + 1];
             this.chainPosition += 2;
             if (this.chainPosition >= chain.length
@@ -2093,7 +2092,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
                 this.chainPosition = 0;
                 this.position += 2;
             }
-            this.lastReturned = (K) key;
+            this.lastReturned = true;
             return (V) val;
         }
 
@@ -2120,7 +2119,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
                 return this.nextFromChain();
             }
             this.position += 2;
-            this.lastReturned = (K) key;
+            this.lastReturned = true;
             return (V) val;
         }
     }

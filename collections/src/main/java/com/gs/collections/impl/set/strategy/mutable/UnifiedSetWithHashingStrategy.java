@@ -1778,7 +1778,7 @@ public class UnifiedSetWithHashingStrategy<K>
         protected int count;
         protected int position;
         protected int chainPosition;
-        protected K lastReturned;
+        protected boolean lastReturned;
 
         public boolean hasNext()
         {
@@ -1787,7 +1787,7 @@ public class UnifiedSetWithHashingStrategy<K>
 
         public void remove()
         {
-            if (this.lastReturned == null)
+            if (!this.lastReturned)
             {
                 throw new IllegalStateException("next() must be called as many times as remove()");
             }
@@ -1809,14 +1809,14 @@ public class UnifiedSetWithHashingStrategy<K>
             }
             UnifiedSetWithHashingStrategy.this.table[pos] = null;
             this.position = pos;
-            this.lastReturned = null;
+            this.lastReturned = false;
         }
 
         protected void removeFromChain()
         {
             ChainedBucket chain = (ChainedBucket) UnifiedSetWithHashingStrategy.this.table[this.position];
             chain.remove(--this.chainPosition);
-            this.lastReturned = null;
+            this.lastReturned = false;
         }
 
         protected void removeLastFromChain(ChainedBucket bucket, int tableIndex)
@@ -1826,7 +1826,7 @@ public class UnifiedSetWithHashingStrategy<K>
             {
                 UnifiedSetWithHashingStrategy.this.table[tableIndex] = null;
             }
-            this.lastReturned = null;
+            this.lastReturned = false;
         }
 
         protected K nextFromChain()
@@ -1839,7 +1839,7 @@ public class UnifiedSetWithHashingStrategy<K>
                 this.chainPosition = 0;
                 this.position++;
             }
-            this.lastReturned = (K) key;
+            this.lastReturned = true;
             return UnifiedSetWithHashingStrategy.this.nonSentinel(key);
         }
 
@@ -1865,7 +1865,7 @@ public class UnifiedSetWithHashingStrategy<K>
                 return this.nextFromChain();
             }
             this.position++;
-            this.lastReturned = (K) key;
+            this.lastReturned = true;
             return UnifiedSetWithHashingStrategy.this.nonSentinel(key);
         }
     }
