@@ -35,15 +35,15 @@ import net.jcip.annotations.NotThreadSafe;
  * <name>ArrayList is similar to {@link FastList}, and is memory-optimized for <type> primitives.
  */
 @NotThreadSafe
-public class <name>ArrayList
+public final class <name>ArrayList
         implements <name>Iterable, Externalizable
 {
     private static final long serialVersionUID = 1L;
     private static final <type>[] DEFAULT_SIZED_EMPTY_ARRAY = {};
     private static final <type>[] ZERO_SIZED_ARRAY = {};
 
-    protected int size;
-    protected transient <type>[] items = DEFAULT_SIZED_EMPTY_ARRAY;
+    private int size;
+    private transient <type>[] items = DEFAULT_SIZED_EMPTY_ARRAY;
 
     public <name>ArrayList()
     {
@@ -54,7 +54,7 @@ public class <name>ArrayList
         this.items = initialCapacity == 0 ? ZERO_SIZED_ARRAY : new <type>[initialCapacity];
     }
 
-    protected <name>ArrayList(<type>[] array)
+    public <name>ArrayList(<type>... array)
     {
         this.size = array.length;
         this.items = array;
@@ -590,7 +590,7 @@ public class <name>ArrayList
         }
     }
 
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
+    public void readExternal(ObjectInput in) throws IOException
     {
         this.size = in.readInt();
         this.items = new <type>[this.size];
