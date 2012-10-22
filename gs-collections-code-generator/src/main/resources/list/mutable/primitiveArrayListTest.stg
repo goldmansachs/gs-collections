@@ -138,7 +138,7 @@ public class <name>ArrayListTest
         <name>ArrayList arrayList = <name>ArrayList.newListWith(<["1", "2", "1"]:(literal.(type))(); separator=", ">);
         Assert.assertEquals(0L, arrayList.indexOf(<(literal.(type))("1")>));
         Assert.assertEquals(1L, arrayList.indexOf(<(literal.(type))("2")>));
-        Assert.assertEquals(-1L, arrayList.lastIndexOf(<(literal.(type))("9")>));
+        Assert.assertEquals(-1L, arrayList.indexOf(<(literal.(type))("9")>));
     }
 
     @Test
