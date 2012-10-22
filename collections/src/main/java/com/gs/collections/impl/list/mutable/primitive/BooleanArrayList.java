@@ -91,7 +91,7 @@ public final class BooleanArrayList
 
     public void clear()
     {
-        if (this.size > 0)
+        if (this.items != null)
         {
             this.items.clear();
             this.size = 0;
