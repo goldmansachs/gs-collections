@@ -113,7 +113,7 @@ public class CollectDoubleIterable<T>
 
     public <V> RichIterable<V> collect(DoubleToObjectFunction<? extends V> function)
     {
-        return new CollectDoubleToObjectIterable<T, V>(this, function);
+        return new CollectDoubleToObjectIterable<V>(this, function);
     }
 
     public double sum()

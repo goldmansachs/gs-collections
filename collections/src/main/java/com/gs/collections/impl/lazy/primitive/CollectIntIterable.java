@@ -31,6 +31,7 @@ import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.iterator.IntIterator;
+import com.gs.collections.impl.block.factory.primitive.IntPredicates;
 import net.jcip.annotations.Immutable;
 
 /**
@@ -111,9 +112,19 @@ public class CollectIntIterable<T>
         });
     }
 
+    public IntIterable select(IntPredicate predicate)
+    {
+        return new SelectIntIterable(this, predicate);
+    }
+
+    public IntIterable reject(IntPredicate predicate)
+    {
+        return new SelectIntIterable(this, IntPredicates.not(predicate));
+    }
+
     public <V> LazyIterable<V> collect(IntToObjectFunction<? extends V> function)
     {
-        return new CollectIntToObjectIterable<T, V>(this, function);
+        return new CollectIntToObjectIterable<V>(this, function);
     }
 
     public long sum()

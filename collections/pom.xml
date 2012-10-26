@@ -131,6 +131,18 @@
                             <templateFileName>api/block/factory/primitivePredicates.stg</templateFileName>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>select</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <targetPath>target/generated-sources/java/com/gs/collections/impl/lazy/primitive
+                            </targetPath>
+                            <templateFileName>lazy/primitiveSelectIterable.stg</templateFileName>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
 

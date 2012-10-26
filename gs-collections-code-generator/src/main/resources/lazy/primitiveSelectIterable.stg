@@ -1,0 +1,253 @@
+import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveHashcode.stg"
+import "primitiveLiteral.stg"
+
+fileName(primitive) ::= "Select<primitive.name>Iterable"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.lazy.primitive;
+
+import java.util.Arrays;
+import java.util.NoSuchElementException;
+
+import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
+import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
+
+public class Select<name>Iterable
+    implements <name>Iterable
+{
+    private final <name>Iterable delegate;
+    private final <name>Predicate predicate;
+
+    public Select<name>Iterable(<name>Iterable delegate, <name>Predicate predicate)
+    {
+        this.delegate = delegate;
+        this.predicate = predicate;
+    }
+
+    public <name>Iterator <type>Iterator()
+    {
+        return new Select<name>Iterator(this.delegate, this.predicate);
+    }
+
+    public void forEach(<name>Procedure procedure)
+    {
+        this.delegate.forEach(new If<name>Procedure(procedure));
+    }
+
+    public int size()
+    {
+        return this.delegate.count(this.predicate);
+    }
+
+    public int count(<name>Predicate predicate)
+    {
+        Count<name>Procedure count<name>Procedure = new Count<name>Procedure(predicate);
+        this.forEach(count<name>Procedure);
+        return count<name>Procedure.getCount();
+    }
+
+    public boolean anySatisfy(<name>Predicate predicate)
+    {
+        return this.delegate.anySatisfy(<name>Predicates.and(this.predicate, predicate));
+    }
+
+    public boolean allSatisfy(<name>Predicate predicate)
+    {
+        return !this.anySatisfy(<name>Predicates.not(predicate));
+    }
+
+    public <name>Iterable select(<name>Predicate predicate)
+    {
+        return new Select<name>Iterable(this, predicate);
+    }
+
+    public <name>Iterable reject(<name>Predicate predicate)
+    {
+        return new Select<name>Iterable(this, <name>Predicates.not(predicate));
+    }
+
+    public \<V\> RichIterable\<V\> collect(<name>ToObjectFunction\<? extends V\> function)
+    {
+        return new Collect<name>ToObjectIterable\<V\>(this, function);
+    }
+
+    public <wideType.(type)> sum()
+    {
+        <wideType.(type)> sum = <wideZero.(type)>;
+        for (<name>Iterator <type>Iterator = this.<type>Iterator(); <type>Iterator.hasNext() ;)
+        {
+            sum += <type>Iterator.next();
+        }
+        return sum;
+    }
+
+    public <type> max()
+    {
+        <name>Iterator <type>Iterator = this.<type>Iterator();
+        <type> max = <type>Iterator.next();
+        while (<type>Iterator.hasNext())
+        {
+            max = (<type>) Math.max(max, <type>Iterator.next());
+        }
+        return max;
+    }
+
+    public <type> min()
+    {
+        <name>Iterator <type>Iterator = this.<type>Iterator();
+        <type> min = <type>Iterator.next();
+        while (<type>Iterator.hasNext())
+        {
+            min = (<type>) Math.min(min, <type>Iterator.next());
+        }
+        return min;
+    }
+
+    public double average()
+    {
+        return <castSum.(type)>this.sum() / (double) this.size();
+    }
+
+    public double median()
+    {
+        <type>[] sortedArray = this.toSortedArray();
+        int middleIndex = sortedArray.length \>\> 1;
+        if (sortedArray.length > 1 && (sortedArray.length & 1) == 0)
+        {
+            <type> first = sortedArray[middleIndex];
+            <type> second = sortedArray[middleIndex - 1];
+            return (<castType.(type)>first + <castType.(type)>second) / 2.0;
+        }
+        return <castType.(type)>sortedArray[middleIndex];
+    }
+
+    public <type>[] toArray()
+    {
+        final <type>[] array = new <type>[this.size()];
+        this.forEach(new <name>Procedure()
+        {
+            @SuppressWarnings("FieldMayBeFinal")
+            private int index = 0;
+            public void value(<type> each)
+            {
+                array[this.index++] = each;
+            }
+        });
+        return array;
+    }
+
+    public <type>[] toSortedArray()
+    {
+        <type>[] array = this.toArray();
+        Arrays.sort(array);
+        return array;
+    }
+
+    private static class Count<name>Procedure implements <name>Procedure
+    {
+        private static final long serialVersionUID = 1L;
+        private final <name>Predicate predicate;
+        private int counter = 0;
+
+        private Count<name>Procedure(<name>Predicate predicate)
+        {
+            this.predicate = predicate;
+        }
+
+        public void value(<type> each)
+        {
+            if (this.predicate.accept(each))
+            {
+                this.counter++;
+            }
+        }
+
+        public int getCount()
+        {
+            return this.counter;
+        }
+    }
+
+    private class If<name>Procedure implements <name>Procedure
+    {
+        private static final long serialVersionUID = 1L;
+        private final <name>Procedure procedure;
+
+        private If<name>Procedure(<name>Procedure procedure)
+        {
+            this.procedure = procedure;
+        }
+
+        public void value(<type> each)
+        {
+            if (Select<name>Iterable.this.predicate.accept(each))
+            {
+                this.procedure.value(each);
+            }
+        }
+    }
+
+    private static final class Select<name>Iterator
+            implements <name>Iterator
+    {
+        private final <name>Iterator iterator;
+        private final <name>Predicate predicate;
+        private <type> next = 0;
+        private boolean verifiedHasNext = false;
+
+        private Select<name>Iterator(<name>Iterable iterable, <name>Predicate predicate)
+        {
+            this(iterable.<type>Iterator(), predicate);
+        }
+
+        private Select<name>Iterator(<name>Iterator iterator, <name>Predicate predicate)
+        {
+            this.iterator = iterator;
+            this.predicate = predicate;
+        }
+
+        public boolean hasNext()
+        {
+            if (this.verifiedHasNext)
+            {
+                return true;
+            }
+            while (this.iterator.hasNext())
+            {
+                <type> temp = this.iterator.next();
+                if (this.predicate.accept(temp))
+                {
+                    this.next = temp;
+                    this.verifiedHasNext = true;
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public <type> next()
+        {
+            if (this.verifiedHasNext || this.hasNext())
+            {
+                this.verifiedHasNext = false;
+                return this.next;
+            }
+            throw new NoSuchElementException();
+        }
+    }
+}
+
+>>

@@ -499,7 +499,7 @@ public final class <name>ArrayList
     {
         <type>[] sortedArray = this.toSortedArray();
         int middleIndex = sortedArray.length \>\> 1;
-        if (sortedArray.length \> 1 && (sortedArray.length & 1) == 0)
+        if (sortedArray.length > 1 && (sortedArray.length & 1) == 0)
         {
             <type> first = sortedArray[middleIndex];
             <type> second = sortedArray[middleIndex - 1];

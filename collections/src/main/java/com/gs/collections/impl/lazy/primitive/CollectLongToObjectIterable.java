@@ -18,6 +18,7 @@ package com.gs.collections.impl.lazy.primitive;
 
 import java.util.Iterator;
 
+import com.gs.collections.api.LongIterable;
 import com.gs.collections.api.block.function.primitive.LongToObjectFunction;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -26,13 +27,13 @@ import com.gs.collections.api.block.procedure.primitive.LongProcedure;
 import com.gs.collections.api.iterator.LongIterator;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
 
-public class CollectLongToObjectIterable<T, V>
+public class CollectLongToObjectIterable<V>
         extends AbstractLazyIterable<V>
 {
-    private final CollectLongIterable<T> iterable;
+    private final LongIterable iterable;
     private final LongToObjectFunction<? extends V> function;
 
-    public CollectLongToObjectIterable(CollectLongIterable<T> iterable, LongToObjectFunction<? extends V> function)
+    public CollectLongToObjectIterable(LongIterable iterable, LongToObjectFunction<? extends V> function)
     {
         this.iterable = iterable;
         this.function = function;

@@ -113,7 +113,7 @@ public class CollectLongIterable<T>
 
     public <V> RichIterable<V> collect(LongToObjectFunction<? extends V> function)
     {
-        return new CollectLongToObjectIterable<T, V>(this, function);
+        return new CollectLongToObjectIterable<V>(this, function);
     }
 
     public long sum()

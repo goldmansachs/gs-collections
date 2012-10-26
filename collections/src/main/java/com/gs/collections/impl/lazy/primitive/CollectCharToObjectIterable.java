@@ -18,22 +18,26 @@ package com.gs.collections.impl.lazy.primitive;
 
 import java.util.Iterator;
 
-import com.gs.collections.api.FloatIterable;
-import com.gs.collections.api.block.function.primitive.FloatToObjectFunction;
+import com.gs.collections.api.ByteIterable;
+import com.gs.collections.api.CharIterable;
+import com.gs.collections.api.block.function.primitive.ByteToObjectFunction;
+import com.gs.collections.api.block.function.primitive.CharToObjectFunction;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.FloatProcedure;
-import com.gs.collections.api.iterator.FloatIterator;
+import com.gs.collections.api.block.procedure.primitive.ByteProcedure;
+import com.gs.collections.api.block.procedure.primitive.CharProcedure;
+import com.gs.collections.api.iterator.ByteIterator;
+import com.gs.collections.api.iterator.CharIterator;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
 
-public class CollectFloatToObjectIterable<V>
+public class CollectCharToObjectIterable<V>
         extends AbstractLazyIterable<V>
 {
-    private final FloatIterable iterable;
-    private final FloatToObjectFunction<? extends V> function;
+    private final CharIterable iterable;
+    private final CharToObjectFunction<? extends V> function;
 
-    public CollectFloatToObjectIterable(FloatIterable iterable, FloatToObjectFunction<? extends V> function)
+    public CollectCharToObjectIterable(CharIterable iterable, CharToObjectFunction<? extends V> function)
     {
         this.iterable = iterable;
         this.function = function;
@@ -41,35 +45,35 @@ public class CollectFloatToObjectIterable<V>
 
     public void forEach(final Procedure<? super V> procedure)
     {
-        this.iterable.forEach(new FloatProcedure()
+        this.iterable.forEach(new CharProcedure()
         {
-            public void value(float each)
+            public void value(char each)
             {
-                procedure.value(CollectFloatToObjectIterable.this.function.valueOf(each));
+                procedure.value(CollectCharToObjectIterable.this.function.valueOf(each));
             }
         });
     }
 
     public void forEachWithIndex(final ObjectIntProcedure<? super V> objectIntProcedure)
     {
-        this.iterable.forEach(new FloatProcedure()
+        this.iterable.forEach(new CharProcedure()
         {
             private int index;
 
-            public void value(float each)
+            public void value(char each)
             {
-                objectIntProcedure.value(CollectFloatToObjectIterable.this.function.valueOf(each), this.index++);
+                objectIntProcedure.value(CollectCharToObjectIterable.this.function.valueOf(each), this.index++);
             }
         });
     }
 
     public <P> void forEachWith(final Procedure2<? super V, ? super P> procedure, final P parameter)
     {
-        this.iterable.forEach(new FloatProcedure()
+        this.iterable.forEach(new CharProcedure()
         {
-            public void value(float each)
+            public void value(char each)
             {
-                procedure.value(CollectFloatToObjectIterable.this.function.valueOf(each), parameter);
+                procedure.value(CollectCharToObjectIterable.this.function.valueOf(each), parameter);
             }
         });
     }
@@ -78,7 +82,7 @@ public class CollectFloatToObjectIterable<V>
     {
         return new Iterator<V>()
         {
-            private final FloatIterator iterator = CollectFloatToObjectIterable.this.iterable.floatIterator();
+            private final CharIterator iterator = CollectCharToObjectIterable.this.iterable.charIterator();
 
             public boolean hasNext()
             {
@@ -87,7 +91,7 @@ public class CollectFloatToObjectIterable<V>
 
             public V next()
             {
-                return CollectFloatToObjectIterable.this.function.valueOf(this.iterator.next());
+                return CollectCharToObjectIterable.this.function.valueOf(this.iterator.next());
             }
 
             public void remove()

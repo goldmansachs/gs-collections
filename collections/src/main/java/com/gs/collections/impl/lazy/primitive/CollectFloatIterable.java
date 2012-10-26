@@ -114,7 +114,7 @@ public class CollectFloatIterable<T>
 
     public <V> RichIterable<V> collect(FloatToObjectFunction<? extends V> function)
     {
-        return new CollectFloatToObjectIterable<T, V>(this, function);
+        return new CollectFloatToObjectIterable<V>(this, function);
     }
 
     public double sum()

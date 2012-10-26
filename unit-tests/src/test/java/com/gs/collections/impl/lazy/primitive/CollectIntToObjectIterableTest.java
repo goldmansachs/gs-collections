@@ -36,7 +36,7 @@ public class CollectIntToObjectIterableTest
     @Override
     protected <T> LazyIterable<T> newWith(T... elements)
     {
-        return new CollectIntToObjectIterable<T, T>(
+        return new CollectIntToObjectIterable<T>(
                 new CollectIntIterable(
                         ArrayAdapter.<T>adapt(elements).asLazy(),
                         PrimitiveFunctions.unboxNumberToInt()),

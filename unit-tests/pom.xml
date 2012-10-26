@@ -168,6 +168,19 @@
                             <test>true</test>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>select</id>
+                        <phase>generate-test-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <targetPath>target/generated-test-sources/java/com/gs/collections/impl/lazy/primitive
+                            </targetPath>
+                            <templateFileName>lazy/primitiveSelectIterableTest.stg</templateFileName>
+                            <test>true</test>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
 

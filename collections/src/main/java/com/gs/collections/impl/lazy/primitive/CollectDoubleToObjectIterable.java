@@ -18,6 +18,7 @@ package com.gs.collections.impl.lazy.primitive;
 
 import java.util.Iterator;
 
+import com.gs.collections.api.DoubleIterable;
 import com.gs.collections.api.block.function.primitive.DoubleToObjectFunction;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -26,13 +27,13 @@ import com.gs.collections.api.block.procedure.primitive.DoubleProcedure;
 import com.gs.collections.api.iterator.DoubleIterator;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
 
-public class CollectDoubleToObjectIterable<T, V>
+public class CollectDoubleToObjectIterable<V>
         extends AbstractLazyIterable<V>
 {
-    private final CollectDoubleIterable<T> iterable;
+    private final DoubleIterable iterable;
     private final DoubleToObjectFunction<? extends V> function;
 
-    public CollectDoubleToObjectIterable(CollectDoubleIterable<T> iterable, DoubleToObjectFunction<? extends V> function)
+    public CollectDoubleToObjectIterable(DoubleIterable iterable, DoubleToObjectFunction<? extends V> function)
     {
         this.iterable = iterable;
         this.function = function;

@@ -18,6 +18,7 @@ package com.gs.collections.impl.lazy.primitive;
 
 import java.util.Iterator;
 
+import com.gs.collections.api.IntIterable;
 import com.gs.collections.api.block.function.primitive.IntToObjectFunction;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -26,13 +27,13 @@ import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.iterator.IntIterator;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
 
-public class CollectIntToObjectIterable<T, V>
+public class CollectIntToObjectIterable<V>
         extends AbstractLazyIterable<V>
 {
-    private final CollectIntIterable<T> iterable;
+    private final IntIterable iterable;
     private final IntToObjectFunction<? extends V> function;
 
-    public CollectIntToObjectIterable(CollectIntIterable<T> iterable, IntToObjectFunction<? extends V> function)
+    public CollectIntToObjectIterable(IntIterable iterable, IntToObjectFunction<? extends V> function)
     {
         this.iterable = iterable;
         this.function = function;
