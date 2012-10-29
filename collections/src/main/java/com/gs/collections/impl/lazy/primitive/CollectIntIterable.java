@@ -79,6 +79,16 @@ public class CollectIntIterable<T>
         return this.iterable.size();
     }
 
+    public boolean isEmpty()
+    {
+        return this.iterable.isEmpty();
+    }
+
+    public boolean notEmpty()
+    {
+        return this.iterable.notEmpty();
+    }
+
     public int count(final IntPredicate predicate)
     {
         return this.iterable.count(new Predicate<T>()
@@ -120,6 +130,20 @@ public class CollectIntIterable<T>
     public IntIterable reject(IntPredicate predicate)
     {
         return new SelectIntIterable(this, IntPredicates.not(predicate));
+    }
+
+    public int detectIfNone(IntPredicate predicate, int ifNone)
+    {
+        IntIterator iterator = this.intIterator();
+        while (iterator.hasNext())
+        {
+            int next = iterator.next();
+            if (predicate.accept(next))
+            {
+                return next;
+            }
+        }
+        return ifNone;
     }
 
     public <V> LazyIterable<V> collect(IntToObjectFunction<? extends V> function)

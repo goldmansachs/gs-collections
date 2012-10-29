@@ -31,6 +31,7 @@ import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.DoubleProcedure;
 import com.gs.collections.api.iterator.DoubleIterator;
+import com.gs.collections.impl.block.factory.primitive.DoublePredicates;
 import net.jcip.annotations.Immutable;
 
 /**
@@ -78,6 +79,16 @@ public class CollectDoubleIterable<T>
         return this.iterable.size();
     }
 
+    public boolean isEmpty()
+    {
+        return this.iterable.isEmpty();
+    }
+
+    public boolean notEmpty()
+    {
+        return this.iterable.notEmpty();
+    }
+
     public int count(final DoublePredicate predicate)
     {
         return this.iterable.count(new Predicate<T>()
@@ -100,6 +111,20 @@ public class CollectDoubleIterable<T>
         });
     }
 
+    public double detectIfNone(DoublePredicate predicate, double ifNone)
+    {
+        DoubleIterator iterator = this.doubleIterator();
+        while (iterator.hasNext())
+        {
+            double next = iterator.next();
+            if (predicate.accept(next))
+            {
+                return next;
+            }
+        }
+        return ifNone;
+    }
+
     public boolean allSatisfy(final DoublePredicate predicate)
     {
         return this.iterable.allSatisfy(new Predicate<T>()
@@ -109,6 +134,16 @@ public class CollectDoubleIterable<T>
                 return predicate.accept(CollectDoubleIterable.this.function.doubleValueOf(each));
             }
         });
+    }
+
+    public DoubleIterable select(DoublePredicate predicate)
+    {
+        return new SelectDoubleIterable(this, predicate);
+    }
+
+    public DoubleIterable reject(DoublePredicate predicate)
+    {
+        return new SelectDoubleIterable(this, DoublePredicates.not(predicate));
     }
 
     public <V> RichIterable<V> collect(DoubleToObjectFunction<? extends V> function)

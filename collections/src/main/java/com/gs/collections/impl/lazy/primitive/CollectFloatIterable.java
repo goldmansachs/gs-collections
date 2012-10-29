@@ -32,6 +32,7 @@ import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.FloatProcedure;
 import com.gs.collections.api.iterator.FloatIterator;
+import com.gs.collections.impl.block.factory.primitive.FloatPredicates;
 import net.jcip.annotations.Immutable;
 
 /**
@@ -79,6 +80,16 @@ public class CollectFloatIterable<T>
         return this.iterable.size();
     }
 
+    public boolean isEmpty()
+    {
+        return this.iterable.isEmpty();
+    }
+
+    public boolean notEmpty()
+    {
+        return this.iterable.notEmpty();
+    }
+
     public int count(final FloatPredicate predicate)
     {
         return this.iterable.count(new Predicate<T>()
@@ -110,6 +121,30 @@ public class CollectFloatIterable<T>
                 return predicate.accept(CollectFloatIterable.this.function.floatValueOf(each));
             }
         });
+    }
+
+    public FloatIterable select(FloatPredicate predicate)
+    {
+        return new SelectFloatIterable(this, predicate);
+    }
+
+    public FloatIterable reject(FloatPredicate predicate)
+    {
+        return new SelectFloatIterable(this, FloatPredicates.not(predicate));
+    }
+
+    public float detectIfNone(FloatPredicate predicate, float ifNone)
+    {
+        FloatIterator iterator = this.floatIterator();
+        while (iterator.hasNext())
+        {
+            float next = iterator.next();
+            if (predicate.accept(next))
+            {
+                return next;
+            }
+        }
+        return ifNone;
     }
 
     public <V> RichIterable<V> collect(FloatToObjectFunction<? extends V> function)

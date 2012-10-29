@@ -31,6 +31,7 @@ import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.LongProcedure;
 import com.gs.collections.api.iterator.LongIterator;
+import com.gs.collections.impl.block.factory.primitive.LongPredicates;
 import net.jcip.annotations.Immutable;
 
 /**
@@ -78,6 +79,16 @@ public class CollectLongIterable<T>
         return this.iterable.size();
     }
 
+    public boolean isEmpty()
+    {
+        return this.iterable.isEmpty();
+    }
+
+    public boolean notEmpty()
+    {
+        return this.iterable.notEmpty();
+    }
+
     public int count(final LongPredicate predicate)
     {
         return this.iterable.count(new Predicate<T>()
@@ -109,6 +120,30 @@ public class CollectLongIterable<T>
                 return predicate.accept(CollectLongIterable.this.function.longValueOf(each));
             }
         });
+    }
+
+    public LongIterable select(LongPredicate predicate)
+    {
+        return new SelectLongIterable(this, predicate);
+    }
+
+    public long detectIfNone(LongPredicate predicate, long ifNone)
+    {
+        LongIterator iterator = this.longIterator();
+        while (iterator.hasNext())
+        {
+            long next = iterator.next();
+            if (predicate.accept(next))
+            {
+                return next;
+            }
+        }
+        return ifNone;
+    }
+
+    public LongIterable reject(LongPredicate predicate)
+    {
+        return new SelectLongIterable(this, LongPredicates.not(predicate));
     }
 
     public <V> RichIterable<V> collect(LongToObjectFunction<? extends V> function)

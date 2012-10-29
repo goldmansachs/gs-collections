@@ -25,6 +25,7 @@ import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.lazy.iterator.CollectIterator;
 import com.gs.collections.impl.utility.Iterate;
+import com.gs.collections.impl.utility.internal.IterableIterate;
 import net.jcip.annotations.Immutable;
 
 /**
@@ -67,6 +68,18 @@ public class CollectIterable<T, V>
     public int size()
     {
         return Iterate.sizeOf(this.adapted);
+    }
+
+    @Override
+    public boolean isEmpty()
+    {
+        return Iterate.isEmpty(this.adapted);
+    }
+
+    @Override
+    public boolean notEmpty()
+    {
+        return !this.isEmpty();
     }
 
     @Override

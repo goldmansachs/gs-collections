@@ -96,4 +96,22 @@ public class CollectLongToObjectIterable<V>
             }
         };
     }
+
+    @Override
+    public int size()
+    {
+        return this.iterable.size();
+    }
+
+    @Override
+    public boolean isEmpty()
+    {
+        return this.iterable.isEmpty();
+    }
+
+    @Override
+    public boolean notEmpty()
+    {
+        return this.iterable.notEmpty();
+    }
 }

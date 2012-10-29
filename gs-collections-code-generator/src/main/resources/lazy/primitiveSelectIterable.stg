@@ -52,6 +52,16 @@ public class Select<name>Iterable
         return this.delegate.count(this.predicate);
     }
 
+    public boolean isEmpty()
+    {
+        return this.size() == 0;
+    }
+
+    public boolean notEmpty()
+    {
+        return this.size() > 0;
+    }
+
     public int count(<name>Predicate predicate)
     {
         Count<name>Procedure count<name>Procedure = new Count<name>Procedure(predicate);
@@ -77,6 +87,19 @@ public class Select<name>Iterable
     public <name>Iterable reject(<name>Predicate predicate)
     {
         return new Select<name>Iterable(this, <name>Predicates.not(predicate));
+    }
+
+    public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
+    {
+        for (<name>Iterator <type>Iterator = this.<type>Iterator(); <type>Iterator.hasNext() ;)
+        {
+            <type> item = <type>Iterator.next();
+            if (predicate.accept(item))
+            {
+                return item;
+            }
+        }
+        return ifNone;
     }
 
     public \<V\> RichIterable\<V\> collect(<name>ToObjectFunction\<? extends V\> function)

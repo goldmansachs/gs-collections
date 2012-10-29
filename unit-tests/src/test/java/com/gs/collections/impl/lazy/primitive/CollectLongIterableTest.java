@@ -44,7 +44,20 @@ public class CollectLongIterableTest
     }
 
     @Test
-    public void testForEach()
+    public void size()
+    {
+        Assert.assertEquals(3L, this.longIterable.size());
+    }
+
+    @Test
+    public void empty()
+    {
+        Assert.assertTrue(this.longIterable.notEmpty());
+        Assert.assertFalse(this.longIterable.isEmpty());
+    }
+
+    @Test
+    public void forEach()
     {
         final long[] value = new long[1];
         this.longIterable.forEach(new LongProcedure()
@@ -81,44 +94,65 @@ public class CollectLongIterableTest
     }
 
     @Test
-    public void testSum()
+    public void select()
+    {
+        Assert.assertEquals(3L, this.longIterable.select(LongPredicates.lessThan(4L)).size());
+        Assert.assertEquals(2L, this.longIterable.select(LongPredicates.lessThan(3L)).size());
+    }
+
+    @Test
+    public void reject()
+    {
+        Assert.assertEquals(0L, this.longIterable.reject(LongPredicates.lessThan(4L)).size());
+        Assert.assertEquals(1L, this.longIterable.reject(LongPredicates.lessThan(3L)).size());
+    }
+
+    @Test
+    public void detectIfNone()
+    {
+        Assert.assertEquals(1L, this.longIterable.detectIfNone(LongPredicates.lessThan(4L), 0L));
+        Assert.assertEquals(0L, this.longIterable.detectIfNone(LongPredicates.greaterThan(3L), 0L));
+    }
+
+    @Test
+    public void sum()
     {
         Assert.assertEquals(6, this.longIterable.sum());
     }
 
     @Test
-    public void testMax()
+    public void max()
     {
         Assert.assertEquals(3, Interval.fromTo(-3, 3).collectLong(PrimitiveFunctions.unboxIntegerToLong()).max());
     }
 
     @Test
-    public void testMin()
+    public void min()
     {
         Assert.assertEquals(-3, Interval.fromTo(-3, 3).collectLong(PrimitiveFunctions.unboxIntegerToLong()).min());
     }
 
     @Test
-    public void testAverage()
+    public void average()
     {
         Assert.assertEquals(2.5, Interval.oneTo(4).collectLong(PrimitiveFunctions.unboxIntegerToLong()).average(), 0.001);
     }
 
     @Test
-    public void testMedian()
+    public void median()
     {
         Assert.assertEquals(2.5d, Interval.oneTo(4).collectLong(PrimitiveFunctions.unboxIntegerToLong()).median(), 0.001);
         Assert.assertEquals(4.0d, Interval.oneTo(7).collectLong(PrimitiveFunctions.unboxIntegerToLong()).median(), 0.001);
     }
 
     @Test
-    public void testToArray()
+    public void toArray()
     {
         Assert.assertArrayEquals(new long[]{1, 2, 3, 4}, Interval.oneTo(4).collectLong(PrimitiveFunctions.unboxIntegerToLong()).toArray());
     }
 
     @Test
-    public void testToSortedArray()
+    public void toSortedArray()
     {
         Assert.assertArrayEquals(new long[]{1, 2, 3, 4}, Interval.fromTo(4, 1).collectLong(PrimitiveFunctions.unboxIntegerToLong()).toSortedArray());
     }

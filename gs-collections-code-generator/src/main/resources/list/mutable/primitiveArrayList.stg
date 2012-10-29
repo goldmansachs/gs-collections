@@ -83,7 +83,12 @@ public final class <name>ArrayList
 
     public boolean isEmpty()
     {
-        return this.size == 0;
+        return this.size() == 0;
+    }
+
+    public boolean notEmpty()
+    {
+        return this.size() > 0;
     }
 
     public void clear()
@@ -432,6 +437,47 @@ public final class <name>ArrayList
             }
         }
         return true;
+    }
+
+    public <name>Iterable select(<name>Predicate predicate)
+    {
+        <name>ArrayList result = new <name>ArrayList();
+        for (int i = 0; i \< this.size; i++)
+        {
+            <type> item = this.items[i];
+            if (predicate.accept(item))
+            {
+                result.add(item);
+            }
+        }
+        return result;
+    }
+
+    public <name>Iterable reject(<name>Predicate predicate)
+    {
+        <name>ArrayList result = new <name>ArrayList();
+        for (int i = 0; i \< this.size; i++)
+        {
+            <type> item = this.items[i];
+            if (!predicate.accept(item))
+            {
+                result.add(item);
+            }
+        }
+        return result;
+    }
+
+    public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
+    {
+        for (int i = 0; i \< this.size; i++)
+        {
+            <type> item = this.items[i];
+            if (predicate.accept(item))
+            {
+                return item;
+            }
+        }
+        return ifNone;
     }
 
     public \<V\> RichIterable\<V\> collect(<name>ToObjectFunction\<? extends V\> function)

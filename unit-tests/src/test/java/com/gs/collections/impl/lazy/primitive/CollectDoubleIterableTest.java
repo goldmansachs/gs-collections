@@ -44,7 +44,20 @@ public class CollectDoubleIterableTest
     }
 
     @Test
-    public void testForEach()
+    public void size()
+    {
+        Assert.assertEquals(3L, this.doubleIterable.size());
+    }
+
+    @Test
+    public void empty()
+    {
+        Assert.assertTrue(this.doubleIterable.notEmpty());
+        Assert.assertFalse(this.doubleIterable.isEmpty());
+    }
+
+    @Test
+    public void forEach()
     {
         final double[] value = new double[1];
         this.doubleIterable.forEach(new DoubleProcedure()
@@ -85,44 +98,65 @@ public class CollectDoubleIterableTest
     }
 
     @Test
-    public void testSum()
+    public void select()
+    {
+        Assert.assertEquals(3L, this.doubleIterable.select(DoublePredicates.lessThan(4.0d)).size());
+        Assert.assertEquals(2L, this.doubleIterable.select(DoublePredicates.lessThan(3.0d)).size());
+    }
+
+    @Test
+    public void reject()
+    {
+        Assert.assertEquals(0L, this.doubleIterable.reject(DoublePredicates.lessThan(4.0d)).size());
+        Assert.assertEquals(1L, this.doubleIterable.reject(DoublePredicates.lessThan(3.0d)).size());
+    }
+
+    @Test
+    public void detectIfNone()
+    {
+        Assert.assertEquals(1.0, this.doubleIterable.detectIfNone(DoublePredicates.lessThan(4.0d), 0.0d), 0.0);
+        Assert.assertEquals(0.0, this.doubleIterable.detectIfNone(DoublePredicates.greaterThan(3.0d), 0.0d), 0.0);
+    }
+
+    @Test
+    public void sum()
     {
         Assert.assertEquals(6.0d, this.doubleIterable.sum(), 0.0d);
     }
 
     @Test
-    public void testMax()
+    public void max()
     {
         Assert.assertEquals(3.0d, Interval.fromTo(-3, 3).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).max(), 0.0d);
     }
 
     @Test
-    public void testMin()
+    public void min()
     {
         Assert.assertEquals(-3.0d, Interval.fromTo(-3, 3).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).min(), 0.0d);
     }
 
     @Test
-    public void testAverage()
+    public void average()
     {
         Assert.assertEquals(2.5d, Interval.oneTo(4).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).average(), 0.0d);
     }
 
     @Test
-    public void testMedian()
+    public void median()
     {
         Assert.assertEquals(2.5d, Interval.oneTo(4).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).median(), 0.0d);
         Assert.assertEquals(4.0d, Interval.oneTo(7).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).median(), 0.0d);
     }
 
     @Test
-    public void testToArray()
+    public void toArray()
     {
         Assert.assertArrayEquals(new double[]{1.0d, 2.0d, 3.0d, 4.0d}, Interval.oneTo(4).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).toArray(), 0.0d);
     }
 
     @Test
-    public void testToSortedArray()
+    public void toSortedArray()
     {
         Assert.assertArrayEquals(new double[]{1.0d, 2.0d, 3.0d, 4.0d}, Interval.fromTo(4, 1).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).toSortedArray(), 0.0d);
     }

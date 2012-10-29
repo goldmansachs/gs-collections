@@ -22,6 +22,7 @@ import com.gs.collections.api.block.procedure.primitive.FloatProcedure;
 import com.gs.collections.api.iterator.FloatIterator;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.primitive.FloatPredicates;
+import com.gs.collections.impl.block.factory.primitive.IntPredicates;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import org.junit.Assert;
@@ -45,7 +46,20 @@ public class CollectFloatIterableTest
     }
 
     @Test
-    public void testForEach()
+    public void size()
+    {
+        Assert.assertEquals(3L, this.floatIterable.size());
+    }
+
+    @Test
+    public void empty()
+    {
+        Assert.assertTrue(this.floatIterable.notEmpty());
+        Assert.assertFalse(this.floatIterable.isEmpty());
+    }
+
+    @Test
+    public void forEach()
     {
         final float[] value = new float[1];
         this.floatIterable.forEach(new FloatProcedure()
@@ -86,44 +100,66 @@ public class CollectFloatIterableTest
     }
 
     @Test
-    public void testSum()
+    public void select()
+    {
+        Assert.assertEquals(3L, this.floatIterable.select(FloatPredicates.lessThan(4.0f)).size());
+        Assert.assertEquals(2L, this.floatIterable.select(FloatPredicates.lessThan(3.0f)).size());
+    }
+
+    @Test
+    public void reject()
+    {
+        Assert.assertEquals(0L, this.floatIterable.reject(FloatPredicates.lessThan(4.0f)).size());
+        Assert.assertEquals(1L, this.floatIterable.reject(FloatPredicates.lessThan(3.0f)).size());
+    }
+
+    @Test
+    public void detectIfNone()
+    {
+        Assert.assertEquals(1.0, this.floatIterable.detectIfNone(FloatPredicates.lessThan(4.0f), 0.0f), 0.0);
+        Assert.assertEquals(0.0, this.floatIterable.detectIfNone(FloatPredicates.greaterThan(3.0f), 0.0f), 0.0);
+    }
+
+
+    @Test
+    public void sum()
     {
         Assert.assertEquals(6.0f, this.floatIterable.sum(), 0.0f);
     }
 
     @Test
-    public void testMax()
+    public void max()
     {
         Assert.assertEquals(3.0f, Interval.fromTo(-3, 3).collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).max(), 0.0f);
     }
 
     @Test
-    public void testMin()
+    public void min()
     {
         Assert.assertEquals(-3.0f, Interval.fromTo(-3, 3).collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).min(), 0.0f);
     }
 
     @Test
-    public void testAverage()
+    public void average()
     {
         Assert.assertEquals(2.5f, Interval.oneTo(4).collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).average(), 0.001);
     }
 
     @Test
-    public void testMedian()
+    public void median()
     {
         Assert.assertEquals(2.5d, Interval.oneTo(4).collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).median(), 0.001);
         Assert.assertEquals(4.0d, Interval.oneTo(7).collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).median(), 0.001);
     }
 
     @Test
-    public void testToArray()
+    public void toArray()
     {
         Assert.assertArrayEquals(new float[]{1.0f, 2.0f, 3.0f, 4.0f}, Interval.oneTo(4).collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).toArray(), 0.0f);
     }
 
     @Test
-    public void testToSortedArray()
+    public void toSortedArray()
     {
         Assert.assertArrayEquals(new float[]{1.0f, 2.0f, 3.0f, 4.0f}, Interval.fromTo(4, 1).collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).toSortedArray(), 0.0f);
     }

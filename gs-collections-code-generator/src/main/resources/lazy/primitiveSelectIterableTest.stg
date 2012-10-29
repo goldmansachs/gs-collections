@@ -27,7 +27,7 @@ public class Select<name>IterableTest
     private final Select<name>Iterable iterable = new Select<name>Iterable(<name>ArrayList.newListWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">), <name>Predicates.lessThan(<(literal.(type))("3")>));
 
     @Test
-    public void test<name>Iterator()
+    public void <type>Iterator()
     {
         <wideType.(type)> sum = <wideZero.(type)>;
         for (<name>Iterator iterator = this.iterable.<type>Iterator(); iterator.hasNext() ;)
@@ -38,7 +38,7 @@ public class Select<name>IterableTest
     }
 
     @Test
-    public void testForEach()
+    public void forEach()
     {
         final <wideType.(type)>[] sum = new <wideType.(type)>[1];
         this.iterable.forEach(new <name>Procedure()
@@ -52,26 +52,34 @@ public class Select<name>IterableTest
     }
 
     @Test
-    public void testSize()
+    public void size()
     {
         Assert.assertEquals(2L, this.iterable.size());
     }
 
     @Test
-    public void testCount()
+    public void empty()
     {
-        Assert.assertEquals(1L, this.iterable.count(<name>Predicates.lessThan(<(literal.(type))("2")>)));
+        Assert.assertTrue(this.iterable.notEmpty());
+        Assert.assertFalse(this.iterable.isEmpty());
     }
 
     @Test
-    public void testAnySatisfy()
+    public void count()
+    {
+        Assert.assertEquals(1L, this.iterable.count(<name>Predicates.lessThan(<(literal.(type))("2")>)));
+        Assert.assertEquals(0L, this.iterable.count(<name>Predicates.lessThan(<(literal.(type))("0")>)));
+    }
+
+    @Test
+    public void anySatisfy()
     {
         Assert.assertTrue(this.iterable.anySatisfy(<name>Predicates.lessThan(<(literal.(type))("2")>)));
         Assert.assertFalse(this.iterable.anySatisfy(<name>Predicates.greaterThan(<(literal.(type))("4")>)));
     }
 
     @Test
-    public void testAllSatisfy()
+    public void allSatisfy()
     {
         Assert.assertTrue(this.iterable.allSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
         Assert.assertFalse(this.iterable.allSatisfy(<name>Predicates.lessThan(<(literal.(type))("2")>)));
@@ -80,19 +88,28 @@ public class Select<name>IterableTest
     }
 
     @Test
-    public void testSelect()
+    public void select()
     {
         Assert.assertEquals(1L, this.iterable.select(<name>Predicates.greaterThan(<(literal.(type))("1")>)).size());
+        Assert.assertEquals(0L, this.iterable.select(<name>Predicates.lessThan(<(literal.(type))("0")>)).size());
     }
 
     @Test
-    public void testReject()
+    public void reject()
     {
         Assert.assertEquals(1L, this.iterable.reject(<name>Predicates.greaterThan(<(literal.(type))("1")>)).size());
+        Assert.assertEquals(0L, this.iterable.reject(<name>Predicates.greaterThan(<(literal.(type))("0")>)).size());
     }
 
     @Test
-    public void testCollect()
+    public void detectIfNone()
+    {
+        Assert.assertEquals(<(wideLiteral.(type))("1")>, this.iterable.detectIfNone(<name>Predicates.lessThan(<(literal.(type))("4")>), <(literal.(type))("0")>)<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("0")>, this.iterable.detectIfNone(<name>Predicates.greaterThan(<(literal.(type))("3")>), <(literal.(type))("0")>)<(wideDelta.(type))>);
+    }
+
+    @Test
+    public void collect()
     {
         Assert.assertEquals(2L, this.iterable.collect(new <name>ToObjectFunction\<String\>()
         {
@@ -104,43 +121,43 @@ public class Select<name>IterableTest
     }
 
     @Test
-    public void testSum()
+    public void sum()
     {
         Assert.assertEquals(<(wideLiteral.(type))("3")>, this.iterable.sum()<(wideDelta.(type))>);
     }
 
     @Test
-    public void testMax()
+    public void max()
     {
         Assert.assertEquals(<(literal.(type))("2")>, this.iterable.max()<(wideDelta.(type))>);
     }
 
     @Test
-    public void testMin()
+    public void min()
     {
         Assert.assertEquals(<(literal.(type))("1")>, this.iterable.min()<(wideDelta.(type))>);
     }
 
     @Test
-    public void testAverage()
+    public void average()
     {
         Assert.assertEquals(1.5d, this.iterable.average(), 0.0);
     }
 
     @Test
-    public void testMedian()
+    public void median()
     {
         Assert.assertEquals(1.5d, this.iterable.median(), 0.0);
     }
 
     @Test
-    public void testToArray()
+    public void toArray()
     {
         Assert.assertArrayEquals(new <type>[]{1, 2}, this.iterable.toArray()<(delta.(type))>);
     }
 
     @Test
-    public void testToSortedArray()
+    public void toSortedArray()
     {
         Assert.assertArrayEquals(new <type>[]{1, 2}, this.iterable.toSortedArray()<(delta.(type))>);
     }
