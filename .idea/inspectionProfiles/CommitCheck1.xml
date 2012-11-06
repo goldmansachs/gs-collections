@@ -576,7 +576,7 @@
     <inspection_tool class="NestedSwitchStatement" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="NestedSynchronizedStatement" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="NestedTryStatement" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="NestingDepth" enabled="true" level="ERROR" enabled_by_default="true">
+    <inspection_tool class="NestingDepth" enabled="false" level="ERROR" enabled_by_default="false">
       <option name="m_limit" value="5" />
     </inspection_tool>
     <inspection_tool class="NewStringBufferWithCharArgument" enabled="false" level="WARNING" enabled_by_default="false" />
@@ -1533,7 +1533,7 @@
       <option name="m_ignoreAnnotatedVariables" value="false" />
     </inspection_tool>
     <inspection_tool class="UnnecessaryModuleDependencyInspection" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="UnnecessaryParentheses" enabled="true" level="ERROR" enabled_by_default="true">
+    <inspection_tool class="UnnecessaryParentheses" enabled="false" level="ERROR" enabled_by_default="false">
       <option name="ignoreClarifyingParentheses" value="true" />
       <option name="ignoreParenthesesOnConditionals" value="false" />
     </inspection_tool>
@@ -1584,14 +1584,14 @@
     <inspection_tool class="UseOfJDBCDriverClass" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="UseOfProcessBuilder" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="UseOfPropertiesAsHashtable" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="UseOfSunClasses" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="UseOfSunClasses" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="UtilSchemaInspection" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="UtilityClassWithPublicConstructor" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="UtilityClassWithoutPrivateConstructor" enabled="true" level="ERROR" enabled_by_default="true">
       <option name="ignoreClassesWithOnlyMain" value="false" />
     </inspection_tool>
     <inspection_tool class="ValidExternallyBoundObject" enabled="false" level="ERROR" enabled_by_default="false" />
-    <inspection_tool class="VolatileArrayField" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="VolatileArrayField" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="VolatileLongOrDoubleField" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="VtlDirectiveArgsInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="VtlFileReferencesInspection" enabled="false" level="WARNING" enabled_by_default="false" />
@@ -1601,7 +1601,7 @@
     <inspection_tool class="WaitCalledOnCondition" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="WaitNotInLoop" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="WaitNotInSynchronizedContext" enabled="true" level="ERROR" enabled_by_default="true" />
-    <inspection_tool class="WaitOrAwaitWithoutTimeout" enabled="true" level="ERROR" enabled_by_default="true" />
+    <inspection_tool class="WaitOrAwaitWithoutTimeout" enabled="false" level="ERROR" enabled_by_default="false" />
     <inspection_tool class="WaitWhileHoldingTwoLocks" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="WaitWithoutCorrespondingNotify" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="WeakerAccess" enabled="false" level="INFO" enabled_by_default="false">

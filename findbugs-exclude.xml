@@ -30,6 +30,8 @@
             <Class name="com.gs.collections.impl.map.sorted.mutable.SynchronizedSortedMap" />
             <Class name="com.gs.collections.impl.set.mutable.SynchronizedMutableSet" />
             <Class name="com.gs.collections.impl.map.mutable.UnifiedMap" />
+            <Class name="com.gs.collections.impl.map.mutable.ConcurrentHashMap" />
+            <Class name="com.gs.collections.impl.map.mutable.ConcurrentHashMapUnSafe" />
             <Class name="com.gs.collections.impl.set.mutable.UnifiedSet" />
             <Class name="com.gs.collections.impl.set.strategy.mutable.UnifiedSetWithHashingStrategy" />
             <Class name="com.gs.collections.impl.map.strategy.mutable.UnifiedMapWithHashingStrategy" />
@@ -145,6 +147,11 @@ is stored in this field.        -->
     <Match>
         <Bug pattern="UWF_UNWRITTEN_FIELD" />
         <Class name="com.gs.collections.codegenerator.maven.GenerateMojo" />
+    </Match>
+
+    <Match>
+        <Bug pattern="NN_NAKED_NOTIFY" />
+        <Class name="com.gs.collections.impl.map.mutable.ConcurrentHashMapUnSafe" />
     </Match>
 
 </FindBugsFilter>
