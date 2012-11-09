@@ -999,12 +999,124 @@ public final class ConcurrentHashMap<K, V>
 
     public boolean replace(K key, V oldValue, V newValue)
     {
-        throw new UnsupportedOperationException("replace not implemented");
+        int hash = this.hash(key);
+        AtomicReferenceArray<Object> currentArray = this.table;
+        int length = currentArray.length();
+        int index = indexFor(hash, length);
+        Object o = currentArray.get(index);
+        if (o == RESIZED || o instanceof ResizeContainer)
+        {
+            return this.slowReplace(key, oldValue, newValue, hash, currentArray);
+        }
+        Entry<K, V> e = (Entry<K, V>) o;
+        while (e != null)
+        {
+            Object candidate = e.getKey();
+            if (candidate == key || candidate.equals(key))
+            {
+                if (oldValue == e.getValue() || (oldValue != null && oldValue.equals(e.getValue())))
+                {
+                    Entry<K, V> replacement = this.createReplacementChainForRemoval((Entry<K, V>) o, e);
+                    Entry<K, V> newEntry = new Entry<K, V>(key, newValue, replacement);
+                    return currentArray.compareAndSet(index, o, newEntry) || this.slowReplace(key, oldValue, newValue, hash, currentArray);
+                }
+                return false;
+            }
+            e = e.getNext();
+        }
+        return false;
+    }
+
+    private boolean slowReplace(K key, V oldValue, V newValue, int hash, AtomicReferenceArray<Object> currentArray)
+    {
+        //noinspection LabeledStatement
+        outer:
+        while (true)
+        {
+            int length = currentArray.length();
+            int index = indexFor(hash, length);
+            Object o = currentArray.get(index);
+            if (o == RESIZED || o instanceof ResizeContainer)
+            {
+                currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
+            }
+            else
+            {
+                Entry<K, V> e = (Entry<K, V>) o;
+                while (e != null)
+                {
+                    Object candidate = e.getKey();
+                    if (candidate == key || candidate.equals(key))
+                    {
+                        if (oldValue == e.getValue() || (oldValue != null && oldValue.equals(e.getValue())))
+                        {
+                            Entry<K, V> replacement = this.createReplacementChainForRemoval((Entry<K, V>) o, e);
+                            Entry<K, V> newEntry = new Entry<K, V>(key, newValue, replacement);
+                            if (currentArray.compareAndSet(index, o, newEntry))
+                            {
+                                return true;
+                            }
+                            //noinspection ContinueStatementWithLabel
+                            continue outer;
+                        }
+                        return false;
+                    }
+                    e = e.getNext();
+                }
+                return false;
+            }
+        }
     }
 
     public V replace(K key, V value)
     {
-        throw new UnsupportedOperationException("replace not implemented");
+        int hash = this.hash(key);
+        AtomicReferenceArray<Object> currentArray = this.table;
+        int length = currentArray.length();
+        int index = indexFor(hash, length);
+        Object o = currentArray.get(index);
+        if (o == null)
+        {
+            return null;
+        }
+        return this.slowReplace(key, value, hash, currentArray);
+    }
+
+    private V slowReplace(K key, V value, int hash, AtomicReferenceArray<Object> currentArray)
+    {
+        //noinspection LabeledStatement
+        outer:
+        while (true)
+        {
+            int length = currentArray.length();
+            int index = indexFor(hash, length);
+            Object o = currentArray.get(index);
+            if (o == RESIZED || o instanceof ResizeContainer)
+            {
+                currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
+            }
+            else
+            {
+                Entry<K, V> e = (Entry<K, V>) o;
+                while (e != null)
+                {
+                    Object candidate = e.getKey();
+                    if (candidate.equals(key))
+                    {
+                        V oldValue = e.getValue();
+                        Entry<K, V> newEntry = new Entry<K, V>(e.getKey(), value, this.createReplacementChainForRemoval((Entry<K, V>) o, e));
+                        if (!currentArray.compareAndSet(index, o, newEntry))
+                        {
+                            //noinspection ContinueStatementWithLabel
+                            continue outer;
+                        }
+                        return oldValue;
+                    }
+                    e = e.getNext();
+                }
+                return null;
+            }
+        }
     }
 
     public V remove(Object key)

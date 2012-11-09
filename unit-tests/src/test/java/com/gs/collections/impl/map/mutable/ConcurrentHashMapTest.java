@@ -146,11 +146,12 @@ public class ConcurrentHashMapTest extends MutableMapTestCase
         Assert.assertNull(map.putIfAbsent(3, 3));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void replace()
     {
         ConcurrentMutableMap<Integer, Integer> map = this.newMapWithKeysValues(1, 1, 2, 2);
-        Assert.assertEquals(Integer.valueOf(1), map.replace(1, 1));
+        Assert.assertEquals(Integer.valueOf(1), map.replace(1, 7));
+        Assert.assertEquals(Integer.valueOf(7), map.get(1));
         Assert.assertNull(map.replace(3, 3));
     }
 
@@ -172,11 +173,12 @@ public class ConcurrentHashMapTest extends MutableMapTestCase
         Assert.assertTrue(map.entrySet().remove(ImmutableEntry.of("One", Integer.valueOf(1))));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void replaceWithOldValue()
     {
         ConcurrentMutableMap<Integer, Integer> map = this.newMapWithKeysValues(1, 1, 2, 2);
-        Assert.assertTrue(map.replace(1, 1, 1));
+        Assert.assertTrue(map.replace(1, 1, 7));
+        Assert.assertEquals(Integer.valueOf(7), map.get(1));
         Assert.assertFalse(map.replace(2, 3, 3));
     }
 
