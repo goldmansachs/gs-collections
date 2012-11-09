@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -154,6 +154,10 @@ public final class ImmutableSetFactoryImpl implements ImmutableSetFactory
             return (ImmutableSet<T>) items;
         }
 
-        return this.of((T[]) Iterate.toArray(items));
+        if (Iterate.isEmpty(items))
+        {
+            return this.with();
+        }
+        return this.with((T[]) Iterate.toArray(items));
     }
 }

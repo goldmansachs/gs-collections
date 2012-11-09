@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,6 +40,8 @@ import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.Iterate;
 import org.junit.Assert;
 import org.junit.Test;
+
+import static com.gs.collections.impl.factory.Iterables.*;
 
 public abstract class UnifiedMapTestCase extends MutableMapTestCase
 {
@@ -250,8 +252,13 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
 
     protected MutableMap<Integer, Integer> mapWithCollisionsOfSize(int size)
     {
-        final MutableMap<Integer, Integer> map = this.newMap();
-        COLLISIONS.forEach(0, size, new Procedure<Integer>()
+        MutableMap<Integer, Integer> map = this.newMap();
+        return this.populateMapWithCollisionsOfSize(size, map);
+    }
+
+    protected <M extends MutableMap<Integer, Integer>> M populateMapWithCollisionsOfSize(int size, final M map)
+    {
+        MORE_COLLISIONS.subList(0, size).forEach(new Procedure<Integer>()
         {
             public void value(Integer each)
             {
@@ -392,6 +399,16 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
             Assert.assertEquals(this.mapWithCollisionsOfSize(i - 1), map);
         }
 
+        for (Integer item : MORE_COLLISIONS)
+        {
+            MutableMap<Integer, Integer> integers = this.mapWithCollisionsOfSize(9);
+            @SuppressWarnings("BoxingBoxedValue")
+            Integer keyCopy = new Integer(item);
+            Assert.assertTrue(integers.entrySet().retainAll(mList(ImmutableEntry.of(keyCopy, keyCopy))));
+            Assert.assertEquals(iMap(keyCopy, keyCopy), integers);
+            Assert.assertNotSame(keyCopy, Iterate.getOnly(integers.entrySet()).getKey());
+        }
+
         // simple map, collection to retain contains non-entry element
         MutableMap<Integer, String> map4 = this.newMapWithKeysValues(1, "One", 2, "Two");
         FastList<Object> toRetain = FastList.<Object>newListWith(ImmutableEntry.of(1, "One"), "explosion!", ImmutableEntry.of(2, "Two"));
@@ -519,6 +536,18 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
         iterator.next();
         iterator.remove();
         Verify.assertEmpty(map);
+    }
+
+    @Test
+    public void iterator_many_collisions()
+    {
+        Iterator<Integer> iterator = this.mapWithCollisionsOfSize(9).iterator();
+        for (Integer collision : MORE_COLLISIONS)
+        {
+            Assert.assertTrue(iterator.hasNext());
+            Assert.assertEquals(collision, iterator.next());
+        }
+        Assert.assertFalse(iterator.hasNext());
     }
 
     @Test

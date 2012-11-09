@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -57,6 +57,6 @@ public final class ImmutableHashingStrategySetFactoryImpl implements ImmutableHa
 
     public <T> ImmutableSet<T> withAll(HashingStrategy<? super T> hashingStrategy, Iterable<? extends T> items)
     {
-        return this.of(hashingStrategy, (T[]) Iterate.toArray(items));
+        return this.with(hashingStrategy, (T[]) Iterate.toArray(items));
     }
 }

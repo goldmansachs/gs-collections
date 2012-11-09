@@ -43,6 +43,7 @@ import com.gs.collections.impl.utility.Iterate;
 import org.apache.commons.lang.RandomStringUtils;
 import org.junit.After;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 public class SerialParallelPerformanceTest
@@ -117,6 +118,7 @@ public class SerialParallelPerformanceTest
         System.gc();
     }
 
+    @Ignore
     @Test
     public void parallelAndSerialGSCollections()
     {
@@ -138,6 +140,7 @@ public class SerialParallelPerformanceTest
         this.basicSerialAndParallelGSCollectionsPerformanceComparison(arrayList, words);
     }
 
+    @Ignore
     @Test
     public void parallelAndSerialTest()
     {

@@ -4,7 +4,7 @@
     "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
 
 <!--
-  ~ Copyright 2011 Goldman Sachs.
+  ~ Copyright 2012 Goldman Sachs.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -58,6 +58,6 @@
 
     <suppress checks="EqualsAvoidNull" files="StringPredicatesTest.java" />
 
-    <suppress checks="IllegalImport" files="ConcurrentHashMapUnsafe.java" />
+    <suppress checks="IllegalImport" files="ConcurrentHashMapUnSafe.java" />
 
 </suppressions>

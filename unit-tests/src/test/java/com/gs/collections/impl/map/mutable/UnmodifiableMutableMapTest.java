@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -450,5 +450,17 @@ public class UnmodifiableMutableMapTest extends MutableMapTestCase
         MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "One", 2, "Two");
         MutableMap<Integer, String> clone = map.clone();
         Assert.assertSame(map, clone);
+    }
+
+    @Override
+    public void retainAllFromKeySet_null_collision()
+    {
+        // Not applicable for unmodifiable maps
+    }
+
+    @Override
+    public void rehash_null_collision()
+    {
+        // Not applicable for unmodifiable maps
     }
 }

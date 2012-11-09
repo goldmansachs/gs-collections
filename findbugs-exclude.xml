@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  ~ Copyright 2011 Goldman Sachs.
+  ~ Copyright 2012 Goldman Sachs.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -52,10 +52,15 @@
     </Match>
 
     <Match>
+        <!--BC: Questionable cast to concrete collection (BC_BAD_CAST_TO_CONCRETE_COLLECTION)-->
+
+        <!--This code casts an abstract collection (such as a Collection, List, or Set) to a specific concrete
+            implementation (such as an ArrayList or HashSet). This might not be correct, and it may make your code
+            fragile, since it makes it harder to switch to other concrete implementations at a future point. Unless you
+            have a particular reason to do so, just use the abstract collection class.-->
+
         <Bug pattern="BC_BAD_CAST_TO_CONCRETE_COLLECTION" />
-        <Or>
-            <Class name="com.gs.collections.impl.list.mutable.FastList" />
-        </Or>
+        <Class name="com.gs.collections.impl.list.mutable.FastList" />
     </Match>
 
     <Match>
@@ -74,18 +79,18 @@
     </Match>
 
     <Match>
+        <!--Eq: Equals checks for incompatible operand (EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS)-->
         <Bug pattern="EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS" />
-        <Or>
-            <Class name="com.gs.collections.impl.bag.immutable.ImmutableHashBag" />
-        </Or>
+        <Class name="com.gs.collections.impl.bag.immutable.ImmutableHashBag" />
     </Match>
 
     <Match>
+        <!--A mutable static field could be changed by malicious code or by accident. The field could be made package
+            protected to avoid this vulnerability.-->
+
         <!-- This is probably a real bug -->
         <Bug pattern="MS_PKGPROTECT" />
-        <Or>
-            <Class name="com.gs.collections.impl.block.factory.Predicates" />
-        </Or>
+        <Class name="com.gs.collections.impl.block.factory.Predicates" />
     </Match>
 
     <Match>
@@ -93,15 +98,21 @@
             <Bug pattern="SE_BAD_FIELD_INNER_CLASS" />
             <!--Se: Non-transient non-serializable instance field in serializable class (SE_BAD_FIELD)-->
             <!--This Serializable class defines a non-primitive instance field which is neither transient,
-Serializable, or java.lang.Object, and does not appear to implement the Externalizable interface
-or the readObject() and writeObject() methods.
-Objects of this class will not be deserialized correctly if a non-Serializable object
-is stored in this field.        -->
+                Serializable, or java.lang.Object, and does not appear to implement the Externalizable interface
+                or the readObject() and writeObject() methods.
+                Objects of this class will not be deserialized correctly if a non-Serializable object
+                is stored in this field.        -->
             <Bug pattern="SE_BAD_FIELD" />
         </Or>
     </Match>
 
     <Match>
+        <!--Se: Serializable inner class (SE_INNER_CLASS)-->
+
+        <!--This Serializable class is an inner class. Any attempt to serialize it will also serialize the associated
+            outer instance. The outer instance is serializable, so this won't fail, but it might serialize a lot more
+            data than intended. If possible, making the inner class a static inner class (also known as a nested class)
+            should solve the problem.-->
         <Bug pattern="SE_INNER_CLASS" />
         <Or>
             <Class name="com.gs.collections.impl.map.mutable.UnifiedMap$KeySet" />
@@ -114,6 +125,11 @@ is stored in this field.        -->
     </Match>
 
     <Match>
+        <!--Se: Class is Serializable but its superclass doesn't define a void constructor (SE_NO_SUITABLE_CONSTRUCTOR)-->
+
+        <!--This class implements the Serializable interface and its superclass does not. When such an object is
+            deserialized, the fields of the superclass need to be initialized by invoking the void constructor of the
+            superclass. Since the superclass does not have one, serialization and deserialization will fail at runtime.-->
         <Bug pattern="SE_NO_SUITABLE_CONSTRUCTOR" />
         <Or>
             <Class name="com.gs.collections.impl.multimap.list.ImmutableListMultimapImpl" />
@@ -124,10 +140,17 @@ is stored in this field.        -->
     </Match>
 
     <Match>
+        <!--JLM: Synchronization performed on util.concurrent instance (JLM_JSR166_UTILCONCURRENT_MONITORENTER)-->
+
+        <!--This method performs synchronization an object that is an instance of a class from the java.util.concurrent
+            package (or its subclasses). Instances of these classes have their own concurrency control mechanisms that
+            are orthogonal to the synchronization provided by the Java keyword synchronized. For example, synchronizing
+            on an AtomicBoolean will not prevent other threads from modifying the AtomicBoolean.-->
+
+        <!--Such code may be correct, but should be carefully reviewed and documented, and may confuse people who have
+            to maintain the code at a later date.-->
         <Bug pattern="JLM_JSR166_UTILCONCURRENT_MONITORENTER" />
-        <Or>
-            <Class name="com.gs.collections.impl.map.mutable.ConcurrentHashMap" />
-        </Or>
+        <Class name="com.gs.collections.impl.map.mutable.ConcurrentHashMap" />
     </Match>
 
     <!--NP: Read of unwritten field (NP_UNWRITTEN_FIELD)-->
@@ -150,8 +173,32 @@ is stored in this field.        -->
     </Match>
 
     <Match>
+        <!--NN: Naked notify (NN_NAKED_NOTIFY)-->
+
+        <!--A call to notify() or notifyAll() was made without any (apparent) accompanying modification to mutable
+            object state.  In general, calling a notify method on a monitor is done because some condition another
+            thread is waiting for has become true.  However, for the condition to be meaningful, it must involve a heap
+            object that is visible to both threads.-->
+
+        <!--This bug does not necessarily indicate an error, since the change to mutable object state may have taken place in a method which then called the method containing the notification.-->
         <Bug pattern="NN_NAKED_NOTIFY" />
-        <Class name="com.gs.collections.impl.map.mutable.ConcurrentHashMapUnSafe" />
+        <Class name="com.gs.collections.impl.map.mutable.ConcurrentHashMapUnSafe$ResizeContainer" />
     </Match>
 
+    <Match>
+        <!--Eq: Unusual equals method (EQ_UNUSUAL)-->
+
+        <!--This class doesn't do any of the patterns we recognize for checking that the type of the argument is
+            compatible with the type of the this object. There might not be anything wrong with this code, but it is
+            worth reviewing.-->
+        <Bug pattern="EQ_UNUSUAL" />
+        <Or>
+            <Class name="com.gs.collections.impl.set.mutable.UnifiedSet$1" />
+            <Class name="com.gs.collections.impl.set.strategy.mutable.UnifiedSetWithHashingStrategy$1" />
+            <Class name="com.gs.collections.impl.map.mutable.UnifiedMap$1" />
+            <Class name="com.gs.collections.impl.map.mutable.UnifiedMap$2" />
+            <Class name="com.gs.collections.impl.map.strategy.mutable.UnifiedMapWithHashingStrategy$1" />
+            <Class name="com.gs.collections.impl.map.strategy.mutable.UnifiedMapWithHashingStrategy$2" />
+        </Or>
+    </Match>
 </FindBugsFilter>

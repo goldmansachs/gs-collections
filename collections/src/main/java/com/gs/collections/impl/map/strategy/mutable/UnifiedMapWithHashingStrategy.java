@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,12 +67,51 @@ import net.jcip.annotations.NotThreadSafe;
  * implementation provided by a developer to compute the hashCode and equals for the objects stored in the map.
  */
 @NotThreadSafe
+@SuppressWarnings("ObjectEquality")
 public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V>
         implements Externalizable, BatchIterable<V>
 {
-    protected static final Object NULL_KEY = new Object();
+    protected static final Object NULL_KEY = new Object()
+    {
+        @Override
+        public boolean equals(Object obj)
+        {
+            throw new AssertionError();
+        }
 
-    protected static final Object CHAINED_KEY = new Object();
+        @Override
+        public int hashCode()
+        {
+            throw new AssertionError();
+        }
+
+        @Override
+        public String toString()
+        {
+            return "UnifiedMapWithHashingStrategy.NULL_KEY";
+        }
+    };
+
+    protected static final Object CHAINED_KEY = new Object()
+    {
+        @Override
+        public boolean equals(Object obj)
+        {
+            throw new AssertionError();
+        }
+
+        @Override
+        public int hashCode()
+        {
+            throw new AssertionError();
+        }
+
+        @Override
+        public String toString()
+        {
+            return "UnifiedMap.CHAINED_KEY";
+        }
+    };
 
     protected static final float DEFAULT_LOAD_FACTOR = 0.75f;
 
@@ -142,11 +181,6 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
         return new UnifiedMapWithHashingStrategy<K, V>(hashingStrategy);
     }
 
-    public static <K, V> UnifiedMapWithHashingStrategy<K, V> newMap(UnifiedMapWithHashingStrategy<K, V> map)
-    {
-        return new UnifiedMapWithHashingStrategy<K, V>(map.hashingStrategy, map);
-    }
-
     public static <K, V> UnifiedMapWithHashingStrategy<K, V> newMap(
             HashingStrategy<? super K> hashingStrategy,
             int size)
@@ -167,6 +201,11 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
             Map<? extends K, ? extends V> map)
     {
         return new UnifiedMapWithHashingStrategy<K, V>(hashingStrategy, map);
+    }
+
+    public static <K, V> UnifiedMapWithHashingStrategy<K, V> newMap(UnifiedMapWithHashingStrategy<K, V> map)
+    {
+        return new UnifiedMapWithHashingStrategy<K, V>(map.hashingStrategy, map);
     }
 
     public static <K, V> UnifiedMapWithHashingStrategy<K, V> newMapWith(
@@ -299,8 +338,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
     protected void computeMaxSize(int capacity)
     {
         // need at least one free slot for open addressing
-        this.maxSize = Math.min(capacity - 1,
-                (int) (capacity * this.loadFactor));
+        this.maxSize = Math.min(capacity - 1, (int) (capacity * this.loadFactor));
     }
 
     protected final int index(K key)
@@ -332,27 +370,24 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
     public V put(K key, V value)
     {
         int index = this.index(key);
-        V result = null;
         Object cur = this.table[index];
         if (cur == null)
         {
-            this.table[index] = this.toSentinelIfNull(key);
+            this.table[index] = toSentinelIfNull(key);
             this.table[index + 1] = value;
             if (++this.occupied > this.maxSize)
             {
                 this.rehash(this.table.length);
             }
+            return null;
         }
-        else if (cur != CHAINED_KEY && this.hashingStrategyEquals(this.nonSentinel(cur), key))
+        if (cur != CHAINED_KEY && this.nonNullTableObjectEquals(cur, key))
         {
-            result = (V) this.table[index + 1];
+            V result = (V) this.table[index + 1];
             this.table[index + 1] = value;
+            return result;
         }
-        else
-        {
-            result = this.chainedPut(key, index, value);
-        }
-        return result;
+        return this.chainedPut(key, index, value);
     }
 
     private V chainedPut(K key, int index, V value)
@@ -366,7 +401,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
             {
                 if (chain[i] == null)
                 {
-                    chain[i] = this.toSentinelIfNull(key);
+                    chain[i] = toSentinelIfNull(key);
                     chain[i + 1] = value;
                     if (++this.occupied > this.maxSize)
                     {
@@ -374,7 +409,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
                     }
                     break;
                 }
-                if (this.hashingStrategyEquals(this.nonSentinel(chain[i]), key))
+                if (this.nonNullTableObjectEquals(chain[i], key))
                 {
                     result = (V) chain[i + 1];
                     chain[i + 1] = value;
@@ -386,7 +421,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
                 Object[] newChain = new Object[chain.length + 4];
                 System.arraycopy(chain, 0, newChain, 0, chain.length);
                 this.table[index + 1] = newChain;
-                newChain[i] = this.toSentinelIfNull(key);
+                newChain[i] = toSentinelIfNull(key);
                 newChain[i + 1] = value;
                 if (++this.occupied > this.maxSize)
                 {
@@ -399,7 +434,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
             Object[] newChain = new Object[4];
             newChain[0] = this.table[index];
             newChain[1] = this.table[index + 1];
-            newChain[2] = this.toSentinelIfNull(key);
+            newChain[2] = toSentinelIfNull(key);
             newChain[3] = value;
             this.table[index] = CHAINED_KEY;
             this.table[index + 1] = newChain;
@@ -420,7 +455,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
         if (cur == null)
         {
             V result = function.value();
-            this.table[index] = this.toSentinelIfNull(key);
+            this.table[index] = toSentinelIfNull(key);
             this.table[index + 1] = result;
             if (++this.occupied > this.maxSize)
             {
@@ -428,7 +463,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
             }
             return result;
         }
-        if (cur != CHAINED_KEY && this.hashingStrategyEquals(this.nonSentinel(cur), key))
+        if (cur != CHAINED_KEY && this.nonNullTableObjectEquals(cur, key))
         {
             return (V) this.table[index + 1];
         }
@@ -447,7 +482,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
                 if (chain[i] == null)
                 {
                     result = function.value();
-                    chain[i] = this.toSentinelIfNull(key);
+                    chain[i] = toSentinelIfNull(key);
                     chain[i + 1] = result;
                     if (++this.occupied > this.maxSize)
                     {
@@ -455,7 +490,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
                     }
                     break;
                 }
-                if (this.hashingStrategyEquals(this.nonSentinel(chain[i]), key))
+                if (this.nonNullTableObjectEquals(chain[i], key))
                 {
                     result = (V) chain[i + 1];
                     break;
@@ -466,7 +501,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
                 result = function.value();
                 Object[] newChain = new Object[chain.length + 4];
                 System.arraycopy(chain, 0, newChain, 0, chain.length);
-                newChain[i] = this.nonSentinel(key);
+                newChain[i] = toSentinelIfNull(key);
                 newChain[i + 1] = result;
                 this.table[index + 1] = newChain;
                 if (++this.occupied > this.maxSize)
@@ -481,7 +516,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
             Object[] newChain = new Object[4];
             newChain[0] = this.table[index];
             newChain[1] = this.table[index + 1];
-            newChain[2] = this.nonSentinel(key);
+            newChain[2] = toSentinelIfNull(key);
             newChain[3] = result;
             this.table[index] = CHAINED_KEY;
             this.table[index + 1] = newChain;
@@ -536,8 +571,8 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
 
         for (int i = 0; i < oldLength; i += 2)
         {
-            Object oldKey = old[i];
-            if (oldKey == CHAINED_KEY)
+            Object cur = old[i];
+            if (cur == CHAINED_KEY)
             {
                 Object[] chain = (Object[]) old[i + 1];
                 for (int j = 0; j < chain.length; j += 2)
@@ -548,9 +583,9 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
                     }
                 }
             }
-            else if (oldKey != null)
+            else if (cur != null)
             {
-                this.put(this.nonSentinel(oldKey), (V) old[i + 1]);
+                this.put(this.nonSentinel(cur), (V) old[i + 1]);
             }
         }
     }
@@ -566,7 +601,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
             {
                 return this.getFromChain((Object[]) val, (K) key);
             }
-            if (this.hashingStrategyEquals(this.nonSentinel(cur), (K) key))
+            if (this.nonNullTableObjectEquals(cur, (K) key))
             {
                 return (V) val;
             }
@@ -583,7 +618,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
             {
                 return null;
             }
-            if (this.hashingStrategyEquals(this.nonSentinel(k), key))
+            if (this.nonNullTableObjectEquals(k, key))
             {
                 return (V) chain[i + 1];
             }
@@ -599,7 +634,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
         {
             return false;
         }
-        if (cur != CHAINED_KEY && this.hashingStrategyEquals(this.nonSentinel(cur), (K) key))
+        if (cur != CHAINED_KEY && this.nonNullTableObjectEquals(cur, (K) key))
         {
             return true;
         }
@@ -615,7 +650,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
             {
                 return false;
             }
-            if (this.hashingStrategyEquals(this.nonSentinel(k), key))
+            if (this.nonNullTableObjectEquals(k, key))
             {
                 return true;
             }
@@ -629,7 +664,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
         {
             if (this.table[i] == CHAINED_KEY)
             {
-                if (this.chainedContainsValue((Object[]) this.table[i + 1], value))
+                if (this.chainedContainsValue((Object[]) this.table[i + 1], (V) value))
                 {
                     return true;
                 }
@@ -645,7 +680,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
         return false;
     }
 
-    private boolean chainedContainsValue(Object[] chain, Object value)
+    private boolean chainedContainsValue(Object[] chain, V value)
     {
         for (int i = 0; i < chain.length; i += 2)
         {
@@ -665,14 +700,14 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
     {
         for (int i = 0; i < this.table.length; i += 2)
         {
-            Object key = this.table[i];
-            if (key == CHAINED_KEY)
+            Object cur = this.table[i];
+            if (cur == CHAINED_KEY)
             {
                 this.chainedForEachEntry((Object[]) this.table[i + 1], procedure);
             }
-            else if (key != null)
+            else if (cur != null)
             {
-                procedure.value(this.nonSentinel(key), (V) this.table[i + 1]);
+                procedure.value(this.nonSentinel(cur), (V) this.table[i + 1]);
             }
         }
     }
@@ -695,12 +730,12 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
     {
         for (int i = 0; i < chain.length; i += 2)
         {
-            Object key = chain[i];
-            if (key == null)
+            Object cur = chain[i];
+            if (cur == null)
             {
                 return;
             }
-            procedure.value(this.nonSentinel(key), (V) chain[i + 1]);
+            procedure.value(this.nonSentinel(cur), (V) chain[i + 1]);
         }
     }
 
@@ -719,14 +754,14 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
     {
         for (int i = 0; i < this.table.length; i += 2)
         {
-            Object key = this.table[i];
-            if (key == CHAINED_KEY)
+            Object cur = this.table[i];
+            if (cur == CHAINED_KEY)
             {
                 this.chainedForEachKey((Object[]) this.table[i + 1], procedure);
             }
-            else if (key != null)
+            else if (cur != null)
             {
-                procedure.value(this.nonSentinel(key));
+                procedure.value(this.nonSentinel(cur));
             }
         }
     }
@@ -735,12 +770,12 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
     {
         for (int i = 0; i < chain.length; i += 2)
         {
-            Object key = chain[i];
-            if (key == null)
+            Object cur = chain[i];
+            if (cur == null)
             {
                 return;
             }
-            procedure.value(this.nonSentinel(key));
+            procedure.value(this.nonSentinel(cur));
         }
     }
 
@@ -749,12 +784,12 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
     {
         for (int i = 0; i < this.table.length; i += 2)
         {
-            Object key = this.table[i];
-            if (key == CHAINED_KEY)
+            Object cur = this.table[i];
+            if (cur == CHAINED_KEY)
             {
                 this.chainedForEachValue((Object[]) this.table[i + 1], procedure);
             }
-            else if (key != null)
+            else if (cur != null)
             {
                 procedure.value((V) this.table[i + 1]);
             }
@@ -813,14 +848,14 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
     {
         for (int i = 0; i < unifiedMap.table.length; i += 2)
         {
-            Object key = unifiedMap.table[i];
-            if (key == CHAINED_KEY)
+            Object cur = unifiedMap.table[i];
+            if (cur == CHAINED_KEY)
             {
                 this.copyChain((Object[]) unifiedMap.table[i + 1]);
             }
-            else if (key != null)
+            else if (cur != null)
             {
-                this.put(this.nonSentinel(key), (V) unifiedMap.table[i + 1]);
+                this.put(this.nonSentinel(cur), (V) unifiedMap.table[i + 1]);
             }
         }
     }
@@ -829,12 +864,12 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
     {
         for (int j = 0; j < chain.length; j += 2)
         {
-            Object key = chain[j];
-            if (key == null)
+            Object cur = chain[j];
+            if (cur == null)
             {
                 break;
             }
-            this.put(this.nonSentinel(key), (V) chain[j + 1]);
+            this.put(this.nonSentinel(cur), (V) chain[j + 1]);
         }
     }
 
@@ -849,7 +884,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
             {
                 return this.removeFromChain((Object[]) val, (K) key, index);
             }
-            if (this.hashingStrategyEquals(this.nonSentinel(cur), (K) key))
+            if (this.nonNullTableObjectEquals(cur, (K) key))
             {
                 this.table[index] = null;
                 this.table[index + 1] = null;
@@ -869,7 +904,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
             {
                 return null;
             }
-            if (this.hashingStrategyEquals(this.nonSentinel(k), key))
+            if (this.nonNullTableObjectEquals(k, key))
             {
                 V val = (V) chain[i + 1];
                 this.overwriteWithLastElementFromChain(chain, index, i);
@@ -948,15 +983,15 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
         int hashCode = 0;
         for (int i = 0; i < this.table.length; i += 2)
         {
-            Object key = this.table[i];
-            if (key == CHAINED_KEY)
+            Object cur = this.table[i];
+            if (cur == CHAINED_KEY)
             {
                 hashCode += this.chainedHashCode((Object[]) this.table[i + 1]);
             }
-            else if (key != null)
+            else if (cur != null)
             {
                 Object value = this.table[i + 1];
-                hashCode += this.hashingStrategy.computeHashCode(this.nonSentinel(key)) ^ (value == null ? 0 : value.hashCode());
+                hashCode += this.hashingStrategy.computeHashCode(this.nonSentinel(cur)) ^ (value == null ? 0 : value.hashCode());
             }
         }
         return hashCode;
@@ -967,13 +1002,13 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
         int hashCode = 0;
         for (int i = 0; i < chain.length; i += 2)
         {
-            Object key = chain[i];
-            if (key == null)
+            Object cur = chain[i];
+            if (cur == null)
             {
                 return hashCode;
             }
             Object value = chain[i + 1];
-            hashCode += this.hashingStrategy.computeHashCode(this.nonSentinel(key)) ^ (value == null ? 0 : value.hashCode());
+            hashCode += this.hashingStrategy.computeHashCode(this.nonSentinel(cur)) ^ (value == null ? 0 : value.hashCode());
         }
         return hashCode;
     }
@@ -1034,14 +1069,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
                 }
                 else
                 {
-                    if (o == NULL_KEY)
-                    {
-                        out.writeObject(null);
-                    }
-                    else
-                    {
-                        out.writeObject(o);
-                    }
+                    out.writeObject(this.nonSentinel(o));
                     out.writeObject(this.table[i + 1]);
                 }
             }
@@ -1052,19 +1080,12 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
     {
         for (int i = 0; i < chain.length; i += 2)
         {
-            Object key = chain[i];
-            if (key == null)
+            Object cur = chain[i];
+            if (cur == null)
             {
                 return;
             }
-            if (key == NULL_KEY)
-            {
-                out.writeObject(null);
-            }
-            else
-            {
-                out.writeObject(key);
-            }
+            out.writeObject(this.nonSentinel(cur));
             out.writeObject(chain[i + 1]);
         }
     }
@@ -1075,12 +1096,12 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
         int index = 0;
         for (int i = 0; i < this.table.length; i += 2)
         {
-            Object key = this.table[i];
-            if (key == CHAINED_KEY)
+            Object cur = this.table[i];
+            if (cur == CHAINED_KEY)
             {
                 index = this.chainedForEachValueWithIndex((Object[]) this.table[i + 1], objectIntProcedure, index);
             }
-            else if (key != null)
+            else if (cur != null)
             {
                 objectIntProcedure.value((V) this.table[i + 1], index++);
             }
@@ -1092,12 +1113,12 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
     {
         for (int i = 0; i < this.table.length; i += 2)
         {
-            Object key = this.table[i];
-            if (key == CHAINED_KEY)
+            Object cur = this.table[i];
+            if (cur == CHAINED_KEY)
             {
                 this.chainedForEachValueWith((Object[]) this.table[i + 1], procedure, parameter);
             }
-            else if (key != null)
+            else if (cur != null)
             {
                 procedure.value((V) this.table[i + 1], parameter);
             }
@@ -1179,7 +1200,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
                     this.putIfFoundFromChain((Object[]) val, (K) key, other);
                     return;
                 }
-                if (UnifiedMapWithHashingStrategy.this.hashingStrategyEquals(UnifiedMapWithHashingStrategy.this.nonSentinel(cur), (K) key))
+                if (UnifiedMapWithHashingStrategy.this.nonNullTableObjectEquals(cur, (K) key))
                 {
                     other.put(UnifiedMapWithHashingStrategy.this.nonSentinel(cur), (V) val);
                 }
@@ -1195,7 +1216,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
                 {
                     return;
                 }
-                if (UnifiedMapWithHashingStrategy.this.hashingStrategyEquals(UnifiedMapWithHashingStrategy.this.nonSentinel(k), key))
+                if (UnifiedMapWithHashingStrategy.this.nonNullTableObjectEquals(k, key))
                 {
                     other.put(UnifiedMapWithHashingStrategy.this.nonSentinel(k), (V) chain[i + 1]);
                 }
@@ -1248,14 +1269,14 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
             }
             for (int i = start; i < end; i += 2)
             {
-                Object key = map[i];
-                if (key == CHAINED_KEY)
+                Object cur = map[i];
+                if (cur == CHAINED_KEY)
                 {
                     UnifiedMapWithHashingStrategy.this.chainedForEachKey((Object[]) map[i + 1], procedure);
                 }
-                else if (key != null)
+                else if (cur != null)
                 {
-                    procedure.value(UnifiedMapWithHashingStrategy.this.nonSentinel(key));
+                    procedure.value(UnifiedMapWithHashingStrategy.this.nonSentinel(cur));
                 }
             }
         }
@@ -1274,12 +1295,12 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
                         Object[] chain = (Object[]) table[i + 1];
                         for (int j = 0; j < chain.length; j += 2)
                         {
-                            Object key = chain[j];
-                            if (key == null)
+                            Object cur = chain[j];
+                            if (cur == null)
                             {
                                 break;
                             }
-                            result[count++] = UnifiedMapWithHashingStrategy.this.nonSentinel(key);
+                            result[count++] = UnifiedMapWithHashingStrategy.this.nonSentinel(cur);
                         }
                     }
                     else
@@ -1319,12 +1340,12 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
                         Object[] chain = (Object[]) table[i + 1];
                         for (int j = 0; j < chain.length; j += 2)
                         {
-                            Object key = chain[j];
-                            if (key == null)
+                            Object cur = chain[j];
+                            if (cur == null)
                             {
                                 break;
                             }
-                            hashCode += UnifiedMapWithHashingStrategy.this.hashingStrategy.computeHashCode(UnifiedMapWithHashingStrategy.this.nonSentinel(key));
+                            hashCode += UnifiedMapWithHashingStrategy.this.hashingStrategy.computeHashCode(UnifiedMapWithHashingStrategy.this.nonSentinel(cur));
                         }
                     }
                     else
@@ -1365,14 +1386,14 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
                     UnifiedMapWithHashingStrategy.this.hashingStrategy, UnifiedMapWithHashingStrategy.this.size());
             for (int i = 0; i < UnifiedMapWithHashingStrategy.this.table.length; i += 2)
             {
-                Object key = UnifiedMapWithHashingStrategy.this.table[i];
-                if (key == CHAINED_KEY)
+                Object cur = UnifiedMapWithHashingStrategy.this.table[i];
+                if (cur == CHAINED_KEY)
                 {
                     this.chainedAddToSet((Object[]) UnifiedMapWithHashingStrategy.this.table[i + 1], replace);
                 }
-                else if (key != null)
+                else if (cur != null)
                 {
-                    replace.add(UnifiedMapWithHashingStrategy.this.nonSentinel(key));
+                    replace.add(UnifiedMapWithHashingStrategy.this.nonSentinel(cur));
                 }
             }
             return replace;
@@ -1382,12 +1403,12 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
         {
             for (int i = 0; i < chain.length; i += 2)
             {
-                Object key = chain[i];
-                if (key == null)
+                Object cur = chain[i];
+                if (cur == null)
                 {
                     return;
                 }
-                replace.add(UnifiedMapWithHashingStrategy.this.nonSentinel(key));
+                replace.add(UnifiedMapWithHashingStrategy.this.nonSentinel(cur));
             }
         }
     }
@@ -1420,8 +1441,8 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
             }
 
             int pos = this.position - 2;
-            Object key = UnifiedMapWithHashingStrategy.this.table[pos];
-            if (key == CHAINED_KEY)
+            Object cur = UnifiedMapWithHashingStrategy.this.table[pos];
+            if (cur == CHAINED_KEY)
             {
                 this.removeLastFromChain((Object[]) UnifiedMapWithHashingStrategy.this.table[pos + 1], pos);
                 return;
@@ -1475,7 +1496,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
         protected K nextFromChain()
         {
             Object[] chain = (Object[]) UnifiedMapWithHashingStrategy.this.table[this.position + 1];
-            Object key = chain[this.chainPosition];
+            Object cur = chain[this.chainPosition];
             this.chainPosition += 2;
             if (this.chainPosition >= chain.length
                     || chain[this.chainPosition] == null)
@@ -1484,7 +1505,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
                 this.position += 2;
             }
             this.lastReturned = true;
-            return UnifiedMapWithHashingStrategy.this.nonSentinel(key);
+            return UnifiedMapWithHashingStrategy.this.nonSentinel(cur);
         }
 
         public K next()
@@ -1503,14 +1524,14 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
             {
                 this.position += 2;
             }
-            Object key = table[this.position];
-            if (key == CHAINED_KEY)
+            Object cur = table[this.position];
+            if (cur == CHAINED_KEY)
             {
                 return this.nextFromChain();
             }
             this.position += 2;
             this.lastReturned = true;
-            return UnifiedMapWithHashingStrategy.this.nonSentinel(key);
+            return UnifiedMapWithHashingStrategy.this.nonSentinel(cur);
         }
     }
 
@@ -1552,34 +1573,54 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
 
         public boolean containsEntry(Entry<?, ?> entry)
         {
-            Object key = entry.getKey();
-            Object value = entry.getValue();
-            int index = UnifiedMapWithHashingStrategy.this.index((K) key);
+            return this.getEntry(entry) != null;
+        }
+
+        private Entry<K, V> getEntry(Entry<?, ?> entry)
+        {
+            K key = (K) entry.getKey();
+            V value = (V) entry.getValue();
+            int index = UnifiedMapWithHashingStrategy.this.index(key);
 
             Object cur = UnifiedMapWithHashingStrategy.this.table[index];
             Object curValue = UnifiedMapWithHashingStrategy.this.table[index + 1];
             if (cur == CHAINED_KEY)
             {
-                return this.chainContainsEntry((Object[]) curValue, (K) key, value);
+                return this.chainGetEntry((Object[]) curValue, key, value);
             }
-            return cur != null && UnifiedMapWithHashingStrategy.this.hashingStrategyEquals(UnifiedMapWithHashingStrategy.this.nonSentinel(cur), (K) key) && UnifiedMapWithHashingStrategy.nullSafeEquals(value, curValue);
+            if (cur == null)
+            {
+                return null;
+            }
+            if (UnifiedMapWithHashingStrategy.this.nonNullTableObjectEquals(cur, key))
+            {
+                if (UnifiedMapWithHashingStrategy.nullSafeEquals(value, curValue))
+                {
+                    return ImmutableEntry.of(UnifiedMapWithHashingStrategy.this.nonSentinel(cur), (V) curValue);
+                }
+            }
+            return null;
         }
 
-        private boolean chainContainsEntry(Object[] chain, K key, Object value)
+        private Entry<K, V> chainGetEntry(Object[] chain, K key, V value)
         {
             for (int i = 0; i < chain.length; i += 2)
             {
-                Object k = chain[i];
-                if (k == null)
+                Object cur = chain[i];
+                if (cur == null)
                 {
-                    return false;
+                    return null;
                 }
-                if (UnifiedMapWithHashingStrategy.this.hashingStrategyEquals(UnifiedMapWithHashingStrategy.this.nonSentinel(k), key))
+                if (UnifiedMapWithHashingStrategy.this.nonNullTableObjectEquals(cur, key))
                 {
-                    return value == null ? chain[i + 1] == null : chain[i + 1] == value || value.equals(chain[i + 1]);
+                    Object curValue = chain[i + 1];
+                    if (UnifiedMapWithHashingStrategy.nullSafeEquals(value, curValue))
+                    {
+                        return ImmutableEntry.of(UnifiedMapWithHashingStrategy.this.nonSentinel(cur), (V) curValue);
+                    }
                 }
             }
-            return false;
+            return null;
         }
 
         public boolean contains(Object o)
@@ -1616,10 +1657,10 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
                 return false;
             }
             Entry<?, ?> entry = (Entry<?, ?>) e;
-            Object key = entry.getKey();
-            Object value = entry.getValue();
+            K key = (K) entry.getKey();
+            V value = (V) entry.getValue();
 
-            int index = UnifiedMapWithHashingStrategy.this.index((K) key);
+            int index = UnifiedMapWithHashingStrategy.this.index(key);
 
             Object cur = UnifiedMapWithHashingStrategy.this.table[index];
             if (cur != null)
@@ -1627,9 +1668,9 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
                 Object val = UnifiedMapWithHashingStrategy.this.table[index + 1];
                 if (cur == CHAINED_KEY)
                 {
-                    return this.removeFromChain((Object[]) val, (K) key, value, index);
+                    return this.removeFromChain((Object[]) val, key, value, index);
                 }
-                if (UnifiedMapWithHashingStrategy.this.hashingStrategyEquals(UnifiedMapWithHashingStrategy.this.nonSentinel(cur), (K) key) && UnifiedMapWithHashingStrategy.nullSafeEquals(value, val))
+                if (UnifiedMapWithHashingStrategy.this.nonNullTableObjectEquals(cur, key) && UnifiedMapWithHashingStrategy.nullSafeEquals(value, val))
                 {
                     UnifiedMapWithHashingStrategy.this.table[index] = null;
                     UnifiedMapWithHashingStrategy.this.table[index + 1] = null;
@@ -1640,7 +1681,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
             return false;
         }
 
-        private boolean removeFromChain(Object[] chain, K key, Object value, int index)
+        private boolean removeFromChain(Object[] chain, K key, V value, int index)
         {
             for (int i = 0; i < chain.length; i += 2)
             {
@@ -1649,7 +1690,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
                 {
                     return false;
                 }
-                if (UnifiedMapWithHashingStrategy.this.hashingStrategyEquals(UnifiedMapWithHashingStrategy.this.nonSentinel(k), key))
+                if (UnifiedMapWithHashingStrategy.this.nonNullTableObjectEquals(k, key))
                 {
                     V val = (V) chain[i + 1];
                     if (UnifiedMapWithHashingStrategy.nullSafeEquals(val, value))
@@ -1685,10 +1726,11 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
             {
                 if (obj instanceof Entry)
                 {
-                    Entry<?, ?> entry = (Entry<?, ?>) obj;
-                    if (this.containsEntry(entry))
+                    Entry<?, ?> otherEntry = (Entry<?, ?>) obj;
+                    Entry<K, V> thisEntry = this.getEntry(otherEntry);
+                    if (thisEntry != null)
                     {
-                        retainedCopy.put(UnifiedMapWithHashingStrategy.this.nonSentinel(entry.getKey()), (V) entry.getValue());
+                        retainedCopy.put(thisEntry.getKey(), thisEntry.getValue());
                     }
                 }
             }
@@ -1711,14 +1753,14 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
         {
             for (int i = 0; i < UnifiedMapWithHashingStrategy.this.table.length; i += 2)
             {
-                Object key = UnifiedMapWithHashingStrategy.this.table[i];
-                if (key == CHAINED_KEY)
+                Object cur = UnifiedMapWithHashingStrategy.this.table[i];
+                if (cur == CHAINED_KEY)
                 {
                     this.chainedForEachEntry((Object[]) UnifiedMapWithHashingStrategy.this.table[i + 1], procedure);
                 }
-                else if (key != null)
+                else if (cur != null)
                 {
-                    procedure.value(ImmutableEntry.of(UnifiedMapWithHashingStrategy.this.nonSentinel(key), (V) UnifiedMapWithHashingStrategy.this.table[i + 1]));
+                    procedure.value(ImmutableEntry.of(UnifiedMapWithHashingStrategy.this.nonSentinel(cur), (V) UnifiedMapWithHashingStrategy.this.table[i + 1]));
                 }
             }
         }
@@ -1727,12 +1769,12 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
         {
             for (int i = 0; i < chain.length; i += 2)
             {
-                Object key = chain[i];
-                if (key == null)
+                Object cur = chain[i];
+                if (cur == null)
                 {
                     return;
                 }
-                procedure.value(ImmutableEntry.of(UnifiedMapWithHashingStrategy.this.nonSentinel(key), (V) chain[i + 1]));
+                procedure.value(ImmutableEntry.of(UnifiedMapWithHashingStrategy.this.nonSentinel(cur), (V) chain[i + 1]));
             }
         }
 
@@ -1753,14 +1795,14 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
             }
             for (int i = start; i < end; i += 2)
             {
-                Object key = map[i];
-                if (key == CHAINED_KEY)
+                Object cur = map[i];
+                if (cur == CHAINED_KEY)
                 {
                     this.chainedForEachEntry((Object[]) map[i + 1], procedure);
                 }
-                else if (key != null)
+                else if (cur != null)
                 {
-                    procedure.value(ImmutableEntry.of(UnifiedMapWithHashingStrategy.this.nonSentinel(key), (V) map[i + 1]));
+                    procedure.value(ImmutableEntry.of(UnifiedMapWithHashingStrategy.this.nonSentinel(cur), (V) map[i + 1]));
                 }
             }
         }
@@ -1779,13 +1821,13 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
                         Object[] chain = (Object[]) table[i + 1];
                         for (int j = 0; j < chain.length; j += 2)
                         {
-                            Object key = chain[j];
-                            if (key == null)
+                            Object cur = chain[j];
+                            if (cur == null)
                             {
                                 break;
                             }
                             result[count++] =
-                                    new WeakBoundEntry<K, V>(UnifiedMapWithHashingStrategy.this.nonSentinel(key), (V) chain[j + 1], this.holder,
+                                    new WeakBoundEntry<K, V>(UnifiedMapWithHashingStrategy.this.nonSentinel(cur), (V) chain[j + 1], this.holder,
                                             UnifiedMapWithHashingStrategy.this.hashingStrategy);
                         }
                     }
@@ -1860,7 +1902,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
         protected Entry<K, V> nextFromChain()
         {
             Object[] chain = (Object[]) UnifiedMapWithHashingStrategy.this.table[this.position + 1];
-            Object key = chain[this.chainPosition];
+            Object cur = chain[this.chainPosition];
             Object value = chain[this.chainPosition + 1];
             this.chainPosition += 2;
             if (this.chainPosition >= chain.length
@@ -1870,7 +1912,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
                 this.position += 2;
             }
             this.lastReturned = true;
-            return new WeakBoundEntry<K, V>(UnifiedMapWithHashingStrategy.this.nonSentinel(key), (V) value, this.holder,
+            return new WeakBoundEntry<K, V>(UnifiedMapWithHashingStrategy.this.nonSentinel(cur), (V) value, this.holder,
                     UnifiedMapWithHashingStrategy.this.hashingStrategy);
         }
 
@@ -1890,20 +1932,20 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
             {
                 this.position += 2;
             }
-            Object key = table[this.position];
+            Object cur = table[this.position];
             Object value = table[this.position + 1];
-            if (key == CHAINED_KEY)
+            if (cur == CHAINED_KEY)
             {
                 return this.nextFromChain();
             }
             this.position += 2;
             this.lastReturned = true;
-            return new WeakBoundEntry<K, V>(UnifiedMapWithHashingStrategy.this.nonSentinel(key), (V) value, this.holder,
+            return new WeakBoundEntry<K, V>(UnifiedMapWithHashingStrategy.this.nonSentinel(cur), (V) value, this.holder,
                     UnifiedMapWithHashingStrategy.this.hashingStrategy);
         }
     }
 
-    protected static class WeakBoundEntry<K, V> implements Entry<K, V>
+    protected static class WeakBoundEntry<K, V> implements Map.Entry<K, V>
     {
         protected final K key;
         protected V value;
@@ -1946,9 +1988,9 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
             if (obj instanceof Entry)
             {
                 Entry<?, ?> other = (Entry<?, ?>) obj;
-                Object otherValue = other.getValue();
-                Object otherValue1 = other.getKey();
-                return this.hashingStrategy.equals(this.key, (K) otherValue1)
+                K otherKey = (K) other.getKey();
+                V otherValue = (V) other.getValue();
+                return this.hashingStrategy.equals(this.key, otherKey)
                         && UnifiedMapWithHashingStrategy.nullSafeEquals(this.value, otherValue);
             }
             return false;
@@ -2001,7 +2043,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
 
         public boolean remove(Object o)
         {
-            // this is so slow that the extra overhead of the iterator won't be noticable
+            // this is so slow that the extra overhead of the iterator won't be noticeable
             if (o == null)
             {
                 for (Iterator<V> it = this.iterator(); it.hasNext(); )
@@ -2111,12 +2153,12 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
             FastList<V> replace = FastList.newList(UnifiedMapWithHashingStrategy.this.size());
             for (int i = 0; i < UnifiedMapWithHashingStrategy.this.table.length; i += 2)
             {
-                Object key = UnifiedMapWithHashingStrategy.this.table[i];
-                if (key == CHAINED_KEY)
+                Object cur = UnifiedMapWithHashingStrategy.this.table[i];
+                if (cur == CHAINED_KEY)
                 {
                     this.chainedAddToList((Object[]) UnifiedMapWithHashingStrategy.this.table[i + 1], replace);
                 }
-                else if (key != null)
+                else if (cur != null)
                 {
                     replace.add((V) UnifiedMapWithHashingStrategy.this.table[i + 1]);
                 }
@@ -2143,7 +2185,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
         protected V nextFromChain()
         {
             Object[] chain = (Object[]) UnifiedMapWithHashingStrategy.this.table[this.position + 1];
-            Object val = chain[this.chainPosition + 1];
+            V val = (V) chain[this.chainPosition + 1];
             this.chainPosition += 2;
             if (this.chainPosition >= chain.length
                     || chain[this.chainPosition] == null)
@@ -2152,7 +2194,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
                 this.position += 2;
             }
             this.lastReturned = true;
-            return (V) val;
+            return val;
         }
 
         public V next()
@@ -2171,9 +2213,9 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
             {
                 this.position += 2;
             }
-            Object key = table[this.position];
+            Object cur = table[this.position];
             Object val = table[this.position + 1];
-            if (key == CHAINED_KEY)
+            if (cur == CHAINED_KEY)
             {
                 return this.nextFromChain();
             }
@@ -2183,17 +2225,12 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
         }
     }
 
-    private boolean hashingStrategyEquals(K key1, K key2)
-    {
-        return key1 == key2 || this.hashingStrategy.equals(key1, key2);
-    }
-
     private K nonSentinel(Object key)
     {
         return key == NULL_KEY ? null : (K) key;
     }
 
-    private Object toSentinelIfNull(Object key)
+    private static Object toSentinelIfNull(Object key)
     {
         if (key == null)
         {
@@ -2202,7 +2239,11 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
         return key;
     }
 
-    @Override
+    private boolean nonNullTableObjectEquals(Object cur, K key)
+    {
+        return cur == key || (cur == NULL_KEY ? key == null : this.hashingStrategy.equals(this.nonSentinel(cur), key));
+    }
+
     public ImmutableMap<K, V> toImmutable()
     {
         return HashingStrategyMaps.immutable.ofMap(this);

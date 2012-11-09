@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,7 @@ package com.gs.collections.impl.set.strategy.mutable;
 import com.gs.collections.api.block.HashingStrategy;
 import com.gs.collections.api.factory.set.strategy.MutableHashingStrategySetFactory;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.impl.utility.Iterate;
 import net.jcip.annotations.Immutable;
 
 @Immutable
@@ -51,6 +52,10 @@ public final class MutableHashingStrategySetFactoryImpl implements MutableHashin
 
     public <T> MutableSet<T> withAll(HashingStrategy<? super T> hashingStrategy, Iterable<? extends T> items)
     {
+        if (Iterate.isEmpty(items))
+        {
+            return this.with(hashingStrategy);
+        }
         return UnifiedSetWithHashingStrategy.newSet(hashingStrategy, items);
     }
 }

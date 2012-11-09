@@ -46,15 +46,17 @@ import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.map.ConcurrentMutableMap;
+import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.procedure.MapEntryToProcedure2;
+import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.MapIterate;
 import com.gs.collections.impl.utility.internal.IterableIterate;
 import sun.misc.Unsafe;
 
-@SuppressWarnings("ObjectEquality")
+@SuppressWarnings("UseOfSunClasses")
 public class ConcurrentHashMapUnSafe<K, V>
         extends AbstractMutableMap<K, V>
         implements ConcurrentMutableMap<K, V>, Externalizable
@@ -95,7 +97,7 @@ public class ConcurrentHashMapUnSafe<K, V>
             int objectArrayScale = UNSAFE.arrayIndexScale(objectArrayClass);
             if ((objectArrayScale & (objectArrayScale - 1)) != 0)
             {
-                throw new Error("data type scale not a power of two");
+                throw new AssertionError("data type scale not a power of two");
             }
             OBJECT_ARRAY_SHIFT = 31 - Integer.numberOfLeadingZeros(objectArrayScale);
 
@@ -104,16 +106,20 @@ public class ConcurrentHashMapUnSafe<K, V>
             int intArrayScale = UNSAFE.arrayIndexScale(intArrayClass);
             if ((intArrayScale & (intArrayScale - 1)) != 0)
             {
-                throw new Error("data type scale not a power of two");
+                throw new AssertionError("data type scale not a power of two");
             }
             INT_ARRAY_SHIFT = 31 - Integer.numberOfLeadingZeros(intArrayScale);
 
             Class<?> mapClass = ConcurrentHashMapUnSafe.class;
             SIZE_OFFSET = UNSAFE.objectFieldOffset(mapClass.getDeclaredField("size"));
         }
-        catch (Exception e)
+        catch (NoSuchFieldException e)
         {
-            throw new Error(e);
+            throw new AssertionError(e);
+        }
+        catch (SecurityException e)
+        {
+            throw new AssertionError(e);
         }
     }
 
@@ -2110,5 +2116,10 @@ public class ConcurrentHashMapUnSafe<K, V>
                         e.getCause());
             }
         }
+    }
+
+    public ImmutableMap<K, V> toImmutable()
+    {
+        return Maps.immutable.ofMap(this);
     }
 }

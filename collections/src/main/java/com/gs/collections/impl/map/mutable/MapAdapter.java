@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,9 @@ import java.util.Set;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.MapIterate;
 
@@ -174,5 +176,10 @@ public class MapAdapter<K, V>
     public int hashCode()
     {
         return this.delegate.hashCode();
+    }
+
+    public ImmutableMap<K, V> toImmutable()
+    {
+        return Maps.immutable.ofMap(this);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,14 @@
 package com.gs.collections.impl.set.mutable;
 
 import java.util.Comparator;
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.TreeSet;
 
+import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -34,7 +38,7 @@ public class SynchronizedMutableSet2Test extends AbstractMutableSetTestCase
     @Override
     protected <T> MutableSet<T> classUnderTest()
     {
-        return new SynchronizedMutableSet<T>(SetAdapter.adapt(new TreeSet<T>()));
+        return new SynchronizedMutableSet<T>(SetAdapter.adapt(new HashSet<T>()));
     }
 
     @Test(expected = NoSuchElementException.class)
@@ -97,5 +101,44 @@ public class SynchronizedMutableSet2Test extends AbstractMutableSetTestCase
         MutableSet<Integer> integers = numbers.selectInstancesOf(Integer.class);
         Assert.assertEquals(UnifiedSet.newSetWith(1, 3, 5), integers);
         Assert.assertEquals(FastList.newListWith(1, 3, 5), integers.toList());
+    }
+
+    @Test
+    @Override
+    public void getFirst()
+    {
+        Assert.assertNotNull(this.newWith(1, 2, 3).getFirst());
+        Assert.assertNull(this.classUnderTest().getFirst());
+        Assert.assertEquals(Integer.valueOf(1), this.newWith(1).getFirst());
+        Integer first = this.newWith(1, 2).getFirst();
+        Assert.assertTrue(first.equals(1) || first.equals(2));
+    }
+
+    @Test
+    @Override
+    public void getLast()
+    {
+        Assert.assertNotNull(this.newWith(1, 2, 3).getLast());
+        Assert.assertNull(this.classUnderTest().getLast());
+        Assert.assertEquals(Integer.valueOf(1), this.newWith(1).getLast());
+        Integer last = this.newWith(1, 2).getLast();
+        Assert.assertTrue(last.equals(1) || last.equals(2));
+    }
+
+    @Test
+    @Override
+    public void iterator()
+    {
+        MutableSet<Integer> objects = this.newWith(1, 2, 3);
+        MutableBag<Integer> actual = Bags.mutable.of();
+
+        Iterator<Integer> iterator = objects.iterator();
+        for (int i = objects.size(); i-- > 0; )
+        {
+            Assert.assertTrue(iterator.hasNext());
+            actual.add(iterator.next());
+        }
+        Assert.assertFalse(iterator.hasNext());
+        Assert.assertEquals(Bags.mutable.of(1, 2, 3), actual);
     }
 }

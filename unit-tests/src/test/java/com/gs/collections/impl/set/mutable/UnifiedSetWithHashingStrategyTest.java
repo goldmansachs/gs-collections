@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -51,7 +51,7 @@ import org.junit.Test;
 /**
  * JUnit test suite for {@link UnifiedSetWithHashingStrategy}.
  */
-public class UnifiedSetWithHashingStrategyTest extends AbstractMutableSetTestCase
+public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCase
 {
     //Not using the static factor method in order to have concrete types for test cases
     private static final HashingStrategy<Integer> INTEGER_HASHING_STRATEGY = HashingStrategies.nullSafeHashingStrategy(new HashingStrategy<Integer>()
@@ -497,12 +497,12 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractMutableSetTestCas
     {
         UnifiedSetWithHashingStrategy<Person> people = UnifiedSetWithHashingStrategy.<Person>newSet(
                 HashingStrategies.nullSafeHashingStrategy(LAST_NAME_HASHING_STRATEGY), 2).withAll(PEOPLE.castToList());
-        Person notInSet = new Person("Not", "inSet");
         //Testing if element already exists, returns the instance in the set
         Assert.assertSame(JOHNSMITH, people.put(new Person("Anything", "Smith")));
         Verify.assertSize(2, people);
 
         //Testing if the element doesn't exist, returns the element itself
+        Person notInSet = new Person("Not", "inSet");
         Assert.assertSame(notInSet, people.put(notInSet));
         Verify.assertSize(3, people);
 

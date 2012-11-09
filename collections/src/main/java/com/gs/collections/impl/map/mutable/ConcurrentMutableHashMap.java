@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,9 +31,11 @@ import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.map.ConcurrentMutableMap;
+import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.procedure.MapEntryToProcedure2;
+import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.tuple.ImmutableEntry;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.internal.IterableIterate;
@@ -42,6 +44,7 @@ import com.gs.collections.impl.utility.internal.IterableIterate;
  * A simple concurrent implementation of MutableMap which uses java.util.concurrent.ConcurrentHashMap for its underlying
  * concurrent Map implementation.
  *
+ * @see com.gs.collections.impl.map.mutable.ConcurrentHashMap
  * @deprecated since 2.0
  */
 @Deprecated
@@ -400,5 +403,10 @@ public final class ConcurrentMutableHashMap<K, V>
         {
             return this.delegate.size();
         }
+    }
+
+    public ImmutableMap<K, V> toImmutable()
+    {
+        return Maps.immutable.ofMap(this);
     }
 }

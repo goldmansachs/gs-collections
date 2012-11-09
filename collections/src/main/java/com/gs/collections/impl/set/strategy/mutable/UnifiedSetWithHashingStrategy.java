@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,7 +65,6 @@ import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Comparators;
-import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.Procedures2;
 import com.gs.collections.impl.block.procedure.CollectIfProcedure;
@@ -104,7 +103,26 @@ import net.jcip.annotations.NotThreadSafe;
 public class UnifiedSetWithHashingStrategy<K>
         implements MutableSet<K>, Externalizable, Pool<K>, BatchIterable<K>
 {
-    protected static final Object NULL_KEY = new Object();
+    protected static final Object NULL_KEY = new Object()
+    {
+        @Override
+        public boolean equals(Object obj)
+        {
+            throw new AssertionError();
+        }
+
+        @Override
+        public int hashCode()
+        {
+            throw new AssertionError();
+        }
+
+        @Override
+        public String toString()
+        {
+            return "UnifiedSetWithHashingStrategy.NULL_KEY";
+        }
+    };
 
     protected static final float DEFAULT_LOAD_FACTOR = 0.75f;
 
@@ -169,7 +187,7 @@ public class UnifiedSetWithHashingStrategy<K>
         this.maxSize = set.maxSize;
         this.loadFactor = set.loadFactor;
         this.occupied = set.occupied;
-        this.table = new Object[set.table.length];
+        this.allocateTable(set.table.length);
 
         for (int i = 0; i < set.table.length; i++)
         {
@@ -254,10 +272,15 @@ public class UnifiedSetWithHashingStrategy<K>
 
     protected int allocate(int capacity)
     {
-        this.table = new Object[capacity];
+        this.allocateTable(capacity);
         this.computeMaxSize(capacity);
 
         return capacity;
+    }
+
+    protected void allocateTable(int sizeToAllocate)
+    {
+        this.table = new Object[sizeToAllocate];
     }
 
     protected void computeMaxSize(int capacity)
@@ -296,21 +319,20 @@ public class UnifiedSetWithHashingStrategy<K>
     {
         int index = this.index(key);
         Object cur = this.table[index];
-
         if (cur == null)
         {
-            this.table[index] = this.toSentinelIfNull(key);
+            this.table[index] = toSentinelIfNull(key);
             if (++this.occupied > this.maxSize)
             {
                 this.rehash();
             }
             return true;
         }
-        if (cur instanceof ChainedBucket)
+        if (cur instanceof ChainedBucket || !this.nonNullTableObjectEquals(cur, key))
         {
             return this.chainedAdd(key, index);
         }
-        return !this.existsAndEqual(cur, key) && this.chainedAdd(key, index);
+        return false;
     }
 
     private boolean chainedAdd(K key, int index)
@@ -320,33 +342,33 @@ public class UnifiedSetWithHashingStrategy<K>
             ChainedBucket bucket = (ChainedBucket) this.table[index];
             do
             {
-                if (this.existsAndEqual(bucket.zero, key))
+                if (this.nonNullTableObjectEquals(bucket.zero, key))
                 {
                     return false;
                 }
                 if (bucket.one == null)
                 {
-                    bucket.one = this.toSentinelIfNull(key);
+                    bucket.one = toSentinelIfNull(key);
                     if (++this.occupied > this.maxSize)
                     {
                         this.rehash();
                     }
                     return true;
                 }
-                if (this.existsAndEqual(bucket.one, key))
+                if (this.nonNullTableObjectEquals(bucket.one, key))
                 {
                     return false;
                 }
                 if (bucket.two == null)
                 {
-                    bucket.two = this.toSentinelIfNull(key);
+                    bucket.two = toSentinelIfNull(key);
                     if (++this.occupied > this.maxSize)
                     {
                         this.rehash();
                     }
                     return true;
                 }
-                if (this.existsAndEqual(bucket.two, key))
+                if (this.nonNullTableObjectEquals(bucket.two, key))
                 {
                     return false;
                 }
@@ -357,18 +379,18 @@ public class UnifiedSetWithHashingStrategy<K>
                 }
                 if (bucket.three == null)
                 {
-                    bucket.three = this.toSentinelIfNull(key);
+                    bucket.three = toSentinelIfNull(key);
                     if (++this.occupied > this.maxSize)
                     {
                         this.rehash();
                     }
                     return true;
                 }
-                if (this.existsAndEqual(bucket.three, key))
+                if (this.nonNullTableObjectEquals(bucket.three, key))
                 {
                     return false;
                 }
-                bucket.three = new ChainedBucket(bucket.three, this.toSentinelIfNull(key));
+                bucket.three = new ChainedBucket(bucket.three, toSentinelIfNull(key));
                 if (++this.occupied > this.maxSize)
                 {
                     this.rehash();
@@ -377,7 +399,7 @@ public class UnifiedSetWithHashingStrategy<K>
             }
             while (true);
         }
-        ChainedBucket newBucket = new ChainedBucket(this.table[index], this.toSentinelIfNull(key));
+        ChainedBucket newBucket = new ChainedBucket(this.table[index], toSentinelIfNull(key));
         this.table[index] = newBucket;
         if (++this.occupied > this.maxSize)
         {
@@ -444,19 +466,22 @@ public class UnifiedSetWithHashingStrategy<K>
     {
         int index = this.index((K) key);
         Object cur = this.table[index];
-
+        if (cur == null)
+        {
+            return false;
+        }
         if (cur instanceof ChainedBucket)
         {
             return this.chainContains((ChainedBucket) cur, (K) key);
         }
-        return this.existsAndEqual(cur, (K) key);
+        return this.nonNullTableObjectEquals(cur, (K) key);
     }
 
     private boolean chainContains(ChainedBucket bucket, K key)
     {
         do
         {
-            if (this.existsAndEqual(bucket.zero, key))
+            if (this.nonNullTableObjectEquals(bucket.zero, key))
             {
                 return true;
             }
@@ -464,7 +489,7 @@ public class UnifiedSetWithHashingStrategy<K>
             {
                 return false;
             }
-            if (this.existsAndEqual(bucket.one, key))
+            if (this.nonNullTableObjectEquals(bucket.one, key))
             {
                 return true;
             }
@@ -472,7 +497,7 @@ public class UnifiedSetWithHashingStrategy<K>
             {
                 return false;
             }
-            if (this.existsAndEqual(bucket.two, key))
+            if (this.nonNullTableObjectEquals(bucket.two, key))
             {
                 return true;
             }
@@ -485,7 +510,7 @@ public class UnifiedSetWithHashingStrategy<K>
                 bucket = (ChainedBucket) bucket.three;
                 continue;
             }
-            return this.existsAndEqual(bucket.three, key);
+            return this.nonNullTableObjectEquals(bucket.three, key);
         }
         while (true);
     }
@@ -522,14 +547,14 @@ public class UnifiedSetWithHashingStrategy<K>
     {
         for (int i = 0; i < this.table.length; i++)
         {
-            Object key = this.table[i];
-            if (key instanceof ChainedBucket)
+            Object cur = this.table[i];
+            if (cur instanceof ChainedBucket)
             {
-                this.chainedForEach((ChainedBucket) key, procedure);
+                this.chainedForEach((ChainedBucket) cur, procedure);
             }
-            else if (key != null)
+            else if (cur != null)
             {
-                procedure.value(this.nonSentinel(key));
+                procedure.value(this.nonSentinel(cur));
             }
         }
     }
@@ -568,14 +593,14 @@ public class UnifiedSetWithHashingStrategy<K>
     {
         for (int i = 0; i < this.table.length; i++)
         {
-            Object key = this.table[i];
-            if (key instanceof ChainedBucket)
+            Object cur = this.table[i];
+            if (cur instanceof ChainedBucket)
             {
-                this.chainedForEachWith((ChainedBucket) key, procedure, parameter);
+                this.chainedForEachWith((ChainedBucket) cur, procedure, parameter);
             }
-            else if (key != null)
+            else if (cur != null)
             {
-                procedure.value(this.nonSentinel(key), parameter);
+                procedure.value(this.nonSentinel(cur), parameter);
             }
         }
     }
@@ -618,14 +643,14 @@ public class UnifiedSetWithHashingStrategy<K>
         int count = 0;
         for (int i = 0; i < this.table.length; i++)
         {
-            Object key = this.table[i];
-            if (key instanceof ChainedBucket)
+            Object cur = this.table[i];
+            if (cur instanceof ChainedBucket)
             {
-                count = this.chainedForEachWithIndex((ChainedBucket) key, objectIntProcedure, count);
+                count = this.chainedForEachWithIndex((ChainedBucket) cur, objectIntProcedure, count);
             }
-            else if (key != null)
+            else if (cur != null)
             {
-                objectIntProcedure.value(this.nonSentinel(key), count++);
+                objectIntProcedure.value(this.nonSentinel(cur), count++);
             }
         }
     }
@@ -1093,10 +1118,6 @@ public class UnifiedSetWithHashingStrategy<K>
 
     public ImmutableSet<K> toImmutable()
     {
-        if (this.isEmpty())
-        {
-            return HashingStrategySets.immutable.of(this.hashingStrategy);
-        }
         return HashingStrategySets.immutable.ofAll(this.hashingStrategy, this);
     }
 
@@ -1193,14 +1214,14 @@ public class UnifiedSetWithHashingStrategy<K>
         boolean changed = false;
         for (int i = 0; i < unifiedset.table.length; i++)
         {
-            Object key = unifiedset.table[i];
-            if (key instanceof ChainedBucket)
+            Object cur = unifiedset.table[i];
+            if (cur instanceof ChainedBucket)
             {
-                changed |= this.copyChain((ChainedBucket) key);
+                changed |= this.copyChain((ChainedBucket) cur);
             }
-            else if (key != null)
+            else if (cur != null)
             {
-                changed |= this.add(this.nonSentinel(key));
+                changed |= this.add(this.nonSentinel(cur));
             }
         }
         return changed;
@@ -1242,25 +1263,26 @@ public class UnifiedSetWithHashingStrategy<K>
         int index = this.index((K) key);
 
         Object cur = this.table[index];
-        if (cur != null)
+        if (cur == null)
         {
-            if (cur instanceof ChainedBucket)
-            {
-                return this.removeFromChain((ChainedBucket) cur, (K) key, index);
-            }
-            if (this.existsAndEqual(cur, (K) key))
-            {
-                this.table[index] = null;
-                this.occupied--;
-                return true;
-            }
+            return false;
+        }
+        if (cur instanceof ChainedBucket)
+        {
+            return this.removeFromChain((ChainedBucket) cur, (K) key, index);
+        }
+        if (this.nonNullTableObjectEquals(cur, (K) key))
+        {
+            this.table[index] = null;
+            this.occupied--;
+            return true;
         }
         return false;
     }
 
     private boolean removeFromChain(ChainedBucket bucket, K key, int index)
     {
-        if (this.existsAndEqual(bucket.zero, key))
+        if (this.nonNullTableObjectEquals(bucket.zero, key))
         {
             bucket.zero = bucket.removeLast(0);
             if (bucket.zero == null)
@@ -1274,7 +1296,7 @@ public class UnifiedSetWithHashingStrategy<K>
         {
             return false;
         }
-        if (this.existsAndEqual(bucket.one, key))
+        if (this.nonNullTableObjectEquals(bucket.one, key))
         {
             bucket.one = bucket.removeLast(1);
             this.occupied--;
@@ -1284,7 +1306,7 @@ public class UnifiedSetWithHashingStrategy<K>
         {
             return false;
         }
-        if (this.existsAndEqual(bucket.two, key))
+        if (this.nonNullTableObjectEquals(bucket.two, key))
         {
             bucket.two = bucket.removeLast(2);
             this.occupied--;
@@ -1298,7 +1320,7 @@ public class UnifiedSetWithHashingStrategy<K>
         {
             return this.removeDeepChain(bucket, key);
         }
-        if (this.existsAndEqual(bucket.three, key))
+        if (this.nonNullTableObjectEquals(bucket.three, key))
         {
             bucket.three = bucket.removeLast(3);
             this.occupied--;
@@ -1312,7 +1334,7 @@ public class UnifiedSetWithHashingStrategy<K>
         do
         {
             ChainedBucket bucket = (ChainedBucket) oldBucket.three;
-            if (this.existsAndEqual(bucket.zero, key))
+            if (this.nonNullTableObjectEquals(bucket.zero, key))
             {
                 bucket.zero = bucket.removeLast(0);
                 if (bucket.zero == null)
@@ -1326,7 +1348,7 @@ public class UnifiedSetWithHashingStrategy<K>
             {
                 return false;
             }
-            if (this.existsAndEqual(bucket.one, key))
+            if (this.nonNullTableObjectEquals(bucket.one, key))
             {
                 bucket.one = bucket.removeLast(1);
                 this.occupied--;
@@ -1336,7 +1358,7 @@ public class UnifiedSetWithHashingStrategy<K>
             {
                 return false;
             }
-            if (this.existsAndEqual(bucket.two, key))
+            if (this.nonNullTableObjectEquals(bucket.two, key))
             {
                 bucket.two = bucket.removeLast(2);
                 this.occupied--;
@@ -1351,7 +1373,7 @@ public class UnifiedSetWithHashingStrategy<K>
                 oldBucket = bucket;
                 continue;
             }
-            if (this.existsAndEqual(bucket.three, key))
+            if (this.nonNullTableObjectEquals(bucket.three, key))
             {
                 bucket.three = bucket.removeLast(3);
                 this.occupied--;
@@ -1381,12 +1403,7 @@ public class UnifiedSetWithHashingStrategy<K>
         }
 
         Set<?> other = (Set<?>) object;
-        if (this.size() != other.size())
-        {
-            return false;
-        }
-
-        return Iterate.allSatisfy(other, Predicates.in(this));
+        return this.size() == other.size() && this.containsAll(other);
     }
 
     @Override
@@ -1395,14 +1412,14 @@ public class UnifiedSetWithHashingStrategy<K>
         int hashCode = 0;
         for (int i = 0; i < this.table.length; i++)
         {
-            Object key = this.table[i];
-            if (key instanceof ChainedBucket)
+            Object cur = this.table[i];
+            if (cur instanceof ChainedBucket)
             {
-                hashCode += this.chainedHashCode((ChainedBucket) key);
+                hashCode += this.chainedHashCode((ChainedBucket) cur);
             }
-            else if (key != null)
+            else if (cur != null)
             {
-                hashCode += this.hashingStrategy.computeHashCode(this.nonSentinel(key));
+                hashCode += this.hashingStrategy.computeHashCode(this.nonSentinel(cur));
             }
         }
         return hashCode;
@@ -1473,14 +1490,7 @@ public class UnifiedSetWithHashingStrategy<K>
                 }
                 else
                 {
-                    if (o == NULL_KEY)
-                    {
-                        out.writeObject(null);
-                    }
-                    else
-                    {
-                        out.writeObject(o);
-                    }
+                    out.writeObject(this.nonSentinel(o));
                 }
             }
         }
@@ -1490,38 +1500,17 @@ public class UnifiedSetWithHashingStrategy<K>
     {
         do
         {
-            if (bucket.zero == NULL_KEY)
-            {
-                out.writeObject(null);
-            }
-            else
-            {
-                out.writeObject(bucket.zero);
-            }
+            out.writeObject(this.nonSentinel(bucket.zero));
             if (bucket.one == null)
             {
                 return;
             }
-            if (bucket.one == NULL_KEY)
-            {
-                out.writeObject(null);
-            }
-            else
-            {
-                out.writeObject(bucket.one);
-            }
+            out.writeObject(this.nonSentinel(bucket.one));
             if (bucket.two == null)
             {
                 return;
             }
-            if (bucket.two == NULL_KEY)
-            {
-                out.writeObject(null);
-            }
-            else
-            {
-                out.writeObject(bucket.two);
-            }
+            out.writeObject(this.nonSentinel(bucket.two));
             if (bucket.three == null)
             {
                 return;
@@ -1531,14 +1520,7 @@ public class UnifiedSetWithHashingStrategy<K>
                 bucket = (ChainedBucket) bucket.three;
                 continue;
             }
-            if (bucket.three == NULL_KEY)
-            {
-                out.writeObject(null);
-            }
-            else
-            {
-                out.writeObject(bucket.three);
-            }
+            out.writeObject(this.nonSentinel(bucket.three));
             return;
         }
         while (true);
@@ -1579,17 +1561,18 @@ public class UnifiedSetWithHashingStrategy<K>
         int index = this.index(key);
 
         Object cur = this.table[index];
-        if (cur != null)
+        if (cur == null)
         {
-            if (cur instanceof ChainedBucket)
-            {
-                this.addIfFoundFromChain((ChainedBucket) cur, key, other);
-                return;
-            }
-            if (this.existsAndEqual(cur, key))
-            {
-                other.add(this.nonSentinel(cur));
-            }
+            return;
+        }
+        if (cur instanceof ChainedBucket)
+        {
+            this.addIfFoundFromChain((ChainedBucket) cur, key, other);
+            return;
+        }
+        if (this.nonNullTableObjectEquals(cur, key))
+        {
+            other.add(this.nonSentinel(cur));
         }
     }
 
@@ -1597,27 +1580,27 @@ public class UnifiedSetWithHashingStrategy<K>
     {
         do
         {
-            if (this.existsAndEqual(bucket.zero, key))
+            if (this.nonNullTableObjectEquals(bucket.zero, key))
             {
-                other.add(this.nonSentinel(key));
+                other.add(this.nonSentinel(bucket.zero));
                 return;
             }
             if (bucket.one == null)
             {
                 return;
             }
-            if (this.existsAndEqual(bucket.one, key))
+            if (this.nonNullTableObjectEquals(bucket.one, key))
             {
-                other.add(this.nonSentinel(key));
+                other.add(this.nonSentinel(bucket.one));
                 return;
             }
             if (bucket.two == null)
             {
                 return;
             }
-            if (this.existsAndEqual(bucket.two, key))
+            if (this.nonNullTableObjectEquals(bucket.two, key))
             {
-                other.add(this.nonSentinel(key));
+                other.add(this.nonSentinel(bucket.two));
                 return;
             }
             if (bucket.three == null)
@@ -1629,9 +1612,9 @@ public class UnifiedSetWithHashingStrategy<K>
                 bucket = (ChainedBucket) bucket.three;
                 continue;
             }
-            if (this.existsAndEqual(bucket.three, key))
+            if (this.nonNullTableObjectEquals(bucket.three, key))
             {
-                other.add(this.nonSentinel(key));
+                other.add(this.nonSentinel(bucket.three));
                 return;
             }
             return;
@@ -1673,7 +1656,7 @@ public class UnifiedSetWithHashingStrategy<K>
 
     private boolean retainAllFromSet(Set<?> collection)
     {
-        //todo: rezaem: turn iterator into a loop
+        // TODO: turn iterator into a loop
         boolean result = false;
         Iterator<K> e = this.iterator();
         while (e.hasNext())
@@ -1706,17 +1689,17 @@ public class UnifiedSetWithHashingStrategy<K>
         int count = 0;
         for (int i = 0; i < table.length; i++)
         {
-            Object x = table[i];
-            if (x != null)
+            Object cur = table[i];
+            if (cur != null)
             {
-                if (x instanceof ChainedBucket)
+                if (cur instanceof ChainedBucket)
                 {
-                    ChainedBucket bucket = (ChainedBucket) x;
+                    ChainedBucket bucket = (ChainedBucket) cur;
                     count = this.copyBucketToArray(result, bucket, count);
                 }
                 else
                 {
-                    result[count++] = this.nonSentinel(x);
+                    result[count++] = this.nonSentinel(cur);
                 }
             }
         }
@@ -1832,7 +1815,7 @@ public class UnifiedSetWithHashingStrategy<K>
         protected K nextFromChain()
         {
             ChainedBucket bucket = (ChainedBucket) UnifiedSetWithHashingStrategy.this.table[this.position];
-            Object key = bucket.get(this.chainPosition);
+            Object cur = bucket.get(this.chainPosition);
             this.chainPosition++;
             if (bucket.get(this.chainPosition) == null)
             {
@@ -1840,7 +1823,7 @@ public class UnifiedSetWithHashingStrategy<K>
                 this.position++;
             }
             this.lastReturned = true;
-            return UnifiedSetWithHashingStrategy.this.nonSentinel(key);
+            return UnifiedSetWithHashingStrategy.this.nonSentinel(cur);
         }
 
         public K next()
@@ -1859,14 +1842,14 @@ public class UnifiedSetWithHashingStrategy<K>
             {
                 this.position++;
             }
-            Object key = table[this.position];
-            if (key instanceof ChainedBucket)
+            Object cur = table[this.position];
+            if (cur instanceof ChainedBucket)
             {
                 return this.nextFromChain();
             }
             this.position++;
             this.lastReturned = true;
-            return UnifiedSetWithHashingStrategy.this.nonSentinel(key);
+            return UnifiedSetWithHashingStrategy.this.nonSentinel(cur);
         }
     }
 
@@ -2218,44 +2201,44 @@ public class UnifiedSetWithHashingStrategy<K>
         int index = this.index(key);
         Object cur = this.table[index];
 
-        Object result = null;
-        if (cur != null)
+        if (cur == null)
         {
-            if (cur instanceof ChainedBucket)
-            {
-                result = this.chainedGet(key, (ChainedBucket) cur);
-            }
-            else if (this.existsAndEqual(cur, key))
-            {
-                result = cur;
-            }
+            return null;
         }
-        return this.nonSentinel(result);
+        if (cur instanceof ChainedBucket)
+        {
+            return this.chainedGet(key, (ChainedBucket) cur);
+        }
+        if (this.nonNullTableObjectEquals(cur, key))
+        {
+            return (K) cur;
+        }
+        return null;
     }
 
-    private Object chainedGet(K key, ChainedBucket bucket)
+    private K chainedGet(K key, ChainedBucket bucket)
     {
         do
         {
-            if (this.existsAndEqual(bucket.zero, key))
+            if (this.nonNullTableObjectEquals(bucket.zero, key))
             {
-                return bucket.zero;
+                return this.nonSentinel(bucket.zero);
             }
             if (bucket.one == null)
             {
                 return null;
             }
-            if (this.existsAndEqual(bucket.one, key))
+            if (this.nonNullTableObjectEquals(bucket.one, key))
             {
-                return bucket.one;
+                return this.nonSentinel(bucket.one);
             }
             if (bucket.two == null)
             {
                 return null;
             }
-            if (this.existsAndEqual(bucket.two, key))
+            if (this.nonNullTableObjectEquals(bucket.two, key))
             {
-                return bucket.two;
+                return this.nonSentinel(bucket.two);
             }
             if (bucket.three instanceof ChainedBucket)
             {
@@ -2266,9 +2249,9 @@ public class UnifiedSetWithHashingStrategy<K>
             {
                 return null;
             }
-            if (this.existsAndEqual(bucket.three, key))
+            if (this.nonNullTableObjectEquals(bucket.three, key))
             {
-                return bucket.three;
+                return this.nonSentinel(bucket.three);
             }
             return null;
         }
@@ -2282,56 +2265,57 @@ public class UnifiedSetWithHashingStrategy<K>
 
         if (cur == null)
         {
-            this.table[index] = this.toSentinelIfNull(key);
+            this.table[index] = toSentinelIfNull(key);
             if (++this.occupied > this.maxSize)
             {
                 this.rehash();
             }
-            return this.nonSentinel(key);
+            return key;
         }
-        if (cur instanceof ChainedBucket || !this.eq(cur, key))
+
+        if (cur instanceof ChainedBucket || !this.nonNullTableObjectEquals(cur, key))
         {
-            return this.nonSentinel(this.chainedPut(key, index));
+            return this.chainedPut(key, index);
         }
         return this.nonSentinel(cur);
     }
 
-    private Object chainedPut(K key, int index)
+    private K chainedPut(K key, int index)
     {
         if (this.table[index] instanceof ChainedBucket)
         {
             ChainedBucket bucket = (ChainedBucket) this.table[index];
             do
             {
-                if (this.existsAndEqual(bucket.zero, key))
+                if (this.nonNullTableObjectEquals(bucket.zero, key))
                 {
-                    return bucket.zero;
+                    return this.nonSentinel(bucket.zero);
                 }
                 if (bucket.one == null)
                 {
-                    bucket.one = this.toSentinelIfNull(key);
+                    bucket.one = toSentinelIfNull(key);
                     if (++this.occupied > this.maxSize)
                     {
                         this.rehash();
                     }
                     return key;
                 }
-                if (this.existsAndEqual(bucket.one, key))
+                if (this.nonNullTableObjectEquals(bucket.one, key))
                 {
-                    return bucket.one;
+                    return this.nonSentinel(bucket.one);
                 }
                 if (bucket.two == null)
                 {
-                    bucket.two = this.toSentinelIfNull(key);
+                    bucket.two = toSentinelIfNull(key);
                     if (++this.occupied > this.maxSize)
                     {
                         this.rehash();
                     }
                     return key;
                 }
-                if (this.existsAndEqual(bucket.two, key))
+                if (this.nonNullTableObjectEquals(bucket.two, key))
                 {
-                    return bucket.two;
+                    return this.nonSentinel(bucket.two);
                 }
                 if (bucket.three instanceof ChainedBucket)
                 {
@@ -2340,18 +2324,18 @@ public class UnifiedSetWithHashingStrategy<K>
                 }
                 if (bucket.three == null)
                 {
-                    bucket.three = this.toSentinelIfNull(key);
+                    bucket.three = toSentinelIfNull(key);
                     if (++this.occupied > this.maxSize)
                     {
                         this.rehash();
                     }
                     return key;
                 }
-                if (this.existsAndEqual(bucket.three, key))
+                if (this.nonNullTableObjectEquals(bucket.three, key))
                 {
-                    return bucket.three;
+                    return this.nonSentinel(bucket.three);
                 }
-                bucket.three = new ChainedBucket(bucket.three, this.toSentinelIfNull(key));
+                bucket.three = new ChainedBucket(bucket.three, key);
                 if (++this.occupied > this.maxSize)
                 {
                     this.rehash();
@@ -2360,7 +2344,7 @@ public class UnifiedSetWithHashingStrategy<K>
             }
             while (true);
         }
-        ChainedBucket newBucket = new ChainedBucket(this.table[index], this.toSentinelIfNull(key));
+        ChainedBucket newBucket = new ChainedBucket(this.table[index], key);
         this.table[index] = newBucket;
         if (++this.occupied > this.maxSize)
         {
@@ -2373,25 +2357,26 @@ public class UnifiedSetWithHashingStrategy<K>
     {
         int index = this.index(key);
         Object cur = this.table[index];
-        if (cur != null)
+        if (cur == null)
         {
-            if (cur instanceof ChainedBucket)
-            {
-                return this.nonSentinel(this.removeFromChainForPool((ChainedBucket) cur, key, index));
-            }
-            if (this.existsAndEqual(cur, key))
-            {
-                this.table[index] = null;
-                this.occupied--;
-                return this.nonSentinel(cur);
-            }
+            return null;
+        }
+        if (cur instanceof ChainedBucket)
+        {
+            return this.removeFromChainForPool((ChainedBucket) cur, key, index);
+        }
+        if (this.nonNullTableObjectEquals(cur, key))
+        {
+            this.table[index] = null;
+            this.occupied--;
+            return this.nonSentinel(cur);
         }
         return null;
     }
 
-    private Object removeFromChainForPool(ChainedBucket bucket, K key, int index)
+    private K removeFromChainForPool(ChainedBucket bucket, K key, int index)
     {
-        if (this.existsAndEqual(bucket.zero, key))
+        if (this.nonNullTableObjectEquals(bucket.zero, key))
         {
             Object result = bucket.zero;
             bucket.zero = bucket.removeLast(0);
@@ -2406,7 +2391,7 @@ public class UnifiedSetWithHashingStrategy<K>
         {
             return null;
         }
-        if (this.existsAndEqual(bucket.one, key))
+        if (this.nonNullTableObjectEquals(bucket.one, key))
         {
             Object result = bucket.one;
             bucket.one = bucket.removeLast(1);
@@ -2417,7 +2402,7 @@ public class UnifiedSetWithHashingStrategy<K>
         {
             return null;
         }
-        if (this.existsAndEqual(bucket.two, key))
+        if (this.nonNullTableObjectEquals(bucket.two, key))
         {
             Object result = bucket.two;
             bucket.two = bucket.removeLast(2);
@@ -2432,7 +2417,7 @@ public class UnifiedSetWithHashingStrategy<K>
         {
             return this.removeDeepChainForPool(bucket, key);
         }
-        if (this.existsAndEqual(bucket.three, key))
+        if (this.nonNullTableObjectEquals(bucket.three, key))
         {
             Object result = bucket.three;
             bucket.three = bucket.removeLast(3);
@@ -2442,12 +2427,12 @@ public class UnifiedSetWithHashingStrategy<K>
         return null;
     }
 
-    private Object removeDeepChainForPool(ChainedBucket oldBucket, K key)
+    private K removeDeepChainForPool(ChainedBucket oldBucket, K key)
     {
         do
         {
             ChainedBucket bucket = (ChainedBucket) oldBucket.three;
-            if (this.existsAndEqual(bucket.zero, key))
+            if (this.nonNullTableObjectEquals(bucket.zero, key))
             {
                 Object result = bucket.zero;
                 bucket.zero = bucket.removeLast(0);
@@ -2462,7 +2447,7 @@ public class UnifiedSetWithHashingStrategy<K>
             {
                 return null;
             }
-            if (this.existsAndEqual(bucket.one, key))
+            if (this.nonNullTableObjectEquals(bucket.one, key))
             {
                 Object result = bucket.one;
                 bucket.one = bucket.removeLast(1);
@@ -2473,7 +2458,7 @@ public class UnifiedSetWithHashingStrategy<K>
             {
                 return null;
             }
-            if (this.existsAndEqual(bucket.two, key))
+            if (this.nonNullTableObjectEquals(bucket.two, key))
             {
                 Object result = bucket.two;
                 bucket.two = bucket.removeLast(2);
@@ -2489,7 +2474,7 @@ public class UnifiedSetWithHashingStrategy<K>
                 oldBucket = bucket;
                 continue;
             }
-            if (this.existsAndEqual(bucket.three, key))
+            if (this.nonNullTableObjectEquals(bucket.three, key))
             {
                 Object result = bucket.three;
                 bucket.three = bucket.removeLast(3);
@@ -2501,27 +2486,22 @@ public class UnifiedSetWithHashingStrategy<K>
         while (true);
     }
 
-    private boolean existsAndEqual(Object object1, K object2)
+    private K nonSentinel(Object key)
     {
-        return object1 != null && this.eq(object1, object2);
+        return key == NULL_KEY ? null : (K) key;
     }
 
-    private boolean eq(Object object1, K object2)
-    {
-        return object1 == object2 || this.hashingStrategy.equals(this.nonSentinel(object1), object2);
-    }
-
-    private K nonSentinel(Object element)
-    {
-        return element == NULL_KEY ? null : (K) element;
-    }
-
-    private Object toSentinelIfNull(Object key)
+    private static Object toSentinelIfNull(Object key)
     {
         if (key == null)
         {
             return NULL_KEY;
         }
         return key;
+    }
+
+    private boolean nonNullTableObjectEquals(Object cur, K key)
+    {
+        return cur == key || (cur == NULL_KEY ? key == null : this.hashingStrategy.equals(this.nonSentinel(cur), key));
     }
 }

@@ -43,9 +43,11 @@ import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.map.ConcurrentMutableMap;
+import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.procedure.MapEntryToProcedure2;
+import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.MapIterate;
 import com.gs.collections.impl.utility.internal.IterableIterate;
@@ -1832,5 +1834,10 @@ public final class ConcurrentHashMap<K, V>
     public <P> void forEachWith(Procedure2<? super V, ? super P> procedure, P parameter)
     {
         Iterate.forEachWith(this.values(), procedure, parameter);
+    }
+
+    public ImmutableMap<K, V> toImmutable()
+    {
+        return Maps.immutable.ofMap(this);
     }
 }

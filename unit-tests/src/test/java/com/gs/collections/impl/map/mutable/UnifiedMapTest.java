@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -360,15 +360,8 @@ public class UnifiedMapTest extends UnifiedMapTestCase
     @Override
     protected UnifiedMap<Integer, Integer> mapWithCollisionsOfSize(int size)
     {
-        final UnifiedMap<Integer, Integer> map = UnifiedMap.newMap(size);
-        COLLISIONS.subList(0, size).forEach(new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                map.put(each, each);
-            }
-        });
-        return map;
+        UnifiedMap<Integer, Integer> map = UnifiedMap.newMap(size);
+        return this.populateMapWithCollisionsOfSize(size, map);
     }
 
     private static final class EntrySumProcedure implements Procedure<Map.Entry<Integer, Integer>>

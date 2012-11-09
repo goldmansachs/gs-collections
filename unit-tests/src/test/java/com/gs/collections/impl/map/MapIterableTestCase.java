@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@ package com.gs.collections.impl.map;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
+import java.util.SortedMap;
+import java.util.concurrent.ConcurrentMap;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
@@ -43,6 +45,7 @@ import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.IntegerWithCast;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
@@ -67,9 +70,11 @@ import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Test;
 
 import static com.gs.collections.impl.factory.Iterables.*;
+import static org.hamcrest.CoreMatchers.*;
 
 public abstract class MapIterableTestCase
 {
@@ -662,13 +667,13 @@ public abstract class MapIterableTestCase
     {
         MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
 
-        NegativeIntervalFunction function = new NegativeIntervalFunction();
         final MutableMultimap<Integer, Integer> expected = FastListMultimap.newMultimap();
         for (int i = 1; i < 4; i++)
         {
             expected.putAll(-i, Interval.fromTo(i, 4));
         }
 
+        NegativeIntervalFunction function = new NegativeIntervalFunction();
         final Multimap<Integer, Integer> actual = map.groupByEach(function);
         expected.forEachKey(new Procedure<Integer>()
         {
@@ -981,5 +986,23 @@ public abstract class MapIterableTestCase
         MapIterable<Integer, String> map = this.newMapWithKeysValues(1, "A", 2, "B", 3, "C", 4, "D");
         MutableSet<Pair<Integer, String>> keyValues = map.keyValuesView().toSet();
         Assert.assertEquals(UnifiedSet.newSetWith(Tuples.pair(1, "A"), Tuples.pair(2, "B"), Tuples.pair(3, "C"), Tuples.pair(4, "D")), keyValues);
+    }
+
+    @Test
+    public void nullCollisionWithCastInEquals()
+    {
+        Assume.assumeThat(this.newMap(), not(is(SortedMap.class)));
+        Assume.assumeThat(this.newMap(), not(is(ConcurrentMap.class)));
+        MapIterable<IntegerWithCast, String> mutableMap = this.newMapWithKeysValues(
+                new IntegerWithCast(0), "Test 2",
+                new IntegerWithCast(0), "Test 3",
+                null, "Test 1");
+        Assert.assertEquals(
+                this.newMapWithKeysValues(
+                        new IntegerWithCast(0), "Test 3",
+                        null, "Test 1"),
+                mutableMap);
+        Assert.assertEquals("Test 3", mutableMap.get(new IntegerWithCast(0)));
+        Assert.assertEquals("Test 1", mutableMap.get(null));
     }
 }

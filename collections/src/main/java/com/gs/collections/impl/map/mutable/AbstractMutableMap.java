@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,13 +29,11 @@ import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.MutableList;
-import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
-import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.list.fixed.ArrayAdapter;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.AbstractMapIterable;
@@ -78,11 +76,6 @@ public abstract class AbstractMutableMap<K, V> extends AbstractMapIterable<K, V>
     public MutableMap<K, V> asUnmodifiable()
     {
         return UnmodifiableMutableMap.of(this);
-    }
-
-    public ImmutableMap<K, V> toImmutable()
-    {
-        return Maps.immutable.ofMap(this);
     }
 
     public MutableMap<K, V> asSynchronized()

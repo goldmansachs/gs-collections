@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -756,16 +756,9 @@ public class UnifiedMapWithHashingStrategyTest extends UnifiedMapTestCase
     @Override
     protected UnifiedMapWithHashingStrategy<Integer, Integer> mapWithCollisionsOfSize(int size)
     {
-        final UnifiedMapWithHashingStrategy<Integer, Integer> map = UnifiedMapWithHashingStrategy.newMap(
+        UnifiedMapWithHashingStrategy<Integer, Integer> map = UnifiedMapWithHashingStrategy.newMap(
                 INTEGER_HASHING_STRATEGY, size);
-        MORE_COLLISIONS.subList(0, size).forEach(new Procedure<Integer>()
-        {
-            public void value(Integer each)
-            {
-                map.put(each, each);
-            }
-        });
-        return map;
+        return this.populateMapWithCollisionsOfSize(size, map);
     }
 
     private static final class EntrySumProcedure implements Procedure<Map.Entry<Integer, Integer>>

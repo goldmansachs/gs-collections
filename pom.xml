@@ -40,6 +40,7 @@
         <module>collections</module>
         <module>collections-testutils</module>
         <module>unit-tests</module>
+        <module>scala-unit-tests</module>
         <module>serialization-tests</module>
     </modules>
 
@@ -312,6 +313,13 @@
                 <artifactId>versions-maven-plugin</artifactId>
                 <version>1.2</version>
             </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-dependency-plugin</artifactId>
+                <version>2.4</version>
+            </plugin>
+
         </plugins>
     </build>
 
@@ -425,9 +433,6 @@
 
         <profile>
             <id>all</id>
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
 
             <modules>
                 <module>gs-collections-code-generator</module>

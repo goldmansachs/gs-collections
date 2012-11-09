@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.UnsortedMapIterable;
@@ -42,6 +43,7 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.MapCollectProcedure;
+import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.parallel.BatchIterable;
@@ -63,19 +65,51 @@ import net.jcip.annotations.NotThreadSafe;
  */
 
 @NotThreadSafe
+@SuppressWarnings("ObjectEquality")
 public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         implements Externalizable, BatchIterable<V>
 {
     protected static final Object NULL_KEY = new Object()
     {
         @Override
+        public boolean equals(Object obj)
+        {
+            throw new AssertionError();
+        }
+
+        @Override
         public int hashCode()
         {
             return 0;
         }
+
+        @Override
+        public String toString()
+        {
+            return "UnifiedMap.NULL_KEY";
+        }
     };
 
-    protected static final Object CHAINED_KEY = new Object();
+    protected static final Object CHAINED_KEY = new Object()
+    {
+        @Override
+        public boolean equals(Object obj)
+        {
+            throw new AssertionError();
+        }
+
+        @Override
+        public int hashCode()
+        {
+            throw new AssertionError();
+        }
+
+        @Override
+        public String toString()
+        {
+            return "UnifiedMap.CHAINED_KEY";
+        }
+    };
 
     protected static final float DEFAULT_LOAD_FACTOR = 0.75f;
 
@@ -212,6 +246,11 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         return new UnifiedMap<K, V>(this);
     }
 
+    public MutableMap<K, V> newEmpty()
+    {
+        return new UnifiedMap<K, V>();
+    }
+
     @Override
     public MutableMap<K, V> newEmpty(int capacity)
     {
@@ -255,8 +294,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
     protected void computeMaxSize(int capacity)
     {
         // need at least one free slot for open addressing
-        this.maxSize = Math.min(capacity - 1,
-                (int) (capacity * this.loadFactor));
+        this.maxSize = Math.min(capacity - 1, (int) (capacity * this.loadFactor));
     }
 
     protected final int index(Object key)
@@ -264,7 +302,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         // This function ensures that hashCodes that differ only by
         // constant multiples at each bit position have a bounded
         // number of collisions (approximately 8 at default load factor).
-        int h = key.hashCode();
+        int h = toSentinelIfNull(key).hashCode();
         h ^= h >>> 20 ^ h >>> 12;
         h ^= h >>> 7 ^ h >>> 4;
         return (h & (this.table.length >> 1) - 1) << 1;
@@ -287,13 +325,11 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
 
     public V put(K key, V value)
     {
-        Object realKey = this.toSentinelIfNull(key);
-        int index = this.index(realKey);
+        int index = this.index(key);
         Object cur = this.table[index];
-
         if (cur == null)
         {
-            this.table[index] = realKey;
+            this.table[index] = toSentinelIfNull(key);
             this.table[index + 1] = value;
             if (++this.occupied > this.maxSize)
             {
@@ -301,16 +337,16 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
             }
             return null;
         }
-        if (realKey == cur || cur.equals(realKey))
+        if (cur != CHAINED_KEY && this.nonNullTableObjectEquals(cur, key))
         {
             V result = (V) this.table[index + 1];
             this.table[index + 1] = value;
             return result;
         }
-        return this.chainedPut(realKey, index, value);
+        return this.chainedPut(key, index, value);
     }
 
-    private V chainedPut(Object realKey, int index, V value)
+    private V chainedPut(K key, int index, V value)
     {
         V result = null;
         if (this.table[index] == CHAINED_KEY)
@@ -321,7 +357,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
             {
                 if (chain[i] == null)
                 {
-                    chain[i] = realKey;
+                    chain[i] = toSentinelIfNull(key);
                     chain[i + 1] = value;
                     if (++this.occupied > this.maxSize)
                     {
@@ -329,7 +365,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
                     }
                     break;
                 }
-                if (realKey == chain[i] || chain[i].equals(realKey))
+                if (this.nonNullTableObjectEquals(chain[i], key))
                 {
                     result = (V) chain[i + 1];
                     chain[i + 1] = value;
@@ -341,7 +377,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
                 Object[] newChain = new Object[chain.length + 4];
                 System.arraycopy(chain, 0, newChain, 0, chain.length);
                 this.table[index + 1] = newChain;
-                newChain[i] = realKey;
+                newChain[i] = toSentinelIfNull(key);
                 newChain[i + 1] = value;
                 if (++this.occupied > this.maxSize)
                 {
@@ -354,7 +390,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
             Object[] newChain = new Object[4];
             newChain[0] = this.table[index];
             newChain[1] = this.table[index + 1];
-            newChain[2] = realKey;
+            newChain[2] = toSentinelIfNull(key);
             newChain[3] = value;
             this.table[index] = CHAINED_KEY;
             this.table[index + 1] = newChain;
@@ -369,14 +405,13 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
     @Override
     public V getIfAbsentPut(K key, Function0<? extends V> function)
     {
-        Object realKey = this.toSentinelIfNull(key);
-        int index = this.index(realKey);
+        int index = this.index(key);
         Object cur = this.table[index];
 
         if (cur == null)
         {
             V result = function.value();
-            this.table[index] = realKey;
+            this.table[index] = toSentinelIfNull(key);
             this.table[index + 1] = result;
             if (++this.occupied > this.maxSize)
             {
@@ -384,14 +419,14 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
             }
             return result;
         }
-        if (realKey == cur || cur.equals(realKey))
+        if (cur != CHAINED_KEY && this.nonNullTableObjectEquals(cur, key))
         {
             return (V) this.table[index + 1];
         }
-        return this.chainedGetIfAbsentPut(realKey, index, function);
+        return this.chainedGetIfAbsentPut(key, index, function);
     }
 
-    private V chainedGetIfAbsentPut(Object realKey, int index, Function0<? extends V> function)
+    private V chainedGetIfAbsentPut(K key, int index, Function0<? extends V> function)
     {
         V result = null;
         if (this.table[index] == CHAINED_KEY)
@@ -403,7 +438,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
                 if (chain[i] == null)
                 {
                     result = function.value();
-                    chain[i] = realKey;
+                    chain[i] = toSentinelIfNull(key);
                     chain[i + 1] = result;
                     if (++this.occupied > this.maxSize)
                     {
@@ -411,7 +446,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
                     }
                     break;
                 }
-                if (realKey == chain[i] || chain[i].equals(realKey))
+                if (this.nonNullTableObjectEquals(chain[i], key))
                 {
                     result = (V) chain[i + 1];
                     break;
@@ -422,7 +457,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
                 result = function.value();
                 Object[] newChain = new Object[chain.length + 4];
                 System.arraycopy(chain, 0, newChain, 0, chain.length);
-                newChain[i] = realKey;
+                newChain[i] = toSentinelIfNull(key);
                 newChain[i + 1] = result;
                 this.table[index + 1] = newChain;
                 if (++this.occupied > this.maxSize)
@@ -437,7 +472,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
             Object[] newChain = new Object[4];
             newChain[0] = this.table[index];
             newChain[1] = this.table[index + 1];
-            newChain[2] = realKey;
+            newChain[2] = toSentinelIfNull(key);
             newChain[3] = result;
             this.table[index] = CHAINED_KEY;
             this.table[index + 1] = newChain;
@@ -492,47 +527,45 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
 
         for (int i = 0; i < oldLength; i += 2)
         {
-            Object oldKey = old[i];
-            if (oldKey == CHAINED_KEY)
+            Object cur = old[i];
+            if (cur == CHAINED_KEY)
             {
                 Object[] chain = (Object[]) old[i + 1];
                 for (int j = 0; j < chain.length; j += 2)
                 {
                     if (chain[j] != null)
                     {
-                        this.put((K) chain[j], (V) chain[j + 1]);
+                        this.put(this.nonSentinel(chain[j]), (V) chain[j + 1]);
                     }
                 }
             }
-            else if (oldKey != null)
+            else if (cur != null)
             {
-                this.put((K) oldKey, (V) old[i + 1]);
+                this.put(this.nonSentinel(cur), (V) old[i + 1]);
             }
         }
     }
 
     public V get(Object key)
     {
-        key = this.toSentinelIfNull(key);
         int index = this.index(key);
-
         Object cur = this.table[index];
         if (cur != null)
         {
             Object val = this.table[index + 1];
-            if (key == cur || cur.equals(key))
-            {
-                return (V) val;
-            }
             if (cur == CHAINED_KEY)
             {
-                return this.getFromChain((Object[]) val, key);
+                return this.getFromChain((Object[]) val, (K) key);
+            }
+            if (this.nonNullTableObjectEquals(cur, (K) key))
+            {
+                return (V) val;
             }
         }
         return null;
     }
 
-    private V getFromChain(Object[] chain, Object key)
+    private V getFromChain(Object[] chain, K key)
     {
         for (int i = 0; i < chain.length; i += 2)
         {
@@ -541,7 +574,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
             {
                 return null;
             }
-            if (key == k || k.equals(key))
+            if (this.nonNullTableObjectEquals(k, key))
             {
                 return (V) chain[i + 1];
             }
@@ -551,22 +584,20 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
 
     public boolean containsKey(Object key)
     {
-        key = this.toSentinelIfNull(key);
         int index = this.index(key);
-
         Object cur = this.table[index];
         if (cur == null)
         {
             return false;
         }
-        if (key == cur || cur.equals(key))
+        if (cur != CHAINED_KEY && this.nonNullTableObjectEquals(cur, (K) key))
         {
             return true;
         }
-        return cur == CHAINED_KEY && this.chainContainsKey((Object[]) this.table[index + 1], key);
+        return cur == CHAINED_KEY && this.chainContainsKey((Object[]) this.table[index + 1], (K) key);
     }
 
-    private boolean chainContainsKey(Object[] chain, Object key)
+    private boolean chainContainsKey(Object[] chain, K key)
     {
         for (int i = 0; i < chain.length; i += 2)
         {
@@ -575,7 +606,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
             {
                 return false;
             }
-            if (key == k || k.equals(key))
+            if (this.nonNullTableObjectEquals(k, key))
             {
                 return true;
             }
@@ -589,7 +620,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         {
             if (this.table[i] == CHAINED_KEY)
             {
-                if (this.chainedContainsValue((Object[]) this.table[i + 1], value))
+                if (this.chainedContainsValue((Object[]) this.table[i + 1], (V) value))
                 {
                     return true;
                 }
@@ -605,7 +636,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         return false;
     }
 
-    private boolean chainedContainsValue(Object[] chain, Object value)
+    private boolean chainedContainsValue(Object[] chain, V value)
     {
         for (int i = 0; i < chain.length; i += 2)
         {
@@ -625,14 +656,14 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
     {
         for (int i = 0; i < this.table.length; i += 2)
         {
-            Object key = this.table[i];
-            if (key == CHAINED_KEY)
+            Object cur = this.table[i];
+            if (cur == CHAINED_KEY)
             {
                 this.chainedForEachEntry((Object[]) this.table[i + 1], procedure);
             }
-            else if (key != null)
+            else if (cur != null)
             {
-                procedure.value(this.nonSentinel(key), (V) this.table[i + 1]);
+                procedure.value(this.nonSentinel(cur), (V) this.table[i + 1]);
             }
         }
     }
@@ -655,12 +686,12 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
     {
         for (int i = 0; i < chain.length; i += 2)
         {
-            Object key = chain[i];
-            if (key == null)
+            Object cur = chain[i];
+            if (cur == null)
             {
                 return;
             }
-            procedure.value(this.nonSentinel(key), (V) chain[i + 1]);
+            procedure.value(this.nonSentinel(cur), (V) chain[i + 1]);
         }
     }
 
@@ -679,14 +710,14 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
     {
         for (int i = 0; i < this.table.length; i += 2)
         {
-            Object key = this.table[i];
-            if (key == CHAINED_KEY)
+            Object cur = this.table[i];
+            if (cur == CHAINED_KEY)
             {
                 this.chainedForEachKey((Object[]) this.table[i + 1], procedure);
             }
-            else if (key != null)
+            else if (cur != null)
             {
-                procedure.value(this.nonSentinel(key));
+                procedure.value(this.nonSentinel(cur));
             }
         }
     }
@@ -695,18 +726,13 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
     {
         for (int i = 0; i < chain.length; i += 2)
         {
-            Object key = chain[i];
-            if (key == null)
+            Object cur = chain[i];
+            if (cur == null)
             {
                 return;
             }
-            procedure.value(this.nonSentinel(key));
+            procedure.value(this.nonSentinel(cur));
         }
-    }
-
-    public MutableMap<K, V> newEmpty()
-    {
-        return new UnifiedMap<K, V>();
     }
 
     @Override
@@ -714,12 +740,12 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
     {
         for (int i = 0; i < this.table.length; i += 2)
         {
-            Object key = this.table[i];
-            if (key == CHAINED_KEY)
+            Object cur = this.table[i];
+            if (cur == CHAINED_KEY)
             {
                 this.chainedForEachValue((Object[]) this.table[i + 1], procedure);
             }
-            else if (key != null)
+            else if (cur != null)
             {
                 procedure.value((V) this.table[i + 1]);
             }
@@ -778,14 +804,14 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
     {
         for (int i = 0; i < unifiedMap.table.length; i += 2)
         {
-            Object key = unifiedMap.table[i];
-            if (key == CHAINED_KEY)
+            Object cur = unifiedMap.table[i];
+            if (cur == CHAINED_KEY)
             {
                 this.copyChain((Object[]) unifiedMap.table[i + 1]);
             }
-            else if (key != null)
+            else if (cur != null)
             {
-                this.put((K) key, (V) unifiedMap.table[i + 1]);
+                this.put(this.nonSentinel(cur), (V) unifiedMap.table[i + 1]);
             }
         }
     }
@@ -794,40 +820,38 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
     {
         for (int j = 0; j < chain.length; j += 2)
         {
-            Object key = chain[j];
-            if (key == null)
+            Object cur = chain[j];
+            if (cur == null)
             {
                 break;
             }
-            this.put((K) key, (V) chain[j + 1]);
+            this.put(this.nonSentinel(cur), (V) chain[j + 1]);
         }
     }
 
     public V remove(Object key)
     {
-        key = this.toSentinelIfNull(key);
         int index = this.index(key);
-
         Object cur = this.table[index];
         if (cur != null)
         {
             Object val = this.table[index + 1];
-            if (key == cur || cur.equals(key))
+            if (cur == CHAINED_KEY)
+            {
+                return this.removeFromChain((Object[]) val, (K) key, index);
+            }
+            if (this.nonNullTableObjectEquals(cur, (K) key))
             {
                 this.table[index] = null;
                 this.table[index + 1] = null;
                 this.occupied--;
                 return (V) val;
             }
-            if (cur == CHAINED_KEY)
-            {
-                return this.removeFromChain((Object[]) val, key, index);
-            }
         }
         return null;
     }
 
-    private V removeFromChain(Object[] chain, Object key, int index)
+    private V removeFromChain(Object[] chain, K key, int index)
     {
         for (int i = 0; i < chain.length; i += 2)
         {
@@ -836,7 +860,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
             {
                 return null;
             }
-            if (key == k || k.equals(key))
+            if (this.nonNullTableObjectEquals(k, key))
             {
                 V val = (V) chain[i + 1];
                 this.overwriteWithLastElementFromChain(chain, index, i);
@@ -915,15 +939,15 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         int hashCode = 0;
         for (int i = 0; i < this.table.length; i += 2)
         {
-            Object key = this.table[i];
-            if (key == CHAINED_KEY)
+            Object cur = this.table[i];
+            if (cur == CHAINED_KEY)
             {
                 hashCode += this.chainedHashCode((Object[]) this.table[i + 1]);
             }
-            else if (key != null)
+            else if (cur != null)
             {
                 Object value = this.table[i + 1];
-                hashCode += (key == NULL_KEY ? 0 : key.hashCode()) ^ (value == null ? 0 : value.hashCode());
+                hashCode += cur.hashCode() ^ (value == null ? 0 : value.hashCode());
             }
         }
         return hashCode;
@@ -934,13 +958,13 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         int hashCode = 0;
         for (int i = 0; i < chain.length; i += 2)
         {
-            Object key = chain[i];
-            if (key == null)
+            Object cur = chain[i];
+            if (cur == null)
             {
                 return hashCode;
             }
             Object value = chain[i + 1];
-            hashCode += (key == NULL_KEY ? 0 : key.hashCode()) ^ (value == null ? 0 : value.hashCode());
+            hashCode += cur.hashCode() ^ (value == null ? 0 : value.hashCode());
         }
         return hashCode;
     }
@@ -1010,12 +1034,12 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
     {
         for (int i = 0; i < chain.length; i += 2)
         {
-            Object key = chain[i];
-            if (key == null)
+            Object cur = chain[i];
+            if (cur == null)
             {
                 return;
             }
-            out.writeObject(this.nonSentinel(key));
+            out.writeObject(this.nonSentinel(cur));
             out.writeObject(chain[i + 1]);
         }
     }
@@ -1026,12 +1050,12 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         int index = 0;
         for (int i = 0; i < this.table.length; i += 2)
         {
-            Object key = this.table[i];
-            if (key == CHAINED_KEY)
+            Object cur = this.table[i];
+            if (cur == CHAINED_KEY)
             {
                 index = this.chainedForEachValueWithIndex((Object[]) this.table[i + 1], objectIntProcedure, index);
             }
-            else if (key != null)
+            else if (cur != null)
             {
                 objectIntProcedure.value((V) this.table[i + 1], index++);
             }
@@ -1043,12 +1067,12 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
     {
         for (int i = 0; i < this.table.length; i += 2)
         {
-            Object key = this.table[i];
-            if (key == CHAINED_KEY)
+            Object cur = this.table[i];
+            if (cur == CHAINED_KEY)
             {
                 this.chainedForEachValueWith((Object[]) this.table[i + 1], procedure, parameter);
             }
-            else if (key != null)
+            else if (cur != null)
             {
                 procedure.value((V) this.table[i + 1], parameter);
             }
@@ -1120,26 +1144,24 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
 
         public void putIfFound(Object key, Map<K, V> other)
         {
-            key = UnifiedMap.this.toSentinelIfNull(key);
             int index = UnifiedMap.this.index(key);
-
             Object cur = UnifiedMap.this.table[index];
             if (cur != null)
             {
                 Object val = UnifiedMap.this.table[index + 1];
-                if (key == cur || cur.equals(key))
-                {
-                    other.put((K) cur, (V) val);
-                    return;
-                }
                 if (cur == CHAINED_KEY)
                 {
-                    this.putIfFoundFromChain((Object[]) val, key, other);
+                    this.putIfFoundFromChain((Object[]) val, (K) key, other);
+                    return;
+                }
+                if (UnifiedMap.this.nonNullTableObjectEquals(cur, (K) key))
+                {
+                    other.put(UnifiedMap.this.nonSentinel(cur), (V) val);
                 }
             }
         }
 
-        private void putIfFoundFromChain(Object[] chain, Object key, Map<K, V> other)
+        private void putIfFoundFromChain(Object[] chain, K key, Map<K, V> other)
         {
             for (int i = 0; i < chain.length; i += 2)
             {
@@ -1148,9 +1170,9 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
                 {
                     return;
                 }
-                if (key == k || k.equals(key))
+                if (UnifiedMap.this.nonNullTableObjectEquals(k, key))
                 {
-                    other.put((K) k, (V) chain[i + 1]);
+                    other.put(UnifiedMap.this.nonSentinel(k), (V) chain[i + 1]);
                 }
             }
         }
@@ -1200,14 +1222,14 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
             }
             for (int i = start; i < end; i += 2)
             {
-                Object key = map[i];
-                if (key == CHAINED_KEY)
+                Object cur = map[i];
+                if (cur == CHAINED_KEY)
                 {
                     UnifiedMap.this.chainedForEachKey((Object[]) map[i + 1], procedure);
                 }
-                else if (key != null)
+                else if (cur != null)
                 {
-                    procedure.value(UnifiedMap.this.nonSentinel(key));
+                    procedure.value(UnifiedMap.this.nonSentinel(cur));
                 }
             }
         }
@@ -1226,12 +1248,12 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
                         Object[] chain = (Object[]) table[i + 1];
                         for (int j = 0; j < chain.length; j += 2)
                         {
-                            Object key = chain[j];
-                            if (key == null)
+                            Object cur = chain[j];
+                            if (cur == null)
                             {
                                 break;
                             }
-                            result[count++] = UnifiedMap.this.nonSentinel(key);
+                            result[count++] = UnifiedMap.this.nonSentinel(cur);
                         }
                     }
                     else
@@ -1271,17 +1293,17 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
                         Object[] chain = (Object[]) table[i + 1];
                         for (int j = 0; j < chain.length; j += 2)
                         {
-                            Object key = chain[j];
-                            if (key == null)
+                            Object cur = chain[j];
+                            if (cur == null)
                             {
                                 break;
                             }
-                            hashCode += key == NULL_KEY ? 0 : key.hashCode();
+                            hashCode += cur.hashCode();
                         }
                     }
                     else
                     {
-                        hashCode += x == NULL_KEY ? 0 : x.hashCode();
+                        hashCode += x.hashCode();
                     }
                 }
             }
@@ -1316,14 +1338,14 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
             UnifiedSet<K> replace = UnifiedSet.newSet(UnifiedMap.this.size());
             for (int i = 0; i < UnifiedMap.this.table.length; i += 2)
             {
-                Object key = UnifiedMap.this.table[i];
-                if (key == CHAINED_KEY)
+                Object cur = UnifiedMap.this.table[i];
+                if (cur == CHAINED_KEY)
                 {
                     this.chainedAddToSet((Object[]) UnifiedMap.this.table[i + 1], replace);
                 }
-                else if (key != null)
+                else if (cur != null)
                 {
-                    replace.add(UnifiedMap.this.nonSentinel(key));
+                    replace.add(UnifiedMap.this.nonSentinel(cur));
                 }
             }
             return replace;
@@ -1333,12 +1355,12 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         {
             for (int i = 0; i < chain.length; i += 2)
             {
-                Object key = chain[i];
-                if (key == null)
+                Object cur = chain[i];
+                if (cur == null)
                 {
                     return;
                 }
-                replace.add(UnifiedMap.this.nonSentinel(key));
+                replace.add(UnifiedMap.this.nonSentinel(cur));
             }
         }
     }
@@ -1371,8 +1393,8 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
             }
 
             int pos = this.position - 2;
-            Object key = UnifiedMap.this.table[pos];
-            if (key == CHAINED_KEY)
+            Object cur = UnifiedMap.this.table[pos];
+            if (cur == CHAINED_KEY)
             {
                 this.removeLastFromChain((Object[]) UnifiedMap.this.table[pos + 1], pos);
                 return;
@@ -1426,7 +1448,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         protected K nextFromChain()
         {
             Object[] chain = (Object[]) UnifiedMap.this.table[this.position + 1];
-            Object key = chain[this.chainPosition];
+            Object cur = chain[this.chainPosition];
             this.chainPosition += 2;
             if (this.chainPosition >= chain.length
                     || chain[this.chainPosition] == null)
@@ -1435,7 +1457,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
                 this.position += 2;
             }
             this.lastReturned = true;
-            return UnifiedMap.this.nonSentinel(key);
+            return UnifiedMap.this.nonSentinel(cur);
         }
 
         public K next()
@@ -1454,14 +1476,14 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
             {
                 this.position += 2;
             }
-            Object key = table[this.position];
-            if (key == CHAINED_KEY)
+            Object cur = table[this.position];
+            if (cur == CHAINED_KEY)
             {
                 return this.nextFromChain();
             }
             this.position += 2;
             this.lastReturned = true;
-            return UnifiedMap.this.nonSentinel(key);
+            return UnifiedMap.this.nonSentinel(cur);
         }
     }
 
@@ -1503,32 +1525,54 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
 
         public boolean containsEntry(Entry<?, ?> entry)
         {
-            Object key = entry.getKey();
-            Object value = entry.getValue();
-            key = UnifiedMap.this.toSentinelIfNull(key);
+            return this.getEntry(entry) != null;
+        }
+
+        private Entry<K, V> getEntry(Entry<?, ?> entry)
+        {
+            K key = (K) entry.getKey();
+            V value = (V) entry.getValue();
             int index = UnifiedMap.this.index(key);
 
             Object cur = UnifiedMap.this.table[index];
             Object curValue = UnifiedMap.this.table[index + 1];
-            return cur != null && ((key == cur || cur.equals(key)) && UnifiedMap.nullSafeEquals(value, curValue)
-                    || cur == CHAINED_KEY && this.chainContainsEntry((Object[]) curValue, key, value));
+            if (cur == CHAINED_KEY)
+            {
+                return this.chainGetEntry((Object[]) curValue, key, value);
+            }
+            if (cur == null)
+            {
+                return null;
+            }
+            if (UnifiedMap.this.nonNullTableObjectEquals(cur, key))
+            {
+                if (UnifiedMap.nullSafeEquals(value, curValue))
+                {
+                    return ImmutableEntry.of(UnifiedMap.this.nonSentinel(cur), (V) curValue);
+                }
+            }
+            return null;
         }
 
-        private boolean chainContainsEntry(Object[] chain, Object key, Object value)
+        private Entry<K, V> chainGetEntry(Object[] chain, K key, V value)
         {
             for (int i = 0; i < chain.length; i += 2)
             {
-                Object k = chain[i];
-                if (k == null)
+                Object cur = chain[i];
+                if (cur == null)
                 {
-                    return false;
+                    return null;
                 }
-                if (key == k || k.equals(key))
+                if (UnifiedMap.this.nonNullTableObjectEquals(cur, key))
                 {
-                    return value == null ? chain[i + 1] == null : chain[i + 1] == value || value.equals(chain[i + 1]);
+                    Object curValue = chain[i + 1];
+                    if (UnifiedMap.nullSafeEquals(value, curValue))
+                    {
+                        return ImmutableEntry.of(UnifiedMap.this.nonSentinel(cur), (V) curValue);
+                    }
                 }
             }
-            return false;
+            return null;
         }
 
         public boolean contains(Object o)
@@ -1565,31 +1609,31 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
                 return false;
             }
             Entry<?, ?> entry = (Entry<?, ?>) e;
-            Object key = entry.getKey();
-            Object value = entry.getValue();
-            key = UnifiedMap.this.toSentinelIfNull(key);
+            K key = (K) entry.getKey();
+            V value = (V) entry.getValue();
+
             int index = UnifiedMap.this.index(key);
 
             Object cur = UnifiedMap.this.table[index];
             if (cur != null)
             {
                 Object val = UnifiedMap.this.table[index + 1];
-                if ((key == cur || cur.equals(key)) && UnifiedMap.nullSafeEquals(value, val))
+                if (cur == CHAINED_KEY)
+                {
+                    return this.removeFromChain((Object[]) val, key, value, index);
+                }
+                if (UnifiedMap.this.nonNullTableObjectEquals(cur, key) && UnifiedMap.nullSafeEquals(value, val))
                 {
                     UnifiedMap.this.table[index] = null;
                     UnifiedMap.this.table[index + 1] = null;
                     UnifiedMap.this.occupied--;
                     return true;
                 }
-                if (cur == CHAINED_KEY)
-                {
-                    return this.removeFromChain((Object[]) val, key, value, index);
-                }
             }
             return false;
         }
 
-        private boolean removeFromChain(Object[] chain, Object key, Object value, int index)
+        private boolean removeFromChain(Object[] chain, K key, V value, int index)
         {
             for (int i = 0; i < chain.length; i += 2)
             {
@@ -1598,7 +1642,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
                 {
                     return false;
                 }
-                if (key == k || k.equals(key))
+                if (UnifiedMap.this.nonNullTableObjectEquals(k, key))
                 {
                     V val = (V) chain[i + 1];
                     if (UnifiedMap.nullSafeEquals(val, value))
@@ -1633,10 +1677,11 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
             {
                 if (obj instanceof Entry)
                 {
-                    Entry<?, ?> entry = (Entry<?, ?>) obj;
-                    if (this.containsEntry(entry))
+                    Entry<?, ?> otherEntry = (Entry<?, ?>) obj;
+                    Entry<K, V> thisEntry = this.getEntry(otherEntry);
+                    if (thisEntry != null)
                     {
-                        retainedCopy.put((K) entry.getKey(), (V) entry.getValue());
+                        retainedCopy.put(thisEntry.getKey(), thisEntry.getValue());
                     }
                 }
             }
@@ -1659,14 +1704,14 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         {
             for (int i = 0; i < UnifiedMap.this.table.length; i += 2)
             {
-                Object key = UnifiedMap.this.table[i];
-                if (key == CHAINED_KEY)
+                Object cur = UnifiedMap.this.table[i];
+                if (cur == CHAINED_KEY)
                 {
                     this.chainedForEachEntry((Object[]) UnifiedMap.this.table[i + 1], procedure);
                 }
-                else if (key != null)
+                else if (cur != null)
                 {
-                    procedure.value(ImmutableEntry.of(UnifiedMap.this.nonSentinel(key), (V) UnifiedMap.this.table[i + 1]));
+                    procedure.value(ImmutableEntry.of(UnifiedMap.this.nonSentinel(cur), (V) UnifiedMap.this.table[i + 1]));
                 }
             }
         }
@@ -1675,12 +1720,12 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         {
             for (int i = 0; i < chain.length; i += 2)
             {
-                Object key = chain[i];
-                if (key == null)
+                Object cur = chain[i];
+                if (cur == null)
                 {
                     return;
                 }
-                procedure.value(ImmutableEntry.of(UnifiedMap.this.nonSentinel(key), (V) chain[i + 1]));
+                procedure.value(ImmutableEntry.of(UnifiedMap.this.nonSentinel(cur), (V) chain[i + 1]));
             }
         }
 
@@ -1701,14 +1746,14 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
             }
             for (int i = start; i < end; i += 2)
             {
-                Object key = map[i];
-                if (key == CHAINED_KEY)
+                Object cur = map[i];
+                if (cur == CHAINED_KEY)
                 {
                     this.chainedForEachEntry((Object[]) map[i + 1], procedure);
                 }
-                else if (key != null)
+                else if (cur != null)
                 {
-                    procedure.value(ImmutableEntry.of(UnifiedMap.this.nonSentinel(key), (V) map[i + 1]));
+                    procedure.value(ImmutableEntry.of(UnifiedMap.this.nonSentinel(cur), (V) map[i + 1]));
                 }
             }
         }
@@ -1727,13 +1772,13 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
                         Object[] chain = (Object[]) table[i + 1];
                         for (int j = 0; j < chain.length; j += 2)
                         {
-                            Object key = chain[j];
-                            if (key == null)
+                            Object cur = chain[j];
+                            if (cur == null)
                             {
                                 break;
                             }
                             result[count++] =
-                                    new WeakBoundEntry<K, V>(UnifiedMap.this.nonSentinel(key), (V) chain[j + 1], this.holder);
+                                    new WeakBoundEntry<K, V>(UnifiedMap.this.nonSentinel(cur), (V) chain[j + 1], this.holder);
                         }
                     }
                     else
@@ -1806,7 +1851,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         protected Entry<K, V> nextFromChain()
         {
             Object[] chain = (Object[]) UnifiedMap.this.table[this.position + 1];
-            Object key = chain[this.chainPosition];
+            Object cur = chain[this.chainPosition];
             Object value = chain[this.chainPosition + 1];
             this.chainPosition += 2;
             if (this.chainPosition >= chain.length
@@ -1816,7 +1861,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
                 this.position += 2;
             }
             this.lastReturned = true;
-            return new WeakBoundEntry<K, V>(UnifiedMap.this.nonSentinel(key), (V) value, this.holder);
+            return new WeakBoundEntry<K, V>(UnifiedMap.this.nonSentinel(cur), (V) value, this.holder);
         }
 
         public Entry<K, V> next()
@@ -1835,15 +1880,15 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
             {
                 this.position += 2;
             }
-            Object key = table[this.position];
+            Object cur = table[this.position];
             Object value = table[this.position + 1];
-            if (key == CHAINED_KEY)
+            if (cur == CHAINED_KEY)
             {
                 return this.nextFromChain();
             }
             this.position += 2;
             this.lastReturned = true;
-            return new WeakBoundEntry<K, V>(UnifiedMap.this.nonSentinel(key), (V) value, this.holder);
+            return new WeakBoundEntry<K, V>(UnifiedMap.this.nonSentinel(cur), (V) value, this.holder);
         }
     }
 
@@ -1887,9 +1932,9 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
             if (obj instanceof Entry)
             {
                 Entry<?, ?> other = (Entry<?, ?>) obj;
-                Object otherValue = other.getValue();
-                Object otherValue1 = other.getKey();
-                return UnifiedMap.nullSafeEquals(this.key, otherValue1)
+                K otherKey = (K) other.getKey();
+                V otherValue = (V) other.getValue();
+                return UnifiedMap.nullSafeEquals(this.key, otherKey)
                         && UnifiedMap.nullSafeEquals(this.value, otherValue);
             }
             return false;
@@ -1898,7 +1943,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         @Override
         public int hashCode()
         {
-            return (this.key == null ? 0 : this.key.hashCode())
+            return toSentinelIfNull(this.key).hashCode()
                     ^ (this.value == null ? 0 : this.value.hashCode());
         }
 
@@ -1942,7 +1987,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
 
         public boolean remove(Object o)
         {
-            // this is so slow that the extra overhead of the iterator won't be noticable
+            // this is so slow that the extra overhead of the iterator won't be noticeable
             if (o == null)
             {
                 for (Iterator<V> it = this.iterator(); it.hasNext(); )
@@ -2052,12 +2097,12 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
             FastList<V> replace = FastList.newList(UnifiedMap.this.size());
             for (int i = 0; i < UnifiedMap.this.table.length; i += 2)
             {
-                Object key = UnifiedMap.this.table[i];
-                if (key == CHAINED_KEY)
+                Object cur = UnifiedMap.this.table[i];
+                if (cur == CHAINED_KEY)
                 {
                     this.chainedAddToList((Object[]) UnifiedMap.this.table[i + 1], replace);
                 }
-                else if (key != null)
+                else if (cur != null)
                 {
                     replace.add((V) UnifiedMap.this.table[i + 1]);
                 }
@@ -2084,7 +2129,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         protected V nextFromChain()
         {
             Object[] chain = (Object[]) UnifiedMap.this.table[this.position + 1];
-            Object val = chain[this.chainPosition + 1];
+            V val = (V) chain[this.chainPosition + 1];
             this.chainPosition += 2;
             if (this.chainPosition >= chain.length
                     || chain[this.chainPosition] == null)
@@ -2093,7 +2138,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
                 this.position += 2;
             }
             this.lastReturned = true;
-            return (V) val;
+            return val;
         }
 
         public V next()
@@ -2112,9 +2157,9 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
             {
                 this.position += 2;
             }
-            Object key = table[this.position];
+            Object cur = table[this.position];
             Object val = table[this.position + 1];
-            if (key == CHAINED_KEY)
+            if (cur == CHAINED_KEY)
             {
                 return this.nextFromChain();
             }
@@ -2129,12 +2174,22 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         return key == NULL_KEY ? null : (K) key;
     }
 
-    private Object toSentinelIfNull(Object key)
+    private static Object toSentinelIfNull(Object key)
     {
         if (key == null)
         {
             return NULL_KEY;
         }
         return key;
+    }
+
+    private boolean nonNullTableObjectEquals(Object cur, K key)
+    {
+        return cur == key || (cur == NULL_KEY ? key == null : cur.equals(key));
+    }
+
+    public ImmutableMap<K, V> toImmutable()
+    {
+        return Maps.immutable.ofMap(this);
     }
 }

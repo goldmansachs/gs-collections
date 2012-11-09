@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -293,7 +293,7 @@ public class UnifiedSetTest extends AbstractMutableSetTestCase
     @Test
     public void null_behavior()
     {
-        final UnifiedSet<Integer> unifiedSet = UnifiedSet.<Integer>newSet(8).withAll(MORE_COLLISIONS);
+        final UnifiedSet<Integer> unifiedSet = UnifiedSet.<Integer>newSet(10).withAll(MORE_COLLISIONS);
         MORE_COLLISIONS.clone().reverseForEach(new Procedure<Integer>()
         {
             public void value(Integer each)

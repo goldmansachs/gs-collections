@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.UnsortedSetIterable;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.Counter;
+import com.gs.collections.impl.IntegerWithCast;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
@@ -37,8 +38,11 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.test.Verify;
+import com.gs.collections.impl.utility.Iterate;
 import org.junit.Assert;
 import org.junit.Test;
+
+import static com.gs.collections.impl.factory.Iterables.*;
 
 /**
  * JUnit test for {@link AbstractMutableSet}.
@@ -372,15 +376,16 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
     @Test
     public void add()
     {
-        MutableSet<Integer> set = this.classUnderTest();
-        set.addAll(COLLISIONS);
-        set.removeAll(COLLISIONS);
+        MutableSet<IntegerWithCast> set = this.classUnderTest();
+        MutableList<IntegerWithCast> collisions = COLLISIONS.collect(IntegerWithCast.CONSTRUCT);
+        set.addAll(collisions);
+        set.removeAll(collisions);
         for (Integer integer : COLLISIONS)
         {
-            Assert.assertTrue(set.add(integer));
-            Assert.assertFalse(set.add(integer));
+            Assert.assertTrue(set.add(new IntegerWithCast(integer)));
+            Assert.assertFalse(set.add(new IntegerWithCast(integer)));
         }
-        Assert.assertEquals(COLLISIONS.toSet(), set);
+        Assert.assertEquals(collisions.toSet(), set);
     }
 
     @Override
@@ -389,34 +394,35 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
     {
         super.remove();
 
-        final MutableSet<Integer> set = this.classUnderTest();
-        set.addAll(COLLISIONS);
-        COLLISIONS.reverseForEach(new Procedure<Integer>()
+        final MutableSet<IntegerWithCast> set = this.classUnderTest();
+        final MutableList<IntegerWithCast> collisions = COLLISIONS.collect(IntegerWithCast.CONSTRUCT);
+        set.addAll(collisions);
+        collisions.reverseForEach(new Procedure<IntegerWithCast>()
         {
-            public void value(Integer each)
+            public void value(IntegerWithCast each)
             {
                 Assert.assertFalse(set.remove(null));
                 Assert.assertTrue(set.remove(each));
                 Assert.assertFalse(set.remove(each));
                 Assert.assertFalse(set.remove(null));
-                Assert.assertFalse(set.remove(COLLISION_10));
+                Assert.assertFalse(set.remove(new IntegerWithCast(COLLISION_10)));
             }
         });
 
-        Assert.assertEquals(UnifiedSet.<Integer>newSet(), set);
+        Assert.assertEquals(UnifiedSet.<IntegerWithCast>newSet(), set);
 
-        COLLISIONS.forEach(new Procedure<Integer>()
+        collisions.forEach(new Procedure<IntegerWithCast>()
         {
-            public void value(Integer each)
+            public void value(IntegerWithCast each)
             {
-                MutableSet<Integer> set2 = AbstractMutableSetTestCase.this.classUnderTest();
-                set2.addAll(COLLISIONS);
+                MutableSet<IntegerWithCast> set2 = AbstractMutableSetTestCase.this.classUnderTest();
+                set2.addAll(collisions);
 
                 Assert.assertFalse(set2.remove(null));
                 Assert.assertTrue(set2.remove(each));
                 Assert.assertFalse(set2.remove(each));
                 Assert.assertFalse(set2.remove(null));
-                Assert.assertFalse(set2.remove(COLLISION_10));
+                Assert.assertFalse(set2.remove(new IntegerWithCast(COLLISION_10)));
             }
         });
 
@@ -454,10 +460,19 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         for (int i = 0; i < size; i++)
         {
             MutableList<Integer> list = MORE_COLLISIONS.subList(0, i);
-            MutableSet<Integer> set = this.classUnderTest();
-            set.addAll(list);
+            MutableSet<Integer> set = this.<Integer>classUnderTest().withAll(list);
             Assert.assertFalse(set.retainAll(collisions));
             Assert.assertEquals(list.toSet(), set);
+        }
+
+        for (Integer item : MORE_COLLISIONS)
+        {
+            MutableSet<Integer> integers = this.<Integer>classUnderTest().withAll(MORE_COLLISIONS);
+            @SuppressWarnings("BoxingBoxedValue")
+            Integer keyCopy = new Integer(item);
+            Assert.assertTrue(integers.retainAll(mList(keyCopy)));
+            Assert.assertEquals(iSet(keyCopy), integers);
+            Assert.assertNotSame(keyCopy, Iterate.getOnly(integers));
         }
 
         // retain all on a bucket with a single element

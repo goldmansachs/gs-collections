@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentMap;
 
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
@@ -31,6 +32,7 @@ import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.IntegerWithCast;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
@@ -44,10 +46,13 @@ import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.test.domain.Key;
 import com.gs.collections.impl.tuple.ImmutableEntry;
 import com.gs.collections.impl.tuple.Tuples;
+import com.gs.collections.impl.utility.Iterate;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Test;
 
 import static com.gs.collections.impl.factory.Iterables.*;
+import static org.hamcrest.CoreMatchers.*;
 
 /**
  * Abstract JUnit TestCase for {@link MutableMap}s.
@@ -220,6 +225,13 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
                 ImmutableEntry.of("Three", 3),
                 ImmutableEntry.of("Four", 4))));
         Assert.assertEquals(UnifiedMap.newWithKeysValues("One", 1, "Three", 3), map);
+
+        MutableMap<Integer, Integer> integers = this.newMapWithKeysValues(1, 1, 2, 2, 3, 3);
+        Integer copy = new Integer(1);
+        Assert.assertTrue(integers.entrySet().retainAll(mList(ImmutableEntry.of(copy, copy))));
+        Assert.assertEquals(iMap(copy, copy), integers);
+        Assert.assertNotSame(copy, Iterate.getOnly(integers.entrySet()).getKey());
+        Assert.assertNotSame(copy, Iterate.getOnly(integers.entrySet()).getValue());
     }
 
     @Test
@@ -696,5 +708,36 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
         MutableMap<String, Integer> mapWithout = map.withoutAllKeys(FastList.newListWith("A", "C"));
         Assert.assertSame(map, mapWithout);
         Verify.assertMapsEqual(UnifiedMap.newWithKeysValues("B", 2), mapWithout);
+    }
+
+    @Test
+    public void retainAllFromKeySet_null_collision()
+    {
+        Assume.assumeThat(this.newMap(), not(is(ConcurrentMap.class)));
+
+        IntegerWithCast key = new IntegerWithCast(0);
+        MutableMap<IntegerWithCast, String> mutableMap = this.newMapWithKeysValues(
+                null, "Test 1",
+                key, "Test 2");
+
+        Assert.assertFalse(mutableMap.keySet().retainAll(FastList.newListWith(key, null)));
+
+        Assert.assertEquals(
+                this.newMapWithKeysValues(
+                        null, "Test 1",
+                        key, "Test 2"),
+                mutableMap);
+    }
+
+    @Test
+    public void rehash_null_collision()
+    {
+        Assume.assumeThat(this.newMap(), not(is(ConcurrentMap.class)));
+        MutableMap<IntegerWithCast, String> mutableMap = this.newMapWithKeyValue(null, null);
+
+        for (int i = 0; i < 256; i++)
+        {
+            mutableMap.put(new IntegerWithCast(i), null);
+        }
     }
 }

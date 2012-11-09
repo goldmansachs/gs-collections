@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -222,16 +222,19 @@ public abstract class AbstractCollectionTestCase
     @Test
     public void forEachWithIndex()
     {
-        final MutableList<Integer> result = Lists.mutable.of();
+        final MutableBag<Integer> elements = Bags.mutable.of();
+        final MutableBag<Integer> indexes = Bags.mutable.of();
         MutableCollection<Integer> collection = this.newWith(1, 2, 3, 4);
         collection.forEachWithIndex(new ObjectIntProcedure<Integer>()
         {
             public void value(Integer object, int index)
             {
-                result.add(object + index);
+                elements.add(object);
+                indexes.add(index);
             }
         });
-        Assert.assertEquals(FastList.newListWith(1, 3, 5, 7), result);
+        Assert.assertEquals(Bags.mutable.of(1, 2, 3, 4), elements);
+        Assert.assertEquals(Bags.mutable.of(0, 1, 2, 3), indexes);
     }
 
     @Test
@@ -586,9 +589,15 @@ public abstract class AbstractCollectionTestCase
         Verify.assertSize(2, objects);
         Verify.assertContainsAll(objects, 1, 2);
 
-        MutableCollection<Integer> integers = this.newWith(0);
-        Assert.assertFalse(integers.retainAll(FastList.newListWith(1, 0)));
-        Assert.assertEquals(Bags.mutable.of(0), integers.toBag());
+        MutableCollection<Integer> integers1 = this.newWith(0);
+        Assert.assertFalse(integers1.retainAll(FastList.newListWith(1, 0)));
+        Assert.assertEquals(Bags.mutable.of(0), integers1.toBag());
+
+        MutableCollection<Integer> integers2 = this.newWith(1, 2, 3);
+        Integer copy = new Integer(1);
+        Assert.assertTrue(integers2.retainAll(FastList.newListWith(copy)));
+        Assert.assertEquals(Bags.mutable.of(1), integers2.toBag());
+        Assert.assertNotSame(copy, integers2.getFirst());
     }
 
     @Test
@@ -621,9 +630,11 @@ public abstract class AbstractCollectionTestCase
         Iterator<Integer> iterator = objects.iterator();
         for (int i = objects.size(); i-- > 0; )
         {
+            Assert.assertTrue(iterator.hasNext());
             Integer integer = iterator.next();
             Assert.assertEquals(3, integer.intValue() + i);
         }
+        Assert.assertFalse(iterator.hasNext());
     }
 
     @Test

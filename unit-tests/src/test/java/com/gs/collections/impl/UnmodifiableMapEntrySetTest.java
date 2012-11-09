@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -256,8 +256,15 @@ public class UnmodifiableMapEntrySetTest extends UnmodifiableMutableCollectionTe
         Iterator<Map.Entry<Integer, Integer>> iterator = objects.iterator();
         for (int i = objects.size(); i-- > 0; )
         {
-            Map.Entry<Integer, Integer> entry = iterator.next();
+            final Map.Entry<Integer, Integer> entry = iterator.next();
             Assert.assertEquals(ImmutableEntry.of(3 - i, 3 - i), entry);
+            Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
+            {
+                public void run()
+                {
+                    entry.setValue(0);
+                }
+            });
         }
     }
 
