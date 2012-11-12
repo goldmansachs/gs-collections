@@ -302,7 +302,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         // This function ensures that hashCodes that differ only by
         // constant multiples at each bit position have a bounded
         // number of collisions (approximately 8 at default load factor).
-        int h = toSentinelIfNull(key).hashCode();
+        int h = key == null ? 0 : key.hashCode();
         h ^= h >>> 20 ^ h >>> 12;
         h ^= h >>> 7 ^ h >>> 4;
         return (h & (this.table.length >> 1) - 1) << 1;
@@ -331,10 +331,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         {
             this.table[index] = toSentinelIfNull(key);
             this.table[index + 1] = value;
-            if (++this.occupied > this.maxSize)
-            {
-                this.rehash(this.table.length);
-            }
+            ++this.occupied;
             return null;
         }
         if (cur != CHAINED_KEY && this.nonNullTableObjectEquals(cur, key))
