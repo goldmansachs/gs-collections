@@ -318,6 +318,11 @@ public final class ConcurrentMutableHashMap<K, V>
         return result;
     }
 
+    public V getIfAbsentPut(K key, Function<? super K, ? extends V> factory)
+    {
+        throw new UnsupportedOperationException("not implemented");
+    }
+
     @Override
     public <A> A ifPresentApply(K key, Function<? super V, ? extends A> function)
     {

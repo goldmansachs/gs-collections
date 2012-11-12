@@ -183,6 +183,7 @@
         <!--This bug does not necessarily indicate an error, since the change to mutable object state may have taken place in a method which then called the method containing the notification.-->
         <Bug pattern="NN_NAKED_NOTIFY" />
         <Class name="com.gs.collections.impl.map.mutable.ConcurrentHashMapUnSafe$ResizeContainer" />
+        <Class name="com.gs.collections.impl.map.mutable.ConcurrentHashMap$ResizeContainer" />
     </Match>
 
     <Match>

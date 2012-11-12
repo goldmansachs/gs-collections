@@ -31,6 +31,8 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.Executor;
 import java.util.concurrent.FutureTask;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicIntegerArray;
 import java.util.concurrent.atomic.AtomicIntegerFieldUpdater;
 import java.util.concurrent.atomic.AtomicReferenceArray;
 import java.util.concurrent.atomic.AtomicReferenceFieldUpdater;
@@ -52,7 +54,7 @@ import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.MapIterate;
 import com.gs.collections.impl.utility.internal.IterableIterate;
 
-@SuppressWarnings("ObjectEquality")
+@SuppressWarnings({ "rawtypes", "ObjectEquality" })
 public final class ConcurrentHashMap<K, V>
         extends AbstractMutableMap<K, V>
         implements ConcurrentMutableMap<K, V>, Externalizable
@@ -69,16 +71,19 @@ public final class ConcurrentHashMap<K, V>
      */
     private static final int MAXIMUM_CAPACITY = 1 << 30;
 
-    @SuppressWarnings("rawtypes")
     private static final AtomicReferenceFieldUpdater<ConcurrentHashMap, AtomicReferenceArray> TABLE_UPDATER = AtomicReferenceFieldUpdater.newUpdater(ConcurrentHashMap.class, AtomicReferenceArray.class, "table");
-    @SuppressWarnings("rawtypes")
     private static final AtomicIntegerFieldUpdater<ConcurrentHashMap> SIZE_UPDATER = AtomicIntegerFieldUpdater.newUpdater(ConcurrentHashMap.class, "size");
     private static final Object RESIZED = new Object();
+    private static final Object RESIZING = new Object();
+    private static final int PARTITIONED_SIZE_THRESHOLD = 4096; // chosen to keep size below 1% of the total size of the map
+    private static final int SIZE_BUCKETS = 7;
 
     /**
      * The table, resized as necessary. Length MUST Always be a power of two.
      */
-    private volatile AtomicReferenceArray<Object> table;
+    private volatile AtomicReferenceArray table;
+
+    private AtomicIntegerArray partitionedSize;
 
     @SuppressWarnings("UnusedDeclaration")
     private volatile int size; // updated via atomic field updater
@@ -107,7 +112,11 @@ public final class ConcurrentHashMap<K, V>
         {
             capacity <<= 1;
         }
-        this.table = new AtomicReferenceArray<Object>(capacity + 1);
+        if (capacity >= PARTITIONED_SIZE_THRESHOLD)
+        {
+            this.partitionedSize = new AtomicIntegerArray(SIZE_BUCKETS * 16); // we want 7 extra slots and 64 bytes for each slot. int is 4 bytes, so 64 bytes is 16 ints.
+        }
+        this.table = new AtomicReferenceArray(capacity + 1);
     }
 
     public static <K, V> ConcurrentHashMap<K, V> newMap()
@@ -128,13 +137,13 @@ public final class ConcurrentHashMap<K, V>
     public V putIfAbsent(K key, V value)
     {
         int hash = this.hash(key);
-        AtomicReferenceArray<Object> currentArray = this.table;
+        AtomicReferenceArray currentArray = this.table;
         while (true)
         {
             int length = currentArray.length();
             int index = ConcurrentHashMap.indexFor(hash, length);
             Object o = currentArray.get(index);
-            if (o == RESIZED || o instanceof ResizeContainer)
+            if (o == RESIZED || o == RESIZING)
             {
                 currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
             }
@@ -153,20 +162,24 @@ public final class ConcurrentHashMap<K, V>
                 Entry<K, V> newEntry = new Entry<K, V>(key, value, (Entry<K, V>) o);
                 if (currentArray.compareAndSet(index, o, newEntry))
                 {
-                    this.incrementSizeAndPossiblyResize(currentArray, length);
+                    this.incrementSizeAndPossiblyResize(currentArray, length, o);
                     return null; // per the contract of putIfAbsent, we return null when the map didn't have this key before
                 }
             }
         }
     }
 
-    private void incrementSizeAndPossiblyResize(AtomicReferenceArray<Object> currentArray, int length)
+    private void incrementSizeAndPossiblyResize(AtomicReferenceArray currentArray, int length, Object prev)
     {
-        int threshold = length >> 1;
-        threshold += threshold >> 1; // threshold = length * 0.75
-        if (SIZE_UPDATER.incrementAndGet(this) > threshold)
+        this.addToSize(1);
+        if (prev != null)
         {
-            this.resize(currentArray);
+            int localSize = this.size();
+            int threshold = (length >> 1) + (length >> 2); // threshold = length * 0.75
+            if (localSize + 1 > threshold)
+            {
+                this.resize(currentArray);
+            }
         }
     }
 
@@ -178,14 +191,14 @@ public final class ConcurrentHashMap<K, V>
         return h;
     }
 
-    private AtomicReferenceArray<Object> helpWithResizeWhileCurrentIndex(AtomicReferenceArray<Object> currentArray, int index)
+    private AtomicReferenceArray helpWithResizeWhileCurrentIndex(AtomicReferenceArray currentArray, int index)
     {
-        AtomicReferenceArray<Object> newArray = this.helpWithResize(currentArray, index);
+        AtomicReferenceArray newArray = this.helpWithResize(currentArray);
         int helpCount = 0;
         while (currentArray.get(index) != RESIZED)
         {
             helpCount++;
-            newArray = this.helpWithResize(currentArray, index + helpCount & currentArray.length() - 2);
+            newArray = this.helpWithResize(currentArray);
             if ((helpCount & 7) == 0)
             {
                 Thread.yield();
@@ -194,86 +207,32 @@ public final class ConcurrentHashMap<K, V>
         return newArray;
     }
 
-    private AtomicReferenceArray<Object> helpWithResize(AtomicReferenceArray<Object> currentArray, int index)
+    private AtomicReferenceArray helpWithResize(AtomicReferenceArray currentArray)
     {
-        AtomicReferenceArray<Object> newTable = (AtomicReferenceArray<Object>) currentArray.get(currentArray.length() - 1);
-        int dir = 1;
-        if ((Integer.bitCount(index) & 1) == 0)
+        ResizeContainer resizeContainer = (ResizeContainer) currentArray.get(currentArray.length() - 1);
+        AtomicReferenceArray newTable = resizeContainer.nextArray;
+        if (resizeContainer.getQueuePosition() > ResizeContainer.QUEUE_INCREMENT)
         {
-            dir = -1;
-        }
-        int low = index + 1;
-        int high = currentArray.length() - 2;
-        int start = -1;
-
-        while (low <= high)
-        {
-            int mid = low + high >>> 1;
-            Object o = currentArray.get(mid);
-            if (o != RESIZED && !(o instanceof ResizeContainer))
-            {
-                start = mid;
-                break;
-            }
-            if (dir < 0)
-            {
-                low = mid + 1;
-            }
-            else
-            {
-                high = mid - 1;
-            }
-        }
-        if (start > 0)
-        {
-            ResizeContainer<K, V> resizeContainer = new ResizeContainer<K, V>(null);
-            for (int j = start; j < currentArray.length() - 1; )
-            {
-                Object o = currentArray.get(j);
-                if (o == null)
-                {
-                    if (currentArray.compareAndSet(j, null, RESIZED))
-                    {
-                        j++;
-                    }
-                }
-                else if (o == RESIZED || o instanceof ResizeContainer)
-                {
-                    break;
-                }
-                else
-                {
-                    Entry<K, V> e = (Entry<K, V>) o;
-                    resizeContainer.setEntryChain(e);
-                    if (currentArray.compareAndSet(j, o, resizeContainer))
-                    {
-                        while (e != null)
-                        {
-                            this.unconditionalCopy(newTable, e);
-                            e = e.getNext();
-                        }
-                        currentArray.set(j, RESIZED);
-                        j++;
-                    }
-                }
-            }
+            resizeContainer.incrementResizer();
+            this.reverseTransfer(currentArray, resizeContainer);
+            resizeContainer.decrementResizerAndNotify();
         }
         return newTable;
     }
 
-    private void resize(AtomicReferenceArray<Object> oldTable)
+    private void resize(AtomicReferenceArray oldTable)
     {
         this.resize(oldTable, (oldTable.length() - 1 << 1) + 1);
     }
 
     // newSize must be a power of 2 + 1
     @SuppressWarnings("JLM_JSR166_UTILCONCURRENT_MONITORENTER")
-    private void resize(AtomicReferenceArray<Object> oldTable, int newSize)
+    private void resize(AtomicReferenceArray oldTable, int newSize)
     {
         int oldCapacity = oldTable.length();
         int end = oldCapacity - 1;
         Object last = oldTable.get(end);
-        if (this.size < end && last == RESIZE_SENTINEL)
+        if (this.size() < end && last == RESIZE_SENTINEL)
         {
             return;
         }
@@ -281,8 +240,8 @@ public final class ConcurrentHashMap<K, V>
         {
             throw new RuntimeException("index is too large!");
         }
+        ResizeContainer resizeContainer = null;
         boolean ownResize = false;
-        AtomicReferenceArray<Object> newTable = null;
         if (last == null || last == RESIZE_SENTINEL)
         {
             synchronized (oldTable) // allocating a new array is too expensive to make this an atomic operation
@@ -290,48 +249,42 @@ public final class ConcurrentHashMap<K, V>
                 if (oldTable.get(end) == null)
                 {
                     oldTable.set(end, RESIZE_SENTINEL);
-                    newTable = new AtomicReferenceArray(newSize);
-                    oldTable.set(end, newTable);
+                    if (this.partitionedSize == null && newSize >= PARTITIONED_SIZE_THRESHOLD)
+                    {
+                        this.partitionedSize = new AtomicIntegerArray(SIZE_BUCKETS * 16);
+                    }
+                    resizeContainer = new ResizeContainer(new AtomicReferenceArray(newSize), oldTable.length() - 1);
+                    oldTable.set(end, resizeContainer);
                     ownResize = true;
                 }
             }
         }
         if (ownResize)
         {
-            this.transfer(oldTable, newTable);
-            AtomicReferenceArray<Object> src = this.table;
-            while (!TABLE_UPDATER.compareAndSet(this, oldTable, newTable))
+            this.transfer(oldTable, resizeContainer);
+            AtomicReferenceArray src = this.table;
+            while (!TABLE_UPDATER.compareAndSet(this, oldTable, resizeContainer.nextArray))
             {
                 // we're in a double resize situation; we'll have to go help until it's our turn to set the table
                 if (src != oldTable)
                 {
-                    AtomicReferenceArray<Object> next = (AtomicReferenceArray<Object>) src.get(src.length() - 1);
-                    if (next != null)
-                    {
-                        this.transfer(src, next);
-                    }
-                    src = next;
-                    if (src == null)
-                    {
-                        src = this.table;
-                    }
+                    this.helpWithResize(src);
                 }
             }
         }
         else
         {
-            this.helpWithResize(oldTable, 0);
+            this.helpWithResize(oldTable);
         }
     }
 
     /*
      * Transfer all entries from src to dest tables
      */
-    private void transfer(AtomicReferenceArray<Object> src, AtomicReferenceArray<Object> dest)
+    private void transfer(AtomicReferenceArray src, ResizeContainer resizeContainer)
     {
-        int rescanLocation = -1;
-        int helpers = 0;
-        ResizeContainer<K, V> resizeContainer = new ResizeContainer<K, V>(null);
+        AtomicReferenceArray dest = resizeContainer.nextArray;
+
         for (int j = 0; j < src.length() - 1; )
         {
             Object o = src.get(j);
@@ -342,24 +295,18 @@ public final class ConcurrentHashMap<K, V>
                     j++;
                 }
             }
-            else if (o == RESIZED)
+            else if (o == RESIZED || o == RESIZING)
             {
-                j++;
-            }
-            else if (o instanceof ResizeContainer)
-            {
-                if (rescanLocation < 0)
+                j = (j & ~(ResizeContainer.QUEUE_INCREMENT - 1)) + ResizeContainer.QUEUE_INCREMENT;
+                if (resizeContainer.resizers.get() == 1)
                 {
-                    rescanLocation = j;
+                    break;
                 }
-                j++;
-                helpers++;
             }
             else
             {
                 Entry<K, V> e = (Entry<K, V>) o;
-                resizeContainer.setEntryChain(e);
-                if (src.compareAndSet(j, o, resizeContainer))
+                if (src.compareAndSet(j, o, RESIZING))
                 {
                     while (e != null)
                     {
@@ -371,47 +318,69 @@ public final class ConcurrentHashMap<K, V>
                 }
             }
         }
-        this.rescanUntilDone(src, rescanLocation, helpers);
+        resizeContainer.decrementResizerAndNotify();
+        resizeContainer.waitForAllResizers();
     }
 
-    private void rescanUntilDone(AtomicReferenceArray<Object> src, int rescanLocation, int helpers)
+    private void reverseTransfer(AtomicReferenceArray src, ResizeContainer resizeContainer)
     {
-        while (rescanLocation >= 0)
+        AtomicReferenceArray dest = resizeContainer.nextArray;
+        while (resizeContainer.getQueuePosition() > 0)
         {
-            if (src.get(rescanLocation) == RESIZED && helpers == 1)
+            int start = resizeContainer.subtractAndGetQueuePosition();
+            int end = start + ResizeContainer.QUEUE_INCREMENT;
+            if (end > 0)
             {
-                return;
-            }
-            helpers = 0;
-            int j = rescanLocation;
-            rescanLocation = -1;
-            while (j < src.length() - 1)
-            {
-                Object o = src.get(j);
-                if (o instanceof ResizeContainer)
+                if (start < 0)
                 {
-                    while (src.get(j) != RESIZED)
+                    start = 0;
+                }
+                for (int j = end - 1; j >= start; )
+                {
+                    Object o = src.get(j);
+                    if (o == null)
                     {
-                        Thread.yield();
+                        if (src.compareAndSet(j, null, RESIZED))
+                        {
+                            j--;
+                        }
+                    }
+                    else if (o == RESIZED || o == RESIZING)
+                    {
+                        resizeContainer.zeroOutQueuePosition();
+                        return;
+                    }
+                    else
+                    {
+                        Entry<K, V> e = (Entry<K, V>) o;
+                        if (src.compareAndSet(j, o, RESIZING))
+                        {
+                            while (e != null)
+                            {
+                                this.unconditionalCopy(dest, e);
+                                e = e.getNext();
+                            }
+                            src.set(j, RESIZED);
+                            j--;
+                        }
                     }
                 }
-                j++;
             }
         }
     }
 
-    private void unconditionalCopy(AtomicReferenceArray<Object> dest, Entry<K, V> toCopyEntry)
+    private void unconditionalCopy(AtomicReferenceArray dest, Entry<K, V> toCopyEntry)
     {
         int hash = this.hash(toCopyEntry.getKey());
-        AtomicReferenceArray<Object> currentArray = dest;
+        AtomicReferenceArray currentArray = dest;
         while (true)
         {
             int length = currentArray.length();
             int index = ConcurrentHashMap.indexFor(hash, length);
             Object o = currentArray.get(index);
-            if (o == RESIZED || o instanceof ResizeContainer)
+            if (o == RESIZED || o == RESIZING)
             {
-                currentArray = (AtomicReferenceArray<Object>) currentArray.get(length - 1);
+                currentArray = ((ResizeContainer) currentArray.get(length - 1)).nextArray;
             }
             else
             {
@@ -442,7 +411,7 @@ public final class ConcurrentHashMap<K, V>
     public V getIfAbsentPut(K key, Function<? super K, ? extends V> factory)
     {
         int hash = this.hash(key);
-        AtomicReferenceArray<Object> currentArray = this.table;
+        AtomicReferenceArray currentArray = this.table;
         V newValue = null;
         boolean createdValue = false;
         while (true)
@@ -450,7 +419,7 @@ public final class ConcurrentHashMap<K, V>
             int length = currentArray.length();
             int index = ConcurrentHashMap.indexFor(hash, length);
             Object o = currentArray.get(index);
-            if (o == RESIZED || o instanceof ResizeContainer)
+            if (o == RESIZED || o == RESIZING)
             {
                 currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
             }
@@ -460,7 +429,7 @@ public final class ConcurrentHashMap<K, V>
                 while (e != null)
                 {
                     Object candidate = e.getKey();
-                    if (candidate.equals(key))
+                    if (candidate == key || candidate.equals(key))
                     {
                         return e.getValue();
                     }
@@ -474,7 +443,7 @@ public final class ConcurrentHashMap<K, V>
                 Entry<K, V> newEntry = new Entry<K, V>(key, newValue, (Entry<K, V>) o);
                 if (currentArray.compareAndSet(index, o, newEntry))
                 {
-                    this.incrementSizeAndPossiblyResize(currentArray, length);
+                    this.incrementSizeAndPossiblyResize(currentArray, length, o);
                     return newValue;
                 }
             }
@@ -485,7 +454,7 @@ public final class ConcurrentHashMap<K, V>
     public V getIfAbsentPut(K key, Function0<? extends V> factory)
     {
         int hash = this.hash(key);
-        AtomicReferenceArray<Object> currentArray = this.table;
+        AtomicReferenceArray currentArray = this.table;
         V newValue = null;
         boolean createdValue = false;
         while (true)
@@ -493,7 +462,7 @@ public final class ConcurrentHashMap<K, V>
             int length = currentArray.length();
             int index = indexFor(hash, length);
             Object o = currentArray.get(index);
-            if (o == RESIZED || o instanceof ResizeContainer)
+            if (o == RESIZED || o == RESIZING)
             {
                 currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
             }
@@ -517,7 +486,7 @@ public final class ConcurrentHashMap<K, V>
                 Entry<K, V> newEntry = new Entry<K, V>(key, newValue, (Entry<K, V>) o);
                 if (currentArray.compareAndSet(index, o, newEntry))
                 {
-                    this.incrementSizeAndPossiblyResize(currentArray, length);
+                    this.incrementSizeAndPossiblyResize(currentArray, length, o);
                     return newValue;
                 }
             }
@@ -535,7 +504,7 @@ public final class ConcurrentHashMap<K, V>
     public <P1, P2> V putIfAbsentGetIfPresent(K key, Function2<K, V, K> keyTransformer, Function3<P1, P2, K, V> factory, P1 param1, P2 param2)
     {
         int hash = this.hash(key);
-        AtomicReferenceArray<Object> currentArray = this.table;
+        AtomicReferenceArray currentArray = this.table;
         V newValue = null;
         boolean createdValue = false;
         while (true)
@@ -543,7 +512,7 @@ public final class ConcurrentHashMap<K, V>
             int length = currentArray.length();
             int index = ConcurrentHashMap.indexFor(hash, length);
             Object o = currentArray.get(index);
-            if (o == RESIZED || o instanceof ResizeContainer)
+            if (o == RESIZED || o == RESIZING)
             {
                 currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
             }
@@ -572,7 +541,7 @@ public final class ConcurrentHashMap<K, V>
                 Entry<K, V> newEntry = new Entry<K, V>(key, newValue, (Entry<K, V>) o);
                 if (currentArray.compareAndSet(index, o, newEntry))
                 {
-                    this.incrementSizeAndPossiblyResize(currentArray, length);
+                    this.incrementSizeAndPossiblyResize(currentArray, length, o);
                     return null;
                 }
             }
@@ -582,7 +551,7 @@ public final class ConcurrentHashMap<K, V>
     public boolean remove(Object key, Object value)
     {
         int hash = this.hash(key);
-        AtomicReferenceArray<Object> currentArray = this.table;
+        AtomicReferenceArray currentArray = this.table;
         //noinspection LabeledStatement
         outer:
         while (true)
@@ -590,7 +559,7 @@ public final class ConcurrentHashMap<K, V>
             int length = currentArray.length();
             int index = indexFor(hash, length);
             Object o = currentArray.get(index);
-            if (o == RESIZED || o instanceof ResizeContainer)
+            if (o == RESIZED || o == RESIZING)
             {
                 currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
             }
@@ -605,7 +574,7 @@ public final class ConcurrentHashMap<K, V>
                         Entry<K, V> replacement = this.createReplacementChainForRemoval((Entry<K, V>) o, e);
                         if (currentArray.compareAndSet(index, o, replacement))
                         {
-                            SIZE_UPDATER.decrementAndGet(this);
+                            this.addToSize(-1);
                             return true;
                         }
                         //noinspection ContinueStatementWithLabel
@@ -618,15 +587,67 @@ public final class ConcurrentHashMap<K, V>
         }
     }
 
+    private void addToSize(int value)
+    {
+        if (this.partitionedSize != null)
+        {
+            if (this.incrementPartitionedSize(value))
+            {
+                return;
+            }
+        }
+        this.incrementLocalSize(value);
+    }
+
+    private boolean incrementPartitionedSize(int value)
+    {
+        int h = (int) Thread.currentThread().getId();
+        h ^= (h >>> 18) ^ (h >>> 12);
+        h = (h ^ (h >>> 10)) & SIZE_BUCKETS;
+        if (h != 0)
+        {
+            h = (h - 1) << 4;
+            while (true)
+            {
+                int localSize = this.partitionedSize.get(h);
+                if (this.partitionedSize.compareAndSet(h, localSize, localSize + value))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private void incrementLocalSize(int value)
+    {
+        while (true)
+        {
+            int localSize = this.size;
+            if (SIZE_UPDATER.compareAndSet(this, localSize, localSize + value))
+            {
+                break;
+            }
+        }
+    }
+
     public int size()
     {
-        return this.size;
+        int localSize = this.size;
+        if (this.partitionedSize != null)
+        {
+            for (int i = 0; i < SIZE_BUCKETS; i++)
+            {
+                localSize += this.partitionedSize.get(i << 4);
+            }
+        }
+        return localSize;
     }
 
     @Override
     public boolean isEmpty()
     {
-        return this.size == 0;
+        return this.size() == 0;
     }
 
     public boolean containsKey(Object key)
@@ -636,28 +657,17 @@ public final class ConcurrentHashMap<K, V>
 
     public boolean containsValue(Object value)
     {
-        AtomicReferenceArray<Object> currentArray = this.table;
-        boolean followResize;
-        int rescanLocation = -1;
-        int helpers = 0;
+        AtomicReferenceArray currentArray = this.table;
+        ResizeContainer resizeContainer;
         do
         {
-            followResize = false;
+            resizeContainer = null;
             for (int i = 0; i < currentArray.length() - 1; i++)
             {
                 Object o = currentArray.get(i);
-                if (o == RESIZED)
+                if (o == RESIZED || o == RESIZING)
                 {
-                    followResize = true;
-                }
-                else if (o instanceof ResizeContainer)
-                {
-                    if (rescanLocation < 0)
-                    {
-                        rescanLocation = i;
-                    }
-                    helpers++;
-                    followResize = true;
+                    resizeContainer = (ResizeContainer) currentArray.get(currentArray.length() - 1);
                 }
                 else if (o != null)
                 {
@@ -673,14 +683,17 @@ public final class ConcurrentHashMap<K, V>
                     }
                 }
             }
-            if (followResize)
+            if (resizeContainer != null)
             {
-                this.helpWithResize(currentArray, 0);
-                this.rescanUntilDone(currentArray, rescanLocation, helpers);
-                currentArray = (AtomicReferenceArray<Object>) currentArray.get(currentArray.length() - 1);
+                if (resizeContainer.isNotDone())
+                {
+                    this.helpWithResize(currentArray);
+                    resizeContainer.waitForAllResizers();
+                }
+                currentArray = resizeContainer.nextArray;
             }
         }
-        while (followResize);
+        while (resizeContainer != null);
         return false;
     }
 
@@ -692,10 +705,10 @@ public final class ConcurrentHashMap<K, V>
     public V get(Object key)
     {
         int hash = this.hash(key);
-        AtomicReferenceArray<Object> currentArray = this.table;
+        AtomicReferenceArray currentArray = this.table;
         int index = ConcurrentHashMap.indexFor(hash, currentArray.length());
         Object o = currentArray.get(index);
-        if (o == RESIZED || o instanceof ResizeContainer)
+        if (o == RESIZED || o == RESIZING)
         {
             return this.slowGet(key, hash, index, currentArray);
         }
@@ -710,14 +723,14 @@ public final class ConcurrentHashMap<K, V>
         return null;
     }
 
-    private V slowGet(Object key, int hash, int index, AtomicReferenceArray<Object> currentArray)
+    private V slowGet(Object key, int hash, int index, AtomicReferenceArray currentArray)
     {
         while (true)
         {
             int length = currentArray.length();
             index = ConcurrentHashMap.indexFor(hash, length);
             Object o = currentArray.get(index);
-            if (o == RESIZED || o instanceof ResizeContainer)
+            if (o == RESIZED || o == RESIZING)
             {
                 currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
             }
@@ -741,13 +754,13 @@ public final class ConcurrentHashMap<K, V>
     private Entry<K, V> getEntry(Object key)
     {
         int hash = this.hash(key);
-        AtomicReferenceArray<Object> currentArray = this.table;
+        AtomicReferenceArray currentArray = this.table;
         while (true)
         {
             int length = currentArray.length();
             int index = ConcurrentHashMap.indexFor(hash, length);
             Object o = currentArray.get(index);
-            if (o == RESIZED || o instanceof ResizeContainer)
+            if (o == RESIZED || o == RESIZING)
             {
                 currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
             }
@@ -771,40 +784,23 @@ public final class ConcurrentHashMap<K, V>
     public V put(K key, V value)
     {
         int hash = this.hash(key);
-        AtomicReferenceArray<Object> currentArray = this.table;
+        AtomicReferenceArray currentArray = this.table;
         int length = currentArray.length();
         int index = ConcurrentHashMap.indexFor(hash, length);
         Object o = currentArray.get(index);
-        if (o == RESIZED || o instanceof ResizeContainer)
+        if (o == null)
         {
-            return this.slowPut(key, value, hash, currentArray);
-        }
-        Entry<K, V> e = (Entry<K, V>) o;
-        while (e != null)
-        {
-            Object candidate = e.getKey();
-            if (candidate.equals(key))
+            Entry<K, V> newEntry = new Entry<K, V>(key, value, null);
+            if (currentArray.compareAndSet(index, null, newEntry))
             {
-                V oldValue = e.getValue();
-                Entry<K, V> newEntry = new Entry<K, V>(e.getKey(), value, this.createReplacementChainForRemoval((Entry<K, V>) o, e));
-                if (!currentArray.compareAndSet(index, o, newEntry))
-                {
-                    return this.slowPut(key, value, hash, currentArray);
-                }
-                return oldValue;
+                this.addToSize(1);
+                return null;
             }
-            e = e.getNext();
-        }
-        Entry<K, V> newEntry = new Entry<K, V>(key, value, (Entry<K, V>) o);
-        if (currentArray.compareAndSet(index, o, newEntry))
-        {
-            this.incrementSizeAndPossiblyResize(currentArray, length);
-            return null;
         }
         return this.slowPut(key, value, hash, currentArray);
     }
 
-    private V slowPut(K key, V value, int hash, AtomicReferenceArray<Object> currentArray)
+    private V slowPut(K key, V value, int hash, AtomicReferenceArray currentArray)
     {
         //noinspection LabeledStatement
         outer:
@@ -813,7 +809,7 @@ public final class ConcurrentHashMap<K, V>
             int length = currentArray.length();
             int index = ConcurrentHashMap.indexFor(hash, length);
             Object o = currentArray.get(index);
-            if (o == RESIZED || o instanceof ResizeContainer)
+            if (o == RESIZED || o == RESIZING)
             {
                 currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
             }
@@ -839,7 +835,7 @@ public final class ConcurrentHashMap<K, V>
                 Entry<K, V> newEntry = new Entry<K, V>(key, value, (Entry<K, V>) o);
                 if (currentArray.compareAndSet(index, o, newEntry))
                 {
-                    this.incrementSizeAndPossiblyResize(currentArray, length);
+                    this.incrementSizeAndPossiblyResize(currentArray, length, o);
                     return null;
                 }
             }
@@ -863,7 +859,7 @@ public final class ConcurrentHashMap<K, V>
         if (map instanceof ConcurrentHashMap<?, ?> && chunks > 1 && map.size() > 50000)
         {
             ConcurrentHashMap<K, V> incoming = (ConcurrentHashMap<K, V>) map;
-            final AtomicReferenceArray<Object> currentArray = incoming.table;
+            final AtomicReferenceArray currentArray = incoming.table;
             FutureTask<?>[] futures = new FutureTask<?>[chunks];
             int chunkSize = currentArray.length() / chunks;
             if (currentArray.length() % chunks != 0)
@@ -901,12 +897,12 @@ public final class ConcurrentHashMap<K, V>
         }
     }
 
-    private void sequentialPutAll(AtomicReferenceArray<Object> currentArray, int start, int end)
+    private void sequentialPutAll(AtomicReferenceArray currentArray, int start, int end)
     {
         for (int i = start; i < end; i++)
         {
             Object o = currentArray.get(i);
-            if (o == RESIZED || o instanceof ResizeContainer)
+            if (o == RESIZED || o == RESIZING)
             {
                 throw new ConcurrentModificationException("can't iterate while resizing!");
             }
@@ -934,28 +930,17 @@ public final class ConcurrentHashMap<K, V>
 
     public void clear()
     {
-        AtomicReferenceArray<Object> currentArray = this.table;
-        boolean followResize;
-        int rescanLocation = -1;
-        int helpers = 0;
+        AtomicReferenceArray currentArray = this.table;
+        ResizeContainer resizeContainer;
         do
         {
-            followResize = false;
+            resizeContainer = null;
             for (int i = 0; i < currentArray.length() - 1; i++)
             {
                 Object o = currentArray.get(i);
-                if (o == RESIZED)
+                if (o == RESIZED || o == RESIZING)
                 {
-                    followResize = true;
-                }
-                else if (o instanceof ResizeContainer)
-                {
-                    if (rescanLocation < 0)
-                    {
-                        rescanLocation = i;
-                    }
-                    helpers++;
-                    followResize = true;
+                    resizeContainer = (ResizeContainer) currentArray.get(currentArray.length() - 1);
                 }
                 else if (o != null)
                 {
@@ -968,18 +953,21 @@ public final class ConcurrentHashMap<K, V>
                             removedEntries++;
                             e = e.getNext();
                         }
-                        SIZE_UPDATER.getAndAdd(this, -removedEntries);
+                        this.addToSize(-removedEntries);
                     }
                 }
             }
-            if (followResize)
+            if (resizeContainer != null)
             {
-                this.helpWithResize(currentArray, 0);
-                this.rescanUntilDone(currentArray, rescanLocation, helpers);
-                currentArray = (AtomicReferenceArray<Object>) currentArray.get(currentArray.length() - 1);
+                if (resizeContainer.isNotDone())
+                {
+                    this.helpWithResize(currentArray);
+                    resizeContainer.waitForAllResizers();
+                }
+                currentArray = resizeContainer.nextArray;
             }
         }
-        while (followResize);
+        while (resizeContainer != null);
     }
 
     public Set<K> keySet()
@@ -1000,11 +988,11 @@ public final class ConcurrentHashMap<K, V>
     public boolean replace(K key, V oldValue, V newValue)
     {
         int hash = this.hash(key);
-        AtomicReferenceArray<Object> currentArray = this.table;
+        AtomicReferenceArray currentArray = this.table;
         int length = currentArray.length();
         int index = indexFor(hash, length);
         Object o = currentArray.get(index);
-        if (o == RESIZED || o instanceof ResizeContainer)
+        if (o == RESIZED || o == RESIZING)
         {
             return this.slowReplace(key, oldValue, newValue, hash, currentArray);
         }
@@ -1027,7 +1015,7 @@ public final class ConcurrentHashMap<K, V>
         return false;
     }
 
-    private boolean slowReplace(K key, V oldValue, V newValue, int hash, AtomicReferenceArray<Object> currentArray)
+    private boolean slowReplace(K key, V oldValue, V newValue, int hash, AtomicReferenceArray currentArray)
     {
         //noinspection LabeledStatement
         outer:
@@ -1036,7 +1024,7 @@ public final class ConcurrentHashMap<K, V>
             int length = currentArray.length();
             int index = indexFor(hash, length);
             Object o = currentArray.get(index);
-            if (o == RESIZED || o instanceof ResizeContainer)
+            if (o == RESIZED || o == RESIZING)
             {
                 currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
             }
@@ -1071,7 +1059,7 @@ public final class ConcurrentHashMap<K, V>
     public V replace(K key, V value)
     {
         int hash = this.hash(key);
-        AtomicReferenceArray<Object> currentArray = this.table;
+        AtomicReferenceArray currentArray = this.table;
         int length = currentArray.length();
         int index = indexFor(hash, length);
         Object o = currentArray.get(index);
@@ -1082,7 +1070,7 @@ public final class ConcurrentHashMap<K, V>
         return this.slowReplace(key, value, hash, currentArray);
     }
 
-    private V slowReplace(K key, V value, int hash, AtomicReferenceArray<Object> currentArray)
+    private V slowReplace(K key, V value, int hash, AtomicReferenceArray currentArray)
     {
         //noinspection LabeledStatement
         outer:
@@ -1091,7 +1079,7 @@ public final class ConcurrentHashMap<K, V>
             int length = currentArray.length();
             int index = indexFor(hash, length);
             Object o = currentArray.get(index);
-            if (o == RESIZED || o instanceof ResizeContainer)
+            if (o == RESIZED || o == RESIZING)
             {
                 currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
             }
@@ -1122,11 +1110,11 @@ public final class ConcurrentHashMap<K, V>
     public V remove(Object key)
     {
         int hash = this.hash(key);
-        AtomicReferenceArray<Object> currentArray = this.table;
+        AtomicReferenceArray currentArray = this.table;
         int length = currentArray.length();
         int index = indexFor(hash, length);
         Object o = currentArray.get(index);
-        if (o == RESIZED || o instanceof ResizeContainer)
+        if (o == RESIZED || o == RESIZING)
         {
             return this.slowRemove(key, hash, currentArray);
         }
@@ -1139,7 +1127,7 @@ public final class ConcurrentHashMap<K, V>
                 Entry<K, V> replacement = this.createReplacementChainForRemoval((Entry<K, V>) o, e);
                 if (currentArray.compareAndSet(index, o, replacement))
                 {
-                    SIZE_UPDATER.decrementAndGet(this);
+                    this.addToSize(-1);
                     return e.getValue();
                 }
                 return this.slowRemove(key, hash, currentArray);
@@ -1149,7 +1137,7 @@ public final class ConcurrentHashMap<K, V>
         return null;
     }
 
-    private V slowRemove(Object key, int hash, AtomicReferenceArray<Object> currentArray)
+    private V slowRemove(Object key, int hash, AtomicReferenceArray currentArray)
     {
         //noinspection LabeledStatement
         outer:
@@ -1158,7 +1146,7 @@ public final class ConcurrentHashMap<K, V>
             int length = currentArray.length();
             int index = ConcurrentHashMap.indexFor(hash, length);
             Object o = currentArray.get(index);
-            if (o == RESIZED || o instanceof ResizeContainer)
+            if (o == RESIZED || o == RESIZING)
             {
                 currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
             }
@@ -1173,7 +1161,7 @@ public final class ConcurrentHashMap<K, V>
                         Entry<K, V> replacement = this.createReplacementChainForRemoval((Entry<K, V>) o, e);
                         if (currentArray.compareAndSet(index, o, replacement))
                         {
-                            SIZE_UPDATER.decrementAndGet(this);
+                            this.addToSize(-1);
                             return e.getValue();
                         }
                         //noinspection ContinueStatementWithLabel
@@ -1188,9 +1176,9 @@ public final class ConcurrentHashMap<K, V>
 
     private Entry<K, V> createReplacementChainForRemoval(Entry<K, V> original, Entry<K, V> toRemove)
     {
-        if (original == toRemove && original.getNext() == null)
+        if (original == toRemove)
         {
-            return null;
+            return original.getNext();
         }
         Entry<K, V> replacement = null;
         Entry<K, V> e = original;
@@ -1207,7 +1195,7 @@ public final class ConcurrentHashMap<K, V>
 
     public void parallelForEachKeyValue(List<Procedure2<K, V>> blocks, Executor executor)
     {
-        final AtomicReferenceArray<Object> currentArray = this.table;
+        final AtomicReferenceArray currentArray = this.table;
         int chunks = blocks.size();
         if (chunks > 1)
         {
@@ -1249,12 +1237,12 @@ public final class ConcurrentHashMap<K, V>
         }
     }
 
-    private void sequentialForEachKeyValue(Procedure2<K, V> block, AtomicReferenceArray<Object> currentArray, int start, int end)
+    private void sequentialForEachKeyValue(Procedure2<K, V> block, AtomicReferenceArray currentArray, int start, int end)
     {
         for (int i = start; i < end; i++)
         {
             Object o = currentArray.get(i);
-            if (o == RESIZED || o instanceof ResizeContainer)
+            if (o == RESIZED || o == RESIZING)
             {
                 throw new ConcurrentModificationException("can't iterate while resizing!");
             }
@@ -1271,7 +1259,7 @@ public final class ConcurrentHashMap<K, V>
 
     public void parallelForEachValue(List<Procedure<V>> blocks, Executor executor)
     {
-        final AtomicReferenceArray<Object> currentArray = this.table;
+        final AtomicReferenceArray currentArray = this.table;
         int chunks = blocks.size();
         if (chunks > 1)
         {
@@ -1313,12 +1301,12 @@ public final class ConcurrentHashMap<K, V>
         }
     }
 
-    private void sequentialForEachValue(Procedure<V> block, AtomicReferenceArray<Object> currentArray, int start, int end)
+    private void sequentialForEachValue(Procedure<V> block, AtomicReferenceArray currentArray, int start, int end)
     {
         for (int i = start; i < end; i++)
         {
             Object o = currentArray.get(i);
-            if (o == RESIZED || o instanceof ResizeContainer)
+            if (o == RESIZED || o == RESIZING)
             {
                 throw new ConcurrentModificationException("can't iterate while resizing!");
             }
@@ -1336,11 +1324,11 @@ public final class ConcurrentHashMap<K, V>
     public int hashCode()
     {
         int h = 0;
-        AtomicReferenceArray<Object> currentArray = this.table;
+        AtomicReferenceArray currentArray = this.table;
         for (int i = 0; i < currentArray.length() - 1; i++)
         {
             Object o = currentArray.get(i);
-            if (o == RESIZED || o instanceof ResizeContainer)
+            if (o == RESIZED || o == RESIZING)
             {
                 throw new ConcurrentModificationException("can't compute hashcode while resizing!");
             }
@@ -1433,7 +1421,7 @@ public final class ConcurrentHashMap<K, V>
         {
             capacity <<= 1;
         }
-        this.table = new AtomicReferenceArray<Object>(capacity + 1);
+        this.table = new AtomicReferenceArray(capacity + 1);
         for (int i = 0; i < size; i++)
         {
             this.put((K) in.readObject(), (V) in.readObject());
@@ -1448,7 +1436,7 @@ public final class ConcurrentHashMap<K, V>
         for (int i = 0; i < this.table.length() - 1; i++)
         {
             Object o = this.table.get(i);
-            if (o == RESIZED || o instanceof ResizeContainer)
+            if (o == RESIZED || o == RESIZING)
             {
                 throw new ConcurrentModificationException("Can't serialize while resizing!");
             }
@@ -1472,7 +1460,7 @@ public final class ConcurrentHashMap<K, V>
         private Entry<K, V> next;
         private int index = 0;
         private Entry<K, V> current;
-        private AtomicReferenceArray<Object> currentTable;
+        private AtomicReferenceArray currentTable;
 
         protected HashIterator()
         {
@@ -1488,7 +1476,7 @@ public final class ConcurrentHashMap<K, V>
             for (; this.index < this.currentTable.length() - 1; this.index++)
             {
                 Object o = this.currentTable.get(this.index);
-                if (o == RESIZED || o instanceof ResizeContainer)
+                if (o == RESIZED || o == RESIZING)
                 {
                     this.throwConcurrentException();
                 }
@@ -1742,23 +1730,93 @@ public final class ConcurrentHashMap<K, V>
         }
     }
 
-    private static final class ResizeContainer<K, V>
+    private static final class ResizeContainer
     {
-        private volatile Entry<K, V> entryChain;
+        private static final int QUEUE_INCREMENT = 1 << 15;
+        private final AtomicInteger resizers = new AtomicInteger(1);
+        private final AtomicReferenceArray nextArray;
+        private final AtomicInteger queuePosition;
 
-        private ResizeContainer(Entry<K, V> entryChain)
+        private ResizeContainer(AtomicReferenceArray nextArray, int oldSize)
         {
-            this.entryChain = entryChain;
+            this.nextArray = nextArray;
+            this.queuePosition = new AtomicInteger(oldSize);
         }
 
-        public Entry<K, V> getEntryChain()
+        public void incrementResizer()
         {
-            return this.entryChain;
+            this.resizers.incrementAndGet();
         }
 
-        public void setEntryChain(Entry<K, V> entryChain)
+        public void decrementResizerAndNotify()
         {
-            this.entryChain = entryChain;
+            int remaining = this.resizers.decrementAndGet();
+            if (remaining == 0)
+            {
+                synchronized (this)
+                {
+                    this.notifyAll();
+                }
+            }
+        }
+
+        public int getQueuePosition()
+        {
+            return this.queuePosition.get();
+        }
+
+        public int subtractAndGetQueuePosition()
+        {
+            return this.queuePosition.addAndGet(-QUEUE_INCREMENT);
+        }
+
+        public void waitForAllResizers()
+        {
+            if (this.resizers.get() > 0)
+            {
+                for (int i = 0; i < 16; i++)
+                {
+                    if (this.resizers.get() == 0)
+                    {
+                        break;
+                    }
+                }
+                for (int i = 0; i < 16; i++)
+                {
+                    if (this.resizers.get() == 0)
+                    {
+                        break;
+                    }
+                    Thread.yield();
+                }
+            }
+            if (this.resizers.get() > 0)
+            {
+                synchronized (this)
+                {
+                    while (this.resizers.get() > 0)
+                    {
+                        try
+                        {
+                            this.wait();
+                        }
+                        catch (InterruptedException e)
+                        {
+                            //ginore
+                        }
+                    }
+                }
+            }
+        }
+
+        public boolean isNotDone()
+        {
+            return this.resizers.get() > 0;
+        }
+
+        public void zeroOutQueuePosition()
+        {
+            this.queuePosition.set(0);
         }
     }
 
@@ -1872,7 +1930,7 @@ public final class ConcurrentHashMap<K, V>
     public <P> V getIfAbsentPutWith(K key, Function<? super P, ? extends V> function, P parameter)
     {
         int hash = this.hash(key);
-        AtomicReferenceArray<Object> currentArray = this.table;
+        AtomicReferenceArray currentArray = this.table;
         V newValue = null;
         boolean createdValue = false;
         while (true)
@@ -1880,7 +1938,7 @@ public final class ConcurrentHashMap<K, V>
             int length = currentArray.length();
             int index = indexFor(hash, length);
             Object o = currentArray.get(index);
-            if (o == RESIZED || o instanceof ResizeContainer)
+            if (o == RESIZED || o == RESIZING)
             {
                 currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
             }
@@ -1904,7 +1962,7 @@ public final class ConcurrentHashMap<K, V>
                 Entry<K, V> newEntry = new Entry<K, V>(key, newValue, (Entry<K, V>) o);
                 if (currentArray.compareAndSet(index, o, newEntry))
                 {
-                    this.incrementSizeAndPossiblyResize(currentArray, length);
+                    this.incrementSizeAndPossiblyResize(currentArray, length, o);
                     return newValue;
                 }
             }
