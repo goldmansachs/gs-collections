@@ -22,6 +22,8 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.ImmutableEntry;
 import org.junit.Assert;
 import org.junit.Test;
@@ -140,6 +142,14 @@ public class ConcurrentMutableHashMapTest extends MutableMapTestCase
     public void removeNullFromKeySet()
     {
         // ConcurrentHashMaps do not support null keys
+    }
+
+    @Override
+    @Test
+    public void keySetEqualsAndHashCode()
+    {
+        MutableMap<String, Integer> map = this.newMapWithKeysValues("One", 1, "Two", 2, "Three", 3);
+        Verify.assertEqualsAndHashCode(UnifiedSet.newSetWith("One", "Two", "Three"), map.keySet());
     }
 
     @Override

@@ -109,7 +109,7 @@ public class UnifiedSet<K>
         @Override
         public int hashCode()
         {
-            return 0;
+            throw new AssertionError();
         }
 
         @Override
@@ -1377,7 +1377,7 @@ public class UnifiedSet<K>
             }
             else if (cur != null)
             {
-                hashCode += cur.hashCode();
+                hashCode += cur == NULL_KEY ? 0 : cur.hashCode();
             }
         }
         return hashCode;
@@ -1388,17 +1388,17 @@ public class UnifiedSet<K>
         int hashCode = 0;
         do
         {
-            hashCode += bucket.zero.hashCode();
+            hashCode += bucket.zero == NULL_KEY ? 0 : bucket.zero.hashCode();
             if (bucket.one == null)
             {
                 return hashCode;
             }
-            hashCode += bucket.one.hashCode();
+            hashCode += bucket.one == NULL_KEY ? 0 : bucket.one.hashCode();
             if (bucket.two == null)
             {
                 return hashCode;
             }
-            hashCode += bucket.two.hashCode();
+            hashCode += bucket.two == NULL_KEY ? 0 : bucket.two.hashCode();
             if (bucket.three == null)
             {
                 return hashCode;
@@ -1408,7 +1408,7 @@ public class UnifiedSet<K>
                 bucket = (ChainedBucket) bucket.three;
                 continue;
             }
-            hashCode += bucket.three.hashCode();
+            hashCode += bucket.three == NULL_KEY ? 0 : bucket.three.hashCode();
             return hashCode;
         }
         while (true);

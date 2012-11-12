@@ -651,15 +651,15 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
     @Test
     public void entrySet_equals()
     {
-        MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "One", 2, "Two", 3, "Three", 4, "Four");
+        MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "One", 2, "Two", 3, "Three", null, null);
         Verify.assertNotEquals(UnifiedSet.newSetWith(ImmutableEntry.of(5, "Five")), map.entrySet());
 
         UnifiedSet<ImmutableEntry<Integer, String>> expected = UnifiedSet.newSetWith(
                 ImmutableEntry.of(1, "One"),
                 ImmutableEntry.of(2, "Two"),
                 ImmutableEntry.of(3, "Three"),
-                ImmutableEntry.of(4, "Four"));
-        Assert.assertEquals(expected, map.entrySet());
+                ImmutableEntry.<Integer, String>of(null, null));
+        Verify.assertEqualsAndHashCode(expected, map.entrySet());
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -683,6 +683,15 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
         Iterator<String> iterator = map.values().iterator();
         iterator.next();
         iterator.next();
+    }
+
+    @Test
+    public void valueCollection_equals()
+    {
+        MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "One", 2, "Two", 3, "Three", null, null);
+        Verify.assertNotEquals(
+                UnifiedSet.newSetWith("One", "Two", "Three", null),
+                map.values());
     }
 
     @Override

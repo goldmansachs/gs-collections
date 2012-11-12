@@ -80,7 +80,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         @Override
         public int hashCode()
         {
-            return 0;
+            throw new AssertionError();
         }
 
         @Override
@@ -944,7 +944,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
             else if (cur != null)
             {
                 Object value = this.table[i + 1];
-                hashCode += cur.hashCode() ^ (value == null ? 0 : value.hashCode());
+                hashCode += (cur == NULL_KEY ? 0 : cur.hashCode()) ^ (value == null ? 0 : value.hashCode());
             }
         }
         return hashCode;
@@ -961,7 +961,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
                 return hashCode;
             }
             Object value = chain[i + 1];
-            hashCode += cur.hashCode() ^ (value == null ? 0 : value.hashCode());
+            hashCode += (cur == NULL_KEY ? 0 : cur.hashCode()) ^ (value == null ? 0 : value.hashCode());
         }
         return hashCode;
     }
@@ -1295,12 +1295,12 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
                             {
                                 break;
                             }
-                            hashCode += cur.hashCode();
+                            hashCode += cur == NULL_KEY ? 0 : cur.hashCode();
                         }
                     }
                     else
                     {
-                        hashCode += x.hashCode();
+                        hashCode += x == NULL_KEY ? 0 : x.hashCode();
                     }
                 }
             }
@@ -1940,7 +1940,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         @Override
         public int hashCode()
         {
-            return toSentinelIfNull(this.key).hashCode()
+            return (this.key == null ? 0 : this.key.hashCode())
                     ^ (this.value == null ? 0 : this.value.hashCode());
         }
 

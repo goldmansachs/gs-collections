@@ -40,6 +40,7 @@ import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.parallel.ParallelIterate;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.ImmutableEntry;
 import org.junit.After;
@@ -228,6 +229,14 @@ public class ConcurrentHashMapTest extends MutableMapTestCase
     public void removeNullFromKeySet()
     {
         // ConcurrentHashMaps do not support null keys
+    }
+
+    @Override
+    @Test
+    public void keySetEqualsAndHashCode()
+    {
+        MutableMap<String, Integer> map = this.newMapWithKeysValues("One", 1, "Two", 2, "Three", 3);
+        Verify.assertEqualsAndHashCode(UnifiedSet.newSetWith("One", "Two", "Three"), map.keySet());
     }
 
     @Test
