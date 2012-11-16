@@ -83,12 +83,12 @@ public final class <name>ArrayList
 
     public boolean isEmpty()
     {
-        return this.size() == 0;
+        return this.size == 0;
     }
 
     public boolean notEmpty()
     {
-        return this.size() > 0;
+        return this.size > 0;
     }
 
     public void clear()
@@ -99,7 +99,7 @@ public final class <name>ArrayList
 
     public boolean contains(<type> value)
     {
-        for (int i = 0; i \< this.size ; i++)
+        for (int i = 0; i \< this.size; i++)
         {
             if (<(equals.(type))("this.items[i]", "value")>)
             {
@@ -609,22 +609,60 @@ public final class <name>ArrayList
     @Override
     public String toString()
     {
-        if (this.isEmpty())
+        return this.makeString("[", ", ", "]");
+    }
+
+    public String makeString()
+    {
+        return this.makeString(", ");
+    }
+
+    public String makeString(String separator)
+    {
+        return this.makeString("", separator, "");
+    }
+
+    public String makeString(String start, String separator, String end)
+    {
+        Appendable stringBuilder = new StringBuilder();
+        this.appendString(stringBuilder, start, separator, end);
+        return stringBuilder.toString();
+    }
+
+    public void appendString(Appendable appendable)
+    {
+        this.appendString(appendable, ", ");
+    }
+
+    public void appendString(Appendable appendable, String separator)
+    {
+        this.appendString(appendable, "", separator, "");
+    }
+
+    public void appendString(
+            Appendable appendable,
+            String start,
+            String separator,
+            String end)
+    {
+        try
         {
-            return "[]";
-        }
-        StringBuilder sb = new StringBuilder();
-        sb.append('[');
-        for (int i = 0; i \< this.size; i++)
-        {
-            if (i \> 0)
+            appendable.append(start);
+            for (int i = 0; i \< this.size; i++)
             {
-                sb.append(',').append(' ');
+                if (i \> 0)
+                {
+                    appendable.append(separator);
+                }
+                <type> value = this.items[i];
+                appendable.append(String.valueOf(value));
             }
-            <type> value = this.items[i];
-            sb.append(value);
+            appendable.append(end);
         }
-        return sb.append(']').toString();
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     public void writeExternal(ObjectOutput out) throws IOException

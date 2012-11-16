@@ -478,4 +478,31 @@ public class BooleanArrayListTest
         Assert.assertEquals("[true, true, false]", this.list.toString());
         Assert.assertEquals("[]", new BooleanArrayList().toString());
     }
+
+    @Test
+    public void makeString()
+    {
+        Assert.assertEquals("true, true, false", this.list.makeString());
+        Assert.assertEquals("true", BooleanArrayList.newListWith(true).makeString("/"));
+        Assert.assertEquals("true/true/false", this.list.makeString("/"));
+        Assert.assertEquals(this.list.toString(), this.list.makeString("[", ", ", "]"));
+        Assert.assertEquals("", new BooleanArrayList().makeString());
+    }
+
+    @Test
+    public void appendString()
+    {
+        StringBuilder appendable = new StringBuilder();
+        new BooleanArrayList().appendString(appendable);
+        Assert.assertEquals("", appendable.toString());
+        StringBuilder appendable2 = new StringBuilder();
+        this.list.appendString(appendable2);
+        Assert.assertEquals("true, true, false", appendable2.toString());
+        StringBuilder appendable3 = new StringBuilder();
+        this.list.appendString(appendable3, "/");
+        Assert.assertEquals("true/true/false", appendable3.toString());
+        StringBuilder appendable4 = new StringBuilder();
+        this.list.appendString(appendable4, "[", ", ", "]");
+        Assert.assertEquals(this.list.toString(), appendable4.toString());
+    }
 }

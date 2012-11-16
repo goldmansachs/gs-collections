@@ -443,18 +443,60 @@ public final class BooleanArrayList
     @Override
     public String toString()
     {
-        StringBuilder sb = new StringBuilder();
-        sb.append('[');
-        for (int i = 0; i < this.size; i++)
+        return this.makeString("[", ", ", "]");
+    }
+
+    public String makeString()
+    {
+        return this.makeString(", ");
+    }
+
+    public String makeString(String separator)
+    {
+        return this.makeString("", separator, "");
+    }
+
+    public String makeString(String start, String separator, String end)
+    {
+        Appendable stringBuilder = new StringBuilder();
+        this.appendString(stringBuilder, start, separator, end);
+        return stringBuilder.toString();
+    }
+
+    public void appendString(Appendable appendable)
+    {
+        this.appendString(appendable, ", ");
+    }
+
+    public void appendString(Appendable appendable, String separator)
+    {
+        this.appendString(appendable, "", separator, "");
+    }
+
+    public void appendString(
+            Appendable appendable,
+            String start,
+            String separator,
+            String end)
+    {
+        try
         {
-            if (i > 0)
+            appendable.append(start);
+            for (int i = 0; i < this.size; i++)
             {
-                sb.append(',').append(' ');
+                if (i > 0)
+                {
+                    appendable.append(separator);
+                }
+                boolean value = this.items.get(i);
+                appendable.append(String.valueOf(value));
             }
-            boolean value = this.items.get(i);
-            sb.append(value);
+            appendable.append(end);
         }
-        return sb.append(']').toString();
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     public void writeExternal(ObjectOutput out) throws IOException

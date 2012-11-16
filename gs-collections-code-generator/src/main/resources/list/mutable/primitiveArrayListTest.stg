@@ -473,6 +473,33 @@ public class <name>ArrayListTest
         Assert.assertEquals("[<["1", "2", "3"]:(toStringLiteral.(type))(); separator=", ">]", this.list.toString());
         Assert.assertEquals("[]", new <name>ArrayList().toString());
     }
+
+    @Test
+    public void makeString()
+    {
+        Assert.assertEquals("<["1", "2", "3"]:(toStringLiteral.(type))(); separator=", ">", this.list.makeString());
+        Assert.assertEquals("<(toStringLiteral.(type))("1")>", <name>ArrayList.newListWith(<(literal.(type))("1")>).makeString("/"));
+        Assert.assertEquals("<["1", "2", "3"]:(toStringLiteral.(type))(); separator="/">", this.list.makeString("/"));
+        Assert.assertEquals(this.list.toString(), this.list.makeString("[", ", ", "]"));
+        Assert.assertEquals("", new <name>ArrayList().makeString());
+    }
+
+    @Test
+    public void appendString()
+    {
+        StringBuilder appendable = new StringBuilder();
+        new <name>ArrayList().appendString(appendable);
+        Assert.assertEquals("", appendable.toString());
+        StringBuilder appendable2 = new StringBuilder();
+        this.list.appendString(appendable2);
+        Assert.assertEquals("<["1", "2", "3"]:(toStringLiteral.(type))(); separator=", ">", appendable2.toString());
+        StringBuilder appendable3 = new StringBuilder();
+        this.list.appendString(appendable3, "/");
+        Assert.assertEquals("<["1", "2", "3"]:(toStringLiteral.(type))(); separator="/">", appendable3.toString());
+        StringBuilder appendable4 = new StringBuilder();
+        this.list.appendString(appendable4, "[", ", ", "]");
+        Assert.assertEquals(this.list.toString(), appendable4.toString());
+    }
 }
 
 >>
