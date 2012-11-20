@@ -29,6 +29,7 @@ import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -745,6 +746,25 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
             }
         });
         Assert.assertEquals(UnifiedSet.newSetWith("0", "17", "34", "51", "68"), set);
+    }
+
+    @Override
+    @Test
+    public void forEachValue()
+    {
+        super.forEachValue();
+
+        MutableMap<Integer, Integer> map = this.mapWithCollisionsOfSize(9).withKeyValue(null, null);
+        final MutableSet<Integer> result = UnifiedSet.newSet();
+        map.forEachValue(new Procedure<Integer>()
+        {
+            public void value(Integer each)
+            {
+                Assert.assertTrue(each == null || each.getClass() == Integer.class);
+                result.add(each);
+            }
+        });
+        Assert.assertEquals(MORE_COLLISIONS.toSet().with(null), result);
     }
 
     @Override

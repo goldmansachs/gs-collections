@@ -25,9 +25,6 @@ import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
-import com.gs.collections.api.block.procedure.ObjectIntProcedure;
-import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
@@ -240,72 +237,6 @@ public abstract class AbstractMutableMap<K, V> extends AbstractMapIterable<K, V>
         return this;
     }
 
-    public void chainedForEachValue(Object[] chain, Procedure<? super V> procedure)
-    {
-        for (int i = 0; i < chain.length; i += 2)
-        {
-            Object key = chain[i];
-            if (key == null)
-            {
-                return;
-            }
-            procedure.value((V) chain[i + 1]);
-        }
-    }
-
-    protected void mapBatchForEach(Object[] map, Procedure<? super V> procedure, int sectionIndex, int sectionCount)
-    {
-        int sectionSize = map.length / sectionCount;
-        int start = sectionIndex * sectionSize;
-        int end = sectionIndex == sectionCount - 1 ? map.length : start + sectionSize;
-        if (start % 2 == 0)
-        {
-            start++;
-        }
-        for (int i = start; i < end; i += 2)
-        {
-            Object value = map[i];
-            if (value instanceof Object[])
-            {
-                this.chainedForEachValue((Object[]) value, procedure);
-            }
-            else if (value == null && map[i - 1] != null || value != null)
-            {
-                procedure.value((V) value);
-            }
-        }
-    }
-
-    public int chainedForEachValueWithIndex(Object[] chain, ObjectIntProcedure<? super V> objectIntProcedure, int index)
-    {
-        for (int i = 0; i < chain.length; i += 2)
-        {
-            Object key = chain[i];
-            if (key == null)
-            {
-                return index;
-            }
-            objectIntProcedure.value((V) chain[i + 1], index++);
-        }
-        return index;
-    }
-
-    public <P> void chainedForEachValueWith(
-            Object[] chain,
-            Procedure2<? super V, ? super P> procedure,
-            P parameter)
-    {
-        for (int i = 0; i < chain.length; i += 2)
-        {
-            Object key = chain[i];
-            if (key == null)
-            {
-                return;
-            }
-            procedure.value((V) chain[i + 1], parameter);
-        }
-    }
-
     /**
      * Trait-style class that is used to capture commonalities between ValuesCollection class implementations in order to
      * avoid code duplication.
@@ -320,35 +251,6 @@ public abstract class AbstractMutableMap<K, V> extends AbstractMapIterable<K, V>
         public boolean addAll(Collection<? extends V> collection)
         {
             throw new UnsupportedOperationException();
-        }
-
-        protected void copyValuesFromTable(Object[] table, Object[] result, Object chainedKey)
-        {
-            int count = 0;
-            for (int i = 0; i < table.length; i += 2)
-            {
-                Object x = table[i];
-                if (x != null)
-                {
-                    if (x == chainedKey)
-                    {
-                        Object[] chain = (Object[]) table[i + 1];
-                        for (int j = 0; j < chain.length; j += 2)
-                        {
-                            Object key = chain[j];
-                            if (key == null)
-                            {
-                                break;
-                            }
-                            result[count++] = chain[j + 1];
-                        }
-                    }
-                    else
-                    {
-                        result[count++] = table[i + 1];
-                    }
-                }
-            }
         }
     }
 

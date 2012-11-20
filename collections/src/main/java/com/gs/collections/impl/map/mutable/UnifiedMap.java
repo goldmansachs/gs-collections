@@ -702,6 +702,29 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         this.mapBatchForEach(this.table, procedure, sectionIndex, sectionCount);
     }
 
+    protected void mapBatchForEach(Object[] map, Procedure<? super V> procedure, int sectionIndex, int sectionCount)
+    {
+        int sectionSize = map.length / sectionCount;
+        int start = sectionIndex * sectionSize;
+        int end = sectionIndex == sectionCount - 1 ? map.length : start + sectionSize;
+        if (start % 2 == 0)
+        {
+            start++;
+        }
+        for (int i = start; i < end; i += 2)
+        {
+            Object value = map[i];
+            if (value instanceof Object[])
+            {
+                this.chainedForEachValue((Object[]) value, procedure);
+            }
+            else if (value == null && map[i - 1] != null || value != null)
+            {
+                procedure.value((V) value);
+            }
+        }
+    }
+
     @Override
     public void forEachKey(Procedure<? super K> procedure)
     {
@@ -746,6 +769,19 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
             {
                 procedure.value((V) this.table[i + 1]);
             }
+        }
+    }
+
+    private void chainedForEachValue(Object[] chain, Procedure<? super V> procedure)
+    {
+        for (int i = 0; i < chain.length; i += 2)
+        {
+            Object cur = chain[i];
+            if (cur == null)
+            {
+                return;
+            }
+            procedure.value((V) chain[i + 1]);
         }
     }
 
@@ -1059,6 +1095,20 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         }
     }
 
+    private int chainedForEachValueWithIndex(Object[] chain, ObjectIntProcedure<? super V> objectIntProcedure, int index)
+    {
+        for (int i = 0; i < chain.length; i += 2)
+        {
+            Object cur = chain[i];
+            if (cur == null)
+            {
+                return index;
+            }
+            objectIntProcedure.value((V) chain[i + 1], index++);
+        }
+        return index;
+    }
+
     @Override
     public <P> void forEachWith(Procedure2<? super V, ? super P> procedure, P parameter)
     {
@@ -1073,6 +1123,22 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
             {
                 procedure.value((V) this.table[i + 1], parameter);
             }
+        }
+    }
+
+    private <P> void chainedForEachValueWith(
+            Object[] chain,
+            Procedure2<? super V, ? super P> procedure,
+            P parameter)
+    {
+        for (int i = 0; i < chain.length; i += 2)
+        {
+            Object cur = chain[i];
+            if (cur == null)
+            {
+                return;
+            }
+            procedure.value((V) chain[i + 1], parameter);
         }
     }
 
@@ -2063,7 +2129,31 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
 
         protected void copyValues(Object[] result)
         {
-            this.copyValuesFromTable(UnifiedMap.this.table, result, CHAINED_KEY);
+            int count = 0;
+            for (int i = 0; i < UnifiedMap.this.table.length; i += 2)
+            {
+                Object x = UnifiedMap.this.table[i];
+                if (x != null)
+                {
+                    if (x == CHAINED_KEY)
+                    {
+                        Object[] chain = (Object[]) UnifiedMap.this.table[i + 1];
+                        for (int j = 0; j < chain.length; j += 2)
+                        {
+                            Object cur = chain[j];
+                            if (cur == null)
+                            {
+                                break;
+                            }
+                            result[count++] = chain[j + 1];
+                        }
+                    }
+                    else
+                    {
+                        result[count++] = UnifiedMap.this.table[i + 1];
+                    }
+                }
+            }
         }
 
         public Object[] toArray()
@@ -2111,8 +2201,8 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         {
             for (int i = 0; i < chain.length; i += 2)
             {
-                Object key = chain[i];
-                if (key == null)
+                Object cur = chain[i];
+                if (cur == null)
                 {
                     return;
                 }
