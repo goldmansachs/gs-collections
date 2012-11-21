@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -110,29 +110,21 @@ final class QuadrupletonList<T>
         switch (index)
         {
             case 0:
-            {
-                T previousElement = this.element1;
+                T previousElement1 = this.element1;
                 this.element1 = element;
-                return previousElement;
-            }
+                return previousElement1;
             case 1:
-            {
-                T previousElement = this.element2;
+                T previousElement2 = this.element2;
                 this.element2 = element;
-                return previousElement;
-            }
+                return previousElement2;
             case 2:
-            {
-                T previousElement = this.element3;
+                T previousElement3 = this.element3;
                 this.element3 = element;
-                return previousElement;
-            }
+                return previousElement3;
             case 3:
-            {
-                T previousElement = this.element4;
+                T previousElement4 = this.element4;
                 this.element4 = element;
-                return previousElement;
-            }
+                return previousElement4;
             default:
                 throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + this.size());
         }

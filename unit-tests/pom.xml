@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  ~ Copyright 2011 Goldman Sachs.
+  ~ Copyright 2012 Goldman Sachs.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -15,6 +15,7 @@
   ~ See the License for the specific language governing permissions and
   ~ limitations under the License.
   -->
+
 <project
     xmlns="http://maven.apache.org/POM/4.0.0"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -149,7 +150,8 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <targetPath>target/generated-test-sources/java/com/gs/collections/impl/list/mutable/primitive
+                            <targetPath>
+                                target/generated-test-sources/java/com/gs/collections/impl/list/mutable/primitive
                             </targetPath>
                             <templateFileName>list/mutable/primitiveArrayListTest.stg</templateFileName>
                             <test>true</test>
@@ -162,7 +164,8 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <targetPath>target/generated-test-sources/java/com/gs/collections/impl/block/factory/primitive
+                            <targetPath>
+                                target/generated-test-sources/java/com/gs/collections/impl/block/factory/primitive
                             </targetPath>
                             <templateFileName>api/block/factory/primitivePredicatesTest.stg</templateFileName>
                             <test>true</test>
@@ -200,8 +203,6 @@
                     <includes>
                         <include>**/*Test.java</include>
                     </includes>
-                    <parallel>both</parallel>
-                    <forkMode>once</forkMode>
                     <argLine>-XX:-OmitStackTraceInFastThrow</argLine>
                 </configuration>
             </plugin>

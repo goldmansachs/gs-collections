@@ -112,8 +112,6 @@
                     <includes>
                         <include>**/*Test.java</include>
                     </includes>
-                    <parallel>both</parallel>
-                    <forkMode>once</forkMode>
                     <argLine>-XX:-OmitStackTraceInFastThrow</argLine>
                 </configuration>
             </plugin>
