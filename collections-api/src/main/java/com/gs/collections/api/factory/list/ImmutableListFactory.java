@@ -20,29 +20,94 @@ import com.gs.collections.api.list.ImmutableList;
 
 public interface ImmutableListFactory
 {
+    /**
+     * Same as {@link #with()}.
+     */
     <T> ImmutableList<T> of();
 
+    <T> ImmutableList<T> with();
+
+    /**
+     * Same as {@link #with(T)}.
+     */
     <T> ImmutableList<T> of(T one);
 
+    <T> ImmutableList<T> with(T one);
+
+    /**
+     * Same as {@link #with(T, T)}.
+     */
     <T> ImmutableList<T> of(T one, T two);
 
+    <T> ImmutableList<T> with(T one, T two);
+
+    /**
+     * Same as {@link #with(T, T, T)}.
+     */
     <T> ImmutableList<T> of(T one, T two, T three);
 
+    <T> ImmutableList<T> with(T one, T two, T three);
+
+    /**
+     * Same as {@link #with(T, T, T, T)}.
+     */
     <T> ImmutableList<T> of(T one, T two, T three, T four);
 
+    <T> ImmutableList<T> with(T one, T two, T three, T four);
+
+    /**
+     * Same as {@link #with(T, T, T, T, T)}.
+     */
     <T> ImmutableList<T> of(T one, T two, T three, T four, T five);
 
+    <T> ImmutableList<T> with(T one, T two, T three, T four, T five);
+
+    /**
+     * Same as {@link #with(T, T, T, T, T, T)}.
+     */
     <T> ImmutableList<T> of(T one, T two, T three, T four, T five, T six);
 
+    <T> ImmutableList<T> with(T one, T two, T three, T four, T five, T six);
+
+    /**
+     * Same as {@link #with(T, T, T, T, T, T, T)}.
+     */
     <T> ImmutableList<T> of(T one, T two, T three, T four, T five, T six, T seven);
 
+    <T> ImmutableList<T> with(T one, T two, T three, T four, T five, T six, T seven);
+
+    /**
+     * Same as {@link #with(T, T, T, T, T, T, T, T)}.
+     */
     <T> ImmutableList<T> of(T one, T two, T three, T four, T five, T six, T seven, T eight);
 
+    <T> ImmutableList<T> with(T one, T two, T three, T four, T five, T six, T seven, T eight);
+
+    /**
+     * Same as {@link #with(T, T, T, T, T, T, T, T, T)}.
+     */
     <T> ImmutableList<T> of(T one, T two, T three, T four, T five, T six, T seven, T eight, T nine);
 
+    <T> ImmutableList<T> with(T one, T two, T three, T four, T five, T six, T seven, T eight, T nine);
+
+    /**
+     * Same as {@link #with(T, T, T, T, T, T, T, T, T, T)}.
+     */
     <T> ImmutableList<T> of(T one, T two, T three, T four, T five, T six, T seven, T eight, T nine, T ten);
 
+    <T> ImmutableList<T> with(T one, T two, T three, T four, T five, T six, T seven, T eight, T nine, T ten);
+
+    /**
+     * Same as {@link #with(T...)}
+     */
     <T> ImmutableList<T> of(T... items);
 
+    <T> ImmutableList<T> with(T... items);
+
+    /**
+     * Same as {@link #withAll(Iterable)}.
+     */
     <T> ImmutableList<T> ofAll(Iterable<? extends T> items);
+
+    <T> ImmutableList<T> withAll(Iterable<? extends T> items);
 }

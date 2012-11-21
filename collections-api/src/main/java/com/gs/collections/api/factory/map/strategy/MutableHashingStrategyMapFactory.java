@@ -21,19 +21,53 @@ import com.gs.collections.api.map.MutableMap;
 
 public interface MutableHashingStrategyMapFactory
 {
+    /**
+     * Same as {@link #with(HashingStrategy)}.
+     */
     <K, V> MutableMap<K, V> of(HashingStrategy<? super K> hashingStrategy);
 
+    <K, V> MutableMap<K, V> with(HashingStrategy<? super K> hashingStrategy);
+
+    /**
+     * Same as {@link #with(HashingStrategy, K, V)}.
+     */
     <K, V> MutableMap<K, V> of(HashingStrategy<? super K> hashingStrategy, K key, V value);
 
+    <K, V> MutableMap<K, V> with(HashingStrategy<? super K> hashingStrategy, K key, V value);
+
+    /**
+     * Same as {@link #with(HashingStrategy, K, V, K, V)}.
+     */
     <K, V> MutableMap<K, V> of(HashingStrategy<? super K> hashingStrategy, K key1, V value1, K key2, V value2);
 
+    <K, V> MutableMap<K, V> with(HashingStrategy<? super K> hashingStrategy, K key1, V value1, K key2, V value2);
+
+    /**
+     * Same as {@link #with(HashingStrategy, K, V, K, V, K, V)}.
+     */
     <K, V> MutableMap<K, V> of(
             HashingStrategy<? super K> hashingStrategy,
             K key1, V value1,
             K key2, V value2,
             K key3, V value3);
 
+    <K, V> MutableMap<K, V> with(
+            HashingStrategy<? super K> hashingStrategy,
+            K key1, V value1,
+            K key2, V value2,
+            K key3, V value3);
+
+    /**
+     * Same as {@link #with(HashingStrategy, K, V, K, V, K, V, K, V)}.
+     */
     <K, V> MutableMap<K, V> of(
+            HashingStrategy<? super K> hashingStrategy,
+            K key1, V value1,
+            K key2, V value2,
+            K key3, V value3,
+            K key4, V value4);
+
+    <K, V> MutableMap<K, V> with(
             HashingStrategy<? super K> hashingStrategy,
             K key1, V value1,
             K key2, V value2,

@@ -20,11 +20,31 @@ import com.gs.collections.api.bag.ImmutableBag;
 
 public interface ImmutableBagFactory
 {
+    /**
+     * Same as {@link #with()}.
+     */
     <T> ImmutableBag<T> of();
 
+    <T> ImmutableBag<T> with();
+
+    /**
+     * Same as {@link #with(T)}.
+     */
     <T> ImmutableBag<T> of(T element);
 
+    <T> ImmutableBag<T> with(T element);
+
+    /**
+     * Same as {@link #with(T...)}.
+     */
     <T> ImmutableBag<T> of(T... elements);
 
+    <T> ImmutableBag<T> with(T... elements);
+
+    /**
+     * Same as {@link #withAll(Iterable)}.
+     */
     <T> ImmutableBag<T> ofAll(Iterable<? extends T> items);
+
+    <T> ImmutableBag<T> withAll(Iterable<? extends T> items);
 }

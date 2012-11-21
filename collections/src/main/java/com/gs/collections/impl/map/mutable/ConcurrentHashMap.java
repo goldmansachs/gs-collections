@@ -2006,6 +2006,7 @@ public final class ConcurrentHashMap<K, V>
         Iterate.forEachWith(this.values(), procedure, parameter);
     }
 
+    @Override
     public ImmutableMap<K, V> toImmutable()
     {
         return Maps.immutable.ofMap(this);

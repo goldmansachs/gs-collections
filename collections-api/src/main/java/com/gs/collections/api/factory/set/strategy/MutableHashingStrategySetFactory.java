@@ -21,9 +21,24 @@ import com.gs.collections.api.set.MutableSet;
 
 public interface MutableHashingStrategySetFactory
 {
+    /**
+     * Same as {@link #with(HashingStrategy)}.
+     */
     <T> MutableSet<T> of(HashingStrategy<? super T> hashingStrategy);
 
+    <T> MutableSet<T> with(HashingStrategy<? super T> hashingStrategy);
+
+    /**
+     * Same as {@link #with(HashingStrategy, T...)}.
+     */
     <T> MutableSet<T> of(HashingStrategy<? super T> hashingStrategy, T... items);
 
+    <T> MutableSet<T> with(HashingStrategy<? super T> hashingStrategy, T... items);
+
+    /**
+     * Same as {@link #withAll(HashingStrategy, Iterable)}.
+     */
     <T> MutableSet<T> ofAll(HashingStrategy<? super T> hashingStrategy, Iterable<? extends T> items);
+
+    <T> MutableSet<T> withAll(HashingStrategy<? super T> hashingStrategy, Iterable<? extends T> items);
 }

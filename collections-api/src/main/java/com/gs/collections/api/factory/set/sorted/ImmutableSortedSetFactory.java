@@ -23,17 +23,52 @@ import com.gs.collections.api.set.sorted.ImmutableSortedSet;
 
 public interface ImmutableSortedSetFactory
 {
+    /**
+     * Same as {@link #with()}.
+     */
     <T> ImmutableSortedSet<T> of();
 
+    <T> ImmutableSortedSet<T> with();
+
+    /**
+     * Same as {@link #with(T...)}.
+     */
     <T> ImmutableSortedSet<T> of(T... items);
 
+    <T> ImmutableSortedSet<T> with(T... items);
+
+    /**
+     * Same as {@link #withAll(Iterable)}.
+     */
     <T> ImmutableSortedSet<T> ofAll(Iterable<? extends T> items);
 
+    <T> ImmutableSortedSet<T> withAll(Iterable<? extends T> items);
+
+    /**
+     * Same as {@link #with(Comparator)}.
+     */
     <T> ImmutableSortedSet<T> of(Comparator<? super T> comparator);
 
+    <T> ImmutableSortedSet<T> with(Comparator<? super T> comparator);
+
+    /**
+     * Same as {@link #with(Comparator, T...)}.
+     */
     <T> ImmutableSortedSet<T> of(Comparator<? super T> comparator, T... items);
 
+    <T> ImmutableSortedSet<T> with(Comparator<? super T> comparator, T... items);
+
+    /**
+     * Same as {@link #withAll(Comparator, Iterable)}.
+     */
     <T> ImmutableSortedSet<T> ofAll(Comparator<? super T> comparator, Iterable<? extends T> items);
 
+    <T> ImmutableSortedSet<T> withAll(Comparator<? super T> comparator, Iterable<? extends T> items);
+
+    /**
+     * Same as {@link #withSortedSet(SortedSet)}.
+     */
     <T> ImmutableSortedSet<T> ofSortedSet(SortedSet<T> set);
+
+    <T> ImmutableSortedSet<T> withSortedSet(SortedSet<T> set);
 }

@@ -20,21 +20,66 @@ import com.gs.collections.api.list.FixedSizeList;
 
 public interface FixedSizeListFactory
 {
+    /**
+     * Same as {@link #with()}.
+     */
     <T> FixedSizeList<T> of();
 
+    <T> FixedSizeList<T> with();
+
+    /**
+     * Same as {@link #with(T)}.
+     */
     <T> FixedSizeList<T> of(T one);
 
+    <T> FixedSizeList<T> with(T one);
+
+    /**
+     * Same as {@link #with(T, T)}.
+     */
     <T> FixedSizeList<T> of(T one, T two);
 
+    <T> FixedSizeList<T> with(T one, T two);
+
+    /**
+     * Same as {@link #with(T, T, T)}.
+     */
     <T> FixedSizeList<T> of(T one, T two, T three);
 
+    <T> FixedSizeList<T> with(T one, T two, T three);
+
+    /**
+     * Same as {@link #with(T, T, T, T)}.
+     */
     <T> FixedSizeList<T> of(T one, T two, T three, T four);
 
+    <T> FixedSizeList<T> with(T one, T two, T three, T four);
+
+    /**
+     * Same as {@link #with(T, T, T, T, T)}.
+     */
     <T> FixedSizeList<T> of(T one, T two, T three, T four, T five);
 
+    <T> FixedSizeList<T> with(T one, T two, T three, T four, T five);
+
+    /**
+     * Same as {@link #with(T, T, T, T, T, T)}.
+     */
     <T> FixedSizeList<T> of(T one, T two, T three, T four, T five, T six);
 
+    <T> FixedSizeList<T> with(T one, T two, T three, T four, T five, T six);
+
+    /**
+     * Same as {@link #with(T...)}
+     */
     <T> FixedSizeList<T> of(T... items);
 
+    <T> FixedSizeList<T> with(T... items);
+
+    /**
+     * Same as {@link #withAll(Iterable)}.
+     */
     <T> FixedSizeList<T> ofAll(Iterable<? extends T> items);
+
+    <T> FixedSizeList<T> withAll(Iterable<? extends T> items);
 }

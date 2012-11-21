@@ -21,9 +21,24 @@ import com.gs.collections.api.set.ImmutableSet;
 
 public interface ImmutableHashingStrategySetFactory
 {
+    /**
+     * Same as {@link #with(HashingStrategy)}.
+     */
     <T> ImmutableSet<T> of(HashingStrategy<? super T> hashingStrategy);
 
+    <T> ImmutableSet<T> with(HashingStrategy<? super T> hashingStrategy);
+
+    /**
+     * Same as {@link #with(HashingStrategy, T...)}.
+     */
     <T> ImmutableSet<T> of(HashingStrategy<? super T> hashingStrategy, T... items);
 
+    <T> ImmutableSet<T> with(HashingStrategy<? super T> hashingStrategy, T... items);
+
+    /**
+     * Same as {@link #withAll(HashingStrategy, Iterable)}.
+     */
     <T> ImmutableSet<T> ofAll(HashingStrategy<? super T> hashingStrategy, Iterable<? extends T> items);
+
+    <T> ImmutableSet<T> withAll(HashingStrategy<? super T> hashingStrategy, Iterable<? extends T> items);
 }

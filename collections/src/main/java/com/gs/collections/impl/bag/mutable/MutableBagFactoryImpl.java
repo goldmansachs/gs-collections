@@ -28,7 +28,17 @@ public final class MutableBagFactoryImpl implements MutableBagFactory
         return HashBag.newBag();
     }
 
+    public <T> MutableBag<T> with()
+    {
+        return HashBag.newBag();
+    }
+
     public <T> MutableBag<T> of(T... elements)
+    {
+        return HashBag.newBagWith(elements);
+    }
+
+    public <T> MutableBag<T> with(T... elements)
     {
         return HashBag.newBagWith(elements);
     }

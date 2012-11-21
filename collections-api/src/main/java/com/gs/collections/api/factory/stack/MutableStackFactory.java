@@ -20,13 +20,38 @@ import com.gs.collections.api.stack.MutableStack;
 
 public interface MutableStackFactory
 {
+    /**
+     * Same as {@link #with()}.
+     */
     <T> MutableStack<T> of();
 
+    <T> MutableStack<T> with();
+
+    /**
+     * Same as {@link #with(T...)}.
+     */
     <T> MutableStack<T> of(T... elements);
 
+    <T> MutableStack<T> with(T... elements);
+
+    /**
+     * Same as {@link #withAll(Iterable)}.
+     */
     <T> MutableStack<T> ofAll(Iterable<? extends T> elements);
 
+    <T> MutableStack<T> withAll(Iterable<? extends T> elements);
+
+    /**
+     * Same as {@link #withReversed(T...)}.
+     */
     <T> MutableStack<T> ofReversed(T... elements);
 
+    <T> MutableStack<T> withReversed(T... elements);
+
+    /**
+     * Same as {@link #withAllReversed(Iterable)}.
+     */
     <T> MutableStack<T> ofAllReversed(Iterable<? extends T> items);
+
+    <T> MutableStack<T> withAllReversed(Iterable<? extends T> items);
 }

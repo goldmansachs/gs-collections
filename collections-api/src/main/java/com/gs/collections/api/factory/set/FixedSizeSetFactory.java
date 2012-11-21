@@ -21,15 +21,45 @@ import com.gs.collections.api.set.MutableSet;
 
 public interface FixedSizeSetFactory
 {
+    /**
+     * Same as {@link #with()}.
+     */
     <T> FixedSizeSet<T> of();
 
+    <T> FixedSizeSet<T> with();
+
+    /**
+     * Same as {@link #with(T)}.
+     */
     <T> FixedSizeSet<T> of(T one);
 
+    <T> FixedSizeSet<T> with(T one);
+
+    /**
+     * Same as {@link #with(T, T)}.
+     */
     <T> FixedSizeSet<T> of(T one, T two);
 
+    <T> FixedSizeSet<T> with(T one, T two);
+
+    /**
+     * Same as {@link #with(T, T, T)}.
+     */
     <T> FixedSizeSet<T> of(T one, T two, T three);
 
+    <T> FixedSizeSet<T> with(T one, T two, T three);
+
+    /**
+     * Same as {@link #with(T, T, T, T)}.
+     */
     <T> FixedSizeSet<T> of(T one, T two, T three, T four);
 
+    <T> FixedSizeSet<T> with(T one, T two, T three, T four);
+
+    /**
+     * Same as {@link #withAll(Iterable)}.
+     */
     <T> MutableSet<T> ofAll(Iterable<? extends T> items);
+
+    <T> MutableSet<T> withAll(Iterable<? extends T> items);
 }

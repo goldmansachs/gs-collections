@@ -20,7 +20,17 @@ import com.gs.collections.api.bag.MutableBag;
 
 public interface MutableBagFactory
 {
+    /**
+     * Same as {@link #with()}.
+     */
     <T> MutableBag<T> of();
 
+    <T> MutableBag<T> with();
+
+    /**
+     * Same as {@link #with(T...)}.
+     */
     <T> MutableBag<T> of(T... elements);
+
+    <T> MutableBag<T> with(T... elements);
 }

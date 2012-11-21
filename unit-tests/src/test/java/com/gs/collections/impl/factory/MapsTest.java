@@ -85,17 +85,17 @@ public class MapsTest
     @Test
     public void copyMap()
     {
-        Assert.assertEquals(Maps.fixedSize.of(1, "One"), Maps.immutable.ofMap(UnifiedMap.newWithKeysValues(1, "One")));
-        Verify.assertInstanceOf(ImmutableMap.class, Maps.immutable.ofMap(UnifiedMap.newWithKeysValues(1, "One")));
+        Assert.assertEquals(Maps.fixedSize.of(1, "One"), Maps.immutable.ofAll(UnifiedMap.newWithKeysValues(1, "One")));
+        Verify.assertInstanceOf(ImmutableMap.class, Maps.immutable.ofAll(UnifiedMap.newWithKeysValues(1, "One")));
 
-        Assert.assertEquals(Maps.fixedSize.of(1, "One", 2, "Dos"), Maps.immutable.ofMap(UnifiedMap.newWithKeysValues(1, "One", 2, "Dos")));
-        Verify.assertInstanceOf(ImmutableMap.class, Maps.immutable.ofMap(UnifiedMap.newWithKeysValues(1, "One", 2, "Dos")));
+        Assert.assertEquals(Maps.fixedSize.of(1, "One", 2, "Dos"), Maps.immutable.ofAll(UnifiedMap.newWithKeysValues(1, "One", 2, "Dos")));
+        Verify.assertInstanceOf(ImmutableMap.class, Maps.immutable.ofAll(UnifiedMap.newWithKeysValues(1, "One", 2, "Dos")));
 
-        Assert.assertEquals(Maps.fixedSize.of(1, "One", 2, "Dos", 3, "Drei"), Maps.immutable.ofMap(UnifiedMap.newWithKeysValues(1, "One", 2, "Dos", 3, "Drei")));
-        Verify.assertInstanceOf(ImmutableMap.class, Maps.immutable.ofMap(UnifiedMap.newWithKeysValues(1, "One", 2, "Dos", 3, "Drei")));
+        Assert.assertEquals(Maps.fixedSize.of(1, "One", 2, "Dos", 3, "Drei"), Maps.immutable.ofAll(UnifiedMap.newWithKeysValues(1, "One", 2, "Dos", 3, "Drei")));
+        Verify.assertInstanceOf(ImmutableMap.class, Maps.immutable.ofAll(UnifiedMap.newWithKeysValues(1, "One", 2, "Dos", 3, "Drei")));
 
-        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, "One", 2, "Dos", 3, "Drei", 4, "Quatro"), Maps.immutable.ofMap(UnifiedMap.newWithKeysValues(1, "One", 2, "Dos", 3, "Drei", 4, "Quatro")));
-        Verify.assertInstanceOf(ImmutableMap.class, Maps.immutable.ofMap(UnifiedMap.newWithKeysValues(1, "One", 2, "Dos", 3, "Drei", 4, "Quatro")));
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, "One", 2, "Dos", 3, "Drei", 4, "Quatro"), Maps.immutable.ofAll(UnifiedMap.newWithKeysValues(1, "One", 2, "Dos", 3, "Drei", 4, "Quatro")));
+        Verify.assertInstanceOf(ImmutableMap.class, Maps.immutable.ofAll(UnifiedMap.newWithKeysValues(1, "One", 2, "Dos", 3, "Drei", 4, "Quatro")));
     }
 
     @Test

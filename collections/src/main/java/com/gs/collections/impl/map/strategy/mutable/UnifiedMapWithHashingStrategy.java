@@ -2329,8 +2329,9 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
         return cur == key || (cur == NULL_KEY ? key == null : this.hashingStrategy.equals(this.nonSentinel(cur), key));
     }
 
+    @Override
     public ImmutableMap<K, V> toImmutable()
     {
-        return HashingStrategyMaps.immutable.ofMap(this);
+        return HashingStrategyMaps.immutable.ofAll(this);
     }
 }

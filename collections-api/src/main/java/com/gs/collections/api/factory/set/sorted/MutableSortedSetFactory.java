@@ -24,13 +24,25 @@ public interface MutableSortedSetFactory
 {
     <T> MutableSortedSet<T> of();
 
+    <T> MutableSortedSet<T> with();
+
     <T> MutableSortedSet<T> of(T... items);
+
+    <T> MutableSortedSet<T> with(T... items);
 
     <T> MutableSortedSet<T> ofAll(Iterable<? extends T> items);
 
+    <T> MutableSortedSet<T> withAll(Iterable<? extends T> items);
+
     <T> MutableSortedSet<T> of(Comparator<? super T> comparator);
+
+    <T> MutableSortedSet<T> with(Comparator<? super T> comparator);
 
     <T> MutableSortedSet<T> of(Comparator<? super T> comparator, T... items);
 
+    <T> MutableSortedSet<T> with(Comparator<? super T> comparator, T... items);
+
     <T> MutableSortedSet<T> ofAll(Comparator<? super T> comparator, Iterable<? extends T> items);
+
+    <T> MutableSortedSet<T> withAll(Comparator<? super T> comparator, Iterable<? extends T> items);
 }

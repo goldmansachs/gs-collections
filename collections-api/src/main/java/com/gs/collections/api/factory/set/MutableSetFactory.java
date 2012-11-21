@@ -20,9 +20,24 @@ import com.gs.collections.api.set.MutableSet;
 
 public interface MutableSetFactory
 {
+    /**
+     * Same as {@link #with()}.
+     */
     <T> MutableSet<T> of();
 
+    <T> MutableSet<T> with();
+
+    /**
+     * Same as {@link #with(T...)}.
+     */
     <T> MutableSet<T> of(T... items);
 
+    <T> MutableSet<T> with(T... items);
+
+    /**
+     * Same as {@link #withAll(Iterable)}.
+     */
     <T> MutableSet<T> ofAll(Iterable<? extends T> items);
+
+    <T> MutableSet<T> withAll(Iterable<? extends T> items);
 }

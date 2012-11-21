@@ -178,6 +178,7 @@ public class MapAdapter<K, V>
         return this.delegate.hashCode();
     }
 
+    @Override
     public ImmutableMap<K, V> toImmutable()
     {
         return Maps.immutable.ofMap(this);

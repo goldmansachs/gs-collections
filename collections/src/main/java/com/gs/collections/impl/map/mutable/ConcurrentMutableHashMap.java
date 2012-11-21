@@ -410,6 +410,7 @@ public final class ConcurrentMutableHashMap<K, V>
         }
     }
 
+    @Override
     public ImmutableMap<K, V> toImmutable()
     {
         return Maps.immutable.ofMap(this);

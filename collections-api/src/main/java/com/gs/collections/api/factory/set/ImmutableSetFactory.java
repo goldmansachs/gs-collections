@@ -20,17 +20,52 @@ import com.gs.collections.api.set.ImmutableSet;
 
 public interface ImmutableSetFactory
 {
+    /**
+     * Same as {@link #with()}.
+     */
     <T> ImmutableSet<T> of();
 
+    <T> ImmutableSet<T> with();
+
+    /**
+     * Same as {@link #with(T)}.
+     */
     <T> ImmutableSet<T> of(T one);
 
+    <T> ImmutableSet<T> with(T one);
+
+    /**
+     * Same as {@link #with(T, T)}.
+     */
     <T> ImmutableSet<T> of(T one, T two);
 
+    <T> ImmutableSet<T> with(T one, T two);
+
+    /**
+     * Same as {@link #with(T, T, T)}.
+     */
     <T> ImmutableSet<T> of(T one, T two, T three);
 
+    <T> ImmutableSet<T> with(T one, T two, T three);
+
+    /**
+     * Same as {@link #with(T, T, T, T)}.
+     */
     <T> ImmutableSet<T> of(T one, T two, T three, T four);
 
+    <T> ImmutableSet<T> with(T one, T two, T three, T four);
+
+    /**
+     * Same as {@link #with(T...)}.
+     */
     <T> ImmutableSet<T> of(T... items);
 
+    <T> ImmutableSet<T> with(T... items);
+
+    /**
+     * Same as {@link #withAll(Iterable)}.
+     */
     <T> ImmutableSet<T> ofAll(Iterable<? extends T> items);
+
+    <T> ImmutableSet<T> withAll(Iterable<? extends T> items);
 }

@@ -2118,6 +2118,7 @@ public class ConcurrentHashMapUnSafe<K, V>
         }
     }
 
+    @Override
     public ImmutableMap<K, V> toImmutable()
     {
         return Maps.immutable.ofMap(this);

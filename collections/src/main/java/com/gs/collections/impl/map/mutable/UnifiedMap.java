@@ -2275,6 +2275,7 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         return cur == key || (cur == NULL_KEY ? key == null : cur.equals(key));
     }
 
+    @Override
     public ImmutableMap<K, V> toImmutable()
     {
         return Maps.immutable.ofMap(this);

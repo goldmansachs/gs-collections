@@ -20,9 +20,24 @@ import com.gs.collections.api.list.MutableList;
 
 public interface MutableListFactory
 {
+    /**
+     * Same as {@link #with()}.
+     */
     <T> MutableList<T> of();
 
+    <T> MutableList<T> with();
+
+    /**
+     * Same as {@link #with(T...)}.
+     */
     <T> MutableList<T> of(T... items);
 
+    <T> MutableList<T> with(T... items);
+
+    /**
+     * Same as {@link #withAll(Iterable)}.
+     */
     <T> MutableList<T> ofAll(Iterable<? extends T> iterable);
+
+    <T> MutableList<T> withAll(Iterable<? extends T> iterable);
 }

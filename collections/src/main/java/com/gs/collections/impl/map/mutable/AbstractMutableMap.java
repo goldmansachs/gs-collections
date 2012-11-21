@@ -26,11 +26,13 @@ import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
+import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.list.fixed.ArrayAdapter;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.AbstractMapIterable;
@@ -73,6 +75,11 @@ public abstract class AbstractMutableMap<K, V> extends AbstractMapIterable<K, V>
     public MutableMap<K, V> asUnmodifiable()
     {
         return UnmodifiableMutableMap.of(this);
+    }
+
+    public ImmutableMap<K, V> toImmutable()
+    {
+        return Maps.immutable.ofAll(this);
     }
 
     public MutableMap<K, V> asSynchronized()

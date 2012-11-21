@@ -20,15 +20,45 @@ import com.gs.collections.api.stack.ImmutableStack;
 
 public interface ImmutableStackFactory
 {
+    /**
+     * Same as {@link #with()}.
+     */
     <T> ImmutableStack<T> of();
 
+    <T> ImmutableStack<T> with();
+
+    /**
+     * Same as {@link #with(T)}.
+     */
     <T> ImmutableStack<T> of(T element);
 
+    <T> ImmutableStack<T> with(T element);
+
+    /**
+     * Same as {@link #with(T...)}.
+     */
     <T> ImmutableStack<T> of(T... elements);
 
+    <T> ImmutableStack<T> with(T... elements);
+
+    /**
+     * Same as {@link #withAll(Iterable)}.
+     */
     <T> ImmutableStack<T> ofAll(Iterable<? extends T> items);
 
+    <T> ImmutableStack<T> withAll(Iterable<? extends T> items);
+
+    /**
+     * Same as {@link #withReversed(T...)}.
+     */
     <T> ImmutableStack<T> ofReversed(T... elements);
 
+    <T> ImmutableStack<T> withReversed(T... elements);
+
+    /**
+     * Same as {@link #withAllReversed(Iterable)}.
+     */
     <T> ImmutableStack<T> ofAllReversed(Iterable<? extends T> items);
+
+    <T> ImmutableStack<T> withAllReversed(Iterable<? extends T> items);
 }

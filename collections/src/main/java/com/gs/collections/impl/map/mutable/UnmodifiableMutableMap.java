@@ -285,7 +285,7 @@ public class UnmodifiableMutableMap<K, V>
 
     public ImmutableMap<K, V> toImmutable()
     {
-        return Maps.immutable.ofMap(this);
+        return Maps.immutable.ofAll(this);
     }
 
     public <R> MutableMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function)

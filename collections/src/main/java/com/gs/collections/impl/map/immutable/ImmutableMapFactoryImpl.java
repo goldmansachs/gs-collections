@@ -20,7 +20,6 @@ import java.util.Map;
 
 import com.gs.collections.api.factory.map.ImmutableMapFactory;
 import com.gs.collections.api.map.ImmutableMap;
-import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import net.jcip.annotations.Immutable;
@@ -99,12 +98,21 @@ public final class ImmutableMapFactoryImpl implements ImmutableMapFactory
         return UnifiedMap.newWithKeysValues(key1, value1, key2, value2, key3, value3, key4, value4).toImmutable();
     }
 
-    public <K, V> ImmutableMap<K, V> ofMap(MutableMap<K, V> map)
+    /**
+     * @deprecated use {@link #ofAll(Map)} instead (inlineable)
+     */
+    @Deprecated
+    public <K, V> ImmutableMap<K, V> ofMap(Map<K, V> map)
     {
-        return this.withMap(map);
+        return this.ofAll(map);
     }
 
-    public <K, V> ImmutableMap<K, V> withMap(MutableMap<K, V> map)
+    public <K, V> ImmutableMap<K, V> ofAll(Map<K, V> map)
+    {
+        return this.withAll(map);
+    }
+
+    public <K, V> ImmutableMap<K, V> withAll(Map<K, V> map)
     {
         if (map.isEmpty())
         {

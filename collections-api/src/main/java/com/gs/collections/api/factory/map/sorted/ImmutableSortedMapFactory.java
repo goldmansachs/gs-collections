@@ -23,25 +23,80 @@ import com.gs.collections.api.map.sorted.ImmutableSortedMap;
 
 public interface ImmutableSortedMapFactory
 {
+    /**
+     * Same as {@link #with()}.
+     */
     <K, V> ImmutableSortedMap<K, V> of();
 
+    <K, V> ImmutableSortedMap<K, V> with();
+
+    /**
+     * Same as {@link #with(K, V)}.
+     */
     <K, V> ImmutableSortedMap<K, V> of(K key, V value);
 
+    <K, V> ImmutableSortedMap<K, V> with(K key, V value);
+
+    /**
+     * Same as {@link #with(K, V, K, V)}.
+     */
     <K, V> ImmutableSortedMap<K, V> of(K key1, V value1, K key2, V value2);
 
+    <K, V> ImmutableSortedMap<K, V> with(K key1, V value1, K key2, V value2);
+
+    /**
+     * Same as {@link #with(K, V, K, V, K, V)}.
+     */
     <K, V> ImmutableSortedMap<K, V> of(K key1, V value1, K key2, V value2, K key3, V value3);
 
+    <K, V> ImmutableSortedMap<K, V> with(K key1, V value1, K key2, V value2, K key3, V value3);
+
+    /**
+     * Same as {@link #with(K, V, K, V, K, V, K, V)}.
+     */
     <K, V> ImmutableSortedMap<K, V> of(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4);
 
+    <K, V> ImmutableSortedMap<K, V> with(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4);
+
+    /**
+     * Same as {@link #with(Comparator)}.
+     */
     <K, V> ImmutableSortedMap<K, V> of(Comparator<? super K> comparator);
 
+    <K, V> ImmutableSortedMap<K, V> with(Comparator<? super K> comparator);
+
+    /**
+     * Same as {@link #with(Comparator, K, V)}.
+     */
     <K, V> ImmutableSortedMap<K, V> of(Comparator<? super K> comparator, K key, V value);
 
+    <K, V> ImmutableSortedMap<K, V> with(Comparator<? super K> comparator, K key, V value);
+
+    /**
+     * Same as {@link #with(Comparator, K, V, K, V)}.
+     */
     <K, V> ImmutableSortedMap<K, V> of(Comparator<? super K> comparator, K key1, V value1, K key2, V value2);
 
+    <K, V> ImmutableSortedMap<K, V> with(Comparator<? super K> comparator, K key1, V value1, K key2, V value2);
+
+    /**
+     * Same as {@link #with(Comparator, K, V, K, V, K, V)}.
+     */
     <K, V> ImmutableSortedMap<K, V> of(Comparator<? super K> comparator, K key1, V value1, K key2, V value2, K key3, V value3);
 
+    <K, V> ImmutableSortedMap<K, V> with(Comparator<? super K> comparator, K key1, V value1, K key2, V value2, K key3, V value3);
+
+    /**
+     * Same as {@link #with(Comparator, K, V, K, V, K, V, K, V)}.
+     */
     <K, V> ImmutableSortedMap<K, V> of(Comparator<? super K> comparator, K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4);
 
+    <K, V> ImmutableSortedMap<K, V> with(Comparator<? super K> comparator, K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4);
+
+    /**
+     * Same as {@link #withSortedMap(SortedMap)}.
+     */
     <K, V> ImmutableSortedMap<K, V> ofSortedMap(SortedMap<K, V> map);
+
+    <K, V> ImmutableSortedMap<K, V> withSortedMap(SortedMap<K, V> map);
 }

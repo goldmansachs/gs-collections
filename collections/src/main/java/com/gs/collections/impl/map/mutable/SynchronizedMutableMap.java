@@ -288,7 +288,7 @@ public class SynchronizedMutableMap<K, V>
     {
         synchronized (this.lock)
         {
-            return Maps.immutable.ofMap(this);
+            return Maps.immutable.ofAll(this);
         }
     }
 
