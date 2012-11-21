@@ -62,6 +62,10 @@ public interface <name>Iterable
     <type>[] toArray();
 
     <type>[] toSortedArray();
+
+    boolean contains(<type> value);
+
+    boolean containsAll(<type>... source);
 }
 
 >>

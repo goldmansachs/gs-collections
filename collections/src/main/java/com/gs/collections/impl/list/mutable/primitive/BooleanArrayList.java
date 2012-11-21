@@ -29,6 +29,7 @@ import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
+import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.impl.list.mutable.FastList;
 import net.jcip.annotations.NotThreadSafe;
 
@@ -37,7 +38,7 @@ import net.jcip.annotations.NotThreadSafe;
  */
 @NotThreadSafe
 public final class BooleanArrayList
-        implements BooleanIterable, Externalizable
+        implements MutableBooleanList, Externalizable
 {
     private static final long serialVersionUID = 1L;
 
@@ -87,6 +88,11 @@ public final class BooleanArrayList
     public boolean isEmpty()
     {
         return this.size == 0;
+    }
+
+    public boolean notEmpty()
+    {
+        return this.size > 0;
     }
 
     public void clear()

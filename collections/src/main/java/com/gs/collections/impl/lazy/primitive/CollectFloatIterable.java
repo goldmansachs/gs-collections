@@ -223,6 +223,23 @@ public class CollectFloatIterable<T>
         return array;
     }
 
+    public boolean contains(float value)
+    {
+        return this.anySatisfy(FloatPredicates.equal(value));
+    }
+
+    public boolean containsAll(float... source)
+    {
+        for (float value : source)
+        {
+            if (!this.contains(value))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private final class FloatFunctionToProcedure implements Procedure2<T, FloatProcedure>
     {
         private static final long serialVersionUID = 5812943420002956844L;

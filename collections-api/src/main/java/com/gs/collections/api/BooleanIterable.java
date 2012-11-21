@@ -32,6 +32,10 @@ public interface BooleanIterable
 
     void forEach(BooleanProcedure procedure);
 
+    boolean isEmpty();
+
+    boolean notEmpty();
+
     int size();
 
     int count(BooleanPredicate predicate);
@@ -43,4 +47,8 @@ public interface BooleanIterable
     <V> RichIterable<V> collect(BooleanToObjectFunction<? extends V> function);
 
     boolean[] toArray();
+
+    boolean contains(boolean value);
+
+    boolean containsAll(boolean... source);
 }

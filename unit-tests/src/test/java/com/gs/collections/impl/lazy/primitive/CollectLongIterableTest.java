@@ -158,6 +158,24 @@ public class CollectLongIterableTest
     }
 
     @Test
+    public void contains()
+    {
+        Assert.assertTrue(Interval.fromTo(4, 1).collectLong(PrimitiveFunctions.unboxIntegerToLong()).contains(1L));
+        Assert.assertTrue(Interval.fromTo(4, 1).collectLong(PrimitiveFunctions.unboxIntegerToLong()).contains(3L));
+        Assert.assertTrue(Interval.fromTo(4, 1).collectLong(PrimitiveFunctions.unboxIntegerToLong()).contains(4L));
+        Assert.assertFalse(Interval.fromTo(4, 1).collectLong(PrimitiveFunctions.unboxIntegerToLong()).contains(5L));
+    }
+
+    @Test
+    public void containsAll()
+    {
+        Assert.assertTrue(Interval.fromTo(4, 1).collectLong(PrimitiveFunctions.unboxIntegerToLong()).containsAll(1L));
+        Assert.assertTrue(Interval.fromTo(4, 1).collectLong(PrimitiveFunctions.unboxIntegerToLong()).containsAll(1L, 2L, 3L, 4L));
+        Assert.assertFalse(Interval.fromTo(4, 1).collectLong(PrimitiveFunctions.unboxIntegerToLong()).containsAll(1L, 2L, 3L, 4L, 5L));
+        Assert.assertFalse(Interval.fromTo(4, 1).collectLong(PrimitiveFunctions.unboxIntegerToLong()).containsAll(7L, 6L, 5L));
+    }
+
+    @Test
     public void collect()
     {
         Assert.assertEquals(FastList.newListWith("1", "2", "3"), this.longIterable.collect(new LongToObjectFunction<Object>()

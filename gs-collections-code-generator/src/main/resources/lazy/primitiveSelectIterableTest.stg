@@ -157,6 +157,24 @@ public class Select<name>IterableTest
     }
 
     @Test
+    public void contains()
+    {
+        Assert.assertTrue(this.iterable.contains(<(literal.(type))("1")>));
+        Assert.assertTrue(this.iterable.contains(<(literal.(type))("2")>));
+        Assert.assertFalse(this.iterable.contains(<(literal.(type))("3")>));
+    }
+
+    @Test
+    public void containsAll()
+    {
+        Assert.assertTrue(this.iterable.containsAll(<["1"]:(literal.(type))(); separator=", ">));
+        Assert.assertTrue(this.iterable.containsAll(<["2"]:(literal.(type))(); separator=", ">));
+        Assert.assertTrue(this.iterable.containsAll(<["1", "2"]:(literal.(type))(); separator=", ">));
+        Assert.assertFalse(this.iterable.containsAll(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
+        Assert.assertFalse(this.iterable.containsAll(<["4", "5", "6"]:(literal.(type))(); separator=", ">));
+    }
+
+    @Test
     public void toSortedArray()
     {
         Assert.assertArrayEquals(new <type>[]{1, 2}, this.iterable.toSortedArray()<(delta.(type))>);

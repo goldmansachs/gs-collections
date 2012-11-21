@@ -184,6 +184,45 @@
                             </templateFileName>
                         </configuration>
                     </execution>
+                    <execution>
+                        <id>primitiveList</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <targetPath>target/generated-sources/java/com/gs/collections/api/list/primitive
+                            </targetPath>
+                            <templateFileName>api/list/primitiveList.stg
+                            </templateFileName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>mutablePrimitiveList</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <targetPath>target/generated-sources/java/com/gs/collections/api/list/primitive
+                            </targetPath>
+                            <templateFileName>api/list/mutablePrimitiveList.stg
+                            </templateFileName>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>mutablePrimitiveCollection</id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>generate</goal>
+                        </goals>
+                        <configuration>
+                            <targetPath>target/generated-sources/java/com/gs/collections/api/collection/primitive
+                            </targetPath>
+                            <templateFileName>api/collection/mutablePrimitiveCollection.stg
+                            </templateFileName>
+                        </configuration>
+                    </execution>
                 </executions>
             </plugin>
 

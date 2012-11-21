@@ -1,0 +1,32 @@
+import "copyright.stg"
+
+fileName(primitive) ::= "<primitive.name>List"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.api.list.primitive;
+
+import com.gs.collections.api.<name>Iterable;
+
+/**
+ * This file was automatically generated from template file primitiveList.stg.
+ */
+public interface <name>List extends <name>Iterable
+{
+    <type> get(int index);
+
+    <type> getFirst();
+
+    <type> getLast();
+
+    int indexOf(<type> object);
+
+    int lastIndexOf(<type> object);
+}
+
+>>

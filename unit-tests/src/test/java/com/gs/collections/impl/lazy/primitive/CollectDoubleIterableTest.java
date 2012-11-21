@@ -162,6 +162,24 @@ public class CollectDoubleIterableTest
     }
 
     @Test
+    public void contains()
+    {
+        Assert.assertTrue(Interval.fromTo(4, 1).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).contains(1.0d));
+        Assert.assertTrue(Interval.fromTo(4, 1).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).contains(3.0d));
+        Assert.assertTrue(Interval.fromTo(4, 1).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).contains(4.0d));
+        Assert.assertFalse(Interval.fromTo(4, 1).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).contains(5.0d));
+    }
+
+    @Test
+    public void containsAll()
+    {
+        Assert.assertTrue(Interval.fromTo(4, 1).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).containsAll(1.0d));
+        Assert.assertTrue(Interval.fromTo(4, 1).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).containsAll(1.0d, 2.0d, 3.0d, 4.0d));
+        Assert.assertFalse(Interval.fromTo(4, 1).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).containsAll(1.0d, 2.0d, 3.0d, 4.0d, 5.0d));
+        Assert.assertFalse(Interval.fromTo(4, 1).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).containsAll(7.0d, 6.0d, 5.0d));
+    }
+
+    @Test
     public void collect()
     {
         Assert.assertEquals(FastList.newListWith("1.0", "2.0", "3.0"), this.doubleIterable.collect(new DoubleToObjectFunction<String>()

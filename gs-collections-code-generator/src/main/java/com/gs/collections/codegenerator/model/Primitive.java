@@ -24,7 +24,8 @@ public enum Primitive
     LONG("long"),
     SHORT("short"),
     BYTE("byte"),
-    CHAR("char");
+    CHAR("char"),
+    BOOLEAN("boolean");
 
     public final String type;
 

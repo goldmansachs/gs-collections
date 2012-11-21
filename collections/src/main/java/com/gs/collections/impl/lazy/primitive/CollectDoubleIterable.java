@@ -222,6 +222,23 @@ public class CollectDoubleIterable<T>
         return array;
     }
 
+    public boolean contains(double value)
+    {
+        return this.anySatisfy(DoublePredicates.equal(value));
+    }
+
+    public boolean containsAll(double... source)
+    {
+        for (double value : source)
+        {
+            if (!this.contains(value))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private final class DoubleFunctionToProcedure implements Procedure2<T, DoubleProcedure>
     {
         private static final long serialVersionUID = 8449781737918512474L;

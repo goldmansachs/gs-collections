@@ -172,6 +172,23 @@ public class Select<name>Iterable
         return array;
     }
 
+    public boolean contains(<type> value)
+    {
+        return this.anySatisfy(<name>Predicates.equal(value));
+    }
+
+    public boolean containsAll(<type>... source)
+    {
+        for (<type> value : source)
+        {
+            if (!this.contains(value))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public <type>[] toSortedArray()
     {
         <type>[] array = this.toArray();
@@ -179,7 +196,7 @@ public class Select<name>Iterable
         return array;
     }
 
-    private static class Count<name>Procedure implements <name>Procedure
+    private static final class Count<name>Procedure implements <name>Procedure
     {
         private static final long serialVersionUID = 1L;
         private final <name>Predicate predicate;
@@ -204,7 +221,7 @@ public class Select<name>Iterable
         }
     }
 
-    private class If<name>Procedure implements <name>Procedure
+    private final class If<name>Procedure implements <name>Procedure
     {
         private static final long serialVersionUID = 1L;
         private final <name>Procedure procedure;

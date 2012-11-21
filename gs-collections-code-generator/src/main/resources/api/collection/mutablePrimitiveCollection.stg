@@ -1,0 +1,38 @@
+import "copyright.stg"
+
+fileName(primitive) ::= "Mutable<primitive.name>Collection"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.api.collection.primitive;
+
+import com.gs.collections.api.<name>Iterable;
+
+/**
+ * This file was automatically generated from template file mutablePrimitiveCollection.stg.
+ */
+public interface Mutable<name>Collection extends <name>Iterable
+{
+    boolean add(<type> element);
+
+    boolean addAll(<type>... source);
+
+    boolean remove(<type> value);
+
+    void clear();
+
+    Mutable<name>Collection with(<type> element);
+
+    Mutable<name>Collection with(<type> element1, <type> element2);
+
+    Mutable<name>Collection with(<type> element1, <type> element2, <type> element3);
+
+    Mutable<name>Collection with(<type> element1, <type> element2, <type> element3, <type>... elements);
+}
+
+>>

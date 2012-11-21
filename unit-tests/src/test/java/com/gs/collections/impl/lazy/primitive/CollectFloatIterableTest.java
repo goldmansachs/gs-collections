@@ -22,7 +22,6 @@ import com.gs.collections.api.block.procedure.primitive.FloatProcedure;
 import com.gs.collections.api.iterator.FloatIterator;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.primitive.FloatPredicates;
-import com.gs.collections.impl.block.factory.primitive.IntPredicates;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import org.junit.Assert;
@@ -120,7 +119,6 @@ public class CollectFloatIterableTest
         Assert.assertEquals(0.0, this.floatIterable.detectIfNone(FloatPredicates.greaterThan(3.0f), 0.0f), 0.0);
     }
 
-
     @Test
     public void sum()
     {
@@ -162,6 +160,24 @@ public class CollectFloatIterableTest
     public void toSortedArray()
     {
         Assert.assertArrayEquals(new float[]{1.0f, 2.0f, 3.0f, 4.0f}, Interval.fromTo(4, 1).collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).toSortedArray(), 0.0f);
+    }
+
+    @Test
+    public void contains()
+    {
+        Assert.assertTrue(Interval.fromTo(4, 1).collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).contains(1.0f));
+        Assert.assertTrue(Interval.fromTo(4, 1).collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).contains(3.0f));
+        Assert.assertTrue(Interval.fromTo(4, 1).collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).contains(4.0f));
+        Assert.assertFalse(Interval.fromTo(4, 1).collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).contains(5.0f));
+    }
+
+    @Test
+    public void containsAll()
+    {
+        Assert.assertTrue(Interval.fromTo(4, 1).collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).containsAll(1.0f));
+        Assert.assertTrue(Interval.fromTo(4, 1).collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).containsAll(1.0f, 2.0f, 3.0f, 4.0f));
+        Assert.assertFalse(Interval.fromTo(4, 1).collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).containsAll(1.0f, 2.0f, 3.0f, 4.0f, 5.0f));
+        Assert.assertFalse(Interval.fromTo(4, 1).collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).containsAll(7.0f, 6.0f, 5.0f));
     }
 
     @Test

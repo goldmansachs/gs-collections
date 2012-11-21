@@ -1,0 +1,30 @@
+import "copyright.stg"
+
+fileName(primitive) ::= "Mutable<primitive.name>List"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.api.list.primitive;
+
+import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
+
+/**
+ * This file was automatically generated from template file mutablePrimitiveList.stg.
+ */
+public interface Mutable<name>List extends Mutable<name>Collection, <name>List
+{
+    void addAtIndex(int index, <type> element);
+
+    boolean addAllAtIndex(int index, <type>... source);
+
+    <type> removeAtIndex(int index);
+
+    <type> set(int index, <type> element);
+}
+
+>>

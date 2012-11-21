@@ -222,6 +222,23 @@ public class CollectIntIterable<T>
         return array;
     }
 
+    public boolean contains(int value)
+    {
+        return this.anySatisfy(IntPredicates.equal(value));
+    }
+
+    public boolean containsAll(int... source)
+    {
+        for (int value : source)
+        {
+            if (!this.contains(value))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private final class IntFunctionToProcedure implements Procedure2<T, IntProcedure>
     {
         private static final long serialVersionUID = -4133872659735979655L;

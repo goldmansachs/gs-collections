@@ -222,6 +222,23 @@ public class CollectLongIterable<T>
         return array;
     }
 
+    public boolean contains(long value)
+    {
+        return this.anySatisfy(LongPredicates.equal(value));
+    }
+
+    public boolean containsAll(long... source)
+    {
+        for (long value : source)
+        {
+            if (!this.contains(value))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private final class LongFunctionToProcedure implements Procedure2<T, LongProcedure>
     {
         private static final long serialVersionUID = 3445125933721627554L;

@@ -40,10 +40,21 @@ public class GsCollectionsCodeGenerator
     {
         for (Primitive primitive : Primitive.values())
         {
-            writeToFile(
-                    this.generateSources(primitive),
-                    new File(this.targetPath, this.getFileName(primitive) + ".java"));
+            String sourceFileName = this.getFileName(primitive);
+            File outputFile = new File(this.targetPath, sourceFileName + ".java");
+            if (!this.sourceFileExists(outputFile))
+            {
+                writeToFile(
+                        this.generateSources(primitive),
+                        outputFile);
+            }
         }
+    }
+
+    private boolean sourceFileExists(File outputFile)
+    {
+        File file = new File(outputFile.getAbsolutePath().replace("target", "src").replace("generated-sources", "main").replace("generated-test-sources", "test"));
+        return file.exists();
     }
 
     private String getFileName(Primitive primitive)

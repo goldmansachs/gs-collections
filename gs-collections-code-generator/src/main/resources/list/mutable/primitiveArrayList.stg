@@ -27,6 +27,7 @@ import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.impl.list.mutable.FastList;
 import net.jcip.annotations.NotThreadSafe;
 
@@ -36,7 +37,7 @@ import net.jcip.annotations.NotThreadSafe;
  */
 @NotThreadSafe
 public final class <name>ArrayList
-        implements <name>Iterable, Externalizable
+        implements Mutable<name>List, Externalizable
 {
     private static final long serialVersionUID = 1L;
     private static final <type>[] DEFAULT_SIZED_EMPTY_ARRAY = {};

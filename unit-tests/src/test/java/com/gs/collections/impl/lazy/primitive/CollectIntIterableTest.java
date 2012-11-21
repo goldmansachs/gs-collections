@@ -160,6 +160,24 @@ public class CollectIntIterableTest
     }
 
     @Test
+    public void contains()
+    {
+        Assert.assertTrue(Interval.fromTo(4, 1).collectInt(PrimitiveFunctions.unboxIntegerToInt()).contains(1));
+        Assert.assertTrue(Interval.fromTo(4, 1).collectInt(PrimitiveFunctions.unboxIntegerToInt()).contains(3));
+        Assert.assertTrue(Interval.fromTo(4, 1).collectInt(PrimitiveFunctions.unboxIntegerToInt()).contains(4));
+        Assert.assertFalse(Interval.fromTo(4, 1).collectInt(PrimitiveFunctions.unboxIntegerToInt()).contains(5));
+    }
+
+    @Test
+    public void containsAll()
+    {
+        Assert.assertTrue(Interval.fromTo(4, 1).collectInt(PrimitiveFunctions.unboxIntegerToInt()).containsAll(1));
+        Assert.assertTrue(Interval.fromTo(4, 1).collectInt(PrimitiveFunctions.unboxIntegerToInt()).containsAll(1, 2, 3, 4));
+        Assert.assertFalse(Interval.fromTo(4, 1).collectInt(PrimitiveFunctions.unboxIntegerToInt()).containsAll(1, 2, 3, 4, 5));
+        Assert.assertFalse(Interval.fromTo(4, 1).collectInt(PrimitiveFunctions.unboxIntegerToInt()).containsAll(7, 6, 5));
+    }
+
+    @Test
     public void collect()
     {
         Assert.assertEquals(FastList.newListWith("1", "2", "3"), this.intIterable.collect(new IntToObjectFunction<String>()
