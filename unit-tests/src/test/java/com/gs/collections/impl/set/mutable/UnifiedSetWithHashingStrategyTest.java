@@ -127,6 +127,10 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
         }).with(JANESMITH));
     }
 
+    /**
+     * @deprecated since 3.0.
+     */
+    @Deprecated
     @Test
     public void lazyCollectForEach()
     {
@@ -143,6 +147,10 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
         Verify.assertContains("5", result);
     }
 
+    /**
+     * @deprecated since 3.0.
+     */
+    @Deprecated
     @Test
     public void lazyRejectForEach()
     {
@@ -154,6 +162,10 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
         Assert.assertEquals(5L, sum.getValue().intValue());
     }
 
+    /**
+     * @deprecated since 3.0.
+     */
+    @Deprecated
     @Test
     public void lazySelectForEach()
     {

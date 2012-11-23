@@ -1019,16 +1019,28 @@ public class UnifiedSetWithHashingStrategy<K>
         return IterableIterate.injectIntoWith(injectValue, this, function, parameter);
     }
 
+    /**
+     * @deprecated since 3.0. Use {@link #asLazy()}.{@link #select(Predicate)} instead.
+     */
+    @Deprecated
     public LazyIterable<K> lazySelect(Predicate<? super K> predicate)
     {
         return this.asLazy().select(predicate);
     }
 
+    /**
+     * @deprecated since 3.0. Use {@link #asLazy()}.{@link #reject(Predicate)} instead.
+     */
+    @Deprecated
     public LazyIterable<K> lazyReject(Predicate<? super K> predicate)
     {
         return this.asLazy().reject(predicate);
     }
 
+    /**
+     * @deprecated since 3.0. Use {@link #asLazy()}.{@link #collect(Function)} instead.
+     */
+    @Deprecated
     public <V> LazyIterable<V> lazyCollect(Function<? super K, ? extends V> function)
     {
         return this.asLazy().collect(function);

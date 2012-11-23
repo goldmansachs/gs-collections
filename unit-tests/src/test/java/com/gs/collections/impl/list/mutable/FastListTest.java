@@ -1196,6 +1196,10 @@ public class FastListTest extends AbstractListTestCase
         Assert.assertEquals("12345", builder.toString());
     }
 
+    /**
+     * @deprecated since 3.0. Use {@code asLazy().reject(Predicate)} instead.
+     */
+    @Deprecated
     @Test
     public void testLazyRejectForEach()
     {
@@ -1205,6 +1209,10 @@ public class FastListTest extends AbstractListTestCase
         Assert.assertEquals(5, sum.getValue().intValue());
     }
 
+    /**
+     * @deprecated since 3.0. Use {@code asLazy().select(Predicate)} instead.
+     */
+    @Deprecated
     @Test
     public void testLazySelectForEach()
     {
