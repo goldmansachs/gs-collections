@@ -16,8 +16,14 @@
 
 package com.gs.collections.impl.set.mutable;
 
+import java.util.concurrent.atomic.AtomicInteger;
+
 import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.UnsortedSetIterable;
 import com.gs.collections.api.tuple.Pair;
@@ -299,5 +305,54 @@ public class MultiReaderUnifiedSetTest extends AbstractCollectionTestCase
                 cartesianProduct
                         .select(Predicates.attributeEqual(Functions.<String>secondOfPair(), "One"))
                         .collect(Functions.<String>firstOfPair()).toSet());
+    }
+    @Override
+    @Test
+    public void aggregateByMutating()
+    {
+        Function0<AtomicInteger> valueCreator = new Function0<AtomicInteger>()
+        {
+            public AtomicInteger value()
+            {
+                return new AtomicInteger(0);
+            }
+        };
+        Procedure2<AtomicInteger, Integer> sumAggregator = new Procedure2<AtomicInteger, Integer>()
+        {
+            public void value(AtomicInteger aggregate, Integer value)
+            {
+                aggregate.addAndGet(value);
+            }
+        };
+        MutableCollection<Integer> collection = this.newWith(1, 1, 1, 2, 2, 3);
+        MapIterable<String, AtomicInteger> aggregation = collection.aggregateBy(Functions.getToString(), valueCreator, sumAggregator);
+        Assert.assertEquals(1, aggregation.get("1").intValue());
+        Assert.assertEquals(2, aggregation.get("2").intValue());
+        Assert.assertEquals(3, aggregation.get("3").intValue());
+    }
+
+    @Override
+    @Test
+    public void aggregateByNonMutating()
+    {
+        Function0<Integer> valueCreator = new Function0<Integer>()
+        {
+            public Integer value()
+            {
+                return Integer.valueOf(0);
+            }
+        };
+        Function2<Integer, Integer, Integer> sumAggregator = new Function2<Integer, Integer, Integer>()
+        {
+            public Integer value(Integer aggregate, Integer value)
+            {
+                return aggregate + value;
+            }
+        };
+        MutableCollection<Integer> collection = this.newWith(1, 1, 1, 2, 2, 3);
+        MapIterable<String, Integer> aggregation = collection.aggregateBy(Functions.getToString(), valueCreator, sumAggregator);
+        Assert.assertEquals(1, aggregation.get("1").intValue());
+        Assert.assertEquals(2, aggregation.get("2").intValue());
+        Assert.assertEquals(3, aggregation.get("3").intValue());
     }
 }

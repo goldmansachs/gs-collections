@@ -18,9 +18,15 @@ package com.gs.collections.impl.list.fixed;
 
 import java.util.Collections;
 
+import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.FixedSizeList;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.stack.MutableStack;
+import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
@@ -139,5 +145,51 @@ public abstract class AbstractMemoryEfficientMutableListTestCase
     {
         MutableStack<String> stack = this.classUnderTest().toStack();
         Assert.assertEquals(ArrayStack.newStack(this.classUnderTest()), stack);
+    }
+
+    @Test
+    public void aggregateByMutating()
+    {
+        Function<String, String> groupBy = Functions.getStringPassThru();
+        Function0<Counter> valueCreator = new Function0<Counter>()
+        {
+            public Counter value()
+            {
+                return new Counter();
+            }
+        };
+        Procedure2<Counter, String> sumAggregator = new Procedure2<Counter, String>()
+        {
+            public void value(Counter aggregate, String value)
+            {
+                aggregate.add(Integer.parseInt(value));
+            }
+        };
+        MapIterable<String, Counter> actual = this.classUnderTest().aggregateBy(groupBy, valueCreator, sumAggregator);
+        MapIterable<String, Counter> expected = FastList.newList(this.classUnderTest()).aggregateBy(groupBy, valueCreator, sumAggregator);
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void aggregateByNonMutating()
+    {
+        Function<String, String> groupBy = Functions.getStringPassThru();
+        Function0<Integer> valueCreator = new Function0<Integer>()
+        {
+            public Integer value()
+            {
+                return Integer.valueOf(0);
+            }
+        };
+        Function2<Integer, String, Integer> sumAggregator = new Function2<Integer, String, Integer>()
+        {
+            public Integer value(Integer aggregate, String value)
+            {
+                return aggregate + Integer.parseInt(value);
+            }
+        };
+        MapIterable<String, Integer> actual = this.classUnderTest().aggregateBy(groupBy, valueCreator, sumAggregator);
+        MapIterable<String, Integer> expected = FastList.newList(this.classUnderTest()).aggregateBy(groupBy, valueCreator, sumAggregator);
+        Assert.assertEquals(expected, actual);
     }
 }

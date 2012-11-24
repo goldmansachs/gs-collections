@@ -19,10 +19,12 @@ package com.gs.collections.impl.stack;
 import java.util.Collections;
 import java.util.EmptyStackException;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
 import com.gs.collections.api.block.function.primitive.IntFunction;
@@ -32,6 +34,7 @@ import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.list.ListMultimap;
@@ -836,6 +839,54 @@ public abstract class StackIterableTestCase
         Verify.assertNotEquals(
                 this.newStackFromTopToBottom(1, 2, 3, 4).hashCode(),
                 this.newStackFromTopToBottom(4, 3, 2, 1).hashCode());
+    }
+
+    @Test
+    public void aggregateByMutating()
+    {
+        Function0<AtomicInteger> valueCreator = new Function0<AtomicInteger>()
+        {
+            public AtomicInteger value()
+            {
+                return new AtomicInteger(0);
+            }
+        };
+        Procedure2<AtomicInteger, Integer> sumAggregator = new Procedure2<AtomicInteger, Integer>()
+        {
+            public void value(AtomicInteger aggregate, Integer value)
+            {
+                aggregate.addAndGet(value);
+            }
+        };
+        StackIterable<Integer> collection = this.newStackWith(1, 1, 1, 2, 2, 3);
+        MapIterable<String, AtomicInteger> aggregation = collection.aggregateBy(Functions.getToString(), valueCreator, sumAggregator);
+        Assert.assertEquals(3, aggregation.get("1").intValue());
+        Assert.assertEquals(4, aggregation.get("2").intValue());
+        Assert.assertEquals(3, aggregation.get("3").intValue());
+    }
+
+    @Test
+    public void aggregateByNonMutating()
+    {
+        Function0<Integer> valueCreator = new Function0<Integer>()
+        {
+            public Integer value()
+            {
+                return Integer.valueOf(0);
+            }
+        };
+        Function2<Integer, Integer, Integer> sumAggregator = new Function2<Integer, Integer, Integer>()
+        {
+            public Integer value(Integer aggregate, Integer value)
+            {
+                return aggregate + value;
+            }
+        };
+        StackIterable<Integer> collection = this.newStackWith(1, 1, 1, 2, 2, 3);
+        MapIterable<String, Integer> aggregation = collection.aggregateBy(Functions.getToString(), valueCreator, sumAggregator);
+        Assert.assertEquals(3, aggregation.get("1").intValue());
+        Assert.assertEquals(4, aggregation.get("2").intValue());
+        Assert.assertEquals(3, aggregation.get("3").intValue());
     }
 
     private static final class CountingPredicate<T>

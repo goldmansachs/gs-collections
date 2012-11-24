@@ -18,37 +18,37 @@ package com.gs.collections.impl.lazy.primitive;
 
 import com.gs.collections.api.InternalIterable;
 import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.block.function.primitive.IntToObjectFunction;
+import com.gs.collections.api.block.function.primitive.CharToObjectFunction;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.list.mutable.FastList;
-import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
+import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class CollectIntToObjectIterableTest
+public class CollectCharToObjectIterableTest
 {
-    public static final IntToObjectFunction<Integer> BOX_INT = new IntToObjectFunction<Integer>()
+    public static final CharToObjectFunction<Character> BOX_CHAR = new CharToObjectFunction<Character>()
     {
-        public Integer valueOf(int each)
+        public Character valueOf(char each)
         {
-            return Integer.valueOf(each);
+            return Character.valueOf(each);
         }
     };
 
-    private LazyIterable<Integer> newPrimitiveWith(int... elements)
+    private LazyIterable<Character> newPrimitiveWith(char... elements)
     {
-        return new CollectIntToObjectIterable<Integer>(IntArrayList.newListWith(elements), BOX_INT);
+        return new CollectCharToObjectIterable<Character>(CharArrayList.newListWith(elements), BOX_CHAR);
     }
 
     @Test
     public void forEach()
     {
-        InternalIterable<Integer> select = this.newPrimitiveWith(1, 2, 3, 4, 5);
+        InternalIterable<Character> select = this.newPrimitiveWith('1', '2', '3', '4', '5');
         Appendable builder = new StringBuilder();
-        Procedure<Integer> appendProcedure = Procedures.append(builder);
+        Procedure<Character> appendProcedure = Procedures.append(builder);
         select.forEach(appendProcedure);
         Assert.assertEquals("12345", builder.toString());
     }
@@ -56,11 +56,11 @@ public class CollectIntToObjectIterableTest
     @Test
     public void forEachWithIndex()
     {
-        InternalIterable<Integer> select = this.newPrimitiveWith(1, 2, 3, 4, 5);
+        InternalIterable<Character> select = this.newPrimitiveWith('1', '2', '3', '4', '5');
         final StringBuilder builder = new StringBuilder("");
-        select.forEachWithIndex(new ObjectIntProcedure<Integer>()
+        select.forEachWithIndex(new ObjectIntProcedure<Character>()
         {
-            public void value(Integer object, int index)
+            public void value(Character object, int index)
             {
                 builder.append(object);
                 builder.append(index);
@@ -72,9 +72,9 @@ public class CollectIntToObjectIterableTest
     @Test
     public void iterator()
     {
-        InternalIterable<Integer> select = this.newPrimitiveWith(1, 2, 3, 4, 5);
+        InternalIterable<Character> select = this.newPrimitiveWith('1', '2', '3', '4', '5');
         StringBuilder builder = new StringBuilder("");
-        for (Integer each : select)
+        for (Character each : select)
         {
             builder.append(each);
         }
@@ -84,11 +84,11 @@ public class CollectIntToObjectIterableTest
     @Test
     public void forEachWith()
     {
-        InternalIterable<Integer> select = this.newPrimitiveWith(1, 2, 3, 4, 5);
+        InternalIterable<Character> select = this.newPrimitiveWith('1', '2', '3', '4', '5');
         StringBuilder builder = new StringBuilder("");
-        select.forEachWith(new Procedure2<Integer, StringBuilder>()
+        select.forEachWith(new Procedure2<Character, StringBuilder>()
         {
-            public void value(Integer each, StringBuilder aBuilder)
+            public void value(Character each, StringBuilder aBuilder)
             {
                 aBuilder.append(each);
             }
@@ -96,10 +96,11 @@ public class CollectIntToObjectIterableTest
         Assert.assertEquals("12345", builder.toString());
     }
 
+    @Test
     public void selectInstancesOf()
     {
         Assert.assertEquals(
-                FastList.<Integer>newListWith(1, 2, 3, 4, 5),
-                this.newPrimitiveWith(1, 2, 3, 4, 5).selectInstancesOf(Integer.class).toList());
+                FastList.<Character>newListWith('1', '2', '3', '4', '5'),
+                this.newPrimitiveWith('1', '2', '3', '4', '5').selectInstancesOf(Character.class).toList());
     }
 }

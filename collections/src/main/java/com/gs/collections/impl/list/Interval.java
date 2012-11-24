@@ -38,6 +38,9 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.block.procedure.primitive.IntIntProcedure;
+import com.gs.collections.api.block.procedure.primitive.IntObjectProcedure;
+import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.bag.mutable.HashBag;
@@ -45,10 +48,6 @@ import com.gs.collections.impl.block.procedure.CollectProcedure;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.block.procedure.RejectProcedure;
 import com.gs.collections.impl.block.procedure.SelectProcedure;
-import com.gs.collections.impl.block.procedure.primitive.IntIntProcedure;
-import com.gs.collections.impl.block.procedure.primitive.IntObjectProcedure;
-import com.gs.collections.impl.block.procedure.primitive.IntProcedure;
-import com.gs.collections.impl.block.procedure.primitive.IntProcedureWithInt;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -378,21 +377,6 @@ public final class Interval
         {
             throw new IllegalStateException("Cannot calculate factorial on negative ranges");
         }
-    }
-
-    /**
-     * @deprecated since 1.2 - Use {@link #forEachWithIndex(IntIntProcedure)}
-     */
-    @Deprecated
-    public void forEachWithIndex(final IntProcedureWithInt procedureWithInt)
-    {
-        this.forEachWithIndex(new IntIntProcedure()
-        {
-            public void value(int each, int index)
-            {
-                procedureWithInt.value(each, index);
-            }
-        });
     }
 
     public void forEachWithIndex(IntIntProcedure procedure)

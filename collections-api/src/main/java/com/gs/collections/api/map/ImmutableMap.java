@@ -19,9 +19,11 @@ package com.gs.collections.api.map;
 import java.util.Map;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.multimap.ImmutableMultimap;
 import com.gs.collections.api.partition.PartitionImmutableCollection;
@@ -79,4 +81,14 @@ public interface ImmutableMap<K, V>
     <VV> ImmutableMultimap<VV, V> groupBy(Function<? super V, ? extends VV> function);
 
     <VV> ImmutableMultimap<VV, V> groupByEach(Function<? super V, ? extends Iterable<VV>> function);
+
+    <K2, V2> ImmutableMap<K2, V2> aggregateBy(
+            Function<? super V, ? extends K2> groupBy,
+            Function0<? extends V2> zeroValueFactory,
+            Procedure2<? super V2, ? super V> mutatingAggregator);
+
+    <K2, V2> ImmutableMap<K2, V2> aggregateBy(
+            Function<? super V, ? extends K2> groupBy,
+            Function0<? extends V2> zeroValueFactory,
+            Function2<? super V2, ? super V, ? extends V2> nonMutatingAggregator);
 }

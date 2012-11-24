@@ -20,13 +20,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
@@ -503,5 +506,53 @@ public class UnmodifiableRichIterableTest
         RichIterable<Number> numbers = UnmodifiableRichIterable.of(FastList.<Number>newListWith(1, 2.0, 3, 4.0, 5));
         Assert.assertEquals(iList(1, 3, 5), numbers.selectInstancesOf(Integer.class));
         Assert.assertEquals(iList(1, 2.0, 3, 4.0, 5), numbers.selectInstancesOf(Number.class));
+    }
+
+    @Test
+    public void aggregateByMutating()
+    {
+        Function0<AtomicInteger> valueCreator = new Function0<AtomicInteger>()
+        {
+            public AtomicInteger value()
+            {
+                return new AtomicInteger(0);
+            }
+        };
+        Procedure2<AtomicInteger, Integer> sumAggregator = new Procedure2<AtomicInteger, Integer>()
+        {
+            public void value(AtomicInteger aggregate, Integer value)
+            {
+                aggregate.addAndGet(value);
+            }
+        };
+        RichIterable<Integer> numbers = UnmodifiableRichIterable.of(FastList.<Integer>newListWith(1, 1, 1, 2, 2, 3));
+        MapIterable<String, AtomicInteger> aggregation = numbers.aggregateBy(Functions.getToString(), valueCreator, sumAggregator);
+        Assert.assertEquals(3, aggregation.get("1").intValue());
+        Assert.assertEquals(4, aggregation.get("2").intValue());
+        Assert.assertEquals(3, aggregation.get("3").intValue());
+    }
+
+    @Test
+    public void aggregateByNonMutating()
+    {
+        Function0<Integer> valueCreator = new Function0<Integer>()
+        {
+            public Integer value()
+            {
+                return Integer.valueOf(0);
+            }
+        };
+        Function2<Integer, Integer, Integer> sumAggregator = new Function2<Integer, Integer, Integer>()
+        {
+            public Integer value(Integer aggregate, Integer value)
+            {
+                return aggregate + value;
+            }
+        };
+        RichIterable<Integer> numbers = UnmodifiableRichIterable.of(FastList.<Integer>newListWith(1, 1, 1, 2, 2, 3));
+        MapIterable<String, Integer> aggregation = numbers.aggregateBy(Functions.getToString(), valueCreator, sumAggregator);
+        Assert.assertEquals(3, aggregation.get("1").intValue());
+        Assert.assertEquals(4, aggregation.get("2").intValue());
+        Assert.assertEquals(3, aggregation.get("3").intValue());
     }
 }

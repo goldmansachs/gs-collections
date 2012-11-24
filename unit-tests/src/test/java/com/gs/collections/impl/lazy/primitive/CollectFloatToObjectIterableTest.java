@@ -22,35 +22,31 @@ import com.gs.collections.api.block.function.primitive.FloatToObjectFunction;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.Procedures;
-import com.gs.collections.impl.list.fixed.ArrayAdapter;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class CollectFloatToObjectIterableTest
 {
-
-    private <T> LazyIterable<T> newWith(T... elements)
+    public static final FloatToObjectFunction<Float> BOX_FLOAT = new FloatToObjectFunction<Float>()
     {
-        return new CollectFloatToObjectIterable(
-                new CollectFloatIterable(
-                        ArrayAdapter.<T>adapt(elements).asLazy(),
-                        PrimitiveFunctions.unboxNumberToFloat()),
-                new FloatToObjectFunction()
-                {
-                    public T valueOf(float each)
-                    {
-                        return (T) Float.valueOf(each);
-                    }
-                });
+        public Float valueOf(float each)
+        {
+            return Float.valueOf(each);
+        }
+    };
+
+    private LazyIterable<Float> newPrimitiveWith(float... elements)
+    {
+        return new CollectFloatToObjectIterable<Float>(FloatArrayList.newListWith(elements), BOX_FLOAT);
     }
 
     @Test
     public void forEach()
     {
-        InternalIterable<Float> select = this.newWith(1.0f, 2.0f, 3.0f, 4.0f, 5.0f);
+        InternalIterable<Float> select = this.newPrimitiveWith(1.0f, 2.0f, 3.0f, 4.0f, 5.0f);
         Appendable builder = new StringBuilder();
         Procedure<Float> appendProcedure = Procedures.append(builder);
         select.forEach(appendProcedure);
@@ -60,7 +56,7 @@ public class CollectFloatToObjectIterableTest
     @Test
     public void forEachWithIndex()
     {
-        InternalIterable<Float> select = this.newWith(1.0f, 2.0f, 3.0f, 4.0f, 5.0f);
+        InternalIterable<Float> select = this.newPrimitiveWith(1.0f, 2.0f, 3.0f, 4.0f, 5.0f);
         final StringBuilder builder = new StringBuilder("");
         select.forEachWithIndex(new ObjectIntProcedure<Float>()
         {
@@ -76,7 +72,7 @@ public class CollectFloatToObjectIterableTest
     @Test
     public void iterator()
     {
-        InternalIterable<Float> select = this.newWith(1.0f, 2.0f, 3.0f, 4.0f, 5.0f);
+        InternalIterable<Float> select = this.newPrimitiveWith(1.0f, 2.0f, 3.0f, 4.0f, 5.0f);
         StringBuilder builder = new StringBuilder("");
         for (Float each : select)
         {
@@ -88,7 +84,7 @@ public class CollectFloatToObjectIterableTest
     @Test
     public void forEachWith()
     {
-        InternalIterable<Float> select = this.newWith(1.0f, 2.0f, 3.0f, 4.0f, 5.0f);
+        InternalIterable<Float> select = this.newPrimitiveWith(1.0f, 2.0f, 3.0f, 4.0f, 5.0f);
         StringBuilder builder = new StringBuilder("");
         select.forEachWith(new Procedure2<Float, StringBuilder>()
         {
@@ -105,6 +101,6 @@ public class CollectFloatToObjectIterableTest
     {
         Assert.assertEquals(
                 FastList.<Float>newListWith(1.0f, 2.0f, 3.0f, 4.0f, 5.0f),
-                this.newWith(1, 2.0f, 3, 4.0f, 5).selectInstancesOf(Float.class).toList());
+                this.newPrimitiveWith(1.0f, 2.0f, 3.0f, 4.0f, 5.0f).selectInstancesOf(Float.class).toList());
     }
 }

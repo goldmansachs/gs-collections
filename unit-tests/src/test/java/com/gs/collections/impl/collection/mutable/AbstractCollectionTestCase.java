@@ -20,11 +20,14 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Set;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
@@ -35,6 +38,7 @@ import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.Multimap;
@@ -86,7 +90,6 @@ public abstract class AbstractCollectionTestCase
     @Test
     public void equalsAndHashCode()
     {
-        Object same = this.newWith(1, 2, 3);
         Verify.assertEqualsAndHashCode(this.newWith(1, 2, 3), this.newWith(1, 2, 3));
         Verify.assertNotEquals(this.newWith(1, 2, 3), this.newWith(1, 2));
     }
@@ -1177,6 +1180,72 @@ public abstract class AbstractCollectionTestCase
         MutableCollection<Integer> collWithout = coll.withoutAll(FastList.newListWith(2, 4));
         Assert.assertSame(coll, collWithout);
         Assert.assertEquals(this.newWith(1, 3, 5), collWithout);
+    }
+
+    @Test
+    public void aggregateByMutating()
+    {
+        Function0<AtomicInteger> valueCreator = new Function0<AtomicInteger>()
+        {
+            public AtomicInteger value()
+            {
+                return new AtomicInteger(0);
+            }
+        };
+        Procedure2<AtomicInteger, Integer> sumAggregator = new Procedure2<AtomicInteger, Integer>()
+        {
+            public void value(AtomicInteger aggregate, Integer value)
+            {
+                aggregate.addAndGet(value);
+            }
+        };
+        MutableCollection<Integer> collection = this.newWith(1, 1, 1, 2, 2, 3);
+        MapIterable<String, AtomicInteger> aggregation = collection.aggregateBy(Functions.getToString(), valueCreator, sumAggregator);
+        if (collection instanceof Set)
+        {
+            Assert.assertEquals(1, aggregation.get("1").intValue());
+            Assert.assertEquals(2, aggregation.get("2").intValue());
+            Assert.assertEquals(3, aggregation.get("3").intValue());
+        }
+        else
+        {
+            Assert.assertEquals(3, aggregation.get("1").intValue());
+            Assert.assertEquals(4, aggregation.get("2").intValue());
+            Assert.assertEquals(3, aggregation.get("3").intValue());
+        }
+    }
+
+    @Test
+    public void aggregateByNonMutating()
+    {
+        Function0<Integer> valueCreator = new Function0<Integer>()
+        {
+            public Integer value()
+            {
+                return Integer.valueOf(0);
+            }
+        };
+        Function2<Integer, Integer, Integer> sumAggregator = new Function2<Integer, Integer, Integer>()
+        {
+            public Integer value(Integer aggregate, Integer value)
+            {
+                return aggregate + value;
+            }
+        };
+        MutableCollection<Integer> collection = this.newWith(1, 1, 1, 2, 2, 3);
+        MapIterable<String, Integer> aggregation = collection.aggregateBy(Functions.getToString(), valueCreator, sumAggregator);
+        if (collection instanceof Set)
+        {
+            Assert.assertEquals(1, aggregation.get("1").intValue());
+            Assert.assertEquals(2, aggregation.get("2").intValue());
+            Assert.assertEquals(3, aggregation.get("3").intValue());
+        }
+        else
+        {
+            Assert.assertEquals(3, aggregation.get("1").intValue());
+            Assert.assertEquals(4, aggregation.get("2").intValue());
+            Assert.assertEquals(3, aggregation.get("3").intValue());
+        }
     }
 
     @Test

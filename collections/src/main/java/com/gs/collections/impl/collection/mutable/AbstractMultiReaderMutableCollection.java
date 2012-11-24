@@ -50,6 +50,9 @@ import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
+import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
+import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
+import com.gs.collections.impl.map.mutable.UnifiedMap;
 
 /**
  * AbstractMultiReaderMutableCollection is a common abstraction that provides thread-safe collection behaviors.
@@ -1274,6 +1277,26 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
+    public <K, V> MutableMap<K, V> aggregateBy(
+            Function<? super T, ? extends K> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Procedure2<? super V, ? super T> mutatingAggregator)
+    {
+        MutableMap<K, V> map = UnifiedMap.newMap();
+        this.forEach(new MutatingAggregationProcedure<T, K, V>(map, groupBy, zeroValueFactory, mutatingAggregator));
+        return map;
+    }
+
+    public <K, V> MutableMap<K, V> aggregateBy(
+            Function<? super T, ? extends K> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Function2<? super V, ? super T, ? extends V> nonMutatingAggregator)
+    {
+        MutableMap<K, V> map = UnifiedMap.newMap();
+        this.forEach(new NonMutatingAggregationProcedure<T, K, V>(map, groupBy, zeroValueFactory, nonMutatingAggregator));
+        return map;
+    }
+
     protected abstract static class UntouchableMutableCollection<T>
             implements MutableCollection<T>
     {
@@ -1752,6 +1775,42 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         public RichIterable<RichIterable<T>> chunk(int size)
         {
             return this.delegate.chunk(size);
+        }
+
+        public <K, V> MutableMap<K, V> aggregateBy(
+                final Function<? super T, ? extends K> groupBy,
+                final Function0<? extends V> zeroValueFactory,
+                final Procedure2<? super V, ? super T> mutatingAggregator)
+        {
+            final MutableMap<K, V> map = UnifiedMap.newMap();
+            this.forEach(new Procedure<T>()
+            {
+                public void value(T each)
+                {
+                    K key = groupBy.valueOf(each);
+                    V value = map.getIfAbsentPut(key, zeroValueFactory);
+                    mutatingAggregator.value(value, each);
+                }
+            });
+            return map;
+        }
+
+        public <K, V> MutableMap<K, V> aggregateBy(
+                final Function<? super T, ? extends K> groupBy,
+                final Function0<? extends V> zeroValueFactory,
+                final Function2<? super V, ? super T, ? extends V> nonMutatingAggregator)
+        {
+            final MutableMap<K, V> map = UnifiedMap.newMap();
+            this.forEach(new Procedure<T>()
+            {
+                public void value(T each)
+                {
+                    K key = groupBy.valueOf(each);
+                    V value = map.getIfAbsentPut(key, zeroValueFactory);
+                    map.put(key, nonMutatingAggregator.value(value, each));
+                }
+            });
+            return map;
         }
     }
 }

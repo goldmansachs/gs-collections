@@ -18,37 +18,37 @@ package com.gs.collections.impl.lazy.primitive;
 
 import com.gs.collections.api.InternalIterable;
 import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.block.function.primitive.IntToObjectFunction;
+import com.gs.collections.api.block.function.primitive.ByteToObjectFunction;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.list.mutable.FastList;
-import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class CollectIntToObjectIterableTest
+public class CollectByteToObjectIterableTest
 {
-    public static final IntToObjectFunction<Integer> BOX_INT = new IntToObjectFunction<Integer>()
+    public static final ByteToObjectFunction<Byte> BOX_BYTE = new ByteToObjectFunction<Byte>()
     {
-        public Integer valueOf(int each)
+        public Byte valueOf(byte each)
         {
-            return Integer.valueOf(each);
+            return Byte.valueOf(each);
         }
     };
 
-    private LazyIterable<Integer> newPrimitiveWith(int... elements)
+    private LazyIterable<Byte> newPrimitiveWith(byte... elements)
     {
-        return new CollectIntToObjectIterable<Integer>(IntArrayList.newListWith(elements), BOX_INT);
+        return new CollectByteToObjectIterable<Byte>(ByteArrayList.newListWith(elements), BOX_BYTE);
     }
 
     @Test
     public void forEach()
     {
-        InternalIterable<Integer> select = this.newPrimitiveWith(1, 2, 3, 4, 5);
+        InternalIterable<Byte> select = this.newPrimitiveWith((byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5);
         Appendable builder = new StringBuilder();
-        Procedure<Integer> appendProcedure = Procedures.append(builder);
+        Procedure<Byte> appendProcedure = Procedures.append(builder);
         select.forEach(appendProcedure);
         Assert.assertEquals("12345", builder.toString());
     }
@@ -56,11 +56,11 @@ public class CollectIntToObjectIterableTest
     @Test
     public void forEachWithIndex()
     {
-        InternalIterable<Integer> select = this.newPrimitiveWith(1, 2, 3, 4, 5);
+        InternalIterable<Byte> select = this.newPrimitiveWith((byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5);
         final StringBuilder builder = new StringBuilder("");
-        select.forEachWithIndex(new ObjectIntProcedure<Integer>()
+        select.forEachWithIndex(new ObjectIntProcedure<Byte>()
         {
-            public void value(Integer object, int index)
+            public void value(Byte object, int index)
             {
                 builder.append(object);
                 builder.append(index);
@@ -72,9 +72,9 @@ public class CollectIntToObjectIterableTest
     @Test
     public void iterator()
     {
-        InternalIterable<Integer> select = this.newPrimitiveWith(1, 2, 3, 4, 5);
+        InternalIterable<Byte> select = this.newPrimitiveWith((byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5);
         StringBuilder builder = new StringBuilder("");
-        for (Integer each : select)
+        for (Byte each : select)
         {
             builder.append(each);
         }
@@ -84,11 +84,11 @@ public class CollectIntToObjectIterableTest
     @Test
     public void forEachWith()
     {
-        InternalIterable<Integer> select = this.newPrimitiveWith(1, 2, 3, 4, 5);
+        InternalIterable<Byte> select = this.newPrimitiveWith((byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5);
         StringBuilder builder = new StringBuilder("");
-        select.forEachWith(new Procedure2<Integer, StringBuilder>()
+        select.forEachWith(new Procedure2<Byte, StringBuilder>()
         {
-            public void value(Integer each, StringBuilder aBuilder)
+            public void value(Byte each, StringBuilder aBuilder)
             {
                 aBuilder.append(each);
             }
@@ -96,10 +96,11 @@ public class CollectIntToObjectIterableTest
         Assert.assertEquals("12345", builder.toString());
     }
 
+    @Test
     public void selectInstancesOf()
     {
         Assert.assertEquals(
-                FastList.<Integer>newListWith(1, 2, 3, 4, 5),
-                this.newPrimitiveWith(1, 2, 3, 4, 5).selectInstancesOf(Integer.class).toList());
+                FastList.<Byte>newListWith((byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5),
+                this.newPrimitiveWith((byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5).selectInstancesOf(Byte.class).toList());
     }
 }

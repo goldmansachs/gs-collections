@@ -18,89 +18,89 @@ package com.gs.collections.impl.lazy.primitive;
 
 import com.gs.collections.api.InternalIterable;
 import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.block.function.primitive.DoubleToObjectFunction;
+import com.gs.collections.api.block.function.primitive.ShortToObjectFunction;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.list.mutable.FastList;
-import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class CollectDoubleToObjectIterableTest
+public class CollectShortToObjectIterableTest
 {
-    public static final DoubleToObjectFunction<Double> BOX_DOUBLE = new DoubleToObjectFunction<Double>()
+    public static final ShortToObjectFunction<Short> BOX_SHORT = new ShortToObjectFunction<Short>()
     {
-        public Double valueOf(double each)
+        public Short valueOf(short each)
         {
-            return Double.valueOf(each);
+            return Short.valueOf(each);
         }
     };
 
-    private LazyIterable<Double> newPrimitiveWith(double... elements)
+    private LazyIterable<Short> newPrimitiveWith(short... elements)
     {
-        return new CollectDoubleToObjectIterable<Double>(DoubleArrayList.newListWith(elements), BOX_DOUBLE);
+        return new CollectShortToObjectIterable<Short>(ShortArrayList.newListWith(elements), BOX_SHORT);
     }
 
     @Test
     public void forEach()
     {
-        InternalIterable<Double> select = this.newPrimitiveWith(1.0, 2.0, 3.0, 4.0, 5.0);
+        InternalIterable<Short> select = this.newPrimitiveWith((short) 1, (short) 2, (short) 3, (short) 4, (short) 5);
         Appendable builder = new StringBuilder();
-        Procedure<Double> appendProcedure = Procedures.append(builder);
+        Procedure<Short> appendProcedure = Procedures.append(builder);
         select.forEach(appendProcedure);
-        Assert.assertEquals("1.02.03.04.05.0", builder.toString());
+        Assert.assertEquals("12345", builder.toString());
     }
 
     @Test
     public void forEachWithIndex()
     {
-        InternalIterable<Double> select = this.newPrimitiveWith(1.0, 2.0, 3.0, 4.0, 5.0);
+        InternalIterable<Short> select = this.newPrimitiveWith((short) 1, (short) 2, (short) 3, (short) 4, (short) 5);
         final StringBuilder builder = new StringBuilder("");
-        select.forEachWithIndex(new ObjectIntProcedure<Double>()
+        select.forEachWithIndex(new ObjectIntProcedure<Short>()
         {
-            public void value(Double object, int index)
+            public void value(Short object, int index)
             {
                 builder.append(object);
                 builder.append(index);
             }
         });
-        Assert.assertEquals("1.002.013.024.035.04", builder.toString());
+        Assert.assertEquals("1021324354", builder.toString());
     }
 
     @Test
     public void iterator()
     {
-        InternalIterable<Double> select = this.newPrimitiveWith(1.0, 2.0, 3.0, 4.0, 5.0);
+        InternalIterable<Short> select = this.newPrimitiveWith((short) 1, (short) 2, (short) 3, (short) 4, (short) 5);
         StringBuilder builder = new StringBuilder("");
-        for (Double each : select)
+        for (Short each : select)
         {
             builder.append(each);
         }
-        Assert.assertEquals("1.02.03.04.05.0", builder.toString());
+        Assert.assertEquals("12345", builder.toString());
     }
 
     @Test
     public void forEachWith()
     {
-        InternalIterable<Double> select = this.newPrimitiveWith(1.0, 2.0, 3.0, 4.0, 5.0);
+        InternalIterable<Short> select = this.newPrimitiveWith((short) 1, (short) 2, (short) 3, (short) 4, (short) 5);
         StringBuilder builder = new StringBuilder("");
-        select.forEachWith(new Procedure2<Double, StringBuilder>()
+        select.forEachWith(new Procedure2<Short, StringBuilder>()
         {
-            public void value(Double each, StringBuilder aBuilder)
+            public void value(Short each, StringBuilder aBuilder)
             {
                 aBuilder.append(each);
             }
         }, builder);
-        Assert.assertEquals("1.02.03.04.05.0", builder.toString());
+        Assert.assertEquals("12345", builder.toString());
     }
 
     @Test
     public void selectInstancesOf()
     {
         Assert.assertEquals(
-                FastList.<Double>newListWith(1.0, 2.0, 3.0, 4.0, 5.0),
-                this.newPrimitiveWith(1.0, 2.0, 3.0, 4.0, 5.0).selectInstancesOf(Double.class).toList());
+                FastList.<Short>newListWith((short) 1, (short) 2, (short) 3, (short) 4, (short) 5),
+                this.newPrimitiveWith((short) 1, (short) 2, (short) 3, (short) 4, (short) 5).selectInstancesOf(Short.class).toList());
     }
 }

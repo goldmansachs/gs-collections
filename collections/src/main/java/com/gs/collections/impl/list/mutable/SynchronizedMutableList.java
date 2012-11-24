@@ -42,18 +42,18 @@ import net.jcip.annotations.GuardedBy;
  *
  * @see MutableList#asSynchronized()
  */
-public class SynchronizedMutableList<E>
-        extends SynchronizedMutableCollection<E>
-        implements MutableList<E>
+public class SynchronizedMutableList<T>
+        extends SynchronizedMutableCollection<T>
+        implements MutableList<T>
 {
     private static final long serialVersionUID = 1L;
 
-    protected SynchronizedMutableList(MutableList<E> newCollection)
+    protected SynchronizedMutableList(MutableList<T> newCollection)
     {
         super(newCollection);
     }
 
-    protected SynchronizedMutableList(MutableList<E> newCollection, Object newLock)
+    protected SynchronizedMutableList(MutableList<T> newCollection, Object newLock)
     {
         super(newCollection, newLock);
     }
@@ -84,9 +84,9 @@ public class SynchronizedMutableList<E>
     }
 
     @GuardedBy("getLock()")
-    private MutableList<E> getMutableList()
+    private MutableList<T> getMutableList()
     {
-        return (MutableList<E>) this.getCollection();
+        return (MutableList<T>) this.getCollection();
     }
 
     @Override
@@ -108,7 +108,7 @@ public class SynchronizedMutableList<E>
     }
 
     @Override
-    public MutableList<E> asUnmodifiable()
+    public MutableList<T> asUnmodifiable()
     {
         synchronized (this.getLock())
         {
@@ -117,7 +117,7 @@ public class SynchronizedMutableList<E>
     }
 
     @Override
-    public ImmutableList<E> toImmutable()
+    public ImmutableList<T> toImmutable()
     {
         synchronized (this.getLock())
         {
@@ -126,13 +126,13 @@ public class SynchronizedMutableList<E>
     }
 
     @Override
-    public MutableList<E> asSynchronized()
+    public MutableList<T> asSynchronized()
     {
         return this;
     }
 
     @Override
-    public MutableList<E> clone()
+    public MutableList<T> clone()
     {
         synchronized (this.getLock())
         {
@@ -141,7 +141,7 @@ public class SynchronizedMutableList<E>
     }
 
     @Override
-    public <V> MutableList<V> collect(Function<? super E, ? extends V> function)
+    public <V> MutableList<V> collect(Function<? super T, ? extends V> function)
     {
         synchronized (this.getLock())
         {
@@ -150,7 +150,7 @@ public class SynchronizedMutableList<E>
     }
 
     @Override
-    public <V> MutableList<V> flatCollect(Function<? super E, ? extends Iterable<V>> function)
+    public <V> MutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
         synchronized (this.getLock())
         {
@@ -160,8 +160,8 @@ public class SynchronizedMutableList<E>
 
     @Override
     public <V> MutableList<V> collectIf(
-            Predicate<? super E> predicate,
-            Function<? super E, ? extends V> function)
+            Predicate<? super T> predicate,
+            Function<? super T, ? extends V> function)
     {
         synchronized (this.getLock())
         {
@@ -170,7 +170,7 @@ public class SynchronizedMutableList<E>
     }
 
     @Override
-    public <P, V> MutableList<V> collectWith(Function2<? super E, ? super P, ? extends V> function, P parameter)
+    public <P, V> MutableList<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
     {
         synchronized (this.getLock())
         {
@@ -179,7 +179,7 @@ public class SynchronizedMutableList<E>
     }
 
     @Override
-    public <V> MutableListMultimap<V, E> groupBy(Function<? super E, ? extends V> function)
+    public <V> MutableListMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
     {
         synchronized (this.getLock())
         {
@@ -188,7 +188,7 @@ public class SynchronizedMutableList<E>
     }
 
     @Override
-    public <V> MutableListMultimap<V, E> groupByEach(Function<? super E, ? extends Iterable<V>> function)
+    public <V> MutableListMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
     {
         synchronized (this.getLock())
         {
@@ -196,7 +196,7 @@ public class SynchronizedMutableList<E>
         }
     }
 
-    public void forEach(int fromIndex, int toIndex, Procedure<? super E> procedure)
+    public void forEach(int fromIndex, int toIndex, Procedure<? super T> procedure)
     {
         synchronized (this.getLock())
         {
@@ -204,7 +204,7 @@ public class SynchronizedMutableList<E>
         }
     }
 
-    public void reverseForEach(Procedure<? super E> procedure)
+    public void reverseForEach(Procedure<? super T> procedure)
     {
         synchronized (this.getLock())
         {
@@ -212,7 +212,7 @@ public class SynchronizedMutableList<E>
         }
     }
 
-    public void forEachWithIndex(int fromIndex, int toIndex, ObjectIntProcedure<? super E> objectIntProcedure)
+    public void forEachWithIndex(int fromIndex, int toIndex, ObjectIntProcedure<? super T> objectIntProcedure)
     {
         synchronized (this.getLock())
         {
@@ -221,7 +221,7 @@ public class SynchronizedMutableList<E>
     }
 
     @Override
-    public MutableList<E> newEmpty()
+    public MutableList<T> newEmpty()
     {
         synchronized (this.getLock())
         {
@@ -230,7 +230,7 @@ public class SynchronizedMutableList<E>
     }
 
     @Override
-    public MutableList<E> reject(Predicate<? super E> predicate)
+    public MutableList<T> reject(Predicate<? super T> predicate)
     {
         synchronized (this.getLock())
         {
@@ -239,7 +239,7 @@ public class SynchronizedMutableList<E>
     }
 
     @Override
-    public <P> MutableList<E> rejectWith(Predicate2<? super E, ? super P> predicate, P parameter)
+    public <P> MutableList<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         synchronized (this.getLock())
         {
@@ -248,7 +248,7 @@ public class SynchronizedMutableList<E>
     }
 
     @Override
-    public MutableList<E> select(Predicate<? super E> predicate)
+    public MutableList<T> select(Predicate<? super T> predicate)
     {
         synchronized (this.getLock())
         {
@@ -257,8 +257,8 @@ public class SynchronizedMutableList<E>
     }
 
     @Override
-    public <P> MutableList<E> selectWith(
-            Predicate2<? super E, ? super P> predicate,
+    public <P> MutableList<T> selectWith(
+            Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
         synchronized (this.getLock())
@@ -268,7 +268,7 @@ public class SynchronizedMutableList<E>
     }
 
     @Override
-    public PartitionMutableList<E> partition(Predicate<? super E> predicate)
+    public PartitionMutableList<T> partition(Predicate<? super T> predicate)
     {
         synchronized (this.getLock())
         {
@@ -285,7 +285,7 @@ public class SynchronizedMutableList<E>
         }
     }
 
-    public MutableList<E> sortThis()
+    public MutableList<T> sortThis()
     {
         synchronized (this.getLock())
         {
@@ -294,7 +294,7 @@ public class SynchronizedMutableList<E>
         }
     }
 
-    public MutableList<E> sortThis(Comparator<? super E> comparator)
+    public MutableList<T> sortThis(Comparator<? super T> comparator)
     {
         synchronized (this.getLock())
         {
@@ -303,7 +303,7 @@ public class SynchronizedMutableList<E>
         }
     }
 
-    public <V extends Comparable<? super V>> MutableList<E> sortThisBy(Function<? super E, ? extends V> function)
+    public <V extends Comparable<? super V>> MutableList<T> sortThisBy(Function<? super T, ? extends V> function)
     {
         synchronized (this.getLock())
         {
@@ -312,7 +312,7 @@ public class SynchronizedMutableList<E>
         }
     }
 
-    public MutableList<E> subList(int fromIndex, int toIndex)
+    public MutableList<T> subList(int fromIndex, int toIndex)
     {
         synchronized (this.getLock())
         {
@@ -320,7 +320,7 @@ public class SynchronizedMutableList<E>
         }
     }
 
-    public void add(int index, E element)
+    public void add(int index, T element)
     {
         synchronized (this.getLock())
         {
@@ -328,7 +328,7 @@ public class SynchronizedMutableList<E>
         }
     }
 
-    public boolean addAll(int index, Collection<? extends E> collection)
+    public boolean addAll(int index, Collection<? extends T> collection)
     {
         synchronized (this.getLock())
         {
@@ -336,7 +336,7 @@ public class SynchronizedMutableList<E>
         }
     }
 
-    public E get(int index)
+    public T get(int index)
     {
         synchronized (this.getLock())
         {
@@ -360,17 +360,17 @@ public class SynchronizedMutableList<E>
         }
     }
 
-    public ListIterator<E> listIterator()
+    public ListIterator<T> listIterator()
     {
         return this.getMutableList().listIterator();
     }
 
-    public ListIterator<E> listIterator(int index)
+    public ListIterator<T> listIterator(int index)
     {
         return this.getMutableList().listIterator(index);
     }
 
-    public E remove(int index)
+    public T remove(int index)
     {
         synchronized (this.getLock())
         {
@@ -378,7 +378,7 @@ public class SynchronizedMutableList<E>
         }
     }
 
-    public E set(int index, E element)
+    public T set(int index, T element)
     {
         synchronized (this.getLock())
         {
@@ -387,7 +387,7 @@ public class SynchronizedMutableList<E>
     }
 
     @Override
-    public <S> MutableList<Pair<E, S>> zip(Iterable<S> that)
+    public <S> MutableList<Pair<T, S>> zip(Iterable<S> that)
     {
         synchronized (this.getLock())
         {
@@ -396,7 +396,7 @@ public class SynchronizedMutableList<E>
     }
 
     @Override
-    public <S, R extends Collection<Pair<E, S>>> R zip(Iterable<S> that, R target)
+    public <S, R extends Collection<Pair<T, S>>> R zip(Iterable<S> that, R target)
     {
         synchronized (this.getLock())
         {
@@ -405,7 +405,7 @@ public class SynchronizedMutableList<E>
     }
 
     @Override
-    public MutableList<Pair<E, Integer>> zipWithIndex()
+    public MutableList<Pair<T, Integer>> zipWithIndex()
     {
         synchronized (this.getLock())
         {
@@ -413,7 +413,7 @@ public class SynchronizedMutableList<E>
         }
     }
 
-    public MutableList<E> toReversed()
+    public MutableList<T> toReversed()
     {
         synchronized (this.getLock())
         {
@@ -421,7 +421,7 @@ public class SynchronizedMutableList<E>
         }
     }
 
-    public MutableList<E> reverseThis()
+    public MutableList<T> reverseThis()
     {
         synchronized (this.getLock())
         {
@@ -430,7 +430,7 @@ public class SynchronizedMutableList<E>
         }
     }
 
-    public MutableStack<E> toStack()
+    public MutableStack<T> toStack()
     {
         synchronized (this.getLock())
         {
@@ -439,7 +439,7 @@ public class SynchronizedMutableList<E>
     }
 
     @Override
-    public <R extends Collection<Pair<E, Integer>>> R zipWithIndex(R target)
+    public <R extends Collection<Pair<T, Integer>>> R zipWithIndex(R target)
     {
         synchronized (this.getLock())
         {
@@ -448,28 +448,28 @@ public class SynchronizedMutableList<E>
     }
 
     @Override
-    public MutableList<E> with(E element)
+    public MutableList<T> with(T element)
     {
         this.add(element);
         return this;
     }
 
     @Override
-    public MutableList<E> without(E element)
+    public MutableList<T> without(T element)
     {
         this.remove(element);
         return this;
     }
 
     @Override
-    public MutableList<E> withAll(Iterable<? extends E> elements)
+    public MutableList<T> withAll(Iterable<? extends T> elements)
     {
         this.addAllIterable(elements);
         return this;
     }
 
     @Override
-    public MutableList<E> withoutAll(Iterable<? extends E> elements)
+    public MutableList<T> withoutAll(Iterable<? extends T> elements)
     {
         this.removeAllIterable(elements);
         return this;

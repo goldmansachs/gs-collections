@@ -29,11 +29,14 @@ import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
 import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.partition.PartitionImmutableCollection;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
+import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
@@ -578,5 +581,49 @@ public abstract class AbstractImmutableCollectionTestCase
                 ((Collection<Integer>) AbstractImmutableCollectionTestCase.this.classUnderTest()).addAll(Lists.fixedSize.<Integer>of());
             }
         });
+    }
+
+    @Test
+    public void aggregateByMutating()
+    {
+        Function0<Counter> valueCreator = new Function0<Counter>()
+        {
+            public Counter value()
+            {
+                return new Counter();
+            }
+        };
+        Procedure2<Counter, Integer> sumAggregator = new Procedure2<Counter, Integer>()
+        {
+            public void value(Counter aggregate, Integer value)
+            {
+                aggregate.add(value);
+            }
+        };
+        MapIterable<String, Counter> actual = this.classUnderTest().aggregateBy(Functions.getToString(), valueCreator, sumAggregator);
+        MapIterable<String, Counter> expected = this.classUnderTest().toBag().aggregateBy(Functions.getToString(), valueCreator, sumAggregator);
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void aggregateByNonMutating()
+    {
+        Function0<Integer> valueCreator = new Function0<Integer>()
+        {
+            public Integer value()
+            {
+                return Integer.valueOf(0);
+            }
+        };
+        Function2<Integer, Integer, Integer> sumAggregator = new Function2<Integer, Integer, Integer>()
+        {
+            public Integer value(Integer aggregate, Integer value)
+            {
+                return aggregate + value;
+            }
+        };
+        MapIterable<String, Integer> actual = this.classUnderTest().aggregateBy(Functions.getToString(), valueCreator, sumAggregator);
+        MapIterable<String, Integer> expected = this.classUnderTest().toBag().aggregateBy(Functions.getToString(), valueCreator, sumAggregator);
+        Assert.assertEquals(expected, actual);
     }
 }

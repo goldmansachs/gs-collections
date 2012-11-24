@@ -39,18 +39,18 @@ import net.jcip.annotations.GuardedBy;
  * @see MutableBag#asSynchronized()
  * @since 1.0
  */
-public class SynchronizedBag<E>
-        extends SynchronizedMutableCollection<E>
-        implements MutableBag<E>
+public class SynchronizedBag<T>
+        extends SynchronizedMutableCollection<T>
+        implements MutableBag<T>
 {
     private static final long serialVersionUID = 1L;
 
-    public SynchronizedBag(MutableBag<E> bag)
+    public SynchronizedBag(MutableBag<T> bag)
     {
         super(bag);
     }
 
-    public SynchronizedBag(MutableBag<E> bag, Object newLock)
+    public SynchronizedBag(MutableBag<T> bag, Object newLock)
     {
         super(bag, newLock);
     }
@@ -64,13 +64,13 @@ public class SynchronizedBag<E>
     }
 
     @GuardedBy("getLock()")
-    private MutableBag<E> getMutableBag()
+    private MutableBag<T> getMutableBag()
     {
-        return (MutableBag<E>) this.getCollection();
+        return (MutableBag<T>) this.getCollection();
     }
 
     @Override
-    public MutableBag<E> asUnmodifiable()
+    public MutableBag<T> asUnmodifiable()
     {
         synchronized (this.getLock())
         {
@@ -79,19 +79,19 @@ public class SynchronizedBag<E>
     }
 
     @Override
-    public ImmutableBag<E> toImmutable()
+    public ImmutableBag<T> toImmutable()
     {
         return Bags.immutable.ofAll(this);
     }
 
     @Override
-    public MutableBag<E> asSynchronized()
+    public MutableBag<T> asSynchronized()
     {
         return this;
     }
 
     @Override
-    public <V> MutableBag<V> collect(Function<? super E, ? extends V> function)
+    public <V> MutableBag<V> collect(Function<? super T, ? extends V> function)
     {
         synchronized (this.getLock())
         {
@@ -100,7 +100,7 @@ public class SynchronizedBag<E>
     }
 
     @Override
-    public <V> MutableBag<V> flatCollect(Function<? super E, ? extends Iterable<V>> function)
+    public <V> MutableBag<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
         synchronized (this.getLock())
         {
@@ -110,8 +110,8 @@ public class SynchronizedBag<E>
 
     @Override
     public <V> MutableBag<V> collectIf(
-            Predicate<? super E> predicate,
-            Function<? super E, ? extends V> function)
+            Predicate<? super T> predicate,
+            Function<? super T, ? extends V> function)
     {
         synchronized (this.getLock())
         {
@@ -120,7 +120,7 @@ public class SynchronizedBag<E>
     }
 
     @Override
-    public <P, V> MutableBag<V> collectWith(Function2<? super E, ? super P, ? extends V> function, P parameter)
+    public <P, V> MutableBag<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
     {
         synchronized (this.getLock())
         {
@@ -129,7 +129,7 @@ public class SynchronizedBag<E>
     }
 
     @Override
-    public <V> MutableBagMultimap<V, E> groupBy(Function<? super E, ? extends V> function)
+    public <V> MutableBagMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
     {
         synchronized (this.getLock())
         {
@@ -138,7 +138,7 @@ public class SynchronizedBag<E>
     }
 
     @Override
-    public <V> MutableBagMultimap<V, E> groupByEach(Function<? super E, ? extends Iterable<V>> function)
+    public <V> MutableBagMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
     {
         synchronized (this.getLock())
         {
@@ -147,7 +147,7 @@ public class SynchronizedBag<E>
     }
 
     @Override
-    public MutableBag<E> newEmpty()
+    public MutableBag<T> newEmpty()
     {
         synchronized (this.getLock())
         {
@@ -156,7 +156,7 @@ public class SynchronizedBag<E>
     }
 
     @Override
-    public MutableBag<E> reject(Predicate<? super E> predicate)
+    public MutableBag<T> reject(Predicate<? super T> predicate)
     {
         synchronized (this.getLock())
         {
@@ -165,7 +165,7 @@ public class SynchronizedBag<E>
     }
 
     @Override
-    public <P> MutableBag<E> rejectWith(Predicate2<? super E, ? super P> predicate, P parameter)
+    public <P> MutableBag<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         synchronized (this.getLock())
         {
@@ -174,7 +174,7 @@ public class SynchronizedBag<E>
     }
 
     @Override
-    public MutableBag<E> select(Predicate<? super E> predicate)
+    public MutableBag<T> select(Predicate<? super T> predicate)
     {
         synchronized (this.getLock())
         {
@@ -183,7 +183,7 @@ public class SynchronizedBag<E>
     }
 
     @Override
-    public <P> MutableBag<E> selectWith(Predicate2<? super E, ? super P> predicate, P parameter)
+    public <P> MutableBag<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         synchronized (this.getLock())
         {
@@ -192,7 +192,7 @@ public class SynchronizedBag<E>
     }
 
     @Override
-    public PartitionMutableBag<E> partition(Predicate<? super E> predicate)
+    public PartitionMutableBag<T> partition(Predicate<? super T> predicate)
     {
         synchronized (this.getLock())
         {
@@ -227,7 +227,7 @@ public class SynchronizedBag<E>
         }
     }
 
-    public void addOccurrences(E item, int occurrences)
+    public void addOccurrences(T item, int occurrences)
     {
         synchronized (this.getLock())
         {
@@ -259,7 +259,7 @@ public class SynchronizedBag<E>
         }
     }
 
-    public void forEachWithOccurrences(ObjectIntProcedure<? super E> objectIntProcedure)
+    public void forEachWithOccurrences(ObjectIntProcedure<? super T> objectIntProcedure)
     {
         synchronized (this.getLock())
         {
@@ -267,7 +267,7 @@ public class SynchronizedBag<E>
         }
     }
 
-    public MutableMap<E, Integer> toMapOfItemToCount()
+    public MutableMap<T, Integer> toMapOfItemToCount()
     {
         synchronized (this.getLock())
         {
@@ -276,7 +276,7 @@ public class SynchronizedBag<E>
     }
 
     @Override
-    public <S> MutableBag<Pair<E, S>> zip(Iterable<S> that)
+    public <S> MutableBag<Pair<T, S>> zip(Iterable<S> that)
     {
         synchronized (this.getLock())
         {
@@ -285,7 +285,7 @@ public class SynchronizedBag<E>
     }
 
     @Override
-    public <S, R extends Collection<Pair<E, S>>> R zip(Iterable<S> that, R target)
+    public <S, R extends Collection<Pair<T, S>>> R zip(Iterable<S> that, R target)
     {
         synchronized (this.getLock())
         {
@@ -294,7 +294,7 @@ public class SynchronizedBag<E>
     }
 
     @Override
-    public MutableBag<Pair<E, Integer>> zipWithIndex()
+    public MutableBag<Pair<T, Integer>> zipWithIndex()
     {
         synchronized (this.getLock())
         {
@@ -303,7 +303,7 @@ public class SynchronizedBag<E>
     }
 
     @Override
-    public <R extends Collection<Pair<E, Integer>>> R zipWithIndex(R target)
+    public <R extends Collection<Pair<T, Integer>>> R zipWithIndex(R target)
     {
         synchronized (this.getLock())
         {
@@ -312,28 +312,28 @@ public class SynchronizedBag<E>
     }
 
     @Override
-    public MutableBag<E> with(E element)
+    public MutableBag<T> with(T element)
     {
         this.add(element);
         return this;
     }
 
     @Override
-    public MutableBag<E> without(E element)
+    public MutableBag<T> without(T element)
     {
         this.remove(element);
         return this;
     }
 
     @Override
-    public MutableBag<E> withAll(Iterable<? extends E> elements)
+    public MutableBag<T> withAll(Iterable<? extends T> elements)
     {
         this.addAllIterable(elements);
         return this;
     }
 
     @Override
-    public MutableBag<E> withoutAll(Iterable<? extends E> elements)
+    public MutableBag<T> withoutAll(Iterable<? extends T> elements)
     {
         this.removeAllIterable(elements);
         return this;

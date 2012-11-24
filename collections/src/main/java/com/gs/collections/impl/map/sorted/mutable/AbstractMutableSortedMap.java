@@ -25,6 +25,7 @@ import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.ImmutableSortedMap;
@@ -33,6 +34,8 @@ import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.procedure.MapCollectProcedure;
+import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
+import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.factory.SortedMaps;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -212,5 +215,25 @@ public abstract class AbstractMutableSortedMap<K, V> extends AbstractMapIterable
     public <VV> MutableListMultimap<VV, V> groupByEach(Function<? super V, ? extends Iterable<VV>> function)
     {
         return this.groupByEach(function, FastListMultimap.<VV, V>newMultimap());
+    }
+
+    public <K2, V2> MutableMap<K2, V2> aggregateBy(
+            Function<? super V, ? extends K2> groupBy,
+            Function0<? extends V2> zeroValueFactory,
+            Procedure2<? super V2, ? super V> mutatingAggregator)
+    {
+        MutableMap<K2, V2> map = UnifiedMap.newMap();
+        this.forEach(new MutatingAggregationProcedure<V, K2, V2>(map, groupBy, zeroValueFactory, mutatingAggregator));
+        return map;
+    }
+
+    public <K2, V2> MutableMap<K2, V2> aggregateBy(
+            Function<? super V, ? extends K2> groupBy,
+            Function0<? extends V2> zeroValueFactory,
+            Function2<? super V2, ? super V, ? extends V2> nonMutatingAggregator)
+    {
+        MutableMap<K2, V2> map = UnifiedMap.newMap();
+        this.forEach(new NonMutatingAggregationProcedure<V, K2, V2>(map, groupBy, zeroValueFactory, nonMutatingAggregator));
+        return map;
     }
 }

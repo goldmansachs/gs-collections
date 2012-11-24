@@ -219,4 +219,22 @@ final class ImmutableEmptyMap<K, V>
     {
         return this;
     }
+
+    @Override
+    public <K2, V2> ImmutableMap<K2, V2> aggregateBy(
+            Function<? super V, ? extends K2> groupBy,
+            Function0<? extends V2> zeroValueFactory,
+            Procedure2<? super V2, ? super V> mutatingAggregator)
+    {
+        return Maps.immutable.of();
+    }
+
+    @Override
+    public <K2, V2> ImmutableMap<K2, V2> aggregateBy(
+            Function<? super V, ? extends K2> groupBy,
+            Function0<? extends V2> zeroValueFactory,
+            Function2<? super V2, ? super V, ? extends V2> nonMutatingAggregator)
+    {
+        return Maps.immutable.of();
+    }
 }

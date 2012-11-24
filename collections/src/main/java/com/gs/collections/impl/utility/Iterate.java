@@ -29,6 +29,7 @@ import java.util.SortedSet;
 import com.gs.collections.api.InternalIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
@@ -1945,6 +1946,60 @@ public final class Iterate
         }
         throw new IllegalArgumentException("Cannot perform a groupBy on null");
     }
+
+    /**
+     * @see RichIterable#aggregateBy(Function, Function0, Procedure2)
+     */
+    public static <T, K, V> MutableMap<K, V> aggregateBy(
+            Iterable<T> iterable,
+            Function<? super T, ? extends K> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Procedure2<? super V, ? super T> mutatingAggregator)
+    {
+        if (iterable instanceof MutableCollection)
+        {
+            return ((MutableCollection<T>) iterable).aggregateBy(groupBy, zeroValueFactory, mutatingAggregator);
+        }
+        if (iterable instanceof ArrayList)
+        {
+            return ArrayListIterate.aggregateBy((ArrayList<T>) iterable, groupBy, zeroValueFactory, mutatingAggregator);
+        }
+        if (iterable instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.aggregateBy((List<T>) iterable, groupBy, zeroValueFactory, mutatingAggregator);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.aggregateBy(iterable, groupBy, zeroValueFactory, mutatingAggregator);
+        }
+        throw new IllegalArgumentException("Cannot perform an aggregateBy on null");
+    }
+
+    public static <T, K, V> MutableMap<K, V> aggregateBy(
+            Iterable<T> iterable,
+            Function<? super T, ? extends K> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Function2<? super V, ? super T, ? extends V> nonMutatingAggregator)
+    {
+        if (iterable instanceof MutableCollection)
+        {
+            return ((MutableCollection<T>) iterable).aggregateBy(groupBy, zeroValueFactory, nonMutatingAggregator);
+        }
+        if (iterable instanceof ArrayList)
+        {
+            return ArrayListIterate.aggregateBy((ArrayList<T>) iterable, groupBy, zeroValueFactory, nonMutatingAggregator);
+        }
+        if (iterable instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.aggregateBy((List<T>) iterable, groupBy, zeroValueFactory, nonMutatingAggregator);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.aggregateBy(iterable, groupBy, zeroValueFactory, nonMutatingAggregator);
+        }
+        throw new IllegalArgumentException("Cannot perform an aggregateBy on null");
+    }
+
 
     /**
      * @see RichIterable#groupByEach(Function)

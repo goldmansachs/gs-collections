@@ -53,6 +53,9 @@ import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
+import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
+import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.utility.LazyIterate;
 import com.gs.collections.impl.utility.internal.IterableIterate;
@@ -65,21 +68,21 @@ import net.jcip.annotations.ThreadSafe;
  * @see MutableCollection#asSynchronized()
  */
 @ThreadSafe
-public class SynchronizedMutableCollection<E>
-        implements MutableCollection<E>, Serializable
+public class SynchronizedMutableCollection<T>
+        implements MutableCollection<T>, Serializable
 {
     private static final long serialVersionUID = 1L;
 
     private final Object lock;
     @GuardedBy("this.lock")
-    private final MutableCollection<E> collection;
+    private final MutableCollection<T> collection;
 
-    protected SynchronizedMutableCollection(MutableCollection<E> newCollection)
+    protected SynchronizedMutableCollection(MutableCollection<T> newCollection)
     {
         this(newCollection, null);
     }
 
-    protected SynchronizedMutableCollection(MutableCollection<E> newCollection, Object newLock)
+    protected SynchronizedMutableCollection(MutableCollection<T> newCollection, Object newLock)
     {
         if (newCollection == null)
         {
@@ -115,7 +118,7 @@ public class SynchronizedMutableCollection<E>
         return this.lock;
     }
 
-    protected MutableCollection<E> getCollection()
+    protected MutableCollection<T> getCollection()
     {
         return this.collection;
     }
@@ -169,12 +172,12 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public Iterator<E> iterator()
+    public Iterator<T> iterator()
     {
         return this.collection.iterator();  // this must be manually synchronized by the developer
     }
 
-    public boolean add(E o)
+    public boolean add(T o)
     {
         synchronized (this.lock)
         {
@@ -214,7 +217,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public boolean addAll(Collection<? extends E> coll)
+    public boolean addAll(Collection<? extends T> coll)
     {
         synchronized (this.lock)
         {
@@ -246,7 +249,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public void forEach(Procedure<? super E> procedure)
+    public void forEach(Procedure<? super T> procedure)
     {
         synchronized (this.lock)
         {
@@ -254,7 +257,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <P> void forEachWith(Procedure2<? super E, ? super P> procedure, P parameter)
+    public <P> void forEachWith(Procedure2<? super T, ? super P> procedure, P parameter)
     {
         synchronized (this.lock)
         {
@@ -262,7 +265,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public void forEachWithIndex(ObjectIntProcedure<? super E> objectIntProcedure)
+    public void forEachWithIndex(ObjectIntProcedure<? super T> objectIntProcedure)
     {
         synchronized (this.lock)
         {
@@ -270,7 +273,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public boolean allSatisfy(Predicate<? super E> predicate)
+    public boolean allSatisfy(Predicate<? super T> predicate)
     {
         synchronized (this.lock)
         {
@@ -278,7 +281,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <P> boolean allSatisfyWith(Predicate2<? super E, ? super P> predicate, P parameter)
+    public <P> boolean allSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         synchronized (this.lock)
         {
@@ -286,7 +289,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public boolean anySatisfy(Predicate<? super E> predicate)
+    public boolean anySatisfy(Predicate<? super T> predicate)
     {
         synchronized (this.lock)
         {
@@ -294,7 +297,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <P> boolean anySatisfyWith(Predicate2<? super E, ? super P> predicate, P parameter)
+    public <P> boolean anySatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         synchronized (this.lock)
         {
@@ -302,7 +305,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public MutableList<E> toList()
+    public MutableList<T> toList()
     {
         synchronized (this.lock)
         {
@@ -311,8 +314,8 @@ public class SynchronizedMutableCollection<E>
     }
 
     public <NK, NV> MutableMap<NK, NV> toMap(
-            Function<? super E, ? extends NK> keyFunction,
-            Function<? super E, ? extends NV> valueFunction)
+            Function<? super T, ? extends NK> keyFunction,
+            Function<? super T, ? extends NV> valueFunction)
     {
         synchronized (this.lock)
         {
@@ -321,8 +324,8 @@ public class SynchronizedMutableCollection<E>
     }
 
     public <NK, NV> MutableSortedMap<NK, NV> toSortedMap(
-            Function<? super E, ? extends NK> keyFunction,
-            Function<? super E, ? extends NV> valueFunction)
+            Function<? super T, ? extends NK> keyFunction,
+            Function<? super T, ? extends NV> valueFunction)
     {
         synchronized (this.lock)
         {
@@ -331,8 +334,8 @@ public class SynchronizedMutableCollection<E>
     }
 
     public <NK, NV> MutableSortedMap<NK, NV> toSortedMap(Comparator<? super NK> comparator,
-            Function<? super E, ? extends NK> keyFunction,
-            Function<? super E, ? extends NV> valueFunction)
+            Function<? super T, ? extends NK> keyFunction,
+            Function<? super T, ? extends NV> valueFunction)
     {
         synchronized (this.lock)
         {
@@ -340,12 +343,12 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public LazyIterable<E> asLazy()
+    public LazyIterable<T> asLazy()
     {
         return LazyIterate.adapt(this);
     }
 
-    public MutableSet<E> toSet()
+    public MutableSet<T> toSet()
     {
         synchronized (this.lock)
         {
@@ -353,7 +356,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public MutableBag<E> toBag()
+    public MutableBag<T> toBag()
     {
         synchronized (this.lock)
         {
@@ -361,7 +364,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public MutableList<E> toSortedList()
+    public MutableList<T> toSortedList()
     {
         synchronized (this.lock)
         {
@@ -369,7 +372,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public MutableList<E> toSortedList(Comparator<? super E> comparator)
+    public MutableList<T> toSortedList(Comparator<? super T> comparator)
     {
         synchronized (this.lock)
         {
@@ -377,7 +380,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <V extends Comparable<? super V>> MutableList<E> toSortedListBy(Function<? super E, ? extends V> function)
+    public <V extends Comparable<? super V>> MutableList<T> toSortedListBy(Function<? super T, ? extends V> function)
     {
         synchronized (this.lock)
         {
@@ -385,7 +388,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public MutableSortedSet<E> toSortedSet()
+    public MutableSortedSet<T> toSortedSet()
     {
         synchronized (this.lock)
         {
@@ -393,7 +396,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public MutableSortedSet<E> toSortedSet(Comparator<? super E> comparator)
+    public MutableSortedSet<T> toSortedSet(Comparator<? super T> comparator)
     {
         synchronized (this.lock)
         {
@@ -401,7 +404,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <V extends Comparable<? super V>> MutableSortedSet<E> toSortedSetBy(Function<? super E, ? extends V> function)
+    public <V extends Comparable<? super V>> MutableSortedSet<T> toSortedSetBy(Function<? super T, ? extends V> function)
     {
         synchronized (this.lock)
         {
@@ -409,20 +412,20 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public MutableCollection<E> asUnmodifiable()
+    public MutableCollection<T> asUnmodifiable()
     {
         synchronized (this.lock)
         {
-            return new UnmodifiableMutableCollection<E>(this);
+            return new UnmodifiableMutableCollection<T>(this);
         }
     }
 
-    public MutableCollection<E> asSynchronized()
+    public MutableCollection<T> asSynchronized()
     {
         return this;
     }
 
-    public ImmutableCollection<E> toImmutable()
+    public ImmutableCollection<T> toImmutable()
     {
         synchronized (this.lock)
         {
@@ -430,7 +433,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <V> MutableCollection<V> collect(Function<? super E, ? extends V> function)
+    public <V> MutableCollection<V> collect(Function<? super T, ? extends V> function)
     {
         synchronized (this.lock)
         {
@@ -438,7 +441,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <V, R extends Collection<V>> R collect(Function<? super E, ? extends V> function, R target)
+    public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)
     {
         synchronized (this.lock)
         {
@@ -446,7 +449,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <V> MutableCollection<V> flatCollect(Function<? super E, ? extends Iterable<V>> function)
+    public <V> MutableCollection<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
         synchronized (this.lock)
         {
@@ -454,7 +457,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <V, R extends Collection<V>> R flatCollect(Function<? super E, ? extends Iterable<V>> function, R target)
+    public <V, R extends Collection<V>> R flatCollect(Function<? super T, ? extends Iterable<V>> function, R target)
     {
         synchronized (this.lock)
         {
@@ -463,8 +466,8 @@ public class SynchronizedMutableCollection<E>
     }
 
     public <V> MutableCollection<V> collectIf(
-            Predicate<? super E> predicate,
-            Function<? super E, ? extends V> function)
+            Predicate<? super T> predicate,
+            Function<? super T, ? extends V> function)
     {
         synchronized (this.lock)
         {
@@ -473,8 +476,8 @@ public class SynchronizedMutableCollection<E>
     }
 
     public <V, R extends Collection<V>> R collectIf(
-            Predicate<? super E> predicate,
-            Function<? super E, ? extends V> function,
+            Predicate<? super T> predicate,
+            Function<? super T, ? extends V> function,
             R target)
     {
         synchronized (this.lock)
@@ -483,7 +486,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <P, A> MutableCollection<A> collectWith(Function2<? super E, ? super P, ? extends A> function, P parameter)
+    public <P, A> MutableCollection<A> collectWith(Function2<? super T, ? super P, ? extends A> function, P parameter)
     {
         synchronized (this.lock)
         {
@@ -492,7 +495,7 @@ public class SynchronizedMutableCollection<E>
     }
 
     public <P, A, R extends Collection<A>> R collectWith(
-            Function2<? super E, ? super P, ? extends A> function,
+            Function2<? super T, ? super P, ? extends A> function,
             P parameter,
             R targetCollection)
     {
@@ -502,7 +505,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public int count(Predicate<? super E> predicate)
+    public int count(Predicate<? super T> predicate)
     {
         synchronized (this.lock)
         {
@@ -510,7 +513,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <P> int countWith(Predicate2<? super E, ? super P> predicate, P parameter)
+    public <P> int countWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         synchronized (this.lock)
         {
@@ -518,7 +521,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public E detect(Predicate<? super E> predicate)
+    public T detect(Predicate<? super T> predicate)
     {
         synchronized (this.lock)
         {
@@ -526,7 +529,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public E min(Comparator<? super E> comparator)
+    public T min(Comparator<? super T> comparator)
     {
         synchronized (this.lock)
         {
@@ -534,7 +537,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public E max(Comparator<? super E> comparator)
+    public T max(Comparator<? super T> comparator)
     {
         synchronized (this.lock)
         {
@@ -542,7 +545,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public E min()
+    public T min()
     {
         synchronized (this.lock)
         {
@@ -550,7 +553,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public E max()
+    public T max()
     {
         synchronized (this.lock)
         {
@@ -558,7 +561,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <V extends Comparable<? super V>> E minBy(Function<? super E, ? extends V> function)
+    public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
     {
         synchronized (this.lock)
         {
@@ -566,7 +569,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <V extends Comparable<? super V>> E maxBy(Function<? super E, ? extends V> function)
+    public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
     {
         synchronized (this.lock)
         {
@@ -574,7 +577,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public E detectIfNone(Predicate<? super E> predicate, Function0<? extends E> function)
+    public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
     {
         synchronized (this.lock)
         {
@@ -582,7 +585,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <P> E detectWith(Predicate2<? super E, ? super P> predicate, P parameter)
+    public <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         synchronized (this.lock)
         {
@@ -590,10 +593,10 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <P> E detectWithIfNone(
-            Predicate2<? super E, ? super P> predicate,
+    public <P> T detectWithIfNone(
+            Predicate2<? super T, ? super P> predicate,
             P parameter,
-            Function0<? extends E> function)
+            Function0<? extends T> function)
     {
         synchronized (this.lock)
         {
@@ -601,7 +604,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public E getFirst()
+    public T getFirst()
     {
         synchronized (this.lock)
         {
@@ -609,7 +612,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public E getLast()
+    public T getLast()
     {
         synchronized (this.lock)
         {
@@ -617,7 +620,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super E, ? extends IV> function)
+    public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
         synchronized (this.lock)
         {
@@ -625,7 +628,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public int injectInto(int injectedValue, IntObjectToIntFunction<? super E> function)
+    public int injectInto(int injectedValue, IntObjectToIntFunction<? super T> function)
     {
         synchronized (this.lock)
         {
@@ -633,7 +636,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public long injectInto(long injectedValue, LongObjectToLongFunction<? super E> function)
+    public long injectInto(long injectedValue, LongObjectToLongFunction<? super T> function)
     {
         synchronized (this.lock)
         {
@@ -641,7 +644,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super E> function)
+    public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super T> function)
     {
         synchronized (this.lock)
         {
@@ -649,7 +652,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public float injectInto(float injectedValue, FloatObjectToFloatFunction<? super E> function)
+    public float injectInto(float injectedValue, FloatObjectToFloatFunction<? super T> function)
     {
         synchronized (this.lock)
         {
@@ -657,7 +660,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public long sumOfInt(IntFunction<? super E> function)
+    public long sumOfInt(IntFunction<? super T> function)
     {
         synchronized (this.lock)
         {
@@ -665,7 +668,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public double sumOfFloat(FloatFunction<? super E> function)
+    public double sumOfFloat(FloatFunction<? super T> function)
     {
         synchronized (this.lock)
         {
@@ -673,7 +676,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public long sumOfLong(LongFunction<? super E> function)
+    public long sumOfLong(LongFunction<? super T> function)
     {
         synchronized (this.lock)
         {
@@ -681,7 +684,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public double sumOfDouble(DoubleFunction<? super E> function)
+    public double sumOfDouble(DoubleFunction<? super T> function)
     {
         synchronized (this.lock)
         {
@@ -691,7 +694,7 @@ public class SynchronizedMutableCollection<E>
 
     public <IV, P> IV injectIntoWith(
             IV injectValue,
-            Function3<? super IV, ? super E, ? super P, ? extends IV> function,
+            Function3<? super IV, ? super T, ? super P, ? extends IV> function,
             P parameter)
     {
         synchronized (this.lock)
@@ -700,7 +703,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public MutableCollection<E> newEmpty()
+    public MutableCollection<T> newEmpty()
     {
         synchronized (this.lock)
         {
@@ -716,7 +719,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public MutableCollection<E> reject(Predicate<? super E> predicate)
+    public MutableCollection<T> reject(Predicate<? super T> predicate)
     {
         synchronized (this.lock)
         {
@@ -724,7 +727,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <R extends Collection<E>> R reject(Predicate<? super E> predicate, R target)
+    public <R extends Collection<T>> R reject(Predicate<? super T> predicate, R target)
     {
         synchronized (this.lock)
         {
@@ -732,8 +735,8 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <P> MutableCollection<E> rejectWith(
-            Predicate2<? super E, ? super P> predicate,
+    public <P> MutableCollection<T> rejectWith(
+            Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
         synchronized (this.lock)
@@ -742,8 +745,8 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <P, R extends Collection<E>> R rejectWith(
-            Predicate2<? super E, ? super P> predicate,
+    public <P, R extends Collection<T>> R rejectWith(
+            Predicate2<? super T, ? super P> predicate,
             P parameter,
             R targetCollection)
     {
@@ -753,7 +756,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public void removeIf(Predicate<? super E> predicate)
+    public void removeIf(Predicate<? super T> predicate)
     {
         synchronized (this.lock)
         {
@@ -761,7 +764,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <P> void removeIfWith(Predicate2<? super E, ? super P> predicate, P parameter)
+    public <P> void removeIfWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         synchronized (this.lock)
         {
@@ -769,7 +772,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public MutableCollection<E> select(Predicate<? super E> predicate)
+    public MutableCollection<T> select(Predicate<? super T> predicate)
     {
         synchronized (this.lock)
         {
@@ -777,7 +780,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <R extends Collection<E>> R select(Predicate<? super E> predicate, R target)
+    public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)
     {
         synchronized (this.lock)
         {
@@ -785,8 +788,8 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <P> Twin<MutableList<E>> selectAndRejectWith(
-            Predicate2<? super E, ? super P> predicate,
+    public <P> Twin<MutableList<T>> selectAndRejectWith(
+            Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
         synchronized (this.lock)
@@ -795,7 +798,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public PartitionMutableCollection<E> partition(Predicate<? super E> predicate)
+    public PartitionMutableCollection<T> partition(Predicate<? super T> predicate)
     {
         synchronized (this.lock)
         {
@@ -803,8 +806,8 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <P> MutableCollection<E> selectWith(
-            Predicate2<? super E, ? super P> predicate,
+    public <P> MutableCollection<T> selectWith(
+            Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
         synchronized (this.lock)
@@ -813,8 +816,8 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <P, R extends Collection<E>> R selectWith(
-            Predicate2<? super E, ? super P> predicate,
+    public <P, R extends Collection<T>> R selectWith(
+            Predicate2<? super T, ? super P> predicate,
             P parameter,
             R targetCollection)
     {
@@ -867,7 +870,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <V> MutableMultimap<V, E> groupBy(Function<? super E, ? extends V> function)
+    public <V> MutableMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
     {
         synchronized (this.lock)
         {
@@ -875,7 +878,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <V> MutableMultimap<V, E> groupByEach(Function<? super E, ? extends Iterable<V>> function)
+    public <V> MutableMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
     {
         synchronized (this.lock)
         {
@@ -883,8 +886,8 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <V, R extends MutableMultimap<V, E>> R groupBy(
-            Function<? super E, ? extends V> function,
+    public <V, R extends MutableMultimap<V, T>> R groupBy(
+            Function<? super T, ? extends V> function,
             R target)
     {
         synchronized (this.lock)
@@ -893,8 +896,8 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <V, R extends MutableMultimap<V, E>> R groupByEach(
-            Function<? super E, ? extends Iterable<V>> function,
+    public <V, R extends MutableMultimap<V, T>> R groupByEach(
+            Function<? super T, ? extends Iterable<V>> function,
             R target)
     {
         synchronized (this.lock)
@@ -903,7 +906,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <S> MutableCollection<Pair<E, S>> zip(Iterable<S> that)
+    public <S> MutableCollection<Pair<T, S>> zip(Iterable<S> that)
     {
         synchronized (this.lock)
         {
@@ -911,7 +914,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <S, R extends Collection<Pair<E, S>>> R zip(Iterable<S> that, R target)
+    public <S, R extends Collection<Pair<T, S>>> R zip(Iterable<S> that, R target)
     {
         synchronized (this.lock)
         {
@@ -919,7 +922,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public MutableCollection<Pair<E, Integer>> zipWithIndex()
+    public MutableCollection<Pair<T, Integer>> zipWithIndex()
     {
         synchronized (this.lock)
         {
@@ -927,7 +930,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public <R extends Collection<Pair<E, Integer>>> R zipWithIndex(R target)
+    public <R extends Collection<Pair<T, Integer>>> R zipWithIndex(R target)
     {
         synchronized (this.lock)
         {
@@ -935,7 +938,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public RichIterable<RichIterable<E>> chunk(int size)
+    public RichIterable<RichIterable<T>> chunk(int size)
     {
         synchronized (this.lock)
         {
@@ -943,7 +946,7 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public boolean addAllIterable(Iterable<? extends E> iterable)
+    public boolean addAllIterable(Iterable<? extends T> iterable)
     {
         synchronized (this.lock)
         {
@@ -967,27 +970,47 @@ public class SynchronizedMutableCollection<E>
         }
     }
 
-    public MutableCollection<E> with(E element)
+    public MutableCollection<T> with(T element)
     {
         this.add(element);
         return this;
     }
 
-    public MutableCollection<E> without(E element)
+    public MutableCollection<T> without(T element)
     {
         this.remove(element);
         return this;
     }
 
-    public MutableCollection<E> withAll(Iterable<? extends E> elements)
+    public MutableCollection<T> withAll(Iterable<? extends T> elements)
     {
         this.addAllIterable(elements);
         return this;
     }
 
-    public MutableCollection<E> withoutAll(Iterable<? extends E> elements)
+    public MutableCollection<T> withoutAll(Iterable<? extends T> elements)
     {
         this.removeAllIterable(elements);
         return this;
+    }
+
+    public <K, V> MutableMap<K, V> aggregateBy(
+            Function<? super T, ? extends K> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Procedure2<? super V, ? super T> mutatingAggregator)
+    {
+        MutableMap<K, V> map = UnifiedMap.newMap();
+        this.forEach(new MutatingAggregationProcedure<T, K, V>(map, groupBy, zeroValueFactory, mutatingAggregator));
+        return map;
+    }
+
+    public <K, V> MutableMap<K, V> aggregateBy(
+            Function<? super T, ? extends K> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Function2<? super V, ? super T, ? extends V> nonMutatingAggregator)
+    {
+        MutableMap<K, V> map = UnifiedMap.newMap();
+        this.forEach(new NonMutatingAggregationProcedure<T, K, V>(map, groupBy, zeroValueFactory, nonMutatingAggregator));
+        return map;
     }
 }

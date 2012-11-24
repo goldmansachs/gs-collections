@@ -24,6 +24,7 @@ import java.util.List;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
@@ -40,6 +41,7 @@ import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
@@ -803,5 +805,23 @@ public final class IterableIterate
         return item == iterable
                 ? "(this " + iterable.getClass().getSimpleName() + ')'
                 : String.valueOf(item);
+    }
+
+    public static <T, K, V> MutableMap<K, V> aggregateBy(
+            Iterable<T> iterable,
+            Function<? super T, ? extends K> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Procedure2<? super V, ? super T> mutatingAggregator)
+    {
+        return IteratorIterate.aggregateBy(iterable.iterator(), groupBy, zeroValueFactory, mutatingAggregator);
+    }
+
+    public static <T, K, V> MutableMap<K, V> aggregateBy(
+            Iterable<T> iterable,
+            Function<? super T, ? extends K> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Function2<? super V, ? super T, ? extends V> nonMutatingAggregator)
+    {
+        return IteratorIterate.aggregateBy(iterable.iterator(), groupBy, zeroValueFactory, nonMutatingAggregator);
     }
 }

@@ -27,6 +27,7 @@ import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
@@ -36,9 +37,12 @@ import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
+import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.collection.mutable.SynchronizedMutableCollection;
 import com.gs.collections.impl.factory.SortedMaps;
 import com.gs.collections.impl.map.SynchronizedMapIterable;
+import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.set.mutable.SynchronizedMutableSet;
 import com.gs.collections.impl.tuple.AbstractImmutableEntry;
 import com.gs.collections.impl.utility.LazyIterate;
@@ -385,7 +389,6 @@ public class SynchronizedSortedMap<K, V>
         }
     }
 
-    @Override
     public <R> MutableList<R> collectIf(
             Predicate<? super V> predicate,
             Function<? super V, ? extends R> function)
@@ -458,5 +461,25 @@ public class SynchronizedSortedMap<K, V>
         {
             return this.getSortedMap().groupByEach(function);
         }
+    }
+
+    public <K2, V2> MutableMap<K2, V2> aggregateBy(
+            Function<? super V, ? extends K2> groupBy,
+            Function0<? extends V2> zeroValueFactory,
+            Procedure2<? super V2, ? super V> mutatingAggregator)
+    {
+        MutableMap<K2, V2> map = UnifiedMap.newMap();
+        this.forEach(new MutatingAggregationProcedure<V, K2, V2>(map, groupBy, zeroValueFactory, mutatingAggregator));
+        return map;
+    }
+
+    public <K2, V2> MutableMap<K2, V2> aggregateBy(
+            Function<? super V, ? extends K2> groupBy,
+            Function0<? extends V2> zeroValueFactory,
+            Function2<? super V2, ? super V, ? extends V2> nonMutatingAggregator)
+    {
+        MutableMap<K2, V2> map = UnifiedMap.newMap();
+        this.forEach(new NonMutatingAggregationProcedure<V, K2, V2>(map, groupBy, zeroValueFactory, nonMutatingAggregator));
+        return map;
     }
 }

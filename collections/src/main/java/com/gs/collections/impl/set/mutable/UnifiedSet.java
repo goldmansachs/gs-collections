@@ -72,6 +72,8 @@ import com.gs.collections.impl.block.procedure.CountProcedure;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
+import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
+import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.RejectProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.block.procedure.SelectProcedure;
@@ -2459,5 +2461,25 @@ public class UnifiedSet<K>
     private boolean nonNullTableObjectEquals(Object cur, K key)
     {
         return cur == key || (cur == NULL_KEY ? key == null : cur.equals(key));
+    }
+
+    public <K2, V> MutableMap<K2, V> aggregateBy(
+            Function<? super K, ? extends K2> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Procedure2<? super V, ? super K> mutatingAggregator)
+    {
+        MutableMap<K2, V> map = UnifiedMap.newMap();
+        this.forEach(new MutatingAggregationProcedure<K, K2, V>(map, groupBy, zeroValueFactory, mutatingAggregator));
+        return map;
+    }
+
+    public <K2, V> MutableMap<K2, V> aggregateBy(
+            Function<? super K, ? extends K2> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Function2<? super V, ? super K, ? extends V> nonMutatingAggregator)
+    {
+        MutableMap<K2, V> map = UnifiedMap.newMap();
+        this.forEach(new NonMutatingAggregationProcedure<K, K2, V>(map, groupBy, zeroValueFactory, nonMutatingAggregator));
+        return map;
     }
 }

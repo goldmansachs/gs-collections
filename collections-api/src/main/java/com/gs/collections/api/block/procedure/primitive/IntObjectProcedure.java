@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,12 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.block.procedure.primitive;
+package com.gs.collections.api.block.procedure.primitive;
 
 import java.io.Serializable;
 
-/**
- * An IntIntProcedure is a two argument Closure which has no return argument and takes an int as the first and
- * second arguments.
- *
- * @deprecated since 2.0 use {@link com.gs.collections.api.block.procedure.primitive.IntIntProcedure}
- */
-@Deprecated
-public interface IntIntProcedure extends Serializable
+public interface IntObjectProcedure<T>
+    extends Serializable
 {
-    void value(int each, int index);
+    void value(int each, T parameter);
 }

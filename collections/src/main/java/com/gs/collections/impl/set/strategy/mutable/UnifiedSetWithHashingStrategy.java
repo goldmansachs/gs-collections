@@ -2516,4 +2516,40 @@ public class UnifiedSetWithHashingStrategy<K>
     {
         return cur == key || (cur == NULL_KEY ? key == null : this.hashingStrategy.equals(this.nonSentinel(cur), key));
     }
+
+    public <K2, V> MutableMap<K2, V> aggregateBy(
+            final Function<? super K, ? extends K2> groupBy,
+            final Function0<? extends V> zeroValueFactory,
+            final Procedure2<? super V, ? super K> mutatingAggregator)
+    {
+        final MutableMap<K2, V> map = UnifiedMap.newMap();
+        this.forEach(new Procedure<K>()
+        {
+            public void value(K each)
+            {
+                K2 key = groupBy.valueOf(each);
+                V value = map.getIfAbsentPut(key, zeroValueFactory);
+                mutatingAggregator.value(value, each);
+            }
+        });
+        return map;
+    }
+
+    public <K2, V> MutableMap<K2, V> aggregateBy(
+            final Function<? super K, ? extends K2> groupBy,
+            final Function0<? extends V> zeroValueFactory,
+            final Function2<? super V, ? super K, ? extends V> nonMutatingAggregator)
+    {
+        final MutableMap<K2, V> map = UnifiedMap.newMap();
+        this.forEach(new Procedure<K>()
+        {
+            public void value(K each)
+            {
+                K2 key = groupBy.valueOf(each);
+                V value = map.getIfAbsentPut(key, zeroValueFactory);
+                map.put(key, nonMutatingAggregator.value(value, each));
+            }
+        });
+        return map;
+    }
 }

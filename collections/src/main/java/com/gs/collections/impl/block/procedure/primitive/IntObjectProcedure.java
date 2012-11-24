@@ -16,6 +16,10 @@
 
 package com.gs.collections.impl.block.procedure.primitive;
 
+/**
+ * @deprecated since 2.0 use {@link com.gs.collections.api.block.procedure.primitive.IntObjectProcedure}
+ */
+@Deprecated
 public interface IntObjectProcedure<T>
 {
     void value(int each, T parameter);

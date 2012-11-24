@@ -52,6 +52,8 @@ import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.UnmodifiableIteratorAdapter;
 import com.gs.collections.impl.UnmodifiableMap;
+import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
+import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.tuple.AbstractImmutableEntry;
 import com.gs.collections.impl.utility.LazyIterate;
@@ -673,5 +675,25 @@ public class UnmodifiableMutableMap<K, V>
     public MutableCollection<Pair<V, Integer>> zipWithIndex()
     {
         return this.getMutableMap().zipWithIndex();
+    }
+
+    public <K2, V2> MutableMap<K2, V2> aggregateBy(
+            Function<? super V, ? extends K2> groupBy,
+            Function0<? extends V2> zeroValueFactory,
+            Procedure2<? super V2, ? super V> mutatingAggregator)
+    {
+        MutableMap<K2, V2> map = UnifiedMap.newMap();
+        this.forEach(new MutatingAggregationProcedure<V, K2, V2>(map, groupBy, zeroValueFactory, mutatingAggregator));
+        return map;
+    }
+
+    public <K2, V2> MutableMap<K2, V2> aggregateBy(
+            Function<? super V, ? extends K2> groupBy,
+            Function0<? extends V2> zeroValueFactory,
+            Function2<? super V2, ? super V, ? extends V2> nonMutatingAggregator)
+    {
+        MutableMap<K2, V2> map = UnifiedMap.newMap();
+        this.forEach(new NonMutatingAggregationProcedure<V, K2, V2>(map, groupBy, zeroValueFactory, nonMutatingAggregator));
+        return map;
     }
 }

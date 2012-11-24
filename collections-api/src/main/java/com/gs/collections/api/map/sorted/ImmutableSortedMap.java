@@ -19,9 +19,11 @@ package com.gs.collections.api.map.sorted;
 import java.util.SortedMap;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.multimap.list.ImmutableListMultimap;
@@ -82,4 +84,14 @@ public interface ImmutableSortedMap<K, V>
     <VV> ImmutableListMultimap<VV, V> groupBy(Function<? super V, ? extends VV> function);
 
     <VV> ImmutableListMultimap<VV, V> groupByEach(Function<? super V, ? extends Iterable<VV>> function);
+
+    <K2, V2> ImmutableMap<K2, V2> aggregateBy(
+            Function<? super V, ? extends K2> groupBy,
+            Function0<? extends V2> zeroValueFactory,
+            Procedure2<? super V2, ? super V> mutatingAggregator);
+
+    <K2, V2> ImmutableMap<K2, V2> aggregateBy(
+            Function<? super V, ? extends K2> groupBy,
+            Function0<? extends V2> zeroValueFactory,
+            Function2<? super V2, ? super V, ? extends V2> nonMutatingAggregator);
 }

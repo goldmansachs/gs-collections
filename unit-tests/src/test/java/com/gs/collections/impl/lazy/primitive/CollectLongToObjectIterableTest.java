@@ -22,35 +22,31 @@ import com.gs.collections.api.block.function.primitive.LongToObjectFunction;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.Procedures;
-import com.gs.collections.impl.list.fixed.ArrayAdapter;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
 import org.junit.Assert;
 import org.junit.Test;
 
 public class CollectLongToObjectIterableTest
 {
-
-    private <T> LazyIterable<T> newWith(T... elements)
+    public static final LongToObjectFunction<Long> BOX_LONG = new LongToObjectFunction<Long>()
     {
-        return new CollectLongToObjectIterable(
-                new CollectLongIterable(
-                        ArrayAdapter.<T>adapt(elements).asLazy(),
-                        PrimitiveFunctions.unboxNumberToLong()),
-                new LongToObjectFunction()
-                {
-                    public T valueOf(long each)
-                    {
-                        return (T) Long.valueOf(each);
-                    }
-                });
+        public Long valueOf(long each)
+        {
+            return Long.valueOf(each);
+        }
+    };
+
+    private LazyIterable<Long> newPrimitiveWith(long... elements)
+    {
+        return new CollectLongToObjectIterable<Long>(LongArrayList.newListWith(elements), BOX_LONG);
     }
 
     @Test
     public void forEach()
     {
-        InternalIterable<Long> select = this.newWith(1L, 2L, 3L, 4L, 5L);
+        InternalIterable<Long> select = this.newPrimitiveWith(1L, 2L, 3L, 4L, 5L);
         Appendable builder = new StringBuilder();
         Procedure<Long> appendProcedure = Procedures.append(builder);
         select.forEach(appendProcedure);
@@ -60,7 +56,7 @@ public class CollectLongToObjectIterableTest
     @Test
     public void forEachWithIndex()
     {
-        InternalIterable<Long> select = this.newWith(1L, 2L, 3L, 4L, 5L);
+        InternalIterable<Long> select = this.newPrimitiveWith(1L, 2L, 3L, 4L, 5L);
         final StringBuilder builder = new StringBuilder("");
         select.forEachWithIndex(new ObjectIntProcedure<Long>()
         {
@@ -76,7 +72,7 @@ public class CollectLongToObjectIterableTest
     @Test
     public void iterator()
     {
-        InternalIterable<Long> select = this.newWith(1L, 2L, 3L, 4L, 5L);
+        InternalIterable<Long> select = this.newPrimitiveWith(1L, 2L, 3L, 4L, 5L);
         StringBuilder builder = new StringBuilder("");
         for (Long each : select)
         {
@@ -88,7 +84,7 @@ public class CollectLongToObjectIterableTest
     @Test
     public void forEachWith()
     {
-        InternalIterable<Long> select = this.newWith(1L, 2L, 3L, 4L, 5L);
+        InternalIterable<Long> select = this.newPrimitiveWith(1L, 2L, 3L, 4L, 5L);
         StringBuilder builder = new StringBuilder("");
         select.forEachWith(new Procedure2<Long, StringBuilder>()
         {
@@ -105,6 +101,6 @@ public class CollectLongToObjectIterableTest
     {
         Assert.assertEquals(
                 FastList.<Long>newListWith(1L, 2L, 3L, 4L, 5L),
-                this.newWith(1, 2L, 3, 4L, 5).selectInstancesOf(Long.class).toList());
+                this.newPrimitiveWith(1L, 2L, 3L, 4L, 5L).selectInstancesOf(Long.class).toList());
     }
 }

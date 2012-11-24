@@ -27,15 +27,18 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
@@ -43,6 +46,7 @@ import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
+import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
@@ -2018,4 +2022,90 @@ public class IterateTest
             }
         });
     }
+
+    @Test
+    public void aggregateByMutating()
+    {
+        this.aggregateByMutableResult(FastList.newListWith(1, 1, 1, 2, 2, 3));
+        this.aggregateByMutableResult(UnifiedSet.newSetWith(1, 1, 1, 2, 2, 3));
+        this.aggregateByMutableResult(HashBag.newBagWith(1, 1, 1, 2, 2, 3));
+        this.aggregateByMutableResult(new HashSet(UnifiedSet.newSetWith(1, 1, 1, 2, 2, 3)));
+        this.aggregateByMutableResult(new LinkedList(FastList.newListWith(1, 1, 1, 2, 2, 3)));
+        this.aggregateByMutableResult(new ArrayList(FastList.newListWith(1, 1, 1, 2, 2, 3)));
+    }
+
+    private void aggregateByMutableResult(Iterable<Integer> iterable)
+    {
+        Function0<AtomicInteger> valueCreator = new Function0<AtomicInteger>()
+        {
+            public AtomicInteger value()
+            {
+                return new AtomicInteger(0);
+            }
+        };
+        Procedure2<AtomicInteger, Integer> sumAggregator = new Procedure2<AtomicInteger, Integer>()
+        {
+            public void value(AtomicInteger aggregate, Integer value)
+            {
+                aggregate.addAndGet(value);
+            }
+        };
+        MapIterable<String, AtomicInteger> aggregation = Iterate.aggregateBy(iterable, Functions.getToString(), valueCreator, sumAggregator);
+        if (iterable instanceof Set)
+        {
+            Assert.assertEquals(1, aggregation.get("1").intValue());
+            Assert.assertEquals(2, aggregation.get("2").intValue());
+            Assert.assertEquals(3, aggregation.get("3").intValue());
+        }
+        else
+        {
+            Assert.assertEquals(3, aggregation.get("1").intValue());
+            Assert.assertEquals(4, aggregation.get("2").intValue());
+            Assert.assertEquals(3, aggregation.get("3").intValue());
+        }
+    }
+
+    @Test
+    public void aggregateByImmutableResult()
+    {
+        this.aggregateByImmutableResult(FastList.newListWith(1, 1, 1, 2, 2, 3));
+        this.aggregateByImmutableResult(UnifiedSet.newSetWith(1, 1, 1, 2, 2, 3));
+        this.aggregateByImmutableResult(HashBag.newBagWith(1, 1, 1, 2, 2, 3));
+        this.aggregateByImmutableResult(new HashSet(UnifiedSet.newSetWith(1, 1, 1, 2, 2, 3)));
+        this.aggregateByImmutableResult(new LinkedList(FastList.newListWith(1, 1, 1, 2, 2, 3)));
+        this.aggregateByImmutableResult(new ArrayList(FastList.newListWith(1, 1, 1, 2, 2, 3)));
+    }
+
+
+    private void aggregateByImmutableResult(Iterable<Integer> iterable)
+    {
+        Function0<Integer> valueCreator = new Function0<Integer>()
+        {
+            public Integer value()
+            {
+                return Integer.valueOf(0);
+            }
+        };
+        Function2<Integer, Integer, Integer> sumAggregator = new Function2<Integer, Integer, Integer>()
+        {
+            public Integer value(Integer aggregate, Integer value)
+            {
+                return aggregate + value;
+            }
+        };
+        MapIterable<String, Integer> aggregation = Iterate.aggregateBy(iterable, Functions.getToString(), valueCreator, sumAggregator);
+        if (iterable instanceof Set)
+        {
+            Assert.assertEquals(1, aggregation.get("1").intValue());
+            Assert.assertEquals(2, aggregation.get("2").intValue());
+            Assert.assertEquals(3, aggregation.get("3").intValue());
+        }
+        else
+        {
+            Assert.assertEquals(3, aggregation.get("1").intValue());
+            Assert.assertEquals(4, aggregation.get("2").intValue());
+            Assert.assertEquals(3, aggregation.get("3").intValue());
+        }
+    }
+
 }
