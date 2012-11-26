@@ -1,5 +1,7 @@
 import "copyright.stg"
 
+targetPath() ::= "collections-api/target/generated-sources/java/com/gs/collections/api/iterator"
+
 fileName(primitive) ::= "<primitive.name>Iterator"
 
 class(primitive) ::= <<

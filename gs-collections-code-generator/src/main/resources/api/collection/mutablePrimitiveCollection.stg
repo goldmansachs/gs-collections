@@ -1,5 +1,7 @@
 import "copyright.stg"
 
+targetPath() ::= "collections-api/target/generated-sources/java/com/gs/collections/api/collection/primitive"
+
 fileName(primitive) ::= "Mutable<primitive.name>Collection"
 
 class(primitive) ::= <<

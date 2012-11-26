@@ -16,108 +16,81 @@
 
 package com.gs.collections.codegenerator;
 
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.util.ArrayList;
 
 import com.gs.collections.codegenerator.model.Primitive;
+import com.gs.collections.codegenerator.tools.FileUtils;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroupFile;
 
 public class GsCollectionsCodeGenerator
 {
-    private final File targetPath;
-    private final String templateFileName;
+    private final File templateDirectory;
 
-    public GsCollectionsCodeGenerator(File targetPath, String templateFileName)
+    public GsCollectionsCodeGenerator(File templateDirectory)
     {
-        this.targetPath = targetPath;
-        this.templateFileName = templateFileName;
+        this.templateDirectory = templateDirectory;
     }
 
     public void generate()
     {
-        for (Primitive primitive : Primitive.values())
+        for (File file : FileUtils.listTemplateFilesRecursively(new ArrayList<File>(), this.templateDirectory))
         {
-            String sourceFileName = this.getFileName(primitive);
-            File outputFile = new File(this.targetPath, sourceFileName + ".java");
-            if (!this.sourceFileExists(outputFile))
+            if (new STGroupFile(file.getAbsolutePath()).isDefined("fileName"))
             {
-                writeToFile(
-                        this.generateSources(primitive),
-                        outputFile);
+                for (Primitive primitive : Primitive.values())
+                {
+                    String sourceFileName = getFileName(file, primitive);
+                    File targetPath = getTargetPath(file);
+                    FileUtils.createDirectory(targetPath);
+                    File outputFile = new File(targetPath, sourceFileName + ".java");
+                    if (!sourceFileExists(outputFile))
+                    {
+                        FileUtils.writeToFile(
+                                generateSources(file, primitive),
+                                outputFile);
+                    }
+                }
             }
         }
     }
 
-    private boolean sourceFileExists(File outputFile)
+    private static File getTargetPath(File templateFile)
+    {
+        ST targetPath = new STGroupFile(templateFile.getAbsolutePath()).getInstanceOf("targetPath");
+        if (targetPath == null)
+        {
+            throw new RuntimeException("Could not parse targetPath in template file " + templateFile.getName());
+        }
+        return new File(targetPath.render());
+    }
+
+    private static boolean sourceFileExists(File outputFile)
     {
         File file = new File(outputFile.getAbsolutePath().replace("target", "src").replace("generated-sources", "main").replace("generated-test-sources", "test"));
         return file.exists();
     }
 
-    private String getFileName(Primitive primitive)
+    private static String getFileName(File templateFile, Primitive primitive)
     {
-        ST fileName = new STGroupFile(this.templateFileName).getInstanceOf("fileName");
+        ST fileName = new STGroupFile(templateFile.getAbsolutePath()).getInstanceOf("fileName");
         if (fileName == null)
         {
-            throw new RuntimeException("Could not parse fileName in template file " + this.templateFileName);
+            throw new RuntimeException("Could not parse fileName in template file " + templateFile.getName());
         }
         fileName.add("primitive", primitive);
         return fileName.render();
     }
 
-    private String generateSources(Primitive primitive)
+    private static String generateSources(File templateFile, Primitive primitive)
     {
-        ST clazz = new STGroupFile(this.templateFileName).getInstanceOf("class");
+        ST clazz = new STGroupFile(templateFile.getAbsolutePath()).getInstanceOf("class");
         if (clazz == null)
         {
-            throw new RuntimeException("Could not parse template " + this.templateFileName);
+            throw new RuntimeException("Could not parse template " + templateFile.getName());
         }
         clazz.add("primitive", primitive);
         return clazz.render();
-    }
-
-    private static void writeToFile(String data, File outputFile)
-    {
-        FileWriter fileWriter = null;
-        BufferedWriter bufferedWriter = null;
-        try
-        {
-            fileWriter = new FileWriter(outputFile);
-            bufferedWriter = new BufferedWriter(fileWriter);
-            bufferedWriter.write(data);
-            bufferedWriter.flush();
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException("Could not write generated sources to file: " + e);
-        }
-        finally
-        {
-            if (fileWriter != null)
-            {
-                try
-                {
-                    fileWriter.close();
-                }
-                catch (IOException e)
-                {
-                    throw new RuntimeException("Could not close filewriter: " + e);
-                }
-            }
-            if (bufferedWriter != null)
-            {
-                try
-                {
-                    bufferedWriter.close();
-                }
-                catch (IOException e)
-                {
-                    throw new RuntimeException("Could not close bufferedwriter: " + e);
-                }
-            }
-        }
     }
 }

@@ -2,6 +2,8 @@ import "copyright.stg"
 import "primitiveHashcode.stg"
 import "primitiveLiteral.stg"
 
+targetPath() ::= "unit-tests/target/generated-test-sources/java/com/gs/collections/impl/list/mutable/primitive"
+
 fileName(primitive) ::= "<primitive.name>ArrayListTest"
 
 class(primitive) ::= <<

@@ -3,6 +3,8 @@ import "primitiveEquals.stg"
 import "primitiveHashcode.stg"
 import "primitiveLiteral.stg"
 
+targetPath() ::= "collections/target/generated-sources/java/com/gs/collections/impl/list/mutable/primitive"
+
 fileName(primitive) ::= "<primitive.name>ArrayList"
 
 class(primitive) ::= <<

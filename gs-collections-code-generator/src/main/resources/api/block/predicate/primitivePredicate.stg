@@ -1,5 +1,7 @@
 import "copyright.stg"
 
+targetPath() ::= "collections-api/target/generated-sources/java/com/gs/collections/api/block/predicate/primitive"
+
 fileName(primitive) ::= "<primitive.name>Predicate"
 
 class(primitive) ::= <<

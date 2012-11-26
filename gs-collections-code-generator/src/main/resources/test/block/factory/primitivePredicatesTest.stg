@@ -1,6 +1,8 @@
 import "copyright.stg"
 import "primitiveLiteral.stg"
 
+targetPath() ::= "unit-tests/target/generated-test-sources/java/com/gs/collections/impl/block/factory/primitive"
+
 fileName(primitive) ::= "<primitive.name>PredicatesTest"
 
 class(primitive) ::= <<

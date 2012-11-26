@@ -3,6 +3,8 @@ import "primitiveEquals.stg"
 import "primitiveHashcode.stg"
 import "primitiveLiteral.stg"
 
+targetPath() ::= "collections/target/generated-sources/java/com/gs/collections/impl/lazy/primitive"
+
 fileName(primitive) ::= "Select<primitive.name>Iterable"
 
 class(primitive) ::= <<

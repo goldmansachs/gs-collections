@@ -23,24 +23,20 @@ import org.apache.tools.ant.Task;
 
 public class GsCollectionsCodeGeneratorTask extends Task
 {
-    private String targetPath;
-    private String templateFileName;
+    private File templateDirectory;
 
     @Override
     public void execute()
     {
+        this.log("Scanning all template files from " + this.templateDirectory.getPath());
+
         GsCollectionsCodeGenerator gsCollectionsCodeGenerator =
-                new GsCollectionsCodeGenerator(new File(this.targetPath), this.templateFileName);
+                new GsCollectionsCodeGenerator(this.templateDirectory);
         gsCollectionsCodeGenerator.generate();
     }
 
-    public void setTargetPath(String targetPath)
+    public void setTemplateDirectory(File templateDirectory)
     {
-        this.targetPath = targetPath;
-    }
-
-    public void setTemplateFileName(String templateFileName)
-    {
-        this.templateFileName = templateFileName;
+        this.templateDirectory = templateDirectory;
     }
 }

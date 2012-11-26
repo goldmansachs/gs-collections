@@ -35,13 +35,7 @@ public class GenerateMojo extends AbstractMojo
      * @parameter expression="${project.build.directory}/generated-sources"
      * @required
      */
-    private File targetPath;
-
-    /**
-     * @parameter
-     * @required
-     */
-    private String templateFileName;
+    private File templateDirectory;
 
     /**
      * The Maven project to act upon.
@@ -51,37 +45,15 @@ public class GenerateMojo extends AbstractMojo
      */
     private MavenProject project;
 
-    /**
-     * Whether the generated source should get added to the compile or test classpath.
-     *
-     * @parameter default-value="false"
-     * @required
-     */
-    private boolean test;
-
     public void execute() throws MojoExecutionException, MojoFailureException
     {
-        if (!this.targetPath.exists())
-        {
-            boolean mkdirs = this.targetPath.mkdirs();
-            if (!mkdirs)
-            {
-                throw new MojoFailureException("Could not create directory " + this.targetPath);
-            }
-        }
-        this.getLog().info("Writing generated code to " + this.targetPath);
+        this.getLog().info("Scanning all template files from " + this.templateDirectory.getPath());
 
         GsCollectionsCodeGenerator gsCollectionsCodeGenerator =
-                new GsCollectionsCodeGenerator(this.targetPath, this.templateFileName);
+                new GsCollectionsCodeGenerator(this.templateDirectory);
         gsCollectionsCodeGenerator.generate();
 
-        if (this.test)
-        {
-            this.project.addTestCompileSourceRoot(this.targetPath.getAbsolutePath());
-        }
-        else
-        {
-            this.project.addCompileSourceRoot(this.targetPath.getAbsolutePath());
-        }
+        this.project.addCompileSourceRoot("target/generated-sources/java");
+        this.project.addTestCompileSourceRoot("target/generated-test-sources/java");
     }
 }

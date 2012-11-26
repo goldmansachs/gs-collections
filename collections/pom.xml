@@ -110,39 +110,12 @@
                 <version>2.1.0-SNAPSHOT</version>
                 <executions>
                     <execution>
-                        <id>list</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <targetPath>target/generated-sources/java/com/gs/collections/impl/list/mutable/primitive
-                            </targetPath>
-                            <templateFileName>list/mutable/primitiveArrayList.stg</templateFileName>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>function</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <targetPath>target/generated-sources/java/com/gs/collections/impl/block/factory/primitive
-                            </targetPath>
-                            <templateFileName>api/block/factory/primitivePredicates.stg</templateFileName>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>select</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                        <configuration>
-                            <targetPath>target/generated-sources/java/com/gs/collections/impl/lazy/primitive
-                            </targetPath>
-                            <templateFileName>lazy/primitiveSelectIterable.stg</templateFileName>
+                            <templateDirectory>..\gs-collections-code-generator\src\main\resources\impl</templateDirectory>
                         </configuration>
                     </execution>
                 </executions>

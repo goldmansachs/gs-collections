@@ -1,5 +1,7 @@
 import "copyright.stg"
 
+targetPath() ::= "collections-api/target/generated-sources/java/com/gs/collections/api/block/function/primitive"
+
 fileName(primitive) ::= "<primitive.name>Function"
 
 class(primitive) ::= <<
