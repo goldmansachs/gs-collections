@@ -51,19 +51,8 @@ public interface <name>Iterable
 
     \<V\> RichIterable\<V\> collect(<name>ToObjectFunction\<? extends V\> function);
 
-    <(wideType.(type))> sum();
-
-    <type> max();
-
-    <type> min();
-
-    double average();
-
-    double median();
-
+    <(arithmeticMethods.(type))(type)>
     <type>[] toArray();
-
-    <type>[] toSortedArray();
 
     boolean contains(<type> value);
 
@@ -71,3 +60,31 @@ public interface <name>Iterable
 }
 
 >>
+
+arithmeticMethods ::= [
+    "byte": "allMethods",
+    "short": "allMethods",
+    "char": "allMethods",
+    "int": "allMethods",
+    "long": "allMethods",
+    "float": "allMethods",
+    "double": "allMethods",
+    "boolean": "noMethods"
+    ]
+
+allMethods(type) ::= <<
+<(wideType.(type))> sum();
+
+<type> max();
+
+<type> min();
+
+double average();
+
+double median();
+
+<type>[] toSortedArray();
+
+>>
+
+noMethods(type) ::= ""
