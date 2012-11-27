@@ -14,6 +14,7 @@ body(type, name) ::= <<
 package com.gs.collections.api.list.primitive;
 
 import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 
 /**
  * This file was automatically generated from template file primitiveList.stg.
@@ -26,9 +27,13 @@ public interface <name>List extends <name>Iterable
 
     <type> getLast();
 
-    int indexOf(<type> object);
+    int indexOf(<type> value);
 
-    int lastIndexOf(<type> object);
+    int lastIndexOf(<type> value);
+
+    <name>List select(<name>Predicate predicate);
+
+    <name>List reject(<name>Predicate predicate);
 }
 
 >>

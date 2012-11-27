@@ -14,6 +14,7 @@ body(type, name) ::= <<
 package com.gs.collections.api.list.primitive;
 
 import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 
 /**
  * This file was automatically generated from template file mutablePrimitiveList.stg.
@@ -27,6 +28,10 @@ public interface Mutable<name>List extends Mutable<name>Collection, <name>List
     <type> removeAtIndex(int index);
 
     <type> set(int index, <type> element);
+
+    Mutable<name>List select(<name>Predicate predicate);
+
+    Mutable<name>List reject(<name>Predicate predicate);
 }
 
 >>

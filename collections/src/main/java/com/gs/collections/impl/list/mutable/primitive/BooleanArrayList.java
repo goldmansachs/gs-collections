@@ -380,6 +380,47 @@ public final class BooleanArrayList
         return true;
     }
 
+    public BooleanArrayList select(BooleanPredicate predicate)
+    {
+        BooleanArrayList result = new BooleanArrayList();
+        for (int i = 0; i < this.size; i++)
+        {
+            boolean item = this.items.get(i);
+            if (predicate.accept(item))
+            {
+                result.add(item);
+            }
+        }
+        return result;
+    }
+
+    public BooleanArrayList reject(BooleanPredicate predicate)
+    {
+        BooleanArrayList result = new BooleanArrayList();
+        for (int i = 0; i < this.size; i++)
+        {
+            boolean item = this.items.get(i);
+            if (!predicate.accept(item))
+            {
+                result.add(item);
+            }
+        }
+        return result;
+    }
+
+    public boolean detectIfNone(BooleanPredicate predicate, boolean ifNone)
+    {
+        for (int i = 0; i < this.size; i++)
+        {
+            boolean item = this.items.get(i);
+            if (predicate.accept(item))
+            {
+                return item;
+            }
+        }
+        return ifNone;
+    }
+
     public <V> RichIterable<V> collect(BooleanToObjectFunction<? extends V> function)
     {
         FastList<V> target = FastList.newList(this.size);

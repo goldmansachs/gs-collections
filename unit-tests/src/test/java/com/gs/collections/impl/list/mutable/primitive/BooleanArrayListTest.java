@@ -72,6 +72,14 @@ public class BooleanArrayListTest
     }
 
     @Test
+    public void notEmpty()
+    {
+        Assert.assertFalse(new BooleanArrayList().notEmpty());
+        Assert.assertTrue(BooleanArrayList.newListWith(false).notEmpty());
+        Assert.assertTrue(this.list.notEmpty());
+    }
+
+    @Test
     public void clear()
     {
         this.list.clear();
@@ -419,6 +427,27 @@ public class BooleanArrayListTest
         Assert.assertTrue(new BooleanArrayList().allSatisfy(BooleanPredicates.isTrue()));
         Assert.assertTrue(new BooleanArrayList().allSatisfy(BooleanPredicates.isFalse()));
         Assert.assertTrue(BooleanArrayList.newListWith(false, false).allSatisfy(BooleanPredicates.isFalse()));
+    }
+
+    @Test
+    public void select()
+    {
+        Assert.assertEquals(2L, this.list.select(BooleanPredicates.isTrue()).size());
+        Assert.assertEquals(1L, this.list.select(BooleanPredicates.isFalse()).size());
+    }
+
+    @Test
+    public void reject()
+    {
+        Assert.assertEquals(1L, this.list.reject(BooleanPredicates.isTrue()).size());
+        Assert.assertEquals(2L, this.list.reject(BooleanPredicates.isFalse()).size());
+    }
+
+    @Test
+    public void detectIfNone()
+    {
+        Assert.assertTrue(this.list.detectIfNone(BooleanPredicates.isTrue(), false));
+        Assert.assertTrue(this.list.detectIfNone(BooleanPredicates.and(BooleanPredicates.isTrue(), BooleanPredicates.isFalse()), true));
     }
 
     @Test
