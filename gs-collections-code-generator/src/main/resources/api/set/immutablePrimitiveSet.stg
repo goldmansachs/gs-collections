@@ -1,0 +1,38 @@
+import "copyright.stg"
+
+targetPath() ::= "collections-api/target/generated-sources/java/com/gs/collections/api/set/primitive"
+
+fileName(primitive) ::= "Immutable<primitive.name>Set"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.api.set.primitive;
+
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.collection.primitive.Immutable<name>Collection;
+
+/**
+ * This file was automatically generated from template file immutablePrimitiveSet.stg.
+ */
+public interface Immutable<name>Set extends Immutable<name>Collection, <name>Set
+{
+    Immutable<name>Set newWith(<type> element);
+
+    Immutable<name>Set newWithout(<type> element);
+
+    Immutable<name>Set newWithAll(<name>Iterable elements);
+
+    Immutable<name>Set newWithoutAll(<name>Iterable elements);
+
+    Immutable<name>Set select(<name>Predicate predicate);
+
+    Immutable<name>Set reject(<name>Predicate predicate);
+}
+
+>>

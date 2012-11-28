@@ -1,0 +1,45 @@
+import "copyright.stg"
+
+targetPath() ::= "collections-api/target/generated-sources/java/com/gs/collections/api/stack/primitive"
+
+fileName(primitive) ::= "Mutable<primitive.name>Stack"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.api.stack.primitive;
+
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
+import com.gs.collections.api.list.primitive.<name>List;
+
+/**
+ * This file was automatically generated from template file mutablePrimitiveStack.stg.
+ */
+public interface Mutable<name>Stack extends Mutable<name>Collection, <name>Stack
+{
+    /**
+     * Adds an item to the top of the stack.
+     */
+    void push(<type> item);
+
+    /**
+     * Removes and returns the top element of the stack.
+     */
+    <type> pop();
+
+    /**
+     * Removes and returns a <name>List of the number of elements specified by the count, beginning with the top of the stack.
+     */
+    <name>List pop(int count);
+
+    Mutable<name>Stack select(<name>Predicate predicate);
+
+    Mutable<name>Stack reject(<name>Predicate predicate);
+}
+
+>>

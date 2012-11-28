@@ -1,0 +1,29 @@
+import "copyright.stg"
+
+targetPath() ::= "collections-api/target/generated-sources/java/com/gs/collections/api/block/procedure/primitive"
+
+fileName(primitive) ::= "<primitive.name>IntProcedure"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.api.block.procedure.primitive;
+
+import java.io.Serializable;
+
+/**
+ * A <name>IntProcedure is a two argument Closure which has no return argument and takes a <type> as the first and
+ * an int as the second argument.
+ * This file was automatically generated from template file primitiveIntProcedure.stg.
+ */
+public interface <name>IntProcedure
+        extends Serializable
+{
+    void value(<type> first, int second);
+}
+
+>>

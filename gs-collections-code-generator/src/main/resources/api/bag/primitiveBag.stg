@@ -1,0 +1,36 @@
+import "copyright.stg"
+
+targetPath() ::= "collections-api/target/generated-sources/java/com/gs/collections/api/bag/primitive"
+
+fileName(primitive) ::= "<primitive.name>Bag"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.api.bag.primitive;
+
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
+
+/**
+ * This file was automatically generated from template file primitiveBag.stg.
+ */
+public interface <name>Bag extends <name>Iterable
+{
+    int sizeDistinct();
+
+    int occurrencesOf(<type> item);
+
+    void forEachWithOccurrences(<name>IntProcedure procedure);
+
+    <name>Bag select(<name>Predicate predicate);
+
+    <name>Bag reject(<name>Predicate predicate);
+}
+
+>>

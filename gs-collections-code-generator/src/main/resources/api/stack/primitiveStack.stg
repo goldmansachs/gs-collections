@@ -1,0 +1,58 @@
+import "copyright.stg"
+
+targetPath() ::= "collections-api/target/generated-sources/java/com/gs/collections/api/stack/primitive"
+
+fileName(primitive) ::= "<primitive.name>Stack"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.api.stack.primitive;
+
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.list.primitive.<name>List;
+
+/**
+ * This file was automatically generated from template file primitiveStack.stg.
+ */
+public interface <name>Stack extends <name>Iterable
+{
+    /**
+     * Returns the top of the stack.
+     */
+    <type> peek();
+
+    /**
+     * Returns <name>List of the number of elements specified by the count, beginning with the top of the stack.
+     */
+    <name>List peek(int count);
+
+    /**
+     * Returns the element at the specified index.
+     * @param index the location to peek into
+     */
+    <type> peekAt(int index);
+
+    /**
+     * Should return the same value as peek().
+     */
+    <type> getFirst();
+
+    /**
+     * Should not work as it violates the contract of a Stack.
+     *
+     * @throws UnsupportedOperationException
+     */
+    <type> getLast();
+
+    <name>Stack select(<name>Predicate predicate);
+
+    <name>Stack reject(<name>Predicate predicate);
+}
+
+>>

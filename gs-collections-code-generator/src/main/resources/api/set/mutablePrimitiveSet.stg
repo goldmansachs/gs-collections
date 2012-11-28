@@ -1,0 +1,38 @@
+import "copyright.stg"
+
+targetPath() ::= "collections-api/target/generated-sources/java/com/gs/collections/api/set/primitive"
+
+fileName(primitive) ::= "Mutable<primitive.name>Set"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.api.set.primitive;
+
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
+
+/**
+ * This file was automatically generated from template file mutablePrimitiveSet.stg.
+ */
+public interface Mutable<name>Set extends Mutable<name>Collection, <name>Set
+{
+    Mutable<name>Set with(<type> element);
+
+    Mutable<name>Set without(<type> element);
+
+    Mutable<name>Set withAll(<name>Iterable elements);
+
+    Mutable<name>Set withoutAll(<name>Iterable elements);
+
+    Mutable<name>Set select(<name>Predicate predicate);
+
+    Mutable<name>Set reject(<name>Predicate predicate);
+}
+
+>>

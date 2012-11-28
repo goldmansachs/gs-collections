@@ -1,0 +1,35 @@
+import "copyright.stg"
+
+targetPath() ::= "collections-api/target/generated-sources/java/com/gs/collections/api/stack/primitive"
+
+fileName(primitive) ::= "Immutable<primitive.name>Stack"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.api.stack.primitive;
+
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.collection.primitive.Immutable<name>Collection;
+
+/**
+ * This file was automatically generated from template file immutablePrimitiveStack.stg.
+ */
+public interface Immutable<name>Stack extends Immutable<name>Collection, <name>Stack
+{
+    Immutable<name>Stack push(<type> item);
+
+    Immutable<name>Stack pop();
+
+    Immutable<name>Stack pop(int count);
+
+    Immutable<name>Stack select(<name>Predicate predicate);
+
+    Immutable<name>Stack reject(<name>Predicate predicate);
+}
+
+>>
