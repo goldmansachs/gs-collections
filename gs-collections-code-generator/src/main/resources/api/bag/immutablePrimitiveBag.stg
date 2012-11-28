@@ -1,0 +1,38 @@
+import "copyright.stg"
+
+targetPath() ::= "collections-api/target/generated-sources/java/com/gs/collections/api/bag/primitive"
+
+fileName(primitive) ::= "Immutable<primitive.name>Bag"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.api.bag.primitive;
+
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.collection.primitive.Immutable<name>Collection;
+
+/**
+ * This file was automatically generated from template file immutablePrimitiveBag.stg.
+ */
+public interface Immutable<name>Bag extends Immutable<name>Collection, <name>Bag
+{
+    Immutable<name>Bag newWith(<type> element);
+
+    Immutable<name>Bag newWithout(<type> element);
+
+    Immutable<name>Bag newWithAll(<name>Iterable elements);
+
+    Immutable<name>Bag newWithoutAll(<name>Iterable elements);
+
+    Immutable<name>Bag select(<name>Predicate predicate);
+
+    Immutable<name>Bag reject(<name>Predicate predicate);
+}
+
+>>

@@ -1,0 +1,44 @@
+import "copyright.stg"
+
+targetPath() ::= "collections-api/target/generated-sources/java/com/gs/collections/api/bag/primitive"
+
+fileName(primitive) ::= "Mutable<primitive.name>Bag"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.api.bag.primitive;
+
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
+
+/**
+ * This file was automatically generated from template file mutablePrimitiveBag.stg.
+ */
+public interface Mutable<name>Bag extends Mutable<name>Collection, <name>Bag
+{
+    Mutable<name>Bag with(<type> element);
+
+    Mutable<name>Bag without(<type> element);
+
+    Mutable<name>Bag withAll(<name>Iterable elements);
+
+    Mutable<name>Bag withoutAll(<name>Iterable elements);
+
+    Mutable<name>Bag newEmpty();
+
+    void addOccurrences(<type> item, int occurrences);
+
+    boolean removeOccurrences(<type> item, int occurrences);
+
+    Mutable<name>Bag select(<name>Predicate predicate);
+
+    Mutable<name>Bag reject(<name>Predicate predicate);
+}
+
+>>
