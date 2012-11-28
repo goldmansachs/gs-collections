@@ -20,7 +20,7 @@ import com.gs.collections.api.list.primitive.<name>List;
 /**
  * This file was automatically generated from template file mutablePrimitiveStack.stg.
  */
-public interface Mutable<name>Stack extends Mutable<name>Collection, <name>Stack
+public interface Mutable<name>Stack extends <name>Stack
 {
     /**
      * Adds an item to the top of the stack.
