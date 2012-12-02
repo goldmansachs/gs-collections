@@ -1975,6 +1975,9 @@ public final class Iterate
         throw new IllegalArgumentException("Cannot perform an aggregateBy on null");
     }
 
+    /**
+     * @see RichIterable#aggregateBy(Function, Function0, Function2)
+     */
     public static <T, K, V> MutableMap<K, V> aggregateBy(
             Iterable<T> iterable,
             Function<? super T, ? extends K> groupBy,

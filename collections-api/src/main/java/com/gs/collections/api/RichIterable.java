@@ -888,7 +888,21 @@ public interface
      */
     RichIterable<RichIterable<T>> chunk(int size);
 
+    /**
+     * Applies an aggregate procedure over the iterable grouping results into a Map based on the specific groupBy function.
+     * Aggregate results are required to be mutable as they will be changed in place by the procedure.  A second function
+     * specifies the initial "zero" aggregate value to work with (i.e. new AtomicInteger(0)).
+     *
+     * @since 3.0
+     */
     <K, V> MapIterable<K, V> aggregateBy(Function<? super T, ? extends K> groupBy, Function0<? extends V> zeroValueFactory, Procedure2<? super V, ? super T> mutatingAggregator);
 
+    /**
+     * Applies an aggregate function over the iterable grouping results into a map based on the specific groupBy function.
+     * Aggregate results are allowed to be immutable as they will be replaced in place in the map.  A second function
+     * specifies the initial "zero" aggregate value to work with (i.e. new Integer(0)).
+     *
+     * @since 3.0
+     */
     <K, V> MapIterable<K, V> aggregateBy(Function<? super T, ? extends K> groupBy, Function0<? extends V> zeroValueFactory, Function2<? super V, ? super T, ? extends V> nonMutatingAggregator);
 }
