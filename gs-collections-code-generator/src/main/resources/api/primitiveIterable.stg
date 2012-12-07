@@ -52,11 +52,24 @@ public interface <name>Iterable
     \<V\> RichIterable\<V\> collect(<name>ToObjectFunction\<? extends V\> function);
 
     <(arithmeticMethods.(type))(type)>
+
     <type>[] toArray();
 
     boolean contains(<type> value);
 
     boolean containsAll(<type>... source);
+
+    String makeString();
+
+    String makeString(String separator);
+
+    String makeString(String start, String separator, String end);
+
+    void appendString(Appendable appendable);
+
+    void appendString(Appendable appendable, String separator);
+
+    void appendString(Appendable appendable, String start, String separator, String end);
 }
 
 >>
@@ -84,7 +97,6 @@ double average();
 double median();
 
 <type>[] toSortedArray();
-
 >>
 
 noMethods(type) ::= ""

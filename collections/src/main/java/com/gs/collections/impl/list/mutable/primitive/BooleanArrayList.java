@@ -278,6 +278,31 @@ public final class BooleanArrayList
         return false;
     }
 
+    public boolean removeAll(BooleanIterable source)
+    {
+        boolean modified = false;
+        BooleanIterator iterator = source.booleanIterator();
+        while (iterator.hasNext())
+        {
+            boolean item = iterator.next();
+            if (this.remove(item))
+            {
+                modified = true;
+            }
+        }
+        return modified;
+    }
+
+    public boolean removeAll(boolean... source)
+    {
+        boolean modified = false;
+        for (boolean i : source)
+        {
+            modified = this.remove(i);
+        }
+        return modified;
+    }
+
     public boolean removeAtIndex(int index)
     {
         boolean previous = this.get(index);
@@ -303,6 +328,24 @@ public final class BooleanArrayList
     public BooleanArrayList with(boolean element)
     {
         this.add(element);
+        return this;
+    }
+
+    public BooleanArrayList without(boolean element)
+    {
+        this.remove(element);
+        return this;
+    }
+
+    public BooleanArrayList withAll(BooleanIterable elements)
+    {
+        this.addAll(elements.toArray());
+        return this;
+    }
+
+    public BooleanArrayList withoutAll(BooleanIterable elements)
+    {
+        this.removeAll(elements);
         return this;
     }
 

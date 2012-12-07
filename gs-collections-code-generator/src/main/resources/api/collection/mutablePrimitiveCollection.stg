@@ -1,19 +1,21 @@
 import "copyright.stg"
+import "primitiveAPI.stg"
 
 targetPath() ::= "collections-api/target/generated-sources/java/com/gs/collections/api/collection/primitive"
 
 fileName(primitive) ::= "Mutable<primitive.name>Collection"
 
 class(primitive) ::= <<
-<body(primitive.type, primitive.name)>
+<body(primitive.type, primitive.name, primitive)>
 >>
 
-body(type, name) ::= <<
+body(type, name, primitive) ::= <<
 <copyright()>
 
 package com.gs.collections.api.collection.primitive;
 
 import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 
 /**
  * This file was automatically generated from template file mutablePrimitiveCollection.stg.
@@ -26,15 +28,15 @@ public interface Mutable<name>Collection extends <name>Iterable
 
     boolean remove(<type> value);
 
+    boolean removeAll(<name>Iterable source);
+
+    boolean removeAll(<type>... source);
+
     void clear();
 
-    Mutable<name>Collection with(<type> element);
+    <sharedAPI(fileName(primitive), name)>
 
-    Mutable<name>Collection with(<type> element1, <type> element2);
-
-    Mutable<name>Collection with(<type> element1, <type> element2, <type> element3);
-
-    Mutable<name>Collection with(<type> element1, <type> element2, <type> element3, <type>... elements);
+    <mutableAPI(fileName(primitive), type, name)>
 }
 
 >>

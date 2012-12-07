@@ -1,4 +1,5 @@
 import "copyright.stg"
+import "primitiveAPI.stg"
 
 targetPath() ::= "collections-api/target/generated-sources/java/com/gs/collections/api/stack/primitive"
 
@@ -37,9 +38,7 @@ public interface Mutable<name>Stack extends <name>Stack
      */
     <name>List pop(int count);
 
-    Mutable<name>Stack select(<name>Predicate predicate);
-
-    Mutable<name>Stack reject(<name>Predicate predicate);
+    <sharedAPI(fileName(primitive), name)>
 }
 
 >>

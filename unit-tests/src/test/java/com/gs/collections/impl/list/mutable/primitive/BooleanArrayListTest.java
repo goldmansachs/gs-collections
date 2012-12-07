@@ -290,6 +290,34 @@ public class BooleanArrayListTest
     }
 
     @Test
+    public void removeAll()
+    {
+        Assert.assertFalse(this.list.removeAll());
+        BooleanArrayList booleanArrayList = BooleanArrayList.newListWith(false, false);
+        Assert.assertFalse(booleanArrayList.removeAll(true));
+        Assert.assertEquals(BooleanArrayList.newListWith(false, false), booleanArrayList);
+        Assert.assertTrue(this.list.removeAll(true, false));
+        Assert.assertEquals(BooleanArrayList.newListWith(true), this.list);
+        Assert.assertTrue(this.list.removeAll(true));
+        Assert.assertEquals(new BooleanArrayList(), this.list);
+    }
+
+    @Test
+    public void removeAllIterable()
+    {
+        Assert.assertFalse(this.list.removeAll(new BooleanArrayList()));
+        BooleanArrayList booleanArrayList = BooleanArrayList.newListWith(false, false);
+        Assert.assertFalse(booleanArrayList.removeAll(new BooleanArrayList(true)));
+        Assert.assertEquals(BooleanArrayList.newListWith(false, false), booleanArrayList);
+        Assert.assertTrue(this.list.removeAll(new BooleanArrayList(true)));
+        Assert.assertEquals(BooleanArrayList.newListWith(true, false), this.list);
+        Assert.assertTrue(this.list.removeAll(BooleanArrayList.newListWith(true, false)));
+        Assert.assertEquals(new BooleanArrayList(), this.list);
+        Assert.assertFalse(this.list.removeAll(BooleanArrayList.newListWith(true, false)));
+        Assert.assertEquals(new BooleanArrayList(), this.list);
+    }
+
+    @Test
     public void removeAtIndex()
     {
         this.list.removeAtIndex(1);
@@ -339,6 +367,43 @@ public class BooleanArrayListTest
         Assert.assertEquals(this.list, arrayList1);
         Assert.assertEquals(BooleanArrayList.newListWith(true, true, false, true), arrayList2);
         Assert.assertEquals(BooleanArrayList.newListWith(true, true, false, true, false), arrayList3);
+    }
+
+    @Test
+    public void withAll()
+    {
+        BooleanArrayList arrayList = new BooleanArrayList().withAll(BooleanArrayList.newListWith(true));
+        BooleanArrayList arrayList0 = new BooleanArrayList().withAll(BooleanArrayList.newListWith(true, false));
+        BooleanArrayList arrayList1 = new BooleanArrayList().withAll(BooleanArrayList.newListWith(true, true, false));
+        BooleanArrayList arrayList2 = new BooleanArrayList().withAll(BooleanArrayList.newListWith(true, false, true, false));
+        BooleanArrayList arrayList3 = new BooleanArrayList().withAll(BooleanArrayList.newListWith(true, false, false, true, false));
+        Assert.assertEquals(BooleanArrayList.newListWith(true), arrayList);
+        Assert.assertEquals(BooleanArrayList.newListWith(true, false), arrayList0);
+        Assert.assertEquals(this.list, arrayList1);
+        Assert.assertEquals(BooleanArrayList.newListWith(true, false, true, false), arrayList2);
+        Assert.assertEquals(BooleanArrayList.newListWith(true, false, false, true, false), arrayList3);
+    }
+
+    @Test
+    public void without()
+    {
+        BooleanArrayList mainArrayList = new BooleanArrayList(true, false, false);
+        Assert.assertEquals(BooleanArrayList.newListWith(true, true, true, true, true), BooleanArrayList.newListWith(true, true, true, true, true).without(false));
+        Assert.assertEquals(BooleanArrayList.newListWith(false, false), mainArrayList.without(true));
+        Assert.assertEquals(new BooleanArrayList(false), mainArrayList.without(false));
+        Assert.assertEquals(new BooleanArrayList(), mainArrayList.without(false));
+        Assert.assertEquals(new BooleanArrayList(), mainArrayList.without(true));
+    }
+
+    @Test
+    public void withoutAll()
+    {
+        Assert.assertEquals(BooleanArrayList.newListWith(true, true, true), BooleanArrayList.newListWith(true, true, true).withoutAll(BooleanArrayList.newListWith(false)));
+        BooleanArrayList mainArrayList = new BooleanArrayList(true, false, false, true, false);
+        Assert.assertEquals(BooleanArrayList.newListWith(false, true, false), mainArrayList.withoutAll(BooleanArrayList.newListWith(true, false)));
+        Assert.assertEquals(new BooleanArrayList(false), mainArrayList.withoutAll(BooleanArrayList.newListWith(true, false)));
+        Assert.assertEquals(new BooleanArrayList(), mainArrayList.withoutAll(BooleanArrayList.newListWith(false)));
+        Assert.assertEquals(new BooleanArrayList(), mainArrayList.withoutAll(BooleanArrayList.newListWith(true)));
     }
 
     @Test

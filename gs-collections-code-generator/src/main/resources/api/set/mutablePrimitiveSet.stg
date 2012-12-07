@@ -1,4 +1,5 @@
 import "copyright.stg"
+import "primitiveAPI.stg"
 
 targetPath() ::= "collections-api/target/generated-sources/java/com/gs/collections/api/set/primitive"
 
@@ -22,17 +23,9 @@ import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
  */
 public interface Mutable<name>Set extends Mutable<name>Collection, <name>Set
 {
-    Mutable<name>Set with(<type> element);
+    <sharedAPI(fileName(primitive), name)>
 
-    Mutable<name>Set without(<type> element);
-
-    Mutable<name>Set withAll(<name>Iterable elements);
-
-    Mutable<name>Set withoutAll(<name>Iterable elements);
-
-    Mutable<name>Set select(<name>Predicate predicate);
-
-    Mutable<name>Set reject(<name>Predicate predicate);
+    <mutableAPI(fileName(primitive), type, name)>
 }
 
 >>

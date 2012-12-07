@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.lazy.primitive;
 
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -220,6 +221,64 @@ public class CollectDoubleIterable<T>
         double[] array = this.toArray();
         Arrays.sort(array);
         return array;
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.makeString("[", ", ", "]");
+    }
+
+    public String makeString()
+    {
+        return this.makeString(", ");
+    }
+
+    public String makeString(String separator)
+    {
+        return this.makeString("", separator, "");
+    }
+
+    public String makeString(String start, String separator, String end)
+    {
+        Appendable stringBuilder = new StringBuilder();
+        this.appendString(stringBuilder, start, separator, end);
+        return stringBuilder.toString();
+    }
+
+    public void appendString(Appendable appendable)
+    {
+        this.appendString(appendable, ", ");
+    }
+
+    public void appendString(Appendable appendable, String separator)
+    {
+        this.appendString(appendable, "", separator, "");
+    }
+
+    public void appendString(Appendable appendable, String start, String separator, String end)
+    {
+        try
+        {
+            appendable.append(start);
+
+            DoubleIterator iterator = this.doubleIterator();
+            if (iterator.hasNext())
+            {
+                appendable.append(String.valueOf(iterator.next()));
+                while (iterator.hasNext())
+                {
+                    appendable.append(separator);
+                    appendable.append(String.valueOf(iterator.next()));
+                }
+            }
+
+            appendable.append(end);
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     public boolean contains(double value)

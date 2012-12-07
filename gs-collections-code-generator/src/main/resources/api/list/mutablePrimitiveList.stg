@@ -1,4 +1,5 @@
 import "copyright.stg"
+import "primitiveAPI.stg"
 
 targetPath() ::= "collections-api/target/generated-sources/java/com/gs/collections/api/list/primitive"
 
@@ -13,6 +14,7 @@ body(type, name) ::= <<
 
 package com.gs.collections.api.list.primitive;
 
+import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 
@@ -29,9 +31,9 @@ public interface Mutable<name>List extends Mutable<name>Collection, <name>List
 
     <type> set(int index, <type> element);
 
-    Mutable<name>List select(<name>Predicate predicate);
+    <sharedAPI(fileName(primitive), name)>
 
-    Mutable<name>List reject(<name>Predicate predicate);
+    <mutableAPI(fileName(primitive), type, name)>
 }
 
 >>

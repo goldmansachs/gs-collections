@@ -1,4 +1,5 @@
 import "copyright.stg"
+import "primitiveAPI.stg"
 
 targetPath() ::= "collections-api/target/generated-sources/java/com/gs/collections/api/bag/primitive"
 
@@ -22,17 +23,9 @@ import com.gs.collections.api.collection.primitive.Immutable<name>Collection;
  */
 public interface Immutable<name>Bag extends Immutable<name>Collection, <name>Bag
 {
-    Immutable<name>Bag newWith(<type> element);
+    <sharedAPI(fileName(primitive), name)>
 
-    Immutable<name>Bag newWithout(<type> element);
-
-    Immutable<name>Bag newWithAll(<name>Iterable elements);
-
-    Immutable<name>Bag newWithoutAll(<name>Iterable elements);
-
-    Immutable<name>Bag select(<name>Predicate predicate);
-
-    Immutable<name>Bag reject(<name>Predicate predicate);
+    <immutableAPI(fileName(primitive), type, name)>
 }
 
 >>

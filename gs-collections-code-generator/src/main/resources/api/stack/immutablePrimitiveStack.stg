@@ -1,4 +1,5 @@
 import "copyright.stg"
+import "primitiveAPI.stg"
 
 targetPath() ::= "collections-api/target/generated-sources/java/com/gs/collections/api/stack/primitive"
 
@@ -27,9 +28,7 @@ public interface Immutable<name>Stack extends <name>Stack
 
     Immutable<name>Stack pop(int count);
 
-    Immutable<name>Stack select(<name>Predicate predicate);
-
-    Immutable<name>Stack reject(<name>Predicate predicate);
+    <sharedAPI(fileName(primitive), name)>
 }
 
 >>

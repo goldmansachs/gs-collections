@@ -32,6 +32,12 @@ import org.apache.maven.project.MavenProject;
 public class GenerateMojo extends AbstractMojo
 {
     /**
+     * Skips code generation if true.
+     *
+     * @parameter expression="${skipCodeGen}"
+     */
+    private boolean skipCodeGen;
+    /**
      * @parameter expression="${project.build.directory}/generated-sources"
      * @required
      */
@@ -47,13 +53,20 @@ public class GenerateMojo extends AbstractMojo
 
     public void execute() throws MojoExecutionException, MojoFailureException
     {
-        this.getLog().info("Scanning all template files from " + this.templateDirectory.getPath());
+        if (this.skipCodeGen)
+        {
+            this.getLog().info("Skipping code generation in " + this.project.getArtifactId());
+        }
+        else
+        {
+            this.getLog().info("Scanning all template files from " + this.templateDirectory.getPath());
 
-        GsCollectionsCodeGenerator gsCollectionsCodeGenerator =
-                new GsCollectionsCodeGenerator(this.templateDirectory);
-        gsCollectionsCodeGenerator.generate();
+            GsCollectionsCodeGenerator gsCollectionsCodeGenerator =
+                    new GsCollectionsCodeGenerator(this.templateDirectory);
+            gsCollectionsCodeGenerator.generate();
 
-        this.project.addCompileSourceRoot("target/generated-sources/java");
-        this.project.addTestCompileSourceRoot("target/generated-test-sources/java");
+            this.project.addCompileSourceRoot("target/generated-sources/java");
+            this.project.addTestCompileSourceRoot("target/generated-test-sources/java");
+        }
     }
 }

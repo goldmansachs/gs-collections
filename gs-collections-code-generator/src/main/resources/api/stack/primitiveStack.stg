@@ -38,18 +38,6 @@ public interface <name>Stack extends <name>Iterable
      */
     <type> peekAt(int index);
 
-    /**
-     * Should return the same value as peek().
-     */
-    <type> getFirst();
-
-    /**
-     * Should not work as it violates the contract of a Stack.
-     *
-     * @throws UnsupportedOperationException
-     */
-    <type> getLast();
-
     <name>Stack select(<name>Predicate predicate);
 
     <name>Stack reject(<name>Predicate predicate);

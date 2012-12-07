@@ -335,6 +335,34 @@ public final class <name>ArrayList
         return false;
     }
 
+    public boolean removeAll(<name>Iterable source)
+    {
+        boolean modified = false;
+        <name>Iterator iterator = source.<type>Iterator();
+        while(iterator.hasNext())
+        {
+            <type> item = iterator.next();
+            if (this.remove(item))
+            {
+                modified = true;
+            }
+        }
+        return modified;
+    }
+
+    public boolean removeAll(<type>... source)
+    {
+        boolean modified = false;
+        for (<type> i : source)
+        {
+            if (this.remove(i))
+            {
+                modified = true;
+            }
+        }
+        return modified;
+    }
+
     public <type> removeAtIndex(int index)
     {
         <type> previous = this.get(index);
@@ -358,6 +386,24 @@ public final class <name>ArrayList
     public <name>ArrayList with(<type> element)
     {
         this.add(element);
+        return this;
+    }
+
+    public <name>ArrayList without(<type> element)
+    {
+        this.remove(element);
+        return this;
+    }
+
+    public <name>ArrayList withAll(<name>Iterable elements)
+    {
+        this.addAll(elements.toArray());
+        return this;
+    }
+
+    public <name>ArrayList withoutAll(<name>Iterable elements)
+    {
+        this.removeAll(elements);
         return this;
     }
 
