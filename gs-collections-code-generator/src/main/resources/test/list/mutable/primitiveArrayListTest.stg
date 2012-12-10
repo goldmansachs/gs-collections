@@ -50,7 +50,7 @@ public class <name>ArrayListTest
     @Test
     public void newListWith()
     {
-        Assert.assertEquals(3L, this.list.size());
+        Verify.assertSize(3, this.list);
         Assert.assertTrue(this.list.containsAll(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
     }
 
@@ -71,7 +71,7 @@ public class <name>ArrayListTest
     public void clear()
     {
         this.list.clear();
-        Assert.assertEquals(0L, this.list.size());
+        Verify.assertSize(0, this.list);
         Assert.assertFalse(this.list.contains(<(literal.(type))("0")>));
         Assert.assertFalse(this.list.contains(<(literal.(type))("1")>));
         Assert.assertFalse(this.list.contains(<(literal.(type))("2")>));
@@ -393,8 +393,8 @@ public class <name>ArrayListTest
     @Test
     public void size()
     {
-        Assert.assertEquals(0L, new <name>ArrayList().size());
-        Assert.assertEquals(3L, this.list.size());
+        Verify.assertSize(0, new <name>ArrayList());
+        Verify.assertSize(3, this.list);
     }
 
     @Test
@@ -427,15 +427,15 @@ public class <name>ArrayListTest
     @Test
     public void select()
     {
-        Assert.assertEquals(3L, this.list.select(<name>Predicates.lessThan(<(literal.(type))("4")>)).size());
-        Assert.assertEquals(2L, this.list.select(<name>Predicates.lessThan(<(literal.(type))("3")>)).size());
+        Verify.assertSize(3, this.list.select(<name>Predicates.lessThan(<(literal.(type))("4")>)));
+        Verify.assertSize(2, this.list.select(<name>Predicates.lessThan(<(literal.(type))("3")>)));
     }
 
     @Test
     public void reject()
     {
-        Assert.assertEquals(0L, this.list.reject(<name>Predicates.lessThan(<(literal.(type))("4")>)).size());
-        Assert.assertEquals(1L, this.list.reject(<name>Predicates.lessThan(<(literal.(type))("3")>)).size());
+        Verify.assertSize(0, this.list.reject(<name>Predicates.lessThan(<(literal.(type))("4")>)));
+        Verify.assertSize(1, this.list.reject(<name>Predicates.lessThan(<(literal.(type))("3")>)));
     }
 
     @Test

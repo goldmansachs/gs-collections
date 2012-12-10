@@ -33,6 +33,7 @@ import java.util.Set;
 import java.util.SortedSet;
 import java.util.concurrent.Callable;
 
+import com.gs.collections.api.PrimitiveIterable;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.list.ImmutableList;
@@ -942,6 +943,51 @@ public final class Verify extends Assert
             {
                 Assert.fail("Incorrect size for "
                         + collectionName
+                        + "; expected:<"
+                        + expectedSize
+                        + "> but was:<"
+                        + actualSize
+                        + '>');
+            }
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    /**
+     * Assert the size of the given {@link PrimitiveIterable}.
+     */
+    public static void assertSize(int expectedSize, PrimitiveIterable primitiveIterable)
+    {
+        try
+        {
+            Verify.assertSize("primitiveIterable", expectedSize, primitiveIterable);
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    /**
+     * Assert the size of the given {@link PrimitiveIterable}.
+     */
+    public static void assertSize(
+            String primitiveIterableName,
+            int expectedSize,
+            PrimitiveIterable actualPrimitiveIterable)
+    {
+        try
+        {
+            Verify.assertObjectNotNull(primitiveIterableName, actualPrimitiveIterable);
+
+            int actualSize = actualPrimitiveIterable.size();
+            if (actualSize != expectedSize)
+            {
+                Assert.fail("Incorrect size for "
+                        + primitiveIterableName
                         + "; expected:<"
                         + expectedSize
                         + "> but was:<"

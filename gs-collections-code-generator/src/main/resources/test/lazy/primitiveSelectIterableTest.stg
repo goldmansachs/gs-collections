@@ -23,6 +23,7 @@ import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -58,7 +59,7 @@ public class Select<name>IterableTest
     @Test
     public void size()
     {
-        Assert.assertEquals(2L, this.iterable.size());
+        Verify.assertSize(2, this.iterable);
     }
 
     @Test
@@ -94,15 +95,15 @@ public class Select<name>IterableTest
     @Test
     public void select()
     {
-        Assert.assertEquals(1L, this.iterable.select(<name>Predicates.greaterThan(<(literal.(type))("1")>)).size());
-        Assert.assertEquals(0L, this.iterable.select(<name>Predicates.lessThan(<(literal.(type))("0")>)).size());
+        Verify.assertSize(1, this.iterable.select(<name>Predicates.greaterThan(<(literal.(type))("1")>)));
+        Verify.assertSize(0, this.iterable.select(<name>Predicates.lessThan(<(literal.(type))("0")>)));
     }
 
     @Test
     public void reject()
     {
-        Assert.assertEquals(1L, this.iterable.reject(<name>Predicates.greaterThan(<(literal.(type))("1")>)).size());
-        Assert.assertEquals(0L, this.iterable.reject(<name>Predicates.greaterThan(<(literal.(type))("0")>)).size());
+        Verify.assertSize(1, this.iterable.reject(<name>Predicates.greaterThan(<(literal.(type))("1")>)));
+        Verify.assertSize(0, this.iterable.reject(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
     }
 
     @Test
@@ -115,13 +116,13 @@ public class Select<name>IterableTest
     @Test
     public void collect()
     {
-        Assert.assertEquals(2L, this.iterable.collect(new <name>ToObjectFunction\<String\>()
+        Verify.assertIterableSize(2, this.iterable.collect(new <name>ToObjectFunction\<String\>()
         {
             public String valueOf(<type> <type>Parameter)
             {
                 return String.valueOf(<type>Parameter);
             }
-        }).size());
+        }));
     }
 
     @Test

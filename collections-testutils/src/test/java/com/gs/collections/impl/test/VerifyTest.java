@@ -28,6 +28,7 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -901,6 +902,21 @@ public class VerifyTest
         try
         {
             Verify.assertIterableSize(3, FastList.newListWith("foo", "bar"));
+            Assert.fail();
+        }
+        catch (AssertionError ex)
+        {
+            Verify.assertContains("Incorrect size", ex.getMessage());
+            Verify.assertContains(VerifyTest.class.getName(), ex.getStackTrace()[0].toString());
+        }
+    }
+
+    @Test
+    public void assertSize_PrimitiveIterable()
+    {
+        try
+        {
+            Verify.assertSize(3, IntArrayList.newListWith(1, 2));
             Assert.fail();
         }
         catch (AssertionError ex)
