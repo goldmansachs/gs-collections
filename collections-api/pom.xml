@@ -109,7 +109,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <templateDirectory>..\gs-collections-code-generator\src\main\resources\api</templateDirectory>
+                            <templateDirectory>api</templateDirectory>
                         </configuration>
                     </execution>
                 </executions>

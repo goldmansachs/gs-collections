@@ -1,7 +1,7 @@
 import "copyright.stg"
 import "primitiveLiteral.stg"
 
-targetPath() ::= "collections-api/target/generated-sources/java/com/gs/collections/api"
+targetPath() ::= "com/gs/collections/api"
 
 fileName(primitive) ::= "<primitive.name>Iterable"
 

@@ -16,8 +16,6 @@
 
 package com.gs.collections.codegenerator.maven;
 
-import java.io.File;
-
 import com.gs.collections.codegenerator.GsCollectionsCodeGenerator;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -41,7 +39,7 @@ public class GenerateMojo extends AbstractMojo
      * @parameter expression="${project.build.directory}/generated-sources"
      * @required
      */
-    private File templateDirectory;
+    private String templateDirectory;
 
     /**
      * The Maven project to act upon.
@@ -59,14 +57,19 @@ public class GenerateMojo extends AbstractMojo
         }
         else
         {
-            this.getLog().info("Scanning all template files from " + this.templateDirectory.getPath());
-
+            this.getLog().info("Generating sources to " + this.project.getArtifactId());
             GsCollectionsCodeGenerator gsCollectionsCodeGenerator =
-                    new GsCollectionsCodeGenerator(this.templateDirectory);
+                    new GsCollectionsCodeGenerator(this.templateDirectory, this.project.getBasedir());
             gsCollectionsCodeGenerator.generate();
 
-            this.project.addCompileSourceRoot("target/generated-sources/java");
-            this.project.addTestCompileSourceRoot("target/generated-test-sources/java");
+            if (gsCollectionsCodeGenerator.isTest())
+            {
+                this.project.addTestCompileSourceRoot(GsCollectionsCodeGenerator.GENERATED_TEST_SOURCES_LOCATION);
+            }
+            else
+            {
+                this.project.addCompileSourceRoot(GsCollectionsCodeGenerator.GENERATED_SOURCES_LOCATION);
+            }
         }
     }
 }

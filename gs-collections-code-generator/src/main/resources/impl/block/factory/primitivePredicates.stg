@@ -2,7 +2,7 @@ import "copyright.stg"
 import "primitiveEquals.stg"
 import "primitiveEqualsWithDelta.stg"
 
-targetPath() ::= "collections/target/generated-sources/java/com/gs/collections/impl/block/factory/primitive"
+targetPath() ::= "com/gs/collections/impl/block/factory/primitive"
 
 fileName(primitive) ::= "<primitive.name>Predicates"
 

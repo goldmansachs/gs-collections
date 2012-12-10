@@ -150,7 +150,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <templateDirectory>..\gs-collections-code-generator\src\main\resources\test</templateDirectory>
+                            <templateDirectory>test</templateDirectory>
                         </configuration>
                     </execution>
                 </executions>

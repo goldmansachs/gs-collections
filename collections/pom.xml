@@ -115,7 +115,7 @@
                             <goal>generate</goal>
                         </goals>
                         <configuration>
-                            <templateDirectory>..\gs-collections-code-generator\src\main\resources\impl</templateDirectory>
+                            <templateDirectory>impl</templateDirectory>
                         </configuration>
                     </execution>
                 </executions>

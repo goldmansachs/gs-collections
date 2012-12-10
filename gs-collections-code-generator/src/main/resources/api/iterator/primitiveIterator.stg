@@ -1,6 +1,6 @@
 import "copyright.stg"
 
-targetPath() ::= "collections-api/target/generated-sources/java/com/gs/collections/api/iterator"
+targetPath() ::= "com/gs/collections/api/iterator"
 
 fileName(primitive) ::= "<primitive.name>Iterator"
 

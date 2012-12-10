@@ -1,6 +1,6 @@
 import "copyright.stg"
 
-targetPath() ::= "collections-api/target/generated-sources/java/com/gs/collections/api/stack/primitive"
+targetPath() ::= "com/gs/collections/api/stack/primitive"
 
 fileName(primitive) ::= "<primitive.name>Stack"
 

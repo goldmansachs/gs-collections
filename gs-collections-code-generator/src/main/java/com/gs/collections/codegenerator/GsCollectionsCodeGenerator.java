@@ -17,7 +17,8 @@
 package com.gs.collections.codegenerator;
 
 import java.io.File;
-import java.util.ArrayList;
+import java.net.URL;
+import java.util.List;
 
 import com.gs.collections.codegenerator.model.Primitive;
 import com.gs.collections.codegenerator.tools.FileUtils;
@@ -26,71 +27,85 @@ import org.stringtemplate.v4.STGroupFile;
 
 public class GsCollectionsCodeGenerator
 {
-    private final File templateDirectory;
+    public static final String GENERATED_TEST_SOURCES_LOCATION = "target/generated-test-sources/java/";
+    public static final String GENERATED_SOURCES_LOCATION = "target/generated-sources/java/";
+    private final String templateDirectory;
+    private final File moduleBaseDir;
+    private boolean isTest;
 
-    public GsCollectionsCodeGenerator(File templateDirectory)
+    public GsCollectionsCodeGenerator(String templateDirectory, File moduleBaseDir)
     {
         this.templateDirectory = templateDirectory;
+        this.moduleBaseDir = moduleBaseDir;
     }
 
     public void generate()
     {
-        for (File file : FileUtils.listTemplateFilesRecursively(new ArrayList<File>(), this.templateDirectory))
+        List<URL> allTemplateFilesFromClassPath = FileUtils.getAllTemplateFilesFromClasspath(this.templateDirectory);
+        for (URL url : allTemplateFilesFromClassPath)
         {
-            if (new STGroupFile(file.getAbsolutePath()).isDefined("fileName"))
+            STGroupFile stGroupFile = new STGroupFile(url, "UTF-8", '<', '>');
+            if (stGroupFile.isDefined("fileName"))
             {
+                this.setTest(stGroupFile);
                 for (Primitive primitive : Primitive.values())
                 {
-                    String sourceFileName = getFileName(file, primitive);
-                    File targetPath = getTargetPath(file);
+                    File targetPath = this.constructTargetPath(stGroupFile);
                     FileUtils.createDirectory(targetPath);
+
+                    String sourceFileName = executeTemplate(stGroupFile, primitive, "fileName");
                     File outputFile = new File(targetPath, sourceFileName + ".java");
+
                     if (!sourceFileExists(outputFile))
                     {
-                        FileUtils.writeToFile(
-                                generateSources(file, primitive),
-                                outputFile);
+                        String classContents = executeTemplate(stGroupFile, primitive, "class");
+                        FileUtils.writeToFile(classContents, outputFile);
                     }
                 }
             }
         }
     }
 
-    private static File getTargetPath(File templateFile)
+    private static String executeTemplate(STGroupFile stGroupFile, Primitive primitive, String templateName)
     {
-        ST targetPath = new STGroupFile(templateFile.getAbsolutePath()).getInstanceOf("targetPath");
-        if (targetPath == null)
+        ST template = findTemplate(stGroupFile, templateName);
+        template.add("primitive", primitive);
+        return template.render();
+    }
+
+    private static ST findTemplate(STGroupFile stGroupFile, String templateName)
+    {
+        ST template = stGroupFile.getInstanceOf(templateName);
+        if (template == null)
         {
-            throw new RuntimeException("Could not parse targetPath in template file " + templateFile.getName());
+            throw new RuntimeException("Could not find template " + templateName + " in " + stGroupFile.getFileName());
         }
-        return new File(targetPath.render());
+        return template;
+    }
+
+    private void setTest(STGroupFile templateFile)
+    {
+        this.isTest = templateFile.getInstanceOf("isTest") == null ? false : Boolean.valueOf(templateFile.getInstanceOf("isTest").render());
+    }
+
+    private File constructTargetPath(STGroupFile templateFile)
+    {
+        ST targetPath = findTemplate(templateFile, "targetPath");
+        return this.isTest ? new File(this.moduleBaseDir, GENERATED_TEST_SOURCES_LOCATION + targetPath.render())
+                : new File(this.moduleBaseDir, GENERATED_SOURCES_LOCATION + targetPath.render());
     }
 
     private static boolean sourceFileExists(File outputFile)
     {
-        File file = new File(outputFile.getAbsolutePath().replace("target", "src").replace("generated-sources", "main").replace("generated-test-sources", "test"));
-        return file.exists();
+        File newPath = new File(outputFile.getAbsolutePath()
+                .replace("target", "src")
+                .replace("generated-sources", "main")
+                .replace("generated-test-sources", "test"));
+        return newPath.exists();
     }
 
-    private static String getFileName(File templateFile, Primitive primitive)
+    public boolean isTest()
     {
-        ST fileName = new STGroupFile(templateFile.getAbsolutePath()).getInstanceOf("fileName");
-        if (fileName == null)
-        {
-            throw new RuntimeException("Could not parse fileName in template file " + templateFile.getName());
-        }
-        fileName.add("primitive", primitive);
-        return fileName.render();
-    }
-
-    private static String generateSources(File templateFile, Primitive primitive)
-    {
-        ST clazz = new STGroupFile(templateFile.getAbsolutePath()).getInstanceOf("class");
-        if (clazz == null)
-        {
-            throw new RuntimeException("Could not parse template " + templateFile.getName());
-        }
-        clazz.add("primitive", primitive);
-        return clazz.render();
+        return this.isTest;
     }
 }

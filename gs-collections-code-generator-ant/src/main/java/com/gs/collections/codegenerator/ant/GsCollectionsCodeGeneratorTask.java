@@ -16,26 +16,24 @@
 
 package com.gs.collections.codegenerator.ant;
 
-import java.io.File;
-
 import com.gs.collections.codegenerator.GsCollectionsCodeGenerator;
 import org.apache.tools.ant.Task;
 
 public class GsCollectionsCodeGeneratorTask extends Task
 {
-    private File templateDirectory;
+    private String templateDirectory;
 
     @Override
     public void execute()
     {
-        this.log("Scanning all template files from " + this.templateDirectory.getPath());
+        this.log("Scanning all template files from " + this.templateDirectory);
 
         GsCollectionsCodeGenerator gsCollectionsCodeGenerator =
-                new GsCollectionsCodeGenerator(this.templateDirectory);
+                new GsCollectionsCodeGenerator(this.templateDirectory, this.getProject().getBaseDir());
         gsCollectionsCodeGenerator.generate();
     }
 
-    public void setTemplateDirectory(File templateDirectory)
+    public void setTemplateDirectory(String templateDirectory)
     {
         this.templateDirectory = templateDirectory;
     }
