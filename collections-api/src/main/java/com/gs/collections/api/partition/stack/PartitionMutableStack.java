@@ -18,6 +18,11 @@ package com.gs.collections.api.partition.stack;
 
 import com.gs.collections.api.stack.MutableStack;
 
+/**
+ * A PartitionMutableStack is the result of splitting a mutable stack into two mutable stacks on a Predicate.
+ * The results that answer true for the Predicate will be returned from the getSelected() method and the results
+ * that answer false for the predicate will be returned from the getRejected() method.
+ */
 public interface PartitionMutableStack<T> extends PartitionStack<T>
 {
     MutableStack<T> getSelected();

@@ -29,7 +29,7 @@ import com.gs.collections.api.partition.list.PartitionList;
 import com.gs.collections.api.tuple.Pair;
 
 /**
- * An iterable whose elements are unique.
+ * An iterable Map whose elements are sorted.
  */
 public interface SortedMapIterable<K, V>
         extends MapIterable<K, V>

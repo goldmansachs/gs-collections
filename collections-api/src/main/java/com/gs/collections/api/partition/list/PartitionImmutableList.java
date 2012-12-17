@@ -19,6 +19,11 @@ package com.gs.collections.api.partition.list;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.partition.PartitionImmutableCollection;
 
+/**
+ * A PartitionImmutableList is the result of splitting an immutable list into two immutable lists based on a Predicate.
+ * The results that answer true for the Predicate will be returned from the getSelected() method and the results that answer
+ * false for the predicate will be returned from the getRejected() method.
+ */
 public interface PartitionImmutableList<T> extends PartitionImmutableCollection<T>, PartitionList<T>
 {
     ImmutableList<T> getSelected();

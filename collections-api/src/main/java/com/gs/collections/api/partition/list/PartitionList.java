@@ -19,6 +19,11 @@ package com.gs.collections.api.partition.list;
 import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.partition.PartitionIterable;
 
+/**
+ * A PartitionList is the result of splitting a ListIterable into two ListIterables based on a Predicate.
+ * The results that answer true for the Predicate will be returned from the getSelected() method and the results
+ * that answer false for the predicate will be returned from the getRejected() method.
+ */
 public interface PartitionList<T> extends PartitionIterable<T>
 {
     ListIterable<T> getSelected();

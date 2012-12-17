@@ -19,6 +19,11 @@ package com.gs.collections.api.partition.set;
 import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.api.set.SetIterable;
 
+/**
+ * A PartitionSet is the result of splitting a SetIterable into two SetIterables based on a Predicate.  The results that
+ * answer true for the Predicate will be returned from the getSelected() method and the results that answer
+ * false for the predicate will be returned from the getRejected() method.
+ */
 public interface PartitionSet<T> extends PartitionIterable<T>
 {
     SetIterable<T> getSelected();

@@ -18,6 +18,11 @@ package com.gs.collections.api.partition;
 
 import com.gs.collections.api.collection.MutableCollection;
 
+/**
+ * A PartitionMutableCollection is the result of splitting a mutable collection into two mutable collections based on a Predicate.
+ * The results that answer true for the Predicate will be returned from the getSelected() method and the results that answer false
+ * for the predicate will be returned from the getRejected() method.
+ */
 public interface PartitionMutableCollection<T> extends PartitionIterable<T>
 {
     MutableCollection<T> getSelected();

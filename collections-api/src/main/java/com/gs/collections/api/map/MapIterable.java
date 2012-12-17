@@ -28,7 +28,8 @@ import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.tuple.Pair;
 
 /**
- * A Read-only Map api, with the minor exception inherited from java.lang.Iterable (iterable.iterator().remove()).
+ * A Read-only Map API, with the minor exception inherited from java.lang.Iterable.  The method map.iterator().remove()
+ * will throw an UnsupportedOperationException.
  */
 public interface MapIterable<K, V> extends RichIterable<V>
 {

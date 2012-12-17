@@ -21,7 +21,7 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.tuple.Pair;
 
 /**
- * An iterable whose elements are unique.
+ * An iterable Map whose elements are unsorted.
  */
 public interface UnsortedMapIterable<K, V>
         extends MapIterable<K, V>

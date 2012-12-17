@@ -18,6 +18,11 @@ package com.gs.collections.api.partition;
 
 import com.gs.collections.api.collection.ImmutableCollection;
 
+/**
+ * A PartitionImmutableCollection is the result of splitting an immutable collection into two immutable collections based
+ * on a Predicate.  The results that answer true for the Predicate will be returned from the getSelected() method and the
+ * results that answer false for the predicate will be returned from the getRejected() method.
+ */
 public interface PartitionImmutableCollection<T> extends PartitionIterable<T>
 {
     ImmutableCollection<T> getSelected();

@@ -19,6 +19,11 @@ package com.gs.collections.api.partition.bag;
 import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.partition.PartitionIterable;
 
+/**
+ * A PartitionBag is the result of splitting a bag into two Bags based on a Predicate.  The results that answer true for
+ * the Predicate will be returned from the getSelected() method and the results that answer false for the
+ * predicate will be returned from the getRejected() method.
+ */
 public interface PartitionBag<T> extends PartitionIterable<T>
 {
     Bag<T> getSelected();

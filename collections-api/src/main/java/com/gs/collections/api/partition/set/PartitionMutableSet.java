@@ -19,6 +19,11 @@ package com.gs.collections.api.partition.set;
 import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.api.set.MutableSet;
 
+/**
+ * A PartitionMutableSet is the result of splitting a mutable set into two mutable sets based on a Predicate.
+ * The results that answer true for the Predicate will be returned from the getSelected() method and the results that answer
+ * false for the predicate will be returned from the getRejected() method.
+ */
 public interface PartitionMutableSet<T> extends PartitionMutableCollection<T>, PartitionUnsortedSet<T>
 {
     MutableSet<T> getSelected();

@@ -19,6 +19,11 @@ package com.gs.collections.api.partition.list;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.partition.PartitionMutableCollection;
 
+/**
+ * A PartitionMutableList is the result of splitting a mutable list into two mutable lists based on a Predicate.
+ * The results that answer true for the Predicate will be returned from the getSelected() method and the results that answer
+ * false for the predicate will be returned from the getRejected() method.
+ */
 public interface PartitionMutableList<T> extends PartitionMutableCollection<T>, PartitionList<T>
 {
     MutableList<T> getSelected();

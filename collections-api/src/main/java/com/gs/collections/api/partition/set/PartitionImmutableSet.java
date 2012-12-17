@@ -19,6 +19,11 @@ package com.gs.collections.api.partition.set;
 import com.gs.collections.api.partition.PartitionImmutableCollection;
 import com.gs.collections.api.set.ImmutableSet;
 
+/**
+ * A PartitionImmutableSet is the result of splitting an immutable set into two immutable sets based on a Predicate.
+ * The results that answer true for the Predicate will be returned from the getSelected() method and the
+ * results that answer false for the predicate will be returned from the getRejected() method.
+ */
 public interface PartitionImmutableSet<T> extends PartitionImmutableCollection<T>, PartitionUnsortedSet<T>
 {
     ImmutableSet<T> getSelected();

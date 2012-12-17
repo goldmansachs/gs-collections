@@ -31,8 +31,8 @@ import com.gs.collections.api.tuple.Pair;
 import net.jcip.annotations.Immutable;
 
 /**
- * A MutableMap is similar to a JCF Map but adds additional useful internal iterator methods.
- * The MutableMap interface additionally implements some of the methods in the Smalltalk Dictionary protocol.
+ * An ImmutableMap is different than a JCF Map but in that it has no mutating methods.  It shares the read-only
+ * protocol of a JDK Map.
  */
 @Immutable
 public interface ImmutableMap<K, V>

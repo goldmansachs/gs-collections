@@ -19,6 +19,11 @@ package com.gs.collections.api.partition.set.sorted;
 import com.gs.collections.api.partition.set.PartitionSet;
 import com.gs.collections.api.set.sorted.SortedSetIterable;
 
+/**
+ * A PartitionSortedSet is the result of splitting a SortedSetIterable into two SortedSetIterables based on a Predicate.
+ * The results that answer true for the Predicate will be returned from the getSelected() method and the results that answer
+ * false for the predicate will be returned from the getRejected() method.
+ */
 public interface PartitionSortedSet<T> extends PartitionSet<T>
 {
     SortedSetIterable<T> getSelected();

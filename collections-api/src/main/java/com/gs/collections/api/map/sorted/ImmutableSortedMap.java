@@ -32,8 +32,8 @@ import com.gs.collections.api.tuple.Pair;
 import net.jcip.annotations.Immutable;
 
 /**
- * A MutableSortedMap is similar to a JCF SortedMap but adds additional useful internal iterator methods.
- * The MutableSortedMap interface additionally implements some of the methods in the Smalltalk Dictionary protocol.
+ * An ImmutableSortedMap is different than a JCF SortedMap in that it has no mutating methods, but it shares
+ * the read-only protocol of a SortedMap.
  */
 @Immutable
 public interface ImmutableSortedMap<K, V>

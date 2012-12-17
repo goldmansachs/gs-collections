@@ -19,6 +19,11 @@ package com.gs.collections.api.partition.stack;
 import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.api.stack.StackIterable;
 
+/**
+ * A PartitionStack is the result of splitting a StackIterable into two StackIterables based on a Predicate.
+ * The results that answer true for the Predicate will be returned from the getSelected() method and the results
+ * that answer false for the predicate will be returned from the getRejected() method.
+ */
 public interface PartitionStack<T> extends PartitionIterable<T>
 {
     StackIterable<T> getSelected();

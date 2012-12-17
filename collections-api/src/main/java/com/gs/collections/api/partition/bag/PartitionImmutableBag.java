@@ -19,6 +19,11 @@ package com.gs.collections.api.partition.bag;
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.partition.PartitionImmutableCollection;
 
+/**
+ * A PartitionImmutableBag is the result of splitting an immutable bag into two immutable bags based on a Predicate.
+ * The results that answer true for the Predicate will be returned from the getSelected() method and the
+ * results that answer false for the predicate will be returned from the getRejected() method.
+ */
 public interface PartitionImmutableBag<T> extends PartitionImmutableCollection<T>, PartitionBag<T>
 {
     ImmutableBag<T> getSelected();
