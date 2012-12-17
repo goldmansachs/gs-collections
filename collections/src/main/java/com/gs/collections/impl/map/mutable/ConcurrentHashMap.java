@@ -56,8 +56,8 @@ import com.gs.collections.impl.utility.internal.IterableIterate;
 
 @SuppressWarnings({ "rawtypes", "ObjectEquality" })
 public final class ConcurrentHashMap<K, V>
-        extends AbstractMutableMap<K, V>
-        implements ConcurrentMutableMap<K, V>, Externalizable
+    extends AbstractMutableMap<K, V>
+    implements ConcurrentMutableMap<K, V>, Externalizable
 {
     private static final long serialVersionUID = 1L;
 
@@ -410,44 +410,7 @@ public final class ConcurrentHashMap<K, V>
 
     public V getIfAbsentPut(K key, Function<? super K, ? extends V> factory)
     {
-        int hash = this.hash(key);
-        AtomicReferenceArray currentArray = this.table;
-        V newValue = null;
-        boolean createdValue = false;
-        while (true)
-        {
-            int length = currentArray.length();
-            int index = ConcurrentHashMap.indexFor(hash, length);
-            Object o = currentArray.get(index);
-            if (o == RESIZED || o == RESIZING)
-            {
-                currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
-            }
-            else
-            {
-                Entry<K, V> e = (Entry<K, V>) o;
-                while (e != null)
-                {
-                    Object candidate = e.getKey();
-                    if (candidate == key || candidate.equals(key))
-                    {
-                        return e.getValue();
-                    }
-                    e = e.getNext();
-                }
-                if (!createdValue)
-                {
-                    createdValue = true;
-                    newValue = factory.valueOf(key);
-                }
-                Entry<K, V> newEntry = new Entry<K, V>(key, newValue, (Entry<K, V>) o);
-                if (currentArray.compareAndSet(index, o, newEntry))
-                {
-                    this.incrementSizeAndPossiblyResize(currentArray, length, o);
-                    return newValue;
-                }
-            }
-        }
+        return this.getIfAbsentPutWith(key, factory, key);
     }
 
     @Override
@@ -460,7 +423,7 @@ public final class ConcurrentHashMap<K, V>
         while (true)
         {
             int length = currentArray.length();
-            int index = indexFor(hash, length);
+            int index = ConcurrentHashMap.indexFor(hash, length);
             Object o = currentArray.get(index);
             if (o == RESIZED || o == RESIZING)
             {
@@ -557,7 +520,7 @@ public final class ConcurrentHashMap<K, V>
         while (true)
         {
             int length = currentArray.length();
-            int index = indexFor(hash, length);
+            int index = ConcurrentHashMap.indexFor(hash, length);
             Object o = currentArray.get(index);
             if (o == RESIZED || o == RESIZING)
             {
@@ -990,7 +953,7 @@ public final class ConcurrentHashMap<K, V>
         int hash = this.hash(key);
         AtomicReferenceArray currentArray = this.table;
         int length = currentArray.length();
-        int index = indexFor(hash, length);
+        int index = ConcurrentHashMap.indexFor(hash, length);
         Object o = currentArray.get(index);
         if (o == RESIZED || o == RESIZING)
         {
@@ -1022,7 +985,7 @@ public final class ConcurrentHashMap<K, V>
         while (true)
         {
             int length = currentArray.length();
-            int index = indexFor(hash, length);
+            int index = ConcurrentHashMap.indexFor(hash, length);
             Object o = currentArray.get(index);
             if (o == RESIZED || o == RESIZING)
             {
@@ -1061,7 +1024,7 @@ public final class ConcurrentHashMap<K, V>
         int hash = this.hash(key);
         AtomicReferenceArray currentArray = this.table;
         int length = currentArray.length();
-        int index = indexFor(hash, length);
+        int index = ConcurrentHashMap.indexFor(hash, length);
         Object o = currentArray.get(index);
         if (o == null)
         {
@@ -1077,7 +1040,7 @@ public final class ConcurrentHashMap<K, V>
         while (true)
         {
             int length = currentArray.length();
-            int index = indexFor(hash, length);
+            int index = ConcurrentHashMap.indexFor(hash, length);
             Object o = currentArray.get(index);
             if (o == RESIZED || o == RESIZING)
             {
@@ -1112,7 +1075,7 @@ public final class ConcurrentHashMap<K, V>
         int hash = this.hash(key);
         AtomicReferenceArray currentArray = this.table;
         int length = currentArray.length();
-        int index = indexFor(hash, length);
+        int index = ConcurrentHashMap.indexFor(hash, length);
         Object o = currentArray.get(index);
         if (o == RESIZED || o == RESIZING)
         {
@@ -1936,7 +1899,7 @@ public final class ConcurrentHashMap<K, V>
         while (true)
         {
             int length = currentArray.length();
-            int index = indexFor(hash, length);
+            int index = ConcurrentHashMap.indexFor(hash, length);
             Object o = currentArray.get(index);
             if (o == RESIZED || o == RESIZING)
             {
@@ -1982,8 +1945,8 @@ public final class ConcurrentHashMap<K, V>
 
     @Override
     public <P> V getIfAbsentWith(K key,
-            Function<? super P, ? extends V> function,
-            P parameter)
+        Function<? super P, ? extends V> function,
+        P parameter)
     {
         V result = this.get(key);
         if (result == null)

@@ -297,36 +297,24 @@ public class UnmodifiableTreeMapTest extends MutableSortedMapTestCase
     }
 
     @Override
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
     public void getIfAbsentPut()
     {
-        final MutableSortedMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
-
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                map.getIfAbsentPut(4, null);
-            }
-        });
-
-        Assert.assertEquals("1", map.getIfAbsentPut(1, null));
+        this.newMapWithKeysValues(1, "1", 2, "2", 3, "3").getIfAbsentPut(4, null);
     }
 
     @Override
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
+    public void getIfAbsentPutWithKey()
+    {
+        this.newMapWithKeysValues(1, 1, 2, 2, 3, 3).getIfAbsentPutWithKey(4, Functions.getIntegerPassThru());
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
     public void getIfAbsentPutWith()
     {
-        final MutableSortedMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
-        Assert.assertNull(map.get(4));
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                Assert.assertEquals("4", map.getIfAbsentPutWith(4, Functions.getToString(), 4));
-            }
-        });
-        Assert.assertEquals("3", map.getIfAbsentPutWith(3, Functions.getToString(), 3));
+        this.newMapWithKeysValues(1, "1", 2, "2", 3, "3").getIfAbsentPutWith(4, Functions.getToString(), 4);
     }
 
     @Override

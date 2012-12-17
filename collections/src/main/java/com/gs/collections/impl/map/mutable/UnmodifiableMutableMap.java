@@ -136,6 +136,11 @@ public class UnmodifiableMutableMap<K, V>
         return result;
     }
 
+    public V getIfAbsentPutWithKey(K key, Function<? super K, ? extends V> function)
+    {
+        return this.getIfAbsentPutWith(key, function, key);
+    }
+
     public <P> V getIfAbsentPutWith(
             K key,
             Function<? super P, ? extends V> function,

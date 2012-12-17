@@ -119,6 +119,14 @@ public class SynchronizedSortedMap<K, V>
         }
     }
 
+    public V getIfAbsentPutWithKey(K key, Function<? super K, ? extends V> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.getSortedMap().getIfAbsentPutWithKey(key, function);
+        }
+    }
+
     public <P> V getIfAbsentPutWith(K key, Function<? super P, ? extends V> function, P parameter)
     {
         synchronized (this.lock)

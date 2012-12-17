@@ -481,6 +481,88 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         return result;
     }
 
+    @Override
+    public <P> V getIfAbsentPutWith(K key, Function<? super P, ? extends V> function, P parameter)
+    {
+        int index = this.index(key);
+        Object cur = this.table[index];
+
+        if (cur == null)
+        {
+            V result = function.valueOf(parameter);
+            this.table[index] = toSentinelIfNull(key);
+            this.table[index + 1] = result;
+            if (++this.occupied > this.maxSize)
+            {
+                this.rehash(this.table.length);
+            }
+            return result;
+        }
+        if (cur != CHAINED_KEY && this.nonNullTableObjectEquals(cur, key))
+        {
+            return (V) this.table[index + 1];
+        }
+        return this.chainedGetIfAbsentPutWith(key, index, function, parameter);
+    }
+
+    private <P> V chainedGetIfAbsentPutWith(K key, int index, Function<? super P, ? extends V> function, P parameter)
+    {
+        V result = null;
+        if (this.table[index] == CHAINED_KEY)
+        {
+            Object[] chain = (Object[]) this.table[index + 1];
+            int i = 0;
+            for (; i < chain.length; i += 2)
+            {
+                if (chain[i] == null)
+                {
+                    result = function.valueOf(parameter);
+                    chain[i] = toSentinelIfNull(key);
+                    chain[i + 1] = result;
+                    if (++this.occupied > this.maxSize)
+                    {
+                        this.rehash(this.table.length);
+                    }
+                    break;
+                }
+                if (this.nonNullTableObjectEquals(chain[i], key))
+                {
+                    result = (V) chain[i + 1];
+                    break;
+                }
+            }
+            if (i == chain.length)
+            {
+                result = function.valueOf(parameter);
+                Object[] newChain = new Object[chain.length + 4];
+                System.arraycopy(chain, 0, newChain, 0, chain.length);
+                newChain[i] = toSentinelIfNull(key);
+                newChain[i + 1] = result;
+                this.table[index + 1] = newChain;
+                if (++this.occupied > this.maxSize)
+                {
+                    this.rehash(this.table.length);
+                }
+            }
+        }
+        else
+        {
+            result = function.valueOf(parameter);
+            Object[] newChain = new Object[4];
+            newChain[0] = this.table[index];
+            newChain[1] = this.table[index + 1];
+            newChain[2] = toSentinelIfNull(key);
+            newChain[3] = result;
+            this.table[index] = CHAINED_KEY;
+            this.table[index + 1] = newChain;
+            if (++this.occupied > this.maxSize)
+            {
+                this.rehash(this.table.length);
+            }
+        }
+        return result;
+    }
+
     public int getCollidingBuckets()
     {
         int count = 0;

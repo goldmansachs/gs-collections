@@ -285,6 +285,13 @@ public class UnmodifiableMutableMapTest extends MutableMapTestCase
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
+    public void getIfAbsentPutWithKey()
+    {
+        this.newMapWithKeysValues(1, 1, 2, 2, 3, 3).getIfAbsentPutWithKey(4, Functions.getIntegerPassThru());
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
     public void getIfAbsentPutWith()
     {
         this.newMapWithKeysValues(1, "1", 2, "2", 3, "3").getIfAbsentPutWith(4, Functions.getToString(), 4);

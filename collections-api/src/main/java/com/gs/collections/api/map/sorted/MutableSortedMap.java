@@ -71,6 +71,13 @@ public interface MutableSortedMap<K, V>
     V getIfAbsentPut(K key, Function0<? extends V> function);
 
     /**
+     * Get and return the value in the Map at the specified key.  Alternatively, if there is no value in the map for that key
+     * return the result of evaluating the specified Function using the specified key, and put that value in the
+     * map at the specified key.
+     */
+    V getIfAbsentPutWithKey(K key, Function<? super K, ? extends V> function);
+
+    /**
      * Return the value in the Map that corresponds to the specified key, or if there is no value
      * at the key, return the result of evaluating the specified one argument Function
      * using the specified parameter, and put that value in the map at the specified key.
