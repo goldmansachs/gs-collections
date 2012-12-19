@@ -2609,7 +2609,7 @@ public final class Verify extends Assert
         {
             Verify.assertInstanceOf(Serializable.class, actualObject);
             Assert.assertEquals(
-                    "Serialization was broken. Contact a senior architect for approval.",
+                    "Serialization was broken.",
                     expectedBase64Form,
                     encodeObject(actualObject));
         }
@@ -2629,7 +2629,7 @@ public final class Verify extends Assert
             Verify.assertInstanceOf(Serializable.class, actualObject);
 
             Assert.assertEquals(
-                    "Serialization was broken. Contact a senior architect for approval.",
+                    "Serialization was broken.",
                     expectedBase64Form,
                     Verify.encodeObject(actualObject));
 
