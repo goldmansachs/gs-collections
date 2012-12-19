@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -309,10 +309,10 @@ public final class ArrayIterate
     /**
      * @see Iterate#collectIf(Iterable, Predicate, Function)
      */
-    public static <T, A> MutableList<A> collectIf(
+    public static <T, V> MutableList<V> collectIf(
             T[] objectArray,
             Predicate<? super T> predicate,
-            Function<? super T, ? extends A> function)
+            Function<? super T, ? extends V> function)
     {
         if (objectArray == null)
         {
@@ -323,7 +323,7 @@ public final class ArrayIterate
                 objectArray,
                 predicate,
                 function,
-                FastList.<A>newList(objectArray.length));
+                FastList.<V>newList(objectArray.length));
     }
 
     /**
@@ -374,10 +374,10 @@ public final class ArrayIterate
     /**
      * @see Iterate#collectIf(Iterable, Predicate, Function, Collection)
      */
-    public static <T, A, R extends Collection<A>> R collectIf(
+    public static <T, V, R extends Collection<V>> R collectIf(
             T[] objectArray,
             Predicate<? super T> predicate,
-            Function<? super T, ? extends A> function,
+            Function<? super T, ? extends V> function,
             R targetCollection)
     {
         if (objectArray == null)
@@ -478,23 +478,23 @@ public final class ArrayIterate
     /**
      * @see Iterate#collect(Iterable, Function)
      */
-    public static <T, A> MutableList<A> collect(
+    public static <T, V> MutableList<V> collect(
             T[] objectArray,
-            Function<? super T, A> function)
+            Function<? super T, ? extends V> function)
     {
         if (objectArray == null)
         {
             throw new IllegalArgumentException("Cannot perform a collect on null");
         }
-        return ArrayIterate.collect(objectArray, function, FastList.<A>newList(objectArray.length));
+        return ArrayIterate.collect(objectArray, function, FastList.<V>newList(objectArray.length));
     }
 
     /**
      * @see Iterate#collect(Iterable, Function, Collection)
      */
-    public static <T, A, R extends Collection<A>> R collect(
+    public static <T, V, R extends Collection<V>> R collect(
             T[] objectArray,
-            Function<? super T, ? extends A> function,
+            Function<? super T, ? extends V> function,
             R targetCollection)
     {
         if (objectArray == null)
@@ -1037,7 +1037,7 @@ public final class ArrayIterate
      */
     public static <K, V> MutableMap<K, V> toMap(
             V[] objectArray,
-            Function<? super V, K> keyFunction)
+            Function<? super V, ? extends K> keyFunction)
     {
         MutableMap<K, V> map = UnifiedMap.newMap();
         Procedure<V> procedure = new MapCollectProcedure<V, K, V>(map, keyFunction);
@@ -1069,24 +1069,24 @@ public final class ArrayIterate
     /**
      * @see Iterate#collectWith(Iterable, Function2, Object)
      */
-    public static <T, P, A> MutableList<A> collectWith(
+    public static <T, P, V> MutableList<V> collectWith(
             T[] objectArray,
-            Function2<? super T, P, A> function,
+            Function2<? super T, ? super P, ? extends V> function,
             P parameter)
     {
         if (objectArray == null)
         {
             throw new IllegalArgumentException("Cannot perform a collectWith on null");
         }
-        return ArrayIterate.collectWith(objectArray, function, parameter, FastList.<A>newList(objectArray.length));
+        return ArrayIterate.collectWith(objectArray, function, parameter, FastList.<V>newList(objectArray.length));
     }
 
     /**
      * @see Iterate#collectWith(Iterable, Function2, Object, Collection)
      */
-    public static <T, P, A, R extends Collection<A>> R collectWith(
+    public static <T, P, V, R extends Collection<V>> R collectWith(
             T[] objectArray,
-            Function2<? super T, ? super P, ? extends A> function,
+            Function2<? super T, ? super P, ? extends V> function,
             P parameter,
             R targetCollection)
     {
