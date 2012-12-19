@@ -58,6 +58,6 @@
 
     <suppress checks="EqualsAvoidNull" files="StringPredicatesTest.java" />
 
-    <suppress checks="IllegalImport" files="ConcurrentHashMapUnSafe.java" />
+    <suppress checks="IllegalImport" files="ConcurrentHashMapUnsafe.java" />
 
 </suppressions>

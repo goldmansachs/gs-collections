@@ -51,7 +51,7 @@ import org.junit.Test;
 import static com.gs.collections.impl.factory.Iterables.*;
 
 /**
- * JUnit test for {@link ConcurrentHashMapUnSafe}.
+ * JUnit test for {@link ConcurrentHashMapUnsafe}.
  */
 public class ConcurrentHashMapUnsafeTest extends MutableMapTestCase
 {
@@ -79,25 +79,25 @@ public class ConcurrentHashMapUnsafeTest extends MutableMapTestCase
     @Override
     public <K, V> ConcurrentMutableMap<K, V> newMap()
     {
-        return ConcurrentHashMapUnSafe.newMap();
+        return ConcurrentHashMapUnsafe.newMap();
     }
 
     @Override
     public <K, V> ConcurrentMutableMap<K, V> newMapWithKeyValue(K key, V value)
     {
-        return ConcurrentHashMapUnSafe.<K, V>newMap().withKeyValue(key, value);
+        return ConcurrentHashMapUnsafe.<K, V>newMap().withKeyValue(key, value);
     }
 
     @Override
     public <K, V> ConcurrentMutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2)
     {
-        return ConcurrentHashMapUnSafe.<K, V>newMap().withKeyValue(key1, value1).withKeyValue(key2, value2);
+        return ConcurrentHashMapUnsafe.<K, V>newMap().withKeyValue(key1, value1).withKeyValue(key2, value2);
     }
 
     @Override
     public <K, V> ConcurrentMutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3)
     {
-        return ConcurrentHashMapUnSafe.<K, V>newMap()
+        return ConcurrentHashMapUnsafe.<K, V>newMap()
                 .withKeyValue(key1, value1)
                 .withKeyValue(key2, value2)
                 .withKeyValue(key3, value3);
@@ -106,7 +106,7 @@ public class ConcurrentHashMapUnsafeTest extends MutableMapTestCase
     @Override
     public <K, V> ConcurrentMutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
     {
-        return ConcurrentHashMapUnSafe.<K, V>newMap()
+        return ConcurrentHashMapUnsafe.<K, V>newMap()
                 .withKeyValue(key1, value1)
                 .withKeyValue(key2, value2)
                 .withKeyValue(key3, value3)
@@ -242,14 +242,14 @@ public class ConcurrentHashMapUnsafeTest extends MutableMapTestCase
     @Test
     public void equalsEdgeCases()
     {
-        Verify.assertNotEquals(ConcurrentHashMapUnSafe.newMap().withKeyValue(1, 1), ConcurrentHashMapUnSafe.newMap());
-        Verify.assertNotEquals(ConcurrentHashMapUnSafe.newMap().withKeyValue(1, 1), ConcurrentHashMapUnSafe.newMap().withKeyValue(1, 1).withKeyValue(2, 2));
+        Verify.assertNotEquals(ConcurrentHashMapUnsafe.newMap().withKeyValue(1, 1), ConcurrentHashMapUnsafe.newMap());
+        Verify.assertNotEquals(ConcurrentHashMapUnsafe.newMap().withKeyValue(1, 1), ConcurrentHashMapUnsafe.newMap().withKeyValue(1, 1).withKeyValue(2, 2));
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void negativeInitialSize()
     {
-        ConcurrentHashMapUnSafe.newMap(-1);
+        ConcurrentHashMapUnsafe.newMap(-1);
     }
 
     @Override
@@ -269,7 +269,7 @@ public class ConcurrentHashMapUnsafeTest extends MutableMapTestCase
     @Test
     public void parallelGroupByIntoConcurrentHashMap()
     {
-        final MutableMap<Integer, MutableBag<Integer>> actual = ConcurrentHashMapUnSafe.newMap();
+        final MutableMap<Integer, MutableBag<Integer>> actual = ConcurrentHashMapUnsafe.newMap();
         ParallelIterate.forEach(Interval.oneTo(1000000), new Procedure<Integer>()
         {
             public void value(Integer each)
@@ -289,9 +289,9 @@ public class ConcurrentHashMapUnsafeTest extends MutableMapTestCase
     @Test
     public void parallelForEachValue()
     {
-        ConcurrentHashMapUnSafe<Integer, Integer> source =
-                ConcurrentHashMapUnSafe.newMap(Interval.oneTo(1000).toMap(Functions.getIntegerPassThru(), Functions.getIntegerPassThru()));
-        final MutableMap<Integer, MutableBag<Integer>> actual = ConcurrentHashMapUnSafe.newMap();
+        ConcurrentHashMapUnsafe<Integer, Integer> source =
+                ConcurrentHashMapUnsafe.newMap(Interval.oneTo(1000).toMap(Functions.getIntegerPassThru(), Functions.getIntegerPassThru()));
+        final MutableMap<Integer, MutableBag<Integer>> actual = ConcurrentHashMapUnsafe.newMap();
         Procedure<Integer> procedure = new Procedure<Integer>()
         {
             public void value(Integer each)
@@ -312,9 +312,9 @@ public class ConcurrentHashMapUnsafeTest extends MutableMapTestCase
     @Test
     public void parallelForEachEntry()
     {
-        ConcurrentHashMapUnSafe<Integer, Integer> source =
-                ConcurrentHashMapUnSafe.newMap(Interval.oneTo(1000).toMap(Functions.getIntegerPassThru(), Functions.getIntegerPassThru()));
-        final MutableMap<Integer, MutableBag<Integer>> actual = ConcurrentHashMapUnSafe.newMap();
+        ConcurrentHashMapUnsafe<Integer, Integer> source =
+                ConcurrentHashMapUnsafe.newMap(Interval.oneTo(1000).toMap(Functions.getIntegerPassThru(), Functions.getIntegerPassThru()));
+        final MutableMap<Integer, MutableBag<Integer>> actual = ConcurrentHashMapUnsafe.newMap();
         Procedure2<Integer, Integer> procedure2 = new Procedure2<Integer, Integer>()
         {
             public void value(Integer key, Integer value)
@@ -335,8 +335,8 @@ public class ConcurrentHashMapUnsafeTest extends MutableMapTestCase
     @Test
     public void putAllInParallelSmallMap()
     {
-        ConcurrentHashMapUnSafe<Integer, Integer> source = ConcurrentHashMapUnSafe.newMap(Interval.oneTo(1000).toMap(Functions.getIntegerPassThru(), Functions.getIntegerPassThru()));
-        ConcurrentHashMapUnSafe<Integer, Integer> target = ConcurrentHashMapUnSafe.newMap();
+        ConcurrentHashMapUnsafe<Integer, Integer> source = ConcurrentHashMapUnsafe.newMap(Interval.oneTo(1000).toMap(Functions.getIntegerPassThru(), Functions.getIntegerPassThru()));
+        ConcurrentHashMapUnsafe<Integer, Integer> target = ConcurrentHashMapUnsafe.newMap();
         target.putAllInParallel(source, 10, this.executor);
         Verify.assertEqualsAndHashCode(source, target);
     }
@@ -344,8 +344,8 @@ public class ConcurrentHashMapUnsafeTest extends MutableMapTestCase
     @Test
     public void putAllInParallelLargeMap()
     {
-        ConcurrentHashMapUnSafe<Integer, Integer> source = ConcurrentHashMapUnSafe.newMap(Interval.oneTo(600000).toMap(Functions.getIntegerPassThru(), Functions.getIntegerPassThru()));
-        ConcurrentHashMapUnSafe<Integer, Integer> target = ConcurrentHashMapUnSafe.newMap();
+        ConcurrentHashMapUnsafe<Integer, Integer> source = ConcurrentHashMapUnsafe.newMap(Interval.oneTo(600000).toMap(Functions.getIntegerPassThru(), Functions.getIntegerPassThru()));
+        ConcurrentHashMapUnsafe<Integer, Integer> target = ConcurrentHashMapUnsafe.newMap();
         target.putAllInParallel(source, 10, this.executor);
         Verify.assertEqualsAndHashCode(source, target);
     }
@@ -353,8 +353,8 @@ public class ConcurrentHashMapUnsafeTest extends MutableMapTestCase
     @Test
     public void concurrentPutGetPutAllRemoveContainsKeyContainsValueGetIfAbsentPutTest()
     {
-        final ConcurrentHashMapUnSafe<Integer, Integer> map1 = ConcurrentHashMapUnSafe.newMap();
-        final ConcurrentHashMapUnSafe<Integer, Integer> map2 = ConcurrentHashMapUnSafe.newMap();
+        final ConcurrentHashMapUnsafe<Integer, Integer> map1 = ConcurrentHashMapUnsafe.newMap();
+        final ConcurrentHashMapUnsafe<Integer, Integer> map2 = ConcurrentHashMapUnsafe.newMap();
         ParallelIterate.forEach(Interval.oneTo(1000), new Procedure<Integer>()
         {
             public void value(Integer each)
@@ -385,8 +385,8 @@ public class ConcurrentHashMapUnsafeTest extends MutableMapTestCase
     @Test
     public void concurrentPutIfAbsentGetIfPresentPutTest()
     {
-        final ConcurrentHashMapUnSafe<Integer, Integer> map1 = ConcurrentHashMapUnSafe.newMap();
-        final ConcurrentHashMapUnSafe<Integer, Integer> map2 = ConcurrentHashMapUnSafe.newMap();
+        final ConcurrentHashMapUnsafe<Integer, Integer> map1 = ConcurrentHashMapUnsafe.newMap();
+        final ConcurrentHashMapUnsafe<Integer, Integer> map2 = ConcurrentHashMapUnsafe.newMap();
         ParallelIterate.forEach(Interval.oneTo(1000), new Procedure<Integer>()
         {
             public void value(Integer each)
@@ -407,7 +407,7 @@ public class ConcurrentHashMapUnsafeTest extends MutableMapTestCase
     @Test
     public void concurrentClear()
     {
-        final ConcurrentHashMapUnSafe<Integer, Integer> map = ConcurrentHashMapUnSafe.newMap();
+        final ConcurrentHashMapUnsafe<Integer, Integer> map = ConcurrentHashMapUnsafe.newMap();
         ParallelIterate.forEach(Interval.oneTo(1000), new Procedure<Integer>()
         {
             public void value(Integer each)
@@ -430,7 +430,7 @@ public class ConcurrentHashMapUnsafeTest extends MutableMapTestCase
     @Test
     public void concurrentRemoveAndPutIfAbsent()
     {
-        final ConcurrentHashMapUnSafe<Integer, Integer> map1 = ConcurrentHashMapUnSafe.newMap();
+        final ConcurrentHashMapUnsafe<Integer, Integer> map1 = ConcurrentHashMapUnsafe.newMap();
         ParallelIterate.forEach(Interval.oneTo(1000), new Procedure<Integer>()
         {
             public void value(Integer each)
@@ -463,7 +463,7 @@ public class ConcurrentHashMapUnsafeTest extends MutableMapTestCase
     @Test
     public void emptyToString()
     {
-        ConcurrentHashMapUnSafe<?, ?> empty = ConcurrentHashMapUnSafe.newMap(0);
+        ConcurrentHashMapUnsafe<?, ?> empty = ConcurrentHashMapUnsafe.newMap(0);
         Assert.assertEquals("{}", empty.toString());
     }
 

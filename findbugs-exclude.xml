@@ -31,7 +31,7 @@
             <Class name="com.gs.collections.impl.set.mutable.SynchronizedMutableSet" />
             <Class name="com.gs.collections.impl.map.mutable.UnifiedMap" />
             <Class name="com.gs.collections.impl.map.mutable.ConcurrentHashMap" />
-            <Class name="com.gs.collections.impl.map.mutable.ConcurrentHashMapUnSafe" />
+            <Class name="com.gs.collections.impl.map.mutable.ConcurrentHashMapUnsafe" />
             <Class name="com.gs.collections.impl.set.mutable.UnifiedSet" />
             <Class name="com.gs.collections.impl.set.strategy.mutable.UnifiedSetWithHashingStrategy" />
             <Class name="com.gs.collections.impl.map.strategy.mutable.UnifiedMapWithHashingStrategy" />
@@ -183,7 +183,7 @@
         <!--This bug does not necessarily indicate an error, since the change to mutable object state may have taken place in a method which then called the method containing the notification.-->
         <Bug pattern="NN_NAKED_NOTIFY" />
         <Or>
-            <Class name="com.gs.collections.impl.map.mutable.ConcurrentHashMapUnSafe$ResizeContainer" />
+            <Class name="com.gs.collections.impl.map.mutable.ConcurrentHashMapUnsafe$ResizeContainer" />
             <Class name="com.gs.collections.impl.map.mutable.ConcurrentHashMap$ResizeContainer" />
         </Or>
     </Match>

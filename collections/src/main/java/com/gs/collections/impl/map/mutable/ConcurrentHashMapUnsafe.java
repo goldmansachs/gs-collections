@@ -57,7 +57,7 @@ import com.gs.collections.impl.utility.internal.IterableIterate;
 import sun.misc.Unsafe;
 
 @SuppressWarnings("UseOfSunClasses")
-public class ConcurrentHashMapUnSafe<K, V>
+public class ConcurrentHashMapUnsafe<K, V>
         extends AbstractMutableMap<K, V>
         implements ConcurrentMutableMap<K, V>, Externalizable
 {
@@ -74,7 +74,7 @@ public class ConcurrentHashMapUnSafe<K, V>
     private static final int MAXIMUM_CAPACITY = 1 << 30;
 
     @SuppressWarnings("rawtypes")
-    private static final AtomicReferenceFieldUpdater<ConcurrentHashMapUnSafe, Object[]> TABLE_UPDATER = AtomicReferenceFieldUpdater.newUpdater(ConcurrentHashMapUnSafe.class, Object[].class, "table");
+    private static final AtomicReferenceFieldUpdater<ConcurrentHashMapUnsafe, Object[]> TABLE_UPDATER = AtomicReferenceFieldUpdater.newUpdater(ConcurrentHashMapUnsafe.class, Object[].class, "table");
     private static final Object RESIZED = new Object();
     private static final Object RESIZING = new Object();
     private static final int PARTITIONED_SIZE_THRESHOLD = 4096; // chosen to keep size below 1% of the total size of the map
@@ -110,7 +110,7 @@ public class ConcurrentHashMapUnSafe<K, V>
             }
             INT_ARRAY_SHIFT = 31 - Integer.numberOfLeadingZeros(intArrayScale);
 
-            Class<?> mapClass = ConcurrentHashMapUnSafe.class;
+            Class<?> mapClass = ConcurrentHashMapUnsafe.class;
             SIZE_OFFSET = UNSAFE.objectFieldOffset(mapClass.getDeclaredField("size"));
         }
         catch (NoSuchFieldException e)
@@ -133,12 +133,12 @@ public class ConcurrentHashMapUnSafe<K, V>
     @SuppressWarnings("UnusedDeclaration")
     private volatile int size; // updated via atomic field updater
 
-    public ConcurrentHashMapUnSafe()
+    public ConcurrentHashMapUnsafe()
     {
         this(DEFAULT_INITIAL_CAPACITY);
     }
 
-    public ConcurrentHashMapUnSafe(int initialCapacity)
+    public ConcurrentHashMapUnsafe(int initialCapacity)
     {
         if (initialCapacity < 0)
         {
@@ -164,14 +164,14 @@ public class ConcurrentHashMapUnSafe<K, V>
         this.table = new Object[capacity + 1];
     }
 
-    public static <K, V> ConcurrentHashMapUnSafe<K, V> newMap()
+    public static <K, V> ConcurrentHashMapUnsafe<K, V> newMap()
     {
-        return new ConcurrentHashMapUnSafe<K, V>();
+        return new ConcurrentHashMapUnsafe<K, V>();
     }
 
-    public static <K, V> ConcurrentHashMapUnSafe<K, V> newMap(int newSize)
+    public static <K, V> ConcurrentHashMapUnsafe<K, V> newMap(int newSize)
     {
-        return new ConcurrentHashMapUnSafe<K, V>(newSize);
+        return new ConcurrentHashMapUnsafe<K, V>(newSize);
     }
 
     private static Object arrayAt(Object[] array, int index)
@@ -201,7 +201,7 @@ public class ConcurrentHashMapUnSafe<K, V>
         while (true)
         {
             int length = currentArray.length;
-            int index = ConcurrentHashMapUnSafe.indexFor(hash, length);
+            int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
             Object o = arrayAt(currentArray, index);
             if (o == RESIZED || o == RESIZING)
             {
@@ -439,7 +439,7 @@ public class ConcurrentHashMapUnSafe<K, V>
         while (true)
         {
             int length = currentArray.length;
-            int index = ConcurrentHashMapUnSafe.indexFor(hash, length);
+            int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
             Object o = arrayAt(currentArray, index);
             if (o == RESIZED || o == RESIZING)
             {
@@ -500,7 +500,7 @@ public class ConcurrentHashMapUnSafe<K, V>
         while (true)
         {
             int length = currentArray.length;
-            int index = ConcurrentHashMapUnSafe.indexFor(hash, length);
+            int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
             Object o = arrayAt(currentArray, index);
             if (o == RESIZED || o == RESIZING)
             {
@@ -593,7 +593,7 @@ public class ConcurrentHashMapUnSafe<K, V>
         while (true)
         {
             int length = currentArray.length;
-            int index = ConcurrentHashMapUnSafe.indexFor(hash, length);
+            int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
             Object o = arrayAt(currentArray, index);
             if (o == RESIZED || o == RESIZING)
             {
@@ -790,7 +790,7 @@ public class ConcurrentHashMapUnSafe<K, V>
     {
         int hash = this.hash(key);
         Object[] currentArray = this.table;
-        int index = ConcurrentHashMapUnSafe.indexFor(hash, currentArray.length);
+        int index = ConcurrentHashMapUnsafe.indexFor(hash, currentArray.length);
         Object o = arrayAt(currentArray, index);
         if (o == RESIZED || o == RESIZING)
         {
@@ -812,7 +812,7 @@ public class ConcurrentHashMapUnSafe<K, V>
         while (true)
         {
             int length = currentArray.length;
-            index = ConcurrentHashMapUnSafe.indexFor(hash, length);
+            index = ConcurrentHashMapUnsafe.indexFor(hash, length);
             Object o = arrayAt(currentArray, index);
             if (o == RESIZED || o == RESIZING)
             {
@@ -842,7 +842,7 @@ public class ConcurrentHashMapUnSafe<K, V>
         while (true)
         {
             int length = currentArray.length;
-            int index = ConcurrentHashMapUnSafe.indexFor(hash, length);
+            int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
             Object o = arrayAt(currentArray, index);
             if (o == RESIZED || o == RESIZING)
             {
@@ -870,7 +870,7 @@ public class ConcurrentHashMapUnSafe<K, V>
         int hash = this.hash(key);
         Object[] currentArray = this.table;
         int length = currentArray.length;
-        int index = ConcurrentHashMapUnSafe.indexFor(hash, length);
+        int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
         Object o = arrayAt(currentArray, index);
         if (o == null)
         {
@@ -891,7 +891,7 @@ public class ConcurrentHashMapUnSafe<K, V>
         while (true)
         {
             int length = currentArray.length;
-            int index = ConcurrentHashMapUnSafe.indexFor(hash, length);
+            int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
             Object o = arrayAt(currentArray, index);
             if (o == RESIZED || o == RESIZING)
             {
@@ -940,9 +940,9 @@ public class ConcurrentHashMapUnSafe<K, V>
             }
             this.resize(this.table, capacity + 1);
         }
-        if (map instanceof ConcurrentHashMapUnSafe<?, ?> && chunks > 1 && map.size() > 50000)
+        if (map instanceof ConcurrentHashMapUnsafe<?, ?> && chunks > 1 && map.size() > 50000)
         {
-            ConcurrentHashMapUnSafe<K, V> incoming = (ConcurrentHashMapUnSafe<K, V>) map;
+            ConcurrentHashMapUnsafe<K, V> incoming = (ConcurrentHashMapUnsafe<K, V>) map;
             final Object[] currentArray = incoming.table;
             FutureTask<?>[] futures = new FutureTask<?>[chunks];
             int chunkSize = currentArray.length / chunks;
@@ -958,7 +958,7 @@ public class ConcurrentHashMapUnSafe<K, V>
                 {
                     public void run()
                     {
-                        ConcurrentHashMapUnSafe.this.sequentialPutAll(currentArray, start, end);
+                        ConcurrentHashMapUnsafe.this.sequentialPutAll(currentArray, start, end);
                     }
                 }, null);
                 executor.execute(futures[i]);
@@ -1007,7 +1007,7 @@ public class ConcurrentHashMapUnSafe<K, V>
         {
             public void value(K key, V value)
             {
-                ConcurrentHashMapUnSafe.this.put(key, value);
+                ConcurrentHashMapUnsafe.this.put(key, value);
             }
         });
     }
@@ -1106,7 +1106,7 @@ public class ConcurrentHashMapUnSafe<K, V>
         while (true)
         {
             int length = currentArray.length;
-            int index = ConcurrentHashMapUnSafe.indexFor(hash, length);
+            int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
             Object o = arrayAt(currentArray, index);
             if (o == RESIZED || o == RESIZING)
             {
@@ -1145,7 +1145,7 @@ public class ConcurrentHashMapUnSafe<K, V>
         int hash = this.hash(key);
         Object[] currentArray = this.table;
         int length = currentArray.length;
-        int index = ConcurrentHashMapUnSafe.indexFor(hash, length);
+        int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
         Object o = arrayAt(currentArray, index);
         if (o == null)
         {
@@ -1161,7 +1161,7 @@ public class ConcurrentHashMapUnSafe<K, V>
         while (true)
         {
             int length = currentArray.length;
-            int index = ConcurrentHashMapUnSafe.indexFor(hash, length);
+            int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
             Object o = arrayAt(currentArray, index);
             if (o == RESIZED || o == RESIZING)
             {
@@ -1228,7 +1228,7 @@ public class ConcurrentHashMapUnSafe<K, V>
         while (true)
         {
             int length = currentArray.length;
-            int index = ConcurrentHashMapUnSafe.indexFor(hash, length);
+            int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
             Object o = arrayAt(currentArray, index);
             if (o == RESIZED || o == RESIZING)
             {
@@ -1298,7 +1298,7 @@ public class ConcurrentHashMapUnSafe<K, V>
                 {
                     public void run()
                     {
-                        ConcurrentHashMapUnSafe.this.sequentialForEachKeyValue(block, currentArray, start, end);
+                        ConcurrentHashMapUnsafe.this.sequentialForEachKeyValue(block, currentArray, start, end);
                     }
                 }, null);
                 executor.execute(futures[i]);
@@ -1362,7 +1362,7 @@ public class ConcurrentHashMapUnSafe<K, V>
                 {
                     public void run()
                     {
-                        ConcurrentHashMapUnSafe.this.sequentialForEachValue(block, currentArray, start, end);
+                        ConcurrentHashMapUnsafe.this.sequentialForEachValue(block, currentArray, start, end);
                     }
                 }, null);
                 executor.execute(futures[i]);
@@ -1548,9 +1548,9 @@ public class ConcurrentHashMapUnSafe<K, V>
 
         protected HashIterator()
         {
-            if (ConcurrentHashMapUnSafe.this.size() > 0)
+            if (ConcurrentHashMapUnsafe.this.size() > 0)
             {
-                this.currentTable = ConcurrentHashMapUnSafe.this.table;
+                this.currentTable = ConcurrentHashMapUnsafe.this.table;
                 this.findNext();
             }
         }
@@ -1607,7 +1607,7 @@ public class ConcurrentHashMapUnSafe<K, V>
             }
             K key = this.current.key;
             this.current = null;
-            ConcurrentHashMapUnSafe.this.remove(key);
+            ConcurrentHashMapUnsafe.this.remove(key);
         }
     }
 
@@ -1646,25 +1646,25 @@ public class ConcurrentHashMapUnSafe<K, V>
         @Override
         public int size()
         {
-            return ConcurrentHashMapUnSafe.this.size();
+            return ConcurrentHashMapUnsafe.this.size();
         }
 
         @Override
         public boolean contains(Object o)
         {
-            return ConcurrentHashMapUnSafe.this.containsKey(o);
+            return ConcurrentHashMapUnsafe.this.containsKey(o);
         }
 
         @Override
         public boolean remove(Object o)
         {
-            return ConcurrentHashMapUnSafe.this.remove(o) != null;
+            return ConcurrentHashMapUnsafe.this.remove(o) != null;
         }
 
         @Override
         public void clear()
         {
-            ConcurrentHashMapUnSafe.this.clear();
+            ConcurrentHashMapUnsafe.this.clear();
         }
     }
 
@@ -1679,19 +1679,19 @@ public class ConcurrentHashMapUnSafe<K, V>
         @Override
         public int size()
         {
-            return ConcurrentHashMapUnSafe.this.size();
+            return ConcurrentHashMapUnsafe.this.size();
         }
 
         @Override
         public boolean contains(Object o)
         {
-            return ConcurrentHashMapUnSafe.this.containsValue(o);
+            return ConcurrentHashMapUnsafe.this.containsValue(o);
         }
 
         @Override
         public void clear()
         {
-            ConcurrentHashMapUnSafe.this.clear();
+            ConcurrentHashMapUnsafe.this.clear();
         }
     }
 
@@ -1711,7 +1711,7 @@ public class ConcurrentHashMapUnSafe<K, V>
                 return false;
             }
             Map.Entry<K, V> e = (Map.Entry<K, V>) o;
-            Entry<K, V> candidate = ConcurrentHashMapUnSafe.this.getEntry(e.getKey());
+            Entry<K, V> candidate = ConcurrentHashMapUnsafe.this.getEntry(e.getKey());
             return candidate != null && candidate.equals(e);
         }
 
@@ -1723,19 +1723,19 @@ public class ConcurrentHashMapUnSafe<K, V>
                 return false;
             }
             Map.Entry<K, V> e = (Map.Entry<K, V>) o;
-            return ConcurrentHashMapUnSafe.this.remove(e.getKey(), e.getValue());
+            return ConcurrentHashMapUnsafe.this.remove(e.getKey(), e.getValue());
         }
 
         @Override
         public int size()
         {
-            return ConcurrentHashMapUnSafe.this.size();
+            return ConcurrentHashMapUnsafe.this.size();
         }
 
         @Override
         public void clear()
         {
-            ConcurrentHashMapUnSafe.this.clear();
+            ConcurrentHashMapUnsafe.this.clear();
         }
     }
 
@@ -1904,53 +1904,53 @@ public class ConcurrentHashMapUnSafe<K, V>
         }
     }
 
-    public static <NK, NV> ConcurrentHashMapUnSafe<NK, NV> newMap(Map<NK, NV> map)
+    public static <NK, NV> ConcurrentHashMapUnsafe<NK, NV> newMap(Map<NK, NV> map)
     {
-        ConcurrentHashMapUnSafe<NK, NV> result = new ConcurrentHashMapUnSafe<NK, NV>(map.size());
+        ConcurrentHashMapUnsafe<NK, NV> result = new ConcurrentHashMapUnsafe<NK, NV>(map.size());
         result.putAll(map);
         return result;
     }
 
     @Override
-    public ConcurrentHashMapUnSafe<K, V> withKeyValue(K key, V value)
+    public ConcurrentHashMapUnsafe<K, V> withKeyValue(K key, V value)
     {
-        return (ConcurrentHashMapUnSafe<K, V>) super.withKeyValue(key, value);
+        return (ConcurrentHashMapUnsafe<K, V>) super.withKeyValue(key, value);
     }
 
     @Override
-    public ConcurrentHashMapUnSafe<K, V> withAllKeyValues(Iterable<? extends Pair<? extends K, ? extends V>> keyValues)
+    public ConcurrentHashMapUnsafe<K, V> withAllKeyValues(Iterable<? extends Pair<? extends K, ? extends V>> keyValues)
     {
-        return (ConcurrentHashMapUnSafe<K, V>) super.withAllKeyValues(keyValues);
+        return (ConcurrentHashMapUnsafe<K, V>) super.withAllKeyValues(keyValues);
     }
 
     @Override
-    public ConcurrentHashMapUnSafe<K, V> withAllKeyValueArguments(Pair<? extends K, ? extends V>... keyValues)
+    public ConcurrentHashMapUnsafe<K, V> withAllKeyValueArguments(Pair<? extends K, ? extends V>... keyValues)
     {
-        return (ConcurrentHashMapUnSafe<K, V>) super.withAllKeyValueArguments(keyValues);
+        return (ConcurrentHashMapUnsafe<K, V>) super.withAllKeyValueArguments(keyValues);
     }
 
     @Override
-    public ConcurrentHashMapUnSafe<K, V> withoutKey(K key)
+    public ConcurrentHashMapUnsafe<K, V> withoutKey(K key)
     {
-        return (ConcurrentHashMapUnSafe<K, V>) super.withoutKey(key);
+        return (ConcurrentHashMapUnsafe<K, V>) super.withoutKey(key);
     }
 
     @Override
-    public ConcurrentHashMapUnSafe<K, V> withoutAllKeys(Iterable<? extends K> keys)
+    public ConcurrentHashMapUnsafe<K, V> withoutAllKeys(Iterable<? extends K> keys)
     {
-        return (ConcurrentHashMapUnSafe<K, V>) super.withoutAllKeys(keys);
+        return (ConcurrentHashMapUnsafe<K, V>) super.withoutAllKeys(keys);
     }
 
     @Override
     public MutableMap<K, V> clone()
     {
-        return ConcurrentHashMapUnSafe.newMap(this);
+        return ConcurrentHashMapUnsafe.newMap(this);
     }
 
     @Override
     public <K, V> MutableMap<K, V> newEmpty(int capacity)
     {
-        return ConcurrentHashMapUnSafe.newMap();
+        return ConcurrentHashMapUnsafe.newMap();
     }
 
     @Override
@@ -1979,7 +1979,7 @@ public class ConcurrentHashMapUnSafe<K, V>
 
     public MutableMap<K, V> newEmpty()
     {
-        return ConcurrentHashMapUnSafe.newMap();
+        return ConcurrentHashMapUnsafe.newMap();
     }
 
     @Override
