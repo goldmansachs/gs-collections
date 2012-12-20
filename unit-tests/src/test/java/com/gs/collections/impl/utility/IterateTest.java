@@ -34,6 +34,10 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.ImmutableList;
@@ -173,6 +177,13 @@ public class IterateTest
                 Assert.assertEquals(15, Iterate.injectInto(0, each, AddFunction.INTEGER_TO_INT));
             }
         });
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.injectInto(0, null, AddFunction.INTEGER_TO_INT);
+            }
+        });
     }
 
     @Test
@@ -182,7 +193,14 @@ public class IterateTest
         {
             public void value(Iterable<Integer> each)
             {
-                Assert.assertEquals(15, Iterate.injectInto(0, each, AddFunction.INTEGER_TO_LONG));
+                Assert.assertEquals(15L, Iterate.injectInto(0L, each, AddFunction.INTEGER_TO_LONG));
+            }
+        });
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.injectInto(0L, null, AddFunction.INTEGER_TO_LONG);
             }
         });
     }
@@ -194,7 +212,33 @@ public class IterateTest
         {
             public void value(Iterable<Integer> each)
             {
-                Assert.assertEquals(15, Iterate.injectInto(0, each, AddFunction.INTEGER_TO_DOUBLE), 0.001);
+                Assert.assertEquals(15.0d, Iterate.injectInto(0.0d, each, AddFunction.INTEGER_TO_DOUBLE), 0.001);
+            }
+        });
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.injectInto(0.0d, null, AddFunction.INTEGER_TO_DOUBLE);
+            }
+        });
+    }
+
+    @Test
+    public void injectIntoFloat()
+    {
+        this.iterables.forEach(new Procedure<Iterable<Integer>>()
+        {
+            public void value(Iterable<Integer> each)
+            {
+                Assert.assertEquals(15.0d, Iterate.injectInto(0.0f, each, AddFunction.INTEGER_TO_FLOAT), 0.001);
+            }
+        });
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.injectInto(0.0f, null, AddFunction.INTEGER_TO_FLOAT);
             }
         });
     }
@@ -1923,23 +1967,11 @@ public class IterateTest
     {
         FastList<String> fastList = FastList.newListWith("1", "2", "3", "4", "5", "6", "7");
         RichIterable<RichIterable<String>> groups1 = Iterate.chunk(fastList, 2);
-        RichIterable<Integer> sizes1 = groups1.collect(new Function<RichIterable<String>, Integer>()
-        {
-            public Integer valueOf(RichIterable<String> richIterable)
-            {
-                return richIterable.size();
-            }
-        });
+        RichIterable<Integer> sizes1 = groups1.collect(Functions.getSizeOf());
         Assert.assertEquals(FastList.newListWith(2, 2, 2, 1), sizes1);
         ArrayList<String> arrayList = new ArrayList<String>(fastList);
         RichIterable<RichIterable<String>> groups2 = Iterate.chunk(arrayList, 2);
-        RichIterable<Integer> sizes2 = groups1.collect(new Function<RichIterable<String>, Integer>()
-        {
-            public Integer valueOf(RichIterable<String> richIterable)
-            {
-                return richIterable.size();
-            }
-        });
+        RichIterable<Integer> sizes2 = groups1.collect(Functions.getSizeOf());
         Assert.assertEquals(FastList.newListWith(2, 2, 2, 1), sizes2);
         Verify.assertThrows(IllegalArgumentException.class, new Runnable()
         {
@@ -2032,6 +2064,14 @@ public class IterateTest
         this.aggregateByMutableResult(new HashSet(UnifiedSet.newSetWith(1, 1, 1, 2, 2, 3)));
         this.aggregateByMutableResult(new LinkedList(FastList.newListWith(1, 1, 1, 2, 2, 3)));
         this.aggregateByMutableResult(new ArrayList(FastList.newListWith(1, 1, 1, 2, 2, 3)));
+        this.aggregateByMutableResult(Arrays.asList(1, 1, 1, 2, 2, 3));
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                IterateTest.this.aggregateByMutableResult(null);
+            }
+        });
     }
 
     private void aggregateByMutableResult(Iterable<Integer> iterable)
@@ -2074,8 +2114,15 @@ public class IterateTest
         this.aggregateByImmutableResult(new HashSet(UnifiedSet.newSetWith(1, 1, 1, 2, 2, 3)));
         this.aggregateByImmutableResult(new LinkedList(FastList.newListWith(1, 1, 1, 2, 2, 3)));
         this.aggregateByImmutableResult(new ArrayList(FastList.newListWith(1, 1, 1, 2, 2, 3)));
+        this.aggregateByImmutableResult(Arrays.asList(1, 1, 1, 2, 2, 3));
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                IterateTest.this.aggregateByImmutableResult(null);
+            }
+        });
     }
-
 
     private void aggregateByImmutableResult(Iterable<Integer> iterable)
     {
@@ -2108,4 +2155,79 @@ public class IterateTest
         }
     }
 
+    @Test
+    public void sumOfInt()
+    {
+        Assert.assertEquals(6, Iterate.sumOfInt(FastList.newListWith(1, 2, 3), new IntFunction<Integer>()
+        {
+            public int intValueOf(Integer value)
+            {
+                return value;
+            }
+        }));
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.sumOfInt(null, null);
+            }
+        });
+    }
+
+    @Test
+    public void sumOfLong()
+    {
+        Assert.assertEquals(6L, Iterate.sumOfLong(FastList.<Long>newListWith(Long.valueOf(1), Long.valueOf(2), Long.valueOf(3)), new LongFunction<Long>()
+        {
+            public long longValueOf(Long value)
+            {
+                return value;
+            }
+        }));
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.sumOfLong(null, null);
+            }
+        });
+    }
+
+    @Test
+    public void sumOfFloat()
+    {
+        Assert.assertEquals(6.0d, Iterate.sumOfFloat(FastList.<Float>newListWith(Float.valueOf(1), Float.valueOf(2), Float.valueOf(3)), new FloatFunction<Float>()
+        {
+            public float floatValueOf(Float value)
+            {
+                return value;
+            }
+        }), 0.0d);
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.sumOfFloat(null, null);
+            }
+        });
+    }
+
+    @Test
+    public void sumOfDouble()
+    {
+        Assert.assertEquals(6.0d, Iterate.sumOfDouble(FastList.<Double>newListWith(Double.valueOf(1), Double.valueOf(2), Double.valueOf(3)), new DoubleFunction<Double>()
+        {
+            public double doubleValueOf(Double value)
+            {
+                return value;
+            }
+        }), 0.0d);
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.sumOfDouble(null, null);
+            }
+        });
+    }
 }
