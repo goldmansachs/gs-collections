@@ -21,13 +21,16 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.StringTokenizer;
 
+import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Twin;
+import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.function.primitive.CharFunction;
 import com.gs.collections.impl.block.function.primitive.CodePointFunction;
 import com.gs.collections.impl.block.predicate.CodePointPredicate;
@@ -35,6 +38,7 @@ import com.gs.collections.impl.block.predicate.primitive.CharPredicate;
 import com.gs.collections.impl.block.procedure.primitive.CharProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CodePointProcedure;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.tuple.Tuples;
@@ -54,7 +58,10 @@ public final class StringIterate
 
     /**
      * Converts a string of tokens separated by the specified separator to a sorted {@link MutableList}.
+     *
+     * @deprecated in 3.0.  Inlineable.  Poorly named method.  Does not actually deal properly with CSV.  This is better handled in a separate library.
      */
+    @Deprecated
     public static MutableList<String> csvTokensToSortedList(String string)
     {
         return StringIterate.tokensToSortedList(string, ",");
@@ -62,7 +69,10 @@ public final class StringIterate
 
     /**
      * Converts a string of tokens separated by the specified separator to a sorted {@link MutableList}.
+     *
+     * @deprecated in 3.0.  Inlineable.  Poorly named method.  Does not actually deal properly with CSV.  This is better handled in a separate library.
      */
+    @Deprecated
     public static MutableList<String> csvTrimmedTokensToSortedList(String string)
     {
         return StringIterate.trimmedTokensToSortedList(string, ",");
@@ -86,7 +96,10 @@ public final class StringIterate
 
     /**
      * Converts a string of tokens separated by commas to a {@link MutableList}.
+     *
+     * @deprecated in 3.0.  Inlineable.  Poorly named method.  Does not actually deal properly with CSV.  This is better handled in a separate library.
      */
+    @Deprecated
     public static MutableList<String> csvTokensToList(String string)
     {
         return StringIterate.tokensToList(string, ",");
@@ -94,7 +107,10 @@ public final class StringIterate
 
     /**
      * Converts a string of tokens separated by commas to a {@link MutableList}.
+     *
+     * @deprecated in 3.0.  Inlineable.  Poorly named method.  Does not actually deal properly with CSV.  This is better handled in a separate library.
      */
+    @Deprecated
     public static MutableList<String> csvTrimmedTokensToList(String string)
     {
         return StringIterate.trimmedTokensToList(string, ",");
@@ -139,7 +155,10 @@ public final class StringIterate
 
     /**
      * Converts a string of tokens separated by commas to a {@link MutableSet}.
+     *
+     * @deprecated in 3.0.  Inlineable.  Poorly named method.  Does not actually deal properly with CSV.  This is better handled in a separate library.
      */
+    @Deprecated
     public static MutableSet<String> csvTokensToSet(String string)
     {
         return StringIterate.tokensToSet(string, ",");
@@ -212,7 +231,10 @@ public final class StringIterate
 
     /**
      * Converts a string of tokens separated by the specified separator to a reverse sorted {@link MutableList}.
+     *
+     * @deprecated in 3.0.  Inlineable.  Poorly named method.  Does not actually deal properly with CSV.  This is better handled in a separate library.
      */
+    @Deprecated
     public static MutableList<String> csvTokensToReverseSortedList(String string)
     {
         return StringIterate.tokensToReverseSortedList(string, ",");
@@ -376,18 +398,18 @@ public final class StringIterate
 
     public static String englishToUpperCase(String string)
     {
-        if (anySatisfy(string, CharPredicate.IS_LOWERCASE))
+        if (StringIterate.anySatisfy(string, CharPredicate.IS_LOWERCASE))
         {
-            return collect(string, CharFunction.TO_UPPERCASE);
+            return StringIterate.collect(string, CharFunction.TO_UPPERCASE);
         }
         return string;
     }
 
     public static String englishToLowerCase(String string)
     {
-        if (anySatisfy(string, CharPredicate.IS_UPPERCASE))
+        if (StringIterate.anySatisfy(string, CharPredicate.IS_UPPERCASE))
         {
-            return collect(string, CharFunction.TO_LOWERCASE);
+            return StringIterate.collect(string, CharFunction.TO_LOWERCASE);
         }
         return string;
     }
@@ -434,7 +456,7 @@ public final class StringIterate
      */
     public static int occurrencesOf(String string, final char value)
     {
-        return count(string, new CharPredicate()
+        return StringIterate.count(string, new CharPredicate()
         {
             public boolean accept(char character)
             {
@@ -448,7 +470,7 @@ public final class StringIterate
      */
     public static int occurrencesOf(String string, final int value)
     {
-        return count(string, new CodePointPredicate()
+        return StringIterate.count(string, new CodePointPredicate()
         {
             public boolean accept(int codePoint)
             {
@@ -645,17 +667,17 @@ public final class StringIterate
 
     private static boolean isWhitespace(String string)
     {
-        return allSatisfy(string, CodePointPredicate.IS_WHITESPACE);
+        return StringIterate.allSatisfy(string, CodePointPredicate.IS_WHITESPACE);
     }
 
     public static boolean isNumber(String string)
     {
-        return charactersSatisfy(string, CodePointPredicate.IS_DIGIT);
+        return StringIterate.charactersSatisfy(string, CodePointPredicate.IS_DIGIT);
     }
 
     public static boolean isAlphaNumeric(String string)
     {
-        return charactersSatisfy(string, CodePointPredicate.IS_LETTER_OR_DIGIT);
+        return StringIterate.charactersSatisfy(string, CodePointPredicate.IS_LETTER_OR_DIGIT);
     }
 
     private static boolean charactersSatisfy(String string, CodePointPredicate predicate)
@@ -703,47 +725,134 @@ public final class StringIterate
         return message + StringIterate.repeat(' ', targetLength - messageLength);
     }
 
+    public static MutableList<Character> toList(String string)
+    {
+        MutableList<Character> characters = FastList.newList(string.length());
+        StringIterate.forEach(string, new AddCharacterToCollection(characters));
+        return characters;
+    }
+
+    public static MutableList<Character> toLowercaseList(String string)
+    {
+        MutableList<Character> characters = FastList.newList();
+        StringIterate.forEach(string, new AddLowercaseCharacterToCollection(characters));
+        return characters;
+    }
+
+    public static MutableList<Character> toUppercaseList(String string)
+    {
+        MutableList<Character> characters = FastList.newList();
+        StringIterate.forEach(string, new AddUppercaseCharacterToCollection(characters));
+        return characters;
+    }
+
+    public static MutableBag<Character> toBag(String string)
+    {
+        MutableBag<Character> characters = HashBag.newBag();
+        StringIterate.forEach(string, new AddCharacterToCollection(characters));
+        return characters;
+    }
+
+    public static MutableBag<Character> toLowercaseBag(String string)
+    {
+        MutableBag<Character> characters = HashBag.newBag();
+        StringIterate.forEach(string, new AddLowercaseCharacterToCollection(characters));
+        return characters;
+    }
+
+    public static MutableBag<Character> toUppercaseBag(String string)
+    {
+        MutableBag<Character> characters = HashBag.newBag();
+        StringIterate.forEach(string, new AddUppercaseCharacterToCollection(characters));
+        return characters;
+    }
+
     public static MutableSet<Character> toSet(String string)
     {
-        final MutableSet<Character> characters = UnifiedSet.newSet();
-        forEach(string, new CharProcedure()
-        {
-            public void value(char character)
-            {
-                characters.add(character);
-            }
-        });
+        MutableSet<Character> characters = UnifiedSet.newSet();
+        StringIterate.forEach(string, new AddCharacterToCollection(characters));
         return characters;
     }
 
+    /**
+     * @deprecated in 3.0. Inlineable.
+     */
+    @Deprecated
     public static MutableSet<Character> asUppercaseSet(String string)
     {
-        final MutableSet<Character> characters = UnifiedSet.newSet();
-        forEach(string, new CharProcedure()
-        {
-            public void value(char character)
-            {
-                characters.add(Character.toUpperCase(character));
-            }
-        });
+        return StringIterate.toUppercaseSet(string);
+    }
+
+    public static MutableSet<Character> toUppercaseSet(String string)
+    {
+        MutableSet<Character> characters = UnifiedSet.newSet();
+        StringIterate.forEach(string, new AddUppercaseCharacterToCollection(characters));
         return characters;
     }
 
+    /**
+     * @deprecated in 3.0. Inlineable.
+     */
+    @Deprecated
     public static MutableSet<Character> asLowercaseSet(String string)
     {
-        final MutableSet<Character> characters = UnifiedSet.newSet();
-        forEach(string, new CharProcedure()
-        {
-            public void value(char character)
-            {
-                characters.add(Character.toLowerCase(character));
-            }
-        });
+        return StringIterate.toLowercaseSet(string);
+    }
+
+    public static MutableSet<Character> toLowercaseSet(String string)
+    {
+        MutableSet<Character> characters = UnifiedSet.newSet();
+        StringIterate.forEach(string, new AddLowercaseCharacterToCollection(characters));
         return characters;
     }
 
     public static Twin<String> splitAtIndex(String aString, int index)
     {
         return Tuples.twin(aString.substring(0, index), aString.substring(index, aString.length()));
+    }
+
+    private static final class AddCharacterToCollection implements CharProcedure
+    {
+        private final MutableCollection<Character> characters;
+
+        private AddCharacterToCollection(MutableCollection<Character> characters)
+        {
+            this.characters = characters;
+        }
+
+        public void value(char character)
+        {
+            this.characters.add(Character.valueOf(character));
+        }
+    }
+
+    private static final class AddLowercaseCharacterToCollection implements CharProcedure
+    {
+        private final MutableCollection<Character> characters;
+
+        private AddLowercaseCharacterToCollection(MutableCollection<Character> characters)
+        {
+            this.characters = characters;
+        }
+
+        public void value(char character)
+        {
+            this.characters.add(Character.valueOf(Character.toLowerCase(character)));
+        }
+    }
+
+    private static final class AddUppercaseCharacterToCollection implements CharProcedure
+    {
+        private final MutableCollection<Character> characters;
+
+        private AddUppercaseCharacterToCollection(MutableCollection<Character> characters)
+        {
+            this.characters = characters;
+        }
+
+        public void value(char character)
+        {
+            this.characters.add(Character.valueOf(Character.toUpperCase(character)));
+        }
     }
 }

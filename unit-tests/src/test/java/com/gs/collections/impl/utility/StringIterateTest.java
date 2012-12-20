@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.utility;
 
+import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
@@ -154,7 +155,7 @@ public class StringIterateTest
     }
 
     @Test
-    public void toList()
+    public void csvTokensToList()
     {
         String tokens = "Ted,Mary  ";
         MutableList<String> results = StringIterate.csvTokensToList(tokens);
@@ -163,7 +164,7 @@ public class StringIterateTest
     }
 
     @Test
-    public void toSortedList()
+    public void csvTokensToSortedList()
     {
         String tokens = " Ted , Mary ";
         MutableList<String> results = StringIterate.csvTokensToSortedList(tokens);
@@ -172,7 +173,7 @@ public class StringIterateTest
     }
 
     @Test
-    public void asTrimmedSortedList()
+    public void csvTrimmedTokensToSortedList()
     {
         String tokens = " Ted,Mary ";
         MutableList<String> results = StringIterate.csvTrimmedTokensToSortedList(tokens);
@@ -190,7 +191,7 @@ public class StringIterateTest
     }
 
     @Test
-    public void toReverseSortedList()
+    public void csvTokensToReverseSortedList()
     {
         String tokens = "Ted,Mary";
         MutableList<String> results = StringIterate.csvTokensToReverseSortedList(tokens);
@@ -198,7 +199,7 @@ public class StringIterateTest
     }
 
     @Test
-    public void toMap()
+    public void tokensToMap()
     {
         String tokens = "1:Ted|2:Mary";
         MutableMap<String, String> results = StringIterate.tokensToMap(tokens);
@@ -208,7 +209,7 @@ public class StringIterateTest
     }
 
     @Test
-    public void toMapWithFunctions()
+    public void tokensToMapWithFunctions()
     {
         String tokens = "1:Ted|2:Mary";
         Function<String, String> stringPassThruFunction = Functions.getPassThru();
@@ -484,11 +485,45 @@ public class StringIterateTest
     }
 
     @Test
+    public void toList()
+    {
+        Assert.assertEquals(FastList.newListWith('a', 'a', 'b', 'c', 'd', 'e'), StringIterate.toList("aabcde"));
+    }
+
+    @Test
+    public void toLowercaseList()
+    {
+        MutableList<Character> set = StringIterate.toLowercaseList("America");
+        Assert.assertEquals(FastList.<Character>newListWith('a', 'm', 'e', 'r', 'i', 'c', 'a'), set);
+    }
+
+    @Test
+    public void toUppercaseList()
+    {
+        MutableList<Character> set = StringIterate.toUppercaseList("America");
+        Assert.assertEquals(FastList.<Character>newListWith('A', 'M', 'E', 'R', 'I', 'C', 'A'), set);
+    }
+
+    @Test
     public void toSet()
     {
-        Verify.assertSetsEqual(
-                UnifiedSet.newSetWith('a', 'b', 'c', 'd', 'e'),
-                StringIterate.toSet("aabcde"));
+        Verify.assertSetsEqual(UnifiedSet.newSetWith('a', 'b', 'c', 'd', 'e'), StringIterate.toSet("aabcde"));
+    }
+
+    @Test
+    public void toLowercaseSet()
+    {
+        MutableSet<Character> set = StringIterate.toLowercaseSet("America");
+        Assert.assertEquals(UnifiedSet.<Character>newSetWith('a', 'm', 'e', 'r', 'i', 'c'), set);
+        Assert.assertEquals(StringIterate.asLowercaseSet("America"), set);
+    }
+
+    @Test
+    public void toUppercaseSet()
+    {
+        MutableSet<Character> set = StringIterate.toUppercaseSet("America");
+        Assert.assertEquals(UnifiedSet.<Character>newSetWith('A', 'M', 'E', 'R', 'I', 'C'), set);
+        Assert.assertEquals(StringIterate.asUppercaseSet("America"), set);
     }
 
     @Test
@@ -517,5 +552,42 @@ public class StringIterateTest
                 StringIterate.splitAtIndex(oompaLoompa, -8);
             }
         });
+    }
+
+    @Test
+    public void toLowercaseBag()
+    {
+        MutableBag<Character> lowercaseBag = StringIterate.toLowercaseBag("America");
+        Assert.assertEquals(2, lowercaseBag.occurrencesOf(Character.valueOf('a')));
+        Assert.assertEquals(1, lowercaseBag.occurrencesOf(Character.valueOf('m')));
+        Assert.assertEquals(1, lowercaseBag.occurrencesOf(Character.valueOf('e')));
+        Assert.assertEquals(1, lowercaseBag.occurrencesOf(Character.valueOf('r')));
+        Assert.assertEquals(1, lowercaseBag.occurrencesOf(Character.valueOf('i')));
+        Assert.assertEquals(1, lowercaseBag.occurrencesOf(Character.valueOf('c')));
+    }
+
+    @Test
+    public void toUppercaseBag()
+    {
+        MutableBag<Character> uppercaseBag = StringIterate.toUppercaseBag("America");
+        Assert.assertEquals(2, uppercaseBag.occurrencesOf(Character.valueOf('A')));
+        Assert.assertEquals(1, uppercaseBag.occurrencesOf(Character.valueOf('M')));
+        Assert.assertEquals(1, uppercaseBag.occurrencesOf(Character.valueOf('E')));
+        Assert.assertEquals(1, uppercaseBag.occurrencesOf(Character.valueOf('R')));
+        Assert.assertEquals(1, uppercaseBag.occurrencesOf(Character.valueOf('I')));
+        Assert.assertEquals(1, uppercaseBag.occurrencesOf(Character.valueOf('C')));
+    }
+
+    @Test
+    public void toBag()
+    {
+        MutableBag<Character> bag = StringIterate.toBag("America");
+        Assert.assertEquals(1, bag.occurrencesOf(Character.valueOf('A')));
+        Assert.assertEquals(1, bag.occurrencesOf(Character.valueOf('m')));
+        Assert.assertEquals(1, bag.occurrencesOf(Character.valueOf('e')));
+        Assert.assertEquals(1, bag.occurrencesOf(Character.valueOf('r')));
+        Assert.assertEquals(1, bag.occurrencesOf(Character.valueOf('i')));
+        Assert.assertEquals(1, bag.occurrencesOf(Character.valueOf('c')));
+        Assert.assertEquals(1, bag.occurrencesOf(Character.valueOf('a')));
     }
 }
