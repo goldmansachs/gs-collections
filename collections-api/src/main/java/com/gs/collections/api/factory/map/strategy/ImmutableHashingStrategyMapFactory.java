@@ -20,7 +20,6 @@ import java.util.Map;
 
 import com.gs.collections.api.block.HashingStrategy;
 import com.gs.collections.api.map.ImmutableMap;
-import com.gs.collections.api.map.MutableMap;
 
 public interface ImmutableHashingStrategyMapFactory
 {
@@ -80,7 +79,7 @@ public interface ImmutableHashingStrategyMapFactory
     <K, V> ImmutableMap<K, V> ofMap(Map<K, V> map);
 
     /**
-     * Same as {@link #withAll(MutableMap)}.
+     * Same as {@link #withAll(Map)}.
      */
     <K, V> ImmutableMap<K, V> ofAll(Map<K, V> map);
 

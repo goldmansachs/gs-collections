@@ -19,7 +19,6 @@ package com.gs.collections.api.factory.map;
 import java.util.Map;
 
 import com.gs.collections.api.map.ImmutableMap;
-import com.gs.collections.api.map.MutableMap;
 
 public interface ImmutableMapFactory
 {
@@ -61,7 +60,7 @@ public interface ImmutableMapFactory
     <K, V> ImmutableMap<K, V> ofMap(Map<K, V> map);
 
     /**
-     * Same as {@link #withAll(MutableMap)}.
+     * Same as {@link #withAll(Map)}.
      */
     <K, V> ImmutableMap<K, V> ofAll(Map<K, V> map);
 
