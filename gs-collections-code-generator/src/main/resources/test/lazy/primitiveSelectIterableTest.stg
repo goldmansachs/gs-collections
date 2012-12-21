@@ -66,7 +66,7 @@ public class Select<name>IterableTest
     public void empty()
     {
         Assert.assertTrue(this.iterable.notEmpty());
-        Assert.assertFalse(this.iterable.isEmpty());
+        Verify.assertNotEmpty(this.iterable);
     }
 
     @Test

@@ -554,6 +554,41 @@ public final class Verify extends Assert
     }
 
     /**
+     * Assert that the given {@link PrimitiveIterable} is empty.
+     */
+    public static void assertEmpty(PrimitiveIterable primitiveIterable)
+    {
+        try
+        {
+            Verify.assertEmpty("primitiveIterable", primitiveIterable);
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    /**
+     * Assert that the given {@link PrimitiveIterable} is empty.
+     */
+    public static void assertEmpty(String iterableName, PrimitiveIterable primitiveIterable)
+    {
+        try
+        {
+            Verify.assertObjectNotNull(iterableName, primitiveIterable);
+
+            if (!primitiveIterable.isEmpty())
+            {
+                Assert.fail(iterableName + " should be empty; actual size:<" + primitiveIterable.size() + '>');
+            }
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    /**
      * Assert that the given {@link Iterable} is empty.
      */
     public static void assertIterableEmpty(Iterable<?> iterable)
@@ -744,6 +779,37 @@ public final class Verify extends Assert
         {
             Verify.assertObjectNotNull(collectionName, actualCollection);
             Assert.assertFalse(collectionName + " should be non-empty, but was empty", actualCollection.isEmpty());
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    /**
+     * Assert that the given {@link PrimitiveIterable} is <em>not</em> empty.
+     */
+    public static void assertNotEmpty(PrimitiveIterable primitiveIterable)
+    {
+        try
+        {
+            Verify.assertNotEmpty("primitiveIterable", primitiveIterable);
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    /**
+     * Assert that the given {@link PrimitiveIterable} is <em>not</em> empty.
+     */
+    public static void assertNotEmpty(String iterableName, PrimitiveIterable primitiveIterable)
+    {
+        try
+        {
+            Verify.assertObjectNotNull(iterableName, primitiveIterable);
+            Assert.assertFalse(iterableName + " should be non-empty, but was empty", primitiveIterable.isEmpty());
         }
         catch (AssertionError e)
         {

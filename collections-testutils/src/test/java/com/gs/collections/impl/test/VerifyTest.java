@@ -716,6 +716,21 @@ public class VerifyTest
     }
 
     @Test
+    public void assertEmpty_PrimitiveIterable()
+    {
+        try
+        {
+            Verify.assertEmpty(IntArrayList.newListWith(1));
+            Assert.fail();
+        }
+        catch (AssertionError ex)
+        {
+            Verify.assertContains("actual size:<1>", ex.getMessage());
+            Verify.assertContains(VerifyTest.class.getName(), ex.getStackTrace()[0].toString());
+        }
+    }
+
+    @Test
     public void assertEmpty_Iterable()
     {
         try
@@ -781,6 +796,21 @@ public class VerifyTest
         try
         {
             Verify.assertNotEmpty(Lists.mutable.of());
+            Assert.fail();
+        }
+        catch (AssertionError ex)
+        {
+            Verify.assertContains("should be non-empty", ex.getMessage());
+            Verify.assertContains(VerifyTest.class.getName(), ex.getStackTrace()[0].toString());
+        }
+    }
+
+    @Test
+    public void assertNotEmpty_PrimitiveIterable()
+    {
+        try
+        {
+            Verify.assertNotEmpty(new IntArrayList());
             Assert.fail();
         }
         catch (AssertionError ex)

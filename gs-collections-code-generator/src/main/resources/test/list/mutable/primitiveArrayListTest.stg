@@ -41,7 +41,7 @@ public class <name>ArrayListTest
     public void test<name>ArrayListWithInitialCapacity() throws Exception
     {
         <name>ArrayList arrayList = new <name>ArrayList(7);
-        Assert.assertTrue(arrayList.isEmpty());
+        Verify.assertEmpty(arrayList);
         Field items = <name>ArrayList.class.getDeclaredField("items");
         items.setAccessible(true);
         Assert.assertEquals(7L, ((<type>[]) items.get(arrayList)).length);
@@ -63,8 +63,8 @@ public class <name>ArrayListTest
     @Test
     public void isEmpty()
     {
-        Assert.assertTrue(new <name>ArrayList().isEmpty());
-        Assert.assertFalse(this.list.isEmpty());
+        Verify.assertEmpty(new <name>ArrayList());
+        Verify.assertNotEmpty(this.list);
     }
 
     @Test
@@ -401,7 +401,7 @@ public class <name>ArrayListTest
     public void empty()
     {
         Assert.assertTrue(this.list.notEmpty());
-        Assert.assertFalse(this.list.isEmpty());
+        Verify.assertNotEmpty(this.list);
     }
 
     @Test
