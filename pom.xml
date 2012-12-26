@@ -48,8 +48,13 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <slf4j.version>1.6.4</slf4j.version>
-        <clover.version>3.1.7</clover.version>
+        <clover.version>3.1.8</clover.version>
         <checkstyle.version>2.9.1</checkstyle.version>
+        <!--Sonar settings-->
+        <sonar.language>java</sonar.language>
+        <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
+        <sonar.core.codeCoveragePlugin>clover</sonar.core.codeCoveragePlugin>
+        <sonar.clover.version>${clover.version}</sonar.clover.version>
     </properties>
 
     <dependencyManagement>
