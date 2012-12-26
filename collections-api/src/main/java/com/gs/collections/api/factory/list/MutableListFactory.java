@@ -16,6 +16,7 @@
 
 package com.gs.collections.api.factory.list;
 
+import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.list.MutableList;
 
 public interface MutableListFactory
@@ -40,4 +41,6 @@ public interface MutableListFactory
     <T> MutableList<T> ofAll(Iterable<? extends T> iterable);
 
     <T> MutableList<T> withAll(Iterable<? extends T> iterable);
+
+    <T> MutableList<T> withNValues(int size, Function0<T> factory);
 }

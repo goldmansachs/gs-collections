@@ -38,6 +38,7 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.Procedures;
@@ -106,6 +107,19 @@ public class FastListTest extends AbstractListTestCase
     public void newEmpty()
     {
         Verify.assertInstanceOf(FastList.class, FastList.newList().newEmpty());
+    }
+
+    @Test
+    public void withNValues()
+    {
+        Assert.assertEquals(FastList.newListWith(1, 1, 1, 1, 1), FastList.newWithNValues(5, Functions0.value(1)));
+        Assert.assertEquals(FastList.newListWith(null, null, null, null, null), FastList.newWithNValues(5, Functions0.value(null)));
+        Assert.assertEquals(FastList.newListWith(
+                Lists.mutable.with(),
+                Lists.mutable.with(),
+                Lists.mutable.with(),
+                Lists.mutable.with(),
+                Lists.mutable.with()), FastList.newWithNValues(5, Functions0.newFastList()));
     }
 
     @Test

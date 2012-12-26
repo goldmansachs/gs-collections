@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.list.mutable;
 
+import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.factory.list.MutableListFactory;
 import com.gs.collections.api.list.MutableList;
 import net.jcip.annotations.Immutable;
@@ -51,5 +52,10 @@ public final class MutableListFactoryImpl implements MutableListFactory
     public <T> MutableList<T> withAll(Iterable<? extends T> iterable)
     {
         return FastList.newList(iterable);
+    }
+
+    public <T> MutableList<T> withNValues(int size, Function0<T> factory)
+    {
+        return FastList.newWithNValues(size, factory);
     }
 }
