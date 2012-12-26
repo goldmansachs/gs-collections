@@ -124,6 +124,9 @@ public abstract class ImmutableBagTestCase
     }
 
     @Test
+    public abstract void toStringOfItemToCount();
+
+    @Test
     public void testNewWithoutAll()
     {
         ImmutableBag<String> bag = this.newBag();

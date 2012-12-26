@@ -94,6 +94,11 @@ public class UnmodifiableBag<T>
         return this.getMutableBag().hashCode();
     }
 
+    public String toStringOfItemToCount()
+    {
+        return this.getMutableBag().toStringOfItemToCount();
+    }
+
     @Override
     public MutableBag<T> newEmpty()
     {

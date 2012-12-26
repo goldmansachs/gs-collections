@@ -302,6 +302,14 @@ public class SynchronizedBag<T>
         }
     }
 
+    public String toStringOfItemToCount()
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableBag().toStringOfItemToCount();
+        }
+    }
+
     @Override
     public <R extends Collection<Pair<T, Integer>>> R zipWithIndex(R target)
     {

@@ -46,6 +46,8 @@ import com.gs.collections.api.partition.bag.PartitionMutableBag;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.Counter;
+import com.gs.collections.impl.bag.immutable.ImmutableArrayBag;
+import com.gs.collections.impl.bag.immutable.ImmutableHashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
@@ -439,6 +441,11 @@ public class HashBag<T>
         return result;
     }
 
+    public String toStringOfItemToCount()
+    {
+        return this.items.toString();
+    }
+
     @Override
     public boolean contains(Object o)
     {
@@ -563,7 +570,7 @@ public class HashBag<T>
 
     public ImmutableBag<T> toImmutable()
     {
-        return Bags.immutable.ofAll(this);
+        return Bags.immutable.withAll(this);
     }
 
     @Override

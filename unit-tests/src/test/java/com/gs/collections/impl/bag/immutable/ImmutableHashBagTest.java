@@ -44,6 +44,15 @@ public class ImmutableHashBagTest extends ImmutableBagTestCase
         Verify.assertIterableSize(10, this.newBag());
     }
 
+    @Override
+    public void toStringOfItemToCount()
+    {
+        Assert.assertEquals("{}", ImmutableHashBag.newBag().toStringOfItemToCount());
+        Assert.assertEquals("{1=3}", ImmutableHashBag.newBagWith("1", "1", "1").toStringOfItemToCount());
+        String actual = ImmutableHashBag.newBagWith("1", "2", "2").toStringOfItemToCount();
+        Assert.assertTrue("{1=1, 2=2}".equals(actual) || "{2=2, 1=1}".equals(actual));
+    }
+
     @Test
     public void selectInstancesOf()
     {

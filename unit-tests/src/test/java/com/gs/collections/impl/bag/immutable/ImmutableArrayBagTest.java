@@ -55,8 +55,11 @@ public class ImmutableArrayBagTest extends ImmutableBagTestCase
     public void testNewWith()
     {
         super.testNewWith();
-        Verify.assertInstanceOf(ImmutableArrayBag.class, Bags.immutable.ofAll(Interval.oneTo(9)).newWith(10));
-        Verify.assertInstanceOf(ImmutableHashBag.class, Bags.immutable.ofAll(Interval.oneTo(10)).newWith(11));
+        int maximumUsefulArrayBagSize = ImmutableArrayBag.MAXIMUM_USEFUL_ARRAY_BAG_SIZE;
+        Verify.assertInstanceOf(ImmutableArrayBag.class,
+                Bags.immutable.ofAll(Interval.oneTo(maximumUsefulArrayBagSize - 1)).newWith(maximumUsefulArrayBagSize));
+        Verify.assertInstanceOf(ImmutableHashBag.class,
+                Bags.immutable.ofAll(Interval.oneTo(maximumUsefulArrayBagSize)).newWith(maximumUsefulArrayBagSize + 1));
     }
 
     @Override
@@ -79,6 +82,13 @@ public class ImmutableArrayBagTest extends ImmutableBagTestCase
         Assert.assertEquals(3, newBag4.sizeDistinct());
         ImmutableBag<String> newBag5 = bag.newWithout("5");
         Assert.assertEquals(bag, newBag5);
+    }
+
+    @Override
+    public void toStringOfItemToCount()
+    {
+        String actual = ImmutableArrayBag.newBagWith("1", "2", "2").toStringOfItemToCount();
+        Assert.assertTrue("{1=1, 2=2}".equals(actual) || "{2=2, 1=1}".equals(actual));
     }
 
     @Override

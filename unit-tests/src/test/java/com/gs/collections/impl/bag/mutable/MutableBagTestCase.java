@@ -76,6 +76,15 @@ public abstract class MutableBagTestCase extends AbstractCollectionTestCase
     }
 
     @Test
+    public void toStringOfItemToCount()
+    {
+        Assert.assertEquals("{}", this.newWith().toStringOfItemToCount());
+        Assert.assertEquals("{1=3}", this.newWith(1, 1, 1).toStringOfItemToCount());
+        String actual = this.newWith(1, 2, 2).toStringOfItemToCount();
+        Assert.assertTrue("{1=1, 2=2}".equals(actual) || "{2=2, 1=1}".equals(actual));
+    }
+
+    @Test
     public void toMapOfItemToCount()
     {
         MutableBag<Integer> bag = this.newWith(1, 2, 2, 3, 3, 3);

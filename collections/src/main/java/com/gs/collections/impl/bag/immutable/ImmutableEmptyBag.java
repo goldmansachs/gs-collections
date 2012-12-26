@@ -104,6 +104,11 @@ final class ImmutableEmptyBag<T>
         return 0;
     }
 
+    public String toStringOfItemToCount()
+    {
+        return "";
+    }
+
     public int occurrencesOf(Object item)
     {
         return 0;

@@ -68,6 +68,12 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
     }
 
     @Override
+    public void toStringOfItemToCount()
+    {
+        Assert.assertEquals("{1=1}", new ImmutableSingletonBag<String>(VAL).toStringOfItemToCount());
+    }
+
+    @Override
     @Test
     public void equalsAndHashCode()
     {

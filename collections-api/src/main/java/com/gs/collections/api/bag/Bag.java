@@ -58,6 +58,22 @@ public interface Bag<T>
     MutableMap<T, Integer> toMapOfItemToCount();
 
     /**
+     * Returns a string representation of this bag. The string representation consists of a list of element-count mappings.
+     * The elements each appear once, in an order consistent with other methods like {@link #forEachWithOccurrences(ObjectIntProcedure)}
+     * and {@link #iterator()}. The element-count mappings are enclosed in braces (<tt>"{}"</tt>).  Adjacent mappings are
+     * separated by the characters <tt>", "</tt> (comma and space).  Each element-count mapping is rendered as the element
+     * followed by an equals sign (<tt>"="</tt>) followed by the number of ooccurrences. Elements and are converted to
+     * strings as by {@link String#valueOf(Object)}.
+     *
+     * The string representation is similar to {@link Map#toString()}, not {@link RichIterable#toString()}.
+     *
+     * @since 3.0
+     *
+     * @return a string representation of this bag
+     */
+    String toStringOfItemToCount();
+
+    /**
      * Convert the Bag to an ImmutableBag.  If the bag is immutable, it returns itself.
      */
     ImmutableBag<T> toImmutable();

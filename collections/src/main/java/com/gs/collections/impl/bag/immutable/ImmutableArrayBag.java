@@ -58,7 +58,7 @@ public class ImmutableArrayBag<T>
         extends AbstractImmutableBag<T>
         implements Serializable
 {
-    static final int MAXIMUM_USEFUL_ARRAY_BAG_SIZE = 10;
+    static final int MAXIMUM_USEFUL_ARRAY_BAG_SIZE = 20;
 
     private static final long serialVersionUID = 1L;
 

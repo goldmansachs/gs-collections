@@ -16,8 +16,10 @@
 
 package com.gs.collections.impl.bag.immutable;
 
+import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.factory.bag.ImmutableBagFactory;
+import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.utility.Iterate;
 import net.jcip.annotations.Immutable;
 
@@ -77,7 +79,23 @@ public final class ImmutableBagFactoryImpl implements ImmutableBagFactory
         {
             return (ImmutableBag<T>) items;
         }
-
+        if (items instanceof Bag<?>)
+        {
+            Bag<T> bag = (Bag<T>) items;
+            if (bag.isEmpty())
+            {
+                return this.with();
+            }
+            if (bag.size() == 1)
+            {
+                return this.with(bag.getFirst());
+            }
+            if (bag.sizeDistinct() < ImmutableArrayBag.MAXIMUM_USEFUL_ARRAY_BAG_SIZE)
+            {
+                return ImmutableArrayBag.copyFrom(bag);
+            }
+            return new ImmutableHashBag<T>(bag);
+        }
         return this.of((T[]) Iterate.toArray(items));
     }
 }

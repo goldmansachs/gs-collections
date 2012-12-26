@@ -126,6 +126,12 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
     }
 
     @Override
+    public void toStringOfItemToCount()
+    {
+        Assert.assertEquals("", Bags.immutable.of().toStringOfItemToCount());
+    }
+
+    @Override
     @Test
     public void testDetect()
     {

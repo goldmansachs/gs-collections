@@ -24,6 +24,7 @@ import java.io.ObjectOutput;
 import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.procedure.checked.CheckedObjectIntProcedure;
@@ -41,6 +42,28 @@ public abstract class AbstractImmutableBag<T>
     protected MutableCollection<T> newMutable(int size)
     {
         return Bags.mutable.of();
+    }
+
+    public String toStringOfItemToCount()
+    {
+        if (this.isEmpty())
+        {
+            return "{}";
+        }
+        final StringBuilder builder = new StringBuilder().append('{');
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                builder.append(each.toString());
+                builder.append('=');
+                builder.append(occurrences);
+                builder.append(", ");
+            }
+        });
+        builder.deleteCharAt(builder.length() - 1);
+        builder.deleteCharAt(builder.length() - 1);
+        return builder.append('}').toString();
     }
 
     protected static class ImmutableBagSerializationProxy<T> implements Externalizable
