@@ -17,8 +17,6 @@
 package com.gs.collections.impl.map.mutable;
 
 import java.util.Collections;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
@@ -43,9 +41,7 @@ import com.gs.collections.impl.parallel.ParallelIterate;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.ImmutableEntry;
-import org.junit.After;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 import static com.gs.collections.impl.factory.Iterables.*;
@@ -53,7 +49,7 @@ import static com.gs.collections.impl.factory.Iterables.*;
 /**
  * JUnit test for {@link ConcurrentHashMapUnsafe}.
  */
-public class ConcurrentHashMapUnsafeTest extends MutableMapTestCase
+public class ConcurrentHashMapUnsafeTest extends ConcurrentHashMapTestCase
 {
     public static final MutableMap<Integer, MutableBag<Integer>> BAG_MUTABLE_MAP = Interval.oneTo(1000).groupBy(new Function<Integer, Integer>()
     {
@@ -62,19 +58,6 @@ public class ConcurrentHashMapUnsafeTest extends MutableMapTestCase
             return each % 100;
         }
     }).toMap(Functions0.<Integer>newHashBag());
-    private ExecutorService executor;
-
-    @Before
-    public void setUp()
-    {
-        this.executor = Executors.newFixedThreadPool(20);
-    }
-
-    @After
-    public void tearDown()
-    {
-        this.executor.shutdown();
-    }
 
     @Override
     public <K, V> ConcurrentMutableMap<K, V> newMap()

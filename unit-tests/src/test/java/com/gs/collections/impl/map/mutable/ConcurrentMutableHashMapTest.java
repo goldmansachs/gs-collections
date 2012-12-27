@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,7 @@ import static com.gs.collections.impl.factory.Iterables.*;
 /**
  * JUnit test for {@link ConcurrentMutableHashMap}.
  */
-public class ConcurrentMutableHashMapTest extends MutableMapTestCase
+public class ConcurrentMutableHashMapTest extends ConcurrentHashMapTestCase
 {
     @Override
     public <K, V> ConcurrentMutableMap<K, V> newMap()

@@ -91,7 +91,7 @@ public class ConcurrentHashMapUnsafe<K, V>
     {
         try
         {
-            UNSAFE = getUnsafe();
+            UNSAFE = ConcurrentHashMapUnsafe.getUnsafe();
             Class<?> objectArrayClass = Object[].class;
             OBJECT_ARRAY_BASE = UNSAFE.arrayBaseOffset(objectArrayClass);
             int objectArrayScale = UNSAFE.arrayIndexScale(objectArrayClass);
@@ -202,7 +202,7 @@ public class ConcurrentHashMapUnsafe<K, V>
         {
             int length = currentArray.length;
             int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
-            Object o = arrayAt(currentArray, index);
+            Object o = ConcurrentHashMapUnsafe.arrayAt(currentArray, index);
             if (o == RESIZED || o == RESIZING)
             {
                 currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
@@ -220,7 +220,7 @@ public class ConcurrentHashMapUnsafe<K, V>
                     e = e.getNext();
                 }
                 Entry<K, V> newEntry = new Entry<K, V>(key, value, (Entry<K, V>) o);
-                if (casArrayAt(currentArray, index, o, newEntry))
+                if (ConcurrentHashMapUnsafe.casArrayAt(currentArray, index, o, newEntry))
                 {
                     this.incrementSizeAndPossiblyResize(currentArray, length, o);
                     return null; // per the contract of putIfAbsent, we return null when the map didn't have this key before
@@ -257,7 +257,7 @@ public class ConcurrentHashMapUnsafe<K, V>
     {
         Object[] newArray = this.helpWithResize(currentArray);
         int helpCount = 0;
-        while (arrayAt(currentArray, index) != RESIZED)
+        while (ConcurrentHashMapUnsafe.arrayAt(currentArray, index) != RESIZED)
         {
             helpCount++;
             newArray = this.helpWithResize(currentArray);
@@ -271,7 +271,7 @@ public class ConcurrentHashMapUnsafe<K, V>
 
     private Object[] helpWithResize(Object[] currentArray)
     {
-        ResizeContainer resizeContainer = (ResizeContainer) arrayAt(currentArray, currentArray.length - 1);
+        ResizeContainer resizeContainer = (ResizeContainer) ConcurrentHashMapUnsafe.arrayAt(currentArray, currentArray.length - 1);
         Object[] newTable = resizeContainer.nextArray;
         if (resizeContainer.getQueuePosition() > ResizeContainer.QUEUE_INCREMENT)
         {
@@ -293,7 +293,7 @@ public class ConcurrentHashMapUnsafe<K, V>
     {
         int oldCapacity = oldTable.length;
         int end = oldCapacity - 1;
-        Object last = arrayAt(oldTable, end);
+        Object last = ConcurrentHashMapUnsafe.arrayAt(oldTable, end);
         if (this.size() < end && last == RESIZE_SENTINEL)
         {
             return;
@@ -308,15 +308,15 @@ public class ConcurrentHashMapUnsafe<K, V>
         {
             synchronized (oldTable) // allocating a new array is too expensive to make this an atomic operation
             {
-                if (arrayAt(oldTable, end) == null)
+                if (ConcurrentHashMapUnsafe.arrayAt(oldTable, end) == null)
                 {
-                    setArrayAt(oldTable, end, RESIZE_SENTINEL);
+                    ConcurrentHashMapUnsafe.setArrayAt(oldTable, end, RESIZE_SENTINEL);
                     if (this.partitionedSize == null && newSize >= PARTITIONED_SIZE_THRESHOLD)
                     {
                         this.partitionedSize = new int[SIZE_BUCKETS * 16];
                     }
                     resizeContainer = new ResizeContainer(new Object[newSize], oldTable.length - 1);
-                    setArrayAt(oldTable, end, resizeContainer);
+                    ConcurrentHashMapUnsafe.setArrayAt(oldTable, end, resizeContainer);
                     ownResize = true;
                 }
             }
@@ -350,10 +350,10 @@ public class ConcurrentHashMapUnsafe<K, V>
 
         for (int j = 0; j < src.length - 1; )
         {
-            Object o = arrayAt(src, j);
+            Object o = ConcurrentHashMapUnsafe.arrayAt(src, j);
             if (o == null)
             {
-                if (casArrayAt(src, j, null, RESIZED))
+                if (ConcurrentHashMapUnsafe.casArrayAt(src, j, null, RESIZED))
                 {
                     j++;
                 }
@@ -369,14 +369,14 @@ public class ConcurrentHashMapUnsafe<K, V>
             else
             {
                 Entry<K, V> e = (Entry<K, V>) o;
-                if (casArrayAt(src, j, o, RESIZING))
+                if (ConcurrentHashMapUnsafe.casArrayAt(src, j, o, RESIZING))
                 {
                     while (e != null)
                     {
                         this.unconditionalCopy(dest, e);
                         e = e.getNext();
                     }
-                    setArrayAt(src, j, RESIZED);
+                    ConcurrentHashMapUnsafe.setArrayAt(src, j, RESIZED);
                     j++;
                 }
             }
@@ -400,10 +400,10 @@ public class ConcurrentHashMapUnsafe<K, V>
                 }
                 for (int j = end - 1; j >= start; )
                 {
-                    Object o = arrayAt(src, j);
+                    Object o = ConcurrentHashMapUnsafe.arrayAt(src, j);
                     if (o == null)
                     {
-                        if (casArrayAt(src, j, null, RESIZED))
+                        if (ConcurrentHashMapUnsafe.casArrayAt(src, j, null, RESIZED))
                         {
                             j--;
                         }
@@ -416,14 +416,14 @@ public class ConcurrentHashMapUnsafe<K, V>
                     else
                     {
                         Entry<K, V> e = (Entry<K, V>) o;
-                        if (casArrayAt(src, j, o, RESIZING))
+                        if (ConcurrentHashMapUnsafe.casArrayAt(src, j, o, RESIZING))
                         {
                             while (e != null)
                             {
                                 this.unconditionalCopy(dest, e);
                                 e = e.getNext();
                             }
-                            setArrayAt(src, j, RESIZED);
+                            ConcurrentHashMapUnsafe.setArrayAt(src, j, RESIZED);
                             j--;
                         }
                     }
@@ -440,10 +440,10 @@ public class ConcurrentHashMapUnsafe<K, V>
         {
             int length = currentArray.length;
             int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
-            Object o = arrayAt(currentArray, index);
+            Object o = ConcurrentHashMapUnsafe.arrayAt(currentArray, index);
             if (o == RESIZED || o == RESIZING)
             {
-                currentArray = ((ResizeContainer) arrayAt(currentArray, length - 1)).nextArray;
+                currentArray = ((ResizeContainer) ConcurrentHashMapUnsafe.arrayAt(currentArray, length - 1)).nextArray;
             }
             else
             {
@@ -463,7 +463,7 @@ public class ConcurrentHashMapUnsafe<K, V>
                 {
                     newEntry = new Entry<K, V>(toCopyEntry.getKey(), toCopyEntry.getValue(), (Entry<K, V>) o);
                 }
-                if (casArrayAt(currentArray, index, o, newEntry))
+                if (ConcurrentHashMapUnsafe.casArrayAt(currentArray, index, o, newEntry))
                 {
                     return;
                 }
@@ -501,7 +501,7 @@ public class ConcurrentHashMapUnsafe<K, V>
         {
             int length = currentArray.length;
             int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
-            Object o = arrayAt(currentArray, index);
+            Object o = ConcurrentHashMapUnsafe.arrayAt(currentArray, index);
             if (o == RESIZED || o == RESIZING)
             {
                 currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
@@ -524,7 +524,7 @@ public class ConcurrentHashMapUnsafe<K, V>
                     newValue = factory.valueOf(key);
                 }
                 Entry<K, V> newEntry = new Entry<K, V>(key, newValue, (Entry<K, V>) o);
-                if (casArrayAt(currentArray, index, o, newEntry))
+                if (ConcurrentHashMapUnsafe.casArrayAt(currentArray, index, o, newEntry))
                 {
                     this.incrementSizeAndPossiblyResize(currentArray, length, o);
                     return newValue;
@@ -543,8 +543,8 @@ public class ConcurrentHashMapUnsafe<K, V>
         while (true)
         {
             int length = currentArray.length;
-            int index = indexFor(hash, length);
-            Object o = arrayAt(currentArray, index);
+            int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
+            Object o = ConcurrentHashMapUnsafe.arrayAt(currentArray, index);
             if (o == RESIZED || o == RESIZING)
             {
                 currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
@@ -567,7 +567,7 @@ public class ConcurrentHashMapUnsafe<K, V>
                     newValue = factory.value();
                 }
                 Entry<K, V> newEntry = new Entry<K, V>(key, newValue, (Entry<K, V>) o);
-                if (casArrayAt(currentArray, index, o, newEntry))
+                if (ConcurrentHashMapUnsafe.casArrayAt(currentArray, index, o, newEntry))
                 {
                     this.incrementSizeAndPossiblyResize(currentArray, length, o);
                     return newValue;
@@ -594,7 +594,7 @@ public class ConcurrentHashMapUnsafe<K, V>
         {
             int length = currentArray.length;
             int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
-            Object o = arrayAt(currentArray, index);
+            Object o = ConcurrentHashMapUnsafe.arrayAt(currentArray, index);
             if (o == RESIZED || o == RESIZING)
             {
                 currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
@@ -622,7 +622,7 @@ public class ConcurrentHashMapUnsafe<K, V>
                     key = keyTransformer.value(key, newValue);
                 }
                 Entry<K, V> newEntry = new Entry<K, V>(key, newValue, (Entry<K, V>) o);
-                if (casArrayAt(currentArray, index, o, newEntry))
+                if (ConcurrentHashMapUnsafe.casArrayAt(currentArray, index, o, newEntry))
                 {
                     this.incrementSizeAndPossiblyResize(currentArray, length, o);
                     return null;
@@ -640,8 +640,8 @@ public class ConcurrentHashMapUnsafe<K, V>
         while (true)
         {
             int length = currentArray.length;
-            int index = indexFor(hash, length);
-            Object o = arrayAt(currentArray, index);
+            int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
+            Object o = ConcurrentHashMapUnsafe.arrayAt(currentArray, index);
             if (o == RESIZED || o == RESIZING)
             {
                 currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
@@ -655,7 +655,7 @@ public class ConcurrentHashMapUnsafe<K, V>
                     if (candidate.equals(key) && this.nullSafeEquals(e.getValue(), value))
                     {
                         Entry<K, V> replacement = this.createReplacementChainForRemoval((Entry<K, V>) o, e);
-                        if (casArrayAt(currentArray, index, o, replacement))
+                        if (ConcurrentHashMapUnsafe.casArrayAt(currentArray, index, o, replacement))
                         {
                             this.addToSize(-1);
                             return true;
@@ -748,10 +748,10 @@ public class ConcurrentHashMapUnsafe<K, V>
             resizeContainer = null;
             for (int i = 0; i < currentArray.length - 1; i++)
             {
-                Object o = arrayAt(currentArray, i);
+                Object o = ConcurrentHashMapUnsafe.arrayAt(currentArray, i);
                 if (o == RESIZED || o == RESIZING)
                 {
-                    resizeContainer = (ResizeContainer) arrayAt(currentArray, currentArray.length - 1);
+                    resizeContainer = (ResizeContainer) ConcurrentHashMapUnsafe.arrayAt(currentArray, currentArray.length - 1);
                 }
                 else if (o != null)
                 {
@@ -791,7 +791,7 @@ public class ConcurrentHashMapUnsafe<K, V>
         int hash = this.hash(key);
         Object[] currentArray = this.table;
         int index = ConcurrentHashMapUnsafe.indexFor(hash, currentArray.length);
-        Object o = arrayAt(currentArray, index);
+        Object o = ConcurrentHashMapUnsafe.arrayAt(currentArray, index);
         if (o == RESIZED || o == RESIZING)
         {
             return this.slowGet(key, hash, index, currentArray);
@@ -813,7 +813,7 @@ public class ConcurrentHashMapUnsafe<K, V>
         {
             int length = currentArray.length;
             index = ConcurrentHashMapUnsafe.indexFor(hash, length);
-            Object o = arrayAt(currentArray, index);
+            Object o = ConcurrentHashMapUnsafe.arrayAt(currentArray, index);
             if (o == RESIZED || o == RESIZING)
             {
                 currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
@@ -843,7 +843,7 @@ public class ConcurrentHashMapUnsafe<K, V>
         {
             int length = currentArray.length;
             int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
-            Object o = arrayAt(currentArray, index);
+            Object o = ConcurrentHashMapUnsafe.arrayAt(currentArray, index);
             if (o == RESIZED || o == RESIZING)
             {
                 currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
@@ -871,11 +871,11 @@ public class ConcurrentHashMapUnsafe<K, V>
         Object[] currentArray = this.table;
         int length = currentArray.length;
         int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
-        Object o = arrayAt(currentArray, index);
+        Object o = ConcurrentHashMapUnsafe.arrayAt(currentArray, index);
         if (o == null)
         {
             Entry<K, V> newEntry = new Entry<K, V>(key, value, null);
-            if (casArrayAt(currentArray, index, null, newEntry))
+            if (ConcurrentHashMapUnsafe.casArrayAt(currentArray, index, null, newEntry))
             {
                 this.addToSize(1);
                 return null;
@@ -892,7 +892,7 @@ public class ConcurrentHashMapUnsafe<K, V>
         {
             int length = currentArray.length;
             int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
-            Object o = arrayAt(currentArray, index);
+            Object o = ConcurrentHashMapUnsafe.arrayAt(currentArray, index);
             if (o == RESIZED || o == RESIZING)
             {
                 currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
@@ -907,7 +907,7 @@ public class ConcurrentHashMapUnsafe<K, V>
                     {
                         V oldValue = e.getValue();
                         Entry<K, V> newEntry = new Entry<K, V>(e.getKey(), value, this.createReplacementChainForRemoval((Entry<K, V>) o, e));
-                        if (!casArrayAt(currentArray, index, o, newEntry))
+                        if (!ConcurrentHashMapUnsafe.casArrayAt(currentArray, index, o, newEntry))
                         {
                             //noinspection ContinueStatementWithLabel
                             continue outer;
@@ -917,7 +917,7 @@ public class ConcurrentHashMapUnsafe<K, V>
                     e = e.getNext();
                 }
                 Entry<K, V> newEntry = new Entry<K, V>(key, value, (Entry<K, V>) o);
-                if (casArrayAt(currentArray, index, o, newEntry))
+                if (ConcurrentHashMapUnsafe.casArrayAt(currentArray, index, o, newEntry))
                 {
                     this.incrementSizeAndPossiblyResize(currentArray, length, o);
                     return null;
@@ -985,7 +985,7 @@ public class ConcurrentHashMapUnsafe<K, V>
     {
         for (int i = start; i < end; i++)
         {
-            Object o = arrayAt(currentArray, i);
+            Object o = ConcurrentHashMapUnsafe.arrayAt(currentArray, i);
             if (o == RESIZED || o == RESIZING)
             {
                 throw new ConcurrentModificationException("can't iterate while resizing!");
@@ -1021,15 +1021,15 @@ public class ConcurrentHashMapUnsafe<K, V>
             resizeContainer = null;
             for (int i = 0; i < currentArray.length - 1; i++)
             {
-                Object o = arrayAt(currentArray, i);
+                Object o = ConcurrentHashMapUnsafe.arrayAt(currentArray, i);
                 if (o == RESIZED || o == RESIZING)
                 {
-                    resizeContainer = (ResizeContainer) arrayAt(currentArray, currentArray.length - 1);
+                    resizeContainer = (ResizeContainer) ConcurrentHashMapUnsafe.arrayAt(currentArray, currentArray.length - 1);
                 }
                 else if (o != null)
                 {
                     Entry<K, V> e = (Entry<K, V>) o;
-                    if (casArrayAt(currentArray, i, o, null))
+                    if (ConcurrentHashMapUnsafe.casArrayAt(currentArray, i, o, null))
                     {
                         int removedEntries = 0;
                         while (e != null)
@@ -1074,8 +1074,8 @@ public class ConcurrentHashMapUnsafe<K, V>
         int hash = this.hash(key);
         Object[] currentArray = this.table;
         int length = currentArray.length;
-        int index = indexFor(hash, length);
-        Object o = arrayAt(currentArray, index);
+        int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
+        Object o = ConcurrentHashMapUnsafe.arrayAt(currentArray, index);
         if (o == RESIZED || o == RESIZING)
         {
             return this.slowReplace(key, oldValue, newValue, hash, currentArray);
@@ -1090,7 +1090,7 @@ public class ConcurrentHashMapUnsafe<K, V>
                 {
                     Entry<K, V> replacement = this.createReplacementChainForRemoval((Entry<K, V>) o, e);
                     Entry<K, V> newEntry = new Entry<K, V>(key, newValue, replacement);
-                    return casArrayAt(currentArray, index, o, newEntry) || this.slowReplace(key, oldValue, newValue, hash, currentArray);
+                    return ConcurrentHashMapUnsafe.casArrayAt(currentArray, index, o, newEntry) || this.slowReplace(key, oldValue, newValue, hash, currentArray);
                 }
                 return false;
             }
@@ -1107,7 +1107,7 @@ public class ConcurrentHashMapUnsafe<K, V>
         {
             int length = currentArray.length;
             int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
-            Object o = arrayAt(currentArray, index);
+            Object o = ConcurrentHashMapUnsafe.arrayAt(currentArray, index);
             if (o == RESIZED || o == RESIZING)
             {
                 currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
@@ -1124,7 +1124,7 @@ public class ConcurrentHashMapUnsafe<K, V>
                         {
                             Entry<K, V> replacement = this.createReplacementChainForRemoval((Entry<K, V>) o, e);
                             Entry<K, V> newEntry = new Entry<K, V>(key, newValue, replacement);
-                            if (casArrayAt(currentArray, index, o, newEntry))
+                            if (ConcurrentHashMapUnsafe.casArrayAt(currentArray, index, o, newEntry))
                             {
                                 return true;
                             }
@@ -1146,7 +1146,7 @@ public class ConcurrentHashMapUnsafe<K, V>
         Object[] currentArray = this.table;
         int length = currentArray.length;
         int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
-        Object o = arrayAt(currentArray, index);
+        Object o = ConcurrentHashMapUnsafe.arrayAt(currentArray, index);
         if (o == null)
         {
             return null;
@@ -1162,7 +1162,7 @@ public class ConcurrentHashMapUnsafe<K, V>
         {
             int length = currentArray.length;
             int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
-            Object o = arrayAt(currentArray, index);
+            Object o = ConcurrentHashMapUnsafe.arrayAt(currentArray, index);
             if (o == RESIZED || o == RESIZING)
             {
                 currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
@@ -1177,7 +1177,7 @@ public class ConcurrentHashMapUnsafe<K, V>
                     {
                         V oldValue = e.getValue();
                         Entry<K, V> newEntry = new Entry<K, V>(e.getKey(), value, this.createReplacementChainForRemoval((Entry<K, V>) o, e));
-                        if (!casArrayAt(currentArray, index, o, newEntry))
+                        if (!ConcurrentHashMapUnsafe.casArrayAt(currentArray, index, o, newEntry))
                         {
                             //noinspection ContinueStatementWithLabel
                             continue outer;
@@ -1196,8 +1196,8 @@ public class ConcurrentHashMapUnsafe<K, V>
         int hash = this.hash(key);
         Object[] currentArray = this.table;
         int length = currentArray.length;
-        int index = indexFor(hash, length);
-        Object o = arrayAt(currentArray, index);
+        int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
+        Object o = ConcurrentHashMapUnsafe.arrayAt(currentArray, index);
         if (o == RESIZED || o == RESIZING)
         {
             return this.slowRemove(key, hash, currentArray);
@@ -1209,7 +1209,7 @@ public class ConcurrentHashMapUnsafe<K, V>
             if (candidate == key || candidate.equals(key))
             {
                 Entry<K, V> replacement = this.createReplacementChainForRemoval((Entry<K, V>) o, e);
-                if (casArrayAt(currentArray, index, o, replacement))
+                if (ConcurrentHashMapUnsafe.casArrayAt(currentArray, index, o, replacement))
                 {
                     this.addToSize(-1);
                     return e.getValue();
@@ -1229,7 +1229,7 @@ public class ConcurrentHashMapUnsafe<K, V>
         {
             int length = currentArray.length;
             int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
-            Object o = arrayAt(currentArray, index);
+            Object o = ConcurrentHashMapUnsafe.arrayAt(currentArray, index);
             if (o == RESIZED || o == RESIZING)
             {
                 currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
@@ -1243,7 +1243,7 @@ public class ConcurrentHashMapUnsafe<K, V>
                     if (candidate.equals(key))
                     {
                         Entry<K, V> replacement = this.createReplacementChainForRemoval((Entry<K, V>) o, e);
-                        if (casArrayAt(currentArray, index, o, replacement))
+                        if (ConcurrentHashMapUnsafe.casArrayAt(currentArray, index, o, replacement))
                         {
                             this.addToSize(-1);
                             return e.getValue();
@@ -1325,7 +1325,7 @@ public class ConcurrentHashMapUnsafe<K, V>
     {
         for (int i = start; i < end; i++)
         {
-            Object o = arrayAt(currentArray, i);
+            Object o = ConcurrentHashMapUnsafe.arrayAt(currentArray, i);
             if (o == RESIZED || o == RESIZING)
             {
                 throw new ConcurrentModificationException("can't iterate while resizing!");
@@ -1389,7 +1389,7 @@ public class ConcurrentHashMapUnsafe<K, V>
     {
         for (int i = start; i < end; i++)
         {
-            Object o = arrayAt(currentArray, i);
+            Object o = ConcurrentHashMapUnsafe.arrayAt(currentArray, i);
             if (o == RESIZED || o == RESIZING)
             {
                 throw new ConcurrentModificationException("can't iterate while resizing!");
@@ -1411,7 +1411,7 @@ public class ConcurrentHashMapUnsafe<K, V>
         Object[] currentArray = this.table;
         for (int i = 0; i < currentArray.length - 1; i++)
         {
-            Object o = arrayAt(currentArray, i);
+            Object o = ConcurrentHashMapUnsafe.arrayAt(currentArray, i);
             if (o == RESIZED || o == RESIZING)
             {
                 throw new ConcurrentModificationException("can't compute hashcode while resizing!");
@@ -1519,7 +1519,7 @@ public class ConcurrentHashMapUnsafe<K, V>
         int count = 0;
         for (int i = 0; i < this.table.length - 1; i++)
         {
-            Object o = arrayAt(this.table, i);
+            Object o = ConcurrentHashMapUnsafe.arrayAt(this.table, i);
             if (o == RESIZED || o == RESIZING)
             {
                 throw new ConcurrentModificationException("Can't serialize while resizing!");
@@ -1559,7 +1559,7 @@ public class ConcurrentHashMapUnsafe<K, V>
         {
             for (; this.index < this.currentTable.length - 1; this.index++)
             {
-                Object o = arrayAt(this.currentTable, this.index);
+                Object o = ConcurrentHashMapUnsafe.arrayAt(this.currentTable, this.index);
                 if (o == RESIZED || o == RESIZING)
                 {
                     this.throwConcurrentException();
@@ -2020,8 +2020,8 @@ public class ConcurrentHashMapUnsafe<K, V>
         while (true)
         {
             int length = currentArray.length;
-            int index = indexFor(hash, length);
-            Object o = arrayAt(currentArray, index);
+            int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
+            Object o = ConcurrentHashMapUnsafe.arrayAt(currentArray, index);
             if (o == RESIZED || o == RESIZING)
             {
                 currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
@@ -2044,7 +2044,7 @@ public class ConcurrentHashMapUnsafe<K, V>
                     newValue = function.valueOf(parameter);
                 }
                 Entry<K, V> newEntry = new Entry<K, V>(key, newValue, (Entry<K, V>) o);
-                if (casArrayAt(currentArray, index, o, newEntry))
+                if (ConcurrentHashMapUnsafe.casArrayAt(currentArray, index, o, newEntry))
                 {
                     this.incrementSizeAndPossiblyResize(currentArray, length, o);
                     return newValue;
@@ -2114,6 +2114,141 @@ public class ConcurrentHashMapUnsafe<K, V>
             {
                 throw new RuntimeException("Could not initialize intrinsics",
                         e.getCause());
+            }
+        }
+    }
+
+    public V updateValue(K key, Function0<? extends V> factory, Function<? super V, ? extends V> function)
+    {
+        int hash = this.hash(key);
+        Object[] currentArray = this.table;
+        int length = currentArray.length;
+        int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
+        Object o = ConcurrentHashMapUnsafe.arrayAt(currentArray, index);
+        if (o == null)
+        {
+            V result = function.valueOf(factory.value());
+            Entry<K, V> newEntry = new Entry<K, V>(key, result, null);
+            if (ConcurrentHashMapUnsafe.casArrayAt(currentArray, index, null, newEntry))
+            {
+                this.addToSize(1);
+                return result;
+            }
+        }
+        return this.slowUpdateValue(key, factory, function, hash, currentArray);
+    }
+
+    private V slowUpdateValue(K key, Function0<? extends V> factory, Function<? super V, ? extends V> function, int hash, Object[] currentArray)
+    {
+        //noinspection LabeledStatement
+        outer:
+        while (true)
+        {
+            int length = currentArray.length;
+            int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
+            Object o = ConcurrentHashMapUnsafe.arrayAt(currentArray, index);
+            if (o == RESIZED || o == RESIZING)
+            {
+                currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
+            }
+            else
+            {
+                Entry<K, V> e = (Entry<K, V>) o;
+                while (e != null)
+                {
+                    Object candidate = e.getKey();
+                    if (candidate.equals(key))
+                    {
+                        V oldValue = e.getValue();
+                        V newValue = function.valueOf(oldValue);
+                        Entry<K, V> newEntry = new Entry<K, V>(e.getKey(), newValue, this.createReplacementChainForRemoval((Entry<K, V>) o, e));
+                        if (!ConcurrentHashMapUnsafe.casArrayAt(currentArray, index, o, newEntry))
+                        {
+                            //noinspection ContinueStatementWithLabel
+                            continue outer;
+                        }
+
+                        return newValue;
+                    }
+                    e = e.getNext();
+                }
+                V result = function.valueOf(factory.value());
+                Entry<K, V> newEntry = new Entry<K, V>(key, result, (Entry<K, V>) o);
+                if (ConcurrentHashMapUnsafe.casArrayAt(currentArray, index, o, newEntry))
+                {
+                    this.incrementSizeAndPossiblyResize(currentArray, length, o);
+                    return result;
+                }
+            }
+        }
+    }
+
+    public <P> V updateValueWith(K key, Function0<? extends V> factory, Function2<? super V, ? super P, ? extends V> function, P parameter)
+    {
+        int hash = this.hash(key);
+        Object[] currentArray = this.table;
+        int length = currentArray.length;
+        int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
+        Object o = ConcurrentHashMapUnsafe.arrayAt(currentArray, index);
+        if (o == null)
+        {
+            V result = function.value(factory.value(), parameter);
+            Entry<K, V> newEntry = new Entry<K, V>(key, result, null);
+            if (ConcurrentHashMapUnsafe.casArrayAt(currentArray, index, null, newEntry))
+            {
+                this.addToSize(1);
+                return result;
+            }
+        }
+        return this.slowUpdateValueWith(key, factory, function, parameter, hash, currentArray);
+    }
+
+    private <P> V slowUpdateValueWith(
+            K key,
+            Function0<? extends V> factory,
+            Function2<? super V, ? super P, ? extends V> function,
+            P parameter,
+            int hash,
+            Object[] currentArray)
+    {
+        //noinspection LabeledStatement
+        outer:
+        while (true)
+        {
+            int length = currentArray.length;
+            int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
+            Object o = ConcurrentHashMapUnsafe.arrayAt(currentArray, index);
+            if (o == RESIZED || o == RESIZING)
+            {
+                currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
+            }
+            else
+            {
+                Entry<K, V> e = (Entry<K, V>) o;
+                while (e != null)
+                {
+                    Object candidate = e.getKey();
+                    if (candidate.equals(key))
+                    {
+                        V oldValue = e.getValue();
+                        V newValue = function.value(oldValue, parameter);
+                        Entry<K, V> newEntry = new Entry<K, V>(e.getKey(), newValue, this.createReplacementChainForRemoval((Entry<K, V>) o, e));
+                        if (!ConcurrentHashMapUnsafe.casArrayAt(currentArray, index, o, newEntry))
+                        {
+                            //noinspection ContinueStatementWithLabel
+                            continue outer;
+                        }
+                        return newValue;
+                    }
+                    e = e.getNext();
+                }
+                V result = function.value(factory.value(), parameter);
+                Entry<K, V> newEntry = new Entry<K, V>(key, result, (Entry<K, V>) o);
+                if (ConcurrentHashMapUnsafe.casArrayAt(currentArray, index, o, newEntry))
+                {
+                    this.incrementSizeAndPossiblyResize(currentArray, length, o);
+                    return result;
+                }
             }
         }
     }

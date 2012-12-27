@@ -27,6 +27,7 @@ import java.util.concurrent.ConcurrentMap;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
@@ -407,6 +408,56 @@ public final class ConcurrentMutableHashMap<K, V>
         public int size()
         {
             return this.delegate.size();
+        }
+    }
+
+    public V updateValue(K key, Function0<? extends V> factory, Function<? super V, ? extends V> function)
+    {
+        while (true)
+        {
+            V originalValue = this.delegate.get(key);
+            if (originalValue == null)
+            {
+                V zero = factory.value();
+                V newValue = function.valueOf(zero);
+                if (this.delegate.putIfAbsent(key, newValue) == null)
+                {
+                    return newValue;
+                }
+            }
+            else
+            {
+                V newValue = function.valueOf(originalValue);
+                if (this.delegate.replace(key, originalValue, newValue))
+                {
+                    return newValue;
+                }
+            }
+        }
+    }
+
+    public <P> V updateValueWith(K key, Function0<? extends V> factory, Function2<? super V, ? super P, ? extends V> function, P parameter)
+    {
+        while (true)
+        {
+            V originalValue = this.delegate.get(key);
+            if (originalValue == null)
+            {
+                V zero = factory.value();
+                V newValue = function.value(zero, parameter);
+                if (this.delegate.putIfAbsent(key, newValue) == null)
+                {
+                    return newValue;
+                }
+            }
+            else
+            {
+                V newValue = function.value(originalValue, parameter);
+                if (this.delegate.replace(key, originalValue, newValue))
+                {
+                    return newValue;
+                }
+            }
         }
     }
 

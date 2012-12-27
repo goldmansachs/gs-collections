@@ -56,8 +56,8 @@ import com.gs.collections.impl.utility.internal.IterableIterate;
 
 @SuppressWarnings({ "rawtypes", "ObjectEquality" })
 public final class ConcurrentHashMap<K, V>
-    extends AbstractMutableMap<K, V>
-    implements ConcurrentMutableMap<K, V>, Externalizable
+        extends AbstractMutableMap<K, V>
+        implements ConcurrentMutableMap<K, V>, Externalizable
 {
     private static final long serialVersionUID = 1L;
 
@@ -1765,7 +1765,7 @@ public final class ConcurrentHashMap<K, V>
                         }
                         catch (InterruptedException e)
                         {
-                            //ginore
+                            // ignore
                         }
                     }
                 }
@@ -1944,9 +1944,10 @@ public final class ConcurrentHashMap<K, V>
     }
 
     @Override
-    public <P> V getIfAbsentWith(K key,
-        Function<? super P, ? extends V> function,
-        P parameter)
+    public <P> V getIfAbsentWith(
+            K key,
+            Function<? super P, ? extends V> function,
+            P parameter)
     {
         V result = this.get(key);
         if (result == null)
@@ -1967,6 +1968,140 @@ public final class ConcurrentHashMap<K, V>
     public <P> void forEachWith(Procedure2<? super V, ? super P> procedure, P parameter)
     {
         Iterate.forEachWith(this.values(), procedure, parameter);
+    }
+
+    public V updateValue(K key, Function0<? extends V> factory, Function<? super V, ? extends V> function)
+    {
+        int hash = this.hash(key);
+        AtomicReferenceArray currentArray = this.table;
+        int length = currentArray.length();
+        int index = ConcurrentHashMap.indexFor(hash, length);
+        Object o = currentArray.get(index);
+        if (o == null)
+        {
+            V result = function.valueOf(factory.value());
+            Entry<K, V> newEntry = new Entry<K, V>(key, result, null);
+            if (currentArray.compareAndSet(index, null, newEntry))
+            {
+                this.addToSize(1);
+                return result;
+            }
+        }
+        return this.slowUpdateValue(key, factory, function, hash, currentArray);
+    }
+
+    private V slowUpdateValue(K key, Function0<? extends V> factory, Function<? super V, ? extends V> function, int hash, AtomicReferenceArray currentArray)
+    {
+        //noinspection LabeledStatement
+        outer:
+        while (true)
+        {
+            int length = currentArray.length();
+            int index = ConcurrentHashMap.indexFor(hash, length);
+            Object o = currentArray.get(index);
+            if (o == RESIZED || o == RESIZING)
+            {
+                currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
+            }
+            else
+            {
+                Entry<K, V> e = (Entry<K, V>) o;
+                while (e != null)
+                {
+                    Object candidate = e.getKey();
+                    if (candidate.equals(key))
+                    {
+                        V oldValue = e.getValue();
+                        V newValue = function.valueOf(oldValue);
+                        Entry<K, V> newEntry = new Entry<K, V>(e.getKey(), newValue, this.createReplacementChainForRemoval((Entry<K, V>) o, e));
+                        if (!currentArray.compareAndSet(index, o, newEntry))
+                        {
+                            //noinspection ContinueStatementWithLabel
+                            continue outer;
+                        }
+                        return newValue;
+                    }
+                    e = e.getNext();
+                }
+                V result = function.valueOf(factory.value());
+                Entry<K, V> newEntry = new Entry<K, V>(key, result, (Entry<K, V>) o);
+                if (currentArray.compareAndSet(index, o, newEntry))
+                {
+                    this.incrementSizeAndPossiblyResize(currentArray, length, o);
+                    return result;
+                }
+            }
+        }
+    }
+
+    public <P> V updateValueWith(K key, Function0<? extends V> factory, Function2<? super V, ? super P, ? extends V> function, P parameter)
+    {
+        int hash = this.hash(key);
+        AtomicReferenceArray currentArray = this.table;
+        int length = currentArray.length();
+        int index = ConcurrentHashMap.indexFor(hash, length);
+        Object o = currentArray.get(index);
+        if (o == null)
+        {
+            V result = function.value(factory.value(), parameter);
+            Entry<K, V> newEntry = new Entry<K, V>(key, result, null);
+            if (currentArray.compareAndSet(index, null, newEntry))
+            {
+                this.addToSize(1);
+                return result;
+            }
+        }
+        return this.slowUpdateValueWith(key, factory, function, parameter, hash, currentArray);
+    }
+
+    private <P> V slowUpdateValueWith(
+            K key,
+            Function0<? extends V> factory,
+            Function2<? super V, ? super P, ? extends V> function,
+            P parameter,
+            int hash,
+            AtomicReferenceArray currentArray)
+    {
+        //noinspection LabeledStatement
+        outer:
+        while (true)
+        {
+            int length = currentArray.length();
+            int index = ConcurrentHashMap.indexFor(hash, length);
+            Object o = currentArray.get(index);
+            if (o == RESIZED || o == RESIZING)
+            {
+                currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
+            }
+            else
+            {
+                Entry<K, V> e = (Entry<K, V>) o;
+                while (e != null)
+                {
+                    Object candidate = e.getKey();
+                    if (candidate.equals(key))
+                    {
+                        V oldValue = e.getValue();
+                        V newValue = function.value(oldValue, parameter);
+                        Entry<K, V> newEntry = new Entry<K, V>(e.getKey(), newValue, this.createReplacementChainForRemoval((Entry<K, V>) o, e));
+                        if (!currentArray.compareAndSet(index, o, newEntry))
+                        {
+                            //noinspection ContinueStatementWithLabel
+                            continue outer;
+                        }
+                        return newValue;
+                    }
+                    e = e.getNext();
+                }
+                V result = function.value(factory.value(), parameter);
+                Entry<K, V> newEntry = new Entry<K, V>(key, result, (Entry<K, V>) o);
+                if (currentArray.compareAndSet(index, o, newEntry))
+                {
+                    this.incrementSizeAndPossiblyResize(currentArray, length, o);
+                    return result;
+                }
+            }
+        }
     }
 
     @Override
