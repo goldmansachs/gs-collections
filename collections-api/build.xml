@@ -16,12 +16,31 @@
   ~ limitations under the License.
   -->
 
-<project name="gs-collections-api" default="test" basedir=".">
+<project name="gs-collections-api" default="test" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
     <import file="../common-build.xml" />
 
     <property name="src.dir" location="src/main/java" />
+    <property name="generatedsrc.dir" location="target/generated-sources/java" />
+    <property name="generatedtestsrc.dir" location="target/generated-test-sources/java" />
     <property name="testsrc.dir" location="src/test/java" />
 
     <!-- No tests to run in this module -->
-    <target name="test" depends="install" description="Run the test cases" />
+    <target name="test" depends="install" description="Run the test cases">
+    </target>
+
+    <target name="generate-sources" description="Generates Sources" depends="-ivy-init">
+        <ivy:cachepath pathid="generate.classpath" conf="generate-sources" />
+        <typedef name="generate"
+            classname="com.gs.collections.codegenerator.ant.GsCollectionsCodeGeneratorTask"
+            classpathref="generate.classpath" />
+        <generate templateDirectory="api" />
+    </target>
+
+    <target name="install" depends="-ivy-init, jar, source-jar, ivy-make-pom"
+        description="installs the module to the local ivy cache">
+        <ivy:resolve conf="default, master, sources, compile, runtime, compile-test, test" />
+        <ivy:publish resolver="local" overwrite="true" pubrevision="${build.version.full}">
+            <artifacts pattern="target/[artifact]-${build.version.full}(-[classifier]).[ext]" />
+        </ivy:publish>
+    </target>
 </project>

@@ -28,6 +28,7 @@
             extends="runtime, master" />
         <conf name="master" description="contains only the artifact, with no transitive dependencies" />
         <conf name="compile" transitive="false" />
+        <conf name="generate-sources" />
         <conf name="runtime" extends="compile" />
         <conf name="compile-test" transitive="false" extends="compile" />
         <conf name="test" extends="runtime, compile-test" />
@@ -39,6 +40,13 @@
     </publications>
 
     <dependencies defaultconfmapping="*->default">
+        <!--generate-sources-->
+        <dependency org="com.goldmansachs"
+            name="gs-collections-code-generator-ant"
+            rev="${build.version.full}"
+            conf="generate-sources"
+            changing="true">
+        </dependency>
 
         <!-- compile -->
         <dependency org="com.goldmansachs"

@@ -16,6 +16,11 @@
 
 package com.gs.collections.codegenerator.maven;
 
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Arrays;
+import java.util.List;
+
 import com.gs.collections.codegenerator.GsCollectionsCodeGenerator;
 import org.apache.maven.plugin.AbstractMojo;
 import org.apache.maven.plugin.MojoExecutionException;
@@ -58,8 +63,10 @@ public class GenerateMojo extends AbstractMojo
         else
         {
             this.getLog().info("Generating sources to " + this.project.getArtifactId());
+            List<URL> urls = Arrays.asList(((URLClassLoader) GenerateMojo.class.getClassLoader()).getURLs());
+
             GsCollectionsCodeGenerator gsCollectionsCodeGenerator =
-                    new GsCollectionsCodeGenerator(this.templateDirectory, this.project.getBasedir());
+                    new GsCollectionsCodeGenerator(this.templateDirectory, this.project.getBasedir(), urls);
             gsCollectionsCodeGenerator.generate();
 
             if (gsCollectionsCodeGenerator.isTest())

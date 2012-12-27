@@ -21,7 +21,17 @@
     <import file="../common-build.xml" />
 
     <property name="src.dir" location="src/main/java" />
+    <property name="generatedsrc.dir" location="target/generated-sources/main/java" />
+    <property name="generatedtestsrc.dir" location="target/generated-test-sources/main/java" />
     <property name="testsrc.dir" location="src/test/java" />
+
+    <target name="generate-sources" description="Generates Sources" depends="-ivy-init">
+        <ivy:cachepath pathid="generate.classpath" conf="generate-sources" />
+        <typedef name="generate"
+            classname="com.gs.collections.codegenerator.ant.GsCollectionsCodeGeneratorTask"
+            classpathref="generate.classpath" />
+        <generate templateDirectory="test" />
+    </target>
 
     <target name="test-jar"
         depends="compile-tests, -deploy-properties"
@@ -35,7 +45,7 @@
 
     <target name="install" depends="-ivy-init, test-jar, ivy-make-pom"
         description="installs the module to the local ivy cache">
-        <ivy:resolve />
+        <ivy:resolve conf="default, master, compile, runtime, compile-test, test" />
         <ivy:publish resolver="local" overwrite="true" pubrevision="${build.version.full}">
             <artifacts pattern="target/[artifact]-${build.version.full}(-[classifier]).[ext]" />
         </ivy:publish>

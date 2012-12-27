@@ -14,7 +14,7 @@
   ~ limitations under the License.
   -->
 
-<project name="gs-collections-code-generator-ant">
+<project name="gs-collections-code-generator">
     <import file="../common-build.xml" />
     <property name="src.dir" location="src/main/java" />
     <property name="generatedsrc.dir" location="target/generated-sources/java" />

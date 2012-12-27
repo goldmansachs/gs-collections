@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2011 Goldman Sachs.
+  ~ Copyright 2012 Goldman Sachs.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -108,22 +108,24 @@
 
     <target
         name="compile"
-        depends="-ivy-init, -compile-init"
+        depends="-ivy-init, generate-sources, -compile-init"
         unless="compile.uptodate"
         description="Compile the code">
 
         <ivy:cachepath pathid="compile.classpath" conf="compile" />
 
         <mkdir dir="${src.dir}" />
+        <mkdir dir="${generatedsrc.dir}" />
         <mkdir dir="target/classes" />
         <javac
             destdir="target/classes"
-            fork="false"
+            fork="true"
             source="1.5"
             target="1.5"
             debug="on">
             <src>
                 <pathelement location="${src.dir}" />
+                <pathelement location="${generatedsrc.dir}" />
             </src>
             <classpath refid="compile.classpath" />
         </javac>
@@ -161,6 +163,7 @@
         <ivy:cachepath pathid="compile-test.classpath" conf="compile-test" />
 
         <mkdir dir="${testsrc.dir}" />
+        <mkdir dir="${generatedtestsrc.dir}" />
         <mkdir dir="target/test-classes" />
         <javac
             destdir="target/test-classes"
@@ -171,6 +174,7 @@
             updatedproperty="compile-tests.success">
             <src>
                 <pathelement location="${testsrc.dir}" />
+                <pathelement location="${generatedtestsrc.dir}" />
             </src>
             <classpath>
                 <path refid="compile-test.classpath" />
@@ -299,4 +303,6 @@
             <artifacts pattern="target/[artifact]-${build.version.full}(-[classifier]).[ext]" />
         </ivy:publish>
     </target>
+
+    <target name="generate-sources" />
 </project>

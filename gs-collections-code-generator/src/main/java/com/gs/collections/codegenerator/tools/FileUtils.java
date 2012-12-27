@@ -23,7 +23,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URISyntaxException;
 import java.net.URL;
-import java.net.URLClassLoader;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
@@ -84,13 +83,12 @@ public final class FileUtils
         }
     }
 
-    public static List<URL> getAllTemplateFilesFromClasspath(String templateDirectory)
+    public static List<URL> getAllTemplateFilesFromClasspath(String templateDirectory, List<URL> classPathURLs)
     {
         List<URL> files = new ArrayList<URL>();
         try
         {
-            URLClassLoader loader = (URLClassLoader) FileUtils.class.getClassLoader();
-            for (URL url : loader.getURLs())
+            for (URL url : classPathURLs)
             {
                 recurseURL(url, files, templateDirectory);
             }
@@ -191,12 +189,11 @@ public final class FileUtils
     private static String readFile(String path)
     {
         FileInputStream stream = null;
-        FileChannel fc;
         MappedByteBuffer bb = null;
         try
         {
             stream = new FileInputStream(new File(path));
-            fc = stream.getChannel();
+            FileChannel fc = stream.getChannel();
             bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size());
         }
         catch (IOException e)

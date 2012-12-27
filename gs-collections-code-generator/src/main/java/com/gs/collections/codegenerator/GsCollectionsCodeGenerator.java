@@ -31,17 +31,19 @@ public class GsCollectionsCodeGenerator
     public static final String GENERATED_SOURCES_LOCATION = "target/generated-sources/java/";
     private final String templateDirectory;
     private final File moduleBaseDir;
+    private final List<URL> classPathURLs;
     private boolean isTest;
 
-    public GsCollectionsCodeGenerator(String templateDirectory, File moduleBaseDir)
+    public GsCollectionsCodeGenerator(String templateDirectory, File moduleBaseDir, List<URL> classPathURLs)
     {
         this.templateDirectory = templateDirectory;
         this.moduleBaseDir = moduleBaseDir;
+        this.classPathURLs = classPathURLs;
     }
 
     public void generate()
     {
-        List<URL> allTemplateFilesFromClassPath = FileUtils.getAllTemplateFilesFromClasspath(this.templateDirectory);
+        List<URL> allTemplateFilesFromClassPath = FileUtils.getAllTemplateFilesFromClasspath(this.templateDirectory, this.classPathURLs);
         for (URL url : allTemplateFilesFromClassPath)
         {
             STGroupFile stGroupFile = new STGroupFile(url, "UTF-8", '<', '>');
