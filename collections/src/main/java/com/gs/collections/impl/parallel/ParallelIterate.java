@@ -26,13 +26,20 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.ListIterable;
+import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
+import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
+import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.list.fixed.ArrayAdapter;
+import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 import com.gs.collections.impl.multimap.list.SynchronizedPutFastListMultimap;
 import com.gs.collections.impl.utility.Iterate;
 
@@ -941,6 +948,213 @@ public final class ParallelIterate
     {
         return ParallelIterate.groupBy(iterable, function, ParallelIterate.DEFAULT_MIN_FORK_SIZE, ParallelIterate.EXECUTOR_SERVICE);
     }
+
+    public static <T, K, V> MutableMap<K, V> aggregateBy(
+            Iterable<T> iterable,
+            Function<? super T, ? extends K> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Function2<? super V, ? super T, ? extends V> nonMutatingAggregator)
+    {
+        return ParallelIterate.aggregateBy(
+                iterable,
+                groupBy,
+                zeroValueFactory,
+                nonMutatingAggregator,
+                ParallelIterate.DEFAULT_MIN_FORK_SIZE);
+    }
+
+    public static <T, K, V, R extends MutableMap<K, V>> R aggregateBy(
+            Iterable<T> iterable,
+            Function<? super T, ? extends K> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Function2<? super V, ? super T, ? extends V> nonMutatingAggregator,
+            R mutableMap)
+    {
+        return ParallelIterate.aggregateBy(
+                iterable,
+                groupBy,
+                zeroValueFactory,
+                nonMutatingAggregator,
+                mutableMap,
+                ParallelIterate.DEFAULT_MIN_FORK_SIZE);
+    }
+
+    public static <T, K, V> MutableMap<K, V> aggregateBy(
+            Iterable<T> iterable,
+            Function<? super T, ? extends K> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Function2<? super V, ? super T, ? extends V> nonMutatingAggregator,
+            int batchSize)
+    {
+        return ParallelIterate.aggregateBy(
+                iterable,
+                groupBy,
+                zeroValueFactory,
+                nonMutatingAggregator,
+                batchSize,
+                ParallelIterate.EXECUTOR_SERVICE);
+    }
+
+    public static <T, K, V, R extends MutableMap<K, V>> R  aggregateBy(
+            Iterable<T> iterable,
+            Function<? super T, ? extends K> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Function2<? super V, ? super T, ? extends V> nonMutatingAggregator,
+            R mutableMap,
+            int batchSize)
+    {
+        return ParallelIterate.aggregateBy(
+                iterable,
+                groupBy,
+                zeroValueFactory,
+                nonMutatingAggregator,
+                mutableMap,
+                batchSize,
+                ParallelIterate.EXECUTOR_SERVICE);
+    }
+
+    public static <T, K, V> MutableMap<K, V> aggregateBy(
+            Iterable<T> iterable,
+            Function<? super T, ? extends K> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Function2<? super V, ? super T, ? extends V> nonMutatingAggregator,
+            int batchSize,
+            Executor executor)
+    {
+        return ParallelIterate.aggregateBy(
+                iterable,
+                groupBy,
+                zeroValueFactory,
+                nonMutatingAggregator,
+                ConcurrentHashMap.<K, V>newMap(),
+                batchSize,
+                executor);
+    }
+
+    public static <T, K, V, R extends MutableMap<K, V>> R aggregateBy(
+            Iterable<T> iterable,
+            Function<? super T, ? extends K> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Function2<? super V, ? super T, ? extends V> nonMutatingAggregator,
+            R mutableMap,
+            int batchSize,
+            Executor executor)
+    {
+        NonMutatingAggregationProcedure<T, K, V> nonMutatingAggregationProcedure =
+                new NonMutatingAggregationProcedure<T, K, V>(mutableMap, groupBy, zeroValueFactory, nonMutatingAggregator);
+        ParallelIterate.forEach(
+                iterable,
+                new PassThruProcedureFactory<Procedure<T>>(nonMutatingAggregationProcedure),
+                Combiners.<Procedure<T>>passThru(),
+                batchSize,
+                executor);
+        return mutableMap;
+    }
+
+    public static <T, K, V> MutableMap<K, V> aggregateBy(
+            Iterable<T> iterable,
+            Function<? super T, ? extends K> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Procedure2<? super V, ? super T> mutatingAggregator)
+    {
+        return ParallelIterate.aggregateBy(
+                iterable,
+                groupBy,
+                zeroValueFactory,
+                mutatingAggregator,
+                ParallelIterate.DEFAULT_MIN_FORK_SIZE);
+    }
+
+    public static <T, K, V, R extends MutableMap<K, V>> R aggregateBy(
+            Iterable<T> iterable,
+            Function<? super T, ? extends K> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Procedure2<? super V, ? super T> mutatingAggregator,
+            R mutableMap)
+    {
+        return ParallelIterate.aggregateBy(
+                iterable,
+                groupBy,
+                zeroValueFactory,
+                mutatingAggregator,
+                mutableMap,
+                ParallelIterate.DEFAULT_MIN_FORK_SIZE);
+    }
+
+    public static <T, K, V> MutableMap<K, V> aggregateBy(
+            Iterable<T> iterable,
+            Function<? super T, ? extends K> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Procedure2<? super V, ? super T> mutatingAggregator,
+            int batchSize)
+    {
+        return ParallelIterate.aggregateBy(
+                iterable,
+                groupBy,
+                zeroValueFactory,
+                mutatingAggregator,
+                batchSize,
+                ParallelIterate.EXECUTOR_SERVICE);
+    }
+
+    public static <T, K, V, R extends MutableMap<K, V>> R aggregateBy(
+            Iterable<T> iterable,
+            Function<? super T, ? extends K> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Procedure2<? super V, ? super T> mutatingAggregator,
+            R mutableMap,
+            int batchSize)
+    {
+        return ParallelIterate.aggregateBy(
+                iterable,
+                groupBy,
+                zeroValueFactory,
+                mutatingAggregator,
+                mutableMap,
+                batchSize,
+                ParallelIterate.EXECUTOR_SERVICE);
+    }
+
+    public static <T, K, V> MutableMap<K, V> aggregateBy(
+            Iterable<T> iterable,
+            Function<? super T, ? extends K> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Procedure2<? super V, ? super T> mutatingAggregator,
+            int batchSize,
+            Executor executor)
+    {
+        MutableMap<K, V> map = ConcurrentHashMap.newMap();
+        MutatingAggregationProcedure<T, K, V> mutatingAggregationProcedure =
+                new MutatingAggregationProcedure<T, K, V>(map, groupBy, zeroValueFactory, mutatingAggregator);
+        ParallelIterate.forEach(
+                iterable,
+                new PassThruProcedureFactory<Procedure<T>>(mutatingAggregationProcedure),
+                Combiners.<Procedure<T>>passThru(),
+                batchSize,
+                executor);
+        return map;
+    }
+
+    public static <T, K, V, R extends MutableMap<K, V>> R aggregateBy(
+            Iterable<T> iterable,
+            Function<? super T, ? extends K> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Procedure2<? super V, ? super T> mutatingAggregator,
+            R mutableMap,
+            int batchSize,
+            Executor executor)
+    {
+        MutatingAggregationProcedure<T, K, V> mutatingAggregationProcedure =
+                new MutatingAggregationProcedure<T, K, V>(mutableMap, groupBy, zeroValueFactory, mutatingAggregator);
+        ParallelIterate.forEach(
+                iterable,
+                new PassThruProcedureFactory<Procedure<T>>(mutatingAggregationProcedure),
+                Combiners.<Procedure<T>>passThru(),
+                batchSize,
+                executor);
+        return mutableMap;
+    }
+
 
     /**
      * Same effect as {@link Iterate#groupBy(Iterable, Function)},

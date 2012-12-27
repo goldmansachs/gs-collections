@@ -16,10 +16,13 @@
 
 package com.gs.collections.impl.block.procedure;
 
+import java.util.concurrent.ConcurrentMap;
+
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.map.ConcurrentMutableMap;
 import com.gs.collections.api.map.MutableMap;
 
 /**
@@ -45,8 +48,16 @@ public final class NonMutatingAggregationProcedure<T, K, V> implements Procedure
 
     public void value(T each)
     {
-        K key = this.groupBy.valueOf(each);
-        V value = this.map.getIfAbsentPut(key, this.zeroValueFactory);
-        this.map.put(key, this.nonMutatingAggregator.value(value, each));
+        if (this.map instanceof ConcurrentMutableMap)
+        {
+            K key = this.groupBy.valueOf(each);
+            ((ConcurrentMutableMap<K, V>) this.map).updateValueWith(key, this.zeroValueFactory, this.nonMutatingAggregator, each);
+        }
+        else
+        {
+            K key = this.groupBy.valueOf(each);
+            V value = this.map.getIfAbsentPut(key, this.zeroValueFactory);
+            this.map.put(key, this.nonMutatingAggregator.value(value, each));
+        }
     }
 }

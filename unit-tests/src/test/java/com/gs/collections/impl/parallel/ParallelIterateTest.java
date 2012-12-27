@@ -24,17 +24,21 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
@@ -87,6 +91,30 @@ public class ParallelIterateTest
         public Collection<String> valueOf(Integer integer)
         {
             return Lists.fixedSize.of(integer.toString(), integer.toString());
+        }
+    };
+
+    private static final Function0<AtomicInteger> ATOMIC_INTEGER_NEW = new Function0<AtomicInteger>()
+    {
+        public AtomicInteger value()
+        {
+            return new AtomicInteger(0);
+        }
+    };
+
+    private static final Function0<Integer> INTEGER_NEW = new Function0<Integer>()
+    {
+        public Integer value()
+        {
+            return Integer.valueOf(0);
+        }
+    };
+
+    private static final Function<Integer,String> EVEN_OR_ODD = new Function<Integer, String>()
+    {
+        public String valueOf(Integer value)
+        {
+            return value % 2 == 0 ? "Even" : "Odd";
         }
     };
 
@@ -575,6 +603,90 @@ public class ParallelIterateTest
                 ParallelIterate.groupBy(null, null, 1);
             }
         });
+    }
+
+    @Test
+    public void aggregateByMutating()
+    {
+        Procedure2<AtomicInteger, Integer> countAggregator = new Procedure2<AtomicInteger, Integer>()
+        {
+            public void value(AtomicInteger aggregate, Integer value)
+            {
+                aggregate.incrementAndGet();
+            }
+        };
+        List<Integer> list = Interval.oneTo(20000);
+        MutableMap<String, AtomicInteger> aggregation =
+                ParallelIterate.aggregateBy(list, EVEN_OR_ODD, ATOMIC_INTEGER_NEW, countAggregator);
+        Assert.assertEquals(10000, aggregation.get("Even").intValue());
+        Assert.assertEquals(10000, aggregation.get("Odd").intValue());
+        ParallelIterate.aggregateBy(list, EVEN_OR_ODD, ATOMIC_INTEGER_NEW, countAggregator, aggregation);
+        Assert.assertEquals(20000, aggregation.get("Even").intValue());
+        Assert.assertEquals(20000, aggregation.get("Odd").intValue());
+    }
+
+    @Test
+    public void aggregateByMutatingWithBatchSize()
+    {
+        Procedure2<AtomicInteger, Integer> sumAggregator = new Procedure2<AtomicInteger, Integer>()
+        {
+            public void value(AtomicInteger aggregate, Integer value)
+            {
+                aggregate.addAndGet(value);
+            }
+        };
+        MutableList<Integer> list = LazyIterate.adapt(Collections.nCopies(1000, 1))
+                        .concatenate(Collections.nCopies(2000, 2))
+                        .concatenate(Collections.nCopies(3000, 3))
+                        .toList();
+        Collections.shuffle(list);
+        MapIterable<String, AtomicInteger> aggregation =
+                ParallelIterate.aggregateBy(list, Functions.getToString(), ATOMIC_INTEGER_NEW, sumAggregator, 100);
+        Assert.assertEquals(1000, aggregation.get("1").intValue());
+        Assert.assertEquals(4000, aggregation.get("2").intValue());
+        Assert.assertEquals(9000, aggregation.get("3").intValue());
+    }
+
+    @Test
+    public void aggregateByNonMutating()
+    {
+        Function2<Integer, Integer, Integer> countAggregator = new Function2<Integer, Integer, Integer>()
+        {
+            public Integer value(Integer aggregate, Integer value)
+            {
+                return aggregate + 1;
+            }
+        };
+        List<Integer> list = Interval.oneTo(20000);
+        MutableMap<String, Integer> aggregation =
+                ParallelIterate.aggregateBy(list, EVEN_OR_ODD, INTEGER_NEW, countAggregator);
+        Assert.assertEquals(10000, aggregation.get("Even").intValue());
+        Assert.assertEquals(10000, aggregation.get("Odd").intValue());
+        ParallelIterate.aggregateBy(list, EVEN_OR_ODD, INTEGER_NEW, countAggregator, aggregation);
+        Assert.assertEquals(20000, aggregation.get("Even").intValue());
+        Assert.assertEquals(20000, aggregation.get("Odd").intValue());
+    }
+
+    @Test
+    public void aggregateByNonMutatingWithBatchSize()
+    {
+        Function2<Integer, Integer, Integer> sumAggregator = new Function2<Integer, Integer, Integer>()
+        {
+            public Integer value(Integer aggregate, Integer value)
+            {
+                return aggregate + value;
+            }
+        };
+        MutableList<Integer> list = LazyIterate.adapt(Collections.nCopies(1000, 1))
+                .concatenate(Collections.nCopies(2000, 2))
+                .concatenate(Collections.nCopies(3000, 3))
+                .toList();
+        Collections.shuffle(list);
+        MapIterable<String, Integer> aggregation =
+                ParallelIterate.aggregateBy(list, Functions.getToString(), INTEGER_NEW, sumAggregator, 100);
+        Assert.assertEquals(1000, aggregation.get("1").intValue());
+        Assert.assertEquals(4000, aggregation.get("2").intValue());
+        Assert.assertEquals(9000, aggregation.get("3").intValue());
     }
 
     private static List<Integer> createIntegerList(int size)
