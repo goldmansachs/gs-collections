@@ -416,7 +416,7 @@ public interface MutableCollection<T>
      */
     boolean retainAllIterable(Iterable<?> iterable);
 
-    <K, V> MutableMap<K, V> aggregateBy(
+    <K, V> MutableMap<K, V> aggregateInPlaceBy(
             Function<? super T, ? extends K> groupBy,
             Function0<? extends V> zeroValueFactory,
             Procedure2<? super V, ? super T> mutatingAggregator);

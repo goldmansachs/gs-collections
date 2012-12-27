@@ -110,7 +110,7 @@ public class ParallelIterateTest
         }
     };
 
-    private static final Function<Integer,String> EVEN_OR_ODD = new Function<Integer, String>()
+    private static final Function<Integer, String> EVEN_OR_ODD = new Function<Integer, String>()
     {
         public String valueOf(Integer value)
         {
@@ -606,7 +606,7 @@ public class ParallelIterateTest
     }
 
     @Test
-    public void aggregateByMutating()
+    public void aggregateInPlaceBy()
     {
         Procedure2<AtomicInteger, Integer> countAggregator = new Procedure2<AtomicInteger, Integer>()
         {
@@ -617,7 +617,7 @@ public class ParallelIterateTest
         };
         List<Integer> list = Interval.oneTo(20000);
         MutableMap<String, AtomicInteger> aggregation =
-                ParallelIterate.aggregateBy(list, EVEN_OR_ODD, ATOMIC_INTEGER_NEW, countAggregator);
+                ParallelIterate.aggregateInPlaceBy(list, EVEN_OR_ODD, ATOMIC_INTEGER_NEW, countAggregator);
         Assert.assertEquals(10000, aggregation.get("Even").intValue());
         Assert.assertEquals(10000, aggregation.get("Odd").intValue());
         ParallelIterate.aggregateBy(list, EVEN_OR_ODD, ATOMIC_INTEGER_NEW, countAggregator, aggregation);
@@ -626,7 +626,7 @@ public class ParallelIterateTest
     }
 
     @Test
-    public void aggregateByMutatingWithBatchSize()
+    public void aggregateInPlaceByWithBatchSize()
     {
         Procedure2<AtomicInteger, Integer> sumAggregator = new Procedure2<AtomicInteger, Integer>()
         {
@@ -636,9 +636,9 @@ public class ParallelIterateTest
             }
         };
         MutableList<Integer> list = LazyIterate.adapt(Collections.nCopies(1000, 1))
-                        .concatenate(Collections.nCopies(2000, 2))
-                        .concatenate(Collections.nCopies(3000, 3))
-                        .toList();
+                .concatenate(Collections.nCopies(2000, 2))
+                .concatenate(Collections.nCopies(3000, 3))
+                .toList();
         Collections.shuffle(list);
         MapIterable<String, AtomicInteger> aggregation =
                 ParallelIterate.aggregateBy(list, Functions.getToString(), ATOMIC_INTEGER_NEW, sumAggregator, 100);
@@ -648,7 +648,7 @@ public class ParallelIterateTest
     }
 
     @Test
-    public void aggregateByNonMutating()
+    public void aggregateBy()
     {
         Function2<Integer, Integer, Integer> countAggregator = new Function2<Integer, Integer, Integer>()
         {
@@ -668,7 +668,7 @@ public class ParallelIterateTest
     }
 
     @Test
-    public void aggregateByNonMutatingWithBatchSize()
+    public void aggregateByWithBatchSize()
     {
         Function2<Integer, Integer, Integer> sumAggregator = new Function2<Integer, Integer, Integer>()
         {

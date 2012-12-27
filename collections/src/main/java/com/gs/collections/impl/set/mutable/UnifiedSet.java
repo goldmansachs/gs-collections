@@ -2463,7 +2463,7 @@ public class UnifiedSet<K>
         return cur == key || (cur == NULL_KEY ? key == null : cur.equals(key));
     }
 
-    public <K2, V> MutableMap<K2, V> aggregateBy(
+    public <K2, V> MutableMap<K2, V> aggregateInPlaceBy(
             Function<? super K, ? extends K2> groupBy,
             Function0<? extends V> zeroValueFactory,
             Procedure2<? super V, ? super K> mutatingAggregator)

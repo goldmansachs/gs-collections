@@ -65,7 +65,7 @@ public interface ImmutableCollection<T>
 
     ImmutableCollection<Pair<T, Integer>> zipWithIndex();
 
-    <K, V> ImmutableMap<K, V> aggregateBy(
+    <K, V> ImmutableMap<K, V> aggregateInPlaceBy(
             Function<? super T, ? extends K> groupBy,
             Function0<? extends V> zeroValueFactory,
             Procedure2<? super V, ? super T> mutatingAggregator);

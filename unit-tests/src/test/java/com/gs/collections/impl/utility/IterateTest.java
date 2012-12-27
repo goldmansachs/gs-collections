@@ -2090,7 +2090,7 @@ public class IterateTest
                 aggregate.addAndGet(value);
             }
         };
-        MapIterable<String, AtomicInteger> aggregation = Iterate.aggregateBy(iterable, Functions.getToString(), valueCreator, sumAggregator);
+        MapIterable<String, AtomicInteger> aggregation = Iterate.aggregateInPlaceBy(iterable, Functions.getToString(), valueCreator, sumAggregator);
         if (iterable instanceof Set)
         {
             Assert.assertEquals(1, aggregation.get("1").intValue());

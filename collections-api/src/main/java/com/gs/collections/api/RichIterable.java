@@ -895,7 +895,7 @@ public interface
      *
      * @since 3.0
      */
-    <K, V> MapIterable<K, V> aggregateBy(Function<? super T, ? extends K> groupBy, Function0<? extends V> zeroValueFactory, Procedure2<? super V, ? super T> mutatingAggregator);
+    <K, V> MapIterable<K, V> aggregateInPlaceBy(Function<? super T, ? extends K> groupBy, Function0<? extends V> zeroValueFactory, Procedure2<? super V, ? super T> mutatingAggregator);
 
     /**
      * Applies an aggregate function over the iterable grouping results into a map based on the specific groupBy function.

@@ -1200,7 +1200,7 @@ public abstract class AbstractCollectionTestCase
             }
         };
         MutableCollection<Integer> collection = this.newWith(1, 1, 1, 2, 2, 3);
-        MapIterable<String, AtomicInteger> aggregation = collection.aggregateBy(Functions.getToString(), valueCreator, sumAggregator);
+        MapIterable<String, AtomicInteger> aggregation = collection.aggregateInPlaceBy(Functions.getToString(), valueCreator, sumAggregator);
         if (collection instanceof Set)
         {
             Assert.assertEquals(1, aggregation.get("1").intValue());

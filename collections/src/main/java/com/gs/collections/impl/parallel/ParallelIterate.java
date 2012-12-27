@@ -995,7 +995,7 @@ public final class ParallelIterate
                 ParallelIterate.EXECUTOR_SERVICE);
     }
 
-    public static <T, K, V, R extends MutableMap<K, V>> R  aggregateBy(
+    public static <T, K, V, R extends MutableMap<K, V>> R aggregateBy(
             Iterable<T> iterable,
             Function<? super T, ? extends K> groupBy,
             Function0<? extends V> zeroValueFactory,
@@ -1051,7 +1051,7 @@ public final class ParallelIterate
         return mutableMap;
     }
 
-    public static <T, K, V> MutableMap<K, V> aggregateBy(
+    public static <T, K, V> MutableMap<K, V> aggregateInPlaceBy(
             Iterable<T> iterable,
             Function<? super T, ? extends K> groupBy,
             Function0<? extends V> zeroValueFactory,
@@ -1154,7 +1154,6 @@ public final class ParallelIterate
                 executor);
         return mutableMap;
     }
-
 
     /**
      * Same effect as {@link Iterate#groupBy(Iterable, Function)},

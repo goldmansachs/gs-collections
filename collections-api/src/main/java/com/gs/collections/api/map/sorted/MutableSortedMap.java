@@ -200,7 +200,7 @@ public interface MutableSortedMap<K, V>
 
     <VV> MutableListMultimap<VV, V> groupByEach(Function<? super V, ? extends Iterable<VV>> function);
 
-    <K2, V2> MutableMap<K2, V2> aggregateBy(
+    <K2, V2> MutableMap<K2, V2> aggregateInPlaceBy(
             Function<? super V, ? extends K2> groupBy,
             Function0<? extends V2> zeroValueFactory,
             Procedure2<? super V2, ? super V> mutatingAggregator);

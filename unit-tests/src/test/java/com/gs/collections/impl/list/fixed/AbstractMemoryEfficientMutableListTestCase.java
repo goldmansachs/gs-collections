@@ -165,8 +165,8 @@ public abstract class AbstractMemoryEfficientMutableListTestCase
                 aggregate.add(Integer.parseInt(value));
             }
         };
-        MapIterable<String, Counter> actual = this.classUnderTest().aggregateBy(groupBy, valueCreator, sumAggregator);
-        MapIterable<String, Counter> expected = FastList.newList(this.classUnderTest()).aggregateBy(groupBy, valueCreator, sumAggregator);
+        MapIterable<String, Counter> actual = this.classUnderTest().aggregateInPlaceBy(groupBy, valueCreator, sumAggregator);
+        MapIterable<String, Counter> expected = FastList.newList(this.classUnderTest()).aggregateInPlaceBy(groupBy, valueCreator, sumAggregator);
         Assert.assertEquals(expected, actual);
     }
 

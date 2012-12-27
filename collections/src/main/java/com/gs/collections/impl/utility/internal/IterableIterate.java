@@ -807,7 +807,7 @@ public final class IterableIterate
                 : String.valueOf(item);
     }
 
-    public static <T, K, V> MutableMap<K, V> aggregateBy(
+    public static <T, K, V> MutableMap<K, V> aggregateInPlaceBy(
             Iterable<T> iterable,
             Function<? super T, ? extends K> groupBy,
             Function0<? extends V> zeroValueFactory,

@@ -1051,7 +1051,7 @@ public final class RandomAccessListIterate
         return target;
     }
 
-    public static <T, K, V> MutableMap<K, V> aggregateBy(
+    public static <T, K, V> MutableMap<K, V> aggregateInPlaceBy(
             List<T> list,
             Function<? super T, ? extends K> groupBy,
             Function0<? extends V> zeroValueFactory,

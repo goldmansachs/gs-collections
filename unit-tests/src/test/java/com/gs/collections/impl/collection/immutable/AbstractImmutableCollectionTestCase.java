@@ -600,8 +600,8 @@ public abstract class AbstractImmutableCollectionTestCase
                 aggregate.add(value);
             }
         };
-        MapIterable<String, Counter> actual = this.classUnderTest().aggregateBy(Functions.getToString(), valueCreator, sumAggregator);
-        MapIterable<String, Counter> expected = this.classUnderTest().toBag().aggregateBy(Functions.getToString(), valueCreator, sumAggregator);
+        MapIterable<String, Counter> actual = this.classUnderTest().aggregateInPlaceBy(Functions.getToString(), valueCreator, sumAggregator);
+        MapIterable<String, Counter> expected = this.classUnderTest().toBag().aggregateInPlaceBy(Functions.getToString(), valueCreator, sumAggregator);
         Assert.assertEquals(expected, actual);
     }
 

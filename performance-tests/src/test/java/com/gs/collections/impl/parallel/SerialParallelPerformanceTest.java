@@ -24,10 +24,14 @@ import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.tuple.Pair;
@@ -95,6 +99,22 @@ public class SerialParallelPerformanceTest
                     return new Alphagram(value);
                 }
             };
+
+    private static final Function0<Integer> INTEGER_NEW = new Function0<Integer>()
+    {
+        public Integer value()
+        {
+            return Integer.valueOf(0);
+        }
+    };
+
+    private static final Function2<Integer, String, Integer> COUNT_AGGREGATOR = new Function2<Integer, String, Integer>()
+    {
+        public Integer value(Integer aggregate, String word)
+        {
+            return aggregate + 1;
+        }
+    };
 
     public FastList<String> generateWords(int count)
     {
@@ -200,6 +220,8 @@ public class SerialParallelPerformanceTest
         this.basicGSCollectionsCollectIfPerformance(iterable, predicateList, SERIAL_RUN_COUNT);
         this.basicGSCollectionsCollectPerformance(iterable, SERIAL_RUN_COUNT);
         this.basicGSCollectionsGroupByPerformance(words, SERIAL_RUN_COUNT);
+        this.basicGSCollectionsAggregateInPlaceByPerformance(words, SERIAL_RUN_COUNT);
+        this.basicGSCollectionsAggregateByPerformance(words, SERIAL_RUN_COUNT);
     }
 
     private void basicTestParallelGSCollections(
@@ -213,6 +235,8 @@ public class SerialParallelPerformanceTest
         this.basicParallelGSCollectionsCollectIfPerformance(iterable, predicates, PARALLEL_RUN_COUNT);
         this.basicParallelGSCollectionsCollectPerformance(iterable, PARALLEL_RUN_COUNT);
         this.basicParallelGSCollectionsGroupByPerformance(words, PARALLEL_RUN_COUNT);
+        this.basicParallelGSCollectionsAggregateInPlaceByPerformance(words, PARALLEL_RUN_COUNT);
+        this.basicParallelGSCollectionsAggregateByPerformance(words, PARALLEL_RUN_COUNT);
     }
 
     private double basicGSCollectionsSelectPerformance(
@@ -471,6 +495,54 @@ public class SerialParallelPerformanceTest
         }, count, 10, 1);
     }
 
+    private double basicGSCollectionsAggregateInPlaceByPerformance(
+            final Iterable<String> iterable,
+            int count)
+    {
+        Assert.assertEquals(
+                ParallelIterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, AtomicIntegerWithEquals.NEW_INSTANCE, AtomicIntegerWithEquals.INCREMENT),
+                Iterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, AtomicIntegerWithEquals.NEW_INSTANCE, AtomicIntegerWithEquals.INCREMENT));
+        return TimeKeeper.logAverageMillisecondsToRunInParallel("GSCollections AggregateInPlaceBy: "
+                + this.getSimpleName(iterable)
+                + " size: "
+                + Iterate.sizeOf(iterable), new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertNotEmpty(
+                        Iterate.aggregateInPlaceBy(
+                                iterable,
+                                ALPHAGRAM_FUNCTION,
+                                AtomicIntegerWithEquals.NEW_INSTANCE,
+                                AtomicIntegerWithEquals.INCREMENT));
+            }
+        }, count, 10, 1);
+    }
+
+    private double basicGSCollectionsAggregateByPerformance(
+            final Iterable<String> iterable,
+            int count)
+    {
+        Assert.assertEquals(
+                ParallelIterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR),
+                Iterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR));
+        return TimeKeeper.logAverageMillisecondsToRunInParallel("GSCollections AggregateBy: "
+                + this.getSimpleName(iterable)
+                + " size: "
+                + Iterate.sizeOf(iterable), new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertNotEmpty(
+                        Iterate.aggregateBy(
+                                iterable,
+                                ALPHAGRAM_FUNCTION,
+                                INTEGER_NEW,
+                                COUNT_AGGREGATOR));
+            }
+        }, count, 10, 1);
+    }
+
     private double basicParallelGSCollectionsCollectPerformance(final Iterable<Integer> iterable, int count)
     {
         return TimeKeeper.logAverageMillisecondsToRunInParallel("ParallelGSCollections Collect: "
@@ -513,6 +585,46 @@ public class SerialParallelPerformanceTest
                 Verify.assertNotEmpty(ParallelIterate.groupBy(
                         iterable,
                         ALPHAGRAM_FUNCTION));
+            }
+        }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
+    }
+
+    private double basicParallelGSCollectionsAggregateInPlaceByPerformance(final Iterable<String> iterable, int count)
+    {
+        Assert.assertEquals(
+                ParallelIterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, AtomicIntegerWithEquals.NEW_INSTANCE, AtomicIntegerWithEquals.INCREMENT),
+                Iterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, AtomicIntegerWithEquals.NEW_INSTANCE, AtomicIntegerWithEquals.INCREMENT));
+        return TimeKeeper.logAverageMillisecondsToRunInParallel("ParallelGSCollections AggregateInPlaceBy: "
+                + this.getSimpleName(iterable)
+                + " size: "
+                + Iterate.sizeOf(iterable), new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertNotEmpty(
+                        ParallelIterate.aggregateInPlaceBy(
+                                iterable,
+                                ALPHAGRAM_FUNCTION,
+                                AtomicIntegerWithEquals.NEW_INSTANCE,
+                                AtomicIntegerWithEquals.INCREMENT));
+            }
+        }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
+    }
+
+    private double basicParallelGSCollectionsAggregateByPerformance(final Iterable<String> iterable, int count)
+    {
+        Assert.assertEquals(
+                ParallelIterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR),
+                Iterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR));
+        return TimeKeeper.logAverageMillisecondsToRunInParallel("ParallelGSCollections AggregateBy: "
+                + this.getSimpleName(iterable)
+                + " size: "
+                + Iterate.sizeOf(iterable), new Runnable()
+        {
+            public void run()
+            {
+                Verify.assertNotEmpty(
+                        ParallelIterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR));
             }
         }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
     }
@@ -571,7 +683,7 @@ public class SerialParallelPerformanceTest
 
         private static void doLog(String message, int count, double total, double average)
         {
-            System.out.println(message + " Count: " + count + " ms Total: " + TimeKeeper.nanosToMillis(total) + " ms Avg: " + TimeKeeper.nanosToMillis(average));
+            System.out.println(message + " Count: " + count + " Total(ms): " + TimeKeeper.nanosToMillis(total) + " Avg(ms): " + TimeKeeper.nanosToMillis(average));
         }
 
         private static double logInParallel(String message, Runnable runnable, int count, int threads)
@@ -714,6 +826,42 @@ public class SerialParallelPerformanceTest
         public String toString()
         {
             return new String(this.key);
+        }
+    }
+
+    public static final class AtomicIntegerWithEquals extends AtomicInteger
+    {
+        private static final Function0<AtomicIntegerWithEquals> NEW_INSTANCE = new Function0<AtomicIntegerWithEquals>()
+        {
+            public AtomicIntegerWithEquals value()
+            {
+                return new AtomicIntegerWithEquals(0);
+            }
+        };
+
+        private static final Procedure2<AtomicIntegerWithEquals, String> INCREMENT = new Procedure2<AtomicIntegerWithEquals, String>()
+        {
+            public void value(AtomicIntegerWithEquals value, String each)
+            {
+                value.incrementAndGet();
+            }
+        };
+
+        private AtomicIntegerWithEquals(int initialValue)
+        {
+            super(initialValue);
+        }
+
+        @Override
+        public int hashCode()
+        {
+            return this.get();
+        }
+
+        @Override
+        public boolean equals(Object obj)
+        {
+            return (obj instanceof AtomicIntegerWithEquals) && ((AtomicIntegerWithEquals) obj).get() == this.get();
         }
     }
 }

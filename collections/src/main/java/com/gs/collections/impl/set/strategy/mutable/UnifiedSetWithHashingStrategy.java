@@ -2517,7 +2517,7 @@ public class UnifiedSetWithHashingStrategy<K>
         return cur == key || (cur == NULL_KEY ? key == null : this.hashingStrategy.equals(this.nonSentinel(cur), key));
     }
 
-    public <K2, V> MutableMap<K2, V> aggregateBy(
+    public <K2, V> MutableMap<K2, V> aggregateInPlaceBy(
             final Function<? super K, ? extends K2> groupBy,
             final Function0<? extends V> zeroValueFactory,
             final Procedure2<? super V, ? super K> mutatingAggregator)

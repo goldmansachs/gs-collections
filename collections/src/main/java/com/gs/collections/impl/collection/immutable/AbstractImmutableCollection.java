@@ -507,7 +507,7 @@ public abstract class AbstractImmutableCollection<T> implements ImmutableCollect
 
     protected abstract MutableCollection<T> newMutable(int size);
 
-    public <K, V> ImmutableMap<K, V> aggregateBy(
+    public <K, V> ImmutableMap<K, V> aggregateInPlaceBy(
             Function<? super T, ? extends K> groupBy,
             Function0<? extends V> zeroValueFactory,
             Procedure2<? super V, ? super T> mutatingAggregator)

@@ -490,7 +490,7 @@ public class UnmodifiableRichIterable<T>
         return this.iterable.chunk(size);
     }
 
-    public <K, V> MapIterable<K, V> aggregateBy(
+    public <K, V> MapIterable<K, V> aggregateInPlaceBy(
             Function<? super T, ? extends K> groupBy,
             Function0<? extends V> zeroValueFactory,
             Procedure2<? super V, ? super T> mutatingAggregator)

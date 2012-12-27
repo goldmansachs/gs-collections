@@ -526,7 +526,7 @@ public class UnmodifiableRichIterableTest
             }
         };
         RichIterable<Integer> numbers = UnmodifiableRichIterable.of(FastList.<Integer>newListWith(1, 1, 1, 2, 2, 3));
-        MapIterable<String, AtomicInteger> aggregation = numbers.aggregateBy(Functions.getToString(), valueCreator, sumAggregator);
+        MapIterable<String, AtomicInteger> aggregation = numbers.aggregateInPlaceBy(Functions.getToString(), valueCreator, sumAggregator);
         Assert.assertEquals(3, aggregation.get("1").intValue());
         Assert.assertEquals(4, aggregation.get("2").intValue());
         Assert.assertEquals(3, aggregation.get("3").intValue());

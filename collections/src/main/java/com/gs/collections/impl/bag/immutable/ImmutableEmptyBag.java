@@ -591,12 +591,12 @@ final class ImmutableEmptyBag<T>
         return new AbstractImmutableBag.ImmutableBagSerializationProxy<T>(this);
     }
 
-    public <K, V> ImmutableMap<K, V> aggregateBy(
+    public <K, V> ImmutableMap<K, V> aggregateInPlaceBy(
             Function<? super T, ? extends K> groupBy,
             Function0<? extends V> zeroValueFactory,
             Procedure2<? super V, ? super T> mutatingAggregator)
     {
-       return Maps.immutable.of();
+        return Maps.immutable.of();
     }
 
     public <K, V> ImmutableMap<K, V> aggregateBy(

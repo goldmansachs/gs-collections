@@ -577,7 +577,7 @@ public abstract class AbstractLazyIterable<T>
         return LazyIterate.chunk(this, size);
     }
 
-    public <K, V> MapIterable<K, V> aggregateBy(
+    public <K, V> MapIterable<K, V> aggregateInPlaceBy(
             Function<? super T, ? extends K> groupBy,
             Function0<? extends V> zeroValueFactory,
             Procedure2<? super V, ? super T> mutatingAggregator)

@@ -306,6 +306,7 @@ public class MultiReaderUnifiedSetTest extends AbstractCollectionTestCase
                         .select(Predicates.attributeEqual(Functions.<String>secondOfPair(), "One"))
                         .collect(Functions.<String>firstOfPair()).toSet());
     }
+
     @Override
     @Test
     public void aggregateByMutating()
@@ -325,7 +326,7 @@ public class MultiReaderUnifiedSetTest extends AbstractCollectionTestCase
             }
         };
         MutableCollection<Integer> collection = this.newWith(1, 1, 1, 2, 2, 3);
-        MapIterable<String, AtomicInteger> aggregation = collection.aggregateBy(Functions.getToString(), valueCreator, sumAggregator);
+        MapIterable<String, AtomicInteger> aggregation = collection.aggregateInPlaceBy(Functions.getToString(), valueCreator, sumAggregator);
         Assert.assertEquals(1, aggregation.get("1").intValue());
         Assert.assertEquals(2, aggregation.get("2").intValue());
         Assert.assertEquals(3, aggregation.get("3").intValue());

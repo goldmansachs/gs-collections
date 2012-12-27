@@ -1948,9 +1948,9 @@ public final class Iterate
     }
 
     /**
-     * @see RichIterable#aggregateBy(Function, Function0, Procedure2)
+     * @see RichIterable#aggregateInPlaceBy(Function, Function0, Procedure2)
      */
-    public static <T, K, V> MutableMap<K, V> aggregateBy(
+    public static <T, K, V> MutableMap<K, V> aggregateInPlaceBy(
             Iterable<T> iterable,
             Function<? super T, ? extends K> groupBy,
             Function0<? extends V> zeroValueFactory,
@@ -1958,21 +1958,21 @@ public final class Iterate
     {
         if (iterable instanceof MutableCollection)
         {
-            return ((MutableCollection<T>) iterable).aggregateBy(groupBy, zeroValueFactory, mutatingAggregator);
+            return ((MutableCollection<T>) iterable).aggregateInPlaceBy(groupBy, zeroValueFactory, mutatingAggregator);
         }
         if (iterable instanceof ArrayList)
         {
-            return ArrayListIterate.aggregateBy((ArrayList<T>) iterable, groupBy, zeroValueFactory, mutatingAggregator);
+            return ArrayListIterate.aggregateInPlaceBy((ArrayList<T>) iterable, groupBy, zeroValueFactory, mutatingAggregator);
         }
         if (iterable instanceof RandomAccess)
         {
-            return RandomAccessListIterate.aggregateBy((List<T>) iterable, groupBy, zeroValueFactory, mutatingAggregator);
+            return RandomAccessListIterate.aggregateInPlaceBy((List<T>) iterable, groupBy, zeroValueFactory, mutatingAggregator);
         }
         if (iterable != null)
         {
-            return IterableIterate.aggregateBy(iterable, groupBy, zeroValueFactory, mutatingAggregator);
+            return IterableIterate.aggregateInPlaceBy(iterable, groupBy, zeroValueFactory, mutatingAggregator);
         }
-        throw new IllegalArgumentException("Cannot perform an aggregateBy on null");
+        throw new IllegalArgumentException("Cannot perform an aggregateInPlaceBy on null");
     }
 
     /**
@@ -2002,7 +2002,6 @@ public final class Iterate
         }
         throw new IllegalArgumentException("Cannot perform an aggregateBy on null");
     }
-
 
     /**
      * @see RichIterable#groupByEach(Function)

@@ -550,7 +550,7 @@ public final class UnmodifiableStack<T> implements MutableStack<T>, Serializable
         return this.mutableStack.hashCode();
     }
 
-    public <K, V> MutableMap<K, V> aggregateBy(
+    public <K, V> MutableMap<K, V> aggregateInPlaceBy(
             Function<? super T, ? extends K> groupBy,
             Function0<? extends V> zeroValueFactory,
             Procedure2<? super V, ? super T> mutatingAggregator)

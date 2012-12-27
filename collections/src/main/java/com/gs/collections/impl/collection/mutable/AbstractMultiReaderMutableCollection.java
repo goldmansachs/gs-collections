@@ -1277,7 +1277,7 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
-    public <K, V> MutableMap<K, V> aggregateBy(
+    public <K, V> MutableMap<K, V> aggregateInPlaceBy(
             Function<? super T, ? extends K> groupBy,
             Function0<? extends V> zeroValueFactory,
             Procedure2<? super V, ? super T> mutatingAggregator)
@@ -1777,7 +1777,7 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
             return this.delegate.chunk(size);
         }
 
-        public <K, V> MutableMap<K, V> aggregateBy(
+        public <K, V> MutableMap<K, V> aggregateInPlaceBy(
                 final Function<? super T, ? extends K> groupBy,
                 final Function0<? extends V> zeroValueFactory,
                 final Procedure2<? super V, ? super T> mutatingAggregator)
