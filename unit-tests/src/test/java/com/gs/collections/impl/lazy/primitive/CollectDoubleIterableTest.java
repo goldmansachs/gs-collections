@@ -16,12 +16,15 @@
 
 package com.gs.collections.impl.lazy.primitive;
 
+import java.util.NoSuchElementException;
+
 import com.gs.collections.api.DoubleIterable;
 import com.gs.collections.api.block.function.primitive.DoubleToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.DoubleProcedure;
 import com.gs.collections.api.iterator.DoubleIterator;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.primitive.DoublePredicates;
+import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import org.junit.Assert;
@@ -134,6 +137,18 @@ public class CollectDoubleIterableTest
     public void min()
     {
         Assert.assertEquals(-3.0d, Interval.fromTo(-3, 3).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).min(), 0.0d);
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void maxThrowsOnEmpty()
+    {
+        Lists.mutable.<Integer>of().asLazy().collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).max();
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void minThrowsOnEmpty()
+    {
+        Lists.mutable.<Integer>of().asLazy().collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).min();
     }
 
     @Test

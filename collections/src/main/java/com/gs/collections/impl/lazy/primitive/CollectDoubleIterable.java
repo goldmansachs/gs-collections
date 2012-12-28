@@ -165,24 +165,24 @@ public class CollectDoubleIterable<T>
 
     public double max()
     {
-        return this.iterable.injectInto(Double.MIN_VALUE, new DoubleObjectToDoubleFunction<T>()
+        DoubleIterator iterator = this.doubleIterator();
+        double max = iterator.next();
+        while (iterator.hasNext())
         {
-            public double doubleValueOf(double doubleValue, T each)
-            {
-                return Math.max(doubleValue, CollectDoubleIterable.this.function.doubleValueOf(each));
-            }
-        });
+            max = Math.max(max, iterator.next());
+        }
+        return max;
     }
 
     public double min()
     {
-        return this.iterable.injectInto(Double.MAX_VALUE, new DoubleObjectToDoubleFunction<T>()
+        DoubleIterator iterator = this.doubleIterator();
+        double min = iterator.next();
+        while (iterator.hasNext())
         {
-            public double doubleValueOf(double doubleValue, T each)
-            {
-                return Math.min(doubleValue, CollectDoubleIterable.this.function.doubleValueOf(each));
-            }
-        });
+            min = Math.min(min, iterator.next());
+        }
+        return min;
     }
 
     public double average()

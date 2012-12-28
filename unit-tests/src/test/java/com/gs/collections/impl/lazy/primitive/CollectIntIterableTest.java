@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.lazy.primitive;
 
+import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.gs.collections.api.IntIterable;
@@ -24,6 +25,7 @@ import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.iterator.IntIterator;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.primitive.IntPredicates;
+import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import org.junit.Assert;
@@ -132,6 +134,18 @@ public class CollectIntIterableTest
     public void min()
     {
         Assert.assertEquals(-3, Interval.fromTo(-3, 3).collectInt(PrimitiveFunctions.unboxIntegerToInt()).min());
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void maxThrowsOnEmpty()
+    {
+        Lists.mutable.<Integer>of().asLazy().collectInt(PrimitiveFunctions.unboxIntegerToInt()).max();
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void minThrowsOnEmpty()
+    {
+        Lists.mutable.<Integer>of().asLazy().collectInt(PrimitiveFunctions.unboxIntegerToInt()).min();
     }
 
     @Test

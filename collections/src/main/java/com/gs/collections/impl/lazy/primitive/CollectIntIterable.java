@@ -23,7 +23,6 @@ import java.util.Iterator;
 import com.gs.collections.api.IntIterable;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.primitive.IntFunction;
-import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
 import com.gs.collections.api.block.function.primitive.IntToObjectFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
@@ -165,24 +164,24 @@ public class CollectIntIterable<T>
 
     public int max()
     {
-        return this.iterable.injectInto(Integer.MIN_VALUE, new IntObjectToIntFunction<T>()
+        IntIterator iterator = this.intIterator();
+        int max = iterator.next();
+        while (iterator.hasNext())
         {
-            public int intValueOf(int intParameter, T each)
-            {
-                return Math.max(intParameter, CollectIntIterable.this.function.intValueOf(each));
-            }
-        });
+            max = Math.max(max, iterator.next());
+        }
+        return max;
     }
 
     public int min()
     {
-        return this.iterable.injectInto(Integer.MAX_VALUE, new IntObjectToIntFunction<T>()
+        IntIterator iterator = this.intIterator();
+        int min = iterator.next();
+        while (iterator.hasNext())
         {
-            public int intValueOf(int intParameter, T each)
-            {
-                return Math.min(intParameter, CollectIntIterable.this.function.intValueOf(each));
-            }
-        });
+            min = Math.min(min, iterator.next());
+        }
+        return min;
     }
 
     public double average()

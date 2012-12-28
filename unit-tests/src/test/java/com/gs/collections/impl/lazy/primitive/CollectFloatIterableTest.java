@@ -16,12 +16,15 @@
 
 package com.gs.collections.impl.lazy.primitive;
 
+import java.util.NoSuchElementException;
+
 import com.gs.collections.api.FloatIterable;
 import com.gs.collections.api.block.function.primitive.FloatToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.FloatProcedure;
 import com.gs.collections.api.iterator.FloatIterator;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.primitive.FloatPredicates;
+import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import org.junit.Assert;
@@ -135,6 +138,18 @@ public class CollectFloatIterableTest
     public void min()
     {
         Assert.assertEquals(-3.0f, Interval.fromTo(-3, 3).collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).min(), 0.0f);
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void maxThrowsOnEmpty()
+    {
+        Lists.mutable.<Integer>of().asLazy().collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).max();
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void minThrowsOnEmpty()
+    {
+        Lists.mutable.<Integer>of().asLazy().collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).min();
     }
 
     @Test

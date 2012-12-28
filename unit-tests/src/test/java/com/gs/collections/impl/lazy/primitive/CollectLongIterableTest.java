@@ -16,12 +16,15 @@
 
 package com.gs.collections.impl.lazy.primitive;
 
+import java.util.NoSuchElementException;
+
 import com.gs.collections.api.LongIterable;
 import com.gs.collections.api.block.function.primitive.LongToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.LongProcedure;
 import com.gs.collections.api.iterator.LongIterator;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.primitive.LongPredicates;
+import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import org.junit.Assert;
@@ -130,6 +133,18 @@ public class CollectLongIterableTest
     public void min()
     {
         Assert.assertEquals(-3, Interval.fromTo(-3, 3).collectLong(PrimitiveFunctions.unboxIntegerToLong()).min());
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void maxThrowsOnEmpty()
+    {
+        Lists.mutable.<Integer>of().asLazy().collectLong(PrimitiveFunctions.unboxIntegerToLong()).max();
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void minThrowsOnEmpty()
+    {
+        Lists.mutable.<Integer>of().asLazy().collectLong(PrimitiveFunctions.unboxIntegerToLong()).min();
     }
 
     @Test

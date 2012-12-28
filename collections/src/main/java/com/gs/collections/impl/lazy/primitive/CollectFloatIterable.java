@@ -25,7 +25,6 @@ import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
-import com.gs.collections.api.block.function.primitive.FloatObjectToFloatFunction;
 import com.gs.collections.api.block.function.primitive.FloatToObjectFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.primitive.FloatPredicate;
@@ -166,24 +165,24 @@ public class CollectFloatIterable<T>
 
     public float max()
     {
-        return this.iterable.injectInto(Float.MIN_VALUE, new FloatObjectToFloatFunction<T>()
+        FloatIterator iterator = this.floatIterator();
+        float max = iterator.next();
+        while (iterator.hasNext())
         {
-            public float floatValueOf(float floatValue, T each)
-            {
-                return Math.max(floatValue, CollectFloatIterable.this.function.floatValueOf(each));
-            }
-        });
+            max = Math.max(max, iterator.next());
+        }
+        return max;
     }
 
     public float min()
     {
-        return this.iterable.injectInto(Float.MAX_VALUE, new FloatObjectToFloatFunction<T>()
+        FloatIterator iterator = this.floatIterator();
+        float min = iterator.next();
+        while (iterator.hasNext())
         {
-            public float floatValueOf(float floatValue, T each)
-            {
-                return Math.min(floatValue, CollectFloatIterable.this.function.floatValueOf(each));
-            }
-        });
+            min = Math.min(min, iterator.next());
+        }
+        return min;
     }
 
     public double average()

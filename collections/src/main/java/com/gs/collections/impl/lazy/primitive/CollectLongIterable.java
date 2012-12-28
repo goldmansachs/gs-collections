@@ -165,24 +165,24 @@ public class CollectLongIterable<T>
 
     public long max()
     {
-        return this.iterable.injectInto(Integer.MIN_VALUE, new LongObjectToLongFunction<T>()
+        LongIterator iterator = this.longIterator();
+        long max = iterator.next();
+        while (iterator.hasNext())
         {
-            public long longValueOf(long longValue, T each)
-            {
-                return Math.max(longValue, CollectLongIterable.this.function.longValueOf(each));
-            }
-        });
+            max = Math.max(max, iterator.next());
+        }
+        return max;
     }
 
     public long min()
     {
-        return this.iterable.injectInto(Integer.MAX_VALUE, new LongObjectToLongFunction<T>()
+        LongIterator iterator = this.longIterator();
+        long min = iterator.next();
+        while (iterator.hasNext())
         {
-            public long longValueOf(long longValue, T each)
-            {
-                return Math.min(longValue, CollectLongIterable.this.function.longValueOf(each));
-            }
-        });
+            min = Math.min(min, iterator.next());
+        }
+        return min;
     }
 
     public double average()

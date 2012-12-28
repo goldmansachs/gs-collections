@@ -18,6 +18,8 @@ body(type, name) ::= <<
 
 package com.gs.collections.impl.lazy.primitive;
 
+import java.util.NoSuchElementException;
+
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
@@ -141,6 +143,18 @@ public class Select<name>IterableTest
     public void min()
     {
         Assert.assertEquals(<(literal.(type))("1")>, this.iterable.min()<(wideDelta.(type))>);
+    }
+
+    @Test (expected = NoSuchElementException.class)
+    public void maxThrowsOnEmpty()
+    {
+        new Select<name>Iterable(new <name>ArrayList(), <name>Predicates.lessThan(<(literal.(type))("3")>)).max();
+    }
+
+    @Test (expected = NoSuchElementException.class)
+    public void minThrowsOnEmpty()
+    {
+        new Select<name>Iterable(new <name>ArrayList(), <name>Predicates.lessThan(<(literal.(type))("3")>)).min();
     }
 
     @Test
