@@ -55,6 +55,7 @@
     <suppress checks="ConstantName" files="Maps.java" />
     <suppress checks="ConstantName" files="Sets.java" />
     <suppress checks="ConstantName" files="Stacks.java" />
+    <suppress checks="ConstantName" files="Multimaps.java" />
 
     <suppress checks="EqualsAvoidNull" files="StringPredicatesTest.java" />
 
