@@ -202,4 +202,32 @@ public class CollectIntIterableTest
             }
         }).toList());
     }
+
+    @Test
+    public void testToString()
+    {
+        Assert.assertEquals("[1, 2, 3]", this.intIterable.toString());
+    }
+
+    @Test
+    public void makeString()
+    {
+        Assert.assertEquals("1, 2, 3", this.intIterable.makeString());
+        Assert.assertEquals("1/2/3", this.intIterable.makeString("/"));
+        Assert.assertEquals("[1, 2, 3]", this.intIterable.makeString("[", ", ", "]"));
+    }
+
+    @Test
+    public void appendString()
+    {
+        StringBuilder appendable = new StringBuilder();
+        this.intIterable.appendString(appendable);
+        Assert.assertEquals("1, 2, 3", appendable.toString());
+        StringBuilder appendable2 = new StringBuilder();
+        this.intIterable.appendString(appendable2, "/");
+        Assert.assertEquals("1/2/3", appendable2.toString());
+        StringBuilder appendable3 = new StringBuilder();
+        this.intIterable.appendString(appendable3, "[", ", ", "]");
+        Assert.assertEquals(this.intIterable.toString(), appendable3.toString());
+    }
 }

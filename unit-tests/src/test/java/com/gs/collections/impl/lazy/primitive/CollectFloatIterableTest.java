@@ -32,7 +32,6 @@ import org.junit.Test;
 
 public class CollectFloatIterableTest
 {
-
     private final FloatIterable floatIterable = Interval.oneTo(3).collectFloat(PrimitiveFunctions.unboxIntegerToFloat());
 
     @Test
@@ -205,5 +204,33 @@ public class CollectFloatIterableTest
                 return String.valueOf(each);
             }
         }).toList());
+    }
+
+    @Test
+    public void testToString()
+    {
+        Assert.assertEquals("[1.0, 2.0, 3.0]", this.floatIterable.toString());
+    }
+
+    @Test
+    public void makeString()
+    {
+        Assert.assertEquals("1.0, 2.0, 3.0", this.floatIterable.makeString());
+        Assert.assertEquals("1.0/2.0/3.0", this.floatIterable.makeString("/"));
+        Assert.assertEquals("[1.0, 2.0, 3.0]", this.floatIterable.makeString("[", ", ", "]"));
+    }
+
+    @Test
+    public void appendString()
+    {
+        StringBuilder appendable = new StringBuilder();
+        this.floatIterable.appendString(appendable);
+        Assert.assertEquals("1.0, 2.0, 3.0", appendable.toString());
+        StringBuilder appendable2 = new StringBuilder();
+        this.floatIterable.appendString(appendable2, "/");
+        Assert.assertEquals("1.0/2.0/3.0", appendable2.toString());
+        StringBuilder appendable3 = new StringBuilder();
+        this.floatIterable.appendString(appendable3, "[", ", ", "]");
+        Assert.assertEquals(this.floatIterable.toString(), appendable3.toString());
     }
 }

@@ -201,4 +201,32 @@ public class CollectLongIterableTest
             }
         }).toList());
     }
+
+    @Test
+    public void testToString()
+    {
+        Assert.assertEquals("[1, 2, 3]", this.longIterable.toString());
+    }
+
+    @Test
+    public void makeString()
+    {
+        Assert.assertEquals("1, 2, 3", this.longIterable.makeString());
+        Assert.assertEquals("1/2/3", this.longIterable.makeString("/"));
+        Assert.assertEquals("[1, 2, 3]", this.longIterable.makeString("[", ", ", "]"));
+    }
+
+    @Test
+    public void appendString()
+    {
+        StringBuilder appendable = new StringBuilder();
+        this.longIterable.appendString(appendable);
+        Assert.assertEquals("1, 2, 3", appendable.toString());
+        StringBuilder appendable2 = new StringBuilder();
+        this.longIterable.appendString(appendable2, "/");
+        Assert.assertEquals("1/2/3", appendable2.toString());
+        StringBuilder appendable3 = new StringBuilder();
+        this.longIterable.appendString(appendable3, "[", ", ", "]");
+        Assert.assertEquals(this.longIterable.toString(), appendable3.toString());
+    }
 }

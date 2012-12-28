@@ -205,4 +205,32 @@ public class CollectDoubleIterableTest
             }
         }).toList());
     }
+
+    @Test
+    public void testToString()
+    {
+        Assert.assertEquals("[1.0, 2.0, 3.0]", this.doubleIterable.toString());
+    }
+
+    @Test
+    public void makeString()
+    {
+        Assert.assertEquals("1.0, 2.0, 3.0", this.doubleIterable.makeString());
+        Assert.assertEquals("1.0/2.0/3.0", this.doubleIterable.makeString("/"));
+        Assert.assertEquals("[1.0, 2.0, 3.0]", this.doubleIterable.makeString("[", ", ", "]"));
+    }
+
+    @Test
+    public void appendString()
+    {
+        StringBuilder appendable = new StringBuilder();
+        this.doubleIterable.appendString(appendable);
+        Assert.assertEquals("1.0, 2.0, 3.0", appendable.toString());
+        StringBuilder appendable2 = new StringBuilder();
+        this.doubleIterable.appendString(appendable2, "/");
+        Assert.assertEquals("1.0/2.0/3.0", appendable2.toString());
+        StringBuilder appendable3 = new StringBuilder();
+        this.doubleIterable.appendString(appendable3, "[", ", ", "]");
+        Assert.assertEquals(this.doubleIterable.toString(), appendable3.toString());
+    }
 }
