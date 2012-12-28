@@ -46,8 +46,6 @@ import com.gs.collections.api.partition.bag.PartitionMutableBag;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.Counter;
-import com.gs.collections.impl.bag.immutable.ImmutableArrayBag;
-import com.gs.collections.impl.bag.immutable.ImmutableHashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
@@ -103,6 +101,12 @@ public class HashBag<T>
     public static <E> HashBag<E> newBag()
     {
         return new HashBag<E>();
+    }
+
+    @Override
+    public boolean isEmpty()
+    {
+        return this.items.isEmpty();
     }
 
     public static <E> HashBag<E> newBag(int size)
