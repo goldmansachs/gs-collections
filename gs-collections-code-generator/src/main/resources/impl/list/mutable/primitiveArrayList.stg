@@ -80,6 +80,16 @@ public final class <name>ArrayList
         return <name>ArrayList.newListWith(source.toArray());
     }
 
+    public static <name>ArrayList newWithNValues(int size, <type> value)
+    {
+        <name>ArrayList newList = new <name>ArrayList(size);
+        for (int i = 0; i \< size; i++)
+        {
+            newList.add(value);
+        }
+        return newList;
+    }
+
     public int size()
     {
         return this.size;
