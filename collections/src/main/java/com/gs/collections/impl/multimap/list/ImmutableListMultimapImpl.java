@@ -20,16 +20,19 @@ import java.io.Serializable;
 
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.list.ImmutableListMultimap;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.impl.factory.Lists;
-import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.multimap.AbstractImmutableMultimap;
 import com.gs.collections.impl.multimap.AbstractMutableMultimap;
 import com.gs.collections.impl.multimap.ImmutableMultimapSerializationProxy;
 
 /**
+ * The default ImmutableListMultimap implementation.
+ *
  * @since 1.0
  */
 public final class ImmutableListMultimapImpl<K, V>
@@ -43,6 +46,11 @@ public final class ImmutableListMultimapImpl<K, V>
         super(map);
     }
 
+    public ImmutableListMultimapImpl(ImmutableMap<K, ImmutableList<V>> map)
+    {
+        super(map);
+    }
+
     @Override
     protected ImmutableList<V> createCollection()
     {
@@ -51,7 +59,7 @@ public final class ImmutableListMultimapImpl<K, V>
 
     public ImmutableListMultimap<K, V> newEmpty()
     {
-        return new ImmutableListMultimapImpl<K, V>(UnifiedMap.<K, ImmutableList<V>>newMap());
+        return new ImmutableListMultimapImpl<K, V>(Maps.immutable.<K, ImmutableList<V>>of());
     }
 
     public MutableListMultimap<K, V> toMutable()
@@ -81,7 +89,7 @@ public final class ImmutableListMultimapImpl<K, V>
             // For Externalizable use only
         }
 
-        public ImmutableListMultimapSerializationProxy(MutableMap<K, ImmutableList<V>> map)
+        public ImmutableListMultimapSerializationProxy(ImmutableMap<K, ImmutableList<V>> map)
         {
             super(map);
         }

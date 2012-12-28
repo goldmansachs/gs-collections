@@ -24,6 +24,7 @@ import java.io.Serializable;
 
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
@@ -31,10 +32,12 @@ import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.impl.block.procedure.checked.CheckedObjectIntProcedure;
 import com.gs.collections.impl.block.procedure.checked.CheckedProcedure2;
 import com.gs.collections.impl.factory.Bags;
-import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.multimap.AbstractImmutableMultimap;
 
 /**
+ * The default ImmutableBagMultimap implementation.
+ *
  * @since 1.0
  */
 public final class ImmutableBagMultimapImpl<K, V>
@@ -48,6 +51,11 @@ public final class ImmutableBagMultimapImpl<K, V>
         super(map);
     }
 
+    public ImmutableBagMultimapImpl(ImmutableMap<K, ImmutableBag<V>> map)
+    {
+        super(map);
+    }
+
     @Override
     protected ImmutableBag<V> createCollection()
     {
@@ -56,7 +64,7 @@ public final class ImmutableBagMultimapImpl<K, V>
 
     public ImmutableBagMultimap<K, V> newEmpty()
     {
-        return new ImmutableBagMultimapImpl<K, V>(UnifiedMap.<K, ImmutableBag<V>>newMap());
+        return new ImmutableBagMultimapImpl<K, V>(Maps.immutable.<K, ImmutableBag<V>>of());
     }
 
     public MutableBagMultimap<K, V> toMutable()
@@ -80,7 +88,7 @@ public final class ImmutableBagMultimapImpl<K, V>
     {
         private static final long serialVersionUID = 1L;
 
-        private MutableMap<K, ImmutableBag<V>> map;
+        private ImmutableMap<K, ImmutableBag<V>> map;
         private MutableMultimap<K, V> multimap;
 
         @SuppressWarnings("UnusedDeclaration")
@@ -89,7 +97,7 @@ public final class ImmutableBagMultimapImpl<K, V>
             // For Externalizable use only
         }
 
-        private ImmutableBagMultimapSerializationProxy(MutableMap<K, ImmutableBag<V>> map)
+        private ImmutableBagMultimapSerializationProxy(ImmutableMap<K, ImmutableBag<V>> map)
         {
             this.map = map;
         }

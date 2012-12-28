@@ -59,7 +59,7 @@ public final class Multimaps
 
         public static final class ImmutableListMultimapFactory
         {
-            public static final ImmutableListMultimap EMPTY = new ImmutableListMultimapImpl(Maps.fixedSize.with());
+            public static final ImmutableListMultimap EMPTY = new ImmutableListMultimapImpl(Maps.immutable.with());
 
             private ImmutableListMultimapFactory()
             {
@@ -72,7 +72,7 @@ public final class Multimaps
 
             public <K, V> ImmutableListMultimap<K, V> with(K key, V value)
             {
-                return new ImmutableListMultimapImpl<K, V>(Maps.fixedSize.with(key, Lists.immutable.<V>with(value)));
+                return new ImmutableListMultimapImpl<K, V>(Maps.immutable.with(key, Lists.immutable.<V>with(value)));
             }
 
             public <K, V> ImmutableListMultimap<K, V> with(K key1, V value1, K key2, V value2)
@@ -95,7 +95,7 @@ public final class Multimaps
 
         public static final class ImmutableSetMultimapFactory
         {
-            public static final ImmutableSetMultimap EMPTY = new ImmutableSetMultimapImpl(Maps.fixedSize.with());
+            public static final ImmutableSetMultimap EMPTY = new ImmutableSetMultimapImpl(Maps.immutable.with());
 
             private ImmutableSetMultimapFactory()
             {
@@ -108,7 +108,7 @@ public final class Multimaps
 
             public <K, V> ImmutableSetMultimap<K, V> with(K key, V value)
             {
-                return new ImmutableSetMultimapImpl<K, V>(Maps.fixedSize.with(key, Sets.immutable.<V>with(value)));
+                return new ImmutableSetMultimapImpl<K, V>(Maps.immutable.with(key, Sets.immutable.<V>with(value)));
             }
 
             public <K, V> ImmutableSetMultimap<K, V> with(K key1, V value1, K key2, V value2)
@@ -137,12 +137,12 @@ public final class Multimaps
 
             public <K, V> ImmutableSortedSetMultimap<K, V> with(Comparator<V> comparator)
             {
-                return new ImmutableSortedSetMultimapImpl(Maps.fixedSize.with(), comparator);
+                return new ImmutableSortedSetMultimapImpl(Maps.immutable.with(), comparator);
             }
 
             public <K, V> ImmutableSortedSetMultimap<K, V> with(Comparator<V> comparator, K key, V value)
             {
-                return new ImmutableSortedSetMultimapImpl<K, V>(Maps.fixedSize.with(key, SortedSets.immutable.<V>with(comparator, value)), comparator);
+                return new ImmutableSortedSetMultimapImpl<K, V>(Maps.immutable.with(key, SortedSets.immutable.<V>with(comparator, value)), comparator);
             }
 
             public <K, V> ImmutableSortedSetMultimap<K, V> with(Comparator<V> comparator, K key1, V value1, K key2, V value2)
@@ -165,7 +165,7 @@ public final class Multimaps
 
         public static final class ImmutableBagMultimapFactory
         {
-            public static final ImmutableBagMultimap EMPTY = new ImmutableBagMultimapImpl(Maps.fixedSize.with());
+            public static final ImmutableBagMultimap EMPTY = new ImmutableBagMultimapImpl(Maps.immutable.with());
 
             private ImmutableBagMultimapFactory()
             {
@@ -178,7 +178,7 @@ public final class Multimaps
 
             public <K, V> ImmutableBagMultimap<K, V> with(K key, V value)
             {
-                return new ImmutableBagMultimapImpl<K, V>(Maps.fixedSize.with(key, Bags.immutable.<V>with(value)));
+                return new ImmutableBagMultimapImpl<K, V>(Maps.immutable.with(key, Bags.immutable.<V>with(value)));
             }
 
             public <K, V> ImmutableBagMultimap<K, V> with(K key1, V value1, K key2, V value2)

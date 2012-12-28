@@ -22,18 +22,21 @@ import java.io.ObjectOutput;
 import java.io.Serializable;
 import java.util.Comparator;
 
+import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.sortedset.ImmutableSortedSetMultimap;
 import com.gs.collections.api.multimap.sortedset.MutableSortedSetMultimap;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
+import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.factory.SortedSets;
-import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.AbstractImmutableMultimap;
 import com.gs.collections.impl.multimap.AbstractMutableMultimap;
 import com.gs.collections.impl.multimap.ImmutableMultimapSerializationProxy;
 
 /**
+ * The default ImmutableSortedSetMultimap implementation.
+ *
  * @since 1.0
  */
 public final class ImmutableSortedSetMultimapImpl<K, V>
@@ -55,6 +58,18 @@ public final class ImmutableSortedSetMultimapImpl<K, V>
         this.comparator = comparator;
     }
 
+    ImmutableSortedSetMultimapImpl(ImmutableMap<K, ImmutableSortedSet<V>> map)
+    {
+        super(map);
+        this.comparator = null;
+    }
+
+    public ImmutableSortedSetMultimapImpl(ImmutableMap<K, ImmutableSortedSet<V>> map, Comparator<? super V> comparator)
+    {
+        super(map);
+        this.comparator = comparator;
+    }
+
     @Override
     protected ImmutableSortedSet<V> createCollection()
     {
@@ -63,7 +78,7 @@ public final class ImmutableSortedSetMultimapImpl<K, V>
 
     public ImmutableSortedSetMultimap<K, V> newEmpty()
     {
-        return new ImmutableSortedSetMultimapImpl<K, V>(UnifiedMap.<K, ImmutableSortedSet<V>>newMap(), this.comparator());
+        return new ImmutableSortedSetMultimapImpl<K, V>(Maps.immutable.<K, ImmutableSortedSet<V>>with(), this.comparator());
     }
 
     public Comparator<? super V> comparator()
@@ -99,7 +114,7 @@ public final class ImmutableSortedSetMultimapImpl<K, V>
             // For Externalizable use only
         }
 
-        private ImmutableSortedSetMultimapSerializationProxy(MutableMap<K, ImmutableSortedSet<V>> map, Comparator<? super V> comparator)
+        private ImmutableSortedSetMultimapSerializationProxy(ImmutableMap<K, ImmutableSortedSet<V>> map, Comparator<? super V> comparator)
         {
             super(map);
             this.comparator = comparator;

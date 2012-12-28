@@ -27,6 +27,7 @@ import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.tuple.Pair;
@@ -36,7 +37,6 @@ import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.Iterate;
-import com.gs.collections.impl.utility.MapIterate;
 
 public abstract class AbstractMultimap<K, V, C extends RichIterable<V>>
         implements Multimap<K, V>
@@ -49,7 +49,7 @@ public abstract class AbstractMultimap<K, V, C extends RichIterable<V>>
         }
     };
 
-    protected abstract MutableMap<K, C> getMap();
+    protected abstract MapIterable<K, C> getMap();
 
     /**
      * Creates the collection of values for a single key.
@@ -78,7 +78,7 @@ public abstract class AbstractMultimap<K, V, C extends RichIterable<V>>
 
     public boolean containsValue(final Object value)
     {
-        return MapIterate.anySatisfy(this.getMap(), new Predicate<C>()
+        return this.getMap().anySatisfy(new Predicate<C>()
         {
             public boolean accept(C collection)
             {

@@ -20,9 +20,9 @@ import java.io.InvalidClassException;
 import java.io.ObjectStreamException;
 
 import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.collection.ImmutableCollection;
+import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.ImmutableMultimap;
 import com.gs.collections.api.multimap.MutableMultimap;
@@ -31,20 +31,30 @@ public abstract class AbstractImmutableMultimap<K, V, C extends ImmutableCollect
         extends AbstractMultimap<K, V, C>
         implements ImmutableMultimap<K, V>
 {
-    protected final MutableMap<K, C> map;
+    protected final ImmutableMap<K, C> map;
 
     /**
-     * Creates a new multimap that uses the provided map.
+     * Creates a new multimap that clones the provided map into an ImmutableMap.
      *
      * @param map place to store the mapping from each key to its corresponding values
      */
     protected AbstractImmutableMultimap(MutableMap<K, C> map)
     {
-        this.map = map.clone();
+        this(map.toImmutable());
+    }
+
+    /**
+     * Creates a new multimap that uses the provided immutableMap.
+     *
+     * @param immutableMap place to store the mapping from each key to its corresponding values
+     */
+    protected AbstractImmutableMultimap(ImmutableMap<K, C> immutableMap)
+    {
+        this.map = immutableMap;
     }
 
     @Override
-    protected MutableMap<K, C> getMap()
+    protected ImmutableMap<K, C> getMap()
     {
         return this.map;
     }
@@ -94,7 +104,7 @@ public abstract class AbstractImmutableMultimap<K, V, C extends ImmutableCollect
 
     public MutableMap<K, RichIterable<V>> toMap()
     {
-        return (MutableMap<K, RichIterable<V>>) (MutableMap<?, ?>) this.map.asUnmodifiable();
+        return (MutableMap<K, RichIterable<V>>) (MutableMap<?, ?>) this.map.toMap();
     }
 
     public ImmutableMultimap<K, V> newWith(K key, V value)

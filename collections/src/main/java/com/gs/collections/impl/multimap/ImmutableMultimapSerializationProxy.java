@@ -22,7 +22,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.impl.block.procedure.checked.MultimapKeyValuesSerializingProcedure;
 
@@ -32,15 +32,15 @@ public abstract class ImmutableMultimapSerializationProxy<K, V, R extends RichIt
     private static final long serialVersionUID = 1L;
 
     private Multimap<K, V> multimapToReadInto;
-    private MutableMap<K, R> mapToWrite;
+    private ImmutableMap<K, R> mapToWrite;
 
     protected ImmutableMultimapSerializationProxy()
     {
     }
 
-    protected ImmutableMultimapSerializationProxy(MutableMap<K, R> mutableMap)
+    protected ImmutableMultimapSerializationProxy(ImmutableMap<K, R> immutableMap)
     {
-        this.mapToWrite = mutableMap;
+        this.mapToWrite = immutableMap;
     }
 
     protected abstract AbstractMutableMultimap<K, V, ?> createEmptyMutableMultimap();

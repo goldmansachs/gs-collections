@@ -18,18 +18,21 @@ package com.gs.collections.impl.multimap.set;
 
 import java.io.Serializable;
 
+import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.factory.Sets;
-import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.AbstractImmutableMultimap;
 import com.gs.collections.impl.multimap.AbstractMutableMultimap;
 import com.gs.collections.impl.multimap.ImmutableMultimapSerializationProxy;
 
 /**
+ * The default ImmutableBagMultimap implementation.
+ *
  * @since 1.0
  */
 public final class ImmutableSetMultimapImpl<K, V>
@@ -43,6 +46,11 @@ public final class ImmutableSetMultimapImpl<K, V>
         super(map);
     }
 
+    public ImmutableSetMultimapImpl(ImmutableMap<K, ImmutableSet<V>> map)
+    {
+        super(map);
+    }
+
     @Override
     protected ImmutableSet<V> createCollection()
     {
@@ -51,7 +59,7 @@ public final class ImmutableSetMultimapImpl<K, V>
 
     public ImmutableSetMultimap<K, V> newEmpty()
     {
-        return new ImmutableSetMultimapImpl<K, V>(UnifiedMap.<K, ImmutableSet<V>>newMap());
+        return new ImmutableSetMultimapImpl<K, V>(Maps.immutable.<K, ImmutableSet<V>>with());
     }
 
     public MutableSetMultimap<K, V> toMutable()
@@ -81,7 +89,7 @@ public final class ImmutableSetMultimapImpl<K, V>
             // For Externalizable use only
         }
 
-        private ImmutableSetMultimapSerializationProxy(MutableMap<K, ImmutableSet<V>> map)
+        private ImmutableSetMultimapSerializationProxy(ImmutableMap<K, ImmutableSet<V>> map)
         {
             super(map);
         }
