@@ -44,6 +44,7 @@ public final class <name>ArrayList
     private static final long serialVersionUID = 1L;
     private static final <type>[] DEFAULT_SIZED_EMPTY_ARRAY = {};
     private static final <type>[] ZERO_SIZED_ARRAY = {};
+    private static final int MAXIMUM_ARRAY_SIZE = Integer.MAX_VALUE - 8;
 
     private int size;
     private transient <type>[] items = DEFAULT_SIZED_EMPTY_ARRAY;
@@ -204,7 +205,8 @@ public final class <name>ArrayList
 
     private int sizePlusFiftyPercent(int oldSize)
     {
-        return oldSize * 3 / 2 + 1;
+        int result = oldSize + (oldSize \>\> 1) + 1;
+        return result \< oldSize ? MAXIMUM_ARRAY_SIZE : result;
     }
 
     public void ensureCapacity(int minCapacity)
