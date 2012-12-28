@@ -32,6 +32,7 @@ import java.util.Set;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
@@ -331,7 +332,10 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
         {
             this.table[index] = toSentinelIfNull(key);
             this.table[index + 1] = value;
-            ++this.occupied;
+            if (++this.occupied > this.maxSize)
+            {
+                this.rehash(this.table.length);
+            }
             return null;
         }
         if (cur != CHAINED_KEY && this.nonNullTableObjectEquals(cur, key))
@@ -345,12 +349,10 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
 
     private V chainedPut(K key, int index, V value)
     {
-        V result = null;
         if (this.table[index] == CHAINED_KEY)
         {
             Object[] chain = (Object[]) this.table[index + 1];
-            int i = 0;
-            for (; i < chain.length; i += 2)
+            for (int i = 0; i < chain.length; i += 2)
             {
                 if (chain[i] == null)
                 {
@@ -360,41 +362,193 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
                     {
                         this.rehash(this.table.length);
                     }
-                    break;
+                    return null;
                 }
                 if (this.nonNullTableObjectEquals(chain[i], key))
                 {
-                    result = (V) chain[i + 1];
+                    V result = (V) chain[i + 1];
                     chain[i + 1] = value;
-                    break;
+                    return result;
                 }
             }
-            if (i == chain.length)
-            {
-                Object[] newChain = new Object[chain.length + 4];
-                System.arraycopy(chain, 0, newChain, 0, chain.length);
-                this.table[index + 1] = newChain;
-                newChain[i] = toSentinelIfNull(key);
-                newChain[i + 1] = value;
-                if (++this.occupied > this.maxSize)
-                {
-                    this.rehash(this.table.length);
-                }
-            }
-        }
-        else
-        {
-            Object[] newChain = new Object[4];
-            newChain[0] = this.table[index];
-            newChain[1] = this.table[index + 1];
-            newChain[2] = toSentinelIfNull(key);
-            newChain[3] = value;
-            this.table[index] = CHAINED_KEY;
+            Object[] newChain = new Object[chain.length + 4];
+            System.arraycopy(chain, 0, newChain, 0, chain.length);
             this.table[index + 1] = newChain;
+            newChain[chain.length] = toSentinelIfNull(key);
+            newChain[chain.length + 1] = value;
             if (++this.occupied > this.maxSize)
             {
                 this.rehash(this.table.length);
             }
+            return null;
+        }
+        Object[] newChain = new Object[4];
+        newChain[0] = this.table[index];
+        newChain[1] = this.table[index + 1];
+        newChain[2] = toSentinelIfNull(key);
+        newChain[3] = value;
+        this.table[index] = CHAINED_KEY;
+        this.table[index + 1] = newChain;
+        if (++this.occupied > this.maxSize)
+        {
+            this.rehash(this.table.length);
+        }
+        return null;
+    }
+
+    @Override
+    public V updateValue(K key, Function0<? extends V> factory, Function<? super V, ? extends V> function)
+    {
+        int index = this.index(key);
+        Object cur = this.table[index];
+        if (cur == null)
+        {
+            this.table[index] = toSentinelIfNull(key);
+            V result = function.valueOf(factory.value());
+            this.table[index + 1] = result;
+            ++this.occupied;
+            return result;
+        }
+        if (cur != CHAINED_KEY && this.nonNullTableObjectEquals(cur, key))
+        {
+            V oldValue = (V) this.table[index + 1];
+            V newValue = function.valueOf(oldValue);
+            this.table[index + 1] = newValue;
+            return newValue;
+        }
+        return this.chainedUpdateValue(key, index, factory, function);
+    }
+
+    private V chainedUpdateValue(K key, int index, Function0<? extends V> factory, Function<? super V, ? extends V> function)
+    {
+        if (this.table[index] == CHAINED_KEY)
+        {
+            Object[] chain = (Object[]) this.table[index + 1];
+            for (int i = 0; i < chain.length; i += 2)
+            {
+                if (chain[i] == null)
+                {
+                    chain[i] = toSentinelIfNull(key);
+                    V result = function.valueOf(factory.value());
+                    chain[i + 1] = result;
+                    if (++this.occupied > this.maxSize)
+                    {
+                        this.rehash(this.table.length);
+                    }
+                    return result;
+                }
+                if (this.nonNullTableObjectEquals(chain[i], key))
+                {
+                    V oldValue = (V) chain[i + 1];
+                    V result = function.valueOf(oldValue);
+                    chain[i + 1] = result;
+                    return result;
+                }
+            }
+            Object[] newChain = new Object[chain.length + 4];
+            System.arraycopy(chain, 0, newChain, 0, chain.length);
+            this.table[index + 1] = newChain;
+            newChain[chain.length] = toSentinelIfNull(key);
+            V result = function.valueOf(factory.value());
+            newChain[chain.length + 1] = result;
+            if (++this.occupied > this.maxSize)
+            {
+                this.rehash(this.table.length);
+            }
+            return result;
+        }
+        Object[] newChain = new Object[4];
+        newChain[0] = this.table[index];
+        newChain[1] = this.table[index + 1];
+        newChain[2] = toSentinelIfNull(key);
+        V result = function.valueOf(factory.value());
+        newChain[3] = result;
+        this.table[index] = CHAINED_KEY;
+        this.table[index + 1] = newChain;
+        if (++this.occupied > this.maxSize)
+        {
+            this.rehash(this.table.length);
+        }
+        return result;
+    }
+
+    @Override
+    public <P> V updateValueWith(K key, Function0<? extends V> factory, Function2<? super V, ? super P, ? extends V> function, P parameter)
+    {
+        int index = this.index(key);
+        Object cur = this.table[index];
+        if (cur == null)
+        {
+            this.table[index] = toSentinelIfNull(key);
+            V result = function.value(factory.value(), parameter);
+            this.table[index + 1] = result;
+            ++this.occupied;
+            return result;
+        }
+        if (cur != CHAINED_KEY && this.nonNullTableObjectEquals(cur, key))
+        {
+            V oldValue = (V) this.table[index + 1];
+            V newValue = function.value(oldValue, parameter);
+            this.table[index + 1] = newValue;
+            return newValue;
+        }
+        return this.chainedUpdateValueWith(key, index, factory, function, parameter);
+    }
+
+    private <P> V chainedUpdateValueWith(
+            K key,
+            int index,
+            Function0<? extends V> factory,
+            Function2<? super V, ? super P, ? extends V> function,
+            P parameter)
+    {
+        if (this.table[index] == CHAINED_KEY)
+        {
+            Object[] chain = (Object[]) this.table[index + 1];
+            for (int i = 0; i < chain.length; i += 2)
+            {
+                if (chain[i] == null)
+                {
+                    chain[i] = toSentinelIfNull(key);
+                    V result = function.value(factory.value(), parameter);
+                    chain[i + 1] = result;
+                    if (++this.occupied > this.maxSize)
+                    {
+                        this.rehash(this.table.length);
+                    }
+                    return result;
+                }
+                if (this.nonNullTableObjectEquals(chain[i], key))
+                {
+                    V oldValue = (V) chain[i + 1];
+                    V result = function.value(oldValue, parameter);
+                    chain[i + 1] = result;
+                    return result;
+                }
+            }
+            Object[] newChain = new Object[chain.length + 4];
+            System.arraycopy(chain, 0, newChain, 0, chain.length);
+            this.table[index + 1] = newChain;
+            newChain[chain.length] = toSentinelIfNull(key);
+            V result = function.value(factory.value(), parameter);
+            newChain[chain.length + 1] = result;
+            if (++this.occupied > this.maxSize)
+            {
+                this.rehash(this.table.length);
+            }
+            return result;
+        }
+        Object[] newChain = new Object[4];
+        newChain[0] = this.table[index];
+        newChain[1] = this.table[index + 1];
+        newChain[2] = toSentinelIfNull(key);
+        V result = function.value(factory.value(), parameter);
+        newChain[3] = result;
+        this.table[index] = CHAINED_KEY;
+        this.table[index + 1] = newChain;
+        if (++this.occupied > this.maxSize)
+        {
+            this.rehash(this.table.length);
         }
         return result;
     }
@@ -781,26 +935,21 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
 
     public void batchForEach(Procedure<? super V> procedure, int sectionIndex, int sectionCount)
     {
-        this.mapBatchForEach(this.table, procedure, sectionIndex, sectionCount);
-    }
-
-    protected void mapBatchForEach(Object[] map, Procedure<? super V> procedure, int sectionIndex, int sectionCount)
-    {
-        int sectionSize = map.length / sectionCount;
+        int sectionSize = this.table.length / sectionCount;
         int start = sectionIndex * sectionSize;
-        int end = sectionIndex == sectionCount - 1 ? map.length : start + sectionSize;
+        int end = sectionIndex == sectionCount - 1 ? this.table.length : start + sectionSize;
         if (start % 2 == 0)
         {
             start++;
         }
         for (int i = start; i < end; i += 2)
         {
-            Object value = map[i];
+            Object value = this.table[i];
             if (value instanceof Object[])
             {
                 this.chainedForEachValue((Object[]) value, procedure);
             }
-            else if (value == null && map[i - 1] != null || value != null)
+            else if (value == null && this.table[i - 1] != null || value != null)
             {
                 procedure.value((V) value);
             }
@@ -2360,6 +2509,6 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
     @Override
     public ImmutableMap<K, V> toImmutable()
     {
-        return Maps.immutable.ofMap(this);
+        return Maps.immutable.withAll(this);
     }
 }

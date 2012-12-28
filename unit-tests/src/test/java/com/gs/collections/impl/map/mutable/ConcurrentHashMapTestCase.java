@@ -54,9 +54,12 @@ public abstract class ConcurrentHashMapTestCase extends MutableMapTestCase
     @Override
     protected abstract <K, V> ConcurrentMutableMap<K, V> newMap();
 
+    @Override
     @Test
     public void updateValue()
     {
+        super.updateValue();
+
         final ConcurrentMutableMap<Integer, Integer> map = this.newMap();
         ParallelIterate.forEach(Interval.oneTo(1000), new Procedure<Integer>()
         {
@@ -75,9 +78,12 @@ public abstract class ConcurrentHashMapTestCase extends MutableMapTestCase
         Assert.assertEquals(FastList.newList(Collections.nCopies(10, 100)), FastList.newList(map.values()));
     }
 
+    @Override
     @Test
     public void updateValue_collisions()
     {
+        super.updateValue_collisions();
+
         final ConcurrentMutableMap<Integer, Integer> map = this.newMap();
         MutableList<Integer> list = Interval.oneTo(2000).toList();
         Collections.shuffle(list);
@@ -101,9 +107,12 @@ public abstract class ConcurrentHashMapTestCase extends MutableMapTestCase
                 FastList.newList(map.values()));
     }
 
+    @Override
     @Test
     public void updateValueWith()
     {
+        super.updateValueWith();
+
         final ConcurrentMutableMap<Integer, Integer> map = this.newMap();
         ParallelIterate.forEach(Interval.oneTo(1000), new Procedure<Integer>()
         {
@@ -123,9 +132,12 @@ public abstract class ConcurrentHashMapTestCase extends MutableMapTestCase
         Assert.assertEquals(FastList.newList(Collections.nCopies(10, 100)), FastList.newList(map.values()));
     }
 
+    @Override
     @Test
     public void updateValueWith_collisions()
     {
+        super.updateValueWith_collisions();
+
         final ConcurrentMutableMap<Integer, Integer> map = this.newMap();
         MutableList<Integer> list = Interval.oneTo(2000).toList();
         Collections.shuffle(list);

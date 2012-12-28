@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,6 +40,7 @@ import com.gs.collections.impl.UnmodifiableMap;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
@@ -107,6 +108,30 @@ public abstract class AbstractMemoryEfficientMutableMapTest
     public void collectKeysAndValues_throws()
     {
         this.classUnderTest().collectKeysAndValues(null, null, null);
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void updateValue()
+    {
+        this.classUnderTest().updateValue("1", Functions0.value(""), new Function<String, String>()
+        {
+            public String valueOf(String object)
+            {
+                return object + object;
+            }
+        });
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void updateValueWith()
+    {
+        this.classUnderTest().updateValueWith("1", Functions0.value(""), new Function2<String, String, String>()
+        {
+            public String value(String argument1, String argument2)
+            {
+                return argument1 + argument2;
+            }
+        }, "!");
     }
 
     @Test

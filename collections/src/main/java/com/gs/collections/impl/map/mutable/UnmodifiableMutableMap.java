@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,8 +52,6 @@ import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.UnmodifiableIteratorAdapter;
 import com.gs.collections.impl.UnmodifiableMap;
-import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
-import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.tuple.AbstractImmutableEntry;
 import com.gs.collections.impl.utility.LazyIterate;
@@ -122,6 +120,20 @@ public class UnmodifiableMutableMap<K, V>
     }
 
     public V removeKey(K key)
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    public V updateValue(K key, Function0<? extends V> factory, Function<? super V, ? extends V> function)
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    public <P> V updateValueWith(
+            K key,
+            Function0<? extends V> factory,
+            Function2<? super V, ? super P, ? extends V> function,
+            P parameter)
     {
         throw new UnsupportedOperationException();
     }
@@ -687,9 +699,7 @@ public class UnmodifiableMutableMap<K, V>
             Function0<? extends V2> zeroValueFactory,
             Procedure2<? super V2, ? super V> mutatingAggregator)
     {
-        MutableMap<K2, V2> map = UnifiedMap.newMap();
-        this.forEach(new MutatingAggregationProcedure<V, K2, V2>(map, groupBy, zeroValueFactory, mutatingAggregator));
-        return map;
+        return this.getMutableMap().aggregateInPlaceBy(groupBy, zeroValueFactory, mutatingAggregator);
     }
 
     public <K2, V2> MutableMap<K2, V2> aggregateBy(
@@ -697,8 +707,6 @@ public class UnmodifiableMutableMap<K, V>
             Function0<? extends V2> zeroValueFactory,
             Function2<? super V2, ? super V, ? extends V2> nonMutatingAggregator)
     {
-        MutableMap<K2, V2> map = UnifiedMap.newMap();
-        this.forEach(new NonMutatingAggregationProcedure<V, K2, V2>(map, groupBy, zeroValueFactory, nonMutatingAggregator));
-        return map;
+        return this.getMutableMap().aggregateBy(groupBy, zeroValueFactory, nonMutatingAggregator);
     }
 }

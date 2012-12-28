@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -262,4 +262,16 @@ public interface MutableMap<K, V>
             Function<? super V, ? extends K2> groupBy,
             Function0<? extends V2> zeroValueFactory,
             Function2<? super V2, ? super V, ? extends V2> nonMutatingAggregator);
+
+    /**
+     * Look up the value associated with {@code key}, apply the {@code function} to it, and replace the value. If there
+     * is no value associated with {@code key}, start it off with a value supplied by {@code factory}.
+     */
+    V updateValue(K key, Function0<? extends V> factory, Function<? super V, ? extends V> function);
+
+    /**
+     * Same as {@link #updateValue(Object, Function0, Function)} with a Function2 and specified parameter which is
+     * passed to the function.
+     */
+    <P> V updateValueWith(K key, Function0<? extends V> factory, Function2<? super V, ? super P, ? extends V> function, P parameter);
 }

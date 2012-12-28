@@ -298,4 +298,20 @@ public abstract class AbstractMutableMap<K, V> extends AbstractMapIterable<K, V>
         this.forEach(new NonMutatingAggregationProcedure<V, K2, V2>(map, groupBy, zeroValueFactory, nonMutatingAggregator));
         return map;
     }
+
+    public V updateValue(K key, Function0<? extends V> factory, Function<? super V, ? extends V> function)
+    {
+        V oldValue = this.getIfAbsent(key, factory);
+        V newValue = function.valueOf(oldValue);
+        this.put(key, newValue);
+        return newValue;
+    }
+
+    public <P> V updateValueWith(K key, Function0<? extends V> factory, Function2<? super V, ? super P, ? extends V> function, P parameter)
+    {
+        V oldValue = this.getIfAbsent(key, factory);
+        V newValue = function.value(oldValue, parameter);
+        this.put(key, newValue);
+        return newValue;
+    }
 }

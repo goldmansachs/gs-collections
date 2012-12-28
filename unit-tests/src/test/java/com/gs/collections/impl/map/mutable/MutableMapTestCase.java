@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.map.mutable;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -28,6 +29,7 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.ImmutableMap;
@@ -36,11 +38,14 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.IntegerWithCast;
+import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.factory.Bags;
+import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.MapIterableTestCase;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -800,5 +805,101 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
         Assert.assertEquals(1, aggregation.get("1").intValue());
         Assert.assertEquals(2, aggregation.get("2").intValue());
         Assert.assertEquals(3, aggregation.get("3").intValue());
+    }
+
+    @Test
+    public void updateValue()
+    {
+        final MutableMap<Integer, Integer> map = this.newMap();
+        Iterate.forEach(Interval.oneTo(1000), new Procedure<Integer>()
+        {
+            public void value(Integer each)
+            {
+                map.updateValue(each % 10, Functions0.value(0), new Function<Integer, Integer>()
+                {
+                    public Integer valueOf(Integer integer)
+                    {
+                        return integer + 1;
+                    }
+                });
+            }
+        });
+        Assert.assertEquals(Interval.zeroTo(9).toSet(), map.keySet());
+        Assert.assertEquals(FastList.newList(Collections.nCopies(10, 100)), FastList.newList(map.values()));
+    }
+
+    @Test
+    public void updateValue_collisions()
+    {
+        final MutableMap<Integer, Integer> map = this.newMap();
+        MutableList<Integer> list = Interval.oneTo(2000).toList();
+        Collections.shuffle(list);
+        Iterate.forEach(list, new Procedure<Integer>()
+        {
+            public void value(Integer each)
+            {
+                map.updateValue(each % 1000, Functions0.value(0), new Function<Integer, Integer>()
+                {
+                    public Integer valueOf(Integer integer)
+                    {
+                        return integer + 1;
+                    }
+                });
+            }
+        });
+        Assert.assertEquals(Interval.zeroTo(999).toSet(), map.keySet());
+        Assert.assertEquals(
+                HashBag.newBag(map.values()).toStringOfItemToCount(),
+                FastList.newList(Collections.nCopies(1000, 2)),
+                FastList.newList(map.values()));
+    }
+
+    @Test
+    public void updateValueWith()
+    {
+        final MutableMap<Integer, Integer> map = this.newMap();
+        Iterate.forEach(Interval.oneTo(1000), new Procedure<Integer>()
+        {
+            public void value(Integer each)
+            {
+                map.updateValueWith(each % 10, Functions0.value(0), new Function2<Integer, Object, Integer>()
+                {
+                    public Integer value(Integer integer, Object parameter)
+                    {
+                        Assert.assertEquals("test", parameter);
+                        return integer + 1;
+                    }
+                }, "test");
+            }
+        });
+        Assert.assertEquals(Interval.zeroTo(9).toSet(), map.keySet());
+        Assert.assertEquals(FastList.newList(Collections.nCopies(10, 100)), FastList.newList(map.values()));
+    }
+
+    @Test
+    public void updateValueWith_collisions()
+    {
+        final MutableMap<Integer, Integer> map = this.newMap();
+        MutableList<Integer> list = Interval.oneTo(2000).toList();
+        Collections.shuffle(list);
+        Iterate.forEach(list, new Procedure<Integer>()
+        {
+            public void value(Integer each)
+            {
+                map.updateValueWith(each % 1000, Functions0.value(0), new Function2<Integer, Object, Integer>()
+                {
+                    public Integer value(Integer integer, Object parameter)
+                    {
+                        Assert.assertEquals("test", parameter);
+                        return integer + 1;
+                    }
+                }, "test");
+            }
+        });
+        Assert.assertEquals(Interval.zeroTo(999).toSet(), map.keySet());
+        Assert.assertEquals(
+                HashBag.newBag(map.values()).toStringOfItemToCount(),
+                FastList.newList(Collections.nCopies(1000, 2)),
+                FastList.newList(map.values()));
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2012 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.Map;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.map.FixedSizeMap;
@@ -65,6 +66,18 @@ abstract class AbstractMemoryEfficientMutableMap<K, V>
             Collection<E> collection,
             Function<? super E, ? extends K> keyFunction,
             Function<? super E, ? extends V> valueFunction)
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public V updateValue(K key, Function0<? extends V> factory, Function<? super V, ? extends V> function)
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <P> V updateValueWith(K key, Function0<? extends V> factory, Function2<? super V, ? super P, ? extends V> function, P parameter)
     {
         throw new UnsupportedOperationException();
     }

@@ -459,6 +459,34 @@ public class UnmodifiableMutableMapTest extends MutableMapTestCase
         Assert.assertSame(map, clone);
     }
 
+    @Test(expected = UnsupportedOperationException.class)
+    @Override
+    public void updateValue()
+    {
+        super.updateValue();
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    @Override
+    public void updateValue_collisions()
+    {
+        super.updateValue_collisions();
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    @Override
+    public void updateValueWith()
+    {
+        super.updateValueWith();
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    @Override
+    public void updateValueWith_collisions()
+    {
+        super.updateValueWith_collisions();
+    }
+
     @Override
     public void retainAllFromKeySet_null_collision()
     {
