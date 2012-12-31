@@ -412,6 +412,17 @@ public class ArrayIterateTest
     }
 
     @Test
+    public void distinct()
+    {
+        List<Integer> result = FastList.newList(); 
+        ArrayIterate.distinct(new Integer[] { 5, 3, 1, 5, 7, 1 }, result);
+        Assert.assertEquals(FastList.newListWith(5, 3, 1, 7), result);
+        result.clear();
+        ArrayIterate.distinct(INTEGER_ARRAY, result);
+        Assert.assertEquals(FastList.newListWith(INTEGER_ARRAY), result);
+    }
+
+    @Test
     public void selectWith()
     {
         Assert.assertEquals(

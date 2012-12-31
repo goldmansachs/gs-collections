@@ -41,6 +41,7 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
+import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Comparators;
@@ -51,6 +52,7 @@ import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.partition.list.PartitionFastList;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.internal.InternalArrayIterate;
 import com.gs.collections.impl.utility.internal.RandomAccessListIterate;
@@ -1037,6 +1039,30 @@ public final class ArrayListIterate
             RandomAccessListIterate.removeIfWith(list, predicate, parameter);
         }
         return list;
+    }
+
+    public static <T> ArrayList<T> distinct(ArrayList<T> list)
+    {
+        return ArrayListIterate.distinct(list, new ArrayList<T>());
+    }
+
+    public static <T, R extends Collection<T>> R distinct(ArrayList<T> list, R targetCollection)
+    {
+        int size = list.size();
+        if (ArrayListIterate.isOptimizableArrayList(list, size))
+        {
+            MutableSet<T> seenSoFar = UnifiedSet.newSet();
+            T[] elements = ArrayListIterate.getInternalArray(list);
+            for (int i = 0; i < size; i++)
+            {
+                if (seenSoFar.add(elements[i]))
+                {
+                    targetCollection.add(elements[i]);
+                }
+            }
+            return targetCollection;
+        }
+        return RandomAccessListIterate.distinct(list, targetCollection);
     }
 
     private static <T> void wipeAndResetTheEnd(

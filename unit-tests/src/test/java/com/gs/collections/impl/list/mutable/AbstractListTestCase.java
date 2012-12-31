@@ -29,6 +29,7 @@ import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.ImmutableList;
+import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
@@ -201,6 +202,14 @@ public abstract class AbstractListTestCase
         MutableList<Integer> expected = this.newWith(4, 3, 2, 1);
         Assert.assertEquals(expected, actual);
         Assert.assertNotSame(original, actual);
+    }
+
+    @Test
+    public void distinct()
+    {
+        ListIterable<Integer> list = this.newWith(1, 4, 3, 2, 1, 4, 1);
+        ListIterable<Integer> actual = list.distinct();
+        Verify.assertListsEqual(FastList.newListWith(1, 4, 3, 2), actual.toList());
     }
 
     @Override

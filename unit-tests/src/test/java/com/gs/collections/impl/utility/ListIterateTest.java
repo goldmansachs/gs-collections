@@ -493,6 +493,19 @@ public class ListIterateTest
     }
 
     @Test
+    public void distinct()
+    {
+        List<Integer> list = FastList.newListWith(5, 2, 3, 5, 4, 2);
+        List<Integer> expectedList = FastList.newListWith(5, 2, 3, 4);
+        List<Integer> actualList = FastList.newList();
+        Verify.assertListsEqual(expectedList, ListIterate.distinct(list, actualList));
+        Verify.assertListsEqual(expectedList, actualList);
+        actualList.clear();
+        Verify.assertListsEqual(this.getIntegerList(), ListIterate.distinct(this.getIntegerList(), actualList));
+        Verify.assertListsEqual(this.getIntegerList(), actualList);
+    }
+
+    @Test
     public void rejectWith()
     {
         MutableList<Integer> list = this.getIntegerList();

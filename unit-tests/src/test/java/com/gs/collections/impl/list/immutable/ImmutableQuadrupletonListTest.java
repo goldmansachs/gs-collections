@@ -17,6 +17,10 @@
 package com.gs.collections.impl.list.immutable;
 
 import com.gs.collections.api.list.ImmutableList;
+import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.test.Verify;
+import org.junit.Assert;
+import org.junit.Test;
 
 public class ImmutableQuadrupletonListTest extends AbstractImmutableListTestCase
 {
@@ -24,5 +28,17 @@ public class ImmutableQuadrupletonListTest extends AbstractImmutableListTestCase
     protected ImmutableList<Integer> classUnderTest()
     {
         return new ImmutableQuadrupletonList<Integer>(1, 2, 3, 4);
+    }
+
+    @Override
+    @Test
+    public void testDistinct()
+    {
+        super.testDistinct();
+        ImmutableList<Integer> list = new ImmutableQuadrupletonList<Integer>(2, 1, 1, 2);
+        ImmutableList<Integer> distinctList = list.distinct();
+        Assert.assertFalse(distinctList.isEmpty());
+        Verify.assertInstanceOf(ImmutableDoubletonList.class, distinctList);
+        Assert.assertEquals(FastList.newListWith(2, 1), distinctList);
     }
 }

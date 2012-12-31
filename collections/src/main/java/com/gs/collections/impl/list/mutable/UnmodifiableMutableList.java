@@ -284,6 +284,11 @@ public final class UnmodifiableMutableList<T>
         return this.getMutableList().selectInstancesOf(clazz);
     }
 
+    public MutableList<T> distinct()
+    {
+        return this.getMutableList().distinct();
+    }
+
     @Override
     public <S> MutableList<Pair<T, S>> zip(Iterable<S> that)
     {

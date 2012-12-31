@@ -625,6 +625,13 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
         throw new UnsupportedOperationException();
     }
 
+    public ImmutableList<T> distinct()
+    {
+        MutableList<T> result = Lists.mutable.of();
+        ListIterate.distinct(this.castToList(), result);
+        return result.toImmutable();
+    }
+
     @Override
     public void appendString(Appendable appendable, String start, String separator, String end)
     {

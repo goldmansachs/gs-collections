@@ -66,6 +66,8 @@ public interface MutableList<T>
 
     <V> MutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
 
+    MutableList<T> distinct();
+
     /**
      * Sorts the internal data structure of this list and returns the list itself as a convenience.
      */

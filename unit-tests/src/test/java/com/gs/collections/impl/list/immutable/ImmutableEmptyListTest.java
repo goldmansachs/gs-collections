@@ -140,6 +140,15 @@ public class ImmutableEmptyListTest extends AbstractImmutableListTestCase
 
     @Override
     @Test
+    public void testDistinct()
+    {
+        ImmutableList<Integer> integers = this.classUnderTest();
+        Assert.assertNotNull(integers.distinct());
+        Assert.assertTrue(integers.isEmpty());
+    }
+
+    @Override
+    @Test
     public void testAllSatisfy()
     {
         ImmutableList<Integer> integers = this.classUnderTest();

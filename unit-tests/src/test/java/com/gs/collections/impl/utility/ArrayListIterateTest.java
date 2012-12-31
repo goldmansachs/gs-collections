@@ -589,6 +589,19 @@ public class ArrayListIterateTest
     }
 
     @Test
+    public void testDistinct()
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        list.addAll(FastList.newListWith(9, 4, 7, 7, 5, 6, 2, 4));
+        List<Integer> result = ArrayListIterate.distinct(list);
+        Verify.assertListsEqual(FastList.newListWith(9, 4, 7, 5, 6, 2), result);
+        ArrayList<Integer> target = new ArrayList<Integer>();
+        ArrayListIterate.distinct(list, target);
+        Verify.assertListsEqual(FastList.newListWith(9, 4, 7, 5, 6, 2), target);
+        Verify.assertSize(8, list);
+    }
+
+    @Test
     public void testSelectInstancesOfOver100()
     {
         ArrayList<Number> list = new ArrayList<Number>(Interval.oneTo(101));

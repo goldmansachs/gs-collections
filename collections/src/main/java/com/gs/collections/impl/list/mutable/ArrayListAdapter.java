@@ -312,6 +312,11 @@ public final class ArrayListAdapter<T>
         return this.wrap(ArrayListIterate.collectWith(this.delegate, function, parameter));
     }
 
+    public ArrayListAdapter<T> distinct()
+    {
+        return this.wrap(ArrayListIterate.distinct(this.delegate));
+    }
+
     @Override
     public <S> MutableList<Pair<T, S>> zip(Iterable<S> that)
     {

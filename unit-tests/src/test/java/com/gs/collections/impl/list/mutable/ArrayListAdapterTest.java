@@ -285,6 +285,13 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
     }
 
     @Test
+    public void distinct()
+    {
+        ArrayListAdapter<Integer> arrayListAdapter = ArrayListAdapter.<Integer>newList().with(3, 2, 1, 1, 2, 3);
+        Verify.assertListsEqual(FastList.newListWith(3, 2, 1), arrayListAdapter.distinct());
+    }
+
+    @Test
     public void testForEachWithFromTo()
     {
         MutableList<Integer> result1 = Lists.mutable.of();

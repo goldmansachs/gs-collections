@@ -166,6 +166,17 @@ public interface ListIterable<T>
 
     <V> ListMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
 
+    /**
+     * Returns a new {@code ListIterable} containing the distinct elements in this list.
+     *
+     * Conceptually similar to {@link #toSet()}{@link #toList()} but retains the original order. If an element appears
+     * multiple times in this list, the first one will be copied into the result.
+     * @return {@code ListIterable} of distinct elements
+     *
+     * @since 3.0
+     */
+    ListIterable<T> distinct();
+
     <S> ListIterable<Pair<T, S>> zip(Iterable<S> that);
 
     ListIterable<Pair<T, Integer>> zipWithIndex();

@@ -429,6 +429,11 @@ public abstract class AbstractMutableList<T>
         return ListIterate.injectInto(injectedValue, this, function);
     }
 
+    public MutableList<T> distinct()
+    {
+        return ListIterate.distinct(this, this.newEmpty());
+    }
+
     @Override
     public long sumOfInt(IntFunction<? super T> function)
     {

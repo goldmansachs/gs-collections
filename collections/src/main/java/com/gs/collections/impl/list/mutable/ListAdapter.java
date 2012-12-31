@@ -317,6 +317,11 @@ public final class ListAdapter<T>
         return ListIterate.collectWith(this.delegate, function, parameter, FastList.<V>newList(this.delegate.size()));
     }
 
+    public MutableList<T> distinct()
+    {
+        return ListIterate.distinct(this.delegate, FastList.<T>newList());
+    }
+
     @Override
     public <S> MutableList<Pair<T, S>> zip(Iterable<S> that)
     {

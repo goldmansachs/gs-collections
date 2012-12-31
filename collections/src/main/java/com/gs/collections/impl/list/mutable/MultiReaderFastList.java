@@ -354,6 +354,19 @@ public final class MultiReaderFastList<T>
         }
     }
 
+    public MutableList<T> distinct()
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.distinct();
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
     public MutableList<T> sortThis()
     {
         this.acquireWriteLock();
@@ -764,6 +777,11 @@ public final class MultiReaderFastList<T>
         public MutableList<T> reject(Predicate<? super T> predicate)
         {
             return this.getDelegate().reject(predicate);
+        }
+
+        public MutableList<T> distinct()
+        {
+            return this.getDelegate().distinct();
         }
 
         public <P> MutableList<T> rejectWith(

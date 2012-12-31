@@ -62,6 +62,8 @@ public interface ImmutableList<T>
 
     <V> ImmutableListMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
 
+    ImmutableList<T> distinct();
+
     <S> ImmutableList<Pair<T, S>> zip(Iterable<S> that);
 
     ImmutableList<Pair<T, Integer>> zipWithIndex();

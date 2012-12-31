@@ -278,6 +278,13 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     }
 
     @Test
+    public void testDistinct()
+    {
+        ImmutableList<Integer> integers = this.classUnderTest();
+        Assert.assertEquals(integers, integers.newWith(1).distinct());
+    }
+
+    @Test
     public void zip()
     {
         ImmutableCollection<Integer> immutableCollection = this.classUnderTest();

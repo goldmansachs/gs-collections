@@ -19,6 +19,7 @@ package com.gs.collections.impl.utility.internal;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.Set;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
@@ -51,6 +52,7 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.partition.list.PartitionFastList;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.Iterate;
 
@@ -647,6 +649,22 @@ public final class IteratorIterate
             }
         }
         return target;
+    }
+
+     public static <T, R extends Collection<T>> R distinct(
+            Iterator<T> iterator,
+            R targetCollection)
+    {
+        Set<T> seenSoFar = UnifiedSet.newSet();
+        while (iterator.hasNext())
+        {
+            T item = iterator.next();
+            if (seenSoFar.add(item))
+            {
+                targetCollection.add(item);
+            }
+        }
+        return targetCollection;
     }
 
     /**

@@ -256,6 +256,18 @@ public class IterableIterateTest
     }
 
     @Test
+    public void distinct()
+    {
+        Collection<Integer> iterable = FastList.newListWith(2, 1, 3, 2, 1, 3);
+        FastList<Integer> result = FastList.newList();
+        FastList<Integer> actualList = IterableIterate.distinct(iterable, result);
+        FastList<Integer> expectedList = FastList.newListWith(2, 1, 3);
+        Verify.assertListsEqual(expectedList, result);
+        Verify.assertListsEqual(expectedList, actualList);
+        Verify.assertSize(6, iterable);
+    }
+
+    @Test
     public void selectWith()
     {
         Iterable<Integer> iterable = new IterableAdapter<Integer>(this.getIntegerList());

@@ -559,6 +559,12 @@ public abstract class AbstractArrayAdapter<T>
     }
 
     @Override
+    public MutableList<T> distinct()
+    {
+        return ArrayIterate.distinct(this.items, FastList.<T>newList());
+    }
+
+    @Override
     public void appendString(Appendable appendable, String start, String separator, String end)
     {
         try

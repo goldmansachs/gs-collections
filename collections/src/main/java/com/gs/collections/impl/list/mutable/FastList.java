@@ -47,6 +47,7 @@ import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates2;
@@ -58,6 +59,7 @@ import com.gs.collections.impl.block.procedure.FastListRejectProcedure;
 import com.gs.collections.impl.block.procedure.FastListSelectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.parallel.BatchIterable;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.ArrayListIterate;
@@ -1187,6 +1189,21 @@ public class FastList<T>
             result = function.floatValueOf(result, this.items[i]);
         }
         return result;
+    }
+
+    @Override
+    public FastList<T> distinct()
+    {
+        MutableSet<T> seenSoFar = UnifiedSet.newSet();
+        FastList<T> targetCollection = FastList.newList();
+        for (int i = 0; i < this.size(); i++)
+        {
+            if (seenSoFar.add(this.items[i]))
+            {
+                targetCollection.add(this.items[i]);
+            }
+        }
+        return targetCollection;
     }
 
     @Override

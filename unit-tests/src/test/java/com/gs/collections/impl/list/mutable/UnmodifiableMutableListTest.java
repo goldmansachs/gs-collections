@@ -266,4 +266,11 @@ public class UnmodifiableMutableListTest
         Assert.assertEquals(iList(1, 3, 5), numbers.selectInstancesOf(Integer.class));
         Assert.assertEquals(iList(1, 2.0, 3, 4.0, 5), numbers.selectInstancesOf(Number.class));
     }
+
+    @Test
+    public void testDistinct()
+    {
+        MutableList<Integer> list = UnmodifiableMutableList.of(FastList.<Integer>newListWith(3, 1, 2, 2, 1, 3));
+        Verify.assertListsEqual(FastList.newListWith(3, 1, 2), list.distinct());
+    }
 }

@@ -373,6 +373,13 @@ public final class IterableIterate
         return IteratorIterate.injectInto(injectValue, iterable.iterator(), function);
     }
 
+    public static <T, R extends Collection<T>> R distinct(
+            Iterable<T> iterable,
+            R targetCollection)
+    {
+        return IteratorIterate.distinct(iterable.iterator(), targetCollection);
+    }
+
     /**
      * @see Iterate#sumOfInt(Iterable, IntFunction)
      */

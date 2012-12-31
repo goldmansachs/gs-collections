@@ -285,6 +285,14 @@ public class SynchronizedMutableList<T>
         }
     }
 
+    public MutableList<T> distinct()
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableList().distinct();
+        }
+    }
+
     public MutableList<T> sortThis()
     {
         synchronized (this.getLock())

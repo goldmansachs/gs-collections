@@ -316,6 +316,11 @@ public final class RandomAccessListAdapter<T>
         return RandomAccessListIterate.collectWith(this.delegate, function, parameter, FastList.<V>newList(this.delegate.size()));
     }
 
+    public MutableList<T> distinct()
+    {
+        return RandomAccessListIterate.distinct(this.delegate, FastList.<T>newList());
+    }
+
     @Override
     public <S> MutableList<Pair<T, S>> zip(Iterable<S> that)
     {

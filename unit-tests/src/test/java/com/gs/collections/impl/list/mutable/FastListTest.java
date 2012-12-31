@@ -676,6 +676,15 @@ public class FastListTest extends AbstractListTestCase
 
     @Override
     @Test
+    public void distinct()
+    {
+        super.distinct();
+        Verify.assertListsEqual(this.newWith(5, 2, 3, 5, 4, 2).distinct(), this.newWith(5, 2, 3, 4));
+        Verify.assertListsEqual(Interval.fromTo(1, 5).toList().distinct(), this.newWith(1, 2, 3, 4, 5));
+    }
+
+    @Override
+    @Test
     public void serialization()
     {
         MutableList<Integer> collection = this.newWith(1, 2, 3, 4, 5);

@@ -833,6 +833,15 @@ public final class ListIterate
         return IterableIterate.collectWith(list, function, parameter, targetCollection);
     }
 
+    public static <T, R extends Collection<T>> R distinct(List<T> list, R targetCollection)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.distinct(list, targetCollection);
+        }
+        return IterableIterate.distinct(list, targetCollection);
+    }
+
     /**
      * Reverses the order of the items in the list.
      * <pre>
