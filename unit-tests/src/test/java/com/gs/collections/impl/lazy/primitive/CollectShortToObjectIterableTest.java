@@ -25,6 +25,7 @@ import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -102,5 +103,19 @@ public class CollectShortToObjectIterableTest
         Assert.assertEquals(
                 FastList.<Short>newListWith((short) 1, (short) 2, (short) 3, (short) 4, (short) 5),
                 this.newPrimitiveWith((short) 1, (short) 2, (short) 3, (short) 4, (short) 5).selectInstancesOf(Short.class).toList());
+    }
+
+    @Test
+    public void sizeEmptyNotEmpty()
+    {
+        Verify.assertIterableSize(2, this.newPrimitiveWith((short) 1, (short) 2));
+        Verify.assertIterableEmpty(this.newPrimitiveWith());
+        Assert.assertTrue(this.newPrimitiveWith((short) 1, (short) 2).notEmpty());
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void removeThrows()
+    {
+        this.newPrimitiveWith().iterator().remove();
     }
 }

@@ -25,6 +25,7 @@ import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -102,5 +103,19 @@ public class CollectCharToObjectIterableTest
         Assert.assertEquals(
                 FastList.<Character>newListWith('1', '2', '3', '4', '5'),
                 this.newPrimitiveWith('1', '2', '3', '4', '5').selectInstancesOf(Character.class).toList());
+    }
+
+    @Test
+    public void sizeEmptyNotEmpty()
+    {
+        Verify.assertIterableSize(2, this.newPrimitiveWith('1', '2'));
+        Verify.assertIterableEmpty(this.newPrimitiveWith());
+        Assert.assertTrue(this.newPrimitiveWith('1', '1').notEmpty());
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void removeThrows()
+    {
+        this.newPrimitiveWith().iterator().remove();
     }
 }

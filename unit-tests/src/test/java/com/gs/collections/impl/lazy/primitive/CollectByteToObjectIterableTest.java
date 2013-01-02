@@ -25,6 +25,7 @@ import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -102,5 +103,19 @@ public class CollectByteToObjectIterableTest
         Assert.assertEquals(
                 FastList.<Byte>newListWith((byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5),
                 this.newPrimitiveWith((byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5).selectInstancesOf(Byte.class).toList());
+    }
+
+    @Test
+    public void sizeEmptyNotEmpty()
+    {
+        Verify.assertIterableSize(2, this.newPrimitiveWith((byte) 1, (byte) 2));
+        Verify.assertIterableEmpty(this.newPrimitiveWith());
+        Assert.assertTrue(this.newPrimitiveWith((byte) 1, (byte) 1).notEmpty());
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void removeThrows()
+    {
+        this.newPrimitiveWith().iterator().remove();
     }
 }

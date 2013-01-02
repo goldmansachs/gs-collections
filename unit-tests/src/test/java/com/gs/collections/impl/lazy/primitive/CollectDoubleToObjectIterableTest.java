@@ -25,6 +25,7 @@ import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.impl.block.factory.Procedures;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -102,5 +103,19 @@ public class CollectDoubleToObjectIterableTest
         Assert.assertEquals(
                 FastList.<Double>newListWith(1.0, 2.0, 3.0, 4.0, 5.0),
                 this.newPrimitiveWith(1.0, 2.0, 3.0, 4.0, 5.0).selectInstancesOf(Double.class).toList());
+    }
+
+    @Test
+    public void sizeEmptyNotEmpty()
+    {
+        Verify.assertIterableSize(2, this.newPrimitiveWith(1.0, 2.0));
+        Verify.assertIterableEmpty(this.newPrimitiveWith());
+        Assert.assertTrue(this.newPrimitiveWith(1.0, 2.0).notEmpty());
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void removeThrows()
+    {
+        this.newPrimitiveWith().iterator().remove();
     }
 }
