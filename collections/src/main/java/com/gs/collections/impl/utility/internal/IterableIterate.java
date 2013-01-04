@@ -744,6 +744,16 @@ public final class IterableIterate
         return IteratorIterate.chunk(iterable.iterator(), size);
     }
 
+    public static <T, V extends Comparable<? super V>> T maxBy(Iterable<T> iterable, Function<? super T, ? extends V> function)
+    {
+        return IteratorIterate.maxBy(iterable.iterator(), function);
+    }
+
+    public static <T, V extends Comparable<? super V>> T minBy(Iterable<T> iterable, Function<? super T, ? extends V> function)
+    {
+        return IteratorIterate.minBy(iterable.iterator(), function);
+    }
+
     /**
      * @see Iterate#min(Iterable, Comparator)
      */

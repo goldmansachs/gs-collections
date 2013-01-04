@@ -2299,4 +2299,38 @@ public final class Iterate
             throw new IllegalArgumentException("Cannot perform an appendString on null");
         }
     }
+
+    public static <T, V extends Comparable<? super V>> T maxBy(Iterable<T> iterable, Function<? super T, ? extends V> function)
+    {
+        if (iterable instanceof RichIterable)
+        {
+            return ((RichIterable<T>) iterable).maxBy(function);
+        }
+        if (iterable instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.maxBy((List<T>) iterable, function);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.maxBy(iterable, function);
+        }
+        throw new IllegalArgumentException("Cannot perform a maxBy on null");
+    }
+
+    public static <T, V extends Comparable<? super V>> T minBy(Iterable<T> iterable, Function<? super T, ? extends V> function)
+    {
+        if (iterable instanceof RichIterable)
+        {
+            return ((RichIterable<T>) iterable).minBy(function);
+        }
+        if (iterable instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.minBy((List<T>) iterable, function);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.minBy(iterable, function);
+        }
+        throw new IllegalArgumentException("Cannot perform a minBy on null");
+    }
 }

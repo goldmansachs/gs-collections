@@ -492,12 +492,12 @@ public abstract class AbstractMutableCollection<T>
 
     public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
     {
-        return Iterate.min(this, Comparators.byFunction(function));
+        return IterableIterate.minBy(this, function);
     }
 
     public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
     {
-        return Iterate.max(this, Comparators.byFunction(function));
+        return IterableIterate.maxBy(this, function);
     }
 
     public <V, R extends MutableMultimap<V, T>> R groupBy(

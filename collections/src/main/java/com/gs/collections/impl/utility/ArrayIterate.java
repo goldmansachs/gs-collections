@@ -21,6 +21,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
@@ -135,8 +136,62 @@ public final class ArrayIterate
     private static <T> void swapWithPrevious(T[] array, int index)
     {
         T t = array[index];
-        array[index] = array[(index - 1)];
-        array[(index - 1)] = t;
+        array[index] = array[index - 1];
+        array[index - 1] = t;
+    }
+
+    public static <T, V extends Comparable<? super V>> T minBy(T[] array, Function<? super T, ? extends V> function)
+    {
+        return ArrayIterate.minBy(array, array.length, function);
+    }
+
+    public static <T, V extends Comparable<? super V>> T minBy(T[] array, int size, Function<? super T, ? extends V> function)
+    {
+        if (ArrayIterate.isEmpty(array))
+        {
+            throw new NoSuchElementException();
+        }
+
+        T min = array[0];
+        V minValue = function.valueOf(min);
+        for (int i = 1; i < size; i++)
+        {
+            T next = array[i];
+            V nextValue = function.valueOf(next);
+            if (nextValue.compareTo(minValue) < 0)
+            {
+                min = next;
+                minValue = nextValue;
+            }
+        }
+        return min;
+    }
+
+    public static <T, V extends Comparable<? super V>> T maxBy(T[] array, Function<? super T, ? extends V> function)
+    {
+        return ArrayIterate.maxBy(array, array.length, function);
+    }
+
+    public static <T, V extends Comparable<? super V>> T maxBy(T[] array, int size, Function<? super T, ? extends V> function)
+    {
+        if (ArrayIterate.isEmpty(array))
+        {
+            throw new NoSuchElementException();
+        }
+
+        T max = array[0];
+        V maxValue = function.valueOf(max);
+        for (int i = 1; i < size; i++)
+        {
+            T next = array[i];
+            V nextValue = function.valueOf(next);
+            if (nextValue.compareTo(maxValue) > 0)
+            {
+                max = next;
+                maxValue = nextValue;
+            }
+        }
+        return max;
     }
 
     /**

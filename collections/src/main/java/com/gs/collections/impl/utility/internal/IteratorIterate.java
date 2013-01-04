@@ -651,7 +651,7 @@ public final class IteratorIterate
         return target;
     }
 
-     public static <T, R extends Collection<T>> R distinct(
+    public static <T, R extends Collection<T>> R distinct(
             Iterator<T> iterator,
             R targetCollection)
     {
@@ -822,5 +822,39 @@ public final class IteratorIterate
         MutableMap<K, V> map = UnifiedMap.newMap();
         IteratorIterate.forEach(iterator, new NonMutatingAggregationProcedure<T, K, V>(map, groupBy, zeroValueFactory, nonMutatingAggregator));
         return map;
+    }
+
+    public static <T, V extends Comparable<? super V>> T minBy(Iterator<T> iterator, Function<? super T, ? extends V> function)
+    {
+        T min = iterator.next();
+        V minValue = function.valueOf(min);
+        while (iterator.hasNext())
+        {
+            T next = iterator.next();
+            V nextValue = function.valueOf(next);
+            if (nextValue.compareTo(minValue) < 0)
+            {
+                min = next;
+                minValue = nextValue;
+            }
+        }
+        return min;
+    }
+
+    public static <T, V extends Comparable<? super V>> T maxBy(Iterator<T> iterator, Function<? super T, ? extends V> function)
+    {
+        T max = iterator.next();
+        V maxValue = function.valueOf(max);
+        while (iterator.hasNext())
+        {
+            T next = iterator.next();
+            V nextValue = function.valueOf(next);
+            if (nextValue.compareTo(maxValue) > 0)
+            {
+                max = next;
+                maxValue = nextValue;
+            }
+        }
+        return max;
     }
 }

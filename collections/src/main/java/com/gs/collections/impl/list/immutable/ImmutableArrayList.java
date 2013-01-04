@@ -24,6 +24,7 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.RandomAccess;
 
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
@@ -436,5 +437,17 @@ final class ImmutableArrayList<T>
         this.toArray(array);
         array[oldSize] = newItem;
         return new ImmutableArrayList<T>(array);
+    }
+
+    @Override
+    public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
+    {
+        return ArrayIterate.minBy(this.items, function);
+    }
+
+    @Override
+    public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
+    {
+        return ArrayIterate.maxBy(this.items, function);
     }
 }

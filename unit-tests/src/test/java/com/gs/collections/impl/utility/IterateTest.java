@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -2229,5 +2230,109 @@ public class IterateTest
                 Iterate.sumOfDouble(null, null);
             }
         });
+    }
+
+    @Test
+    public void minBy()
+    {
+        Assert.assertEquals(Integer.valueOf(1), Iterate.minBy(FastList.<Integer>newListWith(1, 2, 3), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(1), Iterate.minBy(FastList.<Integer>newListWith(3, 2, 1), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(1), Iterate.minBy(FastList.<Integer>newListWith(1, 2, 3).asSynchronized(), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(1), Iterate.minBy(FastList.<Integer>newListWith(3, 2, 1).asSynchronized(), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(1), Iterate.minBy(Arrays.<Integer>asList(1, 2, 3), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(1), Iterate.minBy(Arrays.<Integer>asList(3, 2, 1), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(1), Iterate.minBy(new LinkedList<Integer>(Arrays.<Integer>asList(1, 2, 3)), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(1), Iterate.minBy(new LinkedList<Integer>(Arrays.<Integer>asList(3, 2, 1)), Functions.getIntegerPassThru()));
+    }
+
+    @Test
+    public void minByThrowsOnEmpty()
+    {
+        Verify.assertThrows(NoSuchElementException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.minBy(FastList.<Integer>newList(), Functions.getIntegerPassThru());
+            }
+        });
+        Verify.assertThrows(NoSuchElementException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.minBy(FastList.<Integer>newList().asSynchronized(), Functions.getIntegerPassThru());
+            }
+        });
+        Verify.assertThrows(NoSuchElementException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.minBy(Arrays.<Integer>asList(), Functions.getIntegerPassThru());
+            }
+        });
+        Verify.assertThrows(NoSuchElementException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.minBy(new LinkedList<Integer>(), Functions.getIntegerPassThru());
+            }
+        });
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void minByThrowsOnNull()
+    {
+        Iterate.minBy(null, null);
+    }
+
+    @Test
+    public void maxBy()
+    {
+        Assert.assertEquals(Integer.valueOf(3), Iterate.maxBy(FastList.<Integer>newListWith(1, 2, 3), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(3), Iterate.maxBy(FastList.<Integer>newListWith(3, 2, 1), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(3), Iterate.maxBy(FastList.<Integer>newListWith(1, 2, 3).asSynchronized(), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(3), Iterate.maxBy(FastList.<Integer>newListWith(3, 2, 1).asSynchronized(), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(3), Iterate.maxBy(Arrays.<Integer>asList(1, 2, 3), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(3), Iterate.maxBy(Arrays.<Integer>asList(3, 2, 1), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(3), Iterate.maxBy(new LinkedList<Integer>(Arrays.<Integer>asList(1, 2, 3)), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(3), Iterate.maxBy(new LinkedList<Integer>(Arrays.<Integer>asList(3, 2, 1)), Functions.getIntegerPassThru()));
+    }
+
+    @Test
+    public void maxByThrowsOnEmpty()
+    {
+        Verify.assertThrows(NoSuchElementException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.maxBy(FastList.<Integer>newList(), Functions.getIntegerPassThru());
+            }
+        });
+        Verify.assertThrows(NoSuchElementException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.maxBy(FastList.<Integer>newList().asSynchronized(), Functions.getIntegerPassThru());
+            }
+        });
+        Verify.assertThrows(NoSuchElementException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.maxBy(Arrays.<Integer>asList(), Functions.getIntegerPassThru());
+            }
+        });
+        Verify.assertThrows(NoSuchElementException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.maxBy(new LinkedList<Integer>(), Functions.getIntegerPassThru());
+            }
+        });
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void maxByThrowsOnNull()
+    {
+        Iterate.maxBy(null, null);
     }
 }

@@ -37,7 +37,6 @@ import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.partition.bag.PartitionImmutableBag;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
-import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
@@ -467,13 +466,13 @@ public class ImmutableArrayBag<T>
     @Override
     public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
     {
-        return ArrayIterate.min(this.keys, Comparators.byFunction(function));
+        return ArrayIterate.minBy(this.keys, function);
     }
 
     @Override
     public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
     {
-        return ArrayIterate.max(this.keys, Comparators.byFunction(function));
+        return ArrayIterate.maxBy(this.keys, function);
     }
 
     public <S> ImmutableBag<Pair<T, S>> zip(Iterable<S> that)

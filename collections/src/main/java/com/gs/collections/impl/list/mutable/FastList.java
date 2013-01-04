@@ -858,6 +858,18 @@ public class FastList<T>
     }
 
     @Override
+    public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
+    {
+        return ArrayIterate.minBy(this.items, this.size, function);
+    }
+
+    @Override
+    public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
+    {
+        return ArrayIterate.maxBy(this.items, this.size, function);
+    }
+
+    @Override
     public <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         for (int i = 0; i < this.size; i++)

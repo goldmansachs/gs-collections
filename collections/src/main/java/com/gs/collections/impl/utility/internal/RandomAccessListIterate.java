@@ -950,6 +950,52 @@ public final class RandomAccessListIterate
         return target;
     }
 
+    public static <T, V extends Comparable<? super V>> T minBy(List<T> list, Function<? super T, ? extends V> function)
+    {
+        if (list.isEmpty())
+        {
+            throw new NoSuchElementException();
+        }
+
+        T min = list.get(0);
+        V minValue = function.valueOf(min);
+        int size = list.size();
+        for (int i = 1; i < size; i++)
+        {
+            T next = list.get(i);
+            V nextValue = function.valueOf(next);
+            if (nextValue.compareTo(minValue) < 0)
+            {
+                min = next;
+                minValue = nextValue;
+            }
+        }
+        return min;
+    }
+
+    public static <T, V extends Comparable<? super V>> T maxBy(List<T> list, Function<? super T, ? extends V> function)
+    {
+        if (list.isEmpty())
+        {
+            throw new NoSuchElementException();
+        }
+
+        T max = list.get(0);
+        V maxValue = function.valueOf(max);
+        int size = list.size();
+        for (int i = 1; i < size; i++)
+        {
+            T next = list.get(i);
+            V nextValue = function.valueOf(next);
+            if (nextValue.compareTo(maxValue) > 0)
+            {
+                max = next;
+                maxValue = nextValue;
+            }
+        }
+        return max;
+    }
+
     public static <T> T min(List<T> list, Comparator<? super T> comparator)
     {
         if (list.isEmpty())

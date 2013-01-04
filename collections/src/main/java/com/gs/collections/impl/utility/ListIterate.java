@@ -993,6 +993,24 @@ public final class ListIterate
         return IterableIterate.min(list, comparator);
     }
 
+    public static <T, V extends Comparable<? super V>> T minBy(List<T> list, Function<? super T, ? extends V> function)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.minBy(list, function);
+        }
+        return IterableIterate.minBy(list, function);
+    }
+
+    public static <T, V extends Comparable<? super V>> T maxBy(List<T> list, Function<? super T, ? extends V> function)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.maxBy(list, function);
+        }
+        return IterableIterate.maxBy(list, function);
+    }
+
     /**
      * @see Iterate#max(Iterable, Comparator)
      */

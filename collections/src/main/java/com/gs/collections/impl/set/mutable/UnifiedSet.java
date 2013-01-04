@@ -866,12 +866,12 @@ public class UnifiedSet<K>
 
     public <V extends Comparable<? super V>> K minBy(Function<? super K, ? extends V> function)
     {
-        return Iterate.min(this, Comparators.byFunction(function));
+        return IterableIterate.minBy(this, function);
     }
 
     public <V extends Comparable<? super V>> K maxBy(Function<? super K, ? extends V> function)
     {
-        return Iterate.max(this, Comparators.byFunction(function));
+        return IterableIterate.maxBy(this, function);
     }
 
     public K detectIfNone(Predicate<? super K> predicate, Function0<? extends K> function)

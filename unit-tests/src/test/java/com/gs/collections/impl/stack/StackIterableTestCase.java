@@ -546,7 +546,7 @@ public abstract class StackIterableTestCase
         Assert.assertEquals(
                 Integer.valueOf(1),
                 this.newStackWith(1, 2, 3).minBy(function));
-        Assert.assertEquals(4, function.count);
+        Assert.assertEquals(3, function.count);
     }
 
     @Test

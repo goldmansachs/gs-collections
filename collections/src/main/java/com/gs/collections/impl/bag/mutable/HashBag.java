@@ -679,13 +679,13 @@ public class HashBag<T>
     @Override
     public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
     {
-        return this.min(Comparators.fromFunctions(function));
+        return IterableIterate.minBy(this, function);
     }
 
     @Override
     public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
     {
-        return this.max(Comparators.fromFunctions(function));
+        return IterableIterate.maxBy(this, function);
     }
 
     public void writeExternal(final ObjectOutput out) throws IOException

@@ -350,13 +350,13 @@ public abstract class AbstractMutableList<T>
     @Override
     public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
     {
-        return ListIterate.min(this, Comparators.byFunction(function));
+        return ListIterate.minBy(this, function);
     }
 
     @Override
     public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
     {
-        return ListIterate.max(this, Comparators.byFunction(function));
+        return ListIterate.maxBy(this, function);
     }
 
     @Override
