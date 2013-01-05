@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,36 +33,14 @@ public final class HashingStrategies
         return (HashingStrategy<T>) DEFAULT_HASHING_STRATEGY;
     }
 
-    public static <T> HashingStrategy<T> nullSafeHashingStrategy(final HashingStrategy<T> nonNullSafeStrategy)
+    public static <T> HashingStrategy<T> nullSafeHashingStrategy(HashingStrategy<T> nonNullSafeStrategy)
     {
-        return new HashingStrategy<T>()
-        {
-            public int computeHashCode(T object)
-            {
-                return object == null ? 0 : nonNullSafeStrategy.computeHashCode(object);
-            }
-
-            public boolean equals(T object1, T object2)
-            {
-                return object1 == null || object2 == null ? object1 == object2 : nonNullSafeStrategy.equals(object1, object2);
-            }
-        };
+        return new NullSafeHashingStrategy<T>(nonNullSafeStrategy);
     }
 
-    public static <T, V> HashingStrategy<T> fromFunction(final Function<T, V> function)
+    public static <T, V> HashingStrategy<T> fromFunction(Function<T, V> function)
     {
-        return new HashingStrategy<T>()
-        {
-            public int computeHashCode(T object)
-            {
-                return function.valueOf(object).hashCode();
-            }
-
-            public boolean equals(T object1, T object2)
-            {
-                return function.valueOf(object1).equals(function.valueOf(object2));
-            }
-        };
+        return new FunctionHashingStrategy<T, V>(function);
     }
 
     private static class DefaultStrategy<T> implements HashingStrategy<T>
@@ -77,6 +55,50 @@ public final class HashingStrategies
         public boolean equals(T object1, T object2)
         {
             return object1.equals(object2);
+        }
+    }
+
+    private static final class NullSafeHashingStrategy<T> implements HashingStrategy<T>
+    {
+        private static final long serialVersionUID = 1L;
+
+        private final HashingStrategy<T> nonNullSafeStrategy;
+
+        private NullSafeHashingStrategy(HashingStrategy<T> nonNullSafeStrategy)
+        {
+            this.nonNullSafeStrategy = nonNullSafeStrategy;
+        }
+
+        public int computeHashCode(T object)
+        {
+            return object == null ? 0 : this.nonNullSafeStrategy.computeHashCode(object);
+        }
+
+        public boolean equals(T object1, T object2)
+        {
+            return object1 == null || object2 == null ? object1 == object2 : this.nonNullSafeStrategy.equals(object1, object2);
+        }
+    }
+
+    private static final class FunctionHashingStrategy<T, V> implements HashingStrategy<T>
+    {
+        private static final long serialVersionUID = 1L;
+
+        private final Function<T, V> function;
+
+        private FunctionHashingStrategy(Function<T, V> function)
+        {
+            this.function = function;
+        }
+
+        public int computeHashCode(T object)
+        {
+            return this.function.valueOf(object).hashCode();
+        }
+
+        public boolean equals(T object1, T object2)
+        {
+            return this.function.valueOf(object1).equals(this.function.valueOf(object2));
         }
     }
 }
