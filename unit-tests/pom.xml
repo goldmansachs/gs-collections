@@ -205,6 +205,13 @@
                     <contextFilters>@deprecated</contextFilters>
                     <generateHistorical>true</generateHistorical>
                     <historyDir>${user.home}/clover/${project.artifactId}</historyDir>
+                    <excludes>
+                        <exclude>**/FileUtils.java</exclude>
+                        <exclude>**/GenerateMojo.java</exclude>
+                        <exclude>**/GsCollectionsCodeGenerator.java</exclude>
+                        <exclude>**/GsCollectionsCodeGeneratorTask.java</exclude>
+                        <exclude>**/Primitive.java</exclude>
+                    </excludes>
                 </configuration>
             </plugin>
 
