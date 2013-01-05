@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,7 +69,6 @@ import com.gs.collections.impl.lazy.primitive.CollectLongIterable;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
-import com.gs.collections.impl.partition.list.PartitionFastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.stack.mutable.ArrayStack;
@@ -228,7 +227,7 @@ public abstract class AbstractLazyIterable<T>
 
     public PartitionMutableList<T> partition(Predicate<? super T> predicate)
     {
-        return PartitionFastList.of(this, predicate);
+        return IterableIterate.partition(this, predicate);
     }
 
     public <S> LazyIterable<S> selectInstancesOf(Class<S> clazz)

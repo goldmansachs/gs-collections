@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -677,12 +677,14 @@ public final class RandomAccessListIterate
             List<T> list,
             Predicate<? super T> predicate)
     {
-        PartitionFastList<T> partitionFastList = new PartitionFastList<T>(predicate);
+        PartitionFastList<T> partitionFastList = new PartitionFastList<T>();
 
         int size = list.size();
         for (int i = 0; i < size; i++)
         {
-            partitionFastList.add(list.get(i));
+            T each = list.get(i);
+            MutableList<T> bucket = predicate.accept(each) ? partitionFastList.getSelected() : partitionFastList.getRejected();
+            bucket.add(each);
         }
 
         return partitionFastList;
@@ -1134,5 +1136,73 @@ public final class RandomAccessListIterate
         MutableMap<K, V> map = UnifiedMap.newMap();
         RandomAccessListIterate.forEach(list, new NonMutatingAggregationProcedure<T, K, V>(map, groupBy, zeroValueFactory, nonMutatingAggregator));
         return map;
+    }
+
+    public static <T> MutableList<T> takeWhile(List<T> list, Predicate<? super T> predicate)
+    {
+        MutableList<T> result = FastList.newList();
+        int size = list.size();
+        for (int i = 0; i < size; i++)
+        {
+            T each = list.get(i);
+            if (predicate.accept(each))
+            {
+                result.add(each);
+            }
+            else
+            {
+                return result;
+            }
+        }
+        return result;
+    }
+
+    public static <T> MutableList<T> dropWhile(List<T> list, Predicate<? super T> predicate)
+    {
+        MutableList<T> result = FastList.newList();
+        int size = list.size();
+        for (int i = 0; i < size; i++)
+        {
+            T each = list.get(i);
+            if (!predicate.accept(each))
+            {
+                result.add(each);
+                for (int j = i + 1; j < size; j++)
+                {
+                    T eachNotDropped = list.get(j);
+                    result.add(eachNotDropped);
+                }
+                return result;
+            }
+        }
+        return result;
+    }
+
+    public static <T> PartitionMutableList<T> partitionWhile(List<T> list, Predicate<? super T> predicate)
+    {
+        PartitionMutableList<T> result = new PartitionFastList<T>();
+        MutableList<T> selected = result.getSelected();
+
+        int size = list.size();
+        for (int i = 0; i < size; i++)
+        {
+            T each = list.get(i);
+            if (predicate.accept(each))
+            {
+                selected.add(each);
+            }
+            else
+            {
+                MutableList<T> rejected = result.getRejected();
+                rejected.add(each);
+                for (int j = i + 1; j < size; j++)
+                {
+                    T eachRejected = list.get(j);
+                    rejected.add(eachRejected);
+                }
+                return result;
+            }
+        }
+        return result;
     }
 }

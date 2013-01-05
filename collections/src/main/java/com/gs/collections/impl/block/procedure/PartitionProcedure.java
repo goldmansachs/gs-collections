@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,22 +16,29 @@
 
 package com.gs.collections.impl.block.procedure;
 
+import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.partition.PartitionMutableCollection;
 
-public final class PartitionAddProcedure<T> implements Procedure<T>
+public class PartitionProcedure<T> implements Procedure<T>
 {
     private static final long serialVersionUID = 1L;
 
+    private final Predicate<? super T> predicate;
     private final PartitionMutableCollection<T> partitionMutableCollection;
 
-    public PartitionAddProcedure(PartitionMutableCollection<T> partitionMutableCollection)
+    public PartitionProcedure(Predicate<? super T> predicate, PartitionMutableCollection<T> partitionMutableCollection)
     {
+        this.predicate = predicate;
         this.partitionMutableCollection = partitionMutableCollection;
     }
 
-    public void value(T object)
+    public void value(T each)
     {
-        this.partitionMutableCollection.add(object);
+        MutableCollection<T> bucket = this.predicate.accept(each)
+                ? this.partitionMutableCollection.getSelected()
+                : this.partitionMutableCollection.getRejected();
+        bucket.add(each);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -91,12 +91,17 @@ public final class IteratorIterate
             Iterator<T> iterator,
             Predicate<? super T> predicate)
     {
-        PartitionMutableList<T> partitionFastList = new PartitionFastList<T>(predicate);
+        PartitionMutableList<T> result = new PartitionFastList<T>();
+        MutableList<T> selected = result.getSelected();
+        MutableList<T> rejected = result.getRejected();
+
         while (iterator.hasNext())
         {
-            partitionFastList.add(iterator.next());
+            T each = iterator.next();
+            MutableList<T> bucket = predicate.accept(each) ? selected : rejected;
+            bucket.add(each);
         }
-        return partitionFastList;
+        return result;
     }
 
     /**

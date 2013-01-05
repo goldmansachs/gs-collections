@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,6 +47,7 @@ import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Comparators;
@@ -59,6 +60,7 @@ import com.gs.collections.impl.block.procedure.FastListRejectProcedure;
 import com.gs.collections.impl.block.procedure.FastListSelectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.parallel.BatchIterable;
+import com.gs.collections.impl.partition.list.PartitionFastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.ArrayIterate;
@@ -1292,6 +1294,50 @@ public class FastList<T>
     public FastList<T> toSortedList(Comparator<? super T> comparator)
     {
         return FastList.newList(this).sortThis(comparator);
+    }
+
+    @Override
+    public MutableList<T> takeWhile(Predicate<? super T> predicate)
+    {
+        int endIndex = this.detectNotIndex(predicate);
+        T[] result = (T[]) new Object[endIndex];
+        System.arraycopy(this.items, 0, result, 0, endIndex);
+        return FastList.newListWith(result);
+    }
+
+    @Override
+    public MutableList<T> dropWhile(Predicate<? super T> predicate)
+    {
+        int startIndex = this.detectNotIndex(predicate);
+        int resultSize = this.size() - startIndex;
+        T[] result = (T[]) new Object[resultSize];
+        System.arraycopy(this.items, startIndex, result, 0, resultSize);
+        return FastList.newListWith(result);
+    }
+
+    @Override
+    public PartitionMutableList<T> partitionWhile(Predicate<? super T> predicate)
+    {
+        PartitionMutableList<T> result = new PartitionFastList<T>();
+        FastList<T> selected = (FastList<T>) result.getSelected();
+        FastList<T> rejected = (FastList<T>) result.getRejected();
+        int partitionIndex = this.detectNotIndex(predicate);
+        int rejectedSize = this.size() - partitionIndex;
+        selected.withArrayCopy(this.items, 0, partitionIndex);
+        rejected.withArrayCopy(this.items, partitionIndex, rejectedSize);
+        return result;
+    }
+
+    private int detectNotIndex(Predicate<? super T> predicate)
+    {
+        for (int index = 0; index < this.size; index++)
+        {
+            if (!predicate.accept(this.items[index]))
+            {
+                return index;
+            }
+        }
+        return this.size;
     }
 
     @Override

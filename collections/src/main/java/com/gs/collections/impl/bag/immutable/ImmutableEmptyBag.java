@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -88,6 +88,7 @@ final class ImmutableEmptyBag<T>
 
     private static final LazyIterable<?> LAZY_ITERABLE = LazyIterate.adapt(INSTANCE);
     private static final Object[] TO_ARRAY = new Object[0];
+    private static final PartitionImmutableBag<Object> IMMUTABLE_EMPTY_PARTITION = new PartitionHashBag<Object>().toImmutable();
 
     @Override
     public boolean equals(Object obj)
@@ -250,7 +251,7 @@ final class ImmutableEmptyBag<T>
 
     public PartitionImmutableBag<T> partition(Predicate<? super T> predicate)
     {
-        return PartitionHashBag.of(this, predicate).toImmutable();
+        return (PartitionImmutableBag<T>) IMMUTABLE_EMPTY_PARTITION;
     }
 
     public <S> ImmutableBag<S> selectInstancesOf(Class<S> clazz)

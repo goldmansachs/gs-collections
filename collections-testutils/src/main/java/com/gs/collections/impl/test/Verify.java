@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -2835,7 +2835,6 @@ public final class Verify extends Assert
             if (objectA == null || objectB == null)
             {
                 Assert.fail("Neither item should be null: <" + objectA + "> <" + objectB + '>');
-                return;
             }
 
             Assert.assertFalse("Neither item should equal null", objectA.equals(null));

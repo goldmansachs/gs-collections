@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package com.gs.collections.impl.partition.set;
 
 import com.gs.collections.api.partition.set.PartitionImmutableSet;
+import com.gs.collections.api.partition.set.PartitionMutableSet;
 import com.gs.collections.api.set.ImmutableSet;
 import net.jcip.annotations.Immutable;
 
@@ -26,10 +27,10 @@ public class PartitionImmutableSetImpl<T> implements PartitionImmutableSet<T>
     private final ImmutableSet<T> selected;
     private final ImmutableSet<T> rejected;
 
-    public PartitionImmutableSetImpl(AbstractPartitionMutableSet<T> partitionUnifiedSet)
+    public PartitionImmutableSetImpl(PartitionMutableSet<T> mutablePartition)
     {
-        this.selected = partitionUnifiedSet.getSelected().toImmutable();
-        this.rejected = partitionUnifiedSet.getRejected().toImmutable();
+        this.selected = mutablePartition.getSelected().toImmutable();
+        this.rejected = mutablePartition.getRejected().toImmutable();
     }
 
     public ImmutableSet<T> getSelected()

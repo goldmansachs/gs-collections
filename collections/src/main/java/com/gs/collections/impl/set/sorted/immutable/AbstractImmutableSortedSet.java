@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,7 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.sortedset.ImmutableSortedSetMultimap;
 import com.gs.collections.api.partition.set.sorted.PartitionImmutableSortedSet;
+import com.gs.collections.api.partition.set.sorted.PartitionMutableSortedSet;
 import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
 import com.gs.collections.api.set.sorted.SortedSetIterable;
@@ -41,6 +42,7 @@ import com.gs.collections.impl.block.procedure.CollectProcedure;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
+import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.block.procedure.RejectProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.block.procedure.SelectProcedure;
@@ -135,7 +137,9 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
 
     public PartitionImmutableSortedSet<T> partition(Predicate<? super T> predicate)
     {
-        return PartitionTreeSortedSet.of(this, predicate).toImmutable();
+        PartitionMutableSortedSet<T> partitionTreeSortedSet = new PartitionTreeSortedSet<T>(this.comparator());
+        this.forEach(new PartitionProcedure<T>(predicate, partitionTreeSortedSet));
+        return partitionTreeSortedSet.toImmutable();
     }
 
     public <S> ImmutableSortedSet<S> selectInstancesOf(Class<S> clazz)

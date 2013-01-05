@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -455,5 +455,53 @@ public class ImmutableArrayListTest
     public void testToString()
     {
         Assert.assertEquals("[1, 2, 3]", this.newListWith(1, 2, 3).toString());
+    }
+
+    @Test
+    public void takeWhile()
+    {
+        Assert.assertEquals(
+                iList(1, 2, 3),
+                this.newList(1, 2, 3, 4, 5).takeWhile(Predicates.lessThan(4)));
+
+        Assert.assertEquals(
+                iList(1, 2, 3, 4, 5),
+                this.newList(1, 2, 3, 4, 5).takeWhile(Predicates.lessThan(10)));
+
+        Assert.assertEquals(
+                iList(),
+                this.newList(1, 2, 3, 4, 5).takeWhile(Predicates.lessThan(0)));
+    }
+
+    @Test
+    public void dropWhile()
+    {
+        Assert.assertEquals(
+                iList(4, 5),
+                this.newList(1, 2, 3, 4, 5).dropWhile(Predicates.lessThan(4)));
+
+        Assert.assertEquals(
+                iList(),
+                this.newList(1, 2, 3, 4, 5).dropWhile(Predicates.lessThan(10)));
+
+        Assert.assertEquals(
+                iList(1, 2, 3, 4, 5),
+                this.newList(1, 2, 3, 4, 5).dropWhile(Predicates.lessThan(0)));
+    }
+
+    @Test
+    public void partitionWhile()
+    {
+        PartitionImmutableList<Integer> partition1 = this.newList(1, 2, 3, 4, 5).partitionWhile(Predicates.lessThan(4));
+        Assert.assertEquals(iList(1, 2, 3), partition1.getSelected());
+        Assert.assertEquals(iList(4, 5), partition1.getRejected());
+
+        PartitionImmutableList<Integer> partition2 = this.newList(1, 2, 3, 4, 5).partitionWhile(Predicates.lessThan(0));
+        Assert.assertEquals(iList(), partition2.getSelected());
+        Assert.assertEquals(iList(1, 2, 3, 4, 5), partition2.getRejected());
+
+        PartitionImmutableList<Integer> partition3 = this.newList(1, 2, 3, 4, 5).partitionWhile(Predicates.lessThan(10));
+        Assert.assertEquals(iList(1, 2, 3, 4, 5), partition3.getSelected());
+        Assert.assertEquals(iList(), partition3.getRejected());
     }
 }

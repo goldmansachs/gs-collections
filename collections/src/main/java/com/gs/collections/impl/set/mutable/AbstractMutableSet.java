@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -29,6 +29,7 @@ import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.UnsortedSetIterable;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.collection.mutable.AbstractMutableCollection;
 import com.gs.collections.impl.factory.Sets;
@@ -91,7 +92,9 @@ public abstract class AbstractMutableSet<T>
 
     public PartitionMutableSet<T> partition(Predicate<? super T> predicate)
     {
-        return PartitionUnifiedSet.of(this, predicate);
+        PartitionMutableSet<T> partitionMutableSet = new PartitionUnifiedSet<T>();
+        this.forEach(new PartitionProcedure<T>(predicate, partitionMutableSet));
+        return partitionMutableSet;
     }
 
     public <S> MutableSet<S> selectInstancesOf(Class<S> clazz)

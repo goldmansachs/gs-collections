@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,6 +67,12 @@ public interface ImmutableList<T>
     <S> ImmutableList<Pair<T, S>> zip(Iterable<S> that);
 
     ImmutableList<Pair<T, Integer>> zipWithIndex();
+
+    ImmutableList<T> takeWhile(Predicate<? super T> predicate);
+
+    ImmutableList<T> dropWhile(Predicate<? super T> predicate);
+
+    PartitionImmutableList<T> partitionWhile(Predicate<? super T> predicate);
 
     List<T> castToList();
 }

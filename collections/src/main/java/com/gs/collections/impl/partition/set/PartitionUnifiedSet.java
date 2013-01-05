@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,26 +16,15 @@
 
 package com.gs.collections.impl.partition.set;
 
-import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.partition.set.PartitionImmutableSet;
 import com.gs.collections.api.partition.set.PartitionMutableSet;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 
-public class PartitionUnifiedSet<T> extends AbstractPartitionMutableSet<T>
+public class PartitionUnifiedSet<T> implements PartitionMutableSet<T>
 {
     private final MutableSet<T> selected = UnifiedSet.newSet();
     private final MutableSet<T> rejected = UnifiedSet.newSet();
-
-    public PartitionUnifiedSet(Predicate<? super T> predicate)
-    {
-        super(predicate);
-    }
-
-    public static <V> PartitionMutableSet<V> of(RichIterable<V> iterable, Predicate<? super V> predicate)
-    {
-        return partition(iterable, new PartitionUnifiedSet<V>(predicate));
-    }
 
     public MutableSet<T> getSelected()
     {
@@ -45,5 +34,10 @@ public class PartitionUnifiedSet<T> extends AbstractPartitionMutableSet<T>
     public MutableSet<T> getRejected()
     {
         return this.rejected;
+    }
+
+    public PartitionImmutableSet<T> toImmutable()
+    {
+        return new PartitionImmutableSetImpl<T>(this);
     }
 }

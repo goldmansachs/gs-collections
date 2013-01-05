@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,29 +18,20 @@ package com.gs.collections.impl.partition.set.sorted;
 
 import java.util.Comparator;
 
-import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.partition.set.sorted.PartitionImmutableSortedSet;
 import com.gs.collections.api.partition.set.sorted.PartitionMutableSortedSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
-import com.gs.collections.api.set.sorted.SortedSetIterable;
-import com.gs.collections.impl.partition.AbstractPartitionMutableCollection;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 
-public class PartitionTreeSortedSet<T> extends AbstractPartitionMutableCollection<T> implements PartitionMutableSortedSet<T>
+public class PartitionTreeSortedSet<T> implements PartitionMutableSortedSet<T>
 {
     private final MutableSortedSet<T> selected;
     private final MutableSortedSet<T> rejected;
 
-    public PartitionTreeSortedSet(Comparator<? super T> comparator, Predicate<? super T> predicate)
+    public PartitionTreeSortedSet(Comparator<? super T> comparator)
     {
-        super(predicate);
         this.selected = TreeSortedSet.newSet(comparator);
         this.rejected = TreeSortedSet.newSet(comparator);
-    }
-
-    public static <V> PartitionMutableSortedSet<V> of(SortedSetIterable<V> sortedSetIterable, Predicate<? super V> predicate)
-    {
-        return partition(sortedSetIterable, new PartitionTreeSortedSet<V>(sortedSetIterable.comparator(), predicate));
     }
 
     public MutableSortedSet<T> getSelected()

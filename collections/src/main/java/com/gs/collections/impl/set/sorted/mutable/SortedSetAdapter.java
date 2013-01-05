@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,6 +38,7 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
+import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.collection.mutable.AbstractCollectionAdapter;
 import com.gs.collections.impl.factory.SortedSets;
@@ -207,7 +208,9 @@ public final class SortedSetAdapter<T>
     @Override
     public PartitionMutableSortedSet<T> partition(Predicate<? super T> predicate)
     {
-        return PartitionTreeSortedSet.of(this, predicate);
+        PartitionMutableSortedSet<T> partitionMutableSortedSet = new PartitionTreeSortedSet<T>(this.comparator());
+        this.forEach(new PartitionProcedure<T>(predicate, partitionMutableSortedSet));
+        return partitionMutableSortedSet;
     }
 
     @Override

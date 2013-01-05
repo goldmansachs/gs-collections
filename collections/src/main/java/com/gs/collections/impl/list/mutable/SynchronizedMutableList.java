@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -452,6 +452,30 @@ public class SynchronizedMutableList<T>
         synchronized (this.getLock())
         {
             return this.getMutableList().zipWithIndex(target);
+        }
+    }
+
+    public MutableList<T> takeWhile(Predicate<? super T> predicate)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableList().takeWhile(predicate);
+        }
+    }
+
+    public MutableList<T> dropWhile(Predicate<? super T> predicate)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableList().dropWhile(predicate);
+        }
+    }
+
+    public PartitionMutableList<T> partitionWhile(Predicate<? super T> predicate)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableList().partitionWhile(predicate);
         }
     }
 

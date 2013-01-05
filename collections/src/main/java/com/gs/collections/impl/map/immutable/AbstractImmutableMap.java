@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,10 +31,12 @@ import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.ImmutableMultimap;
 import com.gs.collections.api.partition.PartitionImmutableCollection;
+import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
+import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.AbstractMapIterable;
@@ -218,7 +220,9 @@ public abstract class AbstractImmutableMap<K, V>
 
     public PartitionImmutableCollection<V> partition(Predicate<? super V> predicate)
     {
-        return PartitionFastList.of(this, predicate).toImmutable();
+        PartitionMutableCollection<V> partitionMutableCollection = new PartitionFastList<V>();
+        this.forEach(new PartitionProcedure<V>(predicate, partitionMutableCollection));
+        return partitionMutableCollection.toImmutable();
     }
 
     public <S> ImmutableCollection<S> selectInstancesOf(Class<S> clazz)

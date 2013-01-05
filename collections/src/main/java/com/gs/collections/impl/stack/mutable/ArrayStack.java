@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -364,7 +364,9 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
 
     public PartitionStack<T> partition(Predicate<? super T> predicate)
     {
-        return PartitionArrayStack.of(this.data.asReversed(), predicate);
+        PartitionArrayStack<T> partitionMutableStack = new PartitionArrayStack<T>(predicate);
+        this.data.asReversed().forEach(new PartitionArrayStack.PartitionProcedure<T>(predicate, partitionMutableStack));
+        return partitionMutableStack;
     }
 
     public <S> ArrayStack<Pair<T, S>> zip(Iterable<S> that)

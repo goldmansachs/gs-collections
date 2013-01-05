@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,6 +34,7 @@ import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
+import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.list.fixed.ArrayAdapter;
@@ -194,7 +195,9 @@ public abstract class AbstractMutableMap<K, V> extends AbstractMapIterable<K, V>
 
     public PartitionMutableList<V> partition(Predicate<? super V> predicate)
     {
-        return PartitionFastList.of(this, predicate);
+        PartitionMutableList<V> partitionMutableList = new PartitionFastList<V>();
+        this.forEach(new PartitionProcedure<V>(predicate, partitionMutableList));
+        return partitionMutableList;
     }
 
     public <S> MutableList<S> selectInstancesOf(Class<S> clazz)

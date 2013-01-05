@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,10 +23,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
-import com.gs.collections.impl.collection.mutable.AbstractCollectionAdapter;
 import com.gs.collections.impl.collection.mutable.AbstractCollectionTestCase;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
@@ -38,6 +38,8 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import static com.gs.collections.impl.factory.Iterables.*;
+
 /**
  * JUnit test for {@link ArrayListAdapter}.
  */
@@ -46,9 +48,33 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
     private static final Logger LOGGER = LoggerFactory.getLogger(ArrayListAdapterTest.class);
 
     @Override
-    public <T> AbstractCollectionAdapter<T> classUnderTest()
+    public <T> AbstractListAdapter<T> classUnderTest()
     {
         return ArrayListAdapter.newList();
+    }
+
+    @Override
+    protected <T> AbstractListAdapter<T> newWith(T one)
+    {
+        return ArrayListAdapter.<T>newList().with(one);
+    }
+
+    @Override
+    protected <T> AbstractListAdapter<T> newWith(T one, T two)
+    {
+        return ArrayListAdapter.<T>newList().with(one, two);
+    }
+
+    @Override
+    protected <T> AbstractListAdapter<T> newWith(T one, T two, T three)
+    {
+        return ArrayListAdapter.<T>newList().with(one, two, three);
+    }
+
+    @Override
+    protected <T> ArrayListAdapter<T> newWith(T... littleElements)
+    {
+        return ArrayListAdapter.<T>newList().with(littleElements);
     }
 
     @Test
@@ -60,7 +86,7 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
     @Test
     public void testClone()
     {
-        MutableList<Integer> list = ArrayListAdapter.<Integer>newList().with(1, 2, 3);
+        MutableList<Integer> list = this.newWith(1, 2, 3);
         MutableList<Integer> list2 = list.clone();
         Verify.assertListsEqual(list, list2);
     }
@@ -86,7 +112,7 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
     @Test
     public void remove()
     {
-        MutableList<Integer> objects = ArrayListAdapter.<Integer>newList().with(1, 2, 3, null);
+        MutableList<Integer> objects = this.newWith(1, 2, 3, null);
         objects.removeIf(Predicates.isNull());
         Verify.assertSize(3, objects);
         Verify.assertContainsAll(objects, 1, 2, 3);
@@ -109,7 +135,7 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
     @Test
     public void testRemoveIndex()
     {
-        MutableList<Integer> objects = ArrayListAdapter.<Integer>newList().with(1, 2, 3);
+        MutableList<Integer> objects = this.newWith(1, 2, 3);
         objects.remove(2);
         Verify.assertSize(2, objects);
         Verify.assertContainsAll(objects, 1, 2);
@@ -118,21 +144,21 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
     @Test
     public void testIndexOf()
     {
-        MutableList<Integer> objects = ArrayListAdapter.<Integer>newList().with(1, 2, 3);
+        MutableList<Integer> objects = this.newWith(1, 2, 3);
         Assert.assertEquals(1, objects.indexOf(2));
     }
 
     @Test
     public void testLastIndexOf()
     {
-        MutableList<Integer> objects = ArrayListAdapter.<Integer>newList().with(1, 2, 3);
+        MutableList<Integer> objects = this.newWith(1, 2, 3);
         Assert.assertEquals(1, objects.lastIndexOf(2));
     }
 
     @Test
     public void testSet()
     {
-        MutableList<Integer> objects = ArrayListAdapter.<Integer>newList().with(1, 2, 3);
+        MutableList<Integer> objects = this.newWith(1, 2, 3);
         Assert.assertEquals(Integer.valueOf(2), objects.set(1, 4));
         Verify.assertItemAtIndex(4, 1, objects);
     }
@@ -140,7 +166,7 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
     @Test
     public void testAddAtIndex()
     {
-        MutableList<Integer> objects = ArrayListAdapter.<Integer>newList().with(1, 2, 3);
+        MutableList<Integer> objects = this.newWith(1, 2, 3);
         objects.add(0, 0);
         Verify.assertSize(4, objects);
         Verify.assertItemAtIndex(0, 0, objects);
@@ -149,7 +175,7 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
     @Test
     public void testAddAllAtIndex()
     {
-        MutableList<Integer> objects = ArrayListAdapter.<Integer>newList().with(1, 2, 3);
+        MutableList<Integer> objects = this.newWith(1, 2, 3);
         objects.addAll(0, Lists.fixedSize.of(0));
         Verify.assertSize(4, objects);
         Verify.assertItemAtIndex(0, 0, objects);
@@ -158,9 +184,9 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
     @Test
     public void testEqualsAndHashCode()
     {
-        MutableList<Integer> list1 = ArrayListAdapter.<Integer>newList().with(1, 2, 3, 4);
-        MutableList<Integer> list2 = ArrayListAdapter.<Integer>newList().with(1, 2, 3, 4);
-        MutableList<Integer> list3 = ArrayListAdapter.<Integer>newList().with(2, 3, 4);
+        MutableList<Integer> list1 = this.newWith(1, 2, 3, 4);
+        MutableList<Integer> list2 = this.newWith(1, 2, 3, 4);
+        MutableList<Integer> list3 = this.newWith(2, 3, 4);
         Verify.assertNotEquals(list1, null);
         Verify.assertEqualsAndHashCode(list1, list1);
         Verify.assertEqualsAndHashCode(list1, list2);
@@ -174,7 +200,7 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
     @Test
     public void testSerialization()
     {
-        MutableList<Integer> collection = ArrayListAdapter.<Integer>newList().with(1, 2, 3, 4, 5);
+        MutableList<Integer> collection = this.newWith(1, 2, 3, 4, 5);
         MutableList<Integer> deserializedCollection = SerializeTestHelper.serializeDeserialize(collection);
         Verify.assertSize(5, deserializedCollection);
         Verify.assertStartsWith(deserializedCollection, 1, 2, 3, 4, 5);
@@ -210,7 +236,7 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
     @Test
     public void sortThis_small()
     {
-        MutableList<Integer> actual = ArrayListAdapter.<Integer>newList().with(1, 2, 3);
+        MutableList<Integer> actual = this.newWith(1, 2, 3);
         Collections.shuffle(actual);
         MutableList<Integer> sorted = actual.sortThis();
         Assert.assertSame(actual, sorted);
@@ -220,7 +246,7 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
     @Test
     public void sortThis()
     {
-        MutableList<Integer> actual = ArrayListAdapter.<Integer>newList().with(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        MutableList<Integer> actual = this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
         Collections.shuffle(actual);
         MutableList<Integer> sorted = actual.sortThis();
         Assert.assertSame(actual, sorted);
@@ -230,7 +256,7 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
     @Test
     public void sortThis_large()
     {
-        MutableList<Integer> actual = ArrayListAdapter.<Integer>newList().with(Interval.oneTo(1000).toArray());
+        MutableList<Integer> actual = this.newWith(Interval.oneTo(1000).toArray());
         Collections.shuffle(actual);
         MutableList<Integer> sorted = actual.sortThis();
         Assert.assertSame(actual, sorted);
@@ -240,7 +266,7 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
     @Test
     public void sortThis_with_comparator_small()
     {
-        MutableList<Integer> actual = ArrayListAdapter.<Integer>newList().with(1, 2, 3);
+        MutableList<Integer> actual = this.newWith(1, 2, 3);
         Collections.shuffle(actual);
         MutableList<Integer> sorted = actual.sortThis(Collections.<Integer>reverseOrder());
         Assert.assertSame(actual, sorted);
@@ -250,7 +276,7 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
     @Test
     public void sortThis_with_comparator()
     {
-        MutableList<Integer> actual = ArrayListAdapter.<Integer>newList().with(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        MutableList<Integer> actual = this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
         Collections.shuffle(actual);
         MutableList<Integer> sorted = actual.sortThis(Collections.<Integer>reverseOrder());
         Assert.assertSame(actual, sorted);
@@ -260,7 +286,7 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
     @Test
     public void sortThis_with_comparator_large()
     {
-        MutableList<Integer> actual = ArrayListAdapter.<Integer>newList().with(Interval.oneTo(1000).toArray());
+        MutableList<Integer> actual = this.newWith(Interval.oneTo(1000).toArray());
         Collections.shuffle(actual);
         MutableList<Integer> sorted = actual.sortThis(Collections.<Integer>reverseOrder());
         Assert.assertSame(actual, sorted);
@@ -270,7 +296,7 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
     @Test
     public void sortThisBy()
     {
-        MutableList<Integer> actual = ArrayListAdapter.<Integer>newList().with(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        MutableList<Integer> actual = this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
         Collections.shuffle(actual);
         MutableList<Integer> sorted = actual.sortThisBy(Functions.getToString());
         Assert.assertSame(actual, sorted);
@@ -295,7 +321,7 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
     public void testForEachWithFromTo()
     {
         MutableList<Integer> result1 = Lists.mutable.of();
-        ArrayListAdapter.<Integer>newList().with(1, 2, 3).forEach(1, 2, CollectionAddProcedure.<Integer>on(result1));
+        this.newWith(1, 2, 3).forEach(1, 2, CollectionAddProcedure.<Integer>on(result1));
         Assert.assertEquals(FastList.newListWith(2, 3), result1);
     }
 
@@ -303,7 +329,7 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
     public void testForEachWithIndexWithFromTo()
     {
         MutableList<Integer> result1 = Lists.mutable.of();
-        ArrayListAdapter.<Integer>newList().with(1, 2, 3).forEachWithIndex(1, 2, new AddToList(result1));
+        this.newWith(1, 2, 3).forEachWithIndex(1, 2, new AddToList(result1));
         Assert.assertEquals(FastList.newListWith(2, 3), result1);
     }
 
@@ -324,5 +350,32 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
         ArrayListAdapter.<Integer>adapt(new ArrayList<Integer>(Interval.oneTo(200))).forEachWithIndex(99, 199, new AddToList(result2)
         );
         Verify.assertSize(101, result2);
+    }
+
+    @Test
+    public void takeWhile()
+    {
+        Assert.assertEquals(
+                iList(1, 2, 3),
+                this.newWith(1, 2, 3, 4, 5).takeWhile(Predicates.lessThan(4)));
+    }
+
+    @Test
+    public void dropWhile()
+    {
+        Assert.assertEquals(
+                iList(4, 5),
+                this.newWith(1, 2, 3, 4, 5).dropWhile(Predicates.lessThan(4)));
+    }
+
+    @Test
+    public void partitionWhile()
+    {
+        PartitionMutableList<Integer> partition = this.newWith(1, 2, 3, 4, 5).partitionWhile(Predicates.lessThan(4));
+        MutableList<Integer> selected = partition.getSelected();
+        MutableList<Integer> rejected = partition.getRejected();
+
+        Assert.assertEquals(iList(1, 2, 3), selected);
+        Assert.assertEquals(iList(4, 5), rejected);
     }
 }

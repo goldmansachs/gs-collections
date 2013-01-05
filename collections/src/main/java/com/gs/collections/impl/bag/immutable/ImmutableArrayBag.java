@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,6 +35,7 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.partition.bag.PartitionImmutableBag;
+import com.gs.collections.api.partition.bag.PartitionMutableBag;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Predicates;
@@ -42,6 +43,7 @@ import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
+import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
@@ -256,7 +258,9 @@ public class ImmutableArrayBag<T>
 
     public PartitionImmutableBag<T> partition(Predicate<? super T> predicate)
     {
-        return PartitionHashBag.of(this, predicate).toImmutable();
+        PartitionMutableBag<T> partitionMutableBag = new PartitionHashBag<T>();
+        this.forEach(new PartitionProcedure<T>(predicate, partitionMutableBag));
+        return partitionMutableBag.toImmutable();
     }
 
     public <S> ImmutableBag<S> selectInstancesOf(final Class<S> clazz)

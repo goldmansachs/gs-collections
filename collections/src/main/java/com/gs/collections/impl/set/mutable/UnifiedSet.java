@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,6 +74,7 @@ import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
+import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.block.procedure.RejectProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.block.procedure.SelectProcedure;
@@ -765,7 +766,9 @@ public class UnifiedSet<K>
 
     public PartitionMutableSet<K> partition(Predicate<? super K> predicate)
     {
-        return PartitionUnifiedSet.of(this, predicate);
+        PartitionMutableSet<K> partitionUnifiedSet = new PartitionUnifiedSet<K>();
+        this.forEach(new PartitionProcedure<K>(predicate, partitionUnifiedSet));
+        return partitionUnifiedSet;
     }
 
     public <S> UnifiedSet<S> selectInstancesOf(Class<S> clazz)

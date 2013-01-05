@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,7 +56,6 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Stacks;
 import com.gs.collections.impl.lazy.ReverseIterable;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
-import com.gs.collections.impl.partition.list.PartitionFastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.utility.Iterate;
@@ -236,7 +235,7 @@ public abstract class AbstractMutableList<T>
 
     public PartitionMutableList<T> partition(Predicate<? super T> predicate)
     {
-        return PartitionFastList.of(this, predicate);
+        return ListIterate.partition(this, predicate);
     }
 
     public <S> MutableList<S> selectInstancesOf(Class<S> clazz)
@@ -1016,5 +1015,20 @@ public abstract class AbstractMutableList<T>
     public ReverseIterable<T> asReversed()
     {
         return ReverseIterable.adapt(this);
+    }
+
+    public MutableList<T> takeWhile(Predicate<? super T> predicate)
+    {
+        return ListIterate.takeWhile(this, predicate);
+    }
+
+    public MutableList<T> dropWhile(Predicate<? super T> predicate)
+    {
+        return ListIterate.dropWhile(this, predicate);
+    }
+
+    public PartitionMutableList<T> partitionWhile(Predicate<? super T> predicate)
+    {
+        return ListIterate.partitionWhile(this, predicate);
     }
 }

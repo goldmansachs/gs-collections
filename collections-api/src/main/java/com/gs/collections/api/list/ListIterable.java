@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -168,11 +168,11 @@ public interface ListIterable<T>
 
     /**
      * Returns a new {@code ListIterable} containing the distinct elements in this list.
-     *
-     * Conceptually similar to {@link #toSet()}{@link #toList()} but retains the original order. If an element appears
+     * <p/>
+     * Conceptually similar to {@link #toSet()}.{@link #toList()} but retains the original order. If an element appears
      * multiple times in this list, the first one will be copied into the result.
-     * @return {@code ListIterable} of distinct elements
      *
+     * @return {@code ListIterable} of distinct elements
      * @since 3.0
      */
     ListIterable<T> distinct();
@@ -180,4 +180,28 @@ public interface ListIterable<T>
     <S> ListIterable<Pair<T, S>> zip(Iterable<S> that);
 
     ListIterable<Pair<T, Integer>> zipWithIndex();
+
+    /**
+     * Returns the initial elements that satisfy the Predicate. Short circuits at the first element which does not
+     * satisfy the Predicate.
+     *
+     * @since 3.0
+     */
+    ListIterable<T> takeWhile(Predicate<? super T> predicate);
+
+    /**
+     * Returns the final elements that do not satisfy the Predicate. Short circuits at the first element which does
+     * satisfy the Predicate.
+     *
+     * @since 3.0
+     */
+    ListIterable<T> dropWhile(Predicate<? super T> predicate);
+
+    /**
+     * Returns a Partition of the initial elements that satisfy the Predicate and the remaining elements. Short circuits at the first element which does
+     * satisfy the Predicate.
+     *
+     * @since 3.0
+     */
+    PartitionList<T> partitionWhile(Predicate<? super T> predicate);
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -53,6 +53,7 @@ import com.gs.collections.impl.block.procedure.MaxComparatorProcedure;
 import com.gs.collections.impl.block.procedure.MinComparatorProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
+import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.block.procedure.checked.CheckedProcedure2;
 import com.gs.collections.impl.collection.mutable.AbstractMutableCollection;
 import com.gs.collections.impl.collection.mutable.CollectionAdapter;
@@ -290,7 +291,9 @@ public class HashBag<T>
 
     public PartitionMutableBag<T> partition(Predicate<? super T> predicate)
     {
-        return PartitionHashBag.of(this, predicate);
+        PartitionMutableBag<T> partitionMutableBag = new PartitionHashBag<T>();
+        this.forEach(new PartitionProcedure<T>(predicate, partitionMutableBag));
+        return partitionMutableBag;
     }
 
     public <S> MutableBag<S> selectInstancesOf(final Class<S> clazz)

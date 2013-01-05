@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,8 +28,6 @@ public interface PartitionMutableCollection<T> extends PartitionIterable<T>
     MutableCollection<T> getSelected();
 
     MutableCollection<T> getRejected();
-
-    void add(T t);
 
     PartitionImmutableCollection<T> toImmutable();
 }

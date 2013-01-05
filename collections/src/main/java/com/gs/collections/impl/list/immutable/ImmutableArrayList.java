@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
+import com.gs.collections.api.partition.list.PartitionImmutableList;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.CountProcedure;
@@ -40,6 +41,7 @@ import com.gs.collections.impl.block.procedure.FastListRejectProcedure;
 import com.gs.collections.impl.block.procedure.FastListSelectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.parallel.BatchIterable;
+import com.gs.collections.impl.partition.list.PartitionImmutableListImpl;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.Iterate;
 import net.jcip.annotations.Immutable;
@@ -449,5 +451,50 @@ final class ImmutableArrayList<T>
     public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
     {
         return ArrayIterate.maxBy(this.items, function);
+    }
+
+    @Override
+    public ImmutableList<T> takeWhile(Predicate<? super T> predicate)
+    {
+        int endIndex = this.detectNotIndex(predicate);
+        T[] result = (T[]) new Object[endIndex];
+        System.arraycopy(this.items, 0, result, 0, endIndex);
+        return new ImmutableArrayList<T>(result);
+    }
+
+    @Override
+    public ImmutableList<T> dropWhile(Predicate<? super T> predicate)
+    {
+        int startIndex = this.detectNotIndex(predicate);
+        int resultSize = this.size() - startIndex;
+        T[] result = (T[]) new Object[resultSize];
+        System.arraycopy(this.items, startIndex, result, 0, resultSize);
+        return new ImmutableArrayList<T>(result);
+    }
+
+    @Override
+    public PartitionImmutableList<T> partitionWhile(Predicate<? super T> predicate)
+    {
+        int partitionIndex = this.detectNotIndex(predicate);
+        int rejectedSize = this.size() - partitionIndex;
+        T[] selectedArray = (T[]) new Object[partitionIndex];
+        T[] rejectedArray = (T[]) new Object[rejectedSize];
+        System.arraycopy(this.items, 0, selectedArray, 0, partitionIndex);
+        System.arraycopy(this.items, partitionIndex, rejectedArray, 0, rejectedSize);
+        ImmutableArrayList<T> selected = new ImmutableArrayList<T>(selectedArray);
+        ImmutableArrayList<T> rejected = new ImmutableArrayList<T>(rejectedArray);
+        return new PartitionImmutableListImpl<T>(selected, rejected);
+    }
+
+    private int detectNotIndex(Predicate<? super T> predicate)
+    {
+        for (int index = 0; index < this.size(); index++)
+        {
+            if (!predicate.accept(this.items[index]))
+            {
+                return index;
+            }
+        }
+        return this.size();
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -299,6 +299,21 @@ public final class UnmodifiableMutableList<T>
     public MutableList<Pair<T, Integer>> zipWithIndex()
     {
         return this.getMutableList().zipWithIndex();
+    }
+
+    public MutableList<T> takeWhile(Predicate<? super T> predicate)
+    {
+        return this.getMutableList().takeWhile(predicate);
+    }
+
+    public MutableList<T> dropWhile(Predicate<? super T> predicate)
+    {
+        return this.getMutableList().dropWhile(predicate);
+    }
+
+    public PartitionMutableList<T> partitionWhile(Predicate<? super T> predicate)
+    {
+        return this.getMutableList().partitionWhile(predicate);
     }
 
     @Override

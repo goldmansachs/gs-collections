@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -109,6 +109,12 @@ public interface MutableList<T>
     <S> MutableList<Pair<T, S>> zip(Iterable<S> that);
 
     MutableList<Pair<T, Integer>> zipWithIndex();
+
+    MutableList<T> takeWhile(Predicate<? super T> predicate);
+
+    MutableList<T> dropWhile(Predicate<? super T> predicate);
+
+    PartitionMutableList<T> partitionWhile(Predicate<? super T> predicate);
 
     /**
      * Returns a new MutableList in reverse order

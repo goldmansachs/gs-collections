@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
 import com.gs.collections.api.partition.set.PartitionImmutableSet;
+import com.gs.collections.api.partition.set.PartitionMutableSet;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.UnsortedSetIterable;
@@ -35,6 +36,7 @@ import com.gs.collections.impl.block.procedure.CollectProcedure;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
+import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.block.procedure.RejectProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.block.procedure.SelectProcedure;
@@ -119,7 +121,9 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
 
     public PartitionImmutableSet<T> partition(Predicate<? super T> predicate)
     {
-        return PartitionUnifiedSet.of(this, predicate).toImmutable();
+        PartitionMutableSet<T> partitionUnifiedSet = new PartitionUnifiedSet<T>();
+        this.forEach(new PartitionProcedure<T>(predicate, partitionUnifiedSet));
+        return partitionUnifiedSet.toImmutable();
     }
 
     public <S> ImmutableSet<S> selectInstancesOf(Class<S> clazz)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,10 +26,15 @@ public class PartitionImmutableListImpl<T> implements PartitionImmutableList<T>
     private final ImmutableList<T> selected;
     private final ImmutableList<T> rejected;
 
+    public PartitionImmutableListImpl(ImmutableList<T> selected, ImmutableList<T> rejected)
+    {
+        this.selected = selected;
+        this.rejected = rejected;
+    }
+
     public PartitionImmutableListImpl(PartitionFastList<T> partitionFastList)
     {
-        this.selected = partitionFastList.getSelected().toImmutable();
-        this.rejected = partitionFastList.getRejected().toImmutable();
+        this(partitionFastList.getSelected().toImmutable(), partitionFastList.getRejected().toImmutable());
     }
 
     public ImmutableList<T> getSelected()

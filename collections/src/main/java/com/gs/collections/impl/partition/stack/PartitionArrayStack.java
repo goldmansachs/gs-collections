@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,6 @@
 
 package com.gs.collections.impl.partition.stack;
 
-import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.MutableList;
@@ -35,19 +34,6 @@ public class PartitionArrayStack<T> implements PartitionMutableStack<T>
     public PartitionArrayStack(Predicate<? super T> predicate)
     {
         this.predicate = predicate;
-    }
-
-    public static <V> PartitionMutableStack<V> of(RichIterable<V> iterable, Predicate<? super V> predicate)
-    {
-        return PartitionArrayStack.partition(iterable, new PartitionArrayStack<V>(predicate));
-    }
-
-    protected static <T, P extends PartitionMutableStack<T>> P partition(
-            RichIterable<T> iterable,
-            P partitionMutableStack)
-    {
-        iterable.forEach(new PartitionAddProcedure<T>(partitionMutableStack));
-        return partitionMutableStack;
     }
 
     public MutableStack<T> getSelected()
@@ -70,20 +56,25 @@ public class PartitionArrayStack<T> implements PartitionMutableStack<T>
         (this.predicate.accept(t) ? this.selected : this.rejected).add(t);
     }
 
-    private static final class PartitionAddProcedure<T> implements Procedure<T>
+    public static final class PartitionProcedure<T> implements Procedure<T>
     {
         private static final long serialVersionUID = 1L;
 
-        private final PartitionMutableStack<T> partitionMutableStack;
+        private final Predicate<? super T> predicate;
+        private final PartitionArrayStack<T> partitionMutableStack;
 
-        private PartitionAddProcedure(PartitionMutableStack<T> partitionMutableStack)
+        public PartitionProcedure(Predicate<? super T> predicate, PartitionArrayStack<T> partitionMutableStack)
         {
+            this.predicate = predicate;
             this.partitionMutableStack = partitionMutableStack;
         }
 
-        public void value(T object)
+        public void value(T each)
         {
-            this.partitionMutableStack.add(object);
+            MutableList<T> bucket = this.predicate.accept(each)
+                    ? this.partitionMutableStack.selected
+                    : this.partitionMutableStack.rejected;
+            bucket.add(each);
         }
     }
 }

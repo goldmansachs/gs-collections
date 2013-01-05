@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,6 +42,7 @@ import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
@@ -50,6 +51,7 @@ import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
+import com.gs.collections.impl.partition.list.PartitionFastList;
 import com.gs.collections.impl.utility.internal.IterableIterate;
 import com.gs.collections.impl.utility.internal.RandomAccessListIterate;
 
@@ -1116,5 +1118,91 @@ public final class ListIterate
             return RandomAccessListIterate.zipWithIndex(list, target);
         }
         return IterableIterate.zipWithIndex(list, target);
+    }
+
+    /**
+     * @see ListIterable#takeWhile(Predicate)
+     */
+    public static <T> MutableList<T> takeWhile(List<T> list, Predicate<? super T> predicate)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.takeWhile(list, predicate);
+        }
+        MutableList<T> result = FastList.newList();
+        for (T t : list)
+        {
+            if (predicate.accept(t))
+            {
+                result.add(t);
+            }
+            else
+            {
+                return result;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * @see ListIterable#dropWhile(Predicate)
+     */
+    public static <T> MutableList<T> dropWhile(List<T> list, Predicate<? super T> predicate)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.dropWhile(list, predicate);
+        }
+        MutableList<T> result = FastList.newList();
+        Iterator<T> iterator = list.iterator();
+        while (iterator.hasNext())
+        {
+            T each = iterator.next();
+            if (!predicate.accept(each))
+            {
+                result.add(each);
+                while (iterator.hasNext())
+                {
+                    T eachNotDropped = iterator.next();
+                    result.add(eachNotDropped);
+                }
+                return result;
+            }
+        }
+        return result;
+    }
+
+    /**
+     * @see ListIterable#partitionWhile(Predicate)
+     */
+    public static <T> PartitionMutableList<T> partitionWhile(List<T> list, Predicate<? super T> predicate)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.partitionWhile(list, predicate);
+        }
+        PartitionMutableList<T> result = new PartitionFastList<T>();
+        MutableList<T> selected = result.getSelected();
+        MutableList<T> rejected = result.getRejected();
+
+        Iterator<T> iterator = list.iterator();
+        while (iterator.hasNext())
+        {
+            T each = iterator.next();
+            if (predicate.accept(each))
+            {
+                selected.add(each);
+            }
+            else
+            {
+                rejected.add(each);
+                while (iterator.hasNext())
+                {
+                    rejected.add(iterator.next());
+                }
+                return result;
+            }
+        }
+        return result;
     }
 }

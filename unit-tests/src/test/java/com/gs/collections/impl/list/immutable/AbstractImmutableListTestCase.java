@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.partition.list.PartitionImmutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.ObjectIntProcedures;
@@ -42,6 +43,8 @@ import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.utility.ListIterate;
 import org.junit.Assert;
 import org.junit.Test;
+
+import static com.gs.collections.impl.factory.Iterables.*;
 
 public abstract class AbstractImmutableListTestCase extends AbstractImmutableCollectionTestCase
 {
@@ -483,5 +486,36 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
                 AbstractImmutableListTestCase.this.classUnderTest().castToList().listIterator(0);
             }
         });
+    }
+
+    @Test
+    public void takeWhile()
+    {
+        Assert.assertEquals(
+                iList(1),
+                this.classUnderTest().takeWhile(Predicates.lessThan(2)));
+    }
+
+    @Test
+    public void dropWhile()
+    {
+        Assert.assertEquals(
+                this.classUnderTest(),
+                this.classUnderTest().dropWhile(Predicates.lessThan(0)));
+        Assert.assertEquals(
+                Lists.immutable.of(),
+                this.classUnderTest().dropWhile(Predicates.greaterThan(0)));
+    }
+
+    @Test
+    public void partitionWhile()
+    {
+        PartitionImmutableList<Integer> partitionAll = this.classUnderTest().partitionWhile(Predicates.greaterThan(0));
+        Assert.assertEquals(this.classUnderTest(), partitionAll.getSelected());
+        Assert.assertEquals(Lists.immutable.of(), partitionAll.getRejected());
+
+        PartitionImmutableList<Integer> partitionNone = this.classUnderTest().partitionWhile(Predicates.lessThan(0));
+        Assert.assertEquals(Lists.immutable.of(), partitionNone.getSelected());
+        Assert.assertEquals(this.classUnderTest(), partitionNone.getRejected());
     }
 }

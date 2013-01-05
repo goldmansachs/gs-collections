@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -58,7 +58,6 @@ import com.gs.collections.impl.collection.immutable.AbstractImmutableCollection;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
-import com.gs.collections.impl.partition.list.PartitionFastList;
 import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.ListIterate;
@@ -234,7 +233,7 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
 
     public PartitionImmutableList<T> partition(Predicate<? super T> predicate)
     {
-        return PartitionFastList.of(this, predicate).toImmutable();
+        return ListIterate.partition(this, predicate).toImmutable();
     }
 
     public <S> ImmutableList<S> selectInstancesOf(Class<S> clazz)
@@ -706,6 +705,21 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
     public ImmutableList<Pair<T, Integer>> zipWithIndex()
     {
         return this.zipWithIndex(FastList.<Pair<T, Integer>>newList()).toImmutable();
+    }
+
+    public ImmutableList<T> takeWhile(Predicate<? super T> predicate)
+    {
+        return ListIterate.takeWhile(this, predicate).toImmutable();
+    }
+
+    public ImmutableList<T> dropWhile(Predicate<? super T> predicate)
+    {
+        return ListIterate.dropWhile(this, predicate).toImmutable();
+    }
+
+    public PartitionImmutableList<T> partitionWhile(Predicate<? super T> predicate)
+    {
+        return ListIterate.partitionWhile(this, predicate).toImmutable();
     }
 
     @Override

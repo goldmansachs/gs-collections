@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
@@ -44,6 +45,8 @@ import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
+
+import static com.gs.collections.impl.factory.Iterables.*;
 
 /**
  * Abstract JUnit test for {@link MutableList}s.
@@ -675,5 +678,53 @@ public abstract class AbstractListTestCase
                         FastList.newListWith("5", "6"),
                         FastList.newListWith("7")),
                 groups);
+    }
+
+    @Test
+    public void takeWhile()
+    {
+        Assert.assertEquals(
+                iList(1, 2, 3),
+                this.newWith(1, 2, 3, 4, 5).takeWhile(Predicates.lessThan(4)));
+
+        Assert.assertEquals(
+                iList(1, 2, 3, 4, 5),
+                this.newWith(1, 2, 3, 4, 5).takeWhile(Predicates.lessThan(10)));
+
+        Assert.assertEquals(
+                iList(),
+                this.newWith(1, 2, 3, 4, 5).takeWhile(Predicates.lessThan(0)));
+    }
+
+    @Test
+    public void dropWhile()
+    {
+        Assert.assertEquals(
+                iList(4, 5),
+                this.newWith(1, 2, 3, 4, 5).dropWhile(Predicates.lessThan(4)));
+
+        Assert.assertEquals(
+                iList(),
+                this.newWith(1, 2, 3, 4, 5).dropWhile(Predicates.lessThan(10)));
+
+        Assert.assertEquals(
+                iList(1, 2, 3, 4, 5),
+                this.newWith(1, 2, 3, 4, 5).dropWhile(Predicates.lessThan(0)));
+    }
+
+    @Test
+    public void partitionWhile()
+    {
+        PartitionMutableList<Integer> partition1 = this.newWith(1, 2, 3, 4, 5).partitionWhile(Predicates.lessThan(4));
+        Assert.assertEquals(iList(1, 2, 3), partition1.getSelected());
+        Assert.assertEquals(iList(4, 5), partition1.getRejected());
+
+        PartitionMutableList<Integer> partition2 = this.newWith(1, 2, 3, 4, 5).partitionWhile(Predicates.lessThan(0));
+        Assert.assertEquals(iList(), partition2.getSelected());
+        Assert.assertEquals(iList(1, 2, 3, 4, 5), partition2.getRejected());
+
+        PartitionMutableList<Integer> partition3 = this.newWith(1, 2, 3, 4, 5).partitionWhile(Predicates.lessThan(10));
+        Assert.assertEquals(iList(1, 2, 3, 4, 5), partition3.getSelected());
+        Assert.assertEquals(iList(), partition3.getRejected());
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -847,6 +847,21 @@ public final class MultiReaderFastList<T>
             return this;
         }
 
+        public MutableList<T> takeWhile(Predicate<? super T> predicate)
+        {
+            return this.getDelegate().takeWhile(predicate);
+        }
+
+        public MutableList<T> dropWhile(Predicate<? super T> predicate)
+        {
+            return this.getDelegate().dropWhile(predicate);
+        }
+
+        public PartitionMutableList<T> partitionWhile(Predicate<? super T> predicate)
+        {
+            return this.getDelegate().partitionWhile(predicate);
+        }
+
         public MutableList<T> subList(int fromIndex, int toIndex)
         {
             UntouchableMutableList<T> subList = new UntouchableMutableList<T>(
@@ -1105,6 +1120,45 @@ public final class MultiReaderFastList<T>
         try
         {
             return this.delegate.chunk(size);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public MutableList<T> takeWhile(Predicate<? super T> predicate)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.takeWhile(predicate);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public MutableList<T> dropWhile(Predicate<? super T> predicate)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.dropWhile(predicate);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public PartitionMutableList<T> partitionWhile(Predicate<? super T> predicate)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.partitionWhile(predicate);
         }
         finally
         {

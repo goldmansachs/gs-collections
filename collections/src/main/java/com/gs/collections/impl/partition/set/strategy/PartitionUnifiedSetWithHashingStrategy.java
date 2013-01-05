@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,35 +16,23 @@
 
 package com.gs.collections.impl.partition.set.strategy;
 
-import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.HashingStrategy;
-import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.partition.set.PartitionImmutableSet;
 import com.gs.collections.api.partition.set.PartitionMutableSet;
 import com.gs.collections.api.set.MutableSet;
-import com.gs.collections.impl.partition.set.AbstractPartitionMutableSet;
+import com.gs.collections.impl.partition.set.PartitionImmutableSetImpl;
 import com.gs.collections.impl.set.strategy.mutable.UnifiedSetWithHashingStrategy;
 
 public class PartitionUnifiedSetWithHashingStrategy<T>
-        extends AbstractPartitionMutableSet<T>
+        implements PartitionMutableSet<T>
 {
     private final MutableSet<T> selected;
     private final MutableSet<T> rejected;
 
-    public PartitionUnifiedSetWithHashingStrategy(
-            HashingStrategy<? super T> hashingStrategy,
-            Predicate<? super T> predicate)
+    public PartitionUnifiedSetWithHashingStrategy(HashingStrategy<? super T> hashingStrategy)
     {
-        super(predicate);
         this.selected = UnifiedSetWithHashingStrategy.newSet(hashingStrategy);
         this.rejected = UnifiedSetWithHashingStrategy.newSet(hashingStrategy);
-    }
-
-    public static <T> PartitionMutableSet<T> of(
-            HashingStrategy<? super T> hashingStrategy,
-            RichIterable<T> iterable,
-            Predicate<? super T> predicate)
-    {
-        return partition(iterable, new PartitionUnifiedSetWithHashingStrategy<T>(hashingStrategy, predicate));
     }
 
     public MutableSet<T> getSelected()
@@ -55,5 +43,10 @@ public class PartitionUnifiedSetWithHashingStrategy<T>
     public MutableSet<T> getRejected()
     {
         return this.rejected;
+    }
+
+    public PartitionImmutableSet<T> toImmutable()
+    {
+        return new PartitionImmutableSetImpl<T>(this);
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,6 @@ import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Stacks;
-import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.partition.list.PartitionFastList;
 import net.jcip.annotations.Immutable;
 
@@ -54,7 +53,7 @@ final class ImmutableEmptyList<T>
         implements Serializable, RandomAccess
 {
     static final ImmutableList<?> INSTANCE = new ImmutableEmptyList();
-    private static final PartitionImmutableList<?> EMPTY = PartitionFastList.of(FastList.newList(), null).toImmutable();
+    private static final PartitionImmutableList<?> EMPTY = new PartitionFastList().toImmutable();
 
     private static final long serialVersionUID = 1L;
 
@@ -417,5 +416,23 @@ final class ImmutableEmptyList<T>
         {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public ImmutableList<T> takeWhile(Predicate<? super T> predicate)
+    {
+        return this;
+    }
+
+    @Override
+    public ImmutableList<T> dropWhile(Predicate<? super T> predicate)
+    {
+        return this;
+    }
+
+    @Override
+    public PartitionImmutableList<T> partitionWhile(Predicate<? super T> predicate)
+    {
+        return (PartitionImmutableList<T>) EMPTY;
     }
 }

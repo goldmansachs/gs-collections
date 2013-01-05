@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,6 +73,7 @@ import com.gs.collections.impl.block.procedure.CountProcedure;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
+import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.block.procedure.RejectProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.block.procedure.SelectProcedure;
@@ -790,7 +791,9 @@ public class UnifiedSetWithHashingStrategy<K>
 
     public PartitionMutableSet<K> partition(Predicate<? super K> predicate)
     {
-        return PartitionUnifiedSetWithHashingStrategy.of(this.hashingStrategy, this, predicate);
+        PartitionMutableSet<K> partitionMutableSet = new PartitionUnifiedSetWithHashingStrategy<K>(this.hashingStrategy);
+        this.forEach(new PartitionProcedure<K>(predicate, partitionMutableSet));
+        return partitionMutableSet;
     }
 
     public <S> UnifiedSetWithHashingStrategy<S> selectInstancesOf(Class<S> clazz)

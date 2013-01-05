@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -841,11 +841,16 @@ public final class ArrayListIterate
         int size = list.size();
         if (ArrayListIterate.isOptimizableArrayList(list, size))
         {
-            PartitionFastList<T> partitionFastList = new PartitionFastList<T>(predicate);
+            PartitionFastList<T> partitionFastList = new PartitionFastList<T>();
+            MutableList<T> selected = partitionFastList.getSelected();
+            MutableList<T> rejected = partitionFastList.getRejected();
+
             T[] elements = ArrayListIterate.getInternalArray(list);
             for (int i = 0; i < size; i++)
             {
-                partitionFastList.add(elements[i]);
+                T each = elements[i];
+                MutableList<T> bucket = predicate.accept(each) ? selected : rejected;
+                bucket.add(each);
             }
             return partitionFastList;
         }
@@ -1288,6 +1293,86 @@ public final class ArrayListIterate
             return targetCollection;
         }
         return RandomAccessListIterate.zipWithIndex(list, targetCollection);
+    }
+
+    public static <T> MutableList<T> takeWhile(ArrayList<T> list, Predicate<? super T> predicate)
+    {
+        int size = list.size();
+        if (ArrayListIterate.isOptimizableArrayList(list, size))
+        {
+            MutableList<T> result = FastList.newList();
+            T[] elements = ArrayListIterate.getInternalArray(list);
+            for (int i = 0; i < size; i++)
+            {
+                T element = elements[i];
+                if (predicate.accept(element))
+                {
+                    result.add(element);
+                }
+                else
+                {
+                    return result;
+                }
+            }
+            return result;
+        }
+        return RandomAccessListIterate.takeWhile(list, predicate);
+    }
+
+    public static <T> MutableList<T> dropWhile(ArrayList<T> list, Predicate<? super T> predicate)
+    {
+        int size = list.size();
+        if (ArrayListIterate.isOptimizableArrayList(list, size))
+        {
+            MutableList<T> result = FastList.newList();
+            T[] elements = ArrayListIterate.getInternalArray(list);
+            for (int i = 0; i < size; i++)
+            {
+                T element = elements[i];
+                if (predicate.accept(element))
+                {
+                    result.add(element);
+                }
+                else
+                {
+                    return result;
+                }
+            }
+            return result;
+        }
+        return RandomAccessListIterate.dropWhile(list, predicate);
+    }
+
+    public static <T> PartitionMutableList<T> partitionWhile(ArrayList<T> list, Predicate<? super T> predicate)
+    {
+        int size = list.size();
+        if (ArrayListIterate.isOptimizableArrayList(list, size))
+        {
+            PartitionMutableList<T> result = new PartitionFastList<T>();
+            MutableList<T> selected = result.getSelected();
+
+            T[] elements = ArrayListIterate.getInternalArray(list);
+            for (int i = 0; i < size; i++)
+            {
+                T each = elements[i];
+                if (predicate.accept(each))
+                {
+                    selected.add(each);
+                }
+                else
+                {
+                    MutableList<T> rejected = result.getRejected();
+                    rejected.add(each);
+                    for (int j = i + 1; j < size; j++)
+                    {
+                        rejected.add(elements[j]);
+                    }
+                    return result;
+                }
+            }
+            return result;
+        }
+        return RandomAccessListIterate.partitionWhile(list, predicate);
     }
 
     private static boolean canAccessInternalArray(ArrayList<?> list)

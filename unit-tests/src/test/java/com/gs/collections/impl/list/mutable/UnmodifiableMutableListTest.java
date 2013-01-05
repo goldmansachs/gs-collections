@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,9 +21,11 @@ import java.util.ListIterator;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -272,5 +274,32 @@ public class UnmodifiableMutableListTest
     {
         MutableList<Integer> list = UnmodifiableMutableList.of(FastList.<Integer>newListWith(3, 1, 2, 2, 1, 3));
         Verify.assertListsEqual(FastList.newListWith(3, 1, 2), list.distinct());
+    }
+
+    @Test
+    public void takeWhile()
+    {
+        Assert.assertEquals(
+                iList(1, 2, 3),
+                UnmodifiableMutableList.of(FastList.newListWith(1, 2, 3, 4, 5)).takeWhile(Predicates.lessThan(4)));
+    }
+
+    @Test
+    public void dropWhile()
+    {
+        Assert.assertEquals(
+                iList(4, 5),
+                UnmodifiableMutableList.of(FastList.newListWith(1, 2, 3, 4, 5)).dropWhile(Predicates.lessThan(4)));
+    }
+
+    @Test
+    public void partitionWhile()
+    {
+        PartitionMutableList<Integer> partition = UnmodifiableMutableList.of(FastList.newListWith(1, 2, 3, 4, 5)).partitionWhile(Predicates.lessThan(4));
+        MutableList<Integer> selected = partition.getSelected();
+        MutableList<Integer> rejected = partition.getRejected();
+
+        Assert.assertEquals(iList(1, 2, 3), selected);
+        Assert.assertEquals(iList(4, 5), rejected);
     }
 }

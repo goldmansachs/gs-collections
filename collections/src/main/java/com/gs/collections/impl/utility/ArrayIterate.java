@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -354,11 +354,14 @@ public final class ArrayIterate
             throw new IllegalArgumentException("Cannot perform a partition on null");
         }
 
-        PartitionMutableList<T> partition = new PartitionFastList<T>(predicate);
+        PartitionMutableList<T> partition = new PartitionFastList<T>();
+        MutableList<T> selected = partition.getSelected();
+        MutableList<T> rejected = partition.getRejected();
 
         for (T each : objectArray)
         {
-            partition.add(each);
+            MutableList<T> bucket = predicate.accept(each) ? selected : rejected;
+            bucket.add(each);
         }
         return partition;
     }

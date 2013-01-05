@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -327,5 +327,20 @@ public final class ArrayListAdapter<T>
     public MutableList<Pair<T, Integer>> zipWithIndex()
     {
         return ArrayListIterate.zipWithIndex(this.delegate);
+    }
+
+    public MutableList<T> takeWhile(Predicate<? super T> predicate)
+    {
+        return ArrayListIterate.takeWhile(this.delegate, predicate);
+    }
+
+    public MutableList<T> dropWhile(Predicate<? super T> predicate)
+    {
+        return ArrayListIterate.dropWhile(this.delegate, predicate);
+    }
+
+    public PartitionMutableList<T> partitionWhile(Predicate<? super T> predicate)
+    {
+        return ArrayListIterate.partitionWhile(this.delegate, predicate);
     }
 }
