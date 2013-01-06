@@ -1,6 +1,7 @@
 import "copyright.stg"
 import "primitiveEquals.stg"
 import "primitiveEqualsWithDelta.stg"
+import "integral.stg"
 
 targetPath() ::= "com/gs/collections/impl/block/factory/primitive"
 
@@ -23,6 +24,8 @@ import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
  */
 public final class <name>Predicates
 {
+    <(integralConstants.(type))(name)>
+
     private <name>Predicates()
     {
         throw new AssertionError("Suppress default constructor for noninstantiability");
@@ -35,7 +38,6 @@ public final class <name>Predicates
     }
 
     <(equalWithDelta.(type))(type, name)>
-
     public static <name>Predicate lessThan(<type> expected)
     {
         return new LessThan<name>Predicate(expected);
@@ -61,6 +63,7 @@ public final class <name>Predicates
         return new Not<name>Predicate(negate);
     }
 
+    <(integral.(type))(name)>
     private static final class Equals<name>Predicate implements <name>Predicate
     {
         private static final long serialVersionUID = 1L;
@@ -78,7 +81,6 @@ public final class <name>Predicates
     }
 
     <(equalsWithDeltaClass.(type))(type, name)>
-
     private static final class LessThan<name>Predicate implements <name>Predicate
     {
         private static final long serialVersionUID = 1L;
@@ -167,6 +169,7 @@ public final class <name>Predicates
             return !this.negate.accept(actual);
         }
     }
+    <(integralClass.(type))(type, name)>
 }
 
 >>

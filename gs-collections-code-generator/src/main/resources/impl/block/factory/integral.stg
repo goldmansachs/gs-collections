@@ -1,0 +1,69 @@
+integralConstants ::= [
+    "byte": "integralConstants",
+    "short": "integralConstants",
+    "int": "integralConstants",
+    "long": "integralConstants",
+    default: "nonIntegral"
+]
+
+integral ::= [
+    "byte": "integral",
+    "short": "integral",
+    "int": "integral",
+    "long": "integral",
+    default: "nonIntegral"
+]
+
+integralClass ::= [
+    "byte": "integralClass",
+    "short": "integralClass",
+    "int": "integralClass",
+    "long": "integralClass",
+    default: "nonIntegralClass"
+]
+
+nonIntegral(name) ::= ""
+
+integralConstants(name) ::= <<
+private static final <name>IsEvenPredicate IS_EVEN = new <name>IsEvenPredicate();
+private static final <name>IsOddPredicate IS_ODD = new <name>IsOddPredicate();
+>>
+
+integral(name) ::= <<
+public static <name>Predicate isEven()
+{
+    return IS_EVEN;
+}
+
+public static <name>Predicate isOdd()
+{
+    return IS_ODD;
+}
+
+>>
+
+integralClass(type, name) ::= <<
+
+
+private static final class <name>IsEvenPredicate implements <name>Predicate
+{
+    private static final long serialVersionUID = 1L;
+
+    public boolean accept(<type> integral)
+    {
+        return integral % 2 == 0;
+    }
+}
+
+private static final class <name>IsOddPredicate implements <name>Predicate
+{
+    private static final long serialVersionUID = 1L;
+
+    public boolean accept(<type> integral)
+    {
+        return integral % 2 != 0;
+    }
+}
+>>
+
+nonIntegralClass(name, type) ::= ""

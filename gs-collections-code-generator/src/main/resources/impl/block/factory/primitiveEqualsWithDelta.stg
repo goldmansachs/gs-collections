@@ -20,12 +20,12 @@ equalsWithDeltaClass ::= [
 
 equalWithoutDelta(type, name) ::= ""
 
-
 equalWithDelta(type, name) ::= <<
 public static <name>Predicate equal(<type> expected, <type> delta)
 {
     return new EqualsWithDelta<name>Predicate(expected, delta);
 }
+
 >>
 
 equalsWithDeltaClass(type, name) ::= <<
@@ -46,4 +46,5 @@ private static final class EqualsWithDelta<name>Predicate implements <name>Predi
         return Math.abs(this.expected - actual) \<= this.delta;
     }
 }
+
 >>
