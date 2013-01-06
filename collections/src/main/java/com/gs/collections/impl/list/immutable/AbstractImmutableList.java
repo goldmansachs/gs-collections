@@ -212,7 +212,7 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
             P parameter,
             R targetCollection)
     {
-        return ListIterate.selectWith(this.castToList(), predicate, parameter, targetCollection);
+        return ListIterate.selectWith(this, predicate, parameter, targetCollection);
     }
 
     public ImmutableList<T> reject(Predicate<? super T> predicate)
@@ -228,7 +228,7 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
             P parameter,
             R targetCollection)
     {
-        return ListIterate.rejectWith(this.castToList(), predicate, parameter, targetCollection);
+        return ListIterate.rejectWith(this, predicate, parameter, targetCollection);
     }
 
     public PartitionImmutableList<T> partition(Predicate<? super T> predicate)
@@ -263,7 +263,7 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
     public <P, V, R extends Collection<V>> R collectWith(
             Function2<? super T, ? super P, ? extends V> function, P parameter, R targetCollection)
     {
-        return ListIterate.collectWith(this.castToList(), function, parameter, targetCollection);
+        return ListIterate.collectWith(this, function, parameter, targetCollection);
     }
 
     public <V> ImmutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
