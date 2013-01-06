@@ -29,6 +29,7 @@ import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.partition.list.PartitionImmutableList;
+import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.ObjectIntProcedures;
@@ -486,6 +487,13 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
                 AbstractImmutableListTestCase.this.classUnderTest().castToList().listIterator(0);
             }
         });
+    }
+
+    @Test
+    public void toStack()
+    {
+        MutableStack<Integer> stack = this.classUnderTest().toStack();
+        Assert.assertEquals(stack.toSortedList().toReversed(), stack.toList());
     }
 
     @Test

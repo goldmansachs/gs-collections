@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -117,7 +117,7 @@ public interface StackIterable<T> extends RichIterable<T>
     int hashCode();
 
     /**
-     * Converts the list to a MutableStack implementation.
+     * Converts the stack to a MutableStack implementation.
      *
      * @since 2.0
      */

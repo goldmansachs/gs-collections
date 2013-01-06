@@ -32,12 +32,14 @@ import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.partition.list.PartitionMutableList;
+import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.collection.mutable.AbstractCollectionTestCase;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.factory.Stacks;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.fixed.ArrayAdapter;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -678,6 +680,13 @@ public abstract class AbstractListTestCase
                         FastList.newListWith("5", "6"),
                         FastList.newListWith("7")),
                 groups);
+    }
+
+    @Test
+    public void toStack()
+    {
+        MutableStack<Integer> stack = this.newWith(1, 2, 3, 4).toStack();
+        Assert.assertEquals(Stacks.mutable.of(1, 2, 3, 4), stack);
     }
 
     @Test
