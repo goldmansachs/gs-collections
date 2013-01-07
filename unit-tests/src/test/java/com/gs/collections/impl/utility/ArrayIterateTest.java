@@ -516,6 +516,18 @@ public class ArrayIterateTest
     }
 
     @Test
+    public void toMap2()
+    {
+        MutableMap<String, Integer> map = ArrayIterate.toMap(INTEGER_ARRAY, Functions.getToString(), Functions.squaredInteger());
+        Verify.assertSize(5, map);
+        Verify.assertContainsKeyValue("1",  1, map);
+        Verify.assertContainsKeyValue("2",  4, map);
+        Verify.assertContainsKeyValue("3",  9, map);
+        Verify.assertContainsKeyValue("4", 16, map);
+        Verify.assertContainsKeyValue("5", 25, map);
+    }
+
+    @Test
     public void contains()
     {
         Assert.assertTrue(ArrayIterate.contains(INTEGER_ARRAY, 5));

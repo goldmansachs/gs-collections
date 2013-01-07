@@ -1124,6 +1124,21 @@ public final class ArrayIterate
     }
 
     /**
+     * Iterate over the specified array applying the specified Functions to each element to calculate a key
+     * and value, and return the results as a Map.
+     */
+    public static <T, K, V> MutableMap<K, V> toMap(
+            T[] objectArray,
+            Function<? super T, ? extends K> keyFunction,
+            Function<? super T, ? extends V> valueFunction)
+    {
+        MutableMap<K, V> map = UnifiedMap.newMap();
+        Procedure<T> procedure = new MapCollectProcedure<T, K, V>(map, keyFunction, valueFunction);
+        ArrayIterate.forEach(objectArray, procedure);
+        return map;
+    }
+
+    /**
      * @see Iterate#forEachWith(Iterable, Procedure2, Object)
      */
     public static <T, P> void forEachWith(
