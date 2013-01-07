@@ -28,7 +28,6 @@ import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
-import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 
 /**
@@ -279,7 +278,7 @@ public final class <name>HashSet implements Mutable<name>Set
             return true;
         }
         int index = this.probe(value);
-        if(<(equals.(type))("this.table[index]", "value")>)
+        if (<(equals.(type))("this.table[index]", "value")>)
         {
             this.table[index] = REMOVED;
             this.occupied--;
@@ -348,7 +347,7 @@ public final class <name>HashSet implements Mutable<name>Set
 
         for (int i = 0; i \< oldLength; i++)
         {
-            if(isValidEntry(old[i]))
+            if (isValidEntry(old[i]))
             {
                 this.add(old[i]);
             }
@@ -399,7 +398,7 @@ public final class <name>HashSet implements Mutable<name>Set
     //exposed for testing
     int index(<type> element)
     {
-        int code =  <(hashCode.(type))("element")>;
+        int code = <(hashCode.(type))("element")>;
         code ^= 61 ^ (code \>\> 16);
         code += code \<\< 3;
         code ^= code \>\> 4;
@@ -664,7 +663,7 @@ public final class <name>HashSet implements Mutable<name>Set
 
         for (<type> value : this.table)
         {
-            if (isValidEntry(value) && (!isMaxSet ||  <(lessThan.(type))("max", "value")>))
+            if (isValidEntry(value) && (!isMaxSet || <(lessThan.(type))("max", "value")>))
             {
                 max = value;
                 isMaxSet = true;
@@ -682,7 +681,7 @@ public final class <name>HashSet implements Mutable<name>Set
         <type> min = <zero.(type)>;
         boolean isMinSet = false;
 
-        for (<type> value = <zero.(type)>; isBetweenZeroAndThirtyOne(value)&& !isMinSet; value++)
+        for (<type> value = <zero.(type)>; isBetweenZeroAndThirtyOne(value) && !isMinSet; value++)
         {
             if (this.contains(value))
             {
@@ -693,7 +692,7 @@ public final class <name>HashSet implements Mutable<name>Set
 
         for (<type> value : this.table)
         {
-            if (isValidEntry(value) && (!isMinSet ||  <(lessThan.(type))("value", "min")>))
+            if (isValidEntry(value) && (!isMinSet || <(lessThan.(type))("value", "min")>))
             {
                 min = value;
                 isMinSet = true;
@@ -724,7 +723,7 @@ public final class <name>HashSet implements Mutable<name>Set
     {
         <type>[] array = new <type>[this.size()];
 
-        int j=0;
+        int j = 0;
         for (<type> value = <zero.(type)>; isBetweenZeroAndThirtyOne(value); value++)
         {
             if (this.contains(value))

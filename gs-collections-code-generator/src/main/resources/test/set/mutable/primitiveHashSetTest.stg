@@ -345,7 +345,7 @@ public class <name>HashSetTest
     {
         Assert.assertFalse(this.set.removeAll());
         Assert.assertFalse(this.set.removeAll(<(literal.(type))("15")>, generateCollisions1().get(2), generateCollisions1().get(3)));
-        Assert.assertEquals(<name>HashSet.newSetWith(<["0", "1", "31"]:(literal.(type))(); separator=", ">,  generateCollisions1().getFirst(), generateCollisions1().get(1)), this.set);
+        Assert.assertEquals(<name>HashSet.newSetWith(<["0", "1", "31"]:(literal.(type))(); separator=", ">, generateCollisions1().getFirst(), generateCollisions1().get(1)), this.set);
         Assert.assertTrue(this.set.removeAll(<["0", "31"]:(literal.(type))(); separator=", ">, generateCollisions1().get(3)));
         Assert.assertEquals(<name>HashSet.newSetWith(<(literal.(type))("1")>, generateCollisions1().getFirst(), generateCollisions1().get(1)), this.set);
         Assert.assertTrue(this.set.removeAll(<(literal.(type))("1")>, generateCollisions1().getFirst(), generateCollisions1().get(1)));
