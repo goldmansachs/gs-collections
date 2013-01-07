@@ -36,6 +36,19 @@ doubleLiteral(item) ::= <<
 <item>.0
 >>
 
+decimalLiteral ::= [
+    "float": "floatDecimalLiteral",
+    "double": "doubleDecimalLiteral"
+]
+
+floatDecimalLiteral(item) ::= <<
+<item>f
+>>
+
+doubleDecimalLiteral(item) ::= <<
+<item>
+>>
+
 wideLiteral ::= [
     "byte": "longLiteral",
     "short": "longLiteral",
@@ -57,7 +70,7 @@ toStringLiteral ::= [
 ]
 
 charStringLiteral(item) ::= <<
-\u000<item>
+\u<item; format="%04x">
 >>
 
 zero ::= [
@@ -154,4 +167,18 @@ byteCast(item) ::= <<
 
 charCast(item) ::= <<
 (char) (<item>)
+>>
+
+bitShiftCast ::= [
+    "byte": "noCast",
+    "short": "noCast",
+    "char": "noCast",
+    "int": "noCast",
+    "long": "noCast",
+    "float": "intCast",
+    "double": "intCast"
+]
+
+intCast(item) ::= <<
+(int) <item>
 >>

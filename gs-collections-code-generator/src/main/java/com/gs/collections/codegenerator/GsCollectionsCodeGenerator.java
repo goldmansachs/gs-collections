@@ -22,6 +22,7 @@ import java.util.List;
 
 import com.gs.collections.codegenerator.model.Primitive;
 import com.gs.collections.codegenerator.tools.FileUtils;
+import com.gs.collections.codegenerator.tools.IntegerOrStringRenderer;
 import org.stringtemplate.v4.ST;
 import org.stringtemplate.v4.STGroupFile;
 
@@ -47,6 +48,7 @@ public class GsCollectionsCodeGenerator
         for (URL url : allTemplateFilesFromClassPath)
         {
             STGroupFile stGroupFile = new STGroupFile(url, "UTF-8", '<', '>');
+            stGroupFile.registerRenderer(String.class, new IntegerOrStringRenderer());
             if (stGroupFile.isDefined("fileName"))
             {
                 this.setTest(stGroupFile);

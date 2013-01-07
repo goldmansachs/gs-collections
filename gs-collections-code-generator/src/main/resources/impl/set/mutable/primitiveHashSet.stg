@@ -1,0 +1,906 @@
+import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveHashcode.stg"
+import "primitiveLiteral.stg"
+
+targetPath() ::= "com/gs/collections/impl/set/mutable/primitive"
+
+fileName(primitive) ::= "<primitive.name>HashSet"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.set.mutable.primitive;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.NoSuchElementException;
+
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
+import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.set.primitive.Mutable<name>Set;
+import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
+
+/**
+ * This file was automatically generated from template file primitiveHashSet.stg.
+ */
+public final class <name>HashSet implements Mutable<name>Set
+{
+    private static final float DEFAULT_LOAD_FACTOR = 0.50f;
+    private static final int DEFAULT_INITIAL_CAPACITY = 8;
+    private static final <type> EMPTY = <(literal.(type))("0")>;
+    private static final <type> REMOVED = <(literal.(type))("1")>;
+    private <type>[] table;
+    private float loadFactor = DEFAULT_LOAD_FACTOR;
+    private int maxSize;
+    private int occupied;
+    //The 32 bits of this integer indicate whether the items <(literal.(type))("0")> to <(literal.(type))("31")> are present in the set.
+    private int zeroToThirtyOne;
+    private int zeroToThirtyOneOccupied;
+
+    public <name>HashSet()
+    {
+        this.allocate(DEFAULT_INITIAL_CAPACITY \<\< 1);
+    }
+
+    public <name>HashSet(int initialCapacity)
+    {
+        this(initialCapacity, DEFAULT_LOAD_FACTOR);
+    }
+
+    public <name>HashSet(int initialCapacity, float loadFactor)
+    {
+        if (initialCapacity \< 0)
+        {
+            throw new IllegalArgumentException("initial capacity cannot be less than 0");
+        }
+        this.loadFactor = loadFactor;
+        this.init(this.fastCeil(initialCapacity / loadFactor));
+    }
+
+    public <name>HashSet(<name>HashSet set)
+    {
+        this.maxSize = set.maxSize;
+        this.loadFactor = set.loadFactor;
+        this.occupied = set.occupied;
+        this.zeroToThirtyOneOccupied = set.zeroToThirtyOneOccupied;
+        this.zeroToThirtyOne = set.zeroToThirtyOne;
+        this.allocateTable(set.table.length);
+
+        System.arraycopy(set.table, 0, this.table, 0, set.table.length);
+    }
+
+    public static <name>HashSet newSetWith(<type>... source)
+    {
+        <name>HashSet hashSet = new <name>HashSet();
+        hashSet.addAll(source);
+        return hashSet;
+    }
+
+    public static <name>HashSet newSet(<name>Iterable source)
+    {
+        if (source instanceof <name>HashSet)
+        {
+            return new <name>HashSet((<name>HashSet) source);
+        }
+
+        return <name>HashSet.newSetWith(source.toArray());
+    }
+
+    private int fastCeil(float v)
+    {
+        int possibleResult = (int) v;
+        if (v - possibleResult \> 0.0F)
+        {
+            possibleResult++;
+        }
+        return possibleResult;
+    }
+
+    private int init(int initialCapacity)
+    {
+        int capacity = 1;
+        while (capacity \< initialCapacity)
+        {
+            capacity \<\<= 1;
+        }
+
+        return this.allocate(capacity);
+    }
+
+    private int allocate(int capacity)
+    {
+        this.allocateTable(capacity);
+        this.computeMaxSize(capacity);
+        return capacity;
+    }
+
+    private void allocateTable(int sizeToAllocate)
+    {
+        this.table = new <type>[sizeToAllocate];
+    }
+
+    private void computeMaxSize(int capacity)
+    {
+        // need at least one free slot for open addressing
+        this.maxSize = Math.min(capacity - 1, (int) (capacity * this.loadFactor));
+    }
+
+    private static boolean isBetweenZeroAndThirtyOne(<type> value)
+    {
+        return <(betweenZeroAndThirtyOne.(type))("value")>;
+    }
+
+    private static boolean isValidEntry(<type> value)
+    {
+        return <(notEquals.(type))("value", "EMPTY")> && <(notEquals.(type))("value", "REMOVED")>;
+    }
+
+    public int size()
+    {
+        return this.occupied + this.zeroToThirtyOneOccupied;
+    }
+
+    public boolean isEmpty()
+    {
+        return this.size() == 0;
+    }
+
+    public boolean notEmpty()
+    {
+        return this.size() != 0;
+    }
+
+    public void clear()
+    {
+        this.zeroToThirtyOneOccupied = 0;
+        this.occupied = 0;
+
+        this.zeroToThirtyOne = 0;
+        Arrays.fill(this.table, EMPTY);
+    }
+
+    public boolean contains(<type> value)
+    {
+        if (isBetweenZeroAndThirtyOne(value))
+        {
+            int temp = this.zeroToThirtyOne;
+            return ((temp \>\>\> <(bitShiftCast.(type))("value")>) & 1) != 0;
+        }
+        return <(equals.(type))("this.table[this.probe(value)]", "value")>;
+    }
+
+    public boolean containsAll(<type>... source)
+    {
+        for (<type> item : source)
+        {
+            if (!this.contains(item))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean add(<type> element)
+    {
+        if (isBetweenZeroAndThirtyOne(element))
+        {
+            int initial = this.zeroToThirtyOne;
+            this.zeroToThirtyOne |= 1 \<\< <(bitShiftCast.(type))("element")>;
+            if (this.zeroToThirtyOne != initial)
+            {
+                this.zeroToThirtyOneOccupied++;
+                return true;
+            }
+            return false;
+        }
+
+        int index = this.probe(element);
+
+        if (<(equals.(type))("this.table[index]", "element")>)
+        {
+            //element already present in set
+            return false;
+        }
+
+        this.table[index] = element;
+        ++this.occupied;
+        if (this.occupied \> this.maxSize)
+        {
+            this.rehash();
+        }
+        return true;
+    }
+
+    public boolean addAll(<name>Iterable source)
+    {
+        if (source.isEmpty())
+        {
+            return false;
+        }
+        int oldSize = this.size();
+        if (source instanceof <name>HashSet)
+        {
+            <name>HashSet hashSet = (<name>HashSet) source;
+            this.zeroToThirtyOne |= hashSet.zeroToThirtyOne;
+            this.zeroToThirtyOneOccupied = Integer.bitCount(this.zeroToThirtyOne);
+            for (<type> item : hashSet.table)
+            {
+                if (isValidEntry(item))
+                {
+                    this.add(item);
+                }
+            }
+        }
+        else
+        {
+            <name>Iterator iterator = source.<type>Iterator();
+            while (iterator.hasNext())
+            {
+                <type> item = iterator.next();
+                this.add(item);
+            }
+        }
+        return this.size() != oldSize;
+    }
+
+    public boolean addAll(<type>... source)
+    {
+        int oldSize = this.size();
+        for (<type> item : source)
+        {
+            this.add(item);
+        }
+        return this.size() != oldSize;
+    }
+
+    public boolean remove(<type> value)
+    {
+        if (isBetweenZeroAndThirtyOne(value))
+        {
+            int initial = this.zeroToThirtyOne;
+            this.zeroToThirtyOne &= ~(1 \<\< <(bitShiftCast.(type))("value")>);
+            if (this.zeroToThirtyOne == initial)
+            {
+                return false;
+            }
+            this.zeroToThirtyOneOccupied--;
+            return true;
+        }
+        int index = this.probe(value);
+        if(<(equals.(type))("this.table[index]", "value")>)
+        {
+            this.table[index] = REMOVED;
+            this.occupied--;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean removeAll(<name>Iterable source)
+    {
+        if (source.isEmpty())
+        {
+            return false;
+        }
+        int oldSize = this.size();
+        if (source instanceof <name>HashSet)
+        {
+            <name>HashSet hashSet = (<name>HashSet) source;
+            this.zeroToThirtyOne &= ~hashSet.zeroToThirtyOne;
+            this.zeroToThirtyOneOccupied = Integer.bitCount(this.zeroToThirtyOne);
+            for (<type> item : hashSet.table)
+            {
+                if (isValidEntry(item))
+                {
+                    this.remove(item);
+                }
+            }
+        }
+        else
+        {
+            <name>Iterator iterator = source.<type>Iterator();
+            while (iterator.hasNext())
+            {
+                <type> item = iterator.next();
+                this.remove(item);
+            }
+        }
+        return this.size() != oldSize;
+    }
+
+    public boolean removeAll(<type>... source)
+    {
+        if (source.length == 0)
+        {
+            return false;
+        }
+        int oldSize = this.size();
+        for (<type> item : source)
+        {
+            this.remove(item);
+        }
+        return this.size() != oldSize;
+    }
+
+    private void rehash()
+    {
+        this.rehash(this.table.length \<\< 1);
+    }
+
+    private void rehash(int newCapacity)
+    {
+        int oldLength = this.table.length;
+        <type>[] old = this.table;
+        this.allocate(newCapacity);
+        this.occupied = 0;
+
+        for (int i = 0; i \< oldLength; i++)
+        {
+            if(isValidEntry(old[i]))
+            {
+                this.add(old[i]);
+            }
+        }
+    }
+
+    //exposed for testing
+    int probe(<type> element)
+    {
+        int index = this.index(element);
+        <type> valueAtIndex = this.table[index];
+
+        if (<(equals.(type))("valueAtIndex", "element")> || <(equals.(type))("valueAtIndex", "EMPTY")>)
+        {
+            return index;
+        }
+
+        int removedIndex = <(equals.(type))("valueAtIndex", "REMOVED")> ? index : -1;
+        int nextIndex = index;
+        int probe = 17;
+
+        //loop until an empty slot is reached
+        while (true)
+        {
+            //Probe algorithm: 17*n*(n+1)/2 where n = no. of collisions
+            nextIndex += probe;
+            probe += 17;
+            nextIndex &= this.table.length - 1;
+
+            if (<(equals.(type))("this.table[nextIndex]", "element")>)
+            {
+                return nextIndex;
+            }
+            if (<(equals.(type))("this.table[nextIndex]", "REMOVED")>)
+            {
+                if (removedIndex == -1)
+                {
+                    removedIndex = nextIndex;
+                }
+            }
+            else if (<(equals.(type))("this.table[nextIndex]", "EMPTY")>)
+            {
+                return removedIndex == -1 ? nextIndex : removedIndex;
+            }
+        }
+    }
+
+    //exposed for testing
+    int index(<type> element)
+    {
+        int code =  <(hashCode.(type))("element")>;
+        code ^= 61 ^ (code \>\> 16);
+        code += code \<\< 3;
+        code ^= code \>\> 4;
+        code *= 0x27d4eb2d;
+        code ^= code \>\> 15;
+        return code & (this.table.length - 1);
+    }
+
+    public <name>HashSet with(<type> element)
+    {
+        this.add(element);
+        return this;
+    }
+
+    public <name>HashSet without(<type> element)
+    {
+        this.remove(element);
+        return this;
+    }
+
+    public <name>HashSet withAll(<name>Iterable elements)
+    {
+        this.addAll(elements.toArray());
+        return this;
+    }
+
+    public <name>HashSet withoutAll(<name>Iterable elements)
+    {
+        this.removeAll(elements);
+        return this;
+    }
+
+    public <name>Iterator <type>Iterator()
+    {
+        return new Internal<name>Iterator();
+    }
+
+    public void forEach(<name>Procedure procedure)
+    {
+        for (<type> value = 0; isBetweenZeroAndThirtyOne(value); value++)
+        {
+            if (this.contains(value))
+            {
+                procedure.value(value);
+            }
+        }
+
+        for (<type> value : this.table)
+        {
+            if (isValidEntry(value))
+            {
+                procedure.value(value);
+            }
+        }
+    }
+
+    public int count(<name>Predicate predicate)
+    {
+        int count = 0;
+
+        for (<type> value = <zero.(type)>; isBetweenZeroAndThirtyOne(value); value++)
+        {
+            if (this.contains(value) && predicate.accept(value))
+            {
+                count++;
+            }
+        }
+
+        for (<type> value : this.table)
+        {
+            if (isValidEntry(value))
+            {
+                if (predicate.accept(value))
+                {
+                    count++;
+                }
+            }
+        }
+        return count;
+    }
+
+    public boolean anySatisfy(<name>Predicate predicate)
+    {
+        for (<type> value = <zero.(type)>; isBetweenZeroAndThirtyOne(value); value++)
+        {
+            if (this.contains(value) && predicate.accept(value))
+            {
+                return true;
+            }
+        }
+
+        for (<type> value : this.table)
+        {
+            if (isValidEntry(value))
+            {
+                if (predicate.accept(value))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean allSatisfy(<name>Predicate predicate)
+    {
+        for (<type> value = <zero.(type)>; isBetweenZeroAndThirtyOne(value); value++)
+        {
+            if (this.contains(value) && !predicate.accept(value))
+            {
+                return false;
+            }
+        }
+
+        for (<type> value : this.table)
+        {
+            if (isValidEntry(value))
+            {
+                if (!predicate.accept(value))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    public <name>HashSet select(<name>Predicate predicate)
+    {
+        <name>HashSet result = new <name>HashSet();
+
+        for (<type> value = <zero.(type)>; isBetweenZeroAndThirtyOne(value); value++)
+        {
+            if (this.contains(value) && predicate.accept(value))
+            {
+                result.add(value);
+            }
+        }
+
+        for (<type> value : this.table)
+        {
+            if (isValidEntry(value))
+            {
+                if (predicate.accept(value))
+                {
+                    result.add(value);
+                }
+            }
+        }
+        return result;
+    }
+
+    public Mutable<name>Set reject(<name>Predicate predicate)
+    {
+        <name>HashSet result = new <name>HashSet();
+
+        for (<type> value = <zero.(type)>; isBetweenZeroAndThirtyOne(value); value++)
+        {
+            if (this.contains(value) && !predicate.accept(value))
+            {
+                result.add(value);
+            }
+        }
+
+        for (<type> value : this.table)
+        {
+            if (isValidEntry(value))
+            {
+                if (!predicate.accept(value))
+                {
+                    result.add(value);
+                }
+            }
+        }
+        return result;
+    }
+
+    public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
+    {
+        for (<type> value = <zero.(type)>; isBetweenZeroAndThirtyOne(value); value++)
+        {
+            if (this.contains(value) && predicate.accept(value))
+            {
+                return value;
+            }
+        }
+
+        for (<type> value : this.table)
+        {
+            if (isValidEntry(value))
+            {
+                if (predicate.accept(value))
+                {
+                    return value;
+                }
+            }
+        }
+        return ifNone;
+    }
+
+    public \<V\> RichIterable\<V\> collect(<name>ToObjectFunction\<? extends V\> function)
+    {
+        MutableSet\<V\> target = UnifiedSet.newSet(this.size());
+
+        for (<type> value = <zero.(type)>; isBetweenZeroAndThirtyOne(value); value++)
+        {
+            if (this.contains(value))
+            {
+                target.add(function.valueOf(value));
+            }
+        }
+
+        for (<type> value : this.table)
+        {
+            if (isValidEntry(value))
+            {
+                target.add(function.valueOf(value));
+            }
+        }
+        return target;
+    }
+
+    public <wideType.(type)> sum()
+    {
+        <wideType.(type)> result = <wideZero.(type)>;
+
+        for (<type> value = <zero.(type)>; isBetweenZeroAndThirtyOne(value); value++)
+        {
+            if (this.contains(value))
+            {
+                result += value;
+            }
+        }
+
+        for (<type> value : this.table)
+        {
+            if (isValidEntry(value))
+            {
+                result += value;
+            }
+        }
+        return result;
+    }
+
+    public <type> max()
+    {
+        if (this.isEmpty())
+        {
+            throw new NoSuchElementException();
+        }
+        <type> max = <zero.(type)>;
+        boolean isMaxSet = false;
+
+        for (<type> value = <zero.(type)>; isBetweenZeroAndThirtyOne(value); value++)
+        {
+            if (this.contains(value))
+            {
+                max = value;
+                isMaxSet = true;
+            }
+        }
+
+        for (<type> value : this.table)
+        {
+            if (isValidEntry(value) && (!isMaxSet ||  <(lessThan.(type))("max", "value")>))
+            {
+                max = value;
+                isMaxSet = true;
+            }
+        }
+        return max;
+    }
+
+    public <type> min()
+    {
+        if (this.isEmpty())
+        {
+            throw new NoSuchElementException();
+        }
+        <type> min = <zero.(type)>;
+        boolean isMinSet = false;
+
+        for (<type> value = <zero.(type)>; isBetweenZeroAndThirtyOne(value)&& !isMinSet; value++)
+        {
+            if (this.contains(value))
+            {
+                min = value;
+                isMinSet = true;
+            }
+        }
+
+        for (<type> value : this.table)
+        {
+            if (isValidEntry(value) && (!isMinSet ||  <(lessThan.(type))("value", "min")>))
+            {
+                min = value;
+                isMinSet = true;
+            }
+        }
+        return min;
+    }
+
+    public double average()
+    {
+        return <castSum.(type)>this.sum() / (double) this.size();
+    }
+
+    public double median()
+    {
+        <type>[] sortedArray = this.toSortedArray();
+        int middleIndex = sortedArray.length \>\> 1;
+        if (sortedArray.length > 1 && (sortedArray.length & 1) == 0)
+        {
+            <type> first = sortedArray[middleIndex];
+            <type> second = sortedArray[middleIndex - 1];
+            return (<castType.(type)>first + <castType.(type)>second) / 2.0;
+        }
+        return <castType.(type)>sortedArray[middleIndex];
+    }
+
+    public <type>[] toArray()
+    {
+        <type>[] array = new <type>[this.size()];
+
+        int j=0;
+        for (<type> value = <zero.(type)>; isBetweenZeroAndThirtyOne(value); value++)
+        {
+            if (this.contains(value))
+            {
+                array[j] = value;
+                j++;
+            }
+        }
+
+        for (int i = 0; i \< this.table.length && j \< this.size(); i++)
+        {
+            if (isValidEntry(this.table[i]))
+            {
+                array[j] = this.table[i];
+                j++;
+            }
+        }
+        return array;
+    }
+
+    public <type>[] toSortedArray()
+    {
+        <type>[] array = this.toArray();
+        Arrays.sort(array);
+        return array;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+
+        if (!(obj instanceof <name>HashSet))
+        {
+            return false;
+        }
+
+        <name>HashSet other = (<name>HashSet) obj;
+        return this.size() == other.size() && this.containsAll(other.toArray());
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = this.table == null ? 0 : Arrays.hashCode(this.table);
+        result = 31 * result + this.zeroToThirtyOne;
+        return result;
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.makeString("[", ", ", "]");
+    }
+
+    public String makeString()
+    {
+        return this.makeString(", ");
+    }
+
+    public String makeString(String separator)
+    {
+        return this.makeString("", separator, "");
+    }
+
+    public String makeString(String start, String separator, String end)
+    {
+        Appendable stringBuilder = new StringBuilder();
+        this.appendString(stringBuilder, start, separator, end);
+        return stringBuilder.toString();
+    }
+
+    public void appendString(Appendable appendable)
+    {
+        this.appendString(appendable, ", ");
+    }
+
+    public void appendString(Appendable appendable, String separator)
+    {
+        this.appendString(appendable, "", separator, "");
+    }
+
+    public void appendString(Appendable appendable, String start, String separator, String end)
+    {
+        try
+        {
+            appendable.append(start);
+
+            int count = 0;
+            for (<type> value = <zero.(type)>; isBetweenZeroAndThirtyOne(value); value++)
+            {
+                if (this.contains(value))
+                {
+                    if (count > 0)
+                    {
+                        appendable.append(separator);
+                    }
+                    count++;
+                    appendable.append(String.valueOf(value));
+                }
+            }
+
+            for (<type> value : this.table)
+            {
+                if (isValidEntry(value))
+                {
+                    if (count > 0)
+                    {
+                        appendable.append(separator);
+                    }
+                    count++;
+                    appendable.append(String.valueOf(value));
+                }
+            }
+            appendable.append(end);
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private class Internal<name>Iterator implements <name>Iterator
+    {
+        /**
+         * Index of element returned by most recent call to next or previous.  Reset to -1 if this element is deleted by
+         * a call to remove.
+         */
+        protected int lastIndex = -1;
+
+        /**
+         * Index of element to be returned by subsequent call to next.
+         */
+        private int currentIndex;
+
+        public boolean hasNext()
+        {
+            return this.currentIndex != <name>HashSet.this.size();
+        }
+
+        public <type> next()
+        {
+            try
+            {
+                <type> next = <name>HashSet.this.toArray()[this.currentIndex];
+                this.lastIndex = this.currentIndex;
+                this.currentIndex++;
+                return next;
+            }
+            catch (IndexOutOfBoundsException ignored)
+            {
+                throw new NoSuchElementException();
+            }
+        }
+    }
+}
+
+>>
+
+betweenZeroAndThirtyOne ::= [
+     "byte": "intBetweenZeroAndThirtyOne",
+     "short": "intBetweenZeroAndThirtyOne",
+     "char": "intBetweenZeroAndThirtyOne",
+     "int": "intBetweenZeroAndThirtyOne",
+     "long": "intBetweenZeroAndThirtyOne",
+     "float": "floatBetweenZeroAndThirtyOne",
+     "double": "floatBetweenZeroAndThirtyOne"
+]
+
+intBetweenZeroAndThirtyOne(value) ::= <<
+value \>= <zero.(type)> && value \<= <(literal.(type))("31")>
+>>
+
+floatBetweenZeroAndThirtyOne(value) ::= <<
+value \>= <zero.(type)> && value \<= 31 && Double.compare(value, Math.floor(value)) == 0
+>>

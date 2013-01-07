@@ -1,0 +1,767 @@
+import "copyright.stg"
+import "primitiveLiteral.stg"
+
+isTest() ::= "true"
+
+targetPath() ::= "com/gs/collections/impl/set/mutable/primitive"
+
+fileName(primitive) ::= "<primitive.name>HashSetTest"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.wrapperName, primitive.name)>
+>>
+
+body(type, wrapperName, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.set.mutable.primitive;
+
+import java.lang.reflect.Field;
+import java.util.NoSuchElementException;
+
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
+import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
+import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.impl.test.Verify;
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * This file was automatically generated from template file primitiveHashSetTest.stg.
+ */
+public class <name>HashSetTest
+{
+    private final <name>HashSet set = <name>HashSet.newSetWith(<["0", "1", "31"]:(literal.(type))(); separator=", ">, generateCollisions1().getFirst(), generateCollisions1().get(1));
+
+    private static <name>ArrayList generateCollisions1()
+    {
+        <name>ArrayList collisions = new <name>ArrayList();
+        <name>HashSet hashSet = new <name>HashSet();
+        for (<type> i = <(literal.(type))("32")>; collisions.size() \<= 10; i++)
+        {
+            if (hashSet.index(i) == hashSet.index(<(literal.(type))("32")>))
+            {
+                collisions.add(i);
+            }
+        }
+        return collisions;
+    }
+
+    private static <name>ArrayList generateNonCollisions()
+    {
+        <name>ArrayList collisions = new <name>ArrayList();
+        <name>HashSet hashSet = new <name>HashSet();
+        for (<type> i = <(literal.(type))("32")>; collisions.size() \<= 10; i++)
+        {
+            if (hashSet.index(i) != hashSet.index(<(literal.(type))("32")>))
+            {
+                collisions.add(i);
+            }
+        }
+        return collisions;
+    }
+
+    @Test
+    public void defaultInitialCapacity() throws Exception
+    {
+        <name>HashSet hashSet = new <name>HashSet();
+        Field table = <name>HashSet.class.getDeclaredField("table");
+        table.setAccessible(true);
+        Assert.assertEquals(16L, ((<type>[]) table.get(hashSet)).length);
+    }
+
+    @Test
+    public void newWithInitialCapacity() throws Exception
+    {
+        <name>HashSet hashSet = new <name>HashSet(3);
+        Field table = <name>HashSet.class.getDeclaredField("table");
+        table.setAccessible(true);
+        Assert.assertEquals(8L, ((<type>[]) table.get(hashSet)).length);
+
+        <name>HashSet hashSet2 = new <name>HashSet(10);
+        Assert.assertEquals(32L, ((<type>[]) table.get(hashSet2)).length);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void newWithInitialCapacity_negative_throws()
+    {
+        new <name>HashSet(-1);
+    }
+
+    @Test
+    public void newSet()
+    {
+        <name>HashSet hashSetFromList = <name>HashSet.newSet(<name>ArrayList.newListWith(<["0", "0", "1", "31"]:(literal.(type))(); separator=", ">, generateCollisions1().getFirst(), generateCollisions1().get(1)));
+        <name>HashSet hashSetFromSet = <name>HashSet.newSet(this.set);
+        Assert.assertEquals(this.set, hashSetFromList);
+        Assert.assertEquals(this.set, hashSetFromSet);
+    }
+
+    @Test
+    public void size()
+    {
+        Verify.assertSize(0, new <name>HashSet());
+        Verify.assertSize(5, this.set);
+    }
+
+    @Test
+    public void empty()
+    {
+        Assert.assertTrue(new <name>HashSet().isEmpty());
+        Assert.assertFalse(new <name>HashSet().notEmpty());
+        Assert.assertFalse(this.set.isEmpty());
+        Assert.assertTrue(this.set.notEmpty());
+        Assert.assertFalse(<name>HashSet.newSetWith(<["0", "31"]:(literal.(type))(); separator=", ">).isEmpty());
+        Assert.assertTrue(<name>HashSet.newSetWith(<["0", "31"]:(literal.(type))(); separator=", ">).notEmpty());
+        Assert.assertFalse(<name>HashSet.newSetWith(<["31", "32"]:(literal.(type))(); separator=", ">).isEmpty());
+        Assert.assertTrue(<name>HashSet.newSetWith(<["31", "32"]:(literal.(type))(); separator=", ">).notEmpty());
+        Assert.assertFalse(<name>HashSet.newSetWith(<["32", "33"]:(literal.(type))(); separator=", ">).isEmpty());
+        Assert.assertTrue(<name>HashSet.newSetWith(<["32", "33"]:(literal.(type))(); separator=", ">).notEmpty());
+    }
+
+    @Test
+    public void clear()
+    {
+        <name>HashSet empty = new <name>HashSet();
+        empty.clear();
+        Verify.assertSize(0, empty);
+        this.set.clear();
+        Verify.assertSize(0, this.set);
+        Assert.assertFalse(this.set.contains(<(literal.(type))("0")>));
+        Assert.assertFalse(this.set.contains(<(literal.(type))("31")>));
+        Assert.assertFalse(this.set.contains(<(literal.(type))("1")>));
+        Assert.assertFalse(this.set.contains(generateCollisions1().getFirst()));
+        Assert.assertFalse(this.set.contains(generateCollisions1().get(1)));
+    }
+
+    @Test
+    public void contains()
+    {
+        <name>HashSet hashSet = <name>HashSet.newSetWith(<["14", "2", "30", "31", "32", "35", "0", "1"]:(literal.(type))(); separator=", ">);
+        Assert.assertFalse(hashSet.contains(<(literal.(type))("29")>));
+        Assert.assertFalse(hashSet.contains(<(literal.(type))("49")>));
+
+        <type>[] numbers = {<["14", "2", "30", "31", "32", "35", "0", "1"]:(literal.(type))(); separator=", ">};
+        for (<type> number : numbers)
+        {
+            Assert.assertTrue(hashSet.contains(number));
+            Assert.assertTrue(hashSet.remove(number));
+            Assert.assertFalse(hashSet.contains(number));
+        }
+
+        Assert.assertFalse(hashSet.contains(<(literal.(type))("-1")>));
+        Assert.assertFalse(hashSet.contains(<(literal.(type))("29")>));
+        Assert.assertFalse(hashSet.contains(<(literal.(type))("49")>));
+    }
+
+    @Test
+    public void containsAll()
+    {
+        <name>HashSet hashSet = <name>HashSet.newSetWith(<["14", "2", "30", "32", "35", "0", "1"]:(literal.(type))(); separator=", ">);
+        Assert.assertTrue(hashSet.containsAll(<(literal.(type))("14")>));
+        Assert.assertTrue(hashSet.containsAll(<(literal.(type))("35")>));
+        Assert.assertFalse(hashSet.containsAll(<(literal.(type))("-1")>));
+        Assert.assertTrue(hashSet.containsAll(<["14", "1", "30"]:(literal.(type))(); separator=", ">));
+        Assert.assertTrue(hashSet.containsAll(<["14", "1", "32"]:(literal.(type))(); separator=", ">));
+        Assert.assertTrue(hashSet.containsAll(<["14", "1", "35"]:(literal.(type))(); separator=", ">));
+        Assert.assertFalse(hashSet.containsAll(<["0", "2", "35", "-1"]:(literal.(type))(); separator=", ">));
+        Assert.assertFalse(hashSet.containsAll(<["31", "-1"]:(literal.(type))(); separator=", ">));
+    }
+
+    @Test
+    public void add() throws Exception
+    {
+        <name>HashSet hashSet = new <name>HashSet();
+        Assert.assertTrue(hashSet.add(<(literal.(type))("14")>));
+        Assert.assertFalse(hashSet.add(<(literal.(type))("14")>));
+        Assert.assertTrue(hashSet.add(<(literal.(type))("2")>));
+        Assert.assertFalse(hashSet.add(<(literal.(type))("2")>));
+        Assert.assertTrue(hashSet.add(<(literal.(type))("35")>));
+        Assert.assertFalse(hashSet.add(<(literal.(type))("35")>));
+        Assert.assertTrue(hashSet.add(<(literal.(type))("31")>));
+        Assert.assertFalse(hashSet.add(<(literal.(type))("31")>));
+        Assert.assertTrue(hashSet.add(<(literal.(type))("32")>));
+        Assert.assertFalse(hashSet.add(<(literal.(type))("32")>));
+        Assert.assertTrue(hashSet.add(<(literal.(type))("0")>));
+        Assert.assertFalse(hashSet.add(<(literal.(type))("0")>));
+        Assert.assertTrue(hashSet.add(<(literal.(type))("1")>));
+        Assert.assertFalse(hashSet.add(<(literal.(type))("1")>));
+        Field zeroToThirtyOne = <name>HashSet.class.getDeclaredField("zeroToThirtyOne");
+        zeroToThirtyOne.setAccessible(true);
+        Assert.assertEquals(-2147467257L, ((Integer) zeroToThirtyOne.get(hashSet)).longValue());
+        Assert.assertEquals(<name>HashSet.newSetWith(<["14", "2", "31", "32", "35", "0", "1"]:(literal.(type))(); separator=", ">), hashSet);
+    }
+
+    @Test
+    public void addWithRehash() throws Exception
+    {
+        <name>HashSet hashSet = new <name>HashSet();
+        Assert.assertTrue(hashSet.addAll(<["32", "33", "34", "35", "36", "37", "38", "39"]:(literal.(type))(); separator=", ">));
+
+        Field table = <name>HashSet.class.getDeclaredField("table");
+        table.setAccessible(true);
+        Assert.assertEquals(16L, ((<type>[]) table.get(hashSet)).length);
+        Assert.assertEquals(<name>HashSet.newSetWith(<["32", "33", "34", "35", "36", "37", "38", "39"]:(literal.(type))(); separator=", ">), hashSet);
+        Assert.assertTrue(hashSet.add(<(literal.(type))("43")>));
+        Assert.assertEquals(32L, ((<type>[]) table.get(hashSet)).length);
+    }
+
+    @Test
+    public void addDuplicateWithRemovedSlot()
+    {
+        <type> collision1 = generateCollisions1().getFirst();
+        <type> collision2 = generateCollisions1().get(1);
+        <type> collision3 = generateCollisions1().get(2);
+        <type> collision4 = generateCollisions1().get(3);
+
+        <name>HashSet hashSet = new <name>HashSet();
+        Assert.assertTrue(hashSet.add(collision1));
+        Assert.assertTrue(hashSet.add(collision2));
+        Assert.assertTrue(hashSet.add(collision3));
+        Assert.assertTrue(hashSet.remove(collision2));
+        Assert.assertTrue(hashSet.add(collision4));
+        Assert.assertEquals(<name>HashSet.newSetWith(collision1, collision3, collision4), hashSet);
+
+        <name>HashSet hashSet2 = new <name>HashSet();
+        Assert.assertTrue(hashSet2.add(collision1));
+        Assert.assertTrue(hashSet2.add(collision2));
+        Assert.assertTrue(hashSet2.add(collision3));
+        Assert.assertTrue(hashSet2.remove(collision1));
+        Assert.assertTrue(hashSet2.add(collision4));
+        Assert.assertEquals(<name>HashSet.newSetWith(collision2, collision3, collision4), hashSet2);
+
+        <name>HashSet hashSet3 = new <name>HashSet();
+        Assert.assertTrue(hashSet3.add(collision1));
+        Assert.assertTrue(hashSet3.add(collision2));
+        Assert.assertTrue(hashSet3.add(collision3));
+        Assert.assertTrue(hashSet3.remove(collision3));
+        Assert.assertTrue(hashSet3.add(collision4));
+        Assert.assertEquals(<name>HashSet.newSetWith(collision1, collision2, collision4), hashSet3);
+    }
+
+    @Test
+    public void addWithCollision()
+    {
+        <name>HashSet hashSet = new <name>HashSet();
+        <type> collision1 = generateCollisions1().getFirst();
+        <type> collision2 = generateCollisions1().get(1);
+        Assert.assertTrue(hashSet.add(collision1));
+        Assert.assertTrue(hashSet.add(collision2));
+        Assert.assertEquals(<name>HashSet.newSetWith(collision1, collision2), hashSet);
+    }
+
+    @Test
+    public void addWithCollisionWithRemovedSlot()
+    {
+        <type> collision1 = generateCollisions1().getFirst();
+        <type> collision2 = generateCollisions1().get(1);
+        <type> collision3 = generateCollisions1().get(2);
+        <type> collision4 = generateCollisions1().get(3);
+        <type> collision5 = generateCollisions1().get(4);
+
+        <name>HashSet hashSet = <name>HashSet.newSetWith(collision1, collision2, collision4);
+        Assert.assertTrue(hashSet.remove(collision1));
+        Assert.assertTrue(hashSet.add(collision3));
+        Assert.assertEquals(<name>HashSet.newSetWith(collision3, collision2, collision4), hashSet);
+        Assert.assertTrue(hashSet.remove(collision2));
+        Assert.assertTrue(hashSet.add(collision5));
+        Assert.assertEquals(<name>HashSet.newSetWith(collision3, collision5, collision4), hashSet);
+        Assert.assertTrue(hashSet.remove(collision4));
+        Assert.assertTrue(hashSet.add(collision1));
+        Assert.assertEquals(<name>HashSet.newSetWith(collision3, collision5, collision1), hashSet);
+    }
+
+    @Test
+    public void addZeroToThirtyOne()
+    {
+        <name>HashSet hashSet = <name>HashSet.newSetWith();
+        for (<type> i = <(literal.(type))("0")>; i \<= <(literal.(type))("31")>; i++)
+        {
+            Assert.assertTrue(hashSet.add(i));
+            Assert.assertFalse(hashSet.add(i));
+        }
+        for (<type> i = <(literal.(type))("0")>; i \<= <(literal.(type))("31")>; i++)
+        {
+            Assert.assertTrue(hashSet.contains(i));
+        }
+
+        for (<type> i = <(literal.(type))("0")>; i \<= <(literal.(type))("31")>; i++)
+        {
+            Assert.assertTrue(hashSet.contains(i));
+            Assert.assertTrue(hashSet.remove(i));
+            Assert.assertFalse(hashSet.contains(i));
+            Assert.assertFalse(hashSet.remove(i));
+        }
+
+        Assert.assertEquals(new <name>HashSet(), hashSet);
+    }
+
+    @Test
+    public void addAllIterable()
+    {
+        Assert.assertFalse(this.set.addAll(new <name>ArrayList()));
+        Assert.assertFalse(this.set.addAll(<name>ArrayList.newListWith(<(literal.(type))("31")>, generateCollisions1().get(0), generateCollisions1().get(1))));
+        Assert.assertEquals(<name>HashSet.newSetWith(<["0", "1", "31"]:(literal.(type))(); separator=", ">, generateCollisions1().getFirst(), generateCollisions1().get(1)), this.set);
+
+        Assert.assertTrue(this.set.addAll(<name>HashSet.newSetWith(<["0", "1", "2", "30"]:(literal.(type))(); separator=", ">, generateCollisions1().getFirst(), generateCollisions1().get(4))));
+        Assert.assertEquals(<name>HashSet.newSetWith(<["0", "1", "2", "30", "31"]:(literal.(type))(); separator=", ">, generateCollisions1().getFirst(), generateCollisions1().get(1), generateCollisions1().get(4)), this.set);
+
+        Assert.assertTrue(this.set.addAll(<name>HashSet.newSetWith(<(literal.(type))("5")>)));
+        Assert.assertEquals(<name>HashSet.newSetWith(<["0", "1", "2", "5", "30", "31"]:(literal.(type))(); separator=", ">, generateCollisions1().getFirst(), generateCollisions1().get(1), generateCollisions1().get(4)), this.set);
+
+        Assert.assertTrue(this.set.addAll(<name>HashSet.newSetWith(generateCollisions1().get(5))));
+        Assert.assertEquals(<name>HashSet.newSetWith(<["0", "1", "2", "5", "30", "31"]:(literal.(type))(); separator=", ">, generateCollisions1().getFirst(), generateCollisions1().get(1), generateCollisions1().get(4), generateCollisions1().get(5)), this.set);
+
+        <name>HashSet hashSet = new <name>HashSet();
+        Assert.assertTrue(hashSet.addAll(<["2", "35"]:(literal.(type))(); separator=", ">));
+        Assert.assertEquals(<name>HashSet.newSetWith(<["2", "35"]:(literal.(type))(); separator=", ">), hashSet);
+    }
+
+    @Test
+    public void remove()
+    {
+        Assert.assertFalse(new <name>HashSet().remove(<(literal.(type))("15")>));
+        Assert.assertFalse(this.set.remove(<(literal.(type))("15")>));
+        Assert.assertTrue(this.set.remove(<(literal.(type))("0")>));
+        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "31"]:(literal.(type))(); separator=", ">, generateCollisions1().getFirst(), generateCollisions1().get(1)), this.set);
+        Assert.assertFalse(this.set.remove(generateNonCollisions().getFirst()));
+        Assert.assertFalse(this.set.remove(generateCollisions1().get(3)));
+        Assert.assertTrue(this.set.remove(generateCollisions1().get(1)));
+        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "31"]:(literal.(type))(); separator=", ">, generateCollisions1().getFirst()), this.set);
+        Assert.assertTrue(this.set.remove(generateCollisions1().getFirst()));
+        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "31"]:(literal.(type))(); separator=", ">), this.set);
+        Assert.assertTrue(this.set.remove(<(literal.(type))("31")>));
+        Assert.assertEquals(<name>HashSet.newSetWith(<(literal.(type))("1")>), this.set);
+        Assert.assertTrue(this.set.remove(<(literal.(type))("1")>));
+        Assert.assertEquals(<name>HashSet.newSetWith(), this.set);
+    }
+
+    @Test
+    public void removeAll()
+    {
+        Assert.assertFalse(this.set.removeAll());
+        Assert.assertFalse(this.set.removeAll(<(literal.(type))("15")>, generateCollisions1().get(2), generateCollisions1().get(3)));
+        Assert.assertEquals(<name>HashSet.newSetWith(<["0", "1", "31"]:(literal.(type))(); separator=", ">,  generateCollisions1().getFirst(), generateCollisions1().get(1)), this.set);
+        Assert.assertTrue(this.set.removeAll(<["0", "31"]:(literal.(type))(); separator=", ">, generateCollisions1().get(3)));
+        Assert.assertEquals(<name>HashSet.newSetWith(<(literal.(type))("1")>, generateCollisions1().getFirst(), generateCollisions1().get(1)), this.set);
+        Assert.assertTrue(this.set.removeAll(<(literal.(type))("1")>, generateCollisions1().getFirst(), generateCollisions1().get(1)));
+        Assert.assertEquals(new <name>HashSet(), this.set);
+        Assert.assertFalse(this.set.removeAll(<(literal.(type))("1")>));
+        Assert.assertEquals(new <name>HashSet(), this.set);
+    }
+
+    @Test
+    public void removeAllIterable()
+    {
+        Assert.assertFalse(this.set.removeAll(new <name>ArrayList()));
+        Assert.assertFalse(this.set.removeAll(<name>ArrayList.newListWith(<(literal.(type))("15")>, generateCollisions1().get(2), generateCollisions1().get(3))));
+        Assert.assertEquals(<name>HashSet.newSetWith(<["0", "1", "31"]:(literal.(type))(); separator=", ">, generateCollisions1().getFirst(), generateCollisions1().get(1)), this.set);
+        Assert.assertTrue(this.set.removeAll(<name>HashSet.newSetWith(<["0", "31"]:(literal.(type))(); separator=", ">, generateCollisions1().get(4))));
+        Assert.assertEquals(<name>HashSet.newSetWith(<(literal.(type))("1")>, generateCollisions1().getFirst(), generateCollisions1().get(1)), this.set);
+        Assert.assertTrue(this.set.removeAll(<name>HashSet.newSetWith(<(literal.(type))("1")>, generateCollisions1().getFirst(), generateCollisions1().get(1))));
+        Assert.assertEquals(new <name>HashSet(), this.set);
+        Assert.assertFalse(this.set.removeAll(<name>HashSet.newSetWith(<(literal.(type))("1")>)));
+        Assert.assertEquals(new <name>HashSet(), this.set);
+    }
+
+    @Test
+    public void with()
+    {
+        <name>HashSet hashSet = new <name>HashSet().with(<(literal.(type))("1")>);
+        <name>HashSet hashSet0 = new <name>HashSet().with(<(literal.(type))("1")>).with(<(literal.(type))("2")>);
+        <name>HashSet hashSet1 = new <name>HashSet().with(<(literal.(type))("1")>).with(<(literal.(type))("2")>).with(<(literal.(type))("3")>);
+        <name>HashSet hashSet2 = new <name>HashSet().with(<(literal.(type))("1")>).with(<(literal.(type))("2")>).with(<(literal.(type))("3")>).with(<(literal.(type))("4")>);
+        <name>HashSet hashSet3 = new <name>HashSet().with(<(literal.(type))("1")>).with(<(literal.(type))("2")>).with(<(literal.(type))("3")>).with(<(literal.(type))("4")>).with(<(literal.(type))("5")>);
+        Assert.assertEquals(<name>HashSet.newSetWith(<(literal.(type))("1")>), hashSet);
+        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2"]:(literal.(type))(); separator=", ">), hashSet0);
+        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), hashSet1);
+        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">), hashSet2);
+        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">), hashSet3);
+
+    }
+
+    @Test
+    public void withAll()
+    {
+        <name>HashSet arrayList = new <name>HashSet().withAll(<name>HashSet.newSetWith(<(literal.(type))("1")>));
+        <name>HashSet arrayList0 = new <name>HashSet().withAll(<name>HashSet.newSetWith(<["1", "2"]:(literal.(type))(); separator=", ">));
+        <name>HashSet arrayList1 = new <name>HashSet().withAll(<name>HashSet.newSetWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
+        <name>HashSet arrayList2 = new <name>HashSet().withAll(<name>ArrayList.newListWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">));
+        <name>HashSet arrayList3 = new <name>HashSet().withAll(<name>ArrayList.newListWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">));
+        Assert.assertEquals(<name>HashSet.newSetWith(<(literal.(type))("1")>), arrayList);
+        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2"]:(literal.(type))(); separator=", ">), arrayList0);
+        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), arrayList1);
+        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">), arrayList2);
+        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">), arrayList3);
+    }
+
+    @Test
+    public void without()
+    {
+        <name>HashSet mainArrayList = <name>HashSet.newSetWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
+        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">), mainArrayList.without(<(literal.(type))("9")>));
+        Assert.assertEquals(<name>HashSet.newSetWith(<["2", "3", "4", "5"]:(literal.(type))(); separator=", ">), mainArrayList.without(<(literal.(type))("1")>));
+        Assert.assertEquals(<name>HashSet.newSetWith(<["3", "4", "5"]:(literal.(type))(); separator=", ">), mainArrayList.without(<(literal.(type))("2")>));
+        Assert.assertEquals(<name>HashSet.newSetWith(<["4", "5"]:(literal.(type))(); separator=", ">), mainArrayList.without(<(literal.(type))("3")>));
+        Assert.assertEquals(<name>HashSet.newSetWith(<(literal.(type))("5")>), mainArrayList.without(<(literal.(type))("4")>));
+        Assert.assertEquals(new <name>HashSet(), mainArrayList.without(<(literal.(type))("5")>));
+        Assert.assertEquals(new <name>HashSet(), mainArrayList.without(<(literal.(type))("6")>));
+    }
+
+    @Test
+    public void withoutAll()
+    {
+        <name>HashSet mainArrayList = <name>HashSet.newSetWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
+        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">), mainArrayList.withoutAll(<name>HashSet.newSetWith(<["8", "9"]:(literal.(type))(); separator=", ">)));
+        Assert.assertEquals(<name>HashSet.newSetWith(<["2", "3", "4"]:(literal.(type))(); separator=", ">), mainArrayList.withoutAll(<name>HashSet.newSetWith(<["1", "5"]:(literal.(type))(); separator=", ">)));
+        Assert.assertEquals(<name>HashSet.newSetWith(<["3", "4"]:(literal.(type))(); separator=", ">), mainArrayList.withoutAll(<name>ArrayList.newListWith(<["2", "20"]:(literal.(type))(); separator=", ">)));
+        Assert.assertEquals(new <name>HashSet(), mainArrayList.withoutAll(<name>HashSet.newSetWith(<["3", "4"]:(literal.(type))(); separator=", ">)));
+        Assert.assertEquals(new <name>HashSet(), mainArrayList.withoutAll(<name>HashSet.newSetWith(<(literal.(type))("9")>)));
+    }
+
+    @Test
+    public void toArray()
+    {
+        Assert.assertArrayEquals(new <type>[]{<["0", "1", "31"]:(literal.(type))(); separator=", ">, generateCollisions1().getFirst(), generateCollisions1().get(1)}, this.set.toArray()<(delta.(type))>);
+        Assert.assertArrayEquals(new <type>[]{}, new <name>HashSet().toArray()<(delta.(type))>);
+    }
+
+    @Test
+    public void toSortedArray()
+    {
+        Assert.assertArrayEquals(new <type>[]{<["0", "1", "31"]:(literal.(type))(); separator=", ">, generateCollisions1().getFirst(), generateCollisions1().get(1)}, this.set.toSortedArray()<(delta.(type))>);
+        Assert.assertArrayEquals(new <type>[]{}, new <name>HashSet().toSortedArray()<(delta.(type))>);
+    }
+
+    @Test
+    public void testEquals()
+    {
+        <name>HashSet set1 = <name>HashSet.newSetWith(<["1", "31", "32"]:(literal.(type))(); separator=", ">);
+        <name>HashSet set2 = <name>HashSet.newSetWith(<["32", "31", "1"]:(literal.(type))(); separator=", ">);
+        <name>HashSet set3 = <name>HashSet.newSetWith(<["35", "31", "1"]:(literal.(type))(); separator=", ">);
+        <name>HashSet set4 = <name>HashSet.newSetWith(<["32", "31", "1", "50"]:(literal.(type))(); separator=", ">);
+
+        Verify.assertEqualsAndHashCode(set1, set2);
+        Verify.assertNotEquals(set1, set3);
+        Verify.assertNotEquals(set1, set4);
+    }
+
+    @Test
+    public void <type>Iterator()
+    {
+        MutableSet\<<wrapperName>\> expected = UnifiedSet.newSetWith(<["0", "1", "31"]:(literal.(type))(); separator=", ">, generateCollisions1().getFirst(), generateCollisions1().get(1));
+        MutableSet\<<wrapperName>\> actual = UnifiedSet.newSet();
+        final <name>Iterator iterator = this.set.<type>Iterator();
+        Assert.assertTrue(iterator.hasNext());
+        actual.add(iterator.next());
+        Assert.assertTrue(iterator.hasNext());
+        actual.add(iterator.next());
+        Assert.assertTrue(iterator.hasNext());
+        actual.add(iterator.next());
+        Assert.assertTrue(iterator.hasNext());
+        actual.add(iterator.next());
+        Assert.assertTrue(iterator.hasNext());
+        actual.add(iterator.next());
+        Assert.assertFalse(iterator.hasNext());
+        Assert.assertEquals(expected, actual);
+        Verify.assertThrows(NoSuchElementException.class, new Runnable()
+        {
+            public void run()
+            {
+                iterator.next();
+            }
+        });
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void iterator_throws()
+    {
+        <name>Iterator iterator = this.set.<type>Iterator();
+        while (iterator.hasNext())
+        {
+            iterator.next();
+        }
+
+        iterator.next();
+    }
+
+    @Test
+    public void forEach()
+    {
+        final <wideType.(type)>[] sum = new <wideType.(type)>[1];
+        this.set.forEach(new <name>Procedure()
+        {
+            public void value(<type> each)
+            {
+                sum[0] += each;
+            }
+        });
+
+        Assert.assertEquals(32L + generateCollisions1().getFirst() + generateCollisions1().get(1), sum[0]<(delta.(type))>);
+    }
+
+    @Test
+    public void count()
+    {
+        Assert.assertEquals(4L, this.set.count(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
+        Assert.assertEquals(3L, this.set.count(<name>Predicates.lessThan(<(literal.(type))("32")>)));
+        Assert.assertEquals(1L, this.set.count(<name>Predicates.greaterThan(<(literal.(type))("32")>)));
+    }
+
+    @Test
+    public void anySatisfy()
+    {
+        Assert.assertTrue(<name>HashSet.newSetWith(<["-1", "-1", "-2", "31", "32"]:(literal.(type))(); separator=", ">).anySatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
+        Assert.assertTrue(<name>HashSet.newSetWith(<["2", "-1", "-2", "31", "32"]:(literal.(type))(); separator=", ">).anySatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
+        Assert.assertFalse(<name>HashSet.newSetWith(<["1", "-1", "31", "32"]:(literal.(type))(); separator=", ">).anySatisfy(<name>Predicates.equal(<(literal.(type))("0")>)));
+    }
+
+    @Test
+    public void allSatisfy()
+    {
+        Assert.assertFalse(<name>HashSet.newSetWith(<["1", "0", "31", "32"]:(literal.(type))(); separator=", ">).allSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
+        Assert.assertFalse(<name>HashSet.newSetWith(<["1", "0", "31", "32"]:(literal.(type))(); separator=", ">).allSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
+        Assert.assertTrue(<name>HashSet.newSetWith(<["1", "2", "31", "32"]:(literal.(type))(); separator=", ">).allSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
+    }
+
+    @Test
+    public void select()
+    {
+        Verify.assertSize(3, this.set.select(<name>Predicates.lessThan(<(literal.(type))("32")>)));
+        Verify.assertSize(4, this.set.select(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
+    }
+
+    @Test
+    public void reject()
+    {
+        Verify.assertSize(1, this.set.reject(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
+        Verify.assertSize(2, this.set.reject(<name>Predicates.lessThan(<(literal.(type))("32")>)));
+    }
+
+    @Test
+    public void detectIfNone()
+    {
+        Assert.assertEquals(<(literal.(type))("0")>, this.set.detectIfNone(<name>Predicates.lessThan(<(literal.(type))("1")>), <(literal.(type))("9")>)<(delta.(type))>);
+        Assert.assertEquals(generateCollisions1().get(1), this.set.detectIfNone(<name>Predicates.greaterThan(generateCollisions1().getFirst()), <(literal.(type))("9")>)<(delta.(type))>);
+        Assert.assertEquals(<(literal.(type))("9")>, this.set.detectIfNone(<name>Predicates.greaterThan(generateCollisions1().get(1)), <(literal.(type))("9")>)<(delta.(type))>);
+    }
+
+    @Test
+    public void collect()
+    {
+        Assert.assertEquals(UnifiedSet.newSetWith(<["-1", "0", "30"]:(literal.(type))(); separator=", ">, <(castExpression.(type))("generateCollisions1().getFirst() - 1")>, <(castExpression.(type))("generateCollisions1().get(1) - 1")>), this.set.collect(new <name>ToObjectFunction\<<wrapperName>\>()
+        {
+            public <wrapperName> valueOf(<type> parameter)
+            {
+                return <(castExpression.(type))("parameter - 1")>;
+            }
+        }));
+    }
+
+    @Test
+    public void max()
+    {
+        <(maxTests.(type))(type, name)>
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void max_throws_emptyList()
+    {
+        new <name>HashSet().max();
+    }
+
+    @Test
+    public void min()
+    {
+        <(minTests.(type))(type, name)>
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void min_throws_emptyList()
+    {
+        new <name>HashSet().min();
+    }
+
+    @Test
+    public void sum()
+    {
+
+        Assert.assertEquals(<(wideLiteral.(type))("93")>, <name>HashSet.newSetWith(<["30", "31", "32"]:(literal.(type))(); separator=", ">).sum()<wideDelta.(type)>);
+    }
+
+    @Test
+    public void average()
+    {
+        Assert.assertEquals(31.0, <name>HashSet.newSetWith(<["30", "31", "32"]:(literal.(type))(); separator=", ">).average(), 0.0);
+    }
+
+    @Test
+    public void median()
+    {
+        Assert.assertEquals(31.0, <name>HashSet.newSetWith(<["30", "31", "32"]:(literal.(type))(); separator=", ">).median(), 0.0);
+        Assert.assertEquals(30.5, <name>HashSet.newSetWith(<["1", "30", "31", "32"]:(literal.(type))(); separator=", ">).median(), 0.0);
+    }
+
+    @Test
+    public void testToString()
+    {
+        Assert.assertEquals("[]", new <name>HashSet().toString());
+        Assert.assertEquals("[<(toStringLiteral.(type))("31")>]", new <name>HashSet().with(<(literal.(type))("31")>).toString());
+        Assert.assertEquals("[<(toStringLiteral.(type))("32")>]", new <name>HashSet().with(<(literal.(type))("32")>).toString());
+
+        <name>HashSet set1 = <name>HashSet.newSetWith(<["0", "31"]:(literal.(type))(); separator=", ">);
+        Assert.assertTrue(
+                set1.toString(),
+                set1.toString().equals("[<["0", "31"]:(toStringLiteral.(type))(); separator=", ">]")
+                        || set1.toString().equals("[<["31", "0"]:(toStringLiteral.(type))(); separator=", ">]"));
+
+        <name>HashSet set2 = <name>HashSet.newSetWith(<["31", "32"]:(literal.(type))(); separator=", ">);
+        Assert.assertTrue(
+                set2.toString(),
+                set2.toString().equals("[<["31", "32"]:(toStringLiteral.(type))(); separator=", ">]")
+                        || set2.toString().equals("[<["32", "31"]:(toStringLiteral.(type))(); separator=", ">]"));
+
+        <name>HashSet set3 = <name>HashSet.newSetWith(<["32", "33"]:(literal.(type))(); separator=", ">);
+        Assert.assertTrue(
+                set3.toString(),
+                set3.toString().equals("[<["32", "33"]:(toStringLiteral.(type))(); separator=", ">]")
+                        || set3.toString().equals("[<["33", "32"]:(toStringLiteral.(type))(); separator=", ">]"));
+
+    }
+
+    @Test
+    public void makeString()
+    {
+        Assert.assertEquals("", new <name>HashSet().makeString());
+        Assert.assertEquals("<(toStringLiteral.(type))("31")>", new <name>HashSet().with(<(literal.(type))("31")>).makeString());
+        Assert.assertEquals("<(toStringLiteral.(type))("32")>", new <name>HashSet().with(<(literal.(type))("32")>).makeString());
+
+        <name>HashSet set1 = <name>HashSet.newSetWith(<["0", "31"]:(literal.(type))(); separator=", ">);
+        Assert.assertTrue(
+                set1.makeString(),
+                set1.makeString().equals("<["0", "31"]:(toStringLiteral.(type))(); separator=", ">")
+                        || set1.makeString().equals("<["31", "0"]:(toStringLiteral.(type))(); separator=", ">"));
+
+        <name>HashSet set2 = <name>HashSet.newSetWith(<["31", "32"]:(literal.(type))(); separator=", ">);
+        Assert.assertTrue(
+                set2.makeString("[", "/", "]"),
+                set2.makeString("[", "/", "]").equals("[<["31", "32"]:(toStringLiteral.(type))(); separator="/">]")
+                        || set2.makeString("[", "/", "]").equals("[<["32", "31"]:(toStringLiteral.(type))(); separator="/">]"));
+
+        <name>HashSet set3 = <name>HashSet.newSetWith(<["32", "33"]:(literal.(type))(); separator=", ">);
+        Assert.assertTrue(
+                set3.makeString("/"),
+                set3.makeString("/").equals("<["32", "33"]:(toStringLiteral.(type))(); separator="/">")
+                        || set3.makeString("/").equals("<["33", "32"]:(toStringLiteral.(type))(); separator="/">"));
+    }
+
+    @Test
+    public void appendString()
+    {
+
+        StringBuilder appendable = new StringBuilder();
+        new <name>HashSet().appendString(appendable);
+        Assert.assertEquals("", appendable.toString());
+
+        StringBuilder appendable0 = new StringBuilder();
+        new <name>HashSet().with(<(literal.(type))("31")>).appendString(appendable0);
+        Assert.assertEquals("<(toStringLiteral.(type))("31")>", appendable0.toString());
+
+        StringBuilder appendable1 = new StringBuilder();
+        new <name>HashSet().with(<(literal.(type))("32")>).appendString(appendable1);
+        Assert.assertEquals("<(toStringLiteral.(type))("32")>", appendable1.toString());
+
+        StringBuilder appendable2 = new StringBuilder();
+        <name>HashSet set1 = <name>HashSet.newSetWith(<["0", "31"]:(literal.(type))(); separator=", ">);
+        set1.appendString(appendable2);
+        Assert.assertTrue(appendable2.toString(), "<["0", "31"]:(toStringLiteral.(type))(); separator=", ">".equals(appendable2.toString())
+                || "<["31", "0"]:(toStringLiteral.(type))(); separator=", ">".equals(appendable2.toString()));
+        StringBuilder appendable3 = new StringBuilder();
+        <name>HashSet set2 = <name>HashSet.newSetWith(<["31", "32"]:(literal.(type))(); separator=", ">);
+        set2.appendString(appendable3, "/");
+        Assert.assertTrue(appendable3.toString(), "<["31", "32"]:(toStringLiteral.(type))(); separator="/">".equals(appendable3.toString())
+                || "<["32", "31"]:(toStringLiteral.(type))(); separator="/">".equals(appendable3.toString()));
+        StringBuilder appendable4 = new StringBuilder();
+        <name>HashSet set4 = <name>HashSet.newSetWith(<["32", "33"]:(literal.(type))(); separator=", ">);
+        set4.appendString(appendable4, "[", "/", "]");
+        Assert.assertTrue(appendable4.toString(), "[<["32", "33"]:(toStringLiteral.(type))(); separator="/">]".equals(appendable4.toString())
+                || "[<["33", "32"]:(toStringLiteral.(type))(); separator="/">]".equals(appendable4.toString()));
+    }
+
+}
+
+>>
+
+maxTests ::= [
+    "byte": "intMaxTest",
+    "short": "intMaxTest",
+    "char": "charMaxTest",
+    "int": "intMaxTest",
+    "long": "intMaxTest",
+    "float": "floatMaxTest",
+    "double": "floatMaxTest"
+]
+
+intMaxTest(type, name) ::= <<
+Assert.assertEquals(<(wideLiteral.(type))("9")>, <name>HashSet.newSetWith(<["-1", "-2", "9"]:(literal.(type))(); separator=", ">).max()<(wideDelta.(type))>);
+Assert.assertEquals(<(wideLiteral.(type))("32")>, <name>HashSet.newSetWith(<["1", "0", "9", "30", "31", "32"]:(literal.(type))(); separator=", ">).max()<(wideDelta.(type))>);
+Assert.assertEquals(<(wideLiteral.(type))("32")>, <name>HashSet.newSetWith(<["-1", "0", "9", "30", "31", "32"]:(literal.(type))(); separator=", ">).max()<(wideDelta.(type))>);
+Assert.assertEquals(<(wideLiteral.(type))("31")>, <name>HashSet.newSetWith(<["31", "0", "30"]:(literal.(type))(); separator=", ">).max()<(wideDelta.(type))>);
+Assert.assertEquals(<(wideLiteral.(type))("39")>, <name>HashSet.newSetWith(<["32", "39", "35"]:(literal.(type))(); separator=", ">).max()<(wideDelta.(type))>);
+>>
+
+charMaxTest(type, name) ::= <<
+Assert.assertEquals(<(literal.(type))("-1")>, <name>HashSet.newSetWith(<["-1", "-2", "9"]:(literal.(type))(); separator=", ">).max()<(wideDelta.(type))>);
+Assert.assertEquals(<(literal.(type))("32")>, <name>HashSet.newSetWith(<["1", "0", "9", "30", "31", "32"]:(literal.(type))(); separator=", ">).max()<(wideDelta.(type))>);
+Assert.assertEquals(<(literal.(type))("-1")>, <name>HashSet.newSetWith(<["-1", "0", "9", "30", "31", "32"]:(literal.(type))(); separator=", ">).max()<(wideDelta.(type))>);
+Assert.assertEquals(<(literal.(type))("31")>, <name>HashSet.newSetWith(<["31", "0", "30"]:(literal.(type))(); separator=", ">).max()<(wideDelta.(type))>);
+Assert.assertEquals(<(literal.(type))("39")>, <name>HashSet.newSetWith(<["32", "39", "35"]:(literal.(type))(); separator=", ">).max()<(wideDelta.(type))>);
+>>
+
+floatMaxTest(type, name) ::= <<
+<intMaxTest(type, name)>
+Assert.assertEquals(32.5, <name>HashSet.newSetWith(<["-1.5", "31.8", "32.5"]:(decimalLiteral.(type))(); separator=", ">).max()<(wideDelta.(type))>);
+Assert.assertEquals(<name>.POSITIVE_INFINITY, <name>HashSet.newSetWith(<["-1.5", "31.8", "32.5"]:(decimalLiteral.(type))(); separator=", ">, <name>.POSITIVE_INFINITY).max()<(wideDelta.(type))>);
+Assert.assertEquals(<name>.NaN, <name>HashSet.newSetWith(<["-1.5", "31.8", "32.5"]:(decimalLiteral.(type))(); separator=", ">, <name>.NaN, 31.5f).max()<(wideDelta.(type))>);
+Assert.assertEquals(32.5, <name>HashSet.newSetWith(<["-1.5", "31.8", "32.5"]:(decimalLiteral.(type))(); separator=", ">, <name>.NEGATIVE_INFINITY, 31.5f).max()<(wideDelta.(type))>);
+>>
+
+minTests ::= [
+    "byte": "intMinTest",
+    "short": "intMinTest",
+    "char": "charMinTest",
+    "int": "intMinTest",
+    "long": "intMinTest",
+    "float": "floatMinTest",
+    "double": "floatMinTest"
+]
+
+intMinTest(type, name) ::= <<
+Assert.assertEquals(<(wideLiteral.(type))("-2")>, <name>HashSet.newSetWith(<["-1", "-2", "9"]:(literal.(type))(); separator=", ">).min()<(wideDelta.(type))>);
+Assert.assertEquals(<(wideLiteral.(type))("0")>, <name>HashSet.newSetWith(<["1", "0", "9", "30", "31", "32"]:(literal.(type))(); separator=", ">).min()<(wideDelta.(type))>);
+Assert.assertEquals(<(wideLiteral.(type))("-1")>, <name>HashSet.newSetWith(<["-1", "0", "9", "30", "31", "32"]:(literal.(type))(); separator=", ">).min()<(wideDelta.(type))>);
+Assert.assertEquals(<(wideLiteral.(type))("31")>, <name>HashSet.newSetWith(<["31", "32", "33"]:(literal.(type))(); separator=", ">).min()<(wideDelta.(type))>);
+Assert.assertEquals(<(wideLiteral.(type))("32")>, <name>HashSet.newSetWith(<["32", "39", "35"]:(literal.(type))(); separator=", ">).min()<(wideDelta.(type))>);
+>>
+
+charMinTest(type, name) ::= <<
+Assert.assertEquals(<(wideLiteral.(type))("9")>, <name>HashSet.newSetWith(<["-1", "-2", "9"]:(literal.(type))(); separator=", ">).min()<(wideDelta.(type))>);
+Assert.assertEquals(<(wideLiteral.(type))("0")>, <name>HashSet.newSetWith(<["1", "0", "9", "30", "31", "32"]:(literal.(type))(); separator=", ">).min()<(wideDelta.(type))>);
+Assert.assertEquals(<(wideLiteral.(type))("0")>, <name>HashSet.newSetWith(<["-1", "0", "9", "30", "31", "32"]:(literal.(type))(); separator=", ">).min()<(wideDelta.(type))>);
+Assert.assertEquals(<(wideLiteral.(type))("31")>, <name>HashSet.newSetWith(<["31", "32", "33"]:(literal.(type))(); separator=", ">).min()<(wideDelta.(type))>);
+Assert.assertEquals(<(wideLiteral.(type))("32")>, <name>HashSet.newSetWith(<["32", "39", "35"]:(literal.(type))(); separator=", ">).min()<(wideDelta.(type))>);
+>>
+
+floatMinTest(type, name) ::= <<
+<intMaxTest(type, name)>
+Assert.assertEquals(-1.5, <name>HashSet.newSetWith(<["-1.5", "31.5", "32.5"]:(decimalLiteral.(type))(); separator=", ">).min()<(wideDelta.(type))>);
+Assert.assertEquals(1.5, <name>HashSet.newSetWith(<["1.5", "31.0", "30.0"]:(decimalLiteral.(type))(); separator=", ">, <name>.POSITIVE_INFINITY).min()<(wideDelta.(type))>);
+Assert.assertEquals(31.5, <name>HashSet.newSetWith(<["31.5", "32.5"]:(decimalLiteral.(type))(); separator=", ">, <name>.NaN).min()<(wideDelta.(type))>);
+Assert.assertEquals(<name>.NEGATIVE_INFINITY, <name>HashSet.newSetWith(<["-1.5", "31.5", "32.5"]:(decimalLiteral.(type))(); separator=", ">, <name>.NEGATIVE_INFINITY, 31.5f).min()<(wideDelta.(type))>);
+>>
+
+
