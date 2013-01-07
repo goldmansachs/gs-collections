@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,12 +21,22 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
+import com.gs.collections.api.block.function.primitive.IntFunction;
+
 /**
  * A Counter can be used to increment and return an integer count.  A Counter can be used in Anonymous
  * inner classes if it is declared final, unlike an int, which once declared final cannot be modified.
  */
 public final class Counter implements Externalizable
 {
+    public static final IntFunction<Counter> TO_COUNT = new IntFunction<Counter>()
+    {
+        public int intValueOf(Counter counter)
+        {
+            return counter.getCount();
+        }
+    };
+
     private static final long serialVersionUID = 1L;
 
     private int count;
