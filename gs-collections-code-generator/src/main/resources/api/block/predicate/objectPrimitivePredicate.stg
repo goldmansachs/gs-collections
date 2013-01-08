@@ -1,0 +1,29 @@
+import "copyright.stg"
+
+targetPath() ::= "com/gs/collections/api/block/predicate/primitive"
+
+fileName(primitive) ::= "Object<primitive.name>Predicate"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.api.block.predicate.primitive;
+
+import java.io.Serializable;
+
+/**
+ * A two argument Predicate that takes type T and
+ * a primitive <type> as the arguments.
+ * This file was automatically generated from template file objectPrimitivePredicate.stg.
+ */
+public interface Object<name>Predicate\<T\>
+        extends Serializable
+{
+    boolean accept(T object, <type> value);
+}
+
+>>

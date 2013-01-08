@@ -1,0 +1,34 @@
+import "copyright.stg"
+
+targetPath() ::= "com/gs/collections/api/map/primitive"
+
+fileName(primitive) ::= "ImmutableObject<primitive.name>Map"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.api.map.primitive;
+
+import com.gs.collections.api.block.predicate.primitive.<name>ObjectPredicate;
+
+/**
+ * This file was automatically generated from template file immutableObjectPrimitiveMap.stg.
+ */
+public interface ImmutableObject<name>Map\<K\> extends <name>ObjectMap\<K\>
+{
+    ImmutableObject<name>Map\<K\> select(<name>ObjectPredicate\<? super K\> predicate);
+
+    ImmutableObject<name>Map\<K\> reject(<name>ObjectPredicate\<? super K\> predicate);
+
+    ImmutableObject<name>Map\<K\> newWithKeyValue(K key, <type> value);
+
+    ImmutableObject<name>Map\<K\> newWithoutKey(K key);
+
+    ImmutableObject<name>Map\<K\> newWithoutAllKeys(Iterable\<? extends K\> keys);
+}
+
+>>

@@ -1,0 +1,44 @@
+import "copyright.stg"
+
+targetPath() ::= "com/gs/collections/api/map/primitive"
+
+fileName(primitive) ::= "MutableObject<primitive.name>Map"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.api.map.primitive;
+
+import com.gs.collections.api.block.function.primitive.<name>Function;
+import com.gs.collections.api.block.function.primitive.<name>Function0;
+import com.gs.collections.api.block.predicate.primitive.<name>ObjectPredicate;
+
+/**
+ * This file was automatically generated from template file mutableObjectPrimitiveMap.stg.
+ */
+public interface MutableObject<name>Map\<K\> extends Object<name>Map\<K\>
+{
+    <type> removeKey(K key);
+
+    <type> getIfAbsentPut(K key, <name>Function0 function);
+
+    <type> getIfAbsentPutWithKey(K key, <name>Function\<? extends K\> function);
+
+    \<P\> <type> getIfAbsentPutWith(K key, <name>Function\<? super P\> function, P parameter);
+
+    MutableObject<name>Map\<K\> select(<name>ObjectPredicate\<? super K\> predicate);
+
+    MutableObject<name>Map\<K\> reject(<name>ObjectPredicate\<? super K\> predicate);
+
+    MutableObject<name>Map\<K\> withKeyValue(K key, <type> value);
+
+    MutableObject<name>Map\<K\> withoutKey(K key);
+
+    MutableObject<name>Map\<K\> withoutAllKeys(Iterable\<? extends K\> keys);
+}
+
+>>

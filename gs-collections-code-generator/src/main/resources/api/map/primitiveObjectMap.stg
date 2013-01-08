@@ -1,0 +1,44 @@
+import "copyright.stg"
+
+targetPath() ::= "com/gs/collections/api/map/primitive"
+
+fileName(primitive) ::= "<primitive.name>ObjectMap"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.api.map.primitive;
+
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.block.predicate.primitive.<name>ObjectPredicate;
+import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.block.procedure.primitive.<name>ObjectProcedure;
+import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
+
+/**
+ * This file was automatically generated from template file primitiveObjectMap.stg.
+ */
+public interface <name>ObjectMap\<V\> extends <name>Iterable
+{
+    V get(<type> key);
+
+    boolean containsKey(<type> key);
+
+    boolean containsValue(Object value);
+
+    void forEachValue(Procedure\<? super V\> procedure);
+
+    void forEachKey(<name>Procedure procedure);
+
+    void forEachKeyValue(<name>ObjectProcedure\<? super V\> procedure);
+
+    <name>ObjectMap\<V\> select(<name>ObjectPredicate\<? super V\> predicate);
+
+    <name>ObjectMap\<V\> reject(<name>ObjectPredicate\<? super V\> predicate);
+}
+
+>>
