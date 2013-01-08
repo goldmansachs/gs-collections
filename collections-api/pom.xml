@@ -186,6 +186,7 @@
                         <exclude>**/GsCollectionsCodeGenerator.java</exclude>
                         <exclude>**/GsCollectionsCodeGeneratorTask.java</exclude>
                         <exclude>**/Primitive.java</exclude>
+                        <exclude>**/IntegerOrStringRenderer.java</exclude>
                     </excludes>
                 </configuration>
             </plugin>
