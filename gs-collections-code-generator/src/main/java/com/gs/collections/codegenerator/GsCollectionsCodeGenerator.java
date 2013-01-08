@@ -52,18 +52,40 @@ public class GsCollectionsCodeGenerator
             if (stGroupFile.isDefined("fileName"))
             {
                 this.setTest(stGroupFile);
-                for (Primitive primitive : Primitive.values())
+                File targetPath = this.constructTargetPath(stGroupFile);
+                FileUtils.createDirectory(targetPath);
+
+                boolean hasTwoPrimitives = stGroupFile.isDefined("hasTwoPrimitives") && Boolean.valueOf(stGroupFile.getInstanceOf("hasTwoPrimitives").render());
+
+                if (hasTwoPrimitives)
                 {
-                    File targetPath = this.constructTargetPath(stGroupFile);
-                    FileUtils.createDirectory(targetPath);
-
-                    String sourceFileName = executeTemplate(stGroupFile, primitive, "fileName");
-                    File outputFile = new File(targetPath, sourceFileName + ".java");
-
-                    if (!sourceFileExists(outputFile))
+                    for (Primitive primitive1 : Primitive.values())
                     {
-                        String classContents = executeTemplate(stGroupFile, primitive, "class");
-                        FileUtils.writeToFile(classContents, outputFile);
+                        for (Primitive primitive2 : Primitive.values())
+                        {
+                            String sourceFileName = executeTemplate(stGroupFile, primitive1, primitive2, "fileName");
+                            File outputFile = new File(targetPath, sourceFileName + ".java");
+
+                            if (!sourceFileExists(outputFile))
+                            {
+                                String classContents = executeTemplate(stGroupFile, primitive1, primitive2, "class");
+                                FileUtils.writeToFile(classContents, outputFile);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    for (Primitive primitive : Primitive.values())
+                    {
+                        String sourceFileName = executeTemplate(stGroupFile, primitive, "fileName");
+                        File outputFile = new File(targetPath, sourceFileName + ".java");
+
+                        if (!sourceFileExists(outputFile))
+                        {
+                            String classContents = executeTemplate(stGroupFile, primitive, "class");
+                            FileUtils.writeToFile(classContents, outputFile);
+                        }
                     }
                 }
             }
@@ -74,6 +96,14 @@ public class GsCollectionsCodeGenerator
     {
         ST template = findTemplate(stGroupFile, templateName);
         template.add("primitive", primitive);
+        return template.render();
+    }
+
+    private static String executeTemplate(STGroupFile stGroupFile, Primitive primitive1, Primitive primitive2, String templateName)
+    {
+        ST template = findTemplate(stGroupFile, templateName);
+        template.add("primitive1", primitive1);
+        template.add("primitive2", primitive2);
         return template.render();
     }
 

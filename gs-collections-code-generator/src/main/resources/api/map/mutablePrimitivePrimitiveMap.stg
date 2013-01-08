@@ -1,0 +1,48 @@
+import "copyright.stg"
+
+hasTwoPrimitives() ::= "true"
+
+targetPath() ::= "com/gs/collections/api/map/primitive"
+
+fileName(primitive1, primitive2) ::= "Mutable<primitive1.name><primitive2.name>Map"
+
+class(primitive1, primitive2) ::= <<
+<body(primitive1.type, primitive2.type, primitive1.name, primitive2.name)>
+>>
+
+body(type1, type2, name1, name2) ::= <<
+<copyright()>
+
+package com.gs.collections.api.map.primitive;
+
+import com.gs.collections.api.<name1>Iterable;
+import com.gs.collections.api.block.function.primitive.<name2>Function;
+import com.gs.collections.api.block.function.primitive.<name2>Function0;
+import com.gs.collections.api.block.function.primitive.<name1>To<name2>Function;
+import com.gs.collections.api.block.predicate.primitive.<name1><name2>Predicate;
+
+/**
+ * This file was automatically generated from template file mutablePrimitivePrimitiveMap.stg.
+ */
+public interface Mutable<name1><name2>Map extends <name1><name2>Map
+{
+    <type2> removeKey(<type1> key);
+
+    <type2> getIfAbsentPut(<type1> key, <name2>Function0 function);
+
+    <type2> getIfAbsentPutWithKey(<type1> key, <name1>To<name2>Function function);
+
+    \<P\> <type2> getIfAbsentPutWith(<type1> key, <name2>Function\<? super P\> function, P parameter);
+
+    Mutable<name1><name2>Map select(<name1><name2>Predicate predicate);
+
+    Mutable<name1><name2>Map reject(<name1><name2>Predicate predicate);
+
+    Mutable<name1><name2>Map withKeyValue(<type1> key, <type2> value);
+
+    Mutable<name1><name2>Map withoutKey(<type1> key);
+
+    Mutable<name1><name2>Map withoutAllKeys(<name1>Iterable keys);
+}
+
+>>

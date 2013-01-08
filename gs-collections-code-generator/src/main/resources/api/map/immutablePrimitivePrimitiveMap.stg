@@ -1,0 +1,37 @@
+import "copyright.stg"
+
+hasTwoPrimitives() ::= "true"
+
+targetPath() ::= "com/gs/collections/api/map/primitive"
+
+fileName(primitive1, primitive2) ::= "Immutable<primitive1.name><primitive2.name>Map"
+
+class(primitive1, primitive2) ::= <<
+<body(primitive1.type, primitive2.type, primitive1.name, primitive2.name)>
+>>
+
+body(type1, type2, name1, name2) ::= <<
+<copyright()>
+
+package com.gs.collections.api.map.primitive;
+
+import com.gs.collections.api.<name1>Iterable;
+import com.gs.collections.api.block.predicate.primitive.<name1><name2>Predicate;
+
+/**
+ * This file was automatically generated from template file immutablePrimitivePrimitiveMap.stg.
+ */
+public interface Immutable<name1><name2>Map extends <name1><name2>Map
+{
+    Immutable<name1><name2>Map select(<name1><name2>Predicate predicate);
+
+    Immutable<name1><name2>Map reject(<name1><name2>Predicate predicate);
+
+    Immutable<name1><name2>Map newWithKeyValue(<type1> key, <type2> value);
+
+    Immutable<name1><name2>Map newWithoutKey(<type1> key);
+
+    Immutable<name1><name2>Map newWithoutAllKeys(<name1>Iterable keys);
+}
+
+>>

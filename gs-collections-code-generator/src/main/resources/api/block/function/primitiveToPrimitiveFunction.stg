@@ -1,0 +1,29 @@
+import "copyright.stg"
+
+hasTwoPrimitives() ::= "true"
+
+targetPath() ::= "com/gs/collections/api/block/function/primitive"
+
+fileName(primitive1, primitive2) ::= "<primitive1.name>To<primitive2.name>Function"
+
+class(primitive1, primitive2) ::= <<
+<body(primitive1.type, primitive2.type, primitive1.name, primitive2.name)>
+>>
+
+body(type1, type2, name1, name2) ::= <<
+<copyright()>
+
+package com.gs.collections.api.block.function.primitive;
+
+import java.io.Serializable;
+
+/**
+ * This file was automatically generated from template file primitiveToPrimitiveFunction.stg.
+ */
+public interface <name1>To<name2>Function
+        extends Serializable
+{
+    <type2> valueOf(<type1> <type1>Parameter);
+}
+
+>>
