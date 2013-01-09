@@ -29,6 +29,7 @@ import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.list.primitive.<name>List;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.impl.list.mutable.FastList;
 import net.jcip.annotations.NotThreadSafe;
@@ -636,18 +637,18 @@ public final class <name>ArrayList
         {
             return true;
         }
-        if (!(otherList instanceof <name>ArrayList))
+        if (!(otherList instanceof <name>List))
         {
             return false;
         }
-        <name>ArrayList list = (<name>ArrayList) otherList;
+        <name>List list = (<name>List) otherList;
         if (this.size() != list.size())
         {
             return false;
         }
         for (int i = 0; i \< this.size; i++)
         {
-            if (!(<(equals.(type))("this.items[i]", "list.items[i]")>))
+            if (!(<(equals.(type))("this.items[i]", "list.get(i)")>))
             {
                 return false;
             }
