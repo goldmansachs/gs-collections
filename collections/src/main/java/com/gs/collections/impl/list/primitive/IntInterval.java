@@ -53,13 +53,13 @@ public final class IntInterval
     }
 
     /**
-     * This static {@code from} method allows Interval to act as a fluent builder for itself.
+     * This static {@code from} method allows IntInterval to act as a fluent builder for itself.
      * It works in conjunction with the instance methods {@link #to(int)} and {@link #by(int)}.
      * <p/>
      * Usage Example:
      * <pre>
-     * Interval interval1 = Interval.from(1).to(5);         // results in: 1, 2, 3, 4, 5.
-     * Interval interval2 = Interval.from(1).to(10).by(2);  // results in: 1, 3, 5, 7, 9.
+     * IntInterval interval1 = IntInterval.from(1).to(5);         // results in: 1, 2, 3, 4, 5.
+     * IntInterval interval2 = IntInterval.from(1).to(10).by(2);  // results in: 1, 3, 5, 7, 9.
      * </pre>
      */
     public static IntInterval from(int newFrom)
@@ -68,13 +68,13 @@ public final class IntInterval
     }
 
     /**
-     * This instance {@code to} method allows Interval to act as a fluent builder for itself.
+     * This instance {@code to} method allows IntInterval to act as a fluent builder for itself.
      * It works in conjunction with the static method {@link #from(int)} and instance method {@link #by(int)}.
      * <p/>
      * Usage Example:
      * <pre>
-     * Interval interval1 = Interval.from(1).to(5);         // results in: 1, 2, 3, 4, 5.
-     * Interval interval2 = Interval.from(1).to(10).by(2);  // results in: 1, 3, 5, 7, 9.
+     * IntInterval interval1 = IntInterval.from(1).to(5);         // results in: 1, 2, 3, 4, 5.
+     * IntInterval interval2 = IntInterval.from(1).to(10).by(2);  // results in: 1, 3, 5, 7, 9.
      * </pre>
      */
     public IntInterval to(int newTo)
@@ -83,13 +83,13 @@ public final class IntInterval
     }
 
     /**
-     * This instance {@code by} method allows Interval to act as a fluent builder for itself.
+     * This instance {@code by} method allows IntInterval to act as a fluent builder for itself.
      * It works in conjunction with the static method {@link #from(int)} and instance method {@link #to(int)}.
      * <p/>
      * Usage Example:
      * <pre>
-     * Interval interval1 = Interval.from(1).to(5);         // results in: 1, 2, 3, 4, 5.
-     * Interval interval2 = Interval.from(1).to(10).by(2);  // results in: 1, 3, 5, 7, 9.
+     * IntInterval interval1 = IntInterval.from(1).to(5);         // results in: 1, 2, 3, 4, 5.
+     * IntInterval interval2 = IntInterval.from(1).to(10).by(2);  // results in: 1, 3, 5, 7, 9.
      * </pre>
      */
     public IntInterval by(int newStep)
@@ -98,12 +98,12 @@ public final class IntInterval
     }
 
     /**
-     * Returns an Interval starting at zero.
+     * Returns an IntInterval starting at zero.
      * <p/>
      * Usage Example:
      * <pre>
-     * Interval interval1 = Interval.zero().to(5);         // results in: 0, 1, 2, 3, 4, 5.
-     * Interval interval2 = Interval.zero().to(10).by(2);  // results in: 0, 2, 4, 6, 8, 10.
+     * IntInterval interval1 = IntInterval.zero().to(5);         // results in: 0, 1, 2, 3, 4, 5.
+     * IntInterval interval2 = IntInterval.zero().to(10).by(2);  // results in: 0, 2, 4, 6, 8, 10.
      * </pre>
      */
     public static IntInterval zero()
@@ -112,7 +112,7 @@ public final class IntInterval
     }
 
     /**
-     * Returns an Interval starting from 1 to the specified count value with a step value of 1.
+     * Returns an IntInterval starting from 1 to the specified count value with a step value of 1.
      */
     public static IntInterval oneTo(int count)
     {
@@ -120,7 +120,7 @@ public final class IntInterval
     }
 
     /**
-     * Returns an Interval starting from 1 to the specified count value with a step value of step.
+     * Returns an IntInterval starting from 1 to the specified count value with a step value of step.
      */
     public static IntInterval oneToBy(int count, int step)
     {
@@ -132,7 +132,7 @@ public final class IntInterval
     }
 
     /**
-     * Returns an Interval starting from 0 to the specified count value with a step value of 1.
+     * Returns an IntInterval starting from 0 to the specified count value with a step value of 1.
      */
     public static IntInterval zeroTo(int count)
     {
@@ -140,7 +140,7 @@ public final class IntInterval
     }
 
     /**
-     * Returns an Interval starting from 0 to the specified count value with a step value of step.
+     * Returns an IntInterval starting from 0 to the specified count value with a step value of step.
      */
     public static IntInterval zeroToBy(int count, int step)
     {
@@ -148,7 +148,7 @@ public final class IntInterval
     }
 
     /**
-     * Returns an Interval starting from the value from to the specified value to with a step value of 1.
+     * Returns an IntInterval starting from the value from to the specified value to with a step value of 1.
      */
     public static IntInterval fromTo(int from, int to)
     {
@@ -160,7 +160,7 @@ public final class IntInterval
     }
 
     /**
-     * Returns an Interval representing the even values from the value from to the value to.
+     * Returns an IntInterval representing the even values from the value from to the value to.
      */
     public static IntInterval evensFromTo(int from, int to)
     {
@@ -190,7 +190,7 @@ public final class IntInterval
     }
 
     /**
-     * Returns an Interval representing the odd values from the value from to the value to.
+     * Returns an IntInterval representing the odd values from the value from to the value to.
      */
     public static IntInterval oddsFromTo(int from, int to)
     {
@@ -220,7 +220,7 @@ public final class IntInterval
     }
 
     /**
-     * Returns an Interval for the range of integers inclusively between from and to with the specified
+     * Returns an IntInterval for the range of integers inclusively between from and to with the specified
      * stepBy value.
      */
     public static IntInterval fromToBy(int from, int to, int stepBy)
@@ -237,7 +237,7 @@ public final class IntInterval
     }
 
     /**
-     * Returns true if the Interval contains all of the specified int values.
+     * Returns true if the IntInterval contains all of the specified int values.
      */
     public boolean containsAll(int... values)
     {
@@ -252,7 +252,7 @@ public final class IntInterval
     }
 
     /**
-     * Returns true if the Interval contains none of the specified int values.
+     * Returns true if the IntInterval contains none of the specified int values.
      */
     public boolean containsNone(int... values)
     {
@@ -267,7 +267,7 @@ public final class IntInterval
     }
 
     /**
-     * Returns true if the Interval contains the specified int value.
+     * Returns true if the IntInterval contains the specified int value.
      */
     public boolean contains(int value)
     {
@@ -417,9 +417,9 @@ public final class IntInterval
     }
 
     /**
-     * Returns a new interval with the from and to values reversed and the step value negated.
+     * Returns a new IntInterval with the from and to values reversed and the step value negated.
      */
-    public IntInterval toReverse()
+    public IntInterval toReversed()
     {
         return IntInterval.fromToBy(this.to, this.from, -this.step);
     }
@@ -508,11 +508,6 @@ public final class IntInterval
         return result;
     }
 
-    public String toIntervalString()
-    {
-        return "IntInterval from: " + this.from + " to: " + this.to + " step: " + this.step + " size: " + this.size();
-    }
-
     @Override
     public String toString()
     {
@@ -521,7 +516,7 @@ public final class IntInterval
 
     public IntIterator intIterator()
     {
-        return new IntervalIterator();
+        return new IntIntervalIterator();
     }
 
     public int getFirst()
@@ -654,7 +649,7 @@ public final class IntInterval
         return array;
     }
 
-    private class IntervalIterator implements IntIterator
+    private class IntIntervalIterator implements IntIterator
     {
         private int current = IntInterval.this.from;
 
