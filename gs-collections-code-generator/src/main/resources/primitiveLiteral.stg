@@ -144,9 +144,9 @@ castSum ::= [
 ]
 
 castExpression ::= [
-    "byte": "byteCast",
-    "short": "shortCast",
-    "char": "charCast",
+    "byte": "byteCastExpression",
+    "short": "shortCastExpression",
+    "char": "charCastExpression",
     "int": "noCast",
     "long": "noCast",
     "float": "noCast",
@@ -157,15 +157,15 @@ noCast(item) ::= <<
 <item>
 >>
 
-shortCast(item) ::= <<
+shortCastExpression(item) ::= <<
 (short) (<item>)
 >>
 
-byteCast(item) ::= <<
+byteCastExpression(item) ::= <<
 (byte) (<item>)
 >>
 
-charCast(item) ::= <<
+charCastExpression(item) ::= <<
 (char) (<item>)
 >>
 
@@ -182,3 +182,37 @@ bitShiftCast ::= [
 intCast(item) ::= <<
 (int) <item>
 >>
+
+shortCast(item) ::= <<
+(short) <item>
+>>
+
+byteCast(item) ::= <<
+(byte) <item>
+>>
+
+charCast(item) ::= <<
+(char) <item>
+>>
+
+longCast(item) ::= <<
+(long) <item>
+>>
+
+floatCast(item) ::= <<
+(float) <item>
+>>
+
+doubleCast(item) ::= <<
+(double) <item>
+>>
+
+precisionCast ::= [
+    "byte": "byteCast",
+    "short": "shortCast",
+    "char": "charCast",
+    "int": "noCast",
+    "long": "longCast",
+    "float": "floatCast",
+    "double": "doubleCast"
+]

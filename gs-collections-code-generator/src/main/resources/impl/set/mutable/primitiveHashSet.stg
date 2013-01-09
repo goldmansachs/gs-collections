@@ -140,7 +140,7 @@ public final class <name>HashSet implements Mutable<name>Set
         return <(betweenZeroAndThirtyOne.(type))("value")>;
     }
 
-    private static boolean isValidEntry(<type> value)
+    private static boolean isNonSentinel(<type> value)
     {
         return <(notEquals.(type))("value", "EMPTY")> && <(notEquals.(type))("value", "REMOVED")>;
     }
@@ -236,7 +236,7 @@ public final class <name>HashSet implements Mutable<name>Set
             this.zeroToThirtyOneOccupied = Integer.bitCount(this.zeroToThirtyOne);
             for (<type> item : hashSet.table)
             {
-                if (isValidEntry(item))
+                if (isNonSentinel(item))
                 {
                     this.add(item);
                 }
@@ -301,7 +301,7 @@ public final class <name>HashSet implements Mutable<name>Set
             this.zeroToThirtyOneOccupied = Integer.bitCount(this.zeroToThirtyOne);
             for (<type> item : hashSet.table)
             {
-                if (isValidEntry(item))
+                if (isNonSentinel(item))
                 {
                     this.remove(item);
                 }
@@ -347,7 +347,7 @@ public final class <name>HashSet implements Mutable<name>Set
 
         for (int i = 0; i \< oldLength; i++)
         {
-            if (isValidEntry(old[i]))
+            if (isNonSentinel(old[i]))
             {
                 this.add(old[i]);
             }
@@ -438,17 +438,17 @@ public final class <name>HashSet implements Mutable<name>Set
 
     public void forEach(<name>Procedure procedure)
     {
-        for (<type> value = 0; isBetweenZeroAndThirtyOne(value); value++)
+        int zeroToThirtyOne = this.zeroToThirtyOne;
+        while (zeroToThirtyOne != 0)
         {
-            if (this.contains(value))
-            {
-                procedure.value(value);
-            }
+            <type> value = <(precisionCast.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            procedure.value(value);
+            zeroToThirtyOne &= ~(1 \<\< <(bitShiftCast.(type))("value")>);
         }
 
         for (<type> value : this.table)
         {
-            if (isValidEntry(value))
+            if (isNonSentinel(value))
             {
                 procedure.value(value);
             }
@@ -458,18 +458,20 @@ public final class <name>HashSet implements Mutable<name>Set
     public int count(<name>Predicate predicate)
     {
         int count = 0;
-
-        for (<type> value = <zero.(type)>; isBetweenZeroAndThirtyOne(value); value++)
+        int zeroToThirtyOne = this.zeroToThirtyOne;
+        while (zeroToThirtyOne != 0)
         {
-            if (this.contains(value) && predicate.accept(value))
+            <type> value = <(precisionCast.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            if (predicate.accept(value))
             {
                 count++;
             }
+            zeroToThirtyOne &= ~(1 \<\< <(bitShiftCast.(type))("value")>);
         }
 
         for (<type> value : this.table)
         {
-            if (isValidEntry(value))
+            if (isNonSentinel(value))
             {
                 if (predicate.accept(value))
                 {
@@ -482,17 +484,20 @@ public final class <name>HashSet implements Mutable<name>Set
 
     public boolean anySatisfy(<name>Predicate predicate)
     {
-        for (<type> value = <zero.(type)>; isBetweenZeroAndThirtyOne(value); value++)
+        int zeroToThirtyOne = this.zeroToThirtyOne;
+        while (zeroToThirtyOne != 0)
         {
-            if (this.contains(value) && predicate.accept(value))
+            <type> value = <(precisionCast.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            if (predicate.accept(value))
             {
                 return true;
             }
+            zeroToThirtyOne &= ~(1 \<\< <(bitShiftCast.(type))("value")>);
         }
 
         for (<type> value : this.table)
         {
-            if (isValidEntry(value))
+            if (isNonSentinel(value))
             {
                 if (predicate.accept(value))
                 {
@@ -505,17 +510,20 @@ public final class <name>HashSet implements Mutable<name>Set
 
     public boolean allSatisfy(<name>Predicate predicate)
     {
-        for (<type> value = <zero.(type)>; isBetweenZeroAndThirtyOne(value); value++)
+        int zeroToThirtyOne = this.zeroToThirtyOne;
+        while (zeroToThirtyOne != 0)
         {
-            if (this.contains(value) && !predicate.accept(value))
+            <type> value = <(precisionCast.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            if (!predicate.accept(value))
             {
                 return false;
             }
+            zeroToThirtyOne &= ~(1 \<\< <(bitShiftCast.(type))("value")>);
         }
 
         for (<type> value : this.table)
         {
-            if (isValidEntry(value))
+            if (isNonSentinel(value))
             {
                 if (!predicate.accept(value))
                 {
@@ -530,17 +538,20 @@ public final class <name>HashSet implements Mutable<name>Set
     {
         <name>HashSet result = new <name>HashSet();
 
-        for (<type> value = <zero.(type)>; isBetweenZeroAndThirtyOne(value); value++)
+        int zeroToThirtyOne = this.zeroToThirtyOne;
+        while (zeroToThirtyOne != 0)
         {
-            if (this.contains(value) && predicate.accept(value))
+            <type> value = <(precisionCast.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            if (predicate.accept(value))
             {
                 result.add(value);
             }
+            zeroToThirtyOne &= ~(1 \<\< <(bitShiftCast.(type))("value")>);
         }
 
         for (<type> value : this.table)
         {
-            if (isValidEntry(value))
+            if (isNonSentinel(value))
             {
                 if (predicate.accept(value))
                 {
@@ -555,17 +566,20 @@ public final class <name>HashSet implements Mutable<name>Set
     {
         <name>HashSet result = new <name>HashSet();
 
-        for (<type> value = <zero.(type)>; isBetweenZeroAndThirtyOne(value); value++)
+        int zeroToThirtyOne = this.zeroToThirtyOne;
+        while (zeroToThirtyOne != 0)
         {
-            if (this.contains(value) && !predicate.accept(value))
+            <type> value = <(precisionCast.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            if (!predicate.accept(value))
             {
                 result.add(value);
             }
+            zeroToThirtyOne &= ~(1 \<\< <(bitShiftCast.(type))("value")>);
         }
 
         for (<type> value : this.table)
         {
-            if (isValidEntry(value))
+            if (isNonSentinel(value))
             {
                 if (!predicate.accept(value))
                 {
@@ -578,17 +592,20 @@ public final class <name>HashSet implements Mutable<name>Set
 
     public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
     {
-        for (<type> value = <zero.(type)>; isBetweenZeroAndThirtyOne(value); value++)
+        int zeroToThirtyOne = this.zeroToThirtyOne;
+        while (zeroToThirtyOne != 0)
         {
-            if (this.contains(value) && predicate.accept(value))
+            <type> value = <(precisionCast.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            if (predicate.accept(value))
             {
                 return value;
             }
+            zeroToThirtyOne &= ~(1 \<\< <(bitShiftCast.(type))("value")>);
         }
 
         for (<type> value : this.table)
         {
-            if (isValidEntry(value))
+            if (isNonSentinel(value))
             {
                 if (predicate.accept(value))
                 {
@@ -603,17 +620,17 @@ public final class <name>HashSet implements Mutable<name>Set
     {
         MutableSet\<V\> target = UnifiedSet.newSet(this.size());
 
-        for (<type> value = <zero.(type)>; isBetweenZeroAndThirtyOne(value); value++)
+        int zeroToThirtyOne = this.zeroToThirtyOne;
+        while (zeroToThirtyOne != 0)
         {
-            if (this.contains(value))
-            {
-                target.add(function.valueOf(value));
-            }
+            <type> value = <(precisionCast.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            target.add(function.valueOf(value));
+            zeroToThirtyOne &= ~(1 \<\< <(bitShiftCast.(type))("value")>);
         }
 
         for (<type> value : this.table)
         {
-            if (isValidEntry(value))
+            if (isNonSentinel(value))
             {
                 target.add(function.valueOf(value));
             }
@@ -625,17 +642,17 @@ public final class <name>HashSet implements Mutable<name>Set
     {
         <wideType.(type)> result = <wideZero.(type)>;
 
-        for (<type> value = <zero.(type)>; isBetweenZeroAndThirtyOne(value); value++)
+        int zeroToThirtyOne = this.zeroToThirtyOne;
+        while (zeroToThirtyOne != 0)
         {
-            if (this.contains(value))
-            {
-                result += value;
-            }
+            <type> value = <(precisionCast.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            result += value;
+            zeroToThirtyOne &= ~(1 \<\< <(bitShiftCast.(type))("value")>);
         }
 
         for (<type> value : this.table)
         {
-            if (isValidEntry(value))
+            if (isNonSentinel(value))
             {
                 result += value;
             }
@@ -649,21 +666,12 @@ public final class <name>HashSet implements Mutable<name>Set
         {
             throw new NoSuchElementException();
         }
-        <type> max = <zero.(type)>;
-        boolean isMaxSet = false;
-
-        for (<type> value = <zero.(type)>; isBetweenZeroAndThirtyOne(value); value++)
-        {
-            if (this.contains(value))
-            {
-                max = value;
-                isMaxSet = true;
-            }
-        }
+        <type> max = <(castExpression.(type))("31 - Integer.numberOfLeadingZeros(this.zeroToThirtyOne)")>;
+        boolean isMaxSet = this.zeroToThirtyOneOccupied != 0;
 
         for (<type> value : this.table)
         {
-            if (isValidEntry(value) && (!isMaxSet || <(lessThan.(type))("max", "value")>))
+            if (isNonSentinel(value) && (!isMaxSet || <(lessThan.(type))("max", "value")>))
             {
                 max = value;
                 isMaxSet = true;
@@ -678,21 +686,12 @@ public final class <name>HashSet implements Mutable<name>Set
         {
             throw new NoSuchElementException();
         }
-        <type> min = <zero.(type)>;
-        boolean isMinSet = false;
-
-        for (<type> value = <zero.(type)>; isBetweenZeroAndThirtyOne(value) && !isMinSet; value++)
-        {
-            if (this.contains(value))
-            {
-                min = value;
-                isMinSet = true;
-            }
-        }
+        <type> min = <(precisionCast.(type))("Integer.numberOfTrailingZeros(this.zeroToThirtyOne)")>;
+        boolean isMinSet = this.zeroToThirtyOneOccupied != 0;
 
         for (<type> value : this.table)
         {
-            if (isValidEntry(value) && (!isMinSet || <(lessThan.(type))("value", "min")>))
+            if (isNonSentinel(value) && (!isMinSet || <(lessThan.(type))("value", "min")>))
             {
                 min = value;
                 isMinSet = true;
@@ -724,18 +723,18 @@ public final class <name>HashSet implements Mutable<name>Set
         <type>[] array = new <type>[this.size()];
 
         int j = 0;
-        for (<type> value = <zero.(type)>; isBetweenZeroAndThirtyOne(value); value++)
+        int zeroToThirtyOne = this.zeroToThirtyOne;
+        while (zeroToThirtyOne != 0)
         {
-            if (this.contains(value))
-            {
-                array[j] = value;
-                j++;
-            }
+            <type> value = <(precisionCast.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            array[j] = value;
+            j++;
+            zeroToThirtyOne &= ~(1 \<\< <(bitShiftCast.(type))("value")>);
         }
 
         for (int i = 0; i \< this.table.length && j \< this.size(); i++)
         {
-            if (isValidEntry(this.table[i]))
+            if (isNonSentinel(this.table[i]))
             {
                 array[j] = this.table[i];
                 j++;
@@ -816,22 +815,22 @@ public final class <name>HashSet implements Mutable<name>Set
             appendable.append(start);
 
             int count = 0;
-            for (<type> value = <zero.(type)>; isBetweenZeroAndThirtyOne(value); value++)
+            int zeroToThirtyOne = this.zeroToThirtyOne;
+            while (zeroToThirtyOne != 0)
             {
-                if (this.contains(value))
+                <type> value = <(precisionCast.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+                if (count > 0)
                 {
-                    if (count > 0)
-                    {
-                        appendable.append(separator);
-                    }
-                    count++;
-                    appendable.append(String.valueOf(value));
+                    appendable.append(separator);
                 }
+                count++;
+                appendable.append(String.valueOf(value));
+                zeroToThirtyOne &= ~(1 \<\< <(bitShiftCast.(type))("value")>);
             }
 
             for (<type> value : this.table)
             {
-                if (isValidEntry(value))
+                if (isNonSentinel(value))
                 {
                     if (count > 0)
                     {
@@ -901,5 +900,5 @@ value \>= <zero.(type)> && value \<= <(literal.(type))("31")>
 >>
 
 floatBetweenZeroAndThirtyOne(value) ::= <<
-value \>= <zero.(type)> && value \<= 31 && Double.compare(value, Math.floor(value)) == 0
+value \>= <zero.(type)> && value \<= <(literal.(type))("31")> && Double.compare(value, Math.floor(value)) == 0
 >>
