@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.list.mutable;
+package com.gs.collections.impl.list.fixed;
 
 import java.util.ListIterator;
 
-public class UnmodifiableListIteratorAdapter<T>
+public class FixedSizeListIteratorAdapter<T>
         implements ListIterator<T>
 {
-    private final ListIterator<? extends T> iterator;
+    private final ListIterator<T> iterator;
 
-    public UnmodifiableListIteratorAdapter(ListIterator<T> iterator)
+    public FixedSizeListIteratorAdapter(ListIterator<T> iterator)
     {
         this.iterator = iterator;
     }
@@ -65,7 +65,7 @@ public class UnmodifiableListIteratorAdapter<T>
 
     public void set(T o)
     {
-        throw new UnsupportedOperationException();
+        this.iterator.set(o);
     }
 
     public void add(T o)

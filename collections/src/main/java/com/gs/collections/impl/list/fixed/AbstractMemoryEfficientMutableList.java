@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package com.gs.collections.impl.list.fixed;
 
 import java.util.Collection;
+import java.util.ListIterator;
 import java.util.RandomAccess;
 
 import com.gs.collections.api.block.predicate.Predicate;
@@ -218,5 +219,17 @@ public abstract class AbstractMemoryEfficientMutableList<T>
         {
             throw new UnsupportedOperationException("Cannot add to a fixed size list: " + this.getClass());
         }
+    }
+
+    @Override
+    public ListIterator<T> listIterator(int index)
+    {
+        return new FixedSizeListIteratorAdapter<T>(super.listIterator(index));
+    }
+
+    @Override
+    public ListIterator<T> listIterator()
+    {
+        return new FixedSizeListIteratorAdapter<T>(super.listIterator());
     }
 }

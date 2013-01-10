@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,8 @@ public abstract class UnmodifiableMemoryEfficientListTestCase<T> extends Unmodif
     @Test
     public void listIterator()
     {
-        final ListIterator<T> it = this.getCollection().listIterator();
+        MutableList<T> collection = this.getCollection();
+        final ListIterator<T> it = collection.listIterator();
         Assert.assertFalse(it.hasPrevious());
         Assert.assertEquals(-1, it.previousIndex());
         Assert.assertEquals(0, it.nextIndex());
@@ -58,6 +59,9 @@ public abstract class UnmodifiableMemoryEfficientListTestCase<T> extends Unmodif
                 it.add(null);
             }
         });
+
+        it.set(null);
+        Verify.assertNotEquals(this.getCollection(), collection);
     }
 
     @Test
