@@ -50,6 +50,7 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.procedure.MapEntryToProcedure2;
 import com.gs.collections.impl.factory.Maps;
+import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.MapIterate;
 import com.gs.collections.impl.utility.internal.IterableIterate;
@@ -1418,43 +1419,91 @@ public final class ConcurrentHashMap<K, V>
         }
     }
 
+    private static final class IteratorState
+    {
+        private AtomicReferenceArray currentTable;
+        private int start;
+        private int end;
+
+        private IteratorState(AtomicReferenceArray currentTable)
+        {
+            this.currentTable = currentTable;
+            this.end = this.currentTable.length() - 1;
+        }
+
+        private IteratorState(AtomicReferenceArray currentTable, int start, int end)
+        {
+            this.currentTable = currentTable;
+            this.start = start;
+            this.end = end;
+        }
+    }
+
     private abstract class HashIterator<E> implements Iterator<E>
     {
+        private List<IteratorState> todo = null;
+        private IteratorState currentState;
         private Entry<K, V> next;
         private int index = 0;
         private Entry<K, V> current;
-        private AtomicReferenceArray currentTable;
 
         protected HashIterator()
         {
-            if (ConcurrentHashMap.this.size > 0)
+            if (!ConcurrentHashMap.this.isEmpty())
             {
-                this.currentTable = ConcurrentHashMap.this.table;
+                this.currentState = new IteratorState(ConcurrentHashMap.this.table);
                 this.findNext();
             }
         }
 
         private void findNext()
         {
-            for (; this.index < this.currentTable.length() - 1; this.index++)
+            while (this.index < this.currentState.end)
             {
-                Object o = this.currentTable.get(this.index);
+                Object o = this.currentState.currentTable.get(this.index);
                 if (o == RESIZED || o == RESIZING)
                 {
-                    this.throwConcurrentException();
+                    AtomicReferenceArray nextArray = ConcurrentHashMap.this.helpWithResizeWhileCurrentIndex(this.currentState.currentTable, this.index);
+                    int endResized = this.index + 1;
+                    while (endResized < this.currentState.end)
+                    {
+                        if (this.currentState.currentTable.get(endResized) != RESIZED)
+                        {
+                            break;
+                        }
+                        endResized++;
+                    }
+                    if (this.todo == null)
+                    {
+                        this.todo = new FastList<IteratorState>(4);
+                    }
+                    if (endResized < this.currentState.end)
+                    {
+                        this.todo.add(new IteratorState(this.currentState.currentTable, endResized, this.currentState.end));
+                    }
+                    int powerTwoLength = this.currentState.currentTable.length() - 1;
+                    this.todo.add(new IteratorState(nextArray, this.index + powerTwoLength, endResized + powerTwoLength));
+                    this.currentState.currentTable = nextArray;
+                    this.currentState.end = endResized;
+                    this.currentState.start = this.index;
                 }
-                if (o != null)
+                else if (o != null)
                 {
                     this.next = (Entry<K, V>) o;
                     this.index++;
                     break;
                 }
+                else
+                {
+                    this.index++;
+                }
             }
-        }
-
-        private void throwConcurrentException()
-        {
-            throw new ConcurrentModificationException("Can't iterate while resizing");
+            if (this.next == null && this.index == this.currentState.end && this.todo != null && !this.todo.isEmpty())
+            {
+                this.currentState = this.todo.remove(this.todo.size() - 1);
+                this.index = this.currentState.start;
+                this.findNext();
+            }
         }
 
         public final boolean hasNext()
@@ -1695,7 +1744,7 @@ public final class ConcurrentHashMap<K, V>
 
     private static final class ResizeContainer
     {
-        private static final int QUEUE_INCREMENT = 1 << 15;
+        private static final int QUEUE_INCREMENT = Math.min(1 << 10, Integer.highestOneBit(Runtime.getRuntime().availableProcessors()) << 4);
         private final AtomicInteger resizers = new AtomicInteger(1);
         private final AtomicReferenceArray nextArray;
         private final AtomicInteger queuePosition;
