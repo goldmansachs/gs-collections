@@ -118,7 +118,7 @@ public class Select<name>IterableTest
     @Test
     public void collect()
     {
-        Verify.assertIterableSize(2, this.iterable.collect(new <name>ToObjectFunction\<String\>()
+        Verify.assertIterableSize(2, this.iterable.collect(new <name>ToObjectFunction\<String>()
         {
             public String valueOf(<type> <type>Parameter)
             {

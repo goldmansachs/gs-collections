@@ -111,7 +111,7 @@ public final class <name>Predicates
 
         public boolean accept(<type> actual)
         {
-            return actual \> this.expected;
+            return actual > this.expected;
         }
     }
 

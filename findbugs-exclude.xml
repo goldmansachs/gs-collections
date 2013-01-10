@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  ~ Copyright 2012 Goldman Sachs.
+  ~ Copyright 2013 Goldman Sachs.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -156,8 +156,8 @@
     <!--NP: Read of unwritten field (NP_UNWRITTEN_FIELD)-->
 
     <!--The program is dereferencing a field that does not seem to ever have a non-null value written to it.
-     Unless the field is initialized via some mechanism not seen by the analysis, dereferencing this value will
-     generate a null pointer exception.-->
+        Unless the field is initialized via some mechanism not seen by the analysis, dereferencing this value will
+        generate a null pointer exception.-->
     <Match>
         <Bug pattern="NP_UNWRITTEN_FIELD" />
         <Class name="com.gs.collections.codegenerator.maven.GenerateMojo" />
@@ -180,7 +180,8 @@
             thread is waiting for has become true.  However, for the condition to be meaningful, it must involve a heap
             object that is visible to both threads.-->
 
-        <!--This bug does not necessarily indicate an error, since the change to mutable object state may have taken place in a method which then called the method containing the notification.-->
+        <!--This bug does not necessarily indicate an error, since the change to mutable object state may have taken
+            place in a method which then called the method containing the notification.-->
         <Bug pattern="NN_NAKED_NOTIFY" />
         <Or>
             <Class name="com.gs.collections.impl.map.mutable.ConcurrentHashMapUnsafe$ResizeContainer" />
@@ -203,5 +204,15 @@
             <Class name="com.gs.collections.impl.map.strategy.mutable.UnifiedMapWithHashingStrategy$1" />
             <Class name="com.gs.collections.impl.map.strategy.mutable.UnifiedMapWithHashingStrategy$2" />
         </Or>
+    </Match>
+
+    <Match>
+        <!--Dm: Reliance on default encoding (DM_DEFAULT_ENCODING)-->
+
+        <!--Found a call to a method which will perform a byte to String (or String to byte) conversion, and will assume
+            that the default platform encoding is suitable. This will cause the application behaviour to vary between
+            platforms. Use an alternative API and specify a charset name or Charset object explicitly.-->
+        <Bug pattern="DM_DEFAULT_ENCODING" />
+        <Class name="com.gs.collections.codegenerator.tools.FileUtils" />
     </Match>
 </FindBugsFilter>

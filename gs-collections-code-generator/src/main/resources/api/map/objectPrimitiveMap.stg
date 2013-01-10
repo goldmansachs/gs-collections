@@ -22,7 +22,7 @@ import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 /**
  * This file was automatically generated from template file objectPrimitiveMap.stg.
  */
-public interface Object<name>Map\<K\> extends <name>Iterable
+public interface Object<name>Map\<K> extends <name>Iterable
 {
     <type> get(Object key);
 
@@ -32,13 +32,13 @@ public interface Object<name>Map\<K\> extends <name>Iterable
 
     void forEachValue(<name>Procedure procedure);
 
-    void forEachKey(Procedure\<? super K\> procedure);
+    void forEachKey(Procedure\<? super K> procedure);
 
-    void forEachKeyValue(Object<name>Procedure\<? super K\> procedure);
+    void forEachKeyValue(Object<name>Procedure\<? super K> procedure);
 
-    Object<name>Map\<K\> select(Object<name>Predicate\<? super K\> predicate);
+    Object<name>Map\<K> select(Object<name>Predicate\<? super K> predicate);
 
-    Object<name>Map\<K\> reject(Object<name>Predicate\<? super K\> predicate);
+    Object<name>Map\<K> reject(Object<name>Predicate\<? super K> predicate);
 }
 
 >>

@@ -67,7 +67,7 @@ public final class <name>ArrayList
 
     /**
      * Creates a new list using the passed {@code elements} argument as the backing store.
-     * \<p/\>
+     * \<p/>
      * !!! WARNING: This method uses the passed in array, so can be very unsafe if the original
      * array is held onto anywhere else. !!!
      */
@@ -184,7 +184,7 @@ public final class <name>ArrayList
 
     public int lastIndexOf(<type> value)
     {
-        for (int i = this.size - 1; i \>= 0; i--)
+        for (int i = this.size - 1; i >= 0; i--)
         {
             if (<(equals.(type))("this.items[i]", "value")>)
             {
@@ -216,14 +216,14 @@ public final class <name>ArrayList
 
     private int sizePlusFiftyPercent(int oldSize)
     {
-        int result = oldSize + (oldSize \>\> 1) + 1;
+        int result = oldSize + (oldSize >\> 1) + 1;
         return result \< oldSize ? MAXIMUM_ARRAY_SIZE : result;
     }
 
     public void ensureCapacity(int minCapacity)
     {
         int oldCapacity = this.items.length;
-        if (minCapacity \> oldCapacity)
+        if (minCapacity > oldCapacity)
         {
             int newCapacity = Math.max(this.sizePlusFiftyPercent(oldCapacity), minCapacity);
             this.transferItemsToNewArrayWithCapacity(newCapacity);
@@ -274,7 +274,7 @@ public final class <name>ArrayList
 
     public void addAtIndex(int index, <type> element)
     {
-        if (index \> -1 && index \< this.size)
+        if (index > -1 && index \< this.size)
         {
             this.addAtIndexLessThanSize(index, element);
         }
@@ -295,7 +295,7 @@ public final class <name>ArrayList
         if (this.items.length == oldSize)
         {
             <type>[] newItems = new <type>[this.sizePlusFiftyPercent(oldSize)];
-            if (index \> 0)
+            if (index > 0)
             {
                 System.arraycopy(this.items, 0, newItems, 0, index);
             }
@@ -311,7 +311,7 @@ public final class <name>ArrayList
 
     public boolean addAllAtIndex(int index, <type>... source)
     {
-        if (index \> this.size || index \< 0)
+        if (index > this.size || index \< 0)
         {
             this.throwOutOfBounds(index);
         }
@@ -331,7 +331,7 @@ public final class <name>ArrayList
     private void shiftElementsAtIndex(int index, int sourceSize)
     {
         int numberToMove = this.size - index;
-        if (numberToMove \> 0)
+        if (numberToMove > 0)
         {
             System.arraycopy(this.items, index, this.items, index + sourceSize, numberToMove);
         }
@@ -340,7 +340,7 @@ public final class <name>ArrayList
     public boolean remove(<type> value)
     {
         int index = this.indexOf(value);
-        if (index \>= 0)
+        if (index >= 0)
         {
             this.removeAtIndex(index);
             return true;
@@ -380,7 +380,7 @@ public final class <name>ArrayList
     {
         <type> previous = this.get(index);
         int totalOffset = this.size - index - 1;
-        if (totalOffset \> 0)
+        if (totalOffset > 0)
         {
             System.arraycopy(this.items, index + 1, this.items, index, totalOffset);
         }
@@ -542,9 +542,9 @@ public final class <name>ArrayList
         return ifNone;
     }
 
-    public \<V\> RichIterable\<V\> collect(<name>ToObjectFunction\<? extends V\> function)
+    public \<V> RichIterable\<V> collect(<name>ToObjectFunction\<? extends V> function)
     {
-        FastList\<V\> target = FastList.newList(this.size);
+        FastList\<V> target = FastList.newList(this.size);
         for (int i = 0; i \< this.size; i++)
         {
             target.add(function.valueOf(this.items[i]));
@@ -580,7 +580,7 @@ public final class <name>ArrayList
         for (int i = 1; i \< this.size; i++)
         {
             <type> value = this.items[i];
-            if (min \> value)
+            if (min > value)
             {
                 min = value;
             }
@@ -606,7 +606,7 @@ public final class <name>ArrayList
     public double median()
     {
         <type>[] sortedArray = this.toSortedArray();
-        int middleIndex = sortedArray.length \>\> 1;
+        int middleIndex = sortedArray.length >\> 1;
         if (sortedArray.length > 1 && (sortedArray.length & 1) == 0)
         {
             <type> first = sortedArray[middleIndex];
@@ -712,7 +712,7 @@ public final class <name>ArrayList
             appendable.append(start);
             for (int i = 0; i \< this.size; i++)
             {
-                if (i \> 0)
+                if (i > 0)
                 {
                     appendable.append(separator);
                 }
@@ -753,12 +753,6 @@ public final class <name>ArrayList
          */
         private int currentIndex;
 
-        /**
-         * Index of element returned by most recent call to next or previous.  Reset to -1 if this element is deleted by
-         * a call to remove.
-         */
-        protected int lastIndex = -1;
-
         public boolean hasNext()
         {
             return this.currentIndex != <name>ArrayList.this.size();
@@ -769,7 +763,6 @@ public final class <name>ArrayList
             try
             {
                 <type> next = <name>ArrayList.this.items[this.currentIndex];
-                this.lastIndex = this.currentIndex;
                 this.currentIndex++;
                 return next;
             }

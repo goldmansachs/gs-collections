@@ -43,7 +43,7 @@ public interface <name>Iterable extends PrimitiveIterable
 
     <type> detectIfNone(<name>Predicate predicate, <type> ifNone);
 
-    \<V\> RichIterable\<V\> collect(<name>ToObjectFunction\<? extends V\> function);
+    \<V> RichIterable\<V> collect(<name>ToObjectFunction\<? extends V> function);
 
     <(arithmeticMethods.(type))(type)>
 

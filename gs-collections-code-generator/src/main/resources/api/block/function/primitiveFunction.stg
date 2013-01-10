@@ -20,7 +20,7 @@ import java.io.Serializable;
  * <name>Function is a primitive Function which may be used to reduce the overhead
  * of autoboxing <wrapperName> objects in places where primitive <type>s could be used.
  */
-public interface <name>Function\<T\>
+public interface <name>Function\<T>
         extends Serializable
 {
     <type> <type>ValueOf(T anObject);

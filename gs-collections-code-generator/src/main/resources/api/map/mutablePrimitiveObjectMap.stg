@@ -22,25 +22,25 @@ import com.gs.collections.api.block.predicate.primitive.<name>ObjectPredicate;
 /**
  * This file was automatically generated from template file mutablePrimitiveObjectMap.stg.
  */
-public interface Mutable<name>ObjectMap\<V\> extends <name>ObjectMap\<V\>
+public interface Mutable<name>ObjectMap\<V> extends <name>ObjectMap\<V>
 {
     V removeKey(<type> key);
 
-    V getIfAbsentPut(<type> key, Function0\<? extends V\> function);
+    V getIfAbsentPut(<type> key, Function0\<? extends V> function);
 
-    V getIfAbsentPutWithKey(<type> key, <name>ToObjectFunction\<? extends V\> function);
+    V getIfAbsentPutWithKey(<type> key, <name>ToObjectFunction\<? extends V> function);
 
-    \<P\> V getIfAbsentPutWith(<type> key, Function\<? super P, ? extends V\> function, P parameter);
+    \<P> V getIfAbsentPutWith(<type> key, Function\<? super P, ? extends V> function, P parameter);
 
-    Mutable<name>ObjectMap\<V\> select(<name>ObjectPredicate\<? super V\> predicate);
+    Mutable<name>ObjectMap\<V> select(<name>ObjectPredicate\<? super V> predicate);
 
-    Mutable<name>ObjectMap\<V\> reject(<name>ObjectPredicate\<? super V\> predicate);
+    Mutable<name>ObjectMap\<V> reject(<name>ObjectPredicate\<? super V> predicate);
 
-    Mutable<name>ObjectMap\<V\> withKeyValue(<type> key, V value);
+    Mutable<name>ObjectMap\<V> withKeyValue(<type> key, V value);
 
-    Mutable<name>ObjectMap\<V\> withoutKey(<type> key);
+    Mutable<name>ObjectMap\<V> withoutKey(<type> key);
 
-    Mutable<name>ObjectMap\<V\> withoutAllKeys(<name>Iterable keys);
+    Mutable<name>ObjectMap\<V> withoutAllKeys(<name>Iterable keys);
 }
 
 >>

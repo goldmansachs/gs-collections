@@ -28,6 +28,9 @@ import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
 
+/**
+ * This file was automatically generated from template file primitiveSelectIterable.stg.
+ */
 public class Select<name>Iterable
     implements <name>Iterable
 {
@@ -105,9 +108,9 @@ public class Select<name>Iterable
         return ifNone;
     }
 
-    public \<V\> RichIterable\<V\> collect(<name>ToObjectFunction\<? extends V\> function)
+    public \<V> RichIterable\<V> collect(<name>ToObjectFunction\<? extends V> function)
     {
-        return new Collect<name>ToObjectIterable\<V\>(this, function);
+        return new Collect<name>ToObjectIterable\<V>(this, function);
     }
 
     <(arithmeticMethods.(type))(name, type)>
@@ -351,7 +354,7 @@ allMethods(name, type) ::=<<
     public double median()
     {
         <type>[] sortedArray = this.toSortedArray();
-        int middleIndex = sortedArray.length \>\> 1;
+        int middleIndex = sortedArray.length >\> 1;
         if (sortedArray.length > 1 && (sortedArray.length & 1) == 0)
         {
             <type> first = sortedArray[middleIndex];

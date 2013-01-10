@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -614,12 +614,6 @@ public final class BooleanArrayList
     private class InternalBooleanIterator implements BooleanIterator
     {
         /**
-         * Index of element returned by most recent call to next or previous.  Reset to -1 if this element is deleted by
-         * a call to remove.
-         */
-        protected int lastIndex = -1;
-
-        /**
          * Index of element to be returned by subsequent call to next.
          */
         private int currentIndex;
@@ -634,7 +628,6 @@ public final class BooleanArrayList
             try
             {
                 boolean next = BooleanArrayList.this.get(this.currentIndex);
-                this.lastIndex = this.currentIndex;
                 this.currentIndex++;
                 return next;
             }

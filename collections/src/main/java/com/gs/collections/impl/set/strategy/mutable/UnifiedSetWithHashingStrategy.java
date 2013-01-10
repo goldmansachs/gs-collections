@@ -1911,6 +1911,9 @@ public class UnifiedSetWithHashingStrategy<K>
                             return;
                         }
                         this.three = null;
+                        return;
+                    default:
+                        throw new AssertionError();
                 }
             }
         }

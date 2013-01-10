@@ -18,7 +18,7 @@ import java.io.Serializable;
 /**
  * This file was automatically generated from template file primitiveToObjectFunction.stg.
  */
-public interface <name>ObjectTo<name>Function\<T\>
+public interface <name>ObjectTo<name>Function\<T>
         extends Serializable
 {
     <type> <type>ValueOf(<type> <type>Parameter, T objectParameter);

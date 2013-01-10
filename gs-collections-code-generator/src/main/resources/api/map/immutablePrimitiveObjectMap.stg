@@ -19,17 +19,17 @@ import com.gs.collections.api.block.predicate.primitive.<name>ObjectPredicate;
 /**
  * This file was automatically generated from template file immutablePrimitiveObjectMap.stg.
  */
-public interface Immutable<name>ObjectMap\<V\> extends <name>ObjectMap\<V\>
+public interface Immutable<name>ObjectMap\<V> extends <name>ObjectMap\<V>
 {
-    Immutable<name>ObjectMap\<V\> select(<name>ObjectPredicate\<? super V\> predicate);
+    Immutable<name>ObjectMap\<V> select(<name>ObjectPredicate\<? super V> predicate);
 
-    Immutable<name>ObjectMap\<V\> reject(<name>ObjectPredicate\<? super V\> predicate);
+    Immutable<name>ObjectMap\<V> reject(<name>ObjectPredicate\<? super V> predicate);
 
-    Immutable<name>ObjectMap\<V\> newWithKeyValue(<type> key, V value);
+    Immutable<name>ObjectMap\<V> newWithKeyValue(<type> key, V value);
 
-    Immutable<name>ObjectMap\<V\> newWithoutKey(<type> key);
+    Immutable<name>ObjectMap\<V> newWithoutKey(<type> key);
 
-    Immutable<name>ObjectMap\<V\> newWithoutAllKeys(<name>Iterable keys);
+    Immutable<name>ObjectMap\<V> newWithoutAllKeys(<name>Iterable keys);
 }
 
 >>

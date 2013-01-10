@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -731,7 +731,7 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
     @Test
     public void retainAllFromKeySet_null_collision()
     {
-        Assume.assumeThat(this.newMap(), not(is(ConcurrentMap.class)));
+        Assume.assumeThat(this.newMap(), not(instanceOf(ConcurrentMap.class)));
 
         IntegerWithCast key = new IntegerWithCast(0);
         MutableMap<IntegerWithCast, String> mutableMap = this.newMapWithKeysValues(
@@ -750,7 +750,7 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
     @Test
     public void rehash_null_collision()
     {
-        Assume.assumeThat(this.newMap(), not(is(ConcurrentMap.class)));
+        Assume.assumeThat(this.newMap(), not(instanceOf(ConcurrentMap.class)));
         MutableMap<IntegerWithCast, String> mutableMap = this.newMapWithKeyValue(null, null);
 
         for (int i = 0; i < 256; i++)

@@ -20,7 +20,7 @@ import java.io.Serializable;
  * A two argument procedure that takes a primitive <type> and type T as the arguments.
  * This file was automatically generated from template file objectPrimitiveProcedure.stg.
  */
-public interface <name>ObjectProcedure\<T\>
+public interface <name>ObjectProcedure\<T>
     extends Serializable
 {
     void value(<type> each, T parameter);

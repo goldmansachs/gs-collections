@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2011 Goldman Sachs.
+  ~ Copyright 2013 Goldman Sachs.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -55,7 +55,7 @@
             conf="compile"
             changing="true" />
 
-        <dependency org="commons-codec" name="commons-codec" rev="1.5" conf="compile" />
+        <dependency org="commons-codec" name="commons-codec" rev="1.6" conf="compile" />
 
         <dependency org="junit" name="junit" rev="${junit.version}" conf="compile" />
 

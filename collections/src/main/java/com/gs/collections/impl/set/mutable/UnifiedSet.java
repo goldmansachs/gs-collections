@@ -1857,6 +1857,9 @@ public class UnifiedSet<K>
                             return;
                         }
                         this.three = null;
+                        return;
+                    default:
+                        throw new AssertionError();
                 }
             }
         }
@@ -1886,6 +1889,8 @@ public class UnifiedSet<K>
                         }
                         bucket.three = null;
                         return;
+                    default:
+                        throw new AssertionError();
                 }
             }
             while (true);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -991,8 +991,8 @@ public abstract class MapIterableTestCase
     @Test
     public void nullCollisionWithCastInEquals()
     {
-        Assume.assumeThat(this.newMap(), not(is(SortedMap.class)));
-        Assume.assumeThat(this.newMap(), not(is(ConcurrentMap.class)));
+        Assume.assumeThat(this.newMap(), not(instanceOf(SortedMap.class)));
+        Assume.assumeThat(this.newMap(), not(instanceOf(ConcurrentMap.class)));
         MapIterable<IntegerWithCast, String> mutableMap = this.newMapWithKeysValues(
                 new IntegerWithCast(0), "Test 2",
                 new IntegerWithCast(0), "Test 3",

@@ -99,7 +99,7 @@ public final class <name>HashSet implements Mutable<name>Set
     private int fastCeil(float v)
     {
         int possibleResult = (int) v;
-        if (v - possibleResult \> 0.0F)
+        if (v - possibleResult > 0.0F)
         {
             possibleResult++;
         }
@@ -174,7 +174,7 @@ public final class <name>HashSet implements Mutable<name>Set
         if (isBetweenZeroAndThirtyOne(value))
         {
             int temp = this.zeroToThirtyOne;
-            return ((temp \>\>\> <(bitShiftCast.(type))("value")>) & 1) != 0;
+            return ((temp >\>> <(bitShiftCast.(type))("value")>) & 1) != 0;
         }
         return <(equals.(type))("this.table[this.probe(value)]", "value")>;
     }
@@ -215,7 +215,7 @@ public final class <name>HashSet implements Mutable<name>Set
 
         this.table[index] = element;
         ++this.occupied;
-        if (this.occupied \> this.maxSize)
+        if (this.occupied > this.maxSize)
         {
             this.rehash();
         }
@@ -399,11 +399,11 @@ public final class <name>HashSet implements Mutable<name>Set
     int index(<type> element)
     {
         int code = <(hashCode.(type))("element")>;
-        code ^= 61 ^ (code \>\> 16);
+        code ^= 61 ^ (code >\> 16);
         code += code \<\< 3;
-        code ^= code \>\> 4;
+        code ^= code >\> 4;
         code *= 0x27d4eb2d;
-        code ^= code \>\> 15;
+        code ^= code >\> 15;
         return code & (this.table.length - 1);
     }
 
@@ -616,9 +616,9 @@ public final class <name>HashSet implements Mutable<name>Set
         return ifNone;
     }
 
-    public \<V\> RichIterable\<V\> collect(<name>ToObjectFunction\<? extends V\> function)
+    public \<V> RichIterable\<V> collect(<name>ToObjectFunction\<? extends V> function)
     {
-        MutableSet\<V\> target = UnifiedSet.newSet(this.size());
+        MutableSet\<V> target = UnifiedSet.newSet(this.size());
 
         int zeroToThirtyOne = this.zeroToThirtyOne;
         while (zeroToThirtyOne != 0)
@@ -708,7 +708,7 @@ public final class <name>HashSet implements Mutable<name>Set
     public double median()
     {
         <type>[] sortedArray = this.toSortedArray();
-        int middleIndex = sortedArray.length \>\> 1;
+        int middleIndex = sortedArray.length >\> 1;
         if (sortedArray.length > 1 && (sortedArray.length & 1) == 0)
         {
             <type> first = sortedArray[middleIndex];
@@ -851,12 +851,6 @@ public final class <name>HashSet implements Mutable<name>Set
     private class Internal<name>Iterator implements <name>Iterator
     {
         /**
-         * Index of element returned by most recent call to next or previous.  Reset to -1 if this element is deleted by
-         * a call to remove.
-         */
-        protected int lastIndex = -1;
-
-        /**
          * Index of element to be returned by subsequent call to next.
          */
         private int currentIndex;
@@ -871,7 +865,6 @@ public final class <name>HashSet implements Mutable<name>Set
             try
             {
                 <type> next = <name>HashSet.this.toArray()[this.currentIndex];
-                this.lastIndex = this.currentIndex;
                 this.currentIndex++;
                 return next;
             }
@@ -896,9 +889,9 @@ betweenZeroAndThirtyOne ::= [
 ]
 
 intBetweenZeroAndThirtyOne(value) ::= <<
-value \>= <zero.(type)> && value \<= <(literal.(type))("31")>
+value >= <zero.(type)> && value \<= <(literal.(type))("31")>
 >>
 
 floatBetweenZeroAndThirtyOne(value) ::= <<
-value \>= <zero.(type)> && value \<= <(literal.(type))("31")> && Double.compare(value, Math.floor(value)) == 0
+value >= <zero.(type)> && value \<= <(literal.(type))("31")> && Double.compare(value, Math.floor(value)) == 0
 >>

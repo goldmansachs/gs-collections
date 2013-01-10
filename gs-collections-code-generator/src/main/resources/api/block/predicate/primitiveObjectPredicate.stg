@@ -20,7 +20,7 @@ import java.io.Serializable;
  * type T as the arguments.
  * This file was automatically generated from template file primitiveObjectPredicate.stg.
  */
-public interface <name>ObjectPredicate\<T\>
+public interface <name>ObjectPredicate\<T>
         extends Serializable
 {
     boolean accept(<type> value, T object);
