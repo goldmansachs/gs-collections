@@ -15,7 +15,7 @@ body(type1, type2, name1, name2) ::= <<
 
 package com.gs.collections.api.map.primitive;
 
-import com.gs.collections.api.<name1>Iterable;
+import com.gs.collections.api.<name2>Iterable;
 import com.gs.collections.api.block.predicate.primitive.<name1><name2>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name2>Procedure;
 import com.gs.collections.api.block.procedure.primitive.<name1><name2>Procedure;
@@ -24,7 +24,7 @@ import com.gs.collections.api.block.procedure.primitive.<name1>Procedure;
 /**
  * This file was automatically generated from template file primitivePrimitiveMap.stg.
  */
-public interface <name1><name2>Map extends <name1>Iterable
+public interface <name1><name2>Map extends <name2>Iterable
 {
     <type2> get(<type1> key);
 
