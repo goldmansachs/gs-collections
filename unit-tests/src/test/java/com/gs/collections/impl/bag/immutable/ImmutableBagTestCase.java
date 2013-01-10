@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,6 +47,7 @@ import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.ObjectIntProcedures;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.StringFunctions;
+import com.gs.collections.impl.block.factory.primitive.IntPredicates;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
@@ -198,6 +199,20 @@ public abstract class ImmutableBagTestCase
         ImmutableBag<String> strings = this.newBag();
         strings.forEachWithIndex(ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(result)));
         Assert.assertEquals(strings, result);
+    }
+
+    @Test
+    public void selectByOccurrences()
+    {
+        ImmutableBag<String> strings = this.newBag().selectByOccurrences(IntPredicates.isEven());
+        ImmutableBag<Integer> collect = strings.collect(new Function<String, Integer>()
+        {
+            public Integer valueOf(String each)
+            {
+                return Integer.valueOf(each);
+            }
+        });
+        Verify.assertAllSatisfy(collect, IntegerPredicates.isEven());
     }
 
     @Test

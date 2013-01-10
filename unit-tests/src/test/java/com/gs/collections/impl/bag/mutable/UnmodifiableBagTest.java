@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.block.factory.primitive.IntPredicates;
 import com.gs.collections.impl.collection.mutable.UnmodifiableMutableCollectionTestCase;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
@@ -111,4 +112,12 @@ public class UnmodifiableBagTest
         Assert.assertEquals(iBag(1, 3, 5), numbers.selectInstancesOf(Integer.class));
         Assert.assertEquals(iBag(1, 2.0, 3, 4.0, 5), numbers.selectInstancesOf(Number.class));
     }
+
+    @Test
+    public void selectByOccurrences()
+    {
+        MutableBag<Integer> integers = UnmodifiableBag.of(HashBag.newBagWith(1, 1, 1, 1, 2, 2, 2, 3, 3, 4));
+        Assert.assertEquals(iBag(1, 1, 1, 1, 3, 3), integers.selectByOccurrences(IntPredicates.isEven()));
+    }
+
 }

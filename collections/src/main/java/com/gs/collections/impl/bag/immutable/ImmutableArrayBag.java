@@ -29,6 +29,7 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.map.MutableMap;
@@ -217,20 +218,36 @@ public class ImmutableArrayBag<T>
         return this.reject(Predicates.in(elements));
     }
 
+    public ImmutableBag<T> selectByOccurrences(final IntPredicate predicate)
+    {
+        final MutableBag<T> result = HashBag.newBag();
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                if (predicate.accept(occurrences))
+                {
+                    result.addOccurrences(each, occurrences);
+                }
+            }
+        });
+        return result.toImmutable();
+    }
+
     public ImmutableBag<T> select(final Predicate<? super T> predicate)
     {
         final MutableBag<T> result = HashBag.newBag();
         this.forEachWithOccurrences(new ObjectIntProcedure<T>()
         {
-            public void value(T each, int index)
+            public void value(T each, int occurrences)
             {
                 if (predicate.accept(each))
                 {
-                    result.addOccurrences(each, index);
+                    result.addOccurrences(each, occurrences);
                 }
             }
         });
-        return ImmutableArrayBag.copyFrom(result);
+        return result.toImmutable();
     }
 
     @Override

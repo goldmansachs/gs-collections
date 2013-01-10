@@ -41,6 +41,7 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
@@ -396,6 +397,18 @@ public class HashBag<T>
             }
         });
         return target;
+    }
+
+    public MutableBag<T> selectByOccurrences(final IntPredicate predicate)
+    {
+        MutableMap<T, Counter> map = this.items.select(new Predicate2<T, Counter>()
+        {
+            public boolean accept(T each, Counter occurrences)
+            {
+                return predicate.accept(occurrences.getCount());
+            }
+        });
+        return new HashBag<T>(map);
     }
 
     public PartitionMutableBag<T> partition(final Predicate<? super T> predicate)

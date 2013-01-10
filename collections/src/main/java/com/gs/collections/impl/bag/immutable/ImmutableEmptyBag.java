@@ -41,6 +41,7 @@ import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
@@ -213,6 +214,11 @@ final class ImmutableEmptyBag<T>
     }
 
     public ImmutableBag<T> newWithoutAll(Iterable<? extends T> elements)
+    {
+        return this;
+    }
+
+    public ImmutableBag<T> selectByOccurrences(IntPredicate predicate)
     {
         return this;
     }

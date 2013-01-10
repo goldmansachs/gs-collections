@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
+import com.gs.collections.impl.block.factory.primitive.IntPredicates;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.collection.mutable.AbstractCollectionTestCase;
 import com.gs.collections.impl.factory.Bags;
@@ -309,5 +310,12 @@ public abstract class MutableBagTestCase extends AbstractCollectionTestCase
         PartitionMutableCollection<Integer> result = integers.partition(IntegerPredicates.isEven());
         Assert.assertEquals(iBag(2, 2, 4, 4, 4, 4), result.getSelected());
         Assert.assertEquals(iBag(1, 3, 3, 3), result.getRejected());
+    }
+
+    @Test
+    public void selectByOccurrences()
+    {
+        MutableBag<Integer> integers = this.newWith(1, 1, 1, 1, 2, 2, 2, 3, 3, 4);
+        Assert.assertEquals(iBag(1, 1, 1, 1, 3, 3), integers.selectByOccurrences(IntPredicates.isEven()));
     }
 }

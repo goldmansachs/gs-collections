@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.bag.MutableBagMultimap;
@@ -103,6 +104,11 @@ public class UnmodifiableBag<T>
     public MutableBag<T> newEmpty()
     {
         return this.getMutableBag().newEmpty();
+    }
+
+    public MutableBag<T> selectByOccurrences(IntPredicate predicate)
+    {
+        return this.getMutableBag().selectByOccurrences(predicate);
     }
 
     @Override

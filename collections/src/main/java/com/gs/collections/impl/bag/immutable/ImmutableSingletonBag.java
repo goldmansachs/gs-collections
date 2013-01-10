@@ -29,6 +29,7 @@ import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
@@ -183,6 +184,13 @@ final class ImmutableSingletonBag<T>
     public boolean containsAllArguments(Object... elements)
     {
         return ArrayIterate.allSatisfy(elements, Predicates.equal(this.value));
+    }
+
+    public ImmutableBag<T> selectByOccurrences(IntPredicate predicate)
+    {
+        return predicate.accept(1)
+                ? this
+                : Bags.immutable.<T>of();
     }
 
     public ImmutableBag<T> select(Predicate<? super T> predicate)

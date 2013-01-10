@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,6 +21,7 @@ import java.util.Map;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.bag.BagMultimap;
@@ -64,14 +65,20 @@ public interface Bag<T>
      * separated by the characters <tt>", "</tt> (comma and space).  Each element-count mapping is rendered as the element
      * followed by an equals sign (<tt>"="</tt>) followed by the number of ooccurrences. Elements and are converted to
      * strings as by {@link String#valueOf(Object)}.
-     *
+     * <p/>
      * The string representation is similar to {@link Map#toString()}, not {@link RichIterable#toString()}.
      *
-     * @since 3.0
-     *
      * @return a string representation of this bag
+     * @since 3.0
      */
     String toStringOfItemToCount();
+
+    /**
+     * Returns all elements of the bag that have a number of occurrences that satisfy the predicate.
+     *
+     * @since 3.0
+     */
+    Bag<T> selectByOccurrences(IntPredicate predicate);
 
     /**
      * Convert the Bag to an ImmutableBag.  If the bag is immutable, it returns itself.
