@@ -770,8 +770,24 @@ public final class <name>HashSet implements Mutable<name>Set
     @Override
     public int hashCode()
     {
-        int result = this.table == null ? 0 : Arrays.hashCode(this.table);
-        result = 31 * result + this.zeroToThirtyOne;
+        int result = 0;
+        int zeroToThirtyOne = this.zeroToThirtyOne;
+        while (zeroToThirtyOne != 0)
+        {
+            <type> value = <(precisionCast.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            result += <(hashCode.(type))("value")>;
+            zeroToThirtyOne &= ~(1 \<\< <(bitShiftCast.(type))("value")>);
+        }
+        if (this.table != null)
+        {
+            for (int i = 0; i \< this.table.length; i++)
+            {
+                if (isNonSentinel(this.table[i]))
+                {
+                    result += <(hashCode.(type))("this.table[i]")>;
+                }
+            }
+        }
         return result;
     }
 

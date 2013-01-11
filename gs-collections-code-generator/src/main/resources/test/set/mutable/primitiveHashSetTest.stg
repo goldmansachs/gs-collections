@@ -451,6 +451,15 @@ public class <name>HashSetTest
     }
 
     @Test
+    public void testHashCode()
+    {
+        Assert.assertEquals(UnifiedSet.newSetWith(<["0", "1", "31"]:(literal.(type))(); separator=", ">).hashCode(), <name>HashSet.newSetWith(<["31", "0", "1"]:(literal.(type))(); separator=", ">).hashCode());
+        Assert.assertEquals(UnifiedSet.newSetWith(<["31", "32", "50"]:(literal.(type))(); separator=", ">).hashCode(), <name>HashSet.newSetWith(<["32", "50", "31"]:(literal.(type))(); separator=", ">).hashCode());
+        Assert.assertEquals(UnifiedSet.newSetWith(<["32", "50", "60"]:(literal.(type))(); separator=", ">).hashCode(), <name>HashSet.newSetWith(<["32", "50", "60"]:(literal.(type))(); separator=", ">).hashCode());
+        Assert.assertEquals(UnifiedSet.newSetWith().hashCode(), <name>HashSet.newSetWith().hashCode());
+    }
+
+    @Test
     public void <type>Iterator()
     {
         MutableSet\<<wrapperName>\> expected = UnifiedSet.newSetWith(<["0", "1", "31"]:(literal.(type))(); separator=", ">, generateCollisions1().getFirst(), generateCollisions1().get(1));
