@@ -40,8 +40,12 @@
         <!-- this setting is needed for TeamCity -->
         <maven.deploy.skip>true</maven.deploy.skip>
 
-        <scala.version>2.9.1</scala.version>
+        <scala.version>2.9.2</scala.version>
     </properties>
+
+    <prerequisites>
+        <maven>3.0</maven>
+    </prerequisites>
 
     <dependencies>
 

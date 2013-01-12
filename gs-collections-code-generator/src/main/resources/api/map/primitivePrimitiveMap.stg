@@ -4,9 +4,9 @@ hasTwoPrimitives() ::= "true"
 
 targetPath() ::= "com/gs/collections/api/map/primitive"
 
-fileName(primitive1, primitive2) ::= "<primitive1.name><primitive2.name>Map"
+fileName(primitive1, primitive2, sameTwoPredicates) ::= "<primitive1.name><primitive2.name>Map"
 
-class(primitive1, primitive2) ::= <<
+class(primitive1, primitive2, sameTwoPredicates) ::= <<
 <body(primitive1.type, primitive2.type, primitive1.name, primitive2.name)>
 >>
 
@@ -17,9 +17,9 @@ package com.gs.collections.api.map.primitive;
 
 import com.gs.collections.api.<name2>Iterable;
 import com.gs.collections.api.block.predicate.primitive.<name1><name2>Predicate;
-import com.gs.collections.api.block.procedure.primitive.<name2>Procedure;
 import com.gs.collections.api.block.procedure.primitive.<name1><name2>Procedure;
 import com.gs.collections.api.block.procedure.primitive.<name1>Procedure;
+<if(!sameTwoPredicates)>import com.gs.collections.api.block.procedure.primitive.<name2>Procedure;<endif>
 
 /**
  * This file was automatically generated from template file primitivePrimitiveMap.stg.

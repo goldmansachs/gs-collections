@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -104,6 +104,7 @@ public class GsCollectionsCodeGenerator
         ST template = findTemplate(stGroupFile, templateName);
         template.add("primitive1", primitive1);
         template.add("primitive2", primitive2);
+        template.add("sameTwoPredicates", primitive1 == primitive2);
         return template.render();
     }
 

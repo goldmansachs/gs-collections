@@ -4,9 +4,9 @@ hasTwoPrimitives() ::= "true"
 
 targetPath() ::= "com/gs/collections/api/block/function/primitive"
 
-fileName(primitive1, primitive2) ::= "<primitive1.name>To<primitive2.name>Function"
+fileName(primitive1, primitive2, sameTwoPredicates) ::= "<primitive1.name>To<primitive2.name>Function"
 
-class(primitive1, primitive2) ::= <<
+class(primitive1, primitive2, sameTwoPredicates) ::= <<
 <body(primitive1.type, primitive2.type, primitive1.name, primitive2.name)>
 >>
 

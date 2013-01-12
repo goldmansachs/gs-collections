@@ -4,9 +4,9 @@ hasTwoPrimitives() ::= "true"
 
 targetPath() ::= "com/gs/collections/api/map/primitive"
 
-fileName(primitive1, primitive2) ::= "Mutable<primitive1.name><primitive2.name>Map"
+fileName(primitive1, primitive2, sameTwoPredicates) ::= "Mutable<primitive1.name><primitive2.name>Map"
 
-class(primitive1, primitive2) ::= <<
+class(primitive1, primitive2, sameTwoPredicates) ::= <<
 <body(primitive1.type, primitive2.type, primitive1.name, primitive2.name)>
 >>
 
