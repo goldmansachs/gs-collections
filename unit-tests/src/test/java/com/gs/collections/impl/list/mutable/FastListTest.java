@@ -712,6 +712,22 @@ public class FastListTest extends AbstractListTestCase
     }
 
     @Test
+    public void testSubList()
+    {
+        MutableList<String> collection = FastList.newListWith("1", "2", "3", "4", "5");
+        MutableList<String> subList = collection.subList(1, 3);
+        Verify.assertContainsAll(subList, "2", "3");
+        subList.add("6");
+        Verify.assertItemAtIndex("6", 2, subList);
+        Verify.assertSize(6, collection);
+        Verify.assertSize(3, subList);
+        Verify.assertItemAtIndex("6", 3, collection);
+        subList.remove("6");
+        Verify.assertSize(5, collection);
+        Verify.assertSize(2, subList);
+    }
+
+    @Test
     public void testBAOSSize()
     {
         MutableList<MutableList<Object>> mutableArrayList =

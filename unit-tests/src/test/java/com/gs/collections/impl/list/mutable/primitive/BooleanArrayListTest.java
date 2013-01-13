@@ -540,6 +540,22 @@ public class BooleanArrayListTest
     }
 
     @Test
+    public void reverseThis()
+    {
+        Verify.assertEquals(BooleanArrayList.newListWith(true, true, false, false), BooleanArrayList.newListWith(false, false, true, true).reverseThis());
+        BooleanArrayList originalList = BooleanArrayList.newListWith(true, true, false, false);
+        Verify.assertSame(originalList, originalList.reverseThis());
+    }
+
+    @Test
+    public void toReversed()
+    {
+        Verify.assertEquals(BooleanArrayList.newListWith(true, true, false, false), BooleanArrayList.newListWith(false, false, true, true).toReversed());
+        BooleanArrayList originalList = BooleanArrayList.newListWith(true, true, false, false);
+        Verify.assertNotSame(originalList, originalList.toReversed());
+    }
+
+    @Test
     public void testEquals()
     {
         BooleanArrayList list1 = BooleanArrayList.newListWith(true, false, true, true);

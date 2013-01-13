@@ -70,6 +70,15 @@ public final class BooleanArrayList
         }
     }
 
+    private BooleanArrayList(BooleanIterable booleanIterable)
+    {
+        BooleanIterator booleanIterator = booleanIterable.booleanIterator();
+        while (booleanIterator.hasNext())
+        {
+            this.add(booleanIterator.next());
+        }
+    }
+
     public static BooleanArrayList newListWith(boolean... array)
     {
         return new BooleanArrayList(array);
@@ -77,7 +86,7 @@ public final class BooleanArrayList
 
     public static BooleanArrayList newList(BooleanIterable source)
     {
-        return BooleanArrayList.newListWith(source.toArray());
+        return new BooleanArrayList(source);
     }
 
     public int size()
@@ -451,6 +460,28 @@ public final class BooleanArrayList
         return result;
     }
 
+    public BooleanIterable asReversed()
+    {
+        return new ReverseBooleanIterable();
+    }
+
+    public BooleanArrayList reverseThis()
+    {
+        int endIndex = this.size - 1;
+        for (int i = 0; i < this.size / 2; i++)
+        {
+            boolean tempSwapValue = this.items.get(i);
+            this.items.set(i, this.items.get(endIndex - i));
+            this.items.set(endIndex - i, tempSwapValue);
+        }
+        return this;
+    }
+
+    public BooleanArrayList toReversed()
+    {
+        return new BooleanArrayList(this.asReversed());
+    }
+
     public boolean detectIfNone(BooleanPredicate predicate, boolean ifNone)
     {
         for (int i = 0; i < this.size; i++)
@@ -634,6 +665,274 @@ public final class BooleanArrayList
             catch (IndexOutOfBoundsException ignored)
             {
                 throw new NoSuchElementException();
+            }
+        }
+    }
+
+    private class ReverseBooleanIterable implements BooleanIterable
+    {
+        public BooleanIterator booleanIterator()
+        {
+            return new ReverseBooleanIterator();
+        }
+
+        public void forEach(BooleanProcedure procedure)
+        {
+            BooleanIterator iterator = this.booleanIterator();
+            while (iterator.hasNext())
+            {
+                procedure.value(iterator.next());
+            }
+        }
+
+        public int count(BooleanPredicate predicate)
+        {
+            int count = 0;
+            BooleanIterator iterator = this.booleanIterator();
+            while (iterator.hasNext())
+            {
+                if (predicate.accept(iterator.next()))
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
+
+        public boolean anySatisfy(BooleanPredicate predicate)
+        {
+            BooleanIterator iterator = this.booleanIterator();
+            while (iterator.hasNext())
+            {
+                if (predicate.accept(iterator.next()))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public boolean allSatisfy(BooleanPredicate predicate)
+        {
+            BooleanIterator iterator = this.booleanIterator();
+            while (iterator.hasNext())
+            {
+                if (!predicate.accept(iterator.next()))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public BooleanIterable select(BooleanPredicate predicate)
+        {
+            BooleanArrayList result = new BooleanArrayList(BooleanArrayList.this.size);
+            BooleanIterator iterator = this.booleanIterator();
+            while (iterator.hasNext())
+            {
+                boolean value = iterator.next();
+                if (predicate.accept(value))
+                {
+                    result.add(value);
+                }
+            }
+            return result;
+        }
+
+        public BooleanIterable reject(BooleanPredicate predicate)
+        {
+            BooleanArrayList result = new BooleanArrayList(BooleanArrayList.this.size);
+            BooleanIterator iterator = this.booleanIterator();
+            while (iterator.hasNext())
+            {
+                boolean value = iterator.next();
+                if (!predicate.accept(value))
+                {
+                    result.add(value);
+                }
+            }
+            return result;
+        }
+
+        public boolean detectIfNone(BooleanPredicate predicate, boolean ifNone)
+        {
+            BooleanIterator iterator = this.booleanIterator();
+            while (iterator.hasNext())
+            {
+                boolean value = iterator.next();
+                if (predicate.accept(value))
+                {
+                    return value;
+                }
+            }
+            return ifNone;
+        }
+
+        public <V> RichIterable<V> collect(BooleanToObjectFunction<? extends V> function)
+        {
+            FastList<V> results = FastList.newList(BooleanArrayList.this.size);
+            BooleanIterator iterator = this.booleanIterator();
+            while (iterator.hasNext())
+            {
+                results.add(function.valueOf(iterator.next()));
+            }
+            return results;
+        }
+
+        public boolean[] toArray()
+        {
+            boolean[] results = new boolean[BooleanArrayList.this.size];
+            int index = 0;
+            BooleanIterator iterator = this.booleanIterator();
+            while (iterator.hasNext())
+            {
+                results[index] = iterator.next();
+                index++;
+            }
+            return results;
+        }
+
+        public boolean contains(boolean value)
+        {
+            return BooleanArrayList.this.contains(value);
+        }
+
+        public boolean containsAll(boolean... source)
+        {
+            return BooleanArrayList.this.containsAll(source);
+        }
+
+        public int size()
+        {
+            return BooleanArrayList.this.size;
+        }
+
+        public boolean isEmpty()
+        {
+            return BooleanArrayList.this.isEmpty();
+        }
+
+        public boolean notEmpty()
+        {
+            return BooleanArrayList.this.notEmpty();
+        }
+
+        @Override
+        public String toString()
+        {
+            return this.makeString("[", ", ", "]");
+        }
+
+        public String makeString()
+        {
+            return this.makeString(", ");
+        }
+
+        public String makeString(String separator)
+        {
+            return this.makeString("", separator, "");
+        }
+
+        public String makeString(String start, String separator, String end)
+        {
+            Appendable stringBuilder = new StringBuilder();
+            this.appendString(stringBuilder, start, separator, end);
+            return stringBuilder.toString();
+        }
+
+        public void appendString(Appendable appendable)
+        {
+            this.appendString(appendable, ", ");
+        }
+
+        public void appendString(Appendable appendable, String separator)
+        {
+            this.appendString(appendable, "", separator, "");
+        }
+
+        public void appendString(Appendable appendable, String start, String separator, String end)
+        {
+            try
+            {
+                appendable.append(start);
+                BooleanIterator iterator = this.booleanIterator();
+                boolean appendSeparator = false;
+                while (iterator.hasNext())
+                {
+                    if (appendSeparator)
+                    {
+                        appendable.append(separator);
+                    }
+                    appendable.append(String.valueOf(iterator.next()));
+                    appendSeparator = true;
+                }
+                appendable.append(end);
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+
+        @Override
+        public int hashCode()
+        {
+            return BooleanArrayList.this.hashCode();
+        }
+
+        @Override
+        public boolean equals(Object otherIterable)
+        {
+            if (otherIterable == this)
+            {
+                return true;
+            }
+            if (!(otherIterable instanceof ReverseBooleanIterable))
+            {
+                return false;
+            }
+            ReverseBooleanIterable reverseBooleanIterable = (ReverseBooleanIterable) otherIterable;
+            if (this.size() != reverseBooleanIterable.size())
+            {
+                return false;
+            }
+            BooleanIterator iterator = this.booleanIterator();
+            BooleanIterator otherIterator = this.booleanIterator();
+            while (iterator.hasNext())
+            {
+                if (iterator.next() != otherIterator.next())
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        private class ReverseBooleanIterator implements BooleanIterator
+        {
+            /**
+             * Index of element to be returned by subsequent call to next.
+             */
+            private int currentIndex = BooleanArrayList.this.size - 1;
+
+            public boolean hasNext()
+            {
+                return this.currentIndex != -1;
+            }
+
+            public boolean next()
+            {
+                try
+                {
+                    boolean next = BooleanArrayList.this.get(this.currentIndex);
+                    this.currentIndex--;
+                    return next;
+                }
+                catch (IndexOutOfBoundsException ignored)
+                {
+                    throw new NoSuchElementException();
+                }
             }
         }
     }

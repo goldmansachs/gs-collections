@@ -76,26 +76,26 @@ import com.gs.collections.impl.utility.LazyIterate;
 public class ArrayStack<T> implements MutableStack<T>, Externalizable
 {
     private static final long serialVersionUID = 1L;
-    private FastList<T> data;
+    private FastList<T> delegate;
 
     public ArrayStack()
     {
-        this.data = FastList.newList();
+        this.delegate = FastList.newList();
     }
 
     public ArrayStack(int initialCapacity)
     {
-        this.data = FastList.newList(initialCapacity);
+        this.delegate = FastList.newList(initialCapacity);
     }
 
     public ArrayStack(Iterable<T> items)
     {
-        this.data = FastList.newList(items);
+        this.delegate = FastList.newList(items);
     }
 
     public ArrayStack(T... items)
     {
-        this.data = FastList.wrapCopy(items);
+        this.delegate = FastList.wrapCopy(items);
     }
 
     public static <T> ArrayStack<T> newStack()
@@ -126,24 +126,24 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
     public static <T> ArrayStack<T> newStackFromTopToBottom(Iterable<? extends T> items)
     {
         ArrayStack<T> stack = newStack();
-        stack.data = FastList.newList(items).reverseThis();
+        stack.delegate = FastList.newList(items).reverseThis();
         return stack;
     }
 
     public void push(T item)
     {
-        this.data.add(item);
+        this.delegate.add(item);
     }
 
     public T pop()
     {
         this.checkEmptyStack();
-        return this.data.remove(this.data.size() - 1);
+        return this.delegate.remove(this.delegate.size() - 1);
     }
 
     private void checkEmptyStack()
     {
-        if (this.data.isEmpty())
+        if (this.delegate.isEmpty())
         {
             throw new EmptyStackException();
         }
@@ -203,7 +203,7 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
 
     public void clear()
     {
-        this.data.clear();
+        this.delegate.clear();
     }
 
     private boolean checkZeroCount(int count)
@@ -214,7 +214,7 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
     public T peek()
     {
         this.checkEmptyStack();
-        return this.data.getLast();
+        return this.delegate.getLast();
     }
 
     public ListIterable<T> peek(int count)
@@ -234,22 +234,22 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
         this.checkNegativeCount(index);
         this.checkEmptyStack();
         this.checkSizeLessThanCount(index);
-        return this.data.get(this.data.size() - 1 - index);
+        return this.delegate.get(this.delegate.size() - 1 - index);
     }
 
     public int size()
     {
-        return this.data.asReversed().size();
+        return this.delegate.asReversed().size();
     }
 
     public boolean isEmpty()
     {
-        return this.data.asReversed().isEmpty();
+        return this.delegate.asReversed().isEmpty();
     }
 
     public boolean notEmpty()
     {
-        return this.data.asReversed().notEmpty();
+        return this.delegate.asReversed().notEmpty();
     }
 
     public T getFirst()
@@ -264,252 +264,252 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
 
     public boolean contains(Object object)
     {
-        return this.data.contains(object);
+        return this.delegate.contains(object);
     }
 
     public boolean containsAllIterable(Iterable<?> source)
     {
-        return this.data.containsAllIterable(source);
+        return this.delegate.containsAllIterable(source);
     }
 
     public boolean containsAll(Collection<?> source)
     {
-        return this.data.containsAll(source);
+        return this.delegate.containsAll(source);
     }
 
     public boolean containsAllArguments(Object... elements)
     {
-        return this.data.containsAllArguments(elements);
+        return this.delegate.containsAllArguments(elements);
     }
 
     public <V> ArrayStack<V> collect(Function<? super T, ? extends V> function)
     {
-        return ArrayStack.newStackFromTopToBottom(this.data.asReversed().collect(function));
+        return ArrayStack.newStackFromTopToBottom(this.delegate.asReversed().collect(function));
     }
 
     public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)
     {
-        return this.data.asReversed().collect(function, target);
+        return this.delegate.asReversed().collect(function, target);
     }
 
     public <V> ArrayStack<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
     {
-        return ArrayStack.newStackFromTopToBottom(this.data.asReversed().collectIf(predicate, function).toList());
+        return ArrayStack.newStackFromTopToBottom(this.delegate.asReversed().collectIf(predicate, function).toList());
     }
 
     public <V, R extends Collection<V>> R collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function, R target)
     {
-        return this.data.asReversed().collectIf(predicate, function, target);
+        return this.delegate.asReversed().collectIf(predicate, function, target);
     }
 
     public <P, V, R extends Collection<V>> R collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter, R targetCollection)
     {
-        return this.data.asReversed().collectWith(function, parameter, targetCollection);
+        return this.delegate.asReversed().collectWith(function, parameter, targetCollection);
     }
 
     public <V> ArrayStack<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
-        return ArrayStack.newStackFromTopToBottom(this.data.asReversed().flatCollect(function).toList());
+        return ArrayStack.newStackFromTopToBottom(this.delegate.asReversed().flatCollect(function).toList());
     }
 
     public <V, R extends Collection<V>> R flatCollect(Function<? super T, ? extends Iterable<V>> function, R target)
     {
-        return this.data.asReversed().flatCollect(function, target);
+        return this.delegate.asReversed().flatCollect(function, target);
     }
 
     public ArrayStack<T> select(Predicate<? super T> predicate)
     {
-        return ArrayStack.newStackFromTopToBottom(this.data.asReversed().select(predicate).toList());
+        return ArrayStack.newStackFromTopToBottom(this.delegate.asReversed().select(predicate).toList());
     }
 
     public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)
     {
-        return this.data.asReversed().select(predicate, target);
+        return this.delegate.asReversed().select(predicate, target);
     }
 
     public <S> ArrayStack<S> selectInstancesOf(Class<S> clazz)
     {
-        return ArrayStack.newStackFromTopToBottom(this.data.asReversed().selectInstancesOf(clazz).toList());
+        return ArrayStack.newStackFromTopToBottom(this.delegate.asReversed().selectInstancesOf(clazz).toList());
     }
 
     public <P, R extends Collection<T>> R selectWith(Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
     {
-        return this.data.asReversed().selectWith(predicate, parameter, targetCollection);
+        return this.delegate.asReversed().selectWith(predicate, parameter, targetCollection);
     }
 
     public ArrayStack<T> reject(Predicate<? super T> predicate)
     {
-        return ArrayStack.newStackFromTopToBottom(this.data.asReversed().reject(predicate).toList());
+        return ArrayStack.newStackFromTopToBottom(this.delegate.asReversed().reject(predicate).toList());
     }
 
     public <R extends Collection<T>> R reject(Predicate<? super T> predicate, R target)
     {
-        return this.data.asReversed().reject(predicate, target);
+        return this.delegate.asReversed().reject(predicate, target);
     }
 
     public <P, R extends Collection<T>> R rejectWith(Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
     {
-        return this.data.asReversed().rejectWith(predicate, parameter, targetCollection);
+        return this.delegate.asReversed().rejectWith(predicate, parameter, targetCollection);
     }
 
     public T detect(Predicate<? super T> predicate)
     {
-        return this.data.asReversed().detect(predicate);
+        return this.delegate.asReversed().detect(predicate);
     }
 
     public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
     {
-        return this.data.asReversed().detectIfNone(predicate, function);
+        return this.delegate.asReversed().detectIfNone(predicate, function);
     }
 
     public PartitionStack<T> partition(Predicate<? super T> predicate)
     {
         PartitionArrayStack<T> partitionMutableStack = new PartitionArrayStack<T>(predicate);
-        this.data.asReversed().forEach(new PartitionArrayStack.PartitionProcedure<T>(predicate, partitionMutableStack));
+        this.delegate.asReversed().forEach(new PartitionArrayStack.PartitionProcedure<T>(predicate, partitionMutableStack));
         return partitionMutableStack;
     }
 
     public <S> ArrayStack<Pair<T, S>> zip(Iterable<S> that)
     {
-        return ArrayStack.newStackFromTopToBottom(this.data.asReversed().zip(that).toList());
+        return ArrayStack.newStackFromTopToBottom(this.delegate.asReversed().zip(that).toList());
     }
 
     public <S, R extends Collection<Pair<T, S>>> R zip(Iterable<S> that, R target)
     {
-        return this.data.asReversed().zip(that, target);
+        return this.delegate.asReversed().zip(that, target);
     }
 
     public ArrayStack<Pair<T, Integer>> zipWithIndex()
     {
-        int maxIndex = this.data.size() - 1;
+        int maxIndex = this.delegate.size() - 1;
         Interval indicies = Interval.fromTo(0, maxIndex);
 
-        return ArrayStack.newStackFromTopToBottom(this.data.asReversed().zip(indicies).toList());
+        return ArrayStack.newStackFromTopToBottom(this.delegate.asReversed().zip(indicies).toList());
     }
 
     public <R extends Collection<Pair<T, Integer>>> R zipWithIndex(R target)
     {
-        return this.data.asReversed().zipWithIndex(target);
+        return this.delegate.asReversed().zipWithIndex(target);
     }
 
     public int count(Predicate<? super T> predicate)
     {
-        return this.data.asReversed().count(predicate);
+        return this.delegate.asReversed().count(predicate);
     }
 
     public boolean anySatisfy(Predicate<? super T> predicate)
     {
-        return this.data.asReversed().anySatisfy(predicate);
+        return this.delegate.asReversed().anySatisfy(predicate);
     }
 
     public boolean allSatisfy(Predicate<? super T> predicate)
     {
-        return this.data.asReversed().allSatisfy(predicate);
+        return this.delegate.asReversed().allSatisfy(predicate);
     }
 
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
-        return this.data.asReversed().injectInto(injectedValue, function);
+        return this.delegate.asReversed().injectInto(injectedValue, function);
     }
 
     public int injectInto(int injectedValue, IntObjectToIntFunction<? super T> intObjectToIntFunction)
     {
-        return this.data.asReversed().injectInto(injectedValue, intObjectToIntFunction);
+        return this.delegate.asReversed().injectInto(injectedValue, intObjectToIntFunction);
     }
 
     public long injectInto(long injectedValue, LongObjectToLongFunction<? super T> longObjectToLongFunction)
     {
-        return this.data.asReversed().injectInto(injectedValue, longObjectToLongFunction);
+        return this.delegate.asReversed().injectInto(injectedValue, longObjectToLongFunction);
     }
 
     public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super T> doubleObjectToDoubleFunction)
     {
-        return this.data.asReversed().injectInto(injectedValue, doubleObjectToDoubleFunction);
+        return this.delegate.asReversed().injectInto(injectedValue, doubleObjectToDoubleFunction);
     }
 
     public float injectInto(float injectedValue, FloatObjectToFloatFunction<? super T> floatObjectToFloatFunction)
     {
-        return this.data.asReversed().injectInto(injectedValue, floatObjectToFloatFunction);
+        return this.delegate.asReversed().injectInto(injectedValue, floatObjectToFloatFunction);
     }
 
     public long sumOfInt(IntFunction<? super T> intFunction)
     {
-        return this.data.asReversed().sumOfInt(intFunction);
+        return this.delegate.asReversed().sumOfInt(intFunction);
     }
 
     public double sumOfFloat(FloatFunction<? super T> floatFunction)
     {
-        return this.data.asReversed().sumOfFloat(floatFunction);
+        return this.delegate.asReversed().sumOfFloat(floatFunction);
     }
 
     public long sumOfLong(LongFunction<? super T> longFunction)
     {
-        return this.data.asReversed().sumOfLong(longFunction);
+        return this.delegate.asReversed().sumOfLong(longFunction);
     }
 
     public double sumOfDouble(DoubleFunction<? super T> doubleFunction)
     {
-        return this.data.asReversed().sumOfDouble(doubleFunction);
+        return this.delegate.asReversed().sumOfDouble(doubleFunction);
     }
 
     public T max()
     {
-        return this.data.asReversed().max();
+        return this.delegate.asReversed().max();
     }
 
     public T max(Comparator<? super T> comparator)
     {
-        return this.data.asReversed().max(comparator);
+        return this.delegate.asReversed().max(comparator);
     }
 
     public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
     {
-        return this.data.asReversed().maxBy(function);
+        return this.delegate.asReversed().maxBy(function);
     }
 
     public T min()
     {
-        return this.data.asReversed().min();
+        return this.delegate.asReversed().min();
     }
 
     public T min(Comparator<? super T> comparator)
     {
-        return this.data.asReversed().min(comparator);
+        return this.delegate.asReversed().min(comparator);
     }
 
     public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
     {
-        return this.data.asReversed().toList().minBy(function);
+        return this.delegate.asReversed().toList().minBy(function);
     }
 
     public String makeString()
     {
-        return this.data.asReversed().makeString();
+        return this.delegate.asReversed().makeString();
     }
 
     public String makeString(String separator)
     {
-        return this.data.asReversed().makeString(separator);
+        return this.delegate.asReversed().makeString(separator);
     }
 
     public String makeString(String start, String separator, String end)
     {
-        return this.data.asReversed().makeString(start, separator, end);
+        return this.delegate.asReversed().makeString(start, separator, end);
     }
 
     public void appendString(Appendable appendable)
     {
-        this.data.asReversed().appendString(appendable);
+        this.delegate.asReversed().appendString(appendable);
     }
 
     public void appendString(Appendable appendable, String separator)
     {
-        this.data.asReversed().appendString(appendable, separator);
+        this.delegate.asReversed().appendString(appendable, separator);
     }
 
     public void appendString(Appendable appendable, String start, String separator, String end)
     {
-        this.data.asReversed().appendString(appendable, start, separator, end);
+        this.delegate.asReversed().appendString(appendable, start, separator, end);
     }
 
     public <V> MutableListMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
@@ -519,7 +519,7 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
 
     public <V, R extends MutableMultimap<V, T>> R groupBy(Function<? super T, ? extends V> function, R target)
     {
-        return this.data.asReversed().groupBy(function, target);
+        return this.delegate.asReversed().groupBy(function, target);
     }
 
     public <V> MutableListMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
@@ -529,62 +529,62 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
 
     public <V, R extends MutableMultimap<V, T>> R groupByEach(Function<? super T, ? extends Iterable<V>> function, R target)
     {
-        return this.data.asReversed().groupByEach(function, target);
+        return this.delegate.asReversed().groupByEach(function, target);
     }
 
     public RichIterable<RichIterable<T>> chunk(int size)
     {
-        return this.data.asReversed().chunk(size);
+        return this.delegate.asReversed().chunk(size);
     }
 
     public void forEach(Procedure<? super T> procedure)
     {
-        this.data.reverseForEach(procedure);
+        this.delegate.reverseForEach(procedure);
     }
 
     public <P> void forEachWith(Procedure2<? super T, ? super P> procedure, P parameter)
     {
-        this.data.asReversed().forEachWith(procedure, parameter);
+        this.delegate.asReversed().forEachWith(procedure, parameter);
     }
 
     public void forEachWithIndex(ObjectIntProcedure<? super T> objectIntProcedure)
     {
-        this.data.asReversed().forEachWithIndex(objectIntProcedure);
+        this.delegate.asReversed().forEachWithIndex(objectIntProcedure);
     }
 
     public MutableList<T> toList()
     {
-        return this.data.asReversed().toList();
+        return this.delegate.asReversed().toList();
     }
 
     public MutableList<T> toSortedList()
     {
-        return this.data.asReversed().toSortedList();
+        return this.delegate.asReversed().toSortedList();
     }
 
     public MutableList<T> toSortedList(Comparator<? super T> comparator)
     {
-        return this.data.asReversed().toSortedList(comparator);
+        return this.delegate.asReversed().toSortedList(comparator);
     }
 
     public <V extends Comparable<? super V>> MutableList<T> toSortedListBy(Function<? super T, ? extends V> function)
     {
-        return this.data.asReversed().toSortedListBy(function);
+        return this.delegate.asReversed().toSortedListBy(function);
     }
 
     public MutableSet<T> toSet()
     {
-        return this.data.asReversed().toSet();
+        return this.delegate.asReversed().toSet();
     }
 
     public MutableSortedSet<T> toSortedSet()
     {
-        return this.data.asReversed().toSortedSet();
+        return this.delegate.asReversed().toSortedSet();
     }
 
     public MutableSortedSet<T> toSortedSet(Comparator<? super T> comparator)
     {
-        return this.data.asReversed().toSortedSet(comparator);
+        return this.delegate.asReversed().toSortedSet(comparator);
     }
 
     public MutableStack<T> toStack()
@@ -599,27 +599,27 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
 
     public <V extends Comparable<? super V>> MutableSortedSet<T> toSortedSetBy(Function<? super T, ? extends V> function)
     {
-        return this.data.asReversed().toSortedSetBy(function);
+        return this.delegate.asReversed().toSortedSetBy(function);
     }
 
     public MutableBag<T> toBag()
     {
-        return this.data.asReversed().toBag();
+        return this.delegate.asReversed().toBag();
     }
 
     public <NK, NV> MutableMap<NK, NV> toMap(Function<? super T, ? extends NK> keyFunction, Function<? super T, ? extends NV> valueFunction)
     {
-        return this.data.asReversed().toMap(keyFunction, valueFunction);
+        return this.delegate.asReversed().toMap(keyFunction, valueFunction);
     }
 
     public <NK, NV> MutableSortedMap<NK, NV> toSortedMap(Function<? super T, ? extends NK> keyFunction, Function<? super T, ? extends NV> valueFunction)
     {
-        return this.data.asReversed().toSortedMap(keyFunction, valueFunction);
+        return this.delegate.asReversed().toSortedMap(keyFunction, valueFunction);
     }
 
     public <NK, NV> MutableSortedMap<NK, NV> toSortedMap(Comparator<? super NK> comparator, Function<? super T, ? extends NK> keyFunction, Function<? super T, ? extends NV> valueFunction)
     {
-        return this.data.asReversed().toSortedMap(comparator, keyFunction, valueFunction);
+        return this.delegate.asReversed().toSortedMap(comparator, keyFunction, valueFunction);
     }
 
     public LazyIterable<T> asLazy()
@@ -639,17 +639,17 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
 
     public Object[] toArray()
     {
-        return this.data.asReversed().toArray();
+        return this.delegate.asReversed().toArray();
     }
 
     public <T> T[] toArray(T[] a)
     {
-        return this.data.asReversed().toArray(a);
+        return this.delegate.asReversed().toArray(a);
     }
 
     public Iterator<T> iterator()
     {
-        return this.data.asReversed().iterator();
+        return this.delegate.asReversed().iterator();
     }
 
     @Override
@@ -668,7 +668,7 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
 
         if (that instanceof ArrayStack<?>)
         {
-            return this.data.equals(((ArrayStack<?>) that).data);
+            return this.delegate.equals(((ArrayStack<?>) that).delegate);
         }
         Iterator<T> thisIterator = this.iterator();
         Iterator<?> thatIterator = that.iterator();
@@ -685,7 +685,7 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
     @Override
     public String toString()
     {
-        return this.data.asReversed().makeString("[", ", ", "]");
+        return this.delegate.asReversed().makeString("[", ", ", "]");
     }
 
     @Override
@@ -701,7 +701,7 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
 
     public void writeExternal(ObjectOutput out) throws IOException
     {
-        FastList<T> reversed = (FastList<T>) this.data.toReversed();
+        FastList<T> reversed = (FastList<T>) this.delegate.toReversed();
         reversed.writeExternal(out);
     }
 
@@ -709,14 +709,14 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
     {
         FastList<T> fastList = FastList.newList();
         fastList.readExternal(in);
-        this.data = (FastList<T>) fastList.toReversed();
+        this.delegate = (FastList<T>) fastList.toReversed();
     }
 
     private void checkSizeLessThanCount(int count)
     {
-        if (this.data.size() < count)
+        if (this.delegate.size() < count)
         {
-            throw new IllegalArgumentException("Count must be less than size: Count = " + count + " Size = " + this.data.size());
+            throw new IllegalArgumentException("Count must be less than size: Count = " + count + " Size = " + this.delegate.size());
         }
     }
 

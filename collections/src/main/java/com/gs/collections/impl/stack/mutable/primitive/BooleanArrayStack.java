@@ -1,0 +1,348 @@
+/*
+ * Copyright 2013 Goldman Sachs.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.gs.collections.impl.stack.mutable.primitive;
+
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.util.EmptyStackException;
+
+import com.gs.collections.api.BooleanIterable;
+import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
+import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
+import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
+import com.gs.collections.api.iterator.BooleanIterator;
+import com.gs.collections.api.list.primitive.BooleanList;
+import com.gs.collections.api.list.primitive.MutableBooleanList;
+import com.gs.collections.api.stack.MutableStack;
+import com.gs.collections.api.stack.primitive.BooleanStack;
+import com.gs.collections.api.stack.primitive.MutableBooleanStack;
+import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.stack.mutable.ArrayStack;
+import net.jcip.annotations.NotThreadSafe;
+
+/**
+ * This file was automatically generated from template file primitiveArrayStack.stg.
+ * BooleanArrayStack is similar to {@link ArrayStack}, and is memory-optimized for boolean primitives.
+ */
+@NotThreadSafe
+public final class BooleanArrayStack implements MutableBooleanStack, Externalizable
+{
+    private static final long serialVersionUID = 1L;
+
+    private transient BooleanArrayList delegate;
+
+    public BooleanArrayStack()
+    {
+        this.delegate = new BooleanArrayList();
+    }
+
+    private BooleanArrayStack(int size)
+    {
+        this.delegate = new BooleanArrayList(size);
+    }
+
+    private BooleanArrayStack(boolean... items)
+    {
+        this.delegate = new BooleanArrayList(items);
+    }
+
+    public static BooleanArrayStack newStackFromTopToBottom(boolean... items)
+    {
+        BooleanArrayStack stack = new BooleanArrayStack(items.length);
+        for (int i = items.length - 1; i >= 0; i--)
+        {
+            stack.push(items[i]);
+        }
+        return stack;
+    }
+
+    public static BooleanArrayStack newStackWith(boolean... items)
+    {
+        return new BooleanArrayStack(items);
+    }
+
+    public static BooleanArrayStack newStack(BooleanIterable items)
+    {
+        BooleanArrayStack stack = new BooleanArrayStack(items.size());
+        stack.delegate = BooleanArrayList.newList(items);
+        return stack;
+    }
+
+    public static BooleanArrayStack newStackFromTopToBottom(BooleanIterable items)
+    {
+        BooleanArrayStack stack = new BooleanArrayStack(items.size());
+        stack.delegate = BooleanArrayList.newList(items).reverseThis();
+        return stack;
+    }
+
+    public void push(boolean item)
+    {
+        this.delegate.add(item);
+    }
+
+    public boolean pop()
+    {
+        this.checkEmptyStack();
+        return this.delegate.removeAtIndex(this.delegate.size() - 1);
+    }
+
+    private void checkEmptyStack()
+    {
+        if (this.delegate.isEmpty())
+        {
+            throw new EmptyStackException();
+        }
+    }
+
+    public BooleanList pop(int count)
+    {
+        this.checkPositiveValueForCount(count);
+        this.checkSizeLessThanCount(count);
+        if (count == 0)
+        {
+            return new BooleanArrayList(0);
+        }
+        MutableBooleanList subList = new BooleanArrayList(count);
+        while (count > 0)
+        {
+            subList.add(this.pop());
+            count--;
+        }
+        return subList;
+    }
+
+    private void checkPositiveValueForCount(int count)
+    {
+        if (count < 0)
+        {
+            throw new IllegalArgumentException("Count must be positive but was " + count);
+        }
+    }
+
+    private void checkSizeLessThanCount(int count)
+    {
+        if (this.delegate.size() < count)
+        {
+            throw new IllegalArgumentException("Count must be less than size: Count = " + count + " Size = " + this.delegate.size());
+        }
+    }
+
+    public MutableBooleanStack select(BooleanPredicate predicate)
+    {
+        return newStackFromTopToBottom(this.delegate.asReversed().select(predicate));
+    }
+
+    public MutableBooleanStack reject(BooleanPredicate predicate)
+    {
+        return newStackFromTopToBottom(this.delegate.asReversed().reject(predicate));
+    }
+
+    public boolean peek()
+    {
+        this.checkEmptyStack();
+        return this.delegate.getLast();
+    }
+
+    public BooleanList peek(int count)
+    {
+        this.checkPositiveValueForCount(count);
+        this.checkSizeLessThanCount(count);
+        if (count == 0)
+        {
+            return new BooleanArrayList(0);
+        }
+        MutableBooleanList subList = new BooleanArrayList(count);
+        int index = this.delegate.size() - 1;
+        for (int i = 0; i < count; i++)
+        {
+            subList.add(this.delegate.get(index - i));
+        }
+        return subList;
+    }
+
+    public boolean peekAt(int index)
+    {
+        this.rangeCheck(index);
+        return this.delegate.get(index);
+    }
+
+    private void rangeCheck(int index)
+    {
+        if (index < 0 || index > this.delegate.size() - 1)
+        {
+            throw new IllegalArgumentException("Index " + index + " out of range.Should be between 0 and " + (this.delegate.size() - 1));
+        }
+    }
+
+    public BooleanIterator booleanIterator()
+    {
+        return this.delegate.asReversed().booleanIterator();
+    }
+
+    public void forEach(BooleanProcedure procedure)
+    {
+        this.delegate.asReversed().forEach(procedure);
+    }
+
+    public int size()
+    {
+        return this.delegate.size();
+    }
+
+    public boolean isEmpty()
+    {
+        return this.delegate.isEmpty();
+    }
+
+    public boolean notEmpty()
+    {
+        return this.delegate.notEmpty();
+    }
+
+    public int count(BooleanPredicate predicate)
+    {
+        return this.delegate.asReversed().count(predicate);
+    }
+
+    public boolean anySatisfy(BooleanPredicate predicate)
+    {
+        return this.delegate.asReversed().anySatisfy(predicate);
+    }
+
+    public boolean allSatisfy(BooleanPredicate predicate)
+    {
+        return this.delegate.asReversed().allSatisfy(predicate);
+    }
+
+    public boolean detectIfNone(BooleanPredicate predicate, boolean ifNone)
+    {
+        return this.delegate.asReversed().detectIfNone(predicate, ifNone);
+    }
+
+    public <V> MutableStack<V> collect(BooleanToObjectFunction<? extends V> function)
+    {
+        return ArrayStack.newStackFromTopToBottom(this.delegate.asReversed().collect(function));
+    }
+
+    public boolean[] toArray()
+    {
+        return this.delegate.asReversed().toArray();
+    }
+
+    public boolean contains(boolean value)
+    {
+        return this.delegate.asReversed().contains(value);
+    }
+
+    public boolean containsAll(boolean... source)
+    {
+        return this.delegate.asReversed().containsAll(source);
+    }
+
+    public void clear()
+    {
+        this.delegate.clear();
+    }
+
+    @Override
+    public boolean equals(Object otherStack)
+    {
+        if (otherStack == this)
+        {
+            return true;
+        }
+        if (!(otherStack instanceof BooleanStack))
+        {
+            return false;
+        }
+        BooleanStack stack = (BooleanStack) otherStack;
+        if (this.size() != stack.size())
+        {
+            return false;
+        }
+        for (int i = 0; i < this.size(); i++)
+        {
+            if (this.peekAt(i) != stack.peekAt(i))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        if (this.delegate.isEmpty())
+        {
+            return 1234;
+        }
+        return this.delegate.toReversed().hashCode();
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.delegate.asReversed().toString();
+    }
+
+    public String makeString()
+    {
+        return this.delegate.asReversed().makeString();
+    }
+
+    public String makeString(String separator)
+    {
+        return this.delegate.asReversed().makeString(separator);
+    }
+
+    public String makeString(String start, String separator, String end)
+    {
+        return this.delegate.asReversed().makeString(start, separator, end);
+    }
+
+    public void appendString(Appendable appendable)
+    {
+        this.delegate.asReversed().appendString(appendable);
+    }
+
+    public void appendString(Appendable appendable, String separator)
+    {
+        this.delegate.asReversed().appendString(appendable, separator);
+    }
+
+    public void appendString(
+            Appendable appendable,
+            String start,
+            String separator,
+            String end)
+    {
+        this.delegate.asReversed().appendString(appendable, start, separator, end);
+    }
+
+    public void writeExternal(ObjectOutput out) throws IOException
+    {
+        out.writeObject(this.delegate);
+    }
+
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
+    {
+        this.delegate = (BooleanArrayList) in.readObject();
+    }
+}

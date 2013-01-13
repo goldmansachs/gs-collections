@@ -729,7 +729,7 @@ public final class <name>ArrayList
 
     public void writeExternal(ObjectOutput out) throws IOException
     {
-        out.writeInt(this.size());
+        out.writeInt(this.size);
         for (int i = 0; i \< this.size; i++)
         {
             out.write<name>(this.items[i]);
@@ -744,6 +744,29 @@ public final class <name>ArrayList
         {
             this.items[i] = in.read<name>();
         }
+    }
+
+    public <name>Iterable asReversed()
+    {
+        return new Reverse<name>Iterable();
+    }
+
+    public <name>ArrayList reverseThis()
+    {
+        int size = this.items.length;
+        int endIndex = size - 1;
+        for (int i = 0; i \< size / 2; i++)
+        {
+            <type>  tempSwapValue = this.items[i];
+            this.items[i] = this.items[(endIndex - i)];
+            this.items[endIndex- i] = tempSwapValue;
+        }
+        return this;
+    }
+
+    public <name>ArrayList toReversed()
+    {
+        return <name>ArrayList.newList(this.asReversed());
     }
 
     private class Internal<name>Iterator implements <name>Iterator
@@ -772,6 +795,268 @@ public final class <name>ArrayList
             }
         }
     }
+
+    private class Reverse<name>Iterable implements <name>Iterable
+    {
+        public <name>Iterator <type>Iterator()
+        {
+            return new Reverse<name>Iterator();
+        }
+
+        public void forEach(<name>Procedure procedure)
+        {
+            <name>Iterator iterator = this.<type>Iterator();
+            while (iterator.hasNext())
+            {
+                procedure.value(iterator.next());
+            }
+        }
+
+        public int count(<name>Predicate predicate)
+        {
+            int count = 0;
+            <name>Iterator iterator = this.<type>Iterator();
+            while (iterator.hasNext())
+            {
+                if (predicate.accept(iterator.next()))
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
+
+        public boolean anySatisfy(<name>Predicate predicate)
+        {
+            <name>Iterator iterator = this.<type>Iterator();
+            while (iterator.hasNext())
+            {
+                if (predicate.accept(iterator.next()))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public boolean allSatisfy(<name>Predicate predicate)
+        {
+            <name>Iterator iterator = this.<type>Iterator();
+            while (iterator.hasNext())
+            {
+                if (!predicate.accept(iterator.next()))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public <name>Iterable select(<name>Predicate predicate)
+        {
+            <name>ArrayList result = new <name>ArrayList(<name>ArrayList.this.size);
+            <name>Iterator iterator = this.<type>Iterator();
+            while (iterator.hasNext())
+            {
+                <type> value = iterator.next();
+                if (predicate.accept(value))
+                {
+                    result.add(value);
+                }
+            }
+            return result;
+        }
+
+        public <name>Iterable reject(<name>Predicate predicate)
+        {
+            <name>ArrayList result = new <name>ArrayList(<name>ArrayList.this.size);
+            <name>Iterator iterator = this.<type>Iterator();
+            while (iterator.hasNext())
+            {
+                <type> value = iterator.next();
+                if (!predicate.accept(value))
+                {
+                    result.add(value);
+                }
+            }
+            return result;
+        }
+
+        public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
+        {
+            <name>Iterator iterator = this.<type>Iterator();
+            while (iterator.hasNext())
+            {
+                <type> value = iterator.next();
+                if (predicate.accept(value))
+                {
+                    return value;
+                }
+            }
+            return ifNone;
+        }
+
+        public \<V> RichIterable\<V> collect(<name>ToObjectFunction\<? extends V> function)
+        {
+            FastList\<V>  results = FastList.newList(<name>ArrayList.this.size);
+            <name>Iterator iterator = this.<type>Iterator();
+            while (iterator.hasNext())
+            {
+                results.add(function.valueOf(iterator.next()));
+            }
+            return results;
+        }
+
+        public <wideType.(type)> sum()
+        {
+            return <name>ArrayList.this.sum();
+        }
+
+        public <type> max()
+        {
+            return <name>ArrayList.this.max();
+        }
+
+        public <type> min()
+        {
+            return <name>ArrayList.this.min();
+        }
+
+        public double average()
+        {
+            return <name>ArrayList.this.average();
+        }
+
+        public double median()
+        {
+            return <name>ArrayList.this.median();
+        }
+
+        public <type>[] toSortedArray()
+        {
+            return <name>ArrayList.this.toSortedArray();
+        }
+
+        public <type>[] toArray()
+        {
+            <type>[] results = new <type>[<name>ArrayList.this.size];
+            int index = 0;
+            <name>Iterator iterator = this.<type>Iterator();
+            while (iterator.hasNext())
+            {
+                results[index] = iterator.next();
+                index++;
+            }
+            return results;
+        }
+
+        public boolean contains(<type> value)
+        {
+            return <name>ArrayList.this.contains(value);
+        }
+
+        public boolean containsAll(<type>... source)
+        {
+            return <name>ArrayList.this.containsAll(source);
+        }
+
+        public int size()
+        {
+            return <name>ArrayList.this.size;
+        }
+
+        public boolean isEmpty()
+        {
+            return <name>ArrayList.this.isEmpty();
+        }
+
+        public boolean notEmpty()
+        {
+            return <name>ArrayList.this.notEmpty();
+        }
+
+        @Override
+        public String toString()
+        {
+            return this.makeString("[", ", ", "]");
+        }
+
+        public String makeString()
+        {
+            return this.makeString(", ");
+        }
+
+        public String makeString(String separator)
+        {
+            return this.makeString("", separator, "");
+        }
+
+        public String makeString(String start, String separator, String end)
+        {
+            Appendable stringBuilder = new StringBuilder();
+            this.appendString(stringBuilder, start, separator, end);
+            return stringBuilder.toString();
+        }
+
+        public void appendString(Appendable appendable)
+        {
+            this.appendString(appendable, ", ");
+        }
+
+        public void appendString(Appendable appendable, String separator)
+        {
+            this.appendString(appendable, "", separator, "");
+        }
+
+        public void appendString(Appendable appendable, String start, String separator, String end)
+        {
+            try
+            {
+                appendable.append(start);
+                <name>Iterator iterator = this.<type>Iterator();
+                boolean appendSeparator = false;
+                while (iterator.hasNext())
+                {
+                    if (appendSeparator)
+                    {
+                        appendable.append(separator);
+                    }
+                    appendable.append(String.valueOf(iterator.next()));
+                    appendSeparator = true;
+                }
+                appendable.append(end);
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+
+        private class Reverse<name>Iterator implements <name>Iterator
+        {
+            /**
+             * Index of element to be returned by subsequent call to next.
+             */
+            private int currentIndex = <name>ArrayList.this.size - 1;
+
+            public boolean hasNext()
+            {
+                return this.currentIndex != -1;
+            }
+
+            public <type> next()
+            {
+                if(!this.hasNext())
+                {
+                    throw new NoSuchElementException();
+                }
+                <type> next = <name>ArrayList.this.items[this.currentIndex];
+                this.currentIndex--;
+                return next;
+            }
+        }
+    }
+
 }
 
 >>

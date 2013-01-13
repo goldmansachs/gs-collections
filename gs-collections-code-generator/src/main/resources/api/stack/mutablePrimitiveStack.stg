@@ -38,6 +38,11 @@ public interface Mutable<name>Stack extends <name>Stack
      */
     <name>List pop(int count);
 
+    /**
+     * Clears the Stack
+     */
+    void clear();
+
     <sharedAPI(fileName(primitive), name)>
 }
 
