@@ -438,6 +438,21 @@ public class BooleanArrayListTest
         iterator.next();
     }
 
+    @Test(expected = NoSuchElementException.class)
+    public void iterator_throws_non_empty_list()
+    {
+        BooleanArrayList arrayList = new BooleanArrayList();
+        arrayList.add(true);
+        arrayList.add(true);
+        arrayList.add(false);
+        BooleanIterator iterator = arrayList.booleanIterator();
+        while (iterator.hasNext())
+        {
+            iterator.next();
+        }
+        iterator.next();
+    }
+
     @Test
     public void forEach()
     {

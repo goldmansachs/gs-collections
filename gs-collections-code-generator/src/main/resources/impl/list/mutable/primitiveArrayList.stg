@@ -783,16 +783,13 @@ public final class <name>ArrayList
 
         public <type> next()
         {
-            try
-            {
-                <type> next = <name>ArrayList.this.items[this.currentIndex];
-                this.currentIndex++;
-                return next;
-            }
-            catch (IndexOutOfBoundsException ignored)
+            if (!this.hasNext())
             {
                 throw new NoSuchElementException();
             }
+            <type> next = <name>ArrayList.this.items[this.currentIndex];
+            this.currentIndex++;
+            return next;
         }
     }
 
