@@ -343,6 +343,11 @@ public class BooleanHashSetTest
         Verify.assertNotEquals(this.set3, this.set0);
         Verify.assertEqualsAndHashCode(BooleanHashSet.newSetWith(false, true), this.set3);
         Verify.assertEqualsAndHashCode(BooleanHashSet.newSetWith(true, false), this.set3);
+
+        Verify.assertPostSerializedEqualsAndHashCode(this.set0);
+        Verify.assertPostSerializedEqualsAndHashCode(this.set1);
+        Verify.assertPostSerializedEqualsAndHashCode(this.set2);
+        Verify.assertPostSerializedEqualsAndHashCode(this.set3);
     }
 
     @Test

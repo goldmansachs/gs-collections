@@ -338,11 +338,23 @@ public final class BooleanArrayStack implements MutableBooleanStack, Externaliza
 
     public void writeExternal(ObjectOutput out) throws IOException
     {
-        out.writeObject(this.delegate);
+        out.writeInt(this.size());
+        BooleanIterator iterator = this.delegate.asReversed().booleanIterator();
+        while (iterator.hasNext())
+        {
+            boolean each = iterator.next();
+            out.writeBoolean(each);
+        }
     }
 
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
+    public void readExternal(ObjectInput in) throws IOException
     {
-        this.delegate = (BooleanArrayList) in.readObject();
+        int size = in.readInt();
+        boolean[] array = new boolean[size];
+        for (int i = size - 1; i >= 0; i--)
+        {
+            array[i] = in.readBoolean();
+        }
+        this.delegate = BooleanArrayList.newListWith(array);
     }
 }

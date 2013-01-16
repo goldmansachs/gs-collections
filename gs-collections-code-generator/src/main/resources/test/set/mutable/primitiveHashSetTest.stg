@@ -446,6 +446,7 @@ public class <name>HashSetTest
         <name>HashSet set4 = <name>HashSet.newSetWith(<["32", "31", "1", "50"]:(literal.(type))(); separator=", ">);
 
         Verify.assertEqualsAndHashCode(set1, set2);
+        Verify.assertPostSerializedEqualsAndHashCode(set1);
         Verify.assertNotEquals(set1, set3);
         Verify.assertNotEquals(set1, set4);
     }

@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.map.mutable;
+package com.gs.collections.impl.set.mutable.primitive;
 
 import com.gs.collections.impl.test.Verify;
 import org.junit.Test;
 
-public class ConcurrentHashMapTest
+public class IntHashSetTest
 {
     @Test
     public void serializedForm()
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyADVjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5Db25jdXJyZW50SGFz\n"
-                        + "aE1hcAAAAAAAAAABDAAAeHB3BAAAAAB4",
-                new ConcurrentHashMap<Object, Object>(0));
+                "rO0ABXNyADhjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQubXV0YWJsZS5wcmltaXRpdmUuSW50\n"
+                        + "SGFzaFNldAAAAAAAAAABDAAAeHB3BAAAAAB4",
+                new IntHashSet());
     }
 }

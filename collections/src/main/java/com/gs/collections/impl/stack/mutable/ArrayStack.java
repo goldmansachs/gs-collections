@@ -701,15 +701,22 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
 
     public void writeExternal(ObjectOutput out) throws IOException
     {
-        FastList<T> reversed = (FastList<T>) this.delegate.toReversed();
-        reversed.writeExternal(out);
+        out.writeInt(this.size());
+        for (T each : this.delegate.asReversed())
+        {
+            out.writeObject(each);
+        }
     }
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
     {
-        FastList<T> fastList = FastList.newList();
-        fastList.readExternal(in);
-        this.delegate = (FastList<T>) fastList.toReversed();
+        int size = in.readInt();
+        T[] array = (T[]) new Object[size];
+        for (int i = size - 1; i >= 0; i--)
+        {
+            array[i] = (T) in.readObject();
+        }
+        this.delegate = FastList.newListWith(array);
     }
 
     private void checkSizeLessThanCount(int count)

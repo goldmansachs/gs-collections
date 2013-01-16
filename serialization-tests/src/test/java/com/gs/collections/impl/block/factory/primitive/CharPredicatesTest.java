@@ -19,17 +19,17 @@ package com.gs.collections.impl.block.factory.primitive;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Test;
 
-public class DoublePredicatesTest
+public class CharPredicatesTest
 {
     @Test
     public void equal()
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyAFZjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5E\n"
-                        + "b3VibGVQcmVkaWNhdGVzJEVxdWFsc0RvdWJsZVByZWRpY2F0ZQAAAAAAAAABAgABRAAIZXhwZWN0\n"
-                        + "ZWR4cAAAAAAAAAAA",
-                DoublePredicates.equal(0.0));
+                "rO0ABXNyAFJjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5D\n"
+                        + "aGFyUHJlZGljYXRlcyRFcXVhbHNDaGFyUHJlZGljYXRlAAAAAAAAAAECAAFDAAhleHBlY3RlZHhw\n"
+                        + "AAA=",
+                CharPredicates.equal((char) 0));
     }
 
     @Test
@@ -37,10 +37,10 @@ public class DoublePredicatesTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyAFhjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5E\n"
-                        + "b3VibGVQcmVkaWNhdGVzJExlc3NUaGFuRG91YmxlUHJlZGljYXRlAAAAAAAAAAECAAFEAAhleHBl\n"
-                        + "Y3RlZHhwAAAAAAAAAAA=",
-                DoublePredicates.lessThan(0.0));
+                "rO0ABXNyAFRjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5D\n"
+                        + "aGFyUHJlZGljYXRlcyRMZXNzVGhhbkNoYXJQcmVkaWNhdGUAAAAAAAAAAQIAAUMACGV4cGVjdGVk\n"
+                        + "eHAAAA==",
+                CharPredicates.lessThan((char) 0));
     }
 
     @Test
@@ -48,9 +48,9 @@ public class DoublePredicatesTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyAFtjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5E\n"
-                        + "b3VibGVQcmVkaWNhdGVzJEdyZWF0ZXJUaGFuRG91YmxlUHJlZGljYXRlAAAAAAAAAAECAAFEAAhl\n"
-                        + "eHBlY3RlZHhwAAAAAAAAAAA=",
-                DoublePredicates.greaterThan(0.0));
+                "rO0ABXNyAFdjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5D\n"
+                        + "aGFyUHJlZGljYXRlcyRHcmVhdGVyVGhhbkNoYXJQcmVkaWNhdGUAAAAAAAAAAQIAAUMACGV4cGVj\n"
+                        + "dGVkeHAAAA==",
+                CharPredicates.greaterThan((char) 0));
     }
 }

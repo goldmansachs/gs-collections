@@ -27,11 +27,11 @@ public class PartitionArrayStackPartitionProcedureTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyAE5jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5wYXJ0aXRpb24uc3RhY2suUGFydGl0aW9u\n" +
-                        "QXJyYXlTdGFjayRQYXJ0aXRpb25Qcm9jZWR1cmUAAAAAAAAAAQIAAkwAFXBhcnRpdGlvbk11dGFi\n" +
-                        "bGVTdGFja3QAPUxjb20vZ3MvY29sbGVjdGlvbnMvaW1wbC9wYXJ0aXRpb24vc3RhY2svUGFydGl0\n" +
-                        "aW9uQXJyYXlTdGFjaztMAAlwcmVkaWNhdGV0ADJMY29tL2dzL2NvbGxlY3Rpb25zL2FwaS9ibG9j\n" +
-                        "ay9wcmVkaWNhdGUvUHJlZGljYXRlO3hwcHA=",
+                "rO0ABXNyAE5jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5wYXJ0aXRpb24uc3RhY2suUGFydGl0aW9u\n"
+                        + "QXJyYXlTdGFjayRQYXJ0aXRpb25Qcm9jZWR1cmUAAAAAAAAAAQIAAkwAFXBhcnRpdGlvbk11dGFi\n"
+                        + "bGVTdGFja3QAPUxjb20vZ3MvY29sbGVjdGlvbnMvaW1wbC9wYXJ0aXRpb24vc3RhY2svUGFydGl0\n"
+                        + "aW9uQXJyYXlTdGFjaztMAAlwcmVkaWNhdGV0ADJMY29tL2dzL2NvbGxlY3Rpb25zL2FwaS9ibG9j\n"
+                        + "ay9wcmVkaWNhdGUvUHJlZGljYXRlO3hwcHA=",
                 new PartitionArrayStack.PartitionProcedure<Object>(null, null));
     }
 }

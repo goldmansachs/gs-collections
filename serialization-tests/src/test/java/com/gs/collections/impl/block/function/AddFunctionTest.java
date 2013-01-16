@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,8 +36,8 @@ public class AddFunctionTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyAENjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mdW5jdGlvbi5BZGRGdW5jdGlv\n" +
-                        "biRBZGRGbG9hdEZ1bmN0aW9uAAAAAAAAAAECAAB4cA==",
+                "rO0ABXNyAENjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mdW5jdGlvbi5BZGRGdW5jdGlv\n"
+                        + "biRBZGRGbG9hdEZ1bmN0aW9uAAAAAAAAAAECAAB4cA==",
                 AddFunction.FLOAT);
     }
 

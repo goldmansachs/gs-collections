@@ -37,7 +37,6 @@ import org.junit.Test;
  */
 public class <name>ArrayStackTest
 {
-
     @Test
     public void testPushPopAndPeek()
     {

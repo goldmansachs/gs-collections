@@ -26,9 +26,9 @@ public class IntPredicatesTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyAFBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5J\n" +
-                        "bnRQcmVkaWNhdGVzJEVxdWFsc0ludFByZWRpY2F0ZQAAAAAAAAABAgABSQAIZXhwZWN0ZWR4cAAA\n" +
-                        "AAA=",
+                "rO0ABXNyAFBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5J\n"
+                        + "bnRQcmVkaWNhdGVzJEVxdWFsc0ludFByZWRpY2F0ZQAAAAAAAAABAgABSQAIZXhwZWN0ZWR4cAAA\n"
+                        + "AAA=",
                 IntPredicates.equal(0));
     }
 
@@ -37,9 +37,9 @@ public class IntPredicatesTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyAFJjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5J\n" +
-                        "bnRQcmVkaWNhdGVzJExlc3NUaGFuSW50UHJlZGljYXRlAAAAAAAAAAECAAFJAAhleHBlY3RlZHhw\n" +
-                        "AAAAAA==",
+                "rO0ABXNyAFJjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5J\n"
+                        + "bnRQcmVkaWNhdGVzJExlc3NUaGFuSW50UHJlZGljYXRlAAAAAAAAAAECAAFJAAhleHBlY3RlZHhw\n"
+                        + "AAAAAA==",
                 IntPredicates.lessThan(0));
     }
 
@@ -48,9 +48,9 @@ public class IntPredicatesTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyAFVjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5J\n" +
-                        "bnRQcmVkaWNhdGVzJEdyZWF0ZXJUaGFuSW50UHJlZGljYXRlAAAAAAAAAAECAAFJAAhleHBlY3Rl\n" +
-                        "ZHhwAAAAAA==",
+                "rO0ABXNyAFVjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5J\n"
+                        + "bnRQcmVkaWNhdGVzJEdyZWF0ZXJUaGFuSW50UHJlZGljYXRlAAAAAAAAAAECAAFJAAhleHBlY3Rl\n"
+                        + "ZHhwAAAAAA==",
                 IntPredicates.greaterThan(0));
     }
 
@@ -59,8 +59,8 @@ public class IntPredicatesTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyAFBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5J\n" +
-                        "bnRQcmVkaWNhdGVzJEludElzRXZlblByZWRpY2F0ZQAAAAAAAAABAgAAeHA=",
+                "rO0ABXNyAFBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5J\n"
+                        + "bnRQcmVkaWNhdGVzJEludElzRXZlblByZWRpY2F0ZQAAAAAAAAABAgAAeHA=",
                 IntPredicates.isEven());
     }
 
@@ -69,8 +69,8 @@ public class IntPredicatesTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyAE9jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5J\n" +
-                        "bnRQcmVkaWNhdGVzJEludElzT2RkUHJlZGljYXRlAAAAAAAAAAECAAB4cA==",
+                "rO0ABXNyAE9jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5J\n"
+                        + "bnRQcmVkaWNhdGVzJEludElzT2RkUHJlZGljYXRlAAAAAAAAAAECAAB4cA==",
                 IntPredicates.isOdd());
     }
 }

@@ -16,7 +16,10 @@
 
 package com.gs.collections.impl.set.mutable.primitive;
 
+import java.io.Externalizable;
 import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.BooleanIterable;
@@ -29,8 +32,10 @@ import com.gs.collections.api.set.primitive.MutableBooleanSet;
 import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 
-public class BooleanHashSet implements MutableBooleanSet
+public class BooleanHashSet implements MutableBooleanSet, Externalizable
 {
+    private static final long serialVersionUID = 1L;
+
     /* state = 0 ==> []
        state = 1 ==> [F]
        state = 2 ==> [T]
@@ -580,6 +585,37 @@ public class BooleanHashSet implements MutableBooleanSet
         catch (IOException e)
         {
             throw new RuntimeException(e);
+        }
+    }
+
+    public void writeExternal(ObjectOutput out) throws IOException
+    {
+        out.writeInt(this.size());
+        switch (this.state)
+        {
+            case 0:
+                return;
+            case 1:
+                out.writeBoolean(false);
+                return;
+            case 2:
+                out.writeBoolean(true);
+                return;
+            case 3:
+                out.writeBoolean(true);
+                out.writeBoolean(false);
+                return;
+            default:
+                throw new AssertionError("Invalid state");
+        }
+    }
+
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
+    {
+        int size = in.readInt();
+        for (int i = 0; i < size; i++)
+        {
+            this.add(in.readBoolean());
         }
     }
 }

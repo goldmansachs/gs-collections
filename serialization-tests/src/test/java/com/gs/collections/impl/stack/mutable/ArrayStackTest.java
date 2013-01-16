@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,28 @@ public class ArrayStackTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyADBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zdGFjay5tdXRhYmxlLkFycmF5U3RhY2sA\n" +
-                        "AAAAAAAAAQwAAHhwdwQAAAAAeA==",
+                "rO0ABXNyADBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zdGFjay5tdXRhYmxlLkFycmF5U3RhY2sA\n"
+                        + "AAAAAAAAAQwAAHhwdwQAAAAAeA==",
                 ArrayStack.newStack());
+    }
+
+    @Test
+    public void serializedForm_with_element()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyADBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zdGFjay5tdXRhYmxlLkFycmF5U3RhY2sA\n"
+                        + "AAAAAAAAAQwAAHhwdwQAAAABcHg=",
+                ArrayStack.newStackWith((Object) null));
+    }
+
+    @Test
+    public void serializedForm_with_elements()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyADBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zdGFjay5tdXRhYmxlLkFycmF5U3RhY2sA\n"
+                        + "AAAAAAAAAQwAAHhwdwQAAAAFcHBwcHB4",
+                ArrayStack.newStackWith(null, null, null, null, null));
     }
 }

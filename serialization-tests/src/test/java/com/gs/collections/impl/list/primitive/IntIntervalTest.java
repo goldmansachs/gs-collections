@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,8 @@ public class IntIntervalTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyADJjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5saXN0LnByaW1pdGl2ZS5JbnRJbnRlcnZh\n" +
-                        "bAAAAAAAAAABAgADSQAEZnJvbUkABHN0ZXBJAAJ0b3hwAAAAAAAAAAEAAAAA",
+                "rO0ABXNyADJjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5saXN0LnByaW1pdGl2ZS5JbnRJbnRlcnZh\n"
+                        + "bAAAAAAAAAABAgADSQAEZnJvbUkABHN0ZXBJAAJ0b3hwAAAAAAAAAAEAAAAA",
                 IntInterval.fromToBy(0, 0, 1));
     }
 }

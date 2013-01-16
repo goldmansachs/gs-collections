@@ -14,20 +14,20 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.map.mutable;
+package com.gs.collections.impl.stack.mutable.primitive;
 
 import com.gs.collections.impl.test.Verify;
 import org.junit.Test;
 
-public class ConcurrentHashMapTest
+public class DoubleArrayStackTest
 {
     @Test
     public void serializedForm()
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyADVjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5Db25jdXJyZW50SGFz\n"
-                        + "aE1hcAAAAAAAAAABDAAAeHB3BAAAAAB4",
-                new ConcurrentHashMap<Object, Object>(0));
+                "rO0ABXNyAEBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zdGFjay5tdXRhYmxlLnByaW1pdGl2ZS5E\n"
+                        + "b3VibGVBcnJheVN0YWNrAAAAAAAAAAEMAAB4cHcEAAAAAHg=",
+                new DoubleArrayStack());
     }
 }
