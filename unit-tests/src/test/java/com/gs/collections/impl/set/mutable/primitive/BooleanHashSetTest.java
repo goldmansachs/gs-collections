@@ -351,6 +351,15 @@ public class BooleanHashSetTest
     }
 
     @Test
+    public void testHashCode()
+    {
+        Assert.assertEquals(UnifiedSet.newSet().hashCode(), this.set0.hashCode());
+        Assert.assertEquals(UnifiedSet.newSetWith(false).hashCode(), this.set1.hashCode());
+        Assert.assertEquals(UnifiedSet.newSetWith(true).hashCode(), this.set2.hashCode());
+        Assert.assertEquals(UnifiedSet.newSetWith(true, false).hashCode(), this.set3.hashCode());
+    }
+
+    @Test
     public void booleanIterator()
     {
         final BooleanIterator booleanIterator0 = this.set0.booleanIterator();

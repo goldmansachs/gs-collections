@@ -30,6 +30,7 @@ import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.set.primitive.<name>Set;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 
@@ -762,12 +763,12 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
             return true;
         }
 
-        if (!(obj instanceof <name>HashSet))
+        if (!(obj instanceof <name>Set))
         {
             return false;
         }
 
-        <name>HashSet other = (<name>HashSet) obj;
+        <name>Set other = (<name>Set) obj;
         return this.size() == other.size() && this.containsAll(other.toArray());
     }
 

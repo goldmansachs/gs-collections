@@ -28,6 +28,7 @@ import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
+import com.gs.collections.api.set.primitive.BooleanSet;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
 import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -509,19 +510,19 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
             return true;
         }
 
-        if (!(obj instanceof BooleanHashSet))
+        if (!(obj instanceof BooleanSet))
         {
             return false;
         }
 
-        BooleanHashSet other = (BooleanHashSet) obj;
-        return this.state == other.state;
+        BooleanSet other = (BooleanSet) obj;
+        return this.contains(true) == other.contains(true) && this.contains(false) == other.contains(false);
     }
 
     @Override
     public int hashCode()
     {
-        return (int) this.state;
+        return (this.contains(true) ? 1231 : 0) + (this.contains(false) ? 1237 : 0);
     }
 
     @Override
