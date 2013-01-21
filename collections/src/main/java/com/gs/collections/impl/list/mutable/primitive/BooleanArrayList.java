@@ -656,16 +656,13 @@ public final class BooleanArrayList
 
         public boolean next()
         {
-            try
-            {
-                boolean next = BooleanArrayList.this.get(this.currentIndex);
-                this.currentIndex++;
-                return next;
-            }
-            catch (IndexOutOfBoundsException ignored)
+            if (!this.hasNext())
             {
                 throw new NoSuchElementException();
             }
+            boolean next = BooleanArrayList.this.get(this.currentIndex);
+            this.currentIndex++;
+            return next;
         }
     }
 
