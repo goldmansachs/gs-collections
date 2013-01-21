@@ -712,6 +712,10 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
 
     public double median()
     {
+        if (this.isEmpty())
+        {
+            throw new NoSuchElementException();
+        }
         <type>[] sortedArray = this.toSortedArray();
         int middleIndex = sortedArray.length >\> 1;
         if (sortedArray.length > 1 && (sortedArray.length & 1) == 0)

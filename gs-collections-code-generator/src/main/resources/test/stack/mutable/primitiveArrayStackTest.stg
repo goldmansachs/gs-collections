@@ -528,6 +528,24 @@ public class <name>ArrayStackTest
         Assert.assertEquals(ArrayStack.newStackFromTopToBottom(<["1", "2", "3"]:(literal.(type))(); separator=", ">).hashCode(), <name>ArrayStack.newStackFromTopToBottom(<["1", "2", "3"]:(literal.(type))(); separator=", ">).hashCode());
     }
 
+    @Test(expected = NoSuchElementException.class)
+    public void min_throws_emptyStack()
+    {
+        new <name>ArrayStack().min();
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void max_throws_emptyStack()
+    {
+        new <name>ArrayStack().max();
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void median_throws_emptyStack()
+    {
+        new <name>ArrayStack().median();
+    }
+
     @Test(expected = EmptyStackException.class)
     public void pop_empty_stack_throws_exception()
     {

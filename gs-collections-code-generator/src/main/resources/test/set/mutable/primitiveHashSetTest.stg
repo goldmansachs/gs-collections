@@ -616,6 +616,12 @@ public class <name>HashSetTest
         Assert.assertEquals(30.5, <name>HashSet.newSetWith(<["1", "30", "31", "32"]:(literal.(type))(); separator=", ">).median(), 0.0);
     }
 
+    @Test(expected = NoSuchElementException.class)
+    public void median_throws_emptyList()
+    {
+        new <name>HashSet().median();
+    }
+
     @Test
     public void testToString()
     {

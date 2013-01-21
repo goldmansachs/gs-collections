@@ -352,7 +352,7 @@ public final class <name>ArrayList
     {
         boolean modified = false;
         <name>Iterator iterator = source.<type>Iterator();
-        while(iterator.hasNext())
+        while (iterator.hasNext())
         {
             <type> item = iterator.next();
             if (this.remove(item))
@@ -605,6 +605,10 @@ public final class <name>ArrayList
 
     public double median()
     {
+        if (this.isEmpty())
+        {
+            throw new NoSuchElementException();
+        }
         <type>[] sortedArray = this.toSortedArray();
         int middleIndex = sortedArray.length >\> 1;
         if (sortedArray.length > 1 && (sortedArray.length & 1) == 0)
@@ -757,9 +761,9 @@ public final class <name>ArrayList
         int endIndex = size - 1;
         for (int i = 0; i \< size / 2; i++)
         {
-            <type>  tempSwapValue = this.items[i];
+            <type> tempSwapValue = this.items[i];
             this.items[i] = this.items[(endIndex - i)];
-            this.items[endIndex- i] = tempSwapValue;
+            this.items[endIndex - i] = tempSwapValue;
         }
         return this;
     }
@@ -895,7 +899,7 @@ public final class <name>ArrayList
 
         public \<V> RichIterable\<V> collect(<name>ToObjectFunction\<? extends V> function)
         {
-            FastList\<V>  results = FastList.newList(<name>ArrayList.this.size);
+            FastList\<V> results = FastList.newList(<name>ArrayList.this.size);
             <name>Iterator iterator = this.<type>Iterator();
             while (iterator.hasNext())
             {
@@ -1043,7 +1047,7 @@ public final class <name>ArrayList
 
             public <type> next()
             {
-                if(!this.hasNext())
+                if (!this.hasNext())
                 {
                     throw new NoSuchElementException();
                 }
