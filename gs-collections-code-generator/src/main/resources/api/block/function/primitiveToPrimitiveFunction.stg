@@ -19,6 +19,8 @@ import java.io.Serializable;
 
 /**
  * This file was automatically generated from template file primitiveToPrimitiveFunction.stg.
+ *
+ * @since 3.0.
  */
 public interface <name1>To<name2>Function
         extends Serializable

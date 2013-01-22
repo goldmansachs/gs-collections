@@ -15,11 +15,12 @@ body(type, name) ::= <<
 package com.gs.collections.api.stack.primitive;
 
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
-import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
 import com.gs.collections.api.list.primitive.<name>List;
 
 /**
  * This file was automatically generated from template file mutablePrimitiveStack.stg.
+ *
+ * @since 3.0.
  */
 public interface Mutable<name>Stack extends <name>Stack
 {

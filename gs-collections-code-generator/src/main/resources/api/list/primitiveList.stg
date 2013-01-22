@@ -1,4 +1,6 @@
 import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveHashcode.stg"
 
 targetPath() ::= "com/gs/collections/api/list/primitive"
 
@@ -13,11 +15,15 @@ body(type, name) ::= <<
 
 package com.gs.collections.api.list.primitive;
 
+import java.util.List;
+
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 
 /**
  * This file was automatically generated from template file primitiveList.stg.
+ *
+ * @since 3.0.
  */
 public interface <name>List extends <name>Iterable
 {
@@ -34,6 +40,18 @@ public interface <name>List extends <name>Iterable
     <name>List select(<name>Predicate predicate);
 
     <name>List reject(<name>Predicate predicate);
+
+    /**
+     * Follows the same general contract as {@link List#equals(Object)}.
+     */
+    @Override
+    boolean equals(Object o);
+
+    /**
+     * Follows the same general contract as {@link List#hashCode()}.
+     */
+    @Override
+    int hashCode();
 }
 
 >>

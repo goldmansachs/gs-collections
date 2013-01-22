@@ -18,12 +18,26 @@ import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 
 /**
  * This file was automatically generated from template file primitiveSet.stg.
+ *
+ * @since 3.0.
  */
 public interface <name>Set extends <name>Iterable
 {
     <name>Set select(<name>Predicate predicate);
 
     <name>Set reject(<name>Predicate predicate);
+
+    /**
+     * Follows the same general contract as {@link Set#equals(Object)}.
+     */
+    @Override
+    boolean equals(Object o);
+
+    /**
+     * Follows the same general contract as {@link Set#hashCode()}.
+     */
+    @Override
+    int hashCode();
 }
 
 >>

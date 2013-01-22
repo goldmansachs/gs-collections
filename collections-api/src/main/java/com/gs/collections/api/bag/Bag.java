@@ -86,40 +86,17 @@ public interface Bag<T>
     ImmutableBag<T> toImmutable();
 
     /**
-     * Compares the specified object with this bag for equality.  Returns <tt>true</tt> if the given object is also a
-     * bag and the occurrences of all of the distinct items are the same between the two bags.  More formally, two
-     * bags<tt>b1</tt> and <tt>b2</tt> have the same contents if <tt>m1.toMapOfItemToCount().equals(m2.toMapOfItemToCount())</tt>.
-     * This ensures that the <tt>equals</tt> method works properly across different implementations of the <tt>Bag</tt>
-     * interface.
+     * Two bags<tt>b1</tt> and <tt>b2</tt> are equal if <tt>m1.toMapOfItemToCount().equals(m2.toMapOfItemToCount())</tt>.
      *
-     * @param object object to be compared for equality with this bag
-     * @return <tt>true</tt> if the specified object is equal to this bag
      * @see Map#equals(Object)
      */
     @Override
     boolean equals(Object object);
 
     /**
-     * Returns the hash code for this Bag. This is defined as follows:
-     * <p/>
-     * <pre>
-     * final IntegerSum sum = new IntegerSum(0);
-     * this.forEachWithOccurrences(new ObjectIntProcedure<T>()
-     * {
-     *     public void value(T each, int count)
-     *     {
-     *         sum.add((each == null ? 0 : each.hashCode()) ^ count);
-     *     }
-     * });
-     * return sum.getIntSum();
-     * </pre>
-     * This ensures that <tt>b1.equals(b2)</tt> implies that <tt>b1.hashCode()==b2.hashCode()</tt> for any two bags
-     * <tt>b1</tt> and <tt>b2</tt>, as required by the general contract of {@link Object#hashCode()}.
+     * Returns the hash code for this Bag, defined as <tt>this.{@link #toMapOfItemToCount()}.hashCode()</tt>.
      *
-     * @return the hash code value for this map
      * @see Map#hashCode()
-     * @see #equals(Object)
-     * @see #equals(Object)
      */
     @Override
     int hashCode();

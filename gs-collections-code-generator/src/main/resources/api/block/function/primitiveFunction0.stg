@@ -20,6 +20,8 @@ import java.io.Serializable;
  * by calling the value method. It may be used to reduce the overhead
  * of autoboxing <wrapperName> objects in places where primitive <type>s could be used.
  * This file was automatically generated from template file primitiveFunction0.stg.
+ *
+ * @since 3.0.
  */
 public interface <name>Function0
         extends Serializable

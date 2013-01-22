@@ -18,6 +18,8 @@ import java.io.Serializable;
 /**
  * This file was automatically generated from template file primitiveProcedure.stg.
  * A one argument procedure that takes a primitive <type> as the argument.
+ *
+ * @since 3.0.
  */
 public interface <name>Procedure
         extends Serializable

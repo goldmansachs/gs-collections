@@ -19,6 +19,8 @@ import java.io.Serializable;
  * A two argument Predicate that takes type T and
  * a primitive <type> as the arguments.
  * This file was automatically generated from template file objectPrimitivePredicate.stg.
+ *
+ * @since 3.0.
  */
 public interface Object<name>Predicate\<T>
         extends Serializable

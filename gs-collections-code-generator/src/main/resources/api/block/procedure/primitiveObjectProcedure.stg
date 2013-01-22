@@ -19,6 +19,8 @@ import java.io.Serializable;
  * This file was automatically generated from template file primitiveObjectProcedure.stg.
  * A two argument procedure that takes a primitive <type> and type T as the arguments.
  * This file was automatically generated from template file objectPrimitiveProcedure.stg.
+ *
+ * @since 3.0.
  */
 public interface <name>ObjectProcedure\<T>
     extends Serializable

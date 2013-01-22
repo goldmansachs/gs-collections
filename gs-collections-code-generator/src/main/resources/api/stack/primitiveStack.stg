@@ -1,4 +1,6 @@
 import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveHashcode.stg"
 
 targetPath() ::= "com/gs/collections/api/stack/primitive"
 
@@ -16,9 +18,12 @@ package com.gs.collections.api.stack.primitive;
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.list.primitive.<name>List;
+import com.gs.collections.api.stack.StackIterable;
 
 /**
  * This file was automatically generated from template file primitiveStack.stg.
+ *
+ * @since 3.0.
  */
 public interface <name>Stack extends <name>Iterable
 {
@@ -41,6 +46,18 @@ public interface <name>Stack extends <name>Iterable
     <name>Stack select(<name>Predicate predicate);
 
     <name>Stack reject(<name>Predicate predicate);
+
+    /**
+     * Follows the same general contract as {@link StackIterable#equals(Object)}.
+     */
+    @Override
+    boolean equals(Object o);
+
+    /**
+     * Follows the same general contract as {@link StackIterable#hashCode()}.
+     */
+    @Override
+    int hashCode();
 }
 
 >>

@@ -19,6 +19,8 @@ import com.gs.collections.api.collection.primitive.Immutable<name>Collection;
 
 /**
  * This file was automatically generated from template file immutablePrimitiveStack.stg.
+ *
+ * @since 3.0.
  */
 public interface Immutable<name>Stack extends <name>Stack
 {

@@ -289,11 +289,13 @@ public final class BooleanArrayStack implements MutableBooleanStack, Externaliza
     @Override
     public int hashCode()
     {
-        if (this.delegate.isEmpty())
+        int hashCode = 1;
+        for (int i = this.size() - 1; i >= 0; i--)
         {
-            return 1234;
+            boolean item = this.delegate.get(i);
+            hashCode = 31 * hashCode + (item ? 1231 : 1237);
         }
-        return this.delegate.toReversed().hashCode();
+        return hashCode;
     }
 
     @Override

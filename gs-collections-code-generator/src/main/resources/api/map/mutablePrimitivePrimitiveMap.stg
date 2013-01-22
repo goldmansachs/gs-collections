@@ -23,6 +23,8 @@ import com.gs.collections.api.block.predicate.primitive.<name1><name2>Predicate;
 
 /**
  * This file was automatically generated from template file mutablePrimitivePrimitiveMap.stg.
+ *
+ * @since 3.0.
  */
 public interface Mutable<name1><name2>Map extends <name1><name2>Map
 {

@@ -522,7 +522,19 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
     @Override
     public int hashCode()
     {
-        return (this.contains(true) ? 1231 : 0) + (this.contains(false) ? 1237 : 0);
+        switch (this.state)
+        {
+            case 0:
+                return 0;
+            case 1:
+                return 1237;
+            case 2:
+                return 1231;
+            case 3:
+                return 2468;
+            default:
+                throw new AssertionError("Invalid state");
+        }
     }
 
     @Override

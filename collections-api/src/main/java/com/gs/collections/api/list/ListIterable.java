@@ -204,4 +204,16 @@ public interface ListIterable<T>
      * @since 3.0
      */
     PartitionList<T> partitionWhile(Predicate<? super T> predicate);
+
+    /**
+     * Follows the same general contract as {@link List#equals(Object)}.
+     */
+    @Override
+    boolean equals(Object o);
+
+    /**
+     * Follows the same general contract as {@link List#hashCode()}.
+     */
+    @Override
+    int hashCode();
 }

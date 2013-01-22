@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,6 +26,7 @@ import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -453,8 +454,7 @@ public class BooleanArrayStackTest
         Assert.assertNotSame(stack2, stack3);
         Assert.assertNotSame(stack1, stack3);
         Verify.assertPostSerializedEqualsAndHashCode(stack1);
-        BooleanArrayList list = BooleanArrayList.newListWith(true, false);
-        Assert.assertEquals(list.hashCode(), BooleanArrayStack.newStackFromTopToBottom(true, false).hashCode());
+        Assert.assertEquals(ArrayStack.newStackFromTopToBottom(true, false).hashCode(), BooleanArrayStack.newStackFromTopToBottom(true, false).hashCode());
     }
 
     private void checkArrayValues(String message, boolean[] expected, boolean[] actual)
@@ -505,6 +505,29 @@ public class BooleanArrayStackTest
     {
         BooleanArrayStack stack = BooleanArrayStack.newStackFromTopToBottom();
         stack.peekAt(1);
+    }
+
+    @Test
+    public void testEquals()
+    {
+        BooleanArrayStack stack1 = BooleanArrayStack.newStackWith(true, false, true);
+        BooleanArrayStack stack2 = BooleanArrayStack.newStackWith(true, false, true);
+        BooleanArrayStack stack3 = BooleanArrayStack.newStackWith(false, true, false);
+        BooleanArrayStack stack4 = BooleanArrayStack.newStackWith(true, false, true, false);
+        BooleanArrayStack stack5 = BooleanArrayStack.newStackWith(true, false);
+
+        Verify.assertEqualsAndHashCode(stack1, stack2);
+        Verify.assertPostSerializedEqualsAndHashCode(stack1);
+        Verify.assertNotEquals(stack1, stack3);
+        Verify.assertNotEquals(stack1, stack4);
+        Verify.assertNotEquals(stack1, stack5);
+    }
+
+    @Test
+    public void testHashCode()
+    {
+        Assert.assertEquals(ArrayStack.newStackWith(true, false, true).hashCode(), BooleanArrayStack.newStackWith(true, false, true).hashCode());
+        Assert.assertEquals(ArrayStack.newStack().hashCode(), new BooleanArrayStack().hashCode());
     }
 
     private static class VerificationProcedure implements BooleanProcedure

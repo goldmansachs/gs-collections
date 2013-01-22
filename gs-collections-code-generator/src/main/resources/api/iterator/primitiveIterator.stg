@@ -16,6 +16,8 @@ package com.gs.collections.api.iterator;
 /**
  * This file was automatically generated from template file primitiveIterator.stg.
  * <name>Iterator is an iterator over a <name>Iterable.
+ *
+ * @since 3.0.
  */
 public interface <name>Iterator
 {

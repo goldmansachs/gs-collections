@@ -17,6 +17,8 @@ import com.gs.collections.api.block.predicate.primitive.<name>ObjectPredicate;
 
 /**
  * This file was automatically generated from template file immutableObjectPrimitiveMap.stg.
+ *
+ * @since 3.0.
  */
 public interface ImmutableObject<name>Map\<K> extends <name>ObjectMap\<K>
 {

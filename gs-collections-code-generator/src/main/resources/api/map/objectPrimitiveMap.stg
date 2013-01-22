@@ -21,6 +21,8 @@ import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 
 /**
  * This file was automatically generated from template file objectPrimitiveMap.stg.
+ *
+ * @since 3.0.
  */
 public interface Object<name>Map\<K> extends <name>Iterable
 {

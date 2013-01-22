@@ -1,29 +1,29 @@
 hashCode ::= [
-    "byte": "narrowHashcode",
-    "short": "narrowHashcode",
-    "char": "narrowHashcode",
-    "int": "intHashcode",
-    "long": "longHashcode",
-    "float": "floatHashcode",
-    "double": "doubleHashcode"
+    "byte": "narrowHashCode",
+    "short": "narrowHashCode",
+    "char": "narrowHashCode",
+    "int": "intHashCode",
+    "long": "longHashCode",
+    "float": "floatHashCode",
+    "double": "doubleHashCode"
 ]
 
-intHashcode(item) ::= <<
+intHashCode(item) ::= <<
 <item>
 >>
 
-narrowHashcode(item) ::= <<
-(int)<item>
+narrowHashCode(item) ::= <<
+(int) <item>
 >>
 
-longHashcode(item) ::= <<
+longHashCode(item) ::= <<
 (int) (<item> ^ <item> >\>> 32)
 >>
 
-floatHashcode(item) ::= <<
+floatHashCode(item) ::= <<
 Float.floatToIntBits(<item>)
 >>
 
-doubleHashcode(item) ::= <<
+doubleHashCode(item) ::= <<
 (int) (Double.doubleToLongBits(<item>) ^ Double.doubleToLongBits(<item>) >\>> 32)
 >>

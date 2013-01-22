@@ -19,6 +19,8 @@ import java.io.Serializable;
  * This file was automatically generated from template file primitivePredicate.stg.
  * <name>Predicate is a primitive Predicate which may be used to reduce the overhead
  * of autoboxing <wrapperName> objects in places where primitive <type>s could be used.
+ *
+ * @since 3.0.
  */
 public interface <name>Predicate
         extends Serializable

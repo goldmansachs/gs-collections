@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -591,10 +591,18 @@ public class BooleanArrayListTest
     @Test
     public void testHashCode()
     {
-        BitSet bitSet = new BitSet();
-        bitSet.set(0, 2);
-        Assert.assertEquals(bitSet.hashCode(), BooleanArrayList.newListWith(true, true, false).hashCode());
-        Assert.assertEquals(new BitSet().hashCode(), BooleanArrayList.newListWith().hashCode());
+        Assert.assertEquals(
+                FastList.newListWith(true, false, true, false, true).hashCode(),
+                BooleanArrayList.newListWith(true, false, true, false, true).hashCode());
+        Assert.assertEquals(
+                FastList.newListWith().hashCode(),
+                BooleanArrayList.newListWith().hashCode());
+        Assert.assertEquals(
+                FastList.newListWith(true).hashCode(),
+                BooleanArrayList.newListWith(true).hashCode());
+        Assert.assertEquals(
+                FastList.newListWith(false).hashCode(),
+                BooleanArrayList.newListWith(false).hashCode());
     }
 
     @Test

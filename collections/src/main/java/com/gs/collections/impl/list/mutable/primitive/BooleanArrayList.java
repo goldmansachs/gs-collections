@@ -29,6 +29,7 @@ import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
+import com.gs.collections.api.list.primitive.BooleanList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.impl.list.mutable.FastList;
 import net.jcip.annotations.NotThreadSafe;
@@ -515,16 +516,6 @@ public final class BooleanArrayList
         return newItems;
     }
 
-    /**
-     * Compares the specified object with this boolean list for equality.  Returns
-     * <tt>true</tt> if and only if the specified object is also a BooleanArrayList, both
-     * lists have the same size, and all corresponding pairs of booleans in
-     * the two lists are <i>equal</i>. In other words, two lists are defined to be
-     * equal if they contain the same booleans in the same order.
-     *
-     * @param otherList the object to be compared for equality with this list
-     * @return <tt>true</tt> if the specified object is equal to this list
-     */
     @Override
     public boolean equals(Object otherList)
     {
@@ -532,33 +523,35 @@ public final class BooleanArrayList
         {
             return true;
         }
-        if (!(otherList instanceof BooleanArrayList))
+        if (!(otherList instanceof BooleanList))
         {
             return false;
         }
-        BooleanArrayList list = (BooleanArrayList) otherList;
-        if (this.size != list.size)
+        BooleanList list = (BooleanList) otherList;
+        if (this.size != list.size())
         {
             return false;
         }
-        return this.items == null || this.items.equals(list.items);
+        for (int i = 0; i < this.size; i++)
+        {
+            if (this.items.get(i) != list.get(i))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
-    /**
-     * Returns the hash code value for this list.  The hash code of a BooleanArrayList
-     * is defined to be the result of the following calculation:
-     * <pre>
-     *  this.items == null ? 1234 : this.items.hashCode();
-     * </pre>
-     * where this.items is a java.util.BitSet.
-     *
-     * @return the hash code value for this list
-     * @see BitSet#hashCode()
-     */
     @Override
     public int hashCode()
     {
-        return this.items == null ? 1234 : this.items.hashCode();
+        int hashCode = 1;
+        for (int i = 0; i < this.size; i++)
+        {
+            boolean item = this.items.get(i);
+            hashCode = 31 * hashCode + (item ? 1231 : 1237);
+        }
+        return hashCode;
     }
 
     @Override

@@ -74,6 +74,8 @@ public abstract class MutableBagTestCase extends AbstractCollectionTestCase
         super.equalsAndHashCode();
         Verify.assertNotEquals(this.newWith(1, 1, 2, 3), this.newWith(1, 2, 2, 3));
         Verify.assertEqualsAndHashCode(this.newWith(null, null, 2, 3), this.newWith(null, 2, null, 3));
+        Assert.assertEquals(this.newWith(1, 1, 2, 3).toMapOfItemToCount().hashCode(), this.newWith(1, 1, 2, 3).hashCode());
+        Assert.assertEquals(this.newWith(null, null, 2, 3).toMapOfItemToCount().hashCode(), this.newWith(null, null, 2, 3).hashCode());
     }
 
     @Test

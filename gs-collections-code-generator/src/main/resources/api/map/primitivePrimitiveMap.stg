@@ -23,6 +23,8 @@ import com.gs.collections.api.block.procedure.primitive.<name1>Procedure;
 
 /**
  * This file was automatically generated from template file primitivePrimitiveMap.stg.
+ *
+ * @since 3.0.
  */
 public interface <name1><name2>Map extends <name2>Iterable
 {

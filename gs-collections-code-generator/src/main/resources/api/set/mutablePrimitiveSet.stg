@@ -20,6 +20,8 @@ import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
 
 /**
  * This file was automatically generated from template file mutablePrimitiveSet.stg.
+ *
+ * @since 3.0.
  */
 public interface Mutable<name>Set extends Mutable<name>Collection, <name>Set
 {

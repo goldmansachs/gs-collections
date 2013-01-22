@@ -48,7 +48,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
     private float loadFactor = DEFAULT_LOAD_FACTOR;
     private int maxSize;
     private int occupied;
-    //The 32 bits of this integer indicate whether the items <(literal.(type))("0")> to <(literal.(type))("31")> are present in the set.
+    // The 32 bits of this integer indicate whether the items <(literal.(type))("0")> to <(literal.(type))("31")> are present in the set.
     private int zeroToThirtyOne;
     private int zeroToThirtyOneOccupied;
 
@@ -374,13 +374,12 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         int nextIndex = index;
         int probe = 17;
 
-        //loop until an empty slot is reached
+        // loop until an empty slot is reached
         while (true)
         {
-            //Probe algorithm: 17*n*(n+1)/2 where n = no. of collisions
-            nextIndex += probe;
+            // Probe algorithm: 17 * n * (n+1) / 2 where n = no. of collisions
+            nextIndex = (nextIndex + probe) & this.table.length - 1;
             probe += 17;
-            nextIndex &= this.table.length - 1;
 
             if (<(equals.(type))("this.table[nextIndex]", "element")>)
             {

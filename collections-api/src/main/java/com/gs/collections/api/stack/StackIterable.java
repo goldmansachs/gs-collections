@@ -17,6 +17,7 @@
 package com.gs.collections.api.stack;
 
 import java.util.AbstractCollection;
+import java.util.List;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
@@ -77,41 +78,13 @@ public interface StackIterable<T> extends RichIterable<T>
     String toString();
 
     /**
-     * Compares the specified object with this stack for equality.  Returns
-     * <tt>true</tt> if and only if the specified object is also a stack, both
-     * stacks have the same size, and all corresponding pairs of elements in
-     * the two stacks are <i>equal</i>.  (Two elements <tt>e1</tt> and
-     * <tt>e2</tt> are <i>equal</i> if <tt>(e1==null ? e2==null :
-     * e1.equals(e2))</tt>.)  In other words, two stacks are defined to be
-     * equal if they contain the same elements in the same order.  This
-     * definition ensures that the equals method works properly across
-     * different implementations of the <tt>StackIterable</tt> interface.
-     *
-     * @param o the object to be compared for equality with this stack
-     * @return <tt>true</tt> if the specified object is equal to this stack
+     * Follows the same general contract as {@link List#equals(Object)}, but for Stacks.
      */
     @Override
     boolean equals(Object o);
 
     /**
-     * Returns the hash code value for this stack.  The hash code of a stack
-     * is defined to be the result of the following calculation:
-     * <pre>
-     * int hashCode = 1;
-     * for (T each : stack)
-     * {
-     *     hashCode = 31 * hashCode + (each == null ? 0 : each.hashCode());
-     * }
-     *
-     * </pre>
-     * This ensures that <tt>stack1.equals(stack2)</tt> implies that
-     * <tt>stack1.hashCode()==stack2.hashCode()</tt> for any two stacks,
-     * <tt>stack1</tt> and <tt>stack2</tt>, as required by the general
-     * contract of {@link Object#hashCode}.
-     *
-     * @return the hash code value for this stack
-     * @see Object#equals(Object)
-     * @see #equals(Object)
+     * Follows the same general contract as {@link List#hashCode()}, but for Stacks.
      */
     @Override
     int hashCode();

@@ -84,6 +84,7 @@ public abstract class ImmutableBagTestCase
         MutableBag<String> mutable = HashBag.newBag(immutable);
         Verify.assertEqualsAndHashCode(immutable, mutable);
         Verify.assertNotEquals(immutable, FastList.newList(mutable));
+        Assert.assertEquals(this.newBag().toMapOfItemToCount().hashCode(), this.newBag().hashCode());
     }
 
     @Test

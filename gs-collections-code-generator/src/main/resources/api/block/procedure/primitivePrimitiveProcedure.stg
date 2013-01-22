@@ -21,6 +21,8 @@ import java.io.Serializable;
  * A <name1><name2>Procedure is a two argument lambda or closure which has no return argument and takes a primitive <type1> as the first and
  * a primitive <type2> as the second argument.
  * This file was automatically generated from template file primitivePrimitiveProcedure.stg.
+ *
+ * @since 3.0.
  */
 public interface <name1><name2>Procedure
         extends Serializable

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -207,4 +207,16 @@ public interface MapIterable<K, V> extends RichIterable<V>
      * </pre>
      */
     Pair<K, V> detect(Predicate2<? super K, ? super V> predicate);
+
+    /**
+     * Follows the same general contract as {@link Map#equals(Object)}.
+     */
+    @Override
+    boolean equals(Object o);
+
+    /**
+     * Follows the same general contract as {@link Map#hashCode()}.
+     */
+    @Override
+    int hashCode();
 }

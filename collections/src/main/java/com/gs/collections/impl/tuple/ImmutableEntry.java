@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ public final class ImmutableEntry<K, V> extends AbstractImmutableEntry<K, V>
     }
 
     /**
-     * Indicates whether an object equals this entry, following the behavior specified in {@link Object#equals(Object)}.
+     * Indicates whether an object equals this entry, following the behavior specified in {@link Map.Entry#equals(Object)}.
      */
     @Override
     public boolean equals(Object object)

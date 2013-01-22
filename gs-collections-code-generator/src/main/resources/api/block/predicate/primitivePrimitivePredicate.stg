@@ -19,6 +19,8 @@ import java.io.Serializable;
 
 /**
  * This file was automatically generated from template file primitivePrimitivePredicate.stg.
+ *
+ * @since 3.0.
  */
 public interface <name1><name2>Predicate
         extends Serializable
