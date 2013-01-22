@@ -1,5 +1,5 @@
 import "copyright.stg"
-import "primitiveHashcode.stg"
+import "primitiveHashCode.stg"
 import "primitiveLiteral.stg"
 
 isTest() ::= "true"

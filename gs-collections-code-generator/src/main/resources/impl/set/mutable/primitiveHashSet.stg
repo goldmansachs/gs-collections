@@ -1,6 +1,6 @@
 import "copyright.stg"
 import "primitiveEquals.stg"
-import "primitiveHashcode.stg"
+import "primitiveHashCode.stg"
 import "primitiveLiteral.stg"
 
 targetPath() ::= "com/gs/collections/impl/set/mutable/primitive"
