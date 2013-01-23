@@ -52,6 +52,8 @@ public interface <name>Iterable extends PrimitiveIterable
     boolean contains(<type> value);
 
     boolean containsAll(<type>... source);
+
+    boolean containsAll(<name>Iterable source);
 }
 
 >>

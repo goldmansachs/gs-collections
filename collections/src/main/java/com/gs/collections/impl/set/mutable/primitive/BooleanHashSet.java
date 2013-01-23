@@ -436,6 +436,22 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
         return true;
     }
 
+    public boolean containsAll(BooleanIterable source)
+    {
+        if (this.state == 3)
+        {
+            return true;
+        }
+        for (BooleanIterator iterator = source.booleanIterator(); iterator.hasNext(); )
+        {
+            if (!this.contains(iterator.next()))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public BooleanHashSet with(boolean element)
     {
         if (this.state == 3)

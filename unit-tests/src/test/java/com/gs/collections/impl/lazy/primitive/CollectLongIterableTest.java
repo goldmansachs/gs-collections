@@ -27,6 +27,7 @@ import com.gs.collections.impl.block.factory.primitive.LongPredicates;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -175,19 +176,31 @@ public class CollectLongIterableTest
     @Test
     public void contains()
     {
-        Assert.assertTrue(Interval.fromTo(4, 1).collectLong(PrimitiveFunctions.unboxIntegerToLong()).contains(1L));
-        Assert.assertTrue(Interval.fromTo(4, 1).collectLong(PrimitiveFunctions.unboxIntegerToLong()).contains(3L));
-        Assert.assertTrue(Interval.fromTo(4, 1).collectLong(PrimitiveFunctions.unboxIntegerToLong()).contains(4L));
-        Assert.assertFalse(Interval.fromTo(4, 1).collectLong(PrimitiveFunctions.unboxIntegerToLong()).contains(5L));
+        LongIterable longIterable = Interval.fromTo(4, 1).collectLong(PrimitiveFunctions.unboxIntegerToLong());
+        Assert.assertTrue(longIterable.contains(1L));
+        Assert.assertTrue(longIterable.contains(3L));
+        Assert.assertTrue(longIterable.contains(4L));
+        Assert.assertFalse(longIterable.contains(5L));
     }
 
     @Test
-    public void containsAll()
+    public void containsAllArray()
     {
-        Assert.assertTrue(Interval.fromTo(4, 1).collectLong(PrimitiveFunctions.unboxIntegerToLong()).containsAll(1L));
-        Assert.assertTrue(Interval.fromTo(4, 1).collectLong(PrimitiveFunctions.unboxIntegerToLong()).containsAll(1L, 2L, 3L, 4L));
-        Assert.assertFalse(Interval.fromTo(4, 1).collectLong(PrimitiveFunctions.unboxIntegerToLong()).containsAll(1L, 2L, 3L, 4L, 5L));
-        Assert.assertFalse(Interval.fromTo(4, 1).collectLong(PrimitiveFunctions.unboxIntegerToLong()).containsAll(7L, 6L, 5L));
+        LongIterable longIterable = Interval.fromTo(4, 1).collectLong(PrimitiveFunctions.unboxIntegerToLong());
+        Assert.assertTrue(longIterable.containsAll(1L));
+        Assert.assertTrue(longIterable.containsAll(1L, 2L, 3L, 4L));
+        Assert.assertFalse(longIterable.containsAll(1L, 2L, 3L, 4L, 5L));
+        Assert.assertFalse(longIterable.containsAll(7L, 6L, 5L));
+    }
+
+    @Test
+    public void containsAllIterable()
+    {
+        LongIterable longIterable = Interval.fromTo(4, 1).collectLong(PrimitiveFunctions.unboxIntegerToLong());
+        Assert.assertTrue(longIterable.containsAll(LongArrayList.newListWith(1L)));
+        Assert.assertTrue(longIterable.containsAll(LongArrayList.newListWith(1L, 2L, 3L, 4L)));
+        Assert.assertFalse(longIterable.containsAll(LongArrayList.newListWith(1L, 2L, 3L, 4L, 5L)));
+        Assert.assertFalse(longIterable.containsAll(LongArrayList.newListWith(7L, 6L, 5L)));
     }
 
     @Test

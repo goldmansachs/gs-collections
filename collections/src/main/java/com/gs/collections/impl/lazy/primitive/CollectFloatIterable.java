@@ -298,6 +298,18 @@ public class CollectFloatIterable<T>
         return true;
     }
 
+    public boolean containsAll(FloatIterable source)
+    {
+        for (FloatIterator iterator = source.floatIterator(); iterator.hasNext(); )
+        {
+            if (!this.contains(iterator.next()))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private final class FloatFunctionToProcedure implements Procedure2<T, FloatProcedure>
     {
         private static final long serialVersionUID = 5812943420002956844L;

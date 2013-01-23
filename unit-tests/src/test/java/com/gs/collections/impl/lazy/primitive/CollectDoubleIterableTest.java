@@ -27,6 +27,7 @@ import com.gs.collections.impl.block.factory.primitive.DoublePredicates;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -179,19 +180,31 @@ public class CollectDoubleIterableTest
     @Test
     public void contains()
     {
-        Assert.assertTrue(Interval.fromTo(4, 1).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).contains(1.0d));
-        Assert.assertTrue(Interval.fromTo(4, 1).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).contains(3.0d));
-        Assert.assertTrue(Interval.fromTo(4, 1).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).contains(4.0d));
-        Assert.assertFalse(Interval.fromTo(4, 1).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).contains(5.0d));
+        DoubleIterable doubleIterable = Interval.fromTo(4, 1).collectDouble(PrimitiveFunctions.unboxIntegerToDouble());
+        Assert.assertTrue(doubleIterable.contains(1.0d));
+        Assert.assertTrue(doubleIterable.contains(3.0d));
+        Assert.assertTrue(doubleIterable.contains(4.0d));
+        Assert.assertFalse(doubleIterable.contains(5.0d));
     }
 
     @Test
-    public void containsAll()
+    public void containsAllArray()
     {
-        Assert.assertTrue(Interval.fromTo(4, 1).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).containsAll(1.0d));
-        Assert.assertTrue(Interval.fromTo(4, 1).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).containsAll(1.0d, 2.0d, 3.0d, 4.0d));
-        Assert.assertFalse(Interval.fromTo(4, 1).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).containsAll(1.0d, 2.0d, 3.0d, 4.0d, 5.0d));
-        Assert.assertFalse(Interval.fromTo(4, 1).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).containsAll(7.0d, 6.0d, 5.0d));
+        DoubleIterable doubleIterable = Interval.fromTo(4, 1).collectDouble(PrimitiveFunctions.unboxIntegerToDouble());
+        Assert.assertTrue(doubleIterable.containsAll(1.0d));
+        Assert.assertTrue(doubleIterable.containsAll(1.0d, 2.0d, 3.0d, 4.0d));
+        Assert.assertFalse(doubleIterable.containsAll(1.0d, 2.0d, 3.0d, 4.0d, 5.0d));
+        Assert.assertFalse(doubleIterable.containsAll(7.0d, 6.0d, 5.0d));
+    }
+
+    @Test
+    public void containsAllIterable()
+    {
+        DoubleIterable doubleIterable = Interval.fromTo(4, 1).collectDouble(PrimitiveFunctions.unboxIntegerToDouble());
+        Assert.assertTrue(doubleIterable.containsAll(DoubleArrayList.newListWith(1.0d)));
+        Assert.assertTrue(doubleIterable.containsAll(DoubleArrayList.newListWith(1.0d, 2.0d, 3.0d, 4.0d)));
+        Assert.assertFalse(doubleIterable.containsAll(DoubleArrayList.newListWith(1.0d, 2.0d, 3.0d, 4.0d, 5.0d)));
+        Assert.assertFalse(doubleIterable.containsAll(DoubleArrayList.newListWith(7.0d, 6.0d, 5.0d)));
     }
 
     @Test

@@ -298,6 +298,18 @@ public class CollectDoubleIterable<T>
         return true;
     }
 
+    public boolean containsAll(DoubleIterable source)
+    {
+        for (DoubleIterator iterator = source.doubleIterator(); iterator.hasNext(); )
+        {
+            if (!this.contains(iterator.next()))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private final class DoubleFunctionToProcedure implements Procedure2<T, DoubleProcedure>
     {
         private static final long serialVersionUID = 8449781737918512474L;

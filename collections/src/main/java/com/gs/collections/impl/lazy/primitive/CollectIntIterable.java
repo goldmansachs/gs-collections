@@ -297,6 +297,18 @@ public class CollectIntIterable<T>
         return true;
     }
 
+    public boolean containsAll(IntIterable source)
+    {
+        for (IntIterator iterator = source.intIterator(); iterator.hasNext(); )
+        {
+            if (!this.contains(iterator.next()))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private final class IntFunctionToProcedure implements Procedure2<T, IntProcedure>
     {
         private static final long serialVersionUID = -4133872659735979655L;

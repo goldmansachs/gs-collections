@@ -138,6 +138,18 @@ public final class BooleanArrayList
         return true;
     }
 
+    public boolean containsAll(BooleanIterable source)
+    {
+        for (BooleanIterator iterator = source.booleanIterator(); iterator.hasNext(); )
+        {
+            if (!this.contains(iterator.next()))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public boolean get(int index)
     {
         if (index < this.size)
@@ -664,6 +676,18 @@ public final class BooleanArrayList
         public BooleanIterator booleanIterator()
         {
             return new ReverseBooleanIterator();
+        }
+
+        public boolean containsAll(BooleanIterable source)
+        {
+            for (BooleanIterator iterator = source.booleanIterator(); iterator.hasNext(); )
+            {
+                if (!this.contains(iterator.next()))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
 
         public void forEach(BooleanProcedure procedure)

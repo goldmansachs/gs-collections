@@ -136,6 +136,18 @@ public final class <name>ArrayList
         return true;
     }
 
+    public boolean containsAll(<name>Iterable source)
+    {
+        for (<name>Iterator iterator = source.<type>Iterator(); iterator.hasNext();)
+        {
+            if (!this.contains(iterator.next()))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public <type> get(int index)
     {
         if (index \< this.size)
@@ -957,6 +969,11 @@ public final class <name>ArrayList
         }
 
         public boolean containsAll(<type>... source)
+        {
+            return <name>ArrayList.this.containsAll(source);
+        }
+
+        public boolean containsAll(<name>Iterable source)
         {
             return <name>ArrayList.this.containsAll(source);
         }

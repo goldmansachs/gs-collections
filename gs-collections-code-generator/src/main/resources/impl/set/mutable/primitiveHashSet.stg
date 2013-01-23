@@ -196,6 +196,18 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         return true;
     }
 
+    public boolean containsAll(<name>Iterable source)
+    {
+        for (<name>Iterator iterator = source.<type>Iterator(); iterator.hasNext();)
+        {
+            if (!this.contains(iterator.next()))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public boolean add(<type> element)
     {
         if (isBetweenZeroAndThirtyOne(element))

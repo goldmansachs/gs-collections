@@ -159,7 +159,7 @@ public class <name>HashSetTest
     }
 
     @Test
-    public void containsAll()
+    public void containsAllArray()
     {
         <name>HashSet hashSet = <name>HashSet.newSetWith(<["14", "2", "30", "32", "35", "0", "1"]:(literal.(type))(); separator=", ">);
         Assert.assertTrue(hashSet.containsAll(<(literal.(type))("14")>));
@@ -170,6 +170,22 @@ public class <name>HashSetTest
         Assert.assertTrue(hashSet.containsAll(<["14", "1", "35"]:(literal.(type))(); separator=", ">));
         Assert.assertFalse(hashSet.containsAll(<["0", "2", "35", "-1"]:(literal.(type))(); separator=", ">));
         Assert.assertFalse(hashSet.containsAll(<["31", "-1"]:(literal.(type))(); separator=", ">));
+    }
+
+    @Test
+    public void containsAllIterable()
+    {
+        Assert.assertTrue(new <name>HashSet().containsAll(new <name>HashSet()));
+        Assert.assertFalse(new <name>HashSet().containsAll(<name>HashSet.newSetWith(<(literal.(type))("1")>)));
+        <name>HashSet hashSet = <name>HashSet.newSetWith(<["14", "2", "30", "32", "35", "0", "1"]:(literal.(type))(); separator=", ">);
+        Assert.assertTrue(hashSet.containsAll(<name>HashSet.newSetWith(<(literal.(type))("14")>)));
+        Assert.assertTrue(hashSet.containsAll(<name>HashSet.newSetWith(<(literal.(type))("35")>)));
+        Assert.assertFalse(hashSet.containsAll(<name>HashSet.newSetWith(<(literal.(type))("-1")>)));
+        Assert.assertTrue(hashSet.containsAll(<name>HashSet.newSetWith(<["14", "1", "30"]:(literal.(type))(); separator=", ">)));
+        Assert.assertTrue(hashSet.containsAll(<name>HashSet.newSetWith(<["14", "1", "32"]:(literal.(type))(); separator=", ">)));
+        Assert.assertTrue(hashSet.containsAll(<name>HashSet.newSetWith(<["14", "1", "35"]:(literal.(type))(); separator=", ">)));
+        Assert.assertFalse(hashSet.containsAll(<name>HashSet.newSetWith(<["0", "2", "35", "-1"]:(literal.(type))(); separator=", ">)));
+        Assert.assertFalse(hashSet.containsAll(<name>HashSet.newSetWith(<["31", "-1"]:(literal.(type))(); separator=", ">)));
     }
 
     @Test

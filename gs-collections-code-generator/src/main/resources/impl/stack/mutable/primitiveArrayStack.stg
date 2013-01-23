@@ -258,6 +258,11 @@ public final class <name>ArrayStack
         return this.delegate.asReversed().containsAll(source);
     }
 
+    public boolean containsAll(<name>Iterable source)
+    {
+        return this.delegate.asReversed().containsAll(source);
+    }
+
     public void clear()
     {
         this.delegate.clear();

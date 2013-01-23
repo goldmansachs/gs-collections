@@ -28,6 +28,7 @@ import com.gs.collections.impl.block.factory.primitive.IntPredicates;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -176,19 +177,31 @@ public class CollectIntIterableTest
     @Test
     public void contains()
     {
-        Assert.assertTrue(Interval.fromTo(4, 1).collectInt(PrimitiveFunctions.unboxIntegerToInt()).contains(1));
-        Assert.assertTrue(Interval.fromTo(4, 1).collectInt(PrimitiveFunctions.unboxIntegerToInt()).contains(3));
-        Assert.assertTrue(Interval.fromTo(4, 1).collectInt(PrimitiveFunctions.unboxIntegerToInt()).contains(4));
-        Assert.assertFalse(Interval.fromTo(4, 1).collectInt(PrimitiveFunctions.unboxIntegerToInt()).contains(5));
+        IntIterable intIterable = Interval.fromTo(4, 1).collectInt(PrimitiveFunctions.unboxIntegerToInt());
+        Assert.assertTrue(intIterable.contains(1));
+        Assert.assertTrue(intIterable.contains(3));
+        Assert.assertTrue(intIterable.contains(4));
+        Assert.assertFalse(intIterable.contains(5));
     }
 
     @Test
-    public void containsAll()
+    public void containsAllArray()
     {
-        Assert.assertTrue(Interval.fromTo(4, 1).collectInt(PrimitiveFunctions.unboxIntegerToInt()).containsAll(1));
-        Assert.assertTrue(Interval.fromTo(4, 1).collectInt(PrimitiveFunctions.unboxIntegerToInt()).containsAll(1, 2, 3, 4));
-        Assert.assertFalse(Interval.fromTo(4, 1).collectInt(PrimitiveFunctions.unboxIntegerToInt()).containsAll(1, 2, 3, 4, 5));
-        Assert.assertFalse(Interval.fromTo(4, 1).collectInt(PrimitiveFunctions.unboxIntegerToInt()).containsAll(7, 6, 5));
+        IntIterable intIterable = Interval.fromTo(4, 1).collectInt(PrimitiveFunctions.unboxIntegerToInt());
+        Assert.assertTrue(intIterable.containsAll(1));
+        Assert.assertTrue(intIterable.containsAll(1, 2, 3, 4));
+        Assert.assertFalse(intIterable.containsAll(1, 2, 3, 4, 5));
+        Assert.assertFalse(intIterable.containsAll(7, 6, 5));
+    }
+
+    @Test
+    public void containsAllIterable()
+    {
+        IntIterable intIterable = Interval.fromTo(4, 1).collectInt(PrimitiveFunctions.unboxIntegerToInt());
+        Assert.assertTrue(intIterable.containsAll(IntArrayList.newListWith(1)));
+        Assert.assertTrue(intIterable.containsAll(IntArrayList.newListWith(1, 2, 3, 4)));
+        Assert.assertFalse(intIterable.containsAll(IntArrayList.newListWith(1, 2, 3, 4, 5)));
+        Assert.assertFalse(intIterable.containsAll(IntArrayList.newListWith(7, 6, 5)));
     }
 
     @Test

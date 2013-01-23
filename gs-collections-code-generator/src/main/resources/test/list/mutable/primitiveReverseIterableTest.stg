@@ -45,12 +45,21 @@ public class Reverse<name>IterableTest
     }
 
     @Test
-    public void containsAll()
+    public void containsAllArray()
     {
         <name>Iterable iterable = <name>ArrayList.newListWith(<["3", "2", "1"]:(literal.(type))(); separator=", ">).asReversed();
         Assert.assertTrue(iterable.containsAll(<(literal.(type))("1")>));
         Assert.assertTrue(iterable.containsAll(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
         Assert.assertFalse(iterable.containsAll(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">));
+    }
+
+    @Test
+    public void containsAllIterable()
+    {
+        <name>Iterable iterable = <name>ArrayList.newListWith(<["3", "2", "1"]:(literal.(type))(); separator=", ">).asReversed();
+        Assert.assertTrue(iterable.containsAll(<name>ArrayList.newListWith(<(literal.(type))("1")>)));
+        Assert.assertTrue(iterable.containsAll(<name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">)));
+        Assert.assertFalse(iterable.containsAll(<name>ArrayList.newListWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">)));
     }
 
     @Test

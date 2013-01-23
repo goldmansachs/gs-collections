@@ -390,11 +390,21 @@ public class <name>ArrayStackTest
     }
 
     @Test
-    public void containsAll()
+    public void containsAllArray()
     {
         <name>ArrayStack stack = <name>ArrayStack.newStackFromTopToBottom(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
         Assert.assertTrue(stack.containsAll(<["1","2","3","4","5"]:(literal.(type))(); separator=", ">));
         Assert.assertFalse(stack.containsAll(<["1","2","3","4","5","6"]:(literal.(type))(); separator=", ">));
+    }
+
+    @Test
+    public void containsAllIterable()
+    {
+        Assert.assertTrue(new <name>ArrayStack().containsAll(new <name>ArrayStack()));
+        Assert.assertFalse(new <name>ArrayStack().containsAll(<name>ArrayStack.newStackWith(<(literal.(type))("1")>)));
+        <name>ArrayStack stack = <name>ArrayStack.newStackFromTopToBottom(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
+        Verify.assertTrue(stack.containsAll(<name>ArrayStack.newStackFromTopToBottom(<["1","2","3","4","5"]:(literal.(type))(); separator=", ">)));
+        Verify.assertFalse(stack.containsAll(<name>ArrayStack.newStackFromTopToBottom(<["1","2","3","4","5","6"]:(literal.(type))(); separator=", ">)));
     }
 
     @Test

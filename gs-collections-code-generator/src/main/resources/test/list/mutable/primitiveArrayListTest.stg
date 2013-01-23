@@ -87,11 +87,21 @@ public class <name>ArrayListTest
     }
 
     @Test
-    public void containsAll()
+    public void containsAllArray()
     {
         Assert.assertTrue(this.list.containsAll(<(literal.(type))("1")>));
         Assert.assertTrue(this.list.containsAll(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
         Assert.assertFalse(this.list.containsAll(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">));
+    }
+
+    @Test
+    public void containsAllIterable()
+    {
+        Assert.assertTrue(new <name>ArrayList().containsAll(new <name>ArrayList()));
+        Assert.assertFalse(new <name>ArrayList().containsAll(<name>ArrayList.newListWith(<(literal.(type))("1")>)));
+        Assert.assertTrue(this.list.containsAll(<name>ArrayList.newListWith(<(literal.(type))("1")>)));
+        Assert.assertTrue(this.list.containsAll(<name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">)));
+        Assert.assertFalse(this.list.containsAll(<name>ArrayList.newListWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">)));
     }
 
     @Test

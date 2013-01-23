@@ -21,6 +21,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
+import com.gs.collections.api.IntIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.primitive.IntToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
@@ -244,6 +245,18 @@ public final class IntInterval
         for (int value : values)
         {
             if (!this.contains(value))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean containsAll(IntIterable source)
+    {
+        for (IntIterator iterator = source.intIterator(); iterator.hasNext(); )
+        {
+            if (!this.contains(iterator.next()))
             {
                 return false;
             }

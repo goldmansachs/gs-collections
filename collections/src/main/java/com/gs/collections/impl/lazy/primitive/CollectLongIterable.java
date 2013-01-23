@@ -298,6 +298,18 @@ public class CollectLongIterable<T>
         return true;
     }
 
+    public boolean containsAll(LongIterable source)
+    {
+        for (LongIterator iterator = source.longIterator(); iterator.hasNext(); )
+        {
+            if (!this.contains(iterator.next()))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     private final class LongFunctionToProcedure implements Procedure2<T, LongProcedure>
     {
         private static final long serialVersionUID = 3445125933721627554L;

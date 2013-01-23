@@ -255,6 +255,11 @@ public final class BooleanArrayStack implements MutableBooleanStack, Externaliza
         return this.delegate.asReversed().containsAll(source);
     }
 
+    public boolean containsAll(BooleanIterable source)
+    {
+        return this.delegate.asReversed().containsAll(source);
+    }
+
     public void clear()
     {
         this.delegate.clear();

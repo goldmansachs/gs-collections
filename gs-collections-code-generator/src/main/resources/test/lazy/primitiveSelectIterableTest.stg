@@ -184,13 +184,23 @@ public class Select<name>IterableTest
     }
 
     @Test
-    public void containsAll()
+    public void containsAllArray()
     {
         Assert.assertTrue(this.iterable.containsAll(<["1"]:(literal.(type))(); separator=", ">));
         Assert.assertTrue(this.iterable.containsAll(<["2"]:(literal.(type))(); separator=", ">));
         Assert.assertTrue(this.iterable.containsAll(<["1", "2"]:(literal.(type))(); separator=", ">));
         Assert.assertFalse(this.iterable.containsAll(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
         Assert.assertFalse(this.iterable.containsAll(<["4", "5", "6"]:(literal.(type))(); separator=", ">));
+    }
+
+    @Test
+    public void containsAllIterable()
+    {
+        Assert.assertTrue(this.iterable.containsAll(<name>ArrayList.newListWith(<["1"]:(literal.(type))(); separator=", ">)));
+        Assert.assertTrue(this.iterable.containsAll(<name>ArrayList.newListWith(<["2"]:(literal.(type))(); separator=", ">)));
+        Assert.assertTrue(this.iterable.containsAll(<name>ArrayList.newListWith(<["1", "2"]:(literal.(type))(); separator=", ">)));
+        Assert.assertFalse(this.iterable.containsAll(<name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">)));
+        Assert.assertFalse(this.iterable.containsAll(<name>ArrayList.newListWith(<["4", "5", "6"]:(literal.(type))(); separator=", ">)));
     }
 
     @Test
