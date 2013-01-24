@@ -279,6 +279,11 @@ public final class <name>ArrayList
         return true;
     }
 
+    public boolean addAll(<name>Iterable source)
+    {
+        return this.addAll(source.toArray());
+    }
+
     private void throwOutOfBounds(int index)
     {
         throw this.newIndexOutOfBoundsException(index);
@@ -338,6 +343,11 @@ public final class <name>ArrayList
         System.arraycopy(source, 0, this.items, index, sourceSize);
         this.size = newSize;
         return true;
+    }
+
+    public boolean addAllAtIndex(int index, <name>Iterable source)
+    {
+        return this.addAllAtIndex(index, source.toArray());
     }
 
     private void shiftElementsAtIndex(int index, int sourceSize)

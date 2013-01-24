@@ -220,13 +220,24 @@ public class <name>ArrayListTest
     }
 
     @Test
-    public void addAll()
+    public void addAllArray()
     {
         Assert.assertFalse(this.list.addAll());
         Assert.assertFalse(this.list.addAllAtIndex(1));
         Assert.assertTrue(this.list.addAll(<["4", "5", "6"]:(literal.(type))(); separator=", ">));
         Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3", "4", "5", "6"]:(literal.(type))(); separator=", ">), this.list);
         Assert.assertTrue(this.list.addAllAtIndex(4, <["5", "6"]:(literal.(type))(); separator=", ">));
+        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3", "4", "5", "6", "5", "6"]:(literal.(type))(); separator=", ">), this.list);
+    }
+
+    @Test
+    public void addAllIterable()
+    {
+        Assert.assertFalse(this.list.addAll(new <name>ArrayList()));
+        Assert.assertFalse(this.list.addAllAtIndex(1));
+        Assert.assertTrue(this.list.addAll(<name>ArrayList.newListWith(<["4", "5", "6"]:(literal.(type))(); separator=", ">)));
+        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3", "4", "5", "6"]:(literal.(type))(); separator=", ">), this.list);
+        Assert.assertTrue(this.list.addAllAtIndex(4, <name>ArrayList.newListWith(<["5", "6"]:(literal.(type))(); separator=", ">)));
         Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3", "4", "5", "6", "5", "6"]:(literal.(type))(); separator=", ">), this.list);
     }
 

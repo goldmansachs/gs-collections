@@ -29,6 +29,8 @@ public interface Mutable<name>List extends Mutable<name>Collection, <name>List
 
     boolean addAllAtIndex(int index, <type>... source);
 
+    boolean addAllAtIndex(int index, <name>Iterable source);
+
     <type> removeAtIndex(int index);
 
     <type> set(int index, <type> element);

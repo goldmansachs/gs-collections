@@ -149,7 +149,7 @@ public class BooleanHashSetTest
     }
 
     @Test
-    public void addAll()
+    public void addAllArray()
     {
         Assert.assertTrue(this.set0.addAll(true, false, true));
         Assert.assertEquals(BooleanHashSet.newSetWith(true, false), this.set0);
@@ -160,6 +160,21 @@ public class BooleanHashSetTest
         Assert.assertTrue(this.set2.addAll(true, false, true));
         Assert.assertEquals(BooleanHashSet.newSetWith(true, false), this.set2);
         Assert.assertFalse(this.set3.addAll(true, false));
+        Assert.assertEquals(BooleanHashSet.newSetWith(true, false), this.set3);
+    }
+
+    @Test
+    public void addAllIterable()
+    {
+        Assert.assertTrue(this.set0.addAll(BooleanHashSet.newSetWith(true, false, true)));
+        Assert.assertEquals(BooleanHashSet.newSetWith(true, false), this.set0);
+        Assert.assertFalse(this.set1.addAll(BooleanHashSet.newSetWith(false, false)));
+        Assert.assertTrue(this.set1.addAll(BooleanHashSet.newSetWith(true, false, true)));
+        Assert.assertEquals(BooleanHashSet.newSetWith(true, false), this.set1);
+        Assert.assertFalse(this.set2.addAll(BooleanHashSet.newSetWith(true, true)));
+        Assert.assertTrue(this.set2.addAll(BooleanHashSet.newSetWith(true, false, true)));
+        Assert.assertEquals(BooleanHashSet.newSetWith(true, false), this.set2);
+        Assert.assertFalse(this.set3.addAll(BooleanHashSet.newSetWith(true, false)));
         Assert.assertEquals(BooleanHashSet.newSetWith(true, false), this.set3);
     }
 

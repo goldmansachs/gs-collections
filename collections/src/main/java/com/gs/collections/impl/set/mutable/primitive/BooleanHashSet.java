@@ -172,6 +172,11 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
         return this.state != initialState;
     }
 
+    public boolean addAll(BooleanIterable source)
+    {
+        return this.addAll(source.toArray());
+    }
+
     public boolean remove(boolean value)
     {
         if (!this.contains(value))

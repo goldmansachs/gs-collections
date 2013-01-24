@@ -236,6 +236,11 @@ public final class BooleanArrayList
         return true;
     }
 
+    public boolean addAll(BooleanIterable source)
+    {
+        return this.addAll(source.toArray());
+    }
+
     public void addAtIndex(int index, boolean element)
     {
         if (index > -1 && index < this.size)
@@ -287,6 +292,11 @@ public final class BooleanArrayList
 
         this.size = newSize;
         return true;
+    }
+
+    public boolean addAllAtIndex(int index, BooleanIterable source)
+    {
+        return this.addAllAtIndex(index, source.toArray());
     }
 
     public boolean remove(boolean value)

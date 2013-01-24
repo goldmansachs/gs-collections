@@ -28,6 +28,8 @@ public interface Mutable<name>Collection extends <name>Iterable
 
     boolean addAll(<type>... source);
 
+    boolean addAll(<name>Iterable source);
+
     boolean remove(<type> value);
 
     boolean removeAll(<name>Iterable source);
