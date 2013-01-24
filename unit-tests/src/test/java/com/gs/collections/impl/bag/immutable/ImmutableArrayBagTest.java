@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,15 +69,15 @@ public class ImmutableArrayBagTest extends ImmutableBagTestCase
         super.testNewWithout();
         ImmutableBag<String> bag = this.newBag();
         ImmutableBag<String> newBag2 = bag.newWithout("2").newWithout("2");
-        Verify.assertNotEquals(bag, newBag2);
+        Assert.assertNotEquals(bag, newBag2);
         Assert.assertEquals(newBag2.size(), bag.size() - 2);
         Assert.assertEquals(3, newBag2.sizeDistinct());
         ImmutableBag<String> newBag3 = bag.newWithout("3").newWithout("3").newWithout("3");
-        Verify.assertNotEquals(bag, newBag3);
+        Assert.assertNotEquals(bag, newBag3);
         Assert.assertEquals(newBag3.size(), bag.size() - 3);
         Assert.assertEquals(3, newBag3.sizeDistinct());
         ImmutableBag<String> newBag4 = bag.newWithout("4").newWithout("4").newWithout("4").newWithout("4");
-        Verify.assertNotEquals(bag, newBag4);
+        Assert.assertNotEquals(bag, newBag4);
         Assert.assertEquals(newBag4.size(), bag.size() - 4);
         Assert.assertEquals(3, newBag4.sizeDistinct());
         ImmutableBag<String> newBag5 = bag.newWithout("5");

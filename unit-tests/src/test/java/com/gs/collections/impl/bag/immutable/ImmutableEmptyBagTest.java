@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,10 +62,10 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
     {
         ImmutableBag<String> bag = this.newBag();
         ImmutableBag<String> newBag = bag.newWith("1");
-        Verify.assertNotEquals(bag, newBag);
+        Assert.assertNotEquals(bag, newBag);
         Assert.assertEquals(newBag.size(), bag.size() + 1);
         ImmutableBag<String> newBag2 = bag.newWith("5");
-        Verify.assertNotEquals(bag, newBag2);
+        Assert.assertNotEquals(bag, newBag2);
         Assert.assertEquals(newBag2.size(), bag.size() + 1);
         Assert.assertEquals(1, newBag2.sizeDistinct());
     }

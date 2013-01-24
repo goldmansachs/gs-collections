@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -228,7 +228,7 @@ public abstract class AbstractMultimapTestCase
         Multimap<Integer, String> map2 = this.newMultimapWithKeysValues(1, "1", 2, "2", 3, "3");
         Multimap<Integer, String> map3 = this.newMultimapWithKeysValues(2, "2", 3, "3", 4, "4");
         Assert.assertEquals(map1, map2);
-        Verify.assertNotEquals(map2, map3);
+        Assert.assertNotEquals(map2, map3);
     }
 
     @Test

@@ -83,7 +83,7 @@ public abstract class ImmutableBagTestCase
         ImmutableBag<String> immutable = this.newBag();
         MutableBag<String> mutable = HashBag.newBag(immutable);
         Verify.assertEqualsAndHashCode(immutable, mutable);
-        Verify.assertNotEquals(immutable, FastList.newList(mutable));
+        Assert.assertNotEquals(immutable, FastList.newList(mutable));
         Assert.assertEquals(this.newBag().toMapOfItemToCount().hashCode(), this.newBag().hashCode());
     }
 
@@ -92,11 +92,11 @@ public abstract class ImmutableBagTestCase
     {
         ImmutableBag<String> bag = this.newBag();
         ImmutableBag<String> newBag = bag.newWith("1");
-        Verify.assertNotEquals(bag, newBag);
+        Assert.assertNotEquals(bag, newBag);
         Assert.assertEquals(bag.size() + 1, newBag.size());
         Assert.assertEquals(bag.sizeDistinct(), newBag.sizeDistinct());
         ImmutableBag<String> newBag2 = bag.newWith("0");
-        Verify.assertNotEquals(bag, newBag2);
+        Assert.assertNotEquals(bag, newBag2);
         Assert.assertEquals(bag.size() + 1, newBag2.size());
         Assert.assertEquals(newBag.sizeDistinct() + 1, newBag2.sizeDistinct());
     }
@@ -106,7 +106,7 @@ public abstract class ImmutableBagTestCase
     {
         ImmutableBag<String> bag = this.newBag();
         ImmutableBag<String> newBag = bag.newWithout("1");
-        Verify.assertNotEquals(bag, newBag);
+        Assert.assertNotEquals(bag, newBag);
         Assert.assertEquals(bag.size() - 1, newBag.size());
         Assert.assertEquals(bag.sizeDistinct() - 1, newBag.sizeDistinct());
         ImmutableBag<String> newBag2 = bag.newWithout("0");
@@ -120,7 +120,7 @@ public abstract class ImmutableBagTestCase
     {
         ImmutableBag<String> bag = this.newBag();
         ImmutableBag<String> newBag = bag.newWithAll(Bags.mutable.of("0"));
-        Verify.assertNotEquals(bag, newBag);
+        Assert.assertNotEquals(bag, newBag);
         Assert.assertEquals(HashBag.newBag(bag).with("0"), newBag);
         Assert.assertEquals(newBag.size(), bag.size() + 1);
     }

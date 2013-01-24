@@ -350,12 +350,12 @@ public class BooleanHashSetTest
     @Test
     public void testEquals()
     {
-        Verify.assertNotEquals(this.set1, this.set0);
-        Verify.assertNotEquals(this.set1, this.set2);
-        Verify.assertNotEquals(this.set1, this.set3);
-        Verify.assertNotEquals(this.set2, this.set0);
-        Verify.assertNotEquals(this.set2, this.set3);
-        Verify.assertNotEquals(this.set3, this.set0);
+        Assert.assertNotEquals(this.set1, this.set0);
+        Assert.assertNotEquals(this.set1, this.set2);
+        Assert.assertNotEquals(this.set1, this.set3);
+        Assert.assertNotEquals(this.set2, this.set0);
+        Assert.assertNotEquals(this.set2, this.set3);
+        Assert.assertNotEquals(this.set3, this.set0);
         Verify.assertEqualsAndHashCode(BooleanHashSet.newSetWith(false, true), this.set3);
         Verify.assertEqualsAndHashCode(BooleanHashSet.newSetWith(true, false), this.set3);
 

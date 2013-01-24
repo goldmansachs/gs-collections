@@ -61,7 +61,7 @@ public abstract class UnmodifiableMemoryEfficientListTestCase<T> extends Unmodif
         });
 
         it.set(null);
-        Verify.assertNotEquals(this.getCollection(), collection);
+        Assert.assertNotEquals(this.getCollection(), collection);
     }
 
     @Test

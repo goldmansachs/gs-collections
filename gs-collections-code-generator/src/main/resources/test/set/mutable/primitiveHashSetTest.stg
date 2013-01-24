@@ -463,8 +463,8 @@ public class <name>HashSetTest
 
         Verify.assertEqualsAndHashCode(set1, set2);
         Verify.assertPostSerializedEqualsAndHashCode(set1);
-        Verify.assertNotEquals(set1, set3);
-        Verify.assertNotEquals(set1, set4);
+        Assert.assertNotEquals(set1, set3);
+        Assert.assertNotEquals(set1, set4);
     }
 
     @Test

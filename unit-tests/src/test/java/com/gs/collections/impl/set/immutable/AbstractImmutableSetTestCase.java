@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,7 +64,7 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
         MutableSet<Integer> mutable = UnifiedSet.newSet(immutable);
         Verify.assertEqualsAndHashCode(immutable, mutable);
         Verify.assertPostSerializedEqualsAndHashCode(immutable);
-        Verify.assertNotEquals(immutable, FastList.newList(mutable));
+        Assert.assertNotEquals(immutable, FastList.newList(mutable));
     }
 
     @Test
@@ -88,7 +88,7 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     {
         ImmutableSet<Integer> set = this.classUnderTest();
         ImmutableSet<Integer> withAll = set.newWithAll(UnifiedSet.newSetWith(0));
-        Verify.assertNotEquals(set, withAll);
+        Assert.assertNotEquals(set, withAll);
         Assert.assertEquals(UnifiedSet.newSet(set).with(0), withAll);
     }
 

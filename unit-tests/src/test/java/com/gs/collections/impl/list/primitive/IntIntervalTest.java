@@ -53,16 +53,16 @@ public class IntIntervalTest
         IntInterval interval3 = IntInterval.zeroTo(5);
         Verify.assertPostSerializedEqualsAndHashCode(interval1);
         Verify.assertEqualsAndHashCode(interval1, interval2);
-        Verify.assertNotEquals(interval1, interval3);
-        Verify.assertNotEquals(interval3, interval1);
+        Assert.assertNotEquals(interval1, interval3);
+        Assert.assertNotEquals(interval3, interval1);
 
         Verify.assertEqualsAndHashCode(IntInterval.fromToBy(1, 5, 2), IntInterval.fromToBy(1, 6, 2));
         Verify.assertEqualsAndHashCode(IntArrayList.newListWith(1, 2, 3), IntInterval.fromTo(1, 3));
         Verify.assertEqualsAndHashCode(IntArrayList.newListWith(3, 2, 1), IntInterval.fromTo(3, 1));
 
-        Verify.assertNotEquals(IntArrayList.newListWith(1, 2, 3, 4), IntInterval.fromTo(1, 3));
-        Verify.assertNotEquals(IntArrayList.newListWith(1, 2, 4), IntInterval.fromTo(1, 3));
-        Verify.assertNotEquals(IntArrayList.newListWith(3, 2, 0), IntInterval.fromTo(3, 1));
+        Assert.assertNotEquals(IntArrayList.newListWith(1, 2, 3, 4), IntInterval.fromTo(1, 3));
+        Assert.assertNotEquals(IntArrayList.newListWith(1, 2, 4), IntInterval.fromTo(1, 3));
+        Assert.assertNotEquals(IntArrayList.newListWith(3, 2, 0), IntInterval.fromTo(3, 1));
 
         Verify.assertEqualsAndHashCode(IntArrayList.newListWith(-1, -2, -3), IntInterval.fromTo(-1, -3));
     }
@@ -242,9 +242,9 @@ public class IntIntervalTest
 
         Verify.assertEqualsAndHashCode(list1, list2);
         Verify.assertPostSerializedEqualsAndHashCode(list1);
-        Verify.assertNotEquals(list1, list3);
-        Verify.assertNotEquals(list1, list4);
-        Verify.assertNotEquals(list1, list5);
+        Assert.assertNotEquals(list1, list3);
+        Assert.assertNotEquals(list1, list4);
+        Assert.assertNotEquals(list1, list5);
     }
 
     @Test

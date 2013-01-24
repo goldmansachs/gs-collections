@@ -187,10 +187,10 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
         MutableList<Integer> list1 = this.newWith(1, 2, 3, 4);
         MutableList<Integer> list2 = this.newWith(1, 2, 3, 4);
         MutableList<Integer> list3 = this.newWith(2, 3, 4);
-        Verify.assertNotEquals(list1, null);
+        Assert.assertNotEquals(list1, null);
         Verify.assertEqualsAndHashCode(list1, list1);
         Verify.assertEqualsAndHashCode(list1, list2);
-        Verify.assertNotEquals(list2, list3);
+        Assert.assertNotEquals(list2, list3);
         Verify.assertEqualsAndHashCode(list1, new ArrayList<Integer>(list1));
         Verify.assertEqualsAndHashCode(list1, new LinkedList<Integer>(list1));
         Verify.assertEqualsAndHashCode(list1, ArrayAdapter.<Integer>newArrayWith(1, 2, 3, 4));

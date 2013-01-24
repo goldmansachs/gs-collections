@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,7 +73,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     {
         ImmutableSet<Integer> set = this.newSet(1, 2, 3);
         ImmutableSet<Integer> with = set.newWith(4);
-        Verify.assertNotEquals(set, with);
+        Assert.assertNotEquals(set, with);
         Assert.assertEquals(UnifiedSet.newSetWith(1, 2, 3, 4), with);
         Assert.assertSame(set, set.newWith(3));
     }
@@ -83,7 +83,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     {
         ImmutableSet<Integer> set = this.newSet(1, 2, 3);
         ImmutableSet<Integer> withAll = set.newWithAll(UnifiedSet.newSetWith(4, 5));
-        Verify.assertNotEquals(set, withAll);
+        Assert.assertNotEquals(set, withAll);
         Assert.assertEquals(UnifiedSet.newSetWith(1, 2, 3, 4, 5), withAll);
     }
 
@@ -92,7 +92,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     {
         ImmutableSet<Integer> set = this.newSet(1, 2, 3, 4);
         ImmutableSet<Integer> without = set.newWithout(4);
-        Verify.assertNotEquals(set, without);
+        Assert.assertNotEquals(set, without);
         Assert.assertEquals(UnifiedSet.newSetWith(1, 2, 3), without);
         Assert.assertSame(set, set.newWithout(5));
     }
@@ -102,7 +102,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     {
         ImmutableSet<Integer> set = this.newSet(1, 2, 3, 4, 5);
         ImmutableSet<Integer> withoutAll = set.newWithoutAll(UnifiedSet.newSetWith(4, 5));
-        Verify.assertNotEquals(set, withoutAll);
+        Assert.assertNotEquals(set, withoutAll);
         Assert.assertEquals(UnifiedSet.newSetWith(1, 2, 3), withoutAll);
         ImmutableSet<Integer> largeList = this.newSet(Interval.oneTo(200).toArray());
         ImmutableSet<Integer> largeWithoutAll = largeList.newWithoutAll(FastList.newList(Interval.oneTo(100)));
@@ -224,7 +224,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     public void getFirst()
     {
         Assert.assertEquals(Integer.valueOf(1), this.newSetWith(1, 2, 3).getFirst());
-        Verify.assertNotEquals(Integer.valueOf(3), this.newSetWith(1, 2, 3).getFirst());
+        Assert.assertNotEquals(Integer.valueOf(3), this.newSetWith(1, 2, 3).getFirst());
     }
 
     @Test
@@ -364,10 +364,10 @@ public abstract class AbstractImmutableUnifiedSetTestCase
         ImmutableSet<Integer> set1 = this.newSetWith(1, 2, 3, 4);
         ImmutableSet<Integer> set2 = this.newSetWith(1, 2, 3, 4);
         ImmutableSet<Integer> set3 = this.newSetWith(2, 3, 4);
-        Verify.assertNotEquals(set1, null);
+        Assert.assertNotEquals(set1, null);
         Verify.assertEqualsAndHashCode(set1, set1);
         Verify.assertEqualsAndHashCode(set1, set2);
-        Verify.assertNotEquals(set2, set3);
+        Assert.assertNotEquals(set2, set3);
         UnifiedSet<Integer> fastSet = UnifiedSet.newSet(set1);
         Verify.assertEqualsAndHashCode(set1, fastSet);
         Assert.assertEquals(set1, new HashSet<Integer>(fastSet));

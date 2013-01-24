@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -179,20 +179,20 @@ public class FixedSizeListFactoryTest
         threeA.add("3");
         Verify.assertEqualsAndHashCode(three, threeA);
 
-        Verify.assertNotEquals(three, twoA);
-        Verify.assertNotEquals(twoA, three);
+        Assert.assertNotEquals(three, twoA);
+        Assert.assertNotEquals(twoA, three);
 
         MutableList<String> differentThree = Lists.mutable.of();
         differentThree.add("1");
         differentThree.add("Two");
         differentThree.add("3");
-        Verify.assertNotEquals(three, differentThree);
-        Verify.assertNotEquals(differentThree, three);
+        Assert.assertNotEquals(three, differentThree);
+        Assert.assertNotEquals(differentThree, three);
 
         Assert.assertEquals(new LinkedList<String>(threeA), three);
-        Verify.assertNotEquals(new LinkedList<String>(differentThree), three);
-        Verify.assertNotEquals(new LinkedList<String>(FastList.newListWith("1", "2", "3", "4")), three);
-        Verify.assertNotEquals(new LinkedList<String>(FastList.newListWith("1", "2")), three);
+        Assert.assertNotEquals(new LinkedList<String>(differentThree), three);
+        Assert.assertNotEquals(new LinkedList<String>(FastList.newListWith("1", "2", "3", "4")), three);
+        Assert.assertNotEquals(new LinkedList<String>(FastList.newListWith("1", "2")), three);
     }
 
     @Test

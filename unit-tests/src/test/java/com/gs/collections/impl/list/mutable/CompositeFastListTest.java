@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -347,8 +347,8 @@ public class CompositeFastListTest
 
         Verify.assertEqualsAndHashCode(list2, composite2);
 
-        Verify.assertNotEquals(firstBit, composite2);
-        Verify.assertNotEquals(composite2, firstBit);
+        Assert.assertNotEquals(firstBit, composite2);
+        Assert.assertNotEquals(composite2, firstBit);
 
         MutableList<String> list1 = FastList.newListWith("one", null, "three");
 

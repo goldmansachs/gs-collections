@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -443,7 +443,7 @@ public class FastListTest extends AbstractListTestCase
     {
         Assert.assertNull(FastList.<Integer>newList().getFirst());
         Assert.assertEquals(Integer.valueOf(1), FastList.newListWith(1, 2, 3).getFirst());
-        Verify.assertNotEquals(Integer.valueOf(3), FastList.newListWith(1, 2, 3).getFirst());
+        Assert.assertNotEquals(Integer.valueOf(3), FastList.newListWith(1, 2, 3).getFirst());
     }
 
     @Override
@@ -451,7 +451,7 @@ public class FastListTest extends AbstractListTestCase
     public void getLast()
     {
         Assert.assertNull(FastList.<Integer>newList().getLast());
-        Verify.assertNotEquals(Integer.valueOf(1), FastList.newListWith(1, 2, 3).getLast());
+        Assert.assertNotEquals(Integer.valueOf(1), FastList.newListWith(1, 2, 3).getLast());
         Assert.assertEquals(Integer.valueOf(3), FastList.newListWith(1, 2, 3).getLast());
     }
 
@@ -1065,20 +1065,20 @@ public class FastListTest extends AbstractListTestCase
         Verify.assertEqualsAndHashCode(integers, integers2);
         Verify.assertEqualsAndHashCode(integers, iList(1, 2, 3));
         Verify.assertEqualsAndHashCode(integers, linkedList);
-        Verify.assertNotEquals(integers, integers3);
-        Verify.assertNotEquals(integers, integers5);
-        Verify.assertNotEquals(integers, iList(2, 3, 4));
-        Verify.assertNotEquals(integers, linkedList2);
-        Verify.assertNotEquals(integers, linkedList3);
-        Verify.assertNotEquals(integers, mSet());
+        Assert.assertNotEquals(integers, integers3);
+        Assert.assertNotEquals(integers, integers5);
+        Assert.assertNotEquals(integers, iList(2, 3, 4));
+        Assert.assertNotEquals(integers, linkedList2);
+        Assert.assertNotEquals(integers, linkedList3);
+        Assert.assertNotEquals(integers, mSet());
         Verify.assertEqualsAndHashCode(integers3, integers4);
         Verify.assertEqualsAndHashCode(integers3, new ArrayList<Integer>(integers3));
         Verify.assertEqualsAndHashCode(integers3, new LinkedList<Integer>(integers3));
         Verify.assertEqualsAndHashCode(integers3, ArrayAdapter.<Integer>newArrayWith(1, null, 3, 4, 5));
-        Verify.assertNotEquals(integers3, ArrayAdapter.<Integer>newArrayWith(1, null, 3, 4, 6));
+        Assert.assertNotEquals(integers3, ArrayAdapter.<Integer>newArrayWith(1, null, 3, 4, 6));
         Verify.assertEqualsAndHashCode(integers3, ArrayListAdapter.<Integer>newList().with(1, null, 3, 4, 5));
         Assert.assertTrue(integers.equals(integers2));
-        Verify.assertNotEquals(integers, integers3);
+        Assert.assertNotEquals(integers, integers3);
     }
 
     @Override

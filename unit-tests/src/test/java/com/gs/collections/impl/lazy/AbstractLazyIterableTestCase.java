@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -358,13 +358,13 @@ public abstract class AbstractLazyIterableTestCase
     public void getFirst()
     {
         Assert.assertEquals(Integer.valueOf(1), this.newWith(1, 2, 3).getFirst());
-        Verify.assertNotEquals(Integer.valueOf(3), this.newWith(1, 2, 3).getFirst());
+        Assert.assertNotEquals(Integer.valueOf(3), this.newWith(1, 2, 3).getFirst());
     }
 
     @Test
     public void getLast()
     {
-        Verify.assertNotEquals(Integer.valueOf(1), this.newWith(1, 2, 3).getLast());
+        Assert.assertNotEquals(Integer.valueOf(1), this.newWith(1, 2, 3).getLast());
         Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 2, 3).getLast());
     }
 

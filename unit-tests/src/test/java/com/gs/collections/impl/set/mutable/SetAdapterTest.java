@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -115,10 +115,10 @@ public class SetAdapterTest extends AbstractMutableSetTestCase
         set4.add(2);
         set4.add(3);
         set4.add(4);
-        Verify.assertNotEquals(set1, null);
+        Assert.assertNotEquals(set1, null);
         Verify.assertEqualsAndHashCode(set1, set1);
         Verify.assertEqualsAndHashCode(set1, set2);
-        Verify.assertNotEquals(set2, set3);
+        Assert.assertNotEquals(set2, set3);
         Verify.assertEqualsAndHashCode(set3, set4);
     }
 

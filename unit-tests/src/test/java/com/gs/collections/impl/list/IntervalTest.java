@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -76,16 +76,16 @@ public class IntervalTest
         Interval interval3 = Interval.zeroTo(5);
         Verify.assertPostSerializedEqualsAndHashCode(interval1);
         Verify.assertEqualsAndHashCode(interval1, interval2);
-        Verify.assertNotEquals(interval1, interval3);
-        Verify.assertNotEquals(interval3, interval1);
+        Assert.assertNotEquals(interval1, interval3);
+        Assert.assertNotEquals(interval3, interval1);
 
         Verify.assertEqualsAndHashCode(Interval.fromToBy(1, 5, 2), Interval.fromToBy(1, 6, 2));
         Verify.assertEqualsAndHashCode(FastList.newListWith(1, 2, 3), Interval.fromTo(1, 3));
         Verify.assertEqualsAndHashCode(FastList.newListWith(3, 2, 1), Interval.fromTo(3, 1));
 
-        Verify.assertNotEquals(FastList.newListWith(1, 2, 3, 4), Interval.fromTo(1, 3));
-        Verify.assertNotEquals(FastList.newListWith(1, 2, 4), Interval.fromTo(1, 3));
-        Verify.assertNotEquals(FastList.newListWith(3, 2, 0), Interval.fromTo(3, 1));
+        Assert.assertNotEquals(FastList.newListWith(1, 2, 3, 4), Interval.fromTo(1, 3));
+        Assert.assertNotEquals(FastList.newListWith(1, 2, 4), Interval.fromTo(1, 3));
+        Assert.assertNotEquals(FastList.newListWith(3, 2, 0), Interval.fromTo(3, 1));
 
         Verify.assertEqualsAndHashCode(FastList.newListWith(-1, -2, -3), Interval.fromTo(-1, -3));
     }

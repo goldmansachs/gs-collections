@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -225,8 +225,8 @@ public class ConcurrentHashMapUnsafeTest extends ConcurrentHashMapTestCase
     @Test
     public void equalsEdgeCases()
     {
-        Verify.assertNotEquals(ConcurrentHashMapUnsafe.newMap().withKeyValue(1, 1), ConcurrentHashMapUnsafe.newMap());
-        Verify.assertNotEquals(ConcurrentHashMapUnsafe.newMap().withKeyValue(1, 1), ConcurrentHashMapUnsafe.newMap().withKeyValue(1, 1).withKeyValue(2, 2));
+        Assert.assertNotEquals(ConcurrentHashMapUnsafe.newMap().withKeyValue(1, 1), ConcurrentHashMapUnsafe.newMap());
+        Assert.assertNotEquals(ConcurrentHashMapUnsafe.newMap().withKeyValue(1, 1), ConcurrentHashMapUnsafe.newMap().withKeyValue(1, 1).withKeyValue(2, 2));
     }
 
     @Test(expected = IllegalArgumentException.class)

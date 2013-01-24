@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -380,7 +380,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     public void getLast()
     {
         Assert.assertNull(MultiReaderFastList.newList().getLast());
-        Verify.assertNotEquals(Integer.valueOf(1), MultiReaderFastList.newListWith(1, 2, 3).getLast());
+        Assert.assertNotEquals(Integer.valueOf(1), MultiReaderFastList.newListWith(1, 2, 3).getLast());
         Assert.assertEquals(Integer.valueOf(3), MultiReaderFastList.newListWith(1, 2, 3).getLast());
     }
 
@@ -892,14 +892,14 @@ public class MultiReaderFastListTest extends AbstractListTestCase
         Verify.assertPostSerializedEqualsAndHashCode(integers);
         Verify.assertEqualsAndHashCode(integers, integers2);
         Verify.assertEqualsAndHashCode(integers, randomAccessList);
-        Verify.assertNotEquals(integers, integers3);
-        Verify.assertNotEquals(integers, integers5);
-        Verify.assertNotEquals(integers, randomAccessList2);
-        Verify.assertNotEquals(integers, Sets.fixedSize.of());
+        Assert.assertNotEquals(integers, integers3);
+        Assert.assertNotEquals(integers, integers5);
+        Assert.assertNotEquals(integers, randomAccessList2);
+        Assert.assertNotEquals(integers, Sets.fixedSize.of());
         Verify.assertEqualsAndHashCode(integers3, integers4);
         Verify.assertEqualsAndHashCode(integers3, ArrayAdapter.<Integer>newArrayWith(1, null, 3, 4, 5));
         Assert.assertEquals(integers, integers2);
-        Verify.assertNotEquals(integers, integers3);
+        Assert.assertNotEquals(integers, integers3);
     }
 
     @Override

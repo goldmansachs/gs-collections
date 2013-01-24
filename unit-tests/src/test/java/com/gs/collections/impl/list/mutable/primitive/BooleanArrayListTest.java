@@ -583,9 +583,9 @@ public class BooleanArrayListTest
         Verify.assertEqualsAndHashCode(new BooleanArrayList(), new BooleanArrayList());
         Verify.assertPostSerializedEqualsAndHashCode(list1);
         Verify.assertPostSerializedEqualsAndHashCode(new BooleanArrayList());
-        Verify.assertNotEquals(list1, list3);
-        Verify.assertNotEquals(list1, list4);
-        Verify.assertNotEquals(list1, list5);
+        Assert.assertNotEquals(list1, list3);
+        Assert.assertNotEquals(list1, list4);
+        Assert.assertNotEquals(list1, list5);
     }
 
     @Test

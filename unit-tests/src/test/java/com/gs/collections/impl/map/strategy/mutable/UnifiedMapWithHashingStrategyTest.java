@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -656,7 +656,7 @@ public class UnifiedMapWithHashingStrategyTest extends UnifiedMapTestCase
 
         Assert.assertEquals(map1, map2);
         Assert.assertEquals(map2, map1);
-        Verify.assertNotEquals(map1.hashCode(), map2.hashCode());
+        Assert.assertNotEquals(map1.hashCode(), map2.hashCode());
 
         UnifiedMapWithHashingStrategy<Person, Integer> map3 = UnifiedMapWithHashingStrategy.newWithKeysValues(
                 LAST_NAME_HASHING_STRATEGY, JOHNDOE, 1, JANEDOE, 2, JOHNSMITH, 3, JANESMITH, 4);
@@ -668,7 +668,7 @@ public class UnifiedMapWithHashingStrategyTest extends UnifiedMapTestCase
 
         UnifiedMap<Person, Integer> unifiedMap = UnifiedMap.newWithKeysValues(JOHNDOE, 1, JANEDOE, 1, JOHNSMITH, 1, JANESMITH, 1);
         UnifiedMapWithHashingStrategy<Person, Integer> map5 = UnifiedMapWithHashingStrategy.newMap(LAST_NAME_HASHING_STRATEGY, unifiedMap);
-        Verify.assertNotEquals(map5, unifiedMap);
+        Assert.assertNotEquals(map5, unifiedMap);
     }
 
     @Override

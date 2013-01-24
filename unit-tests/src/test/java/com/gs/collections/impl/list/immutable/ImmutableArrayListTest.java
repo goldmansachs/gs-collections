@@ -67,7 +67,7 @@ public class ImmutableArrayListTest
     {
         ImmutableList<Integer> list = this.newList(1, 2, 3);
         ImmutableList<Integer> with = list.newWith(4);
-        Verify.assertNotEquals(list, with);
+        Assert.assertNotEquals(list, with);
         Assert.assertEquals(FastList.newListWith(1, 2, 3, 4), with);
     }
 
@@ -76,7 +76,7 @@ public class ImmutableArrayListTest
     {
         ImmutableList<Integer> list = this.newList(1, 2, 3);
         ImmutableList<Integer> withAll = list.newWithAll(FastList.newListWith(4, 5));
-        Verify.assertNotEquals(list, withAll);
+        Assert.assertNotEquals(list, withAll);
         Assert.assertEquals(FastList.newListWith(1, 2, 3, 4, 5), withAll);
     }
 
@@ -85,7 +85,7 @@ public class ImmutableArrayListTest
     {
         ImmutableList<Integer> list = this.newList(1, 2, 3, 4);
         ImmutableList<Integer> without = list.newWithout(4);
-        Verify.assertNotEquals(list, without);
+        Assert.assertNotEquals(list, without);
         Assert.assertEquals(FastList.newListWith(1, 2, 3), without);
     }
 
@@ -94,7 +94,7 @@ public class ImmutableArrayListTest
     {
         ImmutableList<Integer> list = this.newList(1, 2, 3, 4, 5);
         ImmutableList<Integer> withoutAll = list.newWithoutAll(FastList.newListWith(4, 5));
-        Verify.assertNotEquals(list, withoutAll);
+        Assert.assertNotEquals(list, withoutAll);
         Assert.assertEquals(FastList.newListWith(1, 2, 3), withoutAll);
         ImmutableList<Integer> largeList = this.newList(Interval.oneTo(20).toArray());
         ImmutableList<Integer> largeWithoutAll = largeList.newWithoutAll(FastList.newList(Interval.oneTo(10)));
@@ -267,13 +267,13 @@ public class ImmutableArrayListTest
     public void getFirst()
     {
         Assert.assertEquals(Integer.valueOf(1), this.newListWith(1, 2, 3).getFirst());
-        Verify.assertNotEquals(Integer.valueOf(3), this.newListWith(1, 2, 3).getFirst());
+        Assert.assertNotEquals(Integer.valueOf(3), this.newListWith(1, 2, 3).getFirst());
     }
 
     @Test
     public void getLast()
     {
-        Verify.assertNotEquals(Integer.valueOf(1), this.newListWith(1, 2, 3).getLast());
+        Assert.assertNotEquals(Integer.valueOf(1), this.newListWith(1, 2, 3).getLast());
         Assert.assertEquals(Integer.valueOf(3), this.newListWith(1, 2, 3).getLast());
     }
 
@@ -341,21 +341,21 @@ public class ImmutableArrayListTest
         List<Integer> mutable2 = new LinkedList<Integer>(mutable1);
         List<Integer> mutable3 = new ArrayList<Integer>(mutable1);
         Verify.assertEqualsAndHashCode(immutable1, immutable2);
-        Verify.assertNotEquals(immutable1, immutable3);
-        Verify.assertNotEquals(immutable1, immutable4);
-        Verify.assertNotEquals(immutable1, immutable5);
+        Assert.assertNotEquals(immutable1, immutable3);
+        Assert.assertNotEquals(immutable1, immutable4);
+        Assert.assertNotEquals(immutable1, immutable5);
         Verify.assertEqualsAndHashCode(mutable1, immutable1);
         Verify.assertEqualsAndHashCode(immutableCopy, immutable1);
         Verify.assertEqualsAndHashCode(mutable2, immutable1);
         Verify.assertEqualsAndHashCode(mutable3, immutable1);
         Verify.assertPostSerializedEqualsAndHashCode(immutable1);
-        Verify.assertNotEquals(immutable1, UnifiedSet.newSet(mutable1));
+        Assert.assertNotEquals(immutable1, UnifiedSet.newSet(mutable1));
         mutable1.add(null);
         mutable2.add(null);
         mutable3.add(null);
-        Verify.assertNotEquals(mutable1, immutable1);
-        Verify.assertNotEquals(mutable2, immutable1);
-        Verify.assertNotEquals(mutable3, immutable1);
+        Assert.assertNotEquals(mutable1, immutable1);
+        Assert.assertNotEquals(mutable2, immutable1);
+        Assert.assertNotEquals(mutable3, immutable1);
         mutable1.remove(null);
         mutable2.remove(null);
         mutable3.remove(null);
@@ -365,15 +365,15 @@ public class ImmutableArrayListTest
         mutable1.set(2, null);
         mutable2.set(2, null);
         mutable3.set(2, null);
-        Verify.assertNotEquals(mutable1, immutable1);
-        Verify.assertNotEquals(mutable2, immutable1);
-        Verify.assertNotEquals(mutable3, immutable1);
+        Assert.assertNotEquals(mutable1, immutable1);
+        Assert.assertNotEquals(mutable2, immutable1);
+        Assert.assertNotEquals(mutable3, immutable1);
         mutable1.remove(2);
         mutable2.remove(2);
         mutable3.remove(2);
-        Verify.assertNotEquals(mutable1, immutable1);
-        Verify.assertNotEquals(mutable2, immutable1);
-        Verify.assertNotEquals(mutable3, immutable1);
+        Assert.assertNotEquals(mutable1, immutable1);
+        Assert.assertNotEquals(mutable2, immutable1);
+        Assert.assertNotEquals(mutable3, immutable1);
     }
 
     @Test

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -150,7 +150,7 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
         Assert.assertEquals(UnifiedSet.newSetWith(1, 2, 3), set2);
 
         Assert.assertEquals(set1, set2);
-        Verify.assertNotEquals(set2, set3);
+        Assert.assertNotEquals(set2, set3);
         Verify.assertEqualsAndHashCode(set3, set4);
         Verify.assertSortedSetsEqual(TreeSortedSet.newSetWith(Collections.<Integer>reverseOrder(), 1, 2, 3), set2);
     }

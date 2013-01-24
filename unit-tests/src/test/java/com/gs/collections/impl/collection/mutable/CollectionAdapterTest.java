@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -185,8 +185,8 @@ public class CollectionAdapterTest extends AbstractCollectionTestCase
         MutableCollection<Integer> list2 = this.<Integer>newList().with(1, 2, 3);
         MutableCollection<Integer> list3 = this.<Integer>newList().with(2, 3, 4);
         Verify.assertEqualsAndHashCode(list1, list2);
-        Verify.assertNotEquals(list1, null);
-        Verify.assertNotEquals(list2, list3);
+        Assert.assertNotEquals(list1, null);
+        Assert.assertNotEquals(list2, list3);
     }
 
     @Test
@@ -281,10 +281,10 @@ public class CollectionAdapterTest extends AbstractCollectionTestCase
     {
         Assert.assertEquals(new CollectionAdapter<Object>(null), new CollectionAdapter<Object>(null));
         FastList<Integer> match = FastList.newListWith(1);
-        Verify.assertNotEquals(new CollectionAdapter<Object>(null), new CollectionAdapter<Integer>(match));
+        Assert.assertNotEquals(new CollectionAdapter<Object>(null), new CollectionAdapter<Integer>(match));
         Assert.assertEquals(new CollectionAdapter<Integer>(match), new CollectionAdapter<Integer>(match));
         FastList<Integer> notMatch = FastList.newListWith(2);
-        Verify.assertNotEquals(new CollectionAdapter<Integer>(match), new CollectionAdapter<Integer>(notMatch));
+        Assert.assertNotEquals(new CollectionAdapter<Integer>(match), new CollectionAdapter<Integer>(notMatch));
     }
 
     @Test

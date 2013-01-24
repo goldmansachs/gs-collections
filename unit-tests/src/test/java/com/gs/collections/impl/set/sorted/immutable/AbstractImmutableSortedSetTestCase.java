@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,7 +70,7 @@ public abstract class AbstractImmutableSortedSetTestCase
         MutableSortedSet<Integer> mutable = TreeSortedSet.newSet(immutable);
         Verify.assertEqualsAndHashCode(mutable, immutable);
         Verify.assertPostSerializedEqualsAndHashCode(immutable);
-        Verify.assertNotEquals(FastList.newList(mutable), immutable);
+        Assert.assertNotEquals(FastList.newList(mutable), immutable);
     }
 
     @Test
@@ -102,7 +102,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     {
         ImmutableSortedSet<Integer> set = this.classUnderTest(Collections.<Integer>reverseOrder());
         ImmutableSortedSet<Integer> withAll = set.newWithAll(UnifiedSet.newSet(Interval.fromTo(1, set.size() + 1)));
-        Verify.assertNotEquals(set, withAll);
+        Assert.assertNotEquals(set, withAll);
         Verify.assertSortedSetsEqual(TreeSortedSet.newSet(Comparators.<Integer>reverseNaturalOrder(), Interval.fromTo(1, set.size() + 1)),
                 withAll.castToSortedSet());
     }

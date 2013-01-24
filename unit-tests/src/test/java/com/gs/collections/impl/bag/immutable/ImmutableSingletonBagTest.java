@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -81,8 +81,8 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
         ImmutableSingletonBag<Integer> immutable = new ImmutableSingletonBag<Integer>(1);
         Bag<Integer> mutable = Bags.mutable.of(1);
         Verify.assertEqualsAndHashCode(immutable, mutable);
-        Verify.assertNotEquals(immutable, FastList.newList(mutable));
-        Verify.assertNotEquals(immutable, Bags.mutable.of(1, 1));
+        Assert.assertNotEquals(immutable, FastList.newList(mutable));
+        Assert.assertNotEquals(immutable, Bags.mutable.of(1, 1));
         Verify.assertEqualsAndHashCode(UnifiedMap.newWithKeysValues(1, 1), immutable.toMapOfItemToCount());
     }
 

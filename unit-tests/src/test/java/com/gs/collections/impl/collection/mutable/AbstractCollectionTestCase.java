@@ -91,7 +91,7 @@ public abstract class AbstractCollectionTestCase
     public void equalsAndHashCode()
     {
         Verify.assertEqualsAndHashCode(this.newWith(1, 2, 3), this.newWith(1, 2, 3));
-        Verify.assertNotEquals(this.newWith(1, 2, 3), this.newWith(1, 2));
+        Assert.assertNotEquals(this.newWith(1, 2, 3), this.newWith(1, 2));
     }
 
     @Test
@@ -542,13 +542,13 @@ public abstract class AbstractCollectionTestCase
     public void getFirst()
     {
         Assert.assertEquals(Integer.valueOf(1), this.newWith(1, 2, 3).getFirst());
-        Verify.assertNotEquals(Integer.valueOf(3), this.newWith(1, 2, 3).getFirst());
+        Assert.assertNotEquals(Integer.valueOf(3), this.newWith(1, 2, 3).getFirst());
     }
 
     @Test
     public void getLast()
     {
-        Verify.assertNotEquals(Integer.valueOf(1), this.newWith(1, 2, 3).getLast());
+        Assert.assertNotEquals(Integer.valueOf(1), this.newWith(1, 2, 3).getLast());
         Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 2, 3).getLast());
     }
 

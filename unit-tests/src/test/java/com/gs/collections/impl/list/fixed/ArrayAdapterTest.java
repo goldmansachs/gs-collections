@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -270,13 +270,13 @@ public class ArrayAdapterTest extends AbstractListTestCase
     public void testGetFirst()
     {
         Assert.assertEquals(Integer.valueOf(1), this.newWith(1, 2, 3).getFirst());
-        Verify.assertNotEquals(Integer.valueOf(3), this.newWith(1, 2, 3).getFirst());
+        Assert.assertNotEquals(Integer.valueOf(3), this.newWith(1, 2, 3).getFirst());
     }
 
     @Test
     public void testGetLast()
     {
-        Verify.assertNotEquals(Integer.valueOf(1), this.newWith(1, 2, 3).getLast());
+        Assert.assertNotEquals(Integer.valueOf(1), this.newWith(1, 2, 3).getLast());
         Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 2, 3).getLast());
     }
 
@@ -445,10 +445,10 @@ public class ArrayAdapterTest extends AbstractListTestCase
         ArrayAdapter<Integer> array1 = ArrayAdapter.newArrayWith(1, 2, 3, 4);
         ArrayAdapter<Integer> array2 = ArrayAdapter.newArrayWith(1, 2, 3, 4);
         ArrayAdapter<Integer> array3 = ArrayAdapter.newArrayWith(2, 3, 4);
-        Verify.assertNotEquals(array1, null);
+        Assert.assertNotEquals(array1, null);
         Verify.assertEqualsAndHashCode(array1, array1);
         Verify.assertEqualsAndHashCode(array1, array2);
-        Verify.assertNotEquals(array2, array3);
+        Assert.assertNotEquals(array2, array3);
         Verify.assertEqualsAndHashCode(array1, new ArrayList<Integer>(array1));
         Verify.assertEqualsAndHashCode(array1, new LinkedList<Integer>(array1));
         Verify.assertEqualsAndHashCode(array1, ArrayListAdapter.<Integer>newList().with(1, 2, 3, 4));

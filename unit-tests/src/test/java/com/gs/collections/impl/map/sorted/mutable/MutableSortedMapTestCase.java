@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -774,9 +774,9 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
         Verify.assertMapsEqual(revMap1, map2);
         Verify.assertMapsEqual(revMap3, map3);
 
-        Verify.assertNotEquals(map2, map3);
-        Verify.assertNotEquals(revMap1, revMap3);
-        Verify.assertNotEquals(map1, revMap3);
+        Assert.assertNotEquals(map2, map3);
+        Assert.assertNotEquals(revMap1, revMap3);
+        Assert.assertNotEquals(map1, revMap3);
     }
 
     @Test

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -334,7 +334,7 @@ public class ImmutableEmptySortedSetTest extends AbstractImmutableSortedSetTestC
         ImmutableSortedSet<Integer> immutable = this.classUnderTest();
         Verify.assertEqualsAndHashCode(UnifiedSet.newSet(), immutable);
         Verify.assertPostSerializedIdentity(immutable);
-        Verify.assertNotEquals(Lists.mutable.of(), immutable);
+        Assert.assertNotEquals(Lists.mutable.of(), immutable);
 
         ImmutableSortedSet<Integer> setWithComparator = this.classUnderTest(Comparators.<Object>reverseNaturalOrder());
         Verify.assertEqualsAndHashCode(UnifiedSet.newSet(), setWithComparator);

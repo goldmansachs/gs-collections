@@ -71,13 +71,13 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
         Verify.assertEqualsAndHashCode(mutable2, immutable);
         Verify.assertEqualsAndHashCode(mutable3, immutable);
         Verify.assertPostSerializedEqualsAndHashCode(immutable);
-        Verify.assertNotEquals(immutable, UnifiedSet.newSet(mutable1));
+        Assert.assertNotEquals(immutable, UnifiedSet.newSet(mutable1));
         mutable1.add(null);
         mutable2.add(null);
         mutable3.add(null);
-        Verify.assertNotEquals(mutable1, immutable);
-        Verify.assertNotEquals(mutable2, immutable);
-        Verify.assertNotEquals(mutable3, immutable);
+        Assert.assertNotEquals(mutable1, immutable);
+        Assert.assertNotEquals(mutable2, immutable);
+        Assert.assertNotEquals(mutable3, immutable);
         mutable1.remove(null);
         mutable2.remove(null);
         mutable3.remove(null);
@@ -89,15 +89,15 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
             mutable1.set(2, null);
             mutable2.set(2, null);
             mutable3.set(2, null);
-            Verify.assertNotEquals(mutable1, immutable);
-            Verify.assertNotEquals(mutable2, immutable);
-            Verify.assertNotEquals(mutable3, immutable);
+            Assert.assertNotEquals(mutable1, immutable);
+            Assert.assertNotEquals(mutable2, immutable);
+            Assert.assertNotEquals(mutable3, immutable);
             mutable1.remove(2);
             mutable2.remove(2);
             mutable3.remove(2);
-            Verify.assertNotEquals(mutable1, immutable);
-            Verify.assertNotEquals(mutable2, immutable);
-            Verify.assertNotEquals(mutable3, immutable);
+            Assert.assertNotEquals(mutable1, immutable);
+            Assert.assertNotEquals(mutable2, immutable);
+            Assert.assertNotEquals(mutable3, immutable);
         }
     }
 

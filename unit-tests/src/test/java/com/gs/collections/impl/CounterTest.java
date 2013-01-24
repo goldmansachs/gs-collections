@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,7 +60,7 @@ public class CounterTest
     public void equalsAndHashCode()
     {
         Verify.assertEqualsAndHashCode(new Counter(1), new Counter(1));
-        Verify.assertNotEquals(new Counter(1), new Counter(2));
+        Assert.assertNotEquals(new Counter(1), new Counter(2));
     }
 
     @Test

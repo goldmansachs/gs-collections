@@ -291,16 +291,16 @@ public class BooleanObjectHashMapTest
     @Test
     public void testEquals()
     {
-        Verify.assertNotEquals(this.map0, this.map1);
-        Verify.assertNotEquals(this.map0, this.map2);
-        Verify.assertNotEquals(this.map0, this.map3);
-        Verify.assertNotEquals(this.map1, this.map2);
-        Verify.assertNotEquals(this.map1, this.map3);
-        Verify.assertNotEquals(this.map2, this.map3);
+        Assert.assertNotEquals(this.map0, this.map1);
+        Assert.assertNotEquals(this.map0, this.map2);
+        Assert.assertNotEquals(this.map0, this.map3);
+        Assert.assertNotEquals(this.map1, this.map2);
+        Assert.assertNotEquals(this.map1, this.map3);
+        Assert.assertNotEquals(this.map2, this.map3);
         Verify.assertEqualsAndHashCode(BooleanObjectHashMap.newWithKeysValues(false, "0", true, "1"), this.map3);
-        Verify.assertNotEquals(BooleanObjectHashMap.newWithKeysValues(false, "1", true, "0"), this.map3);
-        Verify.assertNotEquals(BooleanObjectHashMap.newWithKeysValues(false, "1"), this.map1);
-        Verify.assertNotEquals(BooleanObjectHashMap.newWithKeysValues(true, "0"), this.map2);
+        Assert.assertNotEquals(BooleanObjectHashMap.newWithKeysValues(false, "1", true, "0"), this.map3);
+        Assert.assertNotEquals(BooleanObjectHashMap.newWithKeysValues(false, "1"), this.map1);
+        Assert.assertNotEquals(BooleanObjectHashMap.newWithKeysValues(true, "0"), this.map2);
     }
 
     @Test

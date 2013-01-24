@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package com.gs.collections.impl.block.factory;
 
 import com.gs.collections.api.block.HashingStrategy;
 import com.gs.collections.impl.merge.Person;
-import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -59,15 +58,15 @@ public class HashingStrategiesTest
         HashingStrategy<Person> firstHashingStrategy = HashingStrategies.fromFunction(Person.TO_FIRST);
 
         Assert.assertEquals("John".hashCode(), firstHashingStrategy.computeHashCode(john));
-        Verify.assertNotEquals(john.hashCode(), firstHashingStrategy.computeHashCode(john));
+        Assert.assertNotEquals(john.hashCode(), firstHashingStrategy.computeHashCode(john));
         Assert.assertFalse(firstHashingStrategy.equals(john, jane));
 
         Assert.assertEquals("Smith".hashCode(), lastHashingStrategy.computeHashCode(john));
-        Verify.assertNotEquals(john.hashCode(), lastHashingStrategy.computeHashCode(john));
+        Assert.assertNotEquals(john.hashCode(), lastHashingStrategy.computeHashCode(john));
         Assert.assertTrue(lastHashingStrategy.equals(john, jane));
 
-        Verify.assertNotEquals(lastHashingStrategy.computeHashCode(john), firstHashingStrategy.computeHashCode(john));
-        Verify.assertNotEquals(lastHashingStrategy.computeHashCode(john), firstHashingStrategy.computeHashCode(jane));
+        Assert.assertNotEquals(lastHashingStrategy.computeHashCode(john), firstHashingStrategy.computeHashCode(john));
+        Assert.assertNotEquals(lastHashingStrategy.computeHashCode(john), firstHashingStrategy.computeHashCode(jane));
         Assert.assertEquals(lastHashingStrategy.computeHashCode(john), lastHashingStrategy.computeHashCode(jane));
     }
 }

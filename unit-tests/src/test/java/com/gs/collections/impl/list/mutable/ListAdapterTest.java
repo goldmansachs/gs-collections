@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,10 +60,10 @@ public class ListAdapterTest extends AbstractListTestCase
         MutableList<Integer> list1 = this.<Integer>classUnderTest().with(1, 2, 3);
         MutableList<Integer> list2 = this.<Integer>classUnderTest().with(1, 2, 3);
         MutableList<Integer> list3 = this.<Integer>classUnderTest().with(2, 3, 4);
-        Verify.assertNotEquals(list1, null);
+        Assert.assertNotEquals(list1, null);
         Verify.assertEqualsAndHashCode(list1, list1);
         Verify.assertEqualsAndHashCode(list1, list2);
-        Verify.assertNotEquals(list2, list3);
+        Assert.assertNotEquals(list2, list3);
     }
 
     @Test

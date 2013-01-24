@@ -122,21 +122,21 @@ public abstract class AbstractListTestCase
         MutableCollection<Integer> list2 = this.newWith(1, 2, 3);
         MutableCollection<Integer> list3 = this.newWith(2, 3, 4);
         MutableCollection<Integer> list4 = this.newWith(1, 2, 3, 4);
-        Verify.assertNotEquals(list1, null);
+        Assert.assertNotEquals(list1, null);
         Verify.assertEqualsAndHashCode(list1, list1);
         Verify.assertEqualsAndHashCode(list1, list2);
         Verify.assertEqualsAndHashCode(new LinkedList<Integer>(Arrays.<Integer>asList(1, 2, 3)), list1);
         Verify.assertEqualsAndHashCode(new ArrayList<Integer>(Arrays.<Integer>asList(1, 2, 3)), list1);
         Verify.assertEqualsAndHashCode(ArrayAdapter.newArrayWith(1, 2, 3), list1);
-        Verify.assertNotEquals(list2, list3);
-        Verify.assertNotEquals(list2, list4);
-        Verify.assertNotEquals(new LinkedList<Integer>(Arrays.<Integer>asList(1, 2, 3, 4)), list1);
-        Verify.assertNotEquals(new LinkedList<Integer>(Arrays.<Integer>asList(1, 2, null)), list1);
-        Verify.assertNotEquals(new LinkedList<Integer>(Arrays.<Integer>asList(1, 2)), list1);
-        Verify.assertNotEquals(new ArrayList<Integer>(Arrays.<Integer>asList(1, 2, 3, 4)), list1);
-        Verify.assertNotEquals(new ArrayList<Integer>(Arrays.<Integer>asList(1, 2, null)), list1);
-        Verify.assertNotEquals(new ArrayList<Integer>(Arrays.<Integer>asList(1, 2)), list1);
-        Verify.assertNotEquals(ArrayAdapter.newArrayWith(1, 2, 3, 4), list1);
+        Assert.assertNotEquals(list2, list3);
+        Assert.assertNotEquals(list2, list4);
+        Assert.assertNotEquals(new LinkedList<Integer>(Arrays.<Integer>asList(1, 2, 3, 4)), list1);
+        Assert.assertNotEquals(new LinkedList<Integer>(Arrays.<Integer>asList(1, 2, null)), list1);
+        Assert.assertNotEquals(new LinkedList<Integer>(Arrays.<Integer>asList(1, 2)), list1);
+        Assert.assertNotEquals(new ArrayList<Integer>(Arrays.<Integer>asList(1, 2, 3, 4)), list1);
+        Assert.assertNotEquals(new ArrayList<Integer>(Arrays.<Integer>asList(1, 2, null)), list1);
+        Assert.assertNotEquals(new ArrayList<Integer>(Arrays.<Integer>asList(1, 2)), list1);
+        Assert.assertNotEquals(ArrayAdapter.newArrayWith(1, 2, 3, 4), list1);
     }
 
     @Test

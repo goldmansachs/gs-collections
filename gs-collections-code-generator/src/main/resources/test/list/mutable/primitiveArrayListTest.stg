@@ -602,9 +602,9 @@ public class <name>ArrayListTest
 
         Verify.assertEqualsAndHashCode(list1, list2);
         Verify.assertPostSerializedEqualsAndHashCode(list1);
-        Verify.assertNotEquals(list1, list3);
-        Verify.assertNotEquals(list1, list4);
-        Verify.assertNotEquals(list1, list5);
+        Assert.assertNotEquals(list1, list3);
+        Assert.assertNotEquals(list1, list4);
+        Assert.assertNotEquals(list1, list5);
     }
 
     @Test

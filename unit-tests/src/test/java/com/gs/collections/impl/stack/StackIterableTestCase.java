@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -815,10 +815,10 @@ public abstract class StackIterableTestCase
 
         Verify.assertEqualsAndHashCode(stack1, stack2);
         Verify.assertPostSerializedEqualsAndHashCode(this.newStackWith(1, 2, 3, 4));
-        Verify.assertNotEquals(stack1, stack3);
-        Verify.assertNotEquals(stack1, stack4);
-        Verify.assertNotEquals(stack1, stack5);
-        Verify.assertNotEquals(stack1, stack6);
+        Assert.assertNotEquals(stack1, stack3);
+        Assert.assertNotEquals(stack1, stack4);
+        Assert.assertNotEquals(stack1, stack5);
+        Assert.assertNotEquals(stack1, stack6);
 
         Verify.assertPostSerializedEqualsAndHashCode(this.newStackWith(null, null, null));
 
@@ -830,15 +830,13 @@ public abstract class StackIterableTestCase
     {
         StackIterable<Integer> stack1 = this.newStackWith(1, 2, 3, 5);
         StackIterable<Integer> stack2 = this.newStackWith(1, 2, 3, 4);
-        Verify.assertNotEquals(stack1.hashCode(), stack2.hashCode());
+        Assert.assertNotEquals(stack1.hashCode(), stack2.hashCode());
 
         Assert.assertEquals(31 * 31 * 31 * 31 + 1 * 31 * 31 * 31 + 2 * 31 * 31 + 3 * 31 + 4,
                 this.newStackFromTopToBottom(1, 2, 3, 4).hashCode());
         Assert.assertEquals(31 * 31 * 31, this.newStackFromTopToBottom(null, null, null).hashCode());
 
-        Verify.assertNotEquals(
-                this.newStackFromTopToBottom(1, 2, 3, 4).hashCode(),
-                this.newStackFromTopToBottom(4, 3, 2, 1).hashCode());
+        Assert.assertNotEquals(this.newStackFromTopToBottom(1, 2, 3, 4).hashCode(), this.newStackFromTopToBottom(4, 3, 2, 1).hashCode());
     }
 
     @Test

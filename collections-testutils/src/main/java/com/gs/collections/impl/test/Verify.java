@@ -182,7 +182,10 @@ public final class Verify extends Assert
 
     /**
      * Assert that two items are not the same. If one item is null, the the other must be non-null.
+     *
+     * @deprecated in 3.0. Use {@link Assert#assertNotEquals(String, Object, Object)} in JUnit 4.11 instead.
      */
+    @Deprecated
     public static void assertNotEquals(String itemsName, Object item1, Object item2)
     {
         try
@@ -200,7 +203,10 @@ public final class Verify extends Assert
 
     /**
      * Assert that two items are not the same. If one item is null, the the other must be non-null.
+     *
+     * @deprecated in 3.0. Use {@link Assert#assertNotEquals(Object, Object)} in JUnit 4.11 instead.
      */
+    @Deprecated
     public static void assertNotEquals(Object item1, Object item2)
     {
         try
@@ -215,7 +221,10 @@ public final class Verify extends Assert
 
     /**
      * Asserts that two Strings are not equal.
+     *
+     * @deprecated in 3.0. Use {@link Assert#assertNotEquals(String, Object, Object)} in JUnit 4.11 instead.
      */
+    @Deprecated
     public static void assertNotEquals(String itemName, String notExpected, String actual)
     {
         try
@@ -233,7 +242,10 @@ public final class Verify extends Assert
 
     /**
      * Asserts that two Strings are not equal.
+     *
+     * @deprecated in 3.0. Use {@link Assert#assertNotEquals(Object, Object)} in JUnit 4.11 instead.
      */
+    @Deprecated
     public static void assertNotEquals(String notExpected, String actual)
     {
         try
@@ -249,7 +261,10 @@ public final class Verify extends Assert
     /**
      * Asserts that two doubles are not equal concerning a delta. If the expected value is infinity then the delta value
      * is ignored.
+     *
+     * @deprecated in 3.0. Use {@link Assert#assertNotEquals(String, double, double, double)} in JUnit 4.11 instead.
      */
+    @Deprecated
     public static void assertNotEquals(String itemName, double notExpected, double actual, double delta)
     {
         // handle infinity specially since subtracting to infinite values gives NaN and the
@@ -270,7 +285,10 @@ public final class Verify extends Assert
     /**
      * Asserts that two doubles are not equal concerning a delta. If the expected value is infinity then the delta value
      * is ignored.
+     *
+     * @deprecated in 3.0. Use {@link Assert#assertNotEquals(double, double, double)} in JUnit 4.11 instead.
      */
+    @Deprecated
     public static void assertNotEquals(double notExpected, double actual, double delta)
     {
         try
@@ -322,7 +340,10 @@ public final class Verify extends Assert
 
     /**
      * Asserts that two longs are not equal.
+     *
+     * @deprecated in 3.0. Use {@link Assert#assertNotEquals(String, long, long)} in JUnit 4.11 instead.
      */
+    @Deprecated
     public static void assertNotEquals(String itemName, long notExpected, long actual)
     {
         try
@@ -340,7 +361,10 @@ public final class Verify extends Assert
 
     /**
      * Asserts that two longs are not equal.
+     *
+     * @deprecated in 3.0. Use {@link Assert#assertNotEquals(long, long)} in JUnit 4.11 instead.
      */
+    @Deprecated
     public static void assertNotEquals(long notExpected, long actual)
     {
         try
@@ -487,7 +511,10 @@ public final class Verify extends Assert
 
     /**
      * Asserts that two ints are not equal.
+     *
+     * @deprecated in 3.0. Use {@link Assert#assertNotEquals(String, long, long)} in JUnit 4.11 instead.
      */
+    @Deprecated
     public static void assertNotEquals(String itemName, int notExpected, int actual)
     {
         try
@@ -505,7 +532,10 @@ public final class Verify extends Assert
 
     /**
      * Asserts that two ints are not equal.
+     *
+     * @deprecated in 3.0. Use {@link Assert#assertNotEquals(long, long)} in JUnit 4.11 instead.
      */
+    @Deprecated
     public static void assertNotEquals(int notExpected, int actual)
     {
         try

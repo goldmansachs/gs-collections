@@ -444,7 +444,7 @@ public class BooleanArrayStackTest
         stack3.pop();
         Assert.assertEquals(stack2, stack3);
         Assert.assertNotSame(stack2, stack3);
-        Verify.assertNotEquals(stack1, stack3);
+        Assert.assertNotEquals(stack1, stack3);
         Assert.assertNotSame(stack1, stack3);
         stack1.pop(2);
         stack2.pop();
@@ -518,9 +518,9 @@ public class BooleanArrayStackTest
 
         Verify.assertEqualsAndHashCode(stack1, stack2);
         Verify.assertPostSerializedEqualsAndHashCode(stack1);
-        Verify.assertNotEquals(stack1, stack3);
-        Verify.assertNotEquals(stack1, stack4);
-        Verify.assertNotEquals(stack1, stack5);
+        Assert.assertNotEquals(stack1, stack3);
+        Assert.assertNotEquals(stack1, stack4);
+        Assert.assertNotEquals(stack1, stack5);
     }
 
     @Test

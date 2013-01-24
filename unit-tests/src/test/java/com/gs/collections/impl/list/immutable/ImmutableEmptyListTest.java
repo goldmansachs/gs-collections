@@ -324,7 +324,7 @@ public class ImmutableEmptyListTest extends AbstractImmutableListTestCase
         MutableList<Integer> mutable = FastList.newList(immutable);
         Verify.assertEqualsAndHashCode(immutable, mutable);
         Verify.assertPostSerializedIdentity(immutable);
-        Verify.assertNotEquals(immutable, UnifiedSet.newSet(mutable));
+        Assert.assertNotEquals(immutable, UnifiedSet.newSet(mutable));
     }
 
     @Override

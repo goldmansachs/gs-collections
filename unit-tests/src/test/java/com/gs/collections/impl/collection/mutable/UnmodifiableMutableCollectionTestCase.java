@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -135,28 +135,28 @@ public abstract class UnmodifiableMutableCollectionTestCase<T>
     public void select()
     {
         Assert.assertEquals(this.getCollection(), this.getCollection().select(Predicates.alwaysTrue()));
-        Verify.assertNotEquals(this.getCollection(), this.getCollection().select(Predicates.alwaysFalse()));
+        Assert.assertNotEquals(this.getCollection(), this.getCollection().select(Predicates.alwaysFalse()));
     }
 
     @Test
     public void selectWith()
     {
         Assert.assertEquals(this.getCollection(), this.getCollection().selectWith(Predicates2.alwaysTrue(), null));
-        Verify.assertNotEquals(this.getCollection(), this.getCollection().selectWith(Predicates2.alwaysFalse(), null));
+        Assert.assertNotEquals(this.getCollection(), this.getCollection().selectWith(Predicates2.alwaysFalse(), null));
     }
 
     @Test
     public void reject()
     {
         Assert.assertEquals(this.getCollection(), this.getCollection().reject(Predicates.alwaysFalse()));
-        Verify.assertNotEquals(this.getCollection(), this.getCollection().reject(Predicates.alwaysTrue()));
+        Assert.assertNotEquals(this.getCollection(), this.getCollection().reject(Predicates.alwaysTrue()));
     }
 
     @Test
     public void rejectWith()
     {
         Assert.assertEquals(this.getCollection(), this.getCollection().rejectWith(Predicates2.alwaysFalse(), null));
-        Verify.assertNotEquals(this.getCollection(), this.getCollection().rejectWith(Predicates2.alwaysTrue(), null));
+        Assert.assertNotEquals(this.getCollection(), this.getCollection().rejectWith(Predicates2.alwaysTrue(), null));
     }
 
     @Test
@@ -164,28 +164,28 @@ public abstract class UnmodifiableMutableCollectionTestCase<T>
     {
         PartitionMutableCollection<?> partition = this.getCollection().partition(Predicates.alwaysTrue());
         Assert.assertEquals(this.getCollection(), partition.getSelected());
-        Verify.assertNotEquals(this.getCollection(), partition.getRejected());
+        Assert.assertNotEquals(this.getCollection(), partition.getRejected());
     }
 
     @Test
     public void collect()
     {
         Assert.assertEquals(this.getCollection(), this.getCollection().collect(Functions.<Object>getPassThru()));
-        Verify.assertNotEquals(this.getCollection(), this.getCollection().collect(Functions.getToClass()));
+        Assert.assertNotEquals(this.getCollection(), this.getCollection().collect(Functions.getToClass()));
     }
 
     @Test
     public void collectWith()
     {
         Assert.assertEquals(this.getCollection(), this.getCollection().collectWith(Functions2.fromFunction(Functions.getPassThru()), null));
-        Verify.assertNotEquals(this.getCollection(), this.getCollection().collectWith(Functions2.fromFunction(Functions.getToClass()), null));
+        Assert.assertNotEquals(this.getCollection(), this.getCollection().collectWith(Functions2.fromFunction(Functions.getToClass()), null));
     }
 
     @Test
     public void collectIf()
     {
         Assert.assertEquals(this.getCollection(), this.getCollection().collectIf(Predicates.alwaysTrue(), Functions.<Object>getPassThru()));
-        Verify.assertNotEquals(this.getCollection(), this.getCollection().collectIf(Predicates.alwaysFalse(), Functions.getToClass()));
+        Assert.assertNotEquals(this.getCollection(), this.getCollection().collectIf(Predicates.alwaysFalse(), Functions.getToClass()));
     }
 
     @Test

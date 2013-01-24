@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -132,7 +132,7 @@ public class UnmodifiableMapEntrySetTest extends UnmodifiableMutableCollectionTe
     {
         Object same = this.newWith(1, 2, 3);
         Verify.assertEqualsAndHashCode(this.newWith(1, 2, 3), this.newWith(1, 2, 3));
-        Verify.assertNotEquals(this.newWith(1, 2, 3), this.newWith(1, 2));
+        Assert.assertNotEquals(this.newWith(1, 2, 3), this.newWith(1, 2));
     }
 
     @Override

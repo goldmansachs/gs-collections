@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -477,7 +477,7 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
     public void keySet_equals()
     {
         MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "One", 2, "Two", 3, "Three", 4, "Four");
-        Verify.assertNotEquals(UnifiedSet.newSetWith(1, 2, 3, 4, 5), map.keySet());
+        Assert.assertNotEquals(UnifiedSet.newSetWith(1, 2, 3, 4, 5), map.keySet());
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -581,7 +581,7 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
         MutableMap<Integer, String> map = this.newMapWithKeyValue(null, null);
         Map.Entry<Integer, String> entry = Iterate.getFirst(map.entrySet());
 
-        Verify.assertNotEquals(entry, new Object());
+        Assert.assertNotEquals(entry, new Object());
     }
 
     @Test
@@ -653,7 +653,7 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
     public void entrySet_equals()
     {
         MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "One", 2, "Two", 3, "Three", null, null);
-        Verify.assertNotEquals(UnifiedSet.newSetWith(ImmutableEntry.of(5, "Five")), map.entrySet());
+        Assert.assertNotEquals(UnifiedSet.newSetWith(ImmutableEntry.of(5, "Five")), map.entrySet());
 
         UnifiedSet<ImmutableEntry<Integer, String>> expected = UnifiedSet.newSetWith(
                 ImmutableEntry.of(1, "One"),
@@ -690,9 +690,7 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
     public void valueCollection_equals()
     {
         MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "One", 2, "Two", 3, "Three", null, null);
-        Verify.assertNotEquals(
-                UnifiedSet.newSetWith("One", "Two", "Three", null),
-                map.values());
+        Assert.assertNotEquals(UnifiedSet.newSetWith("One", "Two", "Three", null), map.values());
     }
 
     @Override
@@ -781,17 +779,17 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
             Verify.assertEqualsAndHashCode(expectedMap, map);
             MutableMap<Integer, Integer> clone1 = map.clone();
             clone1.put(COLLISION_10, COLLISION_10);
-            Verify.assertNotEquals(expectedMap, clone1);
+            Assert.assertNotEquals(expectedMap, clone1);
             MutableMap<Integer, Integer> clone2 = map.clone();
             clone2.put(null, null);
-            Verify.assertNotEquals(expectedMap, clone2);
+            Assert.assertNotEquals(expectedMap, clone2);
 
             expectedMap.put(null, null);
-            Verify.assertNotEquals(expectedMap, map);
+            Assert.assertNotEquals(expectedMap, map);
             expectedMap.remove(null);
 
             expectedMap.put(COLLISION_10, COLLISION_10);
-            Verify.assertNotEquals(expectedMap, map);
+            Assert.assertNotEquals(expectedMap, map);
         }
 
         MutableMap<Integer, Integer> mapA = this.mapWithCollisionsOfSize(3);
@@ -800,31 +798,31 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
         // map with a chain, compare the null key (and value) with a non-null key
         mapA.put(null, null);
         mapB.put(42, 84);
-        Verify.assertNotEquals(mapA, mapB);
-        Verify.assertNotEquals(mapA.hashCode(), mapB.hashCode());
+        Assert.assertNotEquals(mapA, mapB);
+        Assert.assertNotEquals(mapA.hashCode(), mapB.hashCode());
 
         // map with a chain, compare the two null keys with different values (one null, one not)
         mapB.remove(42);
         mapB.put(null, 42);
-        Verify.assertNotEquals(mapA, mapB);
+        Assert.assertNotEquals(mapA, mapB);
 
         // map with a chain, compare a non-null key (null value) with a non-null key and value
         mapB.remove(null);
         mapB.remove(42);
         mapA.remove(null);
         mapA.put(17, null);
-        Verify.assertNotEquals(mapA, mapB);
+        Assert.assertNotEquals(mapA, mapB);
 
         MutableMap<Integer, String> mapC = this.newMapWithKeysValues(1, "One", 2, "Two", null, null);
         MutableMap<Integer, String> mapD = this.newMapWithKeysValues(1, "One", 2, "Two", 3, "Three");
 
         // compare the null key (and value) with a non-null key
-        Verify.assertNotEquals(mapC, mapD);
+        Assert.assertNotEquals(mapC, mapD);
 
         // compare a non-null key (and null value) with a non-null key
         mapC.remove(null);
         mapC.put(3, null);
-        Verify.assertNotEquals(mapC, mapD);
+        Assert.assertNotEquals(mapC, mapD);
 
         // reset
         mapC.remove(3);
@@ -835,7 +833,7 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
         mapD.put(null, "Three");
 
         // compare the two null keys with different values (one null, one not)
-        Verify.assertNotEquals(mapC, mapD);
+        Assert.assertNotEquals(mapC, mapD);
 
         Assert.assertEquals(0, this.newMapWithKeyValue(null, null).hashCode());
     }

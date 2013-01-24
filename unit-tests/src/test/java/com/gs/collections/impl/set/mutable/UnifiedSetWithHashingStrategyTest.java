@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -803,7 +803,7 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
         //Testing 2 sets with same hashing strategies must obey object equals definition
         Verify.assertEqualsAndHashCode(hashedString, anotherHashedString);
         //Testing set size matters
-        Verify.assertNotEquals(hashedString, normalString.remove("alpha"));
+        Assert.assertNotEquals(hashedString, normalString.remove("alpha"));
     }
 
     @Test

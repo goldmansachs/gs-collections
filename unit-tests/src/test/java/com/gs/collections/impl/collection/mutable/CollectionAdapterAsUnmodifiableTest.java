@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Functions2;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
-import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -44,7 +43,7 @@ public class CollectionAdapterAsUnmodifiableTest extends UnmodifiableMutableColl
     public void select()
     {
         Assert.assertEquals(this.getCollection().toList(), this.getCollection().select(Predicates.alwaysTrue()));
-        Verify.assertNotEquals(this.getCollection().toList(), this.getCollection().select(Predicates.alwaysFalse()));
+        Assert.assertNotEquals(this.getCollection().toList(), this.getCollection().select(Predicates.alwaysFalse()));
     }
 
     @Override
@@ -52,7 +51,7 @@ public class CollectionAdapterAsUnmodifiableTest extends UnmodifiableMutableColl
     public void selectWith()
     {
         Assert.assertEquals(this.getCollection().toList(), this.getCollection().selectWith(Predicates2.alwaysTrue(), null));
-        Verify.assertNotEquals(this.getCollection().toList(), this.getCollection().selectWith(Predicates2.alwaysFalse(), null));
+        Assert.assertNotEquals(this.getCollection().toList(), this.getCollection().selectWith(Predicates2.alwaysFalse(), null));
     }
 
     @Override
@@ -60,7 +59,7 @@ public class CollectionAdapterAsUnmodifiableTest extends UnmodifiableMutableColl
     public void reject()
     {
         Assert.assertEquals(this.getCollection().toList(), this.getCollection().reject(Predicates.alwaysFalse()));
-        Verify.assertNotEquals(this.getCollection().toList(), this.getCollection().reject(Predicates.alwaysTrue()));
+        Assert.assertNotEquals(this.getCollection().toList(), this.getCollection().reject(Predicates.alwaysTrue()));
     }
 
     @Override
@@ -68,7 +67,7 @@ public class CollectionAdapterAsUnmodifiableTest extends UnmodifiableMutableColl
     public void rejectWith()
     {
         Assert.assertEquals(this.getCollection().toList(), this.getCollection().rejectWith(Predicates2.alwaysFalse(), null));
-        Verify.assertNotEquals(this.getCollection().toList(), this.getCollection().rejectWith(Predicates2.alwaysTrue(), null));
+        Assert.assertNotEquals(this.getCollection().toList(), this.getCollection().rejectWith(Predicates2.alwaysTrue(), null));
     }
 
     @Override
@@ -77,7 +76,7 @@ public class CollectionAdapterAsUnmodifiableTest extends UnmodifiableMutableColl
     {
         PartitionMutableCollection<?> partition = this.getCollection().partition(Predicates.alwaysTrue());
         Assert.assertEquals(this.getCollection().toList(), partition.getSelected());
-        Verify.assertNotEquals(this.getCollection().toList(), partition.getRejected());
+        Assert.assertNotEquals(this.getCollection().toList(), partition.getRejected());
     }
 
     @Override
@@ -85,7 +84,7 @@ public class CollectionAdapterAsUnmodifiableTest extends UnmodifiableMutableColl
     public void collect()
     {
         Assert.assertEquals(this.getCollection().toList(), this.getCollection().collect(Functions.getPassThru()));
-        Verify.assertNotEquals(this.getCollection().toList(), this.getCollection().collect(Functions.getToClass()));
+        Assert.assertNotEquals(this.getCollection().toList(), this.getCollection().collect(Functions.getToClass()));
     }
 
     @Override
@@ -93,7 +92,7 @@ public class CollectionAdapterAsUnmodifiableTest extends UnmodifiableMutableColl
     public void collectWith()
     {
         Assert.assertEquals(this.getCollection().toList(), this.getCollection().collectWith(Functions2.fromFunction(Functions.getPassThru()), null));
-        Verify.assertNotEquals(this.getCollection().toList(), this.getCollection().collectWith(Functions2.fromFunction(Functions.getToClass()), null));
+        Assert.assertNotEquals(this.getCollection().toList(), this.getCollection().collectWith(Functions2.fromFunction(Functions.getToClass()), null));
     }
 
     @Override
@@ -101,6 +100,6 @@ public class CollectionAdapterAsUnmodifiableTest extends UnmodifiableMutableColl
     public void collectIf()
     {
         Assert.assertEquals(this.getCollection().toList(), this.getCollection().collectIf(Predicates.alwaysTrue(), Functions.getPassThru()));
-        Verify.assertNotEquals(this.getCollection().toList(), this.getCollection().collectIf(Predicates.alwaysFalse(), Functions.getToClass()));
+        Assert.assertNotEquals(this.getCollection().toList(), this.getCollection().collectIf(Predicates.alwaysFalse(), Functions.getToClass()));
     }
 }

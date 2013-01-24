@@ -521,7 +521,7 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
         MutableMap<Integer, String> map2 = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
         MutableMap<Integer, String> map3 = this.newMapWithKeysValues(2, "2", 3, "3", 4, "4");
         Verify.assertMapsEqual(map1, map2);
-        Verify.assertNotEquals(map2, map3);
+        Assert.assertNotEquals(map2, map3);
     }
 
     @Test
