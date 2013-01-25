@@ -20,6 +20,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.ListIterator;
+import java.util.NoSuchElementException;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
@@ -418,73 +420,45 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     }
 
     @Test
-    public void testListIteratorHasPrevious()
+    public void listIterator()
     {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
+        final ListIterator<Integer> it = this.classUnderTest().listIterator();
+        Assert.assertFalse(it.hasPrevious());
+
+        Verify.assertThrows(NoSuchElementException.class, new Runnable()
         {
             public void run()
             {
-                AbstractImmutableListTestCase.this.classUnderTest().castToList().listIterator().hasPrevious();
+                it.previous();
             }
         });
-    }
 
-    @Test
-    public void testListIteratorPrevious()
-    {
+        Assert.assertEquals(-1, it.previousIndex());
+        Assert.assertEquals(0, it.nextIndex());
+        it.next();
+        Assert.assertEquals(1, it.nextIndex());
+
         Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
         {
             public void run()
             {
-                AbstractImmutableListTestCase.this.classUnderTest().castToList().listIterator().previous();
+                it.remove();
             }
         });
-    }
 
-    @Test
-    public void testListIteratorPreviousIndex()
-    {
         Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
         {
             public void run()
             {
-                AbstractImmutableListTestCase.this.classUnderTest().castToList().listIterator().previousIndex();
+                it.add(null);
             }
         });
-    }
 
-    @Test
-    public void testListIteratorNextIndex()
-    {
         Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
         {
             public void run()
             {
-                AbstractImmutableListTestCase.this.classUnderTest().castToList().listIterator().previousIndex();
-            }
-        });
-    }
-
-    @Test
-    public void testListIteratorRemove()
-    {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                AbstractImmutableListTestCase.this.classUnderTest().castToList().listIterator().remove();
-            }
-        });
-    }
-
-    @Test
-    public void testListIteratorWithIndex()
-    {
-        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
-        {
-            public void run()
-            {
-                AbstractImmutableListTestCase.this.classUnderTest().castToList().listIterator(0);
+                it.set(null);
             }
         });
     }

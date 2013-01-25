@@ -655,7 +655,7 @@ public abstract class AbstractMutableList<T>
             throw new IndexOutOfBoundsException("Index: " + index);
         }
 
-        return new MutableListIterator(this, index);
+        return new MutableListIterator<T>(this, index);
     }
 
     public MutableList<T> toReversed()

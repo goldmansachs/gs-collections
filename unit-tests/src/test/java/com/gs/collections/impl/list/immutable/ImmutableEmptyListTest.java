@@ -18,6 +18,7 @@ package com.gs.collections.impl.list.immutable;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.list.ImmutableList;
@@ -358,5 +359,39 @@ public class ImmutableEmptyListTest extends AbstractImmutableListTestCase
         PartitionImmutableList<Integer> partiton2 = this.classUnderTest().partitionWhile(Predicates.alwaysFalse());
         Assert.assertEquals(Lists.immutable.of(), partiton2.getSelected());
         Assert.assertEquals(Lists.immutable.of(), partiton2.getRejected());
+    }
+
+    @Override
+    @Test
+    public void listIterator()
+    {
+        final ListIterator<Integer> it = this.classUnderTest().listIterator();
+        Assert.assertFalse(it.hasPrevious());
+        Assert.assertEquals(-1, it.previousIndex());
+        Assert.assertEquals(0, it.nextIndex());
+
+        Verify.assertThrows(NoSuchElementException.class, new Runnable()
+        {
+            public void run()
+            {
+                it.next();
+            }
+        });
+
+        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
+        {
+            public void run()
+            {
+                it.remove();
+            }
+        });
+
+        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
+        {
+            public void run()
+            {
+                it.add(null);
+            }
+        });
     }
 }

@@ -21,7 +21,6 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
-import java.util.NoSuchElementException;
 import java.util.RandomAccess;
 
 import com.gs.collections.api.block.function.Function;
@@ -524,69 +523,7 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
 
     public Iterator<T> iterator()
     {
-        return new ImmutableListIterator();
-    }
-
-    private class ImmutableListIterator implements ListIterator<T>
-    {
-        /**
-         * Index of element to be returned by subsequent call to next.
-         */
-        protected int currentIndex;
-
-        public boolean hasNext()
-        {
-            return this.currentIndex != AbstractImmutableList.this.size();
-        }
-
-        public T next()
-        {
-            try
-            {
-                T next = AbstractImmutableList.this.get(this.currentIndex);
-                this.currentIndex++;
-                return next;
-            }
-            catch (IndexOutOfBoundsException ignored)
-            {
-                throw new NoSuchElementException();
-            }
-        }
-
-        public void remove()
-        {
-            throw new UnsupportedOperationException("Cannot remove from an Immutable List");
-        }
-
-        public boolean hasPrevious()
-        {
-            throw new UnsupportedOperationException();
-        }
-
-        public T previous()
-        {
-            throw new UnsupportedOperationException();
-        }
-
-        public int nextIndex()
-        {
-            throw new UnsupportedOperationException();
-        }
-
-        public int previousIndex()
-        {
-            throw new UnsupportedOperationException();
-        }
-
-        public void set(T t)
-        {
-            throw new UnsupportedOperationException("Cannot set into an Immutable List");
-        }
-
-        public void add(T t)
-        {
-            throw new UnsupportedOperationException("Cannot add to an Immutable List");
-        }
+        return this.listIterator(0);
     }
 
     public boolean addAll(int index, Collection<? extends T> collection)
@@ -611,12 +548,17 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
 
     public ListIterator<T> listIterator()
     {
-        return new ImmutableListIterator();
+        return new ImmutableListIterator<T>(this, 0);
     }
 
     public ListIterator<T> listIterator(int index)
     {
-        throw new UnsupportedOperationException();
+        if (index < 0 || index > this.size())
+        {
+            throw new IndexOutOfBoundsException("Index: " + index);
+        }
+
+        return new ImmutableListIterator<T>(this, index);
     }
 
     public List<T> subList(int fromIndex, int toIndex)
