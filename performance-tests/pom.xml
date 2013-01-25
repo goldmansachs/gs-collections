@@ -184,6 +184,7 @@
                         <include>**/*Test.java</include>
                     </includes>
                     <argLine>-XX:-OmitStackTraceInFastThrow</argLine>
+                    <runOrder>random</runOrder>
                 </configuration>
             </plugin>
 
