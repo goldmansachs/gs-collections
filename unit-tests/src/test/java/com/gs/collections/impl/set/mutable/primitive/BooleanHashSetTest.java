@@ -114,7 +114,7 @@ public class BooleanHashSetTest
     }
 
     @Test
-    public void containsAll()
+    public void containsAllArray()
     {
         Assert.assertFalse(this.set0.containsAll(true));
         Assert.assertFalse(this.set0.containsAll(true, false));
@@ -127,6 +127,22 @@ public class BooleanHashSetTest
         Assert.assertTrue(this.set3.containsAll(true, true));
         Assert.assertTrue(this.set3.containsAll(false, false));
         Assert.assertTrue(this.set3.containsAll(false, true, true));
+    }
+
+    @Test
+    public void containsAllIterable()
+    {
+        Assert.assertFalse(this.set0.containsAll(BooleanArrayList.newListWith(true)));
+        Assert.assertFalse(this.set0.containsAll(BooleanArrayList.newListWith(true, false)));
+        Assert.assertTrue(this.set1.containsAll(BooleanArrayList.newListWith(false, false)));
+        Assert.assertFalse(this.set1.containsAll(BooleanArrayList.newListWith(true, true)));
+        Assert.assertFalse(this.set1.containsAll(BooleanArrayList.newListWith(true, false, true)));
+        Assert.assertTrue(this.set2.containsAll(BooleanArrayList.newListWith(true, true)));
+        Assert.assertFalse(this.set2.containsAll(BooleanArrayList.newListWith(false, false)));
+        Assert.assertFalse(this.set2.containsAll(BooleanArrayList.newListWith(true, false, false)));
+        Assert.assertTrue(this.set3.containsAll(BooleanArrayList.newListWith(true, true)));
+        Assert.assertTrue(this.set3.containsAll(BooleanArrayList.newListWith(false, false)));
+        Assert.assertTrue(this.set3.containsAll(BooleanArrayList.newListWith(false, true, true)));
     }
 
     @Test

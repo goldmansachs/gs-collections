@@ -106,7 +106,7 @@ public class BooleanArrayListTest
     }
 
     @Test
-    public void containsAll()
+    public void containsAllArray()
     {
         BooleanArrayList emptyArrayList = new BooleanArrayList();
         Assert.assertFalse(emptyArrayList.containsAll(true));
@@ -118,6 +118,21 @@ public class BooleanArrayListTest
         Assert.assertFalse(trueArrayList.containsAll(true, false));
         BooleanArrayList falseArrayList = BooleanArrayList.newListWith(false, false, false, false);
         Assert.assertFalse(falseArrayList.containsAll(true, false));
+    }
+
+    @Test
+    public void containsAllIterable()
+    {
+        BooleanArrayList emptyArrayList = new BooleanArrayList();
+        Assert.assertFalse(emptyArrayList.containsAll(BooleanArrayList.newListWith(true)));
+        Assert.assertFalse(emptyArrayList.containsAll(BooleanArrayList.newListWith(false)));
+        Assert.assertTrue(this.list.containsAll(BooleanArrayList.newListWith(true)));
+        Assert.assertTrue(this.list.containsAll(BooleanArrayList.newListWith(false)));
+        Assert.assertTrue(this.list.containsAll(BooleanArrayList.newListWith(true, false)));
+        BooleanArrayList trueArrayList = BooleanArrayList.newListWith(true, true, true, true);
+        Assert.assertFalse(trueArrayList.containsAll(BooleanArrayList.newListWith(true, false)));
+        BooleanArrayList falseArrayList = BooleanArrayList.newListWith(false, false, false, false);
+        Assert.assertFalse(falseArrayList.containsAll(BooleanArrayList.newListWith(true, false)));
     }
 
     @Test
@@ -252,13 +267,24 @@ public class BooleanArrayListTest
     }
 
     @Test
-    public void addAll()
+    public void addAllArray()
     {
         Assert.assertFalse(this.list.addAll());
         Assert.assertFalse(this.list.addAllAtIndex(1));
         Assert.assertTrue(this.list.addAll(true, false, true));
         Assert.assertEquals(BooleanArrayList.newListWith(true, true, false, true, false, true), this.list);
         Assert.assertTrue(this.list.addAllAtIndex(4, false, true));
+        Assert.assertEquals(BooleanArrayList.newListWith(true, true, false, true, false, true, false, true), this.list);
+    }
+
+    @Test
+    public void addAllIterable()
+    {
+        Assert.assertFalse(this.list.addAll(new BooleanArrayList()));
+        Assert.assertFalse(this.list.addAllAtIndex(1, new BooleanArrayList()));
+        Assert.assertTrue(this.list.addAll(BooleanArrayList.newListWith(true, false, true)));
+        Assert.assertEquals(BooleanArrayList.newListWith(true, true, false, true, false, true), this.list);
+        Assert.assertTrue(this.list.addAllAtIndex(4, BooleanArrayList.newListWith(false, true)));
         Assert.assertEquals(BooleanArrayList.newListWith(true, true, false, true, false, true, false, true), this.list);
     }
 
