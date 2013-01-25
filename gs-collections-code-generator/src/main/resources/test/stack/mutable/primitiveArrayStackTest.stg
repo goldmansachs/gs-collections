@@ -357,7 +357,7 @@ public class <name>ArrayStackTest
        {
            public <wrapperName> valueOf(<type> parameter)
            {
-               return <(castExpression.(type))("parameter - 1")>;
+               return <(castIntToNarrowType.(type))("parameter - 1")>;
            }
        });
        Assert.assertEquals("<["0","1", "2", "3","4"]:(toStringLiteral.(type))(); separator=", ">", actualValues.makeString());

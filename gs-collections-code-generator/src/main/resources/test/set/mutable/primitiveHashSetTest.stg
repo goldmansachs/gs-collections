@@ -579,11 +579,11 @@ public class <name>HashSetTest
     @Test
     public void collect()
     {
-        Assert.assertEquals(UnifiedSet.newSetWith(<["-1", "0", "30"]:(literal.(type))(); separator=", ">, <(castExpression.(type))("generateCollisions1().getFirst() - 1")>, <(castExpression.(type))("generateCollisions1().get(1) - 1")>), this.set.collect(new <name>ToObjectFunction\<<wrapperName>\>()
+        Assert.assertEquals(UnifiedSet.newSetWith(<["-1", "0", "30"]:(literal.(type))(); separator=", ">, <(castIntToNarrowType.(type))("generateCollisions1().getFirst() - 1")>, <(castIntToNarrowType.(type))("generateCollisions1().get(1) - 1")>), this.set.collect(new <name>ToObjectFunction\<<wrapperName>\>()
         {
             public <wrapperName> valueOf(<type> parameter)
             {
-                return <(castExpression.(type))("parameter - 1")>;
+                return <(castIntToNarrowType.(type))("parameter - 1")>;
             }
         }));
     }

@@ -496,7 +496,7 @@ public class <name>ArrayListTest
         {
             public <wrapperName> valueOf(<type> parameter)
             {
-                return <(castExpression.(type))("parameter - 1")>;
+                return <(castIntToNarrowType.(type))("parameter - 1")>;
             }
         }));
     }

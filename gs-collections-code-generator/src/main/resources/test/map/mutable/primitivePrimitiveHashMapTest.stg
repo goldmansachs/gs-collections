@@ -1,0 +1,713 @@
+import "copyright.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+
+isTest() ::= "true"
+
+hasTwoPrimitives() ::= "true"
+
+skipBoolean() ::= "true"
+
+targetPath() ::= "com/gs/collections/impl/map/mutable/primitive"
+
+fileName(primitive1, primitive2, sameTwoPredicates) ::= "<primitive1.name><primitive2.name>HashMapTest"
+
+class(primitive1, primitive2, sameTwoPredicates) ::= <<
+<body(primitive1.type, primitive2.type, primitive1.name, primitive2.name)>
+>>
+
+body(type1, type2, name1, name2) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.map.mutable.primitive;
+
+import java.lang.reflect.Field;
+
+import com.gs.collections.api.block.function.primitive.<name1>To<name2>Function;
+import com.gs.collections.api.block.function.primitive.<name2>Function;
+import com.gs.collections.api.block.function.primitive.<name2>Function0;
+import com.gs.collections.impl.list.mutable.primitive.<name1>ArrayList;
+import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.gs.collections.impl.test.Verify;
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * This file was automatically generated from template file primitivePrimitiveHashMapTest.stg.
+ * JUnit test for {@link <name1><name2>HashMap}.
+ */
+public class <name1><name2>HashMapTest
+{
+    private final <name1><name2>HashMap map = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("0")>, <(literal.(type1))("31")>, <(literal.(type2))("31")>, <(literal.(type1))("32")>, <(literal.(type2))("32")>);
+
+    @Test
+    public void defaultInitialCapacity() throws Exception
+    {
+        Field keys = <name1><name2>HashMap.class.getDeclaredField("keys");
+        keys.setAccessible(true);
+        Field values = <name1><name2>HashMap.class.getDeclaredField("values");
+        values.setAccessible(true);
+
+        <name1><name2>HashMap hashMap = new <name1><name2>HashMap();
+        Assert.assertEquals(16L, ((<type1>[]) keys.get(hashMap)).length);
+        Assert.assertEquals(16L, ((<type2>[]) values.get(hashMap)).length);
+    }
+
+    @Test
+    public void newWithInitialCapacity() throws Exception
+    {
+        Field keys = <name1><name2>HashMap.class.getDeclaredField("keys");
+        keys.setAccessible(true);
+        Field values = <name1><name2>HashMap.class.getDeclaredField("values");
+        values.setAccessible(true);
+
+        <name1><name2>HashMap hashMap = new <name1><name2>HashMap(3);
+        Assert.assertEquals(8L, ((<type1>[]) keys.get(hashMap)).length);
+        Assert.assertEquals(8L, ((<type2>[]) values.get(hashMap)).length);
+
+        <name1><name2>HashMap hashMap2 = new <name1><name2>HashMap(15);
+        Assert.assertEquals(32L, ((<type1>[]) keys.get(hashMap2)).length);
+        Assert.assertEquals(32L, ((<type2>[]) values.get(hashMap2)).length);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void newWithInitialCapacity_negative_throws()
+    {
+        new <name1><name2>HashMap(-1);
+    }
+
+    @Test
+    public void newMap() throws Exception
+    {
+        Field keys = <name1><name2>HashMap.class.getDeclaredField("keys");
+        keys.setAccessible(true);
+        Field values = <name1><name2>HashMap.class.getDeclaredField("values");
+        values.setAccessible(true);
+
+        <name1><name2>HashMap hashMap = <name1><name2>HashMap.newMap();
+        Assert.assertEquals(16L, ((<type1>[]) keys.get(hashMap)).length);
+        Assert.assertEquals(16L, ((<type2>[]) values.get(hashMap)).length);
+        Assert.assertEquals(new <name1><name2>HashMap(), hashMap);
+    }
+
+    private static <name1>ArrayList generateCollisions()
+    {
+        <name1>ArrayList collisions = new <name1>ArrayList();
+        <name1><name2>HashMap hashMap = new <name1><name2>HashMap();
+        for (<type1> each = <(literal.(type1))("2")>; collisions.size() \<= 10; each++)
+        {
+            if (hashMap.index(each) == hashMap.index(<(literal.(type1))("2")>))
+            {
+                collisions.add(each);
+            }
+        }
+        return collisions;
+    }
+
+    @Test
+    public void removeKey()
+    {
+        <name1><name2>HashMap map0 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("0")>, <(literal.(type1))("1")>, <(literal.(type2))("1")>);
+        map0.removeKey(<(literal.(type1))("1")>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("0")>), map0);
+        map0.removeKey(<(literal.(type1))("0")>);
+        Assert.assertEquals(<name1><name2>HashMap.newMap(), map0);
+
+        <name1><name2>HashMap map1 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("0")>, <(literal.(type1))("1")>, <(literal.(type2))("1")>);
+        map1.removeKey(<(literal.(type1))("0")>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>), map1);
+        map1.removeKey(<(literal.(type1))("1")>);
+        Assert.assertEquals(<name1><name2>HashMap.newMap(), map1);
+
+        this.map.removeKey(<(literal.(type1))("5")>);
+        this.map.removeKey(<(literal.(type1))("50")>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("0")>, <(literal.(type1))("31")>, <(literal.(type2))("31")>, <(literal.(type1))("32")>, <(literal.(type2))("32")>), this.map);
+        this.map.removeKey(<(literal.(type1))("0")>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("31")>, <(literal.(type2))("31")>, <(literal.(type1))("32")>, <(literal.(type2))("32")>), this.map);
+        this.map.removeKey(<(literal.(type1))("31")>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("32")>, <(literal.(type2))("32")>), this.map);
+        this.map.removeKey(<(literal.(type1))("32")>);
+        Assert.assertEquals(new <name1><name2>HashMap(), this.map);
+        this.map.removeKey(<(literal.(type1))("0")>);
+        this.map.removeKey(<(literal.(type1))("31")>);
+        this.map.removeKey(<(literal.(type1))("32")>);
+        Assert.assertEquals(new <name1><name2>HashMap(), this.map);
+        Assert.assertTrue(this.map.isEmpty());
+
+        this.map.put(generateCollisions().get(0), <(literal.(type2))("1")>);
+        this.map.put(generateCollisions().get(1), <(literal.(type2))("2")>);
+
+        Assert.assertEquals(<(wideLiteral.(type2))("1")>, this.map.get(generateCollisions().get(0))<(wideDelta.(type2))>);
+        this.map.removeKey(generateCollisions().get(0));
+        Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.get(generateCollisions().get(0))<(wideDelta.(type2))>);
+
+        Assert.assertEquals(<(wideLiteral.(type2))("2")>, this.map.get(generateCollisions().get(1))<(wideDelta.(type2))>);
+        this.map.removeKey(generateCollisions().get(1));
+        Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.get(generateCollisions().get(1))<(wideDelta.(type2))>);
+    }
+
+    @Test
+    public void put()
+    {
+        this.map.put(<(literal.(type1))("0")>, <(literal.(type2))("1")>);
+        this.map.put(<(literal.(type1))("31")>, <(literal.(type2))("32")>);
+        this.map.put(<(literal.(type1))("32")>, <(literal.(type2))("33")>);
+        <name1><name2>HashMap expected = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("1")>, <(literal.(type1))("31")>, <(literal.(type2))("32")>, <(literal.(type1))("32")>, <(literal.(type2))("33")>);
+        Assert.assertEquals(expected, this.map);
+
+        this.map.put(<(literal.(type1))("1")>, <(literal.(type2))("2")>);
+        expected.put(<(literal.(type1))("1")>, <(literal.(type2))("2")>);
+        Assert.assertEquals(expected, this.map);
+
+        this.map.put(<(literal.(type1))("33")>, <(literal.(type2))("34")>);
+        expected.put(<(literal.(type1))("33")>, <(literal.(type2))("34")>);
+        Assert.assertEquals(expected, this.map);
+
+        this.map.put(<(literal.(type1))("30")>, <(literal.(type2))("31")>);
+        expected.put(<(literal.(type1))("30")>, <(literal.(type2))("31")>);
+        Assert.assertEquals(expected, this.map);
+    }
+
+    @Test
+    public void putDuplicateWithRemovedSlot()
+    {
+        <type1> collision1 = generateCollisions().getFirst();
+        <type1> collision2 = generateCollisions().get(1);
+        <type1> collision3 = generateCollisions().get(2);
+        <type1> collision4 = generateCollisions().get(3);
+
+        <name1><name2>HashMap hashMap = <name1><name2>HashMap.newMap();
+        hashMap.put(collision1, <(literal.(type2))("1")>);
+        hashMap.put(collision2, <(literal.(type2))("2")>);
+        hashMap.put(collision3, <(literal.(type2))("3")>);
+        Assert.assertEquals(<(wideLiteral.(type2))("2")>, hashMap.get(collision2)<(wideDelta.(type2))>);
+        hashMap.removeKey(collision2);
+        hashMap.put(collision4, <(literal.(type2))("4")>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(collision1, <(literal.(type2))("1")>, collision3, <(literal.(type2))("3")>, collision4, <(literal.(type2))("4")>), hashMap);
+
+        <name1><name2>HashMap hashMap1 = <name1><name2>HashMap.newMap();
+        hashMap1.put(collision1, <(literal.(type2))("1")>);
+        hashMap1.put(collision2, <(literal.(type2))("2")>);
+        hashMap1.put(collision3, <(literal.(type2))("3")>);
+        Assert.assertEquals(<(wideLiteral.(type2))("1")>, hashMap1.get(collision1)<(wideDelta.(type2))>);
+        hashMap1.removeKey(collision1);
+        hashMap1.put(collision4, <(literal.(type2))("4")>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(collision2, <(literal.(type2))("2")>, collision3, <(literal.(type2))("3")>, collision4, <(literal.(type2))("4")>), hashMap1);
+
+        <name1><name2>HashMap hashMap2 = <name1><name2>HashMap.newMap();
+        hashMap2.put(collision1, <(literal.(type2))("1")>);
+        hashMap2.put(collision2, <(literal.(type2))("2")>);
+        hashMap2.put(collision3, <(literal.(type2))("3")>);
+        Assert.assertEquals(<(wideLiteral.(type2))("3")>, hashMap2.get(collision3)<(wideDelta.(type2))>);
+        hashMap2.removeKey(collision3);
+        hashMap2.put(collision4, <(literal.(type2))("4")>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(collision1, <(literal.(type2))("1")>, collision2, <(literal.(type2))("2")>, collision4, <(literal.(type2))("4")>), hashMap2);
+    }
+
+    @Test
+    public void putWithRehash() throws Exception
+    {
+        <name1><name2>HashMap hashMap = <name1><name2>HashMap.newMap();
+        for (int i = 2; i \< 10; i++)
+        {
+            Assert.assertFalse(hashMap.containsKey(<(castFromInt.(type1))("i")>));
+            hashMap.put(<(castFromInt.(type1))("i")>, <(castFromInt.(type2))("i")>);
+        }
+
+        Field keys = <name1><name2>HashMap.class.getDeclaredField("keys");
+        Field values = <name1><name2>HashMap.class.getDeclaredField("values");
+        keys.setAccessible(true);
+        values.setAccessible(true);
+        Assert.assertEquals(16L, ((<type1>[]) keys.get(hashMap)).length);
+        Assert.assertEquals(16L, ((<type2>[]) values.get(hashMap)).length);
+        Assert.assertEquals(8, hashMap.size());
+        for (int i = 2; i \< 10; i++)
+        {
+            Assert.assertTrue(hashMap.containsKey(<(castFromInt.(type1))("i")>));
+            Assert.assertTrue(hashMap.containsValue(<(castFromInt.(type2))("i")>));
+        }
+        hashMap.put(<(literal.(type1))("10")>, <(literal.(type2))("10")>);
+        Assert.assertEquals(32L, ((<type1>[]) keys.get(hashMap)).length);
+        Assert.assertEquals(32L, ((<type2>[]) values.get(hashMap)).length);
+    }
+
+    @Test
+    public void get()
+    {
+        Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.get(<(literal.(type1))("0")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("31")>, this.map.get(<(literal.(type1))("31")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("32")>, this.map.get(<(literal.(type1))("32")>)<(wideDelta.(type2))>);
+
+        Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.get(<(literal.(type1))("1")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.get(<(literal.(type1))("33")>)<(wideDelta.(type2))>);
+
+        this.map.put(<(literal.(type1))("0")>, <(literal.(type2))("1")>);
+        Assert.assertEquals(<(wideLiteral.(type2))("1")>, this.map.get(<(literal.(type1))("0")>)<(wideDelta.(type2))>);
+
+        this.map.put(<(literal.(type1))("1")>, <(literal.(type2))("1")>);
+        Assert.assertEquals(<(wideLiteral.(type2))("1")>, this.map.get(<(literal.(type1))("1")>)<(wideDelta.(type2))>);
+
+        this.map.put(<(literal.(type1))("5")>, <(literal.(type2))("5")>);
+        Assert.assertEquals(<(wideLiteral.(type2))("5")>, this.map.get(<(literal.(type1))("5")>)<(wideDelta.(type2))>);
+
+        this.map.put(<(literal.(type1))("35")>, <(literal.(type2))("35")>);
+        Assert.assertEquals(<(wideLiteral.(type2))("35")>, this.map.get(<(literal.(type1))("35")>)<(wideDelta.(type2))>);
+    }
+
+    @Test
+    public void getOrThrow()
+    {
+        Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.getOrThrow(<(literal.(type1))("0")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("31")>, this.map.getOrThrow(<(literal.(type1))("31")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("32")>, this.map.getOrThrow(<(literal.(type1))("32")>)<(wideDelta.(type2))>);
+
+        this.map.removeKey(<(literal.(type1))("0")>);
+        Verify.assertThrows(IllegalStateException.class, new Runnable()
+        {
+            public void run()
+            {
+                <name1><name2>HashMapTest.this.map.getOrThrow(<(literal.(type1))("0")>);
+            }
+        });
+        Verify.assertThrows(IllegalStateException.class, new Runnable()
+        {
+            public void run()
+            {
+                <name1><name2>HashMapTest.this.map.getOrThrow(<(literal.(type1))("1")>);
+            }
+        });
+        Verify.assertThrows(IllegalStateException.class, new Runnable()
+        {
+            public void run()
+            {
+                <name1><name2>HashMapTest.this.map.getOrThrow(<(literal.(type1))("33")>);
+            }
+        });
+
+        this.map.put(<(literal.(type1))("0")>, <(literal.(type2))("1")>);
+        Assert.assertEquals(<(wideLiteral.(type2))("1")>, this.map.getOrThrow(<(literal.(type1))("0")>)<(wideDelta.(type2))>);
+
+        this.map.put(<(literal.(type1))("1")>, <(literal.(type2))("1")>);
+        Assert.assertEquals(<(wideLiteral.(type2))("1")>, this.map.getOrThrow(<(literal.(type1))("1")>)<(wideDelta.(type2))>);
+
+        this.map.put(<(literal.(type1))("5")>, <(literal.(type2))("5")>);
+        Assert.assertEquals(<(wideLiteral.(type2))("5")>, this.map.getOrThrow(<(literal.(type1))("5")>)<(wideDelta.(type2))>);
+
+        this.map.put(<(literal.(type1))("35")>, <(literal.(type2))("35")>);
+        Assert.assertEquals(<(wideLiteral.(type2))("35")>, this.map.getOrThrow(<(literal.(type1))("35")>)<(wideDelta.(type2))>);
+    }
+
+    @Test
+    public void getIfAbsentPut()
+    {
+        <name1><name2>HashMap map1 = new <name1><name2>HashMap();
+        Assert.assertEquals(<(wideLiteral.(type2))("50")>, map1.getIfAbsentPut(<(literal.(type1))("0")>, <(literal.(type2))("50")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("50")>, map1.getIfAbsentPut(<(literal.(type1))("0")>, <(literal.(type2))("100")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("50")>), map1);
+        Assert.assertEquals(<(wideLiteral.(type2))("50")>, map1.getIfAbsentPut(<(literal.(type1))("1")>, <(literal.(type2))("50")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("50")>, map1.getIfAbsentPut(<(literal.(type1))("1")>, <(literal.(type2))("100")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("50")>, <(literal.(type1))("1")>, <(literal.(type2))("50")>), map1);
+
+        <name1><name2>HashMap map2 = new <name1><name2>HashMap();
+        Assert.assertEquals(<(wideLiteral.(type2))("50")>, map2.getIfAbsentPut(<(literal.(type1))("1")>, <(literal.(type2))("50")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("50")>, map2.getIfAbsentPut(<(literal.(type1))("1")>, <(literal.(type2))("100")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("50")>), map2);
+        Assert.assertEquals(<(wideLiteral.(type2))("50")>, map2.getIfAbsentPut(<(literal.(type1))("0")>, <(literal.(type2))("50")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("50")>, map2.getIfAbsentPut(<(literal.(type1))("0")>, <(literal.(type2))("100")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("50")>, <(literal.(type1))("1")>, <(literal.(type2))("50")>), map2);
+
+        <name1><name2>HashMap map3 = new <name1><name2>HashMap();
+        Assert.assertEquals(<(wideLiteral.(type2))("50")>, map3.getIfAbsentPut(<(literal.(type1))("32")>, <(literal.(type2))("50")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("50")>, map3.getIfAbsentPut(<(literal.(type1))("32")>, <(literal.(type2))("100")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("32")>, <(literal.(type2))("50")>), map3);
+
+        <name1><name2>HashMap map4 = new <name1><name2>HashMap();
+        Assert.assertEquals(<(wideLiteral.(type2))("50")>, map4.getIfAbsentPut(<(literal.(type1))("33")>, <(literal.(type2))("50")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("50")>, map4.getIfAbsentPut(<(literal.(type1))("33")>, <(literal.(type2))("100")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("33")>, <(literal.(type2))("50")>), map4);
+    }
+
+    @Test
+    public void getIfAbsentPut_Function()
+    {
+        <name2>Function0 factory = new <name2>Function0()
+        {
+            public <type2> value()
+            {
+                return <(literal.(type2))("100")>;
+            }
+        };
+
+        <name2>Function0 factoryThrows = new <name2>Function0()
+        {
+            public <type2> value()
+            {
+                throw new AssertionError();
+            }
+        };
+
+        <name1><name2>HashMap map1 = new <name1><name2>HashMap();
+        Assert.assertEquals(<(wideLiteral.(type2))("100")>, map1.getIfAbsentPut(<(literal.(type1))("0")>, factory)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("100")>, map1.getIfAbsentPut(<(literal.(type1))("0")>, factoryThrows)<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("100")>), map1);
+        Assert.assertEquals(<(wideLiteral.(type2))("100")>, map1.getIfAbsentPut(<(literal.(type1))("1")>, factory)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("100")>, map1.getIfAbsentPut(<(literal.(type1))("1")>, factoryThrows)<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("100")>, <(literal.(type1))("1")>, <(literal.(type2))("100")>), map1);
+
+        <name1><name2>HashMap map2 = new <name1><name2>HashMap();
+        Assert.assertEquals(<(wideLiteral.(type2))("100")>, map2.getIfAbsentPut(<(literal.(type1))("1")>, factory)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("100")>, map2.getIfAbsentPut(<(literal.(type1))("1")>, factoryThrows)<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("100")>), map2);
+        Assert.assertEquals(<(wideLiteral.(type2))("100")>, map2.getIfAbsentPut(<(literal.(type1))("0")>, factory)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("100")>, map2.getIfAbsentPut(<(literal.(type1))("0")>, factoryThrows)<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("100")>, <(literal.(type1))("1")>, <(literal.(type2))("100")>), map2);
+
+        <name1><name2>HashMap map3 = new <name1><name2>HashMap();
+        Assert.assertEquals(<(wideLiteral.(type2))("100")>, map3.getIfAbsentPut(<(literal.(type1))("32")>, factory)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("100")>, map3.getIfAbsentPut(<(literal.(type1))("32")>, factoryThrows)<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("32")>, <(literal.(type2))("100")>), map3);
+
+        <name1><name2>HashMap map4 = new <name1><name2>HashMap();
+        Assert.assertEquals(<(wideLiteral.(type2))("100")>, map4.getIfAbsentPut(<(literal.(type1))("33")>, factory)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("100")>, map4.getIfAbsentPut(<(literal.(type1))("33")>, factoryThrows)<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("33")>, <(literal.(type2))("100")>), map4);
+    }
+
+    @Test
+    public void getIfAbsentPutWith()
+    {
+        <name2>Function\<String> functionLength = new <name2>Function\<String>()
+        {
+            public <type2> <type2>ValueOf(String string)
+            {
+                return <(castFromInt.(type2))("string.length()")>;
+            }
+        };
+
+        <name2>Function\<String> functionThrows = new <name2>Function\<String>()
+        {
+            public <type2> <type2>ValueOf(String string)
+            {
+                throw new AssertionError();
+            }
+        };
+
+        <name1><name2>HashMap map1 = new <name1><name2>HashMap();
+        Assert.assertEquals(<(wideLiteral.(type2))("9")>, map1.getIfAbsentPutWith(<(literal.(type1))("0")>, functionLength, "123456789")<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("9")>, map1.getIfAbsentPutWith(<(literal.(type1))("0")>, functionThrows, "unused")<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("9")>), map1);
+        Assert.assertEquals(<(wideLiteral.(type2))("9")>, map1.getIfAbsentPutWith(<(literal.(type1))("1")>, functionLength, "123456789")<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("9")>, map1.getIfAbsentPutWith(<(literal.(type1))("1")>, functionThrows, "unused")<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("9")>, <(literal.(type1))("1")>, <(literal.(type2))("9")>), map1);
+
+        <name1><name2>HashMap map2 = new <name1><name2>HashMap();
+        Assert.assertEquals(<(wideLiteral.(type2))("9")>, map2.getIfAbsentPutWith(<(literal.(type1))("1")>, functionLength, "123456789")<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("9")>, map2.getIfAbsentPutWith(<(literal.(type1))("1")>, functionThrows, "unused")<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("9")>), map2);
+        Assert.assertEquals(<(wideLiteral.(type2))("9")>, map2.getIfAbsentPutWith(<(literal.(type1))("0")>, functionLength, "123456789")<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("9")>, map2.getIfAbsentPutWith(<(literal.(type1))("0")>, functionThrows, "unused")<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("9")>, <(literal.(type1))("1")>, <(literal.(type2))("9")>), map2);
+
+        <name1><name2>HashMap map3 = new <name1><name2>HashMap();
+        Assert.assertEquals(<(wideLiteral.(type2))("9")>, map3.getIfAbsentPutWith(<(literal.(type1))("32")>, functionLength, "123456789")<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("9")>, map3.getIfAbsentPutWith(<(literal.(type1))("32")>, functionThrows, "unused")<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("32")>, <(literal.(type2))("9")>), map3);
+
+        <name1><name2>HashMap map4 = new <name1><name2>HashMap();
+        Assert.assertEquals(<(wideLiteral.(type2))("9")>, map4.getIfAbsentPutWith(<(literal.(type1))("33")>, functionLength, "123456789")<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("9")>, map4.getIfAbsentPutWith(<(literal.(type1))("33")>, functionThrows, "unused")<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("33")>, <(literal.(type2))("9")>), map4);
+    }
+
+    @Test
+    public void getIfAbsentPutWithKey()
+    {
+        <name1>To<name2>Function function = new <name1>To<name2>Function()
+        {
+            public <type2> valueOf(<type1> <type1>Parameter)
+            {
+                return <castExactly(type2, {<type1>Parameter}, sameTwoPredicates)>;
+            }
+        };
+
+        <name1>To<name2>Function functionThrows = new <name1>To<name2>Function()
+        {
+            public <type2> valueOf(<type1> <type1>Parameter)
+            {
+                throw new AssertionError();
+            }
+        };
+
+        <name1><name2>HashMap map1 = new <name1><name2>HashMap();
+        Assert.assertEquals(<(wideLiteral.(type2))("0")>, map1.getIfAbsentPutWithKey(<(literal.(type1))("0")>, function)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("0")>, map1.getIfAbsentPutWithKey(<(literal.(type1))("0")>, functionThrows)<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("0")>), map1);
+        Assert.assertEquals(<(wideLiteral.(type2))("1")>, map1.getIfAbsentPutWithKey(<(literal.(type1))("1")>, function)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("1")>, map1.getIfAbsentPutWithKey(<(literal.(type1))("1")>, functionThrows)<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("0")>, <(literal.(type1))("1")>, <(literal.(type2))("1")>), map1);
+
+        <name1><name2>HashMap map2 = new <name1><name2>HashMap();
+        Assert.assertEquals(<(wideLiteral.(type2))("1")>, map2.getIfAbsentPutWithKey(<(literal.(type1))("1")>, function)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("1")>, map2.getIfAbsentPutWithKey(<(literal.(type1))("1")>, functionThrows)<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>), map2);
+        Assert.assertEquals(<(wideLiteral.(type2))("0")>, map2.getIfAbsentPutWithKey(<(literal.(type1))("0")>, function)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("0")>, map2.getIfAbsentPutWithKey(<(literal.(type1))("0")>, functionThrows)<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("0")>, <(literal.(type1))("1")>, <(literal.(type2))("1")>), map2);
+
+        <name1><name2>HashMap map3 = new <name1><name2>HashMap();
+        Assert.assertEquals(<(wideLiteral.(type2))("32")>, map3.getIfAbsentPutWithKey(<(literal.(type1))("32")>, function)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("32")>, map3.getIfAbsentPutWithKey(<(literal.(type1))("32")>, functionThrows)<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("32")>, <(literal.(type2))("32")>), map3);
+
+        <name1><name2>HashMap map4 = new <name1><name2>HashMap();
+        Assert.assertEquals(<(wideLiteral.(type2))("33")>, map4.getIfAbsentPutWithKey(<(literal.(type1))("33")>, function)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("33")>, map4.getIfAbsentPutWithKey(<(literal.(type1))("33")>, functionThrows)<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("33")>, <(literal.(type2))("33")>), map4);
+    }
+
+    @Test
+    public void containsKey()
+    {
+        Assert.assertTrue(this.map.containsKey(<(literal.(type1))("0")>));
+        Assert.assertTrue(this.map.containsKey(<(literal.(type1))("31")>));
+        Assert.assertTrue(this.map.containsKey(<(literal.(type1))("32")>));
+        Assert.assertFalse(this.map.containsKey(<(literal.(type1))("1")>));
+        Assert.assertFalse(this.map.containsKey(<(literal.(type1))("5")>));
+        Assert.assertFalse(this.map.containsKey(<(literal.(type1))("35")>));
+
+        this.map.removeKey(<(literal.(type1))("0")>);
+        Assert.assertFalse(this.map.containsKey(<(literal.(type1))("0")>));
+        Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.get(<(literal.(type1))("0")>)<(wideDelta.(type2))>);
+        this.map.removeKey(<(literal.(type1))("0")>);
+        Assert.assertFalse(this.map.containsKey(<(literal.(type1))("0")>));
+        Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.get(<(literal.(type1))("0")>)<(wideDelta.(type2))>);
+
+        this.map.removeKey(<(literal.(type1))("1")>);
+        Assert.assertFalse(this.map.containsKey(<(literal.(type1))("1")>));
+        Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.get(<(literal.(type1))("1")>)<(wideDelta.(type2))>);
+
+        this.map.removeKey(<(literal.(type1))("31")>);
+        Assert.assertFalse(this.map.containsKey(<(literal.(type1))("31")>));
+        Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.get(<(literal.(type1))("31")>)<(wideDelta.(type2))>);
+
+        this.map.removeKey(<(literal.(type1))("32")>);
+        Assert.assertFalse(this.map.containsKey(<(literal.(type1))("32")>));
+        Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.get(<(literal.(type1))("32")>)<(wideDelta.(type2))>);
+    }
+
+    @Test
+    public void containsValue()
+    {
+        Assert.assertTrue(this.map.containsValue(<(literal.(type2))("0")>));
+        Assert.assertTrue(this.map.containsValue(<(literal.(type2))("31")>));
+        Assert.assertTrue(this.map.containsValue(<(literal.(type2))("32")>));
+
+        this.map.put(<(literal.(type1))("35")>, <(literal.(type2))("35")>);
+        Assert.assertTrue(this.map.containsValue(<(literal.(type2))("35")>));
+
+        this.map.removeKey(<(literal.(type1))("0")>);
+        Assert.assertFalse(this.map.containsValue(<(literal.(type2))("0")>));
+    }
+
+    @Test
+    public void size()
+    {
+        Assert.assertEquals(0, <name1><name2>HashMap.newMap().size());
+        Assert.assertEquals(1, <name1><name2>HashMap.newMap().withKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("0")>).size());
+        Assert.assertEquals(1, <name1><name2>HashMap.newMap().withKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>).size());
+
+        <name1><name2>HashMap hashMap1 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>, <(literal.(type1))("0")>, <(literal.(type2))("0")>);
+        Assert.assertEquals(2, hashMap1.size());
+        hashMap1.removeKey(<(literal.(type1))("1")>);
+        Assert.assertEquals(1, hashMap1.size());
+        hashMap1.removeKey(<(literal.(type1))("0")>);
+        Assert.assertEquals(0, hashMap1.size());
+
+        Assert.assertEquals(2, <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>, <(literal.(type1))("5")>, <(literal.(type2))("5")>).size());
+        Assert.assertEquals(2, <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("0")>, <(literal.(type1))("5")>, <(literal.(type2))("5")>).size());
+        Assert.assertEquals(3, <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>, <(literal.(type1))("0")>, <(literal.(type2))("0")>, <(literal.(type1))("5")>, <(literal.(type2))("5")>).size());
+        Assert.assertEquals(2, <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("6")>, <(literal.(type2))("6")>, <(literal.(type1))("5")>, <(literal.(type2))("5")>).size());
+
+        <name1><name2>HashMap hashMap = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("6")>, <(literal.(type2))("6")>, <(literal.(type1))("5")>, <(literal.(type2))("5")>);
+        hashMap.removeKey(<(literal.(type1))("5")>);
+        Assert.assertEquals(1, hashMap.size());
+    }
+
+    @Test
+    public void isEmpty()
+    {
+        Assert.assertTrue(<name1><name2>HashMap.newMap().isEmpty());
+        Assert.assertFalse(this.map.isEmpty());
+        Assert.assertFalse(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>).isEmpty());
+        Assert.assertFalse(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("0")>).isEmpty());
+        Assert.assertFalse(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("50")>, <(literal.(type2))("50")>).isEmpty());
+    }
+
+    @Test
+    public void notEmpty()
+    {
+        Assert.assertFalse(<name1><name2>HashMap.newMap().notEmpty());
+        Assert.assertTrue(this.map.notEmpty());
+        Assert.assertTrue(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>).notEmpty());
+        Assert.assertTrue(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("0")>).notEmpty());
+        Assert.assertTrue(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("50")>, <(literal.(type2))("50")>).notEmpty());
+    }
+
+    @Test
+    public void testEquals()
+    {
+        <name1><name2>HashMap map1 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("0")>, <(literal.(type1))("1")>, <(literal.(type2))("1")>, <(literal.(type1))("32")>, <(literal.(type2))("32")>);
+        <name1><name2>HashMap map2 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("32")>, <(literal.(type2))("32")>, <(literal.(type1))("0")>, <(literal.(type2))("0")>, <(literal.(type1))("1")>, <(literal.(type2))("1")>);
+        <name1><name2>HashMap map3 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("0")>, <(literal.(type1))("1")>, <(literal.(type2))("2")>, <(literal.(type1))("32")>, <(literal.(type2))("32")>);
+        <name1><name2>HashMap map4 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("1")>, <(literal.(type1))("1")>, <(literal.(type2))("1")>, <(literal.(type1))("32")>, <(literal.(type2))("32")>);
+        <name1><name2>HashMap map5 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("0")>, <(literal.(type1))("1")>, <(literal.(type2))("1")>, <(literal.(type1))("32")>, <(literal.(type2))("33")>);
+        <name1><name2>HashMap map6 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("50")>, <(literal.(type2))("0")>, <(literal.(type1))("60")>, <(literal.(type2))("1")>, <(literal.(type1))("70")>, <(literal.(type2))("33")>);
+        <name1><name2>HashMap map7 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("50")>, <(literal.(type2))("0")>, <(literal.(type1))("60")>, <(literal.(type2))("1")>);
+        <name1><name2>HashMap map8 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("0")>, <(literal.(type1))("1")>, <(literal.(type2))("1")>);
+
+        Verify.assertEqualsAndHashCode(map1, map2);
+        Verify.assertNotEquals(map1, map3);
+        Verify.assertNotEquals(map1, map4);
+        Verify.assertNotEquals(map1, map5);
+        Verify.assertNotEquals(map7, map6);
+        Verify.assertNotEquals(map7, map8);
+    }
+
+    @Test
+    public void testHashCode()
+    {
+        Assert.assertEquals(
+                UnifiedMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("0")>, <(literal.(type1))("1")>, <(literal.(type2))("1")>, <(literal.(type1))("32")>, <(literal.(type2))("32")>).hashCode(),
+                <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("32")>, <(literal.(type2))("32")>, <(literal.(type1))("0")>, <(literal.(type2))("0")>, <(literal.(type1))("1")>, <(literal.(type2))("1")>).hashCode());
+        Assert.assertEquals(
+                UnifiedMap.newWithKeysValues(<(literal.(type1))("50")>, <(literal.(type2))("0")>, <(literal.(type1))("60")>, <(literal.(type2))("1")>, <(literal.(type1))("70")>, <(literal.(type2))("33")>).hashCode(),
+                <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("50")>, <(literal.(type2))("0")>, <(literal.(type1))("60")>, <(literal.(type2))("1")>, <(literal.(type1))("70")>, <(literal.(type2))("33")>).hashCode());
+        Assert.assertEquals(UnifiedMap.newMap().hashCode(), new <name1><name2>HashMap().hashCode());
+    }
+
+    @Test
+    public void testToString()
+    {
+        Assert.assertEquals("[]", new <name1><name2>HashMap().toString());
+        Assert.assertEquals("[<(toStringLiteral.(type1))("0")>=<(toStringLiteral.(type2))("0")>]", new <name1><name2>HashMap().withKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("0")>).toString());
+        Assert.assertEquals("[<(toStringLiteral.(type1))("1")>=<(toStringLiteral.(type2))("1")>]", new <name1><name2>HashMap().withKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>).toString());
+        Assert.assertEquals("[<(toStringLiteral.(type1))("5")>=<(toStringLiteral.(type2))("5")>]", new <name1><name2>HashMap().withKeysValues(<(literal.(type1))("5")>, <(literal.(type2))("5")>).toString());
+
+        <name1><name2>HashMap map1 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("0")>, <(literal.(type1))("1")>, <(literal.(type2))("1")>);
+        Assert.assertTrue(
+                map1.toString(),
+                "[<(toStringLiteral.(type1))("0")>=<(toStringLiteral.(type2))("0")>, <(toStringLiteral.(type1))("1")>=<(toStringLiteral.(type2))("1")>]".equals(map1.toString())
+                        || "[<(toStringLiteral.(type1))("1")>=<(toStringLiteral.(type2))("1")>, <(toStringLiteral.(type1))("0")>=<(toStringLiteral.(type2))("0")>]".equals(map1.toString()));
+
+        <name1><name2>HashMap map2 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>, <(literal.(type1))("32")>, <(literal.(type2))("32")>);
+        Assert.assertTrue(
+                map2.toString(),
+                "[<(toStringLiteral.(type1))("1")>=<(toStringLiteral.(type2))("1")>, <(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>]".equals(map2.toString())
+                        || "[<(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>, <(toStringLiteral.(type1))("1")>=<(toStringLiteral.(type2))("1")>]".equals(map2.toString()));
+
+        <name1><name2>HashMap map3 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("0")>, <(literal.(type1))("32")>, <(literal.(type2))("32")>);
+        Assert.assertTrue(
+                map3.toString(),
+                "[<(toStringLiteral.(type1))("0")>=<(toStringLiteral.(type2))("0")>, <(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>]".equals(map3.toString())
+                        || "[<(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>, <(toStringLiteral.(type1))("0")>=<(toStringLiteral.(type2))("0")>]".equals(map3.toString()));
+
+        <name1><name2>HashMap map4 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("32")>, <(literal.(type2))("32")>, <(literal.(type1))("33")>, <(literal.(type2))("33")>);
+        Assert.assertTrue(
+                map4.toString(),
+                "[<(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>, <(toStringLiteral.(type1))("33")>=<(toStringLiteral.(type2))("33")>]".equals(map4.toString())
+                        || "[<(toStringLiteral.(type1))("33")>=<(toStringLiteral.(type2))("33")>, <(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>]".equals(map4.toString()));
+
+    }
+
+    @Test
+    public void makeString()
+    {
+        Assert.assertEquals("", new <name1><name2>HashMap().makeString());
+        Assert.assertEquals("<(toStringLiteral.(type1))("0")>=<(toStringLiteral.(type2))("0")>", new <name1><name2>HashMap().withKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("0")>).makeString());
+        Assert.assertEquals("<(toStringLiteral.(type1))("1")>=<(toStringLiteral.(type2))("1")>", new <name1><name2>HashMap().withKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>).makeString());
+        Assert.assertEquals("<(toStringLiteral.(type1))("5")>=<(toStringLiteral.(type2))("5")>", new <name1><name2>HashMap().withKeysValues(<(literal.(type1))("5")>, <(literal.(type2))("5")>).makeString());
+
+        <name1><name2>HashMap map1 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("0")>, <(literal.(type1))("1")>, <(literal.(type2))("1")>);
+        Assert.assertTrue(
+                map1.makeString(),
+                "<(toStringLiteral.(type1))("0")>=<(toStringLiteral.(type2))("0")>, <(toStringLiteral.(type1))("1")>=<(toStringLiteral.(type2))("1")>".equals(map1.makeString())
+                        || "<(toStringLiteral.(type1))("1")>=<(toStringLiteral.(type2))("1")>, <(toStringLiteral.(type1))("0")>=<(toStringLiteral.(type2))("0")>".equals(map1.makeString()));
+
+        <name1><name2>HashMap map2 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>, <(literal.(type1))("32")>, <(literal.(type2))("32")>);
+        Assert.assertTrue(
+                map2.makeString("[", "/", "]"),
+                "[<(toStringLiteral.(type1))("1")>=<(toStringLiteral.(type2))("1")>/<(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>]".equals(map2.makeString("[", "/", "]"))
+                        || "[<(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>/<(toStringLiteral.(type1))("1")>=<(toStringLiteral.(type2))("1")>]".equals(map2.makeString("[", "/", "]")));
+
+        <name1><name2>HashMap map3 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("0")>, <(literal.(type1))("32")>, <(literal.(type2))("32")>);
+        Assert.assertTrue(
+                map3.makeString("~"),
+                "<(toStringLiteral.(type1))("0")>=<(toStringLiteral.(type2))("0")>~<(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>".equals(map3.makeString("~"))
+                        || "<(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>~<(toStringLiteral.(type1))("0")>=<(toStringLiteral.(type2))("0")>".equals(map3.makeString("~")));
+
+        <name1><name2>HashMap map4 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("32")>, <(literal.(type2))("32")>, <(literal.(type1))("33")>, <(literal.(type2))("33")>);
+        Assert.assertTrue(
+                map4.makeString("[", ", ", "]"),
+                "[<(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>, <(toStringLiteral.(type1))("33")>=<(toStringLiteral.(type2))("33")>]".equals(map4.makeString("[", ", ", "]"))
+                        || "[<(toStringLiteral.(type1))("33")>=<(toStringLiteral.(type2))("33")>, <(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>]".equals(map4.makeString("[", ", ", "]")));
+    }
+
+    @Test
+    public void appendString()
+    {
+        Appendable appendable = new StringBuilder();
+        new <name1><name2>HashMap().appendString(appendable);
+        Assert.assertEquals("", appendable.toString());
+
+        Appendable appendable0 = new StringBuilder();
+        <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("0")>).appendString(appendable0);
+        Assert.assertEquals("<(toStringLiteral.(type1))("0")>=<(toStringLiteral.(type2))("0")>", appendable0.toString());
+
+        Appendable appendable1 = new StringBuilder();
+        <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>).appendString(appendable1);
+        Assert.assertEquals("<(toStringLiteral.(type1))("1")>=<(toStringLiteral.(type2))("1")>", appendable1.toString());
+
+        Appendable appendable2 = new StringBuilder();
+        <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("5")>, <(literal.(type2))("5")>).appendString(appendable2);
+        Assert.assertEquals("<(toStringLiteral.(type1))("5")>=<(toStringLiteral.(type2))("5")>", appendable2.toString());
+
+        Appendable appendable3 = new StringBuilder();
+        <name1><name2>HashMap map1 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("0")>, <(literal.(type1))("1")>, <(literal.(type2))("1")>);
+        map1.appendString(appendable3);
+        Assert.assertTrue(
+                appendable3.toString(),
+                "<(toStringLiteral.(type1))("0")>=<(toStringLiteral.(type2))("0")>, <(toStringLiteral.(type1))("1")>=<(toStringLiteral.(type2))("1")>".equals(appendable3.toString())
+                        || "<(toStringLiteral.(type1))("1")>=<(toStringLiteral.(type2))("1")>, <(toStringLiteral.(type1))("0")>=<(toStringLiteral.(type2))("0")>".equals(appendable3.toString()));
+
+        Appendable appendable4 = new StringBuilder();
+        <name1><name2>HashMap map2 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>, <(literal.(type1))("32")>, <(literal.(type2))("32")>);
+        map2.appendString(appendable4, "[", "/", "]");
+        Assert.assertTrue(
+                appendable4.toString(),
+                "[<(toStringLiteral.(type1))("1")>=<(toStringLiteral.(type2))("1")>/<(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>]".equals(appendable4.toString())
+                        || "[<(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>/<(toStringLiteral.(type1))("1")>=<(toStringLiteral.(type2))("1")>]".equals(appendable4.toString()));
+
+        Appendable appendable5 = new StringBuilder();
+        <name1><name2>HashMap map3 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>, <(literal.(type1))("32")>, <(literal.(type2))("32")>);
+        map3.appendString(appendable5, "[", "/", "]");
+        Assert.assertTrue(
+                appendable5.toString(),
+                "[<(toStringLiteral.(type1))("1")>=<(toStringLiteral.(type2))("1")>/<(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>]".equals(appendable5.toString())
+                        || "[<(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>/<(toStringLiteral.(type1))("1")>=<(toStringLiteral.(type2))("1")>]".equals(appendable5.toString()));
+    }
+
+    @Test
+    public void withKeysValues()
+    {
+        <name1><name2>HashMap hashMap = new <name1><name2>HashMap().withKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>);
+        <name1><name2>HashMap hashMap0 = new <name1><name2>HashMap().withKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>, <(literal.(type1))("2")>, <(literal.(type2))("2")>);
+        <name1><name2>HashMap hashMap1 = new <name1><name2>HashMap().withKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>, <(literal.(type1))("2")>, <(literal.(type2))("2")>, <(literal.(type1))("3")>, <(literal.(type2))("3")>);
+        <name1><name2>HashMap hashMap2 = new <name1><name2>HashMap().withKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>, <(literal.(type1))("2")>, <(literal.(type2))("2")>, <(literal.(type1))("3")>, <(literal.(type2))("3")>, <(literal.(type1))("4")>, <(literal.(type2))("4")>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>), hashMap);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>, <(literal.(type1))("2")>, <(literal.(type2))("2")>), hashMap0);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>, <(literal.(type1))("2")>, <(literal.(type2))("2")>, <(literal.(type1))("3")>, <(literal.(type2))("3")>), hashMap1);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>, <(literal.(type1))("2")>, <(literal.(type2))("2")>, <(literal.(type1))("3")>, <(literal.(type2))("3")>).withKeysValues(<(literal.(type1))("4")>, <(literal.(type2))("4")>), hashMap2);
+    }
+}
+
+>>

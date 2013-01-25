@@ -56,13 +56,22 @@ public class GsCollectionsCodeGenerator
                 FileUtils.createDirectory(targetPath);
 
                 boolean hasTwoPrimitives = stGroupFile.isDefined("hasTwoPrimitives") && Boolean.valueOf(stGroupFile.getInstanceOf("hasTwoPrimitives").render());
+                boolean skipBoolean = stGroupFile.isDefined("skipBoolean") && Boolean.valueOf(stGroupFile.getInstanceOf("skipBoolean").render());
 
                 if (hasTwoPrimitives)
                 {
                     for (Primitive primitive1 : Primitive.values())
                     {
+                        if (primitive1 == Primitive.BOOLEAN && skipBoolean)
+                        {
+                            continue;
+                        }
                         for (Primitive primitive2 : Primitive.values())
                         {
+                            if (primitive2 == Primitive.BOOLEAN && skipBoolean)
+                            {
+                                continue;
+                            }
                             String sourceFileName = executeTemplate(stGroupFile, primitive1, primitive2, "fileName");
                             File outputFile = new File(targetPath, sourceFileName + ".java");
 

@@ -28,18 +28,23 @@ import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class <primitive.name>ObjectHashMapTest
+/**
+ * This file was automatically generated from template file primitiveObjectHashMapTest.stg.
+ * JUnit test for {@link <name>ObjectHashMap}.
+ */
+public class <name>ObjectHashMapTest
 {
     private final <name>ObjectHashMap\<String> map = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("31")>, "thirtyOne", <(literal.(type))("32")>, "thirtyTwo");
 
     @Test
     public void defaultInitialCapacity() throws Exception
     {
-        <name>ObjectHashMap hashMap = new <name>ObjectHashMap();
         Field keys = <name>ObjectHashMap.class.getDeclaredField("keys");
         keys.setAccessible(true);
         Field values = <name>ObjectHashMap.class.getDeclaredField("values");
         values.setAccessible(true);
+
+        <name>ObjectHashMap hashMap = new <name>ObjectHashMap();
         Assert.assertEquals(16L, ((<type>[]) keys.get(hashMap)).length);
         Assert.assertEquals(16L, ((Object[]) values.get(hashMap)).length);
     }
@@ -47,11 +52,12 @@ public class <primitive.name>ObjectHashMapTest
     @Test
     public void newWithInitialCapacity() throws Exception
     {
-        <name>ObjectHashMap hashMap = new <name>ObjectHashMap(3);
         Field keys = <name>ObjectHashMap.class.getDeclaredField("keys");
         keys.setAccessible(true);
         Field values = <name>ObjectHashMap.class.getDeclaredField("values");
         values.setAccessible(true);
+
+        <name>ObjectHashMap hashMap = new <name>ObjectHashMap(3);
         Assert.assertEquals(8L, ((<type>[]) keys.get(hashMap)).length);
         Assert.assertEquals(8L, ((Object[]) values.get(hashMap)).length);
 
@@ -69,11 +75,12 @@ public class <primitive.name>ObjectHashMapTest
     @Test
     public void newMap() throws Exception
     {
-        <name>ObjectHashMap hashMap = <name>ObjectHashMap.newMap();
         Field keys = <name>ObjectHashMap.class.getDeclaredField("keys");
         keys.setAccessible(true);
         Field values = <name>ObjectHashMap.class.getDeclaredField("values");
         values.setAccessible(true);
+
+        <name>ObjectHashMap hashMap = <name>ObjectHashMap.newMap();
         Assert.assertEquals(16L, ((<type>[]) keys.get(hashMap)).length);
         Assert.assertEquals(16L, ((Object[]) values.get(hashMap)).length);
         Assert.assertEquals(new <name>ObjectHashMap(), hashMap);
@@ -505,6 +512,11 @@ public class <primitive.name>ObjectHashMapTest
 
         Assert.assertNull(this.map.put(<(literal.(type))("36")>, null));
         Assert.assertNull(this.map.get(<(literal.(type))("36")>));
+
+        <name>ObjectHashMap\<Object> emptyMap = new <name>ObjectHashMap\<Object>();
+        Assert.assertNull(emptyMap.get(<(literal.(type))("0")>));
+        Assert.assertNull(emptyMap.get(<(literal.(type))("1")>));
+        Assert.assertNull(emptyMap.get(<(literal.(type))("33")>));
     }
 
     @Test

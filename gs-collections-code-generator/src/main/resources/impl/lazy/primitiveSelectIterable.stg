@@ -371,9 +371,9 @@ allMethods(name, type) ::=<<
         {
             <type> first = sortedArray[middleIndex];
             <type> second = sortedArray[middleIndex - 1];
-            return (<castType.(type)>first + <castType.(type)>second) / 2.0;
+            return (<castDouble.(type)>first + <castDouble.(type)>second) / 2.0;
         }
-        return <castType.(type)>sortedArray[middleIndex];
+        return <castDouble.(type)>sortedArray[middleIndex];
     }
 
     public <type>[] toSortedArray()

@@ -179,7 +179,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         if (isBetweenZeroAndThirtyOne(value))
         {
             int temp = this.zeroToThirtyOne;
-            return ((temp >\>> <(bitShiftCast.(type))("value")>) & 1) != 0;
+            return ((temp >\>> <(castRealTypeToInt.(type))("value")>) & 1) != 0;
         }
         return <(equals.(type))("this.table[this.probe(value)]", "value")>;
     }
@@ -213,7 +213,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         if (isBetweenZeroAndThirtyOne(element))
         {
             int initial = this.zeroToThirtyOne;
-            this.zeroToThirtyOne |= 1 \<\< <(bitShiftCast.(type))("element")>;
+            this.zeroToThirtyOne |= 1 \<\< <(castRealTypeToInt.(type))("element")>;
             if (this.zeroToThirtyOne != initial)
             {
                 this.zeroToThirtyOneOccupied++;
@@ -226,7 +226,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
 
         if (<(equals.(type))("this.table[index]", "element")>)
         {
-            //element already present in set
+            // element already present in set
             return false;
         }
 
@@ -286,7 +286,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         if (isBetweenZeroAndThirtyOne(value))
         {
             int initial = this.zeroToThirtyOne;
-            this.zeroToThirtyOne &= ~(1 \<\< <(bitShiftCast.(type))("value")>);
+            this.zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
             if (this.zeroToThirtyOne == initial)
             {
                 return false;
@@ -371,7 +371,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         }
     }
 
-    //exposed for testing
+    // exposed for testing
     int probe(<type> element)
     {
         int index = this.index(element);
@@ -411,7 +411,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         }
     }
 
-    //exposed for testing
+    // exposed for testing
     int index(<type> element)
     {
         int code = <(hashCode.(type))("element")>;
@@ -457,9 +457,9 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         int zeroToThirtyOne = this.zeroToThirtyOne;
         while (zeroToThirtyOne != 0)
         {
-            <type> value = <(precisionCast.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
             procedure.value(value);
-            zeroToThirtyOne &= ~(1 \<\< <(bitShiftCast.(type))("value")>);
+            zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
         }
 
         for (<type> value : this.table)
@@ -477,12 +477,12 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         int zeroToThirtyOne = this.zeroToThirtyOne;
         while (zeroToThirtyOne != 0)
         {
-            <type> value = <(precisionCast.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
             if (predicate.accept(value))
             {
                 count++;
             }
-            zeroToThirtyOne &= ~(1 \<\< <(bitShiftCast.(type))("value")>);
+            zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
         }
 
         for (<type> value : this.table)
@@ -503,12 +503,12 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         int zeroToThirtyOne = this.zeroToThirtyOne;
         while (zeroToThirtyOne != 0)
         {
-            <type> value = <(precisionCast.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
             if (predicate.accept(value))
             {
                 return true;
             }
-            zeroToThirtyOne &= ~(1 \<\< <(bitShiftCast.(type))("value")>);
+            zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
         }
 
         for (<type> value : this.table)
@@ -529,12 +529,12 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         int zeroToThirtyOne = this.zeroToThirtyOne;
         while (zeroToThirtyOne != 0)
         {
-            <type> value = <(precisionCast.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
             if (!predicate.accept(value))
             {
                 return false;
             }
-            zeroToThirtyOne &= ~(1 \<\< <(bitShiftCast.(type))("value")>);
+            zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
         }
 
         for (<type> value : this.table)
@@ -557,12 +557,12 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         int zeroToThirtyOne = this.zeroToThirtyOne;
         while (zeroToThirtyOne != 0)
         {
-            <type> value = <(precisionCast.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
             if (predicate.accept(value))
             {
                 result.add(value);
             }
-            zeroToThirtyOne &= ~(1 \<\< <(bitShiftCast.(type))("value")>);
+            zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
         }
 
         for (<type> value : this.table)
@@ -585,12 +585,12 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         int zeroToThirtyOne = this.zeroToThirtyOne;
         while (zeroToThirtyOne != 0)
         {
-            <type> value = <(precisionCast.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
             if (!predicate.accept(value))
             {
                 result.add(value);
             }
-            zeroToThirtyOne &= ~(1 \<\< <(bitShiftCast.(type))("value")>);
+            zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
         }
 
         for (<type> value : this.table)
@@ -611,12 +611,12 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         int zeroToThirtyOne = this.zeroToThirtyOne;
         while (zeroToThirtyOne != 0)
         {
-            <type> value = <(precisionCast.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
             if (predicate.accept(value))
             {
                 return value;
             }
-            zeroToThirtyOne &= ~(1 \<\< <(bitShiftCast.(type))("value")>);
+            zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
         }
 
         for (<type> value : this.table)
@@ -639,9 +639,9 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         int zeroToThirtyOne = this.zeroToThirtyOne;
         while (zeroToThirtyOne != 0)
         {
-            <type> value = <(precisionCast.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
             target.add(function.valueOf(value));
-            zeroToThirtyOne &= ~(1 \<\< <(bitShiftCast.(type))("value")>);
+            zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
         }
 
         for (<type> value : this.table)
@@ -661,9 +661,9 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         int zeroToThirtyOne = this.zeroToThirtyOne;
         while (zeroToThirtyOne != 0)
         {
-            <type> value = <(precisionCast.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
             result += value;
-            zeroToThirtyOne &= ~(1 \<\< <(bitShiftCast.(type))("value")>);
+            zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
         }
 
         for (<type> value : this.table)
@@ -682,7 +682,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         {
             throw new NoSuchElementException();
         }
-        <type> max = <(castExpression.(type))("31 - Integer.numberOfLeadingZeros(this.zeroToThirtyOne)")>;
+        <type> max = <(castIntToNarrowType.(type))("31 - Integer.numberOfLeadingZeros(this.zeroToThirtyOne)")>;
         boolean isMaxSet = this.zeroToThirtyOneOccupied != 0;
 
         for (<type> value : this.table)
@@ -702,7 +702,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         {
             throw new NoSuchElementException();
         }
-        <type> min = <(precisionCast.(type))("Integer.numberOfTrailingZeros(this.zeroToThirtyOne)")>;
+        <type> min = <(castFromInt.(type))("Integer.numberOfTrailingZeros(this.zeroToThirtyOne)")>;
         boolean isMinSet = this.zeroToThirtyOneOccupied != 0;
 
         for (<type> value : this.table)
@@ -733,9 +733,9 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         {
             <type> first = sortedArray[middleIndex];
             <type> second = sortedArray[middleIndex - 1];
-            return (<castType.(type)>first + <castType.(type)>second) / 2.0;
+            return (<castDouble.(type)>first + <castDouble.(type)>second) / 2.0;
         }
-        return <castType.(type)>sortedArray[middleIndex];
+        return <castDouble.(type)>sortedArray[middleIndex];
     }
 
     public <type>[] toArray()
@@ -746,10 +746,10 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         int zeroToThirtyOne = this.zeroToThirtyOne;
         while (zeroToThirtyOne != 0)
         {
-            <type> value = <(precisionCast.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
             array[j] = value;
             j++;
-            zeroToThirtyOne &= ~(1 \<\< <(bitShiftCast.(type))("value")>);
+            zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
         }
 
         for (int i = 0; i \< this.table.length && j \< this.size(); i++)
@@ -794,9 +794,9 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         int zeroToThirtyOne = this.zeroToThirtyOne;
         while (zeroToThirtyOne != 0)
         {
-            <type> value = <(precisionCast.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
             result += <(hashCode.(type))("value")>;
-            zeroToThirtyOne &= ~(1 \<\< <(bitShiftCast.(type))("value")>);
+            zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
         }
         if (this.table != null)
         {
@@ -854,14 +854,14 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
             int zeroToThirtyOne = this.zeroToThirtyOne;
             while (zeroToThirtyOne != 0)
             {
-                <type> value = <(precisionCast.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+                <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
                 if (count > 0)
                 {
                     appendable.append(separator);
                 }
                 count++;
                 appendable.append(String.valueOf(value));
-                zeroToThirtyOne &= ~(1 \<\< <(bitShiftCast.(type))("value")>);
+                zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
             }
 
             for (<type> value : this.table)
@@ -891,9 +891,9 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         int zeroToThirtyOne = this.zeroToThirtyOne;
         while (zeroToThirtyOne != 0)
         {
-            <type> value = <(precisionCast.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
             out.write<name>(value);
-            zeroToThirtyOne &= ~(1 \<\< <(bitShiftCast.(type))("value")>);
+            zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
         }
 
         for (<type> value : this.table)
