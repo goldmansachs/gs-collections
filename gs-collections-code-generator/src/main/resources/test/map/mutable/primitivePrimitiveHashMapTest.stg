@@ -26,6 +26,9 @@ import java.lang.reflect.Field;
 import com.gs.collections.api.block.function.primitive.<name1>To<name2>Function;
 import com.gs.collections.api.block.function.primitive.<name2>Function;
 import com.gs.collections.api.block.function.primitive.<name2>Function0;
+import com.gs.collections.api.block.procedure.primitive.<name1>Procedure;
+import com.gs.collections.api.block.procedure.primitive.<name1><name2>Procedure;
+<if(!sameTwoPredicates)>import com.gs.collections.api.block.procedure.primitive.<name2>Procedure;<endif>
 import com.gs.collections.impl.list.mutable.primitive.<name1>ArrayList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.test.Verify;
@@ -617,6 +620,210 @@ public class <name1><name2>HashMapTest
                 "[<(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>, <(toStringLiteral.(type1))("33")>=<(toStringLiteral.(type2))("33")>]".equals(map4.toString())
                         || "[<(toStringLiteral.(type1))("33")>=<(toStringLiteral.(type2))("33")>, <(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>]".equals(map4.toString()));
 
+    }
+
+    @Test
+    public void forEach()
+    {
+        <name1><name2>HashMap map0 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("1")>, <(literal.(type1))("3")>, <(literal.(type2))("4")>);
+        final <type2>[] sum0 = new <type2>[1];
+        map0.forEach(new <name2>Procedure()
+        {
+            public void value(<type2> each)
+            {
+                sum0[0] += each;
+            }
+        });
+        Assert.assertEquals(sum0[0], <(literal.(type2))("5")><(wideDelta.(type2))>);
+
+        <name1><name2>HashMap map1 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("2")>, <(literal.(type1))("3")>, <(literal.(type2))("4")>);
+        final <type2>[] sum1 = new <type2>[1];
+        map1.forEach(new <name2>Procedure()
+        {
+            public void value(<type2> each)
+            {
+                sum1[0] += each;
+            }
+        });
+        Assert.assertEquals(sum1[0], <(literal.(type2))("6")><(wideDelta.(type2))>);
+
+        <name1><name2>HashMap map01 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("1")>, <(literal.(type1))("1")>, <(literal.(type2))("2")>);
+        final <type2>[] sum01 = new <type2>[1];
+        map01.forEach(new <name2>Procedure()
+        {
+            public void value(<type2> each)
+            {
+                sum01[0] += each;
+            }
+        });
+        Assert.assertEquals(sum01[0], <(literal.(type2))("3")><(wideDelta.(type2))>);
+
+        <name1><name2>HashMap map = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("3")>, <(literal.(type2))("4")>, <(literal.(type1))("4")>, <(literal.(type2))("5")>);
+        final <type2>[] sum = new <type2>[1];
+        map.forEach(new <name2>Procedure()
+        {
+            public void value(<type2> each)
+            {
+                sum[0] += each;
+            }
+        });
+        Assert.assertEquals(sum[0], <(literal.(type2))("9")><(wideDelta.(type2))>);
+    }
+
+    @Test
+    public void forEachValue()
+    {
+        <name1><name2>HashMap map0 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("1")>, <(literal.(type1))("3")>, <(literal.(type2))("4")>);
+        final <type2>[] sum0 = new <type2>[1];
+        map0.forEachValue(new <name2>Procedure()
+        {
+            public void value(<type2> each)
+            {
+                sum0[0] += each;
+            }
+        });
+        Assert.assertEquals(sum0[0], <(literal.(type2))("5")><(wideDelta.(type2))>);
+
+        <name1><name2>HashMap map1 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("2")>, <(literal.(type1))("3")>, <(literal.(type2))("4")>);
+        final <type2>[] sum1 = new <type2>[1];
+        map1.forEachValue(new <name2>Procedure()
+        {
+            public void value(<type2> each)
+            {
+                sum1[0] += each;
+            }
+        });
+        Assert.assertEquals(sum1[0], <(literal.(type2))("6")><(wideDelta.(type2))>);
+
+        <name1><name2>HashMap map01 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("1")>, <(literal.(type1))("1")>, <(literal.(type2))("2")>);
+        final <type2>[] sum01 = new <type2>[1];
+        map01.forEachValue(new <name2>Procedure()
+        {
+            public void value(<type2> each)
+            {
+                sum01[0] += each;
+            }
+        });
+        Assert.assertEquals(sum01[0], <(literal.(type2))("3")><(wideDelta.(type2))>);
+
+        <name1><name2>HashMap map = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("3")>, <(literal.(type2))("4")>, <(literal.(type1))("4")>, <(literal.(type2))("5")>);
+        final <type2>[] sum = new <type2>[1];
+        map.forEachValue(new <name2>Procedure()
+        {
+            public void value(<type2> each)
+            {
+                sum[0] += each;
+            }
+        });
+        Assert.assertEquals(sum[0], <(literal.(type2))("9")><(wideDelta.(type2))>);
+    }
+
+    @Test
+    public void forEachKey()
+    {
+        <name1><name2>HashMap map0 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("1")>, <(literal.(type1))("3")>, <(literal.(type2))("4")>);
+        final <type1>[] sum0 = new <type1>[1];
+        map0.forEachKey(new <name1>Procedure()
+        {
+            public void value(<type1> each)
+            {
+                sum0[0] += each;
+            }
+        });
+        Assert.assertEquals(sum0[0], <(literal.(type1))("3")><(wideDelta.(type1))>);
+
+        <name1><name2>HashMap map1 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("2")>, <(literal.(type1))("3")>, <(literal.(type2))("4")>);
+        final <type1>[] sum1 = new <type1>[1];
+        map1.forEachKey(new <name1>Procedure()
+        {
+            public void value(<type1> each)
+            {
+                sum1[0] += each;
+            }
+        });
+        Assert.assertEquals(sum1[0], <(literal.(type1))("4")><(wideDelta.(type1))>);
+
+        <name1><name2>HashMap map01 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("1")>, <(literal.(type1))("1")>, <(literal.(type2))("2")>);
+        final <type1>[] sum01 = new <type1>[1];
+        map01.forEachKey(new <name1>Procedure()
+        {
+            public void value(<type1> each)
+            {
+                sum01[0] += each;
+            }
+        });
+        Assert.assertEquals(sum01[0], <(literal.(type1))("1")><(wideDelta.(type1))>);
+
+        <name1><name2>HashMap map = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("3")>, <(literal.(type2))("4")>, <(literal.(type1))("4")>, <(literal.(type2))("5")>);
+        final <type1>[] sum = new <type1>[1];
+        map.forEachKey(new <name1>Procedure()
+        {
+            public void value(<type1> each)
+            {
+                sum[0] += each;
+            }
+        });
+        Assert.assertEquals(sum[0], <(literal.(type1))("7")><(wideDelta.(type1))>);
+    }
+
+    @Test
+    public void forEachKeyValue()
+    {
+        <name1><name2>HashMap map0 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("1")>, <(literal.(type1))("3")>, <(literal.(type2))("4")>);
+        final <type1>[] sumKey0 = new <type1>[1];
+        final <type2>[] sumValue0 = new <type2>[1];
+        map0.forEachKeyValue(new <name1><name2>Procedure()
+        {
+            public void value(<type1> eachKey, <type2> eachValue)
+            {
+                sumKey0[0] += eachKey;
+                sumValue0[0] += eachValue;
+            }
+        });
+        Assert.assertEquals(sumKey0[0], <(literal.(type1))("3")><(wideDelta.(type1))>);
+        Assert.assertEquals(sumValue0[0], <(literal.(type2))("5")><(wideDelta.(type2))>);
+
+        <name1><name2>HashMap map1 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("2")>, <(literal.(type1))("3")>, <(literal.(type2))("4")>);
+        final <type1>[] sumKey1 = new <type1>[1];
+        final <type2>[] sumValue1 = new <type2>[1];
+        map1.forEachKeyValue(new <name1><name2>Procedure()
+        {
+            public void value(<type1> eachKey, <type2> eachValue)
+            {
+                sumKey1[0] += eachKey;
+                sumValue1[0] += eachValue;
+            }
+        });
+        Assert.assertEquals(sumKey1[0], <(literal.(type1))("4")><(wideDelta.(type1))>);
+        Assert.assertEquals(sumValue1[0], <(literal.(type2))("6")><(wideDelta.(type2))>);
+
+        <name1><name2>HashMap map01 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("1")>, <(literal.(type1))("1")>, <(literal.(type2))("2")>);
+        final <type1>[] sumKey01 = new <type1>[1];
+        final <type2>[] sumValue01 = new <type2>[1];
+        map01.forEachKeyValue(new <name1><name2>Procedure()
+        {
+            public void value(<type1> eachKey, <type2> eachValue)
+            {
+                sumKey01[0] += eachKey;
+                sumValue01[0] += eachValue;
+            }
+        });
+        Assert.assertEquals(sumKey01[0], <(literal.(type1))("1")><(wideDelta.(type1))>);
+        Assert.assertEquals(sumValue01[0], <(literal.(type2))("3")><(wideDelta.(type2))>);
+
+        <name1><name2>HashMap map = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("3")>, <(literal.(type2))("4")>, <(literal.(type1))("4")>, <(literal.(type2))("5")>);
+        final <type1>[] sumKey = new <type1>[1];
+        final <type2>[] sumValue = new <type2>[1];
+        map.forEachKeyValue(new <name1><name2>Procedure()
+        {
+            public void value(<type1> eachKey, <type2> eachValue)
+            {
+                sumKey[0] += eachKey;
+                sumValue[0] += eachValue;
+            }
+        });
+        Assert.assertEquals(sumKey[0], <(literal.(type1))("7")><(wideDelta.(type1))>);
+        Assert.assertEquals(sumValue[0], <(literal.(type2))("9")><(wideDelta.(type2))>);
     }
 
     @Test

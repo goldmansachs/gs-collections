@@ -25,6 +25,9 @@ import java.io.IOException;
 import com.gs.collections.api.block.function.primitive.<name1>To<name2>Function;
 import com.gs.collections.api.block.function.primitive.<name2>Function;
 import com.gs.collections.api.block.function.primitive.<name2>Function0;
+import com.gs.collections.api.block.procedure.primitive.<name1>Procedure;
+import com.gs.collections.api.block.procedure.primitive.<name1><name2>Procedure;
+<if(!sameTwoPredicates)>import com.gs.collections.api.block.procedure.primitive.<name2>Procedure;<endif>
 
 /*
  * This file was automatically generated from template file primitivePrimitiveHashMap.stg.
@@ -145,6 +148,21 @@ public class <name1><name2>HashMap
     private static boolean isNonSentinelValue(<type2> value)
     {
         return value != EMPTY_VALUE;
+    }
+
+    public int size()
+    {
+        return this.occupied + (this.sentinelValues == null ? 0 : this.sentinelValues.size());
+    }
+
+    public boolean isEmpty()
+    {
+        return this.occupied + (this.sentinelValues == null ? 0 : this.sentinelValues.size()) == 0;
+    }
+
+    public boolean notEmpty()
+    {
+        return this.occupied + (this.sentinelValues == null ? 0 : this.sentinelValues.size()) != 0;
     }
 
     private void rehash()
@@ -496,6 +514,77 @@ public class <name1><name2>HashMap
         return this.makeString("[", ", ", "]");
     }
 
+    public void forEach(<name2>Procedure procedure)
+    {
+        this.forEachValue(procedure);
+    }
+
+    public void forEachValue(<name2>Procedure procedure)
+    {
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey)
+            {
+                procedure.value(this.sentinelValues.zeroValue);
+            }
+            if (this.sentinelValues.containsOneKey)
+            {
+                procedure.value(this.sentinelValues.oneValue);
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                procedure.value(this.values[i]);
+            }
+        }
+    }
+
+    public void forEachKey(<name1>Procedure procedure)
+    {
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey)
+            {
+                procedure.value(EMPTY_KEY);
+            }
+            if (this.sentinelValues.containsOneKey)
+            {
+                procedure.value(REMOVED_KEY);
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                procedure.value(this.keys[i]);
+            }
+        }
+    }
+
+    public void forEachKeyValue(<name1><name2>Procedure procedure)
+    {
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey)
+            {
+                procedure.value(EMPTY_KEY, this.sentinelValues.zeroValue);
+            }
+            if (this.sentinelValues.containsOneKey)
+            {
+                procedure.value(REMOVED_KEY, this.sentinelValues.oneValue);
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                procedure.value(this.keys[i], this.values[i]);
+            }
+        }
+    }
+
     public String makeString()
     {
         return this.makeString(", ");
@@ -567,21 +656,6 @@ public class <name1><name2>HashMap
         {
             throw new RuntimeException(e);
         }
-    }
-
-    public int size()
-    {
-        return this.occupied + (this.sentinelValues == null ? 0 : this.sentinelValues.size());
-    }
-
-    public boolean isEmpty()
-    {
-        return this.occupied + (this.sentinelValues == null ? 0 : this.sentinelValues.size()) == 0;
-    }
-
-    public boolean notEmpty()
-    {
-        return this.occupied + (this.sentinelValues == null ? 0 : this.sentinelValues.size()) != 0;
     }
 
     private static final class SentinelValues
