@@ -24,6 +24,8 @@ import com.gs.collections.api.block.predicate.primitive.<name>ObjectPredicate;
  */
 public interface MutableObject<name>Map\<K> extends Object<name>Map\<K>
 {
+    void clear();
+
     <type> removeKey(K key);
 
     <type> getIfAbsentPut(K key, <name>Function0 function);

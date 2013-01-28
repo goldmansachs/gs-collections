@@ -101,6 +101,23 @@ public class <name>ObjectHashMapTest
     }
 
     @Test
+    public void clear()
+    {
+        <name>ObjectHashMap\<Object> hashMap = new <name>ObjectHashMap\<Object>();
+        hashMap.put(<(literal.(type))("0")>, new Object());
+        hashMap.clear();
+        Assert.assertEquals(new <name>ObjectHashMap(), hashMap);
+
+        hashMap.put(<(literal.(type))("1")>, new Object());
+        hashMap.clear();
+        Assert.assertEquals(new <name>ObjectHashMap(), hashMap);
+
+        hashMap.put(<(literal.(type))("33")>, new Object());
+        hashMap.clear();
+        Assert.assertEquals(new <name>ObjectHashMap(), hashMap);
+    }
+
+    @Test
     public void removeKey()
     {
         Assert.assertNull(this.map.removeKey(<(literal.(type))("5")>));

@@ -28,6 +28,8 @@ import com.gs.collections.api.block.predicate.primitive.<name1><name2>Predicate;
  */
 public interface Mutable<name1><name2>Map extends <name1><name2>Map
 {
+    void clear();
+
     <type2> removeKey(<type1> key);
 
     <type2> getIfAbsentPut(<type1> key, <name2>Function0 function);

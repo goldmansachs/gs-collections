@@ -108,6 +108,23 @@ public class <name1><name2>HashMapTest
     }
 
     @Test
+    public void clear()
+    {
+        <name1><name2>HashMap hashMap = new <name1><name2>HashMap();
+        hashMap.put(<(literal.(type1))("0")>, <(literal.(type2))("0")>);
+        hashMap.clear();
+        Assert.assertEquals(new <name1><name2>HashMap(), hashMap);
+
+        hashMap.put(<(literal.(type1))("1")>, <(literal.(type2))("0")>);
+        hashMap.clear();
+        Assert.assertEquals(new <name1><name2>HashMap(), hashMap);
+
+        hashMap.put(<(literal.(type1))("33")>, <(literal.(type2))("0")>);
+        hashMap.clear();
+        Assert.assertEquals(new <name1><name2>HashMap(), hashMap);
+    }
+
+    @Test
     public void removeKey()
     {
         <name1><name2>HashMap map0 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("0")>, <(literal.(type1))("1")>, <(literal.(type2))("1")>);
