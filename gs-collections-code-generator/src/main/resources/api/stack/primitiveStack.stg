@@ -39,6 +39,7 @@ public interface <name>Stack extends <name>Iterable
 
     /**
      * Returns the element at the specified index.
+     *
      * @param index the location to peek into
      */
     <type> peekAt(int index);

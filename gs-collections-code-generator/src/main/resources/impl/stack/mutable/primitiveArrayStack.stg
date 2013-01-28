@@ -23,13 +23,13 @@ import java.io.ObjectOutput;
 import java.util.EmptyStackException;
 
 import com.gs.collections.api.<name>Iterable;
-import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.primitive.<name>List;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
+import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.stack.primitive.Mutable<name>Stack;
 import com.gs.collections.api.stack.primitive.<name>Stack;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
@@ -286,7 +286,7 @@ public final class <name>ArrayStack
         }
         for (int i = 0; i \< this.size(); i++)
         {
-            if(this.peekAt(i) != stack.peekAt(i))
+            if (this.peekAt(i) != stack.peekAt(i))
             {
                 return false;
             }
@@ -300,10 +300,10 @@ public final class <name>ArrayStack
         int hashCode = 1;
         <name>Iterable iterable = this.delegate.asReversed();
         <name>Iterator iterator = iterable.<type>Iterator();
-        while(iterator.hasNext())
+        while (iterator.hasNext())
         {
-           <type> item = iterator.next();
-           hashCode = 31 * hashCode + <(hashCode.(type))("item")>;
+            <type> item = iterator.next();
+            hashCode = 31 * hashCode + <(hashCode.(type))("item")>;
         }
         return hashCode;
     }
@@ -326,7 +326,7 @@ public final class <name>ArrayStack
 
     public String makeString(String start, String separator, String end)
     {
-       return this.delegate.asReversed().makeString(start,separator,end);
+        return this.delegate.asReversed().makeString(start, separator, end);
     }
 
     public void appendString(Appendable appendable)
@@ -345,7 +345,7 @@ public final class <name>ArrayStack
             String separator,
             String end)
     {
-       this.delegate.asReversed().appendString(appendable,start,separator,end);
+        this.delegate.asReversed().appendString(appendable, start, separator, end);
     }
 
     public void writeExternal(ObjectOutput out) throws IOException
