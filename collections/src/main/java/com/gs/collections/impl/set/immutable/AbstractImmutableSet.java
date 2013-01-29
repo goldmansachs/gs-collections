@@ -41,6 +41,8 @@ import com.gs.collections.impl.block.procedure.RejectProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.block.procedure.SelectProcedure;
 import com.gs.collections.impl.collection.immutable.AbstractImmutableCollection;
+import com.gs.collections.impl.factory.Sets;
+import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
 import com.gs.collections.impl.partition.set.PartitionUnifiedSet;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -107,16 +109,16 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
 
     public ImmutableSet<T> select(Predicate<? super T> predicate)
     {
-        UnifiedSet<T> result = UnifiedSet.newSet();
-        this.forEach(new SelectProcedure<T>(predicate, result));
-        return result.toImmutable();
+        FastList<T> intermediateResult = FastList.newList();
+        this.forEach(new SelectProcedure<T>(predicate, intermediateResult));
+        return Sets.immutable.ofAll(intermediateResult);
     }
 
     public ImmutableSet<T> reject(Predicate<? super T> predicate)
     {
-        UnifiedSet<T> result = UnifiedSet.newSet();
-        this.forEach(new RejectProcedure<T>(predicate, result));
-        return result.toImmutable();
+        FastList<T> intermediateResult = FastList.newList();
+        this.forEach(new RejectProcedure<T>(predicate, intermediateResult));
+        return Sets.immutable.ofAll(intermediateResult);
     }
 
     public PartitionImmutableSet<T> partition(Predicate<? super T> predicate)
