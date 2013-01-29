@@ -481,7 +481,7 @@ public interface
     /**
      * Returns the final result of evaluating function using each element of the iterable and the previous evaluation
      * result as the parameters. The injected value is used for the first parameter of the first evaluation, and the current
-     * item in the iterable is used as the second parameter.  This method is commonly called foldl or sometimes reduce.
+     * item in the iterable is used as the second parameter.  This method is commonly called fold or sometimes reduce.
      *
      * @since 1.0
      */
