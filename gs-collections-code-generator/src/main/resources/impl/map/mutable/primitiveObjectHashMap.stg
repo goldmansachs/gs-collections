@@ -18,11 +18,11 @@ package com.gs.collections.impl.map.mutable.primitive;
 
 import java.io.IOException;
 import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.Arrays;
 
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.LazyIterable;
@@ -80,7 +80,7 @@ import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.LazyIterate;
 import com.gs.collections.impl.utility.internal.IterableIterate;
 
-/*
+/**
  * This file was automatically generated from template file primitiveObjectHashMap.stg.
  *
  * @since 3.0.
@@ -498,6 +498,114 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
         V value = function.valueOf(key);
         this.values[index] = value;
         return value;
+    }
+
+    public V updateValue(<type> key, Function0\<? extends V> factory, Function\<? super V, ? extends V> function)
+    {
+        if (isEmptyKey(key))
+        {
+            if (this.sentinelValues == null)
+            {
+                this.sentinelValues = new SentinelValues\<V>();
+                this.sentinelValues.containsZeroKey = true;
+                this.sentinelValues.zeroValue = function.valueOf(factory.value());
+            }
+            else if (this.sentinelValues.containsZeroKey)
+            {
+                this.sentinelValues.zeroValue = function.valueOf(this.sentinelValues.zeroValue);
+            }
+            else
+            {
+                this.sentinelValues.containsZeroKey = true;
+                this.sentinelValues.zeroValue = function.valueOf(factory.value());
+            }
+            return this.sentinelValues.zeroValue;
+        }
+        if (isRemovedKey(key))
+        {
+            if (this.sentinelValues == null)
+            {
+                this.sentinelValues = new SentinelValues\<V>();
+                this.sentinelValues.containsOneKey = true;
+                this.sentinelValues.oneValue = function.valueOf(factory.value());
+            }
+            else if (this.sentinelValues.containsOneKey)
+            {
+                this.sentinelValues.oneValue = function.valueOf(this.sentinelValues.oneValue);
+            }
+            else
+            {
+                this.sentinelValues.containsOneKey = true;
+                this.sentinelValues.oneValue = function.valueOf(factory.value());
+            }
+            return this.sentinelValues.oneValue;
+        }
+        int index = this.probe(key);
+        if (<(equals.(type))("this.keys[index]", "key")>)
+        {
+            this.values[index] = function.valueOf(this.values[index]);
+        }
+        else
+        {
+            this.keys[index] = key;
+            this.occupied++;
+            this.values[index] = function.valueOf(factory.value());
+        }
+        return this.values[index];
+    }
+
+    public \<P> V updateValueWith(<type> key, Function0\<? extends V> factory, Function2\<? super V, ? super P, ? extends V> function, P parameter)
+    {
+        if (isEmptyKey(key))
+        {
+            if (this.sentinelValues == null)
+            {
+                this.sentinelValues = new SentinelValues\<V>();
+                this.sentinelValues.containsZeroKey = true;
+                this.sentinelValues.zeroValue = function.value(factory.value(), parameter);
+            }
+            else if (this.sentinelValues.containsZeroKey)
+            {
+                this.sentinelValues.zeroValue = function.value(this.sentinelValues.zeroValue, parameter);
+            }
+            else
+            {
+                this.sentinelValues.containsZeroKey = true;
+                this.sentinelValues.zeroValue = function.value(factory.value(), parameter);
+            }
+            return this.sentinelValues.zeroValue;
+        }
+        if (isRemovedKey(key))
+        {
+            if (this.sentinelValues == null)
+            {
+                this.sentinelValues = new SentinelValues\<V>();
+                this.sentinelValues.containsOneKey = true;
+                this.sentinelValues.oneValue = function.value(factory.value(), parameter);
+            }
+            else if (this.sentinelValues.containsOneKey)
+            {
+                this.sentinelValues.oneValue = function.value(this.sentinelValues.oneValue, parameter);
+            }
+            else
+            {
+                this.sentinelValues.containsOneKey = true;
+                this.sentinelValues.oneValue = function.value(factory.value(), parameter);
+            }
+            return this.sentinelValues.oneValue;
+        }
+        int index = this.probe(key);
+        if (<(equals.(type))("this.keys[index]", "key")>)
+        {
+            this.values[index] = function.value(this.values[index], parameter);
+        }
+        else
+        {
+            this.keys[index] = key;
+            this.occupied++;
+            this.values[index] = function.value(factory.value(), parameter);
+        }
+        return this.values[index];
     }
 
     public boolean containsKey(<type> key)

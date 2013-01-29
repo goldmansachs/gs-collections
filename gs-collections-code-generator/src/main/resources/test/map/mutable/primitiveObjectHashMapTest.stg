@@ -43,6 +43,8 @@ import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Functions0;
+import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
@@ -527,6 +529,78 @@ public class <name>ObjectHashMapTest
         <name>ObjectHashMap\<String> emptyMap1 = <name>ObjectHashMap.newMap();
         Assert.assertEquals("<(toStringLiteral.(type))("1")>", emptyMap1.getIfAbsentPutWithKey(<(literal.(type))("1")>, toString));
         Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "<(toStringLiteral.(type))("1")>"), emptyMap1);
+    }
+
+    @Test
+    public void updateValue()
+    {
+        Function\<Integer, Integer> incrementFunction = new Function\<Integer, Integer>()
+        {
+            public Integer valueOf(Integer integer)
+            {
+                return integer + 1;
+            }
+        };
+        Function0\<Integer> zeroFactory = Functions0.value(0);
+
+        <name>ObjectHashMap\<Integer> map1 = new <name>ObjectHashMap\<Integer>();
+        Assert.assertEquals(Integer.valueOf(1), map1.updateValue(<(literal.(type))("0")>, zeroFactory, incrementFunction));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, 1), map1);
+        Assert.assertEquals(Integer.valueOf(2), map1.updateValue(<(literal.(type))("0")>, zeroFactory, incrementFunction));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, 2), map1);
+        Assert.assertEquals(Integer.valueOf(1), map1.updateValue(<(literal.(type))("1")>, zeroFactory, incrementFunction));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, 2, <(literal.(type))("1")>, 1), map1);
+        Assert.assertEquals(Integer.valueOf(2), map1.updateValue(<(literal.(type))("1")>, zeroFactory, incrementFunction));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, 2, <(literal.(type))("1")>, 2), map1);
+
+        <name>ObjectHashMap\<Integer> map2 = new <name>ObjectHashMap\<Integer>();
+        Assert.assertEquals(Integer.valueOf(1), map2.updateValue(<(literal.(type))("1")>, zeroFactory, incrementFunction));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, 1), map2);
+        Assert.assertEquals(Integer.valueOf(2), map2.updateValue(<(literal.(type))("1")>, zeroFactory, incrementFunction));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, 2), map2);
+        Assert.assertEquals(Integer.valueOf(1), map2.updateValue(<(literal.(type))("0")>, zeroFactory, incrementFunction));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, 1, <(literal.(type))("1")>, 2), map2);
+        Assert.assertEquals(Integer.valueOf(2), map2.updateValue(<(literal.(type))("0")>, zeroFactory, incrementFunction));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, 2, <(literal.(type))("1")>, 2), map2);
+
+        <name>ObjectHashMap\<Integer> map3 = new <name>ObjectHashMap\<Integer>();
+        Assert.assertEquals(Integer.valueOf(1), map3.updateValue(<(literal.(type))("33")>, zeroFactory, incrementFunction));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("33")>, 1), map3);
+        Assert.assertEquals(Integer.valueOf(2), map3.updateValue(<(literal.(type))("33")>, zeroFactory, incrementFunction));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("33")>, 2), map3);
+    }
+
+    @Test
+    public void updateValueWith()
+    {
+        Function2\<Integer, Integer, Integer> incrementFunction = AddFunction.INTEGER;
+        Function0\<Integer> zeroFactory = Functions0.value(0);
+
+        <name>ObjectHashMap\<Integer> map1 = new <name>ObjectHashMap\<Integer>();
+        Assert.assertEquals(Integer.valueOf(1), map1.updateValueWith(<(literal.(type))("0")>, zeroFactory, incrementFunction, 1));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, 1), map1);
+        Assert.assertEquals(Integer.valueOf(2), map1.updateValueWith(<(literal.(type))("0")>, zeroFactory, incrementFunction, 1));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, 2), map1);
+        Assert.assertEquals(Integer.valueOf(1), map1.updateValueWith(<(literal.(type))("1")>, zeroFactory, incrementFunction, 1));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, 2, <(literal.(type))("1")>, 1), map1);
+        Assert.assertEquals(Integer.valueOf(2), map1.updateValueWith(<(literal.(type))("1")>, zeroFactory, incrementFunction, 1));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, 2, <(literal.(type))("1")>, 2), map1);
+
+        <name>ObjectHashMap\<Integer> map2 = new <name>ObjectHashMap\<Integer>();
+        Assert.assertEquals(Integer.valueOf(1), map2.updateValueWith(<(literal.(type))("1")>, zeroFactory, incrementFunction, 1));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, 1), map2);
+        Assert.assertEquals(Integer.valueOf(2), map2.updateValueWith(<(literal.(type))("1")>, zeroFactory, incrementFunction, 1));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, 2), map2);
+        Assert.assertEquals(Integer.valueOf(1), map2.updateValueWith(<(literal.(type))("0")>, zeroFactory, incrementFunction, 1));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, 1, <(literal.(type))("1")>, 2), map2);
+        Assert.assertEquals(Integer.valueOf(2), map2.updateValueWith(<(literal.(type))("0")>, zeroFactory, incrementFunction, 1));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, 2, <(literal.(type))("1")>, 2), map2);
+
+        <name>ObjectHashMap\<Integer> map3 = new <name>ObjectHashMap\<Integer>();
+        Assert.assertEquals(Integer.valueOf(1), map3.updateValueWith(<(literal.(type))("33")>, zeroFactory, incrementFunction, 1));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("33")>, 1), map3);
+        Assert.assertEquals(Integer.valueOf(2), map3.updateValueWith(<(literal.(type))("33")>, zeroFactory, incrementFunction, 1));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("33")>, 2), map3);
     }
 
     @Test

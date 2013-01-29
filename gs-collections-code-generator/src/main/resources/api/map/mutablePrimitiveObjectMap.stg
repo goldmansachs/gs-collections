@@ -16,6 +16,7 @@ package com.gs.collections.api.map.primitive;
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>ObjectPredicate;
 
@@ -35,6 +36,18 @@ public interface Mutable<name>ObjectMap\<V> extends <name>ObjectMap\<V>
     V getIfAbsentPutWithKey(<type> key, <name>ToObjectFunction\<? extends V> function);
 
     \<P> V getIfAbsentPutWith(<type> key, Function\<? super P, ? extends V> function, P parameter);
+
+    /**
+     * Look up the value associated with {@code key}, apply the {@code function} to it, and replace the value. If there
+     * is no value associated with {@code key}, start it off with a value supplied by {@code factory}.
+     */
+    V updateValue(<type> key, Function0\<? extends V> factory, Function\<? super V, ? extends V> function);
+
+    /**
+     * Same as {@link #updateValue(<type>, Function0, Function)} with a Function2 and specified parameter which is
+     * passed to the function.
+     */
+    \<P> V updateValueWith(<type> key, Function0\<? extends V> factory, Function2\<? super V, ? super P, ? extends V> function, P parameter);
 
     Mutable<name>ObjectMap\<V> select(<name>ObjectPredicate\<? super V> predicate);
 

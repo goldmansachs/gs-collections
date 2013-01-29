@@ -23,9 +23,10 @@ package com.gs.collections.impl.map.mutable.primitive;
 
 import java.lang.reflect.Field;
 
-import com.gs.collections.api.block.function.primitive.<name1>To<name2>Function;
+<if(!sameTwoPredicates)>import com.gs.collections.api.block.function.primitive.<name1>To<name2>Function;<endif>
 import com.gs.collections.api.block.function.primitive.<name2>Function;
 import com.gs.collections.api.block.function.primitive.<name2>Function0;
+import com.gs.collections.api.block.function.primitive.<name2>To<name2>Function;
 import com.gs.collections.api.block.procedure.primitive.<name1>Procedure;
 import com.gs.collections.api.block.procedure.primitive.<name1><name2>Procedure;
 <if(!sameTwoPredicates)>import com.gs.collections.api.block.procedure.primitive.<name2>Procedure;<endif>
@@ -483,6 +484,44 @@ public class <name1><name2>HashMapTest
         Assert.assertEquals(<(wideLiteral.(type2))("33")>, map4.getIfAbsentPutWithKey(<(literal.(type1))("33")>, function)<(wideDelta.(type2))>);
         Assert.assertEquals(<(wideLiteral.(type2))("33")>, map4.getIfAbsentPutWithKey(<(literal.(type1))("33")>, functionThrows)<(wideDelta.(type2))>);
         Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("33")>, <(literal.(type2))("33")>), map4);
+    }
+
+    @Test
+    public void updateValue()
+    {
+        <name2>To<name2>Function incrementFunction = new <name2>To<name2>Function()
+        {
+            public <type2> valueOf(<type2> value)
+            {
+                return <(castIntToNarrowType.(type2))({value + <(literal.(type2))("1")>})>;
+            }
+        };
+
+        <name1><name2>HashMap map1 = new <name1><name2>HashMap();
+        Assert.assertEquals(<(wideLiteral.(type2))("1")>, map1.updateValue(<(literal.(type1))("0")>, <(literal.(type2))("0")>, incrementFunction)<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("1")>), map1);
+        Assert.assertEquals(<(wideLiteral.(type2))("2")>, map1.updateValue(<(literal.(type1))("0")>, <(literal.(type2))("0")>, incrementFunction)<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("2")>), map1);
+        Assert.assertEquals(<(wideLiteral.(type2))("1")>, map1.updateValue(<(literal.(type1))("1")>, <(literal.(type2))("0")>, incrementFunction)<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("2")>, <(literal.(type1))("1")>, <(literal.(type2))("1")>), map1);
+        Assert.assertEquals(<(wideLiteral.(type2))("2")>, map1.updateValue(<(literal.(type1))("1")>, <(literal.(type2))("0")>, incrementFunction)<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("2")>, <(literal.(type1))("1")>, <(literal.(type2))("2")>), map1);
+
+        <name1><name2>HashMap map2 = new <name1><name2>HashMap();
+        Assert.assertEquals(<(wideLiteral.(type2))("1")>, map2.updateValue(<(literal.(type1))("1")>, <(literal.(type2))("0")>, incrementFunction)<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>), map2);
+        Assert.assertEquals(<(wideLiteral.(type2))("2")>, map2.updateValue(<(literal.(type1))("1")>, <(literal.(type2))("0")>, incrementFunction)<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("2")>), map2);
+        Assert.assertEquals(<(wideLiteral.(type2))("1")>, map2.updateValue(<(literal.(type1))("0")>, <(literal.(type2))("0")>, incrementFunction)<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("1")>, <(literal.(type1))("1")>, <(literal.(type2))("2")>), map2);
+        Assert.assertEquals(<(wideLiteral.(type2))("2")>, map2.updateValue(<(literal.(type1))("0")>, <(literal.(type2))("0")>, incrementFunction)<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("2")>, <(literal.(type1))("1")>, <(literal.(type2))("2")>), map2);
+
+        <name1><name2>HashMap map3 = new <name1><name2>HashMap();
+        Assert.assertEquals(<(wideLiteral.(type2))("1")>, map3.updateValue(<(literal.(type1))("33")>, <(literal.(type2))("0")>, incrementFunction)<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("33")>, <(literal.(type2))("1")>), map3);
+        Assert.assertEquals(<(wideLiteral.(type2))("2")>, map3.updateValue(<(literal.(type1))("33")>, <(literal.(type2))("0")>, incrementFunction)<(wideDelta.(type2))>);
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("33")>, <(literal.(type2))("2")>), map3);
     }
 
     @Test

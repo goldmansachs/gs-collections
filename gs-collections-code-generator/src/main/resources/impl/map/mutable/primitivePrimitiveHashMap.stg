@@ -23,14 +23,15 @@ package com.gs.collections.impl.map.mutable.primitive;
 import java.io.IOException;
 import java.util.Arrays;
 
-import com.gs.collections.api.block.function.primitive.<name1>To<name2>Function;
+<if(!sameTwoPredicates)>import com.gs.collections.api.block.function.primitive.<name1>To<name2>Function;<endif>
 import com.gs.collections.api.block.function.primitive.<name2>Function;
 import com.gs.collections.api.block.function.primitive.<name2>Function0;
+import com.gs.collections.api.block.function.primitive.<name2>To<name2>Function;
 import com.gs.collections.api.block.procedure.primitive.<name1>Procedure;
 import com.gs.collections.api.block.procedure.primitive.<name1><name2>Procedure;
 <if(!sameTwoPredicates)>import com.gs.collections.api.block.procedure.primitive.<name2>Procedure;<endif>
 
-/*
+/**
  * This file was automatically generated from template file primitivePrimitiveHashMap.stg.
  *
  * @since 3.0.
@@ -362,6 +363,60 @@ public class <name1><name2>HashMap
     public <type2> getIfAbsentPutWithKey(<type1> key, <name1>To<name2>Function function)
     {
         <getIfAbsentPut({<type2> value = function.valueOf(key);})>
+    }
+
+    public <type2> updateValue(<type1> key, <type2> initialValueIfAbsent, <name2>To<name2>Function function)
+    {
+        if (isEmptyKey(key))
+        {
+            if (this.sentinelValues == null)
+            {
+                this.sentinelValues = new SentinelValues();
+                this.sentinelValues.containsZeroKey = true;
+                this.sentinelValues.zeroValue = function.valueOf(initialValueIfAbsent);
+            }
+            else if (this.sentinelValues.containsZeroKey)
+            {
+                this.sentinelValues.zeroValue = function.valueOf(this.sentinelValues.zeroValue);
+            }
+            else
+            {
+                this.sentinelValues.containsZeroKey = true;
+                this.sentinelValues.zeroValue = function.valueOf(initialValueIfAbsent);
+            }
+            return this.sentinelValues.zeroValue;
+        }
+        if (isRemovedKey(key))
+        {
+            if (this.sentinelValues == null)
+            {
+                this.sentinelValues = new SentinelValues();
+                this.sentinelValues.containsOneKey = true;
+                this.sentinelValues.oneValue = function.valueOf(initialValueIfAbsent);
+            }
+            else if (this.sentinelValues.containsOneKey)
+            {
+                this.sentinelValues.oneValue = function.valueOf(this.sentinelValues.oneValue);
+            }
+            else
+            {
+                this.sentinelValues.containsOneKey = true;
+                this.sentinelValues.oneValue = function.valueOf(initialValueIfAbsent);
+            }
+            return this.sentinelValues.oneValue;
+        }
+        int index = this.probe(key);
+        if (<(equals.(type1))("this.keys[index]", "key")>)
+        {
+            this.values[index] = function.valueOf(this.values[index]);
+        }
+        else
+        {
+            this.keys[index] = key;
+            this.occupied++;
+            this.values[index] = function.valueOf(initialValueIfAbsent);
+        }
+        return this.values[index];
     }
 
     public boolean containsKey(<type1> key)
