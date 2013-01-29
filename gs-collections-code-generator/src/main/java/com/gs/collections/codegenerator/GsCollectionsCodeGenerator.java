@@ -36,8 +36,9 @@ public class GsCollectionsCodeGenerator
     private final File moduleBaseDir;
     private final List<URL> classPathURLs;
     private boolean isTest;
-    private STGroupFile stGroupFile;
+    private STGroupFile templateFile;
     private final STErrorListener stErrorListener;
+    private URL url;
 
     public GsCollectionsCodeGenerator(String templateDirectory, File moduleBaseDir, List<URL> classPathURLs, ErrorListener errorListener)
     {
@@ -52,17 +53,18 @@ public class GsCollectionsCodeGenerator
         List<URL> allTemplateFilesFromClassPath = FileUtils.getAllTemplateFilesFromClasspath(this.templateDirectory, this.classPathURLs);
         for (URL url : allTemplateFilesFromClassPath)
         {
-            this.stGroupFile = new STGroupFile(url, "UTF-8", '<', '>');
-            this.stGroupFile.setListener(this.stErrorListener);
-            this.stGroupFile.registerRenderer(String.class, new IntegerOrStringRenderer());
-            if (this.stGroupFile.isDefined("fileName"))
+            this.url = url;
+            this.templateFile = new STGroupFile(this.url, "UTF-8", '<', '>');
+            this.templateFile.setListener(this.stErrorListener);
+            this.templateFile.registerRenderer(String.class, new IntegerOrStringRenderer());
+            if (this.templateFile.isDefined("fileName"))
             {
-                this.setTest(this.stGroupFile);
-                File targetPath = this.constructTargetPath(this.stGroupFile);
+                this.setTest();
+                File targetPath = this.constructTargetPath();
                 FileUtils.createDirectory(targetPath);
 
-                boolean hasTwoPrimitives = this.stGroupFile.isDefined("hasTwoPrimitives") && Boolean.valueOf(this.stGroupFile.getInstanceOf("hasTwoPrimitives").render());
-                boolean skipBoolean = this.stGroupFile.isDefined("skipBoolean") && Boolean.valueOf(this.stGroupFile.getInstanceOf("skipBoolean").render());
+                boolean hasTwoPrimitives = this.templateFile.isDefined("hasTwoPrimitives") && Boolean.valueOf(this.templateFile.getInstanceOf("hasTwoPrimitives").render());
+                boolean skipBoolean = this.templateFile.isDefined("skipBoolean") && Boolean.valueOf(this.templateFile.getInstanceOf("skipBoolean").render());
 
                 if (hasTwoPrimitives)
                 {
@@ -78,12 +80,12 @@ public class GsCollectionsCodeGenerator
                             {
                                 continue;
                             }
-                            String sourceFileName = executeTemplate(this.stGroupFile, primitive1, primitive2, "fileName");
+                            String sourceFileName = this.executeTemplate(primitive1, primitive2, "fileName");
                             File outputFile = new File(targetPath, sourceFileName + ".java");
 
                             if (!sourceFileExists(outputFile))
                             {
-                                String classContents = executeTemplate(this.stGroupFile, primitive1, primitive2, "class");
+                                String classContents = this.executeTemplate(primitive1, primitive2, "class");
                                 FileUtils.writeToFile(classContents, outputFile);
                             }
                         }
@@ -93,12 +95,12 @@ public class GsCollectionsCodeGenerator
                 {
                     for (Primitive primitive : Primitive.values())
                     {
-                        String sourceFileName = executeTemplate(this.stGroupFile, primitive, "fileName");
+                        String sourceFileName = this.executeTemplate(primitive, "fileName");
                         File outputFile = new File(targetPath, sourceFileName + ".java");
 
                         if (!sourceFileExists(outputFile))
                         {
-                            String classContents = executeTemplate(this.stGroupFile, primitive, "class");
+                            String classContents = this.executeTemplate(primitive, "class");
                             FileUtils.writeToFile(classContents, outputFile);
                         }
                     }
@@ -107,40 +109,40 @@ public class GsCollectionsCodeGenerator
         }
     }
 
-    private static String executeTemplate(STGroupFile stGroupFile, Primitive primitive, String templateName)
+    private String executeTemplate(Primitive primitive, String templateName)
     {
-        ST template = findTemplate(stGroupFile, templateName);
+        ST template = this.findTemplate(templateName);
         template.add("primitive", primitive);
         return template.render();
     }
 
-    private static String executeTemplate(STGroupFile stGroupFile, Primitive primitive1, Primitive primitive2, String templateName)
+    private String executeTemplate(Primitive primitive1, Primitive primitive2, String templateName)
     {
-        ST template = findTemplate(stGroupFile, templateName);
+        ST template = this.findTemplate(templateName);
         template.add("primitive1", primitive1);
         template.add("primitive2", primitive2);
         template.add("sameTwoPredicates", primitive1 == primitive2);
         return template.render();
     }
 
-    private static ST findTemplate(STGroupFile stGroupFile, String templateName)
+    private ST findTemplate(String templateName)
     {
-        ST template = stGroupFile.getInstanceOf(templateName);
+        ST template = this.templateFile.getInstanceOf(templateName);
         if (template == null)
         {
-            throw new RuntimeException("Could not find template " + templateName + " in " + stGroupFile.getFileName());
+            throw new RuntimeException("Could not find template " + templateName + " in " + this.templateFile.getFileName());
         }
         return template;
     }
 
-    private void setTest(STGroupFile templateFile)
+    private void setTest()
     {
-        this.isTest = templateFile.getInstanceOf("isTest") == null ? false : Boolean.valueOf(templateFile.getInstanceOf("isTest").render());
+        this.isTest = this.templateFile.getInstanceOf("isTest") == null ? false : Boolean.valueOf(this.templateFile.getInstanceOf("isTest").render());
     }
 
-    private File constructTargetPath(STGroupFile templateFile)
+    private File constructTargetPath()
     {
-        ST targetPath = findTemplate(templateFile, "targetPath");
+        ST targetPath = this.findTemplate("targetPath");
         return this.isTest ? new File(this.moduleBaseDir, GENERATED_TEST_SOURCES_LOCATION + targetPath.render())
                 : new File(this.moduleBaseDir, GENERATED_SOURCES_LOCATION + targetPath.render());
     }
@@ -175,8 +177,9 @@ public class GsCollectionsCodeGenerator
 
         private void logError(STMessage stMessage, String errorType)
         {
-            String error = String.format("String template %s error while processing [%s]: %s", errorType, GsCollectionsCodeGenerator.this.stGroupFile, stMessage.toString());
+            String error = String.format("String template %s error while processing [%s]: %s", errorType, GsCollectionsCodeGenerator.this.url.getPath(), stMessage.toString());
             this.errorListener.error(error);
+            throw new RuntimeException();
         }
 
         public void compileTimeError(STMessage stMessage)
