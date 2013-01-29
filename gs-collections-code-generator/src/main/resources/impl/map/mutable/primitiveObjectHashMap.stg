@@ -1691,7 +1691,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
 
         if (this.sentinelValues != null)
         {
-            if (this.sentinelValues.containsZeroKey && (comparator.compare(min, this.sentinelValues.zeroValue) > 0))
+            if (this.sentinelValues.containsZeroKey)
             {
                 min = this.sentinelValues.zeroValue;
                 isMinSet = true;
@@ -1725,7 +1725,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
 
         if (this.sentinelValues != null)
         {
-            if (this.sentinelValues.containsZeroKey && (comparator.compare(max, this.sentinelValues.zeroValue) \< 0))
+            if (this.sentinelValues.containsZeroKey)
             {
                 max = this.sentinelValues.zeroValue;
                 isMaxSet = true;
@@ -1769,7 +1769,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
 
         if (this.sentinelValues != null)
         {
-            if (this.sentinelValues.containsZeroKey && ((Comparable\<V>) function.valueOf(this.sentinelValues.zeroValue)).compareTo(max) > 0)
+            if (this.sentinelValues.containsZeroKey)
             {
                 max = this.sentinelValues.zeroValue;
                 isMaxSet = true;
@@ -1803,7 +1803,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
 
         if (this.sentinelValues != null)
         {
-            if (this.sentinelValues.containsZeroKey && ((Comparable\<V>) function.valueOf(this.sentinelValues.zeroValue)).compareTo(min) \< 0)
+            if (this.sentinelValues.containsZeroKey)
             {
                 min = this.sentinelValues.zeroValue;
                 isMinSet = true;

@@ -18,6 +18,8 @@ body(type, name) ::= <<
 package com.gs.collections.impl.map.mutable.primitive;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.Comparator;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
@@ -37,10 +39,14 @@ import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.<name>ObjectProcedure;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
 import org.junit.Assert;
@@ -650,6 +656,56 @@ public class <name>ObjectHashMapTest
     }
 
     @Test
+    public void collect()
+    {
+        <name>ObjectHashMap\<String> map1 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
+
+        Assert.assertEquals(FastList.newListWith("ZERO", "ONE", "NINE"), map1.collect(new Function\<String, String>()
+        {
+            public String valueOf(String object)
+            {
+                return object.toUpperCase();
+            }
+        }));
+    }
+
+    @Test
+    public void collectWith()
+    {
+        <name>ObjectHashMap\<String> map1 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
+
+        Assert.assertEquals(FastList.newListWith("ZERO!", "ONE!", "NINE!"), map1.collectWith(new Function2\<String, String, String>()
+        {
+            public String value(String argument1, String argument2)
+            {
+                return argument1.toUpperCase() + argument2;
+            }
+        }, "!", FastList.\<String>newList()));
+    }
+
+    @Test
+    public void collectIf()
+    {
+        <name>ObjectHashMap\<String> map1 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
+
+        Predicate\<String> endsWithNe = new Predicate\<String>()
+        {
+            public boolean accept(String each)
+            {
+                return each.endsWith("ne");
+            }
+        };
+
+        Assert.assertEquals(FastList.newListWith("ONE", "NINE"), map1.collectIf(endsWithNe, new Function\<String, String>()
+        {
+            public String valueOf(String object)
+            {
+                return object.toUpperCase();
+            }
+        }));
+    }
+
+    @Test
     public void detect()
     {
         <name>ObjectHashMap\<String> map1 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
@@ -816,12 +872,19 @@ public class <name>ObjectHashMapTest
             }
         };
 
-        Verify.assertAllSatisfy(map1, containsE);
+        Assert.assertTrue(map1.allSatisfy(containsE));
         Assert.assertFalse(map1.allSatisfy(new Predicate\<String>()
         {
             public boolean accept(String each)
             {
                 return each.endsWith("o");
+            }
+        }));
+        Assert.assertFalse(map1.allSatisfy(new Predicate\<String>()
+        {
+            public boolean accept(String each)
+            {
+                return each.contains("o");
             }
         }));
         Assert.assertFalse(map1.allSatisfy(new Predicate\<String>()
@@ -956,6 +1019,196 @@ public class <name>ObjectHashMapTest
     }
 
     @Test
+    public void toSortedList()
+    {
+        <name>ObjectHashMap\<String> map1 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("9")>, "nine");
+        <name>ObjectHashMap\<String> map2 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
+        <name>ObjectHashMap\<String> map3 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("5")>, "five", <(literal.(type))("9")>, "nine");
+
+        Assert.assertEquals(map1.toSortedList().toString(),
+                FastList.newListWith("nine", "zero"), map1.toSortedList());
+        Assert.assertEquals(map2.toSortedList().toString(),
+                FastList.newListWith("nine", "one"), map2.toSortedList());
+        Assert.assertEquals(map3.toSortedList().toString(), FastList.newListWith("five", "nine"), map3.toSortedList());
+
+        Comparator\<String> comparator = new Comparator\<String>()
+        {
+            public int compare(String o1, String o2)
+            {
+                return o1.substring(1).compareTo(o2.substring(1));
+            }
+        };
+        Assert.assertEquals(map1.toSortedList(comparator).toString(),
+                FastList.newListWith("zero", "nine"), map1.toSortedList(comparator));
+        Assert.assertEquals(map2.toSortedList(comparator).toString(),
+                FastList.newListWith("nine", "one"), map2.toSortedList(comparator));
+        Assert.assertEquals(map3.toSortedList(comparator).toString(), FastList.newListWith("nine", "five"), map3.toSortedList(comparator));
+
+        Function\<String, String> substring = new Function\<String, String>()
+        {
+            public String valueOf(String object)
+            {
+                return object.substring(1);
+            }
+        };
+        Assert.assertEquals(map1.toSortedListBy(substring).toString(),
+                FastList.newListWith("zero", "nine"), map1.toSortedListBy(substring));
+        Assert.assertEquals(map2.toSortedListBy(substring).toString(),
+                FastList.newListWith("nine", "one"), map2.toSortedListBy(substring));
+        Assert.assertEquals(map3.toSortedListBy(substring).toString(), FastList.newListWith("nine", "five"), map3.toSortedListBy(substring));
+    }
+
+    @Test
+    public void toSet()
+    {
+        <name>ObjectHashMap\<String> map1 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("5")>, "zero", <(literal.(type))("9")>, "nine");
+        <name>ObjectHashMap\<String> map2 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("5")>, "one", <(literal.(type))("9")>, "nine");
+        <name>ObjectHashMap\<String> map3 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("5")>, "five", <(literal.(type))("6")>, "five", <(literal.(type))("9")>, "nine");
+
+        Assert.assertEquals(map1.toSet().toString(), UnifiedSet.newSetWith("zero", "nine"), map1.toSet());
+        Assert.assertEquals(map2.toSet().toString(), UnifiedSet.newSetWith("one", "nine"), map2.toSet());
+        Assert.assertEquals(map3.toSet().toString(), UnifiedSet.newSetWith("five", "nine"), map3.toSet());
+    }
+
+    @Test
+    public void toSortedSet()
+    {
+        <name>ObjectHashMap\<String> map1 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("5")>, "zero", <(literal.(type))("9")>, "nine");
+        <name>ObjectHashMap\<String> map2 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("5")>, "one", <(literal.(type))("9")>, "nine");
+        <name>ObjectHashMap\<String> map3 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("5")>, "five", <(literal.(type))("6")>, "five", <(literal.(type))("9")>, "nine");
+
+        Assert.assertEquals(map1.toSortedSet().toString(),
+                UnifiedSet.newSetWith("nine", "zero"), map1.toSortedSet());
+        Assert.assertEquals(map2.toSortedSet().toString(),
+                UnifiedSet.newSetWith("nine", "one"), map2.toSortedSet());
+        Assert.assertEquals(map3.toSortedSet().toString(), UnifiedSet.newSetWith("five", "nine"), map3.toSortedSet());
+
+        Comparator\<String> comparator = new Comparator\<String>()
+        {
+            public int compare(String o1, String o2)
+            {
+                return o1.substring(1).compareTo(o2.substring(1));
+            }
+        };
+        Assert.assertEquals(map1.toSortedSet(comparator).toString(),
+                UnifiedSet.newSetWith("zero", "nine"), map1.toSortedSet(comparator));
+        Assert.assertEquals(map2.toSortedSet(comparator).toString(),
+                UnifiedSet.newSetWith("nine", "one"), map2.toSortedSet(comparator));
+        Assert.assertEquals(map3.toSortedSet(comparator).toString(), UnifiedSet.newSetWith("nine", "five"), map3.toSortedSet(comparator));
+
+        Function\<String, String> substring = new Function\<String, String>()
+        {
+            public String valueOf(String object)
+            {
+                return object.substring(1);
+            }
+        };
+        Assert.assertEquals(map1.toSortedSetBy(substring).toString(),
+                UnifiedSet.newSetWith("zero", "nine"), map1.toSortedSetBy(substring));
+        Assert.assertEquals(map2.toSortedSetBy(substring).toString(),
+                UnifiedSet.newSetWith("nine", "one"), map2.toSortedSetBy(substring));
+        Assert.assertEquals(map3.toSortedSetBy(substring).toString(), UnifiedSet.newSetWith("nine", "five"), map3.toSortedSetBy(substring));
+    }
+
+    @Test
+    public void toBag()
+    {
+        <name>ObjectHashMap\<String> map1 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("5")>, "zero", <(literal.(type))("9")>, "nine");
+        <name>ObjectHashMap\<String> map2 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("5")>, "one", <(literal.(type))("9")>, "nine");
+        <name>ObjectHashMap\<String> map3 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("5")>, "five", <(literal.(type))("6")>, "five", <(literal.(type))("9")>, "nine");
+
+        Assert.assertEquals(HashBag.newBagWith("zero", "zero", "nine"), map1.toBag());
+        Assert.assertEquals(HashBag.newBagWith("one", "one", "nine"), map2.toBag());
+        Assert.assertEquals(HashBag.newBagWith("five", "five", "nine"), map3.toBag());
+    }
+
+    @Test
+    public void toMap()
+    {
+        <name>ObjectHashMap\<String> map1 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "a", <(literal.(type))("9")>, "abcd");
+        <name>ObjectHashMap\<String> map2 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "ab", <(literal.(type))("9")>, "abcd");
+        <name>ObjectHashMap\<String> map3 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("5")>, "abc", <(literal.(type))("9")>, "abcd");
+
+        Function\<String, Integer> keyFunction = new Function\<String, Integer>()
+        {
+            public Integer valueOf(String object)
+            {
+                return object.length();
+            }
+        };
+        Function\<String, String> valueFunction = Functions.getPassThru();
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, "a", 4, "abcd"), map1.toMap(keyFunction, valueFunction));
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(2, "ab", 4, "abcd"), map2.toMap(keyFunction, valueFunction));
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(3, "abc", 4, "abcd"), map3.toMap(keyFunction, valueFunction));
+    }
+
+    @Test
+    public void toSortedMap()
+    {
+        <name>ObjectHashMap\<String> map1 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "z", <(literal.(type))("9")>, "abcd");
+        <name>ObjectHashMap\<String> map2 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "ab", <(literal.(type))("9")>, "abcd");
+        <name>ObjectHashMap\<String> map3 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("5")>, "zyx", <(literal.(type))("9")>, "abcd");
+
+        Function\<String, Integer> keyFunction = new Function\<String, Integer>()
+        {
+            public Integer valueOf(String object)
+            {
+                return object.length();
+            }
+        };
+        Function\<String, String> valueFunction = Functions.getPassThru();
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(4, "abcd", 1, "z"), map1.toSortedMap(keyFunction, valueFunction));
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(2, "ab", 4, "abcd"), map2.toSortedMap(keyFunction, valueFunction));
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(4, "abcd", 3, "zyx"), map3.toSortedMap(keyFunction, valueFunction));
+    }
+
+    @Test
+    public void toArray()
+    {
+        <name>ObjectHashMap\<String> map1 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "z", <(literal.(type))("9")>, "abcd");
+        <name>ObjectHashMap\<String> map2 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "ab", <(literal.(type))("9")>, "abcd");
+        <name>ObjectHashMap\<String> map3 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("5")>, "zyx", <(literal.(type))("9")>, "abcd");
+
+        Assert.assertTrue(map1.asLazy().toString(), Arrays.equals(new String[]{"abcd", "z"}, map1.toArray())
+                || Arrays.equals(new String[]{"z", "abcd"}, map1.toArray()));
+        Assert.assertTrue(map2.asLazy().toString(), Arrays.equals(new String[]{"abcd", "ab"}, map2.toArray())
+                || Arrays.equals(new String[]{"ab", "abcd"}, map2.toArray()));
+        Assert.assertTrue(map3.asLazy().toString(), Arrays.equals(new String[]{"abcd", "zyx"}, map3.toArray())
+                || Arrays.equals(new String[]{"zyx", "abcd"}, map3.toArray()));
+
+        Assert.assertTrue(map1.asLazy().toString(), Arrays.equals(new String[]{"abcd", "z"}, map1.toArray(new String[2]))
+                || Arrays.equals(new String[]{"z", "abcd"}, map1.toArray()));
+        Assert.assertTrue(map2.asLazy().toString(), Arrays.equals(new String[]{"abcd", "ab"}, map2.toArray(new String[2]))
+                || Arrays.equals(new String[]{"ab", "abcd"}, map2.toArray()));
+        Assert.assertTrue(map3.asLazy().toString(), Arrays.equals(new String[]{"abcd", "zyx"}, map3.toArray(new String[2]))
+                || Arrays.equals(new String[]{"zyx", "abcd"}, map3.toArray()));
+    }
+
+    @Test
+    public void min()
+    {
+        <name>ObjectHashMap\<String> map1 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "z", <(literal.(type))("9")>, "abcd");
+        <name>ObjectHashMap\<String> map2 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "ab", <(literal.(type))("9")>, "abcd");
+        <name>ObjectHashMap\<String> map3 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("5")>, "zyx", <(literal.(type))("9")>, "abcd");
+
+        Assert.assertEquals("abcd", map1.min());
+        Assert.assertEquals("ab", map2.min());
+        Assert.assertEquals("abcd", map3.min());
+    }
+
+    @Test
+    public void max()
+    {
+        <name>ObjectHashMap\<String> map1 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "z", <(literal.(type))("9")>, "abcd");
+        <name>ObjectHashMap\<String> map2 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "ab", <(literal.(type))("9")>, "abcd");
+        <name>ObjectHashMap\<String> map3 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("5")>, "zyx", <(literal.(type))("9")>, "abcd");
+
+        Assert.assertEquals("z", map1.max());
+        Assert.assertEquals("abcd", map2.max());
+        Assert.assertEquals("zyx", map3.max());
+    }
+
+    @Test
     public void reject()
     {
         <name>ObjectHashMap\<String> map1 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
@@ -1069,6 +1322,24 @@ public class <name>ObjectHashMapTest
                 return !argument1.endsWith(argument2);
             }
         },"o", FastList.\<String>newList()));
+    }
+
+    @Test
+    public void partition()
+    {
+        <name>ObjectHashMap\<String> map1 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
+
+        Predicate\<String> endsWithNe = new Predicate\<String>()
+        {
+            public boolean accept(String each)
+            {
+                return each.endsWith("ne");
+            }
+        };
+
+        PartitionMutableList\<String> partition = map1.partition(endsWithNe);
+        Assert.assertTrue(FastList.newListWith("one", "nine").equals(partition.getSelected()) || FastList.newListWith("nine", "one").equals(partition.getSelected()));
+        Assert.assertEquals(FastList.newListWith("zero"), partition.getRejected());
     }
 
     @Test
@@ -1408,6 +1679,7 @@ public class <name>ObjectHashMapTest
         Assert.assertNotEquals(map1, map3);
         Assert.assertNotEquals(map1, map4);
         Assert.assertNotEquals(map1, map5);
+        Assert.assertNotEquals(map6, map5);
         Assert.assertNotEquals(map7, map6);
         Assert.assertNotEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, null), <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("6")>, ""));
         Assert.assertNotEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("5")>, null), <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("6")>, ""));
