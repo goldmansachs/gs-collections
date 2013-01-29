@@ -22,6 +22,7 @@ import java.util.Iterator;
 
 import com.gs.collections.api.IntIterable;
 import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.bag.primitive.IntBag;
 import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntToObjectFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
@@ -31,7 +32,11 @@ import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.iterator.IntIterator;
+import com.gs.collections.api.list.primitive.IntList;
+import com.gs.collections.api.set.primitive.IntSet;
 import com.gs.collections.impl.block.factory.primitive.IntPredicates;
+import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
+import com.gs.collections.impl.set.mutable.primitive.IntHashSet;
 import net.jcip.annotations.Immutable;
 
 /**
@@ -278,6 +283,21 @@ public class CollectIntIterable<T>
         {
             throw new RuntimeException(e);
         }
+    }
+
+    public IntList toList()
+    {
+        return IntArrayList.newList(this);
+    }
+
+    public IntSet toSet()
+    {
+        return IntHashSet.newSet(this);
+    }
+
+    public IntBag toBag()
+    {
+        throw new UnsupportedOperationException("Bags not implemented yet");
     }
 
     public boolean contains(int value)

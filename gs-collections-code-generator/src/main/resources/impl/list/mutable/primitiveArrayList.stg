@@ -32,6 +32,9 @@ import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.primitive.<name>List;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.api.bag.primitive.<name>Bag;
+import com.gs.collections.api.set.primitive.<name>Set;
+import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 import net.jcip.annotations.NotThreadSafe;
 
 /**
@@ -753,6 +756,21 @@ public final class <name>ArrayList
         }
     }
 
+    public <name>List toList()
+    {
+        return <name>ArrayList.newList(this);
+    }
+
+    public <name>Set toSet()
+    {
+        return <name>HashSet.newSet(this);
+    }
+
+    public <name>Bag toBag()
+    {
+        throw new UnsupportedOperationException("Bags not implemented yet");
+    }
+
     public void writeExternal(ObjectOutput out) throws IOException
     {
         out.writeInt(this.size);
@@ -1058,6 +1076,21 @@ public final class <name>ArrayList
             {
                 throw new RuntimeException(e);
             }
+        }
+
+        public <name>List toList()
+        {
+            return <name>ArrayList.newList(this);
+        }
+
+        public <name>Set toSet()
+        {
+            return <name>HashSet.newSet(this);
+        }
+
+        public <name>Bag toBag()
+        {
+            throw new UnsupportedOperationException("Bags not implemented yet");
         }
 
         private class Reverse<name>Iterator implements <name>Iterator

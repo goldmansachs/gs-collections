@@ -23,16 +23,19 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.IntIterable;
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.bag.primitive.IntBag;
 import com.gs.collections.api.block.function.primitive.IntToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.primitive.IntIntProcedure;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.iterator.IntIterator;
 import com.gs.collections.api.list.primitive.IntList;
+import com.gs.collections.api.set.primitive.IntSet;
 import com.gs.collections.impl.block.factory.primitive.IntPredicates;
 import com.gs.collections.impl.lazy.primitive.CollectIntToObjectIterable;
 import com.gs.collections.impl.lazy.primitive.SelectIntIterable;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
+import com.gs.collections.impl.set.mutable.primitive.IntHashSet;
 
 /**
  * An IntInterval is a range of ints that may be iterated over using a step value.
@@ -660,6 +663,21 @@ public final class IntInterval
         int[] array = this.toArray();
         Arrays.sort(array);
         return array;
+    }
+
+    public IntList toList()
+    {
+        return IntArrayList.newList(this);
+    }
+
+    public IntSet toSet()
+    {
+        return IntHashSet.newSet(this);
+    }
+
+    public IntBag toBag()
+    {
+        throw new UnsupportedOperationException("Bags not implemented yet");
     }
 
     private class IntIntervalIterator implements IntIterator

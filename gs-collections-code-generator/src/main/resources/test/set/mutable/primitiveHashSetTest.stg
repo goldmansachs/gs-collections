@@ -724,6 +724,24 @@ public class <name>HashSetTest
                 || "[<["33", "32"]:(toStringLiteral.(type))(); separator="/">]".equals(appendable4.toString()));
     }
 
+    @Test
+    public void toList()
+    {
+        Assert.assertEquals(<name>ArrayList.newListWith(<["0"]:(literal.(type))(); separator=", ">), <name>HashSet.newSetWith(<["0"]:(literal.(type))(); separator=", ">).toList());
+        Assert.assertEquals(<name>ArrayList.newListWith(<["31"]:(literal.(type))(); separator=", ">), <name>HashSet.newSetWith(<["31"]:(literal.(type))(); separator=", ">).toList());
+    }
+
+    @Test
+    public void toSet()
+    {
+        Assert.assertEquals(<name>HashSet.newSetWith(<["0", "1", "31"]:(literal.(type))(); separator=", ">), <name>HashSet.newSetWith(<["0", "1", "31"]:(literal.(type))(); separator=", ">).toSet());
+    }
+
+    @Test (expected = UnsupportedOperationException.class)
+    public void toBag()
+    {
+        <name>HashSet.newSetWith(<["0"]:(literal.(type))(); separator=", ">).toBag();
+    }
 }
 
 >>

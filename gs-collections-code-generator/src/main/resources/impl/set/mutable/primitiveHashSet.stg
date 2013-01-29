@@ -33,6 +33,9 @@ import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.primitive.<name>Set;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.api.bag.primitive.<name>Bag;
+import com.gs.collections.api.list.primitive.<name>List;
+import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 
 /**
  * This file was automatically generated from template file primitiveHashSet.stg.
@@ -882,6 +885,21 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         {
             throw new RuntimeException(e);
         }
+    }
+
+    public <name>List toList()
+    {
+        return <name>ArrayList.newList(this);
+    }
+
+    public <name>Set toSet()
+    {
+        return <name>HashSet.newSet(this);
+    }
+
+    public <name>Bag toBag()
+    {
+        throw new UnsupportedOperationException("Bags not implemented yet");
     }
 
     public void writeExternal(ObjectOutput out) throws IOException

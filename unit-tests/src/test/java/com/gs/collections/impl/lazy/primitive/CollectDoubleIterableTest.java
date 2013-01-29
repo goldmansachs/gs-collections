@@ -28,6 +28,7 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
+import com.gs.collections.impl.set.mutable.primitive.DoubleHashSet;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -245,5 +246,23 @@ public class CollectDoubleIterableTest
         StringBuilder appendable3 = new StringBuilder();
         this.doubleIterable.appendString(appendable3, "[", ", ", "]");
         Assert.assertEquals(this.doubleIterable.toString(), appendable3.toString());
+    }
+
+    @Test
+    public void toList()
+    {
+        Assert.assertEquals(DoubleArrayList.newListWith(1.0, 2.0, 3.0), this.doubleIterable.toList());
+    }
+
+    @Test
+    public void toSet()
+    {
+        Assert.assertEquals(DoubleHashSet.newSetWith(1.0, 2.0, 3.0), this.doubleIterable.toSet());
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void toBag()
+    {
+        this.doubleIterable.toBag();
     }
 }

@@ -25,13 +25,16 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.bag.primitive.BooleanBag;
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.list.primitive.BooleanList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
+import com.gs.collections.api.set.primitive.BooleanSet;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
 import net.jcip.annotations.NotThreadSafe;
 
 /**
@@ -635,6 +638,21 @@ public final class BooleanArrayList
         }
     }
 
+    public BooleanList toList()
+    {
+        return BooleanArrayList.newList(this);
+    }
+
+    public BooleanSet toSet()
+    {
+        return BooleanHashSet.newSet(this);
+    }
+
+    public BooleanBag toBag()
+    {
+        throw new UnsupportedOperationException("Bags not implemented yet");
+    }
+
     public void writeExternal(ObjectOutput out) throws IOException
     {
         out.writeInt(this.size());
@@ -897,6 +915,21 @@ public final class BooleanArrayList
             {
                 throw new RuntimeException(e);
             }
+        }
+
+        public BooleanList toList()
+        {
+            return BooleanArrayList.newList(this);
+        }
+
+        public BooleanSet toSet()
+        {
+            return BooleanHashSet.newSet(this);
+        }
+
+        public BooleanBag toBag()
+        {
+            throw new UnsupportedOperationException("Bags not implemented yet");
         }
 
         @Override

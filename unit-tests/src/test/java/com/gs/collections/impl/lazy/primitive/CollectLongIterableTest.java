@@ -28,6 +28,7 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
+import com.gs.collections.impl.set.mutable.primitive.LongHashSet;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -241,5 +242,23 @@ public class CollectLongIterableTest
         StringBuilder appendable3 = new StringBuilder();
         this.longIterable.appendString(appendable3, "[", ", ", "]");
         Assert.assertEquals(this.longIterable.toString(), appendable3.toString());
+    }
+
+    @Test
+    public void toList()
+    {
+        Assert.assertEquals(LongArrayList.newListWith(1L, 2L, 3L), this.longIterable.toList());
+    }
+
+    @Test
+    public void toSet()
+    {
+        Assert.assertEquals(LongHashSet.newSetWith(1L, 2L, 3L), this.longIterable.toSet());
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void toBag()
+    {
+        this.longIterable.toBag();
     }
 }

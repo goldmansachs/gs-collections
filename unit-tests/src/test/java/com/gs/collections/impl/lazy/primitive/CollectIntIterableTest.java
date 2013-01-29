@@ -29,6 +29,7 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
+import com.gs.collections.impl.set.mutable.primitive.IntHashSet;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -242,5 +243,23 @@ public class CollectIntIterableTest
         StringBuilder appendable3 = new StringBuilder();
         this.intIterable.appendString(appendable3, "[", ", ", "]");
         Assert.assertEquals(this.intIterable.toString(), appendable3.toString());
+    }
+
+    @Test
+    public void toList()
+    {
+        Assert.assertEquals(IntArrayList.newListWith(1, 2, 3), this.intIterable.toList());
+    }
+
+    @Test
+    public void toSet()
+    {
+        Assert.assertEquals(IntHashSet.newSetWith(1, 2, 3), this.intIterable.toSet());
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void toBag()
+    {
+        this.intIterable.toBag();
     }
 }

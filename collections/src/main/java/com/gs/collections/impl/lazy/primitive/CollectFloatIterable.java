@@ -23,6 +23,7 @@ import java.util.Iterator;
 import com.gs.collections.api.FloatIterable;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.bag.primitive.FloatBag;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
 import com.gs.collections.api.block.function.primitive.FloatToObjectFunction;
@@ -32,7 +33,11 @@ import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.FloatProcedure;
 import com.gs.collections.api.iterator.FloatIterator;
+import com.gs.collections.api.list.primitive.FloatList;
+import com.gs.collections.api.set.primitive.FloatSet;
 import com.gs.collections.impl.block.factory.primitive.FloatPredicates;
+import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
+import com.gs.collections.impl.set.mutable.primitive.FloatHashSet;
 import net.jcip.annotations.Immutable;
 
 /**
@@ -279,6 +284,21 @@ public class CollectFloatIterable<T>
         {
             throw new RuntimeException(e);
         }
+    }
+
+    public FloatList toList()
+    {
+        return FloatArrayList.newList(this);
+    }
+
+    public FloatSet toSet()
+    {
+        return FloatHashSet.newSet(this);
+    }
+
+    public FloatBag toBag()
+    {
+        throw new UnsupportedOperationException("Bags not implemented yet");
     }
 
     public boolean contains(float value)

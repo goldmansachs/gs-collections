@@ -27,6 +27,8 @@ import com.gs.collections.impl.block.factory.primitive.FloatPredicates;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
+import com.gs.collections.impl.set.mutable.primitive.FloatHashSet;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -232,5 +234,23 @@ public class CollectFloatIterableTest
         StringBuilder appendable3 = new StringBuilder();
         this.floatIterable.appendString(appendable3, "[", ", ", "]");
         Assert.assertEquals(this.floatIterable.toString(), appendable3.toString());
+    }
+
+    @Test
+    public void toList()
+    {
+        Assert.assertEquals(FloatArrayList.newListWith(1.0f, 2.0f, 3.0f), this.floatIterable.toList());
+    }
+
+    @Test
+    public void toSet()
+    {
+        Assert.assertEquals(FloatHashSet.newSetWith(1.0f, 2.0f, 3.0f), this.floatIterable.toSet());
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void toBag()
+    {
+        this.floatIterable.toBag();
     }
 }

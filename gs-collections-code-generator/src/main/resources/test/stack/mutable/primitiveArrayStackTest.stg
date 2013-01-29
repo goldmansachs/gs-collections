@@ -26,6 +26,7 @@ import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
+import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -619,6 +620,24 @@ public class <name>ArrayStackTest
     {
         Assert.assertEquals(ArrayStack.newStackWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">).hashCode(), <name>ArrayStack.newStackWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">).hashCode());
         Assert.assertEquals(ArrayStack.newStack().hashCode(), new <name>ArrayStack().hashCode());
+    }
+
+    @Test
+    public void toList()
+    {
+        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), <name>ArrayStack.newStackWith(<["3", "2", "1"]:(literal.(type))(); separator=", ">).toList());
+    }
+
+    @Test
+    public void toSet()
+    {
+        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), <name>ArrayStack.newStackWith(<["3", "2", "1"]:(literal.(type))(); separator=", ">).toSet());
+    }
+
+    @Test (expected = UnsupportedOperationException.class)
+    public void toBag()
+    {
+        <name>ArrayStack.newStackWith(<["3", "2", "1"]:(literal.(type))(); separator=", ">).toBag();
     }
 
     private static class VerificationProcedure implements <name>Procedure

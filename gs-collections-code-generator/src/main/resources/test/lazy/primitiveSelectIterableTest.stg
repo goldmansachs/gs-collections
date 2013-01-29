@@ -25,6 +25,7 @@ import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
+import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -207,6 +208,24 @@ public class Select<name>IterableTest
     public void toSortedArray()
     {
         Assert.assertArrayEquals(new <type>[]{1, 2}, this.iterable.toSortedArray()<(delta.(type))>);
+    }
+
+    @Test
+    public void toList()
+    {
+        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2"]:(literal.(type))(); separator=", ">), this.iterable.toList());
+    }
+
+    @Test
+    public void toSet()
+    {
+        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2"]:(literal.(type))(); separator=", ">), this.iterable.toSet());
+    }
+
+    @Test (expected = UnsupportedOperationException.class)
+    public void toBag()
+    {
+        this.iterable.toBag();
     }
 }
 >>

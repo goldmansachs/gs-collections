@@ -23,6 +23,7 @@ import java.util.Iterator;
 import com.gs.collections.api.DoubleIterable;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.bag.primitive.DoubleBag;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleToObjectFunction;
@@ -32,7 +33,11 @@ import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.DoubleProcedure;
 import com.gs.collections.api.iterator.DoubleIterator;
+import com.gs.collections.api.list.primitive.DoubleList;
+import com.gs.collections.api.set.primitive.DoubleSet;
 import com.gs.collections.impl.block.factory.primitive.DoublePredicates;
+import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
+import com.gs.collections.impl.set.mutable.primitive.DoubleHashSet;
 import net.jcip.annotations.Immutable;
 
 /**
@@ -279,6 +284,21 @@ public class CollectDoubleIterable<T>
         {
             throw new RuntimeException(e);
         }
+    }
+
+    public DoubleList toList()
+    {
+        return DoubleArrayList.newList(this);
+    }
+
+    public DoubleSet toSet()
+    {
+        return DoubleHashSet.newSet(this);
+    }
+
+    public DoubleBag toBag()
+    {
+        throw new UnsupportedOperationException("Bags not implemented yet");
     }
 
     public boolean contains(double value)

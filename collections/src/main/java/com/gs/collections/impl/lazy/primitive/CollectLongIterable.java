@@ -23,6 +23,7 @@ import java.util.Iterator;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.LongIterable;
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.bag.primitive.LongBag;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.function.primitive.LongToObjectFunction;
@@ -32,7 +33,11 @@ import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.LongProcedure;
 import com.gs.collections.api.iterator.LongIterator;
+import com.gs.collections.api.list.primitive.LongList;
+import com.gs.collections.api.set.primitive.LongSet;
 import com.gs.collections.impl.block.factory.primitive.LongPredicates;
+import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
+import com.gs.collections.impl.set.mutable.primitive.LongHashSet;
 import net.jcip.annotations.Immutable;
 
 /**
@@ -279,6 +284,21 @@ public class CollectLongIterable<T>
         {
             throw new RuntimeException(e);
         }
+    }
+
+    public LongList toList()
+    {
+        return LongArrayList.newList(this);
+    }
+
+    public LongSet toSet()
+    {
+        return LongHashSet.newSet(this);
+    }
+
+    public LongBag toBag()
+    {
+        throw new UnsupportedOperationException("Bags not implemented yet");
     }
 
     public boolean contains(long value)
