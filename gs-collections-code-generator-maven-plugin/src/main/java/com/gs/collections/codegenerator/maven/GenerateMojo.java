@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -65,9 +65,22 @@ public class GenerateMojo extends AbstractMojo
             this.getLog().info("Generating sources to " + this.project.getArtifactId());
             List<URL> urls = Arrays.asList(((URLClassLoader) GenerateMojo.class.getClassLoader()).getURLs());
 
+            final boolean[] error = new boolean[1];
+            GsCollectionsCodeGenerator.ErrorListener errorListener = new GsCollectionsCodeGenerator.ErrorListener()
+            {
+                public void error(String string)
+                {
+                    GenerateMojo.this.getLog().error(string);
+                    error[0] = true;
+                }
+            };
             GsCollectionsCodeGenerator gsCollectionsCodeGenerator =
-                    new GsCollectionsCodeGenerator(this.templateDirectory, this.project.getBasedir(), urls);
+                    new GsCollectionsCodeGenerator(this.templateDirectory, this.project.getBasedir(), urls, errorListener);
             gsCollectionsCodeGenerator.generate();
+            if (error[0])
+            {
+                throw new MojoExecutionException("Error(s) during code generation.");
+            }
 
             if (gsCollectionsCodeGenerator.isTest())
             {

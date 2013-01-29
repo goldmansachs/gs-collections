@@ -9,10 +9,10 @@ targetPath() ::= "com/gs/collections/impl/stack/mutable/primitive"
 fileName(primitive) ::= "<primitive.name>ArrayStackTest"
 
 class(primitive) ::= <<
-<body(primitive.type, primitive.wrapperName, primitive.name, primitive.sum)>
+<body(primitive.type, primitive.wrapperName, primitive.name)>
 >>
 
-body(type, wrapperName, name, sum) ::= <<
+body(type, wrapperName, name) ::= <<
 <copyright()>
 
 package com.gs.collections.impl.stack.mutable.primitive;

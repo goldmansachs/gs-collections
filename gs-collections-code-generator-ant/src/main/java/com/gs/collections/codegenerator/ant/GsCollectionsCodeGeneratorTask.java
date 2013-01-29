@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,9 @@ import java.util.List;
 
 import com.gs.collections.codegenerator.GsCollectionsCodeGenerator;
 import org.apache.tools.ant.AntClassLoader;
+import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
+import org.apache.tools.ant.types.LogLevel;
 
 public class GsCollectionsCodeGeneratorTask extends Task
 {
@@ -35,9 +37,22 @@ public class GsCollectionsCodeGeneratorTask extends Task
     {
         this.log("Scanning all template files from " + this.templateDirectory);
 
+        final boolean[] error = new boolean[1];
+        GsCollectionsCodeGenerator.ErrorListener errorListener = new GsCollectionsCodeGenerator.ErrorListener()
+        {
+            public void error(String string)
+            {
+                GsCollectionsCodeGeneratorTask.this.log(string, LogLevel.ERR.getLevel());
+                error[0] = true;
+            }
+        };
         GsCollectionsCodeGenerator gsCollectionsCodeGenerator =
-                new GsCollectionsCodeGenerator(this.templateDirectory, this.getProject().getBaseDir(), this.getClassPathURLs());
+                new GsCollectionsCodeGenerator(this.templateDirectory, this.getProject().getBaseDir(), this.getClassPathURLs(), errorListener);
         gsCollectionsCodeGenerator.generate();
+        if (error[0])
+        {
+            throw new BuildException("Error(s) during code generation.");
+        }
     }
 
     public void setTemplateDirectory(String templateDirectory)

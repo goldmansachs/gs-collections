@@ -24,7 +24,9 @@ import com.gs.collections.codegenerator.model.Primitive;
 import com.gs.collections.codegenerator.tools.FileUtils;
 import com.gs.collections.codegenerator.tools.IntegerOrStringRenderer;
 import org.stringtemplate.v4.ST;
+import org.stringtemplate.v4.STErrorListener;
 import org.stringtemplate.v4.STGroupFile;
+import org.stringtemplate.v4.misc.STMessage;
 
 public class GsCollectionsCodeGenerator
 {
@@ -34,12 +36,15 @@ public class GsCollectionsCodeGenerator
     private final File moduleBaseDir;
     private final List<URL> classPathURLs;
     private boolean isTest;
+    private STGroupFile stGroupFile;
+    private final STErrorListener stErrorListener;
 
-    public GsCollectionsCodeGenerator(String templateDirectory, File moduleBaseDir, List<URL> classPathURLs)
+    public GsCollectionsCodeGenerator(String templateDirectory, File moduleBaseDir, List<URL> classPathURLs, ErrorListener errorListener)
     {
         this.templateDirectory = templateDirectory;
         this.moduleBaseDir = moduleBaseDir;
         this.classPathURLs = classPathURLs;
+        this.stErrorListener = new LoggingErrorListener(errorListener);
     }
 
     public void generate()
@@ -47,16 +52,17 @@ public class GsCollectionsCodeGenerator
         List<URL> allTemplateFilesFromClassPath = FileUtils.getAllTemplateFilesFromClasspath(this.templateDirectory, this.classPathURLs);
         for (URL url : allTemplateFilesFromClassPath)
         {
-            STGroupFile stGroupFile = new STGroupFile(url, "UTF-8", '<', '>');
-            stGroupFile.registerRenderer(String.class, new IntegerOrStringRenderer());
-            if (stGroupFile.isDefined("fileName"))
+            this.stGroupFile = new STGroupFile(url, "UTF-8", '<', '>');
+            this.stGroupFile.setListener(this.stErrorListener);
+            this.stGroupFile.registerRenderer(String.class, new IntegerOrStringRenderer());
+            if (this.stGroupFile.isDefined("fileName"))
             {
-                this.setTest(stGroupFile);
-                File targetPath = this.constructTargetPath(stGroupFile);
+                this.setTest(this.stGroupFile);
+                File targetPath = this.constructTargetPath(this.stGroupFile);
                 FileUtils.createDirectory(targetPath);
 
-                boolean hasTwoPrimitives = stGroupFile.isDefined("hasTwoPrimitives") && Boolean.valueOf(stGroupFile.getInstanceOf("hasTwoPrimitives").render());
-                boolean skipBoolean = stGroupFile.isDefined("skipBoolean") && Boolean.valueOf(stGroupFile.getInstanceOf("skipBoolean").render());
+                boolean hasTwoPrimitives = this.stGroupFile.isDefined("hasTwoPrimitives") && Boolean.valueOf(this.stGroupFile.getInstanceOf("hasTwoPrimitives").render());
+                boolean skipBoolean = this.stGroupFile.isDefined("skipBoolean") && Boolean.valueOf(this.stGroupFile.getInstanceOf("skipBoolean").render());
 
                 if (hasTwoPrimitives)
                 {
@@ -72,12 +78,12 @@ public class GsCollectionsCodeGenerator
                             {
                                 continue;
                             }
-                            String sourceFileName = executeTemplate(stGroupFile, primitive1, primitive2, "fileName");
+                            String sourceFileName = executeTemplate(this.stGroupFile, primitive1, primitive2, "fileName");
                             File outputFile = new File(targetPath, sourceFileName + ".java");
 
                             if (!sourceFileExists(outputFile))
                             {
-                                String classContents = executeTemplate(stGroupFile, primitive1, primitive2, "class");
+                                String classContents = executeTemplate(this.stGroupFile, primitive1, primitive2, "class");
                                 FileUtils.writeToFile(classContents, outputFile);
                             }
                         }
@@ -87,12 +93,12 @@ public class GsCollectionsCodeGenerator
                 {
                     for (Primitive primitive : Primitive.values())
                     {
-                        String sourceFileName = executeTemplate(stGroupFile, primitive, "fileName");
+                        String sourceFileName = executeTemplate(this.stGroupFile, primitive, "fileName");
                         File outputFile = new File(targetPath, sourceFileName + ".java");
 
                         if (!sourceFileExists(outputFile))
                         {
-                            String classContents = executeTemplate(stGroupFile, primitive, "class");
+                            String classContents = executeTemplate(this.stGroupFile, primitive, "class");
                             FileUtils.writeToFile(classContents, outputFile);
                         }
                     }
@@ -151,5 +157,46 @@ public class GsCollectionsCodeGenerator
     public boolean isTest()
     {
         return this.isTest;
+    }
+
+    public interface ErrorListener
+    {
+        void error(String string);
+    }
+
+    private final class LoggingErrorListener implements STErrorListener
+    {
+        private final ErrorListener errorListener;
+
+        private LoggingErrorListener(ErrorListener errorListener)
+        {
+            this.errorListener = errorListener;
+        }
+
+        private void logError(STMessage stMessage, String errorType)
+        {
+            String error = String.format("String template %s error while processing [%s]: %s", errorType, GsCollectionsCodeGenerator.this.stGroupFile, stMessage.toString());
+            this.errorListener.error(error);
+        }
+
+        public void compileTimeError(STMessage stMessage)
+        {
+            this.logError(stMessage, "compile time");
+        }
+
+        public void runTimeError(STMessage stMessage)
+        {
+            this.logError(stMessage, "run time");
+        }
+
+        public void IOError(STMessage stMessage)
+        {
+            this.logError(stMessage, "IO");
+        }
+
+        public void internalError(STMessage stMessage)
+        {
+            this.logError(stMessage, "internal");
+        }
     }
 }
