@@ -404,7 +404,7 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
 
         //Testing JDK map
         MutableMap<Integer, String> map2 = this.newMapWithKeysValues(1, "One", 2, "2");
-        HashMap<Integer, String> hashMaptoAdd = new HashMap(toAdd);
+        HashMap<Integer, String> hashMaptoAdd = new HashMap<Integer, String>(toAdd);
         map2.putAll(hashMaptoAdd);
         Verify.assertSize(3, map2);
         Verify.assertContainsAllKeyValues(map2, 1, "One", 2, "Two", 3, "Three");

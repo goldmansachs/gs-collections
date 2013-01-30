@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,8 @@ package com.gs.collections.impl.factory;
 
 import java.util.Comparator;
 
+import com.gs.collections.api.bag.ImmutableBag;
+import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.multimap.list.ImmutableListMultimap;
@@ -26,6 +28,8 @@ import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.multimap.sortedset.ImmutableSortedSetMultimap;
 import com.gs.collections.api.multimap.sortedset.MutableSortedSetMultimap;
+import com.gs.collections.api.set.ImmutableSet;
+import com.gs.collections.api.set.sorted.ImmutableSortedSet;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.multimap.bag.ImmutableBagMultimapImpl;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
@@ -46,6 +50,7 @@ public final class Multimaps
         throw new AssertionError("Suppress default constructor for noninstantiability");
     }
 
+    @SuppressWarnings("PublicField")
     public static final class ImmutableMultimaps
     {
         public final ImmutableListMultimapFactory list = new ImmutableListMultimapFactory();
@@ -59,7 +64,7 @@ public final class Multimaps
 
         public static final class ImmutableListMultimapFactory
         {
-            public static final ImmutableListMultimap EMPTY = new ImmutableListMultimapImpl(Maps.immutable.with());
+            public static final ImmutableListMultimap<Object, Object> EMPTY = new ImmutableListMultimapImpl<Object, Object>(Maps.immutable.<Object, ImmutableList<Object>>with());
 
             private ImmutableListMultimapFactory()
             {
@@ -67,7 +72,7 @@ public final class Multimaps
 
             public <K, V> ImmutableListMultimap<K, V> with()
             {
-                return EMPTY;
+                return (ImmutableListMultimap<K, V>) EMPTY;
             }
 
             public <K, V> ImmutableListMultimap<K, V> with(K key, V value)
@@ -95,7 +100,7 @@ public final class Multimaps
 
         public static final class ImmutableSetMultimapFactory
         {
-            public static final ImmutableSetMultimap EMPTY = new ImmutableSetMultimapImpl(Maps.immutable.with());
+            public static final ImmutableSetMultimap<Object, Object> EMPTY = new ImmutableSetMultimapImpl<Object, Object>(Maps.immutable.<Object, ImmutableSet<Object>>with());
 
             private ImmutableSetMultimapFactory()
             {
@@ -103,7 +108,7 @@ public final class Multimaps
 
             public <K, V> ImmutableSetMultimap<K, V> with()
             {
-                return EMPTY;
+                return (ImmutableSetMultimap<K, V>) EMPTY;
             }
 
             public <K, V> ImmutableSetMultimap<K, V> with(K key, V value)
@@ -137,7 +142,7 @@ public final class Multimaps
 
             public <K, V> ImmutableSortedSetMultimap<K, V> with(Comparator<V> comparator)
             {
-                return new ImmutableSortedSetMultimapImpl(Maps.immutable.with(), comparator);
+                return new ImmutableSortedSetMultimapImpl<K, V>(Maps.immutable.<K, ImmutableSortedSet<V>>with(), comparator);
             }
 
             public <K, V> ImmutableSortedSetMultimap<K, V> with(Comparator<V> comparator, K key, V value)
@@ -165,7 +170,7 @@ public final class Multimaps
 
         public static final class ImmutableBagMultimapFactory
         {
-            public static final ImmutableBagMultimap EMPTY = new ImmutableBagMultimapImpl(Maps.immutable.with());
+            public static final ImmutableBagMultimap<Object, Object> EMPTY = new ImmutableBagMultimapImpl<Object, Object>(Maps.immutable.<Object, ImmutableBag<Object>>with());
 
             private ImmutableBagMultimapFactory()
             {
@@ -173,7 +178,7 @@ public final class Multimaps
 
             public <K, V> ImmutableBagMultimap<K, V> with()
             {
-                return EMPTY;
+                return (ImmutableBagMultimap<K, V>) EMPTY;
             }
 
             public <K, V> ImmutableBagMultimap<K, V> with(K key, V value)
@@ -200,12 +205,17 @@ public final class Multimaps
         }
     }
 
+    @SuppressWarnings("PublicField")
     public static final class MutableMultimaps
     {
         public final MutableListMultimapFactory list = new MutableListMultimapFactory();
         public final MutableSetMultimapFactory set = new MutableSetMultimapFactory();
         public final MutableSortedSetMultimapFactory sortedSet = new MutableSortedSetMultimapFactory();
         public final MutableBagMultimapFactory bag = new MutableBagMultimapFactory();
+
+        private MutableMultimaps()
+        {
+        }
 
         public static final class MutableListMultimapFactory
         {

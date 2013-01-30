@@ -134,7 +134,7 @@ public abstract class AbstractMutableList<T>
         int hashCode = 1;
         for (int i = 0; i < this.size(); i++)
         {
-            Object obj = this.get(i);
+            T obj = this.get(i);
             hashCode = 31 * hashCode + (obj == null ? 0 : obj.hashCode());
         }
         return hashCode;
@@ -640,7 +640,7 @@ public abstract class AbstractMutableList<T>
     @Override
     public Iterator<T> iterator()
     {
-        return new MutableIterator(this);
+        return new MutableIterator<T>(this);
     }
 
     public ListIterator<T> listIterator()

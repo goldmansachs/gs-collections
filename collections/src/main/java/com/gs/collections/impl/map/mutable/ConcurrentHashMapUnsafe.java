@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -955,7 +955,7 @@ public class ConcurrentHashMapUnsafe<K, V>
             {
                 final int start = i * chunkSize;
                 final int end = Math.min((i + 1) * chunkSize, currentArray.length);
-                futures[i] = new FutureTask(new Runnable()
+                futures[i] = new FutureTask<Void>(new Runnable()
                 {
                     public void run()
                     {
@@ -1295,7 +1295,7 @@ public class ConcurrentHashMapUnsafe<K, V>
                 final int start = i * chunkSize;
                 final int end = Math.min((i + 1) * chunkSize, currentArray.length);
                 final Procedure2<K, V> block = blocks.get(i);
-                futures[i] = new FutureTask(new Runnable()
+                futures[i] = new FutureTask<Void>(new Runnable()
                 {
                     public void run()
                     {
@@ -1359,7 +1359,7 @@ public class ConcurrentHashMapUnsafe<K, V>
                 final int start = i * chunkSize;
                 final int end = Math.min((i + 1) * chunkSize, currentArray.length - 1);
                 final Procedure<V> block = blocks.get(i);
-                futures[i] = new FutureTask(new Runnable()
+                futures[i] = new FutureTask<Void>(new Runnable()
                 {
                     public void run()
                     {

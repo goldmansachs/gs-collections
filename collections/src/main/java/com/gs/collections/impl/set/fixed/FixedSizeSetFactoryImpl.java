@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,7 +26,7 @@ import net.jcip.annotations.Immutable;
 @Immutable
 public class FixedSizeSetFactoryImpl implements FixedSizeSetFactory
 {
-    private static final FixedSizeSet<?> EMPTY_SET = new EmptySet();
+    private static final FixedSizeSet<?> EMPTY_SET = new EmptySet<Object>();
 
     public <T> FixedSizeSet<T> of()
     {

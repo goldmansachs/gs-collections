@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import org.junit.Test;
 
 public final class IntegerFunctionImplTest
 {
-    private static final IntegerFunctionImpl<?> INTEGER_FUNCTION = new IntegerFunctionImpl()
+    private static final IntegerFunctionImpl<?> INTEGER_FUNCTION = new IntegerFunctionImpl<Object>()
     {
         private static final long serialVersionUID = 1L;
 

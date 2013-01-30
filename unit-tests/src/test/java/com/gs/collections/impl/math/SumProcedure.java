@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,7 +31,7 @@ public class SumProcedure<T>
         implements Procedure<T>, Function2<Sum, T, Sum>, ProcedureFactory<SumProcedure<T>>
 {
     private static final long serialVersionUID = 1L;
-    private static final SumProcedure<?> NUMBER = new SumProcedure();
+    private static final SumProcedure<?> NUMBER = new SumProcedure<Object>();
 
     protected final Sum sum;
     protected final Function<? super T, ? extends Number> function;

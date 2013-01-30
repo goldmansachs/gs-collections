@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,18 +45,18 @@ public final class Functions
     private static final Function<Integer, Integer> INTEGER_PASS_THRU_FUNCTION = new IntegerPassThruFunction();
     private static final Function<Long, Long> LONG_PASS_THRU_FUNCTION = new LongPassThruFunction();
 
-    private static final Function<?, ?> PASS_THRU_FUNCTION = new PassThruFunction();
+    private static final Function<?, ?> PASS_THRU_FUNCTION = new PassThruFunction<Object>();
     private static final Function<String, String> STRING_TRIM_FUNCTION = new StringTrimFunction();
     private static final Function<Object, Class<?>> CLASS_FUNCTION = new ClassFunction();
     private static final Function<Number, Double> MATH_SIN_FUNCTION = new MathSinFunction();
     private static final Function<Integer, Integer> SQUARED_INTEGER = new SquaredIntegerFunction();
     private static final Function<Object, String> TO_STRING_FUNCTION = new ToStringFunction();
     private static final Function<String, Integer> STRING_TO_INTEGER_FUNCTION = new StringToIntegerFunction();
-    private static final Function<?, ?> MAP_KEY_FUNCTION = new MapKeyFunction();
-    private static final Function<?, ?> MAP_VALUE_FUNCTION = new MapValueFunction();
+    private static final Function<?, ?> MAP_KEY_FUNCTION = new MapKeyFunction<Object>();
+    private static final Function<?, ?> MAP_VALUE_FUNCTION = new MapValueFunction<Object>();
     private static final Function<Iterable<?>, Integer> SIZE_FUNCTION = new SizeFunction();
-    private static final FirstOfPairFunction<?> FIRST_OF_PAIR_FUNCTION = new FirstOfPairFunction();
-    private static final SecondOfPairFunction<?> SECOND_OF_PAIR_FUNCTION = new SecondOfPairFunction();
+    private static final FirstOfPairFunction<?> FIRST_OF_PAIR_FUNCTION = new FirstOfPairFunction<Object>();
+    private static final SecondOfPairFunction<?> SECOND_OF_PAIR_FUNCTION = new SecondOfPairFunction<Object>();
     private static final CheckedFunction<String, Class<?>> CLASS_FOR_NAME = new ClassForNameFunction();
 
     private Functions()

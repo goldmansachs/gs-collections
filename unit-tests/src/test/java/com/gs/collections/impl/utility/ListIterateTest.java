@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -247,11 +247,11 @@ public class ListIterateTest
     @Test
     public void getFirstAndLastOnEmpty()
     {
-        List<?> list = new ArrayList();
+        List<?> list = new ArrayList<Object>();
         Assert.assertNull(ListIterate.getFirst(list));
         Assert.assertNull(ListIterate.getLast(list));
 
-        List<?> linked = new LinkedList();
+        List<?> linked = new LinkedList<Object>();
         Assert.assertNull(ListIterate.getFirst(linked));
         Assert.assertNull(ListIterate.getLast(linked));
     }

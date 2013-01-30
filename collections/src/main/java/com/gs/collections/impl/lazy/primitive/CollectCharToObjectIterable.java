@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,12 @@ package com.gs.collections.impl.lazy.primitive;
 
 import java.util.Iterator;
 
-import com.gs.collections.api.ByteIterable;
 import com.gs.collections.api.CharIterable;
-import com.gs.collections.api.block.function.primitive.ByteToObjectFunction;
 import com.gs.collections.api.block.function.primitive.CharToObjectFunction;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.block.procedure.primitive.ByteProcedure;
 import com.gs.collections.api.block.procedure.primitive.CharProcedure;
-import com.gs.collections.api.iterator.ByteIterator;
 import com.gs.collections.api.iterator.CharIterator;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
 

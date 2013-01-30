@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -414,8 +414,8 @@ public class ArrayIterateTest
     @Test
     public void distinct()
     {
-        List<Integer> result = FastList.newList(); 
-        ArrayIterate.distinct(new Integer[] { 5, 3, 1, 5, 7, 1 }, result);
+        List<Integer> result = FastList.newList();
+        ArrayIterate.distinct(new Integer[]{5, 3, 1, 5, 7, 1}, result);
         Assert.assertEquals(FastList.newListWith(5, 3, 1, 7), result);
         result.clear();
         ArrayIterate.distinct(INTEGER_ARRAY, result);
@@ -520,9 +520,9 @@ public class ArrayIterateTest
     {
         MutableMap<String, Integer> map = ArrayIterate.toMap(INTEGER_ARRAY, Functions.getToString(), Functions.squaredInteger());
         Verify.assertSize(5, map);
-        Verify.assertContainsKeyValue("1",  1, map);
-        Verify.assertContainsKeyValue("2",  4, map);
-        Verify.assertContainsKeyValue("3",  9, map);
+        Verify.assertContainsKeyValue("1", 1, map);
+        Verify.assertContainsKeyValue("2", 4, map);
+        Verify.assertContainsKeyValue("3", 9, map);
         Verify.assertContainsKeyValue("4", 16, map);
         Verify.assertContainsKeyValue("5", 25, map);
     }
@@ -676,12 +676,12 @@ public class ArrayIterateTest
     @Test
     public void detect()
     {
-        Object[] array = this.createIntegerArray(1);
-        Assert.assertEquals(1, ArrayIterate.detect(array, new Predicate()
+        Integer[] array = this.createIntegerArray(1);
+        Assert.assertEquals(Integer.valueOf(1), ArrayIterate.detect(array, new Predicate<Integer>()
         {
-            public boolean accept(Object anObject)
+            public boolean accept(Integer integer)
             {
-                return (Integer) anObject == 1;
+                return integer == 1;
             }
         }));
     }

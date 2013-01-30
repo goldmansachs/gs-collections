@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -2062,9 +2062,9 @@ public class IterateTest
         this.aggregateByMutableResult(FastList.newListWith(1, 1, 1, 2, 2, 3));
         this.aggregateByMutableResult(UnifiedSet.newSetWith(1, 1, 1, 2, 2, 3));
         this.aggregateByMutableResult(HashBag.newBagWith(1, 1, 1, 2, 2, 3));
-        this.aggregateByMutableResult(new HashSet(UnifiedSet.newSetWith(1, 1, 1, 2, 2, 3)));
-        this.aggregateByMutableResult(new LinkedList(FastList.newListWith(1, 1, 1, 2, 2, 3)));
-        this.aggregateByMutableResult(new ArrayList(FastList.newListWith(1, 1, 1, 2, 2, 3)));
+        this.aggregateByMutableResult(new HashSet<Integer>(UnifiedSet.newSetWith(1, 1, 1, 2, 2, 3)));
+        this.aggregateByMutableResult(new LinkedList<Integer>(FastList.newListWith(1, 1, 1, 2, 2, 3)));
+        this.aggregateByMutableResult(new ArrayList<Integer>(FastList.newListWith(1, 1, 1, 2, 2, 3)));
         this.aggregateByMutableResult(Arrays.asList(1, 1, 1, 2, 2, 3));
         Verify.assertThrows(IllegalArgumentException.class, new Runnable()
         {
@@ -2112,9 +2112,9 @@ public class IterateTest
         this.aggregateByImmutableResult(FastList.newListWith(1, 1, 1, 2, 2, 3));
         this.aggregateByImmutableResult(UnifiedSet.newSetWith(1, 1, 1, 2, 2, 3));
         this.aggregateByImmutableResult(HashBag.newBagWith(1, 1, 1, 2, 2, 3));
-        this.aggregateByImmutableResult(new HashSet(UnifiedSet.newSetWith(1, 1, 1, 2, 2, 3)));
-        this.aggregateByImmutableResult(new LinkedList(FastList.newListWith(1, 1, 1, 2, 2, 3)));
-        this.aggregateByImmutableResult(new ArrayList(FastList.newListWith(1, 1, 1, 2, 2, 3)));
+        this.aggregateByImmutableResult(new HashSet<Integer>(UnifiedSet.newSetWith(1, 1, 1, 2, 2, 3)));
+        this.aggregateByImmutableResult(new LinkedList<Integer>(FastList.newListWith(1, 1, 1, 2, 2, 3)));
+        this.aggregateByImmutableResult(new ArrayList<Integer>(FastList.newListWith(1, 1, 1, 2, 2, 3)));
         this.aggregateByImmutableResult(Arrays.asList(1, 1, 1, 2, 2, 3));
         Verify.assertThrows(IllegalArgumentException.class, new Runnable()
         {

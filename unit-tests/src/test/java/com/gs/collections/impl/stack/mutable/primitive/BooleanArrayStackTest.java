@@ -325,7 +325,7 @@ public class BooleanArrayStackTest
     public void collect()
     {
         BooleanArrayStack stack = BooleanArrayStack.newStackFromTopToBottom(true, true, false, true, false);
-        RichIterable<Boolean> actualValues = stack.collect(new BooleanToObjectFunction()
+        RichIterable<Boolean> actualValues = stack.collect(new BooleanToObjectFunction<Boolean>()
         {
             public Boolean valueOf(boolean parameter)
             {

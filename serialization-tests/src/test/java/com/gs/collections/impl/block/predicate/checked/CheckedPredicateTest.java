@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@ import org.junit.Test;
 
 public class CheckedPredicateTest
 {
-    private static final CheckedPredicate<?> CHECKED_PREDICATE = new CheckedPredicate()
+    private static final CheckedPredicate<?> CHECKED_PREDICATE = new CheckedPredicate<Object>()
     {
         private static final long serialVersionUID = 1L;
 

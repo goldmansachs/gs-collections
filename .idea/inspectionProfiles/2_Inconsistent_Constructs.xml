@@ -1106,10 +1106,7 @@
       <option name="m_maxLength" value="32" />
     </inspection_tool>
     <inspection_tool class="LocalVariableOfConcreteClass" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="LogStatementGuardedByLogCondition" enabled="false" level="WARNING" enabled_by_default="false">
-      <option name="loggerClassName" value="java.util.logging.Logger" />
-      <option name="loggerMethodAndconditionMethodNames" value="fine,isLoggable(java.util.logging.Level.FINE),finer,isLoggable(java.util.logging.Level.FINER),finest,isLoggable(java.util.logging.Level.FINEST)" />
-    </inspection_tool>
+    <inspection_tool class="LogStatementGuardedByLogCondition" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="LoggerInitializedWithForeignClass" enabled="false" level="WARNING" enabled_by_default="false">
       <option name="loggerClassName" value="org.apache.log4j.Logger" />
       <option name="loggerFactoryMethodName" value="getLogger" />
@@ -1127,11 +1124,7 @@
     <inspection_tool class="MVCPathVariableInspection" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="MagicCharacter" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="MagicConstant" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="MagicNumber" enabled="false" level="WARNING" enabled_by_default="false">
-      <option name="ignoreInHashCode" value="true" />
-      <option name="ignoreInTestCode" value="false" />
-      <option name="ignoreInAnnotations" value="true" />
-    </inspection_tool>
+    <inspection_tool class="MagicNumber" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="MagicNumberJS" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="MalformedFormatString" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="MalformedRegex" enabled="false" level="WARNING" enabled_by_default="false" />
@@ -1500,11 +1493,7 @@
       <option name="SAFARI" value="true" />
     </inspection_tool>
     <inspection_tool class="RandomDoubleForRandomInteger" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="RawUseOfParameterizedType" enabled="false" level="WARNING" enabled_by_default="false">
-      <option name="ignoreObjectConstruction" value="true" />
-      <option name="ignoreTypeCasts" value="false" />
-      <option name="ignoreUncompilable" value="false" />
-    </inspection_tool>
+    <inspection_tool class="RawUseOfParameterizedType" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="ReadObjectAndWriteObjectPrivate" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="ReadObjectInitialization" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="ReadResolveAndWriteReplaceProtected" enabled="false" level="WARNING" enabled_by_default="false" />
@@ -2030,7 +2019,7 @@
       <option name="ignoreEquals" value="false" />
     </inspection_tool>
     <inspection_tool class="UseOfJDBCDriverClass" enabled="false" level="WARNING" enabled_by_default="false" />
-    <inspection_tool class="UseOfObsoleteAssert" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="UseOfObsoleteAssert" enabled="true" level="ERROR" enabled_by_default="true" />
     <inspection_tool class="UseOfProcessBuilder" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="UseOfPropertiesAsHashtable" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="UseOfSunClasses" enabled="false" level="WARNING" enabled_by_default="false" />

@@ -52,8 +52,8 @@ final class ImmutableEmptyList<T>
         extends AbstractImmutableList<T>
         implements Serializable, RandomAccess
 {
-    static final ImmutableList<?> INSTANCE = new ImmutableEmptyList();
-    private static final PartitionImmutableList<?> EMPTY = new PartitionFastList().toImmutable();
+    static final ImmutableList<?> INSTANCE = new ImmutableEmptyList<Object>();
+    private static final PartitionImmutableList<?> EMPTY = new PartitionFastList<Object>().toImmutable();
 
     private static final long serialVersionUID = 1L;
 

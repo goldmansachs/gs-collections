@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ final class ImmutableEmptySortedSet<T>
         extends AbstractImmutableSortedSet<T>
         implements Serializable
 {
-    static final ImmutableSortedSet<?> INSTANCE = new ImmutableEmptySortedSet();
+    static final ImmutableSortedSet<?> INSTANCE = new ImmutableEmptySortedSet<Object>();
 
     private static final long serialVersionUID = 1L;
     private final Comparator<? super T> comparator;

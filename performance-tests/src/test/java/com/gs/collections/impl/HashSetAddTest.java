@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -64,7 +64,7 @@ public class HashSetAddTest
     {
         for (int i = 0; i < runs; i++)
         {
-            HashSet<Object> set = new HashSet(8);
+            HashSet<Object> set = new HashSet<Object>(8);
             for (int j = 0; j < length; j++)
             {
                 set.add(objects[j]);

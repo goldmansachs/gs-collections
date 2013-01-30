@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,13 +22,13 @@ import java.util.NoSuchElementException;
 import net.jcip.annotations.Immutable;
 
 /**
- * A Singleton iterator which is empty and can be used by all empty collections
+ * A Singleton iterator which is empty and can be used by all empty collections.
  */
 @Immutable
 public final class EmptyIterator<T>
         implements ListIterator<T>
 {
-    private static final EmptyIterator<?> INSTANCE = new EmptyIterator();
+    private static final EmptyIterator<?> INSTANCE = new EmptyIterator<Object>();
 
     private EmptyIterator()
     {

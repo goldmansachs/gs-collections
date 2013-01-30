@@ -52,7 +52,7 @@ final class ImmutableEmptySet<T>
         extends AbstractImmutableSet<T>
         implements Serializable
 {
-    static final ImmutableSet<?> INSTANCE = new ImmutableEmptySet();
+    static final ImmutableSet<?> INSTANCE = new ImmutableEmptySet<Object>();
     private static final PartitionImmutableSet<?> EMPTY = new PartitionUnifiedSet<Object>().toImmutable();
 
     private static final long serialVersionUID = 1L;

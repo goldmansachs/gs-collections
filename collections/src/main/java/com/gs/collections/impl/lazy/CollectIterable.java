@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,6 @@ import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.lazy.iterator.CollectIterator;
 import com.gs.collections.impl.utility.Iterate;
-import com.gs.collections.impl.utility.internal.IterableIterate;
 import net.jcip.annotations.Immutable;
 
 /**

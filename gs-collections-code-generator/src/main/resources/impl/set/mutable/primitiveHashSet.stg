@@ -39,6 +39,8 @@ import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 
 /**
  * This file was automatically generated from template file primitiveHashSet.stg.
+ *
+ * @since 3.0.
  */
 public final class <name>HashSet implements Mutable<name>Set, Externalizable
 {

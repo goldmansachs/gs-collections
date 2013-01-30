@@ -83,7 +83,7 @@ import net.jcip.annotations.Immutable;
 final class ImmutableEmptyBag<T>
         implements ImmutableBag<T>, Serializable
 {
-    static final ImmutableBag<?> INSTANCE = new ImmutableEmptyBag();
+    static final ImmutableBag<?> INSTANCE = new ImmutableEmptyBag<Object>();
 
     private static final long serialVersionUID = 1L;
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,9 +25,9 @@ import com.gs.collections.api.tuple.Pair;
 public class AbstractImmutableEntry<K, V> implements Map.Entry<K, V>, Serializable
 {
     private static final long serialVersionUID = 1L;
-    private static final KeyFunction<?> TO_KEY = new KeyFunction();
-    private static final ValueFunction<?> TO_VALUE = new ValueFunction();
-    private static final PairFunction<?, ?> TO_PAIR = new PairFunction();
+    private static final KeyFunction<?> TO_KEY = new KeyFunction<Object>();
+    private static final ValueFunction<?> TO_VALUE = new ValueFunction<Object>();
+    private static final PairFunction<?, ?> TO_PAIR = new PairFunction<Object, Object>();
 
     protected final K key;
     protected final V value;

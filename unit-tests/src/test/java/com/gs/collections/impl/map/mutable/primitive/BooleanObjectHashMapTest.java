@@ -379,8 +379,8 @@ public class BooleanObjectHashMapTest
     @Test
     public void withKeyValue()
     {
-        BooleanObjectHashMap<String> hashMap = new BooleanObjectHashMap().withKeyValue(true, "one");
-        BooleanObjectHashMap<String> hashMap0 = new BooleanObjectHashMap().withKeysValues(true, "one", false, "two");
+        BooleanObjectHashMap<String> hashMap = new BooleanObjectHashMap<String>().withKeyValue(true, "one");
+        BooleanObjectHashMap<String> hashMap0 = new BooleanObjectHashMap<String>().withKeysValues(true, "one", false, "two");
         BooleanObjectHashMap<String> hashMap1 = this.map3.withKeyValue(true, "one");
         Assert.assertEquals(BooleanObjectHashMap.newWithKeysValues(true, "one"), hashMap);
         Assert.assertEquals(BooleanObjectHashMap.newWithKeysValues(true, "one", false, "two"), hashMap0);

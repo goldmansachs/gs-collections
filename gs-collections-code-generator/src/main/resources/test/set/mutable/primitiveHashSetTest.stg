@@ -32,6 +32,7 @@ import org.junit.Test;
 
 /**
  * This file was automatically generated from template file primitiveHashSetTest.stg.
+ * JUnit test for {@link <name>HashSetTest}.
  */
 public class <name>HashSetTest
 {
@@ -66,7 +67,7 @@ public class <name>HashSetTest
     }
 
     @Test
-    public void defaultInitialCapacity() throws Exception
+    public void defaultInitialCapacity() throws NoSuchFieldException, IllegalAccessException
     {
         <name>HashSet hashSet = new <name>HashSet();
         Field table = <name>HashSet.class.getDeclaredField("table");
@@ -75,7 +76,7 @@ public class <name>HashSetTest
     }
 
     @Test
-    public void newWithInitialCapacity() throws Exception
+    public void newWithInitialCapacity() throws NoSuchFieldException, IllegalAccessException
     {
         <name>HashSet hashSet = new <name>HashSet(3);
         Field table = <name>HashSet.class.getDeclaredField("table");
@@ -189,7 +190,7 @@ public class <name>HashSetTest
     }
 
     @Test
-    public void add() throws Exception
+    public void add() throws NoSuchFieldException, IllegalAccessException
     {
         <name>HashSet hashSet = new <name>HashSet();
         Assert.assertTrue(hashSet.add(<(literal.(type))("14")>));
@@ -213,7 +214,7 @@ public class <name>HashSetTest
     }
 
     @Test
-    public void addWithRehash() throws Exception
+    public void addWithRehash() throws NoSuchFieldException, IllegalAccessException
     {
         <name>HashSet hashSet = new <name>HashSet();
         Assert.assertTrue(hashSet.addAll(<["32", "33", "34", "35", "36", "37", "38", "39"]:(literal.(type))(); separator=", ">));

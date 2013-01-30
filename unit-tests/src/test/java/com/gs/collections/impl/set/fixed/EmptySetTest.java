@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -105,7 +105,7 @@ public class EmptySetTest extends AbstractMemoryEfficientMutableSetTestCase
     @Test
     public void testForEach()
     {
-        this.emptySet.forEach(new Procedure()
+        this.emptySet.forEach(new Procedure<Object>()
         {
             public void value(Object each)
             {
@@ -117,7 +117,7 @@ public class EmptySetTest extends AbstractMemoryEfficientMutableSetTestCase
     @Test
     public void testForEachWithIndex()
     {
-        this.emptySet.forEachWithIndex(new ObjectIntProcedure()
+        this.emptySet.forEachWithIndex(new ObjectIntProcedure<Object>()
         {
             public void value(Object each, int index)
             {
@@ -129,7 +129,7 @@ public class EmptySetTest extends AbstractMemoryEfficientMutableSetTestCase
     @Test
     public void testForEachWith()
     {
-        this.emptySet.forEachWith(new Procedure2()
+        this.emptySet.forEachWith(new Procedure2<Object, Object>()
         {
             public void value(Object argument1, Object argument2)
             {

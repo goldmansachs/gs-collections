@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,9 @@ package com.gs.collections.impl.map.mutable;
 
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -29,13 +29,13 @@ import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.gs.collections.impl.set.mutable.UnifiedSet;
-import junit.framework.Assert;
+import com.gs.collections.impl.test.Verify;
 import org.junit.After;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class ParallelUnsafeMapIteratePutTest
 {
-
     private static final long SEED = 0x12345678ABCDL;
 
     private static final long PUT_REPEAT = 100;
@@ -59,22 +59,21 @@ public class ParallelUnsafeMapIteratePutTest
         }
         catch (InterruptedException e)
         {
-            //ignore
+            throw new RuntimeException(e);
         }
     }
 
-    //    @Ignore
     @Test
-    public void testMapIteratePut() throws Exception
+    public void testMapIteratePut()
     {
         int constSize = 100000;
         int size = 10000000;
         Integer[] contents = new Integer[size];
         Integer[] constContents = new Integer[constSize];
-        for(int i=0;i<size;i++)
+        for (int i = 0; i < size; i++)
         {
             contents[i] = i;
-            if (i < constSize/2)
+            if (i < constSize / 2)
             {
                 constContents[i] = i;
             }
@@ -98,60 +97,62 @@ public class ParallelUnsafeMapIteratePutTest
 
     private void runPutTest1(int threadCount, Integer[] contents, Integer[] constContents, ExecutorService executorService, boolean warmup)
     {
-        long ops = (warmup ? 1000000/contents.length : 1000000*PUT_REPEAT/contents.length) + 1;
-        Future[] futures = new Future[threadCount];
-        for(int i=0; i < ops; i++)
+        long ops = (warmup ? 1000000 / contents.length : 1000000 * PUT_REPEAT / contents.length) + 1;
+        Future<?>[] futures = new Future<?>[threadCount];
+        for (int i = 0; i < ops; i++)
         {
-            ConcurrentHashMapUnsafe map = new ConcurrentHashMapUnsafe(constContents.length);
-            UnifiedSet setToRemove = new UnifiedSet(constContents.length);
-            for(Integer x: constContents)
+            ConcurrentHashMapUnsafe<Integer, Integer> map = new ConcurrentHashMapUnsafe<Integer, Integer>(constContents.length);
+            UnifiedSet<Integer> setToRemove = UnifiedSet.newSet(constContents.length);
+            for (Integer x : constContents)
             {
-                map.put(x,x);
+                map.put(x, x);
                 setToRemove.put(x);
             }
             AtomicInteger currentPos = new AtomicInteger();
-            for(int t=0;t<threadCount;t++)
+            for (int t = 0; t < threadCount; t++)
             {
                 futures[t] = executorService.submit(new PutRunner1(map, contents, currentPos));
             }
             int count = 0;
-            UnifiedSet setToAdd = new UnifiedSet(constContents.length);
-            for(Iterator it = map.keySet().iterator(); it.hasNext();)
+            UnifiedSet<Integer> setToAdd = UnifiedSet.newSet(constContents.length);
+            for (Integer next : map.keySet())
             {
-                Object next = it.next();
                 setToRemove.remove(next);
                 Assert.assertTrue(setToAdd.add(next));
                 count++;
             }
             Assert.assertTrue(count >= constContents.length);
-            Assert.assertEquals(0, setToRemove.size());
-            for(Future future: futures)
+            Verify.assertEmpty(setToRemove);
+            for (Future<?> future : futures)
             {
                 try
                 {
                     future.get();
                 }
-                catch (Exception e)
+                catch (ExecutionException e)
+                {
+                    throw new RuntimeException("unexpected", e);
+                }
+                catch (InterruptedException e)
                 {
                     throw new RuntimeException("unexpected", e);
                 }
             }
             if (map.size() != contents.length)
             {
-                System.out.println("wrong");
+                throw new AssertionError();
             }
         }
     }
 
-
     private static class PutRunner1 implements Runnable
     {
-        private final Map map;
+        private final Map<Integer, Integer> map;
         private final Integer[] contents;
         private long total;
         private final AtomicInteger queuePosition;
 
-        private PutRunner1(Map map, Integer[] contents, AtomicInteger queuePosition)
+        private PutRunner1(Map<Integer, Integer> map, Integer[] contents, AtomicInteger queuePosition)
         {
             this.map = map;
             this.contents = contents;
@@ -160,7 +161,7 @@ public class ParallelUnsafeMapIteratePutTest
 
         public void run()
         {
-            while(this.queuePosition.get() < this.contents.length)
+            while (this.queuePosition.get() < this.contents.length)
             {
                 int end = this.queuePosition.addAndGet(CHUNK_SIZE);
                 int start = end - CHUNK_SIZE;
@@ -170,7 +171,7 @@ public class ParallelUnsafeMapIteratePutTest
                     {
                         end = this.contents.length;
                     }
-                    for(int i=start;i<end;i++)
+                    for (int i = start; i < end; i++)
                     {
                         if (this.map.put(this.contents[i], this.contents[i]) != null)
                         {
@@ -181,9 +182,8 @@ public class ParallelUnsafeMapIteratePutTest
             }
             if (this.total < 0)
             {
-                System.out.println("wrong"); // never gets here, but it can't be optimized away
+                throw new AssertionError("never gets here, but it can't be optimized away");
             }
         }
     }
-
 }

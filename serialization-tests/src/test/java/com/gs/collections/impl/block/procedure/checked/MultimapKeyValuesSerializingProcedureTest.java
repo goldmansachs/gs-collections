@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,6 +30,6 @@ public class MultimapKeyValuesSerializingProcedureTest
                         + "dWx0aW1hcEtleVZhbHVlc1NlcmlhbGl6aW5nUHJvY2VkdXJlAAAAAAAAAAECAAFMAANvdXR0ABZM\n"
                         + "amF2YS9pby9PYmplY3RPdXRwdXQ7eHIAQWNvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLmJsb2NrLnBy\n"
                         + "b2NlZHVyZS5jaGVja2VkLkNoZWNrZWRQcm9jZWR1cmUyAAAAAAAAAAECAAB4cHA=",
-                new MultimapKeyValuesSerializingProcedure(null));
+                new MultimapKeyValuesSerializingProcedure<Object, Object>(null));
     }
 }

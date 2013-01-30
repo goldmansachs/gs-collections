@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package com.gs.collections.impl.bag.immutable;
 import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.factory.bag.ImmutableBagFactory;
-import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.utility.Iterate;
 import net.jcip.annotations.Immutable;
 

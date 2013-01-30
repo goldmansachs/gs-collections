@@ -21,7 +21,7 @@ import com.gs.collections.api.block.function.Function;
 
 public final class HashingStrategies
 {
-    private static final HashingStrategy<?> DEFAULT_HASHING_STRATEGY = new DefaultStrategy();
+    private static final HashingStrategy<?> DEFAULT_HASHING_STRATEGY = new DefaultStrategy<Object>();
 
     private HashingStrategies()
     {

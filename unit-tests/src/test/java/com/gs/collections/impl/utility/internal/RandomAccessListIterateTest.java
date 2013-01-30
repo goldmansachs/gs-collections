@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -211,7 +211,7 @@ public class RandomAccessListIterateTest
     @Test
     public void getLastOnEmpty()
     {
-        List<?> list = new ArrayList();
+        List<?> list = new ArrayList<Object>();
         Assert.assertNull(RandomAccessListIterate.getLast(list));
     }
 
