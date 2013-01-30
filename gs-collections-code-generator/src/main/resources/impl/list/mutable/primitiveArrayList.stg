@@ -808,6 +808,12 @@ public final class <name>ArrayList
         return this;
     }
 
+    public <name>ArrayList sortThis()
+    {
+        Arrays.sort(this.items, 0, this.items.length);
+        return this;
+    }
+
     public <name>ArrayList toReversed()
     {
         return <name>ArrayList.newList(this.asReversed());

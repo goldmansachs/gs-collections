@@ -583,17 +583,29 @@ public class BooleanArrayListTest
     @Test
     public void reverseThis()
     {
-        Verify.assertEquals(BooleanArrayList.newListWith(true, true, false, false), BooleanArrayList.newListWith(false, false, true, true).reverseThis());
+        Assert.assertEquals(BooleanArrayList.newListWith(true, true, false, false), BooleanArrayList.newListWith(false, false, true, true).reverseThis());
         BooleanArrayList originalList = BooleanArrayList.newListWith(true, true, false, false);
-        Verify.assertSame(originalList, originalList.reverseThis());
+        Assert.assertSame(originalList, originalList.reverseThis());
+    }
+
+    @Test
+    public void sortThis()
+    {
+        Assert.assertEquals(BooleanArrayList.newListWith(false, false, true, true), BooleanArrayList.newListWith(true, false, false, true).sortThis());
+        Assert.assertEquals(BooleanArrayList.newListWith(false), BooleanArrayList.newListWith(false).sortThis());
+        Assert.assertEquals(BooleanArrayList.newListWith(true), BooleanArrayList.newListWith(true).sortThis());
+        Assert.assertEquals(BooleanArrayList.newListWith(), BooleanArrayList.newListWith().sortThis());
+        Assert.assertEquals(BooleanArrayList.newListWith(false, true), BooleanArrayList.newListWith(false, true).sortThis());
+        Assert.assertEquals(BooleanArrayList.newListWith(false, true), BooleanArrayList.newListWith(true, false).sortThis());
+        Assert.assertEquals(BooleanArrayList.newListWith(false, false, true, true, true), BooleanArrayList.newListWith(false, true, false, true, true).sortThis());
     }
 
     @Test
     public void toReversed()
     {
-        Verify.assertEquals(BooleanArrayList.newListWith(true, true, false, false), BooleanArrayList.newListWith(false, false, true, true).toReversed());
+        Assert.assertEquals(BooleanArrayList.newListWith(true, true, false, false), BooleanArrayList.newListWith(false, false, true, true).toReversed());
         BooleanArrayList originalList = BooleanArrayList.newListWith(true, true, false, false);
-        Verify.assertNotSame(originalList, originalList.toReversed());
+        Assert.assertNotSame(originalList, originalList.toReversed());
     }
 
     @Test

@@ -570,12 +570,26 @@ public class <name>ArrayListTest
         Assert.assertEquals(new <name>ArrayList(), new <name>ArrayList().reverseThis());
         <name>ArrayList emptyList = new <name>ArrayList();
         Assert.assertSame(emptyList, emptyList.reverseThis());
+        Assert.assertEquals(<name>ArrayList.newListWith(<["3"]:(literal.(type))(); separator=", ">), <name>ArrayList.newListWith(<["3"]:(literal.(type))(); separator=", ">).reverseThis());
+        Assert.assertEquals(<name>ArrayList.newListWith(<["3", "1"]:(literal.(type))(); separator=", ">), <name>ArrayList.newListWith(<["1", "3"]:(literal.(type))(); separator=", ">).reverseThis());
         Assert.assertEquals(<name>ArrayList.newListWith(<["3", "1", "9", "7"]:(literal.(type))(); separator=", ">), <name>ArrayList.newListWith(<["7", "9", "1", "3"]:(literal.(type))(); separator=", ">).reverseThis());
-        <name>ArrayList evenList = <name>ArrayList.newListWith(<["3", "1", "9", "7"]:(literal.(type))(); separator=", ">);
-        Assert.assertSame(evenList, evenList.reverseThis());
+        <name>ArrayList sameList = <name>ArrayList.newListWith(<["3", "1", "9", "7"]:(literal.(type))(); separator=", ">);
+        Assert.assertSame(sameList, sameList.reverseThis());
         Assert.assertEquals(<name>ArrayList.newListWith(<["3", "1", "9", "7", "8"]:(literal.(type))(); separator=", ">), <name>ArrayList.newListWith(<["8", "7", "9", "1", "3"]:(literal.(type))(); separator=", ">).reverseThis());
-        <name>ArrayList oddList = <name>ArrayList.newListWith(<["3", "1", "9", "7", "8"]:(literal.(type))(); separator=", ">);
-        Assert.assertSame(oddList, oddList.reverseThis());
+    }
+
+    @Test
+    public void sortThis()
+    {
+        Assert.assertEquals(new <name>ArrayList(), new <name>ArrayList().sortThis());
+        <name>ArrayList emptyList = new <name>ArrayList();
+        Assert.assertSame(emptyList, emptyList.reverseThis());
+        Assert.assertEquals(<name>ArrayList.newListWith(<["3"]:(literal.(type))(); separator=", ">), <name>ArrayList.newListWith(<["3"]:(literal.(type))(); separator=", ">).sortThis());
+        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "3"]:(literal.(type))(); separator=", ">), <name>ArrayList.newListWith(<["3", "1"]:(literal.(type))(); separator=", ">).sortThis());
+        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "3", "7", "9"]:(literal.(type))(); separator=", ">), <name>ArrayList.newListWith(<["3", "1", "9", "7"]:(literal.(type))(); separator=", ">).sortThis());
+        <name>ArrayList sameList = <name>ArrayList.newListWith(<["3", "1", "9", "7"]:(literal.(type))(); separator=", ">);
+        Assert.assertSame(sameList, sameList.sortThis());
+        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "3", "7", "8", "9"]:(literal.(type))(); separator=", ">), <name>ArrayList.newListWith(<["8", "1", "7", "3", "9"]:(literal.(type))(); separator=", ">).sortThis());
     }
 
     @Test

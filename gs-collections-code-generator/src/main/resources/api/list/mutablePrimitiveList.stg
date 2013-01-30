@@ -43,6 +43,10 @@ public interface Mutable<name>List extends Mutable<name>Collection, <name>List
 
     Mutable<name>List toReversed();
 
+    /**
+     * Sorts this list mutating its contents and returns the same mutable list (this).
+     */
+    Mutable<name>List sortThis();
 }
 
 >>
