@@ -14,13 +14,13 @@ body(type, name) ::= <<
 
 package com.gs.collections.api;
 
-import com.gs.collections.api.bag.primitive.<name>Bag;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
-import com.gs.collections.api.list.primitive.<name>List;
-import com.gs.collections.api.set.primitive.<name>Set;
+import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
+import com.gs.collections.api.list.primitive.Mutable<name>List;
+import com.gs.collections.api.set.primitive.Mutable<name>Set;
 
 /**
  * This file was automatically generated from template file primitiveIterable.stg.
@@ -58,11 +58,11 @@ public interface <name>Iterable extends PrimitiveIterable
 
     boolean containsAll(<name>Iterable source);
 
-    <name>List toList();
+    Mutable<name>List toList();
 
-    <name>Set toSet();
+    Mutable<name>Set toSet();
 
-    <name>Bag toBag();
+    Mutable<name>Bag toBag();
 }
 
 >>

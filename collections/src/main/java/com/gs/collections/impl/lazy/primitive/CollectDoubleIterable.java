@@ -23,7 +23,7 @@ import java.util.Iterator;
 import com.gs.collections.api.DoubleIterable;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.bag.primitive.DoubleBag;
+import com.gs.collections.api.bag.primitive.MutableDoubleBag;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleToObjectFunction;
@@ -33,8 +33,8 @@ import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.DoubleProcedure;
 import com.gs.collections.api.iterator.DoubleIterator;
-import com.gs.collections.api.list.primitive.DoubleList;
-import com.gs.collections.api.set.primitive.DoubleSet;
+import com.gs.collections.api.list.primitive.MutableDoubleList;
+import com.gs.collections.api.set.primitive.MutableDoubleSet;
 import com.gs.collections.impl.block.factory.primitive.DoublePredicates;
 import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
 import com.gs.collections.impl.set.mutable.primitive.DoubleHashSet;
@@ -286,17 +286,17 @@ public class CollectDoubleIterable<T>
         }
     }
 
-    public DoubleList toList()
+    public MutableDoubleList toList()
     {
         return DoubleArrayList.newList(this);
     }
 
-    public DoubleSet toSet()
+    public MutableDoubleSet toSet()
     {
         return DoubleHashSet.newSet(this);
     }
 
-    public DoubleBag toBag()
+    public MutableDoubleBag toBag()
     {
         throw new UnsupportedOperationException("Bags not implemented yet");
     }

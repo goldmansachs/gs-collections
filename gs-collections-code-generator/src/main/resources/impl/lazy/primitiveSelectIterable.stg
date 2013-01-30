@@ -29,6 +29,9 @@ import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.bag.primitive.<name>Bag;
 import com.gs.collections.api.list.primitive.<name>List;
 import com.gs.collections.api.set.primitive.<name>Set;
+import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
+import com.gs.collections.api.list.primitive.Mutable<name>List;
+import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
@@ -222,17 +225,17 @@ public class Select<name>Iterable
         return true;
     }
 
-    public <name>List toList()
+    public Mutable<name>List toList()
     {
         return <name>ArrayList.newList(this);
     }
 
-    public <name>Set toSet()
+    public Mutable<name>Set toSet()
     {
         return <name>HashSet.newSet(this);
     }
 
-    public <name>Bag toBag()
+    public Mutable<name>Bag toBag()
     {
         throw new UnsupportedOperationException("Bags not implemented yet");
     }
