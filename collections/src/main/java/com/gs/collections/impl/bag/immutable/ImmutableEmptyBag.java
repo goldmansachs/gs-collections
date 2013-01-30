@@ -560,7 +560,7 @@ final class ImmutableEmptyBag<T>
         }
         catch (IOException e)
         {
-            throw new AssertionError(e);
+            throw new RuntimeException(e);
         }
     }
 
