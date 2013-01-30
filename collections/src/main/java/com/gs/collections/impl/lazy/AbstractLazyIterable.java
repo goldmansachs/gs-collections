@@ -105,15 +105,7 @@ public abstract class AbstractLazyIterable<T>
 
     public Object[] toArray()
     {
-        final Object[] result = new Object[this.size()];
-        this.forEachWithIndex(new ObjectIntProcedure<T>()
-        {
-            public void value(T each, int index)
-            {
-                result[index] = each;
-            }
-        });
-        return result;
+        return this.toList().toArray();
     }
 
     public <E> E[] toArray(E[] array)
