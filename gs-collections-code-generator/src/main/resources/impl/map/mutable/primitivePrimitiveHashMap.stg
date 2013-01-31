@@ -493,6 +493,56 @@ public class <name1><name2>HashMap
         }
     }
 
+    public <type2> removeKeyIfAbsent(<type1> key, <type2> value)
+    {
+        if (isEmptyKey(key))
+        {
+            if (this.sentinelValues == null || !this.sentinelValues.containsZeroKey)
+            {
+                return value;
+            }
+            <type2> oldValue = this.sentinelValues.zeroValue;
+            if (this.sentinelValues.containsOneKey)
+            {
+                this.sentinelValues.containsZeroKey = false;
+                this.sentinelValues.zeroValue = EMPTY_VALUE;
+            }
+            else
+            {
+                this.sentinelValues = null;
+            }
+            return oldValue;
+        }
+        if (isRemovedKey(key))
+        {
+            if (this.sentinelValues == null || !this.sentinelValues.containsOneKey)
+            {
+                return value;
+            }
+            <type2> oldValue = this.sentinelValues.oneValue;
+            if (this.sentinelValues.containsZeroKey)
+            {
+                this.sentinelValues.containsOneKey = false;
+                this.sentinelValues.oneValue = EMPTY_VALUE;
+            }
+            else
+            {
+                this.sentinelValues = null;
+            }
+            return oldValue;
+        }
+        int index = this.probe(key);
+        if (<(equals.(type1))("this.keys[index]", "key")>)
+        {
+            this.keys[index] = REMOVED_KEY;
+            this.occupied--;
+            <type2> oldValue = this.values[index];
+            this.values[index] = EMPTY_VALUE;
+            return oldValue;
+        }
+        return value;
+    }
+
     @Override
     public boolean equals(Object obj)
     {

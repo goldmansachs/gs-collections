@@ -31,7 +31,9 @@ public interface Mutable<name1><name2>Map extends <name1><name2>Map
 {
     void clear();
 
-    <type2> removeKey(<type1> key);
+    void removeKey(<type1> key);
+
+    <type2> removeKeyIfAbsent(<type1> key, <type2> value);
 
     <type2> getIfAbsentPut(<type1> key, <type2> value);
 
