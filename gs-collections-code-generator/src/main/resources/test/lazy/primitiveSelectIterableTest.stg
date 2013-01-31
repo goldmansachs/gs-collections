@@ -217,6 +217,12 @@ public class Select<name>IterableTest
     }
 
     @Test
+    public void toSortedList()
+    {
+        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2"]:(literal.(type))(); separator=", ">), this.iterable.toSortedList());
+    }
+
+    @Test
     public void toSet()
     {
         Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2"]:(literal.(type))(); separator=", ">), this.iterable.toSet());

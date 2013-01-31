@@ -291,6 +291,11 @@ public class CollectFloatIterable<T>
         return FloatArrayList.newList(this);
     }
 
+    public MutableFloatList toSortedList()
+    {
+        return FloatArrayList.newList(this).sortThis();
+    }
+
     public MutableFloatSet toSet()
     {
         return FloatHashSet.newSet(this);

@@ -26,6 +26,7 @@ import com.gs.collections.impl.block.factory.primitive.IntPredicates;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.math.IntegerSum;
+import com.gs.collections.impl.set.mutable.primitive.IntHashSet;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -223,6 +224,30 @@ public class IntIntervalTest
     {
         Assert.assertArrayEquals(new int[]{1, 2, 3, 4}, IntInterval.oneTo(4).toArray());
 
+    }
+
+    @Test
+    public void toList()
+    {
+        Assert.assertEquals(IntArrayList.newListWith(1, 2, 3, 4), IntInterval.oneTo(4).toList());
+    }
+
+    @Test
+    public void toSortedList()
+    {
+        Assert.assertEquals(IntArrayList.newListWith(1, 2, 3, 4), IntInterval.oneTo(4).toReversed().toSortedList());
+    }
+
+    @Test
+    public void toSet()
+    {
+        Assert.assertEquals(IntHashSet.newSetWith(1, 2, 3, 4), IntInterval.oneTo(4).toSet());
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void toBag()
+    {
+        IntInterval.oneTo(4).toBag();
     }
 
     @Test

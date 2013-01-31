@@ -252,6 +252,12 @@ public class CollectIntIterableTest
     }
 
     @Test
+    public void toSortedList()
+    {
+        Assert.assertEquals(IntArrayList.newListWith(1, 2, 3), this.intIterable.toSortedList());
+    }
+
+    @Test
     public void toSet()
     {
         Assert.assertEquals(IntHashSet.newSetWith(1, 2, 3), this.intIterable.toSet());

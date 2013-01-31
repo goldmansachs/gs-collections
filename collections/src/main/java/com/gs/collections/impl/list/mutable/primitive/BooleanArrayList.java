@@ -661,6 +661,11 @@ public final class BooleanArrayList
         return BooleanArrayList.newList(this);
     }
 
+    public MutableBooleanList toSortedList()
+    {
+        return BooleanArrayList.newList(this).sortThis();
+    }
+
     public MutableBooleanSet toSet()
     {
         return BooleanHashSet.newSet(this);
@@ -938,6 +943,11 @@ public final class BooleanArrayList
         public MutableBooleanList toList()
         {
             return BooleanArrayList.newList(this);
+        }
+
+        public MutableBooleanList toSortedList()
+        {
+            return BooleanArrayList.newList(this).sortThis();
         }
 
         public MutableBooleanSet toSet()

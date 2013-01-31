@@ -290,6 +290,11 @@ public class CollectIntIterable<T>
         return IntArrayList.newList(this);
     }
 
+    public MutableIntList toSortedList()
+    {
+        return IntArrayList.newList(this).sortThis();
+    }
+
     public MutableIntSet toSet()
     {
         return IntHashSet.newSet(this);

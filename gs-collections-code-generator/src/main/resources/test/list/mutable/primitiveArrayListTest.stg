@@ -670,6 +670,12 @@ public class <name>ArrayListTest
     }
 
     @Test
+    public void toSortedList()
+    {
+        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), this.list.toReversed().toSortedList());
+    }
+
+    @Test
     public void toSet()
     {
         Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), this.list.toSet());

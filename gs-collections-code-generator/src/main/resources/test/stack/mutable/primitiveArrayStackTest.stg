@@ -629,6 +629,12 @@ public class <name>ArrayStackTest
     }
 
     @Test
+    public void toSortedList()
+    {
+        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), <name>ArrayStack.newStackWith(<["3", "2", "1"]:(literal.(type))(); separator=", ">).toSortedList());
+    }
+
+    @Test
     public void toSet()
     {
         Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), <name>ArrayStack.newStackWith(<["3", "2", "1"]:(literal.(type))(); separator=", ">).toSet());

@@ -243,6 +243,12 @@ public class CollectFloatIterableTest
     }
 
     @Test
+    public void toSortedList()
+    {
+        Assert.assertEquals(FloatArrayList.newListWith(1.0f, 2.0f, 3.0f), this.floatIterable.toSortedList());
+    }
+
+    @Test
     public void toSet()
     {
         Assert.assertEquals(FloatHashSet.newSetWith(1.0f, 2.0f, 3.0f), this.floatIterable.toSet());

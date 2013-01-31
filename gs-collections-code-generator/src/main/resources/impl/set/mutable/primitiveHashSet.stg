@@ -894,6 +894,11 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         return <name>ArrayList.newList(this);
     }
 
+    public Mutable<name>List toSortedList()
+    {
+        return <name>ArrayList.newList(this).sortThis();
+    }
+
     public Mutable<name>Set toSet()
     {
         return <name>HashSet.newSet(this);

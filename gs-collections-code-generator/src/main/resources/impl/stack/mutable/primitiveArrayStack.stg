@@ -356,6 +356,11 @@ public final class <name>ArrayStack
         return <name>ArrayList.newList(this);
     }
 
+    public Mutable<name>List toSortedList()
+    {
+        return <name>ArrayList.newList(this).sortThis();
+    }
+
     public Mutable<name>Set toSet()
     {
         return <name>HashSet.newSet(this);

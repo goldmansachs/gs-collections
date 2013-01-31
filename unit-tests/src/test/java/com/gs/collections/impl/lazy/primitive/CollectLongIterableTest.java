@@ -251,6 +251,12 @@ public class CollectLongIterableTest
     }
 
     @Test
+    public void toSortedList()
+    {
+        Assert.assertEquals(LongArrayList.newListWith(1, 2, 3), this.longIterable.toSortedList());
+    }
+
+    @Test
     public void toSet()
     {
         Assert.assertEquals(LongHashSet.newSetWith(1L, 2L, 3L), this.longIterable.toSet());

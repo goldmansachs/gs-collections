@@ -60,6 +60,8 @@ public interface <name>Iterable extends PrimitiveIterable
 
     Mutable<name>List toList();
 
+    Mutable<name>List toSortedList();
+
     Mutable<name>Set toSet();
 
     Mutable<name>Bag toBag();

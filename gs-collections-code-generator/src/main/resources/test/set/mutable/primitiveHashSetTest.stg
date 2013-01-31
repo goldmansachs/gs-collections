@@ -733,6 +733,12 @@ public class <name>HashSetTest
     }
 
     @Test
+    public void toSortedList()
+    {
+        Assert.assertEquals(<name>ArrayList.newListWith(<["0", "1", "31"]:(literal.(type))(); separator=", ">), <name>HashSet.newSetWith(<["0", "1", "31"]:(literal.(type))(); separator=", ">).toSortedList());
+    }
+
+    @Test
     public void toSet()
     {
         Assert.assertEquals(<name>HashSet.newSetWith(<["0", "1", "31"]:(literal.(type))(); separator=", ">), <name>HashSet.newSetWith(<["0", "1", "31"]:(literal.(type))(); separator=", ">).toSet());

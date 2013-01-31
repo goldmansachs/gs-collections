@@ -291,6 +291,11 @@ public class CollectDoubleIterable<T>
         return DoubleArrayList.newList(this);
     }
 
+    public MutableDoubleList toSortedList()
+    {
+        return DoubleArrayList.newList(this).sortThis();
+    }
+
     public MutableDoubleSet toSet()
     {
         return DoubleHashSet.newSet(this);

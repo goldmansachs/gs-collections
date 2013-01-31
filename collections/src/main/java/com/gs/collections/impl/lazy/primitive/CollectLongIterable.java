@@ -291,6 +291,11 @@ public class CollectLongIterable<T>
         return LongArrayList.newList(this);
     }
 
+    public MutableLongList toSortedList()
+    {
+        return LongArrayList.newList(this).sortThis();
+    }
+
     public MutableLongSet toSet()
     {
         return LongHashSet.newSet(this);

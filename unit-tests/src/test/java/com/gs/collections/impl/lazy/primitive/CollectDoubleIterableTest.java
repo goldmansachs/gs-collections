@@ -255,6 +255,12 @@ public class CollectDoubleIterableTest
     }
 
     @Test
+    public void toSortedList()
+    {
+        Assert.assertEquals(DoubleArrayList.newListWith(1.0, 2.0, 3.0), this.doubleIterable.toSortedList());
+    }
+
+    @Test
     public void toSet()
     {
         Assert.assertEquals(DoubleHashSet.newSetWith(1.0, 2.0, 3.0), this.doubleIterable.toSet());
