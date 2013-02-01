@@ -1722,9 +1722,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
 
     public \<NK, NV> MutableSortedMap\<NK, NV> toSortedMap(Function\<? super V, ? extends NK> keyFunction, Function\<? super V, ? extends NV> valueFunction)
     {
-        TreeSortedMap\<NK, NV> sortedMap = TreeSortedMap.newMap();
-        this.forEach(new MapCollectProcedure\<V, NK, NV>(sortedMap, keyFunction, valueFunction));
-        return sortedMap;
+        return this.toSortedMap(Comparators.naturalOrder(), keyFunction, valueFunction);
     }
 
     public \<NK, NV> MutableSortedMap\<NK, NV> toSortedMap(Comparator\<? super NK> comparator, Function\<? super V, ? extends NK> keyFunction, Function\<? super V, ? extends NV> valueFunction)
@@ -2195,7 +2193,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
 
         public void remove()
         {
-            if (!this.hasNext())
+            if (<name>ObjectHashMap.this.size() == 0)
             {
                 throw new NoSuchElementException();
             }
