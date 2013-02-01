@@ -1925,7 +1925,6 @@ public class <name>ObjectHashMapTest
     @Test
     public void containsAllIterable()
     {
-//        Assert.assertFalse(this.map.containsAllIterable(null));
         Assert.assertTrue(this.map.containsAllIterable(FastList.newListWith("zero", "thirtyOne")));
         Assert.assertTrue(this.map.containsAllIterable(FastList.newListWith("zero", "thirtyOne", "thirtyTwo")));
         Assert.assertFalse(this.map.containsAllIterable(FastList.newListWith("zero", "one", "thirtyTwo")));
@@ -1935,7 +1934,6 @@ public class <name>ObjectHashMapTest
     @Test
     public void containsAll()
     {
-//        Assert.assertFalse(this.map.containsAll(null));
         Assert.assertTrue(this.map.containsAll(FastList.newListWith("zero", "thirtyOne")));
         Assert.assertTrue(this.map.containsAll(FastList.newListWith("zero", "thirtyOne", "thirtyTwo")));
         Assert.assertFalse(this.map.containsAll(FastList.newListWith("zero", "one", "thirtyTwo")));
@@ -1945,7 +1943,6 @@ public class <name>ObjectHashMapTest
     @Test
     public void containsAllArguments()
     {
-//        Assert.assertFalse(this.map.containsAll(null));
         Assert.assertTrue(this.map.containsAllArguments("zero", "thirtyOne"));
         Assert.assertTrue(this.map.containsAllArguments("zero", "thirtyOne", "thirtyTwo"));
         Assert.assertFalse(this.map.containsAllArguments("zero", "one", "thirtyTwo"));
