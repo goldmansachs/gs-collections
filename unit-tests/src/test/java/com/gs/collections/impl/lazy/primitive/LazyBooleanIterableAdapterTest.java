@@ -138,9 +138,9 @@ public class LazyBooleanIterableAdapterTest
     {
         RichIterable<String> collect = this.iterable.collect(new BooleanToObjectFunction<String>()
         {
-            public String valueOf(boolean byteParameter)
+            public String valueOf(boolean booleanParameter)
             {
-                return String.valueOf(byteParameter);
+                return String.valueOf(booleanParameter);
             }
         });
         Verify.assertIterableSize(3, collect);

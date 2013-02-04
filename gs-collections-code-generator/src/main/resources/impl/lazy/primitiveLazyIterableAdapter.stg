@@ -33,6 +33,7 @@ import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
 
 /**
  * This file was automatically generated from template file primitiveSelectIterable.stg.
+ * @since  3.0
  */
 public class Lazy<name>IterableAdapter
     implements <name>Iterable
