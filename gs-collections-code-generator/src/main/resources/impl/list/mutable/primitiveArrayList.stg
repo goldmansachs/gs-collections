@@ -613,6 +613,24 @@ public final class <name>ArrayList
         return min;
     }
 
+    public <type> minIfEmpty(<type> defaultValue)
+    {
+        if (this.isEmpty())
+        {
+            return defaultValue;
+        }
+        return this.min();
+    }
+
+    public <type> maxIfEmpty(<type> defaultValue)
+    {
+        if (this.isEmpty())
+        {
+            return defaultValue;
+        }
+        return this.max();
+    }
+
     public <wideType.(type)> sum()
     {
         <wideType.(type)> result = <wideZero.(type)>;
@@ -972,6 +990,24 @@ public final class <name>ArrayList
         public <type> min()
         {
             return <name>ArrayList.this.min();
+        }
+
+        public <type> minIfEmpty(<type> defaultValue)
+        {
+            if (this.isEmpty())
+            {
+                return defaultValue;
+            }
+            return this.min();
+        }
+
+        public <type> maxIfEmpty(<type> defaultValue)
+        {
+            if (this.isEmpty())
+            {
+                return defaultValue;
+            }
+            return this.max();
         }
 
         public double average()

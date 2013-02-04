@@ -19,6 +19,7 @@ package com.gs.collections.impl.lazy.primitive;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.LongIterable;
@@ -188,6 +189,30 @@ public class CollectLongIterable<T>
             min = Math.min(min, iterator.next());
         }
         return min;
+    }
+
+    public long minIfEmpty(long defaultValue)
+    {
+        try
+        {
+            return this.min();
+        }
+        catch (NoSuchElementException ex)
+        {
+        }
+        return defaultValue;
+    }
+
+    public long maxIfEmpty(long defaultValue)
+    {
+        try
+        {
+            return this.max();
+        }
+        catch (NoSuchElementException ex)
+        {
+        }
+        return defaultValue;
     }
 
     public double average()

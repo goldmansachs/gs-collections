@@ -641,6 +641,16 @@ public final class IntInterval
         return this.getLast();
     }
 
+    public int minIfEmpty(int defaultValue)
+    {
+        return this.min();
+    }
+
+    public int maxIfEmpty(int defaultValue)
+    {
+        return this.max();
+    }
+
     public double average()
     {
         return (double) this.sum() / (double) this.size();

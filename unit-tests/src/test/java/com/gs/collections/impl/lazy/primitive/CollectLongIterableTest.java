@@ -137,6 +137,20 @@ public class CollectLongIterableTest
         Assert.assertEquals(-3, Interval.fromTo(-3, 3).collectLong(PrimitiveFunctions.unboxIntegerToLong()).min());
     }
 
+    @Test
+    public void minIfEmpty()
+    {
+        Assert.assertEquals(-3L, Interval.fromTo(-3, 3).collectLong(PrimitiveFunctions.unboxIntegerToLong()).minIfEmpty(0L));
+        Assert.assertEquals(0L, FastList.<Integer>newList().asLazy().collectLong(PrimitiveFunctions.unboxIntegerToLong()).minIfEmpty(0L));
+    }
+
+    @Test
+    public void maxIfEmpty()
+    {
+        Assert.assertEquals(3L, Interval.fromTo(-3, 3).collectLong(PrimitiveFunctions.unboxIntegerToLong()).maxIfEmpty(0L));
+        Assert.assertEquals(0L, FastList.<Integer>newList().asLazy().collectLong(PrimitiveFunctions.unboxIntegerToLong()).maxIfEmpty(0L));
+    }
+
     @Test(expected = NoSuchElementException.class)
     public void maxThrowsOnEmpty()
     {

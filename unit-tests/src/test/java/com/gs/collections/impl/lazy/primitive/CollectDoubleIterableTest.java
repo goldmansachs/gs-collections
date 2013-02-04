@@ -141,6 +141,20 @@ public class CollectDoubleIterableTest
         Assert.assertEquals(-3.0d, Interval.fromTo(-3, 3).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).min(), 0.0d);
     }
 
+    @Test
+    public void minIfEmpty()
+    {
+        Assert.assertEquals(-3.0d, Interval.fromTo(-3, 3).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).minIfEmpty(0.0d), 0.0d);
+        Assert.assertEquals(0.0d, FastList.<Integer>newList().asLazy().collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).minIfEmpty(0.0d), 0.0d);
+    }
+
+    @Test
+    public void maxIfEmpty()
+    {
+        Assert.assertEquals(3.0d, Interval.fromTo(-3, 3).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).maxIfEmpty(0), 0.0d);
+        Assert.assertEquals(0.0d, FastList.<Integer>newList().asLazy().collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).maxIfEmpty(0.0d), 0.0d);
+    }
+
     @Test(expected = NoSuchElementException.class)
     public void maxThrowsOnEmpty()
     {

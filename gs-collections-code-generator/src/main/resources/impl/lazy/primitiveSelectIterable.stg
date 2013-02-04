@@ -386,6 +386,30 @@ allMethods(name, type) ::=<<
         return min;
     }
 
+    public <type> minIfEmpty(<type> defaultValue)
+    {
+        try
+        {
+            return this.min();
+        }
+        catch (NoSuchElementException ex)
+        {
+        }
+        return defaultValue;
+    }
+
+    public <type> maxIfEmpty(<type> defaultValue)
+    {
+        try
+        {
+            return this.max();
+        }
+        catch (NoSuchElementException ex)
+        {
+        }
+        return defaultValue;
+    }
+
     public double average()
     {
         return <castSum.(type)>this.sum() / (double) this.size();

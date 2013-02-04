@@ -607,6 +607,22 @@ public class <name>HashSetTest
         <(minTests.(type))(type, name)>
     }
 
+    @Test
+    public void minIfEmpty()
+    {
+        Assert.assertEquals(<(wideLiteral.(type))("5")>, new <name>HashSet().minIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("0")>, new <name>HashSet().minIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("0")>, <name>HashSet.newSetWith(<["1", "0", "9", "7"]:(literal.(type))(); separator=", ">).minIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
+    }
+
+    @Test
+    public void maxIfEmpty()
+    {
+        Assert.assertEquals(<(wideLiteral.(type))("5")>, new <name>HashSet().maxIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("0")>, new <name>HashSet().maxIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("9")>, <name>HashSet.newSetWith(<["1", "0", "9", "7"]:(literal.(type))(); separator=", ">).maxIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
+    }
+
     @Test(expected = NoSuchElementException.class)
     public void min_throws_emptyList()
     {

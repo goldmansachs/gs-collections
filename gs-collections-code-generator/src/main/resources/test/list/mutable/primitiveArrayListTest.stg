@@ -520,6 +520,22 @@ public class <name>ArrayListTest
         Assert.assertEquals(<(wideLiteral.(type))("0")>, <name>ArrayList.newListWith(<["1", "0", "9", "7"]:(literal.(type))(); separator=", ">).min()<(wideDelta.(type))>);
     }
 
+    @Test
+    public void minIfEmpty()
+    {
+        Assert.assertEquals(<(wideLiteral.(type))("5")>, new <name>ArrayList().minIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("0")>, new <name>ArrayList().minIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("0")>, <name>ArrayList.newListWith(<["1", "0", "9", "7"]:(literal.(type))(); separator=", ">).minIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
+    }
+
+    @Test
+    public void maxIfEmpty()
+    {
+        Assert.assertEquals(<(wideLiteral.(type))("5")>, new <name>ArrayList().maxIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("0")>, new <name>ArrayList().maxIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("9")>, <name>ArrayList.newListWith(<["1", "0", "9", "7"]:(literal.(type))(); separator=", ">).maxIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
+    }
+
     @Test(expected = NoSuchElementException.class)
     public void min_throws_emptyList()
     {

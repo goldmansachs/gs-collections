@@ -141,6 +141,20 @@ public class CollectFloatIterableTest
         Assert.assertEquals(-3.0f, Interval.fromTo(-3, 3).collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).min(), 0.0f);
     }
 
+    @Test
+    public void minIfEmpty()
+    {
+        Assert.assertEquals(-3.0f, Interval.fromTo(-3, 3).collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).minIfEmpty(0.0f), 0.0f);
+        Assert.assertEquals(0.0f, FastList.<Integer>newList().asLazy().collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).minIfEmpty(0.0f), 0.0f);
+    }
+
+    @Test
+    public void maxIfEmpty()
+    {
+        Assert.assertEquals(3.0f, Interval.fromTo(-3, 3).collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).maxIfEmpty(0.0f), 0.0f);
+        Assert.assertEquals(0.0f, FastList.<Integer>newList().asLazy().collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).maxIfEmpty(0.0f), 0.0f);
+    }
+
     @Test(expected = NoSuchElementException.class)
     public void maxThrowsOnEmpty()
     {

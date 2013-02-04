@@ -721,6 +721,24 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         return min;
     }
 
+    public <type> minIfEmpty(<type> defaultValue)
+    {
+        if (this.isEmpty())
+        {
+            return defaultValue;
+        }
+        return this.min();
+    }
+
+    public <type> maxIfEmpty(<type> defaultValue)
+    {
+        if (this.isEmpty())
+        {
+            return defaultValue;
+        }
+        return this.max();
+    }
+
     public double average()
     {
         return <castSum.(type)>this.sum() / (double) this.size();

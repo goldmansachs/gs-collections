@@ -138,6 +138,20 @@ public class CollectIntIterableTest
         Assert.assertEquals(-3, Interval.fromTo(-3, 3).collectInt(PrimitiveFunctions.unboxIntegerToInt()).min());
     }
 
+    @Test
+    public void minIfEmpty()
+    {
+        Assert.assertEquals(-3, Interval.fromTo(-3, 3).collectInt(PrimitiveFunctions.unboxIntegerToInt()).minIfEmpty(0));
+        Assert.assertEquals(0, FastList.<Integer>newList().asLazy().collectInt(PrimitiveFunctions.unboxIntegerToInt()).minIfEmpty(0));
+    }
+
+    @Test
+    public void maxIfEmpty()
+    {
+        Assert.assertEquals(3, Interval.fromTo(-3, 3).collectInt(PrimitiveFunctions.unboxIntegerToInt()).maxIfEmpty(0));
+        Assert.assertEquals(0, FastList.<Integer>newList().asLazy().collectInt(PrimitiveFunctions.unboxIntegerToInt()).maxIfEmpty(0));
+    }
+
     @Test(expected = NoSuchElementException.class)
     public void maxThrowsOnEmpty()
     {

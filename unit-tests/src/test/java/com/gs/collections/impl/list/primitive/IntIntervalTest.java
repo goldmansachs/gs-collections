@@ -201,6 +201,18 @@ public class IntIntervalTest
     }
 
     @Test
+    public void minIfEmpty()
+    {
+        Assert.assertEquals(1, IntInterval.oneTo(9).minIfEmpty(0));
+    }
+
+    @Test
+    public void maxIfEmpty()
+    {
+        Assert.assertEquals(9, IntInterval.oneTo(9).maxIfEmpty(0));
+    }
+
+    @Test
     public void sum()
     {
         Assert.assertEquals(10L, IntInterval.oneTo(4).sum());

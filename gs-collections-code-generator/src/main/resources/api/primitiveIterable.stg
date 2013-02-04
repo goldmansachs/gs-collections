@@ -85,7 +85,11 @@ allMethods(type) ::= <<
 
 <type> max();
 
+<type> maxIfEmpty(<type> defaultValue);
+
 <type> min();
+
+<type> minIfEmpty(<type> defaultValue);
 
 double average();
 

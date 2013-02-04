@@ -422,6 +422,24 @@ public <type> min()
     return this.delegate.min();
 }
 
+public <type> minIfEmpty(<type> defaultValue)
+{
+    if (this.isEmpty())
+    {
+        return defaultValue;
+    }
+    return this.min();
+}
+
+public <type> maxIfEmpty(<type> defaultValue)
+{
+    if (this.isEmpty())
+    {
+        return defaultValue;
+    }
+    return this.max();
+}
+
 public double average()
 {
     return this.delegate.average();
