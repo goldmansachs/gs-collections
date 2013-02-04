@@ -1,0 +1,242 @@
+import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+
+targetPath() ::= "com/gs/collections/impl/lazy/primitive"
+
+fileName(primitive) ::= "Lazy<primitive.name>IterableAdapter"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.lazy.primitive;
+
+import java.io.IOException;
+import java.util.Arrays;
+import java.util.NoSuchElementException;
+
+import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
+import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
+import com.gs.collections.api.list.primitive.Mutable<name>List;
+import com.gs.collections.api.set.primitive.Mutable<name>Set;
+import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
+
+/**
+ * This file was automatically generated from template file primitiveSelectIterable.stg.
+ */
+public class Lazy<name>IterableAdapter
+    implements <name>Iterable
+{
+    private final <name>Iterable delegate;
+
+    public Lazy<name>IterableAdapter(<name>Iterable delegate)
+    {
+        this.delegate = delegate;
+    }
+
+    public <name>Iterator <type>Iterator()
+    {
+        return this.delegate.<type>Iterator();
+    }
+
+    public void forEach(<name>Procedure procedure)
+    {
+        this.delegate.forEach(procedure);
+    }
+
+    public int size()
+    {
+        return this.delegate.size();
+    }
+
+    public boolean isEmpty()
+    {
+        return this.delegate.isEmpty();
+    }
+
+    public boolean notEmpty()
+    {
+        return this.delegate.notEmpty();
+    }
+
+    public int count(<name>Predicate predicate)
+    {
+        return this.delegate.count(predicate);
+    }
+
+    public boolean anySatisfy(<name>Predicate predicate)
+    {
+        return this.delegate.anySatisfy(predicate);
+    }
+
+    public boolean allSatisfy(<name>Predicate predicate)
+    {
+        return this.delegate.allSatisfy(predicate);
+    }
+
+    public <name>Iterable select(<name>Predicate predicate)
+    {
+        return new Select<name>Iterable(this.delegate, predicate);
+    }
+
+    public <name>Iterable reject(<name>Predicate predicate)
+    {
+        return new Select<name>Iterable(this.delegate, <name>Predicates.not(predicate));
+    }
+
+    public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
+    {
+        return this.delegate.detectIfNone(predicate, ifNone);
+    }
+
+    public \<V> RichIterable\<V> collect(<name>ToObjectFunction\<? extends V> function)
+    {
+        return new Collect<name>ToObjectIterable\<V>(this.delegate, function);
+    }
+
+    <(arithmeticMethods.(type))(name, type)>
+
+    public <type>[] toArray()
+    {
+        return this.delegate.toArray();
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.delegate.toString();
+    }
+
+    public String makeString()
+    {
+        return this.delegate.makeString();
+    }
+
+    public String makeString(String separator)
+    {
+        return this.delegate.makeString(separator);
+    }
+
+    public String makeString(String start, String separator, String end)
+    {
+        return this.delegate.makeString(start, separator, end);
+    }
+
+    public void appendString(Appendable appendable)
+    {
+        this.delegate.appendString(appendable);
+    }
+
+    public void appendString(Appendable appendable, String separator)
+    {
+        this.delegate.appendString(appendable, separator);
+    }
+
+    public void appendString(Appendable appendable, String start, String separator, String end)
+    {
+        this.delegate.appendString(appendable, start, separator, end);
+    }
+
+    public boolean contains(<type> value)
+    {
+        return this.delegate.contains(value);
+    }
+
+    public boolean containsAll(<type>... source)
+    {
+        return this.delegate.containsAll(source);
+    }
+
+    public boolean containsAll(<name>Iterable source)
+    {
+        return this.delegate.containsAll(source);
+    }
+
+    public Mutable<name>List toList()
+    {
+        return this.delegate.toList();
+    }
+
+    public Mutable<name>List toSortedList()
+    {
+        return this.delegate.toSortedList();
+    }
+
+    public Mutable<name>Set toSet()
+    {
+        return this.delegate.toSet();
+    }
+
+    public Mutable<name>Bag toBag()
+    {
+        return this.delegate.toBag();
+    }
+}
+
+>>
+
+arithmeticMethods ::= [
+    "byte": "allMethods",
+    "short": "allMethods",
+    "char": "allMethods",
+    "int": "allMethods",
+    "long": "allMethods",
+    "float": "allMethods",
+    "double": "allMethods",
+    "boolean": "noMethods"
+    ]
+
+
+allMethods(name, type) ::=<<
+    public <wideType.(type)> sum()
+    {
+        return this.delegate.sum();
+    }
+
+    public <type> max()
+    {
+        return this.delegate.max();
+    }
+
+    public <type> min()
+    {
+        return this.delegate.min();
+    }
+
+    public <type> minIfEmpty(<type> defaultValue)
+    {
+        return this.delegate.minIfEmpty(defaultValue);
+    }
+
+    public <type> maxIfEmpty(<type> defaultValue)
+    {
+        return this.delegate.maxIfEmpty(defaultValue);
+    }
+
+    public double average()
+    {
+        return this.delegate.average();
+    }
+
+    public double median()
+    {
+        return this.delegate.median();
+    }
+
+    public <type>[] toSortedArray()
+    {
+        return this.delegate.toSortedArray();
+    }
+>>
+
+noMethods(name, type) ::= ""
