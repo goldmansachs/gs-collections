@@ -65,6 +65,8 @@ public interface <name>Iterable extends PrimitiveIterable
     Mutable<name>Set toSet();
 
     Mutable<name>Bag toBag();
+
+    Lazy<name>Iterable asLazy();
 }
 
 >>

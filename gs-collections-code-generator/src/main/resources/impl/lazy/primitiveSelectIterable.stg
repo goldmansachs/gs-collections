@@ -20,12 +20,13 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
-import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.bag.primitive.<name>Bag;
 import com.gs.collections.api.list.primitive.<name>List;
 import com.gs.collections.api.set.primitive.<name>Set;
@@ -40,7 +41,7 @@ import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
  * This file was automatically generated from template file primitiveSelectIterable.stg.
  */
 public class Select<name>Iterable
-    implements <name>Iterable
+    implements Lazy<name>Iterable
 {
     private final <name>Iterable delegate;
     private final <name>Predicate predicate;
@@ -93,12 +94,12 @@ public class Select<name>Iterable
         return !this.anySatisfy(<name>Predicates.not(predicate));
     }
 
-    public <name>Iterable select(<name>Predicate predicate)
+    public Lazy<name>Iterable select(<name>Predicate predicate)
     {
         return new Select<name>Iterable(this, predicate);
     }
 
-    public <name>Iterable reject(<name>Predicate predicate)
+    public Lazy<name>Iterable reject(<name>Predicate predicate)
     {
         return new Select<name>Iterable(this, <name>Predicates.not(predicate));
     }
@@ -243,6 +244,11 @@ public class Select<name>Iterable
     public Mutable<name>Bag toBag()
     {
         throw new UnsupportedOperationException("Bags not implemented yet");
+    }
+
+    public Lazy<name>Iterable asLazy()
+    {
+        return this;
     }
 
     private static final class Count<name>Procedure implements <name>Procedure

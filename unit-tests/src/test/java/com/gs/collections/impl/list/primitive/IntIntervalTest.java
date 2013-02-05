@@ -18,6 +18,7 @@ package com.gs.collections.impl.list.primitive;
 
 import java.util.NoSuchElementException;
 
+import com.gs.collections.api.LazyIntIterable;
 import com.gs.collections.api.block.function.primitive.IntToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.IntIntProcedure;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
@@ -260,6 +261,13 @@ public class IntIntervalTest
     public void toBag()
     {
         IntInterval.oneTo(4).toBag();
+    }
+
+    @Test
+    public void asLazy()
+    {
+        Assert.assertEquals(IntInterval.oneTo(5).toSet(), IntInterval.oneTo(5).asLazy().toSet());
+        Verify.assertInstanceOf(LazyIntIterable.class, IntInterval.oneTo(5).asLazy());
     }
 
     @Test

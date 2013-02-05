@@ -23,6 +23,7 @@ import java.io.ObjectOutput;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.BooleanIterable;
+import com.gs.collections.api.LazyBooleanIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.primitive.MutableBooleanBag;
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
@@ -33,6 +34,7 @@ import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.set.primitive.BooleanSet;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
 import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
+import com.gs.collections.impl.lazy.primitive.LazyBooleanIterableAdapter;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 
@@ -643,6 +645,11 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
     public MutableBooleanBag toBag()
     {
         throw new UnsupportedOperationException("Bags not implemented yet");
+    }
+
+    public LazyBooleanIterable asLazy()
+    {
+        return new LazyBooleanIterableAdapter(this);
     }
 
     public void writeExternal(ObjectOutput out) throws IOException

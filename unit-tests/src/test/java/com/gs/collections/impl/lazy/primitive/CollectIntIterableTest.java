@@ -20,6 +20,7 @@ import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.gs.collections.api.IntIterable;
+import com.gs.collections.api.LazyIntIterable;
 import com.gs.collections.api.block.function.primitive.IntToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.iterator.IntIterator;
@@ -30,6 +31,7 @@ import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.set.mutable.primitive.IntHashSet;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -281,5 +283,12 @@ public class CollectIntIterableTest
     public void toBag()
     {
         this.intIterable.toBag();
+    }
+
+    @Test
+    public void asLazy()
+    {
+        Assert.assertEquals(this.intIterable.toSet(), this.intIterable.asLazy().toSet());
+        Verify.assertInstanceOf(LazyIntIterable.class, this.intIterable.asLazy());
     }
 }

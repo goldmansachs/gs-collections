@@ -20,12 +20,13 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
-import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
@@ -36,7 +37,7 @@ import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
  * @since  3.0
  */
 public class Lazy<name>IterableAdapter
-    implements <name>Iterable
+    implements Lazy<name>Iterable
 {
     private final <name>Iterable delegate;
 
@@ -85,12 +86,12 @@ public class Lazy<name>IterableAdapter
         return this.delegate.allSatisfy(predicate);
     }
 
-    public <name>Iterable select(<name>Predicate predicate)
+    public Lazy<name>Iterable select(<name>Predicate predicate)
     {
         return new Select<name>Iterable(this.delegate, predicate);
     }
 
-    public <name>Iterable reject(<name>Predicate predicate)
+    public Lazy<name>Iterable reject(<name>Predicate predicate)
     {
         return new Select<name>Iterable(this.delegate, <name>Predicates.not(predicate));
     }
@@ -181,6 +182,11 @@ public class Lazy<name>IterableAdapter
     public Mutable<name>Bag toBag()
     {
         return this.delegate.toBag();
+    }
+
+    public Lazy<name>Iterable asLazy()
+    {
+        return this;
     }
 }
 

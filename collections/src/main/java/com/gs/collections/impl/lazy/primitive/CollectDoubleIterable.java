@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.DoubleIterable;
+import com.gs.collections.api.LazyDoubleIterable;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.primitive.MutableDoubleBag;
@@ -46,7 +47,7 @@ import net.jcip.annotations.Immutable;
  */
 @Immutable
 public class CollectDoubleIterable<T>
-        implements DoubleIterable
+        implements LazyDoubleIterable
 {
     private final LazyIterable<T> iterable;
     private final DoubleFunction<? super T> function;
@@ -143,12 +144,12 @@ public class CollectDoubleIterable<T>
         });
     }
 
-    public DoubleIterable select(DoublePredicate predicate)
+    public LazyDoubleIterable select(DoublePredicate predicate)
     {
         return new SelectDoubleIterable(this, predicate);
     }
 
-    public DoubleIterable reject(DoublePredicate predicate)
+    public LazyDoubleIterable reject(DoublePredicate predicate)
     {
         return new SelectDoubleIterable(this, DoublePredicates.not(predicate));
     }
@@ -329,6 +330,11 @@ public class CollectDoubleIterable<T>
     public MutableDoubleBag toBag()
     {
         throw new UnsupportedOperationException("Bags not implemented yet");
+    }
+
+    public LazyDoubleIterable asLazy()
+    {
+        return this;
     }
 
     public boolean contains(double value)

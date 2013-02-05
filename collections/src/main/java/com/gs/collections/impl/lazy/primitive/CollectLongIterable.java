@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.LazyLongIterable;
 import com.gs.collections.api.LongIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.primitive.MutableLongBag;
@@ -46,7 +47,7 @@ import net.jcip.annotations.Immutable;
  */
 @Immutable
 public class CollectLongIterable<T>
-        implements LongIterable
+        implements LazyLongIterable
 {
     private final LazyIterable<T> iterable;
     private final LongFunction<? super T> function;
@@ -129,9 +130,14 @@ public class CollectLongIterable<T>
         });
     }
 
-    public LongIterable select(LongPredicate predicate)
+    public LazyLongIterable select(LongPredicate predicate)
     {
         return new SelectLongIterable(this, predicate);
+    }
+
+    public LazyLongIterable reject(LongPredicate predicate)
+    {
+        return new SelectLongIterable(this, LongPredicates.not(predicate));
     }
 
     public long detectIfNone(LongPredicate predicate, long ifNone)
@@ -146,11 +152,6 @@ public class CollectLongIterable<T>
             }
         }
         return ifNone;
-    }
-
-    public LongIterable reject(LongPredicate predicate)
-    {
-        return new SelectLongIterable(this, LongPredicates.not(predicate));
     }
 
     public <V> RichIterable<V> collect(LongToObjectFunction<? extends V> function)
@@ -329,6 +330,11 @@ public class CollectLongIterable<T>
     public MutableLongBag toBag()
     {
         throw new UnsupportedOperationException("Bags not implemented yet");
+    }
+
+    public LazyLongIterable asLazy()
+    {
+        return this;
     }
 
     public boolean contains(long value)

@@ -702,6 +702,12 @@ public class <name>ArrayListTest
     {
         this.list.toBag();
     }
+
+    @Test
+    public void asLazy()
+    {
+        Assert.assertEquals(this.list.toList(), this.list.asLazy().toList());
+    }
 }
 
 >>

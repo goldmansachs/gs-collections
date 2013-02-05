@@ -20,6 +20,7 @@ package com.gs.collections.impl.stack.mutable.primitive;
 import java.util.EmptyStackException;
 import java.util.NoSuchElementException;
 
+import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
@@ -660,6 +661,14 @@ public class <name>ArrayStackTest
     public void toBag()
     {
         <name>ArrayStack.newStackWith(<["3", "2", "1"]:(literal.(type))(); separator=", ">).toBag();
+    }
+
+    @Test
+    public void asLazy()
+    {
+        <name>ArrayStack stack = <name>ArrayStack.newStackWith(<["3", "2", "1"]:(literal.(type))(); separator=", ">);
+        Assert.assertEquals(stack.toSet(), stack.asLazy().toSet());
+        Verify.assertInstanceOf(Lazy<name>Iterable.class, stack.asLazy());
     }
 
     private static class VerificationProcedure implements <name>Procedure

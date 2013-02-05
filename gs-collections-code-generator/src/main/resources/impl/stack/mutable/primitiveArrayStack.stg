@@ -23,6 +23,7 @@ import java.io.ObjectOutput;
 import java.util.EmptyStackException;
 
 import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
@@ -34,6 +35,7 @@ import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.api.stack.primitive.Mutable<name>Stack;
 import com.gs.collections.api.stack.primitive.<name>Stack;
+import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
@@ -369,6 +371,11 @@ public final class <name>ArrayStack
     public Mutable<name>Bag toBag()
     {
         throw new UnsupportedOperationException("Bags not implemented yet");
+    }
+
+    public Lazy<name>Iterable asLazy()
+    {
+        return new Lazy<name>IterableAdapter(this);
     }
 
     public void writeExternal(ObjectOutput out) throws IOException

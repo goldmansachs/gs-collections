@@ -25,6 +25,7 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
@@ -34,6 +35,7 @@ import com.gs.collections.api.set.primitive.<name>Set;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
+import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 
@@ -925,6 +927,11 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
     public Mutable<name>Bag toBag()
     {
         throw new UnsupportedOperationException("Bags not implemented yet");
+    }
+
+    public Lazy<name>Iterable asLazy()
+    {
+        return new Lazy<name>IterableAdapter(this);
     }
 
     public void writeExternal(ObjectOutput out) throws IOException

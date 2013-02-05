@@ -19,6 +19,7 @@ package com.gs.collections.impl.set.mutable.primitive;
 import java.lang.reflect.Field;
 import java.util.NoSuchElementException;
 
+import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
@@ -764,6 +765,13 @@ public class <name>HashSetTest
     public void toBag()
     {
         <name>HashSet.newSetWith(<["0"]:(literal.(type))(); separator=", ">).toBag();
+    }
+
+    @Test
+    public void asLazy()
+    {
+        Assert.assertEquals(this.set.toSet(), this.set.asLazy().toSet());
+        Verify.assertInstanceOf(Lazy<name>Iterable.class, this.set.asLazy());
     }
 }
 

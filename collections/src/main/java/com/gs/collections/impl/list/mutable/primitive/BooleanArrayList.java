@@ -24,6 +24,7 @@ import java.util.BitSet;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.BooleanIterable;
+import com.gs.collections.api.LazyBooleanIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.primitive.MutableBooleanBag;
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
@@ -34,6 +35,7 @@ import com.gs.collections.api.list.primitive.BooleanList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
 import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
+import com.gs.collections.impl.lazy.primitive.LazyBooleanIterableAdapter;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
 import net.jcip.annotations.NotThreadSafe;
@@ -676,6 +678,11 @@ public final class BooleanArrayList
         throw new UnsupportedOperationException("Bags not implemented yet");
     }
 
+    public LazyBooleanIterable asLazy()
+    {
+        return new LazyBooleanIterableAdapter(this);
+    }
+
     public void writeExternal(ObjectOutput out) throws IOException
     {
         out.writeInt(this.size());
@@ -739,6 +746,11 @@ public final class BooleanArrayList
                 }
             }
             return true;
+        }
+
+        public LazyBooleanIterable asLazy()
+        {
+            return new LazyBooleanIterableAdapter(this);
         }
 
         public void forEach(BooleanProcedure procedure)

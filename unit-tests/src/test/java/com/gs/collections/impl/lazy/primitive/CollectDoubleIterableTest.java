@@ -19,6 +19,7 @@ package com.gs.collections.impl.lazy.primitive;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.DoubleIterable;
+import com.gs.collections.api.LazyDoubleIterable;
 import com.gs.collections.api.block.function.primitive.DoubleToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.DoubleProcedure;
 import com.gs.collections.api.iterator.DoubleIterator;
@@ -29,6 +30,7 @@ import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
 import com.gs.collections.impl.set.mutable.primitive.DoubleHashSet;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -284,5 +286,12 @@ public class CollectDoubleIterableTest
     public void toBag()
     {
         this.doubleIterable.toBag();
+    }
+
+    @Test
+    public void asLazy()
+    {
+        Assert.assertEquals(this.doubleIterable.toSet(), this.doubleIterable.asLazy().toSet());
+        Verify.assertInstanceOf(LazyDoubleIterable.class, this.doubleIterable.asLazy());
     }
 }

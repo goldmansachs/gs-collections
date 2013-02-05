@@ -18,6 +18,7 @@ package com.gs.collections.impl.lazy.primitive;
 
 import java.util.NoSuchElementException;
 
+import com.gs.collections.api.LazyLongIterable;
 import com.gs.collections.api.LongIterable;
 import com.gs.collections.api.block.function.primitive.LongToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.LongProcedure;
@@ -29,6 +30,7 @@ import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
 import com.gs.collections.impl.set.mutable.primitive.LongHashSet;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -280,5 +282,12 @@ public class CollectLongIterableTest
     public void toBag()
     {
         this.longIterable.toBag();
+    }
+
+    @Test
+    public void asLazy()
+    {
+        Assert.assertEquals(this.longIterable.toSet(), this.longIterable.asLazy().toSet());
+        Verify.assertInstanceOf(LazyLongIterable.class, this.longIterable.asLazy());
     }
 }

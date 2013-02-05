@@ -22,6 +22,7 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.IntIterable;
+import com.gs.collections.api.LazyIntIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.primitive.MutableIntBag;
 import com.gs.collections.api.block.function.primitive.IntToObjectFunction;
@@ -34,6 +35,7 @@ import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.set.primitive.MutableIntSet;
 import com.gs.collections.impl.block.factory.primitive.IntPredicates;
 import com.gs.collections.impl.lazy.primitive.CollectIntToObjectIterable;
+import com.gs.collections.impl.lazy.primitive.LazyIntIterableAdapter;
 import com.gs.collections.impl.lazy.primitive.SelectIntIterable;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.set.mutable.primitive.IntHashSet;
@@ -694,6 +696,11 @@ public final class IntInterval
     public MutableIntBag toBag()
     {
         throw new UnsupportedOperationException("Bags not implemented yet");
+    }
+
+    public LazyIntIterable asLazy()
+    {
+        return new LazyIntIterableAdapter(this);
     }
 
     private class IntIntervalIterator implements IntIterator

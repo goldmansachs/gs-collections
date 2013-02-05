@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.IntIterable;
+import com.gs.collections.api.LazyIntIterable;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.bag.primitive.MutableIntBag;
 import com.gs.collections.api.block.function.primitive.IntFunction;
@@ -45,7 +46,7 @@ import net.jcip.annotations.Immutable;
  */
 @Immutable
 public class CollectIntIterable<T>
-        implements IntIterable
+        implements LazyIntIterable
 {
     private final LazyIterable<T> iterable;
     private final IntFunction<? super T> function;
@@ -128,12 +129,12 @@ public class CollectIntIterable<T>
         });
     }
 
-    public IntIterable select(IntPredicate predicate)
+    public LazyIntIterable select(IntPredicate predicate)
     {
         return new SelectIntIterable(this, predicate);
     }
 
-    public IntIterable reject(IntPredicate predicate)
+    public LazyIntIterable reject(IntPredicate predicate)
     {
         return new SelectIntIterable(this, IntPredicates.not(predicate));
     }
@@ -328,6 +329,11 @@ public class CollectIntIterable<T>
     public MutableIntBag toBag()
     {
         throw new UnsupportedOperationException("Bags not implemented yet");
+    }
+
+    public LazyIntIterable asLazy()
+    {
+        return this;
     }
 
     public boolean contains(int value)

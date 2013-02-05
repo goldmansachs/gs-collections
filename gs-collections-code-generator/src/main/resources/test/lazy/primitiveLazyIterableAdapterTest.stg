@@ -20,6 +20,7 @@ package com.gs.collections.impl.lazy.primitive;
 
 import java.util.NoSuchElementException;
 
+import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
@@ -258,6 +259,14 @@ public class Lazy<name>IterableAdapterTest
     public void toBag()
     {
         this.iterable.toBag();
+    }
+
+    @Test
+    public void asLazy()
+    {
+        Assert.assertEquals(this.iterable.toSet(), this.iterable.asLazy().toSet());
+        Verify.assertInstanceOf(Lazy<name>Iterable.class, this.iterable.asLazy());
+        Assert.assertSame(this.iterable, this.iterable.asLazy());
     }
 }
 >>

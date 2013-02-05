@@ -19,6 +19,7 @@ package com.gs.collections.impl.lazy.primitive;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.FloatIterable;
+import com.gs.collections.api.LazyFloatIterable;
 import com.gs.collections.api.block.function.primitive.FloatToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.FloatProcedure;
 import com.gs.collections.api.iterator.FloatIterator;
@@ -29,6 +30,7 @@ import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
 import com.gs.collections.impl.set.mutable.primitive.FloatHashSet;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -272,5 +274,12 @@ public class CollectFloatIterableTest
     public void toBag()
     {
         this.floatIterable.toBag();
+    }
+
+    @Test
+    public void asLazy()
+    {
+        Assert.assertEquals(this.floatIterable.toSet(), this.floatIterable.asLazy().toSet());
+        Verify.assertInstanceOf(LazyFloatIterable.class, this.floatIterable.asLazy());
     }
 }

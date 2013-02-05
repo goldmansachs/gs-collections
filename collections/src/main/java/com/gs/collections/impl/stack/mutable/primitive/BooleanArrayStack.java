@@ -23,6 +23,7 @@ import java.io.ObjectOutput;
 import java.util.EmptyStackException;
 
 import com.gs.collections.api.BooleanIterable;
+import com.gs.collections.api.LazyBooleanIterable;
 import com.gs.collections.api.bag.primitive.MutableBooleanBag;
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
@@ -34,6 +35,7 @@ import com.gs.collections.api.set.primitive.MutableBooleanSet;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.stack.primitive.BooleanStack;
 import com.gs.collections.api.stack.primitive.MutableBooleanStack;
+import com.gs.collections.impl.lazy.primitive.LazyBooleanIterableAdapter;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
 import com.gs.collections.impl.stack.mutable.ArrayStack;
@@ -364,6 +366,11 @@ public final class BooleanArrayStack implements MutableBooleanStack, Externaliza
     public MutableBooleanBag toBag()
     {
         throw new UnsupportedOperationException("Bags not implemented yet");
+    }
+
+    public LazyBooleanIterable asLazy()
+    {
+        return new LazyBooleanIterableAdapter(this);
     }
 
     public void writeExternal(ObjectOutput out) throws IOException

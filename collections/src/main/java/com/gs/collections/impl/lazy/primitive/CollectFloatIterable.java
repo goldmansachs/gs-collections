@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.FloatIterable;
+import com.gs.collections.api.LazyFloatIterable;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.primitive.MutableFloatBag;
@@ -46,7 +47,7 @@ import net.jcip.annotations.Immutable;
  */
 @Immutable
 public class CollectFloatIterable<T>
-        implements FloatIterable
+        implements LazyFloatIterable
 {
     private final LazyIterable<T> iterable;
     private final FloatFunction<? super T> function;
@@ -129,12 +130,12 @@ public class CollectFloatIterable<T>
         });
     }
 
-    public FloatIterable select(FloatPredicate predicate)
+    public LazyFloatIterable select(FloatPredicate predicate)
     {
         return new SelectFloatIterable(this, predicate);
     }
 
-    public FloatIterable reject(FloatPredicate predicate)
+    public LazyFloatIterable reject(FloatPredicate predicate)
     {
         return new SelectFloatIterable(this, FloatPredicates.not(predicate));
     }
@@ -329,6 +330,11 @@ public class CollectFloatIterable<T>
     public MutableFloatBag toBag()
     {
         throw new UnsupportedOperationException("Bags not implemented yet");
+    }
+
+    public LazyFloatIterable asLazy()
+    {
+        return this;
     }
 
     public boolean contains(float value)
