@@ -24,6 +24,7 @@ import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
@@ -166,13 +167,13 @@ public class Select<name>IterableTest
                 .maxIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
     }
 
-    @Test (expected = NoSuchElementException.class)
+    @Test(expected = NoSuchElementException.class)
     public void maxThrowsOnEmpty()
     {
         new Select<name>Iterable(new <name>ArrayList(), <name>Predicates.lessThan(<(literal.(type))("3")>)).max();
     }
 
-    @Test (expected = NoSuchElementException.class)
+    @Test(expected = NoSuchElementException.class)
     public void minThrowsOnEmpty()
     {
         new Select<name>Iterable(new <name>ArrayList(), <name>Predicates.lessThan(<(literal.(type))("3")>)).min();
@@ -248,10 +249,10 @@ public class Select<name>IterableTest
         Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2"]:(literal.(type))(); separator=", ">), this.iterable.toSet());
     }
 
-    @Test (expected = UnsupportedOperationException.class)
+    @Test
     public void toBag()
     {
-        this.iterable.toBag();
+        Assert.assertEquals(<name>HashBag.newBagWith(<["1", "2"]:(literal.(type))(); separator=", ">), this.iterable.toBag());
     }
 
     @Test

@@ -24,6 +24,7 @@ import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -633,7 +634,6 @@ public class <name>HashSetTest
     @Test
     public void sum()
     {
-
         Assert.assertEquals(<(wideLiteral.(type))("93")>, <name>HashSet.newSetWith(<["30", "31", "32"]:(literal.(type))(); separator=", ">).sum()<wideDelta.(type)>);
     }
 
@@ -712,7 +712,6 @@ public class <name>HashSetTest
     @Test
     public void appendString()
     {
-
         StringBuilder appendable = new StringBuilder();
         new <name>HashSet().appendString(appendable);
         Assert.assertEquals("", appendable.toString());
@@ -745,8 +744,8 @@ public class <name>HashSetTest
     @Test
     public void toList()
     {
-        Assert.assertEquals(<name>ArrayList.newListWith(<["0"]:(literal.(type))(); separator=", ">), <name>HashSet.newSetWith(<["0"]:(literal.(type))(); separator=", ">).toList());
-        Assert.assertEquals(<name>ArrayList.newListWith(<["31"]:(literal.(type))(); separator=", ">), <name>HashSet.newSetWith(<["31"]:(literal.(type))(); separator=", ">).toList());
+        Assert.assertEquals(<name>ArrayList.newListWith(<(literal.(type))("0")>), <name>HashSet.newSetWith(<(literal.(type))("0")>).toList());
+        Assert.assertEquals(<name>ArrayList.newListWith(<(literal.(type))("31")>), <name>HashSet.newSetWith(<(literal.(type))("31")>).toList());
     }
 
     @Test
@@ -761,10 +760,10 @@ public class <name>HashSetTest
         Assert.assertEquals(<name>HashSet.newSetWith(<["0", "1", "31"]:(literal.(type))(); separator=", ">), <name>HashSet.newSetWith(<["0", "1", "31"]:(literal.(type))(); separator=", ">).toSet());
     }
 
-    @Test (expected = UnsupportedOperationException.class)
+    @Test
     public void toBag()
     {
-        <name>HashSet.newSetWith(<["0"]:(literal.(type))(); separator=", ">).toBag();
+        Assert.assertEquals(<name>HashBag.newBagWith(<["0", "1", "31"]:(literal.(type))(); separator=", ">), <name>HashBag.newBagWith(<["0", "1", "31"]:(literal.(type))(); separator=", ">).toBag());
     }
 
     @Test
@@ -844,5 +843,4 @@ Assert.assertEquals(1.5, <name>HashSet.newSetWith(<["1.5", "31.0", "30.0"]:(deci
 Assert.assertEquals(31.5, <name>HashSet.newSetWith(<["31.5", "32.5"]:(decimalLiteral.(type))(); separator=", ">, <name>.NaN).min()<(wideDelta.(type))>);
 Assert.assertEquals(<name>.NEGATIVE_INFINITY, <name>HashSet.newSetWith(<["-1.5", "31.5", "32.5"]:(decimalLiteral.(type))(); separator=", ">, <name>.NEGATIVE_INFINITY, 31.5f).min()<(wideDelta.(type))>);
 >>
-
 

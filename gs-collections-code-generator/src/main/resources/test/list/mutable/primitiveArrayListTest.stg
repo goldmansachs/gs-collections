@@ -23,6 +23,7 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
@@ -520,6 +521,12 @@ public class <name>ArrayListTest
         Assert.assertEquals(<(wideLiteral.(type))("0")>, <name>ArrayList.newListWith(<["1", "0", "9", "7"]:(literal.(type))(); separator=", ">).min()<(wideDelta.(type))>);
     }
 
+    @Test(expected = NoSuchElementException.class)
+    public void min_throws_emptyList()
+    {
+        new <name>ArrayList().min();
+    }
+
     @Test
     public void minIfEmpty()
     {
@@ -534,12 +541,6 @@ public class <name>ArrayListTest
         Assert.assertEquals(<(wideLiteral.(type))("5")>, new <name>ArrayList().maxIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
         Assert.assertEquals(<(wideLiteral.(type))("0")>, new <name>ArrayList().maxIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
         Assert.assertEquals(<(wideLiteral.(type))("9")>, <name>ArrayList.newListWith(<["1", "0", "9", "7"]:(literal.(type))(); separator=", ">).maxIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
-    }
-
-    @Test(expected = NoSuchElementException.class)
-    public void min_throws_emptyList()
-    {
-        new <name>ArrayList().min();
     }
 
     @Test
@@ -697,10 +698,10 @@ public class <name>ArrayListTest
         Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), this.list.toSet());
     }
 
-    @Test (expected = UnsupportedOperationException.class)
+    @Test
     public void toBag()
     {
-        this.list.toBag();
+        Assert.assertEquals(<name>HashBag.newBagWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), this.list.toBag());
     }
 
     @Test

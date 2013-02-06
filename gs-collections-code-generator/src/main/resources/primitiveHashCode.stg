@@ -5,7 +5,8 @@ hashCode ::= [
     "int": "intHashCode",
     "long": "longHashCode",
     "float": "floatHashCode",
-    "double": "doubleHashCode"
+    "double": "doubleHashCode",
+    default: "no matching hash code"
 ]
 
 intHashCode(item) ::= <<

@@ -93,7 +93,7 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
     }
 
     @Test
-    public void valuesCollection_toAray_withPreSizedTarget()
+    public void valuesCollection_toArray_withPreSizedTarget()
     {
         MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "One", 2, "Two");
         String[] values = map.values().toArray(new String[2]);

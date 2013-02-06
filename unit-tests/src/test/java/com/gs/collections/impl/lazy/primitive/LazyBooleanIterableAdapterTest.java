@@ -31,7 +31,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * @since 3.0
+ * JUnit test for {@link LazyByteIterableAdapter}.
  */
 public class LazyBooleanIterableAdapterTest
 {

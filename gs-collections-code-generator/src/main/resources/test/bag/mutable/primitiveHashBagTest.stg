@@ -1,0 +1,126 @@
+import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+
+isTest() ::= "true"
+
+targetPath() ::= "com/gs/collections/impl/bag/mutable/primitive"
+
+fileName(primitive) ::= "<primitive.name>HashBagTest"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.bag.mutable.primitive;
+
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
+import com.gs.collections.impl.test.Verify;
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * This file was automatically generated from template file primitiveHashBagTest.stg.
+ * JUnit test for {@link <name>HashBag}.
+ */
+public class <name>HashBagTest
+{
+    @Test
+    public void add()
+    {
+        <name>HashBag bag = new <name>HashBag();
+        Assert.assertTrue(bag.add(<(literal.(type))("100")>));
+        Assert.assertEquals(<name>HashBag.newBagWith(<(literal.(type))("100")>), bag);
+        Assert.assertTrue(bag.add(<(literal.(type))("100")>));
+        Assert.assertEquals(<name>HashBag.newBagWith(<["100", "100"]:(literal.(type))(); separator=", ">), bag);
+    }
+
+    @Test
+    public void addOccurrences()
+    {
+        <name>HashBag bag = new <name>HashBag();
+        bag.addOccurrences(<(literal.(type))("100")>, 3);
+        Assert.assertEquals(<name>HashBag.newBagWith(<["100", "100", "100"]:(literal.(type))(); separator=", ">), bag);
+        bag.addOccurrences(<(literal.(type))("100")>, 2);
+        Assert.assertEquals(<name>HashBag.newBagWith(<["100", "100", "100", "100", "100"]:(literal.(type))(); separator=", ">), bag);
+    }
+
+    @Test
+    public void remove()
+    {
+        <name>HashBag bag = new <name>HashBag();
+        Assert.assertFalse(bag.remove(<(literal.(type))("100")>));
+        Assert.assertEquals(<name>HashBag.newBag(), bag);
+        Assert.assertTrue(bag.add(<(literal.(type))("100")>));
+        Assert.assertTrue(bag.add(<(literal.(type))("100")>));
+        Assert.assertTrue(bag.remove(<(literal.(type))("100")>));
+        Assert.assertEquals(<name>HashBag.newBagWith(<(literal.(type))("100")>), bag);
+        Assert.assertTrue(bag.remove(<(literal.(type))("100")>));
+        Assert.assertEquals(<name>HashBag.newBag(), bag);
+    }
+
+    @Test
+    public void removeOccurrences()
+    {
+        <name>HashBag bag = new <name>HashBag();
+        bag.addOccurrences(<(literal.(type))("100")>, 5);
+        Assert.assertTrue(bag.removeOccurrences(<(literal.(type))("100")>, 2));
+        Assert.assertEquals(<name>HashBag.newBagWith(<["100", "100", "100"]:(literal.(type))(); separator=", ">), bag);
+        Assert.assertFalse(bag.removeOccurrences(<(literal.(type))("100")>, 0));
+        Assert.assertEquals(<name>HashBag.newBagWith(<["100", "100", "100"]:(literal.(type))(); separator=", ">), bag);
+        Assert.assertTrue(bag.removeOccurrences(<(literal.(type))("100")>, 5));
+        Assert.assertEquals(<name>HashBag.newBag(), bag);
+        Assert.assertFalse(bag.removeOccurrences(<(literal.(type))("100")>, 5));
+        Assert.assertEquals(<name>HashBag.newBag(), bag);
+    }
+
+    @Test
+    public void testEqualsAndHashCode()
+    {
+        Verify.assertEqualsAndHashCode(new <name>HashBag(), new <name>HashBag());
+        Verify.assertEqualsAndHashCode(<name>HashBag.newBagWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">), <name>HashBag.newBagWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">));
+        Assert.assertNotEquals(<name>HashBag.newBagWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">), <name>HashBag.newBagWith(<["0", "1", "3"]:(literal.(type))(); separator=", ">));
+        Assert.assertNotEquals(<name>HashBag.newBagWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">), <name>HashBag.newBagWith(<["3", "1", "2"]:(literal.(type))(); separator=", ">));
+        Assert.assertNotEquals(new <name>HashBag(), <name>HashBag.newBagWith(<(literal.(type))("100")>));
+    }
+
+    @Test
+    public void anySatisfy()
+    {
+        final int[] count = {0};
+        <name>HashBag bag = <name>HashBag.newBagWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">);
+        Assert.assertTrue(bag.anySatisfy(new <name>Predicate()
+        {
+            public boolean accept(<type> value)
+            {
+                count[0]++;
+                return <(lessThan.(type))("value", {<(literal.(type))("3")>})>;
+            }
+        }));
+        Assert.assertEquals(1, count[0]);
+        Assert.assertFalse(bag.anySatisfy(<name>Predicates.greaterThan(<(literal.(type))("3")>)));
+    }
+
+    @Test
+    public void allSatisfy()
+    {
+        final int[] count = {0};
+        <name>HashBag bag = <name>HashBag.newBagWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">);
+        Assert.assertFalse(bag.allSatisfy(new <name>Predicate()
+        {
+            public boolean accept(<type> value)
+            {
+                count[0]++;
+                return <(lessThan.(type))({<(literal.(type))("3")>}, "value")>;
+            }
+        }));
+        Assert.assertEquals(1, count[0]);
+        Assert.assertTrue(bag.allSatisfy(<name>Predicates.lessThan(<(literal.(type))("3")>)));
+    }
+}
+>>

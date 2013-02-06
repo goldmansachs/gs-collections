@@ -110,12 +110,6 @@ public class HashBag<T>
         return new HashBag<E>();
     }
 
-    @Override
-    public boolean isEmpty()
-    {
-        return this.items.isEmpty();
-    }
-
     public static <E> HashBag<E> newBag(int size)
     {
         return new HashBag<E>(size);
@@ -131,9 +125,9 @@ public class HashBag<T>
         final HashBag<E> result = HashBag.newBag();
         source.forEachWithOccurrences(new ObjectIntProcedure<E>()
         {
-            public void value(E each, int index)
+            public void value(E each, int occurrences)
             {
-                result.addOccurrences(each, index);
+                result.addOccurrences(each, occurrences);
             }
         });
         return result;
@@ -149,6 +143,23 @@ public class HashBag<T>
     public MutableBag<T> newEmpty()
     {
         return HashBag.newBag();
+    }
+
+    @Override
+    public boolean isEmpty()
+    {
+        return this.items.isEmpty();
+    }
+
+    @Override
+    public int size()
+    {
+        return this.size;
+    }
+
+    public int sizeDistinct()
+    {
+        return this.items.size();
     }
 
     @Override
@@ -190,15 +201,15 @@ public class HashBag<T>
         return this;
     }
 
-    public MutableBag<T> without(T element)
+    public HashBag<T> without(T element)
     {
         this.remove(element);
         return this;
     }
 
-    public MutableBag<T> withoutAll(Iterable<? extends T> elements)
+    public HashBag<T> withoutAll(Iterable<? extends T> iterable)
     {
-        this.removeAllIterable(elements);
+        this.removeAllIterable(iterable);
         return this;
     }
 
@@ -673,20 +684,19 @@ public class HashBag<T>
         {
             return false;
         }
-        Bag<?> bag = (Bag<?>) other;
+        final Bag<?> bag = (Bag<?>) other;
         if (this.sizeDistinct() != bag.sizeDistinct())
         {
             return false;
         }
 
-        for (Map.Entry<T, Counter> entry : this.items.entrySet())
+        return this.items.keyValuesView().allSatisfy(new Predicate<Pair<T, Counter>>()
         {
-            if (bag.occurrencesOf(entry.getKey()) != entry.getValue().getCount())
+            public boolean accept(Pair<T, Counter> each)
             {
-                return false;
+                return bag.occurrencesOf(each.getOne()) == each.getTwo().getCount();
             }
-        }
-        return true;
+        });
     }
 
     @Override
@@ -801,11 +811,6 @@ public class HashBag<T>
         return result;
     }
 
-    public int sizeDistinct()
-    {
-        return this.items.size();
-    }
-
     public int occurrencesOf(Object item)
     {
         Counter counter = this.items.get(item);
@@ -891,12 +896,6 @@ public class HashBag<T>
     public Iterator<T> iterator()
     {
         return this.items.keyValuesView().flatCollect(new NCopiesFunction<T>()).iterator();
-    }
-
-    @Override
-    public int size()
-    {
-        return this.size;
     }
 
     public ImmutableBag<T> toImmutable()

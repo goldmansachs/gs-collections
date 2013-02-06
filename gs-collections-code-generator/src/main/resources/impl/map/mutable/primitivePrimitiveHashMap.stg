@@ -22,21 +22,40 @@ package com.gs.collections.impl.map.mutable.primitive;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
+import com.gs.collections.api.<name1>Iterable;
+<if(!sameTwoPredicates)>import com.gs.collections.api.<name2>Iterable;<endif>
+import com.gs.collections.api.Lazy<name2>Iterable;
+import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.bag.primitive.Mutable<name2>Bag;
 <if(!sameTwoPredicates)>import com.gs.collections.api.block.function.primitive.<name1>To<name2>Function;<endif>
 import com.gs.collections.api.block.function.primitive.<name2>Function;
 import com.gs.collections.api.block.function.primitive.<name2>Function0;
 import com.gs.collections.api.block.function.primitive.<name2>To<name2>Function;
+import com.gs.collections.api.block.function.primitive.<name2>ToObjectFunction;
+import com.gs.collections.api.block.predicate.primitive.<name1><name2>Predicate;
+import com.gs.collections.api.block.predicate.primitive.<name2>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name1>Procedure;
 import com.gs.collections.api.block.procedure.primitive.<name1><name2>Procedure;
 <if(!sameTwoPredicates)>import com.gs.collections.api.block.procedure.primitive.<name2>Procedure;<endif>
+import com.gs.collections.api.iterator.<name2>Iterator;
+import com.gs.collections.api.list.primitive.Mutable<name2>List;
+import com.gs.collections.api.map.primitive.<name1><name2>Map;
+import com.gs.collections.api.map.primitive.Mutable<name1><name2>Map;
+import com.gs.collections.api.set.primitive.Mutable<name2>Set;
+import com.gs.collections.impl.bag.mutable.primitive.<name2>HashBag;
+import com.gs.collections.impl.lazy.primitive.Lazy<name2>IterableAdapter;
+import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.<name2>ArrayList;
+import com.gs.collections.impl.set.mutable.primitive.<name2>HashSet;
 
 /**
  * This file was automatically generated from template file primitivePrimitiveHashMap.stg.
  *
  * @since 3.0.
  */
-public class <name1><name2>HashMap
+public class <name1><name2>HashMap implements Mutable<name1><name2>Map
 {
     public static final <type2> EMPTY_VALUE = <(literal.(type2))("0")>;
     private static final <type1> EMPTY_KEY = <(literal.(type1))("0")>;
@@ -77,7 +96,10 @@ public class <name1><name2>HashMap
         return new <name1><name2>HashMap();
     }
 
-    <newWithKeysValues(["1"])>
+    public static <name1><name2>HashMap newWithKeysValues(<type1> key1, <type2> value1)
+    {
+        return new <name1><name2>HashMap(1).withKeyValue(key1, value1);
+    }
 
     <newWithKeysValues(["1", "2"])>
 
@@ -85,13 +107,35 @@ public class <name1><name2>HashMap
 
     <newWithKeysValues(["1", "2", "3", "4"])>
 
-    <withKeysValues(["1"])>
+    public <name1><name2>HashMap withKeyValue(<type1> key1, <type2> value1)
+    {
+        this.put(key1, value1);
+        return this;
+    }
 
     <withKeysValues(["1", "2"])>
 
     <withKeysValues(["1", "2", "3"])>
 
     <withKeysValues(["1", "2", "3", "4"])>
+
+    public <name1><name2>HashMap withoutKey(<type1> key)
+    {
+        this.removeKey(key);
+        return this;
+    }
+
+    public <name1><name2>HashMap withoutAllKeys(<name1>Iterable keys)
+    {
+        keys.forEach(new <name1>Procedure()
+        {
+            public void value(<type1> key)
+            {
+                <name1><name2>HashMap.this.removeKey(key);
+            }
+        });
+        return this;
+    }
 
     private int init(int initialCapacity)
     {
@@ -292,6 +336,63 @@ public class <name1><name2>HashMap
         }
     }
 
+    public boolean containsKey(<type1> key)
+    {
+        if (isEmptyKey(key))
+        {
+            return this.sentinelValues != null && this.sentinelValues.containsZeroKey;
+        }
+        if (isRemovedKey(key))
+        {
+            return this.sentinelValues != null && this.sentinelValues.containsOneKey;
+        }
+        return <(equals.(type1))("this.keys[this.probe(key)]", "key")>;
+    }
+
+    public boolean containsValue(<type2> value)
+    {
+        if (this.sentinelValues != null && this.sentinelValues.containsValue(value))
+        {
+            return true;
+        }
+        for (int i = 0; i \< this.values.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && <(equals.(type2))("this.values[i]", "value")>)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean contains(<type2> value)
+    {
+        return this.containsValue(value);
+    }
+
+    public boolean containsAll(<type2>... source)
+    {
+        for (<type2> each : source)
+        {
+            if (!this.contains(each))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean containsAll(<name2>Iterable source)
+    {
+        return source.allSatisfy(new <name2>Predicate()
+        {
+            public boolean accept(<type2> value)
+            {
+                return <name1><name2>HashMap.this.contains(value);
+            }
+        });
+    }
+
     public <type2> get(<type1> key)
     {
         if (isEmptyKey(key))
@@ -419,35 +520,6 @@ public class <name1><name2>HashMap
         return this.values[index];
     }
 
-    public boolean containsKey(<type1> key)
-    {
-        if (isEmptyKey(key))
-        {
-            return this.sentinelValues != null && this.sentinelValues.containsZeroKey;
-        }
-        if (isRemovedKey(key))
-        {
-            return this.sentinelValues != null && this.sentinelValues.containsOneKey;
-        }
-        return <(equals.(type1))("this.keys[this.probe(key)]", "key")>;
-    }
-
-    public boolean containsValue(<type2> value)
-    {
-        if (this.sentinelValues != null && this.sentinelValues.containsValue(value))
-        {
-            return true;
-        }
-        for (int i = 0; i \< this.values.length; i++)
-        {
-            if (isNonSentinel(this.keys[i]) && <(equals.(type2))("this.values[i]", "value")>)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
     public void removeKey(<type1> key)
     {
         if (isEmptyKey(key))
@@ -551,12 +623,12 @@ public class <name1><name2>HashMap
             return true;
         }
 
-        if (!(obj instanceof <name1><name2>HashMap))
+        if (!(obj instanceof <name1><name2>Map))
         {
             return false;
         }
 
-        <name1><name2>HashMap other = (<name1><name2>HashMap) obj;
+        <name1><name2>Map other = (<name1><name2>Map) obj;
 
         if (this.size() != other.size())
         {
@@ -628,6 +700,11 @@ public class <name1><name2>HashMap
         return this.makeString("[", ", ", "]");
     }
 
+    public <name2>Iterator <type2>Iterator()
+    {
+        return new Internal<name2>Iterator();
+    }
+
     public void forEach(<name2>Procedure procedure)
     {
         this.forEachValue(procedure);
@@ -635,24 +712,7 @@ public class <name1><name2>HashMap
 
     public void forEachValue(<name2>Procedure procedure)
     {
-        if (this.sentinelValues != null)
-        {
-            if (this.sentinelValues.containsZeroKey)
-            {
-                procedure.value(this.sentinelValues.zeroValue);
-            }
-            if (this.sentinelValues.containsOneKey)
-            {
-                procedure.value(this.sentinelValues.oneValue);
-            }
-        }
-        for (int i = 0; i \< this.keys.length; i++)
-        {
-            if (isNonSentinel(this.keys[i]))
-            {
-                procedure.value(this.values[i]);
-            }
-        }
+        <forEachValue("executeProcedure")>
     }
 
     public void forEachKey(<name1>Procedure procedure)
@@ -697,6 +757,56 @@ public class <name1><name2>HashMap
                 procedure.value(this.keys[i], this.values[i]);
             }
         }
+    }
+
+    public <name1><name2>HashMap select(<name1><name2>Predicate predicate)
+    {
+        <name1><name2>HashMap result = <name1><name2>HashMap.newMap();
+
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey && predicate.accept(EMPTY_KEY, this.sentinelValues.zeroValue))
+            {
+                result.put(EMPTY_KEY, this.sentinelValues.zeroValue);
+            }
+            if (this.sentinelValues.containsOneKey && predicate.accept(REMOVED_KEY, this.sentinelValues.oneValue))
+            {
+                result.put(REMOVED_KEY, this.sentinelValues.oneValue);
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.keys[i], this.values[i]))
+            {
+                result.put(this.keys[i], this.values[i]);
+            }
+        }
+        return result;
+    }
+
+    public <name1><name2>HashMap reject(<name1><name2>Predicate predicate)
+    {
+        <name1><name2>HashMap result = <name1><name2>HashMap.newMap();
+
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey && !predicate.accept(EMPTY_KEY, this.sentinelValues.zeroValue))
+            {
+                result.put(EMPTY_KEY, this.sentinelValues.zeroValue);
+            }
+            if (this.sentinelValues.containsOneKey && !predicate.accept(REMOVED_KEY, this.sentinelValues.oneValue))
+            {
+                result.put(REMOVED_KEY, this.sentinelValues.oneValue);
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && !predicate.accept(this.keys[i], this.values[i]))
+            {
+                result.put(this.keys[i], this.values[i]);
+            }
+        }
+        return result;
     }
 
     public String makeString()
@@ -772,6 +882,283 @@ public class <name1><name2>HashMap
         }
     }
 
+    public <name2>Iterable select(<name2>Predicate predicate)
+    {
+        <name2>ArrayList result = new <name2>ArrayList();
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey && predicate.accept(this.sentinelValues.zeroValue))
+            {
+                result.add(this.sentinelValues.zeroValue);
+            }
+            if (this.sentinelValues.containsOneKey && predicate.accept(this.sentinelValues.oneValue))
+            {
+                result.add(this.sentinelValues.oneValue);
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values[i]))
+            {
+                result.add(this.values[i]);
+            }
+        }
+        return result;
+    }
+
+    public <name2>Iterable reject(<name2>Predicate predicate)
+    {
+        <name2>ArrayList result = new <name2>ArrayList();
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey && !predicate.accept(this.sentinelValues.zeroValue))
+            {
+                result.add(this.sentinelValues.zeroValue);
+            }
+            if (this.sentinelValues.containsOneKey && !predicate.accept(this.sentinelValues.oneValue))
+            {
+                result.add(this.sentinelValues.oneValue);
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && !predicate.accept(this.values[i]))
+            {
+                result.add(this.values[i]);
+            }
+        }
+        return result;
+    }
+
+    public <type2> detectIfNone(<name2>Predicate predicate, <type2> value)
+    {
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey && predicate.accept(this.sentinelValues.zeroValue))
+            {
+                return this.sentinelValues.zeroValue;
+            }
+            if (this.sentinelValues.containsOneKey && predicate.accept(this.sentinelValues.oneValue))
+            {
+                return this.sentinelValues.oneValue;
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values[i]))
+            {
+                return this.values[i];
+            }
+        }
+        return value;
+    }
+
+    public \<V> RichIterable\<V> collect(<name2>ToObjectFunction\<? extends V> function)
+    {
+        FastList\<V> target = FastList.newList(this.size());
+        <forEachValue("collect")>
+        return target;
+    }
+
+    public int count(<name2>Predicate predicate)
+    {
+        int count = 0;
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey && predicate.accept(this.sentinelValues.zeroValue))
+            {
+                count++;
+            }
+            if (this.sentinelValues.containsOneKey && predicate.accept(this.sentinelValues.oneValue))
+            {
+                count++;
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values[i]))
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public boolean anySatisfy(<name2>Predicate predicate)
+    {
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey && predicate.accept(this.sentinelValues.zeroValue))
+            {
+                return true;
+            }
+            if (this.sentinelValues.containsOneKey && predicate.accept(this.sentinelValues.oneValue))
+            {
+                return true;
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values[i]))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean allSatisfy(<name2>Predicate predicate)
+    {
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey && !predicate.accept(this.sentinelValues.zeroValue))
+            {
+                return false;
+            }
+            if (this.sentinelValues.containsOneKey && !predicate.accept(this.sentinelValues.oneValue))
+            {
+                return false;
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && !predicate.accept(this.values[i]))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public <type2> max()
+    {
+        if (this.isEmpty())
+        {
+            throw new NoSuchElementException();
+        }
+        <name2>Iterator iterator = this.<type2>Iterator();
+        <type2> max = iterator.next();
+        while (iterator.hasNext())
+        {
+            <type2> value = iterator.next();
+            if (<(lessThan.(type2))("max", "value")>)
+            {
+                max = value;
+            }
+        }
+        return max;
+    }
+
+    public <type2> min()
+    {
+        if (this.isEmpty())
+        {
+            throw new NoSuchElementException();
+        }
+        <name2>Iterator iterator = this.<type2>Iterator();
+        <type2> min = iterator.next();
+        while (iterator.hasNext())
+        {
+            <type2> value = iterator.next();
+            if (<(lessThan.(type2))("value", "min")>)
+            {
+                min = value;
+            }
+        }
+        return min;
+    }
+
+    public <type2> minIfEmpty(<type2> defaultValue)
+    {
+        if (this.isEmpty())
+        {
+            return defaultValue;
+        }
+        return this.min();
+    }
+
+    public <type2> maxIfEmpty(<type2> defaultValue)
+    {
+        if (this.isEmpty())
+        {
+            return defaultValue;
+        }
+        return this.max();
+    }
+
+    public <wideType.(type2)> sum()
+    {
+        <wideType.(type2)> result = <wideZero.(type2)>;
+
+        <forEachValue("sum")>
+
+        return result;
+    }
+
+    public double average()
+    {
+        return <castSum.(type2)>this.sum() / (double) this.size();
+    }
+
+    public double median()
+    {
+        if (this.isEmpty())
+        {
+            throw new NoSuchElementException();
+        }
+        <type2>[] sortedArray = this.toSortedArray();
+        int middleIndex = sortedArray.length >\> 1;
+        if (sortedArray.length > 1 && (sortedArray.length & 1) == 0)
+        {
+            <type2> first = sortedArray[middleIndex];
+            <type2> second = sortedArray[middleIndex - 1];
+            return (<castDouble.(type2)>first + <castDouble.(type2)>second) / 2.0;
+        }
+        return <castDouble.(type2)>sortedArray[middleIndex];
+    }
+
+    public <type2>[] toArray()
+    {
+        <type2>[] array = new <type2>[this.size()];
+        int index = 0;
+
+        <forEachValue("toArray")>
+
+        return array;
+    }
+
+    public <type2>[] toSortedArray()
+    {
+        <type2>[] array = this.toArray();
+        Arrays.sort(array);
+        return array;
+    }
+
+    public Mutable<name2>List toList()
+    {
+        return <name2>ArrayList.newList(this);
+    }
+
+    public Mutable<name2>List toSortedList()
+    {
+        return <name2>ArrayList.newList(this).sortThis();
+    }
+
+    public Mutable<name2>Set toSet()
+    {
+        return <name2>HashSet.newSet(this);
+    }
+
+    public Mutable<name2>Bag toBag()
+    {
+        return <name2>HashBag.newBag(this);
+    }
+
+    public Lazy<name2>Iterable asLazy()
+    {
+        return new Lazy<name2>IterableAdapter(this);
+    }
+
     private static final class SentinelValues
     {
         private boolean containsZeroKey;
@@ -791,8 +1178,94 @@ public class <name1><name2>HashMap
             return valueEqualsZeroValue || valueEqualsOneValue;
         }
     }
+
+    private class Internal<name2>Iterator implements <name2>Iterator
+    {
+        private int count;
+        private int position;
+        private boolean handledZero;
+        private boolean handledOne;
+
+        public boolean hasNext()
+        {
+            return this.count \< <name1><name2>HashMap.this.size();
+        }
+
+        public <type2> next()
+        {
+            if (!this.hasNext())
+            {
+                throw new NoSuchElementException("next() called, but the iterator is exhausted");
+            }
+            this.count++;
+
+            if (!this.handledZero)
+            {
+                this.handledZero = true;
+                if (<name1><name2>HashMap.this.containsKey(EMPTY_KEY))
+                {
+                    return <name1><name2>HashMap.this.get(EMPTY_KEY);
+                }
+            }
+            if (!this.handledOne)
+            {
+                this.handledOne = true;
+                if (<name1><name2>HashMap.this.containsKey(REMOVED_KEY))
+                {
+                    return <name1><name2>HashMap.this.get(REMOVED_KEY);
+                }
+            }
+
+            <type1>[] keys = <name1><name2>HashMap.this.keys;
+            while (!isNonSentinel(keys[this.position]))
+            {
+                this.position++;
+            }
+            <type2> result = <name1><name2>HashMap.this.values[this.position];
+            this.position++;
+            return result;
+        }
+    }
 }
 
+>>
+
+executeProcedure(value) ::= <<
+procedure.value(<value>);
+>>
+
+collect(value) ::= <<
+target.add(function.valueOf(<value>));
+>>
+
+sum(value) ::= <<
+result += <value>;
+>>
+
+toArray(value) ::= <<
+array[index] = <value>;
+index++;
+>>
+
+forEachValue(procedure) ::= <<
+if (this.sentinelValues != null)
+{
+    if (this.sentinelValues.containsZeroKey)
+    {
+        <(procedure)("this.sentinelValues.zeroValue")>
+    }
+    if (this.sentinelValues.containsOneKey)
+    {
+        <(procedure)("this.sentinelValues.oneValue")>
+    }
+}
+for (int i = 0; i \< this.keys.length; i++)
+{
+    if (isNonSentinel(this.keys[i]))
+    {
+        <(procedure)("this.values[i]")>
+    }
+}
 >>
 
 getIfAbsentPut(function) ::= <<

@@ -25,6 +25,7 @@ import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
@@ -657,10 +658,10 @@ public class <name>ArrayStackTest
         Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), <name>ArrayStack.newStackWith(<["3", "2", "1"]:(literal.(type))(); separator=", ">).toSet());
     }
 
-    @Test (expected = UnsupportedOperationException.class)
+    @Test
     public void toBag()
     {
-        <name>ArrayStack.newStackWith(<["3", "2", "1"]:(literal.(type))(); separator=", ">).toBag();
+        Assert.assertEquals(<name>HashBag.newBagWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), <name>ArrayStack.newStackWith(<["3", "2", "1"]:(literal.(type))(); separator=", ">).toBag());
     }
 
     @Test

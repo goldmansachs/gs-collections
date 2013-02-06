@@ -5,7 +5,8 @@ literal ::= [
     "int": "intLiteral",
     "long": "longLiteral",
     "float": "floatLiteral",
-    "double": "doubleLiteral"
+    "double": "doubleLiteral",
+    default: "no matching literal"
 ]
 
 intLiteral(item) ::= <<
@@ -56,7 +57,8 @@ wideLiteral ::= [
     "int": "longLiteral",
     "long": "longLiteral",
     "float": "doubleLiteral",
-    "double": "doubleLiteral"
+    "double": "doubleLiteral",
+    default: "no matching wide literal"
 ]
 
 toStringLiteral ::= [
@@ -66,7 +68,8 @@ toStringLiteral ::= [
     "int": "intLiteral",
     "long": "intLiteral",
     "float": "doubleLiteral",
-    "double": "doubleLiteral"
+    "double": "doubleLiteral",
+    default: "no matching toString literal"
 ]
 
 charStringLiteral(item) ::= <<
@@ -80,7 +83,8 @@ zero ::= [
     "int": "0",
     "long": "0L",
     "float": "0.0f",
-    "double": "0.0"
+    "double": "0.0",
+    default: "no matching zero"
 ]
 
 wideZero ::= [
@@ -90,7 +94,8 @@ wideZero ::= [
     "int": "0L",
     "long": "0L",
     "float": "0.0",
-    "double": "0.0"
+    "double": "0.0",
+    default: "no matching wide zero"
 ]
 
 delta ::= [
@@ -100,7 +105,8 @@ delta ::= [
     "int": "",
     "long": "",
     "float": ", 0.0f",
-    "double": ", 0.0"
+    "double": ", 0.0",
+    default: "no matching delta"
 ]
 
 wideDelta ::= [
@@ -110,7 +116,8 @@ wideDelta ::= [
     "int": "",
     "long": "",
     "float": ", 0.0",
-    "double": ", 0.0"
+    "double": ", 0.0",
+    default: "no matching wide delta"
 ]
 
 wideType ::= [
@@ -120,7 +127,8 @@ wideType ::= [
     "int": "long",
     "long": "long",
     "float": "double",
-    "double": "double"
+    "double": "double",
+    default: "no matching wide type"
 ]
 
 castDouble ::= [
@@ -130,7 +138,8 @@ castDouble ::= [
     "int": "(double) ",
     "long": "(double) ",
     "float": "(double) ",
-    "double": ""
+    "double": "",
+    default: "no matching double cast"
 ]
 
 castSum ::= [
@@ -140,7 +149,8 @@ castSum ::= [
     "int": "(double) ",
     "long": "(double) ",
     "float": "",
-    "double": ""
+    "double": "",
+    default: "no matching sum cast"
 ]
 
 castIntToNarrowType ::= [
@@ -150,7 +160,8 @@ castIntToNarrowType ::= [
     "int": "noCast",
     "long": "noCast",
     "float": "noCast",
-    "double": "noCast"
+    "double": "noCast",
+    default: "no matching narrow cast"
 ]
 
 noCast(item) ::= <<
@@ -176,7 +187,8 @@ castRealTypeToInt ::= [
     "int": "noCast",
     "long": "noCast",
     "float": "intCast",
-    "double": "intCast"
+    "double": "intCast",
+    default: "no matching real cast"
 ]
 
 intCast(item) ::= <<
@@ -214,7 +226,8 @@ castFromInt ::= [
     "int": "noCast",
     "long": "longCast",
     "float": "floatCast",
-    "double": "doubleCast"
+    "double": "doubleCast",
+    default: "no matching int cast"
 ]
 
 castExactly(type, item, skip) ::= <<
@@ -228,5 +241,6 @@ cast ::= [
     "int": "intCast",
     "long": "longCast",
     "float": "floatCast",
-    "double": "doubleCast"
+    "double": "doubleCast",
+    default: "no matching cast"
 ]

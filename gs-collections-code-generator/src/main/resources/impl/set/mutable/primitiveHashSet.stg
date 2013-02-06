@@ -24,20 +24,21 @@ import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.<name>Iterable;
-import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.Lazy<name>Iterable;
+import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
-import com.gs.collections.api.set.MutableSet;
-import com.gs.collections.api.set.primitive.<name>Set;
-import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
+import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
+import com.gs.collections.api.set.primitive.<name>Set;
+import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
-import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
 
 /**
  * This file was automatically generated from template file primitiveHashSet.stg.
@@ -93,9 +94,9 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
 
     public static <name>HashSet newSetWith(<type>... source)
     {
-        <name>HashSet hashSet = new <name>HashSet();
-        hashSet.addAll(source);
-        return hashSet;
+        <name>HashSet result = new <name>HashSet();
+        result.addAll(source);
+        return result;
     }
 
     public static <name>HashSet newSet(<name>Iterable source)
@@ -926,7 +927,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
 
     public Mutable<name>Bag toBag()
     {
-        throw new UnsupportedOperationException("Bags not implemented yet");
+        return <name>HashBag.newBag(this);
     }
 
     public Lazy<name>Iterable asLazy()
@@ -967,28 +968,42 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
 
     private class Internal<name>Iterator implements <name>Iterator
     {
-        /**
-         * Index of element to be returned by subsequent call to next.
-         */
-        private int currentIndex;
+        private int count;
+        private int position;
+        private <type> zeroToThirtyOne;
 
         public boolean hasNext()
         {
-            return this.currentIndex != <name>HashSet.this.size();
+            return this.count \< <name>HashSet.this.size();
         }
 
         public <type> next()
         {
-            try
+            if (!this.hasNext())
             {
-                <type> next = <name>HashSet.this.toArray()[this.currentIndex];
-                this.currentIndex++;
-                return next;
+                throw new NoSuchElementException("next() called, but the iterator is exhausted");
             }
-            catch (IndexOutOfBoundsException ignored)
+            this.count++;
+
+            while (this.zeroToThirtyOne \< 32)
             {
-                throw new NoSuchElementException();
+                if (<name>HashSet.this.contains(this.zeroToThirtyOne))
+                {
+                    <type> result = this.zeroToThirtyOne;
+                    this.zeroToThirtyOne++;
+                    return result;
+                }
+                this.zeroToThirtyOne++;
             }
+
+            <type>[] table = <name>HashSet.this.table;
+            while (!isNonSentinel(table[this.position]))
+            {
+                this.position++;
+            }
+            <type> result = table[this.position];
+            this.position++;
+            return result;
         }
     }
 }

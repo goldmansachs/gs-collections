@@ -13,6 +13,8 @@ body(type, name) ::= <<
 
 package com.gs.collections.api.map.primitive;
 
+import java.util.Map;
+
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.predicate.primitive.<name>ObjectPredicate;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -41,6 +43,18 @@ public interface <name>ObjectMap\<V> extends RichIterable\<V>
     <name>ObjectMap\<V> select(<name>ObjectPredicate\<? super V> predicate);
 
     <name>ObjectMap\<V> reject(<name>ObjectPredicate\<? super V> predicate);
+
+    /**
+     * Follows the same general contract as {@link Map#equals(Object)}.
+     */
+    @Override
+    boolean equals(Object o);
+
+    /**
+     * Follows the same general contract as {@link Map#hashCode()}.
+     */
+    @Override
+    int hashCode();
 }
 
 >>

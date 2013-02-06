@@ -27,12 +27,10 @@ import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
-import com.gs.collections.api.bag.primitive.<name>Bag;
-import com.gs.collections.api.list.primitive.<name>List;
-import com.gs.collections.api.set.primitive.<name>Set;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
+import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
@@ -243,7 +241,7 @@ public class Select<name>Iterable
 
     public Mutable<name>Bag toBag()
     {
-        throw new UnsupportedOperationException("Bags not implemented yet");
+        return <name>HashBag.newBag(this);
     }
 
     public Lazy<name>Iterable asLazy()

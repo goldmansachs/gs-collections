@@ -652,15 +652,16 @@ public class <name>ObjectHashMapTest
             }
         }));
 
-        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine"), map1.select(new Predicate\<String>()
+        RichIterable\<String> actual1 = map1.select(new Predicate\<String>()
         {
             public boolean accept(String each)
             {
                 return each.endsWith("ne");
             }
-        }));
+        });
+        Assert.assertTrue(FastList.newListWith("one", "nine").equals(actual1) || FastList.newListWith("nine", "one").equals(actual1));
 
-        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("9")>, "nine"), map1.select(new Predicate\<String>()
+        Assert.assertEquals(FastList.newListWith("nine"), map1.select(new Predicate\<String>()
         {
             public boolean accept(String each)
             {
@@ -668,7 +669,7 @@ public class <name>ObjectHashMapTest
             }
         }));
 
-        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero"), map1.select(new Predicate\<String>()
+        Assert.assertEquals(FastList.newListWith("zero"), map1.select(new Predicate\<String>()
         {
             public boolean accept(String each)
             {
@@ -691,6 +692,7 @@ public class <name>ObjectHashMapTest
                 return each.endsWith("ne");
             }
         }, FastList.\<String>newList()));
+
         Assert.assertEquals(FastList.newListWith("zero"), map1.select(new Predicate\<String>()
         {
             public boolean accept(String each)
@@ -1535,15 +1537,16 @@ public class <name>ObjectHashMapTest
             }
         }));
 
-        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine"), map1.reject(new Predicate\<String>()
+        RichIterable\<String> actual1 = map1.reject(new Predicate\<String>()
         {
             public boolean accept(String each)
             {
                 return !each.endsWith("ne");
             }
-        }));
+        });
+        Assert.assertTrue(FastList.newListWith("one", "nine").equals(actual1) || FastList.newListWith("nine", "one").equals(actual1));
 
-        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("9")>, "nine"), map1.reject(new Predicate\<String>()
+        Assert.assertEquals(FastList.newListWith("nine"), map1.reject(new Predicate\<String>()
         {
             public boolean accept(String each)
             {
@@ -1551,13 +1554,14 @@ public class <name>ObjectHashMapTest
             }
         }));
 
-        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero"), map1.reject(new Predicate\<String>()
+        Assert.assertEquals(FastList.newListWith("zero"), map1.reject(new Predicate\<String>()
         {
             public boolean accept(String each)
             {
                 return !each.endsWith("o");
             }
         }));
+
         Assert.assertEquals(FastList.newListWith("nine"), map1.reject(new Predicate\<String>()
         {
             public boolean accept(String each)
@@ -1573,6 +1577,7 @@ public class <name>ObjectHashMapTest
                 return !each.endsWith("ne");
             }
         }, FastList.\<String>newList()));
+
         Assert.assertEquals(FastList.newListWith("zero"), map1.reject(new Predicate\<String>()
         {
             public boolean accept(String each)
@@ -1835,8 +1840,8 @@ public class <name>ObjectHashMapTest
     public void size()
     {
         Assert.assertEquals(0, <name>ObjectHashMap.newMap().size());
-        Assert.assertEquals(1, <name>ObjectHashMap.newMap().withKeysValues(<(literal.(type))("0")>, "zero").size());
-        Assert.assertEquals(1, <name>ObjectHashMap.newMap().withKeysValues(<(literal.(type))("1")>, "one").size());
+        Assert.assertEquals(1, <name>ObjectHashMap.newMap().withKeyValue(<(literal.(type))("0")>, "zero").size());
+        Assert.assertEquals(1, <name>ObjectHashMap.newMap().withKeyValue(<(literal.(type))("1")>, "one").size());
 
         <name>ObjectHashMap\<String> hashMap1 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("0")>, "zero");
         Assert.assertEquals(2, hashMap1.size());
@@ -1984,9 +1989,9 @@ public class <name>ObjectHashMapTest
     public void testToString()
     {
         Assert.assertEquals("[]", new <name>ObjectHashMap\<Object>().toString());
-        Assert.assertEquals("[<(toStringLiteral.(type))("0")>=zero]", new <name>ObjectHashMap\<String>().withKeysValues(<(literal.(type))("0")>, "zero").toString());
-        Assert.assertEquals("[<(toStringLiteral.(type))("1")>=one]", new <name>ObjectHashMap\<String>().withKeysValues(<(literal.(type))("1")>, "one").toString());
-        Assert.assertEquals("[<(toStringLiteral.(type))("5")>=five]", new <name>ObjectHashMap\<String>().withKeysValues(<(literal.(type))("5")>, "five").toString());
+        Assert.assertEquals("[<(toStringLiteral.(type))("0")>=zero]", new <name>ObjectHashMap\<String>().withKeyValue(<(literal.(type))("0")>, "zero").toString());
+        Assert.assertEquals("[<(toStringLiteral.(type))("1")>=one]", new <name>ObjectHashMap\<String>().withKeyValue(<(literal.(type))("1")>, "one").toString());
+        Assert.assertEquals("[<(toStringLiteral.(type))("5")>=five]", new <name>ObjectHashMap\<String>().withKeyValue(<(literal.(type))("5")>, "five").toString());
 
         <name>ObjectHashMap\<String> map1 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one");
         Assert.assertTrue(
@@ -2151,9 +2156,9 @@ public class <name>ObjectHashMapTest
     public void makeString()
     {
         Assert.assertEquals("", new <name>ObjectHashMap\<Object>().makeString());
-        Assert.assertEquals("<(toStringLiteral.(type))("0")>=zero", new <name>ObjectHashMap\<String>().withKeysValues(<(literal.(type))("0")>, "zero").makeString());
-        Assert.assertEquals("<(toStringLiteral.(type))("1")>=one", new <name>ObjectHashMap\<String>().withKeysValues(<(literal.(type))("1")>, "one").makeString());
-        Assert.assertEquals("<(toStringLiteral.(type))("5")>=five", new <name>ObjectHashMap\<String>().withKeysValues(<(literal.(type))("5")>, "five").makeString());
+        Assert.assertEquals("<(toStringLiteral.(type))("0")>=zero", new <name>ObjectHashMap\<String>().withKeyValue(<(literal.(type))("0")>, "zero").makeString());
+        Assert.assertEquals("<(toStringLiteral.(type))("1")>=one", new <name>ObjectHashMap\<String>().withKeyValue(<(literal.(type))("1")>, "one").makeString());
+        Assert.assertEquals("<(toStringLiteral.(type))("5")>=five", new <name>ObjectHashMap\<String>().withKeyValue(<(literal.(type))("5")>, "five").makeString());
 
         <name>ObjectHashMap\<String> map1 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one");
         Assert.assertTrue(
@@ -2227,14 +2232,14 @@ public class <name>ObjectHashMapTest
     @Test
     public void withKeysValues()
     {
-        <name>ObjectHashMap\<String> hashMap = new <name>ObjectHashMap\<String>().withKeysValues(<(literal.(type))("1")>, "one");
+        <name>ObjectHashMap\<String> hashMap = new <name>ObjectHashMap\<String>().withKeyValue(<(literal.(type))("1")>, "one");
         <name>ObjectHashMap\<String> hashMap0 = new <name>ObjectHashMap\<String>().withKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("2")>, "two");
         <name>ObjectHashMap\<String> hashMap1 = new <name>ObjectHashMap\<String>().withKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("2")>, "two", <(literal.(type))("3")>, "three");
         <name>ObjectHashMap\<String> hashMap2 = new <name>ObjectHashMap\<String>().withKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("2")>, "two", <(literal.(type))("3")>, "three", <(literal.(type))("4")>, "four");
         Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one"), hashMap);
         Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("2")>, "two"), hashMap0);
         Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("2")>, "two", <(literal.(type))("3")>, "three"), hashMap1);
-        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("2")>, "two", <(literal.(type))("3")>, "three").withKeysValues(<(literal.(type))("4")>, "four"), hashMap2);
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("2")>, "two", <(literal.(type))("3")>, "three").withKeyValue(<(literal.(type))("4")>, "four"), hashMap2);
     }
 
     @Test

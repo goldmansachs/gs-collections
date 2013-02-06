@@ -52,6 +52,7 @@ import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.primitive.<name>ObjectMap;
 import com.gs.collections.api.map.primitive.Mutable<name>ObjectMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.Multimap;
@@ -126,7 +127,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
 
     public static \<V> <name>ObjectHashMap\<V> newWithKeysValues(<type> key, V value)
     {
-        return new <name>ObjectHashMap\<V>(1).withKeysValues(key, value);
+        return new <name>ObjectHashMap\<V>(1).withKeyValue(key, value);
     }
 
     public static \<V> <name>ObjectHashMap\<V> newWithKeysValues(<type> key1, V value1, <type> key2, V value2)
@@ -191,6 +192,21 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
     private static boolean isNonSentinel(<type> key)
     {
         return key != EMPTY && key != REMOVED;
+    }
+
+    public int size()
+    {
+        return this.occupied + (this.sentinelValues == null ? 0 : this.sentinelValues.size());
+    }
+
+    public boolean isEmpty()
+    {
+        return this.occupied + (this.sentinelValues == null ? 0 : this.sentinelValues.size()) == 0;
+    }
+
+    public boolean notEmpty()
+    {
+        return this.occupied + (this.sentinelValues == null ? 0 : this.sentinelValues.size()) != 0;
     }
 
     private void rehash()
@@ -306,7 +322,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
 
         if (<(equals.(type))("this.keys[index]", "key")>)
         {
-            //key already present in map
+            // key already present in map
             V oldValue = this.values[index];
             this.values[index] = value;
             return oldValue;
@@ -320,6 +336,76 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
             this.rehash();
         }
         return null;
+    }
+
+    public boolean containsKey(<type> key)
+    {
+        if (isEmptyKey(key))
+        {
+            return this.sentinelValues != null && this.sentinelValues.containsZeroKey;
+        }
+        if (isRemovedKey(key))
+        {
+            return this.sentinelValues != null && this.sentinelValues.containsOneKey;
+        }
+        return <(equals.(type))("this.keys[this.probe(key)]", "key")>;
+    }
+
+    public boolean containsValue(Object value)
+    {
+        if (this.sentinelValues != null && this.sentinelValues.containsValue((V) value))
+        {
+            return true;
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && nullSafeEquals(this.values[i], value))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean contains(Object object)
+    {
+        return this.containsValue(object);
+    }
+
+    public boolean containsAllIterable(Iterable\<?> source)
+    {
+        for (Object item : source)
+        {
+            if (!this.contains(item))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean containsAll(Collection\<?> source)
+    {
+        for (Object item : source)
+        {
+            if (!this.contains(item))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean containsAllArguments(Object... elements)
+    {
+        for (Object item : elements)
+        {
+            if (!this.contains(item))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     public V get(<type> key)
@@ -608,151 +694,6 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
         return this.values[index];
     }
 
-    public boolean containsKey(<type> key)
-    {
-        if (isEmptyKey(key))
-        {
-            return this.sentinelValues != null && this.sentinelValues.containsZeroKey;
-        }
-        if (isRemovedKey(key))
-        {
-            return this.sentinelValues != null && this.sentinelValues.containsOneKey;
-        }
-        return <(equals.(type))("this.keys[this.probe(key)]", "key")>;
-    }
-
-    public <name>ObjectHashMap\<V> select(<name>ObjectPredicate\<? super V> predicate)
-    {
-        <name>ObjectHashMap\<V> result = <name>ObjectHashMap.newMap();
-
-        if (this.sentinelValues != null)
-        {
-            if (this.sentinelValues.containsZeroKey && predicate.accept(EMPTY, this.sentinelValues.zeroValue))
-            {
-                result.put(EMPTY, this.sentinelValues.zeroValue);
-            }
-            if (this.sentinelValues.containsOneKey && predicate.accept(REMOVED, this.sentinelValues.oneValue))
-            {
-                result.put(REMOVED, this.sentinelValues.oneValue);
-            }
-        }
-        for (int i = 0; i \< this.keys.length; i++)
-        {
-            if (isNonSentinel(this.keys[i]) && predicate.accept(this.keys[i], this.values[i]))
-            {
-                result.put(this.keys[i], this.values[i]);
-            }
-        }
-        return result;
-    }
-
-    public <name>ObjectHashMap\<V> reject(<name>ObjectPredicate\<? super V> predicate)
-    {
-        <name>ObjectHashMap\<V> result = <name>ObjectHashMap.newMap();
-
-        if (this.sentinelValues != null)
-        {
-            if (this.sentinelValues.containsZeroKey && !predicate.accept(EMPTY, this.sentinelValues.zeroValue))
-            {
-                result.put(EMPTY, this.sentinelValues.zeroValue);
-            }
-            if (this.sentinelValues.containsOneKey && !predicate.accept(REMOVED, this.sentinelValues.oneValue))
-            {
-                result.put(REMOVED, this.sentinelValues.oneValue);
-            }
-        }
-        for (int i = 0; i \< this.keys.length; i++)
-        {
-            if (isNonSentinel(this.keys[i]) && !predicate.accept(this.keys[i], this.values[i]))
-            {
-                result.put(this.keys[i], this.values[i]);
-            }
-        }
-        return result;
-    }
-
-    public boolean containsValue(Object value)
-    {
-        if (this.sentinelValues != null && this.sentinelValues.containsValue((V) value))
-        {
-            return true;
-        }
-        for (int i = 0; i \< this.keys.length; i++)
-        {
-            if (isNonSentinel(this.keys[i]) && nullSafeEquals(this.values[i], value))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public void forEachValue(Procedure\<? super V> procedure)
-    {
-        if (this.sentinelValues != null)
-        {
-            if (this.sentinelValues.containsZeroKey)
-            {
-                procedure.value(this.sentinelValues.zeroValue);
-            }
-            if (this.sentinelValues.containsOneKey)
-            {
-                procedure.value(this.sentinelValues.oneValue);
-            }
-        }
-        for (int i = 0; i \< this.keys.length; i++)
-        {
-            if (isNonSentinel(this.keys[i]))
-            {
-                procedure.value(this.values[i]);
-            }
-        }
-    }
-
-    public void forEachKey(<name>Procedure procedure)
-    {
-        if (this.sentinelValues != null)
-        {
-            if (this.sentinelValues.containsZeroKey)
-            {
-                procedure.value(EMPTY);
-            }
-            if (this.sentinelValues.containsOneKey)
-            {
-                procedure.value(REMOVED);
-            }
-        }
-        for (int i = 0; i \< this.keys.length; i++)
-        {
-            if (isNonSentinel(this.keys[i]))
-            {
-                procedure.value(this.keys[i]);
-            }
-        }
-    }
-
-    public void forEachKeyValue(<name>ObjectProcedure\<? super V> procedure)
-    {
-        if (this.sentinelValues != null)
-        {
-            if (this.sentinelValues.containsZeroKey)
-            {
-                procedure.value(EMPTY, this.sentinelValues.zeroValue);
-            }
-            if (this.sentinelValues.containsOneKey)
-            {
-                procedure.value(REMOVED, this.sentinelValues.oneValue);
-            }
-        }
-        for (int i = 0; i \< this.keys.length; i++)
-        {
-            if (isNonSentinel(this.keys[i]))
-            {
-                procedure.value(this.keys[i], this.values[i]);
-            }
-        }
-    }
-
     public V removeKey(<type> key)
     {
         if (isEmptyKey(key))
@@ -811,12 +752,12 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
             return true;
         }
 
-        if (!(obj instanceof <name>ObjectHashMap))
+        if (!(obj instanceof <name>ObjectMap))
         {
             return false;
         }
 
-        <name>ObjectHashMap\<V> other = (<name>ObjectHashMap\<V>) obj;
+        <name>ObjectMap\<V> other = (<name>ObjectMap\<V>) obj;
 
         if (this.size() != other.size())
         {
@@ -886,6 +827,172 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
     public String toString()
     {
         return this.makeString("[", ", ", "]");
+    }
+
+    public void forEach(Procedure\<? super V> procedure)
+    {
+        this.forEachValue(procedure);
+    }
+
+    public void forEachWithIndex(ObjectIntProcedure\<? super V> objectIntProcedure)
+    {
+        int index = 0;
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey)
+            {
+                objectIntProcedure.value(this.sentinelValues.zeroValue, index++);
+            }
+            if (this.sentinelValues.containsOneKey)
+            {
+                objectIntProcedure.value(this.sentinelValues.oneValue, index++);
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                objectIntProcedure.value(this.values[i], index++);
+            }
+        }
+    }
+
+    public \<P> void forEachWith(Procedure2\<? super V, ? super P> procedure, P parameter)
+    {
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey)
+            {
+                procedure.value(this.sentinelValues.zeroValue, parameter);
+            }
+            if (this.sentinelValues.containsOneKey)
+            {
+                procedure.value(this.sentinelValues.oneValue, parameter);
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                procedure.value(this.values[i], parameter);
+            }
+        }
+    }
+
+    public void forEachValue(Procedure\<? super V> procedure)
+    {
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey)
+            {
+                procedure.value(this.sentinelValues.zeroValue);
+            }
+            if (this.sentinelValues.containsOneKey)
+            {
+                procedure.value(this.sentinelValues.oneValue);
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                procedure.value(this.values[i]);
+            }
+        }
+    }
+
+    public void forEachKey(<name>Procedure procedure)
+    {
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey)
+            {
+                procedure.value(EMPTY);
+            }
+            if (this.sentinelValues.containsOneKey)
+            {
+                procedure.value(REMOVED);
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                procedure.value(this.keys[i]);
+            }
+        }
+    }
+
+    public void forEachKeyValue(<name>ObjectProcedure\<? super V> procedure)
+    {
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey)
+            {
+                procedure.value(EMPTY, this.sentinelValues.zeroValue);
+            }
+            if (this.sentinelValues.containsOneKey)
+            {
+                procedure.value(REMOVED, this.sentinelValues.oneValue);
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                procedure.value(this.keys[i], this.values[i]);
+            }
+        }
+    }
+
+    public <name>ObjectHashMap\<V> select(<name>ObjectPredicate\<? super V> predicate)
+    {
+        <name>ObjectHashMap\<V> result = <name>ObjectHashMap.newMap();
+
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey && predicate.accept(EMPTY, this.sentinelValues.zeroValue))
+            {
+                result.put(EMPTY, this.sentinelValues.zeroValue);
+            }
+            if (this.sentinelValues.containsOneKey && predicate.accept(REMOVED, this.sentinelValues.oneValue))
+            {
+                result.put(REMOVED, this.sentinelValues.oneValue);
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.keys[i], this.values[i]))
+            {
+                result.put(this.keys[i], this.values[i]);
+            }
+        }
+        return result;
+    }
+
+    public <name>ObjectHashMap\<V> reject(<name>ObjectPredicate\<? super V> predicate)
+    {
+        <name>ObjectHashMap\<V> result = <name>ObjectHashMap.newMap();
+
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey && !predicate.accept(EMPTY, this.sentinelValues.zeroValue))
+            {
+                result.put(EMPTY, this.sentinelValues.zeroValue);
+            }
+            if (this.sentinelValues.containsOneKey && !predicate.accept(REMOVED, this.sentinelValues.oneValue))
+            {
+                result.put(REMOVED, this.sentinelValues.oneValue);
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && !predicate.accept(this.keys[i], this.values[i]))
+            {
+                result.put(this.keys[i], this.values[i]);
+            }
+        }
+        return result;
     }
 
     public String makeString()
@@ -1056,21 +1163,6 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
         return IterableIterate.groupByEach(this, function, target);
     }
 
-    public int size()
-    {
-        return this.occupied + (this.sentinelValues == null ? 0 : this.sentinelValues.size());
-    }
-
-    public boolean isEmpty()
-    {
-        return this.occupied + (this.sentinelValues == null ? 0 : this.sentinelValues.size()) == 0;
-    }
-
-    public boolean notEmpty()
-    {
-        return this.occupied + (this.sentinelValues == null ? 0 : this.sentinelValues.size()) != 0;
-    }
-
     public V getFirst()
     {
         if (this.sentinelValues != null)
@@ -1117,69 +1209,28 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
         return null;
     }
 
-    public boolean contains(Object object)
+    public RichIterable\<V> select(Predicate\<? super V> predicate)
     {
-        return this.containsValue(object);
-    }
-
-    public boolean containsAllIterable(Iterable\<?> source)
-    {
-        for (Object item : source)
-        {
-            if (!this.contains(item))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean containsAll(Collection\<?> source)
-    {
-        for (Object item : source)
-        {
-            if (!this.contains(item))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean containsAllArguments(Object... elements)
-    {
-        for (Object item : elements)
-        {
-            if (!this.contains(item))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public <name>ObjectHashMap\<V> select(Predicate\<? super V> predicate)
-    {
-        <name>ObjectHashMap\<V> objects = <name>ObjectHashMap.newMap();
+        MutableList\<V> result = FastList.newList();
         if (this.sentinelValues != null)
         {
             if (this.sentinelValues.containsZeroKey && predicate.accept(this.sentinelValues.zeroValue))
             {
-                objects.put(EMPTY, this.sentinelValues.zeroValue);
+                result.add(this.sentinelValues.zeroValue);
             }
             if (this.sentinelValues.containsOneKey && predicate.accept(this.sentinelValues.oneValue))
             {
-                objects.put(REMOVED, this.sentinelValues.oneValue);
+                result.add(this.sentinelValues.oneValue);
             }
         }
         for (int i = 0; i \< this.keys.length; i++)
         {
             if (isNonSentinel(this.keys[i]) && predicate.accept(this.values[i]))
             {
-                objects.put(this.keys[i], this.values[i]);
+                result.add(this.values[i]);
             }
         }
-        return objects;
+        return result;
     }
 
     public \<R extends Collection\<V>\> R select(Predicate\<? super V> predicate, R target)
@@ -1230,26 +1281,26 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
 
     public RichIterable\<V> reject(Predicate\<? super V> predicate)
     {
-        <name>ObjectHashMap\<V> objects = <name>ObjectHashMap.newMap();
+        MutableList\<V> result = FastList.newList();
         if (this.sentinelValues != null)
         {
             if (this.sentinelValues.containsZeroKey && !predicate.accept(this.sentinelValues.zeroValue))
             {
-                objects.put(EMPTY, this.sentinelValues.zeroValue);
+                result.add(this.sentinelValues.zeroValue);
             }
             if (this.sentinelValues.containsOneKey && !predicate.accept(this.sentinelValues.oneValue))
             {
-                objects.put(REMOVED, this.sentinelValues.oneValue);
+                result.add(this.sentinelValues.oneValue);
             }
         }
         for (int i = 0; i \< this.keys.length; i++)
         {
             if (isNonSentinel(this.keys[i]) && !predicate.accept(this.values[i]))
             {
-                objects.put(this.keys[i], this.values[i]);
+                result.add(this.values[i]);
             }
         }
-        return objects;
+        return result;
     }
 
     public \<R extends Collection\<V>\> R reject(Predicate\<? super V> predicate, R target)
@@ -2031,7 +2082,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
         return sum;
     }
 
-    public <name>ObjectHashMap\<V> withKeysValues(<type> key, V value)
+    public <name>ObjectHashMap\<V> withKeyValue(<type> key, V value)
     {
         this.put(key, value);
         return this;
@@ -2076,56 +2127,6 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
         this.put(key3, value3);
         this.put(key4, value4);
         return this;
-    }
-
-    public void forEach(Procedure\<? super V> procedure)
-    {
-        this.forEachValue(procedure);
-    }
-
-    public void forEachWithIndex(ObjectIntProcedure\<? super V> objectIntProcedure)
-    {
-        int index = 0;
-        if (this.sentinelValues != null)
-        {
-            if (this.sentinelValues.containsZeroKey)
-            {
-                objectIntProcedure.value(this.sentinelValues.zeroValue, index++);
-            }
-            if (this.sentinelValues.containsOneKey)
-            {
-                objectIntProcedure.value(this.sentinelValues.oneValue, index++);
-            }
-        }
-        for (int i = 0; i \< this.keys.length; i++)
-        {
-            if (isNonSentinel(this.keys[i]))
-            {
-                objectIntProcedure.value(this.values[i], index++);
-            }
-        }
-    }
-
-    public \<P> void forEachWith(Procedure2\<? super V, ? super P> procedure, P parameter)
-    {
-        if (this.sentinelValues != null)
-        {
-            if (this.sentinelValues.containsZeroKey)
-            {
-                procedure.value(this.sentinelValues.zeroValue, parameter);
-            }
-            if (this.sentinelValues.containsOneKey)
-            {
-                procedure.value(this.sentinelValues.oneValue, parameter);
-            }
-        }
-        for (int i = 0; i \< this.keys.length; i++)
-        {
-            if (isNonSentinel(this.keys[i]))
-            {
-                procedure.value(this.values[i], parameter);
-            }
-        }
     }
 
     public Iterator\<V> iterator()

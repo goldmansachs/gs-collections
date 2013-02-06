@@ -5,7 +5,8 @@ equals ::= [
     "int": "operatorEquals",
     "long": "operatorEquals",
     "float": "floatEquals",
-    "double": "doubleEquals"
+    "double": "doubleEquals",
+    default: "no matching equals"
 ]
 
 operatorEquals(left, right) ::= <<
@@ -27,7 +28,8 @@ notEquals ::= [
     "int": "operatorNotEquals",
     "long": "operatorNotEquals",
     "float": "floatNotEquals",
-    "double": "doubleNotEquals"
+    "double": "doubleNotEquals",
+    default: "no matching not equals"
 ]
 
 operatorNotEquals(left, right) ::= <<
@@ -49,7 +51,8 @@ lessThan ::= [
     "int": "operatorLessThan",
     "long": "operatorLessThan",
     "float": "floatLessThan",
-    "double": "doubleLessThan"
+    "double": "doubleLessThan",
+    default: "no matching less than"
 ]
 
 operatorLessThan(left, right) ::= <<
