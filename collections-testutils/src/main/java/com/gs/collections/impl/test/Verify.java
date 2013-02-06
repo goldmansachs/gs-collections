@@ -271,6 +271,7 @@ public final class Verify extends Assert
         // the following test fails
         try
         {
+            //noinspection FloatingPointEquality
             if (Double.isInfinite(notExpected) && notExpected == actual || Math.abs(notExpected - actual) <= delta)
             {
                 Assert.fail(itemName + " should not be equal:<" + notExpected + '>');
@@ -311,6 +312,7 @@ public final class Verify extends Assert
         {
             // handle infinity specially since subtracting to infinite values gives NaN and the
             // the following test fails
+            //noinspection FloatingPointEquality
             if (Float.isInfinite(notExpected) && notExpected == actual || Math.abs(notExpected - actual) <= delta)
             {
                 Assert.fail(itemName + " should not be equal:<" + notExpected + '>');

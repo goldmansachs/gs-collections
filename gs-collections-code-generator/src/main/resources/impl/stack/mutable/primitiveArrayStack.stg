@@ -292,7 +292,7 @@ public final class <name>ArrayStack
         }
         for (int i = 0; i \< this.size(); i++)
         {
-            if (this.peekAt(i) != stack.peekAt(i))
+            if (<(notEquals.(type))("this.peekAt(i)", "stack.peekAt(i)")>)
             {
                 return false;
             }

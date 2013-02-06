@@ -167,6 +167,16 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map
         return <(equals.(type1))("key", "REMOVED_KEY")>;
     }
 
+    private static boolean isNonSentinel(<type1> key)
+    {
+        return !isEmptyKey(key) && !isRemovedKey(key);
+    }
+
+    private static boolean isNonSentinelValue(<type2> value)
+    {
+        return <(notEquals.(type2))("value", "EMPTY_VALUE")>;
+    }
+
     private int allocate(int capacity)
     {
         this.allocateTable(capacity);
@@ -184,16 +194,6 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map
     {
         // need at least one free slot for open addressing
         this.maxSize = Math.min(capacity - 1, (int) (capacity * this.loadFactor));
-    }
-
-    private static boolean isNonSentinel(<type1> key)
-    {
-        return key != EMPTY_KEY && key != REMOVED_KEY;
-    }
-
-    private static boolean isNonSentinelValue(<type2> value)
-    {
-        return value != EMPTY_VALUE;
     }
 
     public int size()
@@ -251,7 +251,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map
         // loop until an empty slot is reached
         while (true)
         {
-            // Probe algorithm: 17*n*(n+1)/2 where n = no. of collisions
+            // Probe algorithm: 17*n*(n+1)/2 where n = number of collisions
             nextIndex += probe;
             probe += 17;
             nextIndex &= this.keys.length - 1;

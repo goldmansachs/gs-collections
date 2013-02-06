@@ -397,7 +397,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         // loop until an empty slot is reached
         while (true)
         {
-            // Probe algorithm: 17 * n * (n+1) / 2 where n = no. of collisions
+            // Probe algorithm: 17 * n * (n+1) / 2 where n = number of collisions
             nextIndex = (nextIndex + probe) & this.table.length - 1;
             probe += 17;
 

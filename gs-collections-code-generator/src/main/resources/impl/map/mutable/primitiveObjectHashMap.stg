@@ -170,6 +170,11 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
         return <(equals.(type))("key", "REMOVED")>;
     }
 
+    private static boolean isNonSentinel(<type> key)
+    {
+        return !isEmptyKey(key) && !isRemovedKey(key);
+    }
+
     private int allocate(int capacity)
     {
         this.allocateTable(capacity);
@@ -187,11 +192,6 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
     {
         // need at least one free slot for open addressing
         this.maxSize = Math.min(capacity - 1, (int) (capacity * this.loadFactor));
-    }
-
-    private static boolean isNonSentinel(<type> key)
-    {
-        return key != EMPTY && key != REMOVED;
     }
 
     public int size()
@@ -249,7 +249,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
         // loop until an empty slot is reached
         while (true)
         {
-            // Probe algorithm: 17*n*(n+1)/2 where n = no. of collisions
+            // Probe algorithm: 17*n*(n+1)/2 where n = number of collisions
             nextIndex += probe;
             probe += 17;
             nextIndex &= this.keys.length - 1;
