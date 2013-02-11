@@ -13,6 +13,8 @@ body(type, name) ::= <<
 
 package com.gs.collections.api.set.primitive;
 
+import java.util.Set;
+
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 

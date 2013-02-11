@@ -90,12 +90,17 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
         this.addAll(iterable);
     }
 
-    /* TODO
     public <name>HashBag(<name>HashBag bag)
     {
-        this.items = new <name>IntHashMap(bag.items);
+        this.items = new <name>IntHashMap(bag.sizeDistinct());
+        bag.forEachWithOccurrences(new <name>IntProcedure()
+        {
+            public void value(<type> item, int occurrences)
+            {
+                <name>HashBag.this.addOccurrences(item, occurrences);
+            }
+        });
     }
-    */
 
     public static <name>HashBag newBag()
     {
@@ -116,14 +121,12 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
 
     public static <name>HashBag newBag(<name>Iterable source)
     {
-        /* TODO
         if (source instanceof <name>HashBag)
         {
             return new <name>HashBag((<name>HashBag) source);
         }
-        */
 
-        return <name>HashBag.newBagWith(source.toArray());
+        return new <name>HashBag(source);
     }
 
     public static <name>HashBag newBag(<name>Bag source)
@@ -457,19 +460,13 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
             return false;
         }
 
-        // TODO Lazy or short circuit API for iterating over map entries
-        final boolean[] result = {true};
-        this.items.forEachKeyValue(new <name>IntProcedure()
+        return this.items.keysView().allSatisfy(new <name>Predicate()
         {
-            public void value(<type> eachItem, int occurrences)
+            public boolean accept(<type> key)
             {
-                if (result[0] && bag.occurrencesOf(eachItem) != occurrences)
-                {
-                    result[0] = false;
-                }
+                return <name>HashBag.this.occurrencesOf(key) == bag.occurrencesOf(key);
             }
         });
-        return result[0];
     }
 
     @Override
@@ -575,59 +572,19 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
         return result.getCount();
     }
 
-    // TODO: short circuit
-    public boolean anySatisfy(final <name>Predicate predicate)
+    public boolean anySatisfy(<name>Predicate predicate)
     {
-        final boolean[] result = {false};
-        this.items.forEachKey(new <name>Procedure()
-        {
-            public void value(<type> each)
-            {
-                if (result[0])
-                {
-                    return;
-                }
-                result[0] = predicate.accept(each);
-            }
-        });
-        return result[0];
+        return this.items.keysView().anySatisfy(predicate);
     }
 
-    // TODO: short circuit
-    public boolean allSatisfy(final <name>Predicate predicate)
+    public boolean allSatisfy(<name>Predicate predicate)
     {
-        final boolean[] result = {true};
-        this.items.forEachKey(new <name>Procedure()
-        {
-            public void value(<type> each)
-            {
-                if (!result[0])
-                {
-                    return;
-                }
-                result[0] = predicate.accept(each);
-            }
-        });
-        return result[0];
+        return this.items.keysView().allSatisfy(predicate);
     }
 
-    // TODO: short circuit
-    public <type> detectIfNone(final <name>Predicate predicate, <type> ifNone)
+    public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
     {
-        final boolean[] found = {false};
-        final <type>[] result = new <type>[1];
-        this.items.forEachKey(new <name>Procedure()
-        {
-            public void value(<type> each)
-            {
-                if (!found[0] && predicate.accept(each))
-                {
-                    found[0] = true;
-                    result[0] = each;
-                }
-            }
-        });
-        return found[0] ? result[0] : ifNone;
+        return this.items.keysView().detectIfNone(predicate, ifNone);
     }
 
     public \<V> MutableBag\<V> collect(final <name>ToObjectFunction\<? extends V> function)
@@ -649,18 +606,7 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
         {
             throw new NoSuchElementException();
         }
-        final <type>[] max = new <type>[1];
-        this.items.forEachKey(new <name>Procedure()
-        {
-            public void value(<type> each)
-            {
-                if (<(lessThan.(type))("max[0]", "each")>)
-                {
-                    max[0] = each;
-                }
-            }
-        });
-        return max[0];
+        return this.items.keysView().max();
     }
 
     public <type> min()
@@ -669,18 +615,7 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
         {
             throw new NoSuchElementException();
         }
-        final <type>[] min = new <type>[1];
-        this.items.forEachKey(new <name>Procedure()
-        {
-            public void value(<type> each)
-            {
-                if (<(lessThan.(type))("each", "min[0]")>)
-                {
-                    min[0] = each;
-                }
-            }
-        });
-        return min[0];
+        return this.items.keysView().min();
     }
 
     public <wideType.(type)> sum()
@@ -774,7 +709,7 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
 
     public Mutable<name>Set toSet()
     {
-        return <name>HashSet.newSet(this);
+        return <name>HashSet.newSet(this.items.keysView());
     }
 
     public Mutable<name>Bag toBag()
@@ -789,7 +724,7 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
 
     public <name>Iterator <type>Iterator()
     {
-        throw new UnsupportedOperationException();
+        return new InternalIterator();
     }
 
     public void writeExternal(final ObjectOutput out) throws IOException
@@ -830,6 +765,30 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
         for (int i = 0; i \< size; i++)
         {
             this.addOccurrences(in.read<name>(), in.readInt());
+        }
+    }
+
+    private class InternalIterator implements <name>Iterator
+    {
+        private final <name>Iterator <type>Iterator = <name>HashBag.this.items.keysView().<type>Iterator();
+
+        private <type> currentItem;
+        private int occurrences;
+
+        public boolean hasNext()
+        {
+            return this.occurrences > 0 || this.<type>Iterator.hasNext();
+        }
+
+        public <type> next()
+        {
+            if (this.occurrences == 0)
+            {
+                this.currentItem = this.<type>Iterator.next();
+                this.occurrences = <name>HashBag.this.occurrencesOf(this.currentItem);
+            }
+            this.occurrences--;
+            return this.currentItem;
         }
     }
 }

@@ -10,16 +10,25 @@ targetPath() ::= "com/gs/collections/impl/bag/mutable/primitive"
 fileName(primitive) ::= "<primitive.name>HashBagTest"
 
 class(primitive) ::= <<
-<body(primitive.type, primitive.name)>
+<body(primitive.type, primitive.name, primitive.wrapperName)>
 >>
 
-body(type, name) ::= <<
+body(type, name, wrapperName) ::= <<
 <copyright()>
 
 package com.gs.collections.impl.bag.mutable.primitive;
 
+import java.util.NoSuchElementException;
+
+import com.gs.collections.api.Lazy<name>Iterable;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
+import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
+import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
+import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -30,6 +39,30 @@ import org.junit.Test;
  */
 public class <name>HashBagTest
 {
+    @Test
+    public void empty()
+    {
+        Assert.assertTrue(new <name>HashBag().isEmpty());
+        Assert.assertFalse(new <name>HashBag().notEmpty());
+        Assert.assertFalse(<name>HashBag.newBagWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">).isEmpty());
+        Assert.assertTrue(<name>HashBag.newBagWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">).notEmpty());
+    }
+
+    @Test
+    public void size()
+    {
+        Verify.assertSize(0, new <name>HashBag());
+        Verify.assertSize(3, <name>HashBag.newBagWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">));
+    }
+
+    @Test
+    public void sizeDistinct()
+    {
+        Assert.assertEquals(0, new <name>HashBag().sizeDistinct());
+        Assert.assertEquals(3, <name>HashBag.newBagWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">).sizeDistinct());
+        Assert.assertEquals(3, <name>HashBag.newBagWith(<["0", "1", "1", "2", "2", "2"]:(literal.(type))(); separator=", ">).sizeDistinct());
+    }
+
     @Test
     public void add()
     {
@@ -48,6 +81,12 @@ public class <name>HashBagTest
         Assert.assertEquals(<name>HashBag.newBagWith(<["100", "100", "100"]:(literal.(type))(); separator=", ">), bag);
         bag.addOccurrences(<(literal.(type))("100")>, 2);
         Assert.assertEquals(<name>HashBag.newBagWith(<["100", "100", "100", "100", "100"]:(literal.(type))(); separator=", ">), bag);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void addOccurrences_throws()
+    {
+        new <name>HashBag().addOccurrences(<(literal.(type))("100")>, -1);
     }
 
     @Test
@@ -79,11 +118,146 @@ public class <name>HashBagTest
         Assert.assertEquals(<name>HashBag.newBag(), bag);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void removeOccurrences_throws()
+    {
+        new <name>HashBag().removeOccurrences(<(literal.(type))("100")>, -1);
+    }
+
+    @Test
+    public void clear()
+    {
+        <name>HashBag bag = <name>HashBag.newBagWith(<["0", "1", "1", "2", "2", "2"]:(literal.(type))(); separator=", ">);
+        bag.clear();
+        Assert.assertEquals(new <name>HashBag(), bag);
+    }
+
+    @Test
+    public void addAll()
+    {
+        <name>HashBag bag = new <name>HashBag();
+        Assert.assertTrue(bag.addAll(<name>ArrayList.newListWith(<["1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">)));
+        Assert.assertFalse(bag.addAll(new <name>ArrayList()));
+        Assert.assertEquals(<name>HashBag.newBagWith(<["1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">), bag);
+        Assert.assertTrue(bag.addAll(<name>HashBag.newBagWith(<["4", "4", "4", "4"]:(literal.(type))(); separator=", ">)));
+        Assert.assertEquals(<name>HashBag.newBagWith(<["1", "2", "2", "3", "3", "3", "4", "4", "4", "4"]:(literal.(type))(); separator=", ">), bag);
+    }
+
+    @Test
+    public void removeAll()
+    {
+        <name>HashBag bag = <name>HashBag.newBagWith(<["0", "1", "1", "2", "2", "2"]:(literal.(type))(); separator=", ">);
+        Assert.assertFalse(bag.removeAll());
+        Assert.assertTrue(bag.removeAll(<["0", "1"]:(literal.(type))(); separator=", ">));
+        Assert.assertEquals(<name>HashBag.newBagWith(<["2", "2", "2"]:(literal.(type))(); separator=", ">), bag);
+    }
+
+    @Test
+    public void removeAll_iterable()
+    {
+        <name>HashBag bag = <name>HashBag.newBagWith(<["0", "1", "1", "2", "2", "2"]:(literal.(type))(); separator=", ">);
+        Assert.assertFalse(bag.removeAll(new <name>ArrayList()));
+        Assert.assertTrue(bag.removeAll(<name>ArrayList.newListWith(<["0", "1"]:(literal.(type))(); separator=", ">)));
+        Assert.assertEquals(<name>HashBag.newBagWith(<["2", "2", "2"]:(literal.(type))(); separator=", ">), bag);
+
+        <name>HashBag bag2 = <name>HashBag.newBagWith(<["0", "1", "1", "2", "2", "2"]:(literal.(type))(); separator=", ">);
+        Assert.assertTrue(bag2.removeAll(<name>HashBag.newBagWith(<["0", "1", "1"]:(literal.(type))(); separator=", ">)));
+        Assert.assertEquals(<name>HashBag.newBagWith(<["2", "2", "2"]:(literal.(type))(); separator=", ">), bag2);
+    }
+
+    @Test
+    public void with()
+    {
+        <name>HashBag hashBag = new <name>HashBag().with(<["1"]:(literal.(type))(); separator=", ">);
+        <name>HashBag hashBag0 = new <name>HashBag().with(<["1", "2"]:(literal.(type))(); separator=", ">);
+        <name>HashBag hashBag1 = new <name>HashBag().with(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
+        <name>HashBag hashBag2 = new <name>HashBag().with(<(literal.(type))("1")>).with(<(literal.(type))("2")>).with(<(literal.(type))("3")>).with(<(literal.(type))("4")>);
+        <name>HashBag hashBag3 = new <name>HashBag().with(<(literal.(type))("1")>).with(<(literal.(type))("2")>).with(<(literal.(type))("3")>).with(<(literal.(type))("4")>).with(<(literal.(type))("5")>);
+        Assert.assertEquals(<name>HashBag.newBagWith(<(literal.(type))("1")>), hashBag);
+        Assert.assertEquals(<name>HashBag.newBagWith(<["1", "2"]:(literal.(type))(); separator=", ">), hashBag0);
+        Assert.assertEquals(<name>HashBag.newBagWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), hashBag1);
+        Assert.assertEquals(<name>HashBag.newBagWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">), hashBag2);
+        Assert.assertEquals(<name>HashBag.newBagWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">), hashBag3);
+    }
+
+    @Test
+    public void withAll()
+    {
+        <name>HashBag hashBag = new <name>HashBag().withAll(<name>HashBag.newBagWith(<(literal.(type))("1")>));
+        <name>HashBag hashBag0 = new <name>HashBag().withAll(<name>HashBag.newBagWith(<["1", "2"]:(literal.(type))(); separator=", ">));
+        <name>HashBag hashBag1 = new <name>HashBag().withAll(<name>HashBag.newBagWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
+        <name>HashBag hashBag2 = new <name>HashBag().withAll(<name>ArrayList.newListWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">));
+        <name>HashBag hashBag3 = new <name>HashBag().withAll(<name>ArrayList.newListWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">));
+        Assert.assertEquals(<name>HashBag.newBagWith(<(literal.(type))("1")>), hashBag);
+        Assert.assertEquals(<name>HashBag.newBagWith(<["1", "2"]:(literal.(type))(); separator=", ">), hashBag0);
+        Assert.assertEquals(<name>HashBag.newBagWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), hashBag1);
+        Assert.assertEquals(<name>HashBag.newBagWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">), hashBag2);
+        Assert.assertEquals(<name>HashBag.newBagWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">), hashBag3);
+    }
+
+    @Test
+    public void without()
+    {
+        <name>HashBag mainHashBag = <name>HashBag.newBagWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
+        Assert.assertEquals(<name>HashBag.newBagWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">), mainHashBag.without(<(literal.(type))("9")>));
+        Assert.assertEquals(<name>HashBag.newBagWith(<["2", "3", "4", "5"]:(literal.(type))(); separator=", ">), mainHashBag.without(<(literal.(type))("1")>));
+        Assert.assertEquals(<name>HashBag.newBagWith(<["3", "4", "5"]:(literal.(type))(); separator=", ">), mainHashBag.without(<(literal.(type))("2")>));
+        Assert.assertEquals(<name>HashBag.newBagWith(<["4", "5"]:(literal.(type))(); separator=", ">), mainHashBag.without(<(literal.(type))("3")>));
+        Assert.assertEquals(<name>HashBag.newBagWith(<(literal.(type))("5")>), mainHashBag.without(<(literal.(type))("4")>));
+        Assert.assertEquals(new <name>HashBag(), mainHashBag.without(<(literal.(type))("5")>));
+        Assert.assertEquals(new <name>HashBag(), mainHashBag.without(<(literal.(type))("6")>));
+    }
+
+    @Test
+    public void withoutAll()
+    {
+        <name>HashBag mainHashBag = <name>HashBag.newBagWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
+        Assert.assertEquals(<name>HashBag.newBagWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">), mainHashBag.withoutAll(<name>HashBag.newBagWith(<["8", "9"]:(literal.(type))(); separator=", ">)));
+        Assert.assertEquals(<name>HashBag.newBagWith(<["2", "3", "4"]:(literal.(type))(); separator=", ">), mainHashBag.withoutAll(<name>HashBag.newBagWith(<["1", "5"]:(literal.(type))(); separator=", ">)));
+        Assert.assertEquals(<name>HashBag.newBagWith(<["3", "4"]:(literal.(type))(); separator=", ">), mainHashBag.withoutAll(<name>ArrayList.newListWith(<["2", "20"]:(literal.(type))(); separator=", ">)));
+        Assert.assertEquals(new <name>HashBag(), mainHashBag.withoutAll(<name>HashBag.newBagWith(<["3", "4"]:(literal.(type))(); separator=", ">)));
+        Assert.assertEquals(new <name>HashBag(), mainHashBag.withoutAll(<name>HashBag.newBagWith(<(literal.(type))("9")>)));
+    }
+
+    @Test
+    public void contains()
+    {
+        <name>HashBag bag = <name>HashBag.newBagWith(<["0", "1", "1", "2", "2", "2"]:(literal.(type))(); separator=", ">);
+        Assert.assertTrue(bag.contains(<(literal.(type))("0")>));
+        Assert.assertTrue(bag.contains(<(literal.(type))("1")>));
+        Assert.assertTrue(bag.contains(<(literal.(type))("2")>));
+        Assert.assertFalse(bag.contains(<(literal.(type))("3")>));
+    }
+
+    @Test
+    public void containsAll()
+    {
+        <name>HashBag bag = <name>HashBag.newBagWith(<["0", "1", "1", "2", "2", "2"]:(literal.(type))(); separator=", ">);
+        Assert.assertTrue(bag.containsAll(<(literal.(type))("0")>));
+        Assert.assertTrue(bag.containsAll(<["0", "0", "0"]:(literal.(type))(); separator=", ">));
+        Assert.assertTrue(bag.containsAll(<["0", "1", "1"]:(literal.(type))(); separator=", ">));
+        Assert.assertTrue(bag.containsAll(<["0", "1", "2"]:(literal.(type))(); separator=", ">));
+        Assert.assertFalse(bag.containsAll(<["0", "1", "2", "3", "4"]:(literal.(type))(); separator=", ">));
+        Assert.assertFalse(bag.containsAll(<["3", "4"]:(literal.(type))(); separator=", ">));
+    }
+
+    @Test
+    public void containsAll_iterable()
+    {
+        <name>HashBag bag = <name>HashBag.newBagWith(<["0", "1", "1", "2", "2", "2"]:(literal.(type))(); separator=", ">);
+        Assert.assertTrue(bag.containsAll(<name>ArrayList.newListWith(<(literal.(type))("0")>)));
+        Assert.assertTrue(bag.containsAll(<name>ArrayList.newListWith(<["0", "0", "0"]:(literal.(type))(); separator=", ">)));
+        Assert.assertTrue(bag.containsAll(<name>ArrayList.newListWith(<["0", "1", "1"]:(literal.(type))(); separator=", ">)));
+        Assert.assertTrue(bag.containsAll(<name>ArrayList.newListWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">)));
+        Assert.assertFalse(bag.containsAll(<name>ArrayList.newListWith(<["0", "1", "2", "3", "4"]:(literal.(type))(); separator=", ">)));
+        Assert.assertFalse(bag.containsAll(<name>ArrayList.newListWith(<["3", "4"]:(literal.(type))(); separator=", ">)));
+    }
+
     @Test
     public void testEqualsAndHashCode()
     {
-        Verify.assertEqualsAndHashCode(new <name>HashBag(), new <name>HashBag());
-        Verify.assertEqualsAndHashCode(<name>HashBag.newBagWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">), <name>HashBag.newBagWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">));
+        Verify.assertPostSerializedEqualsAndHashCode(new <name>HashBag());
+        Verify.assertPostSerializedEqualsAndHashCode(<name>HashBag.newBagWith(<["0", "1", "1", "2", "2", "2"]:(literal.(type))(); separator=", ">));
         Assert.assertNotEquals(<name>HashBag.newBagWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">), <name>HashBag.newBagWith(<["0", "1", "3"]:(literal.(type))(); separator=", ">));
         Assert.assertNotEquals(<name>HashBag.newBagWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">), <name>HashBag.newBagWith(<["3", "1", "2"]:(literal.(type))(); separator=", ">));
         Assert.assertNotEquals(new <name>HashBag(), <name>HashBag.newBagWith(<(literal.(type))("100")>));
@@ -122,5 +296,330 @@ public class <name>HashBagTest
         Assert.assertEquals(1, count[0]);
         Assert.assertTrue(bag.allSatisfy(<name>Predicates.lessThan(<(literal.(type))("3")>)));
     }
+
+    @Test
+    public void forEach()
+    {
+        final <wideType.(type)>[] sum = new <wideType.(type)>[1];
+        <name>HashBag.newBagWith(<["1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">).forEach(new <name>Procedure()
+        {
+            public void value(<type> each)
+            {
+                sum[0] += each;
+            }
+        });
+
+        Assert.assertEquals(14L, sum[0]<(delta.(type))>);
+    }
+
+    @Test
+    public void count()
+    {
+        <name>HashBag bag = <name>HashBag.newBagWith(<["1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">);
+        Assert.assertEquals(5L, bag.count(<name>Predicates.greaterThan(<(literal.(type))("1")>)));
+        Assert.assertEquals(1L, bag.count(<name>Predicates.lessThan(<(literal.(type))("2")>)));
+        Assert.assertEquals(0L, bag.count(<name>Predicates.greaterThan(<(literal.(type))("4")>)));
+    }
+
+    @Test
+    public void select()
+    {
+        <name>HashBag bag = <name>HashBag.newBagWith(<["0", "1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">);
+        Assert.assertEquals(<name>HashBag.newBagWith(<["0", "1"]:(literal.(type))(); separator=", ">), bag.select(<name>Predicates.lessThan(<(literal.(type))("2")>)));
+        Assert.assertEquals(<name>HashBag.newBagWith(<["2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">), bag.select(<name>Predicates.greaterThan(<(literal.(type))("1")>)));
+    }
+
+    @Test
+    public void reject()
+    {
+        <name>HashBag bag = <name>HashBag.newBagWith(<["0", "1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">);
+        Assert.assertEquals(<name>HashBag.newBagWith(<["2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">), bag.reject(<name>Predicates.lessThan(<(literal.(type))("2")>)));
+        Assert.assertEquals(<name>HashBag.newBagWith(<["0", "1"]:(literal.(type))(); separator=", ">), bag.reject(<name>Predicates.greaterThan(<(literal.(type))("1")>)));
+    }
+
+    @Test
+    public void detectIfNone()
+    {
+        <name>HashBag bag = <name>HashBag.newBagWith(<["0", "1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">);
+        Assert.assertEquals(<(literal.(type))("0")>, bag.detectIfNone(<name>Predicates.lessThan(<(literal.(type))("1")>), <(literal.(type))("4")>)<(delta.(type))>);
+        Assert.assertEquals(<(literal.(type))("3")>, bag.detectIfNone(<name>Predicates.greaterThan(<(literal.(type))("2")>), <(literal.(type))("4")>)<(delta.(type))>);
+        Assert.assertEquals(<(literal.(type))("4")>, bag.detectIfNone(<name>Predicates.greaterThan(<(literal.(type))("4")>), <(literal.(type))("4")>)<(delta.(type))>);
+    }
+
+    @Test
+    public void collect()
+    {
+        <name>HashBag bag = <name>HashBag.newBagWith(<["1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">);
+        Assert.assertEquals(HashBag.newBagWith(<["0", "1", "1", "2", "2", "2"]:(literal.(type))(); separator=", ">), bag.collect(new <name>ToObjectFunction\<<wrapperName>\>()
+        {
+            public <wrapperName> valueOf(<type> parameter)
+            {
+                return <(castIntToNarrowType.(type))("parameter - 1")>;
+            }
+        }));
+    }
+
+    @Test
+    public void max()
+    {
+        <(maxTests.(type))(type, name)>
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void max_throws_emptyList()
+    {
+        new <name>HashBag().max();
+    }
+
+    @Test
+    public void min()
+    {
+        <(minTests.(type))(type, name)>
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void min_throws_emptyList()
+    {
+        new <name>HashBag().min();
+    }
+
+    @Test
+    public void minIfEmpty()
+    {
+        Assert.assertEquals(<(wideLiteral.(type))("5")>, new <name>HashBag().minIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("0")>, new <name>HashBag().minIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("0")>, <name>HashBag.newBagWith(<["1", "0", "9", "7", "0", "9"]:(literal.(type))(); separator=", ">).minIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
+    }
+
+    @Test
+    public void maxIfEmpty()
+    {
+        Assert.assertEquals(<(wideLiteral.(type))("5")>, new <name>HashBag().maxIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("0")>, new <name>HashBag().maxIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("9")>, <name>HashBag.newBagWith(<["1", "0", "9", "7", "0", "9"]:(literal.(type))(); separator=", ">).maxIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
+    }
+
+    @Test
+    public void sum()
+    {
+        Assert.assertEquals(<(wideLiteral.(type))("14")>, <name>HashBag.newBagWith(<["1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">).sum()<wideDelta.(type)>);
+    }
+
+    @Test
+    public void average()
+    {
+        Assert.assertEquals(31.0, <name>HashBag.newBagWith(<["30", "30", "31", "31", "32", "32"]:(literal.(type))(); separator=", ">).average(), 0.0);
+    }
+
+    @Test
+    public void median()
+    {
+        Assert.assertEquals(31.0, <name>HashBag.newBagWith(<["30", "30", "31", "31", "32"]:(literal.(type))(); separator=", ">).median(), 0.0);
+        Assert.assertEquals(30.5, <name>HashBag.newBagWith(<["1", "30", "30", "31", "31", "32"]:(literal.(type))(); separator=", ">).median(), 0.0);
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void median_throws_emptyList()
+    {
+        new <name>HashBag().median();
+    }
+
+    @Test
+    public void testToString()
+    {
+        Assert.assertEquals("[]", new <name>HashBag().toString());
+        Assert.assertEquals("[<(toStringLiteral.(type))("1")>]", <name>HashBag.newBagWith(<(literal.(type))("1")>).toString());
+        Assert.assertEquals("[<["1", "1", "1"]:(toStringLiteral.(type))(); separator=", ">]", <name>HashBag.newBagWith(<["1", "1", "1"]:(literal.(type))(); separator=", ">).toString());
+
+        <name>HashBag bar = <name>HashBag.newBagWith(<["0", "1"]:(literal.(type))(); separator=", ">);
+        Assert.assertTrue(
+                bar.toString(),
+                bar.toString().equals("[<["0", "1"]:(toStringLiteral.(type))(); separator=", ">]")
+                        || bar.toString().equals("[<["1", "0"]:(toStringLiteral.(type))(); separator=", ">]"));
+    }
+
+    @Test
+    public void makeString()
+    {
+        Assert.assertEquals("", new <name>HashBag().makeString());
+        Assert.assertEquals("<(toStringLiteral.(type))("1")>", <name>HashBag.newBagWith(<(literal.(type))("1")>).makeString());
+        Assert.assertEquals("<["1", "1", "1"]:(toStringLiteral.(type))(); separator=", ">", <name>HashBag.newBagWith(<["1", "1", "1"]:(literal.(type))(); separator=", ">).makeString());
+
+        <name>HashBag bag1 = <name>HashBag.newBagWith(<["0", "1"]:(literal.(type))(); separator=", ">);
+        Assert.assertTrue(
+                bag1.makeString(),
+                bag1.makeString().equals("<["0", "1"]:(toStringLiteral.(type))(); separator=", ">")
+                        || bag1.makeString().equals("<["1", "0"]:(toStringLiteral.(type))(); separator=", ">"));
+
+        <name>HashBag bag2 = <name>HashBag.newBagWith(<["0", "1"]:(literal.(type))(); separator=", ">);
+        Assert.assertTrue(
+                bag2.makeString("[", "/", "]"),
+                bag2.makeString("[", "/", "]").equals("[<["0", "1"]:(toStringLiteral.(type))(); separator="/">]")
+                        || bag2.makeString("[", "/", "]").equals("[<["1", "0"]:(toStringLiteral.(type))(); separator="/">]"));
+
+        <name>HashBag bag3 = <name>HashBag.newBagWith(<["0", "1"]:(literal.(type))(); separator=", ">);
+        Assert.assertTrue(
+                bag3.makeString("/"),
+                bag3.makeString("/").equals("<["0", "1"]:(toStringLiteral.(type))(); separator="/">")
+                        || bag3.makeString("/").equals("<["1", "0"]:(toStringLiteral.(type))(); separator="/">"));
+    }
+
+    @Test
+    public void appendString()
+    {
+        StringBuilder appendable = new StringBuilder();
+        new <name>HashBag().appendString(appendable);
+        Assert.assertEquals("", appendable.toString());
+
+        StringBuilder appendable0 = new StringBuilder();
+        <name>HashBag.newBagWith(<(literal.(type))("1")>).appendString(appendable0);
+        Assert.assertEquals("<(toStringLiteral.(type))("1")>", appendable0.toString());
+
+        StringBuilder appendable1 = new StringBuilder();
+        <name>HashBag.newBagWith(<["1", "1", "1"]:(literal.(type))(); separator=", ">).appendString(appendable1);
+        Assert.assertEquals("<["1", "1", "1"]:(toStringLiteral.(type))(); separator=", ">", appendable1.toString());
+
+        StringBuilder appendable2 = new StringBuilder();
+        <name>HashBag bag1 = <name>HashBag.newBagWith(<["0", "1"]:(literal.(type))(); separator=", ">);
+        bag1.appendString(appendable2);
+        Assert.assertTrue(appendable2.toString(), "<["0", "1"]:(toStringLiteral.(type))(); separator=", ">".equals(appendable2.toString())
+                || "<["1", "0"]:(toStringLiteral.(type))(); separator=", ">".equals(appendable2.toString()));
+        StringBuilder appendable3 = new StringBuilder();
+        <name>HashBag bag2 = <name>HashBag.newBagWith(<["0", "1"]:(literal.(type))(); separator=", ">);
+        bag2.appendString(appendable3, "/");
+        Assert.assertTrue(appendable3.toString(), "<["0", "1"]:(toStringLiteral.(type))(); separator="/">".equals(appendable3.toString())
+                || "<["1", "0"]:(toStringLiteral.(type))(); separator="/">".equals(appendable3.toString()));
+        StringBuilder appendable4 = new StringBuilder();
+        <name>HashBag bag4 = <name>HashBag.newBagWith(<["0", "1"]:(literal.(type))(); separator=", ">);
+        bag4.appendString(appendable4, "[", "/", "]");
+        Assert.assertTrue(appendable4.toString(), "[<["0", "1"]:(toStringLiteral.(type))(); separator="/">]".equals(appendable4.toString())
+                || "[<["1", "0"]:(toStringLiteral.(type))(); separator="/">]".equals(appendable4.toString()));
+    }
+
+    @Test
+    public void toList()
+    {
+        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "1", "1"]:(literal.(type))(); separator=", ">), <name>HashBag.newBagWith(<["1", "1", "1"]:(literal.(type))(); separator=", ">).toList());
+    }
+
+    @Test
+    public void toSortedList()
+    {
+        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">), <name>HashBag.newBagWith(<["1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">).toSortedList());
+    }
+
+    @Test
+    public void toSet()
+    {
+        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), <name>HashBag.newBagWith(<["1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">).toSet());
+    }
+
+    @Test
+    public void toBag()
+    {
+        Assert.assertEquals(<name>HashBag.newBagWith(<["1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">), <name>HashBag.newBagWith(<["1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">).toBag());
+    }
+
+    @Test
+    public void asLazy()
+    {
+        <name>HashBag bag = <name>HashBag.newBagWith(<["1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">);
+        Assert.assertEquals(bag.toBag(), bag.asLazy().toBag());
+        Verify.assertInstanceOf(Lazy<name>Iterable.class, bag.asLazy());
+    }
+
+    @Test
+    public void iterator()
+    {
+        <name>HashBag bag = <name>HashBag.newBagWith(<["1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">);
+        <name>ArrayList list = <name>ArrayList.newListWith(<["1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">);
+        final <name>Iterator iterator = bag.<type>Iterator();
+        for (int i = 0; i \< 6; i++)
+        {
+            Assert.assertTrue(iterator.hasNext());
+            Assert.assertTrue(list.remove(iterator.next()));
+        }
+        Assert.assertTrue(list.isEmpty());
+        Assert.assertFalse(iterator.hasNext());
+
+        Verify.assertThrows(NoSuchElementException.class, new Runnable()
+        {
+            public void run()
+            {
+                iterator.next();
+            }
+        });
+    }
 }
+
+>>
+
+maxTests ::= [
+    "byte": "intMaxTest",
+    "short": "intMaxTest",
+    "char": "charMaxTest",
+    "int": "intMaxTest",
+    "long": "intMaxTest",
+    "float": "floatMaxTest",
+    "double": "floatMaxTest"
+]
+
+intMaxTest(type, name) ::= <<
+Assert.assertEquals(<(wideLiteral.(type))("9")>, <name>HashBag.newBagWith(<["-1", "-2", "9"]:(literal.(type))(); separator=", ">).max()<(wideDelta.(type))>);
+Assert.assertEquals(<(wideLiteral.(type))("-1")>, <name>HashBag.newBagWith(<["-1", "-2", "-9"]:(literal.(type))(); separator=", ">).max()<(wideDelta.(type))>);
+Assert.assertEquals(<(wideLiteral.(type))("32")>, <name>HashBag.newBagWith(<["1", "0", "9", "30", "31", "32"]:(literal.(type))(); separator=", ">).max()<(wideDelta.(type))>);
+Assert.assertEquals(<(wideLiteral.(type))("32")>, <name>HashBag.newBagWith(<["-1", "0", "9", "30", "31", "32"]:(literal.(type))(); separator=", ">).max()<(wideDelta.(type))>);
+Assert.assertEquals(<(wideLiteral.(type))("31")>, <name>HashBag.newBagWith(<["31", "0", "30"]:(literal.(type))(); separator=", ">).max()<(wideDelta.(type))>);
+Assert.assertEquals(<(wideLiteral.(type))("39")>, <name>HashBag.newBagWith(<["32", "39", "35"]:(literal.(type))(); separator=", ">).max()<(wideDelta.(type))>);
+>>
+
+charMaxTest(type, name) ::= <<
+Assert.assertEquals(<(literal.(type))("-1")>, <name>HashBag.newBagWith(<["-1", "-2", "9"]:(literal.(type))(); separator=", ">).max()<(wideDelta.(type))>);
+Assert.assertEquals(<(literal.(type))("32")>, <name>HashBag.newBagWith(<["1", "0", "9", "30", "31", "32"]:(literal.(type))(); separator=", ">).max()<(wideDelta.(type))>);
+Assert.assertEquals(<(literal.(type))("-1")>, <name>HashBag.newBagWith(<["-1", "0", "9", "30", "31", "32"]:(literal.(type))(); separator=", ">).max()<(wideDelta.(type))>);
+Assert.assertEquals(<(literal.(type))("31")>, <name>HashBag.newBagWith(<["31", "0", "30"]:(literal.(type))(); separator=", ">).max()<(wideDelta.(type))>);
+Assert.assertEquals(<(literal.(type))("39")>, <name>HashBag.newBagWith(<["32", "39", "35"]:(literal.(type))(); separator=", ">).max()<(wideDelta.(type))>);
+>>
+
+floatMaxTest(type, name) ::= <<
+<intMaxTest(type, name)>
+Assert.assertEquals(32.5, <name>HashBag.newBagWith(<["-1.5", "31.8", "32.5"]:(decimalLiteral.(type))(); separator=", ">).max()<(wideDelta.(type))>);
+Assert.assertEquals(-1.5, <name>HashBag.newBagWith(<["-1.5", "-31.8", "-32.5"]:(decimalLiteral.(type))(); separator=", ">).max()<(wideDelta.(type))>);
+Assert.assertEquals(<name>.POSITIVE_INFINITY, <name>HashBag.newBagWith(<["-1.5", "31.8", "32.5"]:(decimalLiteral.(type))(); separator=", ">, <name>.POSITIVE_INFINITY).max()<(wideDelta.(type))>);
+Assert.assertEquals(<name>.NaN, <name>HashBag.newBagWith(<["-1.5", "31.8", "32.5"]:(decimalLiteral.(type))(); separator=", ">, <name>.NaN, 31.5f).max()<(wideDelta.(type))>);
+Assert.assertEquals(32.5, <name>HashBag.newBagWith(<["-1.5", "31.8", "32.5"]:(decimalLiteral.(type))(); separator=", ">, <name>.NEGATIVE_INFINITY, 31.5f).max()<(wideDelta.(type))>);
+>>
+
+minTests ::= [
+    "byte": "intMinTest",
+    "short": "intMinTest",
+    "char": "charMinTest",
+    "int": "intMinTest",
+    "long": "intMinTest",
+    "float": "floatMinTest",
+    "double": "floatMinTest"
+]
+
+intMinTest(type, name) ::= <<
+Assert.assertEquals(<(wideLiteral.(type))("-2")>, <name>HashBag.newBagWith(<["-1", "-2", "9"]:(literal.(type))(); separator=", ">).min()<(wideDelta.(type))>);
+Assert.assertEquals(<(wideLiteral.(type))("0")>, <name>HashBag.newBagWith(<["1", "0", "9", "30", "31", "32"]:(literal.(type))(); separator=", ">).min()<(wideDelta.(type))>);
+Assert.assertEquals(<(wideLiteral.(type))("-1")>, <name>HashBag.newBagWith(<["-1", "0", "9", "30", "31", "32"]:(literal.(type))(); separator=", ">).min()<(wideDelta.(type))>);
+Assert.assertEquals(<(wideLiteral.(type))("31")>, <name>HashBag.newBagWith(<["31", "32", "33"]:(literal.(type))(); separator=", ">).min()<(wideDelta.(type))>);
+Assert.assertEquals(<(wideLiteral.(type))("32")>, <name>HashBag.newBagWith(<["32", "39", "35"]:(literal.(type))(); separator=", ">).min()<(wideDelta.(type))>);
+>>
+
+charMinTest(type, name) ::= <<
+Assert.assertEquals(<(wideLiteral.(type))("9")>, <name>HashBag.newBagWith(<["-1", "-2", "9"]:(literal.(type))(); separator=", ">).min()<(wideDelta.(type))>);
+Assert.assertEquals(<(wideLiteral.(type))("0")>, <name>HashBag.newBagWith(<["1", "0", "9", "30", "31", "32"]:(literal.(type))(); separator=", ">).min()<(wideDelta.(type))>);
+Assert.assertEquals(<(wideLiteral.(type))("0")>, <name>HashBag.newBagWith(<["-1", "0", "9", "30", "31", "32"]:(literal.(type))(); separator=", ">).min()<(wideDelta.(type))>);
+Assert.assertEquals(<(wideLiteral.(type))("31")>, <name>HashBag.newBagWith(<["31", "32", "33"]:(literal.(type))(); separator=", ">).min()<(wideDelta.(type))>);
+Assert.assertEquals(<(wideLiteral.(type))("32")>, <name>HashBag.newBagWith(<["32", "39", "35"]:(literal.(type))(); separator=", ">).min()<(wideDelta.(type))>);
+>>
+
+floatMinTest(type, name) ::= <<
+<intMaxTest(type, name)>
+Assert.assertEquals(-1.5, <name>HashBag.newBagWith(<["-1.5", "31.5", "32.5"]:(decimalLiteral.(type))(); separator=", ">).min()<(wideDelta.(type))>);
+Assert.assertEquals(1.5, <name>HashBag.newBagWith(<["1.5", "31.0", "30.0"]:(decimalLiteral.(type))(); separator=", ">, <name>.POSITIVE_INFINITY).min()<(wideDelta.(type))>);
+Assert.assertEquals(31.5, <name>HashBag.newBagWith(<["31.5", "32.5"]:(decimalLiteral.(type))(); separator=", ">, <name>.NaN).min()<(wideDelta.(type))>);
+Assert.assertEquals(<name>.NEGATIVE_INFINITY, <name>HashBag.newBagWith(<["-1.5", "31.5", "32.5"]:(decimalLiteral.(type))(); separator=", ">, <name>.NEGATIVE_INFINITY, 31.5f).min()<(wideDelta.(type))>);
 >>

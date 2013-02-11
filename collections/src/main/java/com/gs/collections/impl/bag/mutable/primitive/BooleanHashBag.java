@@ -20,6 +20,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.util.NoSuchElementException;
 
 import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.LazyBooleanIterable;
@@ -82,27 +83,12 @@ public final class BooleanHashBag implements MutableBooleanBag, Externalizable
 
     public static BooleanHashBag newBag(BooleanIterable source)
     {
-        /* TODO
         if (source instanceof BooleanHashBag)
         {
             return new BooleanHashBag((BooleanHashBag) source);
         }
-        */
 
-        return BooleanHashBag.newBagWith(source.toArray());
-    }
-
-    public static BooleanHashBag newBag(BooleanBag source)
-    {
-        final BooleanHashBag result = BooleanHashBag.newBag();
-        source.forEachWithOccurrences(new BooleanIntProcedure()
-        {
-            public void value(boolean each, int occurrences)
-            {
-                result.addOccurrences(each, occurrences);
-            }
-        });
-        return result;
+        return new BooleanHashBag(source);
     }
 
     private boolean containsFalse()
@@ -670,7 +656,7 @@ public final class BooleanHashBag implements MutableBooleanBag, Externalizable
 
     public BooleanIterator booleanIterator()
     {
-        throw new UnsupportedOperationException();
+        return new InternalIterator(this.falseCount, this.trueCount);
     }
 
     public void writeExternal(ObjectOutput out) throws IOException
@@ -683,5 +669,37 @@ public final class BooleanHashBag implements MutableBooleanBag, Externalizable
     {
         this.falseCount = in.readInt();
         this.trueCount = in.readInt();
+    }
+
+    private static final class InternalIterator implements BooleanIterator
+    {
+        private int falseCount;
+        private int trueCount;
+
+        private InternalIterator(int falseCount, int trueCount)
+        {
+            this.falseCount = falseCount;
+            this.trueCount = trueCount;
+        }
+
+        public boolean hasNext()
+        {
+            return this.falseCount > 0 || this.trueCount > 0;
+        }
+
+        public boolean next()
+        {
+            if (this.falseCount > 0)
+            {
+                this.falseCount--;
+                return false;
+            }
+            if (this.trueCount > 0)
+            {
+                this.trueCount--;
+                return true;
+            }
+            throw new NoSuchElementException("next() called, but the iterator is exhausted");
+        }
     }
 }

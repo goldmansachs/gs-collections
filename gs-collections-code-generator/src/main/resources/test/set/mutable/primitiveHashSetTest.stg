@@ -406,40 +406,40 @@ public class <name>HashSetTest
     @Test
     public void withAll()
     {
-        <name>HashSet arrayList = new <name>HashSet().withAll(<name>HashSet.newSetWith(<(literal.(type))("1")>));
-        <name>HashSet arrayList0 = new <name>HashSet().withAll(<name>HashSet.newSetWith(<["1", "2"]:(literal.(type))(); separator=", ">));
-        <name>HashSet arrayList1 = new <name>HashSet().withAll(<name>HashSet.newSetWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
-        <name>HashSet arrayList2 = new <name>HashSet().withAll(<name>ArrayList.newListWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">));
-        <name>HashSet arrayList3 = new <name>HashSet().withAll(<name>ArrayList.newListWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">));
-        Assert.assertEquals(<name>HashSet.newSetWith(<(literal.(type))("1")>), arrayList);
-        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2"]:(literal.(type))(); separator=", ">), arrayList0);
-        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), arrayList1);
-        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">), arrayList2);
-        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">), arrayList3);
+        <name>HashSet hashSet = new <name>HashSet().withAll(<name>HashSet.newSetWith(<(literal.(type))("1")>));
+        <name>HashSet hashSet0 = new <name>HashSet().withAll(<name>HashSet.newSetWith(<["1", "2"]:(literal.(type))(); separator=", ">));
+        <name>HashSet hashSet1 = new <name>HashSet().withAll(<name>HashSet.newSetWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
+        <name>HashSet hashSet2 = new <name>HashSet().withAll(<name>ArrayList.newListWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">));
+        <name>HashSet hashSet3 = new <name>HashSet().withAll(<name>ArrayList.newListWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">));
+        Assert.assertEquals(<name>HashSet.newSetWith(<(literal.(type))("1")>), hashSet);
+        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2"]:(literal.(type))(); separator=", ">), hashSet0);
+        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), hashSet1);
+        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">), hashSet2);
+        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">), hashSet3);
     }
 
     @Test
     public void without()
     {
-        <name>HashSet mainArrayList = <name>HashSet.newSetWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
-        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">), mainArrayList.without(<(literal.(type))("9")>));
-        Assert.assertEquals(<name>HashSet.newSetWith(<["2", "3", "4", "5"]:(literal.(type))(); separator=", ">), mainArrayList.without(<(literal.(type))("1")>));
-        Assert.assertEquals(<name>HashSet.newSetWith(<["3", "4", "5"]:(literal.(type))(); separator=", ">), mainArrayList.without(<(literal.(type))("2")>));
-        Assert.assertEquals(<name>HashSet.newSetWith(<["4", "5"]:(literal.(type))(); separator=", ">), mainArrayList.without(<(literal.(type))("3")>));
-        Assert.assertEquals(<name>HashSet.newSetWith(<(literal.(type))("5")>), mainArrayList.without(<(literal.(type))("4")>));
-        Assert.assertEquals(new <name>HashSet(), mainArrayList.without(<(literal.(type))("5")>));
-        Assert.assertEquals(new <name>HashSet(), mainArrayList.without(<(literal.(type))("6")>));
+        <name>HashSet mainHashSet = <name>HashSet.newSetWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
+        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">), mainHashSet.without(<(literal.(type))("9")>));
+        Assert.assertEquals(<name>HashSet.newSetWith(<["2", "3", "4", "5"]:(literal.(type))(); separator=", ">), mainHashSet.without(<(literal.(type))("1")>));
+        Assert.assertEquals(<name>HashSet.newSetWith(<["3", "4", "5"]:(literal.(type))(); separator=", ">), mainHashSet.without(<(literal.(type))("2")>));
+        Assert.assertEquals(<name>HashSet.newSetWith(<["4", "5"]:(literal.(type))(); separator=", ">), mainHashSet.without(<(literal.(type))("3")>));
+        Assert.assertEquals(<name>HashSet.newSetWith(<(literal.(type))("5")>), mainHashSet.without(<(literal.(type))("4")>));
+        Assert.assertEquals(new <name>HashSet(), mainHashSet.without(<(literal.(type))("5")>));
+        Assert.assertEquals(new <name>HashSet(), mainHashSet.without(<(literal.(type))("6")>));
     }
 
     @Test
     public void withoutAll()
     {
-        <name>HashSet mainArrayList = <name>HashSet.newSetWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
-        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">), mainArrayList.withoutAll(<name>HashSet.newSetWith(<["8", "9"]:(literal.(type))(); separator=", ">)));
-        Assert.assertEquals(<name>HashSet.newSetWith(<["2", "3", "4"]:(literal.(type))(); separator=", ">), mainArrayList.withoutAll(<name>HashSet.newSetWith(<["1", "5"]:(literal.(type))(); separator=", ">)));
-        Assert.assertEquals(<name>HashSet.newSetWith(<["3", "4"]:(literal.(type))(); separator=", ">), mainArrayList.withoutAll(<name>ArrayList.newListWith(<["2", "20"]:(literal.(type))(); separator=", ">)));
-        Assert.assertEquals(new <name>HashSet(), mainArrayList.withoutAll(<name>HashSet.newSetWith(<["3", "4"]:(literal.(type))(); separator=", ">)));
-        Assert.assertEquals(new <name>HashSet(), mainArrayList.withoutAll(<name>HashSet.newSetWith(<(literal.(type))("9")>)));
+        <name>HashSet mainHashSet = <name>HashSet.newSetWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
+        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">), mainHashSet.withoutAll(<name>HashSet.newSetWith(<["8", "9"]:(literal.(type))(); separator=", ">)));
+        Assert.assertEquals(<name>HashSet.newSetWith(<["2", "3", "4"]:(literal.(type))(); separator=", ">), mainHashSet.withoutAll(<name>HashSet.newSetWith(<["1", "5"]:(literal.(type))(); separator=", ">)));
+        Assert.assertEquals(<name>HashSet.newSetWith(<["3", "4"]:(literal.(type))(); separator=", ">), mainHashSet.withoutAll(<name>ArrayList.newListWith(<["2", "20"]:(literal.(type))(); separator=", ">)));
+        Assert.assertEquals(new <name>HashSet(), mainHashSet.withoutAll(<name>HashSet.newSetWith(<["3", "4"]:(literal.(type))(); separator=", ">)));
+        Assert.assertEquals(new <name>HashSet(), mainHashSet.withoutAll(<name>HashSet.newSetWith(<(literal.(type))("9")>)));
     }
 
     @Test
