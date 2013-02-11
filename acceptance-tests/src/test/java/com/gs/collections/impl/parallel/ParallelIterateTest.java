@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,16 +24,20 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.bag.mutable.HashBag;
@@ -52,6 +56,7 @@ import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.strategy.mutable.UnifiedSetWithHashingStrategy;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.utility.ArrayIterate;
+import com.gs.collections.impl.utility.LazyIterate;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -82,6 +87,21 @@ public class ParallelIterateTest
         }
     };
 
+    private static final Function0<AtomicInteger> ATOMIC_INTEGER_NEW = new Function0<AtomicInteger>()
+    {
+        public AtomicInteger value()
+        {
+            return new AtomicInteger(0);
+        }
+    };
+
+    private static final Function<Integer, String> EVEN_OR_ODD = new Function<Integer, String>()
+    {
+        public String valueOf(Integer value)
+        {
+            return value % 2 == 0 ? "Even" : "Odd";
+        }
+    };
     private int count;
     private final MutableSet<String> threadNames = MultiReaderUnifiedSet.newSet();
 
@@ -556,6 +576,48 @@ public class ParallelIterateTest
         Assert.assertEquals(expected1.getClass().getSimpleName() + '/' + actual1.getClass().getSimpleName(), expected1, actual1);
         Assert.assertEquals(expected2.getClass().getSimpleName() + '/' + actual2.getClass().getSimpleName(), expected2, actual2);
         Assert.assertEquals(expected1.getClass().getSimpleName() + '/' + actual3.getClass().getSimpleName(), expected1.toBag(), HashBag.newBag(actual3));
+    }
+
+    @Test
+    public void aggregateInPlaceBy()
+    {
+        Procedure2<AtomicInteger, Integer> countAggregator = new Procedure2<AtomicInteger, Integer>()
+        {
+            public void value(AtomicInteger aggregate, Integer value)
+            {
+                aggregate.incrementAndGet();
+            }
+        };
+        List<Integer> list = Interval.oneTo(20000);
+        MutableMap<String, AtomicInteger> aggregation =
+                ParallelIterate.aggregateInPlaceBy(list, EVEN_OR_ODD, ATOMIC_INTEGER_NEW, countAggregator);
+        Assert.assertEquals(10000, aggregation.get("Even").intValue());
+        Assert.assertEquals(10000, aggregation.get("Odd").intValue());
+        ParallelIterate.aggregateBy(list, EVEN_OR_ODD, ATOMIC_INTEGER_NEW, countAggregator, aggregation);
+        Assert.assertEquals(20000, aggregation.get("Even").intValue());
+        Assert.assertEquals(20000, aggregation.get("Odd").intValue());
+    }
+
+    @Test
+    public void aggregateInPlaceByWithBatchSize()
+    {
+        Procedure2<AtomicInteger, Integer> sumAggregator = new Procedure2<AtomicInteger, Integer>()
+        {
+            public void value(AtomicInteger aggregate, Integer value)
+            {
+                aggregate.addAndGet(value);
+            }
+        };
+        MutableList<Integer> list = LazyIterate.adapt(Collections.nCopies(1000, 1))
+                .concatenate(Collections.nCopies(2000, 2))
+                .concatenate(Collections.nCopies(3000, 3))
+                .toList();
+        Collections.shuffle(list);
+        MapIterable<String, AtomicInteger> aggregation =
+                ParallelIterate.aggregateBy(list, Functions.getToString(), ATOMIC_INTEGER_NEW, sumAggregator, 100);
+        Assert.assertEquals(1000, aggregation.get("1").intValue());
+        Assert.assertEquals(4000, aggregation.get("2").intValue());
+        Assert.assertEquals(9000, aggregation.get("3").intValue());
     }
 
     private static List<Integer> createIntegerList(int size)

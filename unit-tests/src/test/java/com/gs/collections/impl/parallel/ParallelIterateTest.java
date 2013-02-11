@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -615,14 +615,14 @@ public class ParallelIterateTest
                 aggregate.incrementAndGet();
             }
         };
-        List<Integer> list = Interval.oneTo(20000);
+        List<Integer> list = Interval.oneTo(2000);
         MutableMap<String, AtomicInteger> aggregation =
                 ParallelIterate.aggregateInPlaceBy(list, EVEN_OR_ODD, ATOMIC_INTEGER_NEW, countAggregator);
-        Assert.assertEquals(10000, aggregation.get("Even").intValue());
-        Assert.assertEquals(10000, aggregation.get("Odd").intValue());
+        Assert.assertEquals(1000, aggregation.get("Even").intValue());
+        Assert.assertEquals(1000, aggregation.get("Odd").intValue());
         ParallelIterate.aggregateBy(list, EVEN_OR_ODD, ATOMIC_INTEGER_NEW, countAggregator, aggregation);
-        Assert.assertEquals(20000, aggregation.get("Even").intValue());
-        Assert.assertEquals(20000, aggregation.get("Odd").intValue());
+        Assert.assertEquals(2000, aggregation.get("Even").intValue());
+        Assert.assertEquals(2000, aggregation.get("Odd").intValue());
     }
 
     @Test
@@ -635,16 +635,16 @@ public class ParallelIterateTest
                 aggregate.addAndGet(value);
             }
         };
-        MutableList<Integer> list = LazyIterate.adapt(Collections.nCopies(1000, 1))
-                .concatenate(Collections.nCopies(2000, 2))
-                .concatenate(Collections.nCopies(3000, 3))
+        MutableList<Integer> list = LazyIterate.adapt(Collections.nCopies(100, 1))
+                .concatenate(Collections.nCopies(200, 2))
+                .concatenate(Collections.nCopies(300, 3))
                 .toList();
         Collections.shuffle(list);
         MapIterable<String, AtomicInteger> aggregation =
-                ParallelIterate.aggregateBy(list, Functions.getToString(), ATOMIC_INTEGER_NEW, sumAggregator, 100);
-        Assert.assertEquals(1000, aggregation.get("1").intValue());
-        Assert.assertEquals(4000, aggregation.get("2").intValue());
-        Assert.assertEquals(9000, aggregation.get("3").intValue());
+                ParallelIterate.aggregateBy(list, Functions.getToString(), ATOMIC_INTEGER_NEW, sumAggregator, 50);
+        Assert.assertEquals(100, aggregation.get("1").intValue());
+        Assert.assertEquals(400, aggregation.get("2").intValue());
+        Assert.assertEquals(900, aggregation.get("3").intValue());
     }
 
     @Test
