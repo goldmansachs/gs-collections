@@ -164,6 +164,16 @@ castIntToNarrowType ::= [
     default: "no matching narrow cast"
 ]
 
+castIntToNarrowTypeWithoutBrackets ::= [
+    "byte": "byteCastExpressionWithoutBrackets",
+    "short": "shortCastExpressionWithoutBrackets",
+    "char": "charCastExpressionWithoutBrackets",
+    "int": "noCast",
+    "long": "noCast",
+    "float": "noCast",
+    "double": "noCast"
+]
+
 noCast(item) ::= <<
 <item>
 >>
@@ -178,6 +188,18 @@ byteCastExpression(item) ::= <<
 
 charCastExpression(item) ::= <<
 (char) (<item>)
+>>
+
+shortCastExpressionWithoutBrackets(item) ::= <<
+(short) <item>
+>>
+
+byteCastExpressionWithoutBrackets(item) ::= <<
+(byte) <item>
+>>
+
+charCastExpressionWithoutBrackets(item) ::= <<
+(char) <item>
 >>
 
 castRealTypeToInt ::= [

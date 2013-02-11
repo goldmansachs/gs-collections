@@ -1,0 +1,646 @@
+import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+
+skipBoolean() ::= "true"
+
+targetPath() ::= "com/gs/collections/impl/map/mutable/primitive"
+
+fileName(primitive) ::= "Object<primitive.name>HashMap"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.map.mutable.primitive;
+
+import java.io.IOException;
+import java.util.Arrays;
+
+import com.gs.collections.api.block.function.primitive.<name>Function;
+import com.gs.collections.api.block.function.primitive.<name>Function0;
+import com.gs.collections.api.block.function.primitive.<name>To<name>Function;
+import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
+import com.gs.collections.api.block.procedure.primitive.Object<name>Procedure;
+
+/**
+ * This file was automatically generated from template file objectPrimitiveHashMap.stg.
+ *
+ * @since 3.0.
+ */
+public class Object<name>HashMap\<K>
+{
+    public static final <type> EMPTY_VALUE = <zero.(type)>;
+    private static final Object NULL_KEY = new Object()
+    {
+        @Override
+        public boolean equals(Object obj)
+        {
+            throw new AssertionError();
+        }
+
+        @Override
+        public int hashCode()
+        {
+            throw new AssertionError();
+        }
+
+        @Override
+        public String toString()
+        {
+            return "Object<name>HashMap.NULL_KEY";
+        }
+    };
+    private static final Object REMOVED_KEY = new Object()
+    {
+        @Override
+        public boolean equals(Object obj)
+        {
+            throw new AssertionError();
+        }
+
+        @Override
+        public int hashCode()
+        {
+            throw new AssertionError();
+        }
+
+        @Override
+        public String toString()
+        {
+            return "Object<name>HashMap.REMOVED_KEY";
+        }
+    };
+
+    private static final float DEFAULT_LOAD_FACTOR = 0.5f;
+    private static final int DEFAULT_INITIAL_CAPACITY = 8;
+    private int occupied;
+    private int maxSize;
+
+    private Object[] keys;
+    private <type>[] values;
+    private float loadFactor = DEFAULT_LOAD_FACTOR;
+
+    public Object<name>HashMap()
+    {
+        this.allocate(DEFAULT_INITIAL_CAPACITY \<\< 1);
+    }
+
+    public Object<name>HashMap(int initialCapacity)
+    {
+        this(initialCapacity, DEFAULT_LOAD_FACTOR);
+    }
+
+    public Object<name>HashMap(int initialCapacity, float loadFactor)
+    {
+        if (initialCapacity \< 0)
+        {
+            throw new IllegalArgumentException("initial capacity cannot be less than 0");
+        }
+        this.loadFactor = loadFactor;
+        this.init(this.fastCeil(initialCapacity / loadFactor));
+    }
+
+    public static \<K> Object<name>HashMap\<K> newMap()
+    {
+        return new Object<name>HashMap\<K>();
+    }
+
+    public static \<K> Object<name>HashMap\<K> newWithKeysValues(K key1, <type> value1)
+    {
+        return new Object<name>HashMap\<K>(1).withKeysValues(key1, value1);
+    }
+
+    public static \<K> Object<name>HashMap\<K> newWithKeysValues(K key1, <type> value1, K key2, <type> value2)
+    {
+        return new Object<name>HashMap\<K>(2).withKeysValues(key1, value1, key2, value2);
+    }
+
+    public static \<K> Object<name>HashMap\<K> newWithKeysValues(K key1, <type> value1, K key2, <type> value2, K key3, <type> value3)
+    {
+        return new Object<name>HashMap\<K>(3).withKeysValues(key1, value1, key2, value2, key3, value3);
+    }
+
+    public static \<K> Object<name>HashMap\<K> newWithKeysValues(K key1, <type> value1, K key2, <type> value2, K key3, <type> value3, K key4, <type> value4)
+    {
+        return new Object<name>HashMap\<K>(4).withKeysValues(key1, value1, key2, value2, key3, value3, key4, value4);
+    }
+
+    public Object<name>HashMap\<K> withKeysValues(K key1, <type> value1)
+    {
+        this.put(key1, value1);
+        return this;
+    }
+
+    public Object<name>HashMap\<K> withKeysValues(K key1, <type> value1, K key2, <type> value2)
+    {
+        this.put(key1, value1);
+        this.put(key2, value2);
+        return this;
+    }
+
+    public Object<name>HashMap\<K> withKeysValues(K key1, <type> value1, K key2, <type> value2, K key3, <type> value3)
+    {
+        this.put(key1, value1);
+        this.put(key2, value2);
+        this.put(key3, value3);
+        return this;
+    }
+
+    public Object<name>HashMap\<K> withKeysValues(K key1, <type> value1, K key2, <type> value2, K key3, <type> value3, K key4, <type> value4)
+    {
+        this.put(key1, value1);
+        this.put(key2, value2);
+        this.put(key3, value3);
+        this.put(key4, value4);
+        return this;
+    }
+
+    private int init(int initialCapacity)
+    {
+        int capacity = 1;
+        while (capacity \< initialCapacity)
+        {
+            capacity \<\<= 1;
+        }
+        return this.allocate(capacity);
+    }
+
+    private int fastCeil(float v)
+    {
+        int possibleResult = (int) v;
+        if (v - possibleResult > 0.0F)
+        {
+            possibleResult++;
+        }
+        return possibleResult;
+    }
+
+    private static boolean isRemovedKey(Object key)
+    {
+        return key == REMOVED_KEY;
+    }
+
+    private int allocate(int capacity)
+    {
+        this.allocateTable(capacity);
+        this.computeMaxSize(capacity);
+        return capacity;
+    }
+
+    private void allocateTable(int sizeToAllocate)
+    {
+        this.keys = new Object[sizeToAllocate];
+        this.values = new <type>[sizeToAllocate];
+    }
+
+    private void computeMaxSize(int capacity)
+    {
+        // need at least one free slot for open addressing
+        this.maxSize = Math.min(capacity - 1, (int) (capacity * this.loadFactor));
+    }
+
+    private static \<K> boolean isNonSentinel(K key)
+    {
+        return key != null && !isRemovedKey(key);
+    }
+
+    private static boolean isNonSentinelValue(<type> value)
+    {
+        return value != EMPTY_VALUE;
+    }
+
+    public int size()
+    {
+        return this.occupied;
+    }
+
+    public boolean isEmpty()
+    {
+        return this.occupied == 0;
+    }
+
+    public boolean notEmpty()
+    {
+        return this.occupied != 0;
+    }
+
+    private void rehash()
+    {
+        this.rehash(this.keys.length \<\< 1);
+    }
+
+    private void rehash(int newCapacity)
+    {
+        int oldLength = this.keys.length;
+        Object[] old = this.keys;
+        <type>[] oldValues = this.values;
+        this.allocate(newCapacity);
+        this.occupied = 0;
+
+        for (int i = 0; i \< oldLength; i++)
+        {
+            if (isNonSentinel(old[i]))
+            {
+                this.put(this.toNonSentinel(old[i]), oldValues[i]);
+            }
+        }
+    }
+
+    private K toNonSentinel(Object key)
+    {
+        return key == NULL_KEY ? null : (K) key;
+    }
+
+    // exposed for testing
+    int probe(K element)
+    {
+        int index = this.index(element);
+
+        int removedIndex = -1;
+        if (isRemovedKey(this.keys[index]))
+        {
+            removedIndex = index;
+        }
+
+        else if (this.keys[index] == null || nullSafeEquals(this.toNonSentinel(this.keys[index]), element))
+        {
+            return index;
+        }
+
+        int nextIndex = index;
+        int probe = 17;
+
+        // loop until an empty slot is reached
+        while (true)
+        {
+            // Probe algorithm: 17*n*(n+1)/2 where n = no. of collisions
+            nextIndex += probe;
+            probe += 17;
+            nextIndex &= this.keys.length - 1;
+
+            if (isRemovedKey(this.keys[nextIndex]))
+            {
+                if (removedIndex == -1)
+                {
+                    removedIndex = nextIndex;
+                }
+            }
+            else if (nullSafeEquals(this.toNonSentinel(this.keys[nextIndex]), element))
+            {
+                return nextIndex;
+            }
+            else if (this.keys[nextIndex] == null)
+            {
+                return removedIndex == -1 ? nextIndex : removedIndex;
+            }
+        }
+    }
+
+    // exposed for testing
+    int index(K element)
+    {
+        // This function ensures that hashCodes that differ only by
+        // constant multiples at each bit position have a bounded
+        // number of collisions (approximately 8 at default load factor).
+        int h = element == null ? 0 : element.hashCode();
+        h ^= h >\>> 20 ^ h >\>> 12;
+        h ^= h >\>> 7 ^ h >\>> 4;
+        return (h & (this.keys.length >\> 1) - 1) \<\< 1;
+    }
+
+    public void clear()
+    {
+        this.occupied = 0;
+        Arrays.fill(this.keys, null);
+        Arrays.fill(this.values, EMPTY_VALUE);
+    }
+
+    public void put(K key, <type> value)
+    {
+        int index = this.probe(key);
+
+        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
+        {
+            // key already present in map
+            this.values[index] = value;
+            return;
+        }
+
+        this.keys[index] = toSentinelIfNull(key);
+        this.values[index] = value;
+        ++this.occupied;
+        if (this.occupied > this.maxSize)
+        {
+            this.rehash();
+        }
+    }
+
+    private static Object toSentinelIfNull(Object key)
+    {
+        return key == null ? NULL_KEY : key;
+    }
+
+    public <type> get(K key)
+    {
+        int index = this.probe(key);
+        <type> result = this.values[index];
+        if (isNonSentinelValue(result))
+        {
+            return result;
+        }
+        return EMPTY_VALUE;
+    }
+
+    public <type> getOrThrow(K key)
+    {
+        int index = this.probe(key);
+        if (isNonSentinel(this.keys[index]))
+        {
+            return this.values[index];
+        }
+        throw new IllegalStateException("Key " + key + " not present.");
+    }
+
+    public <type> getIfAbsentPut(K key, <type> value)
+    {
+        int index = this.probe(key);
+        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
+        {
+            return this.values[index];
+        }
+        this.keys[index] = toSentinelIfNull(key);
+        this.occupied++;
+        this.values[index] = value;
+        return value;
+    }
+
+    public <type> getIfAbsentPut(K key, <name>Function0 function)
+    {
+        int index = this.probe(key);
+        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
+        {
+            return this.values[index];
+        }
+        this.keys[index] = toSentinelIfNull(key);
+        this.occupied++;
+        <type> value = function.value();
+        this.values[index] = value;
+        return value;
+    }
+
+    public \<P> <type> getIfAbsentPutWith(K key, <name>Function\<? super P> function, P parameter)
+    {
+        int index = this.probe(key);
+        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
+        {
+            return this.values[index];
+        }
+        this.keys[index] = toSentinelIfNull(key);
+        this.occupied++;
+        <type> value = function.<type>ValueOf(parameter);
+        this.values[index] = value;
+        return value;
+    }
+
+    public <type> getIfAbsentPutWithKey(K key, <name>Function\<K> function)
+    {
+        int index = this.probe(key);
+        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
+        {
+            return this.values[index];
+        }
+        this.keys[index] = toSentinelIfNull(key);
+        this.occupied++;
+        <type> value = function.<type>ValueOf(key);
+        this.values[index] = value;
+        return value;
+    }
+
+    public <type> updateValue(K key, <type> initialValueIfAbsent, <name>To<name>Function function)
+    {
+        int index = this.probe(key);
+        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
+        {
+            this.values[index] = function.valueOf(this.values[index]);
+        }
+        else
+        {
+            this.keys[index] = toSentinelIfNull(key);
+            this.occupied++;
+            this.values[index] = function.valueOf(initialValueIfAbsent);
+        }
+        return this.values[index];
+    }
+
+    public boolean containsKey(K key)
+    {
+        int index = this.probe(key);
+        return isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key);
+    }
+
+    public boolean containsValue(<type> value)
+    {
+        for (int i = 0; i \< this.values.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && <(equals.(type))("this.values[i]", "value")>)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void removeKey(K key)
+    {
+        int index = this.probe(key);
+        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
+        {
+            this.keys[index] = REMOVED_KEY;
+            this.occupied--;
+            this.values[index] = EMPTY_VALUE;
+        }
+    }
+
+    public <type> removeKeyIfAbsent(K key, <type> value)
+    {
+        int index = this.probe(key);
+        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
+        {
+            this.keys[index] = REMOVED_KEY;
+            this.occupied--;
+            <type> oldValue = this.values[index];
+            this.values[index] = EMPTY_VALUE;
+            return oldValue;
+        }
+        return value;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+
+        if (!(obj instanceof Object<name>HashMap))
+        {
+            return false;
+        }
+
+        Object<name>HashMap\<K> other = (Object<name>HashMap\<K>) obj;
+
+        if (this.size() != other.size())
+        {
+            return false;
+        }
+
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && (!other.containsKey(this.toNonSentinel(this.keys[i])) || <(notEquals.(type))("this.values[i]", "other.getOrThrow(this.toNonSentinel(this.keys[i]))")>))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = 0;
+
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                result += (this.toNonSentinel(this.keys[i]) == null ? 0 : this.keys[i].hashCode()) ^ <(hashCode.(type))("this.values[i]")>;
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.makeString("[", ", ", "]");
+    }
+
+    public void forEach(<name>Procedure procedure)
+    {
+        this.forEachValue(procedure);
+    }
+
+    public void forEachValue(<name>Procedure procedure)
+    {
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                procedure.value(this.values[i]);
+            }
+        }
+    }
+
+    public void forEachKey(Procedure\<K> procedure)
+    {
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                procedure.value(this.toNonSentinel(this.keys[i]));
+            }
+        }
+    }
+
+    public void forEachKeyValue(Object<name>Procedure\<K> procedure)
+    {
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                procedure.value(this.toNonSentinel(this.keys[i]), this.values[i]);
+            }
+        }
+    }
+
+    public String makeString()
+    {
+        return this.makeString(", ");
+    }
+
+    public String makeString(String separator)
+    {
+        return this.makeString("", separator, "");
+    }
+
+    public String makeString(String start, String separator, String end)
+    {
+        Appendable stringBuilder = new StringBuilder();
+        this.appendString(stringBuilder, start, separator, end);
+        return stringBuilder.toString();
+    }
+
+    public void appendString(Appendable appendable)
+    {
+        this.appendString(appendable, ", ");
+    }
+
+    public void appendString(Appendable appendable, String separator)
+    {
+        this.appendString(appendable, "", separator, "");
+    }
+
+    public void appendString(Appendable appendable, String start, String separator, String end)
+    {
+        try
+        {
+            appendable.append(start);
+
+            boolean first = true;
+
+            for (int i = 0; i \< this.keys.length; i++)
+            {
+                Object key = this.keys[i];
+                if (isNonSentinel(key))
+                {
+                    if (!first)
+                    {
+                        appendable.append(separator);
+                    }
+                    appendable.append(String.valueOf(this.toNonSentinel(key))).append("=").append(String.valueOf(this.values[i]));
+                    first = false;
+                }
+            }
+            appendable.append(end);
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private static boolean nullSafeEquals(Object value, Object other)
+    {
+        if (value == null)
+        {
+            if (other == null)
+            {
+                return true;
+            }
+        }
+        else if (other == value || value.equals(other))
+        {
+            return true;
+        }
+        return false;
+    }
+}
+
+>>

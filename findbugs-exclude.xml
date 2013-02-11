@@ -201,6 +201,22 @@
             <Class name="com.gs.collections.impl.set.strategy.mutable.UnifiedSetWithHashingStrategy$1" />
             <Class name="com.gs.collections.impl.map.mutable.UnifiedMap$1" />
             <Class name="com.gs.collections.impl.map.mutable.UnifiedMap$2" />
+            <Class name="com.gs.collections.impl.map.mutable.primitive.ObjectIntHashMap$1" />
+            <Class name="com.gs.collections.impl.map.mutable.primitive.ObjectIntHashMap$2" />
+            <Class name="com.gs.collections.impl.map.mutable.primitive.ObjectShortHashMap$1" />
+            <Class name="com.gs.collections.impl.map.mutable.primitive.ObjectShortHashMap$2" />
+            <Class name="com.gs.collections.impl.map.mutable.primitive.ObjectLongHashMap$1" />
+            <Class name="com.gs.collections.impl.map.mutable.primitive.ObjectLongHashMap$2" />
+            <Class name="com.gs.collections.impl.map.mutable.primitive.ObjectFloatHashMap$1" />
+            <Class name="com.gs.collections.impl.map.mutable.primitive.ObjectFloatHashMap$2" />
+            <Class name="com.gs.collections.impl.map.mutable.primitive.ObjectDoubleHashMap$1" />
+            <Class name="com.gs.collections.impl.map.mutable.primitive.ObjectDoubleHashMap$2" />
+            <Class name="com.gs.collections.impl.map.mutable.primitive.ObjectByteHashMap$1" />
+            <Class name="com.gs.collections.impl.map.mutable.primitive.ObjectByteHashMap$2" />
+            <Class name="com.gs.collections.impl.map.mutable.primitive.ObjectCharHashMap$1" />
+            <Class name="com.gs.collections.impl.map.mutable.primitive.ObjectCharHashMap$2" />
+            <Class name="com.gs.collections.impl.map.mutable.primitive.ObjectBooleanHashMap$1" />
+            <Class name="com.gs.collections.impl.map.mutable.primitive.ObjectBooleanHashMap$2" />
             <Class name="com.gs.collections.impl.map.strategy.mutable.UnifiedMapWithHashingStrategy$1" />
             <Class name="com.gs.collections.impl.map.strategy.mutable.UnifiedMapWithHashingStrategy$2" />
         </Or>
