@@ -18,6 +18,7 @@ package com.gs.collections.api.map.primitive;
 import java.util.Map;
 
 import com.gs.collections.api.<name2>Iterable;
+import com.gs.collections.api.Lazy<name1>Iterable;
 import com.gs.collections.api.block.predicate.primitive.<name1><name2>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name1><name2>Procedure;
 import com.gs.collections.api.block.procedure.primitive.<name1>Procedure;
@@ -43,6 +44,8 @@ public interface <name1><name2>Map extends <name2>Iterable
     void forEachKey(<name1>Procedure procedure);
 
     void forEachKeyValue(<name1><name2>Procedure procedure);
+
+    Lazy<name1>Iterable keysView();
 
     <name1><name2>Map select(<name1><name2>Predicate predicate);
 
