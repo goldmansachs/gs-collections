@@ -28,6 +28,8 @@ public interface Object<name>Map\<K> extends <name>Iterable
 {
     <type> get(Object key);
 
+    <type> getOrThrow(Object key);
+
     boolean containsKey(Object key);
 
     boolean containsValue(<type> value);

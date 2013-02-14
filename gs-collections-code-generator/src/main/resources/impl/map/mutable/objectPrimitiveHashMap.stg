@@ -20,20 +20,39 @@ package com.gs.collections.impl.map.mutable.primitive;
 
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.NoSuchElementException;
 
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.Lazy<name>Iterable;
+import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.block.function.primitive.<name>Function;
 import com.gs.collections.api.block.function.primitive.<name>Function0;
 import com.gs.collections.api.block.function.primitive.<name>To<name>Function;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.block.predicate.primitive.Object<name>Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.block.procedure.primitive.Object<name>Procedure;
+import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.Mutable<name>List;
+import com.gs.collections.api.map.primitive.MutableObject<name>Map;
+import com.gs.collections.api.map.primitive.Object<name>Map;
+import com.gs.collections.api.set.primitive.Mutable<name>Set;
+import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
+import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
+import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
+import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 
 /**
  * This file was automatically generated from template file objectPrimitiveHashMap.stg.
  *
  * @since 3.0.
  */
-public class Object<name>HashMap\<K>
+public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>
 {
     public static final <type> EMPTY_VALUE = <zero.(type)>;
     private static final Object NULL_KEY = new Object()
@@ -113,7 +132,7 @@ public class Object<name>HashMap\<K>
 
     public static \<K> Object<name>HashMap\<K> newWithKeysValues(K key1, <type> value1)
     {
-        return new Object<name>HashMap\<K>(1).withKeysValues(key1, value1);
+        return new Object<name>HashMap\<K>(1).withKeyValue(key1, value1);
     }
 
     public static \<K> Object<name>HashMap\<K> newWithKeysValues(K key1, <type> value1, K key2, <type> value2)
@@ -131,7 +150,7 @@ public class Object<name>HashMap\<K>
         return new Object<name>HashMap\<K>(4).withKeysValues(key1, value1, key2, value2, key3, value3, key4, value4);
     }
 
-    public Object<name>HashMap\<K> withKeysValues(K key1, <type> value1)
+    public Object<name>HashMap\<K> withKeyValue(K key1, <type> value1)
     {
         this.put(key1, value1);
         return this;
@@ -158,6 +177,21 @@ public class Object<name>HashMap\<K>
         this.put(key2, value2);
         this.put(key3, value3);
         this.put(key4, value4);
+        return this;
+    }
+
+    public Object<name>HashMap\<K> withoutKey(K key)
+    {
+        this.removeKey(key);
+        return this;
+    }
+
+    public Object<name>HashMap\<K> withoutAllKeys(Iterable\<? extends K> keys)
+    {
+        for (K key : keys)
+        {
+            this.removeKey(key);
+        }
         return this;
     }
 
@@ -258,7 +292,7 @@ public class Object<name>HashMap\<K>
     }
 
     // exposed for testing
-    int probe(K element)
+    int probe(Object element)
     {
         int index = this.index(element);
 
@@ -303,7 +337,7 @@ public class Object<name>HashMap\<K>
     }
 
     // exposed for testing
-    int index(K element)
+    int index(Object element)
     {
         // This function ensures that hashCodes that differ only by
         // constant multiples at each bit position have a bounded
@@ -346,7 +380,7 @@ public class Object<name>HashMap\<K>
         return key == null ? NULL_KEY : key;
     }
 
-    public <type> get(K key)
+    public <type> get(Object key)
     {
         int index = this.probe(key);
         <type> result = this.values[index];
@@ -357,7 +391,7 @@ public class Object<name>HashMap\<K>
         return EMPTY_VALUE;
     }
 
-    public <type> getOrThrow(K key)
+    public <type> getOrThrow(Object key)
     {
         int index = this.probe(key);
         if (isNonSentinel(this.keys[index]))
@@ -408,7 +442,7 @@ public class Object<name>HashMap\<K>
         return value;
     }
 
-    public <type> getIfAbsentPutWithKey(K key, <name>Function\<K> function)
+    public <type> getIfAbsentPutWithKey(K key, <name>Function\<? super K> function)
     {
         int index = this.probe(key);
         if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
@@ -438,7 +472,7 @@ public class Object<name>HashMap\<K>
         return this.values[index];
     }
 
-    public boolean containsKey(K key)
+    public boolean containsKey(Object key)
     {
         int index = this.probe(key);
         return isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key);
@@ -489,12 +523,12 @@ public class Object<name>HashMap\<K>
             return true;
         }
 
-        if (!(obj instanceof Object<name>HashMap))
+        if (!(obj instanceof Object<name>Map))
         {
             return false;
         }
 
-        Object<name>HashMap\<K> other = (Object<name>HashMap\<K>) obj;
+        Object<name>Map\<K> other = (Object<name>HashMap\<K>) obj;
 
         if (this.size() != other.size())
         {
@@ -532,6 +566,11 @@ public class Object<name>HashMap\<K>
         return this.makeString("[", ", ", "]");
     }
 
+    public <name>Iterator <type>Iterator()
+    {
+        return new Internal<name>Iterator();
+    }
+
     public void forEach(<name>Procedure procedure)
     {
         this.forEachValue(procedure);
@@ -548,7 +587,7 @@ public class Object<name>HashMap\<K>
         }
     }
 
-    public void forEachKey(Procedure\<K> procedure)
+    public void forEachKey(Procedure\<? super K> procedure)
     {
         for (int i = 0; i \< this.keys.length; i++)
         {
@@ -559,7 +598,7 @@ public class Object<name>HashMap\<K>
         }
     }
 
-    public void forEachKeyValue(Object<name>Procedure\<K> procedure)
+    public void forEachKeyValue(Object<name>Procedure\<? super K> procedure)
     {
         for (int i = 0; i \< this.keys.length; i++)
         {
@@ -626,6 +665,338 @@ public class Object<name>HashMap\<K>
         }
     }
 
+    public Object<name>HashMap\<K> select(Object<name>Predicate\<? super K> predicate)
+    {
+        Object<name>HashMap\<K> result = Object<name>HashMap.newMap();
+
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.toNonSentinel(this.keys[i]), this.values[i]))
+            {
+                result.put(this.toNonSentinel(this.keys[i]), this.values[i]);
+            }
+        }
+        return result;
+    }
+
+    public Object<name>HashMap\<K> reject(Object<name>Predicate\<? super K> predicate)
+    {
+        Object<name>HashMap\<K> result = Object<name>HashMap.newMap();
+
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && !predicate.accept(this.toNonSentinel(this.keys[i]), this.values[i]))
+            {
+                result.put(this.toNonSentinel(this.keys[i]), this.values[i]);
+            }
+        }
+        return result;
+    }
+
+    public int count(<name>Predicate predicate)
+    {
+        int count = 0;
+
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values[i]))
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public boolean anySatisfy(<name>Predicate predicate)
+    {
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values[i]))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+    
+    public boolean allSatisfy(<name>Predicate predicate)
+    {
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && !predicate.accept(this.values[i]))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+    
+    public Object<name>HashMap\<K> select(<name>Predicate predicate)
+    {
+        Object<name>HashMap\<K> result = Object<name>HashMap.newMap();
+
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values[i]))
+            {
+                result.put(this.toNonSentinel(this.keys[i]), this.values[i]);
+            }
+        }
+        return result;
+    }
+    
+    public Object<name>HashMap\<K> reject(<name>Predicate predicate)
+    {
+        Object<name>HashMap\<K> result = Object<name>HashMap.newMap();
+
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && !predicate.accept(this.values[i]))
+            {
+                result.put(this.toNonSentinel(this.keys[i]), this.values[i]);
+            }
+        }
+        return result;
+    }
+    
+    public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
+    {
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values[i]))
+            {
+                return this.values[i];
+            }
+        }
+        return ifNone;
+    }
+
+    public \<V> RichIterable\<V> collect(<name>ToObjectFunction\<? extends V> function)
+    {
+        MutableList\<V> result = FastList.newList(this.size());
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                result.add(function.valueOf(this.values[i]));
+            }
+        }
+        return result;
+    }
+
+    public <wideType.(type)> sum()
+    {
+        <wideType.(type)> sum = <wideZero.(type)>;
+
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                sum += this.values[i];
+            }
+        }
+        return sum;
+    }
+
+    public <type> max()
+    {
+        if(this.isEmpty())
+        {
+            throw new NoSuchElementException();
+        }
+        <type> max = <zero.(type)>;
+        boolean isMaxSet = false;
+
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && (!isMaxSet || <(lessThan.(type))("max", "this.values[i]")>))
+            {
+                max = this.values[i];
+                isMaxSet = true;
+            }
+        }
+        return max;
+    }
+
+    public <type> min()
+    {
+        if(this.isEmpty())
+        {
+            throw new NoSuchElementException();
+        }
+        <type> min = <zero.(type)>;
+        boolean isMinSet = false;
+
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && (!isMinSet || <(lessThan.(type))("this.values[i]", "min")>))
+            {
+                min = this.values[i];
+                isMinSet = true;
+            }
+        }
+        return min;
+    }
+
+    public <type> maxIfEmpty(<type> defaultValue)
+    {
+        if(this.isEmpty())
+        {
+            return defaultValue;
+        }
+        <type> max = <zero.(type)>;
+        boolean isMaxSet = false;
+
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && (!isMaxSet || <(lessThan.(type))("max", "this.values[i]")>))
+            {
+                max = this.values[i];
+                isMaxSet = true;
+            }
+        }
+        return max;
+    }
+
+    public <type> minIfEmpty(<type> defaultValue)
+    {
+        if(this.isEmpty())
+        {
+            return defaultValue;
+        }
+        <type> min = <zero.(type)>;
+        boolean isMinSet = false;
+
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && (!isMinSet || <(lessThan.(type))("this.values[i]", "min")>))
+            {
+                min = this.values[i];
+                isMinSet = true;
+            }
+        }
+        return min;
+    }
+
+    public double average()
+    {
+        return <castSum.(type)>this.sum() / (double) this.size();
+    }
+
+    public double median()
+    {
+        if (this.isEmpty())
+        {
+            throw new NoSuchElementException();
+        }
+        <type>[] sortedArray = this.toSortedArray();
+        int middleIndex = sortedArray.length >\> 1;
+        if (sortedArray.length > 1 && (sortedArray.length & 1) == 0)
+        {
+            <type> first = sortedArray[middleIndex];
+            <type> second = sortedArray[middleIndex - 1];
+            return ((double) first + (double) second) / 2.0;
+        }
+        return (double) sortedArray[middleIndex];
+    }
+
+    public <type>[] toSortedArray()
+    {
+        <type>[] array = this.toArray();
+        Arrays.sort(array);
+        return array;
+    }
+
+    public <type>[] toArray()
+    {
+        <type>[] result = new <type>[this.size()];
+        int index = 0;
+
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                result[index] = this.values[i];
+                index++;
+            }
+        }
+        return result;
+    }
+
+    public boolean contains(<type> value)
+    {
+        return this.containsValue(value);
+    }
+
+    public boolean containsAll(<type>... source)
+    {
+        for (<type> item : source)
+        {
+            if (!this.containsValue(item))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean containsAll(<name>Iterable source)
+    {
+        return this.containsAll(source.toArray());
+    }
+
+    public Mutable<name>List toList()
+    {
+        Mutable<name>List result = new <name>ArrayList(this.size());
+
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                result.add(this.values[i]);
+            }
+        }
+        return result;
+    }
+
+    public Mutable<name>List toSortedList()
+    {
+        return this.toList().sortThis();
+    }
+
+    public Mutable<name>Set toSet()
+    {
+        Mutable<name>Set result = new <name>HashSet(this.size());
+
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                result.add(this.values[i]);
+            }
+        }
+        return result;
+    }
+
+    public Mutable<name>Bag toBag()
+    {
+        Mutable<name>Bag result = new <name>HashBag(this.size());
+
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                result.add(this.values[i]);
+            }
+        }
+        return result;
+    }
+
+    public Lazy<name>Iterable asLazy()
+    {
+        return new Lazy<name>IterableAdapter(this);
+    }
+
     private static boolean nullSafeEquals(Object value, Object other)
     {
         if (value == null)
@@ -640,6 +1011,35 @@ public class Object<name>HashMap\<K>
             return true;
         }
         return false;
+    }
+
+    private class Internal<name>Iterator implements <name>Iterator
+    {
+        private int count;
+        private int position;
+
+        public <type> next()
+        {
+            if(!this.hasNext())
+            {
+                throw new NoSuchElementException();
+            }
+
+            Object[] keys = Object<name>HashMap.this.keys;
+            while (!isNonSentinel(keys[this.position]))
+            {
+                this.position++;
+            }
+            <type> result = Object<name>HashMap.this.values[this.position];
+            this.count++;
+            this.position++;
+            return result;
+        }
+
+        public boolean hasNext()
+        {
+            return this.count != Object<name>HashMap.this.size();
+        }
     }
 }
 

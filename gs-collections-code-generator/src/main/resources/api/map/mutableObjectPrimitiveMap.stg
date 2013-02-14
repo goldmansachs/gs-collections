@@ -15,7 +15,7 @@ package com.gs.collections.api.map.primitive;
 
 import com.gs.collections.api.block.function.primitive.<name>Function;
 import com.gs.collections.api.block.function.primitive.<name>Function0;
-import com.gs.collections.api.block.predicate.primitive.<name>ObjectPredicate;
+import com.gs.collections.api.block.predicate.primitive.Object<name>Predicate;
 
 /**
  * This file was automatically generated from template file mutableObjectPrimitiveMap.stg.
@@ -26,17 +26,19 @@ public interface MutableObject<name>Map\<K> extends Object<name>Map\<K>
 {
     void clear();
 
-    <type> removeKey(K key);
+    void put(K key, <type> value);
+
+    void removeKey(K key);
 
     <type> getIfAbsentPut(K key, <name>Function0 function);
 
-    <type> getIfAbsentPutWithKey(K key, <name>Function\<? extends K> function);
+    <type> getIfAbsentPutWithKey(K key, <name>Function\<? super K> function);
 
     \<P> <type> getIfAbsentPutWith(K key, <name>Function\<? super P> function, P parameter);
 
-    MutableObject<name>Map\<K> select(<name>ObjectPredicate\<? super K> predicate);
+    MutableObject<name>Map\<K> select(Object<name>Predicate\<? super K> predicate);
 
-    MutableObject<name>Map\<K> reject(<name>ObjectPredicate\<? super K> predicate);
+    MutableObject<name>Map\<K> reject(Object<name>Predicate\<? super K> predicate);
 
     MutableObject<name>Map\<K> withKeyValue(K key, <type> value);
 
