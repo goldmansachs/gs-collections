@@ -16,6 +16,1217 @@
 
 package com.gs.collections.impl.map.mutable.primitive;
 
+import java.lang.reflect.Field;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.NoSuchElementException;
+
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.BooleanFunction0;
+import com.gs.collections.api.block.function.primitive.BooleanToBooleanFunction;
+import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
+import com.gs.collections.api.block.predicate.primitive.ObjectBooleanPredicate;
+import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
+import com.gs.collections.api.block.procedure.primitive.ObjectBooleanProcedure;
+import com.gs.collections.api.iterator.BooleanIterator;
+import com.gs.collections.api.list.MutableList;
+import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
+import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
+import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
+import com.gs.collections.impl.test.Verify;
+import org.junit.Assert;
+import org.junit.Test;
+
 public class ObjectBooleanHashMapTest
 {
+    private final ObjectBooleanHashMap<String> map = ObjectBooleanHashMap.newWithKeysValues("0", true, "1", true, "2", false);
+
+    @Test
+    public void defaultInitialCapacity() throws Exception
+    {
+        Field keys = ObjectBooleanHashMap.class.getDeclaredField("keys");
+        keys.setAccessible(true);
+        Field values = ObjectBooleanHashMap.class.getDeclaredField("values");
+        values.setAccessible(true);
+
+        ObjectBooleanHashMap<String> hashMap = new ObjectBooleanHashMap<String>();
+        Assert.assertEquals(16L, ((Object[]) keys.get(hashMap)).length);
+        Assert.assertEquals(64L, ((BitSet) values.get(hashMap)).size());
+    }
+
+    @Test
+    public void newWithInitialCapacity() throws Exception
+    {
+        Field keys = ObjectBooleanHashMap.class.getDeclaredField("keys");
+        keys.setAccessible(true);
+        Field values = ObjectBooleanHashMap.class.getDeclaredField("values");
+        values.setAccessible(true);
+
+        ObjectBooleanHashMap<String> hashMap = new ObjectBooleanHashMap<String>(3);
+        Assert.assertEquals(8L, ((Object[]) keys.get(hashMap)).length);
+        Assert.assertEquals(64L, ((BitSet) values.get(hashMap)).size());
+
+        ObjectBooleanHashMap<String> hashMap2 = new ObjectBooleanHashMap<String>(15);
+        Assert.assertEquals(32L, ((Object[]) keys.get(hashMap2)).length);
+        Assert.assertEquals(64L, ((BitSet) values.get(hashMap)).size());
+    }
+
+    private static MutableList<String> generateCollisions()
+    {
+        MutableList<String> collisions = FastList.newList();
+        ObjectBooleanHashMap<String> hashMap = new ObjectBooleanHashMap<String>();
+        for (int each = 3; collisions.size() <= 10; each++)
+        {
+            if (hashMap.index(String.valueOf(each)) == hashMap.index(String.valueOf(3)))
+            {
+                collisions.add(String.valueOf(each));
+            }
+        }
+        return collisions;
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void newWithInitialCapacity_negative_throws()
+    {
+        new ObjectBooleanHashMap<String>(-1);
+    }
+
+    @Test
+    public void newMap() throws Exception
+    {
+        Field keys = ObjectBooleanHashMap.class.getDeclaredField("keys");
+        keys.setAccessible(true);
+        Field values = ObjectBooleanHashMap.class.getDeclaredField("values");
+        values.setAccessible(true);
+
+        ObjectBooleanHashMap<String> hashMap = ObjectBooleanHashMap.newMap();
+        Assert.assertEquals(16L, ((Object[]) keys.get(hashMap)).length);
+        Assert.assertEquals(64L, ((BitSet) values.get(hashMap)).size());
+        Assert.assertEquals(new ObjectBooleanHashMap<String>(), hashMap);
+    }
+
+    @Test
+    public void clear()
+    {
+        ObjectBooleanHashMap<String> hashMap = new ObjectBooleanHashMap<String>();
+        hashMap.put("0", true);
+        hashMap.clear();
+        Assert.assertEquals(ObjectBooleanHashMap.newMap(), hashMap);
+
+        hashMap.put("1", false);
+        hashMap.clear();
+        Assert.assertEquals(ObjectBooleanHashMap.newMap(), hashMap);
+
+        hashMap.put(null, true);
+        hashMap.clear();
+        Assert.assertEquals(ObjectBooleanHashMap.newMap(), hashMap);
+    }
+
+    @Test
+    public void removeKey()
+    {
+        ObjectBooleanHashMap<String> map0 = ObjectBooleanHashMap.newWithKeysValues("0", true, "1", false);
+        map0.removeKey("1");
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues("0", true), map0);
+        map0.removeKey("0");
+        Assert.assertEquals(ObjectBooleanHashMap.newMap(), map0);
+
+        ObjectBooleanHashMap<String> map1 = ObjectBooleanHashMap.newWithKeysValues("0", false, "1", true);
+        map1.removeKey("0");
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues("1", true), map1);
+        map1.removeKey("1");
+        Assert.assertEquals(ObjectBooleanHashMap.newMap(), map1);
+
+        this.map.removeKey("5");
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues("0", true, "1", true, "2", false), this.map);
+        this.map.removeKey("0");
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues("1", true, "2", false), this.map);
+        this.map.removeKey("1");
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues("2", false), this.map);
+        this.map.removeKey("2");
+        Assert.assertEquals(ObjectBooleanHashMap.newMap(), this.map);
+        this.map.removeKey("0");
+        this.map.removeKey("1");
+        this.map.removeKey("2");
+        Assert.assertEquals(ObjectBooleanHashMap.newMap(), this.map);
+        Verify.assertEmpty(this.map);
+
+        this.map.put(null, true);
+        Assert.assertTrue(this.map.get(null));
+        this.map.removeKey(null);
+        Assert.assertFalse(this.map.get(null));
+    }
+
+    @Test
+    public void removeKeyIfAbsent()
+    {
+        ObjectBooleanHashMap<String> map0 = ObjectBooleanHashMap.newWithKeysValues("0", false, "1", true);
+        Assert.assertTrue(map0.removeKeyIfAbsent("1", false));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues("0", false), map0);
+        Assert.assertFalse(map0.removeKeyIfAbsent("0", true));
+        Assert.assertEquals(ObjectBooleanHashMap.newMap(), map0);
+        Assert.assertFalse(map0.removeKeyIfAbsent("1", false));
+        Assert.assertTrue(map0.removeKeyIfAbsent("0", true));
+
+        ObjectBooleanHashMap<String> map1 = ObjectBooleanHashMap.newWithKeysValues("0", true, "1", false);
+        Assert.assertTrue(map1.removeKeyIfAbsent("0", false));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues("1", false), map1);
+        Assert.assertFalse(map1.removeKeyIfAbsent("1", true));
+        Assert.assertEquals(ObjectBooleanHashMap.newMap(), map1);
+        Assert.assertFalse(map1.removeKeyIfAbsent("0", false));
+        Assert.assertTrue(map1.removeKeyIfAbsent("1", true));
+
+        Assert.assertTrue(this.map.removeKeyIfAbsent("5", true));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues("0", true, "1", true, "2", false), this.map);
+        Assert.assertTrue(this.map.removeKeyIfAbsent("0", false));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues("1", true, "2", false), this.map);
+        Assert.assertTrue(this.map.removeKeyIfAbsent("1", false));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues("2", false), this.map);
+        Assert.assertFalse(this.map.removeKeyIfAbsent("2", true));
+        Assert.assertEquals(ObjectBooleanHashMap.newMap(), this.map);
+        Assert.assertFalse(this.map.removeKeyIfAbsent("0", false));
+        Assert.assertFalse(this.map.removeKeyIfAbsent("1", false));
+        Assert.assertTrue(this.map.removeKeyIfAbsent("2", true));
+        Assert.assertEquals(ObjectBooleanHashMap.newMap(), this.map);
+        Verify.assertEmpty(this.map);
+
+        this.map.put(null, true);
+
+        Assert.assertTrue(this.map.get(null));
+        Assert.assertTrue(this.map.removeKeyIfAbsent(null, false));
+        Assert.assertFalse(this.map.get(null));
+    }
+
+    @Test
+    public void put()
+    {
+        this.map.put("0", false);
+        this.map.put("1", false);
+        this.map.put("2", true);
+        ObjectBooleanHashMap<String> expected = ObjectBooleanHashMap.newWithKeysValues("0", false, "1", false, "2", true);
+        Assert.assertEquals(expected, this.map);
+
+        this.map.put("5", true);
+        expected.put("5", true);
+        Assert.assertEquals(expected, this.map);
+
+        this.map.put(null, false);
+        expected.put(null, false);
+        Assert.assertEquals(expected, this.map);
+    }
+
+    @Test
+    public void putDuplicateWithRemovedSlot()
+    {
+        String collision1 = generateCollisions().getFirst();
+        String collision2 = generateCollisions().get(1);
+        String collision3 = generateCollisions().get(2);
+        String collision4 = generateCollisions().get(3);
+
+        ObjectBooleanHashMap<String> hashMap = ObjectBooleanHashMap.newMap();
+        hashMap.put(collision1, true);
+        hashMap.put(collision2, false);
+        hashMap.put(collision3, true);
+        Assert.assertFalse(hashMap.get(collision2));
+        hashMap.removeKey(collision2);
+        hashMap.put(collision4, false);
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(collision1, true, collision3, true, collision4, false), hashMap);
+
+        ObjectBooleanHashMap<String> hashMap1 = ObjectBooleanHashMap.newMap();
+        hashMap1.put(collision1, false);
+        hashMap1.put(collision2, false);
+        hashMap1.put(collision3, true);
+        Assert.assertFalse(hashMap1.get(collision1));
+        hashMap1.removeKey(collision1);
+        hashMap1.put(collision4, true);
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(collision2, false, collision3, true, collision4, true), hashMap1);
+
+        ObjectBooleanHashMap<String> hashMap2 = ObjectBooleanHashMap.newMap();
+        hashMap2.put(collision1, true);
+        hashMap2.put(collision2, true);
+        hashMap2.put(collision3, false);
+        Assert.assertFalse(hashMap2.get(collision3));
+        hashMap2.removeKey(collision3);
+        hashMap2.put(collision4, false);
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(collision1, true, collision2, true, collision4, false), hashMap2);
+
+        ObjectBooleanHashMap<String> hashMap3 = ObjectBooleanHashMap.newMap();
+        hashMap3.put(null, false);
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(null, false), hashMap3);
+        hashMap3.put(null, true);
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(null, true), hashMap3);
+    }
+
+    @Test
+    public void putWithRehash() throws Exception
+    {
+        ObjectBooleanHashMap<Integer> hashMap = ObjectBooleanHashMap.newMap();
+        for (int i = 2; i < 10; i++)
+        {
+            Assert.assertFalse(hashMap.containsKey(i));
+            hashMap.put(i, (i & 1) == 0);
+        }
+
+        Field keys = ObjectBooleanHashMap.class.getDeclaredField("keys");
+        Field values = ObjectBooleanHashMap.class.getDeclaredField("values");
+        keys.setAccessible(true);
+        values.setAccessible(true);
+        Assert.assertEquals(16L, ((Object[]) keys.get(hashMap)).length);
+        Assert.assertEquals(64L, ((BitSet) values.get(hashMap)).size());
+        Verify.assertSize(8, hashMap);
+        for (int i = 2; i < 10; i++)
+        {
+            Assert.assertTrue(hashMap.containsKey(i));
+        }
+
+        Assert.assertTrue(hashMap.containsValue(false));
+        Assert.assertTrue(hashMap.containsValue(true));
+        hashMap.put(10, true);
+        Assert.assertEquals(32L, ((Object[]) keys.get(hashMap)).length);
+        Assert.assertEquals(64L, ((BitSet) values.get(hashMap)).size());
+
+        for (int i = 11; i < 75; i++)
+        {
+            Assert.assertFalse(String.valueOf(i), hashMap.containsKey(i));
+            hashMap.put(i, (i & 1) == 0);
+        }
+        Assert.assertEquals(256L, ((Object[]) keys.get(hashMap)).length);
+        Assert.assertEquals(256L, ((BitSet) values.get(hashMap)).size());
+    }
+
+    @Test
+    public void get()
+    {
+        Assert.assertTrue(this.map.get("0"));
+        Assert.assertTrue(this.map.get("1"));
+        Assert.assertFalse(this.map.get("2"));
+
+        Assert.assertFalse(this.map.get("5"));
+
+        this.map.put("0", false);
+        Assert.assertFalse(this.map.get("0"));
+
+        this.map.put("5", true);
+        Assert.assertTrue(this.map.get("5"));
+
+        this.map.put(null, true);
+        Assert.assertTrue(this.map.get(null));
+    }
+
+    @Test
+    public void getOrThrow()
+    {
+        Assert.assertTrue(this.map.getOrThrow("0"));
+        Assert.assertTrue(this.map.getOrThrow("1"));
+        Assert.assertFalse(this.map.getOrThrow("2"));
+
+        this.map.removeKey("0");
+        Verify.assertThrows(IllegalStateException.class, new Runnable()
+        {
+            public void run()
+            {
+                ObjectBooleanHashMapTest.this.map.getOrThrow("0");
+            }
+        });
+        Verify.assertThrows(IllegalStateException.class, new Runnable()
+        {
+            public void run()
+            {
+                ObjectBooleanHashMapTest.this.map.getOrThrow("5");
+            }
+        });
+        Verify.assertThrows(IllegalStateException.class, new Runnable()
+        {
+            public void run()
+            {
+                ObjectBooleanHashMapTest.this.map.getOrThrow(null);
+            }
+        });
+
+        this.map.put("0", false);
+        Assert.assertFalse(this.map.getOrThrow("0"));
+
+        this.map.put("5", true);
+        Assert.assertTrue(this.map.getOrThrow("5"));
+
+        this.map.put(null, false);
+        Assert.assertFalse(this.map.getOrThrow(null));
+    }
+
+    @Test
+    public void getIfAbsentPut()
+    {
+        ObjectBooleanHashMap<Integer> map1 = ObjectBooleanHashMap.newMap();
+        Assert.assertTrue(map1.getIfAbsentPut(0, true));
+        Assert.assertTrue(map1.getIfAbsentPut(0, false));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(0, true), map1);
+        Assert.assertTrue(map1.getIfAbsentPut(1, true));
+        Assert.assertTrue(map1.getIfAbsentPut(1, false));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(0, true, 1, true), map1);
+
+        ObjectBooleanHashMap<Integer> map2 = ObjectBooleanHashMap.newMap();
+        Assert.assertFalse(map2.getIfAbsentPut(1, false));
+        Assert.assertFalse(map2.getIfAbsentPut(1, true));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(1, false), map2);
+        Assert.assertFalse(map2.getIfAbsentPut(0, false));
+        Assert.assertFalse(map2.getIfAbsentPut(0, true));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(0, false, 1, false), map2);
+
+        ObjectBooleanHashMap<Integer> map3 = ObjectBooleanHashMap.newMap();
+        Assert.assertTrue(map3.getIfAbsentPut(null, true));
+        Assert.assertTrue(map3.getIfAbsentPut(null, false));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(null, true), map3);
+    }
+
+    @Test
+    public void getIfAbsentPut_Function()
+    {
+        BooleanFunction0 factory = new BooleanFunction0()
+        {
+            public boolean value()
+            {
+                return true;
+            }
+        };
+
+        ObjectBooleanHashMap<Integer> map1 = ObjectBooleanHashMap.newMap();
+        Assert.assertTrue(map1.getIfAbsentPut(0, factory));
+        BooleanFunction0 factoryThrows = new BooleanFunction0()
+        {
+            public boolean value()
+            {
+                throw new AssertionError();
+            }
+        };
+        Assert.assertTrue(map1.getIfAbsentPut(0, factoryThrows));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(0, true), map1);
+        Assert.assertTrue(map1.getIfAbsentPut(1, factory));
+        Assert.assertTrue(map1.getIfAbsentPut(1, factoryThrows));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(0, true, 1, true), map1);
+
+        ObjectBooleanHashMap<Integer> map2 = ObjectBooleanHashMap.newMap();
+        BooleanFunction0 factoryFalse = new BooleanFunction0()
+        {
+            public boolean value()
+            {
+                return false;
+            }
+        };
+        Assert.assertFalse(map2.getIfAbsentPut(1, factoryFalse));
+        Assert.assertFalse(map2.getIfAbsentPut(1, factoryThrows));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(1, false), map2);
+        Assert.assertFalse(map2.getIfAbsentPut(0, factoryFalse));
+        Assert.assertFalse(map2.getIfAbsentPut(0, factoryThrows));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(0, false, 1, false), map2);
+
+        ObjectBooleanHashMap<Integer> map3 = ObjectBooleanHashMap.newMap();
+        Assert.assertTrue(map3.getIfAbsentPut(null, factory));
+        Assert.assertTrue(map3.getIfAbsentPut(null, factoryThrows));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(null, true), map3);
+    }
+
+    @Test
+    public void getIfAbsentPutWith()
+    {
+        BooleanFunction<String> functionLengthEven = new BooleanFunction<String>()
+        {
+            public boolean booleanValueOf(String string)
+            {
+                return (string.length() & 1) == 0;
+            }
+        };
+
+        ObjectBooleanHashMap<Integer> map1 = ObjectBooleanHashMap.newMap();
+        Assert.assertFalse(map1.getIfAbsentPutWith(0, functionLengthEven, "123456789"));
+        BooleanFunction<String> functionThrows = new BooleanFunction<String>()
+        {
+            public boolean booleanValueOf(String string)
+            {
+                throw new AssertionError();
+            }
+        };
+        Assert.assertFalse(map1.getIfAbsentPutWith(0, functionThrows, "unused"));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(0, false), map1);
+        Assert.assertFalse(map1.getIfAbsentPutWith(1, functionLengthEven, "123456789"));
+        Assert.assertFalse(map1.getIfAbsentPutWith(1, functionThrows, "unused"));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(0, false, 1, false), map1);
+
+        ObjectBooleanHashMap<Integer> map2 = ObjectBooleanHashMap.newMap();
+        Assert.assertTrue(map2.getIfAbsentPutWith(1, functionLengthEven, "1234567890"));
+        Assert.assertTrue(map2.getIfAbsentPutWith(1, functionThrows, "unused0"));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(1, true), map2);
+        Assert.assertTrue(map2.getIfAbsentPutWith(0, functionLengthEven, "1234567890"));
+        Assert.assertTrue(map2.getIfAbsentPutWith(0, functionThrows, "unused0"));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(0, true, 1, true), map2);
+
+        ObjectBooleanHashMap<Integer> map3 = ObjectBooleanHashMap.newMap();
+        Assert.assertFalse(map3.getIfAbsentPutWith(null, functionLengthEven, "123456789"));
+        Assert.assertFalse(map3.getIfAbsentPutWith(null, functionThrows, "unused"));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(null, false), map3);
+    }
+
+    @Test
+    public void getIfAbsentPutWithKey()
+    {
+        BooleanFunction<Integer> function = new BooleanFunction<Integer>()
+        {
+            public boolean booleanValueOf(Integer anObject)
+            {
+                return anObject == null || (anObject & 1) == 0;
+            }
+        };
+
+        ObjectBooleanHashMap<Integer> map1 = ObjectBooleanHashMap.newMap();
+        Assert.assertTrue(map1.getIfAbsentPutWithKey(0, function));
+        BooleanFunction<Integer> functionThrows = new BooleanFunction<Integer>()
+        {
+            public boolean booleanValueOf(Integer anObject)
+            {
+                throw new AssertionError();
+            }
+        };
+        Assert.assertTrue(map1.getIfAbsentPutWithKey(0, functionThrows));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(0, true), map1);
+        Assert.assertFalse(map1.getIfAbsentPutWithKey(1, function));
+        Assert.assertFalse(map1.getIfAbsentPutWithKey(1, functionThrows));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(0, true, 1, false), map1);
+
+        ObjectBooleanHashMap<Integer> map2 = ObjectBooleanHashMap.newMap();
+        Assert.assertFalse(map2.getIfAbsentPutWithKey(1, function));
+        Assert.assertFalse(map2.getIfAbsentPutWithKey(1, functionThrows));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(1, false), map2);
+        Assert.assertTrue(map2.getIfAbsentPutWithKey(0, function));
+        Assert.assertTrue(map2.getIfAbsentPutWithKey(0, functionThrows));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(0, true, 1, false), map2);
+
+        ObjectBooleanHashMap<Integer> map3 = ObjectBooleanHashMap.newMap();
+        Assert.assertTrue(map3.getIfAbsentPutWithKey(null, function));
+        Assert.assertTrue(map3.getIfAbsentPutWithKey(null, functionThrows));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(null, true), map3);
+    }
+
+    @Test
+    public void updateValue()
+    {
+        BooleanToBooleanFunction flip = new BooleanToBooleanFunction()
+        {
+            public boolean valueOf(boolean value)
+            {
+                return !value;
+            }
+        };
+
+        ObjectBooleanHashMap<Integer> map1 = ObjectBooleanHashMap.newMap();
+        Assert.assertTrue(map1.updateValue(0, false, flip));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(0, true), map1);
+        Assert.assertFalse(map1.updateValue(0, false, flip));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(0, false), map1);
+        Assert.assertFalse(map1.updateValue(1, true, flip));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(0, false, 1, false), map1);
+        Assert.assertTrue(map1.updateValue(1, true, flip));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(0, false, 1, true), map1);
+
+        ObjectBooleanHashMap<Integer> map2 = ObjectBooleanHashMap.newMap();
+        Assert.assertTrue(map2.updateValue(1, false, flip));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(1, true), map2);
+        Assert.assertFalse(map2.updateValue(1, false, flip));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(1, false), map2);
+        Assert.assertFalse(map2.updateValue(0, true, flip));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(0, false, 1, false), map2);
+        Assert.assertTrue(map2.updateValue(0, true, flip));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(0, true, 1, false), map2);
+
+        ObjectBooleanHashMap<Integer> map3 = ObjectBooleanHashMap.newMap();
+        Assert.assertFalse(map3.updateValue(null, true, flip));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(null, false), map3);
+        Assert.assertTrue(map3.updateValue(null, true, flip));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(null, true), map3);
+    }
+
+    @Test
+    public void containsKey()
+    {
+        Assert.assertTrue(this.map.containsKey("0"));
+        Assert.assertTrue(this.map.containsKey("1"));
+        Assert.assertTrue(this.map.containsKey("2"));
+        Assert.assertFalse(this.map.containsKey("3"));
+        Assert.assertFalse(this.map.containsKey(null));
+
+        this.map.removeKey("0");
+        Assert.assertFalse(this.map.containsKey("0"));
+        Assert.assertFalse(this.map.get("0"));
+        this.map.removeKey("0");
+        Assert.assertFalse(this.map.containsKey("0"));
+        Assert.assertFalse(this.map.get("0"));
+
+        this.map.removeKey("1");
+        Assert.assertFalse(this.map.containsKey("1"));
+        Assert.assertFalse(this.map.get("1"));
+
+        this.map.removeKey("2");
+        Assert.assertFalse(this.map.containsKey("2"));
+        Assert.assertFalse(this.map.get("2"));
+
+        this.map.removeKey("3");
+        Assert.assertFalse(this.map.containsKey("3"));
+        Assert.assertFalse(this.map.get("3"));
+
+        this.map.put(null, true);
+        Assert.assertTrue(this.map.containsKey(null));
+        this.map.removeKey(null);
+        Assert.assertFalse(this.map.containsKey(null));
+    }
+
+    @Test
+    public void containsValue()
+    {
+        Assert.assertTrue(this.map.containsValue(true));
+        Assert.assertTrue(this.map.containsValue(false));
+        this.map.clear();
+
+        this.map.put("5", true);
+        Assert.assertTrue(this.map.containsValue(true));
+
+        this.map.put(null, false);
+        Assert.assertTrue(this.map.containsValue(false));
+
+        this.map.removeKey("5");
+        Assert.assertFalse(this.map.containsValue(true));
+
+        this.map.removeKey(null);
+        Assert.assertFalse(this.map.containsValue(false));
+    }
+
+    @Test
+    public void size()
+    {
+        Verify.assertSize(0, ObjectBooleanHashMap.newMap());
+        Verify.assertSize(1, ObjectBooleanHashMap.newMap().withKeyValue(0, false));
+        Verify.assertSize(1, ObjectBooleanHashMap.newMap().withKeyValue(1, true));
+        Verify.assertSize(1, ObjectBooleanHashMap.newMap().withKeyValue(null, false));
+
+        ObjectBooleanHashMap<Integer> hashMap1 = ObjectBooleanHashMap.newWithKeysValues(1, true, 0, false);
+        Verify.assertSize(2, hashMap1);
+        hashMap1.removeKey(1);
+        Verify.assertSize(1, hashMap1);
+        hashMap1.removeKey(0);
+        Verify.assertSize(0, hashMap1);
+
+        Verify.assertSize(2, ObjectBooleanHashMap.newWithKeysValues(1, false, 5, false));
+        Verify.assertSize(2, ObjectBooleanHashMap.newWithKeysValues(0, true, 5, true));
+    }
+
+    @Test
+    public void isEmpty()
+    {
+        Verify.assertEmpty(ObjectBooleanHashMap.newMap());
+        Assert.assertFalse(this.map.isEmpty());
+        Assert.assertFalse(ObjectBooleanHashMap.newWithKeysValues(null, false).isEmpty());
+        Assert.assertFalse(ObjectBooleanHashMap.newWithKeysValues(1, true).isEmpty());
+        Assert.assertFalse(ObjectBooleanHashMap.newWithKeysValues(0, false).isEmpty());
+        Assert.assertFalse(ObjectBooleanHashMap.newWithKeysValues(50, true).isEmpty());
+    }
+
+    @Test
+    public void notEmpty()
+    {
+        Assert.assertFalse(ObjectBooleanHashMap.newMap().notEmpty());
+        Assert.assertTrue(this.map.notEmpty());
+        Assert.assertTrue(ObjectBooleanHashMap.newWithKeysValues(1, true).notEmpty());
+        Assert.assertTrue(ObjectBooleanHashMap.newWithKeysValues(null, false).notEmpty());
+        Assert.assertTrue(ObjectBooleanHashMap.newWithKeysValues(0, true).notEmpty());
+        Assert.assertTrue(ObjectBooleanHashMap.newWithKeysValues(50, false).notEmpty());
+    }
+
+    @Test
+    public void testEquals()
+    {
+        ObjectBooleanHashMap<Integer> map1 = ObjectBooleanHashMap.newWithKeysValues(0, true, 1, false, null, false);
+        ObjectBooleanHashMap<Integer> map2 = ObjectBooleanHashMap.newWithKeysValues(null, false, 0, true, 1, false);
+        ObjectBooleanHashMap<Integer> map3 = ObjectBooleanHashMap.newWithKeysValues(0, true, 1, true, null, false);
+        ObjectBooleanHashMap<Integer> map4 = ObjectBooleanHashMap.newWithKeysValues(0, false, 1, false, null, false);
+        ObjectBooleanHashMap<Integer> map5 = ObjectBooleanHashMap.newWithKeysValues(0, true, 1, false, null, true);
+        ObjectBooleanHashMap<Integer> map6 = ObjectBooleanHashMap.newWithKeysValues(null, true, 60, false, 70, true);
+        ObjectBooleanHashMap<Integer> map7 = ObjectBooleanHashMap.newWithKeysValues(null, true, 60, false);
+        ObjectBooleanHashMap<Integer> map8 = ObjectBooleanHashMap.newWithKeysValues(0, true, 1, false);
+
+        Verify.assertEqualsAndHashCode(map1, map2);
+        Assert.assertNotEquals(map1, map3);
+        Assert.assertNotEquals(map1, map4);
+        Assert.assertNotEquals(map1, map5);
+        Assert.assertNotEquals(map7, map6);
+        Assert.assertNotEquals(map7, map8);
+    }
+
+    @Test
+    public void testHashCode()
+    {
+        Assert.assertEquals(
+                UnifiedMap.newWithKeysValues(0, false, 1, true, 32, true).hashCode(),
+                ObjectBooleanHashMap.newWithKeysValues(32, true, 0, false, 1, true).hashCode());
+        Assert.assertEquals(
+                UnifiedMap.newWithKeysValues(50, true, 60, true, null, false).hashCode(),
+                ObjectBooleanHashMap.newWithKeysValues(50, true, 60, true, null, false).hashCode());
+        Assert.assertEquals(UnifiedMap.newMap().hashCode(), ObjectBooleanHashMap.newMap().hashCode());
+    }
+
+    @Test
+    public void testToString()
+    {
+        Assert.assertEquals("[]", ObjectBooleanHashMap.newMap().toString());
+        Assert.assertEquals("[0=false]", ObjectBooleanHashMap.newMap().withKeyValue(0, false).toString());
+        Assert.assertEquals("[1=true]", ObjectBooleanHashMap.newMap().withKeyValue(1, true).toString());
+        Assert.assertEquals("[5=true]", ObjectBooleanHashMap.newMap().withKeyValue(5, true).toString());
+
+        ObjectBooleanHashMap<Integer> map1 = ObjectBooleanHashMap.newWithKeysValues(0, true, 1, false);
+        Assert.assertTrue(
+                map1.toString(),
+                "[0=true, 1=false]".equals(map1.toString())
+                        || "[1=false, 0=true]".equals(map1.toString()));
+
+        ObjectBooleanHashMap<Integer> map2 = ObjectBooleanHashMap.newWithKeysValues(1, false, null, true);
+        Assert.assertTrue(
+                map2.toString(),
+                "[1=false, null=true]".equals(map2.toString())
+                        || "[null=true, 1=false]".equals(map2.toString()));
+
+        ObjectBooleanHashMap<Integer> map3 = ObjectBooleanHashMap.newWithKeysValues(1, true, null, true);
+        Assert.assertTrue(
+                map3.toString(),
+                "[1=true, null=true]".equals(map3.toString())
+                        || "[null=true, 1=true]".equals(map3.toString()));
+    }
+
+    @Test
+    public void forEachValue()
+    {
+        ObjectBooleanHashMap<Integer> map01 = ObjectBooleanHashMap.newWithKeysValues(0, true, 1, false);
+        final String[] sum01 = new String[1];
+        sum01[0] = "";
+        map01.forEachValue(new BooleanProcedure()
+        {
+            public void value(boolean each)
+            {
+                sum01[0] += String.valueOf(each);
+            }
+        });
+        Assert.assertTrue("truefalse".equals(sum01[0]) || "falsetrue".equals(sum01[0]));
+
+        ObjectBooleanHashMap<Integer> map = ObjectBooleanHashMap.newWithKeysValues(3, true, 4, true);
+        final String[] sum = new String[1];
+        sum[0] = "";
+        map.forEachValue(new BooleanProcedure()
+        {
+            public void value(boolean each)
+            {
+                sum[0] += String.valueOf(each);
+            }
+        });
+        Assert.assertEquals("truetrue", sum[0]);
+
+        ObjectBooleanHashMap<Integer> map1 = ObjectBooleanHashMap.newWithKeysValues(3, false, null, true);
+        final String[] sum1 = new String[1];
+        sum1[0] = "";
+        map1.forEachValue(new BooleanProcedure()
+        {
+            public void value(boolean each)
+            {
+                sum1[0] += String.valueOf(each);
+            }
+        });
+        Assert.assertTrue("truefalse".equals(sum1[0]) || "falsetrue".equals(sum1[0]));
+    }
+
+    @Test
+    public void forEach()
+    {
+        ObjectBooleanHashMap<Integer> map01 = ObjectBooleanHashMap.newWithKeysValues(0, true, 1, false);
+        final String[] sum01 = new String[1];
+        sum01[0] = "";
+        map01.forEach(new BooleanProcedure()
+        {
+            public void value(boolean each)
+            {
+                sum01[0] += String.valueOf(each);
+            }
+        });
+        Assert.assertTrue("truefalse".equals(sum01[0]) || "falsetrue".equals(sum01[0]));
+
+        ObjectBooleanHashMap<Integer> map = ObjectBooleanHashMap.newWithKeysValues(3, true, 4, true);
+        final String[] sum = new String[1];
+        sum[0] = "";
+        map.forEach(new BooleanProcedure()
+        {
+            public void value(boolean each)
+            {
+                sum[0] += String.valueOf(each);
+            }
+        });
+        Assert.assertEquals("truetrue", sum[0]);
+
+        ObjectBooleanHashMap<Integer> map1 = ObjectBooleanHashMap.newWithKeysValues(3, false, null, true);
+        final String[] sum1 = new String[1];
+        sum1[0] = "";
+        map1.forEach(new BooleanProcedure()
+        {
+            public void value(boolean each)
+            {
+                sum1[0] += String.valueOf(each);
+            }
+        });
+        Assert.assertTrue("truefalse".equals(sum1[0]) || "falsetrue".equals(sum1[0]));
+    }
+
+    @Test
+    public void forEachKey()
+    {
+        ObjectBooleanHashMap<Integer> map01 = ObjectBooleanHashMap.newWithKeysValues(0, true, 1, false);
+        final int[] sum01 = new int[1];
+        map01.forEachKey(new Procedure<Integer>()
+        {
+            public void value(Integer each)
+            {
+                sum01[0] += each;
+            }
+        });
+        Assert.assertEquals(1, sum01[0]);
+
+        ObjectBooleanHashMap<Integer> map = ObjectBooleanHashMap.newWithKeysValues(3, false, null, true);
+        final String[] sum = new String[1];
+        sum[0] = "";
+        map.forEachKey(new Procedure<Integer>()
+        {
+            public void value(Integer each)
+            {
+                sum[0] += String.valueOf(each);
+            }
+        });
+        Assert.assertTrue("3null".equals(sum[0]) || "null3".equals(sum[0]));
+    }
+
+    @Test
+    public void forEachKeyValue()
+    {
+        ObjectBooleanHashMap<Integer> map01 = ObjectBooleanHashMap.newWithKeysValues(0, true, 1, false);
+        final String[] sumValue01 = new String[1];
+        sumValue01[0] = "";
+        final int[] sumKey01 = new int[1];
+        map01.forEachKeyValue(new ObjectBooleanProcedure<Integer>()
+        {
+            public void value(Integer eachKey, boolean eachValue)
+            {
+                sumKey01[0] += eachKey;
+                sumValue01[0] += eachValue;
+            }
+        });
+        Assert.assertEquals(1, sumKey01[0]);
+        Assert.assertTrue("truefalse".equals(sumValue01[0]) || "falsetrue".equals(sumValue01[0]));
+
+        ObjectBooleanHashMap<Integer> map = ObjectBooleanHashMap.newWithKeysValues(3, true, null, false);
+        final String[] sumKey = new String[1];
+        sumKey[0] = "";
+        final String[] sumValue = new String[1];
+        sumValue[0] = "";
+        map.forEachKeyValue(new ObjectBooleanProcedure<Integer>()
+        {
+            public void value(Integer eachKey, boolean eachValue)
+            {
+                sumKey[0] += String.valueOf(eachKey);
+                sumValue[0] += eachValue;
+            }
+        });
+        Assert.assertTrue(sumKey[0], "3null".equals(sumKey[0]) || "null3".equals(sumKey[0]));
+        Assert.assertTrue("truefalse".equals(sumValue[0]) || "falsetrue".equals(sumValue[0]));
+    }
+
+    @Test
+    public void makeString()
+    {
+        Assert.assertEquals("", new ObjectBooleanHashMap<String>().makeString());
+        Assert.assertEquals("0=true", ObjectBooleanHashMap.newMap().withKeyValue(0, true).makeString());
+        Assert.assertEquals("1=false", ObjectBooleanHashMap.newMap().withKeyValue(1, false).makeString());
+        Assert.assertEquals("null=true", ObjectBooleanHashMap.newMap().withKeyValue(null, true).makeString());
+
+        ObjectBooleanHashMap<Integer> map2 = ObjectBooleanHashMap.newWithKeysValues(1, true, 32, false);
+        Assert.assertTrue(
+                map2.makeString("[", "/", "]"),
+                "[1=true/32=false]".equals(map2.makeString("[", "/", "]"))
+                        || "[32=false/1=true]".equals(map2.makeString("[", "/", "]")));
+    }
+
+    @Test
+    public void appendString()
+    {
+        Appendable appendable = new StringBuilder();
+        ObjectBooleanHashMap.newMap().appendString(appendable);
+        Assert.assertEquals("", appendable.toString());
+
+        Appendable appendable0 = new StringBuilder();
+        ObjectBooleanHashMap.newWithKeysValues(0, true).appendString(appendable0);
+        Assert.assertEquals("0=true", appendable0.toString());
+
+        Appendable appendable1 = new StringBuilder();
+        ObjectBooleanHashMap.newWithKeysValues(1, false).appendString(appendable1);
+        Assert.assertEquals("1=false", appendable1.toString());
+
+        Appendable appendable2 = new StringBuilder();
+        ObjectBooleanHashMap.newWithKeysValues(null, false).appendString(appendable2);
+        Assert.assertEquals("null=false", appendable2.toString());
+
+        Appendable appendable3 = new StringBuilder();
+        ObjectBooleanHashMap<Integer> map1 = ObjectBooleanHashMap.newWithKeysValues(0, true, 1, false);
+        map1.appendString(appendable3);
+        Assert.assertTrue(
+                appendable3.toString(),
+                "0=true, 1=false".equals(appendable3.toString())
+                        || "1=false, 0=true".equals(appendable3.toString()));
+    }
+
+    @Test
+    public void withKeysValues()
+    {
+        ObjectBooleanHashMap<Integer> hashMap = new ObjectBooleanHashMap<Integer>().withKeyValue(1, true);
+        ObjectBooleanHashMap<Integer> hashMap0 = new ObjectBooleanHashMap<Integer>().withKeysValues(1, true, 2, false);
+        ObjectBooleanHashMap<Integer> hashMap1 = new ObjectBooleanHashMap<Integer>().withKeysValues(1, false, 2, false, 3, true);
+        ObjectBooleanHashMap<Integer> hashMap2 = new ObjectBooleanHashMap<Integer>().withKeysValues(1, true, 2, true, 3, false, 4, false);
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(1, true), hashMap);
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(1, true, 2, false), hashMap0);
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(1, false, 2, false, 3, true), hashMap1);
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(1, true, 2, true, 3, false, 4, false), hashMap2);
+    }
+
+    @Test
+    public void withoutKey()
+    {
+        ObjectBooleanHashMap<Integer> hashMap = new ObjectBooleanHashMap<Integer>().withKeysValues(1, true, 2, true, 3, false, 4, false);
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(1, true, 2, true, 3, false, 4, false), hashMap.withoutKey(5));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(1, true, 2, true, 3, false), hashMap.withoutKey(4));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(1, true, 2, true), hashMap.withoutKey(3));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(1, true), hashMap.withoutKey(2));
+        Assert.assertEquals(ObjectBooleanHashMap.newMap(), hashMap.withoutKey(1));
+        Assert.assertEquals(ObjectBooleanHashMap.newMap(), hashMap.withoutKey(1));
+    }
+
+    @Test
+    public void withoutAllKeys()
+    {
+        ObjectBooleanHashMap<Integer> hashMap = new ObjectBooleanHashMap<Integer>().withKeysValues(1, true, 2, true, 3, false, 4, false);
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(1, true, 2, true, 3, false, 4, false), hashMap.withoutAllKeys(FastList.newListWith(5, 6, 7)));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(1, true, 2, true), hashMap.withoutAllKeys(FastList.newListWith(5, 4, 3)));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(1, true), hashMap.withoutAllKeys(FastList.newListWith(2)));
+        Assert.assertEquals(ObjectBooleanHashMap.newMap(), hashMap.withoutAllKeys(FastList.newListWith(1)));
+        Assert.assertEquals(ObjectBooleanHashMap.newMap(), hashMap.withoutAllKeys(FastList.newListWith(5, 6)));
+    }
+
+    @Test
+    public void select()
+    {
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues("0", true, "1", true), this.map.select(BooleanPredicates.isTrue()));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues("2", false), this.map.select(BooleanPredicates.isFalse()));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues("0", true, "1", true, "2", false), this.map.select(BooleanPredicates.or(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())));
+        Assert.assertEquals(ObjectBooleanHashMap.newMap(), this.map.select(BooleanPredicates.and(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())));
+
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues("0", true), this.map.select(new ObjectBooleanPredicate<String>()
+        {
+            public boolean accept(String object, boolean value)
+            {
+                return (Integer.parseInt(object) & 1) == 0 && value;
+            }
+        }));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues("2", false), this.map.select(new ObjectBooleanPredicate<String>()
+        {
+            public boolean accept(String object, boolean value)
+            {
+                return (Integer.parseInt(object) & 1) == 0 && !value;
+            }
+        }));
+        Assert.assertEquals(ObjectBooleanHashMap.newMap(), this.map.select(new ObjectBooleanPredicate<String>()
+        {
+            public boolean accept(String object, boolean value)
+            {
+                return (Integer.parseInt(object) & 1) != 0 && !value;
+            }
+        }));
+    }
+
+    @Test
+    public void reject()
+    {
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues("2", false), this.map.reject(BooleanPredicates.isTrue()));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues("0", true, "1", true), this.map.reject(BooleanPredicates.isFalse()));
+        Assert.assertEquals(ObjectBooleanHashMap.newMap(), this.map.reject(BooleanPredicates.or(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues("0", true, "1", true, "2", false), this.map.reject(BooleanPredicates.and(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())));
+
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues("1", true, "2", false), this.map.reject(new ObjectBooleanPredicate<String>()
+        {
+            public boolean accept(String object, boolean value)
+            {
+                return (Integer.parseInt(object) & 1) == 0 && value;
+            }
+        }));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues("0", true, "1", true), this.map.reject(new ObjectBooleanPredicate<String>()
+        {
+            public boolean accept(String object, boolean value)
+            {
+                return (Integer.parseInt(object) & 1) == 0 && !value;
+            }
+        }));
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues("0", true, "1", true, "2", false), this.map.reject(new ObjectBooleanPredicate<String>()
+        {
+            public boolean accept(String object, boolean value)
+            {
+                return (Integer.parseInt(object) & 1) != 0 && !value;
+            }
+        }));
+    }
+
+    @Test
+    public void count()
+    {
+        Assert.assertEquals(2L, this.map.count(BooleanPredicates.isTrue()));
+        Assert.assertEquals(1L, this.map.count(BooleanPredicates.isFalse()));
+        Assert.assertEquals(3L, this.map.count(BooleanPredicates.or(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())));
+        Assert.assertEquals(0L, this.map.count(BooleanPredicates.and(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())));
+    }
+
+    @Test
+    public void anySatisfy()
+    {
+        Assert.assertTrue(this.map.anySatisfy(BooleanPredicates.isTrue()));
+        Assert.assertTrue(this.map.anySatisfy(BooleanPredicates.isFalse()));
+        Assert.assertTrue(this.map.anySatisfy(BooleanPredicates.or(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())));
+        Assert.assertFalse(this.map.anySatisfy(BooleanPredicates.and(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())));
+    }
+
+    @Test
+    public void allSatisfy()
+    {
+        Assert.assertFalse(this.map.allSatisfy(BooleanPredicates.isTrue()));
+        Assert.assertFalse(this.map.allSatisfy(BooleanPredicates.isFalse()));
+        Assert.assertTrue(this.map.allSatisfy(BooleanPredicates.or(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())));
+        Assert.assertFalse(this.map.allSatisfy(BooleanPredicates.and(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())));
+    }
+
+    @Test
+    public void detectIfNone()
+    {
+        Assert.assertTrue(this.map.detectIfNone(BooleanPredicates.isTrue(), false));
+        Assert.assertFalse(this.map.detectIfNone(BooleanPredicates.isFalse(), true));
+        Assert.assertFalse(ObjectBooleanHashMap.newWithKeysValues("0", true, "1", true).detectIfNone(BooleanPredicates.and(BooleanPredicates.isTrue(), BooleanPredicates.isFalse()), false));
+    }
+
+    @Test
+    public void collect()
+    {
+        ObjectBooleanHashMap<String> map1 = ObjectBooleanHashMap.newWithKeysValues("0", true, "1", false);
+        ObjectBooleanHashMap<String> map2 = ObjectBooleanHashMap.newWithKeysValues("0", true);
+        ObjectBooleanHashMap<String> map3 = ObjectBooleanHashMap.newWithKeysValues("0", false);
+        BooleanToObjectFunction<String> stringValueOf = new BooleanToObjectFunction<String>()
+        {
+            public String valueOf(boolean booleanParameter)
+            {
+                return String.valueOf(booleanParameter);
+            }
+        };
+        Assert.assertTrue(FastList.newListWith("true", "false").equals(map1.collect(stringValueOf)) || FastList.newListWith("false", "true").equals(map1.collect(stringValueOf)));
+        Assert.assertEquals(FastList.newListWith("true"), map2.collect(stringValueOf));
+        Assert.assertEquals(FastList.newListWith("false"), map3.collect(stringValueOf));
+    }
+
+    @Test
+    public void toArray()
+    {
+        ObjectBooleanHashMap<String> map1 = ObjectBooleanHashMap.newWithKeysValues(null, true, "1", false);
+        ObjectBooleanHashMap<String> map2 = ObjectBooleanHashMap.newWithKeysValues("0", true);
+        ObjectBooleanHashMap<String> map3 = ObjectBooleanHashMap.newWithKeysValues("0", false);
+
+        Assert.assertTrue(Arrays.equals(new boolean[]{true, false}, map1.toArray())
+                || Arrays.equals(new boolean[]{false, true}, map1.toArray()));
+        Assert.assertTrue(Arrays.equals(new boolean[]{true}, map2.toArray()));
+        Assert.assertTrue(Arrays.equals(new boolean[]{false}, map3.toArray()));
+    }
+
+    @Test
+    public void contains()
+    {
+        Assert.assertTrue(this.map.contains(true));
+        Assert.assertTrue(this.map.contains(false));
+        this.map.clear();
+
+        this.map.put("5", true);
+        Assert.assertTrue(this.map.contains(true));
+
+        this.map.put(null, false);
+        Assert.assertTrue(this.map.contains(false));
+
+        this.map.removeKey("5");
+        Assert.assertFalse(this.map.contains(true));
+        Assert.assertTrue(this.map.contains(false));
+
+        this.map.removeKey(null);
+        Assert.assertFalse(this.map.contains(false));
+    }
+
+    @Test
+    public void containsAll()
+    {
+        Assert.assertTrue(this.map.containsAll(true, false));
+        Assert.assertTrue(this.map.containsAll(true, true));
+        Assert.assertTrue(this.map.containsAll(false, false));
+        this.map.clear();
+
+        this.map.put("5", true);
+        Assert.assertTrue(this.map.containsAll(true));
+        Assert.assertFalse(this.map.containsAll(true, false));
+        Assert.assertFalse(this.map.containsAll(false, false));
+
+        this.map.put(null, false);
+        Assert.assertTrue(this.map.containsAll(false));
+        Assert.assertTrue(this.map.containsAll(true, false));
+
+        this.map.removeKey("5");
+        Assert.assertFalse(this.map.containsAll(true));
+        Assert.assertFalse(this.map.containsAll(true, false));
+        Assert.assertTrue(this.map.containsAll(false, false));
+
+        this.map.removeKey(null);
+        Assert.assertFalse(this.map.containsAll(false, true));
+    }
+
+    @Test
+    public void containsAllIterable()
+    {
+        Assert.assertTrue(this.map.containsAll(BooleanArrayList.newListWith(true, false)));
+        Assert.assertTrue(this.map.containsAll(BooleanArrayList.newListWith(true, true)));
+        Assert.assertTrue(this.map.containsAll(BooleanArrayList.newListWith(false, false)));
+        this.map.clear();
+
+        this.map.put("5", true);
+        Assert.assertTrue(this.map.containsAll(BooleanArrayList.newListWith(true)));
+        Assert.assertFalse(this.map.containsAll(BooleanArrayList.newListWith(true, false)));
+        Assert.assertFalse(this.map.containsAll(BooleanArrayList.newListWith(false, false)));
+
+        this.map.put(null, false);
+        Assert.assertTrue(this.map.containsAll(BooleanArrayList.newListWith(false)));
+        Assert.assertTrue(this.map.containsAll(BooleanArrayList.newListWith(true, false)));
+
+        this.map.removeKey("5");
+        Assert.assertFalse(this.map.containsAll(BooleanArrayList.newListWith(true)));
+        Assert.assertFalse(this.map.containsAll(BooleanArrayList.newListWith(true, false)));
+        Assert.assertTrue(this.map.containsAll(BooleanArrayList.newListWith(false, false)));
+
+        this.map.removeKey(null);
+        Assert.assertFalse(this.map.containsAll(BooleanArrayList.newListWith(false, true)));
+    }
+
+    @Test
+    public void toList()
+    {
+        ObjectBooleanHashMap<String> map1 = ObjectBooleanHashMap.newWithKeysValues(null, true, "1", false);
+        ObjectBooleanHashMap<String> map2 = ObjectBooleanHashMap.newWithKeysValues("0", true);
+        ObjectBooleanHashMap<String> map3 = ObjectBooleanHashMap.newWithKeysValues("0", false);
+
+        Assert.assertTrue(map1.toList().toString(), BooleanArrayList.newListWith(true, false).equals(map1.toList())
+                || BooleanArrayList.newListWith(false, true).equals(map1.toList()));
+        Assert.assertEquals(BooleanArrayList.newListWith(true), map2.toList());
+        Assert.assertEquals(BooleanArrayList.newListWith(false), map3.toList());
+    }
+
+    @Test
+    public void toSortedList()
+    {
+        ObjectBooleanHashMap<String> map1 = ObjectBooleanHashMap.newWithKeysValues("1", false, null, true, "2", false);
+        ObjectBooleanHashMap<String> map2 = ObjectBooleanHashMap.newWithKeysValues("0", true);
+        ObjectBooleanHashMap<String> map3 = ObjectBooleanHashMap.newWithKeysValues("0", false);
+
+        Assert.assertEquals(BooleanArrayList.newListWith(false, false, true), map1.toSortedList());
+        Assert.assertEquals(BooleanArrayList.newListWith(true), map2.toSortedList());
+        Assert.assertEquals(BooleanArrayList.newListWith(false), map3.toSortedList());
+    }
+
+    @Test
+    public void toSet()
+    {
+        ObjectBooleanHashMap<String> map1 = ObjectBooleanHashMap.newWithKeysValues("1", false, null, true, "2", false);
+        ObjectBooleanHashMap<String> map0 = ObjectBooleanHashMap.newWithKeysValues("1", false, null, true, "2", true);
+        ObjectBooleanHashMap<String> map2 = ObjectBooleanHashMap.newWithKeysValues("0", true);
+        ObjectBooleanHashMap<String> map3 = ObjectBooleanHashMap.newWithKeysValues("0", false);
+
+        Assert.assertEquals(BooleanHashSet.newSetWith(false, true), map1.toSet());
+        Assert.assertEquals(BooleanHashSet.newSetWith(false, true), map0.toSet());
+        Assert.assertEquals(BooleanHashSet.newSetWith(true), map2.toSet());
+        Assert.assertEquals(BooleanHashSet.newSetWith(false), map3.toSet());
+    }
+
+    @Test
+    public void toBag()
+    {
+        ObjectBooleanHashMap<String> map1 = ObjectBooleanHashMap.newWithKeysValues("1", false, null, true, "2", false);
+        ObjectBooleanHashMap<String> map0 = ObjectBooleanHashMap.newWithKeysValues("1", false, null, true, "2", true);
+        ObjectBooleanHashMap<String> map2 = ObjectBooleanHashMap.newWithKeysValues("0", true);
+        ObjectBooleanHashMap<String> map3 = ObjectBooleanHashMap.newWithKeysValues("0", false);
+
+        Assert.assertEquals(BooleanHashBag.newBagWith(false, false, true), map1.toBag());
+        Assert.assertEquals(BooleanHashBag.newBagWith(false, true, true), map0.toBag());
+        Assert.assertEquals(BooleanHashBag.newBagWith(true), map2.toBag());
+        Assert.assertEquals(BooleanHashBag.newBagWith(false), map3.toBag());
+    }
+
+    @Test
+    public void asLazy()
+    {
+        Verify.assertSize(this.map.toList().size(), this.map.asLazy().toList());
+        Assert.assertTrue(this.map.asLazy().toList().containsAll(this.map.toList()));
+    }
+
+    @Test
+    public void iterator()
+    {
+        ObjectBooleanHashMap<String> map1 = ObjectBooleanHashMap.newWithKeysValues(null, true, "GSCollections", false);
+        ObjectBooleanHashMap<String> map2 = ObjectBooleanHashMap.newWithKeysValues("0", true);
+        ObjectBooleanHashMap<String> map3 = ObjectBooleanHashMap.newWithKeysValues("0", false);
+
+        final BooleanIterator iterator1 = map1.booleanIterator();
+        Assert.assertTrue(iterator1.hasNext());
+        boolean first = iterator1.next();
+        Assert.assertTrue(iterator1.hasNext());
+        boolean second = iterator1.next();
+        Assert.assertEquals(first, !second);
+        Assert.assertFalse(iterator1.hasNext());
+        Verify.assertThrows(NoSuchElementException.class, new Runnable()
+        {
+            public void run()
+            {
+                iterator1.next();
+            }
+        });
+
+        final BooleanIterator iterator2 = map2.booleanIterator();
+        Assert.assertTrue(iterator2.hasNext());
+        Assert.assertTrue(iterator2.next());
+        Assert.assertFalse(iterator2.hasNext());
+        Verify.assertThrows(NoSuchElementException.class, new Runnable()
+        {
+            public void run()
+            {
+                iterator2.next();
+            }
+        });
+
+        final BooleanIterator iterator3 = map3.booleanIterator();
+        Assert.assertTrue(iterator3.hasNext());
+        Assert.assertFalse(iterator3.next());
+        Assert.assertFalse(iterator3.hasNext());
+        Verify.assertThrows(NoSuchElementException.class, new Runnable()
+        {
+            public void run()
+            {
+                iterator3.next();
+            }
+        });
+    }
 }
