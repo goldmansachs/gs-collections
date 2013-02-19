@@ -1332,28 +1332,28 @@ public class <name>ObjectHashMapTest
     }
 
     @Test
-    public void minBy()
+    public void maxBy()
     {
-        <name>ObjectHashMap\<String> map1 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "az", <(literal.(type))("9")>, "aabcd");
-        <name>ObjectHashMap\<String> map2 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "aab", <(literal.(type))("9")>, "aabcd");
-        <name>ObjectHashMap\<String> map3 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("5")>, "azyx", <(literal.(type))("9")>, "aabcd");
+        <name>ObjectHashMap\<Class\<?>\> map1 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, <name>ObjectHashMapTest.class, <(literal.(type))("9")>, <name>ObjectHashMap.class);
+        <name>ObjectHashMap\<Class\<?>\> map2 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, <name>ObjectHashMapTest.class, <(literal.(type))("9")>, <name>ObjectHashMap.class);
+        <name>ObjectHashMap\<Class\<?>\> map3 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("5")>, <name>ObjectHashMap.class, <(literal.(type))("9")>, <name>ObjectHashMapTest.class);
 
-        final Function\<String, String> substring = new Function\<String, String>()
+        final Function\<Class\<?>, Integer> classNameLength = new Function\<Class\<?>, Integer>()
         {
-            public String valueOf(String object)
+            public Integer valueOf(Class\<?> aClass)
             {
-                return object.substring(1);
+                return aClass.getName().length();
             }
         };
-        Assert.assertEquals("aabcd", map1.minBy(substring));
-        Assert.assertEquals("aab", map2.minBy(substring));
-        Assert.assertEquals("aabcd", map3.minBy(substring));
+        Assert.assertEquals(<name>ObjectHashMapTest.class, map1.maxBy(classNameLength));
+        Assert.assertEquals(<name>ObjectHashMapTest.class, map2.maxBy(classNameLength));
+        Assert.assertEquals(<name>ObjectHashMapTest.class, map3.maxBy(classNameLength));
 
         Verify.assertThrows(NoSuchElementException.class, new Runnable()
         {
             public void run()
             {
-                <name>ObjectHashMap.\<String>newMap().minBy(substring);
+                <name>ObjectHashMap.\<Class\<?>\>newMap().maxBy(classNameLength);
             }
         });
     }
@@ -1377,28 +1377,28 @@ public class <name>ObjectHashMapTest
     }
 
     @Test
-    public void maxBy()
+    public void minBy()
     {
-        <name>ObjectHashMap\<String> map1 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "az", <(literal.(type))("9")>, "aabcd");
-        <name>ObjectHashMap\<String> map2 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "aab", <(literal.(type))("9")>, "aabcd");
-        <name>ObjectHashMap\<String> map3 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("5")>, "azyx", <(literal.(type))("9")>, "aabcd");
+        <name>ObjectHashMap\<Class\<?>\> map1 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, <name>ObjectHashMapTest.class, <(literal.(type))("9")>, <name>ObjectHashMap.class);
+        <name>ObjectHashMap\<Class\<?>\> map2 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, <name>ObjectHashMapTest.class, <(literal.(type))("9")>, <name>ObjectHashMap.class);
+        <name>ObjectHashMap\<Class\<?>\> map3 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("5")>, <name>ObjectHashMap.class, <(literal.(type))("9")>, <name>ObjectHashMapTest.class);
 
-        final Function\<String, String> substring = new Function\<String, String>()
+        final Function\<Class\<?>, Integer> classNameLength = new Function\<Class\<?>, Integer>()
         {
-            public String valueOf(String object)
+            public Integer valueOf(Class\<?> object)
             {
-                return object.substring(1);
+                return object.getName().length();
             }
         };
-        Assert.assertEquals("az", map1.maxBy(substring));
-        Assert.assertEquals("aabcd", map2.maxBy(substring));
-        Assert.assertEquals("azyx", map3.maxBy(substring));
+        Assert.assertEquals(<name>ObjectHashMap.class, map1.minBy(classNameLength));
+        Assert.assertEquals(<name>ObjectHashMap.class, map2.minBy(classNameLength));
+        Assert.assertEquals(<name>ObjectHashMap.class, map3.minBy(classNameLength));
 
         Verify.assertThrows(NoSuchElementException.class, new Runnable()
         {
             public void run()
             {
-                <name>ObjectHashMap.\<String>newMap().maxBy(substring);
+                <name>ObjectHashMap.\<Class\<?>\>newMap().minBy(classNameLength);
             }
         });
     }

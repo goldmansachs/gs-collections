@@ -1923,6 +1923,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
 
         V max = null;
         boolean isMaxSet = false;
+        V1 maxValue = null;
 
         if (this.sentinelValues != null)
         {
@@ -1930,19 +1931,31 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
             {
                 max = this.sentinelValues.zeroValue;
                 isMaxSet = true;
+                maxValue = function.valueOf(this.sentinelValues.zeroValue);
             }
-            if (this.sentinelValues.containsOneKey && (!isMaxSet || ((Comparable\<V>) function.valueOf(this.sentinelValues.oneValue)).compareTo(max) > 0))
+            if (this.sentinelValues.containsOneKey)
             {
-                max = this.sentinelValues.oneValue;
-                isMaxSet = true;
+                V1 nextValue = function.valueOf(this.sentinelValues.oneValue);
+                if (!isMaxSet || nextValue.compareTo(maxValue) > 0)
+                {
+                    max = this.sentinelValues.oneValue;
+                    isMaxSet = true;
+                    maxValue = nextValue;
+                }
             }
         }
         for (int i = 0; i \< this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]) && (!isMaxSet || ((Comparable\<V>) function.valueOf(this.values[i])).compareTo(max) > 0))
+            if (isNonSentinel(this.keys[i]))
             {
-                max = this.values[i];
-                isMaxSet = true;
+                V next = this.values[i];
+                V1 nextValue = function.valueOf(next);
+                if (!isMaxSet || nextValue.compareTo(maxValue) > 0)
+                {
+                    max = next;
+                    isMaxSet = true;
+                    maxValue = nextValue;
+                }
             }
         }
         return max;
@@ -1957,6 +1970,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
 
         V min = null;
         boolean isMinSet = false;
+        V1 minValue = null;
 
         if (this.sentinelValues != null)
         {
@@ -1964,19 +1978,31 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
             {
                 min = this.sentinelValues.zeroValue;
                 isMinSet = true;
+                minValue = function.valueOf(this.sentinelValues.zeroValue);
             }
-            if (this.sentinelValues.containsOneKey && (!isMinSet || ((Comparable\<V>) function.valueOf(this.sentinelValues.oneValue)).compareTo(min) \< 0))
+            if (this.sentinelValues.containsOneKey)
             {
-                min = this.sentinelValues.oneValue;
-                isMinSet = true;
+                V1 nextValue = function.valueOf(this.sentinelValues.oneValue);
+                if (!isMinSet || nextValue.compareTo(minValue) \< 0)
+                {
+                    min = this.sentinelValues.oneValue;
+                    isMinSet = true;
+                    minValue = nextValue;
+                }
             }
         }
         for (int i = 0; i \< this.keys.length; i++)
         {
-            if (isNonSentinel(this.keys[i]) && (!isMinSet || ((Comparable\<V>) function.valueOf(this.values[i])).compareTo(min) \< 0))
+            if (isNonSentinel(this.keys[i]))
             {
-                min = this.values[i];
-                isMinSet = true;
+                V next = this.values[i];
+                V1 nextValue = function.valueOf(next);
+                if (!isMinSet || nextValue.compareTo(minValue) \< 0)
+                {
+                    min = next;
+                    isMinSet = true;
+                    minValue = nextValue;
+                }
             }
         }
         return min;
