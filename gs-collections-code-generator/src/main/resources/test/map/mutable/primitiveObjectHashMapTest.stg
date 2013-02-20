@@ -59,6 +59,7 @@ import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
 import org.junit.Assert;
@@ -1206,11 +1207,10 @@ public class <name>ObjectHashMapTest
         <name>ObjectHashMap\<String> map2 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("5")>, "one", <(literal.(type))("9")>, "nine");
         <name>ObjectHashMap\<String> map3 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("5")>, "five", <(literal.(type))("6")>, "five", <(literal.(type))("9")>, "nine");
 
-        Assert.assertEquals(map1.toSortedSet().toString(),
-                UnifiedSet.newSetWith("nine", "zero"), map1.toSortedSet());
+        Assert.assertEquals(TreeSortedSet.newSetWith("nine", "zero"), map1.toSortedSet());
         Assert.assertEquals(map2.toSortedSet().toString(),
-                UnifiedSet.newSetWith("nine", "one"), map2.toSortedSet());
-        Assert.assertEquals(map3.toSortedSet().toString(), UnifiedSet.newSetWith("five", "nine"), map3.toSortedSet());
+                TreeSortedSet.newSetWith("nine", "one"), map2.toSortedSet());
+        Assert.assertEquals(TreeSortedSet.newSetWith("five", "nine"), map3.toSortedSet());
 
         Comparator\<String> comparator = new Comparator\<String>()
         {
@@ -1219,11 +1219,10 @@ public class <name>ObjectHashMapTest
                 return o1.substring(1).compareTo(o2.substring(1));
             }
         };
-        Assert.assertEquals(map1.toSortedSet(comparator).toString(),
-                UnifiedSet.newSetWith("zero", "nine"), map1.toSortedSet(comparator));
+        Assert.assertEquals(TreeSortedSet.newSetWith("zero", "nine"), map1.toSortedSet(comparator));
         Assert.assertEquals(map2.toSortedSet(comparator).toString(),
-                UnifiedSet.newSetWith("nine", "one"), map2.toSortedSet(comparator));
-        Assert.assertEquals(map3.toSortedSet(comparator).toString(), UnifiedSet.newSetWith("nine", "five"), map3.toSortedSet(comparator));
+                TreeSortedSet.newSetWith("nine", "one"), map2.toSortedSet(comparator));
+        Assert.assertEquals(TreeSortedSet.newSetWith("nine", "five"), map3.toSortedSet(comparator));
 
         Function\<String, String> substring = new Function\<String, String>()
         {
@@ -1232,11 +1231,9 @@ public class <name>ObjectHashMapTest
                 return object.substring(1);
             }
         };
-        Assert.assertEquals(map1.toSortedSetBy(substring).toString(),
-                UnifiedSet.newSetWith("zero", "nine"), map1.toSortedSetBy(substring));
-        Assert.assertEquals(map2.toSortedSetBy(substring).toString(),
-                UnifiedSet.newSetWith("nine", "one"), map2.toSortedSetBy(substring));
-        Assert.assertEquals(map3.toSortedSetBy(substring).toString(), UnifiedSet.newSetWith("nine", "five"), map3.toSortedSetBy(substring));
+        Assert.assertEquals(TreeSortedSet.newSetWith("zero", "nine"), map1.toSortedSetBy(substring));
+        Assert.assertEquals(TreeSortedSet.newSetWith("nine", "one"), map2.toSortedSetBy(substring));
+        Assert.assertEquals(map3.toSortedSetBy(substring).toString(), TreeSortedSet.newSetWith("nine", "five"), map3.toSortedSetBy(substring));
     }
 
     @Test
@@ -1417,9 +1414,9 @@ public class <name>ObjectHashMapTest
                 return anObject.length();
             }
         };
-        Assert.assertEquals(5, map1.sumOfInt(function));
-        Assert.assertEquals(6, map2.sumOfInt(function));
-        Assert.assertEquals(7, map3.sumOfInt(function));
+        Assert.assertEquals(5L, map1.sumOfInt(function));
+        Assert.assertEquals(6L, map2.sumOfInt(function));
+        Assert.assertEquals(7L, map3.sumOfInt(function));
     }
 
     @Test
@@ -1436,9 +1433,9 @@ public class <name>ObjectHashMapTest
                 return anObject.length();
             }
         };
-        Assert.assertEquals(5, map1.sumOfLong(function));
-        Assert.assertEquals(6, map2.sumOfLong(function));
-        Assert.assertEquals(7, map3.sumOfLong(function));
+        Assert.assertEquals(5L, map1.sumOfLong(function));
+        Assert.assertEquals(6L, map2.sumOfLong(function));
+        Assert.assertEquals(7L, map3.sumOfLong(function));
     }
 
     @Test
@@ -1474,9 +1471,9 @@ public class <name>ObjectHashMapTest
                 return anObject.length();
             }
         };
-        Assert.assertEquals(5.0f, map1.sumOfFloat(function), 0.0f);
-        Assert.assertEquals(6.0f, map2.sumOfFloat(function), 0.0f);
-        Assert.assertEquals(7.0f, map3.sumOfFloat(function), 0.0f);
+        Assert.assertEquals(5.0, map1.sumOfFloat(function), 0.0);
+        Assert.assertEquals(6.0, map2.sumOfFloat(function), 0.0);
+        Assert.assertEquals(7.0, map3.sumOfFloat(function), 0.0);
     }
 
     @Test
@@ -2118,6 +2115,47 @@ public class <name>ObjectHashMapTest
         Assert.assertEquals(1, aggregation.get("1").intValue());
         Assert.assertEquals(2, aggregation.get("2").intValue());
         Assert.assertEquals(3, aggregation.get("3").intValue());
+    }
+
+    @Test
+    public void groupBy()
+    {
+        <name>ObjectHashMap\<String> map1 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one");
+        <name>ObjectHashMap\<String> map2 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("2")>, "two", <(literal.(type))("3")>, "three");
+
+        FastListMultimap\<Character, String> expected1 = FastListMultimap.newMultimap(Tuples.pair('z', "zero")
+                , Tuples.pair('o', "one"));
+        FastListMultimap\<Character, String> expected2 = FastListMultimap.newMultimap(Tuples.pair('t', "two")
+                , Tuples.pair('t', "three"));
+
+        Function\<String, Character> firstChar = new Function\<String, Character>()
+        {
+            public Character valueOf(String object)
+            {
+                return object.charAt(0);
+            }
+        };
+
+        final Multimap\<Character, String> actual1 = map1.groupBy(firstChar);
+        final Multimap\<Character, String> actual2 = map2.groupBy(firstChar);
+
+        Verify.assertSize(expected1.size(), actual1);
+        expected1.forEachKeyValue(new Procedure2\<Character, String>()
+        {
+            public void value(Character argument1, String argument2)
+            {
+                Assert.assertTrue(actual1.containsKeyAndValue(argument1, argument2));
+            }
+        });
+
+        Verify.assertSize(expected2.size(), actual2);
+        expected2.forEachKeyValue(new Procedure2\<Character, String>()
+        {
+            public void value(Character argument1, String argument2)
+            {
+                Assert.assertTrue(actual2.containsKeyAndValue(argument1, argument2));
+            }
+        });
     }
 
     @Test

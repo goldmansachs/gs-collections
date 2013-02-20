@@ -48,14 +48,13 @@ import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.<name>ObjectProcedure;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
+import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.MutableList;
-import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.primitive.<name>ObjectMap;
 import com.gs.collections.api.map.primitive.Mutable<name>ObjectMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
-import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.set.MutableSet;
@@ -386,14 +385,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
 
     public boolean containsAll(Collection\<?> source)
     {
-        for (Object item : source)
-        {
-            if (!this.contains(item))
-            {
-                return false;
-            }
-        }
-        return true;
+        return this.containsAllIterable(source);
     }
 
     public boolean containsAllArguments(Object... elements)
@@ -1109,21 +1101,21 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
         return result;
     }
 
-    public \<K, V1> MapIterable\<K, V1> aggregateInPlaceBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends V1> zeroValueFactory, Procedure2\<? super V1, ? super V> mutatingAggregator)
+    public \<K, V1> MutableMap\<K, V1> aggregateInPlaceBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends V1> zeroValueFactory, Procedure2\<? super V1, ? super V> mutatingAggregator)
     {
         MutableMap\<K, V1> map = UnifiedMap.newMap();
         this.forEach(new MutatingAggregationProcedure\<V, K, V1>(map, groupBy, zeroValueFactory, mutatingAggregator));
         return map;
     }
 
-    public \<K, V1> MapIterable\<K, V1> aggregateBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends V1> zeroValueFactory, Function2\<? super V1, ? super V, ? extends V1> nonMutatingAggregator)
+    public \<K, V1> MutableMap\<K, V1> aggregateBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends V1> zeroValueFactory, Function2\<? super V1, ? super V, ? extends V1> nonMutatingAggregator)
     {
         MutableMap\<K, V1> map = UnifiedMap.newMap();
         this.forEach(new NonMutatingAggregationProcedure\<V, K, V1>(map, groupBy, zeroValueFactory, nonMutatingAggregator));
         return map;
     }
 
-    public \<V1> Multimap\<V1, V> groupBy(Function\<? super V, ? extends V1> function)
+    public \<V1> MutableMultimap\<V1, V> groupBy(Function\<? super V, ? extends V1> function)
     {
         return this.groupBy(function, FastListMultimap.\<V1, V>newMultimap());
     }
@@ -1151,7 +1143,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
         return target;
     }
 
-    public \<V1> Multimap\<V1, V> groupByEach(Function\<? super V, ? extends Iterable\<V1>\> function)
+    public \<V1> MutableMultimap\<V1, V> groupByEach(Function\<? super V, ? extends Iterable\<V1>\> function)
     {
         return this.groupByEach(function, FastListMultimap.\<V1, V>newMultimap());
     }
@@ -1209,7 +1201,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
         return null;
     }
 
-    public RichIterable\<V> select(Predicate\<? super V> predicate)
+    public MutableCollection\<V> select(Predicate\<? super V> predicate)
     {
         MutableList\<V> result = FastList.newList();
         if (this.sentinelValues != null)
@@ -1279,7 +1271,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
         return targetCollection;
     }
 
-    public RichIterable\<V> reject(Predicate\<? super V> predicate)
+    public MutableCollection\<V> reject(Predicate\<? super V> predicate)
     {
         MutableList\<V> result = FastList.newList();
         if (this.sentinelValues != null)
