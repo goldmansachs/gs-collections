@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,6 +24,7 @@ import com.gs.collections.api.LazyIntIterable;
 import com.gs.collections.api.block.function.primitive.IntToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.iterator.IntIterator;
+import com.gs.collections.impl.bag.mutable.primitive.IntHashBag;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.primitive.IntPredicates;
 import com.gs.collections.impl.factory.Lists;
@@ -279,10 +280,10 @@ public class CollectIntIterableTest
         Assert.assertEquals(IntHashSet.newSetWith(1, 2, 3), this.intIterable.toSet());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void toBag()
     {
-        this.intIterable.toBag();
+        Assert.assertEquals(IntHashBag.newBagWith(1, 2, 3), this.intIterable.toBag());
     }
 
     @Test

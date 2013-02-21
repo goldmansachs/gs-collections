@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@ import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.iterator.IntIterator;
 import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.set.primitive.MutableIntSet;
+import com.gs.collections.impl.bag.mutable.primitive.IntHashBag;
 import com.gs.collections.impl.block.factory.primitive.IntPredicates;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.set.mutable.primitive.IntHashSet;
@@ -328,7 +329,7 @@ public class CollectIntIterable<T>
 
     public MutableIntBag toBag()
     {
-        throw new UnsupportedOperationException("Bags not implemented yet");
+        return IntHashBag.newBag(this);
     }
 
     public LazyIntIterable asLazy()

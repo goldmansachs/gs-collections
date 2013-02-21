@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,6 +37,7 @@ import com.gs.collections.api.block.procedure.primitive.FloatProcedure;
 import com.gs.collections.api.iterator.FloatIterator;
 import com.gs.collections.api.list.primitive.MutableFloatList;
 import com.gs.collections.api.set.primitive.MutableFloatSet;
+import com.gs.collections.impl.bag.mutable.primitive.FloatHashBag;
 import com.gs.collections.impl.block.factory.primitive.FloatPredicates;
 import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
 import com.gs.collections.impl.set.mutable.primitive.FloatHashSet;
@@ -329,7 +330,7 @@ public class CollectFloatIterable<T>
 
     public MutableFloatBag toBag()
     {
-        throw new UnsupportedOperationException("Bags not implemented yet");
+        return FloatHashBag.newBag(this);
     }
 
     public LazyFloatIterable asLazy()

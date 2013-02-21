@@ -23,6 +23,7 @@ import com.gs.collections.api.block.function.primitive.IntToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.IntIntProcedure;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.iterator.IntIterator;
+import com.gs.collections.impl.bag.mutable.primitive.IntHashBag;
 import com.gs.collections.impl.block.factory.primitive.IntPredicates;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
@@ -257,10 +258,10 @@ public class IntIntervalTest
         Assert.assertEquals(IntHashSet.newSetWith(1, 2, 3, 4), IntInterval.oneTo(4).toSet());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void toBag()
     {
-        IntInterval.oneTo(4).toBag();
+        Assert.assertEquals(IntHashBag.newBagWith(1, 2, 3, 4), IntInterval.oneTo(4).toBag());
     }
 
     @Test

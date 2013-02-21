@@ -23,6 +23,7 @@ import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
+import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
@@ -195,9 +196,9 @@ public class LazyBooleanIterableAdapterTest
         Assert.assertEquals(BooleanHashSet.newSetWith(true, false), this.iterable.toSet());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void toBag()
     {
-        this.iterable.toBag();
+        Assert.assertEquals(BooleanHashBag.newBagWith(false, true, true), this.iterable.toBag());
     }
 }

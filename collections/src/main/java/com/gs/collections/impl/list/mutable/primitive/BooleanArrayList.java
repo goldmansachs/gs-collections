@@ -34,6 +34,7 @@ import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.list.primitive.BooleanList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
+import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
 import com.gs.collections.impl.lazy.primitive.LazyBooleanIterableAdapter;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -675,7 +676,7 @@ public final class BooleanArrayList
 
     public MutableBooleanBag toBag()
     {
-        throw new UnsupportedOperationException("Bags not implemented yet");
+        return BooleanHashBag.newBag(this);
     }
 
     public LazyBooleanIterable asLazy()
@@ -969,7 +970,7 @@ public final class BooleanArrayList
 
         public MutableBooleanBag toBag()
         {
-            throw new UnsupportedOperationException("Bags not implemented yet");
+            return BooleanHashBag.newBag(this);
         }
 
         @Override

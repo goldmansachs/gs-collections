@@ -33,6 +33,7 @@ import com.gs.collections.api.iterator.IntIterator;
 import com.gs.collections.api.list.primitive.IntList;
 import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.set.primitive.MutableIntSet;
+import com.gs.collections.impl.bag.mutable.primitive.IntHashBag;
 import com.gs.collections.impl.block.factory.primitive.IntPredicates;
 import com.gs.collections.impl.lazy.primitive.CollectIntToObjectIterable;
 import com.gs.collections.impl.lazy.primitive.LazyIntIterableAdapter;
@@ -695,7 +696,7 @@ public final class IntInterval
 
     public MutableIntBag toBag()
     {
-        throw new UnsupportedOperationException("Bags not implemented yet");
+        return IntHashBag.newBag(this);
     }
 
     public LazyIntIterable asLazy()

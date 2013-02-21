@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import com.gs.collections.api.LongIterable;
 import com.gs.collections.api.block.function.primitive.LongToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.LongProcedure;
 import com.gs.collections.api.iterator.LongIterator;
+import com.gs.collections.impl.bag.mutable.primitive.LongHashBag;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.primitive.LongPredicates;
 import com.gs.collections.impl.factory.Lists;
@@ -278,10 +279,10 @@ public class CollectLongIterableTest
         Assert.assertEquals(LongHashSet.newSetWith(1L, 2L, 3L), this.longIterable.toSet());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void toBag()
     {
-        this.longIterable.toBag();
+        Assert.assertEquals(LongHashBag.newBagWith(1L, 2L, 3L), this.longIterable.toBag());
     }
 
     @Test

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,6 +37,7 @@ import com.gs.collections.api.block.procedure.primitive.LongProcedure;
 import com.gs.collections.api.iterator.LongIterator;
 import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.set.primitive.MutableLongSet;
+import com.gs.collections.impl.bag.mutable.primitive.LongHashBag;
 import com.gs.collections.impl.block.factory.primitive.LongPredicates;
 import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
 import com.gs.collections.impl.set.mutable.primitive.LongHashSet;
@@ -329,7 +330,7 @@ public class CollectLongIterable<T>
 
     public MutableLongBag toBag()
     {
-        throw new UnsupportedOperationException("Bags not implemented yet");
+        return LongHashBag.newBag(this);
     }
 
     public LazyLongIterable asLazy()

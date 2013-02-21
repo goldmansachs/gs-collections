@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import com.gs.collections.api.LazyFloatIterable;
 import com.gs.collections.api.block.function.primitive.FloatToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.FloatProcedure;
 import com.gs.collections.api.iterator.FloatIterator;
+import com.gs.collections.impl.bag.mutable.primitive.FloatHashBag;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.primitive.FloatPredicates;
 import com.gs.collections.impl.factory.Lists;
@@ -270,10 +271,10 @@ public class CollectFloatIterableTest
         Assert.assertEquals(FloatHashSet.newSetWith(1.0f, 2.0f, 3.0f), this.floatIterable.toSet());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void toBag()
     {
-        this.floatIterable.toBag();
+        Assert.assertEquals(FloatHashBag.newBagWith(1.0f, 2.0f, 3.0f), this.floatIterable.toBag());
     }
 
     @Test

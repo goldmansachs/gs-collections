@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -37,6 +37,7 @@ import com.gs.collections.api.block.procedure.primitive.DoubleProcedure;
 import com.gs.collections.api.iterator.DoubleIterator;
 import com.gs.collections.api.list.primitive.MutableDoubleList;
 import com.gs.collections.api.set.primitive.MutableDoubleSet;
+import com.gs.collections.impl.bag.mutable.primitive.DoubleHashBag;
 import com.gs.collections.impl.block.factory.primitive.DoublePredicates;
 import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
 import com.gs.collections.impl.set.mutable.primitive.DoubleHashSet;
@@ -329,7 +330,7 @@ public class CollectDoubleIterable<T>
 
     public MutableDoubleBag toBag()
     {
-        throw new UnsupportedOperationException("Bags not implemented yet");
+        return DoubleHashBag.newBag(this);
     }
 
     public LazyDoubleIterable asLazy()
