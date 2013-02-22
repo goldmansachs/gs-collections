@@ -1,4 +1,5 @@
 equals ::= [
+    "boolean": "operatorEquals",
     "byte": "operatorEquals",
     "short": "operatorEquals",
     "char": "operatorEquals",
@@ -22,6 +23,7 @@ floatEquals(left, right) ::= <<
 >>
 
 notEquals ::= [
+    "boolean": "operatorNotEquals",
     "byte": "operatorNotEquals",
     "short": "operatorNotEquals",
     "char": "operatorNotEquals",

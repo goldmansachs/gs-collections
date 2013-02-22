@@ -29,6 +29,8 @@ import com.gs.collections.api.tuple.Pair;
 
 public interface MutablePrimitiveObjectMap<V>
 {
+    void clear();
+
     <K, V1> MutableMap<K, V1> aggregateInPlaceBy(Function<? super V, ? extends K> groupBy, Function0<? extends V1> zeroValueFactory, Procedure2<? super V1, ? super V> mutatingAggregator);
 
     <K, V1> MutableMap<K, V1> aggregateBy(Function<? super V, ? extends K> groupBy, Function0<? extends V1> zeroValueFactory, Function2<? super V1, ? super V, ? extends V1> nonMutatingAggregator);

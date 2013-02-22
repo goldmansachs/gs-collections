@@ -1,4 +1,5 @@
 hashCode ::= [
+    "boolean": "booleanHashCode",
     "byte": "narrowHashCode",
     "short": "narrowHashCode",
     "char": "narrowHashCode",
@@ -8,6 +9,10 @@ hashCode ::= [
     "double": "doubleHashCode",
     default: "no matching hash code"
 ]
+
+booleanHashCode(item) ::= <<
+(<item> ? 1231 : 1237)
+>>
 
 intHashCode(item) ::= <<
 <item>

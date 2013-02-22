@@ -11,9 +11,9 @@ skipBoolean() ::= "true"
 
 targetPath() ::= "com/gs/collections/impl/map/mutable/primitive"
 
-fileName(primitive1, primitive2, sameTwoPredicates) ::= "<primitive1.name><primitive2.name>HashMapTest"
+fileName(primitive1, primitive2, sameTwoPrimitives) ::= "<primitive1.name><primitive2.name>HashMapTest"
 
-class(primitive1, primitive2, sameTwoPredicates) ::= <<
+class(primitive1, primitive2, sameTwoPrimitives) ::= <<
 <body(primitive1.type, primitive2.type, primitive1.name, primitive2.name)>
 >>
 
@@ -27,7 +27,7 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.<name2>Iterable;
 import com.gs.collections.api.RichIterable;
-<if(!sameTwoPredicates)>import com.gs.collections.api.block.function.primitive.<name1>To<name2>Function;<endif>
+<if(!sameTwoPrimitives)>import com.gs.collections.api.block.function.primitive.<name1>To<name2>Function;<endif>
 import com.gs.collections.api.block.function.primitive.<name2>Function;
 import com.gs.collections.api.block.function.primitive.<name2>Function0;
 import com.gs.collections.api.block.function.primitive.<name2>ToObjectFunction;
@@ -35,13 +35,13 @@ import com.gs.collections.api.block.function.primitive.<name2>To<name2>Function;
 import com.gs.collections.api.block.predicate.primitive.<name1><name2>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name1>Procedure;
 import com.gs.collections.api.block.procedure.primitive.<name1><name2>Procedure;
-<if(!sameTwoPredicates)>import com.gs.collections.api.block.procedure.primitive.<name2>Procedure;<endif>
+<if(!sameTwoPrimitives)>import com.gs.collections.api.block.procedure.primitive.<name2>Procedure;<endif>
 import com.gs.collections.api.map.primitive.<name1><name2>Map;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.bag.mutable.primitive.<name2>HashBag;
 import com.gs.collections.impl.block.factory.primitive.<name2>Predicates;
 import com.gs.collections.impl.list.mutable.primitive.<name1>ArrayList;
-<if(!sameTwoPredicates)>import com.gs.collections.impl.list.mutable.primitive.<name2>ArrayList;<endif>
+<if(!sameTwoPrimitives)>import com.gs.collections.impl.list.mutable.primitive.<name2>ArrayList;<endif>
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.set.mutable.primitive.<name2>HashSet;
 import com.gs.collections.impl.test.Verify;
@@ -505,7 +505,7 @@ public class <name1><name2>HashMapTest
         {
             public <type2> valueOf(<type1> <type1>Parameter)
             {
-                return <castExactly(type2, {<type1>Parameter}, sameTwoPredicates)>;
+                return <castExactly(type2, {<type1>Parameter}, sameTwoPrimitives)>;
             }
         };
 

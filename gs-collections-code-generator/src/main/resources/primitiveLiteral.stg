@@ -77,6 +77,7 @@ charStringLiteral(item) ::= <<
 >>
 
 zero ::= [
+    "boolean": "false",
     "byte": "(byte) 0",
     "short": "(short) 0",
     "char": "'\0'",

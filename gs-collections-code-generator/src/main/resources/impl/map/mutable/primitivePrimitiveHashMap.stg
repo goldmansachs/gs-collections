@@ -9,9 +9,9 @@ skipBoolean() ::= "true"
 
 targetPath() ::= "com/gs/collections/impl/map/mutable/primitive"
 
-fileName(primitive1, primitive2, sameTwoPredicates) ::= "<primitive1.name><primitive2.name>HashMap"
+fileName(primitive1, primitive2, sameTwoPrimitives) ::= "<primitive1.name><primitive2.name>HashMap"
 
-class(primitive1, primitive2, sameTwoPredicates) ::= <<
+class(primitive1, primitive2, sameTwoPrimitives) ::= <<
 <body(primitive1.type, primitive2.type, primitive1.name, primitive2.name)>
 >>
 
@@ -26,41 +26,41 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.<name1>Iterable;
 import com.gs.collections.api.Lazy<name1>Iterable;
-<if(!sameTwoPredicates)>import com.gs.collections.api.Lazy<name2>Iterable;<endif>
-<if(!sameTwoPredicates)>import com.gs.collections.api.<name2>Iterable;<endif>
+<if(!sameTwoPrimitives)>import com.gs.collections.api.Lazy<name2>Iterable;<endif>
+<if(!sameTwoPrimitives)>import com.gs.collections.api.<name2>Iterable;<endif>
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.primitive.Mutable<name1>Bag;
-<if(!sameTwoPredicates)>import com.gs.collections.api.bag.primitive.Mutable<name2>Bag;<endif>
-<if(!sameTwoPredicates)>import com.gs.collections.api.block.function.primitive.<name1>ToObjectFunction;<endif>
-<if(!sameTwoPredicates)>import com.gs.collections.api.block.function.primitive.<name1>To<name2>Function;<endif>
+<if(!sameTwoPrimitives)>import com.gs.collections.api.bag.primitive.Mutable<name2>Bag;<endif>
+<if(!sameTwoPrimitives)>import com.gs.collections.api.block.function.primitive.<name1>ToObjectFunction;<endif>
+<if(!sameTwoPrimitives)>import com.gs.collections.api.block.function.primitive.<name1>To<name2>Function;<endif>
 import com.gs.collections.api.block.function.primitive.<name2>Function;
 import com.gs.collections.api.block.function.primitive.<name2>Function0;
 import com.gs.collections.api.block.function.primitive.<name2>To<name2>Function;
 import com.gs.collections.api.block.function.primitive.<name2>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name1><name2>Predicate;
 import com.gs.collections.api.block.predicate.primitive.<name1>Predicate;
-<if(!sameTwoPredicates)>import com.gs.collections.api.block.predicate.primitive.<name2>Predicate;<endif>
+<if(!sameTwoPrimitives)>import com.gs.collections.api.block.predicate.primitive.<name2>Predicate;<endif>
 import com.gs.collections.api.block.procedure.primitive.<name1>Procedure;
 import com.gs.collections.api.block.procedure.primitive.<name1><name2>Procedure;
-<if(!sameTwoPredicates)>import com.gs.collections.api.block.procedure.primitive.<name2>Procedure;<endif>
+<if(!sameTwoPrimitives)>import com.gs.collections.api.block.procedure.primitive.<name2>Procedure;<endif>
 import com.gs.collections.api.iterator.<name1>Iterator;
-<if(!sameTwoPredicates)>import com.gs.collections.api.iterator.<name2>Iterator;<endif>
+<if(!sameTwoPrimitives)>import com.gs.collections.api.iterator.<name2>Iterator;<endif>
 import com.gs.collections.api.list.primitive.Mutable<name1>List;
-<if(!sameTwoPredicates)>import com.gs.collections.api.list.primitive.Mutable<name2>List;<endif>
+<if(!sameTwoPrimitives)>import com.gs.collections.api.list.primitive.Mutable<name2>List;<endif>
 import com.gs.collections.api.map.primitive.<name1><name2>Map;
 import com.gs.collections.api.map.primitive.Mutable<name1><name2>Map;
 import com.gs.collections.api.set.primitive.Mutable<name1>Set;
-<if(!sameTwoPredicates)>import com.gs.collections.api.set.primitive.Mutable<name2>Set;<endif>
+<if(!sameTwoPrimitives)>import com.gs.collections.api.set.primitive.Mutable<name2>Set;<endif>
 import com.gs.collections.impl.bag.mutable.primitive.<name1>HashBag;
-<if(!sameTwoPredicates)>import com.gs.collections.impl.bag.mutable.primitive.<name2>HashBag;<endif>
+<if(!sameTwoPrimitives)>import com.gs.collections.impl.bag.mutable.primitive.<name2>HashBag;<endif>
 import com.gs.collections.impl.block.factory.primitive.<name1>Predicates;
 import com.gs.collections.impl.lazy.primitive.Lazy<name2>IterableAdapter;
 import com.gs.collections.impl.lazy.primitive.Select<name1>Iterable;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.<name1>ArrayList;
-<if(!sameTwoPredicates)>import com.gs.collections.impl.list.mutable.primitive.<name2>ArrayList;<endif>
+<if(!sameTwoPrimitives)>import com.gs.collections.impl.list.mutable.primitive.<name2>ArrayList;<endif>
 import com.gs.collections.impl.set.mutable.primitive.<name1>HashSet;
-<if(!sameTwoPredicates)>import com.gs.collections.impl.set.mutable.primitive.<name2>HashSet;<endif>
+<if(!sameTwoPrimitives)>import com.gs.collections.impl.set.mutable.primitive.<name2>HashSet;<endif>
 
 /**
  * This file was automatically generated from template file primitivePrimitiveHashMap.stg.
@@ -424,12 +424,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map
             return this.sentinelValues.oneValue;
         }
         int index = this.probe(key);
-        <type2> result = this.values[index];
-        if (isNonSentinelValue(result))
-        {
-            return result;
-        }
-        return EMPTY_VALUE;
+        return this.values[index];
     }
 
     public <type2> getOrThrow(<type1> key)

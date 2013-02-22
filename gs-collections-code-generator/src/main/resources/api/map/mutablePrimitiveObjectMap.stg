@@ -27,7 +27,7 @@ import com.gs.collections.api.block.predicate.primitive.<name>ObjectPredicate;
  */
 public interface Mutable<name>ObjectMap\<V> extends <name>ObjectMap\<V>, MutablePrimitiveObjectMap\<V>
 {
-    void clear();
+    V put(<type> key, V value);
 
     V removeKey(<type> key);
 

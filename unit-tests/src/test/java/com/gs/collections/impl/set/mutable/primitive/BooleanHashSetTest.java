@@ -17,11 +17,13 @@
 package com.gs.collections.impl.set.mutable.primitive;
 
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
+import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -359,8 +361,45 @@ public class BooleanHashSetTest
         Assert.assertTrue(this.set2.toArray()[0]);
 
         Assert.assertEquals(2L, this.set3.toArray().length);
-        Assert.assertTrue(this.set3.toArray()[0]);
-        Assert.assertFalse(this.set3.toArray()[1]);
+        Assert.assertTrue(Arrays.equals(new boolean[]{false, true}, this.set3.toArray())
+                || Arrays.equals(new boolean[]{true, false}, this.set3.toArray()));
+    }
+
+    @Test
+    public void toList()
+    {
+        Assert.assertEquals(new BooleanArrayList(), this.set0.toList());
+        Assert.assertEquals(BooleanArrayList.newListWith(false), this.set1.toList());
+        Assert.assertEquals(BooleanArrayList.newListWith(true), this.set2.toList());
+        Assert.assertTrue(BooleanArrayList.newListWith(false, true).equals(this.set3.toList())
+                || BooleanArrayList.newListWith(true, false).equals(this.set3.toList()));
+    }
+
+    @Test
+    public void toSortedList()
+    {
+        Assert.assertEquals(new BooleanArrayList(), this.set0.toSortedList());
+        Assert.assertEquals(BooleanArrayList.newListWith(false), this.set1.toSortedList());
+        Assert.assertEquals(BooleanArrayList.newListWith(true), this.set2.toSortedList());
+        Assert.assertEquals(BooleanArrayList.newListWith(false, true), this.set3.toSortedList());
+    }
+
+    @Test
+    public void toSet()
+    {
+        Assert.assertEquals(new BooleanHashSet(), this.set0.toSet());
+        Assert.assertEquals(BooleanHashSet.newSetWith(false), this.set1.toSet());
+        Assert.assertEquals(BooleanHashSet.newSetWith(true), this.set2.toSet());
+        Assert.assertEquals(BooleanHashSet.newSetWith(false, true), this.set3.toSet());
+    }
+
+    @Test
+    public void toBag()
+    {
+        Assert.assertEquals(new BooleanHashBag(), this.set0.toBag());
+        Assert.assertEquals(BooleanHashBag.newBagWith(false), this.set1.toBag());
+        Assert.assertEquals(BooleanHashBag.newBagWith(true), this.set2.toBag());
+        Assert.assertEquals(BooleanHashBag.newBagWith(false, true), this.set3.toBag());
     }
 
     @Test
@@ -428,10 +467,12 @@ public class BooleanHashSetTest
         });
 
         final BooleanIterator booleanIterator3 = this.set3.booleanIterator();
+        BooleanHashSet actual = new BooleanHashSet();
         Assert.assertTrue(booleanIterator3.hasNext());
-        Assert.assertTrue(booleanIterator3.next());
+        actual.add(booleanIterator3.next());
         Assert.assertTrue(booleanIterator3.hasNext());
-        Assert.assertFalse(booleanIterator3.next());
+        actual.add(booleanIterator3.next());
+        Assert.assertEquals(BooleanHashSet.newSetWith(true, false), actual);
         Assert.assertFalse(booleanIterator3.hasNext());
         Verify.assertThrows(NoSuchElementException.class, new Runnable()
         {
@@ -486,7 +527,7 @@ public class BooleanHashSetTest
         Assert.assertEquals("", sum[0]);
         Assert.assertEquals("false", sum[1]);
         Assert.assertEquals("true", sum[2]);
-        Assert.assertEquals("truefalse", sum[3]);
+        Assert.assertTrue("truefalse".equals(sum[3]) || "falsetrue".equals(sum[3]));
     }
 
     @Test
@@ -519,7 +560,7 @@ public class BooleanHashSetTest
     @Test
     public void allSatisfy()
     {
-        Assert.assertFalse(this.set0.allSatisfy(BooleanPredicates.or(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())));
+        Assert.assertTrue(this.set0.allSatisfy(BooleanPredicates.or(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())));
         Assert.assertFalse(this.set1.allSatisfy(BooleanPredicates.isTrue()));
         Assert.assertTrue(this.set1.allSatisfy(BooleanPredicates.isFalse()));
         Assert.assertFalse(this.set2.allSatisfy(BooleanPredicates.isFalse()));
@@ -573,7 +614,6 @@ public class BooleanHashSetTest
         Assert.assertTrue(this.set2.detectIfNone(BooleanPredicates.isTrue(), false));
         Assert.assertTrue(this.set3.detectIfNone(BooleanPredicates.and(BooleanPredicates.isFalse(), BooleanPredicates.isTrue()), true));
         Assert.assertFalse(this.set3.detectIfNone(BooleanPredicates.and(BooleanPredicates.isFalse(), BooleanPredicates.isTrue()), false));
-        Assert.assertTrue(this.set3.detectIfNone(BooleanPredicates.or(BooleanPredicates.isFalse(), BooleanPredicates.isTrue()), false));
         Assert.assertFalse(this.set3.detectIfNone(BooleanPredicates.isFalse(), true));
         Assert.assertTrue(this.set3.detectIfNone(BooleanPredicates.isTrue(), false));
     }
@@ -611,17 +651,20 @@ public class BooleanHashSetTest
         Assert.assertEquals("", this.set0.makeString());
         Assert.assertEquals("false", this.set1.makeString());
         Assert.assertEquals("true", this.set2.makeString());
-        Assert.assertEquals("true, false", this.set3.makeString());
+        Assert.assertTrue("true, false".equals(this.set3.makeString())
+                || "false, true".equals(this.set3.makeString()));
 
         Assert.assertEquals("", this.set0.makeString("/"));
         Assert.assertEquals("false", this.set1.makeString("/"));
         Assert.assertEquals("true", this.set2.makeString("/"));
-        Assert.assertEquals("true/false", this.set3.makeString("/"));
+        Assert.assertTrue(this.set3.makeString("/"), "true/false".equals(this.set3.makeString("/"))
+                || "false/true".equals(this.set3.makeString("/")));
 
         Assert.assertEquals("[]", this.set0.makeString("[", "/", "]"));
         Assert.assertEquals("[false]", this.set1.makeString("[", "/", "]"));
         Assert.assertEquals("[true]", this.set2.makeString("[", "/", "]"));
-        Assert.assertEquals("[true/false]", this.set3.makeString("[", "/", "]"));
+        Assert.assertTrue(this.set3.makeString("[", "/", "]"), "[true/false]".equals(this.set3.makeString("[", "/", "]"))
+                || "[false/true]".equals(this.set3.makeString("[", "/", "]")));
     }
 
     @Test
@@ -641,10 +684,12 @@ public class BooleanHashSetTest
 
         StringBuilder appendable3 = new StringBuilder();
         this.set3.appendString(appendable3);
-        Assert.assertEquals("true, false", appendable3.toString());
+        Assert.assertTrue("true, false".equals(appendable3.toString())
+                || "false, true".equals(appendable3.toString()));
 
         StringBuilder appendable4 = new StringBuilder();
         this.set3.appendString(appendable4, "[", ", ", "]");
-        Assert.assertEquals(this.set3.toString(), appendable4.toString());
+        Assert.assertTrue("[true, false]".equals(appendable4.toString())
+                || "[false, true]".equals(appendable4.toString()));
     }
 }

@@ -1673,5 +1673,4 @@ public class BooleanObjectHashMapTest
             }
         });
     }
-
 }

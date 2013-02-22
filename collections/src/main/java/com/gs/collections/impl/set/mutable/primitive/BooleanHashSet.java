@@ -103,7 +103,7 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
         }
     }
 
-    private static class TrueFalseBooleanIterator implements BooleanIterator
+    private static class FalseTrueBooleanIterator implements BooleanIterator
     {
         private int currentIndex;
 
@@ -113,10 +113,10 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
             {
                 case 0:
                     this.currentIndex++;
-                    return true;
+                    return false;
                 case 1:
                     this.currentIndex++;
-                    return false;
+                    return true;
                 default:
                     throw new NoSuchElementException();
             }
@@ -254,7 +254,7 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
             case 2:
                 return new TrueBooleanIterator();
             case 3:
-                return new TrueFalseBooleanIterator();
+                return new FalseTrueBooleanIterator();
             default:
                 throw new AssertionError("Invalid state");
         }
@@ -273,8 +273,8 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
                 procedure.value(true);
                 return;
             case 3:
-                procedure.value(true);
                 procedure.value(false);
+                procedure.value(true);
                 return;
             default:
                 throw new AssertionError("Invalid state");
@@ -293,11 +293,11 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
                 return predicate.accept(true) ? 1 : 0;
             case 3:
                 int count = 0;
-                if (predicate.accept(true))
+                if (predicate.accept(false))
                 {
                     count++;
                 }
-                if (predicate.accept(false))
+                if (predicate.accept(true))
                 {
                     count++;
                 }
@@ -314,7 +314,7 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
 
     public boolean allSatisfy(BooleanPredicate predicate)
     {
-        return this.state != 0 && this.count(predicate) == this.size();
+        return this.count(predicate) == this.size();
     }
 
     public BooleanHashSet select(BooleanPredicate predicate)
@@ -337,13 +337,13 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
                 }
                 return set;
             case 3:
-                if (predicate.accept(true))
-                {
-                    set.add(true);
-                }
                 if (predicate.accept(false))
                 {
                     set.add(false);
+                }
+                if (predicate.accept(true))
+                {
+                    set.add(true);
                 }
                 return set;
             default:
@@ -367,13 +367,13 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
             case 2:
                 return predicate.accept(true) || ifNone;
             case 3:
-                if (predicate.accept(true))
-                {
-                    return true;
-                }
                 if (predicate.accept(false))
                 {
                     return false;
+                }
+                if (predicate.accept(true))
+                {
+                    return true;
                 }
                 return ifNone;
             default:
@@ -393,8 +393,8 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
             case 2:
                 return target.with(function.valueOf(true));
             case 3:
-                target.add(function.valueOf(true));
                 target.add(function.valueOf(false));
+                target.add(function.valueOf(true));
                 return target;
             default:
                 throw new AssertionError("Invalid state");
@@ -412,7 +412,7 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
             case 2:
                 return new boolean[]{true};
             case 3:
-                return new boolean[]{true, false};
+                return new boolean[]{false, true};
             default:
                 throw new AssertionError("Invalid state");
         }
@@ -543,7 +543,7 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
         }
 
         BooleanSet other = (BooleanSet) obj;
-        return this.contains(true) == other.contains(true) && this.contains(false) == other.contains(false);
+        return this.contains(false) == other.contains(false) && this.contains(true) == other.contains(true);
     }
 
     @Override
@@ -613,9 +613,9 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
                     appendable.append(String.valueOf(true));
                     break;
                 case 3:
-                    appendable.append(String.valueOf(true));
-                    appendable.append(separator);
                     appendable.append(String.valueOf(false));
+                    appendable.append(separator);
+                    appendable.append(String.valueOf(true));
                     break;
                 default:
                     throw new AssertionError("Invalid state");
@@ -667,8 +667,8 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
                 out.writeBoolean(true);
                 return;
             case 3:
-                out.writeBoolean(true);
                 out.writeBoolean(false);
+                out.writeBoolean(true);
                 return;
             default:
                 throw new AssertionError("Invalid state");

@@ -16,7 +16,7 @@ package com.gs.collections.api.block.function.primitive;
 import java.io.Serializable;
 
 /**
- * This file was automatically generated from template file primitiveToObjectFunction.stg.
+ * This file was automatically generated from template file primitiveObjectToPrimitiveFunction.stg.
  *
  * @since 3.0.
  */
