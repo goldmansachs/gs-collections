@@ -16,11 +16,14 @@
 
 package com.gs.collections.impl.memory.list;
 
+import java.util.ArrayList;
+
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
-import com.gs.collections.impl.list.Interval;
+import com.gs.collections.api.list.primitive.IntList;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.memory.MemoryTestBench;
+import com.gs.collections.impl.memory.TestDataFactory;
 import gnu.trove.list.array.TIntArrayList;
 import org.junit.Test;
 
@@ -49,56 +52,75 @@ public class IntListMemoryTest
                 .printContainerMemoryUsage("IntList", size, new TIntArrayListFactory(size));
         MemoryTestBench.on(IntArrayList.class)
                 .printContainerMemoryUsage("IntList", size, new IntArrayListFactory(size));
+        MemoryTestBench.on(ArrayList.class)
+                .printContainerMemoryUsage("IntList", size, new IntegerArrayListFactory(size));
     }
 
     public static class IntArrayListFactory implements Function0<IntArrayList>
     {
-        private final int size;
+        private final IntList data;
 
         public IntArrayListFactory(int size)
         {
-            this.size = size;
+            this.data = TestDataFactory.create(size);
         }
 
         public IntArrayList value()
         {
             final IntArrayList list = new IntArrayList();
-            if (this.size > 0)
+            this.data.forEach(new IntProcedure()
             {
-                Interval.oneTo(this.size).forEach(new IntProcedure()
+                public void value(int each)
                 {
-                    public void value(int each)
-                    {
-                        list.add(each);
-                    }
-                });
-            }
+                    list.add(each);
+                }
+            });
             return list;
         }
     }
 
     public static class TIntArrayListFactory implements Function0<TIntArrayList>
     {
-        private final int size;
+        private final IntList data;
 
         public TIntArrayListFactory(int size)
         {
-            this.size = size;
+            this.data = TestDataFactory.create(size);
         }
 
         public TIntArrayList value()
         {
             final TIntArrayList list = new TIntArrayList();
-            if (this.size > 0)
+            this.data.forEach(new IntProcedure()
             {
-                Interval.oneTo(this.size).forEach(new IntProcedure()
+                public void value(int each)
                 {
-                    public void value(int each)
-                    {
-                        list.add(each);
-                    }
-                });
-            }
+                    list.add(each);
+                }
+            });
+            return list;
+        }
+    }
+
+    public static class IntegerArrayListFactory implements Function0<ArrayList<Integer>>
+    {
+        private final IntList data;
+
+        public IntegerArrayListFactory(int size)
+        {
+            this.data = TestDataFactory.create(size);
+        }
+
+        public ArrayList<Integer> value()
+        {
+            final ArrayList<Integer> list = new ArrayList<Integer>();
+            this.data.forEach(new IntProcedure()
+            {
+                public void value(int each)
+                {
+                    list.add(each);
+                }
+            });
             return list;
         }
     }

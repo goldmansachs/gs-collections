@@ -27,8 +27,7 @@ import com.gs.collections.impl.list.Interval;
 public class MemoryTestBench
 {
     private static final GCAndSleepProcedure GC_AND_SLEEP_PROCEDURE = new GCAndSleepProcedure();
-    private static final Interval FIRST_GC_INTERVAL = Interval.oneTo(10);
-    private static final Interval SECOND_GC_INTERVAL = Interval.fromToBy(10, 50, 5);
+    private static final Interval GC_INTERVAL = Interval.oneTo(20);
     private final Class<?> clazz;
 
     private MemoryTestBench(Class<?> clazz)
@@ -78,8 +77,7 @@ public class MemoryTestBench
 
     private void forceGCAndSleepMultipleTimes()
     {
-        FIRST_GC_INTERVAL.forEach(GC_AND_SLEEP_PROCEDURE);
-        SECOND_GC_INTERVAL.forEach(GC_AND_SLEEP_PROCEDURE);
+        GC_INTERVAL.forEach(GC_AND_SLEEP_PROCEDURE);
     }
 
     public void printContainerMemoryUsage(String category, int size, Function0<?> factory)
@@ -100,7 +98,7 @@ public class MemoryTestBench
             System.gc();
             try
             {
-                Thread.sleep(5L * (long) each);
+                Thread.sleep(100);
             }
             catch (InterruptedException e)
             {

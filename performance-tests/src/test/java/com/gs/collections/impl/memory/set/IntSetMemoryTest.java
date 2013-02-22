@@ -16,6 +16,8 @@
 
 package com.gs.collections.impl.memory.set;
 
+import java.util.HashSet;
+
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.list.primitive.IntList;
@@ -50,6 +52,8 @@ public class IntSetMemoryTest
                 .printContainerMemoryUsage("IntSet", size, new TIntHashSetFactory(size));
         MemoryTestBench.on(IntHashSet.class)
                 .printContainerMemoryUsage("IntSet", size, new IntHashSetFactory(size));
+        MemoryTestBench.on(HashSet.class)
+                .printContainerMemoryUsage("IntSet", size, new IntegerHashSetFactory(size));
     }
 
     public static class IntHashSetFactory implements Function0<IntHashSet>
@@ -87,6 +91,29 @@ public class IntSetMemoryTest
         public TIntHashSet value()
         {
             final TIntHashSet set = new TIntHashSet();
+            this.data.forEach(new IntProcedure()
+            {
+                public void value(int each)
+                {
+                    set.add(each);
+                }
+            });
+            return set;
+        }
+    }
+
+    public static class IntegerHashSetFactory implements Function0<HashSet<Integer>>
+    {
+        private final IntList data;
+
+        public IntegerHashSetFactory(int size)
+        {
+            this.data = TestDataFactory.create(size);
+        }
+
+        public HashSet<Integer> value()
+        {
+            final HashSet<Integer> set = new HashSet<Integer>();
             this.data.forEach(new IntProcedure()
             {
                 public void value(int each)
