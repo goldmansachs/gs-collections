@@ -16,7 +16,10 @@
 
 package com.gs.collections.impl.map.mutable.primitive;
 
+import java.io.Externalizable;
 import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.Arrays;
 import java.util.BitSet;
 import java.util.NoSuchElementException;
@@ -48,7 +51,7 @@ import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
 /**
  * @since 3.0.
  */
-public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>
+public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Externalizable
 {
     public static final boolean EMPTY_VALUE = false;
     private static final Object NULL_KEY = new Object()
@@ -94,6 +97,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>
 
     private static final float DEFAULT_LOAD_FACTOR = 0.5f;
     private static final int DEFAULT_INITIAL_CAPACITY = 8;
+    private static final long serialVersionUID = 1L;
     private int occupied;
     private int maxSize;
 
@@ -875,6 +879,32 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>
             return true;
         }
         return false;
+    }
+
+    public void writeExternal(ObjectOutput out) throws IOException
+    {
+        out.writeInt(this.size());
+        out.writeFloat(this.loadFactor);
+        for (int i = 0; i < this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                out.writeObject(this.toNonSentinel(this.keys[i]));
+                out.writeBoolean(this.values.get(i));
+            }
+        }
+    }
+
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
+    {
+        int size = in.readInt();
+        this.loadFactor = in.readFloat();
+        this.init(Math.max((int) (size / this.loadFactor) + 1,
+                DEFAULT_INITIAL_CAPACITY));
+        for (int i = 0; i < size; i++)
+        {
+            this.put((K) in.readObject(), in.readBoolean());
+        }
     }
 
     private class InternalBooleanIterator implements BooleanIterator

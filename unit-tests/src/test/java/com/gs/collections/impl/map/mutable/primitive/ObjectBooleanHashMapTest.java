@@ -655,6 +655,8 @@ public class ObjectBooleanHashMapTest
         ObjectBooleanHashMap<Integer> map8 = ObjectBooleanHashMap.newWithKeysValues(0, true, 1, false);
 
         Verify.assertEqualsAndHashCode(map1, map2);
+        Verify.assertPostSerializedEqualsAndHashCode(map1);
+        Verify.assertPostSerializedEqualsAndHashCode(ObjectBooleanHashMap.newMap());
         Assert.assertNotEquals(map1, map3);
         Assert.assertNotEquals(map1, map4);
         Assert.assertNotEquals(map1, map5);

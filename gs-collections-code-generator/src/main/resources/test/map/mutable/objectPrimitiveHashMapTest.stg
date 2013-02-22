@@ -668,6 +668,8 @@ public class Object<name>HashMapTest
         Object<name>HashMap\<Integer> map7 = Object<name>HashMap.newWithKeysValues(null, <(literal.(type))("2")>, 1, <(literal.(type))("1")>);
 
         Verify.assertEqualsAndHashCode(map1, map2);
+        Verify.assertPostSerializedEqualsAndHashCode(map1);
+        Verify.assertPostSerializedEqualsAndHashCode(Object<name>HashMap.newMap());
         Assert.assertNotEquals(map1, map3);
         Assert.assertNotEquals(map1, map5);
         Assert.assertNotEquals(map1, map7);
