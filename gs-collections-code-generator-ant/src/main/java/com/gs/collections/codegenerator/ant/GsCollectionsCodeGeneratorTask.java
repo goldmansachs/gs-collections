@@ -30,6 +30,7 @@ import org.apache.tools.ant.types.LogLevel;
 
 public class GsCollectionsCodeGeneratorTask extends Task
 {
+    private static final String CLASSPATH_SEPARATOR = System.getProperty("path.separator");
     private String templateDirectory;
 
     @Override
@@ -63,7 +64,7 @@ public class GsCollectionsCodeGeneratorTask extends Task
     private List<URL> getClassPathURLs()
     {
         List<URL> urls = new ArrayList<URL>();
-        String[] classPathStrings = ((AntClassLoader) this.getClass().getClassLoader()).getClasspath().split(";");
+        String[] classPathStrings = ((AntClassLoader) this.getClass().getClassLoader()).getClasspath().split(CLASSPATH_SEPARATOR);
 
         for (String classPathString : classPathStrings)
         {
