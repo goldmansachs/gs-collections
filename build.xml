@@ -33,7 +33,6 @@
         <subant buildpath="./collections-api/" target="install" />
         <subant buildpath="./collections/" target="install" />
         <subant buildpath="./collections-testutils/" target="install" />
-        <subant buildpath="./unit-tests/" target="install" />
     </target>
 
     <target name="generate-sources" description="generates sources">
@@ -44,8 +43,10 @@
         <sub-target target="test" />
     </target>
 
-    <target name="zip" description="runs the zip build in each module">
-        <sub-target target="zip" />
+    <target name="zip" depends="ivy-init, install" description="runs the zip build in each module">
+        <subant buildpath="./collections-api/" target="zip" />
+        <subant buildpath="./collections/" target="zip" />
+        <subant buildpath="./collections-testutils/" target="zip" />
     </target>
 
     <target name="ivy-init">

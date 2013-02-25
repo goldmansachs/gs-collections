@@ -20,7 +20,5 @@
     <import file="../common-build.xml" />
 
     <property name="src.dir" location="src/main/java" />
-    <property name="generatedsrc.dir" location="target/generated-sources/java" />
-    <property name="generatedtestsrc.dir" location="target/generated-test-sources/java" />
     <property name="testsrc.dir" location="src/test/java" />
 </project>

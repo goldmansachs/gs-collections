@@ -22,4 +22,5 @@
 
     <property name="src.dir" location="src/main/java" />
     <property name="testsrc.dir" location="src/test/java" />
+
 </project>

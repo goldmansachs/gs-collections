@@ -49,6 +49,7 @@
             changing="true" />
 
         <dependency org="junit" name="junit" rev="${junit.version}" conf="compile-test" />
+        <dependency org="org.hamcrest" name="hamcrest-core" rev="1.3" conf="compile-test" />
         <dependency org="org.slf4j" name="slf4j-api" rev="${slf4j.version}" conf="compile-test" />
         <dependency org="org.slf4j" name="slf4j-nop" rev="${slf4j.version}" conf="compile-test" />
 
