@@ -903,6 +903,29 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map
         return true;
     }
 
+    public boolean noneSatisfy(<name2>Predicate predicate)
+    {
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey && predicate.accept(this.sentinelValues.zeroValue))
+            {
+                return false;
+            }
+            if (this.sentinelValues.containsOneKey && predicate.accept(this.sentinelValues.oneValue))
+            {
+                return false;
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values[i]))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public <type2> max()
     {
         if (this.isEmpty())
@@ -1259,6 +1282,29 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map
             for (<type1> key : <name1><name2>HashMap.this.keys)
             {
                 if (isNonSentinel(key) && !predicate.accept(key))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public boolean noneSatisfy(<name1>Predicate predicate)
+        {
+            if (<name1><name2>HashMap.this.sentinelValues != null)
+            {
+                if (<name1><name2>HashMap.this.sentinelValues.containsZeroKey && predicate.accept(EMPTY_KEY))
+                {
+                    return false;
+                }
+                if (<name1><name2>HashMap.this.sentinelValues.containsOneKey && predicate.accept(REMOVED_KEY))
+                {
+                    return false;
+                }
+            }
+            for (<type1> key : <name1><name2>HashMap.this.keys)
+            {
+                if (isNonSentinel(key) && predicate.accept(key))
                 {
                     return false;
                 }

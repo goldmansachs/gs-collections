@@ -582,6 +582,11 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
         return this.items.keysView().allSatisfy(predicate);
     }
 
+    public boolean noneSatisfy(<name>Predicate predicate)
+    {
+        return this.items.keysView().noneSatisfy(predicate);
+    }
+
     public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
     {
         return this.items.keysView().detectIfNone(predicate, ifNone);

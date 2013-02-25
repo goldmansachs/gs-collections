@@ -374,6 +374,18 @@ public final class IntInterval
         return true;
     }
 
+    public boolean noneSatisfy(IntPredicate predicate)
+    {
+        for (int i = 0; i < this.size(); i++)
+        {
+            if (predicate.accept(this.get(i)))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public boolean equals(Object otherList)
     {

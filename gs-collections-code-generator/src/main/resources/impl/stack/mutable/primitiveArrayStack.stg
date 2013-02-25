@@ -237,6 +237,11 @@ public final class <name>ArrayStack
         return this.delegate.asReversed().allSatisfy(predicate);
     }
 
+    public boolean noneSatisfy(<name>Predicate predicate)
+    {
+        return this.delegate.asReversed().noneSatisfy(predicate);
+    }
+
     public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
     {
         return this.delegate.asReversed().detectIfNone(predicate, ifNone);

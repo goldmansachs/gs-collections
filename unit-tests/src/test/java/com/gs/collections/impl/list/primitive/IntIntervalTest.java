@@ -158,6 +158,13 @@ public class IntIntervalTest
     }
 
     @Test
+    public void noneSatisfy()
+    {
+        Assert.assertFalse(IntInterval.zeroTo(2).noneSatisfy(IntPredicates.isEven()));
+        Assert.assertTrue(IntInterval.evensFromTo(2, 10).noneSatisfy(IntPredicates.isOdd()));
+    }
+
+    @Test
     public void select()
     {
         Verify.assertSize(3, this.intInterval.select(IntPredicates.lessThan(4)));

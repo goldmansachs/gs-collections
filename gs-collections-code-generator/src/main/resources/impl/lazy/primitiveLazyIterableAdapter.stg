@@ -83,6 +83,11 @@ public class Lazy<name>IterableAdapter
         return this.delegate.allSatisfy(predicate);
     }
 
+    public boolean noneSatisfy(<name>Predicate predicate)
+    {
+        return this.delegate.noneSatisfy(predicate);
+    }
+
     public Lazy<name>Iterable select(<name>Predicate predicate)
     {
         return new Select<name>Iterable(this.delegate, predicate);

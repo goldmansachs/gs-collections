@@ -89,7 +89,12 @@ public class Select<name>Iterable
 
     public boolean allSatisfy(<name>Predicate predicate)
     {
-        return !this.anySatisfy(<name>Predicates.not(predicate));
+        return this.noneSatisfy(<name>Predicates.not(predicate));
+    }
+
+    public boolean noneSatisfy(<name>Predicate predicate)
+    {
+        return !this.anySatisfy(predicate);
     }
 
     public Lazy<name>Iterable select(<name>Predicate predicate)

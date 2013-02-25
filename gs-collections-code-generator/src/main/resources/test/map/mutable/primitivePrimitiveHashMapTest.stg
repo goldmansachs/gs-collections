@@ -1209,6 +1209,16 @@ public class <name1><name2>HashMapTest
     }
 
     @Test
+    public void noneSatisfy()
+    {
+        <name1><name2>Map map = <name1><name2>HashMap.newWithKeysValues(<["0", "1", "2", "3"]:keyValue(); separator=", ">);
+        Assert.assertFalse(map.noneSatisfy(<name2>Predicates.equal(<(literal.(type2))("0")>)));
+        Assert.assertFalse(map.noneSatisfy(<name2>Predicates.equal(<(literal.(type2))("1")>)));
+        Assert.assertFalse(map.noneSatisfy(<name2>Predicates.equal(<(literal.(type2))("2")>)));
+        Assert.assertTrue(map.noneSatisfy(<name2>Predicates.lessThan(<(literal.(type2))("0")>)));
+    }
+
+    @Test
     public void max()
     {
         <name1><name2>Map map = <name1><name2>HashMap.newWithKeysValues(<["0", "1", "2", "3"]:keyValue(); separator=", ">);

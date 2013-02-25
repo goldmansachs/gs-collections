@@ -462,6 +462,18 @@ public final class BooleanArrayList
         return true;
     }
 
+    public boolean noneSatisfy(BooleanPredicate predicate)
+    {
+        for (int i = 0; i < this.size; i++)
+        {
+            if (predicate.accept(this.items.get(i)))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public BooleanArrayList select(BooleanPredicate predicate)
     {
         BooleanArrayList result = new BooleanArrayList();
@@ -796,6 +808,19 @@ public final class BooleanArrayList
             while (iterator.hasNext())
             {
                 if (!predicate.accept(iterator.next()))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public boolean noneSatisfy(BooleanPredicate predicate)
+        {
+            BooleanIterator iterator = this.booleanIterator();
+            while (iterator.hasNext())
+            {
+                if (predicate.accept(iterator.next()))
                 {
                     return false;
                 }

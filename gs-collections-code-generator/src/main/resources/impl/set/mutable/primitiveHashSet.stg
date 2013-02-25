@@ -558,6 +558,32 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         return true;
     }
 
+    public boolean noneSatisfy(<name>Predicate predicate)
+    {
+        int zeroToThirtyOne = this.zeroToThirtyOne;
+        while (zeroToThirtyOne != 0)
+        {
+            <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            if (predicate.accept(value))
+            {
+                return false;
+            }
+            zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
+        }
+
+        for (<type> value : this.table)
+        {
+            if (isNonSentinel(value))
+            {
+                if (predicate.accept(value))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
     public <name>HashSet select(<name>Predicate predicate)
     {
         <name>HashSet result = new <name>HashSet();

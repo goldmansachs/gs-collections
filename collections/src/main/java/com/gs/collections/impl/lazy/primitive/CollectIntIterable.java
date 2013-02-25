@@ -130,6 +130,17 @@ public class CollectIntIterable<T>
         });
     }
 
+    public boolean noneSatisfy(final IntPredicate predicate)
+    {
+        return this.iterable.allSatisfy(new Predicate<T>()
+        {
+            public boolean accept(T each)
+            {
+                return !predicate.accept(CollectIntIterable.this.function.intValueOf(each));
+            }
+        });
+    }
+
     public LazyIntIterable select(IntPredicate predicate)
     {
         return new SelectIntIterable(this, predicate);

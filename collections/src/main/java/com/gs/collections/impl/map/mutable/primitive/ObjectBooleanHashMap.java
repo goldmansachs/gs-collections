@@ -639,6 +639,18 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         return true;
     }
 
+    public boolean noneSatisfy(BooleanPredicate predicate)
+    {
+        for (int i = 0; i < this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values.get(i)))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public BooleanIterable select(BooleanPredicate predicate)
     {
         ObjectBooleanHashMap<K> result = ObjectBooleanHashMap.newMap();

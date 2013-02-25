@@ -236,6 +236,11 @@ public final class BooleanArrayStack implements MutableBooleanStack, Externaliza
         return this.delegate.asReversed().allSatisfy(predicate);
     }
 
+    public boolean noneSatisfy(BooleanPredicate predicate)
+    {
+        return this.delegate.asReversed().noneSatisfy(predicate);
+    }
+
     public boolean detectIfNone(BooleanPredicate predicate, boolean ifNone)
     {
         return this.delegate.asReversed().detectIfNone(predicate, ifNone);

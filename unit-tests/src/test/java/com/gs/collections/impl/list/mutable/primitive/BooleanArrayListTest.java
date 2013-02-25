@@ -536,6 +536,15 @@ public class BooleanArrayListTest
     }
 
     @Test
+    public void noneSatisfy()
+    {
+        Assert.assertFalse(this.list.noneSatisfy(BooleanPredicates.isTrue()));
+        Assert.assertTrue(new BooleanArrayList().noneSatisfy(BooleanPredicates.isTrue()));
+        Assert.assertTrue(new BooleanArrayList().noneSatisfy(BooleanPredicates.isFalse()));
+        Assert.assertTrue(BooleanArrayList.newListWith(false, false).noneSatisfy(BooleanPredicates.isTrue()));
+    }
+
+    @Test
     public void select()
     {
         Assert.assertEquals(2L, this.list.select(BooleanPredicates.isTrue()).size());

@@ -131,6 +131,17 @@ public class CollectFloatIterable<T>
         });
     }
 
+    public boolean noneSatisfy(final FloatPredicate predicate)
+    {
+        return this.iterable.allSatisfy(new Predicate<T>()
+        {
+            public boolean accept(T each)
+            {
+                return !predicate.accept(CollectFloatIterable.this.function.floatValueOf(each));
+            }
+        });
+    }
+
     public LazyFloatIterable select(FloatPredicate predicate)
     {
         return new SelectFloatIterable(this, predicate);

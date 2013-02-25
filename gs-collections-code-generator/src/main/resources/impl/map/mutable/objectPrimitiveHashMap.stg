@@ -735,6 +735,18 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         return true;
     }
     
+    public boolean noneSatisfy(<name>Predicate predicate)
+    {
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values[i]))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public Object<name>HashMap\<K> select(<name>Predicate predicate)
     {
         Object<name>HashMap\<K> result = Object<name>HashMap.newMap();

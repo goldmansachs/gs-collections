@@ -40,6 +40,8 @@ public interface <name>Iterable extends PrimitiveIterable
 
     boolean allSatisfy(<name>Predicate predicate);
 
+    boolean noneSatisfy(<name>Predicate predicate);
+
     <name>Iterable select(<name>Predicate predicate);
 
     <name>Iterable reject(<name>Predicate predicate);

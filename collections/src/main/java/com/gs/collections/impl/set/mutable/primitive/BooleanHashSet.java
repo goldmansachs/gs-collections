@@ -317,6 +317,11 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
         return this.count(predicate) == this.size();
     }
 
+    public boolean noneSatisfy(BooleanPredicate predicate)
+    {
+        return this.state != 0 && this.count(predicate) == 0;
+    }
+
     public BooleanHashSet select(BooleanPredicate predicate)
     {
         BooleanHashSet set = new BooleanHashSet();

@@ -99,6 +99,15 @@ public class Select<name>IterableTest
     }
 
     @Test
+    public void noneSatisfy()
+    {
+        Assert.assertTrue(this.iterable.noneSatisfy(<name>Predicates.lessThan(<(literal.(type))("0")>)));
+        Assert.assertFalse(this.iterable.noneSatisfy(<name>Predicates.lessThan(<(literal.(type))("2")>)));
+        Assert.assertTrue(this.iterable.noneSatisfy(<name>Predicates.lessThan(<(literal.(type))("1")>)));
+        Assert.assertTrue(this.iterable.noneSatisfy(<name>Predicates.greaterThan(<(literal.(type))("4")>)));
+    }
+
+    @Test
     public void select()
     {
         Verify.assertSize(1, this.iterable.select(<name>Predicates.greaterThan(<(literal.(type))("1")>)));

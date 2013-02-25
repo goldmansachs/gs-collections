@@ -266,35 +266,43 @@ public class <name>HashBagTest
     @Test
     public void anySatisfy()
     {
-        final int[] count = {0};
         <name>HashBag bag = <name>HashBag.newBagWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">);
         Assert.assertTrue(bag.anySatisfy(new <name>Predicate()
         {
             public boolean accept(<type> value)
             {
-                count[0]++;
                 return <(lessThan.(type))("value", {<(literal.(type))("3")>})>;
             }
         }));
-        Assert.assertEquals(1, count[0]);
         Assert.assertFalse(bag.anySatisfy(<name>Predicates.greaterThan(<(literal.(type))("3")>)));
     }
 
     @Test
     public void allSatisfy()
     {
-        final int[] count = {0};
         <name>HashBag bag = <name>HashBag.newBagWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">);
         Assert.assertFalse(bag.allSatisfy(new <name>Predicate()
         {
             public boolean accept(<type> value)
             {
-                count[0]++;
                 return <(lessThan.(type))({<(literal.(type))("3")>}, "value")>;
             }
         }));
-        Assert.assertEquals(1, count[0]);
         Assert.assertTrue(bag.allSatisfy(<name>Predicates.lessThan(<(literal.(type))("3")>)));
+    }
+
+    @Test
+    public void noneSatisfy()
+    {
+        <name>HashBag bag = <name>HashBag.newBagWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">);
+        Assert.assertFalse(bag.noneSatisfy(new <name>Predicate()
+        {
+            public boolean accept(<type> value)
+            {
+                return <(lessThan.(type))({<(literal.(type))("1")>}, "value")>;
+            }
+        }));
+        Assert.assertTrue(bag.noneSatisfy(<name>Predicates.greaterThan(<(literal.(type))("3")>)));
     }
 
     @Test

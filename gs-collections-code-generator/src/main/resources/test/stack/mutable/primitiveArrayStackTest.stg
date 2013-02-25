@@ -338,6 +338,14 @@ public class <name>ArrayStackTest
     }
 
     @Test
+    public void noneSatisfy()
+    {
+        <name>ArrayStack stack = <name>ArrayStack.newStackFromTopToBottom(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
+        Assert.assertFalse(stack.noneSatisfy(<name>Predicates.greaterThan(<["0"]:(literal.(type))(); separator=", ">)));
+        Assert.assertTrue(stack.noneSatisfy(<name>Predicates.greaterThan(<["5"]:(literal.(type))(); separator=", ">)));
+    }
+
+    @Test
     public void detectIfNone()
     {
         <name>ArrayStack stack = <name>ArrayStack.newStackFromTopToBottom(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);

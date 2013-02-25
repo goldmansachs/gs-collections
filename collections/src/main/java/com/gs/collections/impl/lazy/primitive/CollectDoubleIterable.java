@@ -145,6 +145,17 @@ public class CollectDoubleIterable<T>
         });
     }
 
+    public boolean noneSatisfy(final DoublePredicate predicate)
+    {
+        return this.iterable.allSatisfy(new Predicate<T>()
+        {
+            public boolean accept(T each)
+            {
+                return !predicate.accept(CollectDoubleIterable.this.function.doubleValueOf(each));
+            }
+        });
+    }
+
     public LazyDoubleIterable select(DoublePredicate predicate)
     {
         return new SelectDoubleIterable(this, predicate);

@@ -1014,6 +1014,15 @@ public class ObjectBooleanHashMapTest
     }
 
     @Test
+    public void noneSatisfy()
+    {
+        Assert.assertFalse(this.map.noneSatisfy(BooleanPredicates.isTrue()));
+        Assert.assertFalse(this.map.noneSatisfy(BooleanPredicates.isFalse()));
+        Assert.assertTrue(this.map.noneSatisfy(BooleanPredicates.and(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())));
+        Assert.assertFalse(this.map.noneSatisfy(BooleanPredicates.or(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())));
+    }
+
+    @Test
     public void detectIfNone()
     {
         Assert.assertTrue(this.map.detectIfNone(BooleanPredicates.isTrue(), false));

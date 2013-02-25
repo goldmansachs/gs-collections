@@ -1125,6 +1125,26 @@ public class Object<name>HashMapTest
     }
     
     @Test
+    public void noneSatisfy()
+    {
+        Assert.assertTrue(this.map.noneSatisfy(new <name>Predicate()
+        {
+            public boolean accept(<type> value)
+            {
+                return <(lessThan.(type))("value", {<(literal.(type))("0")>})>;
+            }
+        }));
+
+        Assert.assertFalse(this.map.noneSatisfy(new <name>Predicate()
+        {
+            public boolean accept(<type> value)
+            {
+                return <(lessThan.(type))("value", {<(literal.(type))("2")>})>;
+            }
+        }));
+    }
+
+    @Test
     public void detectIfNone()
     {
         <type> detect = this.map.detectIfNone(new <name>Predicate()

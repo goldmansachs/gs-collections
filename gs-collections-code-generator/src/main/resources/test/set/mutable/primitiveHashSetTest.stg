@@ -558,6 +558,14 @@ public class <name>HashSetTest
     }
 
     @Test
+    public void noneSatisfy()
+    {
+        Assert.assertFalse(<name>HashSet.newSetWith(<["1", "0", "31", "32"]:(literal.(type))(); separator=", ">).noneSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
+        Assert.assertFalse(<name>HashSet.newSetWith(<["1", "0", "31", "32"]:(literal.(type))(); separator=", ">).noneSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
+        Assert.assertTrue(<name>HashSet.newSetWith(<["1", "2", "31", "32"]:(literal.(type))(); separator=", ">).noneSatisfy(<name>Predicates.lessThan(<(literal.(type))("0")>)));
+    }
+
+    @Test
     public void select()
     {
         Verify.assertSize(3, this.set.select(<name>Predicates.lessThan(<(literal.(type))("32")>)));

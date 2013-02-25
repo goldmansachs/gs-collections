@@ -581,6 +581,11 @@ public final class BooleanHashBag implements MutableBooleanBag, Externalizable
         return (!this.containsFalse() || predicate.accept(false)) && (!this.containsTrue() || predicate.accept(true));
     }
 
+    public boolean noneSatisfy(BooleanPredicate predicate)
+    {
+        return (!this.containsFalse() || !predicate.accept(false)) && (!this.containsTrue() || !predicate.accept(true));
+    }
+
     public boolean detectIfNone(BooleanPredicate predicate, boolean ifNone)
     {
         if (this.containsFalse() && predicate.accept(false))

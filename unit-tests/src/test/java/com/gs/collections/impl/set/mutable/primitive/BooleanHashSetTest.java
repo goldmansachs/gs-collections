@@ -572,6 +572,20 @@ public class BooleanHashSetTest
     }
 
     @Test
+    public void noneSatisfy()
+    {
+        Assert.assertFalse(this.set0.noneSatisfy(BooleanPredicates.or(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())));
+        Assert.assertFalse(this.set1.noneSatisfy(BooleanPredicates.isFalse()));
+        Assert.assertTrue(this.set1.noneSatisfy(BooleanPredicates.isTrue()));
+        Assert.assertFalse(this.set2.noneSatisfy(BooleanPredicates.isTrue()));
+        Assert.assertTrue(this.set2.noneSatisfy(BooleanPredicates.isFalse()));
+        Assert.assertFalse(this.set3.noneSatisfy(BooleanPredicates.isTrue()));
+        Assert.assertFalse(this.set3.noneSatisfy(BooleanPredicates.isFalse()));
+        Assert.assertTrue(this.set3.noneSatisfy(BooleanPredicates.and(BooleanPredicates.isFalse(), BooleanPredicates.isTrue())));
+        Assert.assertFalse(this.set3.noneSatisfy(BooleanPredicates.or(BooleanPredicates.isFalse(), BooleanPredicates.isTrue())));
+    }
+
+    @Test
     public void select()
     {
         Verify.assertEmpty(this.set0.select(BooleanPredicates.or(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())));

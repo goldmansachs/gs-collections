@@ -292,6 +292,33 @@ public class BooleanArrayStackTest
                 return true;
             }
         }));
+        Assert.assertFalse(stack.allSatisfy(new BooleanPredicate()
+        {
+            public boolean accept(boolean value)
+            {
+                return value;
+            }
+        }));
+    }
+
+    @Test
+    public void noneSatisfy()
+    {
+        BooleanArrayStack stack = BooleanArrayStack.newStackFromTopToBottom(true, true, false, true, false);
+        Assert.assertTrue(stack.noneSatisfy(new BooleanPredicate()
+        {
+            public boolean accept(boolean value)
+            {
+                return false;
+            }
+        }));
+        Assert.assertFalse(stack.noneSatisfy(new BooleanPredicate()
+        {
+            public boolean accept(boolean value)
+            {
+                return value;
+            }
+        }));
     }
 
     @Test

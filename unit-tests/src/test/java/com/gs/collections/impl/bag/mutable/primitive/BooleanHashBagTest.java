@@ -333,6 +333,20 @@ public class BooleanHashBagTest
     }
 
     @Test
+    public void noneSatisfy()
+    {
+        BooleanHashBag bag = BooleanHashBag.newBagWith(false, true, false);
+        Assert.assertFalse(bag.noneSatisfy(new BooleanPredicate()
+        {
+            public boolean accept(boolean value)
+            {
+                return value;
+            }
+        }));
+        Assert.assertTrue(BooleanHashBag.newBagWith(false, false, false).noneSatisfy(BooleanPredicates.isTrue()));
+    }
+
+    @Test
     public void forEach()
     {
         final int[] sum = new int[1];

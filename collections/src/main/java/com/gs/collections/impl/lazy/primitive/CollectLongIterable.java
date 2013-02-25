@@ -131,6 +131,17 @@ public class CollectLongIterable<T>
         });
     }
 
+    public boolean noneSatisfy(final LongPredicate predicate)
+    {
+        return this.iterable.allSatisfy(new Predicate<T>()
+        {
+            public boolean accept(T each)
+            {
+                return !predicate.accept(CollectLongIterable.this.function.longValueOf(each));
+            }
+        });
+    }
+
     public LazyLongIterable select(LongPredicate predicate)
     {
         return new SelectLongIterable(this, predicate);
