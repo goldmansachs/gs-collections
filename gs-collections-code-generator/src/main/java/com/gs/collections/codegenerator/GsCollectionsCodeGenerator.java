@@ -80,12 +80,12 @@ public class GsCollectionsCodeGenerator
                             {
                                 continue;
                             }
-                            String sourceFileName = executeTemplate(primitive1, primitive2, this.findTemplate("fileName"));
+                            String sourceFileName = this.executeTemplate(primitive1, primitive2, "fileName");
                             File outputFile = new File(targetPath, sourceFileName + ".java");
 
                             if (!sourceFileExists(outputFile))
                             {
-                                String classContents = executeTemplate(primitive1, primitive2, this.findTemplate("class"));
+                                String classContents = this.executeTemplate(primitive1, primitive2, "class");
                                 FileUtils.writeToFile(classContents, outputFile);
                             }
                         }
@@ -95,19 +95,16 @@ public class GsCollectionsCodeGenerator
                 {
                     for (Primitive primitive : Primitive.values())
                     {
-                        String sourceFileName = executeTemplate(primitive, this.findTemplate("fileName"));
+                        if (primitive == Primitive.BOOLEAN && skipBoolean)
+                        {
+                            continue;
+                        }
+                        String sourceFileName = this.executeTemplate(primitive, "fileName");
                         File outputFile = new File(targetPath, sourceFileName + ".java");
 
                         if (!sourceFileExists(outputFile))
                         {
-                            ST template = this.findTemplate("class");
-                            if (this.templateFile.getFileName().contains("boolean")
-                                    && primitive == Primitive.BOOLEAN
-                                    && template.getAttributes().containsKey("sameTwoPrimitives"))
-                            {
-                                template.add("sameTwoPrimitives", true);
-                            }
-                            String classContents = executeTemplate(primitive, template);
+                            String classContents = this.executeTemplate(primitive, "class");
                             FileUtils.writeToFile(classContents, outputFile);
                         }
                     }
@@ -116,14 +113,16 @@ public class GsCollectionsCodeGenerator
         }
     }
 
-    private static String executeTemplate(Primitive primitive, ST template)
+    private String executeTemplate(Primitive primitive, String templateName)
     {
+        ST template = this.findTemplate(templateName);
         template.add("primitive", primitive);
         return template.render();
     }
 
-    private static String executeTemplate(Primitive primitive1, Primitive primitive2, ST template)
+    private String executeTemplate(Primitive primitive1, Primitive primitive2, String templateName)
     {
+        ST template = this.findTemplate(templateName);
         template.add("primitive1", primitive1);
         template.add("primitive2", primitive2);
         template.add("sameTwoPrimitives", primitive1 == primitive2);

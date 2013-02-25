@@ -8,6 +8,8 @@ targetPath() ::= "com/gs/collections/impl/map/mutable/primitive"
 
 fileName(primitive) ::= "<primitive.name>ObjectHashMapTest"
 
+skipBoolean() ::= "true"
+
 class(primitive) ::= <<
 <body(primitive.type, primitive.name)>
 >>
