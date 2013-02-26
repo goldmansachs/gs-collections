@@ -1057,7 +1057,7 @@ public final class ParallelIterate
             Function0<? extends V> zeroValueFactory,
             Procedure2<? super V, ? super T> mutatingAggregator)
     {
-        return ParallelIterate.aggregateBy(
+        return ParallelIterate.aggregateInPlaceBy(
                 iterable,
                 groupBy,
                 zeroValueFactory,
@@ -1065,14 +1065,14 @@ public final class ParallelIterate
                 ParallelIterate.DEFAULT_MIN_FORK_SIZE);
     }
 
-    public static <T, K, V, R extends MutableMap<K, V>> R aggregateBy(
+    public static <T, K, V, R extends MutableMap<K, V>> R aggregateInPlaceBy(
             Iterable<T> iterable,
             Function<? super T, ? extends K> groupBy,
             Function0<? extends V> zeroValueFactory,
             Procedure2<? super V, ? super T> mutatingAggregator,
             R mutableMap)
     {
-        return ParallelIterate.aggregateBy(
+        return ParallelIterate.aggregateInPlaceBy(
                 iterable,
                 groupBy,
                 zeroValueFactory,
@@ -1081,14 +1081,14 @@ public final class ParallelIterate
                 ParallelIterate.DEFAULT_MIN_FORK_SIZE);
     }
 
-    public static <T, K, V> MutableMap<K, V> aggregateBy(
+    public static <T, K, V> MutableMap<K, V> aggregateInPlaceBy(
             Iterable<T> iterable,
             Function<? super T, ? extends K> groupBy,
             Function0<? extends V> zeroValueFactory,
             Procedure2<? super V, ? super T> mutatingAggregator,
             int batchSize)
     {
-        return ParallelIterate.aggregateBy(
+        return ParallelIterate.aggregateInPlaceBy(
                 iterable,
                 groupBy,
                 zeroValueFactory,
@@ -1097,7 +1097,7 @@ public final class ParallelIterate
                 ParallelIterate.EXECUTOR_SERVICE);
     }
 
-    public static <T, K, V, R extends MutableMap<K, V>> R aggregateBy(
+    public static <T, K, V, R extends MutableMap<K, V>> R aggregateInPlaceBy(
             Iterable<T> iterable,
             Function<? super T, ? extends K> groupBy,
             Function0<? extends V> zeroValueFactory,
@@ -1105,7 +1105,7 @@ public final class ParallelIterate
             R mutableMap,
             int batchSize)
     {
-        return ParallelIterate.aggregateBy(
+        return ParallelIterate.aggregateInPlaceBy(
                 iterable,
                 groupBy,
                 zeroValueFactory,
@@ -1115,7 +1115,7 @@ public final class ParallelIterate
                 ParallelIterate.EXECUTOR_SERVICE);
     }
 
-    public static <T, K, V> MutableMap<K, V> aggregateBy(
+    public static <T, K, V> MutableMap<K, V> aggregateInPlaceBy(
             Iterable<T> iterable,
             Function<? super T, ? extends K> groupBy,
             Function0<? extends V> zeroValueFactory,
@@ -1135,7 +1135,7 @@ public final class ParallelIterate
         return map;
     }
 
-    public static <T, K, V, R extends MutableMap<K, V>> R aggregateBy(
+    public static <T, K, V, R extends MutableMap<K, V>> R aggregateInPlaceBy(
             Iterable<T> iterable,
             Function<? super T, ? extends K> groupBy,
             Function0<? extends V> zeroValueFactory,

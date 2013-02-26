@@ -620,7 +620,7 @@ public class ParallelIterateTest
                 ParallelIterate.aggregateInPlaceBy(list, EVEN_OR_ODD, ATOMIC_INTEGER_NEW, countAggregator);
         Assert.assertEquals(1000, aggregation.get("Even").intValue());
         Assert.assertEquals(1000, aggregation.get("Odd").intValue());
-        ParallelIterate.aggregateBy(list, EVEN_OR_ODD, ATOMIC_INTEGER_NEW, countAggregator, aggregation);
+        ParallelIterate.aggregateInPlaceBy(list, EVEN_OR_ODD, ATOMIC_INTEGER_NEW, countAggregator, aggregation);
         Assert.assertEquals(2000, aggregation.get("Even").intValue());
         Assert.assertEquals(2000, aggregation.get("Odd").intValue());
     }
@@ -641,7 +641,7 @@ public class ParallelIterateTest
                 .toList();
         Collections.shuffle(list);
         MapIterable<String, AtomicInteger> aggregation =
-                ParallelIterate.aggregateBy(list, Functions.getToString(), ATOMIC_INTEGER_NEW, sumAggregator, 50);
+                ParallelIterate.aggregateInPlaceBy(list, Functions.getToString(), ATOMIC_INTEGER_NEW, sumAggregator, 50);
         Assert.assertEquals(100, aggregation.get("1").intValue());
         Assert.assertEquals(400, aggregation.get("2").intValue());
         Assert.assertEquals(900, aggregation.get("3").intValue());
