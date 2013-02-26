@@ -2258,12 +2258,16 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
 
     private class InternalIterator implements Iterator\<V>
     {
-        private int currentIndex;
-        private int lastReturnedIndex = -1;
+        private int count;
+        private int position;
+        private <type> currentKey;
+        private boolean isCurrentKeySet;
+        private boolean handledZeroKey;
+        private boolean handledOneKey;
 
         public boolean hasNext()
         {
-            return this.currentIndex != <name>ObjectHashMap.this.size();
+            return this.count != <name>ObjectHashMap.this.size();
         }
 
         public V next()
@@ -2272,25 +2276,60 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
             {
                 throw new NoSuchElementException();
             }
-            V next = (V) <name>ObjectHashMap.this.toArray()[this.currentIndex];
-            this.lastReturnedIndex = this.currentIndex;
-            this.currentIndex++;
-            return next;
+            this.count++;
+            if (!this.handledZeroKey)
+            {
+                this.handledZeroKey = true;
+                if (<name>ObjectHashMap.this.containsKey(EMPTY))
+                {
+                    this.currentKey = <name>ObjectHashMap.EMPTY;
+                    this.isCurrentKeySet = true;
+                    return <name>ObjectHashMap.this.sentinelValues.zeroValue;
+                }
+            }
+            if (!this.handledOneKey)
+            {
+                this.handledOneKey = true;
+                if (<name>ObjectHashMap.this.containsKey(REMOVED))
+                {
+                    this.currentKey = <name>ObjectHashMap.REMOVED;
+                    this.isCurrentKeySet = true;
+                    return <name>ObjectHashMap.this.sentinelValues.oneValue;
+                }
+            }
+            <type>[] keys = <name>ObjectHashMap.this.keys;
+            while (!isNonSentinel(keys[this.position]))
+            {
+                this.position++;
+            }
+            this.currentKey = <name>ObjectHashMap.this.keys[this.position];
+            this.isCurrentKeySet = true;
+            V result = <name>ObjectHashMap.this.values[this.position];
+            this.position++;
+            return result;
         }
 
         public void remove()
         {
-            if (<name>ObjectHashMap.this.size() == 0)
-            {
-                throw new NoSuchElementException();
-            }
-            if (this.lastReturnedIndex \< 0)
+            if (!this.isCurrentKeySet)
             {
                 throw new IllegalStateException();
             }
-            <name>ObjectHashMap.this.removeKey(<name>ObjectHashMap.this.toKeysArray()[this.lastReturnedIndex]);
-            this.currentIndex = this.lastReturnedIndex;
-            this.lastReturnedIndex = -1;
+
+            this.isCurrentKeySet = false;
+            this.count--;
+
+            if (isNonSentinel(this.currentKey))
+            {
+                int index = this.position;
+                <name>ObjectHashMap.this.keys[index] = REMOVED;
+                <name>ObjectHashMap.this.occupied--;
+                <name>ObjectHashMap.this.values[index] = null;
+            }
+            else
+            {
+                <name>ObjectHashMap.this.removeKey(this.currentKey);
+            }
         }
     }
 

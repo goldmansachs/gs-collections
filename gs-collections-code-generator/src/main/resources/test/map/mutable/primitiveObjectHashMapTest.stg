@@ -2519,7 +2519,7 @@ public class <name>ObjectHashMapTest
         iterator1.next();
         iterator1.remove();
         Assert.assertEquals(<name>ObjectHashMap.newMap(), map1);
-        Verify.assertThrows(NoSuchElementException.class, new Runnable()
+        Verify.assertThrows(IllegalStateException.class, new Runnable()
         {
             public void run()
             {
