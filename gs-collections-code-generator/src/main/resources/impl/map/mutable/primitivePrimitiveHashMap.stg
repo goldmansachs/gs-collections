@@ -69,7 +69,7 @@ import com.gs.collections.impl.set.mutable.primitive.<name1>HashSet;
  */
 public class <name1><name2>HashMap implements Mutable<name1><name2>Map
 {
-    public static final <type2> EMPTY_VALUE = <(literal.(type2))("0")>;
+    private static final <type2> EMPTY_VALUE = <(literal.(type2))("0")>;
     private static final <type1> EMPTY_KEY = <(literal.(type1))("0")>;
     private static final <type1> REMOVED_KEY = <(literal.(type1))("1")>;
 
@@ -184,11 +184,6 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map
         return !isEmptyKey(key) && !isRemovedKey(key);
     }
 
-    private static boolean isNonSentinelValue(<type2> value)
-    {
-        return <(notEquals.(type2))("value", "EMPTY_VALUE")>;
-    }
-
     private int allocate(int capacity)
     {
         this.allocateTable(capacity);
@@ -215,12 +210,12 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map
 
     public boolean isEmpty()
     {
-        return this.occupied + (this.sentinelValues == null ? 0 : this.sentinelValues.size()) == 0;
+        return this.occupied == 0 && (this.sentinelValues == null || this.sentinelValues.size() == 0);
     }
 
     public boolean notEmpty()
     {
-        return this.occupied + (this.sentinelValues == null ? 0 : this.sentinelValues.size()) != 0;
+        return this.occupied != 0 || (this.sentinelValues != null && this.sentinelValues.size() != 0);
     }
 
     private void rehash()

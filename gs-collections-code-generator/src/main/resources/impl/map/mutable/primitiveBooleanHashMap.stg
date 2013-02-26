@@ -1,0 +1,1916 @@
+import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+
+targetPath() ::= "com/gs/collections/impl/map/mutable/primitive"
+
+fileName(primitive) ::= "<primitive.name>BooleanHashMap"
+
+skipBoolean() ::= "true"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.map.mutable.primitive;
+
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.util.Arrays;
+import java.util.BitSet;
+import java.util.NoSuchElementException;
+
+import com.gs.collections.api.BooleanIterable;
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.LazyBooleanIterable;
+import com.gs.collections.api.Lazy<name>Iterable;
+import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.bag.primitive.MutableBooleanBag;
+import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.BooleanFunction0;
+import com.gs.collections.api.block.function.primitive.BooleanToBooleanFunction;
+import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
+import com.gs.collections.api.block.function.primitive.<name>ToBooleanFunction;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
+import com.gs.collections.api.block.predicate.primitive.<name>BooleanPredicate;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
+import com.gs.collections.api.block.procedure.primitive.<name>BooleanProcedure;
+import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
+import com.gs.collections.api.iterator.BooleanIterator;
+import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.list.primitive.MutableBooleanList;
+import com.gs.collections.api.list.primitive.Mutable<name>List;
+import com.gs.collections.api.map.primitive.<name>BooleanMap;
+import com.gs.collections.api.map.primitive.Mutable<name>BooleanMap;
+import com.gs.collections.api.set.primitive.MutableBooleanSet;
+import com.gs.collections.api.set.primitive.Mutable<name>Set;
+import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
+import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
+import com.gs.collections.impl.lazy.primitive.LazyBooleanIterableAdapter;
+import com.gs.collections.impl.lazy.primitive.Select<name>Iterable;
+import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
+import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
+import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
+
+/**
+ * This file was automatically generated from template file primitiveBooleanHashMap.stg.
+ *
+ * @since 3.0.
+ */
+public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externalizable
+{
+    private static final long serialVersionUID = 1L;
+    private static final boolean EMPTY_VALUE = false;
+    private static final <type> EMPTY_KEY = <zero.(type)>;
+    private static final <type> REMOVED_KEY = <(literal.(type))("1")>;
+
+    private static final float DEFAULT_LOAD_FACTOR = 0.5f;
+    private static final int DEFAULT_INITIAL_CAPACITY = 8;
+    private int occupied;
+    private int maxSize;
+
+    private <type>[] keys;
+    private BitSet values;
+    private float loadFactor = DEFAULT_LOAD_FACTOR;
+    private SentinelValues sentinelValues;
+
+    public <name>BooleanHashMap()
+    {
+        this.allocate(DEFAULT_INITIAL_CAPACITY \<\< 1);
+    }
+
+    public <name>BooleanHashMap(int initialCapacity)
+    {
+        this(initialCapacity, DEFAULT_LOAD_FACTOR);
+    }
+
+    public <name>BooleanHashMap(int initialCapacity, float loadFactor)
+    {
+        if (initialCapacity \< 0)
+        {
+            throw new IllegalArgumentException("initial capacity cannot be less than 0");
+        }
+        this.loadFactor = loadFactor;
+        this.init(this.fastCeil(initialCapacity / loadFactor));
+    }
+
+    public static <name>BooleanHashMap newMap()
+    {
+        return new <name>BooleanHashMap();
+    }
+
+    public static <name>BooleanHashMap newWithKeysValues(<type> key1, boolean value1)
+    {
+        return new <name>BooleanHashMap(1).withKeyValue(key1, value1);
+    }
+
+    public static <name>BooleanHashMap newWithKeysValues(<type> key1, boolean value1, <type> key2, boolean value2)
+    {
+        return new <name>BooleanHashMap(2).withKeysValues(key1, value1, key2, value2);
+    }
+
+    public static <name>BooleanHashMap newWithKeysValues(<type> key1, boolean value1, <type> key2, boolean value2, <type> key3, boolean value3)
+    {
+        return new <name>BooleanHashMap(3).withKeysValues(key1, value1, key2, value2, key3, value3);
+    }
+
+    public static <name>BooleanHashMap newWithKeysValues(<type> key1, boolean value1, <type> key2, boolean value2, <type> key3, boolean value3, <type> key4, boolean value4)
+    {
+        return new <name>BooleanHashMap(4).withKeysValues(key1, value1, key2, value2, key3, value3, key4, value4);
+    }
+
+    public <name>BooleanHashMap withKeyValue(<type> key1, boolean value1)
+    {
+        this.put(key1, value1);
+        return this;
+    }
+
+    public <name>BooleanHashMap withKeysValues(<type> key1, boolean value1, <type> key2, boolean value2)
+    {
+        this.put(key1, value1);
+        this.put(key2, value2);
+        return this;
+    }
+
+    public <name>BooleanHashMap withKeysValues(<type> key1, boolean value1, <type> key2, boolean value2, <type> key3, boolean value3)
+    {
+        this.put(key1, value1);
+        this.put(key2, value2);
+        this.put(key3, value3);
+        return this;
+    }
+
+    public <name>BooleanHashMap withKeysValues(<type> key1, boolean value1, <type> key2, boolean value2, <type> key3, boolean value3, <type> key4, boolean value4)
+    {
+        this.put(key1, value1);
+        this.put(key2, value2);
+        this.put(key3, value3);
+        this.put(key4, value4);
+        return this;
+    }
+
+    public <name>BooleanHashMap withoutKey(<type> key)
+    {
+        this.removeKey(key);
+        return this;
+    }
+
+    public <name>BooleanHashMap withoutAllKeys(<name>Iterable keys)
+    {
+        keys.forEach(new <name>Procedure()
+        {
+            public void value(<type> key)
+            {
+                <name>BooleanHashMap.this.removeKey(key);
+            }
+        });
+        return this;
+    }
+
+    private int init(int initialCapacity)
+    {
+        int capacity = 1;
+        while (capacity \< initialCapacity)
+        {
+            capacity \<\<= 1;
+        }
+        return this.allocate(capacity);
+    }
+
+    private int fastCeil(float v)
+    {
+        int possibleResult = (int) v;
+        if (v - possibleResult > 0.0F)
+        {
+            possibleResult++;
+        }
+        return possibleResult;
+    }
+
+    private static boolean isEmptyKey(<type> key)
+    {
+        return <(equals.(type))("key", "EMPTY_KEY")>;
+    }
+
+    private static boolean isRemovedKey(<type> key)
+    {
+        return <(equals.(type))("key", "REMOVED_KEY")>;
+    }
+
+    private static boolean isNonSentinel(<type> key)
+    {
+        return !isEmptyKey(key) && !isRemovedKey(key);
+    }
+
+    private int allocate(int capacity)
+    {
+        this.allocateTable(capacity);
+        this.computeMaxSize(capacity);
+        return capacity;
+    }
+
+    private void allocateTable(int sizeToAllocate)
+    {
+        this.keys = new <type>[sizeToAllocate];
+        this.values = new BitSet(sizeToAllocate);
+    }
+
+    private void computeMaxSize(int capacity)
+    {
+        // need at least one free slot for open addressing
+        this.maxSize = Math.min(capacity - 1, (int) (capacity * this.loadFactor));
+    }
+
+    public int size()
+    {
+        return this.occupied + (this.sentinelValues == null ? 0 : this.sentinelValues.size());
+    }
+
+    public boolean isEmpty()
+    {
+        return this.occupied == 0 && (this.sentinelValues == null || this.sentinelValues.size() == 0);
+    }
+
+    public boolean notEmpty()
+    {
+        return this.occupied != 0 || (this.sentinelValues != null && this.sentinelValues.size() != 0);
+    }
+
+    private void rehash()
+    {
+        this.rehash(this.keys.length \<\< 1);
+    }
+
+    private void rehash(int newCapacity)
+    {
+        int oldLength = this.keys.length;
+        <type>[] old = this.keys;
+        BitSet oldValues = this.values;
+        this.allocate(newCapacity);
+        this.occupied = 0;
+
+        for (int i = 0; i \< oldLength; i++)
+        {
+            if (isNonSentinel(old[i]))
+            {
+                this.put(old[i], oldValues.get(i));
+            }
+        }
+    }
+
+    // exposed for testing
+    int probe(<type> element)
+    {
+        int index = this.index(element);
+        <type> keyAtIndex = this.keys[index];
+
+        if (<(equals.(type))("keyAtIndex", "element")> || <(equals.(type))("keyAtIndex", "EMPTY_KEY")>)
+        {
+            return index;
+        }
+
+        int removedIndex = <(equals.(type))("keyAtIndex", "REMOVED_KEY")> ? index : -1;
+        int nextIndex = index;
+        int probe = 17;
+
+        // loop until an empty slot is reached
+        while (true)
+        {
+            // Probe algorithm: 17*n*(n+1)/2 where n = number of collisions
+            nextIndex += probe;
+            probe += 17;
+            nextIndex &= this.keys.length - 1;
+
+            if (<(equals.(type))("this.keys[nextIndex]", "element")>)
+            {
+                return nextIndex;
+            }
+            if (<(equals.(type))("this.keys[nextIndex]", "REMOVED_KEY")>)
+            {
+                if (removedIndex == -1)
+                {
+                    removedIndex = nextIndex;
+                }
+            }
+            else if (<(equals.(type))("this.keys[nextIndex]", "EMPTY_KEY")>)
+            {
+                return removedIndex == -1 ? nextIndex : removedIndex;
+            }
+        }
+    }
+
+    // exposed for testing
+    int index(<type> element)
+    {
+        int code = <(hashCode.(type))("element")>;
+        code ^= 61 ^ (code >\> 16);
+        code += code \<\< 3;
+        code ^= code >\> 4;
+        code *= 0x27d4eb2d;
+        code ^= code >\> 15;
+        return code & (this.keys.length - 1);
+    }
+
+    public void clear()
+    {
+        this.sentinelValues = null;
+        this.occupied = 0;
+        Arrays.fill(this.keys, EMPTY_KEY);
+        this.values.clear();
+    }
+
+    public void put(<type> key, boolean value)
+    {
+        if (isEmptyKey(key))
+        {
+            if (this.sentinelValues == null)
+            {
+                this.sentinelValues = new SentinelValues();
+            }
+            this.sentinelValues.containsZeroKey = true;
+            this.sentinelValues.zeroValue = value;
+            return;
+        }
+
+        if (isRemovedKey(key))
+        {
+            if (this.sentinelValues == null)
+            {
+                this.sentinelValues = new SentinelValues();
+            }
+            this.sentinelValues.containsOneKey = true;
+            this.sentinelValues.oneValue = value;
+            return;
+        }
+
+        int index = this.probe(key);
+
+        if (<(equals.(type))("this.keys[index]", "key")>)
+        {
+            // key already present in map
+            this.values.set(index, value);
+            return;
+        }
+
+        this.keys[index] = key;
+        this.values.set(index, value);
+        ++this.occupied;
+        if (this.occupied > this.maxSize)
+        {
+            this.rehash();
+        }
+    }
+
+    public boolean containsKey(<type> key)
+    {
+        if (isEmptyKey(key))
+        {
+            return this.sentinelValues != null && this.sentinelValues.containsZeroKey;
+        }
+        if (isRemovedKey(key))
+        {
+            return this.sentinelValues != null && this.sentinelValues.containsOneKey;
+        }
+        return <(equals.(type))("this.keys[this.probe(key)]", "key")>;
+    }
+
+    public boolean containsValue(boolean value)
+    {
+        if (this.sentinelValues != null && this.sentinelValues.containsValue(value))
+        {
+            return true;
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && this.values.get(i) == value)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean contains(boolean value)
+    {
+        return this.containsValue(value);
+    }
+
+    public boolean containsAll(boolean... source)
+    {
+        for (boolean each : source)
+        {
+            if (!this.contains(each))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean containsAll(BooleanIterable source)
+    {
+        return source.allSatisfy(new BooleanPredicate()
+        {
+            public boolean accept(boolean value)
+            {
+                return <name>BooleanHashMap.this.contains(value);
+            }
+        });
+    }
+
+    public boolean get(<type> key)
+    {
+        if (isEmptyKey(key))
+        {
+            if (this.sentinelValues == null || !this.sentinelValues.containsZeroKey)
+            {
+                return EMPTY_VALUE;
+            }
+            return this.sentinelValues.zeroValue;
+        }
+        if (isRemovedKey(key))
+        {
+            if (this.sentinelValues == null || !this.sentinelValues.containsOneKey)
+            {
+                return EMPTY_VALUE;
+            }
+            return this.sentinelValues.oneValue;
+        }
+        int index = this.probe(key);
+        return this.values.get(index);
+    }
+
+    public boolean getOrThrow(<type> key)
+    {
+        if (isEmptyKey(key))
+        {
+            if (this.sentinelValues == null || !this.sentinelValues.containsZeroKey)
+            {
+                throw new IllegalStateException("Key " + key + " not present.");
+            }
+            return this.sentinelValues.zeroValue;
+        }
+        if (isRemovedKey(key))
+        {
+            if (this.sentinelValues == null || !this.sentinelValues.containsOneKey)
+            {
+                throw new IllegalStateException("Key " + key + " not present.");
+            }
+            return this.sentinelValues.oneValue;
+        }
+        int index = this.probe(key);
+        if (isNonSentinel(this.keys[index]))
+        {
+            return this.values.get(index);
+        }
+        throw new IllegalStateException("Key " + key + " not present.");
+    }
+
+    public boolean getIfAbsentPut(<type> key, boolean value)
+    {
+        if (isEmptyKey(key))
+        {
+            if (this.sentinelValues == null)
+            {
+                this.sentinelValues = new SentinelValues();
+                this.sentinelValues.containsZeroKey = true;
+                this.sentinelValues.zeroValue = value;
+                return value;
+            }
+            if (this.sentinelValues.containsZeroKey)
+            {
+                return this.sentinelValues.zeroValue;
+            }
+            this.sentinelValues.containsZeroKey = true;
+            this.sentinelValues.zeroValue = value;
+            return value;
+        }
+        if (isRemovedKey(key))
+        {
+            if (this.sentinelValues == null)
+            {
+                this.sentinelValues = new SentinelValues();
+                this.sentinelValues.containsOneKey = true;
+                this.sentinelValues.oneValue = value;
+                return value;
+            }
+            if (this.sentinelValues.containsOneKey)
+            {
+                return this.sentinelValues.oneValue;
+            }
+            this.sentinelValues.containsOneKey = true;
+            this.sentinelValues.oneValue = value;
+            return value;
+        }
+        int index = this.probe(key);
+        if (<(equals.(type))("this.keys[index]", "key")>)
+        {
+            return this.values.get(index);
+        }
+        this.keys[index] = key;
+        this.occupied++;
+        this.values.set(index, value);
+        return value;
+    }
+
+    public boolean getIfAbsentPut(<type> key, BooleanFunction0 function)
+    {
+        if (isEmptyKey(key))
+        {
+            if (this.sentinelValues == null)
+            {
+                boolean value = function.value();
+                this.sentinelValues = new SentinelValues();
+                this.sentinelValues.containsZeroKey = true;
+                this.sentinelValues.zeroValue = value;
+                return value;
+            }
+            if (this.sentinelValues.containsZeroKey)
+            {
+                return this.sentinelValues.zeroValue;
+            }
+            boolean value = function.value();
+            this.sentinelValues.containsZeroKey = true;
+            this.sentinelValues.zeroValue = value;
+            return value;
+        }
+        if (isRemovedKey(key))
+        {
+            if (this.sentinelValues == null)
+            {
+                boolean value = function.value();
+                this.sentinelValues = new SentinelValues();
+                this.sentinelValues.containsOneKey = true;
+                this.sentinelValues.oneValue = value;
+                return value;
+            }
+            if (this.sentinelValues.containsOneKey)
+            {
+                return this.sentinelValues.oneValue;
+            }
+            boolean value = function.value();
+            this.sentinelValues.containsOneKey = true;
+            this.sentinelValues.oneValue = value;
+            return value;
+        }
+        int index = this.probe(key);
+        if (<(equals.(type))("this.keys[index]", "key")>)
+        {
+            return this.values.get(index);
+        }
+        this.keys[index] = key;
+        this.occupied++;
+        boolean value = function.value();
+        this.values.set(index, value);
+        return value;
+    }
+
+    public \<P> boolean getIfAbsentPutWith(<type> key, BooleanFunction\<? super P> function, P parameter)
+    {
+        if (isEmptyKey(key))
+        {
+            if (this.sentinelValues == null)
+            {
+                boolean value = function.booleanValueOf(parameter);
+                this.sentinelValues = new SentinelValues();
+                this.sentinelValues.containsZeroKey = true;
+                this.sentinelValues.zeroValue = value;
+                return value;
+            }
+            if (this.sentinelValues.containsZeroKey)
+            {
+                return this.sentinelValues.zeroValue;
+            }
+            boolean value = function.booleanValueOf(parameter);
+            this.sentinelValues.containsZeroKey = true;
+            this.sentinelValues.zeroValue = value;
+            return value;
+        }
+        if (isRemovedKey(key))
+        {
+            if (this.sentinelValues == null)
+            {
+                boolean value = function.booleanValueOf(parameter);
+                this.sentinelValues = new SentinelValues();
+                this.sentinelValues.containsOneKey = true;
+                this.sentinelValues.oneValue = value;
+                return value;
+            }
+            if (this.sentinelValues.containsOneKey)
+            {
+                return this.sentinelValues.oneValue;
+            }
+            boolean value = function.booleanValueOf(parameter);
+            this.sentinelValues.containsOneKey = true;
+            this.sentinelValues.oneValue = value;
+            return value;
+        }
+        int index = this.probe(key);
+        if (<(equals.(type))("this.keys[index]", "key")>)
+        {
+            return this.values.get(index);
+        }
+        this.keys[index] = key;
+        this.occupied++;
+        boolean value = function.booleanValueOf(parameter);
+        this.values.set(index, value);
+        return value;
+    }
+
+    public boolean getIfAbsentPutWithKey(<type> key, <name>ToBooleanFunction function)
+    {
+        if (isEmptyKey(key))
+        {
+            if (this.sentinelValues == null)
+            {
+                boolean value = function.valueOf(key);
+                this.sentinelValues = new SentinelValues();
+                this.sentinelValues.containsZeroKey = true;
+                this.sentinelValues.zeroValue = value;
+                return value;
+            }
+            if (this.sentinelValues.containsZeroKey)
+            {
+                return this.sentinelValues.zeroValue;
+            }
+            boolean value = function.valueOf(key);
+            this.sentinelValues.containsZeroKey = true;
+            this.sentinelValues.zeroValue = value;
+            return value;
+        }
+        if (isRemovedKey(key))
+        {
+            if (this.sentinelValues == null)
+            {
+                boolean value = function.valueOf(key);
+                this.sentinelValues = new SentinelValues();
+                this.sentinelValues.containsOneKey = true;
+                this.sentinelValues.oneValue = value;
+                return value;
+            }
+            if (this.sentinelValues.containsOneKey)
+            {
+                return this.sentinelValues.oneValue;
+            }
+            boolean value = function.valueOf(key);
+            this.sentinelValues.containsOneKey = true;
+            this.sentinelValues.oneValue = value;
+            return value;
+        }
+        int index = this.probe(key);
+        if (<(equals.(type))("this.keys[index]", "key")>)
+        {
+            return this.values.get(index);
+        }
+        this.keys[index] = key;
+        this.occupied++;
+        boolean value = function.valueOf(key);
+        this.values.set(index, value);
+        return value;
+    }
+
+    public boolean updateValue(<type> key, boolean initialValueIfAbsent, BooleanToBooleanFunction function)
+    {
+        if (isEmptyKey(key))
+        {
+            if (this.sentinelValues == null)
+            {
+                this.sentinelValues = new SentinelValues();
+                this.sentinelValues.containsZeroKey = true;
+                this.sentinelValues.zeroValue = function.valueOf(initialValueIfAbsent);
+            }
+            else if (this.sentinelValues.containsZeroKey)
+            {
+                this.sentinelValues.zeroValue = function.valueOf(this.sentinelValues.zeroValue);
+            }
+            else
+            {
+                this.sentinelValues.containsZeroKey = true;
+                this.sentinelValues.zeroValue = function.valueOf(initialValueIfAbsent);
+            }
+            return this.sentinelValues.zeroValue;
+        }
+        if (isRemovedKey(key))
+        {
+            if (this.sentinelValues == null)
+            {
+                this.sentinelValues = new SentinelValues();
+                this.sentinelValues.containsOneKey = true;
+                this.sentinelValues.oneValue = function.valueOf(initialValueIfAbsent);
+            }
+            else if (this.sentinelValues.containsOneKey)
+            {
+                this.sentinelValues.oneValue = function.valueOf(this.sentinelValues.oneValue);
+            }
+            else
+            {
+                this.sentinelValues.containsOneKey = true;
+                this.sentinelValues.oneValue = function.valueOf(initialValueIfAbsent);
+            }
+            return this.sentinelValues.oneValue;
+        }
+        int index = this.probe(key);
+        if (<(equals.(type))("this.keys[index]", "key")>)
+        {
+            this.values.set(index, function.valueOf(this.values.get(index)));
+        }
+        else
+        {
+            this.keys[index] = key;
+            this.occupied++;
+            this.values.set(index, function.valueOf(initialValueIfAbsent));
+        }
+        return this.values.get(index);
+    }
+
+    public void removeKey(<type> key)
+    {
+        if (isEmptyKey(key))
+        {
+            if (this.sentinelValues == null || !this.sentinelValues.containsZeroKey)
+            {
+                return;
+            }
+            if (this.sentinelValues.containsOneKey)
+            {
+                this.sentinelValues.containsZeroKey = false;
+                this.sentinelValues.zeroValue = EMPTY_VALUE;
+            }
+            else
+            {
+                this.sentinelValues = null;
+            }
+            return;
+        }
+        if (isRemovedKey(key))
+        {
+            if (this.sentinelValues == null || !this.sentinelValues.containsOneKey)
+            {
+                return;
+            }
+            if (this.sentinelValues.containsZeroKey)
+            {
+                this.sentinelValues.containsOneKey = false;
+                this.sentinelValues.oneValue = EMPTY_VALUE;
+            }
+            else
+            {
+                this.sentinelValues = null;
+            }
+            return;
+        }
+        int index = this.probe(key);
+        if (<(equals.(type))("this.keys[index]", "key")>)
+        {
+            this.keys[index] = REMOVED_KEY;
+            this.occupied--;
+            this.values.set(index, EMPTY_VALUE);
+        }
+    }
+
+    public boolean removeKeyIfAbsent(<type> key, boolean value)
+    {
+        if (isEmptyKey(key))
+        {
+            if (this.sentinelValues == null || !this.sentinelValues.containsZeroKey)
+            {
+                return value;
+            }
+            boolean oldValue = this.sentinelValues.zeroValue;
+            if (this.sentinelValues.containsOneKey)
+            {
+                this.sentinelValues.containsZeroKey = false;
+                this.sentinelValues.zeroValue = EMPTY_VALUE;
+            }
+            else
+            {
+                this.sentinelValues = null;
+            }
+            return oldValue;
+        }
+        if (isRemovedKey(key))
+        {
+            if (this.sentinelValues == null || !this.sentinelValues.containsOneKey)
+            {
+                return value;
+            }
+            boolean oldValue = this.sentinelValues.oneValue;
+            if (this.sentinelValues.containsZeroKey)
+            {
+                this.sentinelValues.containsOneKey = false;
+                this.sentinelValues.oneValue = EMPTY_VALUE;
+            }
+            else
+            {
+                this.sentinelValues = null;
+            }
+            return oldValue;
+        }
+        int index = this.probe(key);
+        if (<(equals.(type))("this.keys[index]", "key")>)
+        {
+            this.keys[index] = REMOVED_KEY;
+            this.occupied--;
+            boolean oldValue = this.values.get(index);
+            this.values.set(index, EMPTY_VALUE);
+            return oldValue;
+        }
+        return value;
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+
+        if (!(obj instanceof <name>BooleanMap))
+        {
+            return false;
+        }
+
+        <name>BooleanMap other = (<name>BooleanMap) obj;
+
+        if (this.size() != other.size())
+        {
+            return false;
+        }
+
+        if (this.sentinelValues == null)
+        {
+            if (other.containsKey(EMPTY_KEY) || other.containsKey(REMOVED_KEY))
+            {
+                return false;
+            }
+        }
+        else
+        {
+            if (this.sentinelValues.containsZeroKey && (!other.containsKey(EMPTY_KEY) || this.sentinelValues.zeroValue != other.getOrThrow(EMPTY_KEY)))
+            {
+                return false;
+            }
+
+            if (this.sentinelValues.containsOneKey && (!other.containsKey(REMOVED_KEY) || this.sentinelValues.oneValue != other.getOrThrow(REMOVED_KEY)))
+            {
+                return false;
+            }
+        }
+
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            <type> key = this.keys[i];
+            if (isNonSentinel(key) && (!other.containsKey(key) || this.values.get(i) != other.getOrThrow(key)))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = 0;
+
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey)
+            {
+                result += <(hashCode.(type))("EMPTY_KEY")> ^ (this.sentinelValues.zeroValue ? 1231 : 1237);
+            }
+            if (this.sentinelValues.containsOneKey)
+            {
+                result += <(hashCode.(type))("REMOVED_KEY")> ^ (this.sentinelValues.oneValue ? 1231 : 1237);
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                result += <(hashCode.(type))("this.keys[i]")> ^ (this.values.get(i) ? 1231 : 1237);
+            }
+        }
+
+        return result;
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.makeString("[", ", ", "]");
+    }
+
+    public BooleanIterator booleanIterator()
+    {
+        return new InternalBooleanIterator();
+    }
+
+    public void forEach(BooleanProcedure procedure)
+    {
+        this.forEachValue(procedure);
+    }
+
+    public void forEachValue(BooleanProcedure procedure)
+    {
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey)
+            {
+                procedure.value(this.sentinelValues.zeroValue);
+            }
+            if (this.sentinelValues.containsOneKey)
+            {
+                procedure.value(this.sentinelValues.oneValue);
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                procedure.value(this.values.get(i));
+            }
+        }
+    }
+
+    public void forEachKey(<name>Procedure procedure)
+    {
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey)
+            {
+                procedure.value(EMPTY_KEY);
+            }
+            if (this.sentinelValues.containsOneKey)
+            {
+                procedure.value(REMOVED_KEY);
+            }
+        }
+        for (<type> key : this.keys)
+        {
+            if (isNonSentinel(key))
+            {
+                procedure.value(key);
+            }
+        }
+    }
+
+    public void forEachKeyValue(<name>BooleanProcedure procedure)
+    {
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey)
+            {
+                procedure.value(EMPTY_KEY, this.sentinelValues.zeroValue);
+            }
+            if (this.sentinelValues.containsOneKey)
+            {
+                procedure.value(REMOVED_KEY, this.sentinelValues.oneValue);
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                procedure.value(this.keys[i], this.values.get(i));
+            }
+        }
+    }
+
+    public <name>BooleanHashMap select(<name>BooleanPredicate predicate)
+    {
+        <name>BooleanHashMap result = <name>BooleanHashMap.newMap();
+
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey && predicate.accept(EMPTY_KEY, this.sentinelValues.zeroValue))
+            {
+                result.put(EMPTY_KEY, this.sentinelValues.zeroValue);
+            }
+            if (this.sentinelValues.containsOneKey && predicate.accept(REMOVED_KEY, this.sentinelValues.oneValue))
+            {
+                result.put(REMOVED_KEY, this.sentinelValues.oneValue);
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.keys[i], this.values.get(i)))
+            {
+                result.put(this.keys[i], this.values.get(i));
+            }
+        }
+
+        return result;
+    }
+
+    public <name>BooleanHashMap reject(<name>BooleanPredicate predicate)
+    {
+        <name>BooleanHashMap result = <name>BooleanHashMap.newMap();
+
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey && !predicate.accept(EMPTY_KEY, this.sentinelValues.zeroValue))
+            {
+                result.put(EMPTY_KEY, this.sentinelValues.zeroValue);
+            }
+            if (this.sentinelValues.containsOneKey && !predicate.accept(REMOVED_KEY, this.sentinelValues.oneValue))
+            {
+                result.put(REMOVED_KEY, this.sentinelValues.oneValue);
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && !predicate.accept(this.keys[i], this.values.get(i)))
+            {
+                result.put(this.keys[i], this.values.get(i));
+            }
+        }
+        return result;
+    }
+
+    public String makeString()
+    {
+        return this.makeString(", ");
+    }
+
+    public String makeString(String separator)
+    {
+        return this.makeString("", separator, "");
+    }
+
+    public String makeString(String start, String separator, String end)
+    {
+        Appendable stringBuilder = new StringBuilder();
+        this.appendString(stringBuilder, start, separator, end);
+        return stringBuilder.toString();
+    }
+
+    public void appendString(Appendable appendable)
+    {
+        this.appendString(appendable, ", ");
+    }
+
+    public void appendString(Appendable appendable, String separator)
+    {
+        this.appendString(appendable, "", separator, "");
+    }
+
+    public void appendString(Appendable appendable, String start, String separator, String end)
+    {
+        try
+        {
+            appendable.append(start);
+
+            boolean first = true;
+
+            if (this.sentinelValues != null)
+            {
+                if (this.sentinelValues.containsZeroKey)
+                {
+                    appendable.append(String.valueOf(EMPTY_KEY)).append("=").append(String.valueOf(this.sentinelValues.zeroValue));
+                    first = false;
+                }
+                if (this.sentinelValues.containsOneKey)
+                {
+                    if (!first)
+                    {
+                        appendable.append(separator);
+                    }
+                    appendable.append(String.valueOf(REMOVED_KEY)).append("=").append(String.valueOf(this.sentinelValues.oneValue));
+                    first = false;
+                }
+            }
+            for (int i = 0; i \< this.keys.length; i++)
+            {
+                <type> key = this.keys[i];
+                if (isNonSentinel(key))
+                {
+                    if (!first)
+                    {
+                        appendable.append(separator);
+                    }
+                    appendable.append(String.valueOf(key)).append("=").append(String.valueOf(this.values.get(i)));
+                    first = false;
+                }
+            }
+            appendable.append(end);
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public BooleanIterable select(BooleanPredicate predicate)
+    {
+        BooleanArrayList result = new BooleanArrayList();
+
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey && predicate.accept(this.sentinelValues.zeroValue))
+            {
+                result.add(this.sentinelValues.zeroValue);
+            }
+            if (this.sentinelValues.containsOneKey && predicate.accept(this.sentinelValues.oneValue))
+            {
+                result.add(this.sentinelValues.oneValue);
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values.get(i)))
+            {
+                result.add(this.values.get(i));
+            }
+        }
+
+        return result;
+    }
+
+    public BooleanIterable reject(BooleanPredicate predicate)
+    {
+        BooleanArrayList result = new BooleanArrayList();
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey && !predicate.accept(this.sentinelValues.zeroValue))
+            {
+                result.add(this.sentinelValues.zeroValue);
+            }
+            if (this.sentinelValues.containsOneKey && !predicate.accept(this.sentinelValues.oneValue))
+            {
+                result.add(this.sentinelValues.oneValue);
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && !predicate.accept(this.values.get(i)))
+            {
+                result.add(this.values.get(i));
+            }
+        }
+        return result;
+    }
+
+    public boolean detectIfNone(BooleanPredicate predicate, boolean value)
+    {
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey && predicate.accept(this.sentinelValues.zeroValue))
+            {
+                return this.sentinelValues.zeroValue;
+            }
+            if (this.sentinelValues.containsOneKey && predicate.accept(this.sentinelValues.oneValue))
+            {
+                return this.sentinelValues.oneValue;
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values.get(i)))
+            {
+                return this.values.get(i);
+            }
+        }
+        return value;
+    }
+
+    public \<V> RichIterable\<V> collect(BooleanToObjectFunction\<? extends V> function)
+    {
+        FastList\<V> target = FastList.newList(this.size());
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey)
+            {
+                target.add(function.valueOf(this.sentinelValues.zeroValue));
+            }
+            if (this.sentinelValues.containsOneKey)
+            {
+                target.add(function.valueOf(this.sentinelValues.oneValue));
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                target.add(function.valueOf(this.values.get(i)));
+            }
+        }
+        return target;
+    }
+
+    public int count(BooleanPredicate predicate)
+    {
+        int count = 0;
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey && predicate.accept(this.sentinelValues.zeroValue))
+            {
+                count++;
+            }
+            if (this.sentinelValues.containsOneKey && predicate.accept(this.sentinelValues.oneValue))
+            {
+                count++;
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values.get(i)))
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public boolean anySatisfy(BooleanPredicate predicate)
+    {
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey && predicate.accept(this.sentinelValues.zeroValue))
+            {
+                return true;
+            }
+            if (this.sentinelValues.containsOneKey && predicate.accept(this.sentinelValues.oneValue))
+            {
+                return true;
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values.get(i)))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean allSatisfy(BooleanPredicate predicate)
+    {
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey && !predicate.accept(this.sentinelValues.zeroValue))
+            {
+                return false;
+            }
+            if (this.sentinelValues.containsOneKey && !predicate.accept(this.sentinelValues.oneValue))
+            {
+                return false;
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && !predicate.accept(this.values.get(i)))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean noneSatisfy(BooleanPredicate predicate)
+    {
+        return !this.anySatisfy(predicate);
+    }
+
+    public boolean[] toArray()
+    {
+        boolean[] array = new boolean[this.size()];
+        int index = 0;
+
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey)
+            {
+                array[index] = this.sentinelValues.zeroValue;
+                index++;
+            }
+            if (this.sentinelValues.containsOneKey)
+            {
+                array[index] = this.sentinelValues.oneValue;
+                index++;
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                array[index] = this.values.get(i);
+                index++;
+            }
+        }
+
+        return array;
+    }
+
+    public MutableBooleanList toList()
+    {
+        return BooleanArrayList.newList(this);
+    }
+
+    public MutableBooleanList toSortedList()
+    {
+        return BooleanArrayList.newList(this).sortThis();
+    }
+
+    public MutableBooleanSet toSet()
+    {
+        return BooleanHashSet.newSet(this);
+    }
+
+    public MutableBooleanBag toBag()
+    {
+        return BooleanHashBag.newBag(this);
+    }
+
+    public LazyBooleanIterable asLazy()
+    {
+        return new LazyBooleanIterableAdapter(this);
+    }
+
+    public Lazy<name>Iterable keysView()
+    {
+        return new KeysView();
+    }
+
+    public void writeExternal(ObjectOutput out) throws IOException
+    {
+        out.writeInt(this.size());
+        out.writeFloat(this.loadFactor);
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey)
+            {
+                out.write<name>(EMPTY_KEY);
+                out.writeBoolean(this.sentinelValues.zeroValue);
+            }
+            if (this.sentinelValues.containsOneKey)
+            {
+                out.write<name>(REMOVED_KEY);
+                out.writeBoolean(this.sentinelValues.oneValue);
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                out.write<name>(this.keys[i]);
+                out.writeBoolean(this.values.get(i));
+            }
+        }
+    }
+
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
+    {
+        int size = in.readInt();
+        this.loadFactor = in.readFloat();
+        this.init(Math.max((int) (size / this.loadFactor) + 1,
+                DEFAULT_INITIAL_CAPACITY));
+        for (int i = 0; i \< size; i++)
+        {
+            this.put(in.read<name>(), in.readBoolean());
+        }
+    }
+
+    private static final class SentinelValues
+    {
+        private boolean containsZeroKey;
+        private boolean containsOneKey;
+        private boolean zeroValue;
+        private boolean oneValue;
+
+        public int size()
+        {
+            return (this.containsZeroKey ? 1 : 0) + (this.containsOneKey ? 1 : 0);
+        }
+
+        public boolean containsValue(boolean value)
+        {
+            boolean valueEqualsZeroValue = this.containsZeroKey && this.zeroValue == value;
+            boolean valueEqualsOneValue = this.containsOneKey && this.oneValue == value;
+            return valueEqualsZeroValue || valueEqualsOneValue;
+        }
+    }
+
+    private class InternalBooleanIterator implements BooleanIterator
+    {
+        private int count;
+        private int position;
+        private boolean handledZero;
+        private boolean handledOne;
+
+        public boolean hasNext()
+        {
+            return this.count \< <name>BooleanHashMap.this.size();
+        }
+
+        public boolean next()
+        {
+            if (!this.hasNext())
+            {
+                throw new NoSuchElementException("next() called, but the iterator is exhausted");
+            }
+            this.count++;
+
+            if (!this.handledZero)
+            {
+                this.handledZero = true;
+                if (<name>BooleanHashMap.this.containsKey(EMPTY_KEY))
+                {
+                    return <name>BooleanHashMap.this.sentinelValues.zeroValue;
+                }
+            }
+            if (!this.handledOne)
+            {
+                this.handledOne = true;
+                if (<name>BooleanHashMap.this.containsKey(REMOVED_KEY))
+                {
+                    return <name>BooleanHashMap.this.sentinelValues.oneValue;
+                }
+            }
+
+            <type>[] keys = <name>BooleanHashMap.this.keys;
+            while (!isNonSentinel(keys[this.position]))
+            {
+                this.position++;
+            }
+            boolean result = <name>BooleanHashMap.this.values.get(this.position);
+            this.position++;
+            return result;
+        }
+    }
+
+    private class KeysView implements Lazy<name>Iterable
+    {
+        public boolean isEmpty()
+        {
+            return <name>BooleanHashMap.this.isEmpty();
+        }
+
+        public boolean notEmpty()
+        {
+            return <name>BooleanHashMap.this.notEmpty();
+        }
+
+        public int size()
+        {
+            return <name>BooleanHashMap.this.size();
+        }
+
+        public boolean contains(<type> key)
+        {
+            return <name>BooleanHashMap.this.containsKey(key);
+        }
+
+        public boolean containsAll(<type>... keys)
+        {
+            for (<type> key : keys)
+            {
+                if (!<name>BooleanHashMap.this.containsKey(key))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public boolean containsAll(<name>Iterable source)
+        {
+            return source.allSatisfy(new <name>Predicate()
+            {
+                public boolean accept(<type> key)
+                {
+                    return <name>BooleanHashMap.this.containsKey(key);
+                }
+            });
+        }
+
+        public <name>Iterator <type>Iterator()
+        {
+            return new KeySetIterator();
+        }
+
+        public void forEach(<name>Procedure procedure)
+        {
+            <name>BooleanHashMap.this.forEachKey(procedure);
+        }
+
+        public String makeString()
+        {
+            return this.makeString(", ");
+        }
+
+        public String makeString(String separator)
+        {
+            return this.makeString("", separator, "");
+        }
+
+        public String makeString(String start, String separator, String end)
+        {
+            Appendable stringBuilder = new StringBuilder();
+            this.appendString(stringBuilder, start, separator, end);
+            return stringBuilder.toString();
+        }
+
+        public void appendString(Appendable appendable)
+        {
+            this.appendString(appendable, ", ");
+        }
+
+        public void appendString(Appendable appendable, String separator)
+        {
+            this.appendString(appendable, "", separator, "");
+        }
+
+        public void appendString(Appendable appendable, String start, String separator, String end)
+        {
+            try
+            {
+                appendable.append(start);
+                boolean first = true;
+                if (<name>BooleanHashMap.this.sentinelValues != null)
+                {
+                    if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey)
+                    {
+                        appendable.append(String.valueOf(EMPTY_KEY));
+                        first = false;
+                    }
+                    if (<name>BooleanHashMap.this.sentinelValues.containsOneKey)
+                    {
+                        if (!first)
+                        {
+                            appendable.append(separator);
+                        }
+                        appendable.append(String.valueOf(REMOVED_KEY));
+                        first = false;
+                    }
+                }
+                for (<type> key : <name>BooleanHashMap.this.keys)
+                {
+                    if (isNonSentinel(key))
+                    {
+                        if (!first)
+                        {
+                            appendable.append(separator);
+                        }
+                        appendable.append(String.valueOf(key));
+                        first = false;
+                    }
+                }
+                appendable.append(end);
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public int count(<name>Predicate predicate)
+        {
+            int count = 0;
+            if (<name>BooleanHashMap.this.sentinelValues != null)
+            {
+                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey && predicate.accept(EMPTY_KEY))
+                {
+                    count++;
+                }
+                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey && predicate.accept(REMOVED_KEY))
+                {
+                    count++;
+                }
+            }
+            for (<type> key : <name>BooleanHashMap.this.keys)
+            {
+                if (isNonSentinel(key) && predicate.accept(key))
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
+
+        public boolean anySatisfy(<name>Predicate predicate)
+        {
+            if (<name>BooleanHashMap.this.sentinelValues != null)
+            {
+                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey && predicate.accept(EMPTY_KEY))
+                {
+                    return true;
+                }
+                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey && predicate.accept(REMOVED_KEY))
+                {
+                    return true;
+                }
+            }
+            for (<type> key : <name>BooleanHashMap.this.keys)
+            {
+                if (isNonSentinel(key) && predicate.accept(key))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public boolean allSatisfy(<name>Predicate predicate)
+        {
+            if (<name>BooleanHashMap.this.sentinelValues != null)
+            {
+                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey && !predicate.accept(EMPTY_KEY))
+                {
+                    return false;
+                }
+                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey && !predicate.accept(REMOVED_KEY))
+                {
+                    return false;
+                }
+            }
+            for (<type> key : <name>BooleanHashMap.this.keys)
+            {
+                if (isNonSentinel(key) && !predicate.accept(key))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public boolean noneSatisfy(<name>Predicate predicate)
+        {
+            return !this.anySatisfy(predicate);
+        }
+
+        public Lazy<name>Iterable select(<name>Predicate predicate)
+        {
+            return new Select<name>Iterable(this, predicate);
+        }
+
+        public Lazy<name>Iterable reject(<name>Predicate predicate)
+        {
+            return new Select<name>Iterable(this, <name>Predicates.not(predicate));
+        }
+
+        public <type> detectIfNone(<name>Predicate predicate, <type> value)
+        {
+            if (<name>BooleanHashMap.this.sentinelValues != null)
+            {
+                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey && predicate.accept(EMPTY_KEY))
+                {
+                    return EMPTY_KEY;
+                }
+                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey && predicate.accept(REMOVED_KEY))
+                {
+                    return REMOVED_KEY;
+                }
+            }
+            for (<type> key : <name>BooleanHashMap.this.keys)
+            {
+                if (isNonSentinel(key) && predicate.accept(key))
+                {
+                    return key;
+                }
+            }
+            return value;
+        }
+
+        public \<V> RichIterable\<V> collect(<name>ToObjectFunction\<? extends V> function)
+        {
+            FastList\<V> target = FastList.newList(this.size());
+            if (<name>BooleanHashMap.this.sentinelValues != null)
+            {
+                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey)
+                {
+                    target.add(function.valueOf(EMPTY_KEY));
+                }
+                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey)
+                {
+                    target.add(function.valueOf(REMOVED_KEY));
+                }
+            }
+            for (<type> key : <name>BooleanHashMap.this.keys)
+            {
+                if (isNonSentinel(key))
+                {
+                    target.add(function.valueOf(key));
+                }
+            }
+            return target;
+        }
+
+        public <wideType.(type)> sum()
+        {
+            <wideType.(type)> result = <wideZero.(type)>;
+
+            if (<name>BooleanHashMap.this.sentinelValues != null)
+            {
+                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey)
+                {
+                    result += EMPTY_KEY;
+                }
+                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey)
+                {
+                    result += REMOVED_KEY;
+                }
+            }
+            for (<type> key : <name>BooleanHashMap.this.keys)
+            {
+                if (isNonSentinel(key))
+                {
+                    result += key;
+                }
+            }
+
+            return result;
+        }
+
+        public <type> max()
+        {
+            if (this.isEmpty())
+            {
+                throw new NoSuchElementException();
+            }
+            <name>Iterator iterator = this.<type>Iterator();
+            <type> max = iterator.next();
+            while (iterator.hasNext())
+            {
+                <type> value = iterator.next();
+                if (<(lessThan.(type))("max", "value")>)
+                {
+                    max = value;
+                }
+            }
+            return max;
+        }
+
+        public <type> min()
+        {
+            if (this.isEmpty())
+            {
+                throw new NoSuchElementException();
+            }
+            <name>Iterator iterator = this.<type>Iterator();
+            <type> min = iterator.next();
+            while (iterator.hasNext())
+            {
+                <type> value = iterator.next();
+                if (<(lessThan.(type))("value", "min")>)
+                {
+                    min = value;
+                }
+            }
+            return min;
+        }
+
+        public <type> minIfEmpty(<type> defaultValue)
+        {
+            if (this.isEmpty())
+            {
+                return defaultValue;
+            }
+            return this.min();
+        }
+
+        public <type> maxIfEmpty(<type> defaultValue)
+        {
+            if (this.isEmpty())
+            {
+                return defaultValue;
+            }
+            return this.max();
+        }
+
+        public double average()
+        {
+            return <castSum.(type)>this.sum() / (double) this.size();
+        }
+
+        public double median()
+        {
+            if (this.isEmpty())
+            {
+                throw new NoSuchElementException();
+            }
+            <type>[] sortedArray = this.toSortedArray();
+            int middleIndex = sortedArray.length >\> 1;
+            if (sortedArray.length > 1 && (sortedArray.length & 1) == 0)
+            {
+                <type> first = sortedArray[middleIndex];
+                <type> second = sortedArray[middleIndex - 1];
+                return (<castDouble.(type)>first + <castDouble.(type)>second) / 2.0;
+            }
+            return <castDouble.(type)>sortedArray[middleIndex];
+        }
+
+        public <type>[] toSortedArray()
+        {
+            <type>[] array = this.toArray();
+            Arrays.sort(array);
+            return array;
+        }
+
+        public <type>[] toArray()
+        {
+            int size = <name>BooleanHashMap.this.size();
+            final <type>[] result = new <type>[size];
+            <name>BooleanHashMap.this.forEachKey(new <name>Procedure()
+            {
+                private int index;
+
+                public void value(<type> each)
+                {
+                    result[this.index] = each;
+                    this.index++;
+                }
+            });
+            return result;
+        }
+
+        public Mutable<name>List toList()
+        {
+            return <name>ArrayList.newList(this);
+        }
+
+        public Mutable<name>List toSortedList()
+        {
+            return <name>ArrayList.newList(this).sortThis();
+        }
+
+        public Mutable<name>Set toSet()
+        {
+            return <name>HashSet.newSet(this);
+        }
+
+        public Mutable<name>Bag toBag()
+        {
+            return <name>HashBag.newBag(this);
+        }
+
+        public Lazy<name>Iterable asLazy()
+        {
+            return this;
+        }
+    }
+
+    private class KeySetIterator implements <name>Iterator
+    {
+        private int count;
+        private int position;
+        private boolean handledZero;
+        private boolean handledOne;
+
+        public boolean hasNext()
+        {
+            return this.count \< <name>BooleanHashMap.this.size();
+        }
+
+        public <type> next()
+        {
+            if (!this.hasNext())
+            {
+                throw new NoSuchElementException("next() called, but the iterator is exhausted");
+            }
+            this.count++;
+
+            if (!this.handledZero)
+            {
+                this.handledZero = true;
+                if (<name>BooleanHashMap.this.containsKey(EMPTY_KEY))
+                {
+                    return EMPTY_KEY;
+                }
+            }
+            if (!this.handledOne)
+            {
+                this.handledOne = true;
+                if (<name>BooleanHashMap.this.containsKey(REMOVED_KEY))
+                {
+                    return REMOVED_KEY;
+                }
+            }
+
+            <type>[] keys = <name>BooleanHashMap.this.keys;
+            while (!isNonSentinel(keys[this.position]))
+            {
+                this.position++;
+            }
+            <type> result = keys[this.position];
+            this.position++;
+            return result;
+        }
+    }
+}
+
+>>

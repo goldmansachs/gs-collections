@@ -36,7 +36,9 @@ import com.gs.collections.api.block.predicate.primitive.<name1><name2>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name1>Procedure;
 import com.gs.collections.api.block.procedure.primitive.<name1><name2>Procedure;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.block.procedure.primitive.<name2>Procedure;<endif>
+import com.gs.collections.api.iterator.<name2>Iterator;
 import com.gs.collections.api.map.primitive.<name1><name2>Map;
+import com.gs.collections.api.set.primitive.Mutable<name2>Set;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.bag.mutable.primitive.<name2>HashBag;
 import com.gs.collections.impl.block.factory.primitive.<name2>Predicates;
@@ -299,7 +301,7 @@ public class <name1><name2>HashMapTest
         values.setAccessible(true);
         Assert.assertEquals(16L, ((<type1>[]) keys.get(hashMap)).length);
         Assert.assertEquals(16L, ((<type2>[]) values.get(hashMap)).length);
-        Assert.assertEquals(8, hashMap.size());
+        Verify.assertSize(8, hashMap);
         for (int i = 2; i \< 10; i++)
         {
             Assert.assertTrue(hashMap.containsKey(<(castFromInt.(type1))("i")>));
@@ -731,11 +733,11 @@ public class <name1><name2>HashMapTest
         <name1><name2>HashMap map8 = <name1><name2>HashMap.newWithKeysValues(<["0", "1"]:keyValue(); separator=", ">);
 
         Verify.assertEqualsAndHashCode(map1, map2);
-        Verify.assertNotEquals(map1, map3);
-        Verify.assertNotEquals(map1, map4);
-        Verify.assertNotEquals(map1, map5);
-        Verify.assertNotEquals(map7, map6);
-        Verify.assertNotEquals(map7, map8);
+        Assert.assertNotEquals(map1, map3);
+        Assert.assertNotEquals(map1, map4);
+        Assert.assertNotEquals(map1, map5);
+        Assert.assertNotEquals(map7, map6);
+        Assert.assertNotEquals(map7, map8);
     }
 
     @Test
@@ -796,7 +798,7 @@ public class <name1><name2>HashMapTest
                 sum0[0] += each;
             }
         });
-        Assert.assertEquals(sum0[0], <(literal.(type2))("5")><(wideDelta.(type2))>);
+        Assert.assertEquals(<(literal.(type2))("5")>, sum0[0]<(wideDelta.(type2))>);
 
         <name1><name2>HashMap map1 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("2")>, <(literal.(type1))("3")>, <(literal.(type2))("4")>);
         final <type2>[] sum1 = new <type2>[1];
@@ -807,7 +809,7 @@ public class <name1><name2>HashMapTest
                 sum1[0] += each;
             }
         });
-        Assert.assertEquals(sum1[0], <(literal.(type2))("6")><(wideDelta.(type2))>);
+        Assert.assertEquals(<(literal.(type2))("6")>, sum1[0]<(wideDelta.(type2))>);
 
         <name1><name2>HashMap map01 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("1")>, <(literal.(type1))("1")>, <(literal.(type2))("2")>);
         final <type2>[] sum01 = new <type2>[1];
@@ -818,7 +820,7 @@ public class <name1><name2>HashMapTest
                 sum01[0] += each;
             }
         });
-        Assert.assertEquals(sum01[0], <(literal.(type2))("3")><(wideDelta.(type2))>);
+        Assert.assertEquals(<(literal.(type2))("3")>, sum01[0]<(wideDelta.(type2))>);
 
         <name1><name2>HashMap map = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("3")>, <(literal.(type2))("4")>, <(literal.(type1))("4")>, <(literal.(type2))("5")>);
         final <type2>[] sum = new <type2>[1];
@@ -829,7 +831,7 @@ public class <name1><name2>HashMapTest
                 sum[0] += each;
             }
         });
-        Assert.assertEquals(sum[0], <(literal.(type2))("9")><(wideDelta.(type2))>);
+        Assert.assertEquals(<(literal.(type2))("9")>, sum[0]<(wideDelta.(type2))>);
     }
 
     @Test
@@ -844,7 +846,7 @@ public class <name1><name2>HashMapTest
                 sum0[0] += each;
             }
         });
-        Assert.assertEquals(sum0[0], <(literal.(type2))("5")><(wideDelta.(type2))>);
+        Assert.assertEquals(<(literal.(type2))("5")>, sum0[0]<(wideDelta.(type2))>);
 
         <name1><name2>HashMap map1 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("2")>, <(literal.(type1))("3")>, <(literal.(type2))("4")>);
         final <type2>[] sum1 = new <type2>[1];
@@ -855,7 +857,7 @@ public class <name1><name2>HashMapTest
                 sum1[0] += each;
             }
         });
-        Assert.assertEquals(sum1[0], <(literal.(type2))("6")><(wideDelta.(type2))>);
+        Assert.assertEquals(<(literal.(type2))("6")>, sum1[0]<(wideDelta.(type2))>);
 
         <name1><name2>HashMap map01 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("1")>, <(literal.(type1))("1")>, <(literal.(type2))("2")>);
         final <type2>[] sum01 = new <type2>[1];
@@ -866,7 +868,7 @@ public class <name1><name2>HashMapTest
                 sum01[0] += each;
             }
         });
-        Assert.assertEquals(sum01[0], <(literal.(type2))("3")><(wideDelta.(type2))>);
+        Assert.assertEquals(<(literal.(type2))("3")>, sum01[0]<(wideDelta.(type2))>);
 
         <name1><name2>HashMap map = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("3")>, <(literal.(type2))("4")>, <(literal.(type1))("4")>, <(literal.(type2))("5")>);
         final <type2>[] sum = new <type2>[1];
@@ -877,7 +879,7 @@ public class <name1><name2>HashMapTest
                 sum[0] += each;
             }
         });
-        Assert.assertEquals(sum[0], <(literal.(type2))("9")><(wideDelta.(type2))>);
+        Assert.assertEquals(<(literal.(type2))("9")>, sum[0]<(wideDelta.(type2))>);
     }
 
     @Test
@@ -892,7 +894,7 @@ public class <name1><name2>HashMapTest
                 sum0[0] += each;
             }
         });
-        Assert.assertEquals(sum0[0], <(literal.(type1))("3")><(wideDelta.(type1))>);
+        Assert.assertEquals(<(literal.(type1))("3")>, sum0[0]<(wideDelta.(type1))>);
 
         <name1><name2>HashMap map1 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("2")>, <(literal.(type1))("3")>, <(literal.(type2))("4")>);
         final <type1>[] sum1 = new <type1>[1];
@@ -903,7 +905,7 @@ public class <name1><name2>HashMapTest
                 sum1[0] += each;
             }
         });
-        Assert.assertEquals(sum1[0], <(literal.(type1))("4")><(wideDelta.(type1))>);
+        Assert.assertEquals(<(literal.(type1))("4")>, sum1[0]<(wideDelta.(type1))>);
 
         <name1><name2>HashMap map01 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("1")>, <(literal.(type1))("1")>, <(literal.(type2))("2")>);
         final <type1>[] sum01 = new <type1>[1];
@@ -914,7 +916,7 @@ public class <name1><name2>HashMapTest
                 sum01[0] += each;
             }
         });
-        Assert.assertEquals(sum01[0], <(literal.(type1))("1")><(wideDelta.(type1))>);
+        Assert.assertEquals(<(literal.(type1))("1")>, sum01[0]<(wideDelta.(type1))>);
 
         <name1><name2>HashMap map = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("3")>, <(literal.(type2))("4")>, <(literal.(type1))("4")>, <(literal.(type2))("5")>);
         final <type1>[] sum = new <type1>[1];
@@ -925,7 +927,7 @@ public class <name1><name2>HashMapTest
                 sum[0] += each;
             }
         });
-        Assert.assertEquals(sum[0], <(literal.(type1))("7")><(wideDelta.(type1))>);
+        Assert.assertEquals(<(literal.(type1))("7")>, sum[0]<(wideDelta.(type1))>);
     }
 
     @Test
@@ -942,8 +944,8 @@ public class <name1><name2>HashMapTest
                 sumValue0[0] += eachValue;
             }
         });
-        Assert.assertEquals(sumKey0[0], <(literal.(type1))("3")><(wideDelta.(type1))>);
-        Assert.assertEquals(sumValue0[0], <(literal.(type2))("5")><(wideDelta.(type2))>);
+        Assert.assertEquals(<(literal.(type1))("3")>, sumKey0[0]<(wideDelta.(type1))>);
+        Assert.assertEquals(<(literal.(type2))("5")>, sumValue0[0]<(wideDelta.(type2))>);
 
         <name1><name2>HashMap map1 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("2")>, <(literal.(type1))("3")>, <(literal.(type2))("4")>);
         final <type1>[] sumKey1 = new <type1>[1];
@@ -956,8 +958,8 @@ public class <name1><name2>HashMapTest
                 sumValue1[0] += eachValue;
             }
         });
-        Assert.assertEquals(sumKey1[0], <(literal.(type1))("4")><(wideDelta.(type1))>);
-        Assert.assertEquals(sumValue1[0], <(literal.(type2))("6")><(wideDelta.(type2))>);
+        Assert.assertEquals(<(literal.(type1))("4")>, sumKey1[0]<(wideDelta.(type1))>);
+        Assert.assertEquals(<(literal.(type2))("6")>, sumValue1[0]<(wideDelta.(type2))>);
 
         <name1><name2>HashMap map01 = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("0")>, <(literal.(type2))("1")>, <(literal.(type1))("1")>, <(literal.(type2))("2")>);
         final <type1>[] sumKey01 = new <type1>[1];
@@ -970,8 +972,8 @@ public class <name1><name2>HashMapTest
                 sumValue01[0] += eachValue;
             }
         });
-        Assert.assertEquals(sumKey01[0], <(literal.(type1))("1")><(wideDelta.(type1))>);
-        Assert.assertEquals(sumValue01[0], <(literal.(type2))("3")><(wideDelta.(type2))>);
+        Assert.assertEquals(<(literal.(type1))("1")>, sumKey01[0]<(wideDelta.(type1))>);
+        Assert.assertEquals(<(literal.(type2))("3")>, sumValue01[0]<(wideDelta.(type2))>);
 
         <name1><name2>HashMap map = <name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("3")>, <(literal.(type2))("4")>, <(literal.(type1))("4")>, <(literal.(type2))("5")>);
         final <type1>[] sumKey = new <type1>[1];
@@ -984,8 +986,8 @@ public class <name1><name2>HashMapTest
                 sumValue[0] += eachValue;
             }
         });
-        Assert.assertEquals(sumKey[0], <(literal.(type1))("7")><(wideDelta.(type1))>);
-        Assert.assertEquals(sumValue[0], <(literal.(type2))("9")><(wideDelta.(type2))>);
+        Assert.assertEquals(<(literal.(type1))("7")>, sumKey[0]<(wideDelta.(type1))>);
+        Assert.assertEquals(<(literal.(type2))("9")>, sumValue[0]<(wideDelta.(type2))>);
     }
 
     @Test
@@ -1154,8 +1156,6 @@ public class <name1><name2>HashMapTest
     public void collect()
     {
         <name1><name2>Map map = <name1><name2>HashMap.newWithKeysValues(<["0", "1", "2", "3"]:keyValue(); separator=", ">);
-        Assert.assertEquals(2, map.count(<name2>Predicates.greaterThan(<(literal.(type2))("1")>)));
-        Assert.assertEquals(2, map.count(<name2>Predicates.lessThan(<(literal.(type2))("2")>)));
 
         RichIterable\<<primitive2.wrapperName>\> objects = map.collect(new <name2>ToObjectFunction\<<primitive2.wrapperName>\>()
         {
@@ -1320,6 +1320,39 @@ public class <name1><name2>HashMapTest
     {
         <name1><name2>Map map = <name1><name2>HashMap.newWithKeysValues(<["0", "1", "2", "3"]:keyValue(); separator=", ">);
         Assert.assertEquals(<name2>HashBag.newBagWith(<["0", "1", "2", "3"]:(literal.(type2))(); separator=", ">), map.toBag());
+    }
+
+    @Test
+    public void <type2>Iterator()
+    {
+        Mutable<name2>Set expected = <name2>HashSet.newSetWith(<(literal.(type2))("0")>, <(literal.(type2))("31")>, <(literal.(type2))("32")>);
+        Mutable<name2>Set actual = <name2>HashSet.newSetWith();
+
+        final <name2>Iterator iterator = this.map.<type2>Iterator();
+        Assert.assertTrue(iterator.hasNext());
+        actual.add(iterator.next());
+        Assert.assertTrue(iterator.hasNext());
+        actual.add(iterator.next());
+        Assert.assertTrue(iterator.hasNext());
+        actual.add(iterator.next());
+        Assert.assertFalse(iterator.hasNext());
+
+        Assert.assertEquals(expected, actual);
+        Verify.assertThrows(NoSuchElementException.class, new Runnable()
+        {
+            public void run()
+            {
+                iterator.next();
+            }
+        });
+
+        Verify.assertThrows(NoSuchElementException.class, new Runnable()
+        {
+            public void run()
+            {
+                <name1><name2>HashMap.newMap().<type2>Iterator().next();
+            }
+        });
     }
 }
 
