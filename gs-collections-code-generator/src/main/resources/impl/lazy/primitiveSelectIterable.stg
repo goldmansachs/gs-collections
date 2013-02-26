@@ -126,7 +126,6 @@ public class Select<name>Iterable
     }
 
     <(arithmeticMethods.(type))(name, type)>
-
     public <type>[] toArray()
     {
         final <type>[] array = new <type>[this.size()];
@@ -232,11 +231,6 @@ public class Select<name>Iterable
     public Mutable<name>List toList()
     {
         return <name>ArrayList.newList(this);
-    }
-
-    public Mutable<name>List toSortedList()
-    {
-        return <name>ArrayList.newList(this).sortThis();
     }
 
     public Mutable<name>Set toSet()
@@ -443,6 +437,12 @@ allMethods(name, type) ::=<<
         Arrays.sort(array);
         return array;
     }
+
+    public Mutable<name>List toSortedList()
+    {
+        return <name>ArrayList.newList(this).sortThis();
+    }
+
 >>
 
 noMethods(name, type) ::= ""

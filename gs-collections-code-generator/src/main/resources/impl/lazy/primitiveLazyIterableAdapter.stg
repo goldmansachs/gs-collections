@@ -109,7 +109,6 @@ public class Lazy<name>IterableAdapter
     }
 
     <(arithmeticMethods.(type))(name, type)>
-
     public <type>[] toArray()
     {
         return this.delegate.toArray();
@@ -169,11 +168,6 @@ public class Lazy<name>IterableAdapter
     public Mutable<name>List toList()
     {
         return this.delegate.toList();
-    }
-
-    public Mutable<name>List toSortedList()
-    {
-        return this.delegate.toSortedList();
     }
 
     public Mutable<name>Set toSet()
@@ -246,6 +240,12 @@ public <type>[] toSortedArray()
 {
     return this.delegate.toSortedArray();
 }
+
+public Mutable<name>List toSortedList()
+{
+    return this.delegate.toSortedList();
+}
+
 >>
 
 noMethods(name, type) ::= ""

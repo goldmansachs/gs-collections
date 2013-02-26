@@ -42,11 +42,28 @@ public interface Mutable<name>List extends Mutable<name>Collection, <name>List
     Mutable<name>List reverseThis();
 
     Mutable<name>List toReversed();
-
-    /**
-     * Sorts this list mutating its contents and returns the same mutable list (this).
-     */
-    Mutable<name>List sortThis();
+    <(arithmeticMethods.(type))(type)>
 }
 
 >>
+
+arithmeticMethods ::= [
+    "byte": "allMethods",
+    "short": "allMethods",
+    "char": "allMethods",
+    "int": "allMethods",
+    "long": "allMethods",
+    "float": "allMethods",
+    "double": "allMethods",
+    "boolean": "noMethods"
+]
+
+allMethods(type) ::= <<
+
+/**
+ * Sorts this list mutating its contents and returns the same mutable list (this).
+ */
+Mutable<name>List sortThis();
+>>
+
+noMethods(type) ::= ""

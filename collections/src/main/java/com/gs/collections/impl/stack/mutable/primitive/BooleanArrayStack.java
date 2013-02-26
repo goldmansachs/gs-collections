@@ -359,11 +359,6 @@ public final class BooleanArrayStack implements MutableBooleanStack, Externaliza
         return BooleanArrayList.newList(this);
     }
 
-    public MutableBooleanList toSortedList()
-    {
-        return BooleanArrayList.newList(this).sortThis();
-    }
-
     public MutableBooleanSet toSet()
     {
         return BooleanHashSet.newSet(this);

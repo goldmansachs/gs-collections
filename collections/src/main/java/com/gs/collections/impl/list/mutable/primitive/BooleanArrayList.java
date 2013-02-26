@@ -35,7 +35,6 @@ import com.gs.collections.api.list.primitive.BooleanList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
-import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
 import com.gs.collections.impl.lazy.primitive.LazyBooleanIterableAdapter;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
@@ -519,23 +518,6 @@ public final class BooleanArrayList
         return this;
     }
 
-    public BooleanArrayList sortThis()
-    {
-        if (this.size() > 1)
-        {
-            int falseValues = this.count(BooleanPredicates.isFalse());
-            if (falseValues < this.size())
-            {
-                if (falseValues > 0)
-                {
-                    this.items.set(0, falseValues, false);
-                    this.items.set(falseValues, this.size(), true);
-                }
-            }
-        }
-        return this;
-    }
-
     public BooleanArrayList toReversed()
     {
         return new BooleanArrayList(this.asReversed());
@@ -674,11 +656,6 @@ public final class BooleanArrayList
     public MutableBooleanList toList()
     {
         return BooleanArrayList.newList(this);
-    }
-
-    public MutableBooleanList toSortedList()
-    {
-        return BooleanArrayList.newList(this).sortThis();
     }
 
     public MutableBooleanSet toSet()
@@ -981,11 +958,6 @@ public final class BooleanArrayList
         public MutableBooleanList toList()
         {
             return BooleanArrayList.newList(this);
-        }
-
-        public MutableBooleanList toSortedList()
-        {
-            return BooleanArrayList.newList(this).sortThis();
         }
 
         public MutableBooleanSet toSet()

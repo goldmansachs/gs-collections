@@ -1,5 +1,7 @@
 import "copyright.stg"
 
+skipBooleanKeys() ::= "true"
+
 hasTwoPrimitives() ::= "true"
 
 targetPath() ::= "com/gs/collections/api/map/primitive"

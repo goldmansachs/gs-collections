@@ -639,11 +639,6 @@ public final class BooleanHashBag implements MutableBooleanBag, Externalizable
         return BooleanArrayList.newList(this);
     }
 
-    public MutableBooleanList toSortedList()
-    {
-        return BooleanArrayList.newList(this).sortThis();
-    }
-
     public MutableBooleanSet toSet()
     {
         return BooleanHashSet.newSet(this);

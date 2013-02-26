@@ -376,15 +376,6 @@ public class BooleanHashSetTest
     }
 
     @Test
-    public void toSortedList()
-    {
-        Assert.assertEquals(new BooleanArrayList(), this.set0.toSortedList());
-        Assert.assertEquals(BooleanArrayList.newListWith(false), this.set1.toSortedList());
-        Assert.assertEquals(BooleanArrayList.newListWith(true), this.set2.toSortedList());
-        Assert.assertEquals(BooleanArrayList.newListWith(false, true), this.set3.toSortedList());
-    }
-
-    @Test
     public void toSet()
     {
         Assert.assertEquals(new BooleanHashSet(), this.set0.toSet());

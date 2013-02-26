@@ -1148,18 +1148,6 @@ public class ObjectBooleanHashMapTest
     }
 
     @Test
-    public void toSortedList()
-    {
-        ObjectBooleanHashMap<String> map1 = ObjectBooleanHashMap.newWithKeysValues("1", false, null, true, "2", false);
-        ObjectBooleanHashMap<String> map2 = ObjectBooleanHashMap.newWithKeysValues("0", true);
-        ObjectBooleanHashMap<String> map3 = ObjectBooleanHashMap.newWithKeysValues("0", false);
-
-        Assert.assertEquals(BooleanArrayList.newListWith(false, false, true), map1.toSortedList());
-        Assert.assertEquals(BooleanArrayList.newListWith(true), map2.toSortedList());
-        Assert.assertEquals(BooleanArrayList.newListWith(false), map3.toSortedList());
-    }
-
-    @Test
     public void toSet()
     {
         ObjectBooleanHashMap<String> map1 = ObjectBooleanHashMap.newWithKeysValues("1", false, null, true, "2", false);

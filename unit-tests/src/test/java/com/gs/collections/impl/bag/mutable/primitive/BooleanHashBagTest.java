@@ -496,12 +496,6 @@ public class BooleanHashBagTest
     }
 
     @Test
-    public void toSortedList()
-    {
-        Assert.assertEquals(BooleanArrayList.newListWith(false, false, true, true, true, true), BooleanHashBag.newBagWith(true, false, false, true, true, true).toSortedList());
-    }
-
-    @Test
     public void toSet()
     {
         Assert.assertEquals(BooleanHashSet.newSetWith(true, false), BooleanHashBag.newBagWith(true, false, false, true, true, true).toSet());

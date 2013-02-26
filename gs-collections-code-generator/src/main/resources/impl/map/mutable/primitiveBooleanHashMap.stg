@@ -1321,11 +1321,6 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
         return BooleanArrayList.newList(this);
     }
 
-    public MutableBooleanList toSortedList()
-    {
-        return BooleanArrayList.newList(this).sortThis();
-    }
-
     public MutableBooleanSet toSet()
     {
         return BooleanHashSet.newSet(this);

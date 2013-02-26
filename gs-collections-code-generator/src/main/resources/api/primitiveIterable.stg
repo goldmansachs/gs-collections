@@ -51,7 +51,6 @@ public interface <name>Iterable extends PrimitiveIterable
     \<V> RichIterable\<V> collect(<name>ToObjectFunction\<? extends V> function);
 
     <(arithmeticMethods.(type))(type)>
-
     <type>[] toArray();
 
     boolean contains(<type> value);
@@ -61,8 +60,6 @@ public interface <name>Iterable extends PrimitiveIterable
     boolean containsAll(<name>Iterable source);
 
     Mutable<name>List toList();
-
-    Mutable<name>List toSortedList();
 
     Mutable<name>Set toSet();
 
@@ -100,6 +97,9 @@ double average();
 double median();
 
 <type>[] toSortedArray();
+
+Mutable<name>List toSortedList();
+
 >>
 
 noMethods(type) ::= ""

@@ -65,12 +65,13 @@ public class GsCollectionsCodeGenerator
 
                 boolean hasTwoPrimitives = this.templateFile.isDefined("hasTwoPrimitives") && Boolean.valueOf(this.templateFile.getInstanceOf("hasTwoPrimitives").render());
                 boolean skipBoolean = this.templateFile.isDefined("skipBoolean") && Boolean.valueOf(this.templateFile.getInstanceOf("skipBoolean").render());
+                boolean skipBooleanKeys = this.templateFile.isDefined("skipBooleanKeys") && Boolean.valueOf(this.templateFile.getInstanceOf("skipBooleanKeys").render());
 
                 if (hasTwoPrimitives)
                 {
                     for (Primitive primitive1 : Primitive.values())
                     {
-                        if (primitive1 == Primitive.BOOLEAN && skipBoolean)
+                        if (primitive1 == Primitive.BOOLEAN && (skipBoolean || skipBooleanKeys))
                         {
                             continue;
                         }

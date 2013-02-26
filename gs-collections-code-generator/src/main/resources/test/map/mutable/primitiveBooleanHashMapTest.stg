@@ -1269,13 +1269,6 @@ public class <name>BooleanHashMapTest
     }
 
     @Test
-    public void toSortedList()
-    {
-        <name>BooleanMap map = <name>BooleanHashMap.newWithKeysValues(<(literal.(type))("0")>, true, <(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false);
-        Assert.assertEquals(BooleanArrayList.newListWith(false, false, true, true), map.toSortedList());
-    }
-
-    @Test
     public void toSet()
     {
         <name>BooleanMap map = <name>BooleanHashMap.newWithKeysValues(<(literal.(type))("0")>, true, <(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false);

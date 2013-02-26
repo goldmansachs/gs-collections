@@ -20,7 +20,7 @@ import com.gs.collections.api.block.predicate.primitive.<name>ObjectPredicate;
  *
  * @since 3.0.
  */
-public interface ImmutableObject<name>Map\<K> extends <name>ObjectMap\<K>
+public interface ImmutableObject<name>Map\<K> extends Object<name>Map\<K>
 {
     ImmutableObject<name>Map\<K> select(<name>ObjectPredicate\<? super K> predicate);
 

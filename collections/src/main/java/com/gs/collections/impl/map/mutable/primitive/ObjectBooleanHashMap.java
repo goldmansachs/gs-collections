@@ -752,11 +752,6 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         return result;
     }
 
-    public MutableBooleanList toSortedList()
-    {
-        return this.toList().sortThis();
-    }
-
     public MutableBooleanSet toSet()
     {
         MutableBooleanSet result = new BooleanHashSet();

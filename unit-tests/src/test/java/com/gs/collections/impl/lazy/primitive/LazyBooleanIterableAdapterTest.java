@@ -185,12 +185,6 @@ public class LazyBooleanIterableAdapterTest
     }
 
     @Test
-    public void toSortedList()
-    {
-        Assert.assertEquals(BooleanArrayList.newListWith(false, true, true), this.iterable.toSortedList());
-    }
-
-    @Test
     public void toSet()
     {
         Assert.assertEquals(BooleanHashSet.newSetWith(true, false), this.iterable.toSet());
