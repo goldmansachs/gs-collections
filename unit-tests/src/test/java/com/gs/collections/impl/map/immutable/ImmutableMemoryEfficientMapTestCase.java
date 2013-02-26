@@ -157,6 +157,15 @@ public abstract class ImmutableMemoryEfficientMapTestCase extends ImmutableMapTe
     }
 
     @Test
+    public void noneSatisfy()
+    {
+        ImmutableMap<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
+
+        Assert.assertTrue(map.noneSatisfy(Predicates.instanceOf(Integer.class)));
+        Assert.assertTrue(map.noneSatisfy(Predicates.equal("Monkey")));
+    }
+
+    @Test
     public void appendString()
     {
         ImmutableMap<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");

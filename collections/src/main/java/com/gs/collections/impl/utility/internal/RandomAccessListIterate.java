@@ -657,6 +657,32 @@ public final class RandomAccessListIterate
         return true;
     }
 
+    public static <T> boolean noneSatisfy(List<T> list, Predicate<? super T> predicate)
+    {
+        int size = list.size();
+        for (int i = 0; i < size; i++)
+        {
+            if (predicate.accept(list.get(i)))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public static <T, P> boolean noneSatisfyWith(List<T> list, Predicate2<? super T, ? super P> predicate, P injectedValue)
+    {
+        int size = list.size();
+        for (int i = 0; i < size; i++)
+        {
+            if (predicate.accept(list.get(i), injectedValue))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static <T, IV> Twin<MutableList<T>> selectAndRejectWith(
             List<T> list,
             Predicate2<? super T, ? super IV> predicate,

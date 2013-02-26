@@ -334,6 +334,20 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     }
 
     @Test
+    public void noneSatisfy()
+    {
+        Assert.assertFalse(this.intSet.noneSatisfy(Predicates.instanceOf(Integer.class)));
+        Assert.assertTrue(this.intSet.noneSatisfy(Predicates.equal(10)));
+    }
+
+    @Test
+    public void noneSatisfyWith()
+    {
+        Assert.assertFalse(this.intSet.noneSatisfyWith(Predicates2.instanceOf(), Integer.class));
+        Assert.assertTrue(this.intSet.noneSatisfyWith(Predicates2.equal(), 10));
+    }
+
+    @Test
     public void count()
     {
         Assert.assertEquals(1, this.intSet.count(Predicates.instanceOf(Integer.class)));

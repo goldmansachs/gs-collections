@@ -329,6 +329,11 @@ public abstract class AbstractImmutableCollection<T> implements ImmutableCollect
         return IterableIterate.allSatisfy(this, predicate);
     }
 
+    public boolean noneSatisfy(Predicate<? super T> predicate)
+    {
+        return IterableIterate.noneSatisfy(this, predicate);
+    }
+
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
         return IterableIterate.injectInto(injectedValue, this, function);

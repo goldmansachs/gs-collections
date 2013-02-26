@@ -268,6 +268,16 @@ public abstract class AbstractMemoryEfficientMutableMapTest
     }
 
     @Test
+    public void noneSatisfy()
+    {
+        MutableMap<String, String> map = this.classUnderTest();
+
+        Assert.assertTrue(map.noneSatisfy(Predicates.instanceOf(Boolean.class)));
+        Assert.assertFalse(map.noneSatisfy(Predicates.instanceOf(String.class)));
+        Assert.assertTrue(map.noneSatisfy(Predicates.equal("Monkey")));
+    }
+
+    @Test
     public void anySatisfy()
     {
         MutableMap<String, String> map = this.classUnderTest();

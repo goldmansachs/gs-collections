@@ -729,6 +729,14 @@ public final class MapIterate
     }
 
     /**
+     * @see Iterate#noneSatisfy(Iterable, Predicate)
+     */
+    public static <K, V> boolean noneSatisfy(Map<K, V> map, Predicate<? super V> predicate)
+    {
+        return IterableIterate.noneSatisfy(map.values(), predicate);
+    }
+
+    /**
      * Iterate over the specified map applying the specified Function to each value
      * and return the results as a List.
      */

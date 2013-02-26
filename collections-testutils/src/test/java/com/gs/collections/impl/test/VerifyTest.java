@@ -1062,6 +1062,36 @@ public class VerifyTest
     }
 
     @Test
+    public void assertNoneSatisfy()
+    {
+        try
+        {
+            Verify.assertNoneSatisfy(FastList.newListWith(1, 3), IntegerPredicates.isOdd());
+            Assert.fail();
+        }
+        catch (AssertionError ex)
+        {
+            Verify.assertContains("satisfied the condition", ex.getMessage());
+            Verify.assertContains(VerifyTest.class.getName(), ex.getStackTrace()[0].toString());
+        }
+    }
+
+    @Test
+    public void assertNoneSatisfy_Map()
+    {
+        try
+        {
+            Verify.assertNoneSatisfy((Map<?, Integer>) UnifiedMap.newWithKeysValues(1, 1, 3, 3), IntegerPredicates.isOdd());
+            Assert.fail();
+        }
+        catch (AssertionError ex)
+        {
+            Verify.assertContains("satisfied the condition", ex.getMessage());
+            Verify.assertContains(VerifyTest.class.getName(), ex.getStackTrace()[0].toString());
+        }
+    }
+
+    @Test
     public void assertAnySatisfy()
     {
         try

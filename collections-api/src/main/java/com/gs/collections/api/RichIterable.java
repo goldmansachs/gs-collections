@@ -126,7 +126,7 @@ public interface
     boolean containsAll(Collection<?> source);
 
     /**
-     * Returns true if all elements in the specified var arg array are contained in this collection
+     * Returns true if all elements in the specified var arg array are contained in this collection.
      *
      * @since 1.0
      */
@@ -477,6 +477,14 @@ public interface
      * @since 1.0
      */
     boolean allSatisfy(Predicate<? super T> predicate);
+
+    /**
+     * Returns true if the predicate evaluates to false for every element of the iterable or if the iterable is empty.
+     * Otherwise, returns false.
+     *
+     * @since 3.0
+     */
+    boolean noneSatisfy(Predicate<? super T> predicate);
 
     /**
      * Returns the final result of evaluating function using each element of the iterable and the previous evaluation

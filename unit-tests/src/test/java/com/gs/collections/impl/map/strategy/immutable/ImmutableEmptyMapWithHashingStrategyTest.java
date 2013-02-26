@@ -159,6 +159,16 @@ public class ImmutableEmptyMapWithHashingStrategyTest extends ImmutableMemoryEff
 
     @Override
     @Test
+    public void noneSatisfy()
+    {
+        ImmutableMap<Integer, String> map = this.classUnderTest();
+
+        Assert.assertTrue(map.noneSatisfy(Predicates.instanceOf(Integer.class)));
+        Assert.assertTrue(map.noneSatisfy(Predicates.equal("Monkey")));
+    }
+
+    @Override
+    @Test
     public void anySatisfy()
     {
         ImmutableMap<Integer, String> map = this.classUnderTest();

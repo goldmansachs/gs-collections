@@ -151,6 +151,16 @@ public class ImmutableEmptyMapTest extends ImmutableMemoryEfficientMapTestCase
     }
 
     @Override
+    @Test
+    public void noneSatisfy()
+    {
+        ImmutableMap<String, String> map = new ImmutableEmptyMap<String, String>();
+
+        Assert.assertTrue(map.noneSatisfy(Predicates.instanceOf(String.class)));
+        Assert.assertTrue(map.noneSatisfy(Predicates.equal("Monkey")));
+    }
+
+    @Override
     @Test(expected = NoSuchElementException.class)
     public void max()
     {

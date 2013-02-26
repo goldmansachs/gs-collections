@@ -189,6 +189,18 @@ public class ArrayIterateTest
     }
 
     @Test(expected = IllegalArgumentException.class)
+    public void noneSatisfyThrowsOnNullArgument()
+    {
+        ArrayIterate.noneSatisfy(null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void noneSatisfyWithThrowsOnNullArgument()
+    {
+        ArrayIterate.noneSatisfyWith(null, null, null);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
     public void selectThrowsOnNullArgument()
     {
         ArrayIterate.select(null, null);
@@ -584,6 +596,19 @@ public class ArrayIterateTest
     public void allSatisfyWith()
     {
         Assert.assertTrue(ArrayIterate.allSatisfyWith(INTEGER_ARRAY, Predicates2.instanceOf(), Integer.class));
+    }
+
+    @Test
+    public void noneSatisfy()
+    {
+        Assert.assertTrue(ArrayIterate.noneSatisfy(INTEGER_ARRAY, Predicates.instanceOf(String.class)));
+        Assert.assertFalse(ArrayIterate.noneSatisfy(INTEGER_ARRAY, Predicates.notNull()));
+    }
+
+    @Test
+    public void noneSatisfyWith()
+    {
+        Assert.assertTrue(ArrayIterate.noneSatisfyWith(INTEGER_ARRAY, Predicates2.instanceOf(), String.class));
     }
 
     @Test

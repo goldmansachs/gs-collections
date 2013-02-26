@@ -337,6 +337,11 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().allSatisfy(predicate);
     }
 
+    public boolean noneSatisfy(Predicate<? super V> predicate)
+    {
+        return this.getMutableMap().noneSatisfy(predicate);
+    }
+
     public boolean anySatisfy(Predicate<? super V> predicate)
     {
         return this.getMutableMap().anySatisfy(predicate);

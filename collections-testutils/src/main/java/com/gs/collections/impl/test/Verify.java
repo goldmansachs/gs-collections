@@ -1467,6 +1467,53 @@ public final class Verify extends Assert
         }
     }
 
+    public static <T> void assertNoneSatisfy(Iterable<T> iterable, Predicate<? super T> predicate)
+    {
+        try
+        {
+            Verify.assertNoneSatisfy("The following items satisfied the condition", iterable, predicate);
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    public static <K, V> void assertNoneSatisfy(Map<K, V> map, Predicate<? super V> predicate)
+    {
+        try
+        {
+            Verify.assertNoneSatisfy(map.values(), predicate);
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    public static <T> void assertNoneSatisfy(String message, Iterable<T> iterable, Predicate<? super T> predicate)
+    {
+        try
+        {
+            MutableList<T> unnacceptable = Lists.mutable.of();
+            for (T each : iterable)
+            {
+                if (predicate.accept(each))
+                {
+                    unnacceptable.add(each);
+                }
+            }
+            if (unnacceptable.notEmpty())
+            {
+                Assert.fail(message + " <" + unnacceptable + '>');
+            }
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
     /**
      * Assert that the given {@link Map} contains all of the given keys and values.
      */

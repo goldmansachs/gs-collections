@@ -969,6 +969,18 @@ public class UnifiedSetWithHashingStrategy<K>
         return IterableIterate.allSatisfyWith(this, predicate, parameter);
     }
 
+    public boolean noneSatisfy(Predicate<? super K> predicate)
+    {
+        return IterableIterate.noneSatisfy(this, predicate);
+    }
+
+    public <P> boolean noneSatisfyWith(
+            Predicate2<? super K, ? super P> predicate,
+            P parameter)
+    {
+        return IterableIterate.noneSatisfyWith(this, predicate, parameter);
+    }
+
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super K, ? extends IV> function)
     {
         return IterableIterate.injectInto(injectedValue, this, function);

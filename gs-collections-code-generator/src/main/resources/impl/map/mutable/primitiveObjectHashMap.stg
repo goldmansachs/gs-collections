@@ -1581,6 +1581,29 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>
         return true;
     }
 
+    public boolean noneSatisfy(Predicate\<? super V> predicate)
+    {
+         if (this.sentinelValues != null)
+         {
+             if (this.sentinelValues.containsZeroKey && predicate.accept(this.sentinelValues.zeroValue))
+             {
+                 return false;
+             }
+             if (this.sentinelValues.containsOneKey && predicate.accept(this.sentinelValues.oneValue))
+             {
+                 return false;
+             }
+         }
+         for (int i = 0; i \< this.keys.length; i++)
+         {
+             if (isNonSentinel(this.keys[i]) && predicate.accept(this.values[i]))
+             {
+                 return false;
+             }
+         }
+         return true;
+     }
+
     public \<IV> IV injectInto(IV injectedValue, Function2\<? super IV, ? super V, ? extends IV> function)
     {
         IV result = injectedValue;

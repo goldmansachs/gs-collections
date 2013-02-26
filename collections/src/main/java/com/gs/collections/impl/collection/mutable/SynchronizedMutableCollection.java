@@ -289,6 +289,22 @@ public class SynchronizedMutableCollection<T>
         }
     }
 
+    public boolean noneSatisfy(Predicate<? super T> predicate)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.noneSatisfy(predicate);
+        }
+    }
+
+    public <P> boolean noneSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.noneSatisfyWith(predicate, parameter);
+        }
+    }
+
     public boolean anySatisfy(Predicate<? super T> predicate)
     {
         synchronized (this.lock)

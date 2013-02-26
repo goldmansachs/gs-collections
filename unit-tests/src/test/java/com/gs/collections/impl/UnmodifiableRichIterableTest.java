@@ -98,6 +98,13 @@ public class UnmodifiableRichIterableTest
     }
 
     @Test
+    public void noneSatisfy()
+    {
+        Assert.assertTrue(this.unmodifiableCollection.noneSatisfy(StringPredicates.contains("eatles")));
+        Assert.assertFalse(this.unmodifiableCollection.noneSatisfy(StringPredicates.contains("ovi")));
+    }
+
+    @Test
     public void detect()
     {
         Assert.assertEquals(METALLICA, this.unmodifiableCollection.detect(StringPredicates.contains("allic")));

@@ -137,6 +137,41 @@ public class StringIterateTest
     }
 
     @Test
+    public void allSatisfyCodePoint()
+    {
+        Assert.assertTrue(StringIterate.allSatisfy("MARY", CodePointPredicate.IS_UPPERCASE));
+        Assert.assertFalse(StringIterate.allSatisfy("Mary", CodePointPredicate.IS_UPPERCASE));
+    }
+
+    @Test
+    public void anySatisfy()
+    {
+        Assert.assertTrue(StringIterate.anySatisfy("MARY", CharPredicate.IS_UPPERCASE));
+        Assert.assertFalse(StringIterate.anySatisfy("mary", CharPredicate.IS_UPPERCASE));
+    }
+
+    @Test
+    public void anySatisfyCodePoint()
+    {
+        Assert.assertTrue(StringIterate.anySatisfy("MARY", CodePointPredicate.IS_UPPERCASE));
+        Assert.assertFalse(StringIterate.anySatisfy("mary", CodePointPredicate.IS_UPPERCASE));
+    }
+
+    @Test
+    public void noneSatisfy()
+    {
+        Assert.assertFalse(StringIterate.noneSatisfy("MaRy", CharPredicate.IS_UPPERCASE));
+        Assert.assertTrue(StringIterate.noneSatisfy("mary", CharPredicate.IS_UPPERCASE));
+    }
+
+    @Test
+    public void noneSatisfyCodePoint()
+    {
+        Assert.assertFalse(StringIterate.noneSatisfy("MaRy", CodePointPredicate.IS_UPPERCASE));
+        Assert.assertTrue(StringIterate.noneSatisfy("mary", CodePointPredicate.IS_UPPERCASE));
+    }
+
+    @Test
     public void isNumber()
     {
         Assert.assertTrue(StringIterate.isNumber("123"));

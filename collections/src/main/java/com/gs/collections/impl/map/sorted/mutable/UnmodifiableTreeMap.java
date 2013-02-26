@@ -308,6 +308,11 @@ public class UnmodifiableTreeMap<K, V>
         return this.getMutableSortedMap().allSatisfy(predicate);
     }
 
+    public boolean noneSatisfy(Predicate<? super V> predicate)
+    {
+        return this.getMutableSortedMap().noneSatisfy(predicate);
+    }
+
     public boolean anySatisfy(Predicate<? super V> predicate)
     {
         return this.getMutableSortedMap().anySatisfy(predicate);

@@ -362,6 +362,22 @@ public class IterableIterateTest
     }
 
     @Test
+    public void noneSatisfy()
+    {
+        Iterable<Integer> iterable = new IterableAdapter<Integer>(this.getIntegerList());
+        Assert.assertTrue(Iterate.noneSatisfy(iterable, Predicates.instanceOf(String.class)));
+        Assert.assertFalse(Iterate.noneSatisfy(iterable, Predicates.greaterThan(0)));
+    }
+
+    @Test
+    public void noneSatisfyWith()
+    {
+        Iterable<Integer> iterable = new IterableAdapter<Integer>(this.getIntegerList());
+        Assert.assertTrue(Iterate.noneSatisfyWith(iterable, Predicates2.instanceOf(), String.class));
+        Assert.assertFalse(Iterate.noneSatisfyWith(iterable, Predicates2.<Integer>greaterThan(), 0));
+    }
+
+    @Test
     public void countWith()
     {
         Iterable<Integer> iterable = new IterableAdapter<Integer>(this.getIntegerList());

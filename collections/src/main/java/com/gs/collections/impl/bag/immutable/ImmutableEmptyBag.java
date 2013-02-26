@@ -357,6 +357,11 @@ final class ImmutableEmptyBag<T>
         return true;
     }
 
+    public boolean noneSatisfy(Predicate<? super T> predicate)
+    {
+        return true;
+    }
+
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
         return injectedValue;

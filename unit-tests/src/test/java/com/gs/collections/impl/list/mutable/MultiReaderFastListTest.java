@@ -322,6 +322,25 @@ public class MultiReaderFastListTest extends AbstractListTestCase
 
     @Override
     @Test
+    public void noneSatisfy()
+    {
+        MutableList<Integer> list = this.getIntegerList();
+        Assert.assertTrue(Predicates.<Integer>noneSatisfy(Predicates.instanceOf(String.class)).accept(list));
+        Assert.assertFalse(Predicates.<Integer>noneSatisfy(Predicates.greaterThan(0)).accept(list));
+    }
+
+    @Override
+    @Test
+    public void noneSatisfyWith()
+    {
+        MutableList<Integer> list = this.getIntegerList();
+        Assert.assertTrue(list.noneSatisfyWith(Predicates2.instanceOf(), String.class));
+        Predicate2<Integer, Integer> greaterThanPredicate = Predicates2.greaterThan();
+        Assert.assertFalse(list.noneSatisfyWith(greaterThanPredicate, 0));
+    }
+
+    @Override
+    @Test
     public void count()
     {
         MutableList<Integer> list = this.getIntegerList();

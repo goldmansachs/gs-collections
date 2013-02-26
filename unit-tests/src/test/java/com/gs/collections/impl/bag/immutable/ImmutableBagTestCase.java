@@ -503,6 +503,14 @@ public abstract class ImmutableBagTestCase
     }
 
     @Test
+    public void noneSatisfy()
+    {
+        ImmutableBag<String> strings = this.newBag();
+        Assert.assertTrue(strings.noneSatisfy(Predicates.instanceOf(Integer.class)));
+        Assert.assertTrue(strings.noneSatisfy(Predicates.equal("0")));
+    }
+
+    @Test
     public void testCount()
     {
         ImmutableBag<String> strings = this.newBag();

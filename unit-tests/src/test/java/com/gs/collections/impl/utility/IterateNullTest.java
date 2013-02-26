@@ -530,6 +530,46 @@ public class IterateNullTest
         });
     }
 
+    @Test
+    public void noneSatisfy()
+    {
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.noneSatisfy(null, null);
+            }
+        });
+
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                ArrayIterate.noneSatisfy(null, null);
+            }
+        });
+    }
+
+    @Test
+    public void noneSatisfyWith()
+    {
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.noneSatisfyWith(null, null, null);
+            }
+        });
+
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                ArrayIterate.noneSatisfyWith(null, null, null);
+            }
+        });
+    }
+
     // Others
 
     @Test

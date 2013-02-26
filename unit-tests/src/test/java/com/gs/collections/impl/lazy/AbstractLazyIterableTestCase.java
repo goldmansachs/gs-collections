@@ -328,6 +328,13 @@ public abstract class AbstractLazyIterableTestCase
     }
 
     @Test
+    public void noneSatisfy()
+    {
+        Assert.assertFalse(this.lazyIterable.noneSatisfy(Predicates.instanceOf(Integer.class)));
+        Assert.assertTrue(this.lazyIterable.noneSatisfy(Predicates.instanceOf(String.class)));
+    }
+
+    @Test
     public void count()
     {
         Assert.assertEquals(7, this.lazyIterable.count(Predicates.instanceOf(Integer.class)));

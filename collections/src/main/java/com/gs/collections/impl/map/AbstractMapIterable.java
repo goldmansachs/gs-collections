@@ -125,6 +125,11 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
         return this.valuesView().allSatisfy(predicate);
     }
 
+    public boolean noneSatisfy(Predicate<? super V> predicate)
+    {
+        return this.valuesView().noneSatisfy(predicate);
+    }
+
     public boolean anySatisfy(Predicate<? super V> predicate)
     {
         return this.valuesView().anySatisfy(predicate);

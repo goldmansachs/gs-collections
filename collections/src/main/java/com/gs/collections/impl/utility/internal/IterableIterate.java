@@ -463,6 +463,25 @@ public final class IterableIterate
     }
 
     /**
+     * @see Iterate#allSatisfy(Iterable, Predicate)
+     */
+    public static <T> boolean noneSatisfy(Iterable<T> iterable, Predicate<? super T> predicate)
+    {
+        return IteratorIterate.noneSatisfy(iterable.iterator(), predicate);
+    }
+
+    /**
+     * @see Iterate#noneSatisfyWith(Iterable, Predicate2, Object)
+     */
+    public static <T, IV> boolean noneSatisfyWith(
+            Iterable<T> iterable,
+            Predicate2<? super T, ? super IV> predicate,
+            IV injectedValue)
+    {
+        return IteratorIterate.noneSatisfyWith(iterable.iterator(), predicate, injectedValue);
+    }
+
+    /**
      * @see Iterate#removeIf(Iterable, Predicate)
      */
     public static <T> Iterable<T> removeIf(Iterable<T> iterable, Predicate<? super T> predicate)

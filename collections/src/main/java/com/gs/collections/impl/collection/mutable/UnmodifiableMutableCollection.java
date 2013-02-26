@@ -449,6 +449,16 @@ public class UnmodifiableMutableCollection<T>
         return this.getMutableCollection().allSatisfyWith(predicate, parameter);
     }
 
+    public boolean noneSatisfy(Predicate<? super T> predicate)
+    {
+        return this.getMutableCollection().noneSatisfy(predicate);
+    }
+
+    public <P> boolean noneSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.getMutableCollection().noneSatisfyWith(predicate, parameter);
+    }
+
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
         return this.getMutableCollection().injectInto(injectedValue, function);

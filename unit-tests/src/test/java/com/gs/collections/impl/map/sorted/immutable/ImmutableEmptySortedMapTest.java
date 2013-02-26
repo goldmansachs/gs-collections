@@ -145,6 +145,15 @@ public class ImmutableEmptySortedMapTest extends ImmutableSortedMapTestCase
     }
 
     @Test
+    public void noneSatisfy()
+    {
+        ImmutableSortedMap<String, String> map = new ImmutableEmptySortedMap<String, String>();
+
+        Assert.assertTrue(map.noneSatisfy(Predicates.instanceOf(Integer.class)));
+        Assert.assertTrue(map.noneSatisfy(Predicates.equal("Monkey")));
+    }
+
+    @Test
     public void anySatisfy()
     {
         ImmutableSortedMap<String, String> map = new ImmutableEmptySortedMap<String, String>();

@@ -504,6 +504,39 @@ public final class IteratorIterate
     }
 
     /**
+     * @see Iterate#noneSatisfy(Iterable, Predicate)
+     */
+    public static <T> boolean noneSatisfy(Iterator<T> iterator, Predicate<? super T> predicate)
+    {
+        while (iterator.hasNext())
+        {
+            if (predicate.accept(iterator.next()))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @see Iterate#allSatisfyWith(Iterable, Predicate2, Object)
+     */
+    public static <T, P> boolean noneSatisfyWith(
+            Iterator<T> iterator,
+            Predicate2<? super T, ? super P> predicate,
+            P parameter)
+    {
+        while (iterator.hasNext())
+        {
+            if (predicate.accept(iterator.next(), parameter))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * @see Iterate#removeIf(Iterable, Predicate)
      */
     public static <T> Iterator<T> removeIf(Iterator<T> iterator, Predicate<? super T> predicate)

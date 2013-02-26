@@ -97,6 +97,15 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
 
     @Override
     @Test
+    public void noneSatisfy()
+    {
+        super.noneSatisfy();
+        Assert.assertFalse(this.newBag().noneSatisfy(Predicates.alwaysTrue()));
+        Assert.assertTrue(this.newBag().noneSatisfy(Predicates.alwaysFalse()));
+    }
+
+    @Override
+    @Test
     public void injectInto()
     {
         super.injectInto();

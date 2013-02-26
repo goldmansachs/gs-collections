@@ -407,6 +407,11 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
         return this.delegate.asReversed().allSatisfy(predicate);
     }
 
+    public boolean noneSatisfy(Predicate<? super T> predicate)
+    {
+        return this.delegate.asReversed().noneSatisfy(predicate);
+    }
+
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
         return this.delegate.asReversed().injectInto(injectedValue, function);

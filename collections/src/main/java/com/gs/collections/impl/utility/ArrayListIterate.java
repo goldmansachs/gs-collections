@@ -809,6 +809,51 @@ public final class ArrayListIterate
     }
 
     /**
+     * @see Iterate#noneSatisfy(Iterable, Predicate)
+     */
+    public static <T> boolean noneSatisfy(ArrayList<T> list, Predicate<? super T> predicate)
+    {
+        int size = list.size();
+        if (ArrayListIterate.isOptimizableArrayList(list, size))
+        {
+            T[] elements = ArrayListIterate.getInternalArray(list);
+            for (int i = 0; i < size; i++)
+            {
+                if (predicate.accept(elements[i]))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return RandomAccessListIterate.noneSatisfy(list, predicate);
+    }
+
+    /**
+     * @see Iterate#noneSatisfyWith(Iterable, Predicate2, Object)
+     */
+    public static <T, IV> boolean noneSatisfyWith(
+            ArrayList<T> list,
+            Predicate2<? super T, ? super IV> predicate,
+            IV injectedValue)
+    {
+        int size = list.size();
+        if (ArrayListIterate.isOptimizableArrayList(list, size))
+        {
+            T[] elements = ArrayListIterate.getInternalArray(list);
+            for (int i = 0; i < size; i++)
+            {
+                if (predicate.accept(elements[i], injectedValue))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+        return RandomAccessListIterate.noneSatisfyWith(list, predicate, injectedValue);
+    }
+
+    /**
      * @see Iterate#selectAndRejectWith(Iterable, Predicate2, Object)
      */
     public static <T, P> Twin<MutableList<T>> selectAndRejectWith(

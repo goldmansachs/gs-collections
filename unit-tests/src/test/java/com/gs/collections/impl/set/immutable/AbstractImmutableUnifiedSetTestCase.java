@@ -207,6 +207,14 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     }
 
     @Test
+    public void noneSatisfy()
+    {
+        Assert.assertTrue(this.newSetWith(1, 2, 3).noneSatisfy(Predicates.instanceOf(String.class)));
+        Assert.assertTrue(this.newSetWith(1, 2, 3).noneSatisfy(Predicates.equal(100)));
+        Assert.assertFalse(this.newSetWith(1, 2, 3).noneSatisfy(Predicates.equal(1)));
+    }
+
+    @Test
     public void count()
     {
         Assert.assertEquals(3, this.newSetWith(1, 2, 3).count(Predicates.instanceOf(Integer.class)));

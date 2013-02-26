@@ -321,7 +321,7 @@ public abstract class Predicates<T>
 
     public static <T> Predicates<Iterable<T>> noneSatisfy(Predicate<? super T> predicate)
     {
-        return new AllSatisfy<T>(Predicates.not(predicate));
+        return new NoneSatisfy<T>(predicate);
     }
 
     public static <T, V> Predicates<T> attributeAnySatisfy(
@@ -575,6 +575,22 @@ public abstract class Predicates<T>
         public boolean accept(Iterable<T> iterable)
         {
             return Iterate.allSatisfy(iterable, this.predicate);
+        }
+    }
+
+    public static class NoneSatisfy<T> extends Predicates<Iterable<T>>
+    {
+        private static final long serialVersionUID = 1L;
+        private final Predicate<? super T> predicate;
+
+        public NoneSatisfy(Predicate<? super T> predicate)
+        {
+            this.predicate = predicate;
+        }
+
+        public boolean accept(Iterable<T> iterable)
+        {
+            return Iterate.noneSatisfy(iterable, this.predicate);
         }
     }
 

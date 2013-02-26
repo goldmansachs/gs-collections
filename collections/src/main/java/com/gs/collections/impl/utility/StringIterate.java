@@ -556,6 +556,38 @@ public final class StringIterate
     }
 
     /**
+     * @return true if none of the characters in the {@code string} answer true for the specified {@code predicate}.
+     */
+    public static boolean noneSatisfy(String string, CharPredicate predicate)
+    {
+        int size = string.length();
+        for (int i = 0; i < size; i++)
+        {
+            if (predicate.accept(string.charAt(i)))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @return true if none of the code points in the {@code string} answer true for the specified {@code predicate}.
+     */
+    public static boolean noneSatisfy(String string, CodePointPredicate predicate)
+    {
+        int size = string.length();
+        for (int i = 0; i < size; i++)
+        {
+            if (predicate.accept(string.codePointAt(i)))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * @return a new string with all of the characters that return true for the specified {@code predicate}.
      */
     public static String select(String string, CharPredicate predicate)

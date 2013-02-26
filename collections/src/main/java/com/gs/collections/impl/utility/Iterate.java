@@ -1699,6 +1699,7 @@ public final class Iterate
 
     /**
      * Returns true if the predicate evaluates to true for every element of the iterable, or returns false.
+     * Returns true if the iterable is empty.
      */
     public static <T> boolean allSatisfy(Iterable<T> iterable, Predicate<? super T> predicate)
     {
@@ -1746,6 +1747,59 @@ public final class Iterate
             return IterableIterate.allSatisfyWith(iterable, predicate, parameter);
         }
         throw new IllegalArgumentException("Cannot perform an allSatisfyWith on null");
+    }
+
+    /**
+     * Returns true if the predicate evaluates to false for every element of the iterable, or returns false.
+     * Returns true if the iterable is empty.
+     */
+    public static <T> boolean noneSatisfy(Iterable<T> iterable, Predicate<? super T> predicate)
+    {
+        if (iterable instanceof RichIterable)
+        {
+            return ((RichIterable<T>) iterable).noneSatisfy(predicate);
+        }
+        if (iterable instanceof ArrayList)
+        {
+            return ArrayListIterate.noneSatisfy((ArrayList<T>) iterable, predicate);
+        }
+        if (iterable instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.noneSatisfy((List<T>) iterable, predicate);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.noneSatisfy(iterable, predicate);
+        }
+        throw new IllegalArgumentException("Cannot perform an allSatisfy on null");
+    }
+
+    /**
+     * Returns true if the predicate evaluates to false for every element of the iterable, or returns false.
+     * Returns true if the iterable is empty.
+     */
+    public static <T, P> boolean noneSatisfyWith(
+            Iterable<T> iterable,
+            Predicate2<? super T, ? super P> predicate,
+            P parameter)
+    {
+        if (iterable instanceof MutableCollection)
+        {
+            return ((MutableCollection<T>) iterable).noneSatisfyWith(predicate, parameter);
+        }
+        if (iterable instanceof ArrayList)
+        {
+            return ArrayListIterate.noneSatisfyWith((ArrayList<T>) iterable, predicate, parameter);
+        }
+        if (iterable instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.noneSatisfyWith((List<T>) iterable, predicate, parameter);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.noneSatisfyWith(iterable, predicate, parameter);
+        }
+        throw new IllegalArgumentException("Cannot perform an noneSatisfyWith on null");
     }
 
     /**

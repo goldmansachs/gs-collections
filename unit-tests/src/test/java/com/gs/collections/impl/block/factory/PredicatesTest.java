@@ -493,7 +493,10 @@ public class PredicatesTest
     @Test
     public void noneSatisfy()
     {
-        assertAccepts(Predicates.<Integer>noneSatisfy(Predicates.instanceOf(String.class)), Interval.oneTo(5));
+        Predicates<Iterable<Object>> anyIntegers = Predicates.noneSatisfy(Predicates.instanceOf(Integer.class));
+        assertRejects(anyIntegers, FastList.<Object>newListWith(1, 2, 3));
+        assertAccepts(anyIntegers, FastList.<Object>newListWith(Boolean.TRUE, Boolean.FALSE));
+        assertToString(anyIntegers);
     }
 
     @Test

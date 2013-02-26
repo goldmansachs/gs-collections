@@ -1138,11 +1138,24 @@ public class FastList<T>
     }
 
     @Override
-    public <P> boolean allSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public boolean noneSatisfy(Predicate<? super T> predicate)
     {
         for (int i = 0; i < this.size; i++)
         {
-            if (!predicate.accept(this.items[i], parameter))
+            if (predicate.accept(this.items[i]))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public <P> boolean noneSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        for (int i = 0; i < this.size; i++)
+        {
+            if (predicate.accept(this.items[i], parameter))
             {
                 return false;
             }

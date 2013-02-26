@@ -327,6 +327,20 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
     }
 
     @Test
+    public void noneSatisfy()
+    {
+        Assert.assertTrue(newWith(1).noneSatisfy(Predicates.instanceOf(String.class)));
+        Assert.assertFalse(newWith(1).noneSatisfy(Predicates.equal(1)));
+    }
+
+    @Test
+    public void noneSatisfyWith()
+    {
+        Assert.assertTrue(newWith(1).noneSatisfyWith(Predicates2.instanceOf(), String.class));
+        Assert.assertFalse(newWith(1).noneSatisfyWith(Predicates2.equal(), 1));
+    }
+
+    @Test
     public void count()
     {
         Assert.assertEquals(1, newWith(1).count(Predicates.instanceOf(Integer.class)));

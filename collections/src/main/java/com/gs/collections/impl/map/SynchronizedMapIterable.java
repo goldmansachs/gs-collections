@@ -318,6 +318,14 @@ public abstract class SynchronizedMapIterable<K, V>
         }
     }
 
+    public boolean noneSatisfy(Predicate<? super V> predicate)
+    {
+        synchronized (this.lock)
+        {
+            return this.mapIterable.noneSatisfy(predicate);
+        }
+    }
+
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super V, ? extends IV> function)
     {
         synchronized (this.lock)

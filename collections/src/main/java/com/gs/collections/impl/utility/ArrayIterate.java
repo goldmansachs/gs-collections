@@ -1110,6 +1110,47 @@ public final class ArrayIterate
     }
 
     /**
+     * @see Iterate#noneSatisfy(Iterable, Predicate)
+     */
+    public static <T> boolean noneSatisfy(T[] objectArray, Predicate<? super T> predicate)
+    {
+        if (objectArray == null)
+        {
+            throw new IllegalArgumentException("Cannot perform a noneSatisfy on null");
+        }
+        for (T each : objectArray)
+        {
+            if (predicate.accept(each))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * @see Iterate#noneSatisfyWith(Iterable, Predicate2, Object)
+     */
+    public static <T, IV> boolean noneSatisfyWith(
+            T[] objectArray,
+            Predicate2<? super T, ? super IV> predicate,
+            IV injectedValue)
+    {
+        if (objectArray == null)
+        {
+            throw new IllegalArgumentException("Cannot perform a noneSatisfyWith on null");
+        }
+        for (T each : objectArray)
+        {
+            if (predicate.accept(each, injectedValue))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Iterate over the specified array applying the specified Function to each element to calculate a key
      * and return the results as a HashMap.
      */

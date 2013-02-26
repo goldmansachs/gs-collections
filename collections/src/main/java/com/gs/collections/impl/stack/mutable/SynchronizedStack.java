@@ -420,6 +420,14 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
         }
     }
 
+    public boolean noneSatisfy(Predicate<? super T> predicate)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.noneSatisfy(predicate);
+        }
+    }
+
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
         synchronized (this.lock)

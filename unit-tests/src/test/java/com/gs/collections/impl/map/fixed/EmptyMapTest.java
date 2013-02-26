@@ -192,6 +192,14 @@ public class EmptyMapTest extends AbstractMemoryEfficientMutableMapTest
     }
 
     @Override
+    @Test
+    public void noneSatisfy()
+    {
+        MutableMap<String, String> map = this.classUnderTest();
+        Assert.assertTrue(map.noneSatisfy(Predicates.alwaysTrue()));
+    }
+
+    @Override
     @Test(expected = NoSuchElementException.class)
     public void max()
     {

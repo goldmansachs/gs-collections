@@ -149,6 +149,34 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
+    public boolean noneSatisfy(Predicate<? super T> predicate)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.getDelegate().noneSatisfy(predicate);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public <P> boolean noneSatisfyWith(
+            Predicate2<? super T, ? super P> predicate,
+            P parameter)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.getDelegate().noneSatisfyWith(predicate, parameter);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
     public boolean allSatisfy(Predicate<? super T> predicate)
     {
         this.acquireReadLock();
@@ -1312,6 +1340,18 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
                 P parameter)
         {
             return this.delegate.allSatisfyWith(predicate, parameter);
+        }
+
+        public boolean noneSatisfy(Predicate<? super T> predicate)
+        {
+            return this.delegate.noneSatisfy(predicate);
+        }
+
+        public <P> boolean noneSatisfyWith(
+                Predicate2<? super T, ? super P> predicate,
+                P parameter)
+        {
+            return this.delegate.noneSatisfyWith(predicate, parameter);
         }
 
         public boolean anySatisfy(Predicate<? super T> predicate)

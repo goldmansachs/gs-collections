@@ -699,6 +699,30 @@ public final class ListIterate
     }
 
     /**
+     * @see Iterate#noneSatisfy(Iterable, Predicate)
+     */
+    public static <T> boolean noneSatisfy(List<T> list, Predicate<? super T> predicate)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.noneSatisfy(list, predicate);
+        }
+        return IterableIterate.noneSatisfy(list, predicate);
+    }
+
+    /**
+     * @see Iterate#noneSatisfyWith(Iterable, Predicate2, Object)
+     */
+    public static <T, P> boolean noneSatisfyWith(List<T> list, Predicate2<? super T, ? super P> predicate, P injectedValue)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.noneSatisfyWith(list, predicate, injectedValue);
+        }
+        return IterableIterate.noneSatisfyWith(list, predicate, injectedValue);
+    }
+
+    /**
      * @see Iterate#selectAndRejectWith(Iterable, Predicate2, Object)
      */
     public static <T, IV> Twin<MutableList<T>> selectAndRejectWith(

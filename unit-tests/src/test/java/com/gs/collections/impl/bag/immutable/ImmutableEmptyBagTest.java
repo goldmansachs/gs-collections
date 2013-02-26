@@ -156,6 +156,14 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
 
     @Override
     @Test
+    public void noneSatisfy()
+    {
+        ImmutableBag<String> strings = this.newBag();
+        Assert.assertTrue(strings.noneSatisfy(Predicates.instanceOf(Integer.class)));
+    }
+
+    @Override
+    @Test
     public void testGetFirst()
     {
         Assert.assertNull(this.newBag().getFirst());

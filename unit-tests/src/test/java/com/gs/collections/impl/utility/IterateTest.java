@@ -1016,6 +1016,30 @@ public class IterateTest
     }
 
     @Test
+    public void noneSatisfy()
+    {
+        this.iterables.forEach(new Procedure<Iterable<Integer>>()
+        {
+            public void value(Iterable<Integer> each)
+            {
+                Assert.assertTrue(Iterate.noneSatisfy(each, Predicates.instanceOf(String.class)));
+            }
+        });
+    }
+
+    @Test
+    public void noneSatisfyWith()
+    {
+        this.iterables.forEach(new Procedure<Iterable<Integer>>()
+        {
+            public void value(Iterable<Integer> each)
+            {
+                Assert.assertTrue(Iterate.noneSatisfyWith(each, Predicates2.instanceOf(), String.class));
+            }
+        });
+    }
+
+    @Test
     public void selectWithSet()
     {
         Verify.assertSize(1, Iterate.selectWith(this.getIntegerSet(), Predicates2.equal(), 1));
@@ -1057,6 +1081,13 @@ public class IterateTest
     {
         Assert.assertFalse(Iterate.allSatisfyWith(this.getIntegerSet(), Predicates2.equal(), 1));
         Assert.assertTrue(Iterate.allSatisfyWith(this.getIntegerSet(), Predicates2.instanceOf(), Integer.class));
+    }
+
+    @Test
+    public void noneSatisfyWithSet()
+    {
+        Assert.assertTrue(Iterate.noneSatisfyWith(this.getIntegerSet(), Predicates2.equal(), 100));
+        Assert.assertFalse(Iterate.noneSatisfyWith(this.getIntegerSet(), Predicates2.instanceOf(), Integer.class));
     }
 
     @Test

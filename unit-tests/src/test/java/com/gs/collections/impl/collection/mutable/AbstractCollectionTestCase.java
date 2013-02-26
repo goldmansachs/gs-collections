@@ -486,6 +486,21 @@ public abstract class AbstractCollectionTestCase
     }
 
     @Test
+    public void noneSatisfy()
+    {
+        Assert.assertTrue(this.newWith(1, 2, 3).noneSatisfy(Predicates.instanceOf(Boolean.class)));
+        Assert.assertFalse(this.newWith(1, 1, 3).noneSatisfy(Predicates.equal(1)));
+        Assert.assertTrue(this.newWith(1, 2, 3).noneSatisfy(Predicates.equal(4)));
+    }
+
+    @Test
+    public void noneSatisfyWith()
+    {
+        Assert.assertTrue(this.newWith(1, 2, 3).noneSatisfyWith(Predicates2.instanceOf(), Boolean.class));
+        Assert.assertFalse(this.newWith(1, 2, 3).noneSatisfyWith(Predicates2.equal(), 1));
+    }
+
+    @Test
     public void anySatisfy()
     {
         Assert.assertFalse(this.newWith(1, 2, 3).anySatisfy(Predicates.instanceOf(String.class)));

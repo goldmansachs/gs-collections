@@ -267,6 +267,11 @@ public final class UnmodifiableStack<T> implements MutableStack<T>, Serializable
         return this.mutableStack.allSatisfy(predicate);
     }
 
+    public boolean noneSatisfy(Predicate<? super T> predicate)
+    {
+        return this.mutableStack.noneSatisfy(predicate);
+    }
+
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
         return this.mutableStack.injectInto(injectedValue, function);

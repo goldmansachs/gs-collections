@@ -315,6 +315,15 @@ public abstract class MapIterableTestCase
     }
 
     @Test
+    public void noneSatisfy()
+    {
+        MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
+
+        Verify.assertNoneSatisfy((Map<String, String>) map, Predicates.instanceOf(Integer.class));
+        Assert.assertTrue(map.noneSatisfy(Predicates.equal("Monkey")));
+    }
+
+    @Test
     public void appendString()
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");

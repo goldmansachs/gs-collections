@@ -1036,6 +1036,50 @@ public class <name>ObjectHashMapTest
     }
 
     @Test
+    public void noneSatisfy()
+    {
+        <name>ObjectHashMap\<String> map1 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
+
+        Predicate\<String> notContainE = new Predicate\<String>()
+        {
+            public boolean accept(String each)
+            {
+                return !each.contains("e");
+            }
+        };
+
+        Assert.assertTrue(map1.noneSatisfy(notContainE));
+        Assert.assertFalse(map1.noneSatisfy(new Predicate\<String>()
+        {
+            public boolean accept(String each)
+            {
+                return each.endsWith("o");
+            }
+        }));
+        Assert.assertFalse(map1.noneSatisfy(new Predicate\<String>()
+        {
+            public boolean accept(String each)
+            {
+                return each.contains("o");
+            }
+        }));
+        Assert.assertFalse(map1.noneSatisfy(new Predicate\<String>()
+        {
+            public boolean accept(String each)
+            {
+                return "nine".equals(each);
+            }
+        }));
+        Assert.assertTrue(map1.noneSatisfy(new Predicate\<String>()
+        {
+            public boolean accept(String each)
+            {
+                return "ten".equals(each);
+            }
+        }));
+    }
+
+    @Test
     public void injectInto()
     {
         <name>ObjectHashMap\<String> map1 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("9")>, "nine");

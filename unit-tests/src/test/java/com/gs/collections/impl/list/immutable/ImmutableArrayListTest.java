@@ -250,6 +250,13 @@ public class ImmutableArrayListTest
     }
 
     @Test
+    public void noneSatisfy()
+    {
+        Assert.assertTrue(this.newListWith(1, 2, 3).noneSatisfy(Predicates.instanceOf(String.class)));
+        Assert.assertFalse(this.newListWith(1, 2, 3).noneSatisfy(Predicates.equal(1)));
+    }
+
+    @Test
     public void count()
     {
         Assert.assertEquals(3, this.newListWith(1, 2, 3).count(Predicates.instanceOf(Integer.class)));

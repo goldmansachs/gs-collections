@@ -594,6 +594,18 @@ public class MapIterateTest
     }
 
     @Test
+    public void noneSatisfy()
+    {
+        MutableMap<String, String> map = UnifiedMap.newWithKeysValues(
+                "1", "2",
+                "2", "1",
+                "3", "3");
+        Assert.assertFalse(MapIterate.noneSatisfy(map, Predicates.equal("1")));
+        Assert.assertFalse(MapIterate.noneSatisfy(map, Predicates.equal("3")));
+        Assert.assertTrue(MapIterate.noneSatisfy(map, Predicates.equal("4")));
+    }
+
+    @Test
     public void isEmpty()
     {
         Assert.assertTrue(MapIterate.isEmpty(null));

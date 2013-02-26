@@ -453,6 +453,16 @@ public abstract class StackIterableTestCase
     }
 
     @Test
+    public void noneSatisfy()
+    {
+        StackIterable<Integer> stack = this.newStackWith(3, 3, 3);
+        CountingPredicate<Object> predicate = new CountingPredicate<Object>(Predicates.equal(4));
+        Assert.assertTrue(stack.noneSatisfy(predicate));
+        Assert.assertEquals(3, predicate.count);
+        Assert.assertTrue(stack.noneSatisfy(Predicates.equal(2)));
+    }
+
+    @Test
     public void injectInto()
     {
         Assert.assertEquals(

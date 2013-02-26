@@ -164,6 +164,12 @@ public final class ArrayListAdapter<T>
     }
 
     @Override
+    public boolean noneSatisfy(Predicate<? super T> predicate)
+    {
+        return ArrayListIterate.noneSatisfy(this.delegate, predicate);
+    }
+
+    @Override
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
         return ArrayListIterate.injectInto(injectedValue, this.delegate, function);
