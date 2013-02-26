@@ -153,6 +153,16 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         return this;
     }
 
+    public Mutable<name1><name2>Map asUnmodifiable()
+    {
+        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+    }
+
+    public Mutable<name1><name2>Map asSynchronized()
+    {
+        throw new UnsupportedOperationException("asSynchronized not implemented yet");
+    }
+
     private int init(int initialCapacity)
     {
         int capacity = 1;

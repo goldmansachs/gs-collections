@@ -43,6 +43,10 @@ public interface Mutable<name>List extends Mutable<name>Collection, <name>List
 
     Mutable<name>List toReversed();
     <(arithmeticMethods.(type))(type)>
+
+    Mutable<name>List asUnmodifiable();
+
+    Mutable<name>List asSynchronized();
 }
 
 >>

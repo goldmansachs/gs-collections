@@ -32,6 +32,10 @@ public interface Mutable<name>Bag extends Mutable<name>Collection, <name>Bag
     <sharedAPI(fileName(primitive), name)>
 
     <mutableAPI(fileName(primitive), type, name)>
+
+    Mutable<name>Bag asUnmodifiable();
+
+    Mutable<name>Bag asSynchronized();
 }
 
 >>

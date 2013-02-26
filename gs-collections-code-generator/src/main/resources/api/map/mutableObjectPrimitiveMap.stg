@@ -45,6 +45,10 @@ public interface MutableObject<name>Map\<K> extends Object<name>Map\<K>
     MutableObject<name>Map\<K> withoutKey(K key);
 
     MutableObject<name>Map\<K> withoutAllKeys(Iterable\<? extends K> keys);
+
+    MutableObject<name>Map\<K> asUnmodifiable();
+
+    MutableObject<name>Map\<K> asSynchronized();
 }
 
 >>

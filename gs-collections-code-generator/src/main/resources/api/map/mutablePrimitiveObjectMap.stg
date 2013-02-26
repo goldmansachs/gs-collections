@@ -60,6 +60,10 @@ public interface Mutable<name>ObjectMap\<V> extends <name>ObjectMap\<V>, Mutable
     Mutable<name>ObjectMap\<V> withoutKey(<type> key);
 
     Mutable<name>ObjectMap\<V> withoutAllKeys(<name>Iterable keys);
+
+    Mutable<name>ObjectMap\<V> asUnmodifiable();
+
+    Mutable<name>ObjectMap\<V> asSynchronized();
 }
 
 >>

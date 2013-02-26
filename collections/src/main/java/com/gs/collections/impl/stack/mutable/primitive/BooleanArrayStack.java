@@ -159,6 +159,16 @@ public final class BooleanArrayStack implements MutableBooleanStack, Externaliza
         return newStackFromTopToBottom(this.delegate.asReversed().reject(predicate));
     }
 
+    public MutableBooleanStack asUnmodifiable()
+    {
+        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+    }
+
+    public MutableBooleanStack asSynchronized()
+    {
+        throw new UnsupportedOperationException("asSynchronized not implemented yet");
+    }
+
     public boolean peek()
     {
         this.checkEmptyStack();

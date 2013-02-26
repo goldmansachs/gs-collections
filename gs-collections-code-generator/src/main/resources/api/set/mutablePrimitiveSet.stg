@@ -28,6 +28,10 @@ public interface Mutable<name>Set extends Mutable<name>Collection, <name>Set
     <sharedAPI(fileName(primitive), name)>
 
     <mutableAPI(fileName(primitive), type, name)>
+
+    Mutable<name>Set asUnmodifiable();
+
+    Mutable<name>Set asSynchronized();
 }
 
 >>

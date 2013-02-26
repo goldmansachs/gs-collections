@@ -2176,6 +2176,16 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         return this;
     }
 
+    public Mutable<name>ObjectMap\<V> asUnmodifiable()
+    {
+        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+    }
+
+    public Mutable<name>ObjectMap\<V> asSynchronized()
+    {
+        throw new UnsupportedOperationException("asSynchronized not implemented yet");
+    }
+
     public Iterator\<V> iterator()
     {
         return new InternalIterator();

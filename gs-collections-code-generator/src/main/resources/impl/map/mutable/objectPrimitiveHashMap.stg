@@ -199,6 +199,16 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         return this;
     }
 
+    public MutableObject<name>Map\<K> asUnmodifiable()
+    {
+        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+    }
+
+    public MutableObject<name>Map\<K> asSynchronized()
+    {
+        throw new UnsupportedOperationException("asSynchronized not implemented yet");
+    }
+
     private int init(int initialCapacity)
     {
         int capacity = 1;

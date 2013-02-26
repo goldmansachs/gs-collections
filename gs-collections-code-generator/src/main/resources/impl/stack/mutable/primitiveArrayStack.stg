@@ -384,6 +384,16 @@ public final class <name>ArrayStack
         return new Lazy<name>IterableAdapter(this);
     }
 
+    public Mutable<name>Stack asUnmodifiable()
+    {
+        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+    }
+
+    public Mutable<name>Stack asSynchronized()
+    {
+        throw new UnsupportedOperationException("asSynchronized not implemented yet");
+    }
+
     public void writeExternal(ObjectOutput out) throws IOException
     {
         out.writeInt(this.size());

@@ -41,6 +41,10 @@ public interface Mutable<name>Collection extends <name>Iterable
     <sharedAPI(fileName(primitive), name)>
 
     <mutableAPI(fileName(primitive), type, name)>
+
+    Mutable<name>Collection asUnmodifiable();
+
+    Mutable<name>Collection asSynchronized();
 }
 
 >>

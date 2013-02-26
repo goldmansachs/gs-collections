@@ -961,6 +961,16 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         return new Lazy<name>IterableAdapter(this);
     }
 
+    public Mutable<name>Set asUnmodifiable()
+    {
+        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+    }
+
+    public Mutable<name>Set asSynchronized()
+    {
+        throw new UnsupportedOperationException("asSynchronized not implemented yet");
+    }
+
     public void writeExternal(ObjectOutput out) throws IOException
     {
         out.writeInt(this.size());

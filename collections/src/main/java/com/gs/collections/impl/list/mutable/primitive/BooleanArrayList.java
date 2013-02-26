@@ -518,6 +518,16 @@ public final class BooleanArrayList
         return this;
     }
 
+    public MutableBooleanList asUnmodifiable()
+    {
+        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+    }
+
+    public MutableBooleanList asSynchronized()
+    {
+        throw new UnsupportedOperationException("asSynchronized not implemented yet");
+    }
+
     public BooleanArrayList toReversed()
     {
         return new BooleanArrayList(this.asReversed());

@@ -111,6 +111,16 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
         return new <name>BooleanHashMap();
     }
 
+    public Mutable<name>BooleanMap asUnmodifiable()
+    {
+        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+    }
+
+    public Mutable<name>BooleanMap asSynchronized()
+    {
+        throw new UnsupportedOperationException("asSynchronized not implemented yet");
+    }
+
     public static <name>BooleanHashMap newWithKeysValues(<type> key1, boolean value1)
     {
         return new <name>BooleanHashMap(1).withKeyValue(key1, value1);

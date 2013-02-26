@@ -508,6 +508,16 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
         return this;
     }
 
+    public MutableBooleanSet asUnmodifiable()
+    {
+        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+    }
+
+    public MutableBooleanSet asSynchronized()
+    {
+        throw new UnsupportedOperationException("asSynchronized not implemented yet");
+    }
+
     public int size()
     {
         switch (this.state)

@@ -45,6 +45,10 @@ public interface Mutable<name>Stack extends <name>Stack
     void clear();
 
     <sharedAPI(fileName(primitive), name)>
+
+    Mutable<name>Stack asUnmodifiable();
+
+    Mutable<name>Stack asSynchronized();
 }
 
 >>

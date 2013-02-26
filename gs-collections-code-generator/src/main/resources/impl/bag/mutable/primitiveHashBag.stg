@@ -727,6 +727,16 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
         return new Lazy<name>IterableAdapter(this);
     }
 
+    public Mutable<name>Bag asUnmodifiable()
+    {
+        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+    }
+
+    public Mutable<name>Bag asSynchronized()
+    {
+        throw new UnsupportedOperationException("asSynchronized not implemented yet");
+    }
+
     public <name>Iterator <type>Iterator()
     {
         return new InternalIterator();

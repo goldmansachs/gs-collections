@@ -816,6 +816,16 @@ public final class <name>ArrayList
         return new Lazy<name>IterableAdapter(this);
     }
 
+    public Mutable<name>List asUnmodifiable()
+    {
+        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+    }
+
+    public Mutable<name>List asSynchronized()
+    {
+        throw new UnsupportedOperationException("asSynchronized not implemented yet");
+    }
+
     public void writeExternal(ObjectOutput out) throws IOException
     {
         out.writeInt(this.size);

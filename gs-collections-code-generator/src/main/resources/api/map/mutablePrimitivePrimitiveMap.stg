@@ -58,6 +58,10 @@ public interface Mutable<name1><name2>Map extends <name1><name2>Map
     Mutable<name1><name2>Map withoutKey(<type1> key);
 
     Mutable<name1><name2>Map withoutAllKeys(<name1>Iterable keys);
+
+    Mutable<name1><name2>Map asUnmodifiable();
+
+    Mutable<name1><name2>Map asSynchronized();
 }
 
 >>

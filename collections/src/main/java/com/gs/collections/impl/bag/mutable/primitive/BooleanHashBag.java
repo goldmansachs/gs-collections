@@ -166,6 +166,16 @@ public final class BooleanHashBag implements MutableBooleanBag, Externalizable
         return this;
     }
 
+    public MutableBooleanBag asUnmodifiable()
+    {
+        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+    }
+
+    public MutableBooleanBag asSynchronized()
+    {
+        throw new UnsupportedOperationException("asSynchronized not implemented yet");
+    }
+
     public boolean contains(boolean value)
     {
         return value ? this.containsTrue() : this.containsFalse();

@@ -130,6 +130,16 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         return new ObjectBooleanHashMap<K>();
     }
 
+    public MutableObjectBooleanMap<K> asUnmodifiable()
+    {
+        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+    }
+
+    public MutableObjectBooleanMap<K> asSynchronized()
+    {
+        throw new UnsupportedOperationException("asSynchronized not implemented yet");
+    }
+
     public static <K> ObjectBooleanHashMap<K> newWithKeysValues(K key1, boolean value1)
     {
         return new ObjectBooleanHashMap<K>(1).withKeyValue(key1, value1);
