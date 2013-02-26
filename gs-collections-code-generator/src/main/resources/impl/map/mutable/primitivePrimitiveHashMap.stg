@@ -20,7 +20,10 @@ body(type1, type2, name1, name2) ::= <<
 
 package com.gs.collections.impl.map.mutable.primitive;
 
+import java.io.Externalizable;
 import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
@@ -67,8 +70,9 @@ import com.gs.collections.impl.set.mutable.primitive.<name1>HashSet;
  *
  * @since 3.0.
  */
-public class <name1><name2>HashMap implements Mutable<name1><name2>Map
+public class <name1><name2>HashMap implements Mutable<name1><name2>Map, Externalizable
 {
+    private static final long serialVersionUID = 1L;
     private static final <type2> EMPTY_VALUE = <(literal.(type2))("0")>;
     private static final <type1> EMPTY_KEY = <(literal.(type1))("0")>;
     private static final <type1> REMOVED_KEY = <(literal.(type1))("1")>;
@@ -1053,6 +1057,45 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map
     public Lazy<name1>Iterable keysView()
     {
         return new KeysView();
+    }
+
+    public void writeExternal(ObjectOutput out) throws IOException
+    {
+        out.writeInt(this.size());
+        out.writeFloat(this.loadFactor);
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey)
+            {
+                out.write<name1>(EMPTY_KEY);
+                out.write<name2>(this.sentinelValues.zeroValue);
+            }
+            if (this.sentinelValues.containsOneKey)
+            {
+                out.write<name1>(REMOVED_KEY);
+                out.write<name2>(this.sentinelValues.oneValue);
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                out.write<name1>(this.keys[i]);
+                out.write<name2>(this.values[i]);
+            }
+        }
+    }
+
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
+    {
+        int size = in.readInt();
+        this.loadFactor = in.readFloat();
+        this.init(Math.max((int) (size / this.loadFactor) + 1,
+                DEFAULT_INITIAL_CAPACITY));
+        for (int i = 0; i \< size; i++)
+        {
+            this.put(in.read<name1>(), in.read<name2>());
+        }
     }
 
     private static final class SentinelValues

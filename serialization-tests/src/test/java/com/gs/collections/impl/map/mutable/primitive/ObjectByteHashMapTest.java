@@ -26,8 +26,8 @@ public class ObjectByteHashMapTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyAD9jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5wcmltaXRpdmUuT2Jq\n" +
-                        "ZWN0Qnl0ZUhhc2hNYXAAAAAAAAAAAQwAAHhwdwgAAAAAPwAAAHg=",
+                "rO0ABXNyAD9jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5wcmltaXRpdmUuT2Jq\n"
+                        + "ZWN0Qnl0ZUhhc2hNYXAAAAAAAAAAAQwAAHhwdwgAAAAAPwAAAHg=",
                 new ObjectByteHashMap<Object>());
     }
 }

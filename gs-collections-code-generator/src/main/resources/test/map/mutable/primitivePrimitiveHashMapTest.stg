@@ -733,6 +733,10 @@ public class <name1><name2>HashMapTest
         <name1><name2>HashMap map8 = <name1><name2>HashMap.newWithKeysValues(<["0", "1"]:keyValue(); separator=", ">);
 
         Verify.assertEqualsAndHashCode(map1, map2);
+        Verify.assertPostSerializedEqualsAndHashCode(map1);
+        Verify.assertPostSerializedEqualsAndHashCode(map6);
+        Verify.assertPostSerializedEqualsAndHashCode(map8);
+        Verify.assertPostSerializedEqualsAndHashCode(<name1><name2>HashMap.newMap());
         Assert.assertNotEquals(map1, map3);
         Assert.assertNotEquals(map1, map4);
         Assert.assertNotEquals(map1, map5);

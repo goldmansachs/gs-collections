@@ -26,8 +26,8 @@ public class ObjectShortHashMapTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyAEBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5wcmltaXRpdmUuT2Jq\n" +
-                        "ZWN0U2hvcnRIYXNoTWFwAAAAAAAAAAEMAAB4cHcIAAAAAD8AAAB4",
+                "rO0ABXNyAEBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5wcmltaXRpdmUuT2Jq\n"
+                        + "ZWN0U2hvcnRIYXNoTWFwAAAAAAAAAAEMAAB4cHcIAAAAAD8AAAB4",
                 new ObjectShortHashMap<Object>());
     }
 }

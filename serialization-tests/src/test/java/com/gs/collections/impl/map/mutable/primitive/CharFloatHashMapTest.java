@@ -19,15 +19,15 @@ package com.gs.collections.impl.map.mutable.primitive;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Test;
 
-public class ObjectBooleanHashMapTest
+public class CharFloatHashMapTest
 {
     @Test
     public void serializedForm()
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyAEJjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5wcmltaXRpdmUuT2Jq\n"
-                        + "ZWN0Qm9vbGVhbkhhc2hNYXAAAAAAAAAAAQwAAHhwdwgAAAAAPwAAAHg=",
-                new ObjectBooleanHashMap<Object>());
+                "rO0ABXNyAD5jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5wcmltaXRpdmUuQ2hh\n"
+                        + "ckZsb2F0SGFzaE1hcAAAAAAAAAABDAAAeHB3CAAAAAA/AAAAeA==",
+                new CharFloatHashMap());
     }
 }

@@ -2005,15 +2005,25 @@ public class <name>ObjectHashMapTest
         <name>ObjectHashMap\<String> map3 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "two", <(literal.(type))("32")>, "thirtyTwo");
         <name>ObjectHashMap\<String> map4 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "one", <(literal.(type))("1")>, "one", <(literal.(type))("32")>, "thirtyTwo");
         <name>ObjectHashMap\<String> map5 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("32")>, "thirtyThree");
-        <name>ObjectHashMap\<String> map6 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("50")>, "zero", <(literal.(type))("60")>, "one", <(literal.(type))("70")>, "thirtyThree");
-        <name>ObjectHashMap\<String> map7 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("50")>, "zero", <(literal.(type))("60")>, "one");
+        <name>ObjectHashMap\<String> map6 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("32")>, "thirtyTwo");
+        <name>ObjectHashMap\<String> map7 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("32")>, "thirtyTwo");
+        <name>ObjectHashMap\<String> map8 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("50")>, "zero", <(literal.(type))("60")>, "one", <(literal.(type))("70")>, "thirtyThree");
+        <name>ObjectHashMap\<String> map9 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("50")>, "zero", <(literal.(type))("60")>, "one");
 
+        Verify.assertEqualsAndHashCode(map1, map2);
+        Verify.assertPostSerializedEqualsAndHashCode(map1);
+        Verify.assertPostSerializedEqualsAndHashCode(map6);
+        Verify.assertPostSerializedEqualsAndHashCode(map7);
+        Verify.assertPostSerializedEqualsAndHashCode(map8);
+        Verify.assertPostSerializedEqualsAndHashCode(<name>ObjectHashMap.newMap());
         Verify.assertEqualsAndHashCode(map1, map2);
         Assert.assertNotEquals(map1, map3);
         Assert.assertNotEquals(map1, map4);
         Assert.assertNotEquals(map1, map5);
-        Assert.assertNotEquals(map6, map5);
-        Assert.assertNotEquals(map7, map6);
+        Assert.assertNotEquals(map1, map6);
+        Assert.assertNotEquals(map1, map7);
+        Assert.assertNotEquals(map8, map5);
+        Assert.assertNotEquals(map9, map8);
         Assert.assertNotEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, null), <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("6")>, ""));
         Assert.assertNotEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("5")>, null), <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("6")>, ""));
     }

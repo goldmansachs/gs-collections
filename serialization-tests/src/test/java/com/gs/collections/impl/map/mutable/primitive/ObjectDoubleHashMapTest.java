@@ -26,8 +26,8 @@ public class ObjectDoubleHashMapTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyAEFjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5wcmltaXRpdmUuT2Jq\n" +
-                        "ZWN0RG91YmxlSGFzaE1hcAAAAAAAAAABDAAAeHB3CAAAAAA/AAAAeA==",
+                "rO0ABXNyAEFjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5wcmltaXRpdmUuT2Jq\n"
+                        + "ZWN0RG91YmxlSGFzaE1hcAAAAAAAAAABDAAAeHB3CAAAAAA/AAAAeA==",
                 new ObjectDoubleHashMap<Object>());
     }
 }
