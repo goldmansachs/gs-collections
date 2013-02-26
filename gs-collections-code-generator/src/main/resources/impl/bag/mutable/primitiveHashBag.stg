@@ -27,6 +27,7 @@ import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.bag.primitive.<name>Bag;
+import com.gs.collections.api.bag.primitive.Immutable<name>Bag;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.function.primitive.IntToIntFunction;
@@ -735,6 +736,11 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
     public Mutable<name>Bag asSynchronized()
     {
         throw new UnsupportedOperationException("asSynchronized not implemented yet");
+    }
+
+    public Immutable<name>Bag toImmutable()
+    {
+        throw new UnsupportedOperationException("toImmutable not implemented yet");
     }
 
     public <name>Iterator <type>Iterator()

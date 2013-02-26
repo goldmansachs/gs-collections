@@ -34,6 +34,7 @@ import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.stack.primitive.BooleanStack;
+import com.gs.collections.api.stack.primitive.ImmutableBooleanStack;
 import com.gs.collections.api.stack.primitive.MutableBooleanStack;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.lazy.primitive.LazyBooleanIterableAdapter;
@@ -167,6 +168,11 @@ public final class BooleanArrayStack implements MutableBooleanStack, Externaliza
     public MutableBooleanStack asSynchronized()
     {
         throw new UnsupportedOperationException("asSynchronized not implemented yet");
+    }
+
+    public ImmutableBooleanStack toImmutable()
+    {
+        throw new UnsupportedOperationException("toImmutable not implemented yet");
     }
 
     public boolean peek()

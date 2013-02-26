@@ -40,6 +40,7 @@ import com.gs.collections.api.block.procedure.primitive.ObjectBooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
+import com.gs.collections.api.map.primitive.ImmutableObjectBooleanMap;
 import com.gs.collections.api.map.primitive.MutableObjectBooleanMap;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
@@ -138,6 +139,11 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
     public MutableObjectBooleanMap<K> asSynchronized()
     {
         throw new UnsupportedOperationException("asSynchronized not implemented yet");
+    }
+
+    public ImmutableObjectBooleanMap<K> toImmutable()
+    {
+        throw new UnsupportedOperationException("toImmutable not implemented yet");
     }
 
     public static <K> ObjectBooleanHashMap<K> newWithKeysValues(K key1, boolean value1)

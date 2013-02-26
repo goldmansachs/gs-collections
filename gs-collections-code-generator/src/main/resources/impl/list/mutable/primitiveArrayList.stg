@@ -32,6 +32,7 @@ import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.primitive.<name>List;
+import com.gs.collections.api.list.primitive.Immutable<name>List;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
@@ -824,6 +825,11 @@ public final class <name>ArrayList
     public Mutable<name>List asSynchronized()
     {
         throw new UnsupportedOperationException("asSynchronized not implemented yet");
+    }
+
+    public Immutable<name>List toImmutable()
+    {
+        throw new UnsupportedOperationException("toImmutable not implemented yet");
     }
 
     public void writeExternal(ObjectOutput out) throws IOException

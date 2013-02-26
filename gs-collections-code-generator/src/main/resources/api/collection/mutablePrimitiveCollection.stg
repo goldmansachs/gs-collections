@@ -45,6 +45,8 @@ public interface Mutable<name>Collection extends <name>Iterable
     Mutable<name>Collection asUnmodifiable();
 
     Mutable<name>Collection asSynchronized();
+
+    Immutable<name>Collection toImmutable();
 }
 
 >>

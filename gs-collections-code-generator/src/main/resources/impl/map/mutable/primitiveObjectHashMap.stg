@@ -58,6 +58,7 @@ import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.primitive.<name>ObjectMap;
+import com.gs.collections.api.map.primitive.Immutable<name>ObjectMap;
 import com.gs.collections.api.map.primitive.Mutable<name>ObjectMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.MutableMultimap;
@@ -2184,6 +2185,11 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
     public Mutable<name>ObjectMap\<V> asSynchronized()
     {
         throw new UnsupportedOperationException("asSynchronized not implemented yet");
+    }
+
+    public Immutable<name>ObjectMap\<V> toImmutable()
+    {
+        throw new UnsupportedOperationException("toImmutable not implemented yet");
     }
 
     public Iterator\<V> iterator()

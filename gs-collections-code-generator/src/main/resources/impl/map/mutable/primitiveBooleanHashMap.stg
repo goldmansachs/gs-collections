@@ -50,6 +50,7 @@ import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.map.primitive.<name>BooleanMap;
+import com.gs.collections.api.map.primitive.Immutable<name>BooleanMap;
 import com.gs.collections.api.map.primitive.Mutable<name>BooleanMap;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
@@ -119,6 +120,11 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
     public Mutable<name>BooleanMap asSynchronized()
     {
         throw new UnsupportedOperationException("asSynchronized not implemented yet");
+    }
+
+    public Immutable<name>BooleanMap toImmutable()
+    {
+        throw new UnsupportedOperationException("toImmutable not implemented yet");
     }
 
     public static <name>BooleanHashMap newWithKeysValues(<type> key1, boolean value1)

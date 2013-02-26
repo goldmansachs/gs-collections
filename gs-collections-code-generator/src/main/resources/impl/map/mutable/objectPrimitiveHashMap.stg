@@ -41,6 +41,7 @@ import com.gs.collections.api.block.procedure.primitive.Object<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
+import com.gs.collections.api.map.primitive.ImmutableObject<name>Map;
 import com.gs.collections.api.map.primitive.MutableObject<name>Map;
 import com.gs.collections.api.map.primitive.Object<name>Map;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
@@ -207,6 +208,11 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
     public MutableObject<name>Map\<K> asSynchronized()
     {
         throw new UnsupportedOperationException("asSynchronized not implemented yet");
+    }
+
+    public ImmutableObject<name>Map\<K> toImmutable()
+    {
+        throw new UnsupportedOperationException("toImmutable not implemented yet");
     }
 
     private int init(int initialCapacity)

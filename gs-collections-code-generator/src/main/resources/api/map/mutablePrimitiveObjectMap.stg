@@ -64,6 +64,8 @@ public interface Mutable<name>ObjectMap\<V> extends <name>ObjectMap\<V>, Mutable
     Mutable<name>ObjectMap\<V> asUnmodifiable();
 
     Mutable<name>ObjectMap\<V> asSynchronized();
+
+    Immutable<name>ObjectMap\<V> toImmutable();
 }
 
 >>
