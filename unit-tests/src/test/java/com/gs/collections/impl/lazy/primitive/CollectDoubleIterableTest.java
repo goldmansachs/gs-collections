@@ -176,11 +176,23 @@ public class CollectDoubleIterableTest
         Assert.assertEquals(2.5d, Interval.oneTo(4).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).average(), 0.0d);
     }
 
+    @Test(expected = ArithmeticException.class)
+    public void averageThrowsOnEmpty()
+    {
+        Lists.mutable.<Integer>of().asLazy().collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).average();
+    }
+
     @Test
     public void median()
     {
         Assert.assertEquals(2.5d, Interval.oneTo(4).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).median(), 0.0d);
         Assert.assertEquals(4.0d, Interval.oneTo(7).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).median(), 0.0d);
+    }
+
+    @Test(expected = ArithmeticException.class)
+    public void medianThrowsOnEmpty()
+    {
+        Lists.mutable.<Integer>of().asLazy().collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).median();
     }
 
     @Test

@@ -419,6 +419,11 @@ public class <name>HashBagTest
         Assert.assertEquals(31.0, <name>HashBag.newBagWith(<["30", "30", "31", "31", "32", "32"]:(literal.(type))(); separator=", ">).average(), 0.0);
     }
 
+    @Test(expected = ArithmeticException.class)
+    public void averageThrowsOnEmpty()
+    {
+        <name>HashBag.newBag().average();
+    }
     @Test
     public void median()
     {
@@ -426,10 +431,10 @@ public class <name>HashBagTest
         Assert.assertEquals(30.5, <name>HashBag.newBagWith(<["1", "30", "30", "31", "31", "32"]:(literal.(type))(); separator=", ">).median(), 0.0);
     }
 
-    @Test(expected = NoSuchElementException.class)
-    public void median_throws_emptyList()
+    @Test(expected = ArithmeticException.class)
+    public void medianThrowsOnEmpty()
     {
-        new <name>HashBag().median();
+        <name>HashBag.newBag().median();
     }
 
     @Test

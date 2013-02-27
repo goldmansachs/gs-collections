@@ -176,11 +176,23 @@ public class CollectFloatIterableTest
         Assert.assertEquals(2.5f, Interval.oneTo(4).collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).average(), 0.001);
     }
 
+    @Test(expected = ArithmeticException.class)
+    public void averageThrowsOnEmpty()
+    {
+        Lists.mutable.<Integer>of().asLazy().collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).average();
+    }
+
     @Test
     public void median()
     {
         Assert.assertEquals(2.5d, Interval.oneTo(4).collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).median(), 0.001);
         Assert.assertEquals(4.0d, Interval.oneTo(7).collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).median(), 0.001);
+    }
+
+    @Test(expected = ArithmeticException.class)
+    public void medianThrowsOnEmpty()
+    {
+        Lists.mutable.<Integer>of().asLazy().collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).median();
     }
 
     @Test

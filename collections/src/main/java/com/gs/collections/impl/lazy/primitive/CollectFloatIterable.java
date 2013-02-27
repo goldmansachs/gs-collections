@@ -230,11 +230,19 @@ public class CollectFloatIterable<T>
 
     public double average()
     {
+        if (this.isEmpty())
+        {
+            throw new ArithmeticException();
+        }
         return this.sum() / (double) this.size();
     }
 
     public double median()
     {
+        if (this.isEmpty())
+        {
+            throw new ArithmeticException();
+        }
         float[] sortedArray = this.toSortedArray();
         int i = sortedArray.length >> 1;
         if (sortedArray.length > 1 && (sortedArray.length & 1) == 0)

@@ -497,14 +497,14 @@ public class <name>ArrayStackTest
     public void median()
     {
         <name>ArrayStack stack = <name>ArrayStack.newStackFromTopToBottom(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
-        Assert.assertEquals( 3, (int) stack.median()<(delta.(type))>);
+        Assert.assertEquals(3, (int) stack.median()<(delta.(type))>);
     }
 
     @Test
     public void average()
     {
         <name>ArrayStack stack = <name>ArrayStack.newStackFromTopToBottom(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
-        Assert.assertEquals( 3, (int) stack.average()<(delta.(type))>);
+        Assert.assertEquals(3, (int) stack.average()<(delta.(type))>);
     }
 
     @Test
@@ -577,10 +577,16 @@ public class <name>ArrayStackTest
         new <name>ArrayStack().max();
     }
 
-    @Test(expected = NoSuchElementException.class)
+    @Test(expected = ArithmeticException.class)
     public void median_throws_emptyStack()
     {
         new <name>ArrayStack().median();
+    }
+
+    @Test(expected = ArithmeticException.class)
+    public void average_throws_emptyStack()
+    {
+        new <name>ArrayStack().average();
     }
 
     @Test(expected = EmptyStackException.class)

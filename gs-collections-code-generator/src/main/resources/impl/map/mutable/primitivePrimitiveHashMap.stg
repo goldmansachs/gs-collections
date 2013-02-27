@@ -1008,6 +1008,10 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
 
     public double average()
     {
+        if (this.isEmpty())
+        {
+            throw new ArithmeticException();
+        }
         return <castSum.(type2)>this.sum() / (double) this.size();
     }
 
@@ -1015,7 +1019,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
     {
         if (this.isEmpty())
         {
-            throw new NoSuchElementException();
+            throw new ArithmeticException();
         }
         <type2>[] sortedArray = this.toSortedArray();
         int middleIndex = sortedArray.length >\> 1;

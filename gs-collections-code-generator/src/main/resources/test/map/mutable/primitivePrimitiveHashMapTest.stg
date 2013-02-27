@@ -1282,6 +1282,13 @@ public class <name1><name2>HashMapTest
         Assert.assertEquals(1.5, map.average(), 0.0);
     }
 
+
+    @Test(expected = ArithmeticException.class)
+    public void averageThrowsOnEmpty()
+    {
+        <name1><name2>HashMap.newMap().average();
+    }
+
     @Test
     public void median()
     {
@@ -1291,8 +1298,8 @@ public class <name1><name2>HashMapTest
         Assert.assertEquals(1.0, map2.median(), 0.0);
     }
 
-    @Test(expected = NoSuchElementException.class)
-    public void median_empty_throws()
+    @Test(expected = ArithmeticException.class)
+    public void medianThrowsOnEmpty()
     {
         <name1><name2>HashMap.newMap().median();
     }

@@ -657,6 +657,13 @@ public class <name>HashSetTest
         Assert.assertEquals(31.0, <name>HashSet.newSetWith(<["30", "31", "32"]:(literal.(type))(); separator=", ">).average(), 0.0);
     }
 
+
+    @Test(expected = ArithmeticException.class)
+    public void averageThrowsOnEmpty()
+    {
+        new <name>HashSet().average();
+    }
+
     @Test
     public void median()
     {
@@ -664,8 +671,8 @@ public class <name>HashSetTest
         Assert.assertEquals(30.5, <name>HashSet.newSetWith(<["1", "30", "31", "32"]:(literal.(type))(); separator=", ">).median(), 0.0);
     }
 
-    @Test(expected = NoSuchElementException.class)
-    public void median_throws_emptyList()
+    @Test(expected = ArithmeticException.class)
+    public void medianThrowsOnEmpty()
     {
         new <name>HashSet().median();
     }

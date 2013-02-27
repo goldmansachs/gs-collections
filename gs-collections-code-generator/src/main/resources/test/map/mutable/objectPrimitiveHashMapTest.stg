@@ -917,7 +917,7 @@ public class Object<name>HashMapTest
         Assert.assertEquals(Object<name>HashMap.newWithKeysValues(1, <(literal.(type))("1")>, 2, <(literal.(type))("2")>, 3, <(literal.(type))("3")>), hashMap1);
         Assert.assertEquals(Object<name>HashMap.newWithKeysValues(1, <(literal.(type))("1")>, 2, <(literal.(type))("2")>, 3, <(literal.(type))("3")>, 4, <(literal.(type))("4")>), hashMap2);
     }
-    
+
     @Test
     public void withoutKey()
     {
@@ -962,7 +962,7 @@ public class Object<name>HashMapTest
                 return ((Integer.parseInt(object) + value) % 2) != 0;
             }
         }));
-        
+
         Assert.assertEquals(this.map, this.map.select(new <name>Predicate()
         {
             public boolean accept(<type> value)
@@ -1095,7 +1095,7 @@ public class Object<name>HashMapTest
             }
         }));
     }
-    
+
     @Test
     public void allSatisfy()
     {
@@ -1123,7 +1123,7 @@ public class Object<name>HashMapTest
             }
         }));
     }
-    
+
     @Test
     public void noneSatisfy()
     {
@@ -1243,12 +1243,24 @@ public class Object<name>HashMapTest
         Assert.assertEquals(1.0, this.map.average(), 0.0);
     }
 
+    @Test(expected = ArithmeticException.class)
+    public void averageThrowsOnEmpty()
+    {
+        Object<name>HashMap.newMap().average();
+    }
+
     @Test
     public void median()
     {
         Assert.assertEquals(1.0, this.map.median(), 0.0);
         this.map.put("3", <(literal.(type))("3")>);
         Assert.assertEquals(1.5, this.map.median(), 0.0);
+    }
+
+    @Test(expected = ArithmeticException.class)
+    public void medianThrowsOnEmpty()
+    {
+        Object<name>HashMap.newMap().median();
     }
 
     @Test
@@ -1266,12 +1278,6 @@ public class Object<name>HashMapTest
         Assert.assertArrayEquals(new <type>[]{}, Object<name>HashMap.newMap().toSortedArray()<delta.(type)>);
     }
 
-    @Test(expected = NoSuchElementException.class)
-    public void median_throws_emptyList()
-    {
-        new Object<name>HashMap\<Integer>().median();
-    }
-    
     @Test
     public void contains()
     {
@@ -1288,7 +1294,7 @@ public class Object<name>HashMapTest
         this.map.removeKey("0");
         Assert.assertFalse(this.map.contains(<(literal.(type))("0")>));
     }
-    
+
     @Test
     public void containsAll()
     {

@@ -194,10 +194,22 @@ public class Select<name>IterableTest
         Assert.assertEquals(1.5d, this.iterable.average(), 0.0);
     }
 
+    @Test(expected = ArithmeticException.class)
+    public void averageThrowsOnEmpty()
+    {
+        new Select<name>Iterable(new <name>ArrayList(), <name>Predicates.lessThan(<(literal.(type))("3")>)).average();
+    }
+
     @Test
     public void median()
     {
         Assert.assertEquals(1.5d, this.iterable.median(), 0.0);
+    }
+
+    @Test(expected = ArithmeticException.class)
+    public void medianThrowsOnEmpty()
+    {
+        new Select<name>Iterable(new <name>ArrayList(), <name>Predicates.lessThan(<(literal.(type))("3")>)).median();
     }
 
     @Test

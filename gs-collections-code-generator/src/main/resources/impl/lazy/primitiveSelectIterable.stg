@@ -67,12 +67,12 @@ public class Select<name>Iterable
 
     public boolean isEmpty()
     {
-        return this.size() == 0;
+        return !this.<type>Iterator().hasNext();
     }
 
     public boolean notEmpty()
     {
-        return this.size() > 0;
+        return this.<type>Iterator().hasNext();
     }
 
     public int count(<name>Predicate predicate)
@@ -415,11 +415,19 @@ allMethods(name, type) ::=<<
 
     public double average()
     {
+        if (this.isEmpty())
+        {
+            throw new ArithmeticException();
+        }
         return <castSum.(type)>this.sum() / (double) this.size();
     }
 
     public double median()
     {
+        if (this.isEmpty())
+        {
+            throw new ArithmeticException();
+        }
         <type>[] sortedArray = this.toSortedArray();
         int middleIndex = sortedArray.length >\> 1;
         if (sortedArray.length > 1 && (sortedArray.length & 1) == 0)

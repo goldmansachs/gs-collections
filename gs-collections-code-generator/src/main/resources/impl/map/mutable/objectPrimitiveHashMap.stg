@@ -738,7 +738,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         }
         return false;
     }
-    
+
     public boolean allSatisfy(<name>Predicate predicate)
     {
         for (int i = 0; i \< this.keys.length; i++)
@@ -750,7 +750,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         }
         return true;
     }
-    
+
     public boolean noneSatisfy(<name>Predicate predicate)
     {
         for (int i = 0; i \< this.keys.length; i++)
@@ -776,7 +776,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         }
         return result;
     }
-    
+
     public Object<name>HashMap\<K> reject(<name>Predicate predicate)
     {
         Object<name>HashMap\<K> result = Object<name>HashMap.newMap();
@@ -790,7 +790,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         }
         return result;
     }
-    
+
     public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
     {
         for (int i = 0; i \< this.keys.length; i++)
@@ -912,6 +912,10 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
 
     public double average()
     {
+        if (this.isEmpty())
+        {
+            throw new ArithmeticException();
+        }
         return <castSum.(type)>this.sum() / (double) this.size();
     }
 
@@ -919,7 +923,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
     {
         if (this.isEmpty())
         {
-            throw new NoSuchElementException();
+            throw new ArithmeticException();
         }
         <type>[] sortedArray = this.toSortedArray();
         int middleIndex = sortedArray.length >\> 1;
