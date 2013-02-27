@@ -1,6 +1,7 @@
 import "copyright.stg"
 import "primitiveEquals.stg"
 import "primitiveHashCode.stg"
+import "primitiveAPI.stg"
 
 targetPath() ::= "com/gs/collections/api/stack/primitive"
 
@@ -16,6 +17,7 @@ body(type, name) ::= <<
 package com.gs.collections.api.stack.primitive;
 
 import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.list.primitive.<name>List;
 import com.gs.collections.api.stack.StackIterable;
@@ -44,9 +46,9 @@ public interface <name>Stack extends <name>Iterable
      */
     <type> peekAt(int index);
 
-    <name>Stack select(<name>Predicate predicate);
+    <sharedAPI(fileName(primitive), name)>
 
-    <name>Stack reject(<name>Predicate predicate);
+    \<V> StackIterable\<V> collect(<name>ToObjectFunction\<? extends V> function);
 
     /**
      * Follows the same general contract as {@link StackIterable#equals(Object)}.

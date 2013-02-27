@@ -27,7 +27,6 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.Lazy<name>Iterable;
-import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.block.function.primitive.<name>Function;
 import com.gs.collections.api.block.function.primitive.<name>Function0;
@@ -38,6 +37,8 @@ import com.gs.collections.api.block.predicate.primitive.Object<name>Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.block.procedure.primitive.Object<name>Procedure;
+import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
@@ -763,29 +764,29 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         return true;
     }
 
-    public Object<name>HashMap\<K> select(<name>Predicate predicate)
+    public Mutable<name>Collection select(<name>Predicate predicate)
     {
-        Object<name>HashMap\<K> result = Object<name>HashMap.newMap();
+        <name>ArrayList result = new <name>ArrayList();
 
         for (int i = 0; i \< this.keys.length; i++)
         {
             if (isNonSentinel(this.keys[i]) && predicate.accept(this.values[i]))
             {
-                result.put(this.toNonSentinel(this.keys[i]), this.values[i]);
+                result.add(this.values[i]);
             }
         }
         return result;
     }
 
-    public Object<name>HashMap\<K> reject(<name>Predicate predicate)
+    public Mutable<name>Collection reject(<name>Predicate predicate)
     {
-        Object<name>HashMap\<K> result = Object<name>HashMap.newMap();
+        <name>ArrayList result = new <name>ArrayList();
 
         for (int i = 0; i \< this.keys.length; i++)
         {
             if (isNonSentinel(this.keys[i]) && !predicate.accept(this.values[i]))
             {
-                result.put(this.toNonSentinel(this.keys[i]), this.values[i]);
+                result.add(this.values[i]);
             }
         }
         return result;
@@ -803,7 +804,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         return ifNone;
     }
 
-    public \<V> RichIterable\<V> collect(<name>ToObjectFunction\<? extends V> function)
+    public \<V> MutableCollection\<V> collect(<name>ToObjectFunction\<? extends V> function)
     {
         MutableList\<V> result = FastList.newList(this.size());
         for (int i = 0; i \< this.keys.length; i++)

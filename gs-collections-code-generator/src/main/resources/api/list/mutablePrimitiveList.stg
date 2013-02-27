@@ -15,8 +15,10 @@ body(type, name) ::= <<
 package com.gs.collections.api.list.primitive;
 
 import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.list.MutableList;
 
 /**
  * This file was automatically generated from template file mutablePrimitiveList.stg.
@@ -39,11 +41,13 @@ public interface Mutable<name>List extends Mutable<name>Collection, <name>List
 
     <mutableAPI(fileName(primitive), type, name)>
 
+    \<V> MutableList\<V> collect(<name>ToObjectFunction\<? extends V> function);
+
     Mutable<name>List reverseThis();
 
     Mutable<name>List toReversed();
-    <(arithmeticMethods.(type))(type)>
 
+    <(arithmeticMethods.(type))(type)>
     Mutable<name>List asUnmodifiable();
 
     Mutable<name>List asSynchronized();
@@ -65,11 +69,11 @@ arithmeticMethods ::= [
 ]
 
 allMethods(type) ::= <<
-
 /**
  * Sorts this list mutating its contents and returns the same mutable list (this).
  */
 Mutable<name>List sortThis();
+
 >>
 
 noMethods(type) ::= ""

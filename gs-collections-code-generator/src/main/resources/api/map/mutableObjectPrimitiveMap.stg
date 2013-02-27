@@ -15,7 +15,11 @@ package com.gs.collections.api.map.primitive;
 
 import com.gs.collections.api.block.function.primitive.<name>Function;
 import com.gs.collections.api.block.function.primitive.<name>Function0;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.predicate.primitive.Object<name>Predicate;
+import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
 
 /**
  * This file was automatically generated from template file mutableObjectPrimitiveMap.stg.
@@ -39,6 +43,12 @@ public interface MutableObject<name>Map\<K> extends Object<name>Map\<K>
     MutableObject<name>Map\<K> select(Object<name>Predicate\<? super K> predicate);
 
     MutableObject<name>Map\<K> reject(Object<name>Predicate\<? super K> predicate);
+
+    Mutable<name>Collection select(<name>Predicate predicate);
+
+    Mutable<name>Collection reject(<name>Predicate predicate);
+
+    \<V> MutableCollection\<V> collect(<name>ToObjectFunction\<? extends V> function);
 
     MutableObject<name>Map\<K> withKeyValue(K key, <type> value);
 

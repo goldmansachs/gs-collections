@@ -24,7 +24,6 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.DoubleIterable;
 import com.gs.collections.api.LazyDoubleIterable;
 import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.primitive.MutableDoubleBag;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
@@ -166,7 +165,7 @@ public class CollectDoubleIterable<T>
         return new SelectDoubleIterable(this, DoublePredicates.not(predicate));
     }
 
-    public <V> RichIterable<V> collect(DoubleToObjectFunction<? extends V> function)
+    public <V> LazyIterable<V> collect(DoubleToObjectFunction<? extends V> function)
     {
         return new CollectDoubleToObjectIterable<V>(this, function);
     }

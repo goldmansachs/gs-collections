@@ -101,7 +101,7 @@ public class <name>BooleanHashMapTest
         Field values = <name>BooleanHashMap.class.getDeclaredField("values");
         values.setAccessible(true);
 
-        <name>BooleanHashMap hashMap = <name>BooleanHashMap.newMap();
+        <name>BooleanHashMap hashMap = new <name>BooleanHashMap();
         Assert.assertEquals(16L, ((<type>[]) keys.get(hashMap)).length);
         Assert.assertEquals(64L, ((BitSet) values.get(hashMap)).size());
         Assert.assertEquals(new <name>BooleanHashMap(), hashMap);
@@ -145,13 +145,13 @@ public class <name>BooleanHashMapTest
         map0.removeKey(<(literal.(type))("1")>);
         Assert.assertEquals(<name>BooleanHashMap.newWithKeysValues(<(literal.(type))("0")>, false), map0);
         map0.removeKey(<(literal.(type))("0")>);
-        Assert.assertEquals(<name>BooleanHashMap.newMap(), map0);
+        Assert.assertEquals(new <name>BooleanHashMap(), map0);
 
         <name>BooleanHashMap map1 = <name>BooleanHashMap.newWithKeysValues(<(literal.(type))("0")>, true, <(literal.(type))("1")>, false);
         map1.removeKey(<(literal.(type))("0")>);
         Assert.assertEquals(<name>BooleanHashMap.newWithKeysValues(<(literal.(type))("1")>, false), map1);
         map1.removeKey(<(literal.(type))("1")>);
-        Assert.assertEquals(<name>BooleanHashMap.newMap(), map1);
+        Assert.assertEquals(new <name>BooleanHashMap(), map1);
 
         this.map.removeKey(<(literal.(type))("5")>);
         this.map.removeKey(<(literal.(type))("50")>);
@@ -187,7 +187,7 @@ public class <name>BooleanHashMapTest
         Assert.assertTrue(map0.removeKeyIfAbsent(<(literal.(type))("1")>, false));
         Assert.assertEquals(<name>BooleanHashMap.newWithKeysValues(<(literal.(type))("0")>, false), map0);
         Assert.assertFalse(map0.removeKeyIfAbsent(<(literal.(type))("0")>, true));
-        Assert.assertEquals(<name>BooleanHashMap.newMap(), map0);
+        Assert.assertEquals(new <name>BooleanHashMap(), map0);
         Assert.assertFalse(map0.removeKeyIfAbsent(<(literal.(type))("1")>, false));
         Assert.assertTrue(map0.removeKeyIfAbsent(<(literal.(type))("0")>, true));
 
@@ -195,7 +195,7 @@ public class <name>BooleanHashMapTest
         Assert.assertFalse(map1.removeKeyIfAbsent(<(literal.(type))("0")>, true));
         Assert.assertEquals(<name>BooleanHashMap.newWithKeysValues(<(literal.(type))("1")>, true), map1);
         Assert.assertTrue(map1.removeKeyIfAbsent(<(literal.(type))("1")>, false));
-        Assert.assertEquals(<name>BooleanHashMap.newMap(), map1);
+        Assert.assertEquals(new <name>BooleanHashMap(), map1);
         Assert.assertTrue(map1.removeKeyIfAbsent(<(literal.(type))("0")>, true));
         Assert.assertFalse(map1.removeKeyIfAbsent(<(literal.(type))("1")>, false));
 
@@ -256,7 +256,7 @@ public class <name>BooleanHashMapTest
         <type> collision3 = generateCollisions().get(2);
         <type> collision4 = generateCollisions().get(3);
 
-        <name>BooleanHashMap hashMap = <name>BooleanHashMap.newMap();
+        <name>BooleanHashMap hashMap = new <name>BooleanHashMap();
         hashMap.put(collision1, true);
         hashMap.put(collision2, false);
         hashMap.put(collision3, true);
@@ -265,7 +265,7 @@ public class <name>BooleanHashMapTest
         hashMap.put(collision4, false);
         Assert.assertEquals(<name>BooleanHashMap.newWithKeysValues(collision1, true, collision3, true, collision4, false), hashMap);
 
-        <name>BooleanHashMap hashMap1 = <name>BooleanHashMap.newMap();
+        <name>BooleanHashMap hashMap1 = new <name>BooleanHashMap();
         hashMap1.put(collision1, false);
         hashMap1.put(collision2, true);
         hashMap1.put(collision3, false);
@@ -274,7 +274,7 @@ public class <name>BooleanHashMapTest
         hashMap1.put(collision4, true);
         Assert.assertEquals(<name>BooleanHashMap.newWithKeysValues(collision2, true, collision3, false, collision4, true), hashMap1);
 
-        <name>BooleanHashMap hashMap2 = <name>BooleanHashMap.newMap();
+        <name>BooleanHashMap hashMap2 = new <name>BooleanHashMap();
         hashMap2.put(collision1, true);
         hashMap2.put(collision2, false);
         hashMap2.put(collision3, true);
@@ -287,7 +287,7 @@ public class <name>BooleanHashMapTest
     @Test
     public void putWithRehash() throws Exception
     {
-        <name>BooleanHashMap hashMap = <name>BooleanHashMap.newMap();
+        <name>BooleanHashMap hashMap = new <name>BooleanHashMap();
         for (<type> i = <(literal.(type))("2")>; i \< 10; i++)
         {
             Assert.assertFalse(hashMap.containsKey(i));
@@ -707,9 +707,9 @@ public class <name>BooleanHashMapTest
     @Test
     public void size()
     {
-        Verify.assertSize(0, <name>BooleanHashMap.newMap());
-        Verify.assertSize(1, <name>BooleanHashMap.newMap().withKeyValue(<(literal.(type))("0")>, false));
-        Verify.assertSize(1, <name>BooleanHashMap.newMap().withKeyValue(<(literal.(type))("1")>, true));
+        Verify.assertSize(0, new <name>BooleanHashMap());
+        Verify.assertSize(1, new <name>BooleanHashMap().withKeyValue(<(literal.(type))("0")>, false));
+        Verify.assertSize(1, new <name>BooleanHashMap().withKeyValue(<(literal.(type))("1")>, true));
 
         <name>BooleanHashMap hashMap1 = <name>BooleanHashMap.newWithKeysValues(<(literal.(type))("1")>, true, <(literal.(type))("0")>, false);
         Verify.assertSize(2, hashMap1);
@@ -731,7 +731,7 @@ public class <name>BooleanHashMapTest
     @Test
     public void isEmpty()
     {
-        Verify.assertEmpty(<name>BooleanHashMap.newMap());
+        Verify.assertEmpty(new <name>BooleanHashMap());
         Assert.assertFalse(this.map.isEmpty());
         Assert.assertFalse(<name>BooleanHashMap.newWithKeysValues(<(literal.(type))("1")>, true).isEmpty());
         Assert.assertFalse(<name>BooleanHashMap.newWithKeysValues(<(literal.(type))("0")>, false).isEmpty());
@@ -741,7 +741,7 @@ public class <name>BooleanHashMapTest
     @Test
     public void notEmpty()
     {
-        Assert.assertFalse(<name>BooleanHashMap.newMap().notEmpty());
+        Assert.assertFalse(new <name>BooleanHashMap().notEmpty());
         Assert.assertTrue(this.map.notEmpty());
         Assert.assertTrue(<name>BooleanHashMap.newWithKeysValues(<(literal.(type))("1")>, false).notEmpty());
         Assert.assertTrue(<name>BooleanHashMap.newWithKeysValues(<(literal.(type))("0")>, true).notEmpty());
@@ -782,7 +782,7 @@ public class <name>BooleanHashMapTest
         Verify.assertPostSerializedEqualsAndHashCode(map1);
         Verify.assertPostSerializedEqualsAndHashCode(map8);
         Verify.assertPostSerializedEqualsAndHashCode(map6);
-        Verify.assertPostSerializedEqualsAndHashCode(<name>BooleanHashMap.newMap());
+        Verify.assertPostSerializedEqualsAndHashCode(new <name>BooleanHashMap());
         Assert.assertNotEquals(map1, map3);
         Assert.assertNotEquals(map1, map4);
         Assert.assertNotEquals(map1, map5);
@@ -1310,7 +1310,7 @@ public class <name>BooleanHashMapTest
         {
             public void run()
             {
-                <name>BooleanHashMap.newMap().booleanIterator().next();
+                new <name>BooleanHashMap().booleanIterator().next();
             }
         });
     }

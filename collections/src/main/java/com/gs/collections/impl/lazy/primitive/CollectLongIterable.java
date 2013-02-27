@@ -24,7 +24,6 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.LazyLongIterable;
 import com.gs.collections.api.LongIterable;
-import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.primitive.MutableLongBag;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
@@ -166,7 +165,7 @@ public class CollectLongIterable<T>
         return ifNone;
     }
 
-    public <V> RichIterable<V> collect(LongToObjectFunction<? extends V> function)
+    public <V> LazyIterable<V> collect(LongToObjectFunction<? extends V> function)
     {
         return new CollectLongToObjectIterable<V>(this, function);
     }

@@ -103,11 +103,6 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
         });
     }
 
-    public static <name>HashBag newBag()
-    {
-        return new <name>HashBag();
-    }
-
     public static <name>HashBag newBag(int size)
     {
         return new <name>HashBag(size);
@@ -132,7 +127,7 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
 
     public static <name>HashBag newBag(<name>Bag source)
     {
-        final <name>HashBag result = <name>HashBag.newBag();
+        final <name>HashBag result = new <name>HashBag();
         source.forEachWithOccurrences(new <name>IntProcedure()
         {
             public void value(<type> each, int occurrences)
@@ -414,7 +409,7 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
 
     public Mutable<name>Bag select(final <name>Predicate predicate)
     {
-        final Mutable<name>Bag result = <name>HashBag.newBag();
+        final Mutable<name>Bag result = new <name>HashBag();
         this.forEachWithOccurrences(new <name>IntProcedure()
         {
             public void value(<type> each, int occurrences)
@@ -430,7 +425,7 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
 
     public Mutable<name>Bag reject(final <name>Predicate predicate)
     {
-        final Mutable<name>Bag result = <name>HashBag.newBag();
+        final Mutable<name>Bag result = new <name>HashBag();
         this.forEachWithOccurrences(new <name>IntProcedure()
         {
             public void value(<type> each, int occurrences)

@@ -927,10 +927,10 @@ public class ObjectBooleanHashMapTest
     @Test
     public void select()
     {
-        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues("0", true, "1", true), this.map.select(BooleanPredicates.isTrue()));
-        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues("2", false), this.map.select(BooleanPredicates.isFalse()));
-        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues("0", true, "1", true, "2", false), this.map.select(BooleanPredicates.or(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())));
-        Assert.assertEquals(ObjectBooleanHashMap.newMap(), this.map.select(BooleanPredicates.and(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())));
+        Assert.assertEquals(BooleanHashBag.newBagWith(true, true), this.map.select(BooleanPredicates.isTrue()).toBag());
+        Assert.assertEquals(BooleanHashBag.newBagWith(false), this.map.select(BooleanPredicates.isFalse()).toBag());
+        Assert.assertEquals(BooleanHashBag.newBagWith(true, true, false), this.map.select(BooleanPredicates.or(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())).toBag());
+        Assert.assertEquals(new BooleanHashBag(), this.map.select(BooleanPredicates.and(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())).toBag());
 
         Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues("0", true), this.map.select(new ObjectBooleanPredicate<String>()
         {
@@ -958,10 +958,10 @@ public class ObjectBooleanHashMapTest
     @Test
     public void reject()
     {
-        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues("2", false), this.map.reject(BooleanPredicates.isTrue()));
-        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues("0", true, "1", true), this.map.reject(BooleanPredicates.isFalse()));
-        Assert.assertEquals(ObjectBooleanHashMap.newMap(), this.map.reject(BooleanPredicates.or(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())));
-        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues("0", true, "1", true, "2", false), this.map.reject(BooleanPredicates.and(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())));
+        Assert.assertEquals(BooleanHashBag.newBagWith(false), this.map.reject(BooleanPredicates.isTrue()).toBag());
+        Assert.assertEquals(BooleanHashBag.newBagWith(true, true), this.map.reject(BooleanPredicates.isFalse()).toBag());
+        Assert.assertEquals(new BooleanHashBag(), this.map.reject(BooleanPredicates.or(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())).toBag());
+        Assert.assertEquals(BooleanHashBag.newBagWith(true, true, false), this.map.reject(BooleanPredicates.and(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())).toBag());
 
         Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues("1", true, "2", false), this.map.reject(new ObjectBooleanPredicate<String>()
         {

@@ -70,11 +70,6 @@ public final class BooleanHashBag implements MutableBooleanBag, Externalizable
         this.trueCount = bag.trueCount;
     }
 
-    public static BooleanHashBag newBag()
-    {
-        return new BooleanHashBag();
-    }
-
     public static BooleanHashBag newBagWith(boolean... source)
     {
         BooleanHashBag result = new BooleanHashBag();
@@ -436,7 +431,7 @@ public final class BooleanHashBag implements MutableBooleanBag, Externalizable
 
     public MutableBooleanBag select(final BooleanPredicate predicate)
     {
-        final MutableBooleanBag result = BooleanHashBag.newBag();
+        final MutableBooleanBag result = new BooleanHashBag();
         this.forEachWithOccurrences(new BooleanIntProcedure()
         {
             public void value(boolean each, int occurrences)
@@ -452,7 +447,7 @@ public final class BooleanHashBag implements MutableBooleanBag, Externalizable
 
     public MutableBooleanBag reject(final BooleanPredicate predicate)
     {
-        final MutableBooleanBag result = BooleanHashBag.newBag();
+        final MutableBooleanBag result = new BooleanHashBag();
         this.forEachWithOccurrences(new BooleanIntProcedure()
         {
             public void value(boolean each, int occurrences)

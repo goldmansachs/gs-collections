@@ -14,6 +14,7 @@ body(type, name) ::= <<
 
 package com.gs.collections.api;
 
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 
 /**
@@ -24,6 +25,8 @@ public interface Lazy<name>Iterable extends <name>Iterable
     Lazy<name>Iterable select(<name>Predicate predicate);
 
     Lazy<name>Iterable reject(<name>Predicate predicate);
+
+    \<V> LazyIterable\<V> collect(<name>ToObjectFunction\<? extends V> function);
 }
 
 >>

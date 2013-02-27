@@ -26,7 +26,6 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.LazyBooleanIterable;
-import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.primitive.MutableBooleanBag;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.BooleanFunction0;
@@ -37,6 +36,8 @@ import com.gs.collections.api.block.predicate.primitive.ObjectBooleanPredicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectBooleanProcedure;
+import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
@@ -667,27 +668,27 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         return true;
     }
 
-    public BooleanIterable select(BooleanPredicate predicate)
+    public MutableBooleanCollection select(BooleanPredicate predicate)
     {
-        ObjectBooleanHashMap<K> result = ObjectBooleanHashMap.newMap();
+        BooleanArrayList result = new BooleanArrayList();
         for (int i = 0; i < this.keys.length; i++)
         {
             if (isNonSentinel(this.keys[i]) && predicate.accept(this.values.get(i)))
             {
-                result.put(this.toNonSentinel(this.keys[i]), this.values.get(i));
+                result.add(this.values.get(i));
             }
         }
         return result;
     }
 
-    public BooleanIterable reject(BooleanPredicate predicate)
+    public MutableBooleanCollection reject(BooleanPredicate predicate)
     {
-        ObjectBooleanHashMap<K> result = ObjectBooleanHashMap.newMap();
+        BooleanArrayList result = new BooleanArrayList();
         for (int i = 0; i < this.keys.length; i++)
         {
             if (isNonSentinel(this.keys[i]) && !predicate.accept(this.values.get(i)))
             {
-                result.put(this.toNonSentinel(this.keys[i]), this.values.get(i));
+                result.add(this.values.get(i));
             }
         }
         return result;
@@ -705,7 +706,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         return ifNone;
     }
 
-    public <V> RichIterable<V> collect(BooleanToObjectFunction<? extends V> function)
+    public <V> MutableCollection<V> collect(BooleanToObjectFunction<? extends V> function)
     {
         MutableList<V> result = FastList.newList(this.size());
         for (int i = 0; i < this.keys.length; i++)

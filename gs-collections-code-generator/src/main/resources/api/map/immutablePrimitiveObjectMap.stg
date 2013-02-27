@@ -16,7 +16,10 @@ body(type, name) ::= <<
 package com.gs.collections.api.map.primitive;
 
 import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.primitive.<name>ObjectPredicate;
+import com.gs.collections.api.collection.ImmutableCollection;
 
 /**
  * This file was automatically generated from template file immutablePrimitiveObjectMap.stg.
@@ -28,6 +31,12 @@ public interface Immutable<name>ObjectMap\<V> extends <name>ObjectMap\<V>
     Immutable<name>ObjectMap\<V> select(<name>ObjectPredicate\<? super V> predicate);
 
     Immutable<name>ObjectMap\<V> reject(<name>ObjectPredicate\<? super V> predicate);
+    
+    ImmutableCollection\<V> select(Predicate\<? super V> predicate);
+
+    ImmutableCollection\<V> reject(Predicate\<? super V> predicate);
+
+    \<V1> ImmutableCollection\<V1> collect(Function\<? super V, ? extends V1> function);
 
     Immutable<name>ObjectMap\<V> newWithKeyValue(<type> key, V value);
 

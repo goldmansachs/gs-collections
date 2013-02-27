@@ -14,8 +14,10 @@ body(type, name) ::= <<
 
 package com.gs.collections.api.stack.primitive;
 
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.list.primitive.<name>List;
+import com.gs.collections.api.stack.MutableStack;
 
 /**
  * This file was automatically generated from template file mutablePrimitiveStack.stg.
@@ -45,6 +47,8 @@ public interface Mutable<name>Stack extends <name>Stack
     void clear();
 
     <sharedAPI(fileName(primitive), name)>
+
+    \<V> MutableStack\<V> collect(<name>ToObjectFunction\<? extends V> function);
 
     Mutable<name>Stack asUnmodifiable();
 

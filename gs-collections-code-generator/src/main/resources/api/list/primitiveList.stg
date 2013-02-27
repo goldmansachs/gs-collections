@@ -1,6 +1,7 @@
 import "copyright.stg"
 import "primitiveEquals.stg"
 import "primitiveHashCode.stg"
+import "primitiveAPI.stg"
 
 targetPath() ::= "com/gs/collections/api/list/primitive"
 
@@ -18,7 +19,9 @@ package com.gs.collections.api.list.primitive;
 import java.util.List;
 
 import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.list.ListIterable;
 
 /**
  * This file was automatically generated from template file primitiveList.stg.
@@ -37,9 +40,9 @@ public interface <name>List extends <name>Iterable
 
     int lastIndexOf(<type> value);
 
-    <name>List select(<name>Predicate predicate);
+    <sharedAPI(fileName(primitive), name)>
 
-    <name>List reject(<name>Predicate predicate);
+    \<V> ListIterable\<V> collect(<name>ToObjectFunction\<? extends V> function);
 
     /**
      * Follows the same general contract as {@link List#equals(Object)}.

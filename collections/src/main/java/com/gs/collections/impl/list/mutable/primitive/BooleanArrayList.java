@@ -25,12 +25,12 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.LazyBooleanIterable;
-import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.primitive.MutableBooleanBag;
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
+import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.BooleanList;
 import com.gs.collections.api.list.primitive.ImmutableBooleanList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
@@ -552,7 +552,7 @@ public final class BooleanArrayList
         return ifNone;
     }
 
-    public <V> RichIterable<V> collect(BooleanToObjectFunction<? extends V> function)
+    public <V> MutableList<V> collect(BooleanToObjectFunction<? extends V> function)
     {
         FastList<V> target = FastList.newList(this.size);
         for (int i = 0; i < this.size; i++)
@@ -865,9 +865,9 @@ public final class BooleanArrayList
             return ifNone;
         }
 
-        public <V> RichIterable<V> collect(BooleanToObjectFunction<? extends V> function)
+        public <V> MutableList<V> collect(BooleanToObjectFunction<? extends V> function)
         {
-            FastList<V> results = FastList.newList(BooleanArrayList.this.size);
+            MutableList<V> results = FastList.newList(BooleanArrayList.this.size);
             BooleanIterator iterator = this.booleanIterator();
             while (iterator.hasNext())
             {

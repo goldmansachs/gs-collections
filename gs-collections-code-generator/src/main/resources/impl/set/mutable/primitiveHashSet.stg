@@ -25,7 +25,6 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.Lazy<name>Iterable;
-import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
@@ -667,7 +666,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         return ifNone;
     }
 
-    public \<V> RichIterable\<V> collect(<name>ToObjectFunction\<? extends V> function)
+    public \<V> MutableSet\<V> collect(<name>ToObjectFunction\<? extends V> function)
     {
         MutableSet\<V> target = UnifiedSet.newSet(this.size());
 

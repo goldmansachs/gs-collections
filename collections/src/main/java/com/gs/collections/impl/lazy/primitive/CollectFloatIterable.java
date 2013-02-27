@@ -24,7 +24,6 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.FloatIterable;
 import com.gs.collections.api.LazyFloatIterable;
 import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.primitive.MutableFloatBag;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
@@ -166,7 +165,7 @@ public class CollectFloatIterable<T>
         return ifNone;
     }
 
-    public <V> RichIterable<V> collect(FloatToObjectFunction<? extends V> function)
+    public <V> LazyIterable<V> collect(FloatToObjectFunction<? extends V> function)
     {
         return new CollectFloatToObjectIterable<V>(this, function);
     }

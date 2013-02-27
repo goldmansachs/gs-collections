@@ -94,13 +94,13 @@ public class <name>HashBagTest
     {
         <name>HashBag bag = new <name>HashBag();
         Assert.assertFalse(bag.remove(<(literal.(type))("100")>));
-        Assert.assertEquals(<name>HashBag.newBag(), bag);
+        Assert.assertEquals(new <name>HashBag(), bag);
         Assert.assertTrue(bag.add(<(literal.(type))("100")>));
         Assert.assertTrue(bag.add(<(literal.(type))("100")>));
         Assert.assertTrue(bag.remove(<(literal.(type))("100")>));
         Assert.assertEquals(<name>HashBag.newBagWith(<(literal.(type))("100")>), bag);
         Assert.assertTrue(bag.remove(<(literal.(type))("100")>));
-        Assert.assertEquals(<name>HashBag.newBag(), bag);
+        Assert.assertEquals(new <name>HashBag(), bag);
     }
 
     @Test
@@ -113,9 +113,9 @@ public class <name>HashBagTest
         Assert.assertFalse(bag.removeOccurrences(<(literal.(type))("100")>, 0));
         Assert.assertEquals(<name>HashBag.newBagWith(<["100", "100", "100"]:(literal.(type))(); separator=", ">), bag);
         Assert.assertTrue(bag.removeOccurrences(<(literal.(type))("100")>, 5));
-        Assert.assertEquals(<name>HashBag.newBag(), bag);
+        Assert.assertEquals(new <name>HashBag(), bag);
         Assert.assertFalse(bag.removeOccurrences(<(literal.(type))("100")>, 5));
-        Assert.assertEquals(<name>HashBag.newBag(), bag);
+        Assert.assertEquals(new <name>HashBag(), bag);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -422,7 +422,7 @@ public class <name>HashBagTest
     @Test(expected = ArithmeticException.class)
     public void averageThrowsOnEmpty()
     {
-        <name>HashBag.newBag().average();
+        new <name>HashBag().average();
     }
     @Test
     public void median()
@@ -434,7 +434,7 @@ public class <name>HashBagTest
     @Test(expected = ArithmeticException.class)
     public void medianThrowsOnEmpty()
     {
-        <name>HashBag.newBag().median();
+        new <name>HashBag().median();
     }
 
     @Test

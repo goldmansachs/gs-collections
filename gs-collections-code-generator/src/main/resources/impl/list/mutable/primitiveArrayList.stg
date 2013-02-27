@@ -31,6 +31,7 @@ import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.<name>List;
 import com.gs.collections.api.list.primitive.Immutable<name>List;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
@@ -585,7 +586,7 @@ public final class <name>ArrayList
         return ifNone;
     }
 
-    public \<V> RichIterable\<V> collect(<name>ToObjectFunction\<? extends V> function)
+    public \<V> MutableList\<V> collect(<name>ToObjectFunction\<? extends V> function)
     {
         FastList\<V> target = FastList.newList(this.size);
         for (int i = 0; i \< this.size; i++)

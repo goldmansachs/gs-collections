@@ -963,29 +963,29 @@ public class Object<name>HashMapTest
             }
         }));
 
-        Assert.assertEquals(this.map, this.map.select(new <name>Predicate()
+        Assert.assertEquals(<name>HashBag.newBagWith(<(literal.(type))("0")>, <(literal.(type))("1")>, <(literal.(type))("2")>), this.map.select(new <name>Predicate()
         {
             public boolean accept(<type> value)
             {
                 return <(lessThan.(type))("value", {<(literal.(type))("3")>})>;
             }
-        }));
+        }).toBag());
 
-        Assert.assertEquals(Object<name>HashMap.newWithKeysValues("0", <(literal.(type))("0")>, "1", <(literal.(type))("1")>), this.map.select(new <name>Predicate()
+        Assert.assertEquals(<name>HashBag.newBagWith(<(literal.(type))("0")>, <(literal.(type))("1")>), this.map.select(new <name>Predicate()
         {
             public boolean accept(<type> value)
             {
                 return <(lessThan.(type))("value", {<(literal.(type))("2")>})>;
             }
-        }));
+        }).toBag());
 
-        Assert.assertEquals(Object<name>HashMap.newMap(), this.map.select(new <name>Predicate()
+        Assert.assertEquals(new <name>HashBag(), this.map.select(new <name>Predicate()
         {
             public boolean accept(<type> value)
             {
                 return value > <(literal.(type))("2")>;
             }
-        }));
+        }).toBag());
     }
 
     @Test
@@ -1015,29 +1015,29 @@ public class Object<name>HashMapTest
             }
         }));
 
-        Assert.assertEquals(Object<name>HashMap.newMap(), this.map.reject(new <name>Predicate()
+        Assert.assertEquals(new <name>HashBag(), this.map.reject(new <name>Predicate()
         {
             public boolean accept(<type> value)
             {
                 return <(lessThan.(type))("value", {<(literal.(type))("3")>})>;
             }
-        }));
+        }).toBag());
 
-        Assert.assertEquals(Object<name>HashMap.newWithKeysValues("2", <(literal.(type))("2")>), this.map.reject(new <name>Predicate()
+        Assert.assertEquals(<name>HashBag.newBagWith(<(literal.(type))("2")>), this.map.reject(new <name>Predicate()
         {
             public boolean accept(<type> value)
             {
                 return <(lessThan.(type))("value", {<(literal.(type))("2")>})>;
             }
-        }));
+        }).toBag());
 
-        Assert.assertEquals(this.map, this.map.reject(new <name>Predicate()
+        Assert.assertEquals(<name>HashBag.newBagWith(<(literal.(type))("0")>, <(literal.(type))("1")>, <(literal.(type))("2")>), this.map.reject(new <name>Predicate()
         {
             public boolean accept(<type> value)
             {
                 return value > <(literal.(type))("2")>;
             }
-        }));
+        }).toBag());
     }
 
     @Test

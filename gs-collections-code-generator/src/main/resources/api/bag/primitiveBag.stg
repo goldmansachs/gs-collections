@@ -1,4 +1,5 @@
 import "copyright.stg"
+import "primitiveAPI.stg"
 
 targetPath() ::= "com/gs/collections/api/bag/primitive"
 
@@ -15,6 +16,7 @@ package com.gs.collections.api.bag.primitive;
 
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.bag.Bag;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
 
@@ -40,9 +42,9 @@ public interface <name>Bag extends <name>Iterable
      */
     void forEachWithOccurrences(<name>IntProcedure procedure);
 
-    <name>Bag select(<name>Predicate predicate);
+    <sharedAPI(fileName(primitive), name)>
 
-    <name>Bag reject(<name>Predicate predicate);
+    \<V> Bag\<V> collect(<name>ToObjectFunction\<? extends V> function);
 
     /**
      * Follows the same general contract as {@link Bag#equals(Object)}.

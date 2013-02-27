@@ -24,13 +24,13 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.LazyBooleanIterable;
-import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.primitive.MutableBooleanBag;
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
+import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.primitive.BooleanSet;
 import com.gs.collections.api.set.primitive.ImmutableBooleanSet;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
@@ -387,7 +387,7 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
         }
     }
 
-    public <V> RichIterable<V> collect(BooleanToObjectFunction<? extends V> function)
+    public <V> MutableSet<V> collect(BooleanToObjectFunction<? extends V> function)
     {
         UnifiedSet<V> target = UnifiedSet.newSet(this.size());
         switch (this.state)

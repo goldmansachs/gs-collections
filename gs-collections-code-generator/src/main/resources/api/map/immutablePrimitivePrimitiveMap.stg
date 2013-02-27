@@ -18,7 +18,11 @@ body(type1, type2, name1, name2) ::= <<
 package com.gs.collections.api.map.primitive;
 
 import com.gs.collections.api.<name1>Iterable;
+import com.gs.collections.api.block.function.primitive.<name2>ToObjectFunction;
+import com.gs.collections.api.block.predicate.primitive.<name2>Predicate;
 import com.gs.collections.api.block.predicate.primitive.<name1><name2>Predicate;
+import com.gs.collections.api.collection.ImmutableCollection;
+import com.gs.collections.api.collection.primitive.Immutable<name2>Collection;
 
 /**
  * This file was automatically generated from template file immutablePrimitivePrimitiveMap.stg.
@@ -30,6 +34,12 @@ public interface Immutable<name1><name2>Map extends <name1><name2>Map
     Immutable<name1><name2>Map select(<name1><name2>Predicate predicate);
 
     Immutable<name1><name2>Map reject(<name1><name2>Predicate predicate);
+    
+    Immutable<name2>Collection select(<name2>Predicate predicate);
+
+    Immutable<name2>Collection reject(<name2>Predicate predicate);
+
+    \<V> ImmutableCollection\<V> collect(<name2>ToObjectFunction\<? extends V> function);
 
     Immutable<name1><name2>Map newWithKeyValue(<type1> key, <type2> value);
 

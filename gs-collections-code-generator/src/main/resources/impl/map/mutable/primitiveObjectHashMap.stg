@@ -1363,7 +1363,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         return result;
     }
 
-    public \<V1> MutableList\<V1> collect(Function\<? super V, ? extends V1> function)
+    public \<V1> MutableCollection\<V1> collect(Function\<? super V, ? extends V1> function)
     {
         return this.collect(function, FastList.\<V1>newList(this.size()));
     }

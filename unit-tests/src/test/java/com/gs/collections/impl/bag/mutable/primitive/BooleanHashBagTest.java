@@ -105,23 +105,23 @@ public class BooleanHashBagTest
     {
         BooleanHashBag bag1 = new BooleanHashBag();
         Assert.assertFalse(bag1.remove(false));
-        Assert.assertEquals(BooleanHashBag.newBag(), bag1);
+        Assert.assertEquals(new BooleanHashBag(), bag1);
         Assert.assertTrue(bag1.add(false));
         Assert.assertTrue(bag1.add(false));
         Assert.assertTrue(bag1.remove(false));
         Assert.assertEquals(BooleanHashBag.newBagWith(false), bag1);
         Assert.assertTrue(bag1.remove(false));
-        Assert.assertEquals(BooleanHashBag.newBag(), bag1);
+        Assert.assertEquals(new BooleanHashBag(), bag1);
 
         BooleanHashBag bag2 = new BooleanHashBag();
         Assert.assertFalse(bag2.remove(true));
-        Assert.assertEquals(BooleanHashBag.newBag(), bag2);
+        Assert.assertEquals(new BooleanHashBag(), bag2);
         Assert.assertTrue(bag2.add(true));
         Assert.assertTrue(bag2.add(true));
         Assert.assertTrue(bag2.remove(true));
         Assert.assertEquals(BooleanHashBag.newBagWith(true), bag2);
         Assert.assertTrue(bag2.remove(true));
-        Assert.assertEquals(BooleanHashBag.newBag(), bag2);
+        Assert.assertEquals(new BooleanHashBag(), bag2);
     }
 
     @Test
@@ -134,9 +134,9 @@ public class BooleanHashBagTest
         Assert.assertFalse(bag1.removeOccurrences(true, 0));
         Assert.assertEquals(BooleanHashBag.newBagWith(true, true, true), bag1);
         Assert.assertTrue(bag1.removeOccurrences(true, 5));
-        Assert.assertEquals(BooleanHashBag.newBag(), bag1);
+        Assert.assertEquals(new BooleanHashBag(), bag1);
         Assert.assertFalse(bag1.removeOccurrences(true, 5));
-        Assert.assertEquals(BooleanHashBag.newBag(), bag1);
+        Assert.assertEquals(new BooleanHashBag(), bag1);
 
         BooleanHashBag bag2 = new BooleanHashBag();
         bag2.addOccurrences(false, 5);
@@ -145,9 +145,9 @@ public class BooleanHashBagTest
         Assert.assertFalse(bag2.removeOccurrences(false, 0));
         Assert.assertEquals(BooleanHashBag.newBagWith(false, false, false), bag2);
         Assert.assertTrue(bag2.removeOccurrences(false, 5));
-        Assert.assertEquals(BooleanHashBag.newBag(), bag2);
+        Assert.assertEquals(new BooleanHashBag(), bag2);
         Assert.assertFalse(bag2.removeOccurrences(false, 5));
-        Assert.assertEquals(BooleanHashBag.newBag(), bag2);
+        Assert.assertEquals(new BooleanHashBag(), bag2);
     }
 
     @Test(expected = IllegalArgumentException.class)

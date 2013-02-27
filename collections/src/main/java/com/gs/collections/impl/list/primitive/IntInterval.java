@@ -23,13 +23,13 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.IntIterable;
 import com.gs.collections.api.LazyIntIterable;
-import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.primitive.MutableIntBag;
 import com.gs.collections.api.block.function.primitive.IntToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.primitive.IntIntProcedure;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.iterator.IntIterator;
+import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.IntList;
 import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.set.primitive.MutableIntSet;
@@ -623,9 +623,9 @@ public final class IntInterval
         return new SelectIntIterable(this, predicate).detectIfNone(predicate, ifNone);
     }
 
-    public <V> RichIterable<V> collect(IntToObjectFunction<? extends V> function)
+    public <V> MutableList<V> collect(IntToObjectFunction<? extends V> function)
     {
-        return new CollectIntToObjectIterable<V>(this, function);
+        return new CollectIntToObjectIterable<V>(this, function).toList();
     }
 
     public long sum()

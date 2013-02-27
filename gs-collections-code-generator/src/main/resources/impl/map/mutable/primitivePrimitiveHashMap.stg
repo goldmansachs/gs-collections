@@ -31,7 +31,7 @@ import com.gs.collections.api.<name1>Iterable;
 import com.gs.collections.api.Lazy<name1>Iterable;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.Lazy<name2>Iterable;<endif>
 <if(!sameTwoPrimitives)>import com.gs.collections.api.<name2>Iterable;<endif>
-import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.bag.primitive.Mutable<name1>Bag;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.bag.primitive.Mutable<name2>Bag;<endif>
 <if(!sameTwoPrimitives)>import com.gs.collections.api.block.function.primitive.<name1>ToObjectFunction;<endif>
@@ -46,6 +46,8 @@ import com.gs.collections.api.block.predicate.primitive.<name1>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name1>Procedure;
 import com.gs.collections.api.block.procedure.primitive.<name1><name2>Procedure;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.block.procedure.primitive.<name2>Procedure;<endif>
+import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.collection.primitive.Mutable<name2>Collection;
 import com.gs.collections.api.iterator.<name1>Iterator;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.iterator.<name2>Iterator;<endif>
 import com.gs.collections.api.list.primitive.Mutable<name1>List;
@@ -58,6 +60,7 @@ import com.gs.collections.api.set.primitive.Mutable<name1>Set;
 import com.gs.collections.impl.bag.mutable.primitive.<name1>HashBag;
 <if(!sameTwoPrimitives)>import com.gs.collections.impl.bag.mutable.primitive.<name2>HashBag;<endif>
 import com.gs.collections.impl.block.factory.primitive.<name1>Predicates;
+import com.gs.collections.impl.lazy.primitive.Collect<name1>ToObjectIterable;
 import com.gs.collections.impl.lazy.primitive.Lazy<name2>IterableAdapter;
 import com.gs.collections.impl.lazy.primitive.Select<name1>Iterable;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -106,11 +109,6 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         }
         this.loadFactor = loadFactor;
         this.init(this.fastCeil(initialCapacity / loadFactor));
-    }
-
-    public static <name1><name2>HashMap newMap()
-    {
-        return new <name1><name2>HashMap();
     }
 
     public static <name1><name2>HashMap newWithKeysValues(<type1> key1, <type2> value1)
@@ -731,7 +729,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
 
     public <name1><name2>HashMap select(<name1><name2>Predicate predicate)
     {
-        <name1><name2>HashMap result = <name1><name2>HashMap.newMap();
+        <name1><name2>HashMap result = new <name1><name2>HashMap();
 
         <forEachKeyValueSatisfying("select2")>
 
@@ -740,7 +738,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
 
     public <name1><name2>HashMap reject(<name1><name2>Predicate predicate)
     {
-        <name1><name2>HashMap result = <name1><name2>HashMap.newMap();
+        <name1><name2>HashMap result = new <name1><name2>HashMap();
 
         if (this.sentinelValues != null)
         {
@@ -836,7 +834,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         }
     }
 
-    public <name2>Iterable select(<name2>Predicate predicate)
+    public Mutable<name2>Collection select(<name2>Predicate predicate)
     {
         <name2>ArrayList result = new <name2>ArrayList();
 
@@ -845,7 +843,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         return result;
     }
 
-    public <name2>Iterable reject(<name2>Predicate predicate)
+    public Mutable<name2>Collection reject(<name2>Predicate predicate)
     {
         <name2>ArrayList result = new <name2>ArrayList();
         if (this.sentinelValues != null)
@@ -875,10 +873,27 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         return value;
     }
 
-    public \<V> RichIterable\<V> collect(<name2>ToObjectFunction\<? extends V> function)
+    public \<V> MutableCollection\<V> collect(<name2>ToObjectFunction\<? extends V> function)
     {
         FastList\<V> target = FastList.newList(this.size());
-        <forEachValue("collect")>
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey)
+            {
+                target.add(function.valueOf(this.sentinelValues.zeroValue));
+            }
+            if (this.sentinelValues.containsOneKey)
+            {
+                target.add(function.valueOf(this.sentinelValues.oneValue));
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                target.add(function.valueOf(this.values[i]));
+            }
+        }
         return target;
     }
 
@@ -1386,11 +1401,9 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             return value;
         }
 
-        public \<V> RichIterable\<V> collect(<name1>ToObjectFunction\<? extends V> function)
+        public \<V> LazyIterable\<V> collect(<name1>ToObjectFunction\<? extends V> function)
         {
-            FastList\<V> target = FastList.newList(this.size());
-            <forEachKey("collect", true)>
-            return target;
+            return new Collect<name1>ToObjectIterable\<V>(this, function);
         }
 
         public <wideType.(type1)> sum()
@@ -1607,10 +1620,6 @@ return true;
 
 allSatisfy(value) ::= <<
 return false;
->>
-
-collect(value) ::= <<
-target.add(function.valueOf(<value>));
 >>
 
 sum(value) ::= <<

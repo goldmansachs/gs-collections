@@ -20,7 +20,9 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.primitive.<name>ObjectPredicate;
+import com.gs.collections.api.collection.MutableCollection;
 
 /**
  * This file was automatically generated from template file mutablePrimitiveObjectMap.stg.
@@ -54,6 +56,12 @@ public interface Mutable<name>ObjectMap\<V> extends <name>ObjectMap\<V>, Mutable
     Mutable<name>ObjectMap\<V> select(<name>ObjectPredicate\<? super V> predicate);
 
     Mutable<name>ObjectMap\<V> reject(<name>ObjectPredicate\<? super V> predicate);
+
+    MutableCollection\<V> select(Predicate\<? super V> predicate);
+
+    MutableCollection\<V> reject(Predicate\<? super V> predicate);
+
+    \<V1> MutableCollection\<V1> collect(Function\<? super V, ? extends V1> function);
 
     Mutable<name>ObjectMap\<V> withKeyValue(<type> key, V value);
 
