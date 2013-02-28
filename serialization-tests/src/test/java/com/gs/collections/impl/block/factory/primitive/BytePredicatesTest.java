@@ -73,4 +73,47 @@ public class BytePredicatesTest
                         + "eXRlUHJlZGljYXRlcyRCeXRlSXNPZGRQcmVkaWNhdGUAAAAAAAAAAQIAAHhw",
                 BytePredicates.isOdd());
     }
+
+    @Test
+    public void and()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAE9jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5C\n"
+                        + "eXRlUHJlZGljYXRlcyRBbmRCeXRlUHJlZGljYXRlAAAAAAAAAAECAAJMAANvbmV0AEBMY29tL2dz\n"
+                        + "L2NvbGxlY3Rpb25zL2FwaS9ibG9jay9wcmVkaWNhdGUvcHJpbWl0aXZlL0J5dGVQcmVkaWNhdGU7\n"
+                        + "TAADdHdvcQB+AAF4cHNyAFJjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnBy\n"
+                        + "aW1pdGl2ZS5CeXRlUHJlZGljYXRlcyRCeXRlSXNFdmVuUHJlZGljYXRlAAAAAAAAAAECAAB4cHNy\n"
+                        + "AFFjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5CeXRlUHJl\n"
+                        + "ZGljYXRlcyRCeXRlSXNPZGRQcmVkaWNhdGUAAAAAAAAAAQIAAHhw",
+                BytePredicates.and(BytePredicates.isEven(), BytePredicates.isOdd()));
+    }
+
+    @Test
+    public void or()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAE5jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5C\n"
+                        + "eXRlUHJlZGljYXRlcyRPckJ5dGVQcmVkaWNhdGUAAAAAAAAAAQIAAkwAA29uZXQAQExjb20vZ3Mv\n"
+                        + "Y29sbGVjdGlvbnMvYXBpL2Jsb2NrL3ByZWRpY2F0ZS9wcmltaXRpdmUvQnl0ZVByZWRpY2F0ZTtM\n"
+                        + "AAN0d29xAH4AAXhwc3IAUmNvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLmJsb2NrLmZhY3RvcnkucHJp\n"
+                        + "bWl0aXZlLkJ5dGVQcmVkaWNhdGVzJEJ5dGVJc0V2ZW5QcmVkaWNhdGUAAAAAAAAAAQIAAHhwc3IA\n"
+                        + "UWNvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLmJsb2NrLmZhY3RvcnkucHJpbWl0aXZlLkJ5dGVQcmVk\n"
+                        + "aWNhdGVzJEJ5dGVJc09kZFByZWRpY2F0ZQAAAAAAAAABAgAAeHA=",
+                BytePredicates.or(BytePredicates.isEven(), BytePredicates.isOdd()));
+    }
+
+    @Test
+    public void not()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAE9jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5C\n"
+                        + "eXRlUHJlZGljYXRlcyROb3RCeXRlUHJlZGljYXRlAAAAAAAAAAECAAFMAAZuZWdhdGV0AEBMY29t\n"
+                        + "L2dzL2NvbGxlY3Rpb25zL2FwaS9ibG9jay9wcmVkaWNhdGUvcHJpbWl0aXZlL0J5dGVQcmVkaWNh\n"
+                        + "dGU7eHBzcgBSY29tLmdzLmNvbGxlY3Rpb25zLmltcGwuYmxvY2suZmFjdG9yeS5wcmltaXRpdmUu\n"
+                        + "Qnl0ZVByZWRpY2F0ZXMkQnl0ZUlzRXZlblByZWRpY2F0ZQAAAAAAAAABAgAAeHA=",
+                BytePredicates.not(BytePredicates.isEven()));
+    }
 }

@@ -73,4 +73,47 @@ public class LongPredicatesTest
                         + "b25nUHJlZGljYXRlcyRMb25nSXNPZGRQcmVkaWNhdGUAAAAAAAAAAQIAAHhw",
                 LongPredicates.isOdd());
     }
+
+    @Test
+    public void and()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAE9jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5M\n"
+                        + "b25nUHJlZGljYXRlcyRBbmRMb25nUHJlZGljYXRlAAAAAAAAAAECAAJMAANvbmV0AEBMY29tL2dz\n"
+                        + "L2NvbGxlY3Rpb25zL2FwaS9ibG9jay9wcmVkaWNhdGUvcHJpbWl0aXZlL0xvbmdQcmVkaWNhdGU7\n"
+                        + "TAADdHdvcQB+AAF4cHNyAFJjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnBy\n"
+                        + "aW1pdGl2ZS5Mb25nUHJlZGljYXRlcyRMb25nSXNFdmVuUHJlZGljYXRlAAAAAAAAAAECAAB4cHNy\n"
+                        + "AFFjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5Mb25nUHJl\n"
+                        + "ZGljYXRlcyRMb25nSXNPZGRQcmVkaWNhdGUAAAAAAAAAAQIAAHhw",
+                LongPredicates.and(LongPredicates.isEven(), LongPredicates.isOdd()));
+    }
+
+    @Test
+    public void or()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAE5jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5M\n"
+                        + "b25nUHJlZGljYXRlcyRPckxvbmdQcmVkaWNhdGUAAAAAAAAAAQIAAkwAA29uZXQAQExjb20vZ3Mv\n"
+                        + "Y29sbGVjdGlvbnMvYXBpL2Jsb2NrL3ByZWRpY2F0ZS9wcmltaXRpdmUvTG9uZ1ByZWRpY2F0ZTtM\n"
+                        + "AAN0d29xAH4AAXhwc3IAUmNvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLmJsb2NrLmZhY3RvcnkucHJp\n"
+                        + "bWl0aXZlLkxvbmdQcmVkaWNhdGVzJExvbmdJc0V2ZW5QcmVkaWNhdGUAAAAAAAAAAQIAAHhwc3IA\n"
+                        + "UWNvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLmJsb2NrLmZhY3RvcnkucHJpbWl0aXZlLkxvbmdQcmVk\n"
+                        + "aWNhdGVzJExvbmdJc09kZFByZWRpY2F0ZQAAAAAAAAABAgAAeHA=",
+                LongPredicates.or(LongPredicates.isEven(), LongPredicates.isOdd()));
+    }
+
+    @Test
+    public void not()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAE9jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5M\n"
+                        + "b25nUHJlZGljYXRlcyROb3RMb25nUHJlZGljYXRlAAAAAAAAAAECAAFMAAZuZWdhdGV0AEBMY29t\n"
+                        + "L2dzL2NvbGxlY3Rpb25zL2FwaS9ibG9jay9wcmVkaWNhdGUvcHJpbWl0aXZlL0xvbmdQcmVkaWNh\n"
+                        + "dGU7eHBzcgBSY29tLmdzLmNvbGxlY3Rpb25zLmltcGwuYmxvY2suZmFjdG9yeS5wcmltaXRpdmUu\n"
+                        + "TG9uZ1ByZWRpY2F0ZXMkTG9uZ0lzRXZlblByZWRpY2F0ZQAAAAAAAAABAgAAeHA=",
+                LongPredicates.not(LongPredicates.isEven()));
+    }
 }

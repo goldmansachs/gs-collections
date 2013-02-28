@@ -53,4 +53,50 @@ public class FloatPredicatesTest
                         + "ZWN0ZWR4cAAAAAA=",
                 FloatPredicates.greaterThan(0.0f));
     }
+
+    @Test
+    public void and()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAFFjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5G\n"
+                        + "bG9hdFByZWRpY2F0ZXMkQW5kRmxvYXRQcmVkaWNhdGUAAAAAAAAAAQIAAkwAA29uZXQAQUxjb20v\n"
+                        + "Z3MvY29sbGVjdGlvbnMvYXBpL2Jsb2NrL3ByZWRpY2F0ZS9wcmltaXRpdmUvRmxvYXRQcmVkaWNh\n"
+                        + "dGU7TAADdHdvcQB+AAF4cHNyAFZjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5\n"
+                        + "LnByaW1pdGl2ZS5GbG9hdFByZWRpY2F0ZXMkTGVzc1RoYW5GbG9hdFByZWRpY2F0ZQAAAAAAAAAB\n"
+                        + "AgABRgAIZXhwZWN0ZWR4cAAAAABzcgBZY29tLmdzLmNvbGxlY3Rpb25zLmltcGwuYmxvY2suZmFj\n"
+                        + "dG9yeS5wcmltaXRpdmUuRmxvYXRQcmVkaWNhdGVzJEdyZWF0ZXJUaGFuRmxvYXRQcmVkaWNhdGUA\n"
+                        + "AAAAAAAAAQIAAUYACGV4cGVjdGVkeHAAAAAA",
+                FloatPredicates.and(FloatPredicates.lessThan(0.0f), FloatPredicates.greaterThan(0.0f)));
+    }
+
+    @Test
+    public void or()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAFBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5G\n"
+                        + "bG9hdFByZWRpY2F0ZXMkT3JGbG9hdFByZWRpY2F0ZQAAAAAAAAABAgACTAADb25ldABBTGNvbS9n\n"
+                        + "cy9jb2xsZWN0aW9ucy9hcGkvYmxvY2svcHJlZGljYXRlL3ByaW1pdGl2ZS9GbG9hdFByZWRpY2F0\n"
+                        + "ZTtMAAN0d29xAH4AAXhwc3IAVmNvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLmJsb2NrLmZhY3Rvcnku\n"
+                        + "cHJpbWl0aXZlLkZsb2F0UHJlZGljYXRlcyRMZXNzVGhhbkZsb2F0UHJlZGljYXRlAAAAAAAAAAEC\n"
+                        + "AAFGAAhleHBlY3RlZHhwAAAAAHNyAFljb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0\n"
+                        + "b3J5LnByaW1pdGl2ZS5GbG9hdFByZWRpY2F0ZXMkR3JlYXRlclRoYW5GbG9hdFByZWRpY2F0ZQAA\n"
+                        + "AAAAAAABAgABRgAIZXhwZWN0ZWR4cAAAAAA=",
+                FloatPredicates.or(FloatPredicates.lessThan(0.0f), FloatPredicates.greaterThan(0.0f)));
+    }
+
+    @Test
+    public void not()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAFFjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5G\n"
+                        + "bG9hdFByZWRpY2F0ZXMkTm90RmxvYXRQcmVkaWNhdGUAAAAAAAAAAQIAAUwABm5lZ2F0ZXQAQUxj\n"
+                        + "b20vZ3MvY29sbGVjdGlvbnMvYXBpL2Jsb2NrL3ByZWRpY2F0ZS9wcmltaXRpdmUvRmxvYXRQcmVk\n"
+                        + "aWNhdGU7eHBzcgBWY29tLmdzLmNvbGxlY3Rpb25zLmltcGwuYmxvY2suZmFjdG9yeS5wcmltaXRp\n"
+                        + "dmUuRmxvYXRQcmVkaWNhdGVzJExlc3NUaGFuRmxvYXRQcmVkaWNhdGUAAAAAAAAAAQIAAUYACGV4\n"
+                        + "cGVjdGVkeHAAAAAA",
+                FloatPredicates.not(FloatPredicates.lessThan(0.0f)));
+    }
 }
