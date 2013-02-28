@@ -265,11 +265,6 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         return key != null && !isRemovedKey(key);
     }
 
-    private static boolean isNonSentinelValue(<type> value)
-    {
-        return value != EMPTY_VALUE;
-    }
-
     public int size()
     {
         return this.occupied;
@@ -403,13 +398,17 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
 
     public <type> get(Object key)
     {
+        return this.getIfAbsent(key, EMPTY_VALUE);
+    }
+
+    public <type> getIfAbsent(Object key, <type> ifAbsent)
+    {
         int index = this.probe(key);
-        <type> result = this.values[index];
-        if (isNonSentinelValue(result))
+        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
         {
-            return result;
+            return this.values[index];
         }
-        return EMPTY_VALUE;
+        return ifAbsent;
     }
 
     public <type> getOrThrow(Object key)

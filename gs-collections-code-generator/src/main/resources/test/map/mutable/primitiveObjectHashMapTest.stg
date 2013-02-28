@@ -1710,6 +1710,45 @@ public class <name>ObjectHashMapTest
     }
 
     @Test
+    public void getIfAbsent()
+    {
+        Function0\<String> ifAbsent = new Function0\<String>()
+        {
+            public String value()
+            {
+                return "ifAbsent";
+            }
+        };
+
+        Assert.assertEquals("zero", this.map.getIfAbsent(<(literal.(type))("0")>, ifAbsent));
+        Assert.assertEquals("thirtyOne", this.map.getIfAbsent(<(literal.(type))("31")>, ifAbsent));
+        Assert.assertEquals("thirtyTwo", this.map.getIfAbsent(<(literal.(type))("32")>, ifAbsent));
+
+        Assert.assertEquals("ifAbsent", this.map.getIfAbsent(<(literal.(type))("1")>, ifAbsent));
+        Assert.assertEquals("ifAbsent", this.map.getIfAbsent(<(literal.(type))("33")>, ifAbsent));
+
+        Assert.assertEquals("zero", this.map.put(<(literal.(type))("0")>, "one"));
+        Assert.assertEquals("one", this.map.getIfAbsent(<(literal.(type))("0")>, ifAbsent));
+
+        Assert.assertNull(this.map.put(<(literal.(type))("5")>, "five"));
+        Assert.assertEquals("five", this.map.getIfAbsent(<(literal.(type))("5")>, ifAbsent));
+
+        Assert.assertNull(this.map.put(<(literal.(type))("35")>, "thirtyFive"));
+        Assert.assertEquals("thirtyFive", this.map.getIfAbsent(<(literal.(type))("35")>, ifAbsent));
+
+        Assert.assertNull(this.map.put(<(literal.(type))("6")>, null));
+        Assert.assertNull(this.map.getIfAbsent(<(literal.(type))("6")>, ifAbsent));
+
+        Assert.assertNull(this.map.put(<(literal.(type))("36")>, null));
+        Assert.assertNull(this.map.getIfAbsent(<(literal.(type))("36")>, ifAbsent));
+
+        <name>ObjectHashMap\<Object> emptyMap = new <name>ObjectHashMap\<Object>();
+        Assert.assertEquals("ifAbsent", emptyMap.getIfAbsent(<(literal.(type))("0")>, ifAbsent));
+        Assert.assertEquals("ifAbsent", emptyMap.getIfAbsent(<(literal.(type))("1")>, ifAbsent));
+        Assert.assertEquals("ifAbsent", emptyMap.getIfAbsent(<(literal.(type))("33")>, ifAbsent));
+    }
+
+    @Test
     public void containsKey()
     {
         Assert.assertTrue(this.map.containsKey(<(literal.(type))("0")>));

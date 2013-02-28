@@ -35,6 +35,8 @@ public interface <name1><name2>Map extends <name2>Iterable
 {
     <type2> get(<type1> key);
 
+    <type2> getIfAbsent(<type1> key, <type2> ifAbsent);
+
     <type2> getOrThrow(<type1> key);
 
     boolean containsKey(<type1> key);

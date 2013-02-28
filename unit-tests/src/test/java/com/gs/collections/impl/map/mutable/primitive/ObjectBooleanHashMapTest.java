@@ -318,6 +318,33 @@ public class ObjectBooleanHashMapTest
     }
 
     @Test
+    public void getIfAbsent()
+    {
+        Assert.assertTrue(this.map.getIfAbsent("0", false));
+        Assert.assertTrue(this.map.getIfAbsent("1", false));
+        Assert.assertFalse(this.map.getIfAbsent("2", true));
+
+        this.map.removeKey("0");
+        Assert.assertTrue(this.map.getIfAbsent("0", true));
+        Assert.assertFalse(this.map.getIfAbsent("0", false));
+
+        Assert.assertTrue(this.map.getIfAbsent("5", true));
+        Assert.assertFalse(this.map.getIfAbsent("5", false));
+
+        Assert.assertTrue(this.map.getIfAbsent(null, true));
+        Assert.assertFalse(this.map.getIfAbsent(null, false));
+
+        this.map.put("0", false);
+        Assert.assertFalse(this.map.getIfAbsent("0", true));
+
+        this.map.put("5", true);
+        Assert.assertTrue(this.map.getIfAbsent("5", false));
+
+        this.map.put(null, false);
+        Assert.assertFalse(this.map.getIfAbsent(null, true));
+    }
+
+    @Test
     public void getOrThrow()
     {
         Assert.assertTrue(this.map.getOrThrow("0"));

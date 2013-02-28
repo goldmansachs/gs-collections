@@ -18,6 +18,7 @@ package com.gs.collections.api.map.primitive;
 import java.util.Map;
 
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.predicate.primitive.<name>ObjectPredicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.<name>ObjectProcedure;
@@ -31,6 +32,8 @@ import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 public interface <name>ObjectMap\<V> extends RichIterable\<V>
 {
     V get(<type> key);
+
+    V getIfAbsent(<type> key, Function0\<? extends V> ifAbsent);
 
     boolean containsKey(<type> key);
 

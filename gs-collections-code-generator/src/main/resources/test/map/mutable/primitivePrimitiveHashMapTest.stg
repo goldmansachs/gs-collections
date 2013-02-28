@@ -336,6 +336,32 @@ public class <name1><name2>HashMapTest
     }
 
     @Test
+    public void getIfAbsent()
+    {
+        Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.getIfAbsent(<(literal.(type1))("0")>, <(literal.(type2))("5")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("31")>, this.map.getIfAbsent(<(literal.(type1))("31")>, <(literal.(type2))("5")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("32")>, this.map.getIfAbsent(<(literal.(type1))("32")>, <(literal.(type2))("5")>)<(wideDelta.(type2))>);
+
+        this.map.removeKey(<(literal.(type1))("0")>);
+        Assert.assertEquals(<(wideLiteral.(type2))("5")>, this.map.getIfAbsent(<(literal.(type1))("0")>, <(literal.(type2))("5")>)<(wideDelta.(type2))>);
+
+        Assert.assertEquals(<(wideLiteral.(type2))("6")>, this.map.getIfAbsent(<(literal.(type1))("1")>, <(literal.(type2))("6")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("6")>, this.map.getIfAbsent(<(literal.(type1))("33")>, <(literal.(type2))("6")>)<(wideDelta.(type2))>);
+
+        this.map.put(<(literal.(type1))("0")>, <(literal.(type2))("1")>);
+        Assert.assertEquals(<(wideLiteral.(type2))("1")>, this.map.getIfAbsent(<(literal.(type1))("0")>, <(literal.(type2))("5")>)<(wideDelta.(type2))>);
+
+        this.map.put(<(literal.(type1))("1")>, <(literal.(type2))("1")>);
+        Assert.assertEquals(<(wideLiteral.(type2))("1")>, this.map.getIfAbsent(<(literal.(type1))("1")>, <(literal.(type2))("5")>)<(wideDelta.(type2))>);
+
+        this.map.put(<(literal.(type1))("5")>, <(literal.(type2))("5")>);
+        Assert.assertEquals(<(wideLiteral.(type2))("5")>, this.map.getIfAbsent(<(literal.(type1))("5")>, <(literal.(type2))("6")>)<(wideDelta.(type2))>);
+
+        this.map.put(<(literal.(type1))("35")>, <(literal.(type2))("35")>);
+        Assert.assertEquals(<(wideLiteral.(type2))("35")>, this.map.getIfAbsent(<(literal.(type1))("35")>, <(literal.(type2))("5")>)<(wideDelta.(type2))>);
+    }
+
+    @Test
     public void getOrThrow()
     {
         Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.getOrThrow(<(literal.(type1))("0")>)<(wideDelta.(type2))>);

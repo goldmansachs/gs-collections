@@ -420,11 +420,16 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
 
     public <type2> get(<type1> key)
     {
+        return this.getIfAbsent(key, EMPTY_VALUE);
+    }
+
+    public <type2> getIfAbsent(<type1> key, <type2> ifAbsent)
+    {
         if (isEmptyKey(key))
         {
             if (this.sentinelValues == null || !this.sentinelValues.containsZeroKey)
             {
-                return EMPTY_VALUE;
+                return ifAbsent;
             }
             return this.sentinelValues.zeroValue;
         }
@@ -432,12 +437,16 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         {
             if (this.sentinelValues == null || !this.sentinelValues.containsOneKey)
             {
-                return EMPTY_VALUE;
+                return ifAbsent;
             }
             return this.sentinelValues.oneValue;
         }
         int index = this.probe(key);
-        return this.values[index];
+        if (<(equals.(type1))("this.keys[index]", "key")>)
+        {
+            return this.values[index];
+        }
+        return ifAbsent;
     }
 
     public <type2> getOrThrow(<type1> key)

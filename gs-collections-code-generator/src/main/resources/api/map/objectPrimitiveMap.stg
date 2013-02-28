@@ -30,6 +30,8 @@ public interface Object<name>Map\<K> extends <name>Iterable
 
     <type> getOrThrow(Object key);
 
+    <type> getIfAbsent(Object key, <type> ifAbsent);
+
     boolean containsKey(Object key);
 
     boolean containsValue(<type> value);

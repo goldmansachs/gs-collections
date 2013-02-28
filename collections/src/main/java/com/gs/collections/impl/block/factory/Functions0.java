@@ -33,6 +33,7 @@ public final class Functions0
     private static final NewUnifiedSetFunction<?> NEW_UNIFIED_SET_FUNCTION = new NewUnifiedSetFunction<Object>();
     private static final NewHashBagFunction<?> NEW_HASH_BAG_FUNCTION = new NewHashBagFunction<Object>();
     private static final NewUnifiedMapFunction<?, ?> NEW_UNIFIED_MAP_FUNCTION = new NewUnifiedMapFunction<Object, Object>();
+    private static final NullFunction<?> NULL_FUNCTION = new NullFunction<Object>();
 
     private Functions0()
     {
@@ -57,6 +58,11 @@ public final class Functions0
     public static <K, V> Function0<MutableMap<K, V>> newUnifiedMap()
     {
         return (Function0<MutableMap<K, V>>) NEW_UNIFIED_MAP_FUNCTION;
+    }
+
+    public static <T> Function0<T> nullValue()
+    {
+        return (Function0<T>) NULL_FUNCTION;
     }
 
     public static <T> Function0<T> value(T t)
@@ -101,6 +107,16 @@ public final class Functions0
         public MutableBag<T> value()
         {
             return Bags.mutable.of();
+        }
+    }
+
+    private static class NullFunction<T> implements Function0<T>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public T value()
+        {
+            return null;
         }
     }
 }

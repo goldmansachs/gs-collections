@@ -261,11 +261,6 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         return key != null && !isRemovedKey(key);
     }
 
-    private static boolean isNonSentinelValue(boolean value)
-    {
-        return value != EMPTY_VALUE;
-    }
-
     public int size()
     {
         return this.occupied;
@@ -399,13 +394,17 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
 
     public boolean get(Object key)
     {
+        return this.getIfAbsent(key, EMPTY_VALUE);
+    }
+
+    public boolean getIfAbsent(Object key, boolean ifAbsent)
+    {
         int index = this.probe(key);
-        boolean result = this.values.get(index);
-        if (isNonSentinelValue(result))
+        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
         {
-            return result;
+            return this.values.get(index);
         }
-        return EMPTY_VALUE;
+        return ifAbsent;
     }
 
     public boolean getOrThrow(Object key)

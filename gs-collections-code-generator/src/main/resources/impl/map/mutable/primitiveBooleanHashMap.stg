@@ -446,11 +446,16 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
 
     public boolean get(<type> key)
     {
+        return this.getIfAbsent(key, EMPTY_VALUE);
+    }
+
+    public boolean getIfAbsent(<type> key, boolean ifAbsent)
+    {
         if (isEmptyKey(key))
         {
             if (this.sentinelValues == null || !this.sentinelValues.containsZeroKey)
             {
-                return EMPTY_VALUE;
+                return ifAbsent;
             }
             return this.sentinelValues.zeroValue;
         }
@@ -458,12 +463,16 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
         {
             if (this.sentinelValues == null || !this.sentinelValues.containsOneKey)
             {
-                return EMPTY_VALUE;
+                return ifAbsent;
             }
             return this.sentinelValues.oneValue;
         }
         int index = this.probe(key);
-        return this.values.get(index);
+        if (isNonSentinel(this.keys[index]))
+        {
+            return this.values.get(index);
+        }
+        return ifAbsent;
     }
 
     public boolean getOrThrow(<type> key)

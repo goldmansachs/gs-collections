@@ -344,6 +344,36 @@ public class <name>BooleanHashMapTest
     }
 
     @Test
+    public void getIfAbsent()
+    {
+        Assert.assertTrue(this.map.getIfAbsent(<(literal.(type))("0")>, false));
+        Assert.assertFalse(this.map.getIfAbsent(<(literal.(type))("31")>, true));
+        Assert.assertTrue(this.map.getIfAbsent(<(literal.(type))("32")>, false));
+
+        this.map.removeKey(<(literal.(type))("0")>);
+        Assert.assertFalse(this.map.getIfAbsent(<(literal.(type))("0")>, false));
+        Assert.assertTrue(this.map.getIfAbsent(<(literal.(type))("0")>, true));
+
+        Assert.assertFalse(this.map.getIfAbsent(<(literal.(type))("1")>, false));
+        Assert.assertTrue(this.map.getIfAbsent(<(literal.(type))("1")>, true));
+
+        Assert.assertFalse(this.map.getIfAbsent(<(literal.(type))("33")>, false));
+        Assert.assertTrue(this.map.getIfAbsent(<(literal.(type))("33")>, true));
+
+        this.map.put(<(literal.(type))("0")>, false);
+        Assert.assertFalse(this.map.getIfAbsent(<(literal.(type))("0")>, true));
+
+        this.map.put(<(literal.(type))("1")>, true);
+        Assert.assertTrue(this.map.getIfAbsent(<(literal.(type))("1")>, false));
+
+        this.map.put(<(literal.(type))("5")>, false);
+        Assert.assertFalse(this.map.getIfAbsent(<(literal.(type))("5")>, true));
+
+        this.map.put(<(literal.(type))("35")>, true);
+        Assert.assertTrue(this.map.getIfAbsent(<(literal.(type))("35")>, false));
+    }
+
+    @Test
     public void getOrThrow()
     {
         Assert.assertTrue(this.map.getOrThrow(<(literal.(type))("0")>));

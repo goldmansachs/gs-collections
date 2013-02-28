@@ -67,6 +67,7 @@ import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.Procedures2;
 import com.gs.collections.impl.block.procedure.MapCollectProcedure;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
@@ -409,11 +410,16 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
 
     public V get(<type> key)
     {
+        return this.getIfAbsent(key, Functions0.\<V>nullValue());
+    }
+
+    public V getIfAbsent(<type> key, Function0\<? extends V> ifAbsent)
+    {
         if (isEmptyKey(key))
         {
             if (this.sentinelValues == null || !this.sentinelValues.containsZeroKey)
             {
-                return null;
+                return ifAbsent.value();
             }
             return this.sentinelValues.zeroValue;
         }
@@ -421,12 +427,16 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         {
             if (this.sentinelValues == null || !this.sentinelValues.containsOneKey)
             {
-                return null;
+                return ifAbsent.value();
             }
             return this.sentinelValues.oneValue;
         }
         int index = this.probe(key);
-        return this.values[index];
+        if(<(equals.(type))("this.keys[this.probe(key)]", "key")>)
+        {
+            return this.values[index];
+        }
+        return ifAbsent.value();
     }
 
     public V getIfAbsentPut(<type> key, Function0\<? extends V> function)

@@ -380,6 +380,33 @@ public class Object<name>HashMapTest
     }
 
     @Test
+    public void getIfAbsent()
+    {
+        Assert.assertEquals(<(literal.(type))("0")>, this.map.getIfAbsent("0", <(literal.(type))("1")>)<delta.(type)>);
+        Assert.assertEquals(<(literal.(type))("1")>, this.map.getIfAbsent("1", <(literal.(type))("2")>)<delta.(type)>);
+        Assert.assertEquals(<(literal.(type))("2")>, this.map.getIfAbsent("2", <(literal.(type))("3")>)<delta.(type)>);
+
+        this.map.removeKey("0");
+        Assert.assertEquals(<(literal.(type))("1")>, this.map.getIfAbsent("0", <(literal.(type))("1")>)<delta.(type)>);
+        Assert.assertEquals(<(literal.(type))("5")>, this.map.getIfAbsent("0", <(literal.(type))("5")>)<delta.(type)>);
+
+        Assert.assertEquals(<(literal.(type))("1")>, this.map.getIfAbsent("5", <(literal.(type))("1")>)<delta.(type)>);
+        Assert.assertEquals(<(literal.(type))("0")>, this.map.getIfAbsent("5", <(literal.(type))("0")>)<delta.(type)>);
+
+        Assert.assertEquals(<(literal.(type))("1")>, this.map.getIfAbsent(null, <(literal.(type))("1")>)<delta.(type)>);
+        Assert.assertEquals(<(literal.(type))("0")>, this.map.getIfAbsent(null, <(literal.(type))("0")>)<delta.(type)>);
+
+        this.map.put("0", <(literal.(type))("1")>);
+        Assert.assertEquals(<(literal.(type))("1")>, this.map.getIfAbsent("0", <(literal.(type))("5")>)<delta.(type)>);
+
+        this.map.put("5", <(literal.(type))("5")>);
+        Assert.assertEquals(<(literal.(type))("5")>, this.map.getIfAbsent("5", <(literal.(type))("0")>)<delta.(type)>);
+
+        this.map.put(null, <(literal.(type))("6")>);
+        Assert.assertEquals(<(literal.(type))("6")>, this.map.getIfAbsent(null, <(literal.(type))("5")>)<delta.(type)>);
+    }
+
+    @Test
     public void getIfAbsentPut()
     {
         Object<name>HashMap\<Integer> map1 = new Object<name>HashMap\<Integer>();
