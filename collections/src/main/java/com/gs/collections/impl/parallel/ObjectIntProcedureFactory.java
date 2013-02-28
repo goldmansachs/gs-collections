@@ -16,7 +16,7 @@
 
 package com.gs.collections.impl.parallel;
 
-import com.gs.collections.api.block.procedure.ObjectIntProcedure;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 
 /**
  * ObjectIntProcedureFactory is used by parallel iterators as a factory for stateful ObjectIntProcedure instances.

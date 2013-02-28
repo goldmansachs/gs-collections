@@ -19,9 +19,9 @@ package com.gs.collections.impl.lazy;
 import java.util.Iterator;
 import java.util.ListIterator;
 
-import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.impl.block.factory.Procedures;
 import net.jcip.annotations.Immutable;

@@ -23,7 +23,7 @@ import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.procedure.ObjectIntProcedure;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.impl.utility.ArrayIterate;
 
 public final class ObjectIntProcedureFJTaskRunner<T, BT extends ObjectIntProcedure<? super T>>

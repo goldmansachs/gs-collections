@@ -16,8 +16,8 @@
 
 package com.gs.collections.impl.block.factory;
 
-import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 
 /**
  * Contains factory methods for creating {@link ObjectIntProcedure} instances.

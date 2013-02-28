@@ -16,7 +16,7 @@
 
 package com.gs.collections.impl.block.procedure;
 
-import com.gs.collections.api.block.procedure.ObjectIntProcedure;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.impl.block.factory.ObjectIntProcedures;
 import com.gs.collections.impl.list.mutable.FastList;
 import org.junit.Assert;

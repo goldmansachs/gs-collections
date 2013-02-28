@@ -20,9 +20,9 @@ import java.io.IOException;
 import java.io.PrintStream;
 
 import com.gs.collections.api.block.predicate.Predicate;
-import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.impl.block.procedure.CaseProcedure;
 import com.gs.collections.impl.block.procedure.IfProcedure;
 
@@ -91,17 +91,9 @@ public final class Procedures
         return new Procedures.SynchronizedProcedure<T>(procedure);
     }
 
-    public static <T, P> Procedure<T> bind(final Procedure2<? super T, ? super P> procedure, final P parameter)
+    public static <T, P> Procedure<T> bind(Procedure2<? super T, ? super P> procedure, P parameter)
     {
-        return new Procedure<T>()
-        {
-            private static final long serialVersionUID = 1L;
-
-            public void value(T each)
-            {
-                procedure.value(each, parameter);
-            }
-        };
+        return new BindProcedure<T, P>(procedure, parameter);
     }
 
     private static final class PrintlnProcedure<T> implements Procedure<T>
@@ -153,7 +145,7 @@ public final class Procedures
 
     private static final class ObjectIntProcedureAdapter<T> implements Procedure<T>
     {
-        private static final long serialVersionUID = 1L;
+        private static final long serialVersionUID = 2L;
         private int count;
         private final ObjectIntProcedure<? super T> objectIntProcedure;
 
@@ -192,6 +184,24 @@ public final class Procedures
                     this.procedure.value(each);
                 }
             }
+        }
+    }
+
+    private static final class BindProcedure<T, P> implements Procedure<T>
+    {
+        private static final long serialVersionUID = 1L;
+        private final Procedure2<? super T, ? super P> procedure;
+        private final P parameter;
+
+        private BindProcedure(Procedure2<? super T, ? super P> procedure, P parameter)
+        {
+            this.procedure = procedure;
+            this.parameter = parameter;
+        }
+
+        public void value(T each)
+        {
+            this.procedure.value(each, this.parameter);
         }
     }
 }

@@ -20,9 +20,9 @@ import java.util.Iterator;
 
 import com.gs.collections.api.ShortIterable;
 import com.gs.collections.api.block.function.primitive.ShortToObjectFunction;
-import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.primitive.ShortProcedure;
 import com.gs.collections.api.iterator.ShortIterator;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;

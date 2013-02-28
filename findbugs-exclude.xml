@@ -231,4 +231,19 @@
         <Bug pattern="DM_DEFAULT_ENCODING" />
         <Class name="com.gs.collections.codegenerator.tools.FileUtils" />
     </Match>
+
+    <Match>
+        <!--Nm: Class names shouldn't shadow simple name of implemented interface-->
+
+        <!--This class/interface has a simple name that is identical to that of an implemented/extended interface,
+        except that the interface is in a different package (e.g., alpha.Foo extends beta.Foo). This can be
+        exceptionally confusing, create lots of situations in which you have to look at import statements to resolve
+        references and creates many opportunities to accidentally define methods that do not override methods in their
+        superclasses.-->
+
+        <Bug pattern="NM_SAME_SIMPLE_NAME_AS_INTERFACE" />
+        <Or>
+            <Class name="com.gs.collections.api.block.procedure.ObjectIntProcedure" />
+        </Or>
+    </Match>
 </FindBugsFilter>

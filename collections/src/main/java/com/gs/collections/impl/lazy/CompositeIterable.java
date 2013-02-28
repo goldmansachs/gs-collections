@@ -19,9 +19,9 @@ package com.gs.collections.impl.lazy;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.EmptyIterator;

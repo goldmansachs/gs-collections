@@ -18,7 +18,7 @@ package com.gs.collections.impl.list.mutable;
 
 import java.util.List;
 
-import com.gs.collections.api.block.procedure.ObjectIntProcedure;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 
 public final class AddToList implements ObjectIntProcedure<Integer>
 {

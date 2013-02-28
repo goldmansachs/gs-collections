@@ -24,9 +24,9 @@ import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
-import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.comparator.primitive.DoubleFunctionComparator;
 import com.gs.collections.impl.block.comparator.primitive.IntFunctionComparator;
@@ -272,18 +272,10 @@ public final class Functions
      * @return A new Procedure
      */
     public static <T1, T2> Procedure<T1> bind(
-            final Procedure<? super T2> delegate,
-            final Function<? super T1, T2> function)
+            Procedure<? super T2> delegate,
+            Function<? super T1, T2> function)
     {
-        return new Procedure<T1>()
-        {
-            private static final long serialVersionUID = 1L;
-
-            public void value(T1 each)
-            {
-                delegate.value(function.valueOf(each));
-            }
-        };
+        return new BindProcedure<T1, T2>(delegate, function);
     }
 
     /**
@@ -294,18 +286,10 @@ public final class Functions
      * @return A new ObjectIntProcedure
      */
     public static <T1, T2> ObjectIntProcedure<T1> bind(
-            final ObjectIntProcedure<? super T2> delegate,
-            final Function<? super T1, T2> function)
+            ObjectIntProcedure<? super T2> delegate,
+            Function<? super T1, T2> function)
     {
-        return new ObjectIntProcedure<T1>()
-        {
-            private static final long serialVersionUID = 1L;
-
-            public void value(T1 each, int index)
-            {
-                delegate.value(function.valueOf(each), index);
-            }
-        };
+        return new BindObjectIntProcedure<T1, T2>(delegate, function);
     }
 
     /**
@@ -316,17 +300,9 @@ public final class Functions
      * @return A new Procedure2
      */
     public static <T1, T2, T3> Procedure2<T1, T3> bind(
-            final Procedure2<? super T2, T3> delegate, final Function<? super T1, T2> function)
+            Procedure2<? super T2, T3> delegate, Function<? super T1, T2> function)
     {
-        return new Procedure2<T1, T3>()
-        {
-            private static final long serialVersionUID = 1L;
-
-            public void value(T1 each, T3 constant)
-            {
-                delegate.value(function.valueOf(each), constant);
-            }
-        };
+        return new BindProcedure2<T1, T2, T3>(delegate, function);
     }
 
     public static Function<Integer, Integer> squaredInteger()
@@ -694,6 +670,60 @@ public final class Functions
         public Class<?> safeValueOf(String className) throws ClassNotFoundException
         {
             return Class.forName(className);
+        }
+    }
+
+    private static final class BindObjectIntProcedure<T1, T2> implements ObjectIntProcedure<T1>
+    {
+        private static final long serialVersionUID = 1L;
+        private final ObjectIntProcedure<? super T2> delegate;
+        private final Function<? super T1, T2> function;
+
+        private BindObjectIntProcedure(ObjectIntProcedure<? super T2> delegate, Function<? super T1, T2> function)
+        {
+            this.delegate = delegate;
+            this.function = function;
+        }
+
+        public void value(T1 each, int index)
+        {
+            this.delegate.value(this.function.valueOf(each), index);
+        }
+    }
+
+    private static final class BindProcedure<T1, T2> implements Procedure<T1>
+    {
+        private static final long serialVersionUID = 1L;
+        private final Procedure<? super T2> delegate;
+        private final Function<? super T1, T2> function;
+
+        private BindProcedure(Procedure<? super T2> delegate, Function<? super T1, T2> function)
+        {
+            this.delegate = delegate;
+            this.function = function;
+        }
+
+        public void value(T1 each)
+        {
+            this.delegate.value(this.function.valueOf(each));
+        }
+    }
+
+    private static final class BindProcedure2<T1, T2, T3> implements Procedure2<T1, T3>
+    {
+        private static final long serialVersionUID = 1L;
+        private final Procedure2<? super T2, T3> delegate;
+        private final Function<? super T1, T2> function;
+
+        private BindProcedure2(Procedure2<? super T2, T3> delegate, Function<? super T1, T2> function)
+        {
+            this.delegate = delegate;
+            this.function = function;
+        }
+
+        public void value(T1 each, T3 constant)
+        {
+            this.delegate.value(this.function.valueOf(each), constant);
         }
     }
 }

@@ -20,10 +20,10 @@ import java.util.Iterator;
 
 import com.gs.collections.api.FloatIterable;
 import com.gs.collections.api.block.function.primitive.FloatToObjectFunction;
-import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.FloatProcedure;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.iterator.FloatIterator;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
 

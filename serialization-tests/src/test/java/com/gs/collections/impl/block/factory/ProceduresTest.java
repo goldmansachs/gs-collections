@@ -58,11 +58,11 @@ public class ProceduresTest
     public void asProcedure()
     {
         Verify.assertSerializedForm(
-                1L,
+                2L,
                 "rO0ABXNyAEpjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlByb2NlZHVyZXMk\n"
-                        + "T2JqZWN0SW50UHJvY2VkdXJlQWRhcHRlcgAAAAAAAAABAgACSQAFY291bnRMABJvYmplY3RJbnRQ\n"
-                        + "cm9jZWR1cmV0ADtMY29tL2dzL2NvbGxlY3Rpb25zL2FwaS9ibG9jay9wcm9jZWR1cmUvT2JqZWN0\n"
-                        + "SW50UHJvY2VkdXJlO3hwAAAAAHA=",
+                        + "T2JqZWN0SW50UHJvY2VkdXJlQWRhcHRlcgAAAAAAAAACAgACSQAFY291bnRMABJvYmplY3RJbnRQ\n"
+                        + "cm9jZWR1cmV0AEVMY29tL2dzL2NvbGxlY3Rpb25zL2FwaS9ibG9jay9wcm9jZWR1cmUvcHJpbWl0\n"
+                        + "aXZlL09iamVjdEludFByb2NlZHVyZTt4cAAAAABw",
                 Procedures.fromObjectIntProcedure(null));
     }
 
@@ -71,10 +71,10 @@ public class ProceduresTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyADJjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlByb2NlZHVyZXMk\n"
-                        + "MQAAAAAAAAABAgACTAANdmFsJHBhcmFtZXRlcnQAEkxqYXZhL2xhbmcvT2JqZWN0O0wADXZhbCRw\n"
-                        + "cm9jZWR1cmV0ADNMY29tL2dzL2NvbGxlY3Rpb25zL2FwaS9ibG9jay9wcm9jZWR1cmUvUHJvY2Vk\n"
-                        + "dXJlMjt4cHBw",
+                "rO0ABXNyAD5jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlByb2NlZHVyZXMk\n"
+                        + "QmluZFByb2NlZHVyZQAAAAAAAAABAgACTAAJcGFyYW1ldGVydAASTGphdmEvbGFuZy9PYmplY3Q7\n"
+                        + "TAAJcHJvY2VkdXJldAAzTGNvbS9ncy9jb2xsZWN0aW9ucy9hcGkvYmxvY2svcHJvY2VkdXJlL1By\n"
+                        + "b2NlZHVyZTI7eHBwcA==",
                 Procedures.bind(null, null));
     }
 }

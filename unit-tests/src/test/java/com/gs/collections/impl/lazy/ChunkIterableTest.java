@@ -17,8 +17,8 @@
 package com.gs.collections.impl.lazy;
 
 import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.impl.list.mutable.FastList;
 import org.junit.Assert;
 import org.junit.Before;

@@ -17,8 +17,8 @@
 package com.gs.collections.impl.block.procedure;
 
 import com.gs.collections.api.block.predicate.Predicate;
-import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.impl.Counter;
 
 /**
@@ -27,7 +27,7 @@ import com.gs.collections.impl.Counter;
 public final class IfObjectIntProcedure<T>
         implements Procedure<T>
 {
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 2L;
 
     private final Counter index = new Counter();
     private final ObjectIntProcedure<? super T> objectIntProcedure;

@@ -20,10 +20,10 @@ import java.util.Iterator;
 
 import com.gs.collections.api.ByteIterable;
 import com.gs.collections.api.block.function.primitive.ByteToObjectFunction;
-import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ByteProcedure;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.iterator.ByteIterator;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
 

@@ -16,9 +16,9 @@
 
 package com.gs.collections.api;
 
-import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 
 /**
  * The base interface for all GS Collections.  All GS Collections are internally iterable, and this interface provides

@@ -16,7 +16,7 @@
 
 package com.gs.collections.impl.parallel;
 
-import com.gs.collections.api.block.procedure.ObjectIntProcedure;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 
 /**
  * This class acts as a no op factory for a ObjectIntProcedure which gets passed in and returned out.

@@ -25,13 +25,13 @@ public class IfObjectIntProcedureTest
     public void serializedForm()
     {
         Verify.assertSerializedForm(
-                1L,
+                2L,
                 "rO0ABXNyADxjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5wcm9jZWR1cmUuSWZPYmplY3RJ\n"
-                        + "bnRQcm9jZWR1cmUAAAAAAAAAAQIAA0wABWluZGV4dAAhTGNvbS9ncy9jb2xsZWN0aW9ucy9pbXBs\n"
-                        + "L0NvdW50ZXI7TAASb2JqZWN0SW50UHJvY2VkdXJldAA7TGNvbS9ncy9jb2xsZWN0aW9ucy9hcGkv\n"
-                        + "YmxvY2svcHJvY2VkdXJlL09iamVjdEludFByb2NlZHVyZTtMAAlwcmVkaWNhdGV0ADJMY29tL2dz\n"
-                        + "L2NvbGxlY3Rpb25zL2FwaS9ibG9jay9wcmVkaWNhdGUvUHJlZGljYXRlO3hwc3IAH2NvbS5ncy5j\n"
-                        + "b2xsZWN0aW9ucy5pbXBsLkNvdW50ZXIAAAAAAAAAAQwAAHhwdwQAAAAAeHBw",
+                        + "bnRQcm9jZWR1cmUAAAAAAAAAAgIAA0wABWluZGV4dAAhTGNvbS9ncy9jb2xsZWN0aW9ucy9pbXBs\n"
+                        + "L0NvdW50ZXI7TAASb2JqZWN0SW50UHJvY2VkdXJldABFTGNvbS9ncy9jb2xsZWN0aW9ucy9hcGkv\n"
+                        + "YmxvY2svcHJvY2VkdXJlL3ByaW1pdGl2ZS9PYmplY3RJbnRQcm9jZWR1cmU7TAAJcHJlZGljYXRl\n"
+                        + "dAAyTGNvbS9ncy9jb2xsZWN0aW9ucy9hcGkvYmxvY2svcHJlZGljYXRlL1ByZWRpY2F0ZTt4cHNy\n"
+                        + "AB9jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5Db3VudGVyAAAAAAAAAAEMAAB4cHcEAAAAAHhwcA==\n",
                 new IfObjectIntProcedure<Object>(null, null));
     }
 }

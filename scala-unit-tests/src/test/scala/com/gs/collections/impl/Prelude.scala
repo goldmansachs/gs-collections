@@ -19,7 +19,8 @@ package com.gs.collections.impl
 import java.util.Comparator
 import com.gs.collections.api.block.function.{Function, Function0, Function2, Function3}
 import com.gs.collections.api.block.predicate.{Predicate2, Predicate}
-import com.gs.collections.api.block.procedure.{ObjectIntProcedure, Procedure2, Procedure}
+import com.gs.collections.api.block.procedure.{Procedure2, Procedure}
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure
 
 object Prelude
 {

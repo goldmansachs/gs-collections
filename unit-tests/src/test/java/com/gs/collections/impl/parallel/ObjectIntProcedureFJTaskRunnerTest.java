@@ -19,7 +19,7 @@ package com.gs.collections.impl.parallel;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 
-import com.gs.collections.api.block.procedure.ObjectIntProcedure;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.impl.block.factory.ObjectIntProcedures;
 import com.gs.collections.impl.block.procedure.DoNothingProcedure;
 import com.gs.collections.impl.list.mutable.FastList;

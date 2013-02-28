@@ -19,7 +19,7 @@ package com.gs.collections.impl.parallel;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.gs.collections.api.block.procedure.ObjectIntProcedure;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.utility.ArrayListIterate;
 import com.gs.collections.impl.utility.ListIterate;

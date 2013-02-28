@@ -30,9 +30,9 @@ import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunct
 import com.gs.collections.api.block.function.primitive.DoubleToObjectFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.primitive.DoublePredicate;
-import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.DoubleProcedure;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.iterator.DoubleIterator;
 import com.gs.collections.api.list.primitive.MutableDoubleList;
 import com.gs.collections.api.set.primitive.MutableDoubleSet;

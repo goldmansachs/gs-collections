@@ -16,7 +16,7 @@
 
 package com.gs.collections.impl.set.fixed;
 
-import com.gs.collections.api.block.procedure.ObjectIntProcedure;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.factory.set.FixedSizeSetFactory;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.FixedSizeSet;

@@ -20,10 +20,10 @@ import java.util.Iterator;
 
 import com.gs.collections.api.CharIterable;
 import com.gs.collections.api.block.function.primitive.CharToObjectFunction;
-import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.CharProcedure;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.iterator.CharIterator;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
 

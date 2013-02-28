@@ -16,7 +16,7 @@
 
 package com.gs.collections.impl.block.procedure.checked;
 
-import com.gs.collections.api.block.procedure.ObjectIntProcedure;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 
 public abstract class CheckedObjectIntProcedure<T>
         implements ObjectIntProcedure<T>

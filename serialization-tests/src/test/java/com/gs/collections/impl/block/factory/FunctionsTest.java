@@ -19,6 +19,8 @@ package com.gs.collections.impl.block.factory;
 import java.util.Collection;
 
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Test;
 
@@ -185,15 +187,40 @@ public class FunctionsTest
     }
 
     @Test
-    public void bind()
+    public void bind_procedure()
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyADFjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9ucyQx\n"
-                        + "AAAAAAAAAAECAAJMAAx2YWwkZGVsZWdhdGV0ADJMY29tL2dzL2NvbGxlY3Rpb25zL2FwaS9ibG9j\n"
-                        + "ay9wcm9jZWR1cmUvUHJvY2VkdXJlO0wADHZhbCRmdW5jdGlvbnQAMExjb20vZ3MvY29sbGVjdGlv\n"
-                        + "bnMvYXBpL2Jsb2NrL2Z1bmN0aW9uL0Z1bmN0aW9uO3hwcHA=",
+                "rO0ABXNyAD1jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9ucyRC\n"
+                        + "aW5kUHJvY2VkdXJlAAAAAAAAAAECAAJMAAhkZWxlZ2F0ZXQAMkxjb20vZ3MvY29sbGVjdGlvbnMv\n"
+                        + "YXBpL2Jsb2NrL3Byb2NlZHVyZS9Qcm9jZWR1cmU7TAAIZnVuY3Rpb250ADBMY29tL2dzL2NvbGxl\n"
+                        + "Y3Rpb25zL2FwaS9ibG9jay9mdW5jdGlvbi9GdW5jdGlvbjt4cHBw",
                 Functions.bind((Procedure<Object>) null, null));
+    }
+
+    @Test
+    public void bind_procedure2()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAD5jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9ucyRC\n"
+                        + "aW5kUHJvY2VkdXJlMgAAAAAAAAABAgACTAAIZGVsZWdhdGV0ADNMY29tL2dzL2NvbGxlY3Rpb25z\n"
+                        + "L2FwaS9ibG9jay9wcm9jZWR1cmUvUHJvY2VkdXJlMjtMAAhmdW5jdGlvbnQAMExjb20vZ3MvY29s\n"
+                        + "bGVjdGlvbnMvYXBpL2Jsb2NrL2Z1bmN0aW9uL0Z1bmN0aW9uO3hwcHA=",
+                Functions.bind((Procedure2<Object, Object>) null, null));
+    }
+
+    @Test
+    public void bind_object_int_procedure()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAEZjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9ucyRC\n"
+                        + "aW5kT2JqZWN0SW50UHJvY2VkdXJlAAAAAAAAAAECAAJMAAhkZWxlZ2F0ZXQARUxjb20vZ3MvY29s\n"
+                        + "bGVjdGlvbnMvYXBpL2Jsb2NrL3Byb2NlZHVyZS9wcmltaXRpdmUvT2JqZWN0SW50UHJvY2VkdXJl\n"
+                        + "O0wACGZ1bmN0aW9udAAwTGNvbS9ncy9jb2xsZWN0aW9ucy9hcGkvYmxvY2svZnVuY3Rpb24vRnVu\n"
+                        + "Y3Rpb247eHBwcA==",
+                Functions.bind((ObjectIntProcedure<Object>) null, null));
     }
 
     @Test

@@ -20,10 +20,10 @@ import java.util.Iterator;
 
 import com.gs.collections.api.LongIterable;
 import com.gs.collections.api.block.function.primitive.LongToObjectFunction;
-import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.LongProcedure;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.iterator.LongIterator;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
 

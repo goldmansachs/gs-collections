@@ -19,9 +19,9 @@ package com.gs.collections.impl.lazy;
 import java.util.Iterator;
 
 import com.gs.collections.api.block.predicate.Predicate;
-import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.IfObjectIntProcedure;
 import com.gs.collections.impl.block.procedure.IfProcedure;

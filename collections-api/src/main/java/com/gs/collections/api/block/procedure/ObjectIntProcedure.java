@@ -16,13 +16,13 @@
 
 package com.gs.collections.api.block.procedure;
 
-import java.io.Serializable;
-
 /**
  * A ObjectIntProcedure is a single argument Closure which has no return argument and takes an int as a second argument
  * which is usually the index of the current element of a collection.
+ *
+ * @deprecated since 3.0 use {@link com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure} instead.
  */
-public interface ObjectIntProcedure<T> extends Serializable
+@Deprecated
+public interface ObjectIntProcedure<T> extends com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure<T>
 {
-    void value(T each, int index);
 }

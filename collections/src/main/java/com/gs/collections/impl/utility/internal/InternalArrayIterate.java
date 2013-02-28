@@ -16,8 +16,8 @@
 
 package com.gs.collections.impl.utility.internal;
 
-import com.gs.collections.api.block.procedure.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 
 public final class InternalArrayIterate
 {
