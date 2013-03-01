@@ -48,6 +48,24 @@ public class IntIntervalTest
         Verify.assertEqualsAndHashCode(interval3, IntInterval.fromToBy(1, 10, 2));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void fromToBy_throws_step_size_zero()
+    {
+        IntInterval.fromToBy(0, 0, 0);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void oneToBy_throws_step_size_zero()
+    {
+        IntInterval.oneToBy(1, 0);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void zeroToBy_throws_step_size_zero()
+    {
+        IntInterval.zeroToBy(0, 0);
+    }
+
     @Test
     public void equalsAndHashCode()
     {
@@ -126,7 +144,6 @@ public class IntIntervalTest
     @Test
     public void size()
     {
-        Verify.assertSize(0, new IntArrayList());
         Verify.assertSize(3, this.intInterval);
     }
 

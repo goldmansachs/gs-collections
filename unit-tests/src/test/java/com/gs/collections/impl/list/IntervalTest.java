@@ -68,6 +68,24 @@ public class IntervalTest
         Verify.assertEqualsAndHashCode(interval3, Interval.fromToBy(1, 10, 2));
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void fromToBy_throws_step_size_zero()
+    {
+        Interval.fromToBy(0, 0, 0);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void oneToBy_throws_step_size_zero()
+    {
+        Interval.oneToBy(1, 0);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void zeroToBy_throws_step_size_zero()
+    {
+        Interval.zeroToBy(0, 0);
+    }
+
     @Test
     public void equalsAndHashCode()
     {

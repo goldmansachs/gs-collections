@@ -233,7 +233,7 @@ public final class IntInterval
      */
     public static IntInterval fromToBy(int from, int to, int stepBy)
     {
-        if (stepBy == 0 && from + to != 0)
+        if (stepBy == 0)
         {
             throw new IllegalArgumentException("Cannot use a step by of 0");
         }

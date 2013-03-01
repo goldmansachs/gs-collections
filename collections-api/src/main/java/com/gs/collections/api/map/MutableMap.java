@@ -264,8 +264,8 @@ public interface MutableMap<K, V>
             Function2<? super V2, ? super V, ? extends V2> nonMutatingAggregator);
 
     /**
-     * Look up the value associated with {@code key}, apply the {@code function} to it, and replace the value. If there
-     * is no value associated with {@code key}, start it off with a value supplied by {@code factory}.
+     * Looks up the value associated with {@code key}, applies the {@code function} to it, and replaces the value. If there
+     * is no value associated with {@code key}, starts it off with a value supplied by {@code factory}.
      */
     V updateValue(K key, Function0<? extends V> factory, Function<? super V, ? extends V> function);
 
