@@ -52,7 +52,7 @@ public class <name>BooleanHashMapKeysViewTest
         <name>BooleanHashMap hashMap = new <name>BooleanHashMap();
         for (<type> i = <(literal.(type))("32")>; collisions.size() \<= 10; i++)
         {
-            if (hashMap.index(i) == hashMap.index(<(literal.(type))("32")>))
+            if (hashMap.spread(i) == hashMap.spread(<(literal.(type))("32")>))
             {
                 collisions.add(i);
             }

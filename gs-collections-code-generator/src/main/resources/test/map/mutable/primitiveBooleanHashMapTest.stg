@@ -113,7 +113,7 @@ public class <name>BooleanHashMapTest
         <name>BooleanHashMap hashMap = new <name>BooleanHashMap();
         for (<type> each = <(literal.(type))("2")>; collisions.size() \<= 10; each++)
         {
-            if (hashMap.index(each) == hashMap.index(<(literal.(type))("2")>))
+            if (hashMap.spread(each) == hashMap.spread(<(literal.(type))("2")>))
             {
                 collisions.add(each);
             }

@@ -382,7 +382,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
     // exposed for testing
     int probe(<type> element)
     {
-        int index = this.index(element);
+        int index = this.spread(element);
         <type> valueAtIndex = this.table[index];
 
         if (<(equals.(type))("valueAtIndex", "element")> || <(equals.(type))("valueAtIndex", "EMPTY")>)
@@ -420,16 +420,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
     }
 
     // exposed for testing
-    int index(<type> element)
-    {
-        int code = <(hashCode.(type))("element")>;
-        code ^= 61 ^ (code >\> 16);
-        code += code \<\< 3;
-        code ^= code >\> 4;
-        code *= 0x27d4eb2d;
-        code ^= code >\> 15;
-        return code & (this.table.length - 1);
-    }
+    <(spread.(type))(type, "table")>
 
     public <name>HashSet with(<type> element)
     {

@@ -131,7 +131,7 @@ public class <name>ObjectHashMapTest
         <name>ObjectHashMap\<?> hashMap = new <name>ObjectHashMap\<Object>();
         for (<type> i = <(literal.(type))("2")>; collisions.size() \<= 10; i++)
         {
-            if (hashMap.index(i) == hashMap.index(<(literal.(type))("2")>))
+            if (hashMap.spread(i) == hashMap.spread(<(literal.(type))("2")>))
             {
                 collisions.add(i);
             }
@@ -2582,6 +2582,23 @@ public class <name>ObjectHashMapTest
         iterator2.next();
         iterator2.remove();
         Assert.assertEquals(<name>ObjectHashMap.newMap(), map2);
+
+        <name>ObjectHashMap\<String> map3 = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("8")>, "eight", <(literal.(type))("9")>, "nine");
+        final Iterator\<String> iterator3 = map3.iterator();
+        Verify.assertThrows(IllegalStateException.class, new Runnable()
+        {
+            public void run()
+            {
+                iterator3.remove();
+            }
+        });
+        iterator3.next();
+        iterator3.remove();
+        Assert.assertTrue(map3.toString(), <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("8")>, "eight").equals(map3)
+                || <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("9")>, "nine").equals(map3));
+        iterator3.next();
+        iterator3.remove();
+        Assert.assertEquals(<name>ObjectHashMap.newMap(), map3);
     }
 }
 

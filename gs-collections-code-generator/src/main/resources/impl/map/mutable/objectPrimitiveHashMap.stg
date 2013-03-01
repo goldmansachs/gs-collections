@@ -310,7 +310,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
     // exposed for testing
     int probe(Object element)
     {
-        int index = this.index(element);
+        int index = this.spread(element);
 
         int removedIndex = -1;
         if (isRemovedKey(this.keys[index]))
@@ -353,7 +353,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
     }
 
     // exposed for testing
-    int index(Object element)
+    int spread(Object element)
     {
         // This function ensures that hashCodes that differ only by
         // constant multiples at each bit position have a bounded

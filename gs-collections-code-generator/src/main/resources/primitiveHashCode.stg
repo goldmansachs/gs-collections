@@ -33,3 +33,66 @@ Float.floatToIntBits(<item>)
 doubleHashCode(item) ::= <<
 (int) (Double.doubleToLongBits(<item>) ^ Double.doubleToLongBits(<item>) >\>> 32)
 >>
+
+bits ::= [
+    "byte": "narrowHashCode",
+    "short": "narrowHashCode",
+    "char": "narrowHashCode",
+    "int": "intHashCode",
+    "long": "intHashCode",
+    "float": "floatHashCode",
+    "double": "doubleBits",
+    default: "no matching bits"
+]
+
+doubleBits(item) ::= <<
+Double.doubleToLongBits(<item>)
+>>
+
+spread ::= [
+    "byte": "spread8",
+    "short": "spread32",
+    "char": "spread32",
+    "int": "spread32",
+    "long": "spread64",
+    "float": "spread32",
+    "double": "spread64",
+    default: "no matching spread function"
+]
+
+spread8(type, table) ::= <<
+int spread(<type> element)
+{
+    // No spreading necessary for 8-bit types
+    return element & (this.<table>.length - 1);
+}
+>>
+
+spread32(type, table) ::= <<
+int spread(<type> element)
+{
+    int code = <(bits.(type))("element")>;
+    code ^= 61 ^ (code >\> 16);
+    code += code \<\< 3;
+    code ^= code >\> 4;
+    code *= 0x27d4eb2d;
+    code ^= code >\> 15;
+    return code & (this.<table>.length - 1);
+}
+>>
+
+spread64(type, table) ::= <<
+int spread(<type> element)
+{
+    long code = <(bits.(type))("element")>;
+    code = ~code + (code \<\< 18);
+    code = (code \<\< 18) - code - 1;
+    code ^= code >\>> 31;
+    code *= 21;
+    code += (code \<\< 2) + (code \<\< 4);
+    code ^= code >\>> 11;
+    code += code \<\< 6;
+    code ^= code >\>> 22;
+    return (int) code & (this.<table>.length - 1);
+}
+>>

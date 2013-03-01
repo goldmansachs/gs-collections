@@ -47,7 +47,7 @@ public class <name>HashSetTest
         <name>HashSet hashSet = new <name>HashSet();
         for (<type> i = <(literal.(type))("32")>; collisions.size() \<= 10; i++)
         {
-            if (hashSet.index(i) == hashSet.index(<(literal.(type))("32")>))
+            if (hashSet.spread(i) == hashSet.spread(<(literal.(type))("32")>))
             {
                 collisions.add(i);
             }
@@ -61,7 +61,7 @@ public class <name>HashSetTest
         <name>HashSet hashSet = new <name>HashSet();
         for (<type> i = <(literal.(type))("32")>; collisions.size() \<= 10; i++)
         {
-            if (hashSet.index(i) != hashSet.index(<(literal.(type))("32")>))
+            if (hashSet.spread(i) != hashSet.spread(<(literal.(type))("32")>))
             {
                 collisions.add(i);
             }

@@ -114,7 +114,7 @@ public class <name1><name2>HashMapTest
         <name1><name2>HashMap hashMap = new <name1><name2>HashMap();
         for (<type1> each = <(literal.(type1))("2")>; collisions.size() \<= 10; each++)
         {
-            if (hashMap.index(each) == hashMap.index(<(literal.(type1))("2")>))
+            if (hashMap.spread(each) == hashMap.spread(<(literal.(type1))("2")>))
             {
                 collisions.add(each);
             }

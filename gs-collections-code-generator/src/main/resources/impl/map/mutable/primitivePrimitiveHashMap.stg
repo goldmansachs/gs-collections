@@ -261,7 +261,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
     // exposed for testing
     int probe(<type1> element)
     {
-        int index = this.index(element);
+        int index = this.spread(element);
         <type1> keyAtIndex = this.keys[index];
 
         if (<(equals.(type1))("keyAtIndex", "element")> || <(equals.(type1))("keyAtIndex", "EMPTY_KEY")>)
@@ -300,16 +300,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
     }
 
     // exposed for testing
-    int index(<type1> element)
-    {
-        int code = <(hashCode.(type1))("element")>;
-        code ^= 61 ^ (code >\> 16);
-        code += code \<\< 3;
-        code ^= code >\> 4;
-        code *= 0x27d4eb2d;
-        code ^= code >\> 15;
-        return code & (this.keys.length - 1);
-    }
+    <(spread.(type1))(type1, "keys")>
 
     public void clear()
     {
