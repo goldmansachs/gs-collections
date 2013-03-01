@@ -22,7 +22,7 @@ import java.io.Serializable;
  * An IntIntProcedure is a two argument Closure which has no return argument and takes an int as the first and
  * second arguments.
  *
- * @deprecated since 2.0 use {@link com.gs.collections.api.block.procedure.primitive.IntIntProcedure}
+ * @deprecated since 3.0 use {@link com.gs.collections.api.block.procedure.primitive.IntIntProcedure}
  */
 @Deprecated
 public interface IntIntProcedure extends Serializable

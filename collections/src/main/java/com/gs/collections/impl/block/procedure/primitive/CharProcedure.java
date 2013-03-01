@@ -16,6 +16,10 @@
 
 package com.gs.collections.impl.block.procedure.primitive;
 
+/**
+ * @deprecated since 3.0 use {@link com.gs.collections.api.block.procedure.primitive.CharProcedure}
+ */
+@Deprecated
 public interface CharProcedure
 {
     void value(char character);

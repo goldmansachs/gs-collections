@@ -18,17 +18,17 @@ package com.gs.collections.impl.utility;
 
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.procedure.primitive.CharProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.primitive.CharPredicates;
+import com.gs.collections.impl.block.factory.primitive.CharToCharFunctions;
 import com.gs.collections.impl.block.function.AddFunction;
-import com.gs.collections.impl.block.function.primitive.CharFunction;
 import com.gs.collections.impl.block.function.primitive.CodePointFunction;
 import com.gs.collections.impl.block.predicate.CodePointPredicate;
-import com.gs.collections.impl.block.predicate.primitive.CharPredicate;
 import com.gs.collections.impl.block.procedure.checked.CheckedProcedure;
-import com.gs.collections.impl.block.procedure.primitive.CharProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CodePointProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -53,8 +53,8 @@ public class StringIterateTest
     @Test
     public void collect()
     {
-        Assert.assertEquals("ABC", StringIterate.collect("abc", CharFunction.TO_UPPERCASE));
-        Assert.assertEquals("abc", StringIterate.collect("abc", CharFunction.TO_LOWERCASE));
+        Assert.assertEquals("ABC", StringIterate.collect("abc", CharToCharFunctions.toUpperCase()));
+        Assert.assertEquals("abc", StringIterate.collect("abc", CharToCharFunctions.toLowerCase()));
     }
 
     @Test
@@ -97,7 +97,7 @@ public class StringIterateTest
     @Test
     public void select()
     {
-        String string = StringIterate.select("1a2a3", CharPredicate.IS_DIGIT);
+        String string = StringIterate.select("1a2a3", CharPredicates.isDigit());
         Assert.assertEquals("123", string);
     }
 
@@ -111,29 +111,29 @@ public class StringIterateTest
     @Test
     public void detect()
     {
-        char character = StringIterate.detect("1a2a3", CharPredicate.IS_LETTER);
+        char character = StringIterate.detect("1a2a3", CharPredicates.isLetter());
         Assert.assertEquals('a', character);
     }
 
     @Test
     public void detectIfNone()
     {
-        char character = StringIterate.detectIfNone("123", CharPredicate.IS_LETTER, "b".charAt(0));
+        char character = StringIterate.detectIfNone("123", CharPredicates.isLetter(), "b".charAt(0));
         Assert.assertEquals('b', character);
     }
 
     @Test
     public void detectIfNoneWithString()
     {
-        char character = StringIterate.detectIfNone("123", CharPredicate.IS_LETTER, "b");
+        char character = StringIterate.detectIfNone("123", CharPredicates.isLetter(), "b");
         Assert.assertEquals('b', character);
     }
 
     @Test
     public void allSatisfy()
     {
-        Assert.assertTrue(StringIterate.allSatisfy("MARY", CharPredicate.IS_UPPERCASE));
-        Assert.assertFalse(StringIterate.allSatisfy("Mary", CharPredicate.IS_UPPERCASE));
+        Assert.assertTrue(StringIterate.allSatisfy("MARY", CharPredicates.isUpperCase()));
+        Assert.assertFalse(StringIterate.allSatisfy("Mary", CharPredicates.isUpperCase()));
     }
 
     @Test
@@ -146,8 +146,8 @@ public class StringIterateTest
     @Test
     public void anySatisfy()
     {
-        Assert.assertTrue(StringIterate.anySatisfy("MARY", CharPredicate.IS_UPPERCASE));
-        Assert.assertFalse(StringIterate.anySatisfy("mary", CharPredicate.IS_UPPERCASE));
+        Assert.assertTrue(StringIterate.anySatisfy("MARY", CharPredicates.isUpperCase()));
+        Assert.assertFalse(StringIterate.anySatisfy("mary", CharPredicates.isUpperCase()));
     }
 
     @Test
@@ -160,8 +160,8 @@ public class StringIterateTest
     @Test
     public void noneSatisfy()
     {
-        Assert.assertFalse(StringIterate.noneSatisfy("MaRy", CharPredicate.IS_UPPERCASE));
-        Assert.assertTrue(StringIterate.noneSatisfy("mary", CharPredicate.IS_UPPERCASE));
+        Assert.assertFalse(StringIterate.noneSatisfy("MaRy", CharPredicates.isUpperCase()));
+        Assert.assertTrue(StringIterate.noneSatisfy("mary", CharPredicates.isUpperCase()));
     }
 
     @Test
@@ -257,7 +257,7 @@ public class StringIterateTest
     @Test
     public void reject()
     {
-        String string = StringIterate.reject("1a2b3c", CharPredicate.IS_DIGIT);
+        String string = StringIterate.reject("1a2b3c", CharPredicates.isDigit());
         Assert.assertEquals("abc", string);
     }
 
@@ -271,7 +271,7 @@ public class StringIterateTest
     @Test
     public void count()
     {
-        int count = StringIterate.count("1a2a3", CharPredicate.IS_DIGIT);
+        int count = StringIterate.count("1a2a3", CharPredicates.isDigit());
         Assert.assertEquals(3, count);
     }
 
@@ -312,7 +312,7 @@ public class StringIterateTest
     @Test
     public void count2()
     {
-        int count = StringIterate.count("1a2a3", CharPredicate.IS_UNDEFINED);
+        int count = StringIterate.count("1a2a3", CharPredicates.isUndefined());
         Assert.assertEquals(0, count);
     }
 

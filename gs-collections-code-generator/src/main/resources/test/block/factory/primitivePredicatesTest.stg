@@ -46,6 +46,9 @@ public final class <name>PredicatesTest
         Assert.assertFalse(<name>Predicates.greaterThan(<(literal.(type))("5")>).accept(<(literal.(type))("4")>));
     }
 
+    <(intPredicatesTest.(type))()>
+    <(charPredicatesTest.(type))()>
+
     @Test
     public void testAnd()
     {
@@ -70,4 +73,103 @@ public final class <name>PredicatesTest
     }
 }
 
+>>
+
+intPredicatesTest ::=[
+    "byte": "allIntPredicateTests",
+    "short": "allIntPredicateTests",
+    "int": "allIntPredicateTests",
+    "long": "allIntPredicateTests",
+    default: "noTests"
+]
+
+charPredicatesTest ::=[
+    "char": "allCharPredicateTests",
+    default: "noTests"
+]
+
+noTests() ::= ""
+
+allIntPredicateTests() ::= <<
+@Test
+public void testIsOdd()
+{
+    Assert.assertTrue(<name>Predicates.isOdd().accept(<(literal.(type))("5")>));
+    Assert.assertFalse(<name>Predicates.isOdd().accept(<(literal.(type))("6")>));
+}
+
+@Test
+public void testIsEven()
+{
+    Assert.assertTrue(<name>Predicates.isEven().accept(<(literal.(type))("6")>));
+    Assert.assertFalse(<name>Predicates.isEven().accept(<(literal.(type))("5")>));
+}
+
+>>
+
+allCharPredicateTests() ::= <<
+@Test
+public void testIsUpperCase()
+{
+    Assert.assertTrue(CharPredicates.isUpperCase().accept('A'));
+    Assert.assertFalse(CharPredicates.isUpperCase().accept('a'));
+}
+
+@Test
+public void testIsLowerCase()
+{
+    Assert.assertTrue(CharPredicates.isLowerCase().accept('a'));
+    Assert.assertFalse(CharPredicates.isLowerCase().accept('A'));
+}
+
+@Test
+public void testIsDigit()
+{
+    Assert.assertTrue(CharPredicates.isDigit().accept('5'));
+    Assert.assertFalse(CharPredicates.isDigit().accept('a'));
+}
+
+@Test
+public void testIsDigitOrDot()
+{
+    Assert.assertTrue(CharPredicates.isDigitOrDot().accept('5'));
+    Assert.assertTrue(CharPredicates.isDigitOrDot().accept('.'));
+    Assert.assertFalse(CharPredicates.isDigitOrDot().accept('a'));
+}
+
+@Test
+public void testIsLetter()
+{
+    Assert.assertTrue(CharPredicates.isLetter().accept('a'));
+    Assert.assertTrue(CharPredicates.isLetter().accept('A'));
+    Assert.assertFalse(CharPredicates.isLetter().accept('5'));
+}
+
+@Test
+public void testIsLetterOrDigit()
+{
+    Assert.assertTrue(CharPredicates.isLetterOrDigit().accept('a'));
+    Assert.assertTrue(CharPredicates.isLetterOrDigit().accept('A'));
+    Assert.assertTrue(CharPredicates.isLetterOrDigit().accept('5'));
+    Assert.assertFalse(CharPredicates.isLetterOrDigit().accept('.'));
+    Assert.assertFalse(CharPredicates.isLetterOrDigit().accept('#'));
+}
+
+@Test
+public void testisWhitespace()
+{
+    Assert.assertTrue(CharPredicates.isWhitespace().accept(' '));
+    Assert.assertTrue(CharPredicates.isWhitespace().accept('\n'));
+    Assert.assertFalse(CharPredicates.isWhitespace().accept('A'));
+    Assert.assertFalse(CharPredicates.isWhitespace().accept('5'));
+    Assert.assertFalse(CharPredicates.isWhitespace().accept('.'));
+    Assert.assertFalse(CharPredicates.isWhitespace().accept('#'));
+}
+
+@Test
+public void testIsUndefined()
+{
+    Assert.assertTrue(CharPredicates.isUndefined().accept((char) 888));
+    Assert.assertFalse(CharPredicates.isUndefined().accept('a'));
+}
 >>

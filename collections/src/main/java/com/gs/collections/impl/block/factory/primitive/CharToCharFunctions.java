@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,32 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.block.function.primitive;
-
-import java.io.Serializable;
+package com.gs.collections.impl.block.factory.primitive;
 
 import com.gs.collections.api.block.function.primitive.CharToCharFunction;
 
-/**
- * A CharFunction can be used to convert one character to another.
- *
- * @deprecated since 3.0. Use {@link CharToCharFunction} instead.
- */
-@Deprecated
-public interface CharFunction
-        extends Serializable
+public final class CharToCharFunctions
 {
-    CharFunction TO_UPPERCASE = new CharFunction()
+    private static final CharToCharFunction TO_UPPERCASE = new ToUpperCaseCharToCharFunction();
+
+    private static final CharToCharFunction TO_LOWERCASE = new ToLowerCaseCharToCharFunction();
+
+    private CharToCharFunctions()
+    {
+        throw new AssertionError("Suppress default constructor for noninstantiability");
+    }
+
+    public static CharToCharFunction toUpperCase()
+    {
+        return TO_UPPERCASE;
+    }
+
+    public static CharToCharFunction toLowerCase()
+    {
+        return TO_LOWERCASE;
+    }
+
+    private static class ToUpperCaseCharToCharFunction implements CharToCharFunction
     {
         private static final long serialVersionUID = 1L;
 
@@ -37,9 +47,9 @@ public interface CharFunction
         {
             return Character.toUpperCase(character);
         }
-    };
+    }
 
-    CharFunction TO_LOWERCASE = new CharFunction()
+    private static class ToLowerCaseCharToCharFunction implements CharToCharFunction
     {
         private static final long serialVersionUID = 1L;
 
@@ -47,7 +57,5 @@ public interface CharFunction
         {
             return Character.toLowerCase(character);
         }
-    };
-
-    char valueOf(char character);
+    }
 }

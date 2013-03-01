@@ -1,7 +1,7 @@
 import "copyright.stg"
 import "primitiveEquals.stg"
 import "primitiveEqualsWithDelta.stg"
-import "integral.stg"
+import "specialPredicates.stg"
 
 targetPath() ::= "com/gs/collections/impl/block/factory/primitive"
 
@@ -24,7 +24,8 @@ import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
  */
 public final class <name>Predicates
 {
-    <(integralConstants.(type))(name)>
+    <(intPredicateConstants.(type))()>
+    <(charPredicateConstants.(type))()>
 
     private <name>Predicates()
     {
@@ -37,7 +38,7 @@ public final class <name>Predicates
         return new Equals<name>Predicate(expected);
     }
 
-    <(equalWithDelta.(type))(type, name)>
+    <(equalWithDelta.(type))()>
     public static <name>Predicate lessThan(<type> expected)
     {
         return new LessThan<name>Predicate(expected);
@@ -48,6 +49,8 @@ public final class <name>Predicates
         return new GreaterThan<name>Predicate(expected);
     }
 
+    <(intPredicateMethods.(type))()>
+    <(charPredicateMethods.(type))()>
     public static <name>Predicate and(<name>Predicate one, <name>Predicate two)
     {
         return new And<name>Predicate(one, two);
@@ -63,7 +66,6 @@ public final class <name>Predicates
         return new Not<name>Predicate(negate);
     }
 
-    <(integral.(type))(name)>
     private static final class Equals<name>Predicate implements <name>Predicate
     {
         private static final long serialVersionUID = 1L;
@@ -80,7 +82,7 @@ public final class <name>Predicates
         }
     }
 
-    <(equalsWithDeltaClass.(type))(type, name)>
+    <(equalsWithDeltaClass.(type))()>
     private static final class LessThan<name>Predicate implements <name>Predicate
     {
         private static final long serialVersionUID = 1L;
@@ -169,7 +171,9 @@ public final class <name>Predicates
             return !this.negate.accept(actual);
         }
     }
-    <(integralClass.(type))(type, name)>
+
+    <(intPredicateClasses.(type))()>
+    <(charPredicateClasses.(type))()>
 }
 
 >>

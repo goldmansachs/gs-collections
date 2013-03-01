@@ -24,18 +24,21 @@ import java.util.StringTokenizer;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.CharToCharFunction;
+import com.gs.collections.api.block.predicate.primitive.CharPredicate;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.block.procedure.primitive.CharProcedure;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.impl.block.factory.primitive.CharPredicates;
+import com.gs.collections.impl.block.factory.primitive.CharToCharFunctions;
 import com.gs.collections.impl.block.function.primitive.CharFunction;
 import com.gs.collections.impl.block.function.primitive.CodePointFunction;
 import com.gs.collections.impl.block.predicate.CodePointPredicate;
-import com.gs.collections.impl.block.predicate.primitive.CharPredicate;
-import com.gs.collections.impl.block.procedure.primitive.CharProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CodePointProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -296,6 +299,23 @@ public final class StringIterate
 
     /**
      * For each character in the {@code string}, execute the {@link CharProcedure}.
+     *
+     * @deprecated since 3.0. Use {@link #forEach(String, CharProcedure)} instead.
+     */
+    @Deprecated
+    public static void forEach(String string, final com.gs.collections.impl.block.procedure.primitive.CharProcedure procedure)
+    {
+        StringIterate.forEach(string, new CharProcedure()
+        {
+            public void value(char each)
+            {
+                procedure.value(each);
+            }
+        });
+    }
+
+    /**
+     * For each character in the {@code string}, execute the {@link CharProcedure}.
      */
     public static void forEach(String string, CharProcedure procedure)
     {
@@ -342,6 +362,23 @@ public final class StringIterate
 
     /**
      * Count the number of elements that return true for the specified {@code predicate}.
+     *
+     * @deprecated since 3.0.
+     */
+    @Deprecated
+    public static int count(String string, final com.gs.collections.impl.block.predicate.primitive.CharPredicate predicate)
+    {
+        return StringIterate.count(string, new CharPredicate()
+        {
+            public boolean accept(char value)
+            {
+                return predicate.accept(value);
+            }
+        });
+    }
+
+    /**
+     * Count the number of elements that return true for the specified {@code predicate}.
      */
     public static int count(String string, CharPredicate predicate)
     {
@@ -374,7 +411,22 @@ public final class StringIterate
         return count;
     }
 
-    public static String collect(String string, CharFunction function)
+    /**
+     * @deprecated since 3.0. Use {@link #collect(String, CharToCharFunction)} instead.
+     */
+    @Deprecated
+    public static String collect(String string, final CharFunction function)
+    {
+        return StringIterate.collect(string, new CharToCharFunction()
+        {
+            public char valueOf(char charParameter)
+            {
+                return function.valueOf(charParameter);
+            }
+        });
+    }
+
+    public static String collect(String string, CharToCharFunction function)
     {
         int size = string.length();
         StringBuilder builder = new StringBuilder(size);
@@ -398,18 +450,18 @@ public final class StringIterate
 
     public static String englishToUpperCase(String string)
     {
-        if (StringIterate.anySatisfy(string, CharPredicate.IS_LOWERCASE))
+        if (StringIterate.anySatisfy(string, CharPredicates.isLowerCase()))
         {
-            return StringIterate.collect(string, CharFunction.TO_UPPERCASE);
+            return StringIterate.collect(string, CharToCharFunctions.toUpperCase());
         }
         return string;
     }
 
     public static String englishToLowerCase(String string)
     {
-        if (StringIterate.anySatisfy(string, CharPredicate.IS_UPPERCASE))
+        if (StringIterate.anySatisfy(string, CharPredicates.isUpperCase()))
         {
-            return StringIterate.collect(string, CharFunction.TO_LOWERCASE);
+            return StringIterate.collect(string, CharToCharFunctions.toLowerCase());
         }
         return string;
     }

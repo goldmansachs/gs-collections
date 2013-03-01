@@ -81,6 +81,8 @@ public class <name>HashBagTest
         Assert.assertEquals(<name>HashBag.newBagWith(<["100", "100", "100"]:(literal.(type))(); separator=", ">), bag);
         bag.addOccurrences(<(literal.(type))("100")>, 2);
         Assert.assertEquals(<name>HashBag.newBagWith(<["100", "100", "100", "100", "100"]:(literal.(type))(); separator=", ">), bag);
+        bag.addOccurrences(<(literal.(type))("100")>, 0);
+        Assert.assertEquals(<name>HashBag.newBagWith(<["100", "100", "100", "100", "100"]:(literal.(type))(); separator=", ">), bag);
     }
 
     @Test(expected = IllegalArgumentException.class)

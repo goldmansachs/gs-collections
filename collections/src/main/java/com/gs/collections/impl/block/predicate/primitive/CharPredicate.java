@@ -20,7 +20,10 @@ import java.io.Serializable;
 
 /**
  * A Predicate that accepts a char value
+ *
+ * @deprecated since 3.0. Use {@link com.gs.collections.api.block.predicate.primitive.CharPredicate} instead.
  */
+@Deprecated
 public interface CharPredicate
         extends Serializable
 {

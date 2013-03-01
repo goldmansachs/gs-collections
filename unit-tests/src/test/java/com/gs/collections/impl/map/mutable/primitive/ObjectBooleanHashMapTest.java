@@ -255,10 +255,21 @@ public class ObjectBooleanHashMapTest
         Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(collision1, true, collision2, true, collision4, false), hashMap2);
 
         ObjectBooleanHashMap<String> hashMap3 = ObjectBooleanHashMap.newMap();
-        hashMap3.put(null, false);
-        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(null, false), hashMap3);
-        hashMap3.put(null, true);
-        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(null, true), hashMap3);
+        hashMap3.put(collision1, true);
+        hashMap3.put(collision2, true);
+        hashMap3.put(collision3, false);
+        Assert.assertTrue(hashMap3.get(collision2));
+        Assert.assertFalse(hashMap3.get(collision3));
+        hashMap3.removeKey(collision2);
+        hashMap3.removeKey(collision3);
+        hashMap3.put(collision4, false);
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(collision1, true, collision4, false), hashMap3);
+
+        ObjectBooleanHashMap<String> hashMap4 = ObjectBooleanHashMap.newMap();
+        hashMap4.put(null, false);
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(null, false), hashMap4);
+        hashMap4.put(null, true);
+        Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(null, true), hashMap4);
     }
 
     @Test

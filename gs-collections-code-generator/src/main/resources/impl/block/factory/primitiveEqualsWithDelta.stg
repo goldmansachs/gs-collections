@@ -18,9 +18,9 @@ equalsWithDeltaClass ::= [
     "double": "equalsWithDeltaClass"
 ]
 
-equalWithoutDelta(type, name) ::= ""
+equalWithoutDelta() ::= ""
 
-equalWithDelta(type, name) ::= <<
+equalWithDelta() ::= <<
 public static <name>Predicate equal(<type> expected, <type> delta)
 {
     return new EqualsWithDelta<name>Predicate(expected, delta);
@@ -28,7 +28,7 @@ public static <name>Predicate equal(<type> expected, <type> delta)
 
 >>
 
-equalsWithDeltaClass(type, name) ::= <<
+equalsWithDeltaClass() ::= <<
 private static final class EqualsWithDelta<name>Predicate implements <name>Predicate
 {
     private static final long serialVersionUID = 1L;

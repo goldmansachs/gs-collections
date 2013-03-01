@@ -92,6 +92,8 @@ public class BooleanHashBagTest
         Assert.assertEquals(BooleanHashBag.newBagWith(false, false, false), bag);
         bag.addOccurrences(false, 2);
         Assert.assertEquals(BooleanHashBag.newBagWith(false, false, false, false, false), bag);
+        bag.addOccurrences(true, 0);
+        Assert.assertEquals(BooleanHashBag.newBagWith(false, false, false, false, false), bag);
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -406,13 +408,18 @@ public class BooleanHashBagTest
     public void collect()
     {
         BooleanHashBag bag = BooleanHashBag.newBagWith(true, false, false, true, true, true);
-        Assert.assertEquals(HashBag.newBagWith("true", "false", "false", "true", "true", "true"), bag.collect(new BooleanToObjectFunction<String>()
+        BooleanToObjectFunction<String> stringValueOf = new BooleanToObjectFunction<String>()
         {
             public String valueOf(boolean parameter)
             {
                 return parameter ? "true" : "false";
             }
-        }));
+        };
+        Assert.assertEquals(HashBag.newBagWith("true", "false", "false", "true", "true", "true"), bag.collect(stringValueOf));
+        BooleanHashBag bag1 = BooleanHashBag.newBagWith(false, false);
+        Assert.assertEquals(HashBag.newBagWith("false", "false"), bag1.collect(stringValueOf));
+        BooleanHashBag bag2 = BooleanHashBag.newBagWith(true, true);
+        Assert.assertEquals(HashBag.newBagWith("true", "true"), bag2.collect(stringValueOf));
     }
 
     @Test
