@@ -25,7 +25,7 @@
 
     <groupId>com.goldmansachs</groupId>
     <artifactId>unit-tests</artifactId>
-    <version>2.1.0-SNAPSHOT</version>
+    <version>3.0.0</version>
 
     <name>Goldman Sachs Collections Unit Test Suite</name>
 
@@ -49,21 +49,21 @@
         <dependency>
             <groupId>com.goldmansachs</groupId>
             <artifactId>gs-collections-api</artifactId>
-            <version>2.1.0-SNAPSHOT</version>
+            <version>3.0.0</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>com.goldmansachs</groupId>
             <artifactId>gs-collections</artifactId>
-            <version>2.1.0-SNAPSHOT</version>
+            <version>3.0.0</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>com.goldmansachs</groupId>
             <artifactId>gs-collections-testutils</artifactId>
-            <version>2.1.0-SNAPSHOT</version>
+            <version>3.0.0</version>
             <scope>test</scope>
         </dependency>
 
@@ -187,7 +187,7 @@
             <plugin>
                 <groupId>com.goldmansachs</groupId>
                 <artifactId>gs-collections-code-generator-maven-plugin</artifactId>
-                <version>2.1.0-SNAPSHOT</version>
+                <version>3.0.0</version>
                 <executions>
                     <execution>
                         <id>list</id>
