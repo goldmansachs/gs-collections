@@ -43,4 +43,14 @@
             <artifacts pattern="target/[artifact]-${build.version.full}(-[classifier]).[ext]" />
         </ivy:publish>
     </target>
+
+    <target name="source-jar" depends="-deploy-properties" description="Builds the source jar for the application">
+        <jar
+            jarfile="${source.jar.name}"
+            compress="true"
+            index="false">
+            <fileset dir="${src.dir}" />
+            <fileset dir="${generatedsrc.dir}" />
+        </jar>
+    </target>
 </project>

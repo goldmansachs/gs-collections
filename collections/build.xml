@@ -42,4 +42,14 @@
 
     <!-- No tests to run in this module -->
     <target name="test" depends="install" description="Run the test cases" />
+
+    <target name="source-jar" depends="-deploy-properties" description="Builds the source jar for the application">
+        <jar
+            jarfile="${source.jar.name}"
+            compress="true"
+            index="false">
+            <fileset dir="${src.dir}" />
+            <fileset dir="${generatedsrc.dir}" />
+        </jar>
+    </target>
 </project>
