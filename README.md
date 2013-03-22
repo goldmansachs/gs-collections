@@ -3,8 +3,10 @@
 GS Collections is a collections framework for Java. It has JDK-compatible List, Set and Map implementations with a rich API and set of utility classes that work with any JDK compatible Collections, Arrays, Maps or Strings. The iteration protocol was inspired by the Smalltalk collection framework.
 
 ## Download
-[Version 2.0.0](https://github.com/downloads/goldmansachs/gs-collections/gs-collections-2.0.0.zip)
-[Older releases](https://github.com/goldmansachs/gs-collections/downloads)
+[Version 3.0.1](http://www.goldmansachs.com/gs-collections/binaries/gs-collections-3.0.1.zip)
+[Version 2.0.0](http://www.goldmansachs.com/gs-collections/binaries/gs-collections-2.0.0.zip)
+[Version 1.2.0](http://www.goldmansachs.com/gs-collections/binaries/gs-collections-1.2.0.zip)
+[Version 1.1.0](http://www.goldmansachs.com/gs-collections/binaries/gs-collections-1.1.0.zip)
 
 ## Quick Example
 GS Collections puts iteration methods on the container types. Lambdas are simulated using anonymous inner classes. Here's a code example that demonstrates the usual style of programming with GS Collections.
@@ -38,9 +40,9 @@ public static final Function<Person, String> TO_LAST_NAME = new Function<Person,
 * Has been under active development since 2005 and is a mature library
 
 ## Documentation
-The best way to learn about GS Collections is to dive into the [code kata](https://github.com/goldmansachs/gs-collections-kata). The kata is a fun way to learn idiomatic GS Collections usage and hone your skills through practice. New concepts are introduced in the [slides](https://github.com/downloads/goldmansachs/gs-collections-kata/GS%20Collections%20Training%20Session%20and%20Kata%201.0.0.pdf), with coding exercises at the end of each section. The exercises are set up as a unit tests which fail. Your task is to make them pass, using GS Collections.
+The best way to learn about GS Collections is to dive into the [code kata](https://github.com/goldmansachs/gs-collections-kata). The kata is a fun way to learn idiomatic GS Collections usage and hone your skills through practice. New concepts are introduced in the [slides](http://www.goldmansachs.com/gs-collections/documents/GS Collections Training Session and Kata 2.0.0.pdf), with coding exercises at the end of each section. The exercises are set up as a unit tests which fail. Your task is to make them pass, using GS Collections.
 
-For more comprehensive documentation, take a look at the [Reference Guide](https://github.com/downloads/goldmansachs/gs-collections/GS%20Collections%20Reference%20Guide%201.2.0.pdf).
+For more comprehensive documentation, take a look at the [Reference Guide](http://www.goldmansachs.com/gs-collections/documents/GS Collections Reference Guide 1.2.0.pdf).
 
 ## Contributions
 We currently do all development in an internal Subversion repository and are not prepared to take external contributions. However, we watch the [issue tracker](https://github.com/goldmansachs/gs-collections/issues) for bug reports and feature requests.
