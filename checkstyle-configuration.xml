@@ -4,7 +4,7 @@
     "http://www.puppycrawl.com/dtds/configuration_1_2.dtd">
 
 <!--
-  ~ Copyright 2011 Goldman Sachs.
+  ~ Copyright 2013 Goldman Sachs.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -245,7 +245,7 @@
 
     <module name="RegexpHeader">
         <property name="headerFile" value="java.header" />
-        <property name="multiLines" value="19" />
+        <property name="multiLines" value="17, 18, 19, 21, 22" />
         <property name="fileExtensions" value="java, scala" />
     </module>
 
