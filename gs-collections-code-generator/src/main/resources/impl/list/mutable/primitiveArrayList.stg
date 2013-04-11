@@ -824,12 +824,12 @@ public final class <name>ArrayList
 
     public Mutable<name>List asUnmodifiable()
     {
-        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+        return new Unmodifiable<name>List(this);
     }
 
     public Mutable<name>List asSynchronized()
     {
-        throw new UnsupportedOperationException("asSynchronized not implemented yet");
+        return new Synchronized<name>List(this);
     }
 
     public Immutable<name>List toImmutable()

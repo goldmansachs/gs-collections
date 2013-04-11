@@ -1,0 +1,408 @@
+import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+
+targetPath() ::= "com/gs/collections/impl/list/mutable/primitive"
+
+fileName(primitive) ::= "Unmodifiable<primitive.name>List"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.list.mutable.primitive;
+
+import java.io.Serializable;
+
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.Lazy<name>Iterable;
+import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
+import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.Immutable<name>List;
+import com.gs.collections.api.list.primitive.Mutable<name>List;
+import com.gs.collections.api.set.primitive.Mutable<name>Set;
+import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
+import net.jcip.annotations.NotThreadSafe;
+
+/**
+ * This file was automatically generated from template file primitiveUnmodifiableList.stg.
+ *
+ * @since 3.1.
+ */
+@NotThreadSafe
+public final class Unmodifiable<name>List
+        implements Mutable<name>List, Serializable
+{
+    private static final long serialVersionUID = 1L;
+
+    private final Mutable<name>List list;
+
+    public Unmodifiable<name>List(Mutable<name>List list)
+    {
+        this.list = list;
+    }
+
+    public int size()
+    {
+        return this.list.size();
+    }
+
+    public boolean isEmpty()
+    {
+        return this.list.isEmpty();
+    }
+
+    public boolean notEmpty()
+    {
+        return this.list.notEmpty();
+    }
+
+    public void clear()
+    {
+        throw new UnsupportedOperationException("Cannot call clear on an unmodifiable collection");
+    }
+
+    public boolean contains(<type> value)
+    {
+        return this.list.contains(value);
+    }
+
+    public boolean containsAll(<type>... source)
+    {
+        return this.list.containsAll(source);
+    }
+
+    public boolean containsAll(<name>Iterable source)
+    {
+        return this.list.containsAll(source);
+    }
+
+    public <type> get(int index)
+    {
+        return this.list.get(index);
+    }
+
+    public <type> getFirst()
+    {
+        return this.list.getFirst();
+    }
+
+    public <type> getLast()
+    {
+        return this.list.getLast();
+    }
+
+    public int indexOf(<type> value)
+    {
+        return this.list.indexOf(value);
+    }
+
+    public int lastIndexOf(<type> value)
+    {
+        return this.list.lastIndexOf(value);
+    }
+
+    public boolean add(<type> newItem)
+    {
+        throw new UnsupportedOperationException("Cannot call add on an unmodifiable collection");
+    }
+
+    public boolean addAll(<type>... source)
+    {
+        throw new UnsupportedOperationException("Cannot call addAll on an unmodifiable collection");
+    }
+
+    public boolean addAll(<name>Iterable source)
+    {
+        throw new UnsupportedOperationException("Cannot call addAll on an unmodifiable collection");
+    }
+
+    public void addAtIndex(int index, <type> element)
+    {
+        throw new UnsupportedOperationException("Cannot call addAtIndex on an unmodifiable collection");
+    }
+
+    public boolean addAllAtIndex(int index, <type>... source)
+    {
+        throw new UnsupportedOperationException("Cannot call addAllAtIndex on an unmodifiable collection");
+    }
+
+    public boolean addAllAtIndex(int index, <name>Iterable source)
+    {
+        throw new UnsupportedOperationException("Cannot call addAllAtIndex on an unmodifiable collection");
+    }
+
+    public boolean remove(<type> value)
+    {
+        throw new UnsupportedOperationException("Cannot call remove on an unmodifiable collection");
+    }
+
+    public boolean removeAll(<name>Iterable source)
+    {
+        throw new UnsupportedOperationException("Cannot call removeAll on an unmodifiable collection");
+    }
+
+    public boolean removeAll(<type>... source)
+    {
+        throw new UnsupportedOperationException("Cannot call removeAll on an unmodifiable collection");
+    }
+
+    public <type> removeAtIndex(int index)
+    {
+        throw new UnsupportedOperationException("Cannot call removeAtIndex on an unmodifiable collection");
+    }
+
+    public <type> set(int index, <type> element)
+    {
+        throw new UnsupportedOperationException("Cannot call set on an unmodifiable collection");
+    }
+
+    public Synchronized<name>List with(<type> element)
+    {
+        throw new UnsupportedOperationException("Cannot call with on an unmodifiable collection");
+    }
+
+    public Synchronized<name>List without(<type> element)
+    {
+        throw new UnsupportedOperationException("Cannot call without on an unmodifiable collection");
+    }
+
+    public Synchronized<name>List withAll(<name>Iterable elements)
+    {
+        throw new UnsupportedOperationException("Cannot call withAll on an unmodifiable collection");
+    }
+
+    public Synchronized<name>List withoutAll(<name>Iterable elements)
+    {
+        throw new UnsupportedOperationException("Cannot call withoutAll on an unmodifiable collection");
+    }
+
+    public <name>Iterator <type>Iterator()
+    {
+        return this.list.<type>Iterator();  // this must be manually synchronized by the developer
+    }
+
+    public void forEach(<name>Procedure procedure)
+    {
+        this.list.forEach(procedure);
+    }
+
+    public int count(<name>Predicate predicate)
+    {
+        return this.list.count(predicate);
+    }
+
+    public boolean anySatisfy(<name>Predicate predicate)
+    {
+        return this.list.anySatisfy(predicate);
+    }
+
+    public boolean allSatisfy(<name>Predicate predicate)
+    {
+        return this.list.allSatisfy(predicate);
+    }
+
+    public boolean noneSatisfy(<name>Predicate predicate)
+    {
+        return this.list.noneSatisfy(predicate);
+    }
+
+    public Mutable<name>List select(<name>Predicate predicate)
+    {
+        return this.list.select(predicate);
+    }
+
+    public Mutable<name>List reject(<name>Predicate predicate)
+    {
+        return this.list.reject(predicate);
+    }
+
+    public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
+    {
+        return this.list.detectIfNone(predicate, ifNone);
+    }
+
+    public \<V> MutableList\<V> collect(<name>ToObjectFunction\<? extends V> function)
+    {
+        return this.list.collect(function);
+    }
+
+    <(arithmeticMethods.(type))(name, type)>
+    public <type>[] toArray()
+    {
+        return this.list.toArray();
+    }
+
+    @Override
+    public boolean equals(Object otherList)
+    {
+        return this.list.equals(otherList);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return this.list.hashCode();
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.list.toString();
+    }
+
+    public String makeString()
+    {
+        return this.list.makeString();
+    }
+
+    public String makeString(String separator)
+    {
+        return this.list.makeString(separator);
+    }
+
+    public String makeString(String start, String separator, String end)
+    {
+        return this.list.makeString(start, separator, end);
+    }
+
+    public void appendString(Appendable appendable)
+    {
+        this.list.appendString(appendable);
+    }
+
+    public void appendString(Appendable appendable, String separator)
+    {
+        this.list.appendString(appendable, separator);
+    }
+
+    public void appendString(
+            Appendable appendable,
+            String start,
+            String separator,
+            String end)
+    {
+        this.list.appendString(appendable, start, separator, end);
+    }
+
+    public Mutable<name>List toList()
+    {
+        return this.list.toList();
+    }
+
+    public Mutable<name>Set toSet()
+    {
+        return this.list.toSet();
+    }
+
+    public Mutable<name>Bag toBag()
+    {
+        return this.list.toBag();
+    }
+
+    public Lazy<name>Iterable asLazy()
+    {
+        return new Lazy<name>IterableAdapter(this);
+    }
+
+    public Mutable<name>List asUnmodifiable()
+    {
+        return this;
+    }
+
+    public Mutable<name>List asSynchronized()
+    {
+        return new Synchronized<name>List(this);
+    }
+
+    public Immutable<name>List toImmutable()
+    {
+        throw new UnsupportedOperationException("toImmutable not implemented yet");
+    }
+
+    public Mutable<name>List reverseThis()
+    {
+        throw new UnsupportedOperationException("Cannot call reverseThis on an unmodifiable collection");
+    }
+
+    public Mutable<name>List toReversed()
+    {
+        return this.list.toReversed();
+    }
+}
+
+>>
+
+arithmeticMethods ::= [
+    "byte": "allMethods",
+    "short": "allMethods",
+    "char": "allMethods",
+    "int": "allMethods",
+    "long": "allMethods",
+    "float": "allMethods",
+    "double": "allMethods",
+    "boolean": "noMethods"
+    ]
+
+allMethods(name, type) ::=<<
+public <wideType.(type)> sum()
+{
+    return this.list.sum();
+}
+
+public <type> max()
+{
+    return this.list.max();
+}
+
+public <type> min()
+{
+    return this.list.min();
+}
+
+public <type> minIfEmpty(<type> defaultValue)
+{
+    return this.list.minIfEmpty(defaultValue);
+}
+
+public <type> maxIfEmpty(<type> defaultValue)
+{
+    return this.list.maxIfEmpty(defaultValue);
+}
+
+public double average()
+{
+    return this.list.average();
+}
+
+public double median()
+{
+    return this.list.median();
+}
+
+public Mutable<name>List sortThis()
+{
+    throw new UnsupportedOperationException("Cannot call sortThis on an unmodifiable collection");
+}
+
+public Mutable<name>List toSortedList()
+{
+    return this.list.toSortedList();
+}
+
+public <type>[] toSortedArray()
+{
+    return this.list.toSortedArray();
+}
+
+>>
+
+noMethods(name, type) ::= ""
