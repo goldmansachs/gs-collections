@@ -22,6 +22,8 @@ import java.util.Set;
 
 import com.google.common.collect.ImmutableSet;
 import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.procedure.primitive.IntProcedure;
+import com.gs.collections.impl.list.primitive.IntInterval;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import org.junit.Test;
@@ -31,19 +33,15 @@ public class ImmutableSetMemoryTest
     @Test
     public void memoryForScaledImmutableSets()
     {
-        this.memoryForScaledSets(0);
-        this.memoryForScaledSets(1);
-        this.memoryForScaledSets(2);
-        this.memoryForScaledSets(3);
-        this.memoryForScaledSets(4);
-        this.memoryForScaledSets(5);
-        this.memoryForScaledSets(6);
-        this.memoryForScaledSets(7);
-        this.memoryForScaledSets(8);
-        this.memoryForScaledSets(9);
-        this.memoryForScaledSets(10);
-        this.memoryForScaledSets(11);
-        this.memoryForScaledSets(100);
+        IntProcedure procedure = new IntProcedure()
+        {
+            public void value(int size)
+            {
+                ImmutableSetMemoryTest.this.memoryForScaledSets(size);
+            }
+        };
+        IntInterval.zeroTo(9).forEach(procedure);
+        IntInterval.fromToBy(10, 100, 10).forEach(procedure);
     }
 
     public void memoryForScaledSets(int size)

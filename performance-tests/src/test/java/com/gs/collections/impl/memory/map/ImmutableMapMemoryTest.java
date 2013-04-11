@@ -22,6 +22,8 @@ import java.util.Map;
 
 import com.google.common.collect.ImmutableMap;
 import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.procedure.primitive.IntProcedure;
+import com.gs.collections.impl.list.primitive.IntInterval;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import org.junit.Test;
@@ -31,19 +33,15 @@ public class ImmutableMapMemoryTest
     @Test
     public void memoryForScaledImmutableMaps()
     {
-        this.memoryForScaledMaps(0);
-        this.memoryForScaledMaps(1);
-        this.memoryForScaledMaps(2);
-        this.memoryForScaledMaps(3);
-        this.memoryForScaledMaps(4);
-        this.memoryForScaledMaps(5);
-        this.memoryForScaledMaps(6);
-        this.memoryForScaledMaps(7);
-        this.memoryForScaledMaps(8);
-        this.memoryForScaledMaps(9);
-        this.memoryForScaledMaps(10);
-        this.memoryForScaledMaps(11);
-        this.memoryForScaledMaps(100);
+        IntProcedure procedure = new IntProcedure()
+        {
+            public void value(int size)
+            {
+                ImmutableMapMemoryTest.this.memoryForScaledMaps(size);
+            }
+        };
+        IntInterval.zeroTo(9).forEach(procedure);
+        IntInterval.fromToBy(10, 100, 10).forEach(procedure);
     }
 
     public void memoryForScaledMaps(int size)

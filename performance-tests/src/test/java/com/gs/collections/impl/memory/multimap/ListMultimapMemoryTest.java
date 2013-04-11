@@ -30,18 +30,10 @@ public class ListMultimapMemoryTest
     @Test
     public void memoryForScaledMultimaps()
     {
-        this.memoryForScaledMultimaps(0);
-        this.memoryForScaledMultimaps(10);
-        this.memoryForScaledMultimaps(50);
-        this.memoryForScaledMultimaps(100);
-        this.memoryForScaledMultimaps(500);
-        this.memoryForScaledMultimaps(1000);
-        this.memoryForScaledMultimaps(5000);
-        this.memoryForScaledMultimaps(10000);
-        this.memoryForScaledMultimaps(50000);
-        this.memoryForScaledMultimaps(100000);
-        this.memoryForScaledMultimaps(500000);
-        this.memoryForScaledMultimaps(1000000);
+        for (int size = 0; size < 1000001; size += 10000)
+        {
+            this.memoryForScaledMultimaps(size);
+        }
     }
 
     public void memoryForScaledMultimaps(int size)
@@ -52,13 +44,23 @@ public class ListMultimapMemoryTest
                 .printContainerMemoryUsage("ListMultimap", size, new SizedGscMultimapFactory(size));
     }
 
-    public static class SizedGuavaMultimapFactory implements Function0<ArrayListMultimap<Integer, String>>
+    public abstract static class SizedMultimapFactory
     {
-        private final ImmutableList<Integer> data;
+        protected final ImmutableList<Integer> data;
 
+        protected SizedMultimapFactory(int size)
+        {
+            this.data = TestDataFactory.createRandomImmutableList(size);
+        }
+    }
+
+    public static class SizedGuavaMultimapFactory
+            extends SizedMultimapFactory
+            implements Function0<ArrayListMultimap<Integer, String>>
+    {
         public SizedGuavaMultimapFactory(int size)
         {
-            this.data = TestDataFactory.createImmutableList(size);
+            super(size);
         }
 
         public ArrayListMultimap<Integer, String> value()
@@ -78,13 +80,13 @@ public class ListMultimapMemoryTest
         }
     }
 
-    public static class SizedGscMultimapFactory implements Function0<FastListMultimap<Integer, String>>
+    public static class SizedGscMultimapFactory
+            extends SizedMultimapFactory
+            implements Function0<FastListMultimap<Integer, String>>
     {
-        private final ImmutableList<Integer> data;
-
         public SizedGscMultimapFactory(int size)
         {
-            this.data = TestDataFactory.createImmutableList(size);
+            super(size);
         }
 
         public FastListMultimap<Integer, String> value()

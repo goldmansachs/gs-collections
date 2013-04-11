@@ -31,15 +31,10 @@ public class ConcurrentMapMemoryTest
     @Test
     public void memoryForScaledConcurrentMaps()
     {
-        this.memoryForScaledConcurrentMaps(0);
-        this.memoryForScaledConcurrentMaps(10);
-        this.memoryForScaledConcurrentMaps(100);
-        this.memoryForScaledConcurrentMaps(500);
-        this.memoryForScaledConcurrentMaps(1000);
-        this.memoryForScaledConcurrentMaps(5000);
-        this.memoryForScaledConcurrentMaps(10000);
-        this.memoryForScaledConcurrentMaps(100000);
-        this.memoryForScaledConcurrentMaps(1000000);
+        for (int size = 0; size < 1000001; size += 10000)
+        {
+            this.memoryForScaledConcurrentMaps(size);
+        }
     }
 
     public void memoryForScaledConcurrentMaps(int size)
@@ -56,7 +51,7 @@ public class ConcurrentMapMemoryTest
 
         protected SizedConcurrentMapFactory(int size)
         {
-            this.data = TestDataFactory.createImmutableList(size);
+            this.data = TestDataFactory.createRandomImmutableList(size);
         }
 
         protected <R extends Map<Integer, String>> R fill(final R map)

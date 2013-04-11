@@ -21,6 +21,7 @@ import java.util.HashMap;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.list.primitive.IntList;
+import com.gs.collections.api.set.primitive.IntSet;
 import com.gs.collections.impl.map.mutable.primitive.IntIntHashMap;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.memory.TestDataFactory;
@@ -32,18 +33,10 @@ public class IntIntMapMemoryTest
     @Test
     public void memoryForScaledMaps()
     {
-        this.memoryForScaledMaps(0);
-        this.memoryForScaledMaps(10);
-        this.memoryForScaledMaps(50);
-        this.memoryForScaledMaps(100);
-        this.memoryForScaledMaps(500);
-        this.memoryForScaledMaps(1000);
-        this.memoryForScaledMaps(5000);
-        this.memoryForScaledMaps(10000);
-        this.memoryForScaledMaps(50000);
-        this.memoryForScaledMaps(100000);
-        this.memoryForScaledMaps(500000);
-        this.memoryForScaledMaps(1000000);
+        for (int size = 0; size < 1000001; size += 10000)
+        {
+            this.memoryForScaledMaps(size);
+        }
     }
 
     public void memoryForScaledMaps(int size)
@@ -58,11 +51,11 @@ public class IntIntMapMemoryTest
 
     public static class IntIntHashMapFactory implements Function0<IntIntHashMap>
     {
-        private final IntList data;
+        private final IntSet data;
 
         public IntIntHashMapFactory(int size)
         {
-            this.data = TestDataFactory.create(size);
+            this.data = TestDataFactory.createRandomSet(size);
         }
 
         public IntIntHashMap value()

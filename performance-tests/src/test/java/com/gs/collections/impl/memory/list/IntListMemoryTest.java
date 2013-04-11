@@ -32,18 +32,10 @@ public class IntListMemoryTest
     @Test
     public void memoryForScaledLists()
     {
-        this.memoryForScaledLists(0);
-        this.memoryForScaledLists(10);
-        this.memoryForScaledLists(50);
-        this.memoryForScaledLists(100);
-        this.memoryForScaledLists(500);
-        this.memoryForScaledLists(1000);
-        this.memoryForScaledLists(5000);
-        this.memoryForScaledLists(10000);
-        this.memoryForScaledLists(50000);
-        this.memoryForScaledLists(100000);
-        this.memoryForScaledLists(500000);
-        this.memoryForScaledLists(1000000);
+        for (int size = 0; size < 1000001; size += 10000)
+        {
+            this.memoryForScaledLists(size);
+        }
     }
 
     public void memoryForScaledLists(int size)

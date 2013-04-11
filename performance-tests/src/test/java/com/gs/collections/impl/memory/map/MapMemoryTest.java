@@ -34,18 +34,10 @@ public class MapMemoryTest
     @Test
     public void memoryForScaledMaps()
     {
-        this.memoryForScaledMaps(0);
-        this.memoryForScaledMaps(10);
-        this.memoryForScaledMaps(50);
-        this.memoryForScaledMaps(100);
-        this.memoryForScaledMaps(500);
-        this.memoryForScaledMaps(1000);
-        this.memoryForScaledMaps(5000);
-        this.memoryForScaledMaps(10000);
-        this.memoryForScaledMaps(50000);
-        this.memoryForScaledMaps(100000);
-        this.memoryForScaledMaps(500000);
-        this.memoryForScaledMaps(1000000);
+        for (int size = 0; size < 1000001; size += 10000)
+        {
+            this.memoryForScaledMaps(size);
+        }
     }
 
     public void memoryForScaledMaps(int size)
@@ -66,7 +58,7 @@ public class MapMemoryTest
 
         protected SizedMapFactory(int size)
         {
-            this.data = TestDataFactory.createImmutableList(size);
+            this.data = TestDataFactory.createRandomImmutableList(size);
         }
 
         protected <R extends Map<Integer, String>> R fill(final R map)

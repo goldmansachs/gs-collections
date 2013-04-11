@@ -19,7 +19,9 @@ package com.gs.collections.impl.memory.bag;
 import com.google.common.collect.ImmutableMultiset;
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.impl.list.primitive.IntInterval;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import org.junit.Test;
 
@@ -28,15 +30,15 @@ public class ImmutableBagMemoryTest
     @Test
     public void memoryForScaledImmutableBags()
     {
-        this.memoryForScaledBags(0);
-        this.memoryForScaledBags(1);
-        this.memoryForScaledBags(2);
-        this.memoryForScaledBags(3);
-        this.memoryForScaledBags(4);
-        this.memoryForScaledBags(5);
-        this.memoryForScaledBags(10);
-        this.memoryForScaledBags(20);
-        this.memoryForScaledBags(100);
+        IntProcedure procedure = new IntProcedure()
+        {
+            public void value(int size)
+            {
+                ImmutableBagMemoryTest.this.memoryForScaledBags(size);
+            }
+        };
+        IntInterval.zeroTo(9).forEach(procedure);
+        IntInterval.fromToBy(10, 100, 10).forEach(procedure);
     }
 
     public void memoryForScaledBags(int size)

@@ -30,18 +30,10 @@ public class BagMemoryTest
     @Test
     public void memoryForScaledBags()
     {
-        this.memoryForScaledBags(0);
-        this.memoryForScaledBags(10);
-        this.memoryForScaledBags(50);
-        this.memoryForScaledBags(100);
-        this.memoryForScaledBags(500);
-        this.memoryForScaledBags(1000);
-        this.memoryForScaledBags(5000);
-        this.memoryForScaledBags(10000);
-        this.memoryForScaledBags(50000);
-        this.memoryForScaledBags(100000);
-        this.memoryForScaledBags(500000);
-        this.memoryForScaledBags(1000000);
+        for (int size = 0; size < 1000001; size += 10000)
+        {
+            this.memoryForScaledBags(size);
+        }
     }
 
     public void memoryForScaledBags(int size)

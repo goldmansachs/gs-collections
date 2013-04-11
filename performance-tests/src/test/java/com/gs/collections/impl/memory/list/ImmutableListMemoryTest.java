@@ -22,7 +22,9 @@ import java.util.List;
 
 import com.google.common.collect.ImmutableList;
 import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.primitive.IntInterval;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import org.junit.Test;
 
@@ -31,19 +33,15 @@ public class ImmutableListMemoryTest
     @Test
     public void memoryForScaledImmutableLists()
     {
-        this.memoryForScaledLists(0);
-        this.memoryForScaledLists(1);
-        this.memoryForScaledLists(2);
-        this.memoryForScaledLists(3);
-        this.memoryForScaledLists(4);
-        this.memoryForScaledLists(5);
-        this.memoryForScaledLists(6);
-        this.memoryForScaledLists(7);
-        this.memoryForScaledLists(8);
-        this.memoryForScaledLists(9);
-        this.memoryForScaledLists(10);
-        this.memoryForScaledLists(11);
-        this.memoryForScaledLists(100);
+        IntProcedure procedure = new IntProcedure()
+        {
+            public void value(int size)
+            {
+                ImmutableListMemoryTest.this.memoryForScaledLists(size);
+            }
+        };
+        IntInterval.zeroTo(9).forEach(procedure);
+        IntInterval.fromToBy(10, 100, 10).forEach(procedure);
     }
 
     public void memoryForScaledLists(int size)

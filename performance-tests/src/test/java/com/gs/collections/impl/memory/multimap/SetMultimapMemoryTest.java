@@ -30,13 +30,10 @@ public class SetMultimapMemoryTest
     @Test
     public void memoryForScaledMultimaps()
     {
-        this.memoryForScaledMultimaps(0);
-        this.memoryForScaledMultimaps(10);
-        this.memoryForScaledMultimaps(100);
-        this.memoryForScaledMultimaps(1000);
-        this.memoryForScaledMultimaps(10000);
-        this.memoryForScaledMultimaps(100000);
-        this.memoryForScaledMultimaps(1000000);
+        for (int size = 0; size < 1000001; size += 10000)
+        {
+            this.memoryForScaledMultimaps(size);
+        }
     }
 
     public void memoryForScaledMultimaps(int size)

@@ -86,9 +86,9 @@ public class MemoryTestBench
         String sizeFormatted = NumberFormat.getInstance().format(size);
         System.out.println(
                 category + " " +
+                        this.clazz.getName() + " " +
                         "size " + sizeFormatted + " " +
-                        "bytes " + memoryUsedInBytes + " " +
-                        this.clazz.getName());
+                        "bytes " + memoryUsedInBytes);
     }
 
     private static class GCAndSleepProcedure implements IntProcedure

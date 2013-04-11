@@ -20,11 +20,11 @@ import java.util.HashSet;
 import java.util.Set;
 
 import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.memory.TestDataFactory;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
-import com.gs.collections.impl.utility.Iterate;
 import gnu.trove.set.hash.THashSet;
 import org.junit.Test;
 
@@ -33,28 +33,17 @@ public class SetMemoryTest
     @Test
     public void memoryForScaledSets()
     {
-        this.memoryForScaledSets(0);
-        this.memoryForScaledSets(10);
-        this.memoryForScaledSets(50);
-        this.memoryForScaledSets(100);
-        this.memoryForScaledSets(500);
-        this.memoryForScaledSets(1000);
-        this.memoryForScaledSets(5000);
-        this.memoryForScaledSets(10000);
-        this.memoryForScaledSets(50000);
-        this.memoryForScaledSets(100000);
-        this.memoryForScaledSets(500000);
-        this.memoryForScaledSets(1000000);
+        for (int size = 0; size < 1000001; size += 10000)
+        {
+            this.memoryForScaledSets(size);
+        }
     }
 
-    public void memoryForScaledSets(int size)
+    private void memoryForScaledSets(int size)
     {
-        MemoryTestBench.on(HashSet.class)
-                .printContainerMemoryUsage("Set", size, new HashSetFactory(size));
-        MemoryTestBench.on(THashSet.class)
-                .printContainerMemoryUsage("Set", size, new THashSetFactory(size));
-        MemoryTestBench.on(UnifiedSet.class)
-                .printContainerMemoryUsage("Set", size, new UnifiedSetFactory(size));
+        MemoryTestBench.on(THashSet.class).printContainerMemoryUsage("Set", size, new THashSetFactory(size));
+        MemoryTestBench.on(UnifiedSet.class).printContainerMemoryUsage("Set", size, new UnifiedSetFactory(size));
+        MemoryTestBench.on(HashSet.class).printContainerMemoryUsage("Set", size, new HashSetFactory(size));
     }
 
     public abstract static class SizedSetFactory
@@ -63,12 +52,18 @@ public class SetMemoryTest
 
         protected SizedSetFactory(int size)
         {
-            this.data = TestDataFactory.createImmutableList(size);
+            this.data = TestDataFactory.createRandomImmutableList(size);
         }
 
-        protected <R extends Set<Integer>> R fill(R set)
+        protected <R extends Set<Integer>> R fill(final R set)
         {
-            Iterate.addAllTo(this.data, set);
+            this.data.forEach(new Procedure<Integer>()
+            {
+                public void value(Integer each)
+                {
+                    set.add(each);
+                }
+            });
             return set;
         }
     }

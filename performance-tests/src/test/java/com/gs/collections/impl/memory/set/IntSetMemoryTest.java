@@ -20,7 +20,7 @@ import java.util.HashSet;
 
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
-import com.gs.collections.api.list.primitive.IntList;
+import com.gs.collections.api.set.primitive.IntSet;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.memory.TestDataFactory;
 import com.gs.collections.impl.set.mutable.primitive.IntHashSet;
@@ -32,18 +32,10 @@ public class IntSetMemoryTest
     @Test
     public void memoryForScaledSets()
     {
-        this.memoryForScaledSets(0);
-        this.memoryForScaledSets(10);
-        this.memoryForScaledSets(50);
-        this.memoryForScaledSets(100);
-        this.memoryForScaledSets(500);
-        this.memoryForScaledSets(1000);
-        this.memoryForScaledSets(5000);
-        this.memoryForScaledSets(10000);
-        this.memoryForScaledSets(50000);
-        this.memoryForScaledSets(100000);
-        this.memoryForScaledSets(500000);
-        this.memoryForScaledSets(1000000);
+        for (int i = 0; i < 1000001; i += 10000)
+        {
+            this.memoryForScaledSets(i);
+        }
     }
 
     public void memoryForScaledSets(int size)
@@ -58,11 +50,11 @@ public class IntSetMemoryTest
 
     public static class IntHashSetFactory implements Function0<IntHashSet>
     {
-        private final IntList data;
+        private final IntSet data;
 
         public IntHashSetFactory(int size)
         {
-            this.data = TestDataFactory.create(size);
+            this.data = TestDataFactory.createRandomSet(size);
         }
 
         public IntHashSet value()
@@ -81,11 +73,11 @@ public class IntSetMemoryTest
 
     public static class TIntHashSetFactory implements Function0<TIntHashSet>
     {
-        private final IntList data;
+        private final IntSet data;
 
         public TIntHashSetFactory(int size)
         {
-            this.data = TestDataFactory.create(size);
+            this.data = TestDataFactory.createRandomSet(size);
         }
 
         public TIntHashSet value()
@@ -104,11 +96,11 @@ public class IntSetMemoryTest
 
     public static class IntegerHashSetFactory implements Function0<HashSet<Integer>>
     {
-        private final IntList data;
+        private final IntSet data;
 
         public IntegerHashSetFactory(int size)
         {
-            this.data = TestDataFactory.create(size);
+            this.data = TestDataFactory.createRandomSet(size);
         }
 
         public HashSet<Integer> value()
