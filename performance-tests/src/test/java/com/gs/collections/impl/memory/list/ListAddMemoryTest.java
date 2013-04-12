@@ -30,7 +30,7 @@ public class ListAddMemoryTest
     @Test
     public void memoryForScaledLists()
     {
-        for (int size = 0; size < 1000001; size += 10000)
+        for (int size = 0; size < 1000001; size += 25000)
         {
             this.memoryForScaledLists(size);
         }

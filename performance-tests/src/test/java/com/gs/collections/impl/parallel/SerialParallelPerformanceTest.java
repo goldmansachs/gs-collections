@@ -30,16 +30,17 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
-import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.IntList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.CompositeFastList;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
@@ -51,7 +52,7 @@ import org.junit.Test;
 
 public class SerialParallelPerformanceTest
 {
-    private static final int SCALE_FACTOR = Integer.parseInt(System.getProperty("scaleFactor", "10"));
+    private static final int SCALE_FACTOR = Integer.parseInt(System.getProperty("scaleFactor", "100"));
 
     private static final int WARM_UP_COUNT = Integer.parseInt(System.getProperty("WarmupCount", "100"));
     private static final int PARALLEL_RUN_COUNT = Integer.parseInt(System.getProperty("ParallelRunCount", "100"));
@@ -135,6 +136,7 @@ public class SerialParallelPerformanceTest
         System.gc();
         Thread.yield();
         System.gc();
+        Thread.yield();
     }
 
     @Test
@@ -161,32 +163,27 @@ public class SerialParallelPerformanceTest
     @Test
     public void parallelAndSerialTest()
     {
-        this.basicTestParallelAndSerialGSCollectionsArrayList(5); // Warm everything up
-        this.basicTestParallelAndSerialGSCollectionsFastList(5);  // Warm everything up
-        this.basicTestParallelAndSerialGSCollectionsFastList(5);  // Warm everything up
-        this.basicTestParallelAndSerialGSCollectionsArrayList(5); // Warm everything up
-        FastList<Integer> sizes = FastList.newListWith(VERY_SMALL_COUNT, SMALL_COUNT, MEDIUM_COUNT, LARGE_COUNT);
-        for (int i = 0; i < 2; i++)
+        this.basicTestParallelAndSerialGSCollectionsArrayList(100); // Warm everything up
+        this.basicTestParallelAndSerialGSCollectionsFastList(100);  // Warm everything up
+        this.basicTestParallelAndSerialGSCollectionsFastList(100);  // Warm everything up
+        this.basicTestParallelAndSerialGSCollectionsArrayList(100); // Warm everything up
+        IntList sizes = IntArrayList.newListWith(VERY_SMALL_COUNT, SMALL_COUNT, MEDIUM_COUNT, LARGE_COUNT);
+        sizes.forEach(new IntProcedure()
         {
-            Collections.shuffle(sizes);
-            sizes.forEach(new Procedure<Integer>()
+            public void value(int size)
             {
-                public void value(Integer each)
-                {
-                    SerialParallelPerformanceTest.this.basicTestParallelAndSerialGSCollectionsArrayList(each);
-                    SerialParallelPerformanceTest.this.basicTestParallelAndSerialGSCollectionsFastList(each);
-                }
-            });
-            Collections.shuffle(sizes);
-            sizes.forEach(new Procedure<Integer>()
+                SerialParallelPerformanceTest.this.basicTestParallelAndSerialGSCollectionsArrayList(size);
+                SerialParallelPerformanceTest.this.basicTestParallelAndSerialGSCollectionsFastList(size);
+            }
+        });
+        sizes.forEach(new IntProcedure()
+        {
+            public void value(int size)
             {
-                public void value(Integer each)
-                {
-                    SerialParallelPerformanceTest.this.basicTestParallelAndSerialGSCollectionsFastList(each);
-                    SerialParallelPerformanceTest.this.basicTestParallelAndSerialGSCollectionsArrayList(each);
-                }
-            });
-        }
+                SerialParallelPerformanceTest.this.basicTestParallelAndSerialGSCollectionsFastList(size);
+                SerialParallelPerformanceTest.this.basicTestParallelAndSerialGSCollectionsArrayList(size);
+            }
+        });
     }
 
     private void basicTestParallelAndSerialGSCollectionsFastList(int count)

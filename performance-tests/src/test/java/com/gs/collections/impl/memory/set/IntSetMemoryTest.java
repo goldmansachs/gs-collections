@@ -32,7 +32,7 @@ public class IntSetMemoryTest
     @Test
     public void memoryForScaledSets()
     {
-        for (int i = 0; i < 1000001; i += 10000)
+        for (int i = 0; i < 1000001; i += 25000)
         {
             this.memoryForScaledSets(i);
         }

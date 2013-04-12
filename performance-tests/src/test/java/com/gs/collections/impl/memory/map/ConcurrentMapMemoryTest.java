@@ -31,7 +31,7 @@ public class ConcurrentMapMemoryTest
     @Test
     public void memoryForScaledConcurrentMaps()
     {
-        for (int size = 0; size < 1000001; size += 10000)
+        for (int size = 0; size < 1000001; size += 25000)
         {
             this.memoryForScaledConcurrentMaps(size);
         }
