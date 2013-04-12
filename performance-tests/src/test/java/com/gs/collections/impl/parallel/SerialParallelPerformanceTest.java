@@ -122,7 +122,7 @@ public class SerialParallelPerformanceTest
         {
             public void value(int each)
             {
-                words.add(RandomStringUtils.randomAlphabetic(7));
+                words.add(RandomStringUtils.randomAlphabetic(5).toLowerCase());
             }
         });
         return words;
