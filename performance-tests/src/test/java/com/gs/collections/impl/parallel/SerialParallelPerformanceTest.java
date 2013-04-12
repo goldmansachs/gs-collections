@@ -17,10 +17,8 @@
 package com.gs.collections.impl.parallel;
 
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.List;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.Executor;
 import java.util.concurrent.ExecutorService;
@@ -33,7 +31,7 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.list.MutableList;
-import com.gs.collections.api.list.primitive.IntList;
+import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
@@ -56,7 +54,7 @@ public class SerialParallelPerformanceTest
 
     private static final int WARM_UP_COUNT = Integer.parseInt(System.getProperty("WarmupCount", "100"));
     private static final int PARALLEL_RUN_COUNT = Integer.parseInt(System.getProperty("ParallelRunCount", "100"));
-    private static final int SERIAL_RUN_COUNT = Integer.parseInt(System.getProperty("SerialRunCount", "100"));
+    private static final int SERIAL_RUN_COUNT = Integer.parseInt(System.getProperty("Serial**RunCount", "100"));
     private static final int NUMBER_OF_USER_THREADS = Integer.parseInt(System.getProperty("UserThreads", "1"));
 
     private static final int VERY_SMALL_COUNT = 10 * SCALE_FACTOR;
@@ -134,56 +132,38 @@ public class SerialParallelPerformanceTest
     public void tearDown()
     {
         System.gc();
+        System.gc();
         Thread.yield();
         System.gc();
         Thread.yield();
     }
 
-    @Test
-    public void parallelAndSerialGSCollections()
+    public void printMachineAndTestConfiguration()
     {
         System.out.println("Available Processors: " + Runtime.getRuntime().availableProcessors());
         System.out.println("Default Thread Pool Size: " + ParallelIterate.getDefaultMaxThreadPoolSize());
         System.out.println("Default Task Count: " + ParallelIterate.getDefaultTaskCount());
         System.out.println("Warm up count: " + WARM_UP_COUNT);
         System.out.println("Parallel Run Count: " + PARALLEL_RUN_COUNT);
-        System.out.println("Serial Run Count: " + SERIAL_RUN_COUNT);
+        System.out.println("Serial** Run Count: " + SERIAL_RUN_COUNT);
         System.out.println("Number of User Threads: " + NUMBER_OF_USER_THREADS);
-    }
-
-    private void basicTestParallelAndSerialGSCollectionsArrayList(int count)
-    {
-        List<Integer> arrayList = new ArrayList<Integer>(Interval.oneTo(count));
-        Collections.shuffle(arrayList);
-        ArrayList<String> words = new ArrayList<String>(this.generateWords(count));
-        Collections.shuffle(words);
-        this.basicSerialAndParallelGSCollectionsPerformanceComparison(arrayList, words);
     }
 
     @Test
     public void parallelAndSerialTest()
     {
-        this.basicTestParallelAndSerialGSCollectionsArrayList(100); // Warm everything up
+        this.printMachineAndTestConfiguration();
         this.basicTestParallelAndSerialGSCollectionsFastList(100);  // Warm everything up
-        this.basicTestParallelAndSerialGSCollectionsFastList(100);  // Warm everything up
-        this.basicTestParallelAndSerialGSCollectionsArrayList(100); // Warm everything up
-        IntList sizes = IntArrayList.newListWith(VERY_SMALL_COUNT, SMALL_COUNT, MEDIUM_COUNT, LARGE_COUNT);
-        sizes.forEach(new IntProcedure()
-        {
-            public void value(int size)
-            {
-                SerialParallelPerformanceTest.this.basicTestParallelAndSerialGSCollectionsArrayList(size);
-                SerialParallelPerformanceTest.this.basicTestParallelAndSerialGSCollectionsFastList(size);
-            }
-        });
-        sizes.forEach(new IntProcedure()
+        MutableIntList sizes = IntArrayList.newListWith(LARGE_COUNT, MEDIUM_COUNT, SMALL_COUNT, VERY_SMALL_COUNT);
+        IntProcedure procedure = new IntProcedure()
         {
             public void value(int size)
             {
                 SerialParallelPerformanceTest.this.basicTestParallelAndSerialGSCollectionsFastList(size);
-                SerialParallelPerformanceTest.this.basicTestParallelAndSerialGSCollectionsArrayList(size);
             }
-        });
+        };
+        sizes.forEach(procedure);
+        sizes.reverseThis().forEach(procedure);
     }
 
     private void basicTestParallelAndSerialGSCollectionsFastList(int count)
@@ -202,46 +182,37 @@ public class SerialParallelPerformanceTest
         Predicate<Integer> operation3 = IntegerPredicates.isEven().and(IntegerPredicates.isPositive());
         MutableList<Predicate<Integer>> predicates = FastList.newListWith(operation1, operation2, operation3);
 
-        this.basicTestParallelGSCollections(collection, words, predicates);
-        this.basicTestGSCollections(collection, words, predicates);
+        this.basicSerialSelectPerformance(collection, predicates, SERIAL_RUN_COUNT);
+        this.basicParallelSelectPerformance(collection, predicates, PARALLEL_RUN_COUNT);
+
+        this.basicSerialRejectPerformance(collection, predicates, SERIAL_RUN_COUNT);
+        this.basicParallelRejectPerformance(collection, predicates, PARALLEL_RUN_COUNT);
+
+        this.basicSerialCountPerformance(collection, predicates, SERIAL_RUN_COUNT);
+        this.basicParallelCountPerformance(collection, predicates, PARALLEL_RUN_COUNT);
+
+        this.basicSerialCollectIfPerformance(collection, predicates, SERIAL_RUN_COUNT);
+        this.basicParallelCollectIfPerformance(collection, predicates, PARALLEL_RUN_COUNT);
+
+        this.basicSerialCollectPerformance(collection, SERIAL_RUN_COUNT);
+        this.basicParallelCollectPerformance(collection, PARALLEL_RUN_COUNT);
+
+        this.basicSerialGroupByPerformance(words, SERIAL_RUN_COUNT);
+        this.basicParallelGroupByPerformance(words, PARALLEL_RUN_COUNT);
+
+        this.basicSerialAggregateInPlaceByPerformance(words, SERIAL_RUN_COUNT);
+        this.basicParallelAggregateInPlaceByPerformance(words, PARALLEL_RUN_COUNT);
+
+        this.basicSerialAggregateByPerformance(words, SERIAL_RUN_COUNT);
+        this.basicParallelAggregateByPerformance(words, PARALLEL_RUN_COUNT);
     }
 
-    private void basicTestGSCollections(
-            Iterable<Integer> iterable,
-            Iterable<String> words,
-            MutableList<Predicate<Integer>> predicateList)
-    {
-        this.basicGSCollectionsSelectPerformance(iterable, predicateList, SERIAL_RUN_COUNT);
-        this.basicGSCollectionsRejectPerformance(iterable, predicateList, SERIAL_RUN_COUNT);
-        this.basicGSCollectionsCountPerformance(iterable, predicateList, SERIAL_RUN_COUNT);
-        this.basicGSCollectionsCollectIfPerformance(iterable, predicateList, SERIAL_RUN_COUNT);
-        this.basicGSCollectionsCollectPerformance(iterable, SERIAL_RUN_COUNT);
-        this.basicGSCollectionsGroupByPerformance(words, SERIAL_RUN_COUNT);
-        this.basicGSCollectionsAggregateInPlaceByPerformance(words, SERIAL_RUN_COUNT);
-        this.basicGSCollectionsAggregateByPerformance(words, SERIAL_RUN_COUNT);
-    }
-
-    private void basicTestParallelGSCollections(
-            Iterable<Integer> iterable,
-            Iterable<String> words,
-            MutableList<Predicate<Integer>> predicates)
-    {
-        this.basicParallelGSCollectionsSelectPerformance(iterable, predicates, PARALLEL_RUN_COUNT);
-        this.basicParallelGSCollectionsRejectPerformance(iterable, predicates, PARALLEL_RUN_COUNT);
-        this.basicParallelGSCollectionsCountPerformance(iterable, predicates, PARALLEL_RUN_COUNT);
-        this.basicParallelGSCollectionsCollectIfPerformance(iterable, predicates, PARALLEL_RUN_COUNT);
-        this.basicParallelGSCollectionsCollectPerformance(iterable, PARALLEL_RUN_COUNT);
-        this.basicParallelGSCollectionsGroupByPerformance(words, PARALLEL_RUN_COUNT);
-        this.basicParallelGSCollectionsAggregateInPlaceByPerformance(words, PARALLEL_RUN_COUNT);
-        this.basicParallelGSCollectionsAggregateByPerformance(words, PARALLEL_RUN_COUNT);
-    }
-
-    private double basicGSCollectionsSelectPerformance(
+    private double basicSerialSelectPerformance(
             final Iterable<Integer> iterable,
             final MutableList<Predicate<Integer>> predicateList,
             int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("GSCollections Select: "
+        return TimeKeeper.logAverageMillisecondsToRunInParallel("Serial** Select: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + Iterate.sizeOf(iterable), new Runnable()
@@ -255,12 +226,12 @@ public class SerialParallelPerformanceTest
         }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
     }
 
-    private double basicParallelGSCollectionsSelectPerformance(
+    private double basicParallelSelectPerformance(
             final Iterable<Integer> iterable,
             final MutableList<Predicate<Integer>> predicateList,
             int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("ParallelGSCollections Select: "
+        return TimeKeeper.logAverageMillisecondsToRunInParallel("Parallel Select: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + Iterate.sizeOf(iterable), new Runnable()
@@ -291,12 +262,12 @@ public class SerialParallelPerformanceTest
         return collection.getClass().getSimpleName();
     }
 
-    private double basicGSCollectionsCountPerformance(
+    private double basicSerialCountPerformance(
             final Iterable<Integer> iterable,
             final MutableList<Predicate<Integer>> predicateList,
             int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("GSCollections Count: "
+        return TimeKeeper.logAverageMillisecondsToRunInParallel("Serial** Count: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + Iterate.sizeOf(iterable), new Runnable()
@@ -310,12 +281,12 @@ public class SerialParallelPerformanceTest
         }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
     }
 
-    private double basicParallelGSCollectionsCountPerformance(
+    private double basicParallelCountPerformance(
             final Iterable<Integer> iterable,
             final MutableList<Predicate<Integer>> predicateList,
             int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("ParallelGSCollections Count: "
+        return TimeKeeper.logAverageMillisecondsToRunInParallel("Parallel Count: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + Iterate.sizeOf(iterable), new Runnable()
@@ -329,12 +300,12 @@ public class SerialParallelPerformanceTest
         }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
     }
 
-    private double basicGSCollectionsRejectPerformance(
+    private double basicSerialRejectPerformance(
             final Iterable<Integer> iterable,
             final MutableList<Predicate<Integer>> predicateList,
             int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("GSCollections Reject: "
+        return TimeKeeper.logAverageMillisecondsToRunInParallel("Serial** Reject: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + Iterate.sizeOf(iterable), new Runnable()
@@ -348,12 +319,12 @@ public class SerialParallelPerformanceTest
         }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
     }
 
-    private double basicParallelGSCollectionsRejectPerformance(
+    private double basicParallelRejectPerformance(
             final Iterable<Integer> iterable,
             final MutableList<Predicate<Integer>> predicateList,
             int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("ParallelGSCollections Reject: "
+        return TimeKeeper.logAverageMillisecondsToRunInParallel("Parallel Reject: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + Iterate.sizeOf(iterable), new Runnable()
@@ -379,12 +350,12 @@ public class SerialParallelPerformanceTest
         }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
     }
 
-    private double basicParallelGSCollectionsCollectIfPerformance(
+    private double basicParallelCollectIfPerformance(
             final Iterable<Integer> iterable,
             final MutableList<Predicate<Integer>> predicates,
             int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("ParallelGSCollections CollectIf: "
+        return TimeKeeper.logAverageMillisecondsToRunInParallel("Parallel CollectIf: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + Iterate.sizeOf(iterable), new Runnable()
@@ -413,12 +384,12 @@ public class SerialParallelPerformanceTest
         }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
     }
 
-    private double basicGSCollectionsCollectIfPerformance(
+    private double basicSerialCollectIfPerformance(
             final Iterable<Integer> iterable,
             final MutableList<Predicate<Integer>> predicates,
             int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("GSCollections CollectIf: "
+        return TimeKeeper.logAverageMillisecondsToRunInParallel("Serial** CollectIf: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + Iterate.sizeOf(iterable), new Runnable()
@@ -444,11 +415,11 @@ public class SerialParallelPerformanceTest
         }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
     }
 
-    private double basicGSCollectionsCollectPerformance(
+    private double basicSerialCollectPerformance(
             final Iterable<Integer> iterable,
             int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("GSCollections Collect: "
+        return TimeKeeper.logAverageMillisecondsToRunInParallel("Serial** Collect: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + Iterate.sizeOf(iterable), new Runnable()
@@ -472,13 +443,13 @@ public class SerialParallelPerformanceTest
         }, count, 10, 1);
     }
 
-    private double basicGSCollectionsGroupByPerformance(
+    private double basicSerialGroupByPerformance(
             final Iterable<String> iterable,
             int count)
     {
         Assert.assertEquals(HashBagMultimap.newMultimap(ParallelIterate.groupBy(iterable, ALPHAGRAM_FUNCTION)),
                 HashBagMultimap.newMultimap(Iterate.groupBy(iterable, ALPHAGRAM_FUNCTION)));
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("GSCollections GroupBy: "
+        return TimeKeeper.logAverageMillisecondsToRunInParallel("Serial** GroupBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + Iterate.sizeOf(iterable), new Runnable()
@@ -492,14 +463,14 @@ public class SerialParallelPerformanceTest
         }, count, 10, 1);
     }
 
-    private double basicGSCollectionsAggregateInPlaceByPerformance(
+    private double basicSerialAggregateInPlaceByPerformance(
             final Iterable<String> iterable,
             int count)
     {
         Assert.assertEquals(
                 ParallelIterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, AtomicIntegerWithEquals.NEW_INSTANCE, AtomicIntegerWithEquals.INCREMENT),
                 Iterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, AtomicIntegerWithEquals.NEW_INSTANCE, AtomicIntegerWithEquals.INCREMENT));
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("GSCollections AggregateInPlaceBy: "
+        return TimeKeeper.logAverageMillisecondsToRunInParallel("Serial** AggregateInPlaceBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + Iterate.sizeOf(iterable), new Runnable()
@@ -516,14 +487,14 @@ public class SerialParallelPerformanceTest
         }, count, 10, 1);
     }
 
-    private double basicGSCollectionsAggregateByPerformance(
+    private double basicSerialAggregateByPerformance(
             final Iterable<String> iterable,
             int count)
     {
         Assert.assertEquals(
                 ParallelIterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR),
                 Iterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR));
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("GSCollections AggregateBy: "
+        return TimeKeeper.logAverageMillisecondsToRunInParallel("Serial** AggregateBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + Iterate.sizeOf(iterable), new Runnable()
@@ -540,9 +511,9 @@ public class SerialParallelPerformanceTest
         }, count, 10, 1);
     }
 
-    private double basicParallelGSCollectionsCollectPerformance(final Iterable<Integer> iterable, int count)
+    private double basicParallelCollectPerformance(final Iterable<Integer> iterable, int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("ParallelGSCollections Collect: "
+        return TimeKeeper.logAverageMillisecondsToRunInParallel("Parallel Collect: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + Iterate.sizeOf(iterable), new Runnable()
@@ -568,11 +539,11 @@ public class SerialParallelPerformanceTest
         }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
     }
 
-    private double basicParallelGSCollectionsGroupByPerformance(final Iterable<String> iterable, int count)
+    private double basicParallelGroupByPerformance(final Iterable<String> iterable, int count)
     {
         Assert.assertEquals(HashBagMultimap.newMultimap(ParallelIterate.groupBy(iterable, ALPHAGRAM_FUNCTION)),
                 HashBagMultimap.newMultimap(Iterate.groupBy(iterable, ALPHAGRAM_FUNCTION)));
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("ParallelGSCollections GroupBy: "
+        return TimeKeeper.logAverageMillisecondsToRunInParallel("Parallel GroupBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + Iterate.sizeOf(iterable), new Runnable()
@@ -586,12 +557,12 @@ public class SerialParallelPerformanceTest
         }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
     }
 
-    private double basicParallelGSCollectionsAggregateInPlaceByPerformance(final Iterable<String> iterable, int count)
+    private double basicParallelAggregateInPlaceByPerformance(final Iterable<String> iterable, int count)
     {
         Assert.assertEquals(
                 ParallelIterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, AtomicIntegerWithEquals.NEW_INSTANCE, AtomicIntegerWithEquals.INCREMENT),
                 Iterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, AtomicIntegerWithEquals.NEW_INSTANCE, AtomicIntegerWithEquals.INCREMENT));
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("ParallelGSCollections AggregateInPlaceBy: "
+        return TimeKeeper.logAverageMillisecondsToRunInParallel("Parallel AggregateInPlaceBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + Iterate.sizeOf(iterable), new Runnable()
@@ -608,12 +579,12 @@ public class SerialParallelPerformanceTest
         }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
     }
 
-    private double basicParallelGSCollectionsAggregateByPerformance(final Iterable<String> iterable, int count)
+    private double basicParallelAggregateByPerformance(final Iterable<String> iterable, int count)
     {
         Assert.assertEquals(
                 ParallelIterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR),
                 Iterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR));
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("ParallelGSCollections AggregateBy: "
+        return TimeKeeper.logAverageMillisecondsToRunInParallel("Parallel AggregateBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + Iterate.sizeOf(iterable), new Runnable()
