@@ -1,0 +1,514 @@
+import "copyright.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+
+isTest() ::= "true"
+
+targetPath() ::= "com/gs/collections/impl/collection/mutable/primitive"
+
+fileName(primitive) ::= "AbstractSynchronized<primitive.name>CollectionTestCase"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.wrapperName, primitive.name)>
+>>
+
+body(type, wrapperName, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.collection.mutable.primitive;
+
+import java.util.NoSuchElementException;
+
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
+import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
+import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
+import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
+import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
+import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
+import com.gs.collections.impl.test.Verify;
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * This file was automatically generated from template file abstractSynchronizedPrimitiveCollectionTestCase.stg.
+ */
+public abstract class AbstractSynchronized<name>CollectionTestCase
+{
+    protected abstract Mutable<name>Collection classUnderTest();
+
+    protected abstract Mutable<name>Collection classUnderTestWithLock();
+
+    protected abstract Mutable<name>Collection getEmptyCollection();
+
+    protected abstract Mutable<name>Collection getEmptyUnSynchronizedCollection();
+
+    protected abstract MutableCollection\<<wrapperName>\> getEmptyObjectCollection();
+
+    protected abstract Mutable<name>Collection newWith(<type>... elements);
+
+    protected abstract Mutable<name>Collection newUnSynchronizedCollectionWith(<type>... elements);
+
+    protected abstract MutableCollection\<<wrapperName>\> newObjectCollectionWith(<wrapperName>... elements);
+    
+    @Test
+    public void newCollectionWith()
+    {
+        Mutable<name>Collection collection = this.classUnderTest();
+        Verify.assertSize(3, collection);
+        Assert.assertTrue(collection.containsAll(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
+    }
+     
+    @Test
+    public void newCollection()
+    {
+        Assert.assertEquals(this.newUnSynchronizedCollectionWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), this.classUnderTest());
+    }
+    
+    @Test
+    public void isEmpty()
+    {
+        Verify.assertEmpty(this.getEmptyCollection());
+        Verify.assertNotEmpty(this.classUnderTest());
+    }
+
+    @Test
+    public void notEmpty()
+    {
+        Assert.assertFalse(this.getEmptyCollection().notEmpty());
+        Assert.assertTrue(this.classUnderTest().notEmpty());
+    }
+
+    @Test
+    public void clear()
+    {
+        Mutable<name>Collection collection = this.classUnderTest();
+        collection.clear();
+        Verify.assertSize(0, collection);
+        Assert.assertFalse(collection.contains(<(literal.(type))("0")>));
+        Assert.assertFalse(collection.contains(<(literal.(type))("1")>));
+        Assert.assertFalse(collection.contains(<(literal.(type))("2")>));
+        Assert.assertFalse(collection.contains(<(literal.(type))("3")>));
+    }
+
+    @Test
+    public void containsAllArray()
+    {
+        Mutable<name>Collection collection = this.classUnderTest();
+        Assert.assertTrue(collection.containsAll(<(literal.(type))("1")>));
+        Assert.assertTrue(collection.containsAll(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
+        Assert.assertFalse(collection.containsAll(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">));
+        Assert.assertFalse(collection.containsAll(<["1", "2", "4"]:(literal.(type))(); separator=", ">));
+        Assert.assertFalse(collection.containsAll(<["4", "5", "6"]:(literal.(type))(); separator=", ">));
+    }
+
+    @Test
+    public void containsAllIterable()
+    {
+        Mutable<name>Collection collection = this.classUnderTest();
+        Assert.assertTrue(this.getEmptyCollection().containsAll(new <name>ArrayList()));
+        Assert.assertFalse(this.getEmptyCollection().containsAll(<name>ArrayList.newListWith(<(literal.(type))("1")>)));
+        Assert.assertTrue(collection.containsAll(<name>ArrayList.newListWith(<(literal.(type))("1")>)));
+        Assert.assertTrue(collection.containsAll(<name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">)));
+        Assert.assertFalse(collection.containsAll(<name>ArrayList.newListWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">)));
+        Assert.assertFalse(collection.containsAll(<name>ArrayList.newListWith(<["1", "2", "4"]:(literal.(type))(); separator=", ">)));
+        Assert.assertFalse(collection.containsAll(<name>ArrayList.newListWith(<["4", "5", "6"]:(literal.(type))(); separator=", ">)));
+    }
+
+    @Test
+    public void add()
+    {
+        Mutable<name>Collection emptyList = this.getEmptyCollection();
+        Assert.assertTrue(emptyList.add(<(literal.(type))("1")>));
+        Assert.assertEquals(this.newUnSynchronizedCollectionWith(<(literal.(type))("1")>), emptyList);
+        Mutable<name>Collection collection = this.classUnderTest();
+        Assert.assertTrue(collection.add(<(literal.(type))("4")>));
+        Assert.assertEquals(this.newUnSynchronizedCollectionWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">), collection);
+    }
+
+    @Test
+    public void addAllArray()
+    {
+        Mutable<name>Collection collection = this.classUnderTest();
+        Assert.assertFalse(collection.addAll());
+        Assert.assertTrue(collection.addAll(<["4", "5", "6"]:(literal.(type))(); separator=", ">));
+        Assert.assertEquals(this.newUnSynchronizedCollectionWith(<["1", "2", "3", "4", "5", "6"]:(literal.(type))(); separator=", ">), collection);
+    }
+
+    @Test
+    public void addAllIterable()
+    {
+        Mutable<name>Collection collection = this.classUnderTest();    
+        Assert.assertFalse(collection.addAll(this.getEmptyUnSynchronizedCollection()));
+        Assert.assertTrue(collection.addAll(this.newUnSynchronizedCollectionWith(<["4", "5", "6"]:(literal.(type))(); separator=", ">)));
+        Assert.assertEquals(this.newUnSynchronizedCollectionWith(<["1", "2", "3", "4", "5", "6"]:(literal.(type))(); separator=", ">), collection);
+    }
+
+    @Test
+    public void remove()
+    {
+        Mutable<name>Collection collection = this.classUnderTest();
+        Assert.assertFalse(collection.remove(<(literal.(type))("-1")>));
+        Assert.assertEquals(this.newUnSynchronizedCollectionWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), collection);
+        Assert.assertTrue(collection.remove(<(literal.(type))("3")>));
+        Assert.assertEquals(this.newUnSynchronizedCollectionWith(<["1", "2"]:(literal.(type))(); separator=", ">), collection);
+    }
+
+    @Test
+    public void removeAll()
+    {
+        Mutable<name>Collection collection = this.classUnderTest();    
+        Assert.assertFalse(collection.removeAll());
+        Assert.assertFalse(collection.removeAll(<(literal.(type))("-1")>));
+        Assert.assertEquals(this.newUnSynchronizedCollectionWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), collection);
+        Assert.assertTrue(collection.removeAll(<["1", "5"]:(literal.(type))(); separator=", ">));
+        Assert.assertEquals(this.newUnSynchronizedCollectionWith(<["2", "3"]:(literal.(type))(); separator=", ">), collection);
+        Assert.assertTrue(collection.removeAll(<["3", "2"]:(literal.(type))(); separator=", ">));
+        Assert.assertEquals(this.getEmptyUnSynchronizedCollection(), collection);
+    }
+
+    @Test
+    public void removeAllIterable()
+    {
+        Mutable<name>Collection collection = this.classUnderTest();        
+        Assert.assertFalse(collection.removeAll(this.getEmptyUnSynchronizedCollection()));
+        Assert.assertFalse(collection.removeAll(this.newUnSynchronizedCollectionWith(<(literal.(type))("-1")>)));
+        Assert.assertEquals(this.newUnSynchronizedCollectionWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), collection);
+        Assert.assertTrue(collection.removeAll(this.newUnSynchronizedCollectionWith(<["1", "5"]:(literal.(type))(); separator=", ">)));
+        Assert.assertEquals(this.newUnSynchronizedCollectionWith(<["2", "3"]:(literal.(type))(); separator=", ">), collection);
+    }
+
+    @Test
+    public void with()
+    {
+        Mutable<name>Collection arrayList = this.getEmptyCollection().with(<["1"]:(literal.(type))(); separator=", ">);
+        Assert.assertEquals(this.newUnSynchronizedCollectionWith(<(literal.(type))("1")>), arrayList);
+    }
+    
+    @Test
+    public void withAll()
+    {
+        Mutable<name>Collection arrayList = this.getEmptyCollection().withAll(this.newUnSynchronizedCollectionWith(<(literal.(type))("1")>));
+        Mutable<name>Collection arrayList0 = this.getEmptyCollection().withAll(this.newUnSynchronizedCollectionWith(<["1", "2"]:(literal.(type))(); separator=", ">));
+        Mutable<name>Collection arrayList1 = this.getEmptyCollection().withAll(this.newUnSynchronizedCollectionWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
+        Mutable<name>Collection arrayList2 = this.getEmptyCollection().withAll(this.newUnSynchronizedCollectionWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">));
+        Mutable<name>Collection arrayList3 = this.getEmptyCollection().withAll(this.newUnSynchronizedCollectionWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">));
+        Assert.assertEquals(this.newUnSynchronizedCollectionWith(<(literal.(type))("1")>), arrayList);
+        Assert.assertEquals(this.newUnSynchronizedCollectionWith(<["1", "2"]:(literal.(type))(); separator=", ">), arrayList0);
+        Assert.assertEquals(this.classUnderTest(), arrayList1);
+        Assert.assertEquals(this.newUnSynchronizedCollectionWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">), arrayList2);
+        Assert.assertEquals(this.newUnSynchronizedCollectionWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">), arrayList3);
+    }
+
+    @Test
+    public void without()
+    {
+        Mutable<name>Collection mainArrayList = this.newWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
+        Assert.assertEquals(this.newUnSynchronizedCollectionWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">), mainArrayList.without(<(literal.(type))("9")>));
+        Assert.assertEquals(this.newUnSynchronizedCollectionWith(<["2", "3", "4", "5"]:(literal.(type))(); separator=", ">), mainArrayList.without(<(literal.(type))("1")>));
+        Assert.assertEquals(this.newUnSynchronizedCollectionWith(<["3", "4", "5"]:(literal.(type))(); separator=", ">), mainArrayList.without(<(literal.(type))("2")>));
+        Assert.assertEquals(this.newUnSynchronizedCollectionWith(<["4", "5"]:(literal.(type))(); separator=", ">), mainArrayList.without(<(literal.(type))("3")>));
+        Assert.assertEquals(this.newUnSynchronizedCollectionWith(<(literal.(type))("5")>), mainArrayList.without(<(literal.(type))("4")>));
+        Assert.assertEquals(this.getEmptyUnSynchronizedCollection(), mainArrayList.without(<(literal.(type))("5")>));
+        Assert.assertEquals(this.getEmptyUnSynchronizedCollection(), mainArrayList.without(<(literal.(type))("6")>));
+    }
+
+    @Test
+    public void withoutAll()
+    {
+        Mutable<name>Collection mainArrayList = this.newWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
+        Assert.assertEquals(this.newUnSynchronizedCollectionWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">), mainArrayList.withoutAll(this.newUnSynchronizedCollectionWith(<["8", "9",]:(literal.(type))(); separator=", ">)));
+        Assert.assertEquals(this.newUnSynchronizedCollectionWith(<["2", "3", "4"]:(literal.(type))(); separator=", ">), mainArrayList.withoutAll(this.newUnSynchronizedCollectionWith(<["1", "5",]:(literal.(type))(); separator=", ">)));
+        Assert.assertEquals(this.newUnSynchronizedCollectionWith(<["3", "4",]:(literal.(type))(); separator=", ">), mainArrayList.withoutAll(this.newUnSynchronizedCollectionWith(<["2", "20",]:(literal.(type))(); separator=", ">)));
+        Assert.assertEquals(this.getEmptyUnSynchronizedCollection(), mainArrayList.withoutAll(this.newUnSynchronizedCollectionWith(<["3", "4",]:(literal.(type))(); separator=", ">)));
+        Assert.assertEquals(this.getEmptyUnSynchronizedCollection(), mainArrayList.withoutAll(this.newUnSynchronizedCollectionWith(<(literal.(type))("9")>)));
+    }
+
+    @Test
+    public abstract void iterator();
+
+    @Test(expected = NoSuchElementException.class)
+    public void iterator_throws()
+    {
+        <name>Iterator iterator = this.classUnderTest().<type>Iterator();
+        while (iterator.hasNext())
+        {
+            iterator.next();
+        }
+
+        iterator.next();
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void iterator_throws_non_empty_list()
+    {
+        Mutable<name>Collection collection = this.getEmptyCollection();
+        collection.add(<(literal.(type))("1")>);
+        collection.add(<(literal.(type))("2")>);
+        collection.add(<(literal.(type))("3")>);
+        <name>Iterator iterator = collection.<type>Iterator();
+        while (iterator.hasNext())
+        {
+            iterator.next();
+        }
+        iterator.next();
+    }
+
+    @Test
+    public void forEach()
+    {
+        final <wideType.(type)>[] sum = new <wideType.(type)>[1];
+        this.classUnderTest().forEach(new <name>Procedure()
+        {
+            public void value(<type> each)
+            {
+                sum[0] += each;
+            }
+        });
+
+        Assert.assertEquals(<(wideLiteral.(type))("6")>, sum[0]<(wideDelta.(type))>);
+    }
+
+    @Test
+    public void size()
+    {
+        Verify.assertSize(0, this.getEmptyCollection());
+        Verify.assertSize(3, this.classUnderTest());
+    }
+
+    @Test
+    public void count()
+    {
+        Assert.assertEquals(2L, this.newWith(<["1", "0", "2"]:(literal.(type))(); separator=", ">).count(<name>Predicates.greaterThan(<zero.(type)>)));
+    }
+
+    @Test
+    public void anySatisfy()
+    {
+        Assert.assertTrue(this.newWith(<["1", "-1", "2"]:(literal.(type))(); separator=", ">).anySatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
+        Assert.assertFalse(this.newWith(<["1", "-1", "2"]:(literal.(type))(); separator=", ">).anySatisfy(<name>Predicates.equal(<(literal.(type))("0")>)));
+    }
+
+    @Test
+    public void allSatisfy()
+    {
+        Assert.assertFalse(this.newWith(<["1", "0", "2"]:(literal.(type))(); separator=", ">).allSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
+        Assert.assertTrue(this.newWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">).allSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
+    }
+
+    @Test
+    public void noneSatisfy()
+    {
+        Assert.assertFalse(this.newWith(<["1", "0", "2"]:(literal.(type))(); separator=", ">).noneSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
+        Assert.assertTrue(this.newWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">).noneSatisfy(<name>Predicates.greaterThan(<(literal.(type))("3")>)));
+    }
+    
+    @Test
+    public void collect()
+    {
+        Assert.assertEquals(this.newObjectCollectionWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">), this.classUnderTest().collect(new <name>ToObjectFunction\<<wrapperName>\>()
+        {
+            public <wrapperName> valueOf(<type> parameter)
+            {
+                return <(castIntToNarrowType.(type))("parameter - 1")>;
+            }
+        }));
+    }
+
+    @Test
+    public void select()
+    {
+        Mutable<name>Collection collection = this.classUnderTest();
+        Verify.assertSize(3, collection.select(<name>Predicates.lessThan(<(literal.(type))("4")>)));
+        Verify.assertSize(2, collection.select(<name>Predicates.lessThan(<(literal.(type))("3")>)));
+    }
+
+    @Test
+    public void reject()
+    {
+        Mutable<name>Collection collection = this.classUnderTest();
+        Verify.assertSize(0, collection.reject(<name>Predicates.lessThan(<(literal.(type))("4")>)));
+        Verify.assertSize(1, collection.reject(<name>Predicates.lessThan(<(literal.(type))("3")>)));
+    }
+
+    @Test
+    public void detectIfNone()
+    {
+        Mutable<name>Collection collection = this.classUnderTest();
+        Assert.assertEquals(<(wideLiteral.(type))("1")>, collection.detectIfNone(<name>Predicates.lessThan(<(literal.(type))("4")>), <(literal.(type))("0")>)<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("0")>, collection.detectIfNone(<name>Predicates.greaterThan(<(literal.(type))("3")>), <(literal.(type))("0")>)<(wideDelta.(type))>);
+    }
+
+    @Test
+    public void max()
+    {
+        Assert.assertEquals(<(wideLiteral.(type))("9")>, this.newWith(<["1", "0", "9", "7"]:(literal.(type))(); separator=", ">).max()<(wideDelta.(type))>);
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void max_throws_emptyList()
+    {
+        this.getEmptyCollection().max();
+    }
+
+    @Test
+    public void min()
+    {
+        Assert.assertEquals(<(wideLiteral.(type))("0")>, this.newWith(<["1", "0", "9", "7"]:(literal.(type))(); separator=", ">).min()<(wideDelta.(type))>);
+    }
+
+    @Test(expected = NoSuchElementException.class)
+    public void min_throws_emptyList()
+    {
+        this.getEmptyCollection().min();
+    }
+
+    @Test
+    public void minIfEmpty()
+    {
+        Assert.assertEquals(<(wideLiteral.(type))("5")>, this.getEmptyCollection().minIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("0")>, this.getEmptyCollection().minIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("0")>, this.newWith(<["1", "0", "9", "7"]:(literal.(type))(); separator=", ">).minIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
+    }
+
+    @Test
+    public void maxIfEmpty()
+    {
+        Assert.assertEquals(<(wideLiteral.(type))("5")>, this.getEmptyCollection().maxIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("0")>, this.getEmptyCollection().maxIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("9")>, this.newWith(<["1", "0", "9", "7"]:(literal.(type))(); separator=", ">).maxIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
+    }
+
+    @Test
+    public void sum()
+    {
+        Assert.assertEquals(<(wideLiteral.(type))("10")>, this.newWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">).sum()<(wideDelta.(type))>);
+    }
+
+    @Test
+    public void average()
+    {
+        Assert.assertEquals(2.5, this.newWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">).average(), 0.0);
+    }
+
+    @Test(expected = ArithmeticException.class)
+    public void averageThrowsOnEmpty()
+    {
+        this.getEmptyCollection().average();
+    }
+
+    @Test
+    public void median()
+    {
+        Assert.assertEquals(2.5, this.newWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">).median(), 0.0);
+        Assert.assertEquals(3.0, this.newWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">).median(), 0.0);
+    }
+
+    @Test(expected = ArithmeticException.class)
+    public void medianThrowsOnEmpty()
+    {
+        this.getEmptyCollection().median();
+    }
+
+    @Test
+    public void toArray()
+    {
+        Assert.assertArrayEquals(new <type>[]{<["1", "2", "4", "3"]:(literal.(type))(); separator=", ">},
+                this.newWith(<["1", "2", "4", "3"]:(literal.(type))(); separator=", ">).toArray()<(delta.(type))>);
+
+    }
+
+    @Test
+    public void toSortedArray()
+    {
+        Assert.assertArrayEquals(new <type>[]{<["1", "3", "7", "9"]:(literal.(type))(); separator=", ">},
+                this.newWith(<["3", "1", "9", "7"]:(literal.(type))(); separator=", ">).toSortedArray()<(delta.(type))>);
+    }
+
+    @Test
+    public void testEquals()
+    {
+        Mutable<name>Collection list1 = this.newWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">);
+        Mutable<name>Collection list2 = this.newWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">);
+        Mutable<name>Collection list3 = this.newWith(<["4", "3", "2", "1"]:(literal.(type))(); separator=", ">);
+        Mutable<name>Collection list4 = this.newWith(<["5", "6", "7", "8"]:(literal.(type))(); separator=", ">);
+        Mutable<name>Collection list5 = this.newWith(<["5", "6", "7"]:(literal.(type))(); separator=", ">);
+
+        Verify.assertEqualsAndHashCode(list1, list2);
+        Verify.assertPostSerializedEqualsAndHashCode(list1);
+        Assert.assertNotEquals(list1, list3);
+        Assert.assertNotEquals(list1, list4);
+        Assert.assertNotEquals(list1, list5);
+    }
+
+    @Test
+    public void testHashCode()
+    {
+        Assert.assertEquals(this.newObjectCollectionWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">).hashCode(),
+                this.newWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">).hashCode());
+        Assert.assertEquals(this.getEmptyObjectCollection().hashCode(), this.getEmptyCollection().hashCode());
+    }
+
+    @Test
+    public void testToString()
+    {
+        Assert.assertEquals("[]", this.getEmptyCollection().toString());
+        Assert.assertEquals("[<(toStringLiteral.(type))("1")>]", this.newWith(<(literal.(type))("1")>).toString());
+    }
+
+    @Test
+    public void makeString()
+    {
+        Mutable<name>Collection collection = this.classUnderTest();
+        Assert.assertEquals("<(toStringLiteral.(type))("1")>", this.newWith(<(literal.(type))("1")>).makeString("/"));
+        Assert.assertEquals(collection.toString(), collection.makeString("[", ", ", "]"));
+        Assert.assertEquals("", this.getEmptyCollection().makeString());
+    }
+
+    @Test
+    public void appendString()
+    {
+        StringBuilder appendable = new StringBuilder();
+        this.getEmptyCollection().appendString(appendable);
+        Assert.assertEquals("", appendable.toString());
+        StringBuilder appendable1 = new StringBuilder();
+        this.newWith(<(literal.(type))("1")>).appendString(appendable1);
+        Assert.assertEquals("<(toStringLiteral.(type))("1")>", appendable1.toString());
+    }
+
+    @Test
+    public void toList()
+    {
+        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), this.classUnderTest().toList());
+    }
+
+    @Test
+    public void toSet()
+    {
+        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), this.classUnderTest().toSet());
+    }
+
+    @Test
+    public void toBag()
+    {
+        Assert.assertEquals(<name>HashBag.newBagWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), this.classUnderTest().toBag());
+    }
+
+    @Test
+    public void asLazy()
+    {
+        Mutable<name>Collection collection = this.classUnderTest();
+        Assert.assertEquals(collection.toList(), collection.asLazy().toList());
+    }
+
+    @Test
+    public void asSynchronized()
+    {
+        Mutable<name>Collection collection = this.classUnderTestWithLock();
+        Assert.assertEquals(collection, collection.asSynchronized());
+    }
+}
+
+>>

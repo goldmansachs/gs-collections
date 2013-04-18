@@ -15,6 +15,8 @@ body(type, name, primitive) ::= <<
 package com.gs.collections.api.collection.primitive;
 
 import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 
 /**
@@ -41,6 +43,8 @@ public interface Mutable<name>Collection extends <name>Iterable
     <sharedAPI(fileName(primitive), name)>
 
     <mutableAPI(fileName(primitive), type, name)>
+
+    \<V>MutableCollection\<V> collect(<name>ToObjectFunction\<? extends V> function);
 
     Mutable<name>Collection asUnmodifiable();
 

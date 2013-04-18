@@ -1,0 +1,284 @@
+import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+
+targetPath() ::= "com/gs/collections/impl/list/mutable/primitive"
+
+fileName(primitive) ::= "Synchronized<primitive.name>List"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.list.mutable.primitive;
+
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.Lazy<name>Iterable;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.Immutable<name>List;
+import com.gs.collections.api.list.primitive.Mutable<name>List;
+import com.gs.collections.impl.collection.mutable.primitive.AbstractSynchronized<name>Collection;
+import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
+/**
+ * This file was automatically generated from template file synchronizedPrimitiveList.stg.
+ *
+ * @since 3.1.
+ */
+@ThreadSafe
+public final class Synchronized<name>List
+        extends AbstractSynchronized<name>Collection
+        implements Mutable<name>List
+{
+    private static final long serialVersionUID = 1L;
+
+    Synchronized<name>List(Mutable<name>List list)
+    {
+        super(list);
+    }
+
+    Synchronized<name>List(Mutable<name>List list, Object newLock)
+    {
+        super(list, newLock);
+    }
+
+    @GuardedBy("getLock()")
+    private Mutable<name>List getMutable<name>List()
+    {
+        return (Mutable<name>List) this.get<name>Collection();
+    }
+
+    public <type> get(int index)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>List().get(index);
+        }
+    }
+
+    public <type> getFirst()
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>List().getFirst();
+        }
+    }
+
+    public <type> getLast()
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>List().getLast();
+        }
+    }
+
+    public int indexOf(<type> value)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>List().indexOf(value);
+        }
+    }
+
+    public int lastIndexOf(<type> value)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>List().lastIndexOf(value);
+        }
+    }
+
+    public void addAtIndex(int index, <type> element)
+    {
+        synchronized (this.getLock())
+        {
+            this.getMutable<name>List().addAtIndex(index, element);
+        }
+    }
+
+    public boolean addAllAtIndex(int index, <type>... source)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>List().addAllAtIndex(index, source);
+        }
+    }
+
+    public boolean addAllAtIndex(int index, <name>Iterable source)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>List().addAllAtIndex(index, source);
+        }
+    }
+
+    public <type> removeAtIndex(int index)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>List().removeAtIndex(index);
+        }
+    }
+
+    public <type> set(int index, <type> element)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>List().set(index, element);
+        }
+    }
+
+    public Synchronized<name>List with(<type> element)
+    {
+        synchronized (this.getLock())
+        {
+            this.getMutable<name>List().add(element);
+        }
+        return this;
+    }
+
+    public Synchronized<name>List without(<type> element)
+    {
+        synchronized (this.getLock())
+        {
+            this.getMutable<name>List().remove(element);
+        }
+        return this;
+    }
+
+    public Synchronized<name>List withAll(<name>Iterable elements)
+    {
+        synchronized (this.getLock())
+        {
+            this.getMutable<name>List().addAll(elements.toArray());
+        }
+        return this;
+    }
+
+    public Synchronized<name>List withoutAll(<name>Iterable elements)
+    {
+        synchronized (this.getLock())
+        {
+            this.getMutable<name>List().removeAll(elements);
+        }
+        return this;
+    }
+
+    public Mutable<name>List select(<name>Predicate predicate)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>List().select(predicate);
+        }
+    }
+
+    public Mutable<name>List reject(<name>Predicate predicate)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>List().reject(predicate);
+        }
+    }
+
+    public \<V> MutableList\<V> collect(<name>ToObjectFunction\<? extends V> function)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>List().collect(function);
+        }
+    }
+
+    <(arithmeticMethods.(type))(name, type)>
+    @Override
+    public boolean equals(Object otherList)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>List().equals(otherList);
+        }
+    }
+
+    @Override
+    public int hashCode()
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>List().hashCode();
+        }
+    }
+
+    public Lazy<name>Iterable asLazy()
+    {
+        synchronized (this.getLock())
+        {
+            return new Lazy<name>IterableAdapter(this);
+        }
+    }
+
+    public Mutable<name>List asUnmodifiable()
+    {
+        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+    }
+
+    public Mutable<name>List asSynchronized()
+    {
+        return this;
+    }
+
+    public Immutable<name>List toImmutable()
+    {
+        throw new UnsupportedOperationException("toImmutable not implemented yet");
+    }
+
+    public Mutable<name>List reverseThis()
+    {
+        synchronized (this.getLock())
+        {
+            this.getMutable<name>List().reverseThis();
+        }
+        return this;
+    }
+
+    public Mutable<name>List toReversed()
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>List().toReversed();
+        }
+    }
+}
+
+>>
+
+arithmeticMethods ::= [
+    "byte": "allMethods",
+    "short": "allMethods",
+    "char": "allMethods",
+    "int": "allMethods",
+    "long": "allMethods",
+    "float": "allMethods",
+    "double": "allMethods",
+    "boolean": "noMethods"
+    ]
+
+allMethods(name, type) ::=<<
+public Mutable<name>List sortThis()
+{
+    synchronized (this.getLock())
+    {
+        this.getMutable<name>List().sortThis();
+    }
+    return this;
+}
+
+>>
+
+noMethods(name, type) ::= ""
