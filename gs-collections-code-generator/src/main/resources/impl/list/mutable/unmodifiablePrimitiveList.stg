@@ -1,0 +1,205 @@
+import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+
+targetPath() ::= "com/gs/collections/impl/list/mutable/primitive"
+
+fileName(primitive) ::= "Unmodifiable<primitive.name>List"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.list.mutable.primitive;
+
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.Lazy<name>Iterable;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.Immutable<name>List;
+import com.gs.collections.api.list.primitive.Mutable<name>List;
+import com.gs.collections.impl.collection.mutable.primitive.AbstractUnmodifiable<name>Collection;
+import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
+import net.jcip.annotations.NotThreadSafe;
+
+/**
+ * This file was automatically generated from template file unmodifiablePrimitiveList.stg.
+ *
+ * @since 3.1.
+ */
+@NotThreadSafe
+public final class Unmodifiable<name>List
+        extends AbstractUnmodifiable<name>Collection
+        implements Mutable<name>List
+{
+    Unmodifiable<name>List(Mutable<name>List list)
+    {
+        super(list);
+    }
+
+    private Mutable<name>List getMutable<name>List()
+    {
+        return (Mutable<name>List) this.get<name>Collection();
+    }
+    
+    public <type> get(int index)
+    {
+        return this.getMutable<name>List().get(index);
+    }
+
+    public <type> getFirst()
+    {
+        return this.getMutable<name>List().getFirst();
+    }
+
+    public <type> getLast()
+    {
+        return this.getMutable<name>List().getLast();
+    }
+
+    public int indexOf(<type> value)
+    {
+        return this.getMutable<name>List().indexOf(value);
+    }
+
+    public int lastIndexOf(<type> value)
+    {
+        return this.getMutable<name>List().lastIndexOf(value);
+    }
+
+    public void addAtIndex(int index, <type> element)
+    {
+        throw new UnsupportedOperationException("Cannot call addAtIndex on an unmodifiable collection");
+    }
+
+    public boolean addAllAtIndex(int index, <type>... source)
+    {
+        throw new UnsupportedOperationException("Cannot call addAllAtIndex on an unmodifiable collection");
+    }
+
+    public boolean addAllAtIndex(int index, <name>Iterable source)
+    {
+        throw new UnsupportedOperationException("Cannot call addAllAtIndex on an unmodifiable collection");
+    }
+
+    public <type> removeAtIndex(int index)
+    {
+        throw new UnsupportedOperationException("Cannot call removeAtIndex on an unmodifiable collection");
+    }
+
+    public <type> set(int index, <type> element)
+    {
+        throw new UnsupportedOperationException("Cannot call set on an unmodifiable collection");
+    }
+
+    public Unmodifiable<name>List with(<type> element)
+    {
+        throw new UnsupportedOperationException("Cannot call with on an unmodifiable collection");
+    }
+
+    public Unmodifiable<name>List without(<type> element)
+    {
+        throw new UnsupportedOperationException("Cannot call without on an unmodifiable collection");
+    }
+
+    public Unmodifiable<name>List withAll(<name>Iterable elements)
+    {
+        throw new UnsupportedOperationException("Cannot call withAll on an unmodifiable collection");
+    }
+
+    public Unmodifiable<name>List withoutAll(<name>Iterable elements)
+    {
+        throw new UnsupportedOperationException("Cannot call withoutAll on an unmodifiable collection");
+    }
+
+    public Mutable<name>List select(<name>Predicate predicate)
+    {
+        return this.getMutable<name>List().select(predicate);
+    }
+
+    public Mutable<name>List reject(<name>Predicate predicate)
+    {
+        return this.getMutable<name>List().reject(predicate);
+    }
+
+    public \<V> MutableList\<V> collect(<name>ToObjectFunction\<? extends V> function)
+    {
+        return this.getMutable<name>List().collect(function);
+    }
+
+    <(arithmeticMethods.(type))(name, type)>
+    public <type>[] toArray()
+    {
+        return this.getMutable<name>List().toArray();
+    }
+
+    @Override
+    public boolean equals(Object otherList)
+    {
+        return this.getMutable<name>List().equals(otherList);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return this.getMutable<name>List().hashCode();
+    }
+
+    public Lazy<name>Iterable asLazy()
+    {
+        return new Lazy<name>IterableAdapter(this);
+    }
+
+    public Mutable<name>List asUnmodifiable()
+    {
+        return this;
+    }
+
+    public Mutable<name>List asSynchronized()
+    {
+        return new Synchronized<name>List(this);
+    }
+
+    public Immutable<name>List toImmutable()
+    {
+        throw new UnsupportedOperationException("toImmutable not implemented yet");
+    }
+
+    public Mutable<name>List reverseThis()
+    {
+        throw new UnsupportedOperationException("Cannot call reverseThis on an unmodifiable collection");
+    }
+
+    public Mutable<name>List toReversed()
+    {
+        return this.getMutable<name>List().toReversed();
+    }
+}
+
+>>
+
+arithmeticMethods ::= [
+    "byte": "allMethods",
+    "short": "allMethods",
+    "char": "allMethods",
+    "int": "allMethods",
+    "long": "allMethods",
+    "float": "allMethods",
+    "double": "allMethods",
+    "boolean": "noMethods"
+    ]
+
+allMethods(name, type) ::=<<
+public Mutable<name>List sortThis()
+{
+    throw new UnsupportedOperationException("Cannot call sortThis on an unmodifiable collection");
+}
+
+>>
+
+noMethods(name, type) ::= ""

@@ -16,68 +16,68 @@
 
 package com.gs.collections.impl.list.mutable.primitive;
 
-import java.util.NoSuchElementException;
-
-import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
-import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
+import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
-import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
-import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
+import com.gs.collections.impl.collection.mutable.primitive.AbstractUnmodifiableBooleanCollectionTestCase;
 import com.gs.collections.impl.list.mutable.FastList;
-import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
-import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * JUnit test for {@link UnmodifiableBooleanList}.
  */
-public class UnmodifiableBooleanListTest
+public class UnmodifiableBooleanListTest extends AbstractUnmodifiableBooleanCollectionTestCase
 {
-    private final MutableBooleanList list = new UnmodifiableBooleanList(BooleanArrayList.newListWith(true, false, true));
-
-    @Test
-    public void newListWith()
+    @Override
+    protected final MutableBooleanList classUnderTest()
     {
-        Verify.assertSize(3, this.list);
-        Assert.assertTrue(this.list.containsAll(true, false, true));
+        return new UnmodifiableBooleanList(BooleanArrayList.newListWith(true, false, true));
     }
 
-    @Test
-    public void newList()
+    @Override
+    protected MutableBooleanList getEmptyCollection()
     {
-        Assert.assertEquals(BooleanArrayList.newListWith(true, false, true), BooleanArrayList.newList(this.list));
+        return new UnmodifiableBooleanList(new BooleanArrayList());
     }
 
-    @Test
-    public void isEmpty()
+    @Override
+    protected MutableBooleanList getEmptyModifiableCollection()
     {
-        Verify.assertEmpty(new UnmodifiableBooleanList(new BooleanArrayList()));
-        Verify.assertNotEmpty(this.list);
+        return new BooleanArrayList();
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void clear()
+    @Override
+    protected MutableCollection<Boolean> getEmptyObjectCollection()
     {
-        this.list.clear();
+        return FastList.newList();
     }
 
-    @Test
-    public void containsAllArray()
+    @Override
+    protected MutableBooleanList newWith(boolean... elements)
     {
-        Assert.assertTrue(this.list.containsAll(true));
-        Assert.assertTrue(this.list.containsAll(true, false, true));
+        return new UnmodifiableBooleanList(BooleanArrayList.newListWith(elements));
     }
 
-    @Test
-    public void containsAllIterable()
+    @Override
+    protected MutableBooleanList newModifiableCollectionWith(boolean... elements)
     {
-        Assert.assertTrue(new UnmodifiableBooleanList(new BooleanArrayList()).containsAll(new BooleanArrayList()));
-        Assert.assertFalse(new UnmodifiableBooleanList(new BooleanArrayList()).containsAll(BooleanArrayList.newListWith(true)));
-        Assert.assertTrue(this.list.containsAll(BooleanArrayList.newListWith(true)));
-        Assert.assertTrue(this.list.containsAll(BooleanArrayList.newListWith(true, false, true)));
+        return BooleanArrayList.newListWith(elements);
     }
+
+    @Override
+    protected MutableCollection<Object> newObjectCollectionWith(Object... elements)
+    {
+        return FastList.newListWith(elements);
+    }
+
+    @Override
+    protected MutableBooleanList newSynchronizedCollectionWith(boolean... elements)
+    {
+        return new SynchronizedBooleanList(BooleanArrayList.newListWith(elements));
+    }
+
+    private final MutableBooleanList list = this.classUnderTest();
 
     @Test
     public void get()
@@ -146,13 +146,6 @@ public class UnmodifiableBooleanListTest
     }
 
     @Test(expected = UnsupportedOperationException.class)
-    public void add()
-    {
-        MutableBooleanList emptyList = new UnmodifiableBooleanList(new BooleanArrayList());
-        emptyList.add(true);
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
     public void addAtIndex()
     {
         MutableBooleanList emptyList = new UnmodifiableBooleanList(new BooleanArrayList());
@@ -173,18 +166,6 @@ public class UnmodifiableBooleanListTest
     }
 
     @Test(expected = UnsupportedOperationException.class)
-    public void addAllArray()
-    {
-        this.list.addAll(true, false, true);
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void addAllIterable()
-    {
-        this.list.addAll(new BooleanArrayList());
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
     public void addAll_throws_index_negative()
     {
         this.list.addAllAtIndex(-1, true, true);
@@ -197,21 +178,15 @@ public class UnmodifiableBooleanListTest
     }
 
     @Test(expected = UnsupportedOperationException.class)
-    public void remove()
+    public void addAllIterable_throws_index_negative()
     {
-        this.list.remove(false);
+        this.list.addAllAtIndex(-1, BooleanArrayList.newListWith(true, true));
     }
 
     @Test(expected = UnsupportedOperationException.class)
-    public void removeAll()
+    public void addAllIterable_throws_index_greater_than_size()
     {
-        this.list.removeAll(true, false);
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void removeAllIterable()
-    {
-        this.list.removeAll(new BooleanArrayList());
+        this.list.addAllAtIndex(5, BooleanArrayList.newListWith(true, true));
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -239,41 +214,7 @@ public class UnmodifiableBooleanListTest
         this.list.set(1, true);
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void with()
-    {
-        new UnmodifiableBooleanList(new BooleanArrayList()).with(true);
-    }
-
-    @Test
-    public void withAll()
-    {
-        MutableBooleanList arrayList = new UnmodifiableBooleanList(new BooleanArrayList().withAll(BooleanArrayList.newListWith(true)));
-        MutableBooleanList arrayList0 = new UnmodifiableBooleanList(new BooleanArrayList().withAll(BooleanArrayList.newListWith(true, false)));
-        MutableBooleanList arrayList1 = new UnmodifiableBooleanList(new BooleanArrayList().withAll(BooleanArrayList.newListWith(true, false, true)));
-        MutableBooleanList arrayList2 = new UnmodifiableBooleanList(new BooleanArrayList().withAll(BooleanArrayList.newListWith(true, false, true, false)));
-        MutableBooleanList arrayList3 = new UnmodifiableBooleanList(new BooleanArrayList().withAll(BooleanArrayList.newListWith(true, false, true, false, true)));
-        Assert.assertEquals(BooleanArrayList.newListWith(true), arrayList);
-        Assert.assertEquals(BooleanArrayList.newListWith(true, false), arrayList0);
-        Assert.assertEquals(this.list, arrayList1);
-        Assert.assertEquals(BooleanArrayList.newListWith(true, false, true, false), arrayList2);
-        Assert.assertEquals(BooleanArrayList.newListWith(true, false, true, false, true), arrayList3);
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void without()
-    {
-        MutableBooleanList mainArrayList = new UnmodifiableBooleanList(new BooleanArrayList(true, false, true, false, true));
-        mainArrayList.without(true);
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void withoutAll()
-    {
-        MutableBooleanList mainArrayList = new UnmodifiableBooleanList(new BooleanArrayList(true, false, true, false, true));
-        mainArrayList.withoutAll(BooleanArrayList.newListWith(false, false));
-    }
-
+    @Override
     @Test
     public void iterator()
     {
@@ -285,127 +226,6 @@ public class UnmodifiableBooleanListTest
         Assert.assertTrue(iterator.hasNext());
         Assert.assertTrue(iterator.next());
         Assert.assertFalse(iterator.hasNext());
-    }
-
-    @Test(expected = NoSuchElementException.class)
-    public void iterator_throws()
-    {
-        BooleanIterator iterator = this.list.booleanIterator();
-        while (iterator.hasNext())
-        {
-            iterator.next();
-        }
-
-        iterator.next();
-    }
-
-    @Test(expected = NoSuchElementException.class)
-    public void iterator_throws_non_empty_list()
-    {
-        MutableBooleanList arrayList = new UnmodifiableBooleanList(new BooleanArrayList().with(true).with(true).with(true));
-        BooleanIterator iterator = arrayList.booleanIterator();
-        while (iterator.hasNext())
-        {
-            iterator.next();
-        }
-        iterator.next();
-    }
-
-    @Test
-    public void forEach()
-    {
-        final long[] sum = new long[1];
-        this.list.forEach(new BooleanProcedure()
-        {
-            public void value(boolean each)
-            {
-                sum[0] += each ? 1 : 0;
-            }
-        });
-
-        Assert.assertEquals(2L, sum[0]);
-    }
-
-    @Test
-    public void size()
-    {
-        Verify.assertSize(0, new UnmodifiableBooleanList(new BooleanArrayList()));
-        Verify.assertSize(3, this.list);
-    }
-
-    @Test
-    public void empty()
-    {
-        Assert.assertTrue(this.list.notEmpty());
-        Verify.assertNotEmpty(this.list);
-    }
-
-    @Test
-    public void count()
-    {
-        Assert.assertEquals(2L, new UnmodifiableBooleanList(BooleanArrayList.newListWith(true, false, true)).count(BooleanPredicates.isTrue()));
-    }
-
-    @Test
-    public void anySatisfy()
-    {
-        Assert.assertTrue(new UnmodifiableBooleanList(BooleanArrayList.newListWith(true)).anySatisfy(BooleanPredicates.isTrue()));
-        Assert.assertFalse(new UnmodifiableBooleanList(BooleanArrayList.newListWith(false)).anySatisfy(BooleanPredicates.isTrue()));
-    }
-
-    @Test
-    public void allSatisfy()
-    {
-        Assert.assertFalse(new UnmodifiableBooleanList(BooleanArrayList.newListWith(true, false)).allSatisfy(BooleanPredicates.isTrue()));
-        Assert.assertTrue(new UnmodifiableBooleanList(BooleanArrayList.newListWith(true, true, true)).allSatisfy(BooleanPredicates.isTrue()));
-    }
-
-    @Test
-    public void noneSatisfy()
-    {
-        Assert.assertTrue(new UnmodifiableBooleanList(BooleanArrayList.newListWith(true, true)).noneSatisfy(BooleanPredicates.isFalse()));
-        Assert.assertFalse(new UnmodifiableBooleanList(BooleanArrayList.newListWith(true, true)).noneSatisfy(BooleanPredicates.isTrue()));
-    }
-
-    @Test
-    public void select()
-    {
-        Verify.assertSize(2, this.list.select(BooleanPredicates.isTrue()));
-        Verify.assertSize(1, this.list.select(BooleanPredicates.isFalse()));
-    }
-
-    @Test
-    public void reject()
-    {
-        Verify.assertSize(1, this.list.reject(BooleanPredicates.isTrue()));
-        Verify.assertSize(2, this.list.reject(BooleanPredicates.isFalse()));
-    }
-
-    @Test
-    public void detectIfNone()
-    {
-        Assert.assertFalse(this.list.detectIfNone(BooleanPredicates.isFalse(), true));
-        Assert.assertTrue(this.list.detectIfNone(BooleanPredicates.and(BooleanPredicates.isTrue(), BooleanPredicates.isFalse()), true));
-    }
-
-    @Test
-    public void collect()
-    {
-        Assert.assertEquals(FastList.newListWith(1, 0, 1), this.list.collect(new BooleanToObjectFunction<Object>()
-        {
-            public Object valueOf(boolean value)
-            {
-                return Integer.valueOf(value ? 1 : 0);
-            }
-        }));
-    }
-
-    @Test
-    public void toArray()
-    {
-        Assert.assertEquals(BooleanArrayList.newListWith(true, false, true, false),
-                BooleanArrayList.newListWith(new UnmodifiableBooleanList(BooleanArrayList.newListWith(true, false, true, false)).toArray()));
-
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -428,53 +248,28 @@ public class UnmodifiableBooleanListTest
                 new UnmodifiableBooleanList(BooleanArrayList.newListWith(false, false, true, false, true)).toReversed());
     }
 
-    @Test
-    public void testEquals()
-    {
-        MutableBooleanList list1 = new UnmodifiableBooleanList(BooleanArrayList.newListWith(true, false, true, false));
-        MutableBooleanList list2 = new UnmodifiableBooleanList(BooleanArrayList.newListWith(true, false, true, false));
-        MutableBooleanList list3 = new UnmodifiableBooleanList(BooleanArrayList.newListWith(false, true, false, true));
-        MutableBooleanList list4 = new UnmodifiableBooleanList(BooleanArrayList.newListWith(false, false, true, true));
-        MutableBooleanList list5 = new UnmodifiableBooleanList(BooleanArrayList.newListWith(true, true, true));
-
-        Verify.assertEqualsAndHashCode(list1, list2);
-        Verify.assertPostSerializedEqualsAndHashCode(list1);
-        Assert.assertNotEquals(list1, list3);
-        Assert.assertNotEquals(list1, list4);
-        Assert.assertNotEquals(list1, list5);
-    }
-
-    @Test
-    public void testHashCode()
-    {
-        Assert.assertEquals(FastList.newListWith(true, false, true).hashCode(),
-                new UnmodifiableBooleanList(BooleanArrayList.newListWith(true, false, true)).hashCode());
-        Assert.assertEquals(FastList.newList().hashCode(), new UnmodifiableBooleanList(new BooleanArrayList()).hashCode());
-    }
-
+    @Override
     @Test
     public void testToString()
     {
+        super.testToString();
         Assert.assertEquals("[true, false, true]", this.list.toString());
-        Assert.assertEquals("[]", new UnmodifiableBooleanList(new BooleanArrayList()).toString());
     }
 
+    @Override
     @Test
     public void makeString()
     {
+        super.makeString();
         Assert.assertEquals("true, false, true", this.list.makeString());
-        Assert.assertEquals("true", new UnmodifiableBooleanList(BooleanArrayList.newListWith(true)).makeString("/"));
         Assert.assertEquals("true/false/true", this.list.makeString("/"));
-        Assert.assertEquals(this.list.toString(), this.list.makeString("[", ", ", "]"));
-        Assert.assertEquals("", new UnmodifiableBooleanList(new BooleanArrayList()).makeString());
     }
 
+    @Override
     @Test
     public void appendString()
     {
-        StringBuilder appendable = new StringBuilder();
-        new BooleanArrayList().appendString(appendable);
-        Assert.assertEquals("", appendable.toString());
+        super.appendString();
         StringBuilder appendable2 = new StringBuilder();
         this.list.appendString(appendable2);
         Assert.assertEquals("true, false, true", appendable2.toString());
@@ -484,29 +279,5 @@ public class UnmodifiableBooleanListTest
         StringBuilder appendable4 = new StringBuilder();
         this.list.appendString(appendable4, "[", ", ", "]");
         Assert.assertEquals(this.list.toString(), appendable4.toString());
-    }
-
-    @Test
-    public void toList()
-    {
-        Assert.assertEquals(BooleanArrayList.newListWith(true, false, true), this.list.toList());
-    }
-
-    @Test
-    public void toSet()
-    {
-        Assert.assertEquals(BooleanHashSet.newSetWith(true, false, true), this.list.toSet());
-    }
-
-    @Test
-    public void toBag()
-    {
-        Assert.assertEquals(BooleanHashBag.newBagWith(true, false, true), this.list.toBag());
-    }
-
-    @Test
-    public void asLazy()
-    {
-        Assert.assertEquals(this.list.toList(), this.list.asLazy().toList());
     }
 }
