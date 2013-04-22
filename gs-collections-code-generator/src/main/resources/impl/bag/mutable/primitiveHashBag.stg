@@ -260,7 +260,7 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
 
     public boolean addAll(<type>... source)
     {
-        if (source.length \< 1)
+        if (source.length == 0)
         {
             return false;
         }
