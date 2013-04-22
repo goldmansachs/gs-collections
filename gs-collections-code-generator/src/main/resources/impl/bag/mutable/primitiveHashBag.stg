@@ -161,6 +161,7 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
     public void clear()
     {
         this.items.clear();
+        this.size = 0;
     }
 
     public <name>HashBag with(<type> element)

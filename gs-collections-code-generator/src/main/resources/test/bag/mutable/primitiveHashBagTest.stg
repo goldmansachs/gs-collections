@@ -131,6 +131,7 @@ public class <name>HashBagTest
     {
         <name>HashBag bag = <name>HashBag.newBagWith(<["0", "1", "1", "2", "2", "2"]:(literal.(type))(); separator=", ">);
         bag.clear();
+        Verify.assertSize(0, bag);
         Assert.assertEquals(new <name>HashBag(), bag);
     }
 
