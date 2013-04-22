@@ -258,6 +258,11 @@ public final class BooleanHashBag implements MutableBooleanBag, Externalizable
 
     public boolean addAll(boolean... source)
     {
+        if (source.length < 1)
+        {
+            return false;
+        }
+
         for (boolean each : source)
         {
             this.add(each);

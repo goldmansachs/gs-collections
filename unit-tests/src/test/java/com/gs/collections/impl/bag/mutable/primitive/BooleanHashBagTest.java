@@ -170,6 +170,7 @@ public class BooleanHashBagTest
     public void addAll()
     {
         BooleanHashBag bag = new BooleanHashBag();
+        Assert.assertFalse(bag.addAll());
         Assert.assertTrue(bag.addAll(BooleanArrayList.newListWith(true, false, true, false, true)));
         Assert.assertFalse(bag.addAll(new BooleanArrayList()));
         Assert.assertEquals(BooleanHashBag.newBagWith(true, false, true, false, true), bag);

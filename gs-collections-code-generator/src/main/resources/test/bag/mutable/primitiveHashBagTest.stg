@@ -138,6 +138,7 @@ public class <name>HashBagTest
     public void addAll()
     {
         <name>HashBag bag = new <name>HashBag();
+        Assert.assertFalse(bag.addAll());
         Assert.assertTrue(bag.addAll(<name>ArrayList.newListWith(<["1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">)));
         Assert.assertFalse(bag.addAll(new <name>ArrayList()));
         Assert.assertEquals(<name>HashBag.newBagWith(<["1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">), bag);

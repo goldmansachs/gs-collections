@@ -260,6 +260,11 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
 
     public boolean addAll(<type>... source)
     {
+        if (source.length \< 1)
+        {
+            return false;
+        }
+
         for (<type> each : source)
         {
             this.add(each);
