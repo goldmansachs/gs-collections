@@ -1,0 +1,162 @@
+import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+
+targetPath() ::= "com/gs/collections/impl/set/mutable/primitive"
+
+fileName(primitive) ::= "Synchronized<primitive.name>Set"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.set.mutable.primitive;
+
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.Lazy<name>Iterable;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.set.primitive.Immutable<name>Set;
+import com.gs.collections.api.set.primitive.Mutable<name>Set;
+import com.gs.collections.impl.collection.mutable.primitive.AbstractSynchronized<name>Collection;
+import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
+/**
+ * This file was automatically generated from template file synchronizedPrimitiveSet.stg.
+ *
+ * @since 3.1.
+ */
+@ThreadSafe
+public final class Synchronized<name>Set
+        extends AbstractSynchronized<name>Collection
+        implements Mutable<name>Set
+{
+    private static final long serialVersionUID = 1L;
+
+    public Synchronized<name>Set(Mutable<name>Set set)
+    {
+        super(set);
+    }
+
+    public Synchronized<name>Set(Mutable<name>Set set, Object newLock)
+    {
+        super(set, newLock);
+    }
+
+    @GuardedBy("getLock()")
+    private Mutable<name>Set getMutable<name>Set()
+    {
+        return (Mutable<name>Set) this.get<name>Collection();
+    }
+
+    public Synchronized<name>Set with(<type> element)
+    {
+        synchronized (this.getLock())
+        {
+            this.getMutable<name>Set().add(element);
+        }
+        return this;
+    }
+
+    public Synchronized<name>Set without(<type> element)
+    {
+        synchronized (this.getLock())
+        {
+            this.getMutable<name>Set().remove(element);
+        }
+        return this;
+    }
+
+    public Synchronized<name>Set withAll(<name>Iterable elements)
+    {
+        synchronized (this.getLock())
+        {
+            this.getMutable<name>Set().addAll(elements.toArray());
+        }
+        return this;
+    }
+
+    public Synchronized<name>Set withoutAll(<name>Iterable elements)
+    {
+        synchronized (this.getLock())
+        {
+            this.getMutable<name>Set().removeAll(elements);
+        }
+        return this;
+    }
+
+    public Mutable<name>Set select(<name>Predicate predicate)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>Set().select(predicate);
+        }
+    }
+
+    public Mutable<name>Set reject(<name>Predicate predicate)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>Set().reject(predicate);
+        }
+    }
+
+    public \<V> MutableSet\<V> collect(<name>ToObjectFunction\<? extends V> function)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>Set().collect(function);
+        }
+    }
+
+    @Override
+    public boolean equals(Object otherSet)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>Set().equals(otherSet);
+        }
+    }
+
+    @Override
+    public int hashCode()
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>Set().hashCode();
+        }
+    }
+
+    public Lazy<name>Iterable asLazy()
+    {
+        synchronized (this.getLock())
+        {
+            return new Lazy<name>IterableAdapter(this);
+        }
+    }
+
+    public Mutable<name>Set asUnmodifiable()
+    {
+        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+    }
+
+    public Mutable<name>Set asSynchronized()
+    {
+        return this;
+    }
+
+    public Immutable<name>Set toImmutable()
+    {
+        throw new UnsupportedOperationException("toImmutable not implemented yet");
+    }
+
+}
+
+>>

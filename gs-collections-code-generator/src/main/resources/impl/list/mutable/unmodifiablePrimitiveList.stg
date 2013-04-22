@@ -133,11 +133,6 @@ public final class Unmodifiable<name>List
     }
 
     <(arithmeticMethods.(type))(name, type)>
-    public <type>[] toArray()
-    {
-        return this.getMutable<name>List().toArray();
-    }
-
     @Override
     public boolean equals(Object otherList)
     {

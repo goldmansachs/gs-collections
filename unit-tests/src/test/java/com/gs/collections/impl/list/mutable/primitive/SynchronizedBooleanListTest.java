@@ -16,6 +16,8 @@
 
 package com.gs.collections.impl.list.mutable.primitive;
 
+import java.util.Arrays;
+
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
 import com.gs.collections.api.iterator.BooleanIterator;
@@ -278,6 +280,28 @@ public class SynchronizedBooleanListTest extends AbstractSynchronizedBooleanColl
 
     @Override
     @Test
+    public void toArray()
+    {
+        super.toArray();
+        Assert.assertTrue(Arrays.equals(new boolean[]{true, false, true, false},
+                this.newWith(true, false, true, false).toArray()));
+    }
+
+    @Override
+    @Test
+    public void testEquals()
+    {
+        super.testEquals();
+        MutableBooleanCollection list1 = this.newWith(true, false, true, false);
+        MutableBooleanCollection list2 = this.newWith(false, true, false, true);
+        MutableBooleanCollection list3 = this.newWith(false, false, true, true);
+
+        Assert.assertNotEquals(list1, list2);
+        Assert.assertNotEquals(list1, list3);
+    }
+
+    @Override
+    @Test
     public void testToString()
     {
         super.testToString();
@@ -289,6 +313,7 @@ public class SynchronizedBooleanListTest extends AbstractSynchronizedBooleanColl
     public void makeString()
     {
         super.makeString();
+        Assert.assertEquals(this.list.toString(), this.list.makeString("[", ", ", "]"));
         Assert.assertEquals("true, false, true", this.list.makeString());
         Assert.assertEquals("true/false/true", this.list.makeString("/"));
     }
@@ -307,5 +332,13 @@ public class SynchronizedBooleanListTest extends AbstractSynchronizedBooleanColl
         StringBuilder appendable4 = new StringBuilder();
         this.list.appendString(appendable4, "[", ", ", "]");
         Assert.assertEquals(this.list.toString(), appendable4.toString());
+    }
+
+    @Override
+    @Test
+    public void toList()
+    {
+        super.toList();
+        Assert.assertEquals(BooleanArrayList.newListWith(true, false, true), this.classUnderTest().toList());
     }
 }

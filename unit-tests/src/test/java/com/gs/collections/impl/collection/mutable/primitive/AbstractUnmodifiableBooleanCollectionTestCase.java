@@ -297,23 +297,19 @@ public abstract class AbstractUnmodifiableBooleanCollectionTestCase
     @Test
     public void toArray()
     {
-        Assert.assertTrue(Arrays.equals(new boolean[]{true, false, true, false},
-                this.newWith(true, false, true, false).toArray()));
+        Assert.assertTrue(Arrays.equals(new boolean[]{false, true}, this.newWith(true, false).toArray())
+                || Arrays.equals(new boolean[]{true, false}, this.newWith(true, false).toArray()));
     }
 
     @Test
     public void testEquals()
     {
-        MutableBooleanCollection list1 = this.newWith(true, false, true, false);
-        MutableBooleanCollection list2 = this.newWith(true, false, true, false);
-        MutableBooleanCollection list3 = this.newWith(false, true, false, true);
-        MutableBooleanCollection list4 = this.newWith(false, false, true, true);
-        MutableBooleanCollection list5 = this.newWith(true, true, true);
+        MutableBooleanCollection collection1 = this.newWith(true, false, true, false);
+        MutableBooleanCollection collection2 = this.newWith(true, false, true, false);
+        MutableBooleanCollection collection3 = this.newWith(true, true, true);
 
-        Verify.assertEqualsAndHashCode(list1, list2);
-        Assert.assertNotEquals(list1, list3);
-        Assert.assertNotEquals(list1, list4);
-        Assert.assertNotEquals(list1, list5);
+        Verify.assertEqualsAndHashCode(collection1, collection2);
+        Assert.assertNotEquals(collection1, collection3);
     }
 
     @Test
@@ -329,6 +325,9 @@ public abstract class AbstractUnmodifiableBooleanCollectionTestCase
     {
         Assert.assertEquals("[]", this.getEmptyCollection().toString());
         Assert.assertEquals("[true]", this.newWith(true).toString());
+        MutableBooleanCollection collection = this.newWith(true, false);
+        Assert.assertTrue("[true, false]".equals(collection.toString())
+                || "[false, true]".equals(collection.toString()));
     }
 
     @Test
@@ -336,8 +335,14 @@ public abstract class AbstractUnmodifiableBooleanCollectionTestCase
     {
         MutableBooleanCollection collection = this.classUnderTest();
         Assert.assertEquals("true", this.newWith(true).makeString("/"));
-        Assert.assertEquals(collection.toString(), collection.makeString("[", ", ", "]"));
         Assert.assertEquals("", this.getEmptyCollection().makeString());
+        MutableBooleanCollection collection1 = this.newWith(true, false);
+        Assert.assertTrue("true, false".equals(collection1.makeString())
+                || "false, true".equals(collection1.makeString()));
+        Assert.assertTrue(collection1.makeString("/"), "true/false".equals(collection1.makeString("/"))
+                || "false/true".equals(collection1.makeString("/")));
+        Assert.assertTrue(collection1.makeString("[", "/", "]"), "[true/false]".equals(collection1.makeString("[", "/", "]"))
+                || "[false/true]".equals(collection1.makeString("[", "/", "]")));
     }
 
     @Test
@@ -349,12 +354,26 @@ public abstract class AbstractUnmodifiableBooleanCollectionTestCase
         StringBuilder appendable1 = new StringBuilder();
         this.newWith(true).appendString(appendable1);
         Assert.assertEquals("true", appendable1.toString());
+        StringBuilder appendable2 = new StringBuilder();
+        MutableBooleanCollection collection = this.newWith(true, false);
+        collection.appendString(appendable2);
+        Assert.assertTrue("true, false".equals(appendable2.toString())
+                || "false, true".equals(appendable2.toString()));
+        StringBuilder appendable3 = new StringBuilder();
+        collection.appendString(appendable3, "/");
+        Assert.assertTrue("true/false".equals(appendable3.toString())
+                || "false/true".equals(appendable3.toString()));
+        StringBuilder appendable4 = new StringBuilder();
+        collection.appendString(appendable4, "[", ", ", "]");
+        Assert.assertEquals(collection.toString(), appendable4.toString());
     }
 
     @Test
     public void toList()
     {
-        Assert.assertEquals(BooleanArrayList.newListWith(true, false, true), this.classUnderTest().toList());
+        MutableBooleanCollection collection = this.newWith(true, false);
+        Assert.assertTrue(BooleanArrayList.newListWith(false, true).equals(collection.toList())
+                || BooleanArrayList.newListWith(true, false).equals(collection.toList()));
     }
 
     @Test
