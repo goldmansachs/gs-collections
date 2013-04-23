@@ -166,6 +166,7 @@ public class HashBag<T>
     public void clear()
     {
         this.items.clear();
+        this.size = 0;
     }
 
     public HashBag<T> with(T element)

@@ -636,6 +636,7 @@ public abstract class AbstractCollectionTestCase
     {
         MutableCollection<Integer> objects = this.newWith(1, 2, 3);
         objects.clear();
+        Verify.assertSize(0, objects);
         Verify.assertEmpty(objects);
         objects.clear();
         Verify.assertEmpty(objects);
