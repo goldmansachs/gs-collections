@@ -1,0 +1,204 @@
+import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+
+targetPath() ::= "com/gs/collections/impl/bag/mutable/primitive"
+
+fileName(primitive) ::= "Synchronized<primitive.name>Bag"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.bag.mutable.primitive;
+
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.Lazy<name>Iterable;
+import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.primitive.Immutable<name>Bag;
+import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
+import com.gs.collections.impl.collection.mutable.primitive.AbstractSynchronized<name>Collection;
+import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
+import net.jcip.annotations.GuardedBy;
+import net.jcip.annotations.ThreadSafe;
+
+/**
+ * This file was automatically generated from template file synchronizedPrimitiveBag.stg.
+ *
+ * @since 3.1.
+ */
+@ThreadSafe
+public final class Synchronized<name>Bag
+        extends AbstractSynchronized<name>Collection
+        implements Mutable<name>Bag
+{
+    private static final long serialVersionUID = 1L;
+
+    public Synchronized<name>Bag(Mutable<name>Bag bag)
+    {
+        super(bag);
+    }
+
+    public Synchronized<name>Bag(Mutable<name>Bag bag, Object newLock)
+    {
+        super(bag, newLock);
+    }
+
+    @GuardedBy("getLock()")
+    private Mutable<name>Bag getMutable<name>Bag()
+    {
+        return (Mutable<name>Bag) this.get<name>Collection();
+    }
+
+    public Synchronized<name>Bag with(<type> element)
+    {
+        synchronized (this.getLock())
+        {
+            this.getMutable<name>Bag().add(element);
+        }
+        return this;
+    }
+
+    public Synchronized<name>Bag without(<type> element)
+    {
+        synchronized (this.getLock())
+        {
+            this.getMutable<name>Bag().remove(element);
+        }
+        return this;
+    }
+
+    public Synchronized<name>Bag withAll(<name>Iterable elements)
+    {
+        synchronized (this.getLock())
+        {
+            this.getMutable<name>Bag().addAll(elements.toArray());
+        }
+        return this;
+    }
+
+    public Synchronized<name>Bag withoutAll(<name>Iterable elements)
+    {
+        synchronized (this.getLock())
+        {
+            this.getMutable<name>Bag().removeAll(elements);
+        }
+        return this;
+    }
+
+    public void addOccurrences(<type> item, int occurrences)
+    {
+        synchronized (this.getLock())
+        {
+            this.getMutable<name>Bag().addOccurrences(item, occurrences);
+        }
+    }
+
+    public boolean removeOccurrences(<type> item, int occurrences)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>Bag().removeOccurrences(item, occurrences);
+        }
+    }
+
+    public int sizeDistinct()
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>Bag().sizeDistinct();
+        }
+    }
+
+    public int occurrencesOf(<type> item)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>Bag().occurrencesOf(item);
+        }
+    }
+
+    public void forEachWithOccurrences(<name>IntProcedure procedure)
+    {
+        synchronized (this.getLock())
+        {
+            this.getMutable<name>Bag().forEachWithOccurrences(procedure);
+        }
+    }
+
+    public Mutable<name>Bag select(<name>Predicate predicate)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>Bag().select(predicate);
+        }
+    }
+
+    public Mutable<name>Bag reject(<name>Predicate predicate)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>Bag().reject(predicate);
+        }
+    }
+
+    public \<V> MutableBag\<V> collect(<name>ToObjectFunction\<? extends V> function)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>Bag().collect(function);
+        }
+    }
+
+    @Override
+    public boolean equals(Object otherBag)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>Bag().equals(otherBag);
+        }
+    }
+
+    @Override
+    public int hashCode()
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>Bag().hashCode();
+        }
+    }
+
+    public Lazy<name>Iterable asLazy()
+    {
+        synchronized (this.getLock())
+        {
+            return new Lazy<name>IterableAdapter(this);
+        }
+    }
+
+    public Mutable<name>Bag asUnmodifiable()
+    {
+        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+    }
+
+    public Mutable<name>Bag asSynchronized()
+    {
+        return this;
+    }
+
+    public Immutable<name>Bag toImmutable()
+    {
+        throw new UnsupportedOperationException("toImmutable not implemented yet");
+    }
+
+}
+
+>>
+

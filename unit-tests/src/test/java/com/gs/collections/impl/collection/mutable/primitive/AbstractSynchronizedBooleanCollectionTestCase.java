@@ -163,7 +163,7 @@ public abstract class AbstractSynchronizedBooleanCollectionTestCase
         MutableBooleanCollection collection = this.classUnderTest();
         Assert.assertFalse(collection.removeAll());
         Assert.assertTrue(collection.removeAll(true));
-        Assert.assertEquals(this.newUnSynchronizedCollectionWith(false, true), collection);
+        Assert.assertEquals(this.newUnSynchronizedCollectionWith(false), collection);
         Assert.assertTrue(collection.removeAll(false, true));
         Assert.assertEquals(this.getEmptyUnSynchronizedCollection(), collection);
     }

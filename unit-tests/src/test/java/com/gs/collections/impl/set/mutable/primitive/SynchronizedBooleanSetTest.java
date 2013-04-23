@@ -150,18 +150,6 @@ public class SynchronizedBooleanSetTest extends AbstractSynchronizedBooleanColle
 
     @Override
     @Test
-    public void removeAll()
-    {
-        MutableBooleanCollection collection = this.classUnderTest();
-        Assert.assertFalse(collection.removeAll());
-        Assert.assertTrue(collection.removeAll(true));
-        Assert.assertEquals(this.newUnSynchronizedCollectionWith(false), collection);
-        Assert.assertTrue(collection.removeAll(false, true));
-        Assert.assertEquals(this.getEmptyUnSynchronizedCollection(), collection);
-    }
-
-    @Override
-    @Test
     public void without()
     {
         Assert.assertEquals(this.newUnSynchronizedCollectionWith(false), this.set.without(true));

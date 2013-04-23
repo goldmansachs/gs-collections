@@ -208,6 +208,18 @@ public class SynchronizedBooleanListTest extends AbstractSynchronizedBooleanColl
         this.list.addAllAtIndex(5, true, true);
     }
 
+    @Override
+    @Test
+    public void removeAll()
+    {
+        MutableBooleanCollection collection = this.classUnderTest();
+        Assert.assertFalse(collection.removeAll());
+        Assert.assertTrue(collection.removeAll(true));
+        Assert.assertEquals(this.newUnSynchronizedCollectionWith(false, true), collection);
+        Assert.assertTrue(collection.removeAll(false, true));
+        Assert.assertEquals(this.getEmptyUnSynchronizedCollection(), collection);
+    }
+
     @Test
     public void removeAtIndex()
     {
