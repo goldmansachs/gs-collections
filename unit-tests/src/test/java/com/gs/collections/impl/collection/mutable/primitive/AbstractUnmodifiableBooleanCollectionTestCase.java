@@ -309,6 +309,7 @@ public abstract class AbstractUnmodifiableBooleanCollectionTestCase
         MutableBooleanCollection collection3 = this.newWith(true, true, true);
 
         Verify.assertEqualsAndHashCode(collection1, collection2);
+        Verify.assertPostSerializedEqualsAndHashCode(collection1);
         Assert.assertNotEquals(collection1, collection3);
     }
 

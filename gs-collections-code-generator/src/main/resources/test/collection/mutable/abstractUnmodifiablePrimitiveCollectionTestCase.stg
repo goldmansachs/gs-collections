@@ -390,6 +390,7 @@ public abstract class AbstractUnmodifiable<name>CollectionTestCase
         Mutable<name>Collection collection4 = this.newWith(<["5", "6", "7"]:(literal.(type))(); separator=", ">);
 
         Verify.assertEqualsAndHashCode(collection1, collection2);
+        Verify.assertPostSerializedEqualsAndHashCode(collection1);
         Assert.assertNotEquals(collection1, collection3);
         Assert.assertNotEquals(collection1, collection4);
     }

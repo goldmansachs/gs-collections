@@ -16,6 +16,8 @@ body(type, name) ::= <<
 
 package com.gs.collections.impl.collection.mutable.primitive;
 
+import java.io.Serializable;
+
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
@@ -34,8 +36,10 @@ import net.jcip.annotations.ThreadSafe;
  */
 @ThreadSafe
 public abstract class AbstractUnmodifiable<name>Collection
-        implements Mutable<name>Collection
+        implements Mutable<name>Collection, Serializable
 {
+    private static final long serialVersionUID = 1L;
+
     private final Mutable<name>Collection collection;
 
     protected AbstractUnmodifiable<name>Collection(Mutable<name>Collection collection)
