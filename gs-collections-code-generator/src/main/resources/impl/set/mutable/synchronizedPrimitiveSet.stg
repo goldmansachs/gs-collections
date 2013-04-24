@@ -40,12 +40,12 @@ public final class Synchronized<name>Set
 {
     private static final long serialVersionUID = 1L;
 
-    public Synchronized<name>Set(Mutable<name>Set set)
+    Synchronized<name>Set(Mutable<name>Set set)
     {
         super(set);
     }
 
-    public Synchronized<name>Set(Mutable<name>Set set, Object newLock)
+    Synchronized<name>Set(Mutable<name>Set set, Object newLock)
     {
         super(set, newLock);
     }
