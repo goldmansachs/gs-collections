@@ -44,8 +44,6 @@ public interface Mutable<name>Collection extends <name>Iterable
 
     <mutableAPI(fileName(primitive), type, name)>
 
-    \<V>MutableCollection\<V> collect(<name>ToObjectFunction\<? extends V> function);
-
     Mutable<name>Collection asUnmodifiable();
 
     Mutable<name>Collection asSynchronized();
