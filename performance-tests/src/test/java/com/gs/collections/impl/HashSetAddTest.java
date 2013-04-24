@@ -20,10 +20,12 @@ import java.util.HashSet;
 import java.util.Random;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 public class HashSetAddTest
 {
     @Test
+    @Category(PerformanceTests.class)
     public void testHashPutMonomorphic()
     {
         this.runIntegerHashPut("monomorphic");
@@ -73,6 +75,7 @@ public class HashSetAddTest
     }
 
     @Test
+    @Category(PerformanceTests.class)
     public void testHashPutPolymorphic()
     {
         this.runIntegerHashPut("monomorphic");

@@ -22,15 +22,18 @@ import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.list.primitive.IntList;
 import com.gs.collections.api.set.primitive.IntSet;
+import com.gs.collections.impl.MemoryTests;
 import com.gs.collections.impl.map.mutable.primitive.IntIntHashMap;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.memory.TestDataFactory;
 import gnu.trove.map.hash.TIntIntHashMap;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 public class IntIntMapMemoryTest
 {
     @Test
+    @Category(MemoryTests.class)
     public void memoryForScaledMaps()
     {
         for (int size = 0; size < 1000001; size += 25000)

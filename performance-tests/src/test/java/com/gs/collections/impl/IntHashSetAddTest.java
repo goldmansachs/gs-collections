@@ -20,10 +20,12 @@ import java.util.Random;
 
 import com.gs.collections.impl.set.mutable.primitive.IntHashSet;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 public class IntHashSetAddTest
 {
     @Test
+    @Category(PerformanceTests.class)
     public void testHashPut()
     {
         this.runIntHashPut();

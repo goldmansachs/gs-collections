@@ -23,14 +23,17 @@ import java.util.List;
 import com.google.common.collect.ImmutableList;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
+import com.gs.collections.impl.MemoryTests;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.primitive.IntInterval;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 public class ImmutableListMemoryTest
 {
     @Test
+    @Category(MemoryTests.class)
     public void memoryForScaledImmutableLists()
     {
         IntProcedure procedure = new IntProcedure()

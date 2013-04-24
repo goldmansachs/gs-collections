@@ -20,14 +20,17 @@ import com.google.common.collect.HashMultiset;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
+import com.gs.collections.impl.MemoryTests;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.memory.TestDataFactory;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 public class BagMemoryTest
 {
     @Test
+    @Category(MemoryTests.class)
     public void memoryForScaledBags()
     {
         for (int size = 0; size < 1000001; size += 25000)

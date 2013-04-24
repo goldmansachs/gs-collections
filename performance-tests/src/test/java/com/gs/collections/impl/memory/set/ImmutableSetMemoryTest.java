@@ -23,14 +23,17 @@ import java.util.Set;
 import com.google.common.collect.ImmutableSet;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
+import com.gs.collections.impl.MemoryTests;
 import com.gs.collections.impl.list.primitive.IntInterval;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 public class ImmutableSetMemoryTest
 {
     @Test
+    @Category(MemoryTests.class)
     public void memoryForScaledImmutableSets()
     {
         IntProcedure procedure = new IntProcedure()

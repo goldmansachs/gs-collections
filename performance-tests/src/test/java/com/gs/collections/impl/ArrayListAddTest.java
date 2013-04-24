@@ -20,10 +20,12 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 public class ArrayListAddTest
 {
     @Test
+    @Category(PerformanceTests.class)
     public void runArrayListAdd()
     {
         this.runIntegerArrayListAdd("integer");

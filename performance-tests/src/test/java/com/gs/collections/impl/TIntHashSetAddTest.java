@@ -20,10 +20,12 @@ import java.util.Random;
 
 import gnu.trove.set.hash.TIntHashSet;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 public class TIntHashSetAddTest
 {
     @Test
+    @Category(PerformanceTests.class)
     public void testHashPut()
     {
         this.runIntHashPut();

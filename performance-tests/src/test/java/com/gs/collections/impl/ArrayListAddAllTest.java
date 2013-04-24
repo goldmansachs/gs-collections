@@ -23,10 +23,12 @@ import java.util.Random;
 
 import com.gs.collections.impl.list.Interval;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 public class ArrayListAddAllTest
 {
     @Test
+    @Category(PerformanceTests.class)
     public void runArrayListAddAll()
     {
         this.runIntegerArrayListAddAll("integer");

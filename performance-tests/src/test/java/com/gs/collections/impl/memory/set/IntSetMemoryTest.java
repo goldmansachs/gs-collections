@@ -21,15 +21,18 @@ import java.util.HashSet;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.set.primitive.IntSet;
+import com.gs.collections.impl.MemoryTests;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.memory.TestDataFactory;
 import com.gs.collections.impl.set.mutable.primitive.IntHashSet;
 import gnu.trove.set.hash.TIntHashSet;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 public class IntSetMemoryTest
 {
     @Test
+    @Category(MemoryTests.class)
     public void memoryForScaledSets()
     {
         for (int i = 0; i < 1000001; i += 25000)

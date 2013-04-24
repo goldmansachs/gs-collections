@@ -22,13 +22,16 @@ import java.util.LinkedList;
 import java.util.List;
 
 import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.impl.MemoryTests;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 public class ListAddAllMemoryTest
 {
     @Test
+    @Category(MemoryTests.class)
     public void memoryForScaledLists()
     {
         for (int size = 0; size < 1000001; size += 100000)

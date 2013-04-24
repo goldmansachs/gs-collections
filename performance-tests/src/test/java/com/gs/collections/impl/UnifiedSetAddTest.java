@@ -20,16 +20,19 @@ import java.util.Random;
 
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 public class UnifiedSetAddTest
 {
     @Test
+    @Category(PerformanceTests.class)
     public void testUnifiedPutMonomorphic()
     {
         this.runIntegerUnifiedPut("monomorphic");
     }
 
     @Test
+    @Category(PerformanceTests.class)
     public void testUnifiedPutPolymorphic()
     {
         this.runIntegerUnifiedPut("monomorphic");

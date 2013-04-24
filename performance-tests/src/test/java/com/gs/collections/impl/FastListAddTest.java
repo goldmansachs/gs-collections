@@ -20,10 +20,12 @@ import java.util.Random;
 
 import com.gs.collections.impl.list.mutable.FastList;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 public class FastListAddTest
 {
     @Test
+    @Category(PerformanceTests.class)
     public void runFastListAdd()
     {
         this.runIntegerFastListAdd("integer");

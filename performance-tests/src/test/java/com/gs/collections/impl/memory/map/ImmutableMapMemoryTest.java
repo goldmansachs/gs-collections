@@ -23,14 +23,17 @@ import java.util.Map;
 import com.google.common.collect.ImmutableMap;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
+import com.gs.collections.impl.MemoryTests;
 import com.gs.collections.impl.list.primitive.IntInterval;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 public class ImmutableMapMemoryTest
 {
     @Test
+    @Category(MemoryTests.class)
     public void memoryForScaledImmutableMaps()
     {
         IntProcedure procedure = new IntProcedure()

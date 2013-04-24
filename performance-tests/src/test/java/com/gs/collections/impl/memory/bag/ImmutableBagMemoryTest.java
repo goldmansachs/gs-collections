@@ -20,14 +20,17 @@ import com.google.common.collect.ImmutableMultiset;
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
+import com.gs.collections.impl.MemoryTests;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.list.primitive.IntInterval;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 public class ImmutableBagMemoryTest
 {
     @Test
+    @Category(MemoryTests.class)
     public void memoryForScaledImmutableBags()
     {
         IntProcedure procedure = new IntProcedure()

@@ -22,15 +22,18 @@ import java.util.Set;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
+import com.gs.collections.impl.MemoryTests;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.memory.TestDataFactory;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import gnu.trove.set.hash.THashSet;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 public class SetMemoryTest
 {
     @Test
+    @Category(MemoryTests.class)
     public void memoryForScaledSets()
     {
         for (int size = 0; size < 1000001; size += 25000)

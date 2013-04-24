@@ -22,10 +22,12 @@ import java.util.Random;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 public class FastListAddAllTest
 {
     @Test
+    @Category(PerformanceTests.class)
     public void runFastListAddAll()
     {
         this.runIntegerFastListAddAll("integer");

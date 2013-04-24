@@ -18,15 +18,18 @@ package com.gs.collections.impl.memory.list;
 
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
+import com.gs.collections.impl.MemoryTests;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import gnu.trove.list.array.TIntArrayList;
 import org.junit.Test;
+import org.junit.experimental.categories.Category;
 
 public class IntListPresizedMemoryTest
 {
     @Test
+    @Category(MemoryTests.class)
     public void memoryForScaledLists()
     {
         for (int size = 0; size < 1000001; size += 25000)
