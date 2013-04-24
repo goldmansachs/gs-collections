@@ -202,20 +202,20 @@ public class <name>ArrayStackTest
     {
         <name>ArrayStack stack1 = <name>ArrayStack.newStackFromTopToBottom(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
         Verify.assertSize(5, stack1);
-        Assert.assertEquals(<["5"]:(literal.(type))(); separator=", ">, stack1.peekAt(0)<(delta.(type))>);
-        Assert.assertEquals(<["4"]:(literal.(type))(); separator=", ">, stack1.peekAt(1)<(delta.(type))>);
+        Assert.assertEquals(<["1"]:(literal.(type))(); separator=", ">, stack1.peekAt(0)<(delta.(type))>);
+        Assert.assertEquals(<["2"]:(literal.(type))(); separator=", ">, stack1.peekAt(1)<(delta.(type))>);
         Assert.assertEquals(<["3"]:(literal.(type))(); separator=", ">, stack1.peekAt(2)<(delta.(type))>);
-        Assert.assertEquals(<["2"]:(literal.(type))(); separator=", ">, stack1.peekAt(3)<(delta.(type))>);
-        Assert.assertEquals(<["1"]:(literal.(type))(); separator=", ">, stack1.peekAt(4)<(delta.(type))>);
+        Assert.assertEquals(<["4"]:(literal.(type))(); separator=", ">, stack1.peekAt(3)<(delta.(type))>);
+        Assert.assertEquals(<["5"]:(literal.(type))(); separator=", ">, stack1.peekAt(4)<(delta.(type))>);
         <name>ArrayStack stack2 = <name>ArrayStack.newStackWith(<["5", "4", "3", "2", "1"]:(literal.(type))(); separator=", ">);
         Verify.assertSize(5, stack2);
-        Assert.assertEquals(<["5"]:(literal.(type))(); separator=", ">, stack2.peekAt(0)<(delta.(type))>);
-        Assert.assertEquals(<["4"]:(literal.(type))(); separator=", ">, stack2.peekAt(1)<(delta.(type))>);
+        Assert.assertEquals(<["1"]:(literal.(type))(); separator=", ">, stack2.peekAt(0)<(delta.(type))>);
+        Assert.assertEquals(<["2"]:(literal.(type))(); separator=", ">, stack2.peekAt(1)<(delta.(type))>);
         Assert.assertEquals(<["3"]:(literal.(type))(); separator=", ">, stack2.peekAt(2)<(delta.(type))>);
-        Assert.assertEquals(<["2"]:(literal.(type))(); separator=", ">, stack2.peekAt(3)<(delta.(type))>);
-        Assert.assertEquals(<["1"]:(literal.(type))(); separator=", ">, stack2.peekAt(4)<(delta.(type))>);
+        Assert.assertEquals(<["4"]:(literal.(type))(); separator=", ">, stack2.peekAt(3)<(delta.(type))>);
+        Assert.assertEquals(<["5"]:(literal.(type))(); separator=", ">, stack2.peekAt(4)<(delta.(type))>);
         stack2.pop(2);
-        Assert.assertEquals(<["5"]:(literal.(type))(); separator=", ">, stack2.peekAt(0)<(delta.(type))>);
+        Assert.assertEquals(<["3"]:(literal.(type))(); separator=", ">, stack2.peekAt(0)<(delta.(type))>);
     }
 
     @Test

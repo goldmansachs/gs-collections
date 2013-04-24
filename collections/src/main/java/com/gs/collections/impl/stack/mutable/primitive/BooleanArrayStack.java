@@ -201,7 +201,7 @@ public final class BooleanArrayStack implements MutableBooleanStack, Externaliza
     public boolean peekAt(int index)
     {
         this.rangeCheck(index);
-        return this.delegate.get(index);
+        return this.delegate.get(this.delegate.size() - 1 - index);
     }
 
     private void rangeCheck(int index)

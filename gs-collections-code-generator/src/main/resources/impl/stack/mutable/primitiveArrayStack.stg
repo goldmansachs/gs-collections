@@ -187,7 +187,7 @@ public final class <name>ArrayStack
     public <type> peekAt(int index)
     {
         this.rangeCheck(index);
-        return this.delegate.get(index);
+        return this.delegate.get(this.delegate.size() - 1 - index);
     }
 
     private void rangeCheck(int index)

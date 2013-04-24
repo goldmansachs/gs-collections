@@ -187,9 +187,11 @@ public class BooleanArrayStackTest
     {
         BooleanArrayStack stack = BooleanArrayStack.newStackFromTopToBottom(true, true, false, true, false);
         Verify.assertSize(5, stack);
-        Assert.assertFalse(stack.peekAt(0));
-        stack.pop(2);
-        Assert.assertFalse(stack.peekAt(0));
+        Assert.assertTrue(stack.peekAt(0));
+        Assert.assertTrue(stack.peekAt(1));
+        Assert.assertFalse(stack.peekAt(2));
+        Assert.assertTrue(stack.peekAt(3));
+        Assert.assertFalse(stack.peekAt(4));
     }
 
     @Test
