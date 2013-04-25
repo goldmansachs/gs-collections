@@ -51,7 +51,7 @@ public class BagMemoryTest
 
         public SizedGuavaMultisetFactory(int size)
         {
-            this.data = TestDataFactory.createImmutableList(size);
+            this.data = TestDataFactory.createRandomImmutableList(size);
         }
 
         public HashMultiset<Integer> value()
@@ -74,7 +74,7 @@ public class BagMemoryTest
 
         public SizedGscBagFactory(int size)
         {
-            this.data = TestDataFactory.createImmutableList(size);
+            this.data = TestDataFactory.createRandomImmutableList(size);
         }
 
         public HashBag<Integer> value()
