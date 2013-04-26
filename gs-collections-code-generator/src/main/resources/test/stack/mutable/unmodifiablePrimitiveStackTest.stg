@@ -6,7 +6,7 @@ isTest() ::= "true"
 
 targetPath() ::= "com/gs/collections/impl/stack/mutable/primitive"
 
-fileName(primitive) ::= "Synchronized<primitive.name>StackTest"
+fileName(primitive) ::= "Unmodifiable<primitive.name>StackTest"
 
 class(primitive) ::= <<
 <body(primitive.type, primitive.wrapperName, primitive.name)>
@@ -34,43 +34,28 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * This file was automatically generated from template file synchronizedPrimitiveStackTest.stg.
+ * This file was automatically generated from template file unmodifiablePrimitiveStackTest.stg.
  */
-public class Synchronized<name>StackTest
+public class Unmodifiable<name>StackTest
 {
-    private final Mutable<name>Stack stack = new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
+    private final Mutable<name>Stack stack = new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
     
-    @Test
+    @Test (expected = UnsupportedOperationException.class)
     public void push()
     {
-        Verify.assertSize(3, this.stack);
         this.stack.push(<(literal.(type))("5")>);
-        Assert.assertEquals(<name>ArrayStack.newStackWith(<["1", "2", "3", "5"]:(literal.(type))(); separator=", ">), this.stack);
-        Verify.assertSize(4, this.stack);
-        this.stack.pop();
-        Assert.assertEquals(<name>ArrayStack.newStackWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), this.stack);
-        Verify.assertSize(3, this.stack);
-        Assert.assertEquals(<name>ArrayList.newListWith(<["3", "2"]:(literal.(type))(); separator=", ">), this.stack.peek(2));
     }
 
-    @Test
+    @Test (expected = UnsupportedOperationException.class)
     public void pop()
     {
-        Verify.assertSize(3, this.stack);
-        Assert.assertEquals(<(wideLiteral.(type))("3")>, this.stack.pop()<(wideDelta.(type))>);
-        Assert.assertEquals(<name>ArrayStack.newStackWith(<["1", "2"]:(literal.(type))(); separator=", ">), this.stack);
-        Assert.assertEquals(<(wideLiteral.(type))("2")>, this.stack.pop()<(wideDelta.(type))>);
-        Assert.assertEquals(<name>ArrayStack.newStackWith(<["1"]:(literal.(type))(); separator=", ">), this.stack);
-        Assert.assertEquals(<(wideLiteral.(type))("1")>, this.stack.pop()<(wideDelta.(type))>);
-        Assert.assertEquals(<name>ArrayStack.newStackWith(), this.stack);
+        this.stack.pop();
     }
 
-    @Test
+    @Test (expected = UnsupportedOperationException.class)
     public void popWithCount()
     {
-        Verify.assertSize(3, this.stack);
-        Assert.assertEquals(<name>ArrayList.newListWith(<["3", "2"]:(literal.(type))(); separator=", ">), this.stack.pop(2));
-        Assert.assertEquals(<name>ArrayStack.newStackWith(<["1"]:(literal.(type))(); separator=", ">), this.stack);
+        this.stack.pop(2);
     }
 
     @Test
@@ -78,12 +63,6 @@ public class Synchronized<name>StackTest
     {
         Verify.assertSize(3, this.stack);
         Assert.assertEquals(<(wideLiteral.(type))("3")>, this.stack.peek()<(wideDelta.(type))>);
-        this.stack.pop();
-        Assert.assertEquals(<name>ArrayStack.newStackWith(<["1", "2"]:(literal.(type))(); separator=", ">), this.stack);
-        Assert.assertEquals(<(wideLiteral.(type))("2")>, this.stack.peek()<(wideDelta.(type))>);
-        this.stack.pop();
-        Assert.assertEquals(<name>ArrayStack.newStackWith(<["1"]:(literal.(type))(); separator=", ">), this.stack);
-        Assert.assertEquals(<(wideLiteral.(type))("1")>, this.stack.peek()<(wideDelta.(type))>);
     }
 
     @Test
@@ -92,67 +71,43 @@ public class Synchronized<name>StackTest
         Verify.assertSize(3, this.stack);
         Assert.assertEquals(<name>ArrayList.newListWith(<["3", "2"]:(literal.(type))(); separator=", ">), this.stack.peek(2));
         Assert.assertEquals(new <name>ArrayList(), this.stack.peek(0));
-        this.stack.pop(2);
-        Assert.assertEquals(<name>ArrayStack.newStackWith(<["1"]:(literal.(type))(); separator=", ">), this.stack);
-        Assert.assertEquals(<name>ArrayList.newListWith(<(literal.(type))("1")>), this.stack.peek(1));
     }
 
     @Test
     public void peekAtIndex()
     {
-        Mutable<name>Stack stack1 = new Synchronized<name>Stack(<name>ArrayStack.newStackFromTopToBottom(<["1", "2", "3", "4" ,"5"]:(literal.(type))(); separator=", ">));
+        Mutable<name>Stack stack1 = new Unmodifiable<name>Stack(<name>ArrayStack.newStackFromTopToBottom(<["1", "2", "3", "4" ,"5"]:(literal.(type))(); separator=", ">));
         Verify.assertSize(5, stack1);
         Assert.assertEquals(<(wideLiteral.(type))("1")>, stack1.peekAt(0)<(wideDelta.(type))>);
         Assert.assertEquals(<(wideLiteral.(type))("2")>, stack1.peekAt(1)<(wideDelta.(type))>);
         Assert.assertEquals(<(wideLiteral.(type))("3")>, stack1.peekAt(2)<(wideDelta.(type))>);
         Assert.assertEquals(<(wideLiteral.(type))("4")>, stack1.peekAt(3)<(wideDelta.(type))>);
         Assert.assertEquals(<(wideLiteral.(type))("5")>, stack1.peekAt(4)<(wideDelta.(type))>);
-        Mutable<name>Stack stack2 = new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["5", "4", "3", "2" ,"1"]:(literal.(type))(); separator=", ">));
+        Mutable<name>Stack stack2 = new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["5", "4", "3", "2" ,"1"]:(literal.(type))(); separator=", ">));
         Verify.assertSize(5, stack2);
         Assert.assertEquals(<(wideLiteral.(type))("1")>, stack2.peekAt(0)<(wideDelta.(type))>);
         Assert.assertEquals(<(wideLiteral.(type))("2")>, stack2.peekAt(1)<(wideDelta.(type))>);
         Assert.assertEquals(<(wideLiteral.(type))("3")>, stack2.peekAt(2)<(wideDelta.(type))>);
         Assert.assertEquals(<(wideLiteral.(type))("4")>, stack2.peekAt(3)<(wideDelta.(type))>);
         Assert.assertEquals(<(wideLiteral.(type))("5")>, stack2.peekAt(4)<(wideDelta.(type))>);
-        stack2.pop(2);
-        Assert.assertEquals(<name>ArrayStack.newStackWith(<["5", "4", "3"]:(literal.(type))(); separator=", ">), stack2);
-        Assert.assertEquals(<(wideLiteral.(type))("3")>, stack2.peekAt(0)<(wideDelta.(type))>);
-    }
-
-    @Test(expected = EmptyStackException.class)
-    public void pop_empty_stack_throws_exception()
-    {
-        new Synchronized<name>Stack(new <name>ArrayStack()).pop();
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void pop_with_negative_count_throws_exception()
-    {
-        new Synchronized<name>Stack(<name>ArrayStack.newStackFromTopToBottom(<(literal.(type))("1")>)).pop(-1);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void pop_with_count_greater_than_stack_size_throws_exception()
-    {
-        new Synchronized<name>Stack(<name>ArrayStack.newStackFromTopToBottom(<(literal.(type))("1")>)).pop(2);
     }
 
     @Test(expected = EmptyStackException.class)
     public void peek_empty_stack_throws_exception()
     {
-        new Synchronized<name>Stack(new <name>ArrayStack()).peek();
+        new Unmodifiable<name>Stack(new <name>ArrayStack()).peek();
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void peek_at_index_less_than_zero_throws_exception()
     {
-        new Synchronized<name>Stack(<name>ArrayStack.newStackFromTopToBottom(<["1", "2", "3", "4" ,"5"]:(literal.(type))(); separator=", ">)).peek(-1);
+        new Unmodifiable<name>Stack(<name>ArrayStack.newStackFromTopToBottom(<["1", "2", "3", "4" ,"5"]:(literal.(type))(); separator=", ">)).peek(-1);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void peek_at_index_greater_than_size_throws_exception()
     {
-        new Synchronized<name>Stack(<name>ArrayStack.newStackFromTopToBottom(<(literal.(type))("1")>)).peekAt(1);
+        new Unmodifiable<name>Stack(<name>ArrayStack.newStackFromTopToBottom(<(literal.(type))("1")>)).peekAt(1);
     }
     
     @Test
@@ -171,26 +126,21 @@ public class Synchronized<name>StackTest
     @Test
     public void isEmpty()
     {
-        Verify.assertEmpty(new Synchronized<name>Stack(new <name>ArrayStack()));
+        Verify.assertEmpty(new Unmodifiable<name>Stack(new <name>ArrayStack()));
         Verify.assertNotEmpty(this.stack);
     }
 
     @Test
     public void notEmpty()
     {
-        Assert.assertFalse(new Synchronized<name>Stack(new <name>ArrayStack()).notEmpty());
+        Assert.assertFalse(new Unmodifiable<name>Stack(new <name>ArrayStack()).notEmpty());
         Assert.assertTrue(this.stack.notEmpty());
     }
 
-    @Test
+    @Test (expected = UnsupportedOperationException.class)
     public void clear()
     {
         this.stack.clear();
-        Verify.assertSize(0, this.stack);
-        Assert.assertFalse(this.stack.contains(<(literal.(type))("0")>));
-        Assert.assertFalse(this.stack.contains(<(literal.(type))("1")>));
-        Assert.assertFalse(this.stack.contains(<(literal.(type))("2")>));
-        Assert.assertFalse(this.stack.contains(<(literal.(type))("3")>));
     }
 
     @Test
@@ -206,8 +156,8 @@ public class Synchronized<name>StackTest
     @Test
     public void containsAllIterable()
     {
-        Assert.assertTrue(new Synchronized<name>Stack(new <name>ArrayStack()).containsAll(new <name>ArrayList()));
-        Assert.assertFalse(new Synchronized<name>Stack(new <name>ArrayStack()).containsAll(<name>ArrayList.newListWith(<(literal.(type))("1")>)));
+        Assert.assertTrue(new Unmodifiable<name>Stack(new <name>ArrayStack()).containsAll(new <name>ArrayList()));
+        Assert.assertFalse(new Unmodifiable<name>Stack(new <name>ArrayStack()).containsAll(<name>ArrayList.newListWith(<(literal.(type))("1")>)));
         Assert.assertTrue(this.stack.containsAll(<name>ArrayList.newListWith(<(literal.(type))("1")>)));
         Assert.assertTrue(this.stack.containsAll(<name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">)));
         Assert.assertFalse(this.stack.containsAll(<name>ArrayList.newListWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">)));
@@ -249,11 +199,12 @@ public class Synchronized<name>StackTest
     @Test(expected = NoSuchElementException.class)
     public void iterator_throws_non_empty_list()
     {
-        Mutable<name>Stack stack1 = new Synchronized<name>Stack(new <name>ArrayStack());
-        stack1.push(<(literal.(type))("1")>);
-        stack1.push(<(literal.(type))("2")>);
-        stack1.push(<(literal.(type))("3")>);
-        <name>Iterator iterator = stack1.<type>Iterator();
+        <name>ArrayStack modifiableStack = new <name>ArrayStack();
+        Mutable<name>Stack unmodifiableStack = new Unmodifiable<name>Stack(modifiableStack);
+        modifiableStack.push(<(literal.(type))("1")>);
+        modifiableStack.push(<(literal.(type))("2")>);
+        modifiableStack.push(<(literal.(type))("3")>);
+        <name>Iterator iterator = unmodifiableStack.<type>Iterator();
         while (iterator.hasNext())
         {
             iterator.next();
@@ -279,35 +230,35 @@ public class Synchronized<name>StackTest
     @Test
     public void size()
     {
-        Verify.assertSize(0, new Synchronized<name>Stack(new <name>ArrayStack()));
+        Verify.assertSize(0, new Unmodifiable<name>Stack(new <name>ArrayStack()));
         Verify.assertSize(3, this.stack);
     }
 
     @Test
     public void count()
     {
-        Assert.assertEquals(2L, new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["1", "0", "2"]:(literal.(type))(); separator=", ">)).count(<name>Predicates.greaterThan(<zero.(type)>)));
+        Assert.assertEquals(2L, new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["1", "0", "2"]:(literal.(type))(); separator=", ">)).count(<name>Predicates.greaterThan(<zero.(type)>)));
     }
 
     @Test
     public void anySatisfy()
     {
-        Assert.assertTrue(new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["1", "-1", "2"]:(literal.(type))(); separator=", ">)).anySatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
-        Assert.assertFalse(new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["1", "-1", "2"]:(literal.(type))(); separator=", ">)).anySatisfy(<name>Predicates.equal(<(literal.(type))("0")>)));
+        Assert.assertTrue(new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["1", "-1", "2"]:(literal.(type))(); separator=", ">)).anySatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
+        Assert.assertFalse(new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["1", "-1", "2"]:(literal.(type))(); separator=", ">)).anySatisfy(<name>Predicates.equal(<(literal.(type))("0")>)));
     }
 
     @Test
     public void allSatisfy()
     {
-        Assert.assertFalse(new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["1", "0", "2"]:(literal.(type))(); separator=", ">)).allSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
-        Assert.assertTrue(new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">)).allSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
+        Assert.assertFalse(new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["1", "0", "2"]:(literal.(type))(); separator=", ">)).allSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
+        Assert.assertTrue(new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">)).allSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
     }
 
     @Test
     public void noneSatisfy()
     {
-        Assert.assertFalse(new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["1", "0", "2"]:(literal.(type))(); separator=", ">)).noneSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
-        Assert.assertTrue(new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">)).noneSatisfy(<name>Predicates.greaterThan(<(literal.(type))("3")>)));
+        Assert.assertFalse(new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["1", "0", "2"]:(literal.(type))(); separator=", ">)).noneSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
+        Assert.assertTrue(new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">)).noneSatisfy(<name>Predicates.greaterThan(<(literal.(type))("3")>)));
     }
     
     @Test
@@ -349,72 +300,72 @@ public class Synchronized<name>StackTest
     @Test
     public void max()
     {
-        Assert.assertEquals(<(wideLiteral.(type))("9")>, new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["1", "0", "9", "7"]:(literal.(type))(); separator=", ">)).max()<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("9")>, new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["1", "0", "9", "7"]:(literal.(type))(); separator=", ">)).max()<(wideDelta.(type))>);
     }
 
     @Test(expected = NoSuchElementException.class)
     public void max_throws_emptyList()
     {
-        new Synchronized<name>Stack(new <name>ArrayStack()).max();
+        new Unmodifiable<name>Stack(new <name>ArrayStack()).max();
     }
 
     @Test
     public void min()
     {
-        Assert.assertEquals(<(wideLiteral.(type))("0")>, new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["1", "0", "9", "7"]:(literal.(type))(); separator=", ">)).min()<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("0")>, new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["1", "0", "9", "7"]:(literal.(type))(); separator=", ">)).min()<(wideDelta.(type))>);
     }
 
     @Test(expected = NoSuchElementException.class)
     public void min_throws_emptyList()
     {
-        new Synchronized<name>Stack(new <name>ArrayStack()).min();
+        new Unmodifiable<name>Stack(new <name>ArrayStack()).min();
     }
 
     @Test
     public void minIfEmpty()
     {
-        Assert.assertEquals(<(wideLiteral.(type))("5")>, new Synchronized<name>Stack(new <name>ArrayStack()).minIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
-        Assert.assertEquals(<(wideLiteral.(type))("0")>, new Synchronized<name>Stack(new <name>ArrayStack()).minIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
-        Assert.assertEquals(<(wideLiteral.(type))("0")>, new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["1", "0", "9", "7"]:(literal.(type))(); separator=", ">)).minIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("5")>, new Unmodifiable<name>Stack(new <name>ArrayStack()).minIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("0")>, new Unmodifiable<name>Stack(new <name>ArrayStack()).minIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("0")>, new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["1", "0", "9", "7"]:(literal.(type))(); separator=", ">)).minIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
     }
 
     @Test
     public void maxIfEmpty()
     {
-        Assert.assertEquals(<(wideLiteral.(type))("5")>, new Synchronized<name>Stack(new <name>ArrayStack()).maxIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
-        Assert.assertEquals(<(wideLiteral.(type))("0")>, new Synchronized<name>Stack(new <name>ArrayStack()).maxIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
-        Assert.assertEquals(<(wideLiteral.(type))("9")>, new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["1", "0", "9", "7"]:(literal.(type))(); separator=", ">)).maxIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("5")>, new Unmodifiable<name>Stack(new <name>ArrayStack()).maxIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("0")>, new Unmodifiable<name>Stack(new <name>ArrayStack()).maxIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("9")>, new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["1", "0", "9", "7"]:(literal.(type))(); separator=", ">)).maxIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
     }
 
     @Test
     public void sum()
     {
-        Assert.assertEquals(<(wideLiteral.(type))("10")>, new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">)).sum()<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("10")>, new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">)).sum()<(wideDelta.(type))>);
     }
 
     @Test
     public void average()
     {
-        Assert.assertEquals(2.5, new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">)).average(), 0.0);
+        Assert.assertEquals(2.5, new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">)).average(), 0.0);
     }
 
     @Test(expected = ArithmeticException.class)
     public void averageThrowsOnEmpty()
     {
-        new Synchronized<name>Stack(new <name>ArrayStack()).average();
+        new Unmodifiable<name>Stack(new <name>ArrayStack()).average();
     }
 
     @Test
     public void median()
     {
-        Assert.assertEquals(2.5, new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">)).median(), 0.0);
-        Assert.assertEquals(3.0, new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">)).median(), 0.0);
+        Assert.assertEquals(2.5, new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">)).median(), 0.0);
+        Assert.assertEquals(3.0, new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">)).median(), 0.0);
     }
 
     @Test(expected = ArithmeticException.class)
     public void medianThrowsOnEmpty()
     {
-        new Synchronized<name>Stack(new <name>ArrayStack()).median();
+        new Unmodifiable<name>Stack(new <name>ArrayStack()).median();
     }
 
     @Test
@@ -428,7 +379,7 @@ public class Synchronized<name>StackTest
     public void toSortedArray()
     {
         Assert.assertArrayEquals(new <type>[]{<["1", "3", "7", "9"]:(literal.(type))(); separator=", ">},
-                new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["3", "1", "9", "7"]:(literal.(type))(); separator=", ">)).toSortedArray()<(delta.(type))>);
+                new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["3", "1", "9", "7"]:(literal.(type))(); separator=", ">)).toSortedArray()<(delta.(type))>);
     }
 
     @Test
@@ -440,11 +391,11 @@ public class Synchronized<name>StackTest
     @Test
     public void testEquals()
     {
-        Mutable<name>Stack stack1 = new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">));
-        Mutable<name>Stack stack2 = new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">));
-        Mutable<name>Stack stack3 = new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["5", "6", "7", "8"]:(literal.(type))(); separator=", ">));
-        Mutable<name>Stack stack4 = new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["5", "6", "7"]:(literal.(type))(); separator=", ">));
-        Mutable<name>Stack stack5 = new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["4", "3", "2", "1"]:(literal.(type))(); separator=", ">));
+        Mutable<name>Stack stack1 = new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">));
+        Mutable<name>Stack stack2 = new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">));
+        Mutable<name>Stack stack3 = new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["5", "6", "7", "8"]:(literal.(type))(); separator=", ">));
+        Mutable<name>Stack stack4 = new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["5", "6", "7"]:(literal.(type))(); separator=", ">));
+        Mutable<name>Stack stack5 = new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["4", "3", "2", "1"]:(literal.(type))(); separator=", ">));
 
         Verify.assertEqualsAndHashCode(stack1, stack2);
         Verify.assertPostSerializedEqualsAndHashCode(stack1);
@@ -457,16 +408,16 @@ public class Synchronized<name>StackTest
     public void testHashCode()
     {
         Assert.assertEquals(ArrayStack.newStackWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">).hashCode(),
-                new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">)).hashCode());
-        Assert.assertEquals(ArrayStack.newStack().hashCode(), new Synchronized<name>Stack(new <name>ArrayStack()).hashCode());
+                new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">)).hashCode());
+        Assert.assertEquals(ArrayStack.newStack().hashCode(), new Unmodifiable<name>Stack(new <name>ArrayStack()).hashCode());
     }
 
     @Test
     public void testToString()
     {
-        Assert.assertEquals("[]", new Synchronized<name>Stack(new <name>ArrayStack()).toString());
-        Assert.assertEquals("[<(toStringLiteral.(type))("1")>]", new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<(literal.(type))("1")>)).toString());
-        Mutable<name>Stack stack1 = new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["1", "2"]:(literal.(type))(); separator=", ">));
+        Assert.assertEquals("[]", new Unmodifiable<name>Stack(new <name>ArrayStack()).toString());
+        Assert.assertEquals("[<(toStringLiteral.(type))("1")>]", new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<(literal.(type))("1")>)).toString());
+        Mutable<name>Stack stack1 = new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["1", "2"]:(literal.(type))(); separator=", ">));
         Assert.assertEquals("[<["2", "1"]:(toStringLiteral.(type))(); separator=", ">]", stack1.toString());
         Assert.assertEquals("[<["3", "2", "1"]:(toStringLiteral.(type))(); separator=", ">]", this.stack.toString());
     }
@@ -475,10 +426,10 @@ public class Synchronized<name>StackTest
     public void makeString()
     {
         
-        Assert.assertEquals("<(toStringLiteral.(type))("1")>", new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<(literal.(type))("1")>)).makeString("/"));
+        Assert.assertEquals("<(toStringLiteral.(type))("1")>", new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<(literal.(type))("1")>)).makeString("/"));
         Assert.assertEquals(this.stack.toString(), this.stack.makeString("[", ", ", "]"));
-        Assert.assertEquals("", new Synchronized<name>Stack(new <name>ArrayStack()).makeString());
-        Mutable<name>Stack stack1 = new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["1", "2"]:(literal.(type))(); separator=", ">));
+        Assert.assertEquals("", new Unmodifiable<name>Stack(new <name>ArrayStack()).makeString());
+        Mutable<name>Stack stack1 = new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["1", "2"]:(literal.(type))(); separator=", ">));
         Assert.assertEquals("<["2", "1"]:(toStringLiteral.(type))(); separator=", ">", stack1.makeString());
         Assert.assertEquals("<["2", "1"]:(toStringLiteral.(type))(); separator="/">", stack1.makeString("/"));
         Assert.assertEquals("[<["2", "1"]:(toStringLiteral.(type))(); separator="/">]", stack1.makeString("[", "/", "]"));
@@ -490,13 +441,13 @@ public class Synchronized<name>StackTest
     public void appendString()
     {
         StringBuilder appendable = new StringBuilder();
-        new Synchronized<name>Stack(new <name>ArrayStack()).appendString(appendable);
+        new Unmodifiable<name>Stack(new <name>ArrayStack()).appendString(appendable);
         Assert.assertEquals("", appendable.toString());
         StringBuilder appendable1 = new StringBuilder();
-        new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<(literal.(type))("1")>)).appendString(appendable1);
+        new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<(literal.(type))("1")>)).appendString(appendable1);
         Assert.assertEquals("<(toStringLiteral.(type))("1")>", appendable1.toString());
         StringBuilder appendable2 = new StringBuilder();
-        Mutable<name>Stack stack1 = new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["1", "2"]:(literal.(type))(); separator=", ">));
+        Mutable<name>Stack stack1 = new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["1", "2"]:(literal.(type))(); separator=", ">));
         stack1.appendString(appendable2);
         Assert.assertEquals("<["2", "1"]:(toStringLiteral.(type))(); separator=", ">", appendable2.toString());
         StringBuilder appendable3 = new StringBuilder();
@@ -537,9 +488,16 @@ public class Synchronized<name>StackTest
     }
 
     @Test
+    public void asUnmodifiable()
+    {
+        Mutable<name>Stack stack1 = new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
+        Assert.assertEquals(stack1, stack1.asUnmodifiable());
+    }
+
+    @Test
     public void asSynchronized()
     {
-        Mutable<name>Stack stack1 = new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), new Object());
+        Mutable<name>Stack stack1 = new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
         Assert.assertEquals(stack1, stack1.asSynchronized());
     }
 }

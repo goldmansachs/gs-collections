@@ -387,12 +387,12 @@ public final class <name>ArrayStack
 
     public Mutable<name>Stack asUnmodifiable()
     {
-        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+        return new Unmodifiable<name>Stack(this);
     }
 
     public Mutable<name>Stack asSynchronized()
     {
-        throw new UnsupportedOperationException("asSynchronized not implemented yet");
+        return new Synchronized<name>Stack(this);
     }
 
     public Immutable<name>Stack toImmutable()
