@@ -24,20 +24,21 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.goldmansachs</groupId>
-    <artifactId>acceptance-tests</artifactId>
+    <artifactId>gs-collections-forkjoin</artifactId>
     <version>3.1.0-SNAPSHOT</version>
+    <packaging>bundle</packaging>
 
-    <name>Goldman Sachs Collections Acceptance Test Suite</name>
+    <name>Goldman Sachs Collections Fork Join Utilities</name>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
-        <slf4j.version>1.7.2</slf4j.version>
         <clover.version>3.1.8</clover.version>
         <checkstyle.version>2.9.1</checkstyle.version>
-
+        <sonar.clover.reportPath>${project.basedir}/target/site/clover/clover.xml</sonar.clover.reportPath>
+        <sonar.surefire.reportsPath>${project.basedir}/target/clover/surefire-reports</sonar.surefire.reportsPath>
         <!-- this setting is needed for TeamCity -->
-        <maven.deploy.skip>true</maven.deploy.skip>
+        <maven.deploy.skip>${build.is.personal}</maven.deploy.skip>
     </properties>
 
     <prerequisites>
@@ -50,26 +51,19 @@
             <groupId>com.goldmansachs</groupId>
             <artifactId>gs-collections-api</artifactId>
             <version>3.1.0-SNAPSHOT</version>
-            <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>com.goldmansachs</groupId>
             <artifactId>gs-collections</artifactId>
             <version>3.1.0-SNAPSHOT</version>
-            <scope>test</scope>
         </dependency>
+
+        <!-- Testing Dependencies -->
 
         <dependency>
             <groupId>com.goldmansachs</groupId>
             <artifactId>gs-collections-testutils</artifactId>
-            <version>3.1.0-SNAPSHOT</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>com.goldmansachs</groupId>
-            <artifactId>gs-collections-forkjoin</artifactId>
             <version>3.1.0-SNAPSHOT</version>
             <scope>test</scope>
         </dependency>
@@ -81,20 +75,6 @@
             <scope>test</scope>
         </dependency>
 
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-api</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>test</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-nop</artifactId>
-            <version>${slf4j.version}</version>
-            <scope>test</scope>
-        </dependency>
-
     </dependencies>
 
     <build>
@@ -102,13 +82,23 @@
             <plugins>
 
                 <plugin>
+                    <artifactId>maven-assembly-plugin</artifactId>
+                    <version>2.4</version>
+                </plugin>
+
+                <plugin>
                     <artifactId>maven-clean-plugin</artifactId>
                     <version>2.5</version>
                 </plugin>
 
                 <plugin>
-                    <artifactId>maven-resources-plugin</artifactId>
-                    <version>2.5</version>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>3.0</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-dependency-plugin</artifactId>
+                    <version>2.6</version>
                 </plugin>
 
                 <plugin>
@@ -117,18 +107,44 @@
                 </plugin>
 
                 <plugin>
-                    <artifactId>maven-jar-plugin</artifactId>
-                    <version>2.3.2</version>
+                    <artifactId>maven-install-plugin</artifactId>
+                    <version>2.4</version>
                 </plugin>
 
                 <plugin>
-                    <artifactId>maven-install-plugin</artifactId>
-                    <version>2.3.1</version>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>2.4</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-resources-plugin</artifactId>
+                    <version>2.6</version>
                 </plugin>
 
                 <plugin>
                     <artifactId>maven-site-plugin</artifactId>
-                    <version>3.0</version>
+                    <version>3.2</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>2.2.1</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-enforcer-plugin</artifactId>
+                    <version>1.2</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>versions-maven-plugin</artifactId>
+                    <version>2.0</version>
+                </plugin>
+
+                <plugin>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>2.12.4</version>
                 </plugin>
 
                 <plugin>
@@ -182,6 +198,23 @@
             </plugin>
 
             <plugin>
+                <groupId>org.apache.felix</groupId>
+                <artifactId>maven-bundle-plugin</artifactId>
+                <version>2.3.7</version>
+                <extensions>true</extensions>
+                <configuration>
+                    <instructions>
+                        <Export-Package>com.gs.collections.impl.forkjoin</Export-Package>
+                        <Bundle-RequiredExecutionEnvironment>J2SE-1.5,JavaSE-1.6</Bundle-RequiredExecutionEnvironment>
+                        <Import-Package>
+                            net.jcip.annotations;resolution:=optional,*
+                        </Import-Package>
+                        <Bundle-Version>${project.version}</Bundle-Version>
+                    </instructions>
+                </configuration>
+            </plugin>
+
+            <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>sonar-maven-plugin</artifactId>
                 <version>2.0</version>
@@ -226,8 +259,8 @@
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>2.9</version>
                 <configuration>
-                    <doctitle>Goldman Sachs Collections - ${project.version}</doctitle>
-                    <windowtitle>Goldman Sachs Collections - ${project.version}</windowtitle>
+                    <doctitle>Goldman Sachs Collections Fork Join - ${project.version}</doctitle>
+                    <windowtitle>Goldman Sachs Collections Fork Join - ${project.version}</windowtitle>
                     <show>public</show>
                     <links>
                         <link>http://java.sun.com/j2se/1.5.0/docs/api/</link>
@@ -261,6 +294,38 @@
                 </executions>
             </plugin>
 
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>clirr-maven-plugin</artifactId>
+                <version>2.5</version>
+                <configuration>
+                    <comparisonArtifacts>
+                        <comparisonArtifact>
+                            <groupId>com.goldmansachs</groupId>
+                            <artifactId>gs-collections-forkjoin</artifactId>
+                            <version>3.1.0</version>
+                        </comparisonArtifact>
+                    </comparisonArtifacts>
+                    <textOutputFile>${project.build.directory}/clirr.txt</textOutputFile>
+                </configuration>
+            </plugin>
+
         </plugins>
     </build>
+
+    <distributionManagement>
+
+        <repository>
+            <id>repository</id>
+            <name>releases</name>
+            <url>${repository.url}</url>
+        </repository>
+
+        <snapshotRepository>
+            <id>repository</id>
+            <name>snapshots</name>
+            <url>${repository.url}</url>
+        </snapshotRepository>
+
+    </distributionManagement>
 </project>

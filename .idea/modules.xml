@@ -9,6 +9,7 @@
       <module fileurl="file://$PROJECT_DIR$/gs-collections-code-generator/gs-collections-code-generator.iml" filepath="$PROJECT_DIR$/gs-collections-code-generator/gs-collections-code-generator.iml" />
       <module fileurl="file://$PROJECT_DIR$/gs-collections-code-generator-ant/gs-collections-code-generator-ant.iml" filepath="$PROJECT_DIR$/gs-collections-code-generator-ant/gs-collections-code-generator-ant.iml" />
       <module fileurl="file://$PROJECT_DIR$/gs-collections-code-generator-maven-plugin/gs-collections-code-generator-maven-plugin.iml" filepath="$PROJECT_DIR$/gs-collections-code-generator-maven-plugin/gs-collections-code-generator-maven-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/gs-collections-forkjoin/gs-collections-forkjoin.iml" filepath="$PROJECT_DIR$/gs-collections-forkjoin/gs-collections-forkjoin.iml" />
       <module fileurl="file://$PROJECT_DIR$/collections-testutils/gs-collections-testutils.iml" filepath="$PROJECT_DIR$/collections-testutils/gs-collections-testutils.iml" />
       <module fileurl="file://$PROJECT_DIR$/performance-tests/performance-tests.iml" filepath="$PROJECT_DIR$/performance-tests/performance-tests.iml" />
       <module fileurl="file://$PROJECT_DIR$/scala-unit-tests/scala-unit-tests.iml" filepath="$PROJECT_DIR$/scala-unit-tests/scala-unit-tests.iml" />

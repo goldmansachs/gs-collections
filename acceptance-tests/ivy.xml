@@ -47,6 +47,11 @@
             rev="${build.version.full}"
             conf="compile-test"
             changing="true" />
+        <dependency org="com.goldmansachs"
+            name="gs-collections-forkjoin"
+            rev="${build.version.full}"
+            conf="compile-test"
+            changing="true" />
 
         <dependency org="junit" name="junit" rev="${junit.version}" conf="compile-test" />
         <dependency org="org.hamcrest" name="hamcrest-core" rev="1.3" conf="compile-test" />

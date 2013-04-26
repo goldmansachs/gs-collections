@@ -33,6 +33,7 @@
         <subant buildpath="./collections-api/" target="install" />
         <subant buildpath="./collections/" target="install" />
         <subant buildpath="./collections-testutils/" target="install" />
+        <subant buildpath="./gs-collections-forkjoin/" target="install" />
     </target>
 
     <target name="generate-sources" description="generates sources">
@@ -47,6 +48,7 @@
         <subant buildpath="./collections-api/" target="zip" />
         <subant buildpath="./collections/" target="zip" />
         <subant buildpath="./collections-testutils/" target="zip" />
+        <subant buildpath="./gs-collections-forkjoin/" target="zip" />
     </target>
 
     <target name="ivy-init">
@@ -78,6 +80,7 @@
         <file name="collections-api" />
         <file name="collections" />
         <file name="collections-testutils" />
+        <file name="gs-collections-forkjoin" />
         <file name="unit-tests" />
         <file name="scala-unit-tests" />
         <file name="serialization-tests" />

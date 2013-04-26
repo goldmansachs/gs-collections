@@ -16,8 +16,6 @@
 
 package com.gs.collections.impl.parallel;
 
-import java.util.Collection;
-
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -25,9 +23,9 @@ import com.gs.collections.impl.list.mutable.FastList;
 public final class FlatCollectProcedureFactory<T, V> implements ProcedureFactory<FlatCollectProcedure<T, V>>
 {
     private final int collectionSize;
-    private final Function<? super T, Collection<V>> function;
+    private final Function<? super T, ? extends Iterable<V>> function;
 
-    public FlatCollectProcedureFactory(Function<? super T, Collection<V>> function, int newTaskSize)
+    public FlatCollectProcedureFactory(Function<? super T, ? extends Iterable<V>> function, int newTaskSize)
     {
         this.collectionSize = newTaskSize;
         this.function = function;
