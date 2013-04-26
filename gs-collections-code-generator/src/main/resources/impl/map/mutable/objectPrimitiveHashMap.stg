@@ -548,7 +548,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
             return false;
         }
 
-        Object<name>Map\<K> other = (Object<name>HashMap\<K>) obj;
+        Object<name>Map\<K> other = (Object<name>Map\<K>) obj;
 
         if (this.size() != other.size())
         {

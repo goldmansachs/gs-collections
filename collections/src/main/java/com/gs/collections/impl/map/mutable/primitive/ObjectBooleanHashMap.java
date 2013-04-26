@@ -43,6 +43,7 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.map.primitive.ImmutableObjectBooleanMap;
 import com.gs.collections.api.map.primitive.MutableObjectBooleanMap;
+import com.gs.collections.api.map.primitive.ObjectBooleanMap;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.lazy.primitive.LazyBooleanIterableAdapter;
@@ -539,12 +540,12 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
             return true;
         }
 
-        if (!(obj instanceof ObjectBooleanHashMap))
+        if (!(obj instanceof ObjectBooleanMap))
         {
             return false;
         }
 
-        ObjectBooleanHashMap<K> other = (ObjectBooleanHashMap<K>) obj;
+        ObjectBooleanMap<K> other = (ObjectBooleanMap<K>) obj;
 
         if (this.size() != other.size())
         {

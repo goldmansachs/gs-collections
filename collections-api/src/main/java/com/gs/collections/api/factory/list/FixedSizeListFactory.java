@@ -28,49 +28,49 @@ public interface FixedSizeListFactory
     <T> FixedSizeList<T> with();
 
     /**
-     * Same as {@link #with(T)}.
+     * Same as {@link #with(Object)}.
      */
     <T> FixedSizeList<T> of(T one);
 
     <T> FixedSizeList<T> with(T one);
 
     /**
-     * Same as {@link #with(T, T)}.
+     * Same as {@link #with(Object, Object)}.
      */
     <T> FixedSizeList<T> of(T one, T two);
 
     <T> FixedSizeList<T> with(T one, T two);
 
     /**
-     * Same as {@link #with(T, T, T)}.
+     * Same as {@link #with(Object, Object, Object)}.
      */
     <T> FixedSizeList<T> of(T one, T two, T three);
 
     <T> FixedSizeList<T> with(T one, T two, T three);
 
     /**
-     * Same as {@link #with(T, T, T, T)}.
+     * Same as {@link #with(Object, Object, Object, Object)}.
      */
     <T> FixedSizeList<T> of(T one, T two, T three, T four);
 
     <T> FixedSizeList<T> with(T one, T two, T three, T four);
 
     /**
-     * Same as {@link #with(T, T, T, T, T)}.
+     * Same as {@link #with(Object, Object, Object, Object, Object)}.
      */
     <T> FixedSizeList<T> of(T one, T two, T three, T four, T five);
 
     <T> FixedSizeList<T> with(T one, T two, T three, T four, T five);
 
     /**
-     * Same as {@link #with(T, T, T, T, T, T)}.
+     * Same as {@link #with(Object, Object, Object, Object, Object, Object)}.
      */
     <T> FixedSizeList<T> of(T one, T two, T three, T four, T five, T six);
 
     <T> FixedSizeList<T> with(T one, T two, T three, T four, T five, T six);
 
     /**
-     * Same as {@link #with(T...)}
+     * Same as {@link #with(Object[])}
      */
     <T> FixedSizeList<T> of(T... items);
 
