@@ -1,0 +1,147 @@
+import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+
+targetPath() ::= "com/gs/collections/impl/bag/mutable/primitive"
+
+fileName(primitive) ::= "Unmodifiable<primitive.name>Bag"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.bag.mutable.primitive;
+
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.Lazy<name>Iterable;
+import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.primitive.Immutable<name>Bag;
+import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
+import com.gs.collections.impl.collection.mutable.primitive.AbstractUnmodifiable<name>Collection;
+import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
+import net.jcip.annotations.NotThreadSafe;
+
+/**
+ * This file was automatically generated from template file unmodifiablePrimitiveBag.stg.
+ *
+ * @since 3.1.
+ */
+@NotThreadSafe
+public final class Unmodifiable<name>Bag
+        extends AbstractUnmodifiable<name>Collection
+        implements Mutable<name>Bag
+{
+    private static final long serialVersionUID = 1L;
+
+    Unmodifiable<name>Bag(Mutable<name>Bag bag)
+    {
+        super(bag);
+    }
+
+    private Mutable<name>Bag getMutable<name>Bag()
+    {
+        return (Mutable<name>Bag) this.get<name>Collection();
+    }
+
+    public Unmodifiable<name>Bag with(<type> element)
+    {
+        throw new UnsupportedOperationException("Cannot use with on an Unmodifiable<name>Bag");
+    }
+
+    public Unmodifiable<name>Bag without(<type> element)
+    {
+        throw new UnsupportedOperationException("Cannot use without on an Unmodifiable<name>Bag");
+    }
+
+    public Unmodifiable<name>Bag withAll(<name>Iterable elements)
+    {
+        throw new UnsupportedOperationException("Cannot use withAll on an Unmodifiable<name>Bag");
+    }
+
+    public Unmodifiable<name>Bag withoutAll(<name>Iterable elements)
+    {
+        throw new UnsupportedOperationException("Cannot use withoutAll on an Unmodifiable<name>Bag");
+    }
+
+    public void addOccurrences(<type> item, int occurrences)
+    {
+        throw new UnsupportedOperationException("Cannot use addOccurrences on an Unmodifiable<name>Bag");
+    }
+
+    public boolean removeOccurrences(<type> item, int occurrences)
+    {
+        throw new UnsupportedOperationException("Cannot use removeOccurrences on an Unmodifiable<name>Bag");
+    }
+
+    public int sizeDistinct()
+    {
+        return this.getMutable<name>Bag().sizeDistinct();
+    }
+
+    public int occurrencesOf(<type> item)
+    {
+        return this.getMutable<name>Bag().occurrencesOf(item);
+    }
+
+    public void forEachWithOccurrences(<name>IntProcedure procedure)
+    {
+        this.getMutable<name>Bag().forEachWithOccurrences(procedure);
+    }
+
+    public Mutable<name>Bag select(<name>Predicate predicate)
+    {
+        return this.getMutable<name>Bag().select(predicate);
+    }
+
+    public Mutable<name>Bag reject(<name>Predicate predicate)
+    {
+        return this.getMutable<name>Bag().reject(predicate);
+    }
+
+    public \<V> MutableBag\<V> collect(<name>ToObjectFunction\<? extends V> function)
+    {
+        return this.getMutable<name>Bag().collect(function);
+    }
+
+    @Override
+    public boolean equals(Object otherBag)
+    {
+        return this.getMutable<name>Bag().equals(otherBag);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return this.getMutable<name>Bag().hashCode();
+    }
+
+    public Lazy<name>Iterable asLazy()
+    {
+        return new Lazy<name>IterableAdapter(this);
+    }
+
+    public Mutable<name>Bag asUnmodifiable()
+    {
+        return this;
+    }
+
+    public Mutable<name>Bag asSynchronized()
+    {
+        return new Synchronized<name>Bag(this);
+    }
+
+    public Immutable<name>Bag toImmutable()
+    {
+        throw new UnsupportedOperationException("toImmutable not implemented yet");
+    }
+}
+
+>>
+

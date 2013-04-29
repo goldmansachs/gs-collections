@@ -6,7 +6,7 @@ isTest() ::= "true"
 
 targetPath() ::= "com/gs/collections/impl/bag/mutable/primitive"
 
-fileName(primitive) ::= "Synchronized<primitive.name>BagTest"
+fileName(primitive) ::= "Unmodifiable<primitive.name>BagTest"
 
 class(primitive) ::= <<
 <body(primitive.type, primitive.wrapperName, primitive.name)>
@@ -23,37 +23,31 @@ import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
 import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.impl.bag.mutable.HashBag;
-import com.gs.collections.impl.collection.mutable.primitive.AbstractSynchronized<name>CollectionTestCase;
+import com.gs.collections.impl.collection.mutable.primitive.AbstractUnmodifiable<name>CollectionTestCase;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * This file was automatically generated from template file synchronizedPrimitiveBagTest.stg.
- * JUnit test for {@link Synchronized<name>Bag}.
+ * JUnit test for {@link Unmodifiable<name>Bag}.
  */
-public class Synchronized<name>BagTest extends AbstractSynchronized<name>CollectionTestCase
+public class Unmodifiable<name>BagTest extends AbstractUnmodifiable<name>CollectionTestCase
 {
     @Override
     protected final Mutable<name>Bag classUnderTest()
     {
-        return new Synchronized<name>Bag(<name>HashBag.newBagWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
-    }
-
-    @Override
-    protected final Mutable<name>Bag classUnderTestWithLock()
-    {
-        return new Synchronized<name>Bag(<name>HashBag.newBagWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), new Object());
+        return new Unmodifiable<name>Bag(<name>HashBag.newBagWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
     }
 
     @Override
     protected Mutable<name>Bag getEmptyCollection()
     {
-        return new Synchronized<name>Bag(new <name>HashBag());
+        return new Unmodifiable<name>Bag(new <name>HashBag());
     }
 
     @Override
-    protected Mutable<name>Bag getEmptyUnSynchronizedCollection()
+    protected Mutable<name>Bag getEmptyModifiableCollection()
     {
         return new <name>HashBag();
     }
@@ -65,13 +59,19 @@ public class Synchronized<name>BagTest extends AbstractSynchronized<name>Collect
     }
 
     @Override
-    protected Mutable<name>Bag newWith(<type>... elements)
+    protected Mutable<name>Collection newSynchronizedCollectionWith(<type>... elements)
     {
         return new Synchronized<name>Bag(<name>HashBag.newBagWith(elements));
     }
 
     @Override
-    protected Mutable<name>Bag newUnSynchronizedCollectionWith(<type>... elements)
+    protected Mutable<name>Bag newWith(<type>... elements)
+    {
+        return new Unmodifiable<name>Bag(<name>HashBag.newBagWith(elements));
+    }
+
+    @Override
+    protected Mutable<name>Bag newModifiableCollectionWith(<type>... elements)
     {
         return <name>HashBag.newBagWith(elements);
     }
@@ -84,39 +84,11 @@ public class Synchronized<name>BagTest extends AbstractSynchronized<name>Collect
 
     private final Mutable<name>Bag bag = this.classUnderTest();
 
-    @Override
-    @Test
-    public void addAllArray()
-    {
-        super.addAllArray();
-        Assert.assertTrue(this.bag.addAll(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
-        Assert.assertEquals(<name>HashBag.newBagWith(<["1", "2", "3", "1", "2", "3"]:(literal.(type))(); separator=", ">), this.bag);
-    }
 
-    @Override
-    @Test
-    public void addAllIterable()
-    {
-        super.addAllIterable();
-        Assert.assertTrue(this.bag.addAll(<name>HashBag.newBagWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">)));
-        Assert.assertEquals(<name>HashBag.newBagWith(<["1", "2", "3", "1", "2", "3"]:(literal.(type))(); separator=", ">), this.bag);
-    }
-
-    @Test
+    @Test (expected = UnsupportedOperationException.class)
     public void addOccurrences()
     {
         this.bag.addOccurrences(<(literal.(type))("1")>, 3);
-        Assert.assertEquals(<name>HashBag.newBagWith(<["1", "2", "3", "1", "1", "1"]:(literal.(type))(); separator=", ">), this.bag);
-        this.bag.addOccurrences(<(literal.(type))("1")>, 2);
-        Assert.assertEquals(<name>HashBag.newBagWith(<["1", "2", "3", "1", "1", "1", "1", "1"]:(literal.(type))(); separator=", ">), this.bag);
-        this.bag.addOccurrences(<(literal.(type))("2")>, 0);
-        Assert.assertEquals(<name>HashBag.newBagWith(<["1", "2", "3", "1", "1", "1", "1", "1"]:(literal.(type))(); separator=", ">), this.bag);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void addOccurrences_throws()
-    {
-        this.bag.addOccurrences(<(literal.(type))("1")>, -1);
     }
 
     @Test
@@ -135,27 +107,10 @@ public class Synchronized<name>BagTest extends AbstractSynchronized<name>Collect
                 || "<(toStringLiteral.(type))("2")>1<(toStringLiteral.(type))("1")>2".equals(string));
     }
 
-    @Test
+    @Test (expected = UnsupportedOperationException.class)
     public void removeOccurrences()
     {
-        Assert.assertTrue(this.bag.removeOccurrences(<(literal.(type))("1")>, 1));
-        Assert.assertEquals(<name>HashBag.newBagWith(<["2", "3"]:(literal.(type))(); separator=", ">), this.bag);
-        Assert.assertFalse(this.bag.removeOccurrences(<(literal.(type))("1")>, 0));
-        Assert.assertEquals(<name>HashBag.newBagWith(<["2", "3"]:(literal.(type))(); separator=", ">), this.bag);
-        Assert.assertTrue(this.bag.removeOccurrences(<(literal.(type))("2")>, 1));
-        Assert.assertEquals(<name>HashBag.newBagWith(<(literal.(type))("3")>), this.bag);
-        Assert.assertFalse(this.bag.removeOccurrences(<(literal.(type))("1")>, 5));
-        Assert.assertEquals(<name>HashBag.newBagWith(<(literal.(type))("3")>), this.bag);
-        Assert.assertTrue(this.bag.removeOccurrences(<(literal.(type))("3")>, 5));
-        Assert.assertEquals(this.getEmptyUnSynchronizedCollection(), this.bag);
-        Assert.assertFalse(this.bag.removeOccurrences(<(literal.(type))("3")>, 1));
-        Assert.assertEquals(this.getEmptyUnSynchronizedCollection(), this.bag);
-    }
-
-    @Test(expected = IllegalArgumentException.class)
-    public void removeOccurrences_throws()
-    {
-        new <name>HashBag().removeOccurrences(<(literal.(type))("1")>, -1);
+        this.bag.removeOccurrences(<(literal.(type))("1")>, 1);
     }
 
     @Override

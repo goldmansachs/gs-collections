@@ -735,7 +735,7 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
 
     public Mutable<name>Bag asUnmodifiable()
     {
-        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+        return new Unmodifiable<name>Bag(this);
     }
 
     public Mutable<name>Bag asSynchronized()

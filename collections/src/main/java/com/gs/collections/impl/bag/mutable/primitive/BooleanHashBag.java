@@ -164,7 +164,7 @@ public final class BooleanHashBag implements MutableBooleanBag, Externalizable
 
     public MutableBooleanBag asUnmodifiable()
     {
-        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+        return new UnmodifiableBooleanBag(this);
     }
 
     public MutableBooleanBag asSynchronized()
