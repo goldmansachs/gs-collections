@@ -559,6 +559,13 @@ public class BooleanArrayStackTest
         Assert.assertEquals(ArrayStack.newStack().hashCode(), new BooleanArrayStack().hashCode());
     }
 
+    @Test
+    public void asSynchronized()
+    {
+        BooleanArrayStack stack = BooleanArrayStack.newStackWith(true, false, true);
+        Assert.assertEquals(new SynchronizedBooleanStack(stack), stack.asSynchronized());
+    }
+
     private static class VerificationProcedure implements BooleanProcedure
     {
         private final BooleanArrayList checkingList;

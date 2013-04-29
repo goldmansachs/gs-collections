@@ -44,7 +44,6 @@ import com.gs.collections.impl.stack.mutable.ArrayStack;
 import net.jcip.annotations.NotThreadSafe;
 
 /**
- * This file was automatically generated from template file primitiveArrayStack.stg.
  * BooleanArrayStack is similar to {@link ArrayStack}, and is memory-optimized for boolean primitives.
  */
 @NotThreadSafe
@@ -167,7 +166,7 @@ public final class BooleanArrayStack implements MutableBooleanStack, Externaliza
 
     public MutableBooleanStack asSynchronized()
     {
-        throw new UnsupportedOperationException("asSynchronized not implemented yet");
+        return new SynchronizedBooleanStack(this);
     }
 
     public ImmutableBooleanStack toImmutable()

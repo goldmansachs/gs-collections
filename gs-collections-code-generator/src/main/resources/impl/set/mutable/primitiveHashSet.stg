@@ -963,7 +963,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
 
     public Mutable<name>Set asSynchronized()
     {
-        throw new UnsupportedOperationException("asSynchronized not implemented yet");
+        return new Synchronized<name>Set(this);
     }
 
     public Immutable<name>Set toImmutable()

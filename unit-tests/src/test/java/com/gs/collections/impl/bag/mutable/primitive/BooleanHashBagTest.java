@@ -550,4 +550,11 @@ public class BooleanHashBagTest
             }
         });
     }
+
+    @Test
+    public void asSynchronized()
+    {
+        BooleanHashBag bag = BooleanHashBag.newBagWith(true, false, false, true, true, true);
+        Assert.assertEquals(new SynchronizedBooleanBag(bag), bag.asSynchronized());
+    }
 }

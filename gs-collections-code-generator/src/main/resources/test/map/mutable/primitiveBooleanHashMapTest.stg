@@ -1313,6 +1313,12 @@ public class <name>BooleanHashMapTest
     }
 
     @Test
+    public void asSynchronized()
+    {
+        Assert.assertEquals(new Synchronized<name>BooleanHashMap(this.map), this.map.asSynchronized());
+    }
+
+    @Test
     public void booleanIterator()
     {
         MutableBooleanBag expected = BooleanHashBag.newBagWith(true, false, true);

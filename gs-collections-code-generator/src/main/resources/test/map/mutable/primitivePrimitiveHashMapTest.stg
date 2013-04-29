@@ -1360,6 +1360,12 @@ public class <name1><name2>HashMapTest
     }
 
     @Test
+    public void asSynchronized()
+    {
+        Assert.assertEquals(new Synchronized<name1><name2>HashMap(this.map), this.map.asSynchronized());
+    }
+
+    @Test
     public void <type2>Iterator()
     {
         Mutable<name2>Set expected = <name2>HashSet.newSetWith(<(literal.(type2))("0")>, <(literal.(type2))("31")>, <(literal.(type2))("32")>);

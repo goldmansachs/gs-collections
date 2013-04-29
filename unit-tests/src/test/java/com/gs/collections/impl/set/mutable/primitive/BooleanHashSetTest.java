@@ -697,4 +697,13 @@ public class BooleanHashSetTest
         Assert.assertTrue("[true, false]".equals(appendable4.toString())
                 || "[false, true]".equals(appendable4.toString()));
     }
+
+    @Test
+    public void asSynchronized()
+    {
+        Assert.assertEquals(new SynchronizedBooleanSet(this.set0), this.set0.asSynchronized());
+        Assert.assertEquals(new SynchronizedBooleanSet(this.set1), this.set1.asSynchronized());
+        Assert.assertEquals(new SynchronizedBooleanSet(this.set2), this.set2.asSynchronized());
+        Assert.assertEquals(new SynchronizedBooleanSet(this.set3), this.set3.asSynchronized());
+    }
 }

@@ -686,6 +686,13 @@ public class <name>ArrayStackTest
         Verify.assertInstanceOf(Lazy<name>Iterable.class, stack.asLazy());
     }
 
+    @Test
+    public void asSynchronized()
+    {
+        <name>ArrayStack stack = <name>ArrayStack.newStackWith(<["3", "2", "1"]:(literal.(type))(); separator=", ">);
+        Assert.assertEquals(new Synchronized<name>Stack(stack), stack.asSynchronized());
+    }
+
     private static class VerificationProcedure implements <name>Procedure
     {
         private final <name>ArrayList checkingList;

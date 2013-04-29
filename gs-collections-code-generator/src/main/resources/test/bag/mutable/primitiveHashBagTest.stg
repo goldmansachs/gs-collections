@@ -546,6 +546,13 @@ public class <name>HashBagTest
     }
 
     @Test
+    public void asSynchronized()
+    {
+        <name>HashBag bag = <name>HashBag.newBagWith(<["1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">);
+        Assert.assertEquals(new Synchronized<name>Bag(bag), bag.asSynchronized());
+    }
+
+    @Test
     public void iterator()
     {
         <name>HashBag bag = <name>HashBag.newBagWith(<["1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">);

@@ -169,7 +169,7 @@ public final class BooleanHashBag implements MutableBooleanBag, Externalizable
 
     public MutableBooleanBag asSynchronized()
     {
-        throw new UnsupportedOperationException("asSynchronized not implemented yet");
+        return new SynchronizedBooleanBag(this);
     }
 
     public ImmutableBooleanBag toImmutable()

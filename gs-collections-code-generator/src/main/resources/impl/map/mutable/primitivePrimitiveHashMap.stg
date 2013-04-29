@@ -159,7 +159,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
 
     public Mutable<name1><name2>Map asSynchronized()
     {
-        throw new UnsupportedOperationException("asSynchronized not implemented yet");
+        return new Synchronized<name1><name2>HashMap(this);
     }
 
     public Immutable<name1><name2>Map toImmutable()

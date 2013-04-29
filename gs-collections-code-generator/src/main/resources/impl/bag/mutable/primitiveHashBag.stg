@@ -740,7 +740,7 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
 
     public Mutable<name>Bag asSynchronized()
     {
-        throw new UnsupportedOperationException("asSynchronized not implemented yet");
+        return new Synchronized<name>Bag(this);
     }
 
     public Immutable<name>Bag toImmutable()

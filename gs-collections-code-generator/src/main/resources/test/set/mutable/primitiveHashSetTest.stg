@@ -793,6 +793,12 @@ public class <name>HashSetTest
         Assert.assertEquals(this.set.toSet(), this.set.asLazy().toSet());
         Verify.assertInstanceOf(Lazy<name>Iterable.class, this.set.asLazy());
     }
+
+    @Test
+    public void asSynchronized()
+    {
+        Assert.assertEquals(new Synchronized<name>Set(this.set), this.set.asSynchronized());
+    }
 }
 
 >>
