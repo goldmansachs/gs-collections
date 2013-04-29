@@ -1,0 +1,112 @@
+import "copyright.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+
+isTest() ::= "true"
+
+targetPath() ::= "com/gs/collections/impl/set/mutable/primitive"
+
+fileName(primitive) ::= "Unmodifiable<primitive.name>SetTest"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.wrapperName, primitive.name)>
+>>
+
+body(type, wrapperName, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.set.mutable.primitive;
+
+import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
+import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.set.primitive.Mutable<name>Set;
+import com.gs.collections.impl.collection.mutable.primitive.AbstractUnmodifiable<name>CollectionTestCase;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * This file was automatically generated from template file unmodifiablePrimitiveSetTest.stg.
+ * JUnit test for {@link Unmodifiable<name>Set}.
+ */
+public class Unmodifiable<name>SetTest extends AbstractUnmodifiable<name>CollectionTestCase
+{
+    @Override
+    protected final Mutable<name>Set classUnderTest()
+    {
+        return new Unmodifiable<name>Set(<name>HashSet.newSetWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
+    }
+
+    @Override
+    protected Mutable<name>Set getEmptyCollection()
+    {
+        return new Unmodifiable<name>Set(new <name>HashSet());
+    }
+
+    @Override
+    protected Mutable<name>Set getEmptyModifiableCollection()
+    {
+        return new <name>HashSet();
+    }
+
+    @Override
+    protected Mutable<name>Collection newSynchronizedCollectionWith(<type>... elements)
+    {
+        return <name>HashSet.newSetWith(elements).asSynchronized();
+    }
+
+    @Override
+    protected MutableSet\<<wrapperName>\> getEmptyObjectCollection()
+    {
+        return UnifiedSet.newSet();
+    }
+
+    @Override
+    protected Mutable<name>Set newWith(<type>... elements)
+    {
+        return new Unmodifiable<name>Set(<name>HashSet.newSetWith(elements));
+    }
+
+    @Override
+    protected Mutable<name>Set newModifiableCollectionWith(<type>... elements)
+    {
+        return <name>HashSet.newSetWith(elements);
+    }
+
+    @Override
+    protected MutableSet\<<wrapperName>\> newObjectCollectionWith(<wrapperName>... elements)
+    {
+        return UnifiedSet.newSetWith(elements);
+    }
+
+    private final Mutable<name>Set set = this.classUnderTest();
+
+    @Override
+    @Test
+    public void iterator()
+    {
+        <name>Iterator iterator = this.set.<type>Iterator();
+        Assert.assertTrue(iterator.hasNext());
+        Mutable<name>Collection actual = this.getEmptyModifiableCollection();
+        actual.add(iterator.next());
+        Assert.assertTrue(iterator.hasNext());
+        actual.add(iterator.next());
+        Assert.assertTrue(iterator.hasNext());
+        actual.add(iterator.next());
+        Assert.assertFalse(iterator.hasNext());
+        Assert.assertEquals(this.newModifiableCollectionWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), actual);
+    }
+
+    @Override
+    @Test
+    public void testEquals()
+    {
+        super.testEquals();
+        Mutable<name>Collection set1 = this.newWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">);
+        Mutable<name>Collection set2 = this.newWith(<["4", "3", "2", "1"]:(literal.(type))(); separator=", ">);
+        Assert.assertEquals(set1, set2);
+    }
+}
+
+>>

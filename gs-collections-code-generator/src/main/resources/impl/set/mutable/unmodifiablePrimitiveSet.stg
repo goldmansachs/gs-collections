@@ -1,0 +1,120 @@
+import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+
+targetPath() ::= "com/gs/collections/impl/set/mutable/primitive"
+
+fileName(primitive) ::= "Unmodifiable<primitive.name>Set"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.set.mutable.primitive;
+
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.Lazy<name>Iterable;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.set.primitive.Immutable<name>Set;
+import com.gs.collections.api.set.primitive.Mutable<name>Set;
+import com.gs.collections.impl.collection.mutable.primitive.AbstractUnmodifiable<name>Collection;
+import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
+import net.jcip.annotations.NotThreadSafe;
+
+/**
+ * This file was automatically generated from template file unmodifiablePrimitiveSet.stg.
+ *
+ * @since 3.1.
+ */
+@NotThreadSafe
+public final class Unmodifiable<name>Set
+        extends AbstractUnmodifiable<name>Collection
+        implements Mutable<name>Set
+{
+    private static final long serialVersionUID = 1L;
+
+    Unmodifiable<name>Set(Mutable<name>Set set)
+    {
+        super(set);
+    }
+
+    private Mutable<name>Set getMutable<name>Set()
+    {
+        return (Mutable<name>Set) this.get<name>Collection();
+    }
+
+    public Unmodifiable<name>Set with(<type> element)
+    {
+        throw new UnsupportedOperationException("Cannot call with on an Unmodifiable<name>Set");
+    }
+
+    public Synchronized<name>Set without(<type> element)
+    {
+        throw new UnsupportedOperationException("Cannot call without on an Unmodifiable<name>Set");
+    }
+
+    public Synchronized<name>Set withAll(<name>Iterable elements)
+    {
+        throw new UnsupportedOperationException("Cannot call withAll on an Unmodifiable<name>Set");
+    }
+
+    public Synchronized<name>Set withoutAll(<name>Iterable elements)
+    {
+        throw new UnsupportedOperationException("Cannot call withoutAll on an Unmodifiable<name>Set");
+    }
+
+    public Mutable<name>Set select(<name>Predicate predicate)
+    {
+        return this.getMutable<name>Set().select(predicate);
+    }
+
+    public Mutable<name>Set reject(<name>Predicate predicate)
+    {
+        return this.getMutable<name>Set().reject(predicate);
+    }
+
+    public \<V> MutableSet\<V> collect(<name>ToObjectFunction\<? extends V> function)
+    {
+        return this.getMutable<name>Set().collect(function);
+    }
+
+    @Override
+    public boolean equals(Object otherSet)
+    {
+        return this.getMutable<name>Set().equals(otherSet);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return this.getMutable<name>Set().hashCode();
+    }
+
+    public Lazy<name>Iterable asLazy()
+    {
+        return new Lazy<name>IterableAdapter(this);
+    }
+
+    public Mutable<name>Set asUnmodifiable()
+    {
+        return this;
+    }
+
+    public Mutable<name>Set asSynchronized()
+    {
+        return new Synchronized<name>Set(this);
+    }
+
+    public Immutable<name>Set toImmutable()
+    {
+        throw new UnsupportedOperationException("toImmutable not implemented yet");
+    }
+}
+
+>>

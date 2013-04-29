@@ -511,7 +511,7 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
 
     public MutableBooleanSet asUnmodifiable()
     {
-        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+        return new UnmodifiableBooleanSet(this);
     }
 
     public MutableBooleanSet asSynchronized()
