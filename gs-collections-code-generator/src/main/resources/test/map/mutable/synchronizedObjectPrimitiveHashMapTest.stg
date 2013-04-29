@@ -1,0 +1,78 @@
+import "copyright.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+import "primitiveEquals.stg"
+
+skipBoolean() ::= "true"
+
+isTest() ::= "true"
+
+targetPath() ::= "com/gs/collections/impl/map/mutable/primitive"
+
+fileName(primitive) ::= "SynchronizedObject<primitive.name>HashMapTest"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name, primitive.wrapperName)>
+>>
+
+body(type, name, wrapperName) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.map.mutable.primitive;
+
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * This file was automatically generated from template file synchronizedObjectPrimitiveHashMapTest.stg.
+ * JUnit test for {@link SynchronizedObject<name>HashMap}.
+ */
+public class SynchronizedObject<name>HashMapTest extends AbstractMutableObject<name>HashMapTestCase
+{
+    @Override
+    protected SynchronizedObject<name>HashMap\<String> classUnderTest()
+    {
+        return new SynchronizedObject<name>HashMap\<String>(Object<name>HashMap.newWithKeysValues("0", <(literal.(type))("0")>, "1", <(literal.(type))("1")>, "2", <(literal.(type))("2")>));
+    }
+
+    @Override
+    protected \<T> SynchronizedObject<name>HashMap\<T> newWithKeysValues(T key1, <type> value1)
+    {
+        return new SynchronizedObject<name>HashMap\<T>(Object<name>HashMap.newWithKeysValues(key1, value1));
+    }
+
+    @Override
+    protected \<T> SynchronizedObject<name>HashMap\<T> newWithKeysValues(T key1, <type> value1, T key2, <type> value2)
+    {
+        return new SynchronizedObject<name>HashMap\<T>(Object<name>HashMap.newWithKeysValues(key1, value1, key2, value2));
+    }
+
+    @Override
+    protected \<T> SynchronizedObject<name>HashMap\<T> newWithKeysValues(T key1, <type> value1, T key2, <type> value2, T key3, <type> value3)
+    {
+        return new SynchronizedObject<name>HashMap\<T>(Object<name>HashMap.newWithKeysValues(key1, value1, key2, value2, key3, value3));
+    }
+
+    @Override
+    protected \<T> SynchronizedObject<name>HashMap\<T> newWithKeysValues(T key1, <type> value1, T key2, <type> value2, T key3, <type> value3, T key4, <type> value4)
+    {
+        return new SynchronizedObject<name>HashMap\<T>(Object<name>HashMap.newWithKeysValues(key1, value1, key2, value2, key3, value3, key4, value4));
+    }
+
+    @Override
+    protected \<T> SynchronizedObject<name>HashMap\<T> getEmptyMap()
+    {
+        return new SynchronizedObject<name>HashMap\<T>(new Object<name>HashMap\<T>());
+    }
+
+    private final SynchronizedObject<name>HashMap\<String> map = this.classUnderTest();
+
+    @Override
+    @Test
+    public void asSynchronized()
+    {
+        Assert.assertSame(this.map, this.map.asSynchronized());
+    }
+}
+
+>>

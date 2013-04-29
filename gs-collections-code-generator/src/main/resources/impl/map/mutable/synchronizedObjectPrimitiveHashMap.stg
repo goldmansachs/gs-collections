@@ -1,0 +1,571 @@
+import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+
+targetPath() ::= "com/gs/collections/impl/map/mutable/primitive"
+
+fileName(primitive) ::= "SynchronizedObject<primitive.name>HashMap"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.map.mutable.primitive;
+
+import java.io.Serializable;
+
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.Lazy<name>Iterable;
+import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
+import com.gs.collections.api.block.function.primitive.<name>Function;
+import com.gs.collections.api.block.function.primitive.<name>Function0;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.block.predicate.primitive.Object<name>Predicate;
+import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
+import com.gs.collections.api.block.procedure.primitive.Object<name>Procedure;
+import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
+import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.list.primitive.Mutable<name>List;
+import com.gs.collections.api.map.primitive.ImmutableObject<name>Map;
+import com.gs.collections.api.map.primitive.MutableObject<name>Map;
+import com.gs.collections.api.set.primitive.Mutable<name>Set;
+import net.jcip.annotations.GuardedBy;
+
+/**
+ * This file was automatically generated from template file synchronizedObjectPrimitiveHashMap.stg.
+ *
+ * @since 3.1.
+ */
+public final class SynchronizedObject<name>HashMap\<V>
+        implements MutableObject<name>Map\<V>, Serializable
+{
+    private static final long serialVersionUID = 1L;
+
+    private final Object lock;
+    @GuardedBy("this.lock")
+    private final MutableObject<name>Map\<V> map;
+
+    SynchronizedObject<name>HashMap(MutableObject<name>Map\<V> map)
+    {
+        this(map, null);
+    }
+
+    SynchronizedObject<name>HashMap(MutableObject<name>Map\<V> map, Object newLock)
+    {
+        this.map = map;
+        this.lock = newLock == null ? this : newLock;
+    }
+
+    public void clear()
+    {
+        synchronized (this.lock)
+        {
+            this.map.clear();
+        }
+    }
+
+    public void put(V key, <type> value)
+    {
+        synchronized (this.lock)
+        {
+            this.map.put(key, value);
+        }
+    }
+
+    public void removeKey(V key)
+    {
+        synchronized (this.lock)
+        {
+            this.map.removeKey(key);
+        }
+    }
+
+    public <type> getIfAbsentPut(V key, <name>Function0 function)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.getIfAbsentPut(key, function);
+        }
+    }
+
+    public <type> getIfAbsentPutWithKey(V key, <name>Function\<? super V> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.getIfAbsentPutWithKey(key, function);
+        }
+    }
+
+    public \<P> <type> getIfAbsentPutWith(V key, <name>Function\<? super P> function, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.getIfAbsentPutWith(key, function, parameter);
+        }
+    }
+
+    public <type> get(Object key)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.get(key);
+        }
+    }
+
+    public <type> getOrThrow(Object key)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.getOrThrow(key);
+        }
+    }
+
+    public <type> getIfAbsent(Object key, <type> ifAbsent)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.getIfAbsent(key, ifAbsent);
+        }
+    }
+
+    public boolean containsKey(Object key)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.containsKey(key);
+        }
+    }
+
+    public boolean containsValue(<type> value)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.containsValue(value);
+        }
+    }
+
+    public void forEachValue(<name>Procedure procedure)
+    {
+        synchronized (this.lock)
+        {
+            this.map.forEachValue(procedure);
+        }
+    }
+
+    public void forEachKey(Procedure\<? super V> procedure)
+    {
+        synchronized (this.lock)
+        {
+            this.map.forEachKey(procedure);
+        }
+    }
+
+    public void forEachKeyValue(Object<name>Procedure\<? super V> procedure)
+    {
+        synchronized (this.lock)
+        {
+            this.map.forEachKeyValue(procedure);
+        }
+    }
+
+    public MutableObject<name>Map\<V> select(Object<name>Predicate\<? super V> predicate)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.select(predicate);
+        }
+    }
+
+    public MutableObject<name>Map\<V> reject(Object<name>Predicate\<? super V> predicate)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.reject(predicate);
+        }
+    }
+
+    public <name>Iterator <type>Iterator()
+    {
+        synchronized (this.lock)
+        {
+            return this.map.<type>Iterator();
+        }
+    }
+
+    public void forEach(<name>Procedure procedure)
+    {
+        synchronized (this.lock)
+        {
+            this.map.forEach(procedure);
+        }
+    }
+
+    public int count(<name>Predicate predicate)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.count(predicate);
+        }
+    }
+
+    public boolean anySatisfy(<name>Predicate predicate)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.anySatisfy(predicate);
+        }
+    }
+
+    public boolean allSatisfy(<name>Predicate predicate)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.allSatisfy(predicate);
+        }
+    }
+
+    public boolean noneSatisfy(<name>Predicate predicate)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.noneSatisfy(predicate);
+        }
+    }
+
+    public Mutable<name>Collection select(<name>Predicate predicate)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.select(predicate);
+        }
+    }
+
+    public Mutable<name>Collection reject(<name>Predicate predicate)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.reject(predicate);
+        }
+    }
+
+    public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.detectIfNone(predicate, ifNone);
+        }
+    }
+
+    public \<V1 extends Object> MutableCollection\<V1> collect(<name>ToObjectFunction\<? extends V1> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.collect(function);
+        }
+    }
+
+    <(arithmeticMethods.(type))(name, type)>
+    public <type>[] toArray()
+    {
+        synchronized (this.lock)
+        {
+            return this.map.toArray();
+        }
+    }
+
+    public boolean contains(<type> value)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.contains(value);
+        }
+    }
+
+    public boolean containsAll(<type>... source)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.containsAll(source);
+        }
+    }
+
+    public boolean containsAll(<name>Iterable source)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.containsAll(source);
+        }
+    }
+
+    public Mutable<name>List toList()
+    {
+        synchronized (this.lock)
+        {
+            return this.map.toList();
+        }
+    }
+
+    public Mutable<name>Set toSet()
+    {
+        synchronized (this.lock)
+        {
+            return this.map.toSet();
+        }
+    }
+
+    public Mutable<name>Bag toBag()
+    {
+        synchronized (this.lock)
+        {
+            return this.map.toBag();
+        }
+    }
+
+    public Lazy<name>Iterable asLazy()
+    {
+        synchronized (this.lock)
+        {
+            return this.map.asLazy();
+        }
+    }
+
+    public MutableObject<name>Map\<V> withKeyValue(V key, <type> value)
+    {
+        synchronized (this.lock)
+        {
+            this.map.withKeyValue(key, value);
+        }
+        return this;
+    }
+
+    public MutableObject<name>Map\<V> withoutKey(V key)
+    {
+        synchronized (this.lock)
+        {
+            this.map.withoutKey(key);
+        }
+        return this;
+    }
+
+    public MutableObject<name>Map\<V> withoutAllKeys(Iterable\<? extends V> keys)
+    {
+        synchronized (this.lock)
+        {
+            this.map.withoutAllKeys(keys);
+        }
+        return this;
+    }
+
+    public MutableObject<name>Map\<V> asUnmodifiable()
+    {
+        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+    }
+
+    public MutableObject<name>Map\<V> asSynchronized()
+    {
+        return this;
+    }
+
+    public ImmutableObject<name>Map\<V> toImmutable()
+    {
+        throw new UnsupportedOperationException("toImmutable not implemented yet");
+    }
+
+    public int size()
+    {
+        synchronized (this.lock)
+        {
+            return this.map.size();
+        }
+    }
+
+    public boolean isEmpty()
+    {
+        synchronized (this.lock)
+        {
+            return this.map.isEmpty();
+        }
+    }
+
+    public boolean notEmpty()
+    {
+        synchronized (this.lock)
+        {
+            return this.map.notEmpty();
+        }
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.equals(obj);
+        }
+    }
+
+    @Override
+    public int hashCode()
+    {
+        synchronized (this.lock)
+        {
+            return this.map.hashCode();
+        }
+    }
+
+    @Override
+    public String toString()
+    {
+        synchronized (this.lock)
+        {
+            return this.map.toString();
+        }
+    }
+    
+    public String makeString()
+    {
+        synchronized (this.lock)
+        {
+            return this.map.makeString();
+        }
+    }
+
+    public String makeString(String separator)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.makeString(separator);
+        }
+    }
+
+    public String makeString(String start, String separator, String end)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.makeString(start, separator, end);
+        }
+    }
+
+    public void appendString(Appendable appendable)
+    {
+        synchronized (this.lock)
+        {
+            this.map.appendString(appendable);
+        }
+    }
+
+    public void appendString(Appendable appendable, String separator)
+    {
+        synchronized (this.lock)
+        {
+            this.map.appendString(appendable, separator);
+        }
+    }
+
+    public void appendString(Appendable appendable, String start, String separator, String end)
+    {
+        synchronized (this.lock)
+        {
+            this.map.appendString(appendable, start, separator, end);
+        }
+    }
+}
+
+>>
+
+arithmeticMethods ::= [
+    "byte": "allMethods",
+    "short": "allMethods",
+    "char": "allMethods",
+    "int": "allMethods",
+    "long": "allMethods",
+    "float": "allMethods",
+    "double": "allMethods",
+    "boolean": "noMethods"
+    ]
+
+allMethods(name, type) ::=<<
+public <wideType.(type)> sum()
+{
+    synchronized (this.lock)
+    {
+        return this.map.sum();
+    }
+}
+
+public <type> max()
+{
+    synchronized (this.lock)
+    {
+        return this.map.max();
+    }
+}
+
+public <type> maxIfEmpty(<type> defaultValue)
+{
+    synchronized (this.lock)
+    {
+        return this.map.maxIfEmpty(defaultValue);
+    }
+}
+
+public <type> min()
+{
+    synchronized (this.lock)
+    {
+        return this.map.min();
+    }
+}
+
+public <type> minIfEmpty(<type> defaultValue)
+{
+    synchronized (this.lock)
+    {
+        return this.map.minIfEmpty(defaultValue);
+    }
+}
+
+public double average()
+{
+    synchronized (this.lock)
+    {
+        return this.map.average();
+    }
+}
+
+public double median()
+{
+    synchronized (this.lock)
+    {
+        return this.map.median();
+    }
+}
+
+public <type>[] toSortedArray()
+{
+    synchronized (this.lock)
+    {
+        return this.map.toSortedArray();
+    }
+}
+
+public Mutable<name>List toSortedList()
+{
+    synchronized (this.lock)
+    {
+        return this.map.toSortedList();
+    }
+}
+
+>>
+
+noMethods(name, type) ::= ""
+
+

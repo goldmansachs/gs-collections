@@ -208,7 +208,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
 
     public MutableObject<name>Map\<K> asSynchronized()
     {
-        throw new UnsupportedOperationException("asSynchronized not implemented yet");
+        return new SynchronizedObject<name>HashMap\<K>(this);
     }
 
     public ImmutableObject<name>Map\<K> toImmutable()
