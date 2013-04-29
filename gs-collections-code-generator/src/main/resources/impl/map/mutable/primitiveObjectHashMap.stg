@@ -2185,7 +2185,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
 
     public Mutable<name>ObjectMap\<V> asSynchronized()
     {
-        throw new UnsupportedOperationException("asSynchronized not implemented yet");
+        return new Synchronized<name>ObjectHashMap\<V>(this);
     }
 
     public Immutable<name>ObjectMap\<V> toImmutable()
@@ -2348,32 +2348,6 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
                 <name>ObjectHashMap.this.removeKey(this.currentKey);
             }
         }
-    }
-
-    private <type>[] toKeysArray()
-    {
-        <type>[] result = new <type>[this.size()];
-        int index = 0;
-
-        if (this.sentinelValues != null)
-        {
-            if (this.sentinelValues.containsZeroKey)
-            {
-                result[index++] = EMPTY;
-            }
-            if (this.sentinelValues.containsOneKey)
-            {
-                result[index++] = REMOVED;
-            }
-        }
-        for (int i = 0; i \< this.keys.length; i++)
-        {
-            if (isNonSentinel(this.keys[i]))
-            {
-                result[index++] = this.keys[i];
-            }
-        }
-        return result;
     }
 }
 

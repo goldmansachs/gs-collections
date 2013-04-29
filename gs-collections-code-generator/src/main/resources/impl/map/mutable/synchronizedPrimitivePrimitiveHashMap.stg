@@ -413,7 +413,7 @@ public final class Synchronized<name1><name2>HashMap
 
     public Immutable<name1><name2>Map toImmutable()
     {
-        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+        throw new UnsupportedOperationException("toImmutable not implemented yet");
     }
 
     public int size()

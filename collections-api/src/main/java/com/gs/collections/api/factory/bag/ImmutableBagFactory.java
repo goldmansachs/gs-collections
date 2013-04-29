@@ -28,14 +28,14 @@ public interface ImmutableBagFactory
     <T> ImmutableBag<T> with();
 
     /**
-     * Same as {@link #with(T)}.
+     * Same as {@link #with(Object)}.
      */
     <T> ImmutableBag<T> of(T element);
 
     <T> ImmutableBag<T> with(T element);
 
     /**
-     * Same as {@link #with(T...)}.
+     * Same as {@link #with(Object[])}.
      */
     <T> ImmutableBag<T> of(T... elements);
 
