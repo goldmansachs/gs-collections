@@ -77,10 +77,7 @@ public final class FJIterate
     public static final int DEFAULT_MIN_FORK_SIZE = 5000;
     private static final int DEFAULT_PARALLEL_TASK_COUNT = ParallelIterate.getDefaultTaskCount() * 4;
 
-    // TODO Review whether this can be reduced to one pool.
-    private static final ForkJoinPool FOR_EACH_EXECUTOR = new ForkJoinPool(ParallelIterate.getDefaultMaxThreadPoolSize());
-    private static final ForkJoinPool FILTER_EXECUTOR = new ForkJoinPool(ParallelIterate.getDefaultMaxThreadPoolSize());
-    private static final ForkJoinPool COLLECT_EXECUTOR = new ForkJoinPool(ParallelIterate.getDefaultMaxThreadPoolSize());
+    private static final ForkJoinPool FORK_JOIN_POOL = new ForkJoinPool(ParallelIterate.getDefaultMaxThreadPoolSize());
 
     private FJIterate()
     {
@@ -107,7 +104,7 @@ public final class FJIterate
             Iterable<T> iterable,
             ObjectIntProcedure<? super T> procedure)
     {
-        FJIterate.forEachWithIndex(iterable, procedure, FJIterate.FOR_EACH_EXECUTOR);
+        FJIterate.forEachWithIndex(iterable, procedure, FJIterate.FORK_JOIN_POOL);
     }
 
     /**
@@ -177,7 +174,7 @@ public final class FJIterate
             int minForkSize,
             int taskCount)
     {
-        FJIterate.forEachWithIndex(iterable, procedureFactory, combiner, minForkSize, taskCount, FJIterate.FOR_EACH_EXECUTOR);
+        FJIterate.forEachWithIndex(iterable, procedureFactory, combiner, minForkSize, taskCount, FJIterate.FORK_JOIN_POOL);
     }
 
     public static <T, PT extends ObjectIntProcedure<? super T>> void forEachWithIndex(
@@ -261,7 +258,7 @@ public final class FJIterate
      */
     public static <T> void forEach(Iterable<T> iterable, Procedure<? super T> procedure)
     {
-        FJIterate.forEach(iterable, procedure, FJIterate.FOR_EACH_EXECUTOR);
+        FJIterate.forEach(iterable, procedure, FJIterate.FORK_JOIN_POOL);
     }
 
     /**
@@ -282,7 +279,7 @@ public final class FJIterate
      */
     public static <T> void forEach(Iterable<T> iterable, Procedure<? super T> procedure, int batchSize)
     {
-        FJIterate.forEach(iterable, procedure, batchSize, FJIterate.FOR_EACH_EXECUTOR);
+        FJIterate.forEach(iterable, procedure, batchSize, FJIterate.FORK_JOIN_POOL);
     }
 
     public static <T> void forEach(Iterable<T> iterable, Procedure<? super T> procedure, int batchSize, ForkJoinPool executor)
@@ -322,7 +319,7 @@ public final class FJIterate
             int minForkSize,
             int taskCount)
     {
-        FJIterate.forEach(iterable, procedure, minForkSize, taskCount, FJIterate.FOR_EACH_EXECUTOR);
+        FJIterate.forEach(iterable, procedure, minForkSize, taskCount, FJIterate.FORK_JOIN_POOL);
     }
 
     public static <T, PT extends Procedure<? super T>> void forEach(
@@ -351,7 +348,7 @@ public final class FJIterate
             ProcedureFactory<PT> procedureFactory,
             Combiner<PT> combiner)
     {
-        FJIterate.forEach(iterable, procedureFactory, combiner, FJIterate.FOR_EACH_EXECUTOR);
+        FJIterate.forEach(iterable, procedureFactory, combiner, FJIterate.FORK_JOIN_POOL);
     }
 
     /**
@@ -364,7 +361,7 @@ public final class FJIterate
             Combiner<PT> combiner,
             int batchSize)
     {
-        FJIterate.forEach(iterable, procedureFactory, combiner, batchSize, FJIterate.FOR_EACH_EXECUTOR);
+        FJIterate.forEach(iterable, procedureFactory, combiner, batchSize, FJIterate.FORK_JOIN_POOL);
     }
 
     public static <T, PT extends Procedure<? super T>> void forEach(
@@ -388,7 +385,7 @@ public final class FJIterate
             int minForkSize,
             int taskCount)
     {
-        FJIterate.forEach(iterable, procedureFactory, combiner, minForkSize, taskCount, FJIterate.FOR_EACH_EXECUTOR);
+        FJIterate.forEach(iterable, procedureFactory, combiner, minForkSize, taskCount, FJIterate.FORK_JOIN_POOL);
     }
 
     public static <T, PT extends Procedure<? super T>> void forEach(
@@ -541,7 +538,7 @@ public final class FJIterate
             R target,
             boolean allowReorderedResult)
     {
-        return FJIterate.select(iterable, predicate, target, FJIterate.DEFAULT_MIN_FORK_SIZE, FJIterate.FILTER_EXECUTOR, allowReorderedResult);
+        return FJIterate.select(iterable, predicate, target, FJIterate.DEFAULT_MIN_FORK_SIZE, FJIterate.FORK_JOIN_POOL, allowReorderedResult);
     }
 
     /**
@@ -632,7 +629,7 @@ public final class FJIterate
             R target,
             boolean allowReorderedResult)
     {
-        return FJIterate.reject(iterable, predicate, target, FJIterate.DEFAULT_MIN_FORK_SIZE, FJIterate.FILTER_EXECUTOR, allowReorderedResult);
+        return FJIterate.reject(iterable, predicate, target, FJIterate.DEFAULT_MIN_FORK_SIZE, FJIterate.FORK_JOIN_POOL, allowReorderedResult);
     }
 
     public static <T, R extends Collection<T>> R reject(
@@ -657,7 +654,7 @@ public final class FJIterate
      */
     public static <T> int count(Iterable<T> iterable, Predicate<? super T> predicate)
     {
-        return count(iterable, predicate, FJIterate.DEFAULT_MIN_FORK_SIZE, FJIterate.FILTER_EXECUTOR);
+        return count(iterable, predicate, FJIterate.DEFAULT_MIN_FORK_SIZE, FJIterate.FORK_JOIN_POOL);
     }
 
     /**
@@ -725,7 +722,7 @@ public final class FJIterate
                 function,
                 target,
                 FJIterate.DEFAULT_MIN_FORK_SIZE,
-                FJIterate.FOR_EACH_EXECUTOR,
+                FJIterate.FORK_JOIN_POOL,
                 allowReorderedResult);
     }
 
@@ -777,7 +774,7 @@ public final class FJIterate
                 function,
                 target,
                 FJIterate.DEFAULT_MIN_FORK_SIZE,
-                FJIterate.COLLECT_EXECUTOR,
+                FJIterate.FORK_JOIN_POOL,
                 allowReorderedResult);
     }
 
@@ -855,7 +852,7 @@ public final class FJIterate
                 function,
                 target,
                 FJIterate.DEFAULT_MIN_FORK_SIZE,
-                FJIterate.COLLECT_EXECUTOR,
+                FJIterate.FORK_JOIN_POOL,
                 allowReorderedResult);
     }
 
@@ -923,7 +920,7 @@ public final class FJIterate
                 zeroValueFactory,
                 nonMutatingAggregator,
                 batchSize,
-                FJIterate.FOR_EACH_EXECUTOR);
+                FJIterate.FORK_JOIN_POOL);
     }
 
     public static <T, K, V, R extends MutableMap<K, V>> R aggregateBy(
@@ -941,7 +938,7 @@ public final class FJIterate
                 nonMutatingAggregator,
                 mutableMap,
                 batchSize,
-                FJIterate.FOR_EACH_EXECUTOR);
+                FJIterate.FORK_JOIN_POOL);
     }
 
     public static <T, K, V> MutableMap<K, V> aggregateBy(
@@ -1025,7 +1022,7 @@ public final class FJIterate
                 zeroValueFactory,
                 mutatingAggregator,
                 batchSize,
-                FJIterate.FOR_EACH_EXECUTOR);
+                FJIterate.FORK_JOIN_POOL);
     }
 
     public static <T, K, V, R extends MutableMap<K, V>> R aggregateInPlaceBy(
@@ -1043,7 +1040,7 @@ public final class FJIterate
                 mutatingAggregator,
                 mutableMap,
                 batchSize,
-                FJIterate.FOR_EACH_EXECUTOR);
+                FJIterate.FORK_JOIN_POOL);
     }
 
     public static <T, K, V> MutableMap<K, V> aggregateInPlaceBy(
@@ -1094,7 +1091,7 @@ public final class FJIterate
             Iterable<V> iterable,
             Function<? super V, ? extends K> function)
     {
-        return FJIterate.groupBy(iterable, function, FJIterate.DEFAULT_MIN_FORK_SIZE, FJIterate.FOR_EACH_EXECUTOR);
+        return FJIterate.groupBy(iterable, function, FJIterate.DEFAULT_MIN_FORK_SIZE, FJIterate.FORK_JOIN_POOL);
     }
 
     /**
@@ -1119,7 +1116,7 @@ public final class FJIterate
             R concurrentMultimap,
             int batchSize)
     {
-        return FJIterate.groupBy(iterable, function, concurrentMultimap, batchSize, FJIterate.FOR_EACH_EXECUTOR);
+        return FJIterate.groupBy(iterable, function, concurrentMultimap, batchSize, FJIterate.FORK_JOIN_POOL);
     }
 
     /**
@@ -1131,7 +1128,7 @@ public final class FJIterate
             Function<? super V, ? extends K> function,
             int batchSize)
     {
-        return FJIterate.groupBy(iterable, function, batchSize, FJIterate.FOR_EACH_EXECUTOR);
+        return FJIterate.groupBy(iterable, function, batchSize, FJIterate.FORK_JOIN_POOL);
     }
 
     /**
