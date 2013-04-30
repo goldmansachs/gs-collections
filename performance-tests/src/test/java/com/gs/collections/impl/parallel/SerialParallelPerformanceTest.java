@@ -285,7 +285,7 @@ public class SerialParallelPerformanceTest
         return TimeKeeper.logAverageMillisecondsToRunInParallel("ForkJoin Select: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + Iterate.sizeOf(iterable), new Runnable()
+                + this.formatSizeOf(iterable), new Runnable()
         {
             public void run()
             {
@@ -359,7 +359,7 @@ public class SerialParallelPerformanceTest
         return TimeKeeper.logAverageMillisecondsToRunInParallel("ForkJoin Count: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + Iterate.sizeOf(iterable), new Runnable()
+                + this.formatSizeOf(iterable), new Runnable()
         {
             public void run()
             {
@@ -428,7 +428,7 @@ public class SerialParallelPerformanceTest
         return TimeKeeper.logAverageMillisecondsToRunInParallel("ForkJoin Reject: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + Iterate.sizeOf(iterable), new Runnable()
+                + this.formatSizeOf(iterable), new Runnable()
         {
             public void run()
             {
@@ -493,7 +493,7 @@ public class SerialParallelPerformanceTest
         return TimeKeeper.logAverageMillisecondsToRunInParallel("ForkJoin CollectIf: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + Iterate.sizeOf(iterable), new Runnable()
+                + this.formatSizeOf(iterable), new Runnable()
         {
             public void run()
             {
@@ -679,7 +679,7 @@ public class SerialParallelPerformanceTest
         return TimeKeeper.logAverageMillisecondsToRunInParallel("ForkJoin Collect: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + Iterate.sizeOf(iterable), new Runnable()
+                + this.formatSizeOf(iterable), new Runnable()
         {
             public void run()
             {
@@ -727,7 +727,7 @@ public class SerialParallelPerformanceTest
         return TimeKeeper.logAverageMillisecondsToRunInParallel("ForkJoin GroupBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + Iterate.sizeOf(iterable), new Runnable()
+                + this.formatSizeOf(iterable), new Runnable()
         {
             public void run()
             {
@@ -768,7 +768,7 @@ public class SerialParallelPerformanceTest
         return TimeKeeper.logAverageMillisecondsToRunInParallel("ForkJoin AggregateInPlaceBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + Iterate.sizeOf(iterable), new Runnable()
+                + this.formatSizeOf(iterable), new Runnable()
         {
             public void run()
             {
@@ -808,7 +808,7 @@ public class SerialParallelPerformanceTest
         return TimeKeeper.logAverageMillisecondsToRunInParallel("ForkJoin AggregateBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
-                + Iterate.sizeOf(iterable), new Runnable()
+                + this.formatSizeOf(iterable), new Runnable()
         {
             public void run()
             {
