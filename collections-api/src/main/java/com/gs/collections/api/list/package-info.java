@@ -26,7 +26,7 @@
  *         {@link com.gs.collections.api.list.MutableList} - an implementation of a JCF List which provides internal iterator methods matching the Smalltalk Collection protocol.
  *     </li>
  *     <li>
- *         {@link com.gs.collections.api.list.ImmutableList} - the non-modifiable equivalent interface to {@link MutableList}.
+ *         {@link com.gs.collections.api.list.ImmutableList} - the non-modifiable equivalent interface to {@link com.gs.collections.api.list.MutableList}.
  *     </li>
  *     <li>
  *         {@link com.gs.collections.api.list.FixedSizeList} - a list that may be mutated, but cannot grow or shrink in size.

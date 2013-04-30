@@ -28,35 +28,35 @@ public interface ImmutableSetFactory
     <T> ImmutableSet<T> with();
 
     /**
-     * Same as {@link #with(T)}.
+     * Same as {@link #with(Object)}.
      */
     <T> ImmutableSet<T> of(T one);
 
     <T> ImmutableSet<T> with(T one);
 
     /**
-     * Same as {@link #with(T, T)}.
+     * Same as {@link #with(Object, Object)}.
      */
     <T> ImmutableSet<T> of(T one, T two);
 
     <T> ImmutableSet<T> with(T one, T two);
 
     /**
-     * Same as {@link #with(T, T, T)}.
+     * Same as {@link #with(Object, Object, Object)}.
      */
     <T> ImmutableSet<T> of(T one, T two, T three);
 
     <T> ImmutableSet<T> with(T one, T two, T three);
 
     /**
-     * Same as {@link #with(T, T, T, T)}.
+     * Same as {@link #with(Object, Object, Object, Object)}.
      */
     <T> ImmutableSet<T> of(T one, T two, T three, T four);
 
     <T> ImmutableSet<T> with(T one, T two, T three, T four);
 
     /**
-     * Same as {@link #with(T...)}.
+     * Same as {@link #with(Object[])}.
      */
     <T> ImmutableSet<T> of(T... items);
 

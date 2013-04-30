@@ -27,7 +27,7 @@ import com.gs.collections.impl.utility.internal.IterableIterate;
 import net.jcip.annotations.Immutable;
 
 /**
- * A CollectIterable is an iterable that transforms a source iterable on a condition as it iterates.
+ * A ChunkIterable is an iterable that partitions a source iterable into fixed size chunks as it iterates.
  */
 @Immutable
 public class ChunkIterable<T>

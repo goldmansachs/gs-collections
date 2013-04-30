@@ -31,7 +31,7 @@ public interface ImmutableSortedSetFactory
     <T> ImmutableSortedSet<T> with();
 
     /**
-     * Same as {@link #with(T...)}.
+     * Same as {@link #with(Object[])}.
      */
     <T> ImmutableSortedSet<T> of(T... items);
 
@@ -52,7 +52,7 @@ public interface ImmutableSortedSetFactory
     <T> ImmutableSortedSet<T> with(Comparator<? super T> comparator);
 
     /**
-     * Same as {@link #with(Comparator, T...)}.
+     * Same as {@link #with(java.util.Comparator, Object[])}.
      */
     <T> ImmutableSortedSet<T> of(Comparator<? super T> comparator, T... items);
 

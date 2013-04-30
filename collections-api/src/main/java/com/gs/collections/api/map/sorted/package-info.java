@@ -26,7 +26,7 @@
  *         {@link com.gs.collections.api.map.sorted.MutableSortedMap} - an implementation of a JCF Map which provides methods matching the Smalltalk Collection protocol.
  *     </li>
  *     <li>
- *         {@link com.gs.collections.api.map.sorted.ImmutableSortedMap - the non-mutable equivalent of {@link com.gs.collections.api.map.sorted.MutableSortedMap}.
+ *         {@link com.gs.collections.api.map.sorted.ImmutableSortedMap} - the non-mutable equivalent of {@link com.gs.collections.api.map.sorted.MutableSortedMap}.
  *     </li>
  *     <li>
  *         {@link com.gs.collections.api.map.sorted.SortedMapIterable} - a map which contains elements in sorted order.

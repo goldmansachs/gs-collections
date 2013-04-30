@@ -28,7 +28,7 @@ public interface MutableSetFactory
     <T> MutableSet<T> with();
 
     /**
-     * Same as {@link #with(T...)}.
+     * Same as {@link #with(Object[])}.
      */
     <T> MutableSet<T> of(T... items);
 

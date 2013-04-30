@@ -31,70 +31,70 @@ public interface MutableSortedMapFactory
     <K, V> MutableSortedMap<K, V> with();
 
     /**
-     * Same as {@link #with(K, V)}.
+     * Same as {@link #with(Object, Object)}.
      */
     <K, V> MutableSortedMap<K, V> of(K key, V value);
 
     <K, V> MutableSortedMap<K, V> with(K key, V value);
 
     /**
-     * Same as {@link #with(K, V, K, V)}.
+     * Same as {@link #with(Object, Object, Object, Object)}.
      */
     <K, V> MutableSortedMap<K, V> of(K key1, V value1, K key2, V value2);
 
     <K, V> MutableSortedMap<K, V> with(K key1, V value1, K key2, V value2);
 
     /**
-     * Same as {@link #with(K, V, K, V, K, V)}.
+     * Same as {@link #with(Object, Object, Object, Object, Object, Object)}.
      */
     <K, V> MutableSortedMap<K, V> of(K key1, V value1, K key2, V value2, K key3, V value3);
 
     <K, V> MutableSortedMap<K, V> with(K key1, V value1, K key2, V value2, K key3, V value3);
 
     /**
-     * Same as {@link #with(K, V, K, V, K, V, K, V)}.
+     * Same as {@link #with(Object, Object, Object, Object, Object, Object, Object, Object)}.
      */
     <K, V> MutableSortedMap<K, V> of(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4);
 
     <K, V> MutableSortedMap<K, V> with(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4);
 
     /**
-     * Same as {@link #with(Comparator)}.
+     * Same as {@link #with(java.util.Comparator)}.
      */
     <K, V> MutableSortedMap<K, V> of(Comparator<? super K> comparator);
 
     <K, V> MutableSortedMap<K, V> with(Comparator<? super K> comparator);
 
     /**
-     * Same as {@link #with(Comparator, K, V)}.
+     * Same as {@link #with(java.util.Comparator, Object, Object)}.
      */
     <K, V> MutableSortedMap<K, V> of(Comparator<? super K> comparator, K key, V value);
 
     <K, V> MutableSortedMap<K, V> with(Comparator<? super K> comparator, K key, V value);
 
     /**
-     * Same as {@link #with(Comparator, K, V, K, V)}.
+     * Same as {@link #with(java.util.Comparator, Object, Object, Object, Object)}.
      */
     <K, V> MutableSortedMap<K, V> of(Comparator<? super K> comparator, K key1, V value1, K key2, V value2);
 
     <K, V> MutableSortedMap<K, V> with(Comparator<? super K> comparator, K key1, V value1, K key2, V value2);
 
     /**
-     * Same as {@link #with(Comparator, K, V, K, V, K, V)}.
+     * Same as {@link #with(java.util.Comparator, Object, Object, Object, Object, Object, Object)}.
      */
     <K, V> MutableSortedMap<K, V> of(Comparator<? super K> comparator, K key1, V value1, K key2, V value2, K key3, V value3);
 
     <K, V> MutableSortedMap<K, V> with(Comparator<? super K> comparator, K key1, V value1, K key2, V value2, K key3, V value3);
 
     /**
-     * Same as {@link #with(Comparator, K, V, K, V, K, V, K, V)}.
+     * Same as {@link #with(java.util.Comparator, Object, Object, Object, Object, Object, Object, Object, Object)}.
      */
     <K, V> MutableSortedMap<K, V> of(Comparator<? super K> comparator, K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4);
 
     <K, V> MutableSortedMap<K, V> with(Comparator<? super K> comparator, K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4);
 
     /**
-     * Same as {@link #withSortedMap(Map)}.
+     * Same as {@link #withSortedMap(java.util.Map)}.
      */
     <K, V> MutableSortedMap<K, V> ofSortedMap(Map<? extends K, ? extends V> map);
 

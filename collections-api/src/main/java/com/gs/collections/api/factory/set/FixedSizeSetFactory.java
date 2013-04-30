@@ -29,28 +29,28 @@ public interface FixedSizeSetFactory
     <T> FixedSizeSet<T> with();
 
     /**
-     * Same as {@link #with(T)}.
+     * Same as {@link #with(Object)}.
      */
     <T> FixedSizeSet<T> of(T one);
 
     <T> FixedSizeSet<T> with(T one);
 
     /**
-     * Same as {@link #with(T, T)}.
+     * Same as {@link #with(Object, Object)}.
      */
     <T> FixedSizeSet<T> of(T one, T two);
 
     <T> FixedSizeSet<T> with(T one, T two);
 
     /**
-     * Same as {@link #with(T, T, T)}.
+     * Same as {@link #with(Object, Object, Object)}.
      */
     <T> FixedSizeSet<T> of(T one, T two, T three);
 
     <T> FixedSizeSet<T> with(T one, T two, T three);
 
     /**
-     * Same as {@link #with(T, T, T, T)}.
+     * Same as {@link #with(Object, Object, Object, Object)}.
      */
     <T> FixedSizeSet<T> of(T one, T two, T three, T four);
 

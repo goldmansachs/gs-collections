@@ -29,7 +29,7 @@ public interface ImmutableHashingStrategySetFactory
     <T> ImmutableSet<T> with(HashingStrategy<? super T> hashingStrategy);
 
     /**
-     * Same as {@link #with(HashingStrategy, T...)}.
+     * Same as {@link #with(com.gs.collections.api.block.HashingStrategy, Object[])}.
      */
     <T> ImmutableSet<T> of(HashingStrategy<? super T> hashingStrategy, T... items);
 

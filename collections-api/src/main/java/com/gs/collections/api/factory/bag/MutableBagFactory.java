@@ -31,7 +31,7 @@ public interface MutableBagFactory
     <T> MutableBag<T> with();
 
     /**
-     * Same as {@link #with(T...)}.
+     * Same as {@link #with(Object[])}.
      */
     <T> MutableBag<T> of(T... elements);
 
