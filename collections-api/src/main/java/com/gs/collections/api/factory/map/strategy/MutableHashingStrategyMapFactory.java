@@ -29,21 +29,21 @@ public interface MutableHashingStrategyMapFactory
     <K, V> MutableMap<K, V> with(HashingStrategy<? super K> hashingStrategy);
 
     /**
-     * Same as {@link #with(HashingStrategy, K, V)}.
+     * Same as {@link #with(com.gs.collections.api.block.HashingStrategy, Object, Object)}.
      */
     <K, V> MutableMap<K, V> of(HashingStrategy<? super K> hashingStrategy, K key, V value);
 
     <K, V> MutableMap<K, V> with(HashingStrategy<? super K> hashingStrategy, K key, V value);
 
     /**
-     * Same as {@link #with(HashingStrategy, K, V, K, V)}.
+     * Same as {@link #with(com.gs.collections.api.block.HashingStrategy, Object, Object, Object, Object)}.
      */
     <K, V> MutableMap<K, V> of(HashingStrategy<? super K> hashingStrategy, K key1, V value1, K key2, V value2);
 
     <K, V> MutableMap<K, V> with(HashingStrategy<? super K> hashingStrategy, K key1, V value1, K key2, V value2);
 
     /**
-     * Same as {@link #with(HashingStrategy, K, V, K, V, K, V)}.
+     * Same as {@link #with(com.gs.collections.api.block.HashingStrategy, Object, Object, Object, Object, Object, Object)}.
      */
     <K, V> MutableMap<K, V> of(
             HashingStrategy<? super K> hashingStrategy,
@@ -58,7 +58,7 @@ public interface MutableHashingStrategyMapFactory
             K key3, V value3);
 
     /**
-     * Same as {@link #with(HashingStrategy, K, V, K, V, K, V, K, V)}.
+     * Same as {@link #with(com.gs.collections.api.block.HashingStrategy, Object, Object, Object, Object, Object, Object, Object, Object)}.
      */
     <K, V> MutableMap<K, V> of(
             HashingStrategy<? super K> hashingStrategy,

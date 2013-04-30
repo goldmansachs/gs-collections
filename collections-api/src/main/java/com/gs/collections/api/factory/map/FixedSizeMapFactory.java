@@ -28,21 +28,21 @@ public interface FixedSizeMapFactory
     <K, V> FixedSizeMap<K, V> with();
 
     /**
-     * Same as {@link #with(K, V)}.
+     * Same as {@link #with(Object, Object)}.
      */
     <K, V> FixedSizeMap<K, V> of(K key, V value);
 
     <K, V> FixedSizeMap<K, V> with(K key, V value);
 
     /**
-     * Same as {@link #with(K, V, K, V)}.
+     * Same as {@link #with(Object, Object, Object, Object)}.
      */
     <K, V> FixedSizeMap<K, V> of(K key1, V value1, K key2, V value2);
 
     <K, V> FixedSizeMap<K, V> with(K key1, V value1, K key2, V value2);
 
     /**
-     * Same as {@link #with(K, V, K, V, K, V)}.
+     * Same as {@link #with(Object, Object, Object, Object, Object, Object)}.
      */
     <K, V> FixedSizeMap<K, V> of(K key1, V value1, K key2, V value2, K key3, V value3);
 

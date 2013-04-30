@@ -19,7 +19,7 @@ package com.gs.collections.api.block.function;
 import java.io.Serializable;
 
 /**
- * Function is a one-argument lambda or closure which performs a transformation on the object of type {@code T}
+ * Function is a one-argument lambda which performs a transformation on the object of type {@code T}
  * passed to the valueOf() method.  This transformation can return the value of calling a getter, or perform
  * some more elaborate logic to calculate a value, of type {@code V}.
  */

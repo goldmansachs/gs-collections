@@ -16,7 +16,6 @@
 
 package com.gs.collections.impl.map.strategy.immutable;
 
-import java.util.Map;
 import java.util.Map.Entry;
 
 import com.gs.collections.api.block.HashingStrategy;
@@ -41,7 +40,7 @@ public final class ImmutableEntryWithHashingStrategy<K, V> extends AbstractImmut
     }
 
     /**
-     * Indicates whether an object equals this entry, following the behavior specified in {@link Map.Entry#equals(Object)}.
+     * Indicates whether an object equals this entry, following the behavior specified in {@link java.util.Map.Entry#equals(Object)}.
      */
     @Override
     public boolean equals(Object object)
@@ -56,7 +55,7 @@ public final class ImmutableEntryWithHashingStrategy<K, V> extends AbstractImmut
     }
 
     /**
-     * Return this entry's hash code, following the behavior specified in {@link Map.Entry#hashCode()}.
+     * Return this entry's hash code, following the behavior specified in {@link java.util.Map.Entry#hashCode()}.
      */
     @Override
     public int hashCode()

@@ -18,6 +18,9 @@ package com.gs.collections.api.factory.bag;
 
 import com.gs.collections.api.bag.ImmutableBag;
 
+/**
+ * A factory which creates instances of type {@link com.gs.collections.api.bag.ImmutableBag}.
+ */
 public interface ImmutableBagFactory
 {
     /**

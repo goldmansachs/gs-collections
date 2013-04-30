@@ -29,7 +29,7 @@ public interface MutableListFactory
     <T> MutableList<T> with();
 
     /**
-     * Same as {@link #with(T...)}.
+     * Same as {@link #with(Object[])}.
      */
     <T> MutableList<T> of(T... items);
 

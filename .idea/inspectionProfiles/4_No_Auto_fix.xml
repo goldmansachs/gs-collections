@@ -1962,7 +1962,7 @@
     <inspection_tool class="UnnecessaryExplicitNumericCast" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="UnnecessaryFinalOnLocalVariableOrParameter" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="UnnecessaryFullyQualifiedName" enabled="true" level="ERROR" enabled_by_default="true">
-      <option name="m_ignoreJavadoc" value="false" />
+      <option name="m_ignoreJavadoc" value="true" />
     </inspection_tool>
     <inspection_tool class="UnnecessaryInheritDoc" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="UnnecessaryInterfaceModifier" enabled="false" level="WARNING" enabled_by_default="false" />

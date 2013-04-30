@@ -32,7 +32,7 @@ import com.gs.collections.impl.collection.mutable.UnmodifiableMutableCollection;
 import com.gs.collections.impl.factory.Bags;
 
 /**
- * An unmodifiable view of a list.
+ * An unmodifiable view of a bag.
  *
  * @see MutableBag#asUnmodifiable()
  * @since 1.0

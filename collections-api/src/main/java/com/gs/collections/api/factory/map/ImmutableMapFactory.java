@@ -30,28 +30,28 @@ public interface ImmutableMapFactory
     <K, V> ImmutableMap<K, V> with();
 
     /**
-     * Same as {@link #with(K, V)}.
+     * Same as {@link #with(Object, Object)}.
      */
     <K, V> ImmutableMap<K, V> of(K key, V value);
 
     <K, V> ImmutableMap<K, V> with(K key, V value);
 
     /**
-     * Same as {@link #with(K, V, K, V)}.
+     * Same as {@link #with(Object, Object, Object, Object)}.
      */
     <K, V> ImmutableMap<K, V> of(K key1, V value1, K key2, V value2);
 
     <K, V> ImmutableMap<K, V> with(K key1, V value1, K key2, V value2);
 
     /**
-     * Same as {@link #with(K, V, K, V, K, V)}.
+     * Same as {@link #with(Object, Object, Object, Object, Object, Object)}.
      */
     <K, V> ImmutableMap<K, V> of(K key1, V value1, K key2, V value2, K key3, V value3);
 
     <K, V> ImmutableMap<K, V> with(K key1, V value1, K key2, V value2, K key3, V value3);
 
     /**
-     * Same as {@link #with(K, V, K, V, K, V, K, V)}.
+     * Same as {@link #with(Object, Object, Object, Object, Object, Object, Object, Object)}.
      */
     <K, V> ImmutableMap<K, V> of(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4);
 
@@ -60,7 +60,7 @@ public interface ImmutableMapFactory
     <K, V> ImmutableMap<K, V> ofMap(Map<K, V> map);
 
     /**
-     * Same as {@link #withAll(Map)}.
+     * Same as {@link #withAll(java.util.Map)}.
      */
     <K, V> ImmutableMap<K, V> ofAll(Map<K, V> map);
 

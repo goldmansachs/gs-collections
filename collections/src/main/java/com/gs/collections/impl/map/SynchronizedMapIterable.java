@@ -50,9 +50,7 @@ import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 
 /**
- * A synchronized view of a SortedMap.
- *
- * @see SynchronizedMapIterable (java.util.SortedMap)
+ * A synchronized view of a map.
  */
 public abstract class SynchronizedMapIterable<K, V>
         implements MapIterable<K, V>, Serializable

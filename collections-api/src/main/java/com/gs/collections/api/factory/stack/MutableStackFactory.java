@@ -28,7 +28,7 @@ public interface MutableStackFactory
     <T> MutableStack<T> with();
 
     /**
-     * Same as {@link #with(T...)}.
+     * Same as {@link #with(Object[])}.
      */
     <T> MutableStack<T> of(T... elements);
 
@@ -42,7 +42,7 @@ public interface MutableStackFactory
     <T> MutableStack<T> withAll(Iterable<? extends T> elements);
 
     /**
-     * Same as {@link #withReversed(T...)}.
+     * Same as {@link #withReversed(Object[])}.
      */
     <T> MutableStack<T> ofReversed(T... elements);
 

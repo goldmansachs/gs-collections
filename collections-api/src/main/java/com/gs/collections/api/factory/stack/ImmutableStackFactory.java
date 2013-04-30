@@ -28,14 +28,14 @@ public interface ImmutableStackFactory
     <T> ImmutableStack<T> with();
 
     /**
-     * Same as {@link #with(T)}.
+     * Same as {@link #with(Object)}.
      */
     <T> ImmutableStack<T> of(T element);
 
     <T> ImmutableStack<T> with(T element);
 
     /**
-     * Same as {@link #with(T...)}.
+     * Same as {@link #with(Object[])}.
      */
     <T> ImmutableStack<T> of(T... elements);
 
@@ -49,7 +49,7 @@ public interface ImmutableStackFactory
     <T> ImmutableStack<T> withAll(Iterable<? extends T> items);
 
     /**
-     * Same as {@link #withReversed(T...)}.
+     * Same as {@link #withReversed(Object[])}.
      */
     <T> ImmutableStack<T> ofReversed(T... elements);
 

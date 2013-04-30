@@ -22,7 +22,7 @@ import java.util.Map;
 import com.gs.collections.api.block.function.Function2;
 
 /**
- * MaxSizeFunction compares the size of strings, collections, or maps to determine the max size
+ * MaxSizeFunction compares the size of strings, collections, or maps to determine the max size.
  */
 public final class MaxSizeFunction
 {

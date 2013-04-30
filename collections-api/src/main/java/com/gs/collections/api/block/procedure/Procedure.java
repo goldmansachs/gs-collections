@@ -19,7 +19,7 @@ package com.gs.collections.api.block.procedure;
 import java.io.Serializable;
 
 /**
- * A Procedure is a single argument Lambda or Closure which has no return argument
+ * A Procedure is a single argument lambda which has no return argument.
  */
 public interface Procedure<T>
         extends Serializable
