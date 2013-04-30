@@ -32,6 +32,7 @@ import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.MutableIntList;
+import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.ParallelTests;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
@@ -42,6 +43,7 @@ import com.gs.collections.impl.list.mutable.CompositeFastList;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.Iterate;
@@ -118,16 +120,26 @@ public class SerialParallelPerformanceTest
         }
     };
 
-    public FastList<String> generateWords(int count)
+    public MutableList<String> generateWords(int count)
     {
         final FastList<String> words = FastList.newList();
         Interval.oneTo(count).forEach(new IntProcedure()
         {
             public void value(int each)
             {
-                words.add(RandomStringUtils.randomAlphabetic(2).toLowerCase());
+                words.add(RandomStringUtils.randomAlphabetic(2));
             }
         });
+        return words;
+    }
+
+    public MutableSet<String> generateWordsSet(int count)
+    {
+        UnifiedSet<String> words = UnifiedSet.newSet();
+        while (words.size() < count)
+        {
+            words.add(RandomStringUtils.randomAlphabetic(5));
+        }
         return words;
     }
 
@@ -165,6 +177,8 @@ public class SerialParallelPerformanceTest
             public void value(int size)
             {
                 SerialParallelPerformanceTest.this.basicTestParallelAndSerialGSCollectionsFastList(size);
+                SerialParallelPerformanceTest.this.basicTestParallelAndSerialGSCollectionsUnifiedSet(size);
+                SerialParallelPerformanceTest.this.basicTestParallelAndSerialGSCollectionsImmutableList(size);
             }
         };
         sizes.forEach(procedure);
@@ -175,10 +189,26 @@ public class SerialParallelPerformanceTest
 
     private void basicTestParallelAndSerialGSCollectionsFastList(int count)
     {
-        FastList<Integer> fastList = (FastList<Integer>) Interval.oneTo(count).toList();
-        Collections.shuffle(fastList);
-        FastList<String> words = this.generateWords(count);
+        MutableList<Integer> integers = Interval.oneTo(count).toList();
+        Collections.shuffle(integers);
+        MutableList<String> words = this.generateWords(count);
         Collections.shuffle(words);
+        this.basicSerialAndParallelGSCollectionsPerformanceComparison(integers, words);
+    }
+
+    private void basicTestParallelAndSerialGSCollectionsImmutableList(int count)
+    {
+        MutableList<Integer> integers = Interval.oneTo(count).toList();
+        Collections.shuffle(integers);
+        MutableList<String> words = this.generateWords(count);
+        Collections.shuffle(words);
+        this.basicSerialAndParallelGSCollectionsPerformanceComparison(integers.toImmutable(), words.toImmutable());
+    }
+
+    private void basicTestParallelAndSerialGSCollectionsUnifiedSet(int count)
+    {
+        MutableSet<Integer> fastList = Interval.oneTo(count).toSet();
+        MutableSet<String> words = this.generateWordsSet(count);
         this.basicSerialAndParallelGSCollectionsPerformanceComparison(fastList, words);
     }
 
@@ -954,6 +984,7 @@ public class SerialParallelPerformanceTest
 
         private static void gcAndYield()
         {
+            System.gc();
             System.gc();
             Thread.yield();
             System.gc();
