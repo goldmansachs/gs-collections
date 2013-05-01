@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,19 +19,16 @@ package com.gs.collections.impl.parallel;
 import java.text.NumberFormat;
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.Executor;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.list.MutableList;
-import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.ParallelTests;
@@ -41,7 +38,7 @@ import com.gs.collections.impl.forkjoin.FJIterate;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.CompositeFastList;
 import com.gs.collections.impl.list.mutable.FastList;
-import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
+import com.gs.collections.impl.list.primitive.IntInterval;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
@@ -60,9 +57,7 @@ public class SerialParallelPerformanceTest
     private static final int WARM_UP_COUNT = Integer.parseInt(System.getProperty("WarmupCount", "100"));
     private static final int PARALLEL_RUN_COUNT = Integer.parseInt(System.getProperty("ParallelRunCount", "200"));
     private static final int SERIAL_RUN_COUNT = Integer.parseInt(System.getProperty("SerialRunCount", "200"));
-    private static final int NUMBER_OF_USER_THREADS = Integer.parseInt(System.getProperty("UserThreads", "1"));
 
-    private static final int VERY_SMALL_COUNT = 10 * SCALE_FACTOR;
     private static final int SMALL_COUNT = 100 * SCALE_FACTOR;
     private static final int MEDIUM_COUNT = 1000 * SCALE_FACTOR;
     private static final int LARGE_COUNT = 10000 * SCALE_FACTOR;
@@ -119,8 +114,116 @@ public class SerialParallelPerformanceTest
             return aggregate + 1;
         }
     };
+    public static final Predicate<Integer> PREDICATE_1 = Predicates.greaterThan(0).and(IntegerPredicates.isOdd());
+    public static final Predicate<Integer> PREDICATE_2 = IntegerPredicates.isPositive().and(IntegerPredicates.isEven());
+    public static final Predicate<Integer> PREDICATE_3 = IntegerPredicates.isOdd().and(IntegerPredicates.isNegative());
+    public static final MutableList<Predicate<Integer>> PREDICATES = FastList.newListWith(PREDICATE_1, PREDICATE_2, PREDICATE_3);
 
-    public MutableList<String> generateWords(int count)
+    @Test
+    @Category(ParallelTests.class)
+    public void select()
+    {
+        this.measureAlgorithmForIntegerIterable("Select", new Procedure<Function0<Iterable<Integer>>>()
+        {
+            public void value(Function0<Iterable<Integer>> each)
+            {
+                SerialParallelPerformanceTest.this.select(each.value());
+            }
+        });
+    }
+
+    @Test
+    @Category(ParallelTests.class)
+    public void reject()
+    {
+        this.measureAlgorithmForIntegerIterable("Reject", new Procedure<Function0<Iterable<Integer>>>()
+        {
+            public void value(Function0<Iterable<Integer>> each)
+            {
+                SerialParallelPerformanceTest.this.reject(each.value());
+            }
+        });
+    }
+
+    @Test
+    @Category(ParallelTests.class)
+    public void count()
+    {
+        this.measureAlgorithmForIntegerIterable("Count", new Procedure<Function0<Iterable<Integer>>>()
+        {
+            public void value(Function0<Iterable<Integer>> each)
+            {
+                SerialParallelPerformanceTest.this.count(each.value());
+            }
+        });
+    }
+
+    @Test
+    @Category(ParallelTests.class)
+    public void collectIf()
+    {
+        this.measureAlgorithmForIntegerIterable("CollectIf", new Procedure<Function0<Iterable<Integer>>>()
+        {
+            public void value(Function0<Iterable<Integer>> each)
+            {
+                SerialParallelPerformanceTest.this.collectIf(each.value());
+            }
+        });
+    }
+
+    @Test
+    @Category(ParallelTests.class)
+    public void collect()
+    {
+        this.measureAlgorithmForIntegerIterable("Collect", new Procedure<Function0<Iterable<Integer>>>()
+        {
+            public void value(Function0<Iterable<Integer>> each)
+            {
+                SerialParallelPerformanceTest.this.collect(each.value());
+            }
+        });
+    }
+
+    @Test
+    @Category(ParallelTests.class)
+    public void groupBy()
+    {
+        this.measureAlgorithmForRandomStringIterable("GroupBy", new Procedure<Function0<Iterable<String>>>()
+        {
+            public void value(Function0<Iterable<String>> each)
+            {
+                SerialParallelPerformanceTest.this.groupBy(each.value());
+            }
+        });
+    }
+
+    @Test
+    @Category(ParallelTests.class)
+    public void aggregateBy()
+    {
+        this.measureAlgorithmForRandomStringIterable("AggregateBy", new Procedure<Function0<Iterable<String>>>()
+        {
+            public void value(Function0<Iterable<String>> each)
+            {
+                SerialParallelPerformanceTest.this.aggregateBy(each.value());
+            }
+        });
+    }
+
+    @Test
+    @Category(ParallelTests.class)
+    public void aggregateInPlaceBy()
+    {
+        this.measureAlgorithmForRandomStringIterable("AggregateInPlaceBy", new Procedure<Function0<Iterable<String>>>()
+        {
+            public void value(Function0<Iterable<String>> each)
+            {
+                SerialParallelPerformanceTest.this.aggregateInPlaceBy(each.value());
+            }
+        });
+    }
+
+    public MutableList<String> generateWordsList(int count)
     {
         final FastList<String> words = FastList.newList();
         Interval.oneTo(count).forEach(new IntProcedure()
@@ -146,15 +249,31 @@ public class SerialParallelPerformanceTest
     @After
     public void tearDown()
     {
-        System.gc();
-        System.gc();
-        Thread.yield();
-        System.gc();
-        Thread.yield();
+        SerialParallelPerformanceTest.forceGC();
     }
 
-    public void printMachineAndTestConfiguration()
+    private static void forceGC()
     {
+        IntInterval.oneTo(20).forEach(new IntProcedure()
+        {
+            public void value(int each)
+            {
+                System.gc();
+                try
+                {
+                    Thread.sleep(100);
+                }
+                catch (InterruptedException e)
+                {
+                    throw new RuntimeException(e);
+                }
+            }
+        });
+    }
+
+    public void printMachineAndTestConfiguration(String serialParallelAlgorithm)
+    {
+        System.out.println("*** Algorithm: " + serialParallelAlgorithm);
         System.out.println("Available Processors: " + Runtime.getRuntime().availableProcessors());
         System.out.println("Default Thread Pool Size: " + ParallelIterate.getDefaultMaxThreadPoolSize());
         System.out.println("Default Task Count: " + ParallelIterate.getDefaultTaskCount());
@@ -162,94 +281,332 @@ public class SerialParallelPerformanceTest
         System.out.println("Warm up count: " + WARM_UP_COUNT);
         System.out.println("Parallel Run Count: " + PARALLEL_RUN_COUNT);
         System.out.println("Serial** Run Count: " + SERIAL_RUN_COUNT);
-        System.out.println("Number of User Threads: " + NUMBER_OF_USER_THREADS);
     }
 
-    @Test
-    @Category(ParallelTests.class)
-    public void parallelAndSerialTest()
+    private MutableList<Integer> getSizes()
     {
-        this.printMachineAndTestConfiguration();
-        this.basicTestParallelAndSerialGSCollectionsFastList(100);  // Warm everything up
-        MutableIntList sizes = IntArrayList.newListWith(LARGE_COUNT, MEDIUM_COUNT, SMALL_COUNT, VERY_SMALL_COUNT);
-        IntProcedure procedure = new IntProcedure()
+        MutableList<Integer> sizes = FastList.newListWith(LARGE_COUNT, MEDIUM_COUNT, SMALL_COUNT);
+        Collections.shuffle(sizes);
+        return sizes;
+    }
+
+    private MutableList<Function0<Iterable<Integer>>> getIntegerListGenerators(int count)
+    {
+        final Interval interval = Interval.fromTo(-(count / 2), count / 2 - 1);
+        MutableList<Function0<Iterable<Integer>>> generators = FastList.newList();
+        generators.add(new Function0<Iterable<Integer>>()
         {
-            public void value(int size)
+            public Iterable<Integer> value()
             {
-                SerialParallelPerformanceTest.this.basicTestParallelAndSerialGSCollectionsFastList(size);
-                SerialParallelPerformanceTest.this.basicTestParallelAndSerialGSCollectionsUnifiedSet(size);
-                SerialParallelPerformanceTest.this.basicTestParallelAndSerialGSCollectionsImmutableList(size);
+                MutableList<Integer> integers = interval.toList();
+                Collections.shuffle(integers);
+                return integers;
             }
-        };
-        sizes.forEach(procedure);
-        sizes.reverseThis().forEach(procedure);
-        sizes.forEach(procedure);
-        sizes.reverseThis().forEach(procedure);
+        });
+        generators.add(new Function0<Iterable<Integer>>()
+        {
+            public Iterable<Integer> value()
+            {
+                MutableList<Integer> integers = interval.toList();
+                Collections.shuffle(integers);
+                return integers.toImmutable();
+            }
+        });
+        generators.add(new Function0<Iterable<Integer>>()
+        {
+            public Iterable<Integer> value()
+            {
+                return interval.toSet();
+            }
+        });
+        Collections.shuffle(generators);
+        return generators;
     }
 
-    private void basicTestParallelAndSerialGSCollectionsFastList(int count)
+    private MutableList<Function0<Iterable<String>>> getRandomWordsGenerators(final int count)
     {
-        MutableList<Integer> integers = Interval.oneTo(count).toList();
-        Collections.shuffle(integers);
-        MutableList<String> words = this.generateWords(count);
-        Collections.shuffle(words);
-        this.basicSerialAndParallelGSCollectionsPerformanceComparison(integers, words);
+        MutableList<Function0<Iterable<String>>> generators = FastList.newList();
+        generators.add(new Function0<Iterable<String>>()
+        {
+            public Iterable<String> value()
+            {
+                return SerialParallelPerformanceTest.this.generateWordsList(count);
+            }
+        });
+        generators.add(new Function0<Iterable<String>>()
+        {
+            public Iterable<String> value()
+            {
+                return SerialParallelPerformanceTest.this.generateWordsList(count).toImmutable();
+            }
+        });
+        generators.add(new Function0<Iterable<String>>()
+        {
+            public Iterable<String> value()
+            {
+                return SerialParallelPerformanceTest.this.generateWordsSet(count);
+            }
+        });
+        Collections.shuffle(generators);
+        return generators;
     }
 
-    private void basicTestParallelAndSerialGSCollectionsImmutableList(int count)
+    private void measureAlgorithmForIntegerIterable(String algorithmName, final Procedure<Function0<Iterable<Integer>>> algorithm)
     {
-        MutableList<Integer> integers = Interval.oneTo(count).toList();
-        Collections.shuffle(integers);
-        MutableList<String> words = this.generateWords(count);
-        Collections.shuffle(words);
-        this.basicSerialAndParallelGSCollectionsPerformanceComparison(integers.toImmutable(), words.toImmutable());
+        this.printMachineAndTestConfiguration(algorithmName);
+        for (int i = 0; i < 4; i++)
+        {
+            this.getSizes().forEach(new Procedure<Integer>()
+            {
+                public void value(Integer count)
+                {
+                    SerialParallelPerformanceTest.this.getIntegerListGenerators(count).forEach(algorithm);
+                }
+            });
+        }
     }
 
-    private void basicTestParallelAndSerialGSCollectionsUnifiedSet(int count)
+    private void measureAlgorithmForRandomStringIterable(String algorithmName, final Procedure<Function0<Iterable<String>>> algorithm)
     {
-        MutableSet<Integer> fastList = Interval.oneTo(count).toSet();
-        MutableSet<String> words = this.generateWordsSet(count);
-        this.basicSerialAndParallelGSCollectionsPerformanceComparison(fastList, words);
+        this.printMachineAndTestConfiguration(algorithmName);
+        for (int i = 0; i < 4; i++)
+        {
+            this.getSizes().forEach(new Procedure<Integer>()
+            {
+                public void value(Integer count)
+                {
+                    SerialParallelPerformanceTest.this.getRandomWordsGenerators(count).forEach(algorithm);
+                }
+            });
+        }
     }
 
-    private void basicSerialAndParallelGSCollectionsPerformanceComparison(Iterable<Integer> collection, Iterable<String> words)
+    private void aggregateBy(final Iterable<String> words)
     {
-        Predicate<Integer> operation1 = Predicates.greaterThan(0).and(IntegerPredicates.isEven());
-        Predicate<Integer> operation2 = IntegerPredicates.isPositive().and(IntegerPredicates.isEven());
-        Predicate<Integer> operation3 = IntegerPredicates.isEven().and(IntegerPredicates.isPositive());
-        MutableList<Predicate<Integer>> predicates = FastList.newListWith(operation1, operation2, operation3);
+        MutableList<Runnable> runnables = FastList.newList();
+        runnables.add(new Runnable()
+        {
+            public void run()
+            {
+                SerialParallelPerformanceTest.this.basicSerialAggregateByPerformance(words, SERIAL_RUN_COUNT);
+            }
+        });
+        runnables.add(new Runnable()
+        {
+            public void run()
+            {
+                SerialParallelPerformanceTest.this.basicParallelAggregateByPerformance(words, PARALLEL_RUN_COUNT);
+            }
+        });
+        runnables.add(new Runnable()
+        {
+            public void run()
+            {
+                SerialParallelPerformanceTest.this.basicForkJoinAggregateByPerformance(words, PARALLEL_RUN_COUNT);
+            }
+        });
+        this.shuffleAndRun(runnables);
+    }
 
-        this.basicSerialSelectPerformance(collection, predicates, SERIAL_RUN_COUNT);
-        this.basicParallelSelectPerformance(collection, predicates, PARALLEL_RUN_COUNT);
-        this.basicForkJoinSelectPerformance(collection, predicates, PARALLEL_RUN_COUNT);
+    private void aggregateInPlaceBy(final Iterable<String> words)
+    {
+        MutableList<Runnable> runnables = FastList.newList();
+        runnables.add(new Runnable()
+        {
+            public void run()
+            {
+                SerialParallelPerformanceTest.this.basicSerialAggregateInPlaceByPerformance(words, SERIAL_RUN_COUNT);
+            }
+        });
+        runnables.add(new Runnable()
+        {
+            public void run()
+            {
+                SerialParallelPerformanceTest.this.basicParallelAggregateInPlaceByPerformance(words, PARALLEL_RUN_COUNT);
+            }
+        });
+        runnables.add(new Runnable()
+        {
+            public void run()
+            {
+                SerialParallelPerformanceTest.this.basicForkJoinAggregateInPlaceByPerformance(words, PARALLEL_RUN_COUNT);
+            }
+        });
+        this.shuffleAndRun(runnables);
+    }
 
-        this.basicSerialRejectPerformance(collection, predicates, SERIAL_RUN_COUNT);
-        this.basicParallelRejectPerformance(collection, predicates, PARALLEL_RUN_COUNT);
-        this.basicForkJoinRejectPerformance(collection, predicates, PARALLEL_RUN_COUNT);
+    private void groupBy(final Iterable<String> words)
+    {
+        MutableList<Runnable> runnables = FastList.newList();
+        runnables.add(new Runnable()
+        {
+            public void run()
+            {
+                SerialParallelPerformanceTest.this.basicSerialGroupByPerformance(words, SERIAL_RUN_COUNT);
+            }
+        });
+        runnables.add(new Runnable()
+        {
+            public void run()
+            {
+                SerialParallelPerformanceTest.this.basicParallelGroupByPerformance(words, PARALLEL_RUN_COUNT);
+            }
+        });
+        runnables.add(new Runnable()
+        {
+            public void run()
+            {
+                SerialParallelPerformanceTest.this.basicForkJoinGroupByPerformance(words, PARALLEL_RUN_COUNT);
+            }
+        });
+        this.shuffleAndRun(runnables);
+    }
 
-        this.basicSerialCountPerformance(collection, predicates, SERIAL_RUN_COUNT);
-        this.basicParallelCountPerformance(collection, predicates, PARALLEL_RUN_COUNT);
-        this.basicForkJoinCountPerformance(collection, predicates, PARALLEL_RUN_COUNT);
+    private void collect(final Iterable<Integer> collection)
+    {
+        MutableList<Runnable> runnables = FastList.newList();
+        runnables.add(new Runnable()
+        {
+            public void run()
+            {
+                SerialParallelPerformanceTest.this.basicSerialCollectPerformance(collection, SERIAL_RUN_COUNT);
+            }
+        });
+        runnables.add(new Runnable()
+        {
+            public void run()
+            {
+                SerialParallelPerformanceTest.this.basicParallelCollectPerformance(collection, PARALLEL_RUN_COUNT);
+            }
+        });
+        runnables.add(new Runnable()
+        {
+            public void run()
+            {
+                SerialParallelPerformanceTest.this.basicForkJoinCollectPerformance(collection, PARALLEL_RUN_COUNT);
+            }
+        });
+        this.shuffleAndRun(runnables);
+    }
 
-        this.basicSerialCollectIfPerformance(collection, predicates, SERIAL_RUN_COUNT);
-        this.basicParallelCollectIfPerformance(collection, predicates, PARALLEL_RUN_COUNT);
-        this.basicForkJoinCollectIfPerformance(collection, predicates, PARALLEL_RUN_COUNT);
+    private void collectIf(final Iterable<Integer> collection)
+    {
+        MutableList<Runnable> runnables = FastList.newList();
+        runnables.add(new Runnable()
+        {
+            public void run()
+            {
+                SerialParallelPerformanceTest.this.basicSerialCollectIfPerformance(collection, PREDICATES, SERIAL_RUN_COUNT);
+            }
+        });
+        runnables.add(new Runnable()
+        {
+            public void run()
+            {
+                SerialParallelPerformanceTest.this.basicParallelCollectIfPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT);
+            }
+        });
+        runnables.add(new Runnable()
+        {
+            public void run()
+            {
+                SerialParallelPerformanceTest.this.basicForkJoinCollectIfPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT);
+            }
+        });
+        this.shuffleAndRun(runnables);
+    }
 
-        this.basicSerialCollectPerformance(collection, SERIAL_RUN_COUNT);
-        this.basicParallelCollectPerformance(collection, PARALLEL_RUN_COUNT);
-        this.basicForkJoinCollectPerformance(collection, PARALLEL_RUN_COUNT);
+    private void count(final Iterable<Integer> collection)
+    {
+        MutableList<Runnable> runnables = FastList.newList();
+        runnables.add(new Runnable()
+        {
+            public void run()
+            {
+                SerialParallelPerformanceTest.this.basicSerialCountPerformance(collection, PREDICATES, SERIAL_RUN_COUNT);
+            }
+        });
+        runnables.add(new Runnable()
+        {
+            public void run()
+            {
+                SerialParallelPerformanceTest.this.basicParallelCountPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT);
+            }
+        });
+        runnables.add(new Runnable()
+        {
+            public void run()
+            {
+                SerialParallelPerformanceTest.this.basicForkJoinCountPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT);
+            }
+        });
+        this.shuffleAndRun(runnables);
+    }
 
-        this.basicSerialGroupByPerformance(words, SERIAL_RUN_COUNT);
-        this.basicParallelGroupByPerformance(words, PARALLEL_RUN_COUNT);
-        this.basicForkJoinGroupByPerformance(words, PARALLEL_RUN_COUNT);
+    private void shuffleAndRun(MutableList<Runnable> runnables)
+    {
+        Collections.shuffle(runnables);
+        runnables.forEach(new Procedure<Runnable>()
+        {
+            public void value(Runnable runnable)
+            {
+                runnable.run();
+            }
+        });
+    }
 
-        this.basicSerialAggregateInPlaceByPerformance(words, SERIAL_RUN_COUNT);
-        this.basicParallelAggregateInPlaceByPerformance(words, PARALLEL_RUN_COUNT);
-        this.basicForkJoinAggregateInPlaceByPerformance(words, PARALLEL_RUN_COUNT);
+    private void reject(final Iterable<Integer> collection)
+    {
+        MutableList<Runnable> runnables = FastList.newList();
+        runnables.add(new Runnable()
+        {
+            public void run()
+            {
+                SerialParallelPerformanceTest.this.basicSerialRejectPerformance(collection, PREDICATES, SERIAL_RUN_COUNT);
+            }
+        });
+        runnables.add(new Runnable()
+        {
+            public void run()
+            {
+                SerialParallelPerformanceTest.this.basicParallelRejectPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT);
+            }
+        });
+        runnables.add(new Runnable()
+        {
+            public void run()
+            {
+                SerialParallelPerformanceTest.this.basicForkJoinRejectPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT);
+            }
+        });
+        this.shuffleAndRun(runnables);
+    }
 
-        this.basicSerialAggregateByPerformance(words, SERIAL_RUN_COUNT);
-        this.basicParallelAggregateByPerformance(words, PARALLEL_RUN_COUNT);
-        this.basicForkJoinAggregateByPerformance(words, PARALLEL_RUN_COUNT);
+    private void select(final Iterable<Integer> collection)
+    {
+        MutableList<Runnable> runnables = FastList.newList();
+        runnables.add(new Runnable()
+        {
+            public void run()
+            {
+                SerialParallelPerformanceTest.this.basicSerialSelectPerformance(collection, PREDICATES, SERIAL_RUN_COUNT);
+            }
+        });
+        runnables.add(new Runnable()
+        {
+            public void run()
+            {
+                SerialParallelPerformanceTest.this.basicParallelSelectPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT);
+            }
+        });
+        runnables.add(new Runnable()
+        {
+            public void run()
+            {
+                SerialParallelPerformanceTest.this.basicForkJoinSelectPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT);
+            }
+        });
+        this.shuffleAndRun(runnables);
     }
 
     private double basicSerialSelectPerformance(
@@ -257,7 +614,7 @@ public class SerialParallelPerformanceTest
             final MutableList<Predicate<Integer>> predicateList,
             int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("Serial** Select: "
+        return TimeKeeper.logAverageMillisecondsToRun("Serial** Select: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), new Runnable()
@@ -268,7 +625,7 @@ public class SerialParallelPerformanceTest
                 Verify.assertNotEmpty(Iterate.select(iterable, predicateList.get(1), FastList.<Integer>newList()));
                 Verify.assertNotEmpty(Iterate.select(iterable, predicateList.get(2), FastList.<Integer>newList()));
             }
-        }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
+        }, count, WARM_UP_COUNT);
     }
 
     private String formatSizeOf(Iterable<?> iterable)
@@ -281,7 +638,7 @@ public class SerialParallelPerformanceTest
             final MutableList<Predicate<Integer>> predicateList,
             int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("Parallel Select: "
+        return TimeKeeper.logAverageMillisecondsToRun("Parallel Select: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), new Runnable()
@@ -304,7 +661,7 @@ public class SerialParallelPerformanceTest
                         new CompositeFastList<Integer>(),
                         true));
             }
-        }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
+        }, count, WARM_UP_COUNT);
     }
 
     private double basicForkJoinSelectPerformance(
@@ -312,7 +669,7 @@ public class SerialParallelPerformanceTest
             final MutableList<Predicate<Integer>> predicateList,
             int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("ForkJoin Select: "
+        return TimeKeeper.logAverageMillisecondsToRun("ForkJoin Select: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), new Runnable()
@@ -335,7 +692,7 @@ public class SerialParallelPerformanceTest
                         new CompositeFastList<Integer>(),
                         true));
             }
-        }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
+        }, count, WARM_UP_COUNT);
     }
 
     private String getSimpleName(Object collection)
@@ -348,7 +705,7 @@ public class SerialParallelPerformanceTest
             final MutableList<Predicate<Integer>> predicateList,
             int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("Serial** Count: "
+        return TimeKeeper.logAverageMillisecondsToRun("Serial** Count: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), new Runnable()
@@ -359,7 +716,7 @@ public class SerialParallelPerformanceTest
                 Assert.assertTrue(Iterate.count(iterable, predicateList.get(1)) > 0);
                 Assert.assertTrue(Iterate.count(iterable, predicateList.get(2)) > 0);
             }
-        }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
+        }, count, WARM_UP_COUNT);
     }
 
     private double basicParallelCountPerformance(
@@ -367,7 +724,7 @@ public class SerialParallelPerformanceTest
             final MutableList<Predicate<Integer>> predicateList,
             int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("Parallel Count: "
+        return TimeKeeper.logAverageMillisecondsToRun("Parallel Count: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), new Runnable()
@@ -378,7 +735,7 @@ public class SerialParallelPerformanceTest
                 Assert.assertTrue(ParallelIterate.count(iterable, predicateList.get(1)) > 0);
                 Assert.assertTrue(ParallelIterate.count(iterable, predicateList.get(2)) > 0);
             }
-        }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
+        }, count, WARM_UP_COUNT);
     }
 
     private double basicForkJoinCountPerformance(
@@ -386,7 +743,7 @@ public class SerialParallelPerformanceTest
             final MutableList<Predicate<Integer>> predicateList,
             int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("ForkJoin Count: "
+        return TimeKeeper.logAverageMillisecondsToRun("ForkJoin Count: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), new Runnable()
@@ -397,7 +754,7 @@ public class SerialParallelPerformanceTest
                 Assert.assertTrue(FJIterate.count(iterable, predicateList.get(1)) > 0);
                 Assert.assertTrue(FJIterate.count(iterable, predicateList.get(2)) > 0);
             }
-        }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
+        }, count, WARM_UP_COUNT);
     }
 
     private double basicSerialRejectPerformance(
@@ -405,7 +762,7 @@ public class SerialParallelPerformanceTest
             final MutableList<Predicate<Integer>> predicateList,
             int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("Serial** Reject: "
+        return TimeKeeper.logAverageMillisecondsToRun("Serial** Reject: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), new Runnable()
@@ -416,7 +773,7 @@ public class SerialParallelPerformanceTest
                 Verify.assertNotEmpty(Iterate.reject(iterable, predicateList.get(1), FastList.<Integer>newList()));
                 Verify.assertNotEmpty(Iterate.reject(iterable, predicateList.get(2), FastList.<Integer>newList()));
             }
-        }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
+        }, count, WARM_UP_COUNT);
     }
 
     private double basicParallelRejectPerformance(
@@ -424,7 +781,7 @@ public class SerialParallelPerformanceTest
             final MutableList<Predicate<Integer>> predicateList,
             int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("Parallel Reject: "
+        return TimeKeeper.logAverageMillisecondsToRun("Parallel Reject: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), new Runnable()
@@ -447,7 +804,7 @@ public class SerialParallelPerformanceTest
                         new CompositeFastList<Integer>(),
                         true));
             }
-        }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
+        }, count, WARM_UP_COUNT);
     }
 
     private double basicForkJoinRejectPerformance(
@@ -455,7 +812,7 @@ public class SerialParallelPerformanceTest
             final MutableList<Predicate<Integer>> predicateList,
             int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("ForkJoin Reject: "
+        return TimeKeeper.logAverageMillisecondsToRun("ForkJoin Reject: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), new Runnable()
@@ -478,7 +835,7 @@ public class SerialParallelPerformanceTest
                         new CompositeFastList<Integer>(),
                         true));
             }
-        }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
+        }, count, WARM_UP_COUNT);
     }
 
     private double basicParallelCollectIfPerformance(
@@ -486,7 +843,7 @@ public class SerialParallelPerformanceTest
             final MutableList<Predicate<Integer>> predicates,
             int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("Parallel CollectIf: "
+        return TimeKeeper.logAverageMillisecondsToRun("Parallel CollectIf: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), new Runnable()
@@ -512,7 +869,7 @@ public class SerialParallelPerformanceTest
                         new CompositeFastList<Short>(),
                         true));
             }
-        }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
+        }, count, WARM_UP_COUNT);
     }
 
     private double basicForkJoinCollectIfPerformance(
@@ -520,7 +877,7 @@ public class SerialParallelPerformanceTest
             final MutableList<Predicate<Integer>> predicates,
             int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("ForkJoin CollectIf: "
+        return TimeKeeper.logAverageMillisecondsToRun("ForkJoin CollectIf: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), new Runnable()
@@ -546,7 +903,7 @@ public class SerialParallelPerformanceTest
                         new CompositeFastList<Short>(),
                         true));
             }
-        }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
+        }, count, WARM_UP_COUNT);
     }
 
     private double basicSerialCollectIfPerformance(
@@ -554,7 +911,7 @@ public class SerialParallelPerformanceTest
             final MutableList<Predicate<Integer>> predicates,
             int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("Serial** CollectIf: "
+        return TimeKeeper.logAverageMillisecondsToRun("Serial** CollectIf: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), new Runnable()
@@ -577,14 +934,14 @@ public class SerialParallelPerformanceTest
                         SHORT_FUNCTION,
                         FastList.<Short>newList()));
             }
-        }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
+        }, count, WARM_UP_COUNT);
     }
 
     private double basicSerialCollectPerformance(
             final Iterable<Integer> iterable,
             int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("Serial** Collect: "
+        return TimeKeeper.logAverageMillisecondsToRun("Serial** Collect: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), new Runnable()
@@ -605,7 +962,7 @@ public class SerialParallelPerformanceTest
                         SHORT_FUNCTION,
                         FastList.<Short>newList(initialCapacity)));
             }
-        }, count, 10, 1);
+        }, count, 10);
     }
 
     private double basicSerialGroupByPerformance(
@@ -614,7 +971,7 @@ public class SerialParallelPerformanceTest
     {
         Assert.assertEquals(HashBagMultimap.newMultimap(ParallelIterate.groupBy(iterable, ALPHAGRAM_FUNCTION)),
                 HashBagMultimap.newMultimap(Iterate.groupBy(iterable, ALPHAGRAM_FUNCTION)));
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("Serial** GroupBy: "
+        return TimeKeeper.logAverageMillisecondsToRun("Serial** GroupBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), new Runnable()
@@ -625,7 +982,7 @@ public class SerialParallelPerformanceTest
                         iterable,
                         ALPHAGRAM_FUNCTION));
             }
-        }, count, 10, 1);
+        }, count, 10);
     }
 
     private double basicSerialAggregateInPlaceByPerformance(
@@ -635,7 +992,7 @@ public class SerialParallelPerformanceTest
         Assert.assertEquals(
                 ParallelIterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, AtomicIntegerWithEquals.NEW_INSTANCE, AtomicIntegerWithEquals.INCREMENT),
                 Iterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, AtomicIntegerWithEquals.NEW_INSTANCE, AtomicIntegerWithEquals.INCREMENT));
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("Serial** AggregateInPlaceBy: "
+        return TimeKeeper.logAverageMillisecondsToRun("Serial** AggregateInPlaceBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), new Runnable()
@@ -649,7 +1006,7 @@ public class SerialParallelPerformanceTest
                                 AtomicIntegerWithEquals.NEW_INSTANCE,
                                 AtomicIntegerWithEquals.INCREMENT));
             }
-        }, count, 10, 1);
+        }, count, 10);
     }
 
     private double basicSerialAggregateByPerformance(
@@ -659,7 +1016,7 @@ public class SerialParallelPerformanceTest
         Assert.assertEquals(
                 ParallelIterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR),
                 Iterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR));
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("Serial** AggregateBy: "
+        return TimeKeeper.logAverageMillisecondsToRun("Serial** AggregateBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), new Runnable()
@@ -673,12 +1030,12 @@ public class SerialParallelPerformanceTest
                                 INTEGER_NEW,
                                 COUNT_AGGREGATOR));
             }
-        }, count, 10, 1);
+        }, count, 10);
     }
 
     private double basicParallelCollectPerformance(final Iterable<Integer> iterable, int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("Parallel Collect: "
+        return TimeKeeper.logAverageMillisecondsToRun("Parallel Collect: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), new Runnable()
@@ -701,12 +1058,12 @@ public class SerialParallelPerformanceTest
                         new CompositeFastList<Short>(),
                         true));
             }
-        }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
+        }, count, WARM_UP_COUNT);
     }
 
     private double basicForkJoinCollectPerformance(final Iterable<Integer> iterable, int count)
     {
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("ForkJoin Collect: "
+        return TimeKeeper.logAverageMillisecondsToRun("ForkJoin Collect: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), new Runnable()
@@ -729,14 +1086,14 @@ public class SerialParallelPerformanceTest
                         new CompositeFastList<Short>(),
                         true));
             }
-        }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
+        }, count, WARM_UP_COUNT);
     }
 
     private double basicParallelGroupByPerformance(final Iterable<String> iterable, int count)
     {
         Assert.assertEquals(HashBagMultimap.newMultimap(ParallelIterate.groupBy(iterable, ALPHAGRAM_FUNCTION)),
                 HashBagMultimap.newMultimap(Iterate.groupBy(iterable, ALPHAGRAM_FUNCTION)));
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("Parallel GroupBy: "
+        return TimeKeeper.logAverageMillisecondsToRun("Parallel GroupBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), new Runnable()
@@ -747,14 +1104,14 @@ public class SerialParallelPerformanceTest
                         iterable,
                         ALPHAGRAM_FUNCTION));
             }
-        }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
+        }, count, WARM_UP_COUNT);
     }
 
     private double basicForkJoinGroupByPerformance(final Iterable<String> iterable, int count)
     {
         Assert.assertEquals(HashBagMultimap.newMultimap(FJIterate.groupBy(iterable, ALPHAGRAM_FUNCTION)),
                 HashBagMultimap.newMultimap(Iterate.groupBy(iterable, ALPHAGRAM_FUNCTION)));
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("ForkJoin GroupBy: "
+        return TimeKeeper.logAverageMillisecondsToRun("ForkJoin GroupBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), new Runnable()
@@ -765,7 +1122,7 @@ public class SerialParallelPerformanceTest
                         iterable,
                         ALPHAGRAM_FUNCTION));
             }
-        }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
+        }, count, WARM_UP_COUNT);
     }
 
     private double basicParallelAggregateInPlaceByPerformance(final Iterable<String> iterable, int count)
@@ -773,7 +1130,7 @@ public class SerialParallelPerformanceTest
         Assert.assertEquals(
                 ParallelIterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, AtomicIntegerWithEquals.NEW_INSTANCE, AtomicIntegerWithEquals.INCREMENT),
                 Iterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, AtomicIntegerWithEquals.NEW_INSTANCE, AtomicIntegerWithEquals.INCREMENT));
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("Parallel AggregateInPlaceBy: "
+        return TimeKeeper.logAverageMillisecondsToRun("Parallel AggregateInPlaceBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), new Runnable()
@@ -787,7 +1144,7 @@ public class SerialParallelPerformanceTest
                                 AtomicIntegerWithEquals.NEW_INSTANCE,
                                 AtomicIntegerWithEquals.INCREMENT));
             }
-        }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
+        }, count, WARM_UP_COUNT);
     }
 
     private double basicForkJoinAggregateInPlaceByPerformance(final Iterable<String> iterable, int count)
@@ -795,7 +1152,7 @@ public class SerialParallelPerformanceTest
         Assert.assertEquals(
                 FJIterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, AtomicIntegerWithEquals.NEW_INSTANCE, AtomicIntegerWithEquals.INCREMENT),
                 Iterate.aggregateInPlaceBy(iterable, ALPHAGRAM_FUNCTION, AtomicIntegerWithEquals.NEW_INSTANCE, AtomicIntegerWithEquals.INCREMENT));
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("ForkJoin AggregateInPlaceBy: "
+        return TimeKeeper.logAverageMillisecondsToRun("ForkJoin AggregateInPlaceBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), new Runnable()
@@ -809,7 +1166,7 @@ public class SerialParallelPerformanceTest
                                 AtomicIntegerWithEquals.NEW_INSTANCE,
                                 AtomicIntegerWithEquals.INCREMENT));
             }
-        }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
+        }, count, WARM_UP_COUNT);
     }
 
     private double basicParallelAggregateByPerformance(final Iterable<String> iterable, int count)
@@ -817,7 +1174,7 @@ public class SerialParallelPerformanceTest
         Assert.assertEquals(
                 ParallelIterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR),
                 Iterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR));
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("Parallel AggregateBy: "
+        return TimeKeeper.logAverageMillisecondsToRun("Parallel AggregateBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), new Runnable()
@@ -827,7 +1184,7 @@ public class SerialParallelPerformanceTest
                 Verify.assertNotEmpty(
                         ParallelIterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR));
             }
-        }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
+        }, count, WARM_UP_COUNT);
     }
 
     private double basicForkJoinAggregateByPerformance(final Iterable<String> iterable, int count)
@@ -835,7 +1192,7 @@ public class SerialParallelPerformanceTest
         Assert.assertEquals(
                 FJIterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR),
                 Iterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR));
-        return TimeKeeper.logAverageMillisecondsToRunInParallel("ForkJoin AggregateBy: "
+        return TimeKeeper.logAverageMillisecondsToRun("ForkJoin AggregateBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
                 + this.formatSizeOf(iterable), new Runnable()
@@ -845,7 +1202,7 @@ public class SerialParallelPerformanceTest
                 Verify.assertNotEmpty(
                         FJIterate.aggregateBy(iterable, ALPHAGRAM_FUNCTION, INTEGER_NEW, COUNT_AGGREGATOR));
             }
-        }, count, WARM_UP_COUNT, NUMBER_OF_USER_THREADS);
+        }, count, WARM_UP_COUNT);
     }
 
     static final class TimeKeeper
@@ -887,11 +1244,6 @@ public class SerialParallelPerformanceTest
             long start = TimeKeeper.getCurrentTimeAsNanos();
             runnable.run();
             long end = TimeKeeper.getCurrentTimeAsNanos();
-            return TimeKeeper.calcElapsedTime(start, end);
-        }
-
-        private static long calcElapsedTime(long start, long end)
-        {
             return end - start;
         }
 
@@ -900,95 +1252,51 @@ public class SerialParallelPerformanceTest
             return TimeKeeper.currentTimeNanoseconds();
         }
 
-        private static void doLog(String message, int count, double total, double average)
+        private static void doLog(String message, int count, long total, double average)
         {
-            System.out.println(message + " Count: " + count + " Total(ms): " + TimeKeeper.nanosToMillis(total) + " Avg(ms): " + TimeKeeper.nanosToMillis(average));
+            System.out.println(message + " Count: " + count + " Total(ms): " + TimeKeeper.longNanosToMillisString(total) + " Avg(ms): " + TimeKeeper.doubleNanosToMillisString(average));
         }
 
-        private static double logInParallel(String message, Runnable runnable, int count, int threads)
+        public static double logAverageMillisecondsToRun(
+                String message,
+                Runnable runnable,
+                int count)
         {
-            ExecutorService executor =
-                    ParallelIterate.newPooledExecutor(threads, "logAverageMillisecondsToRunInParallel", true);
-            try
+            long start = TimeKeeper.getCurrentTimeAsNanos();
+            for (int i = 0; i < count; i++)
             {
-                long[] nanos = new long[count];
-                long start = TimeKeeper.getCurrentTimeAsNanos();
-                long runStart = start;
-                for (int i = 0; i < count; i++)
-                {
-                    TimeKeeper.executeNumberOfTimes(runnable, threads, executor);
-                    long end = TimeKeeper.getCurrentTimeAsNanos();
-                    nanos[i] = end - runStart;
-                    runStart = end;
-                }
-                long totalNanos = TimeKeeper.calcElapsedTime(start, TimeKeeper.getCurrentTimeAsNanos());
-                double averageTime = (double) totalNanos / (double) count;
-                TimeKeeper.doLog(message, count, (double) totalNanos, averageTime);
-                return averageTime / (double) TimeKeeper.MILLIS_TO_NANOS;
+                runnable.run();
             }
-            finally
-            {
-                executor.shutdown();
-            }
+            long totalNanos = TimeKeeper.getCurrentTimeAsNanos() - start;
+            double averageTime = (double) totalNanos / (double) count;
+            TimeKeeper.doLog(message, count, totalNanos, averageTime);
+            return averageTime / (double) TimeKeeper.MILLIS_TO_NANOS;
         }
 
-        public static double logAverageMillisecondsToRunInParallel(
+        private static String doubleNanosToMillisString(double nanos)
+        {
+            return NumberFormat.getInstance().format(nanos / MILLIS_TO_NANOS);
+        }
+
+        private static String longNanosToMillisString(long nanos)
+        {
+            return NumberFormat.getInstance().format(nanos / MILLIS_TO_NANOS);
+        }
+
+        public static double logAverageMillisecondsToRun(
                 String message,
                 Runnable runnable,
                 int count,
-                int threads)
-        {
-            return TimeKeeper.logInParallel(message, runnable, count, threads);
-        }
-
-        private static void executeNumberOfTimes(final Runnable runnable, int threads, Executor executor)
-        {
-            try
-            {
-                final CountDownLatch latch = new CountDownLatch(threads);
-                for (int j = 0; j < threads; j++)
-                {
-                    executor.execute(new Runnable()
-                    {
-                        public void run()
-                        {
-                            runnable.run();
-                            latch.countDown();
-                        }
-                    });
-                }
-                latch.await();
-            }
-            catch (InterruptedException e)
-            {
-                throw new RuntimeException(e);
-            }
-        }
-
-        private static String nanosToMillis(double nanos)
-        {
-            return NumberFormat.getInstance().format(nanos / 1000000.0);
-        }
-
-        public static double logAverageMillisecondsToRunInParallel(
-                String message,
-                Runnable runnable,
-                int count,
-                int warmUpCount,
-                int threads)
+                int warmUpCount)
         {
             TimeKeeper.warmUp(warmUpCount, runnable);
             TimeKeeper.gcAndYield();
-            return TimeKeeper.logAverageMillisecondsToRunInParallel(message, runnable, count, threads);
+            return TimeKeeper.logAverageMillisecondsToRun(message, runnable, count);
         }
 
         private static void gcAndYield()
         {
-            System.gc();
-            System.gc();
-            Thread.yield();
-            System.gc();
-            Thread.yield();
+            SerialParallelPerformanceTest.forceGC();
         }
 
         private static void warmUp(int warmUpCount, Runnable runnable)
