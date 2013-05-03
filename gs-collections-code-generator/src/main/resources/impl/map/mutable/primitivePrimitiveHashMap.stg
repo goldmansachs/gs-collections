@@ -76,8 +76,8 @@ import com.gs.collections.impl.set.mutable.primitive.<name1>HashSet;
  */
 public class <name1><name2>HashMap implements Mutable<name1><name2>Map, Externalizable
 {
+    static final <type2> EMPTY_VALUE = <(literal.(type2))("0")>;
     private static final long serialVersionUID = 1L;
-    private static final <type2> EMPTY_VALUE = <(literal.(type2))("0")>;
     private static final <type1> EMPTY_KEY = <(literal.(type1))("0")>;
     private static final <type1> REMOVED_KEY = <(literal.(type1))("1")>;
 
@@ -154,7 +154,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
 
     public Mutable<name1><name2>Map asUnmodifiable()
     {
-        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+        return new Unmodifiable<name1><name2>HashMap(this);
     }
 
     public Mutable<name1><name2>Map asSynchronized()

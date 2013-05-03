@@ -1,0 +1,351 @@
+import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+
+isTest() ::= "true"
+
+hasTwoPrimitives() ::= "true"
+
+skipBoolean() ::= "true"
+
+targetPath() ::= "com/gs/collections/impl/map/mutable/primitive"
+
+fileName(primitive1, primitive2, sameTwoPrimitives) ::= "Unmodifiable<primitive1.name><primitive2.name>HashMapTest"
+
+class(primitive1, primitive2, sameTwoPrimitives) ::= <<
+<body(primitive1.type, primitive2.type, primitive1.name, primitive2.name)>
+>>
+
+body(type1, type2, name1, name2) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.map.mutable.primitive;
+
+import com.gs.collections.api.block.function.primitive.<name2>Function;
+import com.gs.collections.api.block.function.primitive.<name2>Function0;
+import com.gs.collections.api.block.function.primitive.<name2>To<name2>Function;
+<if(!sameTwoPrimitives)>import com.gs.collections.api.block.function.primitive.<name1>To<name2>Function;<endif>
+import com.gs.collections.impl.list.mutable.primitive.<name1>ArrayList;
+import com.gs.collections.impl.test.Verify;
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * This file was automatically generated from template file unmodifiablePrimitivePrimitiveHashMapTest.stg.
+ * JUnit test for {@link Unmodifiable<name1><name2>HashMap}.
+ */
+public class Unmodifiable<name1><name2>HashMapTest extends Abstract<name1><name2>HashMapTestCase
+{
+    private final Unmodifiable<name1><name2>HashMap map = this.classUnderTest();
+
+    @Override
+    protected Unmodifiable<name1><name2>HashMap classUnderTest()
+    {
+        return new Unmodifiable<name1><name2>HashMap(<name1><name2>HashMap.newWithKeysValues(<["0", "31", "32"]:keyValue(); separator=", ">));
+    }
+
+    @Override
+    protected Unmodifiable<name1><name2>HashMap newWithKeysValues(<type1> key1, <type2> value1)
+    {
+        return new Unmodifiable<name1><name2>HashMap(new <name1><name2>HashMap(1).withKeyValue(key1, value1));
+    }
+
+    @Override
+    protected Unmodifiable<name1><name2>HashMap newWithKeysValues(<type1> key1, <type2> value1, <type1> key2, <type2> value2)
+    {
+        return new Unmodifiable<name1><name2>HashMap(new <name1><name2>HashMap(2).withKeysValues(key1, value1, key2, value2));
+    }
+
+    @Override
+    protected Unmodifiable<name1><name2>HashMap newWithKeysValues(<type1> key1, <type2> value1, <type1> key2, <type2> value2, <type1> key3, <type2> value3)
+    {
+        return new Unmodifiable<name1><name2>HashMap(new <name1><name2>HashMap(3).withKeysValues(key1, value1, key2, value2, key3, value3));
+    }
+
+    @Override
+    protected Unmodifiable<name1><name2>HashMap newWithKeysValues(<type1> key1, <type2> value1, <type1> key2, <type2> value2, <type1> key3, <type2> value3, <type1> key4, <type2> value4)
+    {
+        return new Unmodifiable<name1><name2>HashMap(new <name1><name2>HashMap(4).withKeysValues(key1, value1, key2, value2, key3, value3, key4, value4));
+    }
+         
+    @Override
+    protected Unmodifiable<name1><name2>HashMap getEmptyMap()
+    {
+        return new Unmodifiable<name1><name2>HashMap(new <name1><name2>HashMap());
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void clear()
+    {
+        this.map.clear();
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void removeKey()
+    {
+        this.map.removeKey(<(literal.(type1))("5")>);
+    }
+
+    @Override
+    @Test
+    public void removeKeyIfAbsent()
+    {
+        Assert.assertEquals(<(literal.(type2))("100")>, this.map.removeKeyIfAbsent(<(literal.(type1))("10")>, <(literal.(type2))("100")>)<(wideDelta.(type2))>);
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void removeKeyIfAbsentThrowsException()
+    {
+        Assert.assertEquals(<(literal.(type2))("100")>, this.map.removeKeyIfAbsent(<(literal.(type1))("10")>, <(literal.(type2))("100")>)<(wideDelta.(type2))>);
+        this.map.removeKeyIfAbsent(<(literal.(type1))("0")>, <(literal.(type2))("100")>);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void put()
+    {
+        this.map.put(<(literal.(type1))("0")>, <(literal.(type2))("1")>);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void withKeysValues()
+    {
+        this.map.withKeyValue(<(literal.(type1))("1")>, <(literal.(type2))("1")>);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void withoutKey()
+    {
+        this.map.withoutKey(<(literal.(type1))("32")>);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void withoutAllKeys()
+    {
+        this.map.withoutAllKeys(<name1>ArrayList.newListWith(<(literal.(type1))("0")>, <(literal.(type1))("32")>));
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void putDuplicateWithRemovedSlot()
+    {
+        <type1> collision1 = Abstract<name1><name2>HashMapTestCase.generateCollisions().getFirst();
+
+        Unmodifiable<name1><name2>HashMap hashMap = this.getEmptyMap();
+        hashMap.put(collision1, <(literal.(type2))("1")>);
+    }
+
+    @Override
+    @Test
+    public void get()
+    {
+        Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.get(<(literal.(type1))("0")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("31")>, this.map.get(<(literal.(type1))("31")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("32")>, this.map.get(<(literal.(type1))("32")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.get(<(literal.(type1))("1")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.get(<(literal.(type1))("33")>)<(wideDelta.(type2))>);
+    }
+
+    @Override
+    @Test
+    public void getIfAbsent()
+    {
+        Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.getIfAbsent(<(literal.(type1))("0")>, <(literal.(type2))("5")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("31")>, this.map.getIfAbsent(<(literal.(type1))("31")>, <(literal.(type2))("5")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("32")>, this.map.getIfAbsent(<(literal.(type1))("32")>, <(literal.(type2))("5")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("6")>, this.map.getIfAbsent(<(literal.(type1))("33")>, <(literal.(type2))("6")>)<(wideDelta.(type2))>);
+    }
+
+    @Override
+    @Test
+    public void getOrThrow()
+    {
+        Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.getOrThrow(<(literal.(type1))("0")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("31")>, this.map.getOrThrow(<(literal.(type1))("31")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("32")>, this.map.getOrThrow(<(literal.(type1))("32")>)<(wideDelta.(type2))>);
+
+        Verify.assertThrows(IllegalStateException.class, new Runnable()
+        {
+            public void run()
+            {
+                Unmodifiable<name1><name2>HashMapTest.this.map.getOrThrow(<(literal.(type1))("1")>);
+            }
+        });
+        Verify.assertThrows(IllegalStateException.class, new Runnable()
+        {
+            public void run()
+            {
+                Unmodifiable<name1><name2>HashMapTest.this.map.getOrThrow(<(literal.(type1))("33")>);
+            }
+        });
+    }
+
+    @Override
+    @Test
+    public void getIfAbsentPut()
+    {
+        Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.getIfAbsentPut(<(literal.(type1))("0")>, <(literal.(type2))("50")>)<(wideDelta.(type2))>);
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void getIfAbsentPutThrowsException()
+    {
+        this.map.getIfAbsentPut(<(literal.(type1))("10")>, <(literal.(type2))("100")>);
+    }
+
+    @Override
+    @Test
+    public void getIfAbsentPut_Function()
+    {
+        <name2>Function0 factory = new <name2>Function0()
+        {
+            public <type2> value()
+            {
+                return <(literal.(type2))("100")>;
+            }
+        };
+
+        Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.getIfAbsentPut(<(literal.(type1))("0")>, factory)<(wideDelta.(type2))>);
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void getIfAbsentPut_FunctionThrowsException()
+    {
+        <name2>Function0 factory = new <name2>Function0()
+        {
+            public <type2> value()
+            {
+                return <(literal.(type2))("100")>;
+            }
+        };
+
+        this.map.getIfAbsentPut(<(literal.(type1))("10")>, factory);
+    }
+
+    @Override
+    @Test
+    public void getIfAbsentPutWith()
+    {
+        <name2>Function\<String> functionLength = new <name2>Function\<String>()
+        {
+            public <type2> <type2>ValueOf(String string)
+            {
+                return <(castFromInt.(type2))("string.length()")>;
+            }
+        };
+
+        Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.getIfAbsentPutWith(<(literal.(type1))("0")>, functionLength, "123456789")<(wideDelta.(type2))>);
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void getIfAbsentPutWithThrowsException()
+    {
+        <name2>Function\<String> functionLength = new <name2>Function\<String>()
+        {
+            public <type2> <type2>ValueOf(String string)
+            {
+                return <(castFromInt.(type2))("string.length()")>;
+            }
+        };
+
+        this.map.getIfAbsentPutWith(<(literal.(type1))("10")>, functionLength, "unused");
+    }
+
+    @Override
+    @Test
+    public void getIfAbsentPutWithKey()
+    {
+        <name1>To<name2>Function function = new <name1>To<name2>Function()
+        {
+            public <type2> valueOf(<type1> <type1>Parameter)
+            {
+                return <castExactly(type2, {<type1>Parameter}, sameTwoPrimitives)>;
+            }
+        };
+        Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.getIfAbsentPutWithKey(<(literal.(type1))("0")>, function)<(wideDelta.(type2))>);
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void getIfAbsentPutWithKeyThrowsException()
+    {
+        <name1>To<name2>Function function = new <name1>To<name2>Function()
+        {
+            public <type2> valueOf(<type1> <type1>Parameter)
+            {
+                return <castExactly(type2, {<type1>Parameter}, sameTwoPrimitives)>;
+            }
+        };
+        this.map.getIfAbsentPutWithKey(<(literal.(type1))("10")>, function);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void updateValue()
+    {
+        <name2>To<name2>Function incrementFunction = new <name2>To<name2>Function()
+        {
+            public <type2> valueOf(<type2> value)
+            {
+                return <(castIntToNarrowType.(type2))({value + <(literal.(type2))("1")>})>;
+            }
+        };
+        this.map.updateValue(<keyValue("0")>, incrementFunction);
+    }
+
+    @Override
+    @Test
+    public void contains()
+    {
+        Assert.assertTrue(this.map.contains(<(literal.(type2))("0")>));
+        Assert.assertTrue(this.map.contains(<(literal.(type2))("31")>));
+        Assert.assertTrue(this.map.contains(<(literal.(type2))("32")>));
+    }
+
+    @Override
+    @Test
+    public void containsKey()
+    {
+        Assert.assertTrue(this.map.containsKey(<(literal.(type1))("0")>));
+        Assert.assertTrue(this.map.containsKey(<(literal.(type1))("31")>));
+        Assert.assertTrue(this.map.containsKey(<(literal.(type1))("32")>));
+        Assert.assertFalse(this.map.containsKey(<(literal.(type1))("1")>));
+        Assert.assertFalse(this.map.containsKey(<(literal.(type1))("5")>));
+        Assert.assertFalse(this.map.containsKey(<(literal.(type1))("35")>));
+    }
+
+    @Override
+    @Test
+    public void containsValue()
+    {
+        Assert.assertTrue(this.map.containsValue(<(literal.(type2))("0")>));
+        Assert.assertTrue(this.map.containsValue(<(literal.(type2))("31")>));
+        Assert.assertTrue(this.map.containsValue(<(literal.(type2))("32")>));
+    }
+
+    @Override
+    @Test
+    public void size()
+    {
+        Assert.assertEquals(0, this.getEmptyMap().size());
+        Assert.assertEquals(1, this.newWithKeysValues(<keyValue("0")>).size());
+        Assert.assertEquals(1, this.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>).size());
+
+        Assert.assertEquals(2, this.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>, <(literal.(type1))("5")>, <(literal.(type2))("5")>).size());
+        Assert.assertEquals(2, this.newWithKeysValues(<keyValue("0")>, <(literal.(type1))("5")>, <(literal.(type2))("5")>).size());
+        Assert.assertEquals(3, this.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>, <keyValue("0")>, <(literal.(type1))("5")>, <(literal.(type2))("5")>).size());
+        Assert.assertEquals(2, this.newWithKeysValues(<(literal.(type1))("6")>, <(literal.(type2))("6")>, <(literal.(type1))("5")>, <(literal.(type2))("5")>).size());
+        Verify.assertSize(3, this.map);
+    }
+}
+
+>>
+
+keyValue(value) ::= <<
+<(literal.(type1))(value)>, <(literal.(type2))(value)>
+>>

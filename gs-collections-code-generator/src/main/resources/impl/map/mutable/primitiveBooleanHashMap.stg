@@ -75,8 +75,8 @@ import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
  */
 public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externalizable
 {
+    static final boolean EMPTY_VALUE = false;
     private static final long serialVersionUID = 1L;
-    private static final boolean EMPTY_VALUE = false;
     private static final <type> EMPTY_KEY = <zero.(type)>;
     private static final <type> REMOVED_KEY = <(literal.(type))("1")>;
 
@@ -112,7 +112,7 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
 
     public Mutable<name>BooleanMap asUnmodifiable()
     {
-        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+        return new Unmodifiable<name>BooleanHashMap(this);
     }
 
     public Mutable<name>BooleanMap asSynchronized()
