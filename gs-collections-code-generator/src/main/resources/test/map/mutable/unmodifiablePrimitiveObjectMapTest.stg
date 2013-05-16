@@ -1,0 +1,369 @@
+import "copyright.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+
+isTest() ::= "true"
+
+targetPath() ::= "com/gs/collections/impl/map/mutable/primitive"
+
+fileName(primitive) ::= "Unmodifiable<primitive.name>ObjectMapTest"
+
+skipBoolean() ::= "true"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.map.mutable.primitive;
+
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.impl.block.factory.Functions0;
+import com.gs.collections.impl.block.function.AddFunction;
+import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.impl.test.Verify;
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * JUnit test for {@link Unmodifiable<name>ObjectMap}.
+ * This file was automatically generated from template file unmodifiablePrimitiveObjectMapTest.stg.
+ */
+public class Unmodifiable<name>ObjectMapTest extends AbstractMutable<name>ObjectHashMapTestCase
+{
+    private final Unmodifiable<name>ObjectMap\<String> map = this.classUnderTest();
+
+    @Override
+    protected Unmodifiable<name>ObjectMap\<String> classUnderTest()
+    {
+        return new Unmodifiable<name>ObjectMap\<String>(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("31")>, "thirtyOne", <(literal.(type))("32")>, "thirtyTwo"));
+    }
+
+    @Override
+    protected \<T> Unmodifiable<name>ObjectMap\<T> newWithKeysValues(<type> key1, T value1)
+    {
+        return new Unmodifiable<name>ObjectMap\<T>(<name>ObjectHashMap.newWithKeysValues(key1, value1));
+    }
+
+    @Override
+    protected \<T> Unmodifiable<name>ObjectMap\<T> newWithKeysValues(<type> key1, T value1, <type> key2, T value2)
+    {
+        return new Unmodifiable<name>ObjectMap\<T>(<name>ObjectHashMap.newWithKeysValues(key1, value1, key2, value2));
+    }
+
+    @Override
+    protected \<T> Unmodifiable<name>ObjectMap\<T> newWithKeysValues(<type> key1, T value1, <type> key2, T value2, <type> key3, T value3)
+    {
+        return new Unmodifiable<name>ObjectMap\<T>(<name>ObjectHashMap.newWithKeysValues(key1, value1, key2, value2, key3, value3));
+    }
+
+    @Override
+    protected \<T> Unmodifiable<name>ObjectMap\<T> getEmptyMap()
+    {
+        return new Unmodifiable<name>ObjectMap\<T>(new <name>ObjectHashMap\<T>());
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void clear()
+    {
+        this.map.clear();
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void removeKey()
+    {
+        this.map.removeKey(<(literal.(type))("5")>);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void put()
+    {
+        this.map.put(<(literal.(type))("0")>, "one");
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void withKeysValues()
+    {
+        this.map.withKeyValue(<(literal.(type))("1")>, "one");
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void withoutKey()
+    {
+        this.map.withoutKey(<(literal.(type))("32")>);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void withoutAllKeys()
+    {
+        this.map.withoutAllKeys(<name>ArrayList.newListWith(<(literal.(type))("0")>, <(literal.(type))("32")>));
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void putDuplicateWithRemovedSlot()
+    {
+        <type> collision1 = AbstractMutable<name>ObjectHashMapTestCase.generateCollisions().getFirst();
+        this.getEmptyMap().put(collision1, "one");
+    }
+
+    @Override
+    @Test
+    public void get()
+    {
+        Assert.assertEquals("zero", this.map.get(<(literal.(type))("0")>));
+        Assert.assertEquals("thirtyOne", this.map.get(<(literal.(type))("31")>));
+        Assert.assertEquals("thirtyTwo", this.map.get(<(literal.(type))("32")>));
+
+        Assert.assertNull(this.map.get(<(literal.(type))("1")>));
+        Assert.assertNull(this.map.get(<(literal.(type))("33")>));
+    }
+
+    @Override
+    @Test
+    public void getIfAbsent()
+    {
+        Function0\<String> ifAbsent = new Function0\<String>()
+        {
+            public String value()
+            {
+                return "ifAbsent";
+            }
+        };
+
+        Assert.assertEquals("zero", this.map.getIfAbsent(<(literal.(type))("0")>, ifAbsent));
+        Assert.assertEquals("thirtyOne", this.map.getIfAbsent(<(literal.(type))("31")>, ifAbsent));
+        Assert.assertEquals("thirtyTwo", this.map.getIfAbsent(<(literal.(type))("32")>, ifAbsent));
+
+        Assert.assertEquals("ifAbsent", this.map.getIfAbsent(<(literal.(type))("1")>, ifAbsent));
+        Assert.assertEquals("ifAbsent", this.map.getIfAbsent(<(literal.(type))("33")>, ifAbsent));
+    }
+
+    @Override
+    @Test
+    public void getIfAbsentPut()
+    {
+        Assert.assertEquals("zero", this.map.getIfAbsentPut(<(literal.(type))("0")>, new Function0\<String>()
+        {
+            public String value()
+            {
+                return "zeroValue";
+            }
+        }));
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void getIfAbsentPutThrowsException()
+    {
+        this.map.getIfAbsentPut(<(literal.(type))("1")>, new Function0\<String>()
+        {
+            public String value()
+            {
+                return "oneValue";
+            }
+        });
+    }
+
+    @Override
+    @Test
+    public void getIfAbsentPutWith()
+    {
+        Function\<String, String> toUpperCase = new Function\<String, String>()
+        {
+            public String valueOf(String string)
+            {
+                return string.toUpperCase();
+            }
+        };
+
+        Assert.assertEquals("zero", this.map.getIfAbsentPutWith(<(literal.(type))("0")>, toUpperCase, "zeroValue"));
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void getIfAbsentPutWithThrowsException()
+    {
+        Function\<String, String> toUpperCase = new Function\<String, String>()
+        {
+            public String valueOf(String string)
+            {
+                return string.toUpperCase();
+            }
+        };
+
+        this.map.getIfAbsentPutWith(<(literal.(type))("1")>, toUpperCase, "zeroValue");
+    }
+
+    @Override
+    @Test
+    public void getIfAbsentPutWithKey()
+    {
+        <name>ToObjectFunction\<String> toString = new <name>ToObjectFunction\<String>()
+        {
+            public String valueOf(<type> <type>Parameter)
+            {
+                return String.valueOf(<type>Parameter);
+            }
+        };
+
+        Assert.assertEquals("zero", this.map.getIfAbsentPutWithKey(<(literal.(type))("0")>, toString));
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void getIfAbsentPutWithKeyThrowsException()
+    {
+        <name>ToObjectFunction\<String> toString = new <name>ToObjectFunction\<String>()
+        {
+            public String valueOf(<type> <type>Parameter)
+            {
+                return String.valueOf(<type>Parameter);
+            }
+        };
+
+        this.map.getIfAbsentPutWithKey(<(literal.(type))("1")>, toString);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void updateValue()
+    {
+        Function\<Integer, Integer> incrementFunction = new Function\<Integer, Integer>()
+        {
+            public Integer valueOf(Integer integer)
+            {
+                return integer + 1;
+            }
+        };
+        Function0\<Integer> zeroFactory = Functions0.value(0);
+
+        this.\<Integer>getEmptyMap().updateValue(<(literal.(type))("0")>, zeroFactory, incrementFunction);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void updateValueWith()
+    {
+        Function2\<Integer, Integer, Integer> incrementFunction = AddFunction.INTEGER;
+        Function0\<Integer> zeroFactory = Functions0.value(0);
+
+        this.\<Integer>getEmptyMap().updateValueWith(<(literal.(type))("0")>, zeroFactory, incrementFunction, 1);
+    }
+
+    @Override
+    @Test
+    public void contains()
+    {
+        Assert.assertFalse(this.map.contains(null));
+        Assert.assertTrue(this.map.contains("zero"));
+        Assert.assertTrue(this.map.contains("thirtyOne"));
+        Assert.assertTrue(this.map.contains("thirtyTwo"));
+    }
+
+    @Override
+    @Test
+    public void containsKey()
+    {
+        Assert.assertTrue(this.map.containsKey(<(literal.(type))("0")>));
+        Assert.assertTrue(this.map.containsKey(<(literal.(type))("31")>));
+        Assert.assertTrue(this.map.containsKey(<(literal.(type))("32")>));
+        Assert.assertFalse(this.map.containsKey(<(literal.(type))("1")>));
+        Assert.assertFalse(this.map.containsKey(<(literal.(type))("5")>));
+        Assert.assertFalse(this.map.containsKey(<(literal.(type))("35")>));
+    }
+
+    @Override
+    @Test
+    public void containsValue()
+    {
+        Assert.assertFalse(this.map.containsValue(null));
+        Assert.assertTrue(this.map.containsValue("zero"));
+        Assert.assertTrue(this.map.containsValue("thirtyOne"));
+        Assert.assertTrue(this.map.containsValue("thirtyTwo"));
+    }
+
+    @Override
+    @Test
+    public void size()
+    {
+        Assert.assertEquals(0, this.getEmptyMap().size());
+        Assert.assertEquals(1, this.newWithKeysValues(<(literal.(type))("0")>, "zero").size());
+        Assert.assertEquals(1, this.newWithKeysValues(<(literal.(type))("1")>, "one").size());
+
+        Assert.assertEquals(2, this.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("5")>, "five").size());
+        Assert.assertEquals(2, this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("5")>, "five").size());
+        Assert.assertEquals(3, this.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("0")>, "zero", <(literal.(type))("5")>, "five").size());
+        Assert.assertEquals(2, this.newWithKeysValues(<(literal.(type))("6")>, "six", <(literal.(type))("5")>, "five").size());
+    }
+
+    @Override
+    @Test
+    public void asUnmodifiable()
+    {
+        super.asUnmodifiable();
+        Assert.assertSame(this.map, this.map.asUnmodifiable());
+    }
+
+    @Override
+    @Test
+    public void iterator()
+    {
+        UnifiedSet\<String> expected = UnifiedSet.newSetWith("zero", "one", "thirtyOne", "thirtyTwo");
+        UnifiedSet\<String> actual = UnifiedSet.newSet();
+
+        final Iterator\<String> iterator = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero",
+                <(literal.(type))("31")>, "thirtyOne", <(literal.(type))("32")>, "thirtyTwo")
+                .withKeyValue(<(literal.(type))("1")>, "one").asUnmodifiable().iterator();
+        Assert.assertTrue(iterator.hasNext());
+        actual.add(iterator.next());
+        Assert.assertTrue(iterator.hasNext());
+        actual.add(iterator.next());
+        Assert.assertTrue(iterator.hasNext());
+        actual.add(iterator.next());
+        Assert.assertTrue(iterator.hasNext());
+        actual.add(iterator.next());
+        Assert.assertFalse(iterator.hasNext());
+
+        Assert.assertEquals(expected, actual);
+        Verify.assertThrows(NoSuchElementException.class, new Runnable()
+        {
+            public void run()
+            {
+                iterator.next();
+            }
+        });
+
+        Unmodifiable<name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one");
+        final Iterator\<String> iterator1 = map1.iterator();
+        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
+        {
+            public void run()
+            {
+                iterator1.remove();
+            }
+        });
+        iterator1.next();
+        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
+        {
+            public void run()
+            {
+                iterator1.remove();
+            }
+        });
+    }
+}
+
+>>

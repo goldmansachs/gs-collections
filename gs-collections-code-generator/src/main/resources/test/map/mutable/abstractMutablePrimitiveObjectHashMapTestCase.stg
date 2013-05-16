@@ -72,6 +72,8 @@ import org.junit.Test;
  */
 public abstract class AbstractMutable<name>ObjectHashMapTestCase
 {
+    private final Mutable<name>ObjectMap\<String> map = this.classUnderTest();
+
     protected abstract Mutable<name>ObjectMap\<String> classUnderTest();
 
     protected abstract \<T> Mutable<name>ObjectMap\<T> newWithKeysValues(<type> key1, T value1);
@@ -82,9 +84,7 @@ public abstract class AbstractMutable<name>ObjectHashMapTestCase
                                                     
     protected abstract \<T> Mutable<name>ObjectMap\<T> getEmptyMap();
 
-    private final Mutable<name>ObjectMap\<String> map = this.classUnderTest();
-
-    private static <name>ArrayList generateCollisions()
+    protected static <name>ArrayList generateCollisions()
     {
         <name>ArrayList collisions = new <name>ArrayList();
         <name>ObjectHashMap\<?> hashMap = new <name>ObjectHashMap\<Object>();
@@ -1885,9 +1885,9 @@ public abstract class AbstractMutable<name>ObjectHashMapTestCase
     @Test
     public void size()
     {
-        Assert.assertEquals(0, <name>ObjectHashMap.newMap().size());
-        Assert.assertEquals(1, <name>ObjectHashMap.newMap().withKeyValue(<(literal.(type))("0")>, "zero").size());
-        Assert.assertEquals(1, <name>ObjectHashMap.newMap().withKeyValue(<(literal.(type))("1")>, "one").size());
+        Assert.assertEquals(0, this.getEmptyMap().size());
+        Assert.assertEquals(1, this.getEmptyMap().withKeyValue(<(literal.(type))("0")>, "zero").size());
+        Assert.assertEquals(1, this.getEmptyMap().withKeyValue(<(literal.(type))("1")>, "one").size());
 
         Mutable<name>ObjectMap\<String> hashMap1 = this.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("0")>, "zero");
         Assert.assertEquals(2, hashMap1.size());
@@ -2596,7 +2596,18 @@ public abstract class AbstractMutable<name>ObjectHashMapTestCase
     }
 
     @Test
-    public abstract void asSynchronized();
+    public void asUnmodifiable()
+    {
+        Verify.assertInstanceOf(Unmodifiable<name>ObjectMap.class, this.map.asUnmodifiable());
+        Assert.assertEquals(new Unmodifiable<name>ObjectMap\<String>(this.map), this.map.asUnmodifiable());
+    }
+
+    @Test
+    public void asSynchronized()
+    {
+        Verify.assertInstanceOf(Synchronized<name>ObjectHashMap.class, this.map.asSynchronized());
+        Assert.assertEquals(new Synchronized<name>ObjectHashMap\<String>(this.map), this.map.asSynchronized());
+    }
 }
 
 >>

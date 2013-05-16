@@ -5,7 +5,7 @@ import "primitiveLiteral.stg"
 
 targetPath() ::= "com/gs/collections/impl/map/mutable/primitive"
 
-fileName(primitive) ::= "Synchronized<primitive.name>ObjectHashMap"
+fileName(primitive) ::= "Unmodifiable<primitive.name>ObjectMap"
 
 skipBoolean() ::= "true"
 
@@ -58,847 +58,550 @@ import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
-import net.jcip.annotations.GuardedBy;
+import com.gs.collections.impl.UnmodifiableIteratorAdapter;
 
 /**
- * This file was automatically generated from template file synchronizedPrimitiveObjectHashMap.stg.
+ * This file was automatically generated from template file unmodifiablePrimitiveObjectMap.stg.
  *
- * @since 3.1.
+ * @since 3.2.
  */
-public final class Synchronized<name>ObjectHashMap\<V>
+public final class Unmodifiable<name>ObjectMap\<V>
         implements Mutable<name>ObjectMap\<V>, Serializable
 {
     private static final long serialVersionUID = 1L;
-
-    private final Object lock;
-    @GuardedBy("this.lock")
     private final Mutable<name>ObjectMap\<V> map;
 
-    Synchronized<name>ObjectHashMap(Mutable<name>ObjectMap\<V> map)
-    {
-        this(map, null);
-    }
-
-    Synchronized<name>ObjectHashMap(Mutable<name>ObjectMap\<V> map, Object newLock)
+    Unmodifiable<name>ObjectMap(Mutable<name>ObjectMap\<V> map)
     {
         this.map = map;
-        this.lock = newLock == null ? this : newLock;
+    }
+
+    private boolean isAbsent(V result, <type> key)
+    {
+        return result == null && !this.containsKey(key);
+    }
+
+    private V getIfAbsentThrow(<type> key)
+    {
+        V result = this.map.get(key);
+        if (this.isAbsent(result, key))
+        {
+            throw new UnsupportedOperationException("Cannot add to an " + this.getClass().getSimpleName());
+        }
+        return result;
     }
 
     public V put(<type> key, V value)
     {
-        synchronized (this.lock)
-        {
-            return this.map.put(key, value);
-        }
+        throw new UnsupportedOperationException("Cannot call put() on " + this.getClass().getSimpleName());
     }
 
     public V removeKey(<type> key)
     {
-        synchronized (this.lock)
-        {
-            return this.map.removeKey(key);
-        }
+        throw new UnsupportedOperationException("Cannot call removeKey() on " + this.getClass().getSimpleName());
     }
 
     public V getIfAbsentPut(<type> key, Function0\<? extends V> function)
     {
-        synchronized (this.lock)
-        {
-            return this.map.getIfAbsentPut(key, function);
-        }
+        return this.getIfAbsentThrow(key);
     }
 
     public V getIfAbsentPutWithKey(<type> key, <name>ToObjectFunction\<? extends V> function)
     {
-        synchronized (this.lock)
-        {
-            return this.map.getIfAbsentPutWithKey(key, function);
-        }
+        return this.getIfAbsentThrow(key);
     }
 
     public \<P> V getIfAbsentPutWith(<type> key, Function\<? super P, ? extends V> function, P parameter)
     {
-        synchronized (this.lock)
-        {
-            return this.map.getIfAbsentPutWith(key, function, parameter);
-        }
+        return this.getIfAbsentThrow(key);
     }
 
     public V updateValue(<type> key, Function0\<? extends V> factory, Function\<? super V, ? extends V> function)
     {
-        synchronized (this.lock)
-        {
-            return this.map.updateValue(key, factory, function);
-        }
+        throw new UnsupportedOperationException("Cannot call updateValue() on " + this.getClass().getSimpleName());
     }
 
     public \<P> V updateValueWith(<type> key, Function0\<? extends V> factory, Function2\<? super V, ? super P, ? extends V> function, P parameter)
     {
-        synchronized (this.lock)
-        {
-            return this.map.updateValueWith(key, factory, function, parameter);
-        }
+        throw new UnsupportedOperationException("Cannot call updateValueWith() on " + this.getClass().getSimpleName());
     }
 
     public V get(<type> key)
     {
-        synchronized (this.lock)
-        {
-            return this.map.get(key);
-        }
+        return this.map.get(key);
     }
 
     public V getIfAbsent(<type> key, Function0\<? extends V> ifAbsent)
     {
-        synchronized (this.lock)
-        {
-            return this.map.getIfAbsent(key, ifAbsent);
-        }
+        return this.map.getIfAbsent(key, ifAbsent);
     }
 
     public boolean containsKey(<type> key)
     {
-        synchronized (this.lock)
-        {
-            return this.map.containsKey(key);
-        }
+        return this.map.containsKey(key);
     }
 
     public boolean containsValue(Object value)
     {
-        synchronized (this.lock)
-        {
-            return this.map.containsValue(value);
-        }
+        return this.map.containsValue(value);
     }
 
     public void forEachValue(Procedure\<? super V> procedure)
     {
-        synchronized (this.lock)
-        {
-            this.map.forEachValue(procedure);
-        }
+        this.map.forEachValue(procedure);
     }
 
     public void forEachKey(<name>Procedure procedure)
     {
-        synchronized (this.lock)
-        {
-            this.map.forEachKey(procedure);
-        }
+        this.map.forEachKey(procedure);
     }
 
     public void forEachKeyValue(<name>ObjectProcedure\<? super V> procedure)
     {
-        synchronized (this.lock)
-        {
-            this.map.forEachKeyValue(procedure);
-        }
+        this.map.forEachKeyValue(procedure);
     }
 
     public Mutable<name>ObjectMap\<V> select(<name>ObjectPredicate\<? super V> predicate)
     {
-        synchronized (this.lock)
-        {
-            return this.map.select(predicate);
-        }
+        return this.map.select(predicate);
     }
 
     public Mutable<name>ObjectMap\<V> reject(<name>ObjectPredicate\<? super V> predicate)
     {
-        synchronized (this.lock)
-        {
-            return this.map.reject(predicate);
-        }
+        return this.map.reject(predicate);
     }
 
     public int size()
     {
-        synchronized (this.lock)
-        {
-            return this.map.size();
-        }
+        return this.map.size();
     }
 
     public boolean isEmpty()
     {
-        synchronized (this.lock)
-        {
-            return this.map.isEmpty();
-        }
+        return this.map.isEmpty();
     }
 
     public boolean notEmpty()
     {
-        synchronized (this.lock)
-        {
-            return this.map.notEmpty();
-        }
+        return this.map.notEmpty();
     }
 
     public V getFirst()
     {
-        synchronized (this.lock)
-        {
-            return this.map.getFirst();
-        }
+        return this.map.getFirst();
     }
 
     public V getLast()
     {
-        synchronized (this.lock)
-        {
-            return this.map.getLast();
-        }
+        return this.map.getLast();
     }
 
     public boolean contains(Object object)
     {
-        synchronized (this.lock)
-        {
-            return this.map.contains(object);
-        }
+        return this.map.contains(object);
     }
 
     public boolean containsAllIterable(Iterable\<?> source)
     {
-        synchronized (this.lock)
-        {
-            return this.map.containsAllIterable(source);
-        }
+        return this.map.containsAllIterable(source);
     }
 
     public boolean containsAll(Collection\<?> source)
     {
-        synchronized (this.lock)
-        {
-            return this.map.containsAll(source);
-        }
+        return this.map.containsAll(source);
     }
 
     public boolean containsAllArguments(Object... elements)
     {
-        synchronized (this.lock)
-        {
-            return this.map.containsAllArguments(elements);
-        }
+        return this.map.containsAllArguments(elements);
     }
 
     public MutableCollection\<V> select(Predicate\<? super V> predicate)
     {
-        synchronized (this.lock)
-        {
-            return this.map.select(predicate);
-        }
+        return this.map.select(predicate);
     }
 
     public \<R extends Collection\<V>\> R select(Predicate\<? super V> predicate, R target)
     {
-        synchronized (this.lock)
-        {
-            return this.map.select(predicate, target);
-        }
+        return this.map.select(predicate, target);
     }
 
     public \<P, R extends Collection\<V>\> R selectWith(Predicate2\<? super V, ? super P> predicate, P parameter, R targetCollection)
     {
-        synchronized (this.lock)
-        {
-            return this.map.selectWith(predicate, parameter, targetCollection);
-        }
+        return this.map.selectWith(predicate, parameter, targetCollection);
     }
 
     public PartitionMutableCollection\<V> partition(Predicate\<? super V> predicate)
     {
-        synchronized (this.lock)
-        {
-            return (PartitionMutableCollection\<V>) this.map.partition(predicate);
-        }
+        return (PartitionMutableCollection\<V>) this.map.partition(predicate);
     }
 
     public \<S> MutableCollection\<S> selectInstancesOf(Class\<S> clazz)
     {
-        synchronized (this.lock)
-        {
-            return (MutableCollection\<S>) this.map.selectInstancesOf(clazz);
-        }
+        return (MutableCollection\<S>) this.map.selectInstancesOf(clazz);
     }
 
     public MutableList\<Pair\<V, Integer>\> zipWithIndex()
     {
-        synchronized (this.lock)
-        {
-            return (MutableList\<Pair\<V, Integer>\>) this.map.zipWithIndex();
-        }
+        return (MutableList\<Pair\<V, Integer>\>) this.map.zipWithIndex();
     }
 
     public \<R extends Collection\<Pair\<V, Integer>\>> R zipWithIndex(R target)
     {
-        synchronized (this.lock)
-        {
-            return this.map.zipWithIndex(target);
-        }
+        return this.map.zipWithIndex(target);
     }
 
     public RichIterable\<RichIterable\<V>\> chunk(int size)
     {
-        synchronized (this.lock)
-        {
-            return this.map.chunk(size);
-        }
+        return this.map.chunk(size);
     }
 
     public \<K, V1 extends Object> MutableMap\<K, V1> aggregateInPlaceBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends V1> zeroValueFactory, Procedure2\<? super V1, ? super V> mutatingAggregator)
     {
-        synchronized (this.lock)
-        {
-            return (MutableMap\<K, V1>) this.map.aggregateInPlaceBy(groupBy, zeroValueFactory, mutatingAggregator);
-        }
+        return (MutableMap\<K, V1>) this.map.aggregateInPlaceBy(groupBy, zeroValueFactory, mutatingAggregator);
     }
 
     public \<K, V1 extends Object> MutableMap\<K, V1> aggregateBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends V1> zeroValueFactory, Function2\<? super V1, ? super V, ? extends V1> nonMutatingAggregator)
     {
-        synchronized (this.lock)
-        {
-            return (MutableMap\<K, V1>) this.map.aggregateBy(groupBy, zeroValueFactory, nonMutatingAggregator);
-        }
+        return (MutableMap\<K, V1>) this.map.aggregateBy(groupBy, zeroValueFactory, nonMutatingAggregator);
     }
 
     public MutableCollection\<V> reject(Predicate\<? super V> predicate)
     {
-        synchronized (this.lock)
-        {
-            return this.map.reject(predicate);
-        }
+        return this.map.reject(predicate);
     }
 
     public \<R extends Collection\<V>\> R reject(Predicate\<? super V> predicate, R target)
     {
-        synchronized (this.lock)
-        {
-            return this.map.reject(predicate, target);
-        }
+        return this.map.reject(predicate, target);
     }
 
     public \<P, R extends Collection\<V>\> R rejectWith(Predicate2\<? super V, ? super P> predicate, P parameter, R targetCollection)
     {
-        synchronized (this.lock)
-        {
-            return this.map.rejectWith(predicate, parameter, targetCollection);
-        }
+        return this.map.rejectWith(predicate, parameter, targetCollection);
     }
 
     public void clear()
     {
-        synchronized (this.lock)
-        {
-            this.map.clear();
-        }
+        throw new UnsupportedOperationException("Cannot call clear() on " + this.getClass().getSimpleName());
     }
 
     public \<V1> MutableCollection\<V1> collect(Function\<? super V, ? extends V1> function)
     {
-        synchronized (this.lock)
-        {
-            return this.map.collect(function);
-        }
+        return this.map.collect(function);
     }
 
     public \<P, V1 extends Object, R extends Collection\<V1>\> R collectWith(Function2\<? super V, ? super P, ? extends V1> function, P parameter, R targetCollection)
     {
-        synchronized (this.lock)
-        {
-            return this.map.collectWith(function, parameter, targetCollection);
-        }
+        return this.map.collectWith(function, parameter, targetCollection);
     }
 
     public \<V1 extends Object, R extends Collection\<V1>\> R collect(Function\<? super V, ? extends V1> function, R target)
     {
-        synchronized (this.lock)
-        {
-            return this.map.collect(function, target);
-        }
+        return this.map.collect(function, target);
     }
 
     public \<V1 extends Object> MutableCollection\<V1> collectIf(Predicate\<? super V> predicate, Function\<? super V, ? extends V1> function)
     {
-        synchronized (this.lock)
-        {
-            return (MutableCollection\<V1>) this.map.collectIf(predicate, function);
-        }
+        return (MutableCollection\<V1>) this.map.collectIf(predicate, function);
     }
 
     public \<V1 extends Object, R extends Collection\<V1>\> R collectIf(Predicate\<? super V> predicate, Function\<? super V, ? extends V1> function, R target)
     {
-        synchronized (this.lock)
-        {
-            return this.map.collectIf(predicate, function, target);
-        }
+        return this.map.collectIf(predicate, function, target);
     }
 
     public \<V1 extends Object> RichIterable\<V1> flatCollect(Function\<? super V, ? extends Iterable\<V1>\> function)
     {
-        synchronized (this.lock)
-        {
-            return this.map.flatCollect(function);
-        }
+        return this.map.flatCollect(function);
     }
 
     public \<V1 extends Object, R extends Collection\<V1>\> R flatCollect(Function\<? super V, ? extends Iterable\<V1>\> function, R target)
     {
-        synchronized (this.lock)
-        {
-            return this.map.flatCollect(function, target);
-        }
+        return this.map.flatCollect(function, target);
     }
 
     public V detect(Predicate\<? super V> predicate)
     {
-        synchronized (this.lock)
-        {
-            return this.map.detect(predicate);
-        }
+        return this.map.detect(predicate);
     }
 
     public V detectIfNone(Predicate\<? super V> predicate, Function0\<? extends V> function)
     {
-        synchronized (this.lock)
-        {
-            return this.map.detectIfNone(predicate, function);
-        }
+        return this.map.detectIfNone(predicate, function);
     }
 
     public int count(Predicate\<? super V> predicate)
     {
-        synchronized (this.lock)
-        {
-            return this.map.count(predicate);
-        }
+        return this.map.count(predicate);
     }
 
     public boolean anySatisfy(Predicate\<? super V> predicate)
     {
-        synchronized (this.lock)
-        {
-            return this.map.anySatisfy(predicate);
-        }
+        return this.map.anySatisfy(predicate);
     }
 
     public boolean allSatisfy(Predicate\<? super V> predicate)
     {
-        synchronized (this.lock)
-        {
-            return this.map.allSatisfy(predicate);
-        }
+        return this.map.allSatisfy(predicate);
     }
 
     public boolean noneSatisfy(Predicate\<? super V> predicate)
     {
-        synchronized (this.lock)
-        {
-            return this.map.noneSatisfy(predicate);
-        }
+        return this.map.noneSatisfy(predicate);
     }
 
     public \<IV> IV injectInto(IV injectedValue, Function2\<? super IV, ? super V, ? extends IV> function)
     {
-        synchronized (this.lock)
-        {
-            return this.map.injectInto(injectedValue, function);
-        }
+        return this.map.injectInto(injectedValue, function);
     }
 
     public int injectInto(int injectedValue, IntObjectToIntFunction\<? super V> function)
     {
-        synchronized (this.lock)
-        {
-            return this.map.injectInto(injectedValue, function);
-        }
+        return this.map.injectInto(injectedValue, function);
     }
 
     public long injectInto(long injectedValue, LongObjectToLongFunction\<? super V> function)
     {
-        synchronized (this.lock)
-        {
-            return this.map.injectInto(injectedValue, function);
-        }
+        return this.map.injectInto(injectedValue, function);
     }
 
     public float injectInto(float injectedValue, FloatObjectToFloatFunction\<? super V> function)
     {
-        synchronized (this.lock)
-        {
-            return this.map.injectInto(injectedValue, function);
-        }
+        return this.map.injectInto(injectedValue, function);
     }
 
     public double injectInto(double injectedValue, DoubleObjectToDoubleFunction\<? super V> function)
     {
-        synchronized (this.lock)
-        {
-            return this.map.injectInto(injectedValue, function);
-        }
+        return this.map.injectInto(injectedValue, function);
     }
 
     public MutableList\<V> toList()
     {
-        synchronized (this.lock)
-        {
-            return this.map.toList();
-        }
+        return this.map.toList();
     }
 
     public MutableList\<V> toSortedList()
     {
-        synchronized (this.lock)
-        {
-            return this.map.toSortedList();
-        }
+        return this.map.toSortedList();
     }
 
     public MutableList\<V> toSortedList(Comparator\<? super V> comparator)
     {
-        synchronized (this.lock)
-        {
-            return this.map.toSortedList(comparator);
-        }
+        return this.map.toSortedList(comparator);
     }
 
     public \<V1 extends Comparable\<? super V1>\> MutableList\<V> toSortedListBy(Function\<? super V, ? extends V1> function)
     {
-        synchronized (this.lock)
-        {
-            return this.map.toSortedListBy(function);
-        }
+        return this.map.toSortedListBy(function);
     }
 
     public MutableSet\<V> toSet()
     {
-        synchronized (this.lock)
-        {
-            return this.map.toSet();
-        }
+        return this.map.toSet();
     }
 
     public MutableSortedSet\<V> toSortedSet()
     {
-        synchronized (this.lock)
-        {
-            return this.map.toSortedSet();
-        }
+        return this.map.toSortedSet();
     }
 
     public MutableSortedSet\<V> toSortedSet(Comparator\<? super V> comparator)
     {
-        synchronized (this.lock)
-        {
-            return this.map.toSortedSet(comparator);
-        }
+        return this.map.toSortedSet(comparator);
     }
 
     public \<V1 extends Comparable\<? super V1>\> MutableSortedSet\<V> toSortedSetBy(Function\<? super V, ? extends V1> function)
     {
-        synchronized (this.lock)
-        {
-            return this.map.toSortedSetBy(function);
-        }
+        return this.map.toSortedSetBy(function);
     }
 
     public MutableBag\<V> toBag()
     {
-        synchronized (this.lock)
-        {
-            return this.map.toBag();
-        }
+        return this.map.toBag();
     }
 
     public \<NK, NV> MutableMap\<NK, NV> toMap(Function\<? super V, ? extends NK> keyFunction, Function\<? super V, ? extends NV> valueFunction)
     {
-        synchronized (this.lock)
-        {
-            return this.map.toMap(keyFunction, valueFunction);
-        }
+        return this.map.toMap(keyFunction, valueFunction);
     }
 
     public \<NK, NV> MutableSortedMap\<NK, NV> toSortedMap(Function\<? super V, ? extends NK> keyFunction, Function\<? super V, ? extends NV> valueFunction)
     {
-        synchronized (this.lock)
-        {
-            return this.map.toSortedMap(keyFunction, valueFunction);
-        }
+        return this.map.toSortedMap(keyFunction, valueFunction);
     }
 
     public \<NK, NV> MutableSortedMap\<NK, NV> toSortedMap(Comparator\<? super NK> comparator, Function\<? super V, ? extends NK> keyFunction, Function\<? super V, ? extends NV> valueFunction)
     {
-        synchronized (this.lock)
-        {
-            return this.map.toSortedMap(comparator, keyFunction, valueFunction);
-        }
+        return this.map.toSortedMap(comparator, keyFunction, valueFunction);
     }
 
     public LazyIterable\<V> asLazy()
     {
-        synchronized (this.lock)
-        {
-            return this.map.asLazy();
-        }
+        return this.map.asLazy();
     }
 
     public Object[] toArray()
     {
-        synchronized (this.lock)
-        {
-            return this.map.toArray();
-        }
+        return this.map.toArray();
     }
 
     public \<T> T[] toArray(T[] a)
     {
-        synchronized (this.lock)
-        {
-            return this.map.toArray(a);
-        }
+        return this.map.toArray(a);
     }
 
     public V min(Comparator\<? super V> comparator)
     {
-        synchronized (this.lock)
-        {
-            return this.map.min(comparator);
-        }
+        return this.map.min(comparator);
     }
 
     public V max(Comparator\<? super V> comparator)
     {
-        synchronized (this.lock)
-        {
-            return this.map.max(comparator);
-        }
+        return this.map.max(comparator);
     }
 
     public V min()
     {
-        synchronized (this.lock)
-        {
-            return this.map.min();
-        }
+        return this.map.min();
     }
 
     public V max()
     {
-        synchronized (this.lock)
-        {
-            return this.map.max();
-        }
+        return this.map.max();
     }
 
     public \<V1 extends Comparable\<? super V1>\> V maxBy(Function\<? super V, ? extends V1> function)
     {
-        synchronized (this.lock)
-        {
-            return this.map.maxBy(function);
-        }
+        return this.map.maxBy(function);
     }
 
     public \<V1 extends Comparable\<? super V1>\> V minBy(Function\<? super V, ? extends V1> function)
     {
-        synchronized (this.lock)
-        {
-            return this.map.minBy(function);
-        }
+        return this.map.minBy(function);
     }
 
     public long sumOfInt(IntFunction\<? super V> function)
     {
-        synchronized (this.lock)
-        {
-            return this.map.sumOfInt(function);
-        }
+        return this.map.sumOfInt(function);
     }
 
     public double sumOfFloat(FloatFunction\<? super V> function)
     {
-        synchronized (this.lock)
-        {
-            return this.map.sumOfFloat(function);
-        }
+        return this.map.sumOfFloat(function);
     }
 
     public long sumOfLong(LongFunction\<? super V> function)
     {
-        synchronized (this.lock)
-        {
-            return this.map.sumOfLong(function);
-        }
+        return this.map.sumOfLong(function);
     }
 
     public double sumOfDouble(DoubleFunction\<? super V> function)
     {
-        synchronized (this.lock)
-        {
-            return this.map.sumOfDouble(function);
-        }
+        return this.map.sumOfDouble(function);
     }
 
     @Override
     public boolean equals(Object obj)
     {
-        synchronized (this.lock)
-        {
-            return this.map.equals(obj);
-        }
+        return this.map.equals(obj);
     }
 
     @Override
     public int hashCode()
     {
-        synchronized (this.lock)
-        {
-            return this.map.hashCode();
-        }
+        return this.map.hashCode();
     }
 
     @Override
     public String toString()
     {
-        synchronized (this.lock)
-        {
-            return this.map.toString();
-        }
+        return this.map.toString();
     }
 
     public String makeString()
     {
-        synchronized (this.lock)
-        {
-            return this.map.makeString();
-        }
+        return this.map.makeString();
     }
 
     public String makeString(String separator)
     {
-        synchronized (this.lock)
-        {
-            return this.map.makeString(separator);
-        }
+        return this.map.makeString(separator);
     }
 
     public String makeString(String start, String separator, String end)
     {
-        synchronized (this.lock)
-        {
-            return this.map.makeString(start, separator, end);
-        }
+        return this.map.makeString(start, separator, end);
     }
 
     public void appendString(Appendable appendable)
     {
-        synchronized (this.lock)
-        {
-            this.map.appendString(appendable);
-        }
+        this.map.appendString(appendable);
     }
 
     public void appendString(Appendable appendable, String separator)
     {
-        synchronized (this.lock)
-        {
-            this.map.appendString(appendable, separator);
-        }
+        this.map.appendString(appendable, separator);
     }
 
     public void appendString(Appendable appendable, String start, String separator, String end)
     {
-        synchronized (this.lock)
-        {
-            this.map.appendString(appendable, start, separator, end);
-        }
+        this.map.appendString(appendable, start, separator, end);
     }
 
     public \<V1 extends Object> MutableMultimap\<V1, V> groupBy(Function\<? super V, ? extends V1> function)
     {
-        synchronized (this.lock)
-        {
-            return (MutableMultimap\<V1, V>) this.map.groupBy(function);
-        }
+        return (MutableMultimap\<V1, V>) this.map.groupBy(function);
     }
 
     public \<V1 extends Object, R extends MutableMultimap\<V1, V>\> R groupBy(Function\<? super V, ? extends V1> function, R target)
     {
-        synchronized (this.lock)
-        {
-            return this.map.groupBy(function, target);
-        }
+        return this.map.groupBy(function, target);
     }
 
     public \<V1 extends Object> MutableMultimap\<V1, V> groupByEach(Function\<? super V, ? extends Iterable\<V1>\> function)
     {
-        synchronized (this.lock)
-        {
-            return (MutableMultimap\<V1, V>) this.map.groupByEach(function);
-        }
+        return (MutableMultimap\<V1, V>) this.map.groupByEach(function);
     }
 
     public \<V1 extends Object, R extends MutableMultimap\<V1, V>\> R groupByEach(Function\<? super V, ? extends Iterable\<V1>\> function, R target)
     {
-        synchronized (this.lock)
-        {
-            return this.map.groupByEach(function, target);
-        }
+        return this.map.groupByEach(function, target);
     }
 
     public \<S> MutableCollection\<Pair\<V, S>\> zip(Iterable\<S> that)
     {
-        synchronized (this.lock)
-        {
-            return (MutableCollection\<Pair\<V, S>\>) this.map.zip(that);
-        }
+        return (MutableCollection\<Pair\<V, S>\>) this.map.zip(that);
     }
 
     public \<S, R extends Collection\<Pair\<V, S>\>> R zip(Iterable\<S> that, R target)
     {
-        synchronized (this.lock)
-        {
-            return this.map.zip(that, target);
-        }
+        return this.map.zip(that, target);
     }
 
     public Mutable<name>ObjectMap\<V> withKeyValue(<type> key, V value)
     {
-        synchronized (this.lock)
-        {
-            this.map.withKeyValue(key, value);
-        }
-        return this;
+        throw new UnsupportedOperationException("Cannot call withKeyValue() on " + this.getClass().getSimpleName());
     }
 
     public Mutable<name>ObjectMap\<V> withoutKey(<type> key)
     {
-        synchronized (this.lock)
-        {
-            this.map.withoutKey(key);
-        }
-        return this;
+        throw new UnsupportedOperationException("Cannot call withoutKey() on " + this.getClass().getSimpleName());
     }
 
     public Mutable<name>ObjectMap\<V> withoutAllKeys(<name>Iterable keys)
     {
-        synchronized (this.lock)
-        {
-            this.map.withoutAllKeys(keys);
-        }
-        return this;
+        throw new UnsupportedOperationException("Cannot call withoutAllKeys() on " + this.getClass().getSimpleName());
     }
 
     public Mutable<name>ObjectMap\<V> asUnmodifiable()
     {
-        return new Unmodifiable<name>ObjectMap\<V>(this);
+        return this;
     }
 
     public Mutable<name>ObjectMap\<V> asSynchronized()
     {
-        return this;
+        return new Synchronized<name>ObjectHashMap\<V>(this);
     }
 
     public Immutable<name>ObjectMap\<V> toImmutable()
@@ -908,32 +611,22 @@ public final class Synchronized<name>ObjectHashMap\<V>
 
     public void forEach(Procedure\<? super V> procedure)
     {
-        synchronized (this.lock)
-        {
-            this.map.forEach(procedure);
-        }
+        this.map.forEach(procedure);
     }
 
     public void forEachWithIndex(ObjectIntProcedure\<? super V> objectIntProcedure)
     {
-        synchronized (this.lock)
-        {
-            this.map.forEachWithIndex(objectIntProcedure);
-        }
+        this.map.forEachWithIndex(objectIntProcedure);
     }
 
     public \<P> void forEachWith(Procedure2\<? super V, ? super P> procedure, P parameter)
     {
-        synchronized (this.lock)
-        {
-            this.map.forEachWith(procedure, parameter);
-        }
+        this.map.forEachWith(procedure, parameter);
     }
 
     public Iterator\<V> iterator()
     {
-        // this must be manually synchronized by developer
-        return this.map.iterator();
+        return new UnmodifiableIteratorAdapter\<V>(this.map.iterator());
     }
 }
 

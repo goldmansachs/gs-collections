@@ -29,13 +29,11 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * This file was automatically generated from template file primitivePrimitiveHashMapTest.stg.
  * JUnit test for {@link <name1><name2>HashMap}.
+ * This file was automatically generated from template file primitivePrimitiveHashMapTest.stg.
  */
 public class <name1><name2>HashMapTest extends Abstract<name1><name2>HashMapTestCase
 {
-    private final <name1><name2>HashMap map = this.classUnderTest();
-
     @Override
     protected <name1><name2>HashMap classUnderTest()
     {

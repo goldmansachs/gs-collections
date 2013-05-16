@@ -23,11 +23,14 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * This file was automatically generated from template file synchronizedPrimitiveObjectHashMapTest.stg.
  * JUnit test for {@link Synchronized<name>ObjectHashMap}.
+ * This file was automatically generated from template file synchronizedPrimitiveObjectHashMapTest.stg.
  */
 public class Synchronized<name>ObjectHashMapTest extends AbstractMutable<name>ObjectHashMapTestCase
 {
+
+    private final Synchronized<name>ObjectHashMap\<String> map = this.classUnderTest();
+
     @Override
     protected Synchronized<name>ObjectHashMap\<String> classUnderTest()
     {
@@ -58,12 +61,11 @@ public class Synchronized<name>ObjectHashMapTest extends AbstractMutable<name>Ob
         return new Synchronized<name>ObjectHashMap\<T>(new <name>ObjectHashMap\<T>());
     }
 
-    private final Synchronized<name>ObjectHashMap\<String> map = this.classUnderTest();
-
     @Override
     @Test
     public void asSynchronized()
     {
+        super.asSynchronized();
         Assert.assertSame(this.map, this.map.asSynchronized());
     }
 }

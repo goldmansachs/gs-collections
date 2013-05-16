@@ -25,11 +25,13 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * This file was automatically generated from template file primitiveObjectHashMapTest.stg.
  * JUnit test for {@link <name>ObjectHashMap}.
+ * This file was automatically generated from template file primitiveObjectHashMapTest.stg.
  */
 public class <name>ObjectHashMapTest extends AbstractMutable<name>ObjectHashMapTestCase
 {
+    private final <name>ObjectHashMap\<String> map = this.classUnderTest();
+
     @Override
     protected <name>ObjectHashMap\<String> classUnderTest()
     {
@@ -59,8 +61,6 @@ public class <name>ObjectHashMapTest extends AbstractMutable<name>ObjectHashMapT
     {
         return new <name>ObjectHashMap\<T>();
     }
-
-    private final <name>ObjectHashMap\<String> map = this.classUnderTest();
 
     @Test
     public void defaultInitialCapacity() throws NoSuchFieldException, IllegalAccessException
@@ -138,23 +138,18 @@ public class <name>ObjectHashMapTest extends AbstractMutable<name>ObjectHashMapT
         Assert.assertEquals(32L, ((Object[]) values.get(hashMap)).length);
     }
 
+    @Override
     @Test
     public void withKeysValues()
     {
         super.withKeysValues();
-        <name>ObjectHashMap\<String> hashMap0 = new <name>ObjectHashMap\<String>().withKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("2")>, "two");
+        <name>ObjectHashMap\<String> hashMap0 = new <name>ObjectHashMap\<String>();
+        Assert.assertSame(hashMap0.withKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("2")>, "two"), hashMap0);
         <name>ObjectHashMap\<String> hashMap1 = new <name>ObjectHashMap\<String>().withKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("2")>, "two", <(literal.(type))("3")>, "three");
         <name>ObjectHashMap\<String> hashMap2 = new <name>ObjectHashMap\<String>().withKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("2")>, "two", <(literal.(type))("3")>, "three", <(literal.(type))("4")>, "four");
         Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("2")>, "two"), hashMap0);
         Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("2")>, "two", <(literal.(type))("3")>, "three"), hashMap1);
         Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("2")>, "two", <(literal.(type))("3")>, "three").withKeyValue(<(literal.(type))("4")>, "four"), hashMap2);
-    }
-
-    @Override
-    @Test
-    public void asSynchronized()
-    {
-        Assert.assertEquals(new Synchronized<name>ObjectHashMap\<String>(this.map), this.map.asSynchronized());
     }
 }
 
