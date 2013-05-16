@@ -82,6 +82,18 @@ public class SynchronizedBooleanSetTest extends AbstractSynchronizedBooleanColle
         return UnifiedSet.newSetWith(elements);
     }
 
+    @Override
+    protected MutableBooleanSet newSynchronizedCollectionWith(boolean... elements)
+    {
+        return new SynchronizedBooleanSet(BooleanHashSet.newSetWith(elements));
+    }
+
+    @Override
+    protected MutableBooleanSet newUnmodifiableCollectionWith(boolean... elements)
+    {
+        return new UnmodifiableBooleanSet(BooleanHashSet.newSetWith(elements));
+    }
+
     private final MutableBooleanSet set = this.classUnderTest();
 
     @Override
@@ -241,4 +253,11 @@ public class SynchronizedBooleanSetTest extends AbstractSynchronizedBooleanColle
         Assert.assertEquals(BooleanHashBag.newBagWith(false, true), this.set.toBag());
     }
 
+    @Override
+    @Test
+    public void asSynchronized()
+    {
+        super.asSynchronized();
+        Assert.assertSame(this.set, this.set.asSynchronized());
+    }
 }

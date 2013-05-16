@@ -161,7 +161,7 @@ public final class BooleanArrayStack implements MutableBooleanStack, Externaliza
 
     public MutableBooleanStack asUnmodifiable()
     {
-        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+        return new UnmodifiableBooleanStack(this);
     }
 
     public MutableBooleanStack asSynchronized()

@@ -521,12 +521,12 @@ public final class BooleanArrayList
 
     public MutableBooleanList asUnmodifiable()
     {
-        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+        return new UnmodifiableBooleanList(this);
     }
 
     public MutableBooleanList asSynchronized()
     {
-        throw new UnsupportedOperationException("asSynchronized not implemented yet");
+        return new SynchronizedBooleanList(this);
     }
 
     public ImmutableBooleanList toImmutable()

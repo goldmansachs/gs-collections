@@ -53,6 +53,10 @@ public abstract class AbstractSynchronizedBooleanCollectionTestCase
 
     protected abstract MutableCollection<Object> newObjectCollectionWith(Object... elements);
 
+    protected abstract MutableBooleanCollection newSynchronizedCollectionWith(boolean... elements);
+
+    protected abstract MutableBooleanCollection newUnmodifiableCollectionWith(boolean... elements);
+
     @Test
     public void newCollectionWith()
     {
@@ -436,6 +440,15 @@ public abstract class AbstractSynchronizedBooleanCollectionTestCase
     public void asSynchronized()
     {
         MutableBooleanCollection collection = this.classUnderTestWithLock();
+        Verify.assertInstanceOf(this.newSynchronizedCollectionWith(true, false, true).getClass(), this.classUnderTest().asSynchronized());
         Assert.assertEquals(collection, collection.asSynchronized());
     }
+
+    @Test
+    public void asUnmodifiable()
+    {
+        Verify.assertInstanceOf(this.newUnmodifiableCollectionWith(true, false, true).getClass(), this.classUnderTest().asUnmodifiable());
+        Assert.assertEquals(this.newUnmodifiableCollectionWith(true, false, true), this.classUnderTest().asUnmodifiable());
+    }
+
 }

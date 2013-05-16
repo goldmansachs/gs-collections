@@ -52,8 +52,10 @@ public abstract class AbstractUnmodifiable<name>CollectionTestCase
 
     protected abstract MutableCollection\<<wrapperName>\> newObjectCollectionWith(<wrapperName>... elements);
     
+    protected abstract Mutable<name>Collection newUnmodifiableCollectionWith(<type>... elements);
+
     protected abstract Mutable<name>Collection newSynchronizedCollectionWith(<type>... elements);
-    
+
     @Test
     public void newCollectionWith()
     {
@@ -482,6 +484,7 @@ public abstract class AbstractUnmodifiable<name>CollectionTestCase
     @Test
     public void asSynchronized()
     {
+        Verify.assertInstanceOf(this.newSynchronizedCollectionWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">).getClass(), this.classUnderTest().asSynchronized());
         Assert.assertEquals(this.newSynchronizedCollectionWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), this.classUnderTest().asSynchronized());
     }
 
@@ -490,6 +493,7 @@ public abstract class AbstractUnmodifiable<name>CollectionTestCase
     {
         Mutable<name>Collection collection = this.classUnderTest();
         Assert.assertEquals(collection, collection.asUnmodifiable());
+        Verify.assertInstanceOf(this.newUnmodifiableCollectionWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">).getClass(), this.classUnderTest().asUnmodifiable());
     }
 }
 

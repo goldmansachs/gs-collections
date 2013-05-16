@@ -19,6 +19,7 @@ package com.gs.collections.impl.stack.mutable.primitive;
 import java.util.EmptyStackException;
 import java.util.NoSuchElementException;
 
+import com.gs.collections.api.LazyBooleanIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
@@ -560,10 +561,27 @@ public class BooleanArrayStackTest
     }
 
     @Test
+    public void asLazy()
+    {
+        BooleanArrayStack stack = BooleanArrayStack.newStackWith(true, false, true);
+        Assert.assertEquals(stack.toSet(), stack.asLazy().toSet());
+        Verify.assertInstanceOf(LazyBooleanIterable.class, stack.asLazy());
+    }
+
+    @Test
     public void asSynchronized()
     {
         BooleanArrayStack stack = BooleanArrayStack.newStackWith(true, false, true);
+        Verify.assertInstanceOf(SynchronizedBooleanStack.class, stack.asSynchronized());
         Assert.assertEquals(new SynchronizedBooleanStack(stack), stack.asSynchronized());
+    }
+
+    @Test
+    public void asUnmodifiable()
+    {
+        BooleanArrayStack stack = BooleanArrayStack.newStackWith(true, false, true);
+        Verify.assertInstanceOf(UnmodifiableBooleanStack.class, stack.asUnmodifiable());
+        Assert.assertEquals(new UnmodifiableBooleanStack(stack), stack.asUnmodifiable());
     }
 
     private static class VerificationProcedure implements BooleanProcedure

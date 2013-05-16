@@ -34,8 +34,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * This file was automatically generated from template file primitiveHashBagTest.stg.
  * JUnit test for {@link <name>HashBag}.
+ * This file was automatically generated from template file primitiveHashBagTest.stg.
  */
 public class <name>HashBagTest
 {
@@ -52,7 +52,12 @@ public class <name>HashBagTest
     public void size()
     {
         Verify.assertSize(0, new <name>HashBag());
+        Verify.assertSize(0, new <name>HashBag(3));
+        Verify.assertSize(0, <name>HashBag.newBag(3));
         Verify.assertSize(3, <name>HashBag.newBagWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">));
+        Verify.assertSize(3, new <name>HashBag(<name>HashBag.newBagWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">)));
+        Verify.assertSize(3, <name>HashBag.newBag(<name>HashBag.newBagWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">)));
+        Verify.assertSize(3, new <name>HashBag(<name>ArrayList.newListWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">)));
     }
 
     @Test
@@ -549,7 +554,16 @@ public class <name>HashBagTest
     public void asSynchronized()
     {
         <name>HashBag bag = <name>HashBag.newBagWith(<["1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">);
+        Verify.assertInstanceOf(Synchronized<name>Bag.class, bag.asSynchronized());
         Assert.assertEquals(new Synchronized<name>Bag(bag), bag.asSynchronized());
+    }
+
+    @Test
+    public void asUnmodifiable()
+    {
+        <name>HashBag bag = <name>HashBag.newBagWith(<["1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">);
+        Verify.assertInstanceOf(Unmodifiable<name>Bag.class, bag.asUnmodifiable());
+        Assert.assertEquals(new Unmodifiable<name>Bag(bag), bag.asUnmodifiable());
     }
 
     @Test

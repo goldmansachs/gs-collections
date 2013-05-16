@@ -34,8 +34,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * This file was automatically generated from template file primitiveHashSetTest.stg.
  * JUnit test for {@link <name>HashSetTest}.
+ * This file was automatically generated from template file primitiveHashSetTest.stg.
  */
 public class <name>HashSetTest
 {
@@ -553,6 +553,7 @@ public class <name>HashSetTest
         Assert.assertTrue(<name>HashSet.newSetWith(<["-1", "-1", "-2", "31", "32"]:(literal.(type))(); separator=", ">).anySatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
         Assert.assertTrue(<name>HashSet.newSetWith(<["2", "-1", "-2", "31", "32"]:(literal.(type))(); separator=", ">).anySatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
         Assert.assertFalse(<name>HashSet.newSetWith(<["1", "-1", "31", "32"]:(literal.(type))(); separator=", ">).anySatisfy(<name>Predicates.equal(<(literal.(type))("0")>)));
+        Assert.assertTrue(<name>HashSet.newSetWith(<["32"]:(literal.(type))(); separator=", ">).anySatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
     }
 
     @Test
@@ -561,6 +562,7 @@ public class <name>HashSetTest
         Assert.assertFalse(<name>HashSet.newSetWith(<["1", "0", "31", "32"]:(literal.(type))(); separator=", ">).allSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
         Assert.assertFalse(<name>HashSet.newSetWith(<["1", "0", "31", "32"]:(literal.(type))(); separator=", ">).allSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
         Assert.assertTrue(<name>HashSet.newSetWith(<["1", "2", "31", "32"]:(literal.(type))(); separator=", ">).allSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
+        Assert.assertFalse(<name>HashSet.newSetWith(<["-32"]:(literal.(type))(); separator=", ">).allSatisfy(<name>Predicates.equal(<(literal.(type))("33")>)));
     }
 
     @Test
@@ -569,6 +571,7 @@ public class <name>HashSetTest
         Assert.assertFalse(<name>HashSet.newSetWith(<["1", "0", "31", "32"]:(literal.(type))(); separator=", ">).noneSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
         Assert.assertFalse(<name>HashSet.newSetWith(<["1", "0", "31", "32"]:(literal.(type))(); separator=", ">).noneSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
         Assert.assertTrue(<name>HashSet.newSetWith(<["1", "2", "31", "32"]:(literal.(type))(); separator=", ">).noneSatisfy(<name>Predicates.lessThan(<(literal.(type))("0")>)));
+        Assert.assertFalse(<name>HashSet.newSetWith(<["32"]:(literal.(type))(); separator=", ">).noneSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
     }
 
     @Test
@@ -797,7 +800,15 @@ public class <name>HashSetTest
     @Test
     public void asSynchronized()
     {
+        Verify.assertInstanceOf(Synchronized<name>Set.class, this.set.asSynchronized());
         Assert.assertEquals(new Synchronized<name>Set(this.set), this.set.asSynchronized());
+    }
+   
+    @Test
+    public void asUnmodifiable()
+    {
+        Verify.assertInstanceOf(Unmodifiable<name>Set.class, this.set.asUnmodifiable());
+        Assert.assertEquals(new Unmodifiable<name>Set(this.set), this.set.asUnmodifiable());
     }
 }
 

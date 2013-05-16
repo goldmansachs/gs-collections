@@ -443,6 +443,15 @@ public class SynchronizedBooleanStackTest
     public void asSynchronized()
     {
         MutableBooleanStack stack1 = new SynchronizedBooleanStack(BooleanArrayStack.newStackWith(true, false, true), new Object());
+        Assert.assertSame(stack1, stack1.asSynchronized());
         Assert.assertEquals(stack1, stack1.asSynchronized());
+    }
+
+    @Test
+    public void asUnmodifiable()
+    {
+        MutableBooleanStack stack1 = new SynchronizedBooleanStack(BooleanArrayStack.newStackWith(true, false, true), new Object());
+        Verify.assertInstanceOf(UnmodifiableBooleanStack.class, stack1.asUnmodifiable());
+        Assert.assertEquals(stack1, stack1.asUnmodifiable());
     }
 }

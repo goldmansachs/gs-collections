@@ -399,6 +399,7 @@ public abstract class AbstractUnmodifiableBooleanCollectionTestCase
     @Test
     public void asSynchronized()
     {
+        Verify.assertInstanceOf(this.newSynchronizedCollectionWith(true, false, true).getClass(), this.classUnderTest().asSynchronized());
         Assert.assertEquals(this.newSynchronizedCollectionWith(true, false, true), this.classUnderTest().asSynchronized());
     }
 

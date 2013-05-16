@@ -43,8 +43,8 @@ import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 import net.jcip.annotations.NotThreadSafe;
 
 /**
- * This file was automatically generated from template file primitiveArrayList.stg.
  * <name>ArrayList is similar to {@link FastList}, and is memory-optimized for <type> primitives.
+ * This file was automatically generated from template file primitiveArrayList.stg.
  *
  * @since 3.0.
  */

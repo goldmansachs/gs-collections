@@ -22,8 +22,10 @@ import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
+import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -39,12 +41,22 @@ public class ReverseBooleanIterableTest
     }
 
     @Test
+    public void contains()
+    {
+        BooleanIterable iterable = BooleanArrayList.newListWith(false, false).asReversed();
+        Assert.assertTrue(iterable.contains(false));
+        Assert.assertFalse(iterable.contains(true));
+    }
+
+    @Test
     public void containsAll()
     {
         BooleanIterable iterable = BooleanArrayList.newListWith(true, false, true).asReversed();
         Assert.assertTrue(iterable.containsAll(true));
         Assert.assertTrue(iterable.containsAll(true, false));
         Assert.assertFalse(BooleanArrayList.newListWith(false, false).asReversed().containsAll(true));
+        Assert.assertFalse(BooleanArrayList.newListWith(false, false).asReversed().containsAll(BooleanArrayList.newListWith(true, false)));
+        Assert.assertTrue(BooleanArrayList.newListWith(false, false, true).asReversed().containsAll(BooleanArrayList.newListWith(true, false)));
     }
 
     @Test
@@ -122,6 +134,13 @@ public class ReverseBooleanIterableTest
     {
         Assert.assertFalse(BooleanArrayList.newListWith(true, false).asReversed().allSatisfy(BooleanPredicates.equal(false)));
         Assert.assertTrue(BooleanArrayList.newListWith(false, false).asReversed().allSatisfy(BooleanPredicates.equal(false)));
+    }
+
+    @Test
+    public void noneSatisfy()
+    {
+        Assert.assertFalse(BooleanArrayList.newListWith(true, false).asReversed().noneSatisfy(BooleanPredicates.equal(false)));
+        Assert.assertTrue(BooleanArrayList.newListWith(false, false).asReversed().noneSatisfy(BooleanPredicates.equal(true)));
     }
 
     @Test
@@ -220,5 +239,29 @@ public class ReverseBooleanIterableTest
         StringBuilder appendable4 = new StringBuilder();
         iterable.appendString(appendable4, "[", ", ", "]");
         Assert.assertEquals(iterable.toString(), appendable4.toString());
+    }
+
+    @Test
+    public void toList()
+    {
+        Assert.assertEquals(BooleanArrayList.newListWith(false, true), BooleanArrayList.newListWith(true, false).asReversed().toList());
+    }
+
+    @Test
+    public void toSet()
+    {
+        Assert.assertEquals(BooleanHashSet.newSetWith(true, false), BooleanArrayList.newListWith(true, false).asReversed().toSet());
+    }
+
+    @Test
+    public void toBag()
+    {
+        Assert.assertEquals(BooleanHashBag.newBagWith(true, false), BooleanArrayList.newListWith(true, false).asReversed().toBag());
+    }
+
+    @Test
+    public void asLazy()
+    {
+        Assert.assertEquals(BooleanArrayList.newListWith(false, true), BooleanArrayList.newListWith(true, false).asReversed().asLazy().toList());
     }
 }

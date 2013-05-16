@@ -32,6 +32,8 @@ import org.junit.Test;
  */
 public class Unmodifiable<name>SetTest extends AbstractUnmodifiable<name>CollectionTestCase
 {
+    private final Mutable<name>Set set = this.classUnderTest();
+
     @Override
     protected final Mutable<name>Set classUnderTest()
     {
@@ -54,6 +56,12 @@ public class Unmodifiable<name>SetTest extends AbstractUnmodifiable<name>Collect
     protected Mutable<name>Collection newSynchronizedCollectionWith(<type>... elements)
     {
         return <name>HashSet.newSetWith(elements).asSynchronized();
+    }
+
+    @Override
+    protected Mutable<name>Collection newUnmodifiableCollectionWith(<type>... elements)
+    {
+        return <name>HashSet.newSetWith(elements).asUnmodifiable();
     }
 
     @Override
@@ -80,8 +88,6 @@ public class Unmodifiable<name>SetTest extends AbstractUnmodifiable<name>Collect
         return UnifiedSet.newSetWith(elements);
     }
 
-    private final Mutable<name>Set set = this.classUnderTest();
-
     @Override
     @Test
     public void iterator()
@@ -106,6 +112,14 @@ public class Unmodifiable<name>SetTest extends AbstractUnmodifiable<name>Collect
         Mutable<name>Collection set1 = this.newWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">);
         Mutable<name>Collection set2 = this.newWith(<["4", "3", "2", "1"]:(literal.(type))(); separator=", ">);
         Assert.assertEquals(set1, set2);
+    }
+
+    @Override
+    @Test
+    public void asUnmodifiable()
+    {
+        super.asUnmodifiable();
+        Assert.assertSame(this.set, this.set.asUnmodifiable());
     }
 }
 

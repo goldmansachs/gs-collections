@@ -690,7 +690,16 @@ public class <name>ArrayStackTest
     public void asSynchronized()
     {
         <name>ArrayStack stack = <name>ArrayStack.newStackWith(<["3", "2", "1"]:(literal.(type))(); separator=", ">);
+        Verify.assertInstanceOf(Synchronized<name>Stack.class, stack.asSynchronized());
         Assert.assertEquals(new Synchronized<name>Stack(stack), stack.asSynchronized());
+    }
+
+    @Test
+    public void asUnmodifiable()
+    {
+        <name>ArrayStack stack = <name>ArrayStack.newStackWith(<["3", "2", "1"]:(literal.(type))(); separator=", ">);
+        Verify.assertInstanceOf(Unmodifiable<name>Stack.class, stack.asUnmodifiable());
+        Assert.assertEquals(new Unmodifiable<name>Stack(stack), stack.asUnmodifiable());
     }
 
     private static class VerificationProcedure implements <name>Procedure

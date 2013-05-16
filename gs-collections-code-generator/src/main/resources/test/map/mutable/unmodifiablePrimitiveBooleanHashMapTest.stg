@@ -31,8 +31,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * This file was automatically generated from template file unmodifiablePrimitiveBooleanHashMapTest.stg.
  * JUnit test for {@link Unmodifiable<name>BooleanHashMap}.
+ * This file was automatically generated from template file unmodifiablePrimitiveBooleanHashMapTest.stg.
  */
 public class Unmodifiable<name>BooleanHashMapTest extends Abstract<name>BooleanHashMapTestCase
 {
@@ -354,6 +354,15 @@ public class Unmodifiable<name>BooleanHashMapTest extends Abstract<name>BooleanH
         Verify.assertSize(1, this.newWithKeysValues(<(literal.(type))("1")>, true));
         Verify.assertSize(3, this.map);
     }
+
+    @Override
+    @Test
+    public void asUnmodifiable()
+    {
+        super.asUnmodifiable();
+        Assert.assertSame(this.map, this.map.asUnmodifiable());
+    }
+
 }
 
 >>

@@ -364,7 +364,7 @@ public final class Synchronized<name>Stack
 
     public Mutable<name>Stack asUnmodifiable()
     {
-        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+        return new Unmodifiable<name>Stack(this);
     }
 
     public Mutable<name>Stack asSynchronized()

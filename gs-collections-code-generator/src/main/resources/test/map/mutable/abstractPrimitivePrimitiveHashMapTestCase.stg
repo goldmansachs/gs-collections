@@ -1335,12 +1335,14 @@ public abstract class Abstract<name1><name2>HashMapTestCase
     @Test
     public void asSynchronized()
     {
+        Verify.assertInstanceOf(Synchronized<name1><name2>HashMap.class, this.map.asSynchronized());
         Assert.assertEquals(new Synchronized<name1><name2>HashMap(this.map), this.map.asSynchronized());
     }
 
     @Test
     public void asUnmodifiable()
     {
+        Verify.assertInstanceOf(Unmodifiable<name1><name2>HashMap.class, this.map.asUnmodifiable());
         Assert.assertEquals(new Unmodifiable<name1><name2>HashMap(this.map), this.map.asUnmodifiable());
     }
 

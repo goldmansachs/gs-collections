@@ -144,7 +144,7 @@ public final class Synchronized<name>Set
 
     public Mutable<name>Set asUnmodifiable()
     {
-        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+        return new Unmodifiable<name>Set(this);
     }
 
     public Mutable<name>Set asSynchronized()

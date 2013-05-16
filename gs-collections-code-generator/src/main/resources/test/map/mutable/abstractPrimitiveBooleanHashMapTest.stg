@@ -1264,12 +1264,14 @@ public abstract class Abstract<name>BooleanHashMapTestCase
     @Test
     public void asSynchronized()
     {
+        Verify.assertInstanceOf(Synchronized<name>BooleanHashMap.class, this.map.asSynchronized());
         Assert.assertEquals(new Synchronized<name>BooleanHashMap(this.map), this.map.asSynchronized());
     }
 
     @Test
     public void asUnmodifiable()
     {
+        Verify.assertInstanceOf(Unmodifiable<name>BooleanHashMap.class, this.map.asUnmodifiable());
         Assert.assertEquals(new Unmodifiable<name>BooleanHashMap(this.map), this.map.asUnmodifiable());
     }
 

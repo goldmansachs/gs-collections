@@ -32,6 +32,8 @@ import org.junit.Test;
  */
 public class Synchronized<name>SetTest extends AbstractSynchronized<name>CollectionTestCase
 {
+    private final Mutable<name>Set set = this.classUnderTest();
+
     @Override
     protected final Mutable<name>Set classUnderTest()
     {
@@ -80,7 +82,11 @@ public class Synchronized<name>SetTest extends AbstractSynchronized<name>Collect
         return UnifiedSet.newSetWith(elements);
     }
 
-    private final Mutable<name>Set set = this.classUnderTest();
+    @Override
+    protected Mutable<name>Set newUnmodifiableCollectionWith(<type>... elements)
+    {
+        return new Unmodifiable<name>Set(<name>HashSet.newSetWith(elements));
+    }
 
     @Override
     @Test

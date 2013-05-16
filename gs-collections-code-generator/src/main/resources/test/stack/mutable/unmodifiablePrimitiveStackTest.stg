@@ -40,19 +40,19 @@ public class Unmodifiable<name>StackTest
 {
     private final Mutable<name>Stack stack = new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
     
-    @Test (expected = UnsupportedOperationException.class)
+    @Test(expected = UnsupportedOperationException.class)
     public void push()
     {
         this.stack.push(<(literal.(type))("5")>);
     }
 
-    @Test (expected = UnsupportedOperationException.class)
+    @Test(expected = UnsupportedOperationException.class)
     public void pop()
     {
         this.stack.pop();
     }
 
-    @Test (expected = UnsupportedOperationException.class)
+    @Test(expected = UnsupportedOperationException.class)
     public void popWithCount()
     {
         this.stack.pop(2);
@@ -137,7 +137,7 @@ public class Unmodifiable<name>StackTest
         Assert.assertTrue(this.stack.notEmpty());
     }
 
-    @Test (expected = UnsupportedOperationException.class)
+    @Test(expected = UnsupportedOperationException.class)
     public void clear()
     {
         this.stack.clear();
@@ -492,13 +492,14 @@ public class Unmodifiable<name>StackTest
     {
         Mutable<name>Stack stack1 = new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
         Assert.assertEquals(stack1, stack1.asUnmodifiable());
+        Assert.assertSame(stack1, stack1.asUnmodifiable());
     }
 
     @Test
     public void asSynchronized()
     {
         Mutable<name>Stack stack1 = new Unmodifiable<name>Stack(<name>ArrayStack.newStackWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
-        Assert.assertEquals(stack1, stack1.asSynchronized());
+        Verify.assertInstanceOf(Synchronized<name>Stack.class, stack1.asSynchronized());
     }
 }
 

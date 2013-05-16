@@ -34,6 +34,8 @@ import org.junit.Test;
  */
 public class Synchronized<name>BagTest extends AbstractSynchronized<name>CollectionTestCase
 {
+    private final Mutable<name>Bag bag = this.classUnderTest();
+
     @Override
     protected final Mutable<name>Bag classUnderTest()
     {
@@ -82,7 +84,11 @@ public class Synchronized<name>BagTest extends AbstractSynchronized<name>Collect
         return HashBag.newBagWith(elements);
     }
 
-    private final Mutable<name>Bag bag = this.classUnderTest();
+    @Override
+    protected Mutable<name>Bag newUnmodifiableCollectionWith(<type>... elements)
+    {
+        return new Unmodifiable<name>Bag(<name>HashBag.newBagWith(elements));
+    }
 
     @Override
     @Test

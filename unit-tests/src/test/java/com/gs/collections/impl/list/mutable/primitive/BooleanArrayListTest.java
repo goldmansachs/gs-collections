@@ -507,6 +507,7 @@ public class BooleanArrayListTest
     public void size()
     {
         Assert.assertEquals(0L, new BooleanArrayList().size());
+        Assert.assertEquals(0L, new BooleanArrayList(1).size());
         Assert.assertEquals(1L, BooleanArrayList.newListWith(false).size());
         Assert.assertEquals(3L, this.list.size());
     }
@@ -672,5 +673,25 @@ public class BooleanArrayListTest
         StringBuilder appendable4 = new StringBuilder();
         this.list.appendString(appendable4, "[", ", ", "]");
         Assert.assertEquals(this.list.toString(), appendable4.toString());
+    }
+
+    @Test
+    public void asLazy()
+    {
+        Assert.assertEquals(this.list.toList(), this.list.asLazy().toList());
+    }
+
+    @Test
+    public void asSynchronized()
+    {
+        Verify.assertInstanceOf(SynchronizedBooleanList.class, this.list.asSynchronized());
+        Assert.assertEquals(new SynchronizedBooleanList(this.list), this.list.asSynchronized());
+    }
+
+    @Test
+    public void asUnmodifiable()
+    {
+        Verify.assertInstanceOf(UnmodifiableBooleanList.class, this.list.asUnmodifiable());
+        Assert.assertEquals(new UnmodifiableBooleanList(this.list), this.list.asUnmodifiable());
     }
 }

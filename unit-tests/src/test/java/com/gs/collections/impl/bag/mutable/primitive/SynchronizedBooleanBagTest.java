@@ -81,6 +81,18 @@ public class SynchronizedBooleanBagTest extends AbstractSynchronizedBooleanColle
         return HashBag.newBagWith(elements);
     }
 
+    @Override
+    protected MutableBooleanBag newSynchronizedCollectionWith(boolean... elements)
+    {
+        return new SynchronizedBooleanBag(BooleanHashBag.newBagWith(elements));
+    }
+
+    @Override
+    protected MutableBooleanBag newUnmodifiableCollectionWith(boolean... elements)
+    {
+        return new UnmodifiableBooleanBag(BooleanHashBag.newBagWith(elements));
+    }
+
     private final MutableBooleanBag bag = this.classUnderTest();
 
     @Test
@@ -166,5 +178,13 @@ public class SynchronizedBooleanBagTest extends AbstractSynchronizedBooleanColle
         Assert.assertNotEquals(this.newWith(false), this.bag);
         Verify.assertEqualsAndHashCode(this.newUnSynchronizedCollectionWith(false, true, true), this.bag);
         Verify.assertEqualsAndHashCode(this.newUnSynchronizedCollectionWith(true, false, true), this.bag);
+    }
+
+    @Override
+    @Test
+    public void asSynchronized()
+    {
+        super.asSynchronized();
+        Assert.assertSame(this.bag, this.bag.asSynchronized());
     }
 }

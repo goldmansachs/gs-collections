@@ -541,6 +541,14 @@ public class Synchronized<name>StackTest
     {
         Mutable<name>Stack stack1 = new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), new Object());
         Assert.assertEquals(stack1, stack1.asSynchronized());
+        Assert.assertSame(stack1, stack1.asSynchronized());
+    }
+
+    @Test
+    public void asUnmodifiable()
+    {
+        Verify.assertInstanceOf(Unmodifiable<name>Stack.class, this.stack.asUnmodifiable());
+        Assert.assertEquals(new Unmodifiable<name>Stack(this.stack), this.stack.asUnmodifiable());
     }
 }
 

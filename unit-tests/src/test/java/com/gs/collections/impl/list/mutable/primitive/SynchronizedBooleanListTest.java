@@ -80,6 +80,18 @@ public class SynchronizedBooleanListTest extends AbstractSynchronizedBooleanColl
         return FastList.newListWith(elements);
     }
 
+    @Override
+    protected MutableBooleanList newSynchronizedCollectionWith(boolean... elements)
+    {
+        return new SynchronizedBooleanList(BooleanArrayList.newListWith(elements));
+    }
+
+    @Override
+    protected MutableBooleanList newUnmodifiableCollectionWith(boolean... elements)
+    {
+        return new UnmodifiableBooleanList(BooleanArrayList.newListWith(elements));
+    }
+
     private final MutableBooleanList list = this.classUnderTest();
 
     @Test
@@ -352,5 +364,13 @@ public class SynchronizedBooleanListTest extends AbstractSynchronizedBooleanColl
     {
         super.toList();
         Assert.assertEquals(BooleanArrayList.newListWith(true, false, true), this.classUnderTest().toList());
+    }
+
+    @Override
+    @Test
+    public void asSynchronized()
+    {
+        super.asSynchronized();
+        Assert.assertSame(this.list, this.list.asSynchronized());
     }
 }

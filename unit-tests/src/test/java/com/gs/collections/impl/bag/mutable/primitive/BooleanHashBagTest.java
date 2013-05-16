@@ -59,6 +59,8 @@ public class BooleanHashBagTest
     {
         Verify.assertSize(0, new BooleanHashBag());
         Verify.assertSize(3, BooleanHashBag.newBagWith(true, false, true));
+        Verify.assertSize(3, new BooleanHashBag(BooleanHashBag.newBagWith(true, false, true)));
+        Verify.assertSize(3, new BooleanHashBag(BooleanArrayList.newListWith(true, false, true)));
     }
 
     @Test
@@ -555,6 +557,16 @@ public class BooleanHashBagTest
     public void asSynchronized()
     {
         BooleanHashBag bag = BooleanHashBag.newBagWith(true, false, false, true, true, true);
+        Verify.assertInstanceOf(SynchronizedBooleanBag.class, bag.asSynchronized());
         Assert.assertEquals(new SynchronizedBooleanBag(bag), bag.asSynchronized());
+    }
+
+    @Test
+    public void asUnmodifiable()
+    {
+        BooleanHashBag bag = BooleanHashBag.newBagWith(true, false, false, true, true, true);
+        Verify.assertInstanceOf(UnmodifiableBooleanBag.class, bag.asUnmodifiable());
+        Assert.assertEquals(new UnmodifiableBooleanBag(bag), bag.asUnmodifiable());
+
     }
 }

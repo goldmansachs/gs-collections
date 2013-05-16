@@ -723,6 +723,20 @@ public class <name>ArrayListTest
     {
         Assert.assertEquals(this.list.toList(), this.list.asLazy().toList());
     }
+
+    @Test
+    public void asUnmodifiable()
+    {
+        Assert.assertEquals(new Unmodifiable<name>List(this.list), this.list.asUnmodifiable());
+        Verify.assertInstanceOf(Unmodifiable<name>List.class, this.list.asUnmodifiable());
+    }
+
+    @Test
+    public void asSynchronized()
+    {
+        Assert.assertEquals(new Synchronized<name>List(this.list), this.list.asSynchronized());
+        Verify.assertInstanceOf(Synchronized<name>List.class, this.list.asSynchronized());
+    }
 }
 
 >>

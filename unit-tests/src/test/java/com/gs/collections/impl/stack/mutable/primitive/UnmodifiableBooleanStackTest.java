@@ -398,6 +398,6 @@ public class UnmodifiableBooleanStackTest
     public void asSynchronized()
     {
         MutableBooleanStack stack1 = new UnmodifiableBooleanStack(BooleanArrayStack.newStackWith(true, false, true));
-        Assert.assertEquals(stack1, stack1.asSynchronized());
+        Verify.assertInstanceOf(SynchronizedBooleanStack.class, stack1.asSynchronized());
     }
 }

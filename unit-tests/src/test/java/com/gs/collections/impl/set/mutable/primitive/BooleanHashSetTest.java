@@ -20,6 +20,7 @@ import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
+import com.gs.collections.api.LazyBooleanIterable;
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
@@ -699,11 +700,33 @@ public class BooleanHashSetTest
     }
 
     @Test
+    public void asLazy()
+    {
+        Verify.assertInstanceOf(LazyBooleanIterable.class, this.set0.asLazy());
+        Assert.assertEquals(this.set0, this.set0.asLazy().toSet());
+        Assert.assertEquals(this.set1, this.set1.asLazy().toSet());
+        Assert.assertEquals(this.set2, this.set2.asLazy().toSet());
+        Assert.assertEquals(this.set3, this.set3.asLazy().toSet());
+    }
+
+    @Test
     public void asSynchronized()
     {
+        Verify.assertInstanceOf(SynchronizedBooleanSet.class, this.set0.asSynchronized());
         Assert.assertEquals(new SynchronizedBooleanSet(this.set0), this.set0.asSynchronized());
         Assert.assertEquals(new SynchronizedBooleanSet(this.set1), this.set1.asSynchronized());
         Assert.assertEquals(new SynchronizedBooleanSet(this.set2), this.set2.asSynchronized());
         Assert.assertEquals(new SynchronizedBooleanSet(this.set3), this.set3.asSynchronized());
     }
+
+    @Test
+    public void asUnmodifiable()
+    {
+        Verify.assertInstanceOf(UnmodifiableBooleanSet.class, this.set0.asUnmodifiable());
+        Assert.assertEquals(new UnmodifiableBooleanSet(this.set0), this.set0.asUnmodifiable());
+        Assert.assertEquals(new UnmodifiableBooleanSet(this.set1), this.set1.asUnmodifiable());
+        Assert.assertEquals(new UnmodifiableBooleanSet(this.set2), this.set2.asUnmodifiable());
+        Assert.assertEquals(new UnmodifiableBooleanSet(this.set3), this.set3.asUnmodifiable());
+    }
+
 }

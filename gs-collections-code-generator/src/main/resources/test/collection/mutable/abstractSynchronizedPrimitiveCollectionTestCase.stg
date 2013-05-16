@@ -54,6 +54,8 @@ public abstract class AbstractSynchronized<name>CollectionTestCase
 
     protected abstract MutableCollection\<<wrapperName>\> newObjectCollectionWith(<wrapperName>... elements);
     
+    protected abstract Mutable<name>Collection newUnmodifiableCollectionWith(<type>... elements);
+
     @Test
     public void newCollectionWith()
     {
@@ -293,6 +295,10 @@ public abstract class AbstractSynchronized<name>CollectionTestCase
     {
         Assert.assertTrue(this.newWith(<["1", "-1", "2"]:(literal.(type))(); separator=", ">).anySatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
         Assert.assertFalse(this.newWith(<["1", "-1", "2"]:(literal.(type))(); separator=", ">).anySatisfy(<name>Predicates.equal(<(literal.(type))("0")>)));
+        Assert.assertTrue(this.newWith(<["-1", "-1", "-2", "31", "32"]:(literal.(type))(); separator=", ">).anySatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
+        Assert.assertTrue(this.newWith(<["2", "-1", "-2", "31", "32"]:(literal.(type))(); separator=", ">).anySatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
+        Assert.assertFalse(this.newWith(<["1", "-1", "31", "32"]:(literal.(type))(); separator=", ">).anySatisfy(<name>Predicates.equal(<(literal.(type))("0")>)));
+        Assert.assertTrue(this.newWith(<["32"]:(literal.(type))(); separator=", ">).anySatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
     }
 
     @Test
@@ -300,6 +306,10 @@ public abstract class AbstractSynchronized<name>CollectionTestCase
     {
         Assert.assertFalse(this.newWith(<["1", "0", "2"]:(literal.(type))(); separator=", ">).allSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
         Assert.assertTrue(this.newWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">).allSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
+        Assert.assertFalse(this.newWith(<["1", "0", "31", "32"]:(literal.(type))(); separator=", ">).allSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
+        Assert.assertFalse(this.newWith(<["1", "0", "31", "32"]:(literal.(type))(); separator=", ">).allSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
+        Assert.assertTrue(this.newWith(<["1", "2", "31", "32"]:(literal.(type))(); separator=", ">).allSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
+        Assert.assertFalse(this.newWith(<["32"]:(literal.(type))(); separator=", ">).allSatisfy(<name>Predicates.equal(<(literal.(type))("33")>)));
     }
 
     @Test
@@ -307,6 +317,10 @@ public abstract class AbstractSynchronized<name>CollectionTestCase
     {
         Assert.assertFalse(this.newWith(<["1", "0", "2"]:(literal.(type))(); separator=", ">).noneSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
         Assert.assertTrue(this.newWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">).noneSatisfy(<name>Predicates.greaterThan(<(literal.(type))("3")>)));
+        Assert.assertFalse(this.newWith(<["1", "0", "31", "32"]:(literal.(type))(); separator=", ">).noneSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
+        Assert.assertFalse(this.newWith(<["1", "0", "31", "32"]:(literal.(type))(); separator=", ">).noneSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
+        Assert.assertTrue(this.newWith(<["1", "2", "31", "32"]:(literal.(type))(); separator=", ">).noneSatisfy(<name>Predicates.lessThan(<(literal.(type))("0")>)));
+        Assert.assertFalse(this.newWith(<["32"]:(literal.(type))(); separator=", ">).noneSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
     }
     
     @Test
@@ -535,6 +549,13 @@ public abstract class AbstractSynchronized<name>CollectionTestCase
     {
         Mutable<name>Collection collection = this.classUnderTestWithLock();
         Assert.assertEquals(collection, collection.asSynchronized());
+    }
+
+    @Test
+    public void asUnmodifiable()
+    {
+        Verify.assertInstanceOf(this.newUnmodifiableCollectionWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">).getClass(), this.classUnderTest().asUnmodifiable());
+        Assert.assertEquals(this.newUnmodifiableCollectionWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), this.classUnderTest().asUnmodifiable());
     }
 }
 

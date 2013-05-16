@@ -54,17 +54,17 @@ public final class Unmodifiable<name>Set
         throw new UnsupportedOperationException("Cannot call with on an Unmodifiable<name>Set");
     }
 
-    public Synchronized<name>Set without(<type> element)
+    public Unmodifiable<name>Set without(<type> element)
     {
         throw new UnsupportedOperationException("Cannot call without on an Unmodifiable<name>Set");
     }
 
-    public Synchronized<name>Set withAll(<name>Iterable elements)
+    public Unmodifiable<name>Set withAll(<name>Iterable elements)
     {
         throw new UnsupportedOperationException("Cannot call withAll on an Unmodifiable<name>Set");
     }
 
-    public Synchronized<name>Set withoutAll(<name>Iterable elements)
+    public Unmodifiable<name>Set withoutAll(<name>Iterable elements)
     {
         throw new UnsupportedOperationException("Cannot call withoutAll on an Unmodifiable<name>Set");
     }
