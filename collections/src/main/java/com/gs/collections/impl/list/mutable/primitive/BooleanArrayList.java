@@ -986,40 +986,6 @@ public final class BooleanArrayList
             return BooleanHashBag.newBag(this);
         }
 
-        @Override
-        public int hashCode()
-        {
-            return BooleanArrayList.this.hashCode();
-        }
-
-        @Override
-        public boolean equals(Object otherIterable)
-        {
-            if (otherIterable == this)
-            {
-                return true;
-            }
-            if (!(otherIterable instanceof ReverseBooleanIterable))
-            {
-                return false;
-            }
-            ReverseBooleanIterable reverseBooleanIterable = (ReverseBooleanIterable) otherIterable;
-            if (this.size() != reverseBooleanIterable.size())
-            {
-                return false;
-            }
-            BooleanIterator iterator = this.booleanIterator();
-            BooleanIterator otherIterator = this.booleanIterator();
-            while (iterator.hasNext())
-            {
-                if (iterator.next() != otherIterator.next())
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
         private class ReverseBooleanIterator implements BooleanIterator
         {
             /**

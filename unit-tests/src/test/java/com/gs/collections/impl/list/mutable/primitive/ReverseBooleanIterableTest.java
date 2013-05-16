@@ -190,21 +190,6 @@ public class ReverseBooleanIterableTest
     }
 
     @Test
-    public void testEquals()
-    {
-        BooleanIterable list1 = BooleanArrayList.newListWith(false, false, true).asReversed();
-        BooleanIterable list2 = BooleanArrayList.newListWith(false, false, true).asReversed();
-        BooleanIterable list3 = BooleanArrayList.newListWith(false, true).asReversed();
-        BooleanIterable list4 = BooleanArrayList.newListWith(false, false).asReversed();
-        BooleanIterable list5 = BooleanArrayList.newListWith(true).asReversed();
-
-        Verify.assertEqualsAndHashCode(list1, list2);
-        Assert.assertNotEquals(list1, list3);
-        Assert.assertNotEquals(list1, list4);
-        Assert.assertNotEquals(list1, list5);
-    }
-
-    @Test
     public void testToString()
     {
         BooleanIterable iterable = BooleanArrayList.newListWith(false, false, true).asReversed();
