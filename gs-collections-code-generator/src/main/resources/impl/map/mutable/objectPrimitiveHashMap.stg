@@ -203,7 +203,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
 
     public MutableObject<name>Map\<K> asUnmodifiable()
     {
-        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+        return new UnmodifiableObject<name>Map\<K>(this);
     }
 
     public MutableObject<name>Map\<K> asSynchronized()

@@ -135,12 +135,12 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
 
     public MutableObjectBooleanMap<K> asUnmodifiable()
     {
-        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+        return new UnmodifiableObjectBooleanMap<K>(this);
     }
 
     public MutableObjectBooleanMap<K> asSynchronized()
     {
-        throw new UnsupportedOperationException("asSynchronized not implemented yet");
+        return new SynchronizedObjectBooleanHashMap<K>(this);
     }
 
     public ImmutableObjectBooleanMap<K> toImmutable()

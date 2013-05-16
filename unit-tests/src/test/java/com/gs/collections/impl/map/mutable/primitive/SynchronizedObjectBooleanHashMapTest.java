@@ -59,9 +59,11 @@ public class SynchronizedObjectBooleanHashMapTest extends AbstractMutableObjectB
 
     private final SynchronizedObjectBooleanHashMap<String> map = this.classUnderTest();
 
+    @Override
     @Test
     public void asSynchronized()
     {
+        super.asSynchronized();
         Assert.assertSame(this.map, this.map.asSynchronized());
     }
 }

@@ -28,8 +28,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * This file was automatically generated from template file objectPrimitiveHashMapTest.stg.
  * JUnit test for {@link Object<name>HashMap}.
+ * This file was automatically generated from template file objectPrimitiveHashMapTest.stg.
  */
 public class Object<name>HashMapTest extends AbstractMutableObject<name>HashMapTestCase
 {
@@ -268,19 +268,13 @@ public class Object<name>HashMapTest extends AbstractMutableObject<name>HashMapT
     public void withKeysValues()
     {
         super.withKeysValues();
-        Object<name>HashMap\<Integer> hashMap0 = new Object<name>HashMap\<Integer>().withKeysValues(1, <(literal.(type))("1")>, 2, <(literal.(type))("2")>);
+        Object<name>HashMap\<Integer> hashMap0 = new Object<name>HashMap\<Integer>();
+        Assert.assertSame(hashMap0, hashMap0.withKeysValues(1, <(literal.(type))("1")>, 2, <(literal.(type))("2")>));
         Object<name>HashMap\<Integer> hashMap1 = new Object<name>HashMap\<Integer>().withKeysValues(1, <(literal.(type))("1")>, 2, <(literal.(type))("2")>, 3, <(literal.(type))("3")>);
         Object<name>HashMap\<Integer> hashMap2 = new Object<name>HashMap\<Integer>().withKeysValues(1, <(literal.(type))("1")>, 2, <(literal.(type))("2")>, 3, <(literal.(type))("3")>, 4, <(literal.(type))("4")>);
         Assert.assertEquals(Object<name>HashMap.newWithKeysValues(1, <(literal.(type))("1")>, 2, <(literal.(type))("2")>), hashMap0);
         Assert.assertEquals(Object<name>HashMap.newWithKeysValues(1, <(literal.(type))("1")>, 2, <(literal.(type))("2")>, 3, <(literal.(type))("3")>), hashMap1);
         Assert.assertEquals(Object<name>HashMap.newWithKeysValues(1, <(literal.(type))("1")>, 2, <(literal.(type))("2")>, 3, <(literal.(type))("3")>, 4, <(literal.(type))("4")>), hashMap2);
-    }
-
-    @Override
-    @Test
-    public void asSynchronized()
-    {
-        Assert.assertEquals(new SynchronizedObject<name>HashMap\<String>(this.map), this.map.asSynchronized());
     }
 }
 

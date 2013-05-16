@@ -365,7 +365,7 @@ public final class SynchronizedObject<name>HashMap\<V>
 
     public MutableObject<name>Map\<V> asUnmodifiable()
     {
-        throw new UnsupportedOperationException("asUnmodifiable not implemented yet");
+        return new UnmodifiableObject<name>Map\<V>(this);
     }
 
     public MutableObject<name>Map\<V> asSynchronized()

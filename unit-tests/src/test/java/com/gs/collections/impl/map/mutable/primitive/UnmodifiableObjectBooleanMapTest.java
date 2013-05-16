@@ -1,0 +1,325 @@
+/*
+ * Copyright 2013 Goldman Sachs.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.gs.collections.impl.map.mutable.primitive;
+
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.BooleanFunction0;
+import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.test.Verify;
+import org.junit.Assert;
+import org.junit.Test;
+
+public class UnmodifiableObjectBooleanMapTest extends AbstractMutableObjectBooleanHashMapTestCase
+{
+    private final UnmodifiableObjectBooleanMap<String> map = this.classUnderTest();
+
+    @Override
+    protected UnmodifiableObjectBooleanMap<String> classUnderTest()
+    {
+        return new UnmodifiableObjectBooleanMap<String>(ObjectBooleanHashMap.newWithKeysValues("0", true, "1", true, "2", false));
+    }
+
+    @Override
+    protected <T> UnmodifiableObjectBooleanMap<T> newWithKeysValues(T key1, boolean value1)
+    {
+        return new UnmodifiableObjectBooleanMap<T>(ObjectBooleanHashMap.newWithKeysValues(key1, value1));
+    }
+
+    @Override
+    protected <T> UnmodifiableObjectBooleanMap<T> newWithKeysValues(T key1, boolean value1, T key2, boolean value2)
+    {
+        return new UnmodifiableObjectBooleanMap<T>(ObjectBooleanHashMap.newWithKeysValues(key1, value1, key2, value2));
+    }
+
+    @Override
+    protected <T> UnmodifiableObjectBooleanMap<T> newWithKeysValues(T key1, boolean value1, T key2, boolean value2, T key3, boolean value3)
+    {
+        return new UnmodifiableObjectBooleanMap<T>(ObjectBooleanHashMap.newWithKeysValues(key1, value1, key2, value2, key3, value3));
+    }
+
+    @Override
+    protected <T> UnmodifiableObjectBooleanMap<T> newWithKeysValues(T key1, boolean value1, T key2, boolean value2, T key3, boolean value3, T key4, boolean value4)
+    {
+        return new UnmodifiableObjectBooleanMap<T>(ObjectBooleanHashMap.newWithKeysValues(key1, value1, key2, value2, key3, value3, key4, value4));
+    }
+
+    @Override
+    protected <T> UnmodifiableObjectBooleanMap<T> getEmptyMap()
+    {
+        return new UnmodifiableObjectBooleanMap<T>(new ObjectBooleanHashMap<T>());
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void clear()
+    {
+        this.map.clear();
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void removeKey()
+    {
+        this.map.removeKey("0");
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void put()
+    {
+        this.map.put("0", true);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void withKeysValues()
+    {
+        this.map.withKeyValue("1", true);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void withoutKey()
+    {
+        this.map.withoutKey("0");
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void withoutAllKeys()
+    {
+        this.map.withoutAllKeys(FastList.newListWith("0", "1"));
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void putDuplicateWithRemovedSlot()
+    {
+        String collision1 = AbstractMutableObjectBooleanHashMapTestCase.generateCollisions().getFirst();
+        this.getEmptyMap().put(collision1, true);
+    }
+
+    @Override
+    @Test
+    public void get()
+    {
+        Assert.assertTrue(this.map.get("0"));
+        Assert.assertTrue(this.map.get("1"));
+        Assert.assertFalse(this.map.get("2"));
+
+        Assert.assertFalse(this.map.get("5"));
+    }
+
+    @Override
+    @Test
+    public void getIfAbsent()
+    {
+        Assert.assertTrue(this.map.getIfAbsent("0", false));
+        Assert.assertTrue(this.map.getIfAbsent("1", false));
+        Assert.assertFalse(this.map.getIfAbsent("2", true));
+
+        Assert.assertTrue(this.map.getIfAbsent("33", true));
+        Assert.assertFalse(this.map.getIfAbsent("33", false));
+    }
+
+    @Override
+    @Test
+    public void getIfAbsentPut_Function()
+    {
+        BooleanFunction0 factory = new BooleanFunction0()
+        {
+            public boolean value()
+            {
+                return false;
+            }
+        };
+
+        Assert.assertTrue(this.map.getIfAbsentPut("0", factory));
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void getIfAbsentPut_FunctionThrowsException()
+    {
+        BooleanFunction0 factory = new BooleanFunction0()
+        {
+            public boolean value()
+            {
+                return false;
+            }
+        };
+
+        this.map.getIfAbsentPut("10", factory);
+    }
+
+    @Override
+    @Test
+    public void getIfAbsentPutWith()
+    {
+        BooleanFunction<String> functionLengthEven = new BooleanFunction<String>()
+        {
+            public boolean booleanValueOf(String string)
+            {
+                return (string.length() & 1) == 0;
+            }
+        };
+
+        Assert.assertTrue(this.map.getIfAbsentPutWith("0", functionLengthEven, "zeroValue"));
+
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void getIfAbsentPutWithThrowsException()
+    {
+        BooleanFunction<String> functionLengthEven = new BooleanFunction<String>()
+        {
+            public boolean booleanValueOf(String string)
+            {
+                return (string.length() & 1) == 0;
+            }
+        };
+
+        this.map.getIfAbsentPutWith("10", functionLengthEven, "zeroValue");
+    }
+
+    @Override
+    @Test
+    public void getIfAbsentPutWithKey()
+    {
+        BooleanFunction<Integer> function = new BooleanFunction<Integer>()
+        {
+            public boolean booleanValueOf(Integer anObject)
+            {
+                return anObject == null || (anObject & 1) == 0;
+            }
+        };
+
+        Assert.assertTrue(this.newWithKeysValues(0, true).getIfAbsentPutWithKey(0, function));
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void getIfAbsentPutWithKeyThrowsException()
+    {
+        BooleanFunction<Integer> function = new BooleanFunction<Integer>()
+        {
+            public boolean booleanValueOf(Integer anObject)
+            {
+                return anObject == null || (anObject & 1) == 0;
+            }
+        };
+
+        this.<Integer>getEmptyMap().getIfAbsentPutWithKey(10, function);
+    }
+
+    @Override
+    @Test
+    public void getOrThrow()
+    {
+        Assert.assertTrue(this.map.getOrThrow("0"));
+        Assert.assertTrue(this.map.getOrThrow("1"));
+        Assert.assertFalse(this.map.getOrThrow("2"));
+
+        Verify.assertThrows(IllegalStateException.class, new Runnable()
+        {
+            public void run()
+            {
+                UnmodifiableObjectBooleanMapTest.this.map.getOrThrow("5");
+            }
+        });
+        Verify.assertThrows(IllegalStateException.class, new Runnable()
+        {
+            public void run()
+            {
+                UnmodifiableObjectBooleanMapTest.this.map.getOrThrow(null);
+            }
+        });
+    }
+
+    @Override
+    @Test
+    public void contains()
+    {
+        Assert.assertTrue(this.map.contains(true));
+        Assert.assertTrue(this.map.contains(false));
+        Assert.assertFalse(this.getEmptyMap().contains(false));
+        Assert.assertFalse(this.newWithKeysValues("0", true).contains(false));
+    }
+
+    @Override
+    @Test
+    public void containsAllIterable()
+    {
+        Assert.assertTrue(this.map.containsAll(BooleanArrayList.newListWith(true, false)));
+        Assert.assertTrue(this.map.containsAll(BooleanArrayList.newListWith(true, true)));
+        Assert.assertTrue(this.map.containsAll(BooleanArrayList.newListWith(false, false)));
+        Assert.assertFalse(this.getEmptyMap().containsAll(BooleanArrayList.newListWith(false, true)));
+        Assert.assertFalse(this.newWithKeysValues("0", true).containsAll(BooleanArrayList.newListWith(false)));
+    }
+
+    @Override
+    @Test
+    public void containsAll()
+    {
+        Assert.assertTrue(this.map.containsAll(true, false));
+        Assert.assertTrue(this.map.containsAll(true, true));
+        Assert.assertTrue(this.map.containsAll(false, false));
+        Assert.assertFalse(this.getEmptyMap().containsAll(false, true));
+        Assert.assertFalse(this.newWithKeysValues("0", true).containsAll(false));
+    }
+
+    @Override
+    @Test
+    public void containsKey()
+    {
+        Assert.assertTrue(this.map.containsKey("0"));
+        Assert.assertTrue(this.map.containsKey("1"));
+        Assert.assertTrue(this.map.containsKey("2"));
+        Assert.assertFalse(this.map.containsKey("3"));
+        Assert.assertFalse(this.map.containsKey(null));
+    }
+
+    @Override
+    @Test
+    public void containsValue()
+    {
+        Assert.assertTrue(this.map.containsValue(true));
+        Assert.assertTrue(this.map.containsValue(false));
+        Assert.assertFalse(this.getEmptyMap().contains(true));
+        Assert.assertFalse(this.newWithKeysValues("0", false).contains(true));
+    }
+
+    @Override
+    @Test
+    public void size()
+    {
+        Verify.assertSize(0, this.getEmptyMap());
+        Verify.assertSize(1, this.newWithKeysValues(0, false));
+        Verify.assertSize(1, this.newWithKeysValues(1, true));
+        Verify.assertSize(1, this.newWithKeysValues(null, false));
+
+        Verify.assertSize(2, this.newWithKeysValues(1, false, 5, false));
+        Verify.assertSize(2, this.newWithKeysValues(0, true, 5, true));
+    }
+
+    @Override
+    @Test
+    public void asUnmodifiable()
+    {
+        super.asUnmodifiable();
+        Assert.assertSame(this.map, this.map.asUnmodifiable());
+    }
+}

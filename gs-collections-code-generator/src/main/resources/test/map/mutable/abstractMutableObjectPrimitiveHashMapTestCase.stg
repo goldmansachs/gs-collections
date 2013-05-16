@@ -123,15 +123,15 @@ public abstract class AbstractMutableObject<name>HashMapTestCase
         Assert.assertEquals(Object<name>HashMap.newMap(), this.map);
         Verify.assertEmpty(this.map);
 
-        this.map.put(generateCollisions().get(0), <(literal.(type))("1")>);
-        this.map.put(generateCollisions().get(1), <(literal.(type))("2")>);
+        this.map.put(AbstractMutableObject<name>HashMapTestCase.generateCollisions().get(0), <(literal.(type))("1")>);
+        this.map.put(AbstractMutableObject<name>HashMapTestCase.generateCollisions().get(1), <(literal.(type))("2")>);
 
         Assert.assertEquals(<(literal.(type))("1")>, this.map.get(generateCollisions().get(0))<delta.(type)>);
-        this.map.removeKey(generateCollisions().get(0));
+        this.map.removeKey(AbstractMutableObject<name>HashMapTestCase.generateCollisions().get(0));
         Assert.assertEquals(<(literal.(type))("0")>, this.map.get(generateCollisions().get(0))<delta.(type)>);
 
         Assert.assertEquals(<(literal.(type))("2")>, this.map.get(generateCollisions().get(1))<delta.(type)>);
-        this.map.removeKey(generateCollisions().get(1));
+        this.map.removeKey(AbstractMutableObject<name>HashMapTestCase.generateCollisions().get(1));
         Assert.assertEquals(<(literal.(type))("0")>, this.map.get(generateCollisions().get(1))<delta.(type)>);
 
         this.map.put(null, <(literal.(type))("3")>);
@@ -162,10 +162,10 @@ public abstract class AbstractMutableObject<name>HashMapTestCase
     @Test
     public void putDuplicateWithRemovedSlot()
     {
-        String collision1 = generateCollisions().getFirst();
-        String collision2 = generateCollisions().get(1);
-        String collision3 = generateCollisions().get(2);
-        String collision4 = generateCollisions().get(3);
+        String collision1 = AbstractMutableObject<name>HashMapTestCase.generateCollisions().getFirst();
+        String collision2 = AbstractMutableObject<name>HashMapTestCase.generateCollisions().get(1);
+        String collision3 = AbstractMutableObject<name>HashMapTestCase.generateCollisions().get(2);
+        String collision4 = AbstractMutableObject<name>HashMapTestCase.generateCollisions().get(3);
 
         MutableObject<name>Map\<String> hashMap = this.getEmptyMap();
         hashMap.put(collision1, <(literal.(type))("1")>);
@@ -536,7 +536,7 @@ public abstract class AbstractMutableObject<name>HashMapTestCase
     public void testToString()
     {
         Assert.assertEquals("[]", this.\<Integer>getEmptyMap().toString());
-        Assert.assertEquals("[0=<(toStringLiteral.(type))("0")>]", this.\<Integer>getEmptyMap().withKeyValue(0, <(literal.(type))("0")>).toString());
+        Assert.assertEquals("[0=<(toStringLiteral.(type))("0")>]", this.newWithKeysValues(0, <(literal.(type))("0")>).toString());
 
         MutableObject<name>Map\<Integer> map1 = this.newWithKeysValues(0, <(literal.(type))("0")>, 1, <(literal.(type))("1")>);
         Assert.assertTrue(
@@ -718,9 +718,9 @@ public abstract class AbstractMutableObject<name>HashMapTestCase
     public void makeString()
     {
         Assert.assertEquals("", this.\<String>getEmptyMap().makeString());
-        Assert.assertEquals("0=<(toStringLiteral.(type))("0")>", this.getEmptyMap().withKeyValue(0, <(literal.(type))("0")>).makeString());
-        Assert.assertEquals("1=<(toStringLiteral.(type))("1")>", this.getEmptyMap().withKeyValue(1, <(literal.(type))("1")>).makeString());
-        Assert.assertEquals("null=<(toStringLiteral.(type))("5")>", this.getEmptyMap().withKeyValue(null, <(literal.(type))("5")>).makeString());
+        Assert.assertEquals("0=<(toStringLiteral.(type))("0")>", this.newWithKeysValues(0, <(literal.(type))("0")>).makeString());
+        Assert.assertEquals("1=<(toStringLiteral.(type))("1")>", this.newWithKeysValues(1, <(literal.(type))("1")>).makeString());
+        Assert.assertEquals("null=<(toStringLiteral.(type))("5")>", this.newWithKeysValues(null, <(literal.(type))("5")>).makeString());
 
         MutableObject<name>Map\<Integer> map2 = this.newWithKeysValues(1, <(literal.(type))("1")>, 32, <(literal.(type))("32")>);
         Assert.assertTrue(
@@ -1120,8 +1120,7 @@ public abstract class AbstractMutableObject<name>HashMapTestCase
     public void median()
     {
         Assert.assertEquals(1.0, this.map.median(), 0.0);
-        this.map.put("3", <(literal.(type))("3")>);
-        Assert.assertEquals(1.5, this.map.median(), 0.0);
+        Assert.assertEquals(1.5, this.newWithKeysValues("0", <(literal.(type))("0")>, "1", <(literal.(type))("1")>, "2", <(literal.(type))("2")>, "3", <(literal.(type))("3")>).median(), 0.0);
     }
 
     @Test(expected = ArithmeticException.class)
@@ -1208,7 +1207,18 @@ public abstract class AbstractMutableObject<name>HashMapTestCase
     }
 
     @Test
-    public abstract void asSynchronized();
+    public void asUnmodifiable()
+    {
+        Verify.assertInstanceOf(UnmodifiableObject<name>Map.class, this.map.asUnmodifiable());
+        Assert.assertEquals(new UnmodifiableObject<name>Map\<String>(this.map), this.map.asUnmodifiable());
+    }
+
+    @Test
+    public void asSynchronized()
+    {
+        Verify.assertInstanceOf(SynchronizedObject<name>HashMap.class, this.map.asSynchronized());
+        Assert.assertEquals(new SynchronizedObject<name>HashMap\<String>(this.map), this.map.asSynchronized());
+    }
 }
 
 >>

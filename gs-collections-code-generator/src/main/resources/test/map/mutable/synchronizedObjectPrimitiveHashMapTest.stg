@@ -24,8 +24,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * This file was automatically generated from template file synchronizedObjectPrimitiveHashMapTest.stg.
  * JUnit test for {@link SynchronizedObject<name>HashMap}.
+ * This file was automatically generated from template file synchronizedObjectPrimitiveHashMapTest.stg.
  */
 public class SynchronizedObject<name>HashMapTest extends AbstractMutableObject<name>HashMapTestCase
 {
@@ -71,6 +71,7 @@ public class SynchronizedObject<name>HashMapTest extends AbstractMutableObject<n
     @Test
     public void asSynchronized()
     {
+        super.asSynchronized();
         Assert.assertSame(this.map, this.map.asSynchronized());
     }
 }

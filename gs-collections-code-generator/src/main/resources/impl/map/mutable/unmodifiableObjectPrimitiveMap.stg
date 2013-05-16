@@ -1,0 +1,399 @@
+import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+
+targetPath() ::= "com/gs/collections/impl/map/mutable/primitive"
+
+fileName(primitive) ::= "UnmodifiableObject<primitive.name>Map"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.map.mutable.primitive;
+
+import java.io.Serializable;
+
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.Lazy<name>Iterable;
+import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
+import com.gs.collections.api.block.function.primitive.<name>Function;
+import com.gs.collections.api.block.function.primitive.<name>Function0;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.block.predicate.primitive.Object<name>Predicate;
+import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
+import com.gs.collections.api.block.procedure.primitive.Object<name>Procedure;
+import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
+import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.list.primitive.Mutable<name>List;
+import com.gs.collections.api.map.primitive.ImmutableObject<name>Map;
+import com.gs.collections.api.map.primitive.MutableObject<name>Map;
+import com.gs.collections.api.set.primitive.Mutable<name>Set;
+
+/**
+ * This file was automatically generated from template file unmodifiableObjectPrimitiveMap.stg.
+ *
+ * @since 3.2
+ */
+public final class UnmodifiableObject<name>Map\<V>
+        implements MutableObject<name>Map\<V>, Serializable
+{
+    private static final long serialVersionUID = 1L;
+    private final MutableObject<name>Map\<V> map;
+
+    UnmodifiableObject<name>Map(MutableObject<name>Map\<V> map)
+    {
+        this.map = map;
+    }
+
+    private boolean isAbsent(<type> result, V key)
+    {
+        return result == Object<name>HashMap.EMPTY_VALUE && !this.containsKey(key);
+    }
+
+    private <type> getIfAbsentThrow(V key)
+    {
+        <type> result = this.map.get(key);
+        if (this.isAbsent(result, key))
+        {
+            throw new UnsupportedOperationException("Cannot add to an " + this.getClass().getSimpleName());
+        }
+        return result;
+    }
+
+    public void clear()
+    {
+        throw new UnsupportedOperationException("Cannot call clear() on " + this.getClass().getSimpleName());
+    }
+
+    public void put(V key, <type> value)
+    {
+        throw new UnsupportedOperationException("Cannot call put() on " + this.getClass().getSimpleName());
+    }
+
+    public void removeKey(V key)
+    {
+        throw new UnsupportedOperationException("Cannot call removeKey() on " + this.getClass().getSimpleName());
+    }
+
+    public <type> getIfAbsentPut(V key, <name>Function0 function)
+    {
+        return this.getIfAbsentThrow(key);
+    }
+
+    public <type> getIfAbsentPutWithKey(V key, <name>Function\<? super V> function)
+    {
+        return this.getIfAbsentThrow(key);
+    }
+
+    public \<P> <type> getIfAbsentPutWith(V key, <name>Function\<? super P> function, P parameter)
+    {
+        return this.getIfAbsentThrow(key);
+    }
+
+    public <type> get(Object key)
+    {
+        return this.map.get(key);
+    }
+
+    public <type> getOrThrow(Object key)
+    {
+        return this.map.getOrThrow(key);
+    }
+
+    public <type> getIfAbsent(Object key, <type> ifAbsent)
+    {
+        return this.map.getIfAbsent(key, ifAbsent);
+    }
+
+    public boolean containsKey(Object key)
+    {
+        return this.map.containsKey(key);
+    }
+
+    public boolean containsValue(<type> value)
+    {
+        return this.map.containsValue(value);
+    }
+
+    public void forEachValue(<name>Procedure procedure)
+    {
+        this.map.forEachValue(procedure);
+    }
+
+    public void forEachKey(Procedure\<? super V> procedure)
+    {
+        this.map.forEachKey(procedure);
+    }
+
+    public void forEachKeyValue(Object<name>Procedure\<? super V> procedure)
+    {
+        this.map.forEachKeyValue(procedure);
+    }
+
+    public MutableObject<name>Map\<V> select(Object<name>Predicate\<? super V> predicate)
+    {
+        return this.map.select(predicate);
+    }
+
+    public MutableObject<name>Map\<V> reject(Object<name>Predicate\<? super V> predicate)
+    {
+        return this.map.reject(predicate);
+    }
+
+    public <name>Iterator <type>Iterator()
+    {
+        return this.map.<type>Iterator();
+    }
+
+    public void forEach(<name>Procedure procedure)
+    {
+        this.map.forEach(procedure);
+    }
+
+    public int count(<name>Predicate predicate)
+    {
+        return this.map.count(predicate);
+    }
+
+    public boolean anySatisfy(<name>Predicate predicate)
+    {
+        return this.map.anySatisfy(predicate);
+    }
+
+    public boolean allSatisfy(<name>Predicate predicate)
+    {
+        return this.map.allSatisfy(predicate);
+    }
+
+    public boolean noneSatisfy(<name>Predicate predicate)
+    {
+        return this.map.noneSatisfy(predicate);
+    }
+
+    public Mutable<name>Collection select(<name>Predicate predicate)
+    {
+        return this.map.select(predicate);
+    }
+
+    public Mutable<name>Collection reject(<name>Predicate predicate)
+    {
+        return this.map.reject(predicate);
+    }
+
+    public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
+    {
+        return this.map.detectIfNone(predicate, ifNone);
+    }
+
+    public \<V1 extends Object> MutableCollection\<V1> collect(<name>ToObjectFunction\<? extends V1> function)
+    {
+        return this.map.collect(function);
+    }
+
+    <(arithmeticMethods.(type))(name, type)>
+    public <type>[] toArray()
+    {
+        return this.map.toArray();
+    }
+
+    public boolean contains(<type> value)
+    {
+        return this.map.contains(value);
+    }
+
+    public boolean containsAll(<type>... source)
+    {
+        return this.map.containsAll(source);
+    }
+
+    public boolean containsAll(<name>Iterable source)
+    {
+        return this.map.containsAll(source);
+    }
+
+    public Mutable<name>List toList()
+    {
+        return this.map.toList();
+    }
+
+    public Mutable<name>Set toSet()
+    {
+        return this.map.toSet();
+    }
+
+    public Mutable<name>Bag toBag()
+    {
+        return this.map.toBag();
+    }
+
+    public Lazy<name>Iterable asLazy()
+    {
+        return this.map.asLazy();
+    }
+
+    public MutableObject<name>Map\<V> withKeyValue(V key, <type> value)
+    {
+        throw new UnsupportedOperationException("Cannot call withKeyValue() on " + this.getClass().getSimpleName());
+    }
+
+    public MutableObject<name>Map\<V> withoutKey(V key)
+    {
+        throw new UnsupportedOperationException("Cannot call withoutKey() on " + this.getClass().getSimpleName());
+    }
+
+    public MutableObject<name>Map\<V> withoutAllKeys(Iterable\<? extends V> keys)
+    {
+        throw new UnsupportedOperationException("Cannot call withoutAllKeys() on " + this.getClass().getSimpleName());
+    }
+
+    public MutableObject<name>Map\<V> asUnmodifiable()
+    {
+        return this;
+    }
+
+    public MutableObject<name>Map\<V> asSynchronized()
+    {
+        return new SynchronizedObject<name>HashMap\<V>(this);
+    }
+
+    public ImmutableObject<name>Map\<V> toImmutable()
+    {
+        throw new UnsupportedOperationException("toImmutable not implemented yet");
+    }
+
+    public int size()
+    {
+        return this.map.size();
+    }
+
+    public boolean isEmpty()
+    {
+        return this.map.isEmpty();
+    }
+
+    public boolean notEmpty()
+    {
+        return this.map.notEmpty();
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        return this.map.equals(obj);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return this.map.hashCode();
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.map.toString();
+    }
+    
+    public String makeString()
+    {
+        return this.map.makeString();
+    }
+
+    public String makeString(String separator)
+    {
+        return this.map.makeString(separator);
+    }
+
+    public String makeString(String start, String separator, String end)
+    {
+        return this.map.makeString(start, separator, end);
+    }
+
+    public void appendString(Appendable appendable)
+    {
+        this.map.appendString(appendable);
+    }
+
+    public void appendString(Appendable appendable, String separator)
+    {
+        this.map.appendString(appendable, separator);
+    }
+
+    public void appendString(Appendable appendable, String start, String separator, String end)
+    {
+        this.map.appendString(appendable, start, separator, end);
+    }
+}
+
+>>
+
+arithmeticMethods ::= [
+    "byte": "allMethods",
+    "short": "allMethods",
+    "char": "allMethods",
+    "int": "allMethods",
+    "long": "allMethods",
+    "float": "allMethods",
+    "double": "allMethods",
+    "boolean": "noMethods"
+    ]
+
+allMethods(name, type) ::=<<
+public <wideType.(type)> sum()
+{
+    return this.map.sum();
+}
+
+public <type> max()
+{
+    return this.map.max();
+}
+
+public <type> maxIfEmpty(<type> defaultValue)
+{
+    return this.map.maxIfEmpty(defaultValue);
+}
+
+public <type> min()
+{
+    return this.map.min();
+}
+
+public <type> minIfEmpty(<type> defaultValue)
+{
+    return this.map.minIfEmpty(defaultValue);
+}
+
+public double average()
+{
+    return this.map.average();
+}
+
+public double median()
+{
+    return this.map.median();
+}
+
+public <type>[] toSortedArray()
+{
+    return this.map.toSortedArray();
+}
+
+public Mutable<name>List toSortedList()
+{
+    return this.map.toSortedList();
+}
+
+>>
+
+noMethods(name, type) ::= ""
+
+

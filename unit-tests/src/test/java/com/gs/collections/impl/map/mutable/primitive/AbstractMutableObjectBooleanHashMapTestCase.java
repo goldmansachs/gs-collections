@@ -55,7 +55,7 @@ public abstract class AbstractMutableObjectBooleanHashMapTestCase
 
     private final MutableObjectBooleanMap<String> map = this.classUnderTest();
 
-    private static MutableList<String> generateCollisions()
+    protected static MutableList<String> generateCollisions()
     {
         MutableList<String> collisions = FastList.newList();
         ObjectBooleanHashMap<String> hashMap = new ObjectBooleanHashMap<String>();
@@ -538,9 +538,9 @@ public abstract class AbstractMutableObjectBooleanHashMapTestCase
     public void testToString()
     {
         Assert.assertEquals("[]", this.getEmptyMap().toString());
-        Assert.assertEquals("[0=false]", this.getEmptyMap().withKeyValue(0, false).toString());
-        Assert.assertEquals("[1=true]", this.getEmptyMap().withKeyValue(1, true).toString());
-        Assert.assertEquals("[5=true]", this.getEmptyMap().withKeyValue(5, true).toString());
+        Assert.assertEquals("[0=false]", this.newWithKeysValues(0, false).toString());
+        Assert.assertEquals("[1=true]", this.newWithKeysValues(1, true).toString());
+        Assert.assertEquals("[5=true]", this.newWithKeysValues(5, true).toString());
 
         MutableObjectBooleanMap<Integer> map1 = this.newWithKeysValues(0, true, 1, false);
         Assert.assertTrue(
@@ -707,9 +707,9 @@ public abstract class AbstractMutableObjectBooleanHashMapTestCase
     public void makeString()
     {
         Assert.assertEquals("", this.<String>getEmptyMap().makeString());
-        Assert.assertEquals("0=true", this.getEmptyMap().withKeyValue(0, true).makeString());
-        Assert.assertEquals("1=false", this.getEmptyMap().withKeyValue(1, false).makeString());
-        Assert.assertEquals("null=true", this.getEmptyMap().withKeyValue(null, true).makeString());
+        Assert.assertEquals("0=true", this.newWithKeysValues(0, true).makeString());
+        Assert.assertEquals("1=false", this.newWithKeysValues(1, false).makeString());
+        Assert.assertEquals("null=true", this.newWithKeysValues(null, true).makeString());
 
         MutableObjectBooleanMap<Integer> map2 = this.newWithKeysValues(1, true, 32, false);
         Assert.assertTrue(
@@ -1104,5 +1104,19 @@ public abstract class AbstractMutableObjectBooleanHashMapTestCase
                 iterator3.next();
             }
         });
+    }
+
+    @Test
+    public void asUnmodifiable()
+    {
+        Verify.assertInstanceOf(UnmodifiableObjectBooleanMap.class, this.map.asUnmodifiable());
+        Assert.assertEquals(new UnmodifiableObjectBooleanMap<String>(this.map), this.map.asUnmodifiable());
+    }
+
+    @Test
+    public void asSynchronized()
+    {
+        Verify.assertInstanceOf(SynchronizedObjectBooleanHashMap.class, this.map.asSynchronized());
+        Assert.assertEquals(new SynchronizedObjectBooleanHashMap<String>(this.map), this.map.asSynchronized());
     }
 }
