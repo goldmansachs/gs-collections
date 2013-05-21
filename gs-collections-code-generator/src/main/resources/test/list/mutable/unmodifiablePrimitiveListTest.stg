@@ -17,12 +17,9 @@ body(type, wrapperName, name) ::= <<
 
 package com.gs.collections.impl.list.mutable.primitive;
 
-import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
+import java.util.NoSuchElementException;
+
 import com.gs.collections.api.iterator.<name>Iterator;
-import com.gs.collections.api.list.MutableList;
-import com.gs.collections.api.list.primitive.Mutable<name>List;
-import com.gs.collections.impl.collection.mutable.primitive.AbstractUnmodifiable<name>CollectionTestCase;
-import com.gs.collections.impl.list.mutable.FastList;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -30,190 +27,99 @@ import org.junit.Test;
  * JUnit test for {@link Unmodifiable<name>List}.
  * This file was automatically generated from template file unmodifiablePrimitiveListTest.stg.
  */
-public class Unmodifiable<name>ListTest extends AbstractUnmodifiable<name>CollectionTestCase
+public class Unmodifiable<name>ListTest extends Abstract<name>ListTestCase
 {
-    private final Mutable<name>List list = this.classUnderTest();
+    private final Unmodifiable<name>List list = this.classUnderTest();
 
     @Override
-    protected final Mutable<name>List classUnderTest()
+    protected final Unmodifiable<name>List classUnderTest()
     {
         return new Unmodifiable<name>List(<name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
     }
 
     @Override
-    protected Mutable<name>List getEmptyCollection()
+    protected Unmodifiable<name>List getEmptyCollection()
     {
         return new Unmodifiable<name>List(new <name>ArrayList());
     }
 
     @Override
-    protected Mutable<name>List getEmptyModifiableCollection()
-    {
-        return new <name>ArrayList();
-    }
-
-    @Override
-    protected MutableList\<<wrapperName>\> getEmptyObjectCollection()
-    {
-        return FastList.newList();
-    }
-
-    @Override
-    protected Mutable<name>List newWith(<type>... elements)
+    protected Unmodifiable<name>List newWith(<type>... elements)
     {
         return new Unmodifiable<name>List(<name>ArrayList.newListWith(elements));
     }
 
     @Override
-    protected Mutable<name>List newModifiableCollectionWith(<type>... elements)
-    {
-        return <name>ArrayList.newListWith(elements);
-    }
-
-    @Override
-    protected MutableList\<<wrapperName>\> newObjectCollectionWith(<wrapperName>... elements)
-    {
-        return FastList.newListWith(elements);
-    }
-
-    @Override
-    protected Mutable<name>List newSynchronizedCollectionWith(<type>... elements)
-    {
-        return new Synchronized<name>List(<name>ArrayList.newListWith(elements));
-    }
-
-    @Override
-    protected Mutable<name>List newUnmodifiableCollectionWith(<type>... elements)
-    {
-        return new Unmodifiable<name>List(<name>ArrayList.newListWith(elements));
-    }
-
-    @Test
-    public void get()
-    {
-        Assert.assertEquals(<(wideLiteral.(type))("1")>, this.list.get(0)<(wideDelta.(type))>);
-        Assert.assertEquals(<(wideLiteral.(type))("2")>, this.list.get(1)<(wideDelta.(type))>);
-        Assert.assertEquals(<(wideLiteral.(type))("3")>, this.list.get(2)<(wideDelta.(type))>);
-    }
-
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void get_throws_index_greater_than_size()
-    {
-        this.list.get(3);
-    }
-
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void get_throws_index_negative()
-    {
-        this.list.get(-1);
-    }
-
-    @Test
-    public void getFirst()
-    {
-        Mutable<name>List singleItemList = new Unmodifiable<name>List(<name>ArrayList.newListWith(<(literal.(type))("1")>));
-        Assert.assertEquals(<(wideLiteral.(type))("1")>, singleItemList.getFirst()<(wideDelta.(type))>);
-        Assert.assertEquals(<(wideLiteral.(type))("1")>, this.list.getFirst()<(wideDelta.(type))>);
-    }
-
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void getFirst_emptyList_throws()
-    {
-        new Unmodifiable<name>List(new <name>ArrayList()).getFirst();
-    }
-
-    @Test
-    public void getLast()
-    {
-        Mutable<name>List singleItemList = new Unmodifiable<name>List(<name>ArrayList.newListWith(<(literal.(type))("1")>));
-        Assert.assertEquals(<(wideLiteral.(type))("1")>, singleItemList.getLast()<(wideDelta.(type))>);
-        Assert.assertEquals(<(wideLiteral.(type))("3")>, this.list.getLast()<(wideDelta.(type))>);
-    }
-
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void getLast_emptyList_throws()
-    {
-        new Unmodifiable<name>List(new <name>ArrayList()).getLast();
-    }
-
-    @Test
-    public void indexOf()
-    {
-        Mutable<name>List arrayList = new Unmodifiable<name>List(<name>ArrayList.newListWith(<["1", "2", "1"]:(literal.(type))(); separator=", ">));
-        Assert.assertEquals(0L, arrayList.indexOf(<(literal.(type))("1")>));
-        Assert.assertEquals(1L, arrayList.indexOf(<(literal.(type))("2")>));
-        Assert.assertEquals(-1L, arrayList.indexOf(<(literal.(type))("9")>));
-    }
-
-    @Test
-    public void lastIndexOf()
-    {
-        Mutable<name>List arrayList = new Unmodifiable<name>List(<name>ArrayList.newListWith(<["1", "2", "1"]:(literal.(type))(); separator=", ">));
-        Assert.assertEquals(2L, arrayList.lastIndexOf(<(literal.(type))("1")>));
-        Assert.assertEquals(1L, arrayList.lastIndexOf(<(literal.(type))("2")>));
-        Assert.assertEquals(-1L, arrayList.lastIndexOf(<(literal.(type))("9")>));
-    }
-
     @Test(expected = UnsupportedOperationException.class)
     public void addAtIndex()
     {
         new Unmodifiable<name>List(new <name>ArrayList()).addAtIndex(0, <(literal.(type))("1")>);
     }
 
+    @Override
     @Test(expected = UnsupportedOperationException.class)
     public void addAtIndex_throws_index_greater_than_size()
     {
         new Unmodifiable<name>List(new <name>ArrayList()).addAtIndex(1, <(literal.(type))("0")>);
     }
 
+    @Override
     @Test(expected = UnsupportedOperationException.class)
     public void addAtIndex_throws_index_negative()
     {
         this.list.addAtIndex(-1, <(literal.(type))("4")>);
     }
 
+    @Override
     @Test(expected = UnsupportedOperationException.class)
     public void addAll_throws_index_negative()
     {
         this.list.addAllAtIndex(-1, <["5", "6"]:(literal.(type))(); separator=", ">);
     }
 
+    @Override
     @Test(expected = UnsupportedOperationException.class)
     public void addAll_throws_index_greater_than_size()
     {
         this.list.addAllAtIndex(5, <["5", "6"]:(literal.(type))(); separator=", ">);
     }
 
+    @Override
     @Test(expected = UnsupportedOperationException.class)
     public void addAllIterable_throws_index_negative()
     {
         this.list.addAllAtIndex(-1, <name>ArrayList.newListWith(<["1", "2"]:(literal.(type))(); separator=", ">));
     }
 
+    @Override
     @Test(expected = UnsupportedOperationException.class)
     public void addAllIterable_throws_index_greater_than_size()
     {
         this.list.addAllAtIndex(5, <name>ArrayList.newListWith(<["1", "2"]:(literal.(type))(); separator=", ">));
     }
 
+    @Override
     @Test(expected = UnsupportedOperationException.class)
     public void removeAtIndex()
     {
         this.list.removeAtIndex(1);
     }
 
+    @Override
     @Test(expected = UnsupportedOperationException.class)
     public void removeAtIndex_throws_index_greater_than_size()
     {
         new Unmodifiable<name>List(new <name>ArrayList()).removeAtIndex(1);
     }
 
+    @Override
     @Test(expected = UnsupportedOperationException.class)
     public void removeAtIndex_throws_index_negative()
     {
         this.list.removeAtIndex(-1);
     }
 
+    @Override
     @Test(expected = UnsupportedOperationException.class)
     public void set()
     {
@@ -221,110 +127,132 @@ public class Unmodifiable<name>ListTest extends AbstractUnmodifiable<name>Collec
     }
 
     @Override
-    @Test
-    public void iterator()
+    @Test(expected = UnsupportedOperationException.class)
+    public void clear()
     {
-        <name>Iterator iterator = this.list.<type>Iterator();
-        Assert.assertTrue(iterator.hasNext());
-        Assert.assertEquals(<(wideLiteral.(type))("1")>, iterator.next()<(wideDelta.(type))>);
-        Assert.assertTrue(iterator.hasNext());
-        Assert.assertEquals(<(wideLiteral.(type))("2")>, iterator.next()<(wideDelta.(type))>);
-        Assert.assertTrue(iterator.hasNext());
-        Assert.assertEquals(<(wideLiteral.(type))("3")>, iterator.next()<(wideDelta.(type))>);
-        Assert.assertFalse(iterator.hasNext());
+        this.classUnderTest().clear();
     }
 
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void add()
+    {
+        this.getEmptyCollection().add(<(literal.(type))("1")>);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void addAllArray()
+    {
+        this.classUnderTest().addAll();
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void addAllIterable()
+    {
+        this.classUnderTest().addAll(this.getEmptyMutableCollection());
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void remove()
+    {
+        this.classUnderTest().remove(<(literal.(type))("1")>);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void removeAll()
+    {
+        this.classUnderTest().removeAll();
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void removeAllIterable()
+    {
+        this.classUnderTest().removeAll(this.getEmptyMutableCollection());
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void with()
+    {
+        this.getEmptyCollection().with(<["1"]:(literal.(type))(); separator=", ">);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void withAll()
+    {
+        this.getEmptyCollection().withAll(this.newMutableCollectionWith(<(literal.(type))("1")>));
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void without()
+    {
+        this.newWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">).without(<(literal.(type))("9")>);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void withoutAll()
+    {
+        this.newWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">).withoutAll(this.newMutableCollectionWith(<["8", "9",]:(literal.(type))(); separator=", ">));
+    }
+
+    @Override
     @Test(expected = UnsupportedOperationException.class)
     public void reverseThis()
     {
         new Unmodifiable<name>List(new <name>ArrayList()).reverseThis();
     }
 
+    @Override
     @Test(expected = UnsupportedOperationException.class)
     public void sortThis()
     {
         new Unmodifiable<name>List(new <name>ArrayList()).sortThis();
     }
 
+    @Override
     @Test
-    public void toReversed()
+    public void contains()
     {
-        Assert.assertEquals(new <name>ArrayList(), new Unmodifiable<name>List(new <name>ArrayList()).toReversed());
-        Mutable<name>List emptyList = new Unmodifiable<name>List(new <name>ArrayList());
-        Assert.assertNotSame(emptyList, emptyList.toReversed());
-        Assert.assertEquals(<name>ArrayList.newListWith(<["3", "1", "9", "7"]:(literal.(type))(); separator=", ">),
-                new Unmodifiable<name>List(<name>ArrayList.newListWith(<["7", "9", "1", "3"]:(literal.(type))(); separator=", ">)).toReversed());
-        Mutable<name>List evenList = new Unmodifiable<name>List(<name>ArrayList.newListWith(<["3", "1", "9", "7"]:(literal.(type))(); separator=", ">));
-        Assert.assertNotSame(evenList, evenList.toReversed());
-        Assert.assertEquals(<name>ArrayList.newListWith(<["3", "1", "9", "7", "8"]:(literal.(type))(); separator=", ">),
-                new Unmodifiable<name>List(<name>ArrayList.newListWith(<["8", "7", "9", "1", "3"]:(literal.(type))(); separator=", ">)).toReversed());
-        Mutable<name>List oddList = new Unmodifiable<name>List(<name>ArrayList.newListWith(<["3", "1", "9", "7", "8"]:(literal.(type))(); separator=", ">));
-        Assert.assertNotSame(oddList, oddList.toReversed());
+        Unmodifiable<name>List collection = this.newWith(<["14", "2", "30", "31", "32", "35", "0", "1"]:(literal.(type))(); separator=", ">);
+        Assert.assertFalse(collection.contains(<(literal.(type))("29")>));
+        Assert.assertFalse(collection.contains(<(literal.(type))("49")>));
+
+        <type>[] numbers = {<["14", "2", "30", "31", "32", "35", "0", "1"]:(literal.(type))(); separator=", ">};
+        for (<type> number : numbers)
+        {
+            Assert.assertTrue(collection.contains(number));
+        }
+
+        Assert.assertFalse(collection.contains(<(literal.(type))("-1")>));
+        Assert.assertFalse(collection.contains(<(literal.(type))("29")>));
+        Assert.assertFalse(collection.contains(<(literal.(type))("49")>));
+
+        Unmodifiable<name>List collection1 = this.newWith(<["0", "1", "1", "2", "2", "2"]:(literal.(type))(); separator=", ">);
+        Assert.assertTrue(collection1.contains(<(literal.(type))("0")>));
+        Assert.assertTrue(collection1.contains(<(literal.(type))("1")>));
+        Assert.assertTrue(collection1.contains(<(literal.(type))("2")>));
+        Assert.assertFalse(collection1.contains(<(literal.(type))("3")>));
     }
 
     @Override
-    @Test
-    public void toArray()
+    @Test(expected = NoSuchElementException.class)
+    public void <type>Iterator_throws_non_empty_list()
     {
-        Assert.assertArrayEquals(new <type>[]{<["1", "2", "4", "3"]:(literal.(type))(); separator=", ">},
-                this.newWith(<["1", "2", "4", "3"]:(literal.(type))(); separator=", ">).toArray()<(delta.(type))>);
-    }
-
-    @Override
-    @Test
-    public void testEquals()
-    {
-        super.testEquals();
-        Mutable<name>Collection list1 = this.newWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">);
-        Mutable<name>Collection list2 = this.newWith(<["4", "3", "2", "1"]:(literal.(type))(); separator=", ">);
-        Assert.assertNotEquals(list1, list2);
-    }
-
-    @Override
-    @Test
-    public void testToString()
-    {
-        super.testToString();
-        Assert.assertEquals("[<["1", "2", "3"]:(toStringLiteral.(type))(); separator=", ">]", this.list.toString());
-    }
-
-    @Override
-    @Test
-    public void makeString()
-    {
-        super.makeString();
-        Assert.assertEquals(this.list.toString(), this.list.makeString("[", ", ", "]"));
-        Assert.assertEquals("<["1", "2", "3"]:(toStringLiteral.(type))(); separator=", ">", this.list.makeString());
-        Assert.assertEquals("<["1", "2", "3"]:(toStringLiteral.(type))(); separator="/">", this.list.makeString("/"));
-    }
-
-    @Override
-    @Test
-    public void appendString()
-    {
-        super.appendString();
-        StringBuilder appendable2 = new StringBuilder();
-        this.list.appendString(appendable2);
-        Assert.assertEquals("<["1", "2", "3"]:(toStringLiteral.(type))(); separator=", ">", appendable2.toString());
-        StringBuilder appendable3 = new StringBuilder();
-        this.list.appendString(appendable3, "/");
-        Assert.assertEquals("<["1", "2", "3"]:(toStringLiteral.(type))(); separator="/">", appendable3.toString());
-        StringBuilder appendable4 = new StringBuilder();
-        this.list.appendString(appendable4, "[", ", ", "]");
-        Assert.assertEquals(this.list.toString(), appendable4.toString());
-    }
-
-    @Override
-    @Test
-    public void toList()
-    {
-        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), this.classUnderTest().toList());
-    }
-
-    @Test
-    public void toSortedList()
-    {
-        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), this.list.toSortedList());
+        Unmodifiable<name>List collection = this.newWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
+        <name>Iterator iterator = collection.<type>Iterator();
+        while (iterator.hasNext())
+        {
+            iterator.next();
+        }
+        iterator.next();
     }
 
     @Override
@@ -333,6 +261,7 @@ public class Unmodifiable<name>ListTest extends AbstractUnmodifiable<name>Collec
     {
         super.asUnmodifiable();
         Assert.assertSame(this.list, this.list.asUnmodifiable());
+        Assert.assertEquals(this.list, this.list.asUnmodifiable());
     }
 }
 

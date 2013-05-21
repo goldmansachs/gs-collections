@@ -18,26 +18,36 @@ body(type, wrapperName, name) ::= <<
 package com.gs.collections.impl.list.mutable.primitive;
 
 import java.lang.reflect.Field;
-import java.util.NoSuchElementException;
 
-import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
-import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
-import com.gs.collections.api.iterator.<name>Iterator;
-import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
-import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
-import com.gs.collections.impl.list.mutable.FastList;
-import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * This file was automatically generated from template file primitiveArrayListTest.stg.
  * JUnit test for {@link <name>ArrayList}.
+ * This file was automatically generated from template file primitiveArrayListTest.stg.
  */
-public class <name>ArrayListTest
+public class <name>ArrayListTest extends Abstract<name>ListTestCase
 {
-    private final <name>ArrayList list = <name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
+    private final <name>ArrayList list = this.classUnderTest();
+
+    @Override
+    protected final <name>ArrayList classUnderTest()
+    {
+        return <name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
+    }
+
+    @Override
+    protected <name>ArrayList getEmptyCollection()
+    {
+        return new <name>ArrayList();
+    }
+
+    @Override
+    protected <name>ArrayList newWith(<type>... elements)
+    {
+        return <name>ArrayList.newListWith(elements);
+    }
 
     @Test
     public void test<name>ArrayListWithInitialCapacity() throws Exception
@@ -50,152 +60,11 @@ public class <name>ArrayListTest
     }
 
     @Test
-    public void newListWith()
-    {
-        Verify.assertSize(3, this.list);
-        Assert.assertTrue(this.list.containsAll(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
-    }
-
-    @Test
-    public void newList()
-    {
-        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), <name>ArrayList.newList(this.list));
-    }
-
-    @Test
-    public void isEmpty()
-    {
-        Verify.assertEmpty(new <name>ArrayList());
-        Verify.assertNotEmpty(this.list);
-    }
-
-    @Test
-    public void clear()
-    {
-        this.list.clear();
-        Verify.assertSize(0, this.list);
-        Assert.assertFalse(this.list.contains(<(literal.(type))("0")>));
-        Assert.assertFalse(this.list.contains(<(literal.(type))("1")>));
-        Assert.assertFalse(this.list.contains(<(literal.(type))("2")>));
-        Assert.assertFalse(this.list.contains(<(literal.(type))("3")>));
-    }
-
-    @Test
     public void newWithNValues()
     {
         <name>ArrayList newList = <name>ArrayList.newWithNValues(5, <(literal.(type))("42")>);
         Verify.assertSize(5, newList);
         Assert.assertEquals(<name>ArrayList.newListWith(<["42", "42", "42", "42", "42"]:(literal.(type))(); separator=", ">), newList);
-    }
-
-    @Test
-    public void containsAllArray()
-    {
-        Assert.assertTrue(this.list.containsAll(<(literal.(type))("1")>));
-        Assert.assertTrue(this.list.containsAll(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
-        Assert.assertFalse(this.list.containsAll(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">));
-    }
-
-    @Test
-    public void containsAllIterable()
-    {
-        Assert.assertTrue(new <name>ArrayList().containsAll(new <name>ArrayList()));
-        Assert.assertFalse(new <name>ArrayList().containsAll(<name>ArrayList.newListWith(<(literal.(type))("1")>)));
-        Assert.assertTrue(this.list.containsAll(<name>ArrayList.newListWith(<(literal.(type))("1")>)));
-        Assert.assertTrue(this.list.containsAll(<name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">)));
-        Assert.assertFalse(this.list.containsAll(<name>ArrayList.newListWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">)));
-    }
-
-    @Test
-    public void get()
-    {
-        Assert.assertEquals(<(wideLiteral.(type))("1")>, this.list.get(0)<(wideDelta.(type))>);
-        Assert.assertEquals(<(wideLiteral.(type))("2")>, this.list.get(1)<(wideDelta.(type))>);
-        Assert.assertEquals(<(wideLiteral.(type))("3")>, this.list.get(2)<(wideDelta.(type))>);
-    }
-
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void get_throws_index_greater_than_size()
-    {
-        this.list.get(3);
-    }
-
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void get_throws_index_negative()
-    {
-        this.list.get(-1);
-    }
-
-    @Test
-    public void getFirst()
-    {
-        <name>ArrayList singleItemList = <name>ArrayList.newListWith(<(literal.(type))("1")>);
-        Assert.assertEquals(<(wideLiteral.(type))("1")>, singleItemList.getFirst()<(wideDelta.(type))>);
-        Assert.assertEquals(<(wideLiteral.(type))("1")>, this.list.getFirst()<(wideDelta.(type))>);
-    }
-
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void getFirst_emptyList_throws()
-    {
-        <name>ArrayList emptyList = new <name>ArrayList();
-        emptyList.getFirst();
-    }
-
-    @Test
-    public void getLast()
-    {
-        <name>ArrayList singleItemList = <name>ArrayList.newListWith(<(literal.(type))("1")>);
-        Assert.assertEquals(<(wideLiteral.(type))("1")>, singleItemList.getLast()<(wideDelta.(type))>);
-        Assert.assertEquals(<(wideLiteral.(type))("3")>, this.list.getLast()<(wideDelta.(type))>);
-    }
-
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void getLast_emptyList_throws()
-    {
-        <name>ArrayList emptyList = new <name>ArrayList();
-        emptyList.getLast();
-    }
-
-    @Test
-    public void indexOf()
-    {
-        <name>ArrayList arrayList = <name>ArrayList.newListWith(<["1", "2", "1"]:(literal.(type))(); separator=", ">);
-        Assert.assertEquals(0L, arrayList.indexOf(<(literal.(type))("1")>));
-        Assert.assertEquals(1L, arrayList.indexOf(<(literal.(type))("2")>));
-        Assert.assertEquals(-1L, arrayList.indexOf(<(literal.(type))("9")>));
-    }
-
-    @Test
-    public void lastIndexOf()
-    {
-        <name>ArrayList arrayList = <name>ArrayList.newListWith(<["1", "2", "1"]:(literal.(type))(); separator=", ">);
-        Assert.assertEquals(2L, arrayList.lastIndexOf(<(literal.(type))("1")>));
-        Assert.assertEquals(1L, arrayList.lastIndexOf(<(literal.(type))("2")>));
-        Assert.assertEquals(-1L, arrayList.lastIndexOf(<(literal.(type))("9")>));
-    }
-
-    @Test
-    public void add()
-    {
-        <name>ArrayList emptyList = new <name>ArrayList();
-        Assert.assertTrue(emptyList.add(<(literal.(type))("1")>));
-        Assert.assertEquals(<name>ArrayList.newListWith(<(literal.(type))("1")>), emptyList);
-        <name>ArrayList arrayList = this.list;
-        Assert.assertTrue(arrayList.add(<(literal.(type))("4")>));
-        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">), arrayList);
-    }
-
-    @Test
-    public void addAtIndex()
-    {
-        <name>ArrayList emptyList = new <name>ArrayList();
-        emptyList.addAtIndex(0, <(literal.(type))("1")>);
-        Assert.assertEquals(<name>ArrayList.newListWith(<(literal.(type))("1")>), emptyList);
-        <name>ArrayList arrayList = this.list;
-        arrayList.addAtIndex(3, <(literal.(type))("4")>);
-        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">), arrayList);
-        arrayList.addAtIndex(2, <(literal.(type))("5")>);
-        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "5", "3", "4"]:(literal.(type))(); separator=", ">), arrayList);
     }
 
     @Test
@@ -206,167 +75,6 @@ public class <name>ArrayListTest
         Field items = <name>ArrayList.class.getDeclaredField("items");
         items.setAccessible(true);
         Assert.assertEquals(7L, ((<type>[]) items.get(listWithCapacity)).length);
-    }
-
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void addAtIndex_throws_index_greater_than_size()
-    {
-        <name>ArrayList emptyList = new <name>ArrayList();
-        emptyList.addAtIndex(1, <(literal.(type))("0")>);
-    }
-
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void addAtIndex_throws_index_negative()
-    {
-        this.list.addAtIndex(-1, <(literal.(type))("4")>);
-    }
-
-    @Test
-    public void addAllArray()
-    {
-        Assert.assertFalse(this.list.addAll());
-        Assert.assertFalse(this.list.addAllAtIndex(1));
-        Assert.assertTrue(this.list.addAll(<["4", "5", "6"]:(literal.(type))(); separator=", ">));
-        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3", "4", "5", "6"]:(literal.(type))(); separator=", ">), this.list);
-        Assert.assertTrue(this.list.addAllAtIndex(4, <["5", "6"]:(literal.(type))(); separator=", ">));
-        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3", "4", "5", "6", "5", "6"]:(literal.(type))(); separator=", ">), this.list);
-    }
-
-    @Test
-    public void addAllIterable()
-    {
-        Assert.assertFalse(this.list.addAll(new <name>ArrayList()));
-        Assert.assertFalse(this.list.addAllAtIndex(1));
-        Assert.assertTrue(this.list.addAll(<name>ArrayList.newListWith(<["4", "5", "6"]:(literal.(type))(); separator=", ">)));
-        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3", "4", "5", "6"]:(literal.(type))(); separator=", ">), this.list);
-        Assert.assertTrue(this.list.addAllAtIndex(4, <name>ArrayList.newListWith(<["5", "6"]:(literal.(type))(); separator=", ">)));
-        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3", "4", "5", "6", "5", "6"]:(literal.(type))(); separator=", ">), this.list);
-    }
-
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void addAll_throws_index_negative()
-    {
-        this.list.addAllAtIndex(-1, <["5", "6"]:(literal.(type))(); separator=", ">);
-    }
-
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void addAll_throws_index_greater_than_size()
-    {
-        this.list.addAllAtIndex(5, <["5", "6"]:(literal.(type))(); separator=", ">);
-    }
-
-    @Test
-    public void remove()
-    {
-        Assert.assertFalse(this.list.remove(<(literal.(type))("-1")>));
-        Assert.assertTrue(this.list.remove(<(literal.(type))("3")>));
-        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2"]:(literal.(type))(); separator=", ">), this.list);
-    }
-
-    @Test
-    public void removeAll()
-    {
-        Assert.assertFalse(this.list.removeAll());
-        Assert.assertFalse(this.list.removeAll(<(literal.(type))("-1")>));
-        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), this.list);
-        Assert.assertTrue(this.list.removeAll(<["1", "5"]:(literal.(type))(); separator=", ">));
-        Assert.assertEquals(<name>ArrayList.newListWith(<["2", "3"]:(literal.(type))(); separator=", ">), this.list);
-        Assert.assertTrue(this.list.removeAll(<["3", "2"]:(literal.(type))(); separator=", ">));
-        Assert.assertEquals(new <name>ArrayList(), this.list);
-    }
-
-    @Test
-    public void removeAllIterable()
-    {
-        Assert.assertFalse(this.list.removeAll(new <name>ArrayList()));
-        Assert.assertFalse(this.list.removeAll(<name>ArrayList.newListWith(<(literal.(type))("-1")>)));
-        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), this.list);
-        Assert.assertTrue(this.list.removeAll(<name>ArrayList.newListWith(<["1", "5"]:(literal.(type))(); separator=", ">)));
-        Assert.assertEquals(<name>ArrayList.newListWith(<["2", "3"]:(literal.(type))(); separator=", ">), this.list);
-        <name>ArrayList arrayList = <name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
-        arrayList.removeAll(<name>ArrayList.newListWith(<["3", "2"]:(literal.(type))(); separator=", ">));
-        Assert.assertEquals(<name>ArrayList.newListWith(<(literal.(type))("1")>), arrayList);
-    }
-
-    @Test
-    public void removeAtIndex()
-    {
-        this.list.removeAtIndex(1);
-        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "3"]:(literal.(type))(); separator=", ">), this.list);
-    }
-
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void removeAtIndex_throws_index_greater_than_size()
-    {
-        <name>ArrayList emptyList = new <name>ArrayList();
-        emptyList.removeAtIndex(1);
-    }
-
-    @Test(expected = IndexOutOfBoundsException.class)
-    public void removeAtIndex_throws_index_negative()
-    {
-        this.list.removeAtIndex(-1);
-    }
-
-    @Test
-    public void set()
-    {
-        this.list.set(1, <(literal.(type))("4")>);
-        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "4", "3"]:(literal.(type))(); separator=", ">), this.list);
-    }
-
-    @Test
-    public void with()
-    {
-        <name>ArrayList arrayList = new <name>ArrayList().with(<["1"]:(literal.(type))(); separator=", ">);
-        <name>ArrayList arrayList0 = new <name>ArrayList().with(<["1", "2"]:(literal.(type))(); separator=", ">);
-        <name>ArrayList arrayList1 = new <name>ArrayList().with(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
-        <name>ArrayList arrayList2 = new <name>ArrayList().with(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">);
-        <name>ArrayList arrayList3 = new <name>ArrayList().with(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
-        Assert.assertEquals(<name>ArrayList.newListWith(<(literal.(type))("1")>), arrayList);
-        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2"]:(literal.(type))(); separator=", ">), arrayList0);
-        Assert.assertEquals(this.list, arrayList1);
-        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">), arrayList2);
-        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">), arrayList3);
-    }
-
-    @Test
-    public void withAll()
-    {
-        <name>ArrayList arrayList = new <name>ArrayList().withAll(<name>ArrayList.newListWith(<(literal.(type))("1")>));
-        <name>ArrayList arrayList0 = new <name>ArrayList().withAll(<name>ArrayList.newListWith(<["1", "2"]:(literal.(type))(); separator=", ">));
-        <name>ArrayList arrayList1 = new <name>ArrayList().withAll(<name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
-        <name>ArrayList arrayList2 = new <name>ArrayList().withAll(<name>ArrayList.newListWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">));
-        <name>ArrayList arrayList3 = new <name>ArrayList().withAll(<name>ArrayList.newListWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">));
-        Assert.assertEquals(<name>ArrayList.newListWith(<(literal.(type))("1")>), arrayList);
-        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2"]:(literal.(type))(); separator=", ">), arrayList0);
-        Assert.assertEquals(this.list, arrayList1);
-        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">), arrayList2);
-        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">), arrayList3);
-    }
-
-    @Test
-    public void without()
-    {
-        <name>ArrayList mainArrayList = new <name>ArrayList(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
-        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">), mainArrayList.without(<(literal.(type))("9")>));
-        Assert.assertEquals(<name>ArrayList.newListWith(<["2", "3", "4", "5"]:(literal.(type))(); separator=", ">), mainArrayList.without(<(literal.(type))("1")>));
-        Assert.assertEquals(<name>ArrayList.newListWith(<["3", "4", "5"]:(literal.(type))(); separator=", ">), mainArrayList.without(<(literal.(type))("2")>));
-        Assert.assertEquals(<name>ArrayList.newListWith(<["4", "5"]:(literal.(type))(); separator=", ">), mainArrayList.without(<(literal.(type))("3")>));
-        Assert.assertEquals(<name>ArrayList.newListWith(<(literal.(type))("5")>), mainArrayList.without(<(literal.(type))("4")>));
-        Assert.assertEquals(new <name>ArrayList(), mainArrayList.without(<(literal.(type))("5")>));
-        Assert.assertEquals(new <name>ArrayList(), mainArrayList.without(<(literal.(type))("6")>));
-    }
-
-    @Test
-    public void withoutAll()
-    {
-        <name>ArrayList mainArrayList = new <name>ArrayList(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
-        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">), mainArrayList.withoutAll(<name>ArrayList.newListWith(<["8", "9",]:(literal.(type))(); separator=", ">)));
-        Assert.assertEquals(<name>ArrayList.newListWith(<["2", "3", "4"]:(literal.(type))(); separator=", ">), mainArrayList.withoutAll(<name>ArrayList.newListWith(<["1", "5",]:(literal.(type))(); separator=", ">)));
-        Assert.assertEquals(<name>ArrayList.newListWith(<["3", "4",]:(literal.(type))(); separator=", ">), mainArrayList.withoutAll(<name>ArrayList.newListWith(<["2", "20",]:(literal.(type))(); separator=", ">)));
-        Assert.assertEquals(new <name>ArrayList(), mainArrayList.withoutAll(<name>ArrayList.newListWith(<["3", "4",]:(literal.(type))(); separator=", ">)));
-        Assert.assertEquals(new <name>ArrayList(), mainArrayList.withoutAll(<name>ArrayList.newListWith(<(literal.(type))("9")>)));
     }
 
     @Test
@@ -381,361 +89,33 @@ public class <name>ArrayListTest
         Assert.assertArrayEquals(new <type>[]{<["1", "2", "3"]:(literal.(type))(); separator=", ">}, (<type>[]) items.get(arrayList)<(delta.(type))>);
     }
 
-    @Test
-    public void iterator()
-    {
-        <name>Iterator iterator = this.list.<type>Iterator();
-        Assert.assertTrue(iterator.hasNext());
-        Assert.assertEquals(<(wideLiteral.(type))("1")>, iterator.next()<(wideDelta.(type))>);
-        Assert.assertTrue(iterator.hasNext());
-        Assert.assertEquals(<(wideLiteral.(type))("2")>, iterator.next()<(wideDelta.(type))>);
-        Assert.assertTrue(iterator.hasNext());
-        Assert.assertEquals(<(wideLiteral.(type))("3")>, iterator.next()<(wideDelta.(type))>);
-        Assert.assertFalse(iterator.hasNext());
-    }
-
-    @Test(expected = NoSuchElementException.class)
-    public void iterator_throws()
-    {
-        <name>Iterator iterator = this.list.<type>Iterator();
-        while (iterator.hasNext())
-        {
-            iterator.next();
-        }
-
-        iterator.next();
-    }
-
-    @Test(expected = NoSuchElementException.class)
-    public void iterator_throws_non_empty_list()
-    {
-        <name>ArrayList arrayList = new <name>ArrayList();
-        arrayList.add(<(literal.(type))("1")>);
-        arrayList.add(<(literal.(type))("2")>);
-        arrayList.add(<(literal.(type))("3")>);
-        <name>Iterator iterator = arrayList.<type>Iterator();
-        while (iterator.hasNext())
-        {
-            iterator.next();
-        }
-        iterator.next();
-    }
-
-    @Test
-    public void forEach()
-    {
-        final <wideType.(type)>[] sum = new <wideType.(type)>[1];
-        this.list.forEach(new <name>Procedure()
-        {
-            public void value(<type> each)
-            {
-                sum[0] += each;
-            }
-        });
-
-        Assert.assertEquals(<(wideLiteral.(type))("6")>, sum[0]<(wideDelta.(type))>);
-    }
-
+    @Override
     @Test
     public void size()
     {
+        super.size();
         Verify.assertSize(0, new <name>ArrayList());
+        Verify.assertSize(3, <name>ArrayList.newList(this.list));
         Verify.assertSize(3, this.list);
     }
 
+    @Override
     @Test
-    public void empty()
+    public void with()
     {
-        Assert.assertTrue(this.list.notEmpty());
-        Verify.assertNotEmpty(this.list);
-    }
-
-    @Test
-    public void count()
-    {
-        Assert.assertEquals(2L, <name>ArrayList.newListWith(<["1", "0", "2"]:(literal.(type))(); separator=", ">).count(<name>Predicates.greaterThan(<zero.(type)>)));
-    }
-
-    @Test
-    public void anySatisfy()
-    {
-        Assert.assertTrue(<name>ArrayList.newListWith(<["1", "-1", "2"]:(literal.(type))(); separator=", ">).anySatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
-        Assert.assertFalse(<name>ArrayList.newListWith(<["1", "-1", "2"]:(literal.(type))(); separator=", ">).anySatisfy(<name>Predicates.equal(<(literal.(type))("0")>)));
-    }
-
-    @Test
-    public void allSatisfy()
-    {
-        Assert.assertFalse(<name>ArrayList.newListWith(<["1", "0", "2"]:(literal.(type))(); separator=", ">).allSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
-        Assert.assertTrue(<name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">).allSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
-    }
-
-    @Test
-    public void noneSatisfy()
-    {
-        Assert.assertFalse(<name>ArrayList.newListWith(<["1", "0", "2"]:(literal.(type))(); separator=", ">).noneSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
-        Assert.assertTrue(<name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">).noneSatisfy(<name>Predicates.greaterThan(<(literal.(type))("3")>)));
-    }
-
-    @Test
-    public void select()
-    {
-        Verify.assertSize(3, this.list.select(<name>Predicates.lessThan(<(literal.(type))("4")>)));
-        Verify.assertSize(2, this.list.select(<name>Predicates.lessThan(<(literal.(type))("3")>)));
-    }
-
-    @Test
-    public void reject()
-    {
-        Verify.assertSize(0, this.list.reject(<name>Predicates.lessThan(<(literal.(type))("4")>)));
-        Verify.assertSize(1, this.list.reject(<name>Predicates.lessThan(<(literal.(type))("3")>)));
-    }
-
-    @Test
-    public void detectIfNone()
-    {
-        Assert.assertEquals(<(wideLiteral.(type))("1")>, this.list.detectIfNone(<name>Predicates.lessThan(<(literal.(type))("4")>), <(literal.(type))("0")>)<(wideDelta.(type))>);
-        Assert.assertEquals(<(wideLiteral.(type))("0")>, this.list.detectIfNone(<name>Predicates.greaterThan(<(literal.(type))("3")>), <(literal.(type))("0")>)<(wideDelta.(type))>);
-    }
-
-    @Test
-    public void collect()
-    {
-        Assert.assertEquals(FastList.newListWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">), this.list.collect(new <name>ToObjectFunction\<<wrapperName>\>()
-        {
-            public <wrapperName> valueOf(<type> parameter)
-            {
-                return <(castIntToNarrowType.(type))("parameter - 1")>;
-            }
-        }));
-    }
-
-    @Test
-    public void max()
-    {
-        Assert.assertEquals(<(wideLiteral.(type))("9")>, <name>ArrayList.newListWith(<["1", "0", "9", "7"]:(literal.(type))(); separator=", ">).max()<(wideDelta.(type))>);
-    }
-
-    @Test(expected = NoSuchElementException.class)
-    public void max_throws_emptyList()
-    {
-        new <name>ArrayList().max();
-    }
-
-    @Test
-    public void min()
-    {
-        Assert.assertEquals(<(wideLiteral.(type))("0")>, <name>ArrayList.newListWith(<["1", "0", "9", "7"]:(literal.(type))(); separator=", ">).min()<(wideDelta.(type))>);
-    }
-
-    @Test(expected = NoSuchElementException.class)
-    public void min_throws_emptyList()
-    {
-        new <name>ArrayList().min();
-    }
-
-    @Test
-    public void minIfEmpty()
-    {
-        Assert.assertEquals(<(wideLiteral.(type))("5")>, new <name>ArrayList().minIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
-        Assert.assertEquals(<(wideLiteral.(type))("0")>, new <name>ArrayList().minIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
-        Assert.assertEquals(<(wideLiteral.(type))("0")>, <name>ArrayList.newListWith(<["1", "0", "9", "7"]:(literal.(type))(); separator=", ">).minIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
-    }
-
-    @Test
-    public void maxIfEmpty()
-    {
-        Assert.assertEquals(<(wideLiteral.(type))("5")>, new <name>ArrayList().maxIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
-        Assert.assertEquals(<(wideLiteral.(type))("0")>, new <name>ArrayList().maxIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
-        Assert.assertEquals(<(wideLiteral.(type))("9")>, <name>ArrayList.newListWith(<["1", "0", "9", "7"]:(literal.(type))(); separator=", ">).maxIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
-    }
-
-    @Test
-    public void sum()
-    {
-        Assert.assertEquals(<(wideLiteral.(type))("10")>, <name>ArrayList.newListWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">).sum()<(wideDelta.(type))>);
-    }
-
-    @Test
-    public void average()
-    {
-        Assert.assertEquals(2.5, <name>ArrayList.newListWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">).average(), 0.0);
-    }
-
-
-    @Test(expected = ArithmeticException.class)
-    public void averageThrowsOnEmpty()
-    {
-        new <name>ArrayList().average();
-    }
-
-    @Test
-    public void median()
-    {
-        Assert.assertEquals(2.5, <name>ArrayList.newListWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">).median(), 0.0);
-        Assert.assertEquals(3.0, <name>ArrayList.newListWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">).median(), 0.0);
-    }
-
-    @Test(expected = ArithmeticException.class)
-    public void medianThrowsOnEmpty()
-    {
-        new <name>ArrayList().median();
-    }
-
-    @Test
-    public void toArray()
-    {
-        Assert.assertArrayEquals(new <type>[]{<["1", "2", "4", "3"]:(literal.(type))(); separator=", ">}, <name>ArrayList.newListWith(<["1", "2", "4", "3"]:(literal.(type))(); separator=", ">).toArray()<(delta.(type))>);
-
-    }
-
-    @Test
-    public void toSortedArray()
-    {
-        Assert.assertArrayEquals(new <type>[]{<["1", "3", "7", "9"]:(literal.(type))(); separator=", ">}, <name>ArrayList.newListWith(<["3", "1", "9", "7"]:(literal.(type))(); separator=", ">).toSortedArray()<(delta.(type))>);
-    }
-
-    @Test
-    public void reverseThis()
-    {
-        Assert.assertEquals(new <name>ArrayList(), new <name>ArrayList().reverseThis());
+        super.with();
         <name>ArrayList emptyList = new <name>ArrayList();
-        Assert.assertSame(emptyList, emptyList.reverseThis());
-        Assert.assertEquals(<name>ArrayList.newListWith(<["3"]:(literal.(type))(); separator=", ">), <name>ArrayList.newListWith(<["3"]:(literal.(type))(); separator=", ">).reverseThis());
-        Assert.assertEquals(<name>ArrayList.newListWith(<["3", "1"]:(literal.(type))(); separator=", ">), <name>ArrayList.newListWith(<["1", "3"]:(literal.(type))(); separator=", ">).reverseThis());
-        Assert.assertEquals(<name>ArrayList.newListWith(<["3", "1", "9", "7"]:(literal.(type))(); separator=", ">), <name>ArrayList.newListWith(<["7", "9", "1", "3"]:(literal.(type))(); separator=", ">).reverseThis());
-        <name>ArrayList sameList = <name>ArrayList.newListWith(<["3", "1", "9", "7"]:(literal.(type))(); separator=", ">);
-        Assert.assertSame(sameList, sameList.reverseThis());
-        Assert.assertEquals(<name>ArrayList.newListWith(<["3", "1", "9", "7", "8"]:(literal.(type))(); separator=", ">), <name>ArrayList.newListWith(<["8", "7", "9", "1", "3"]:(literal.(type))(); separator=", ">).reverseThis());
-    }
-
-    @Test
-    public void sortThis()
-    {
-        Assert.assertEquals(new <name>ArrayList(), new <name>ArrayList().sortThis());
-        <name>ArrayList emptyList = new <name>ArrayList();
-        Assert.assertSame(emptyList, emptyList.reverseThis());
-        Assert.assertEquals(<name>ArrayList.newListWith(<["3"]:(literal.(type))(); separator=", ">), <name>ArrayList.newListWith(<["3"]:(literal.(type))(); separator=", ">).sortThis());
-        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "3"]:(literal.(type))(); separator=", ">), <name>ArrayList.newListWith(<["3", "1"]:(literal.(type))(); separator=", ">).sortThis());
-        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "3", "7", "9"]:(literal.(type))(); separator=", ">), <name>ArrayList.newListWith(<["3", "1", "9", "7"]:(literal.(type))(); separator=", ">).sortThis());
-        <name>ArrayList sameList = <name>ArrayList.newListWith(<["3", "1", "9", "7"]:(literal.(type))(); separator=", ">);
-        Assert.assertSame(sameList, sameList.sortThis());
-        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "3", "7", "8", "9"]:(literal.(type))(); separator=", ">), <name>ArrayList.newListWith(<["8", "1", "7", "3", "9"]:(literal.(type))(); separator=", ">).sortThis());
-    }
-
-    @Test
-    public void toReversed()
-    {
-        Assert.assertEquals(new <name>ArrayList(), new <name>ArrayList().toReversed());
-        <name>ArrayList emptyList = new <name>ArrayList();
-        Assert.assertNotSame(emptyList, emptyList.toReversed());
-        Assert.assertEquals(<name>ArrayList.newListWith(<["3", "1", "9", "7"]:(literal.(type))(); separator=", ">), <name>ArrayList.newListWith(<["7", "9", "1", "3"]:(literal.(type))(); separator=", ">).toReversed());
-        <name>ArrayList evenList = <name>ArrayList.newListWith(<["3", "1", "9", "7"]:(literal.(type))(); separator=", ">);
-        Assert.assertNotSame(evenList, evenList.toReversed());
-        Assert.assertEquals(<name>ArrayList.newListWith(<["3", "1", "9", "7", "8"]:(literal.(type))(); separator=", ">), <name>ArrayList.newListWith(<["8", "7", "9", "1", "3"]:(literal.(type))(); separator=", ">).toReversed());
-        <name>ArrayList oddList = <name>ArrayList.newListWith(<["3", "1", "9", "7", "8"]:(literal.(type))(); separator=", ">);
-        Assert.assertNotSame(oddList, oddList.toReversed());
-    }
-
-    @Test
-    public void testEquals()
-    {
-        <name>ArrayList list1 = <name>ArrayList.newListWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">);
-        <name>ArrayList list2 = <name>ArrayList.newListWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">);
-        <name>ArrayList list3 = <name>ArrayList.newListWith(<["4", "3", "2", "1"]:(literal.(type))(); separator=", ">);
-        <name>ArrayList list4 = <name>ArrayList.newListWith(<["5", "6", "7", "8"]:(literal.(type))(); separator=", ">);
-        <name>ArrayList list5 = <name>ArrayList.newListWith(<["5", "6", "7"]:(literal.(type))(); separator=", ">);
-
-        Verify.assertEqualsAndHashCode(list1, list2);
-        Verify.assertPostSerializedEqualsAndHashCode(list1);
-        Assert.assertNotEquals(list1, list3);
-        Assert.assertNotEquals(list1, list4);
-        Assert.assertNotEquals(list1, list5);
-    }
-
-    @Test
-    public void testHashCode()
-    {
-        Assert.assertEquals(FastList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">).hashCode(), <name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">).hashCode());
-        Assert.assertEquals(FastList.newList().hashCode(), new <name>ArrayList().hashCode());
-    }
-
-    @Test
-    public void testToString()
-    {
-        Assert.assertEquals("[<["1", "2", "3"]:(toStringLiteral.(type))(); separator=", ">]", this.list.toString());
-        Assert.assertEquals("[]", new <name>ArrayList().toString());
-    }
-
-    @Test
-    public void makeString()
-    {
-        Assert.assertEquals("<["1", "2", "3"]:(toStringLiteral.(type))(); separator=", ">", this.list.makeString());
-        Assert.assertEquals("<(toStringLiteral.(type))("1")>", <name>ArrayList.newListWith(<(literal.(type))("1")>).makeString("/"));
-        Assert.assertEquals("<["1", "2", "3"]:(toStringLiteral.(type))(); separator="/">", this.list.makeString("/"));
-        Assert.assertEquals(this.list.toString(), this.list.makeString("[", ", ", "]"));
-        Assert.assertEquals("", new <name>ArrayList().makeString());
-    }
-
-    @Test
-    public void appendString()
-    {
-        StringBuilder appendable = new StringBuilder();
-        new <name>ArrayList().appendString(appendable);
-        Assert.assertEquals("", appendable.toString());
-        StringBuilder appendable2 = new StringBuilder();
-        this.list.appendString(appendable2);
-        Assert.assertEquals("<["1", "2", "3"]:(toStringLiteral.(type))(); separator=", ">", appendable2.toString());
-        StringBuilder appendable3 = new StringBuilder();
-        this.list.appendString(appendable3, "/");
-        Assert.assertEquals("<["1", "2", "3"]:(toStringLiteral.(type))(); separator="/">", appendable3.toString());
-        StringBuilder appendable4 = new StringBuilder();
-        this.list.appendString(appendable4, "[", ", ", "]");
-        Assert.assertEquals(this.list.toString(), appendable4.toString());
-    }
-
-    @Test
-    public void toList()
-    {
-        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), this.list.toList());
-    }
-
-    @Test
-    public void toSortedList()
-    {
-        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), this.list.toReversed().toSortedList());
-    }
-
-    @Test
-    public void toSet()
-    {
-        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), this.list.toSet());
-    }
-
-    @Test
-    public void toBag()
-    {
-        Assert.assertEquals(<name>HashBag.newBagWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), this.list.toBag());
-    }
-
-    @Test
-    public void asLazy()
-    {
-        Assert.assertEquals(this.list.toList(), this.list.asLazy().toList());
-    }
-
-    @Test
-    public void asUnmodifiable()
-    {
-        Assert.assertEquals(new Unmodifiable<name>List(this.list), this.list.asUnmodifiable());
-        Verify.assertInstanceOf(Unmodifiable<name>List.class, this.list.asUnmodifiable());
-    }
-
-    @Test
-    public void asSynchronized()
-    {
-        Assert.assertEquals(new Synchronized<name>List(this.list), this.list.asSynchronized());
-        Verify.assertInstanceOf(Synchronized<name>List.class, this.list.asSynchronized());
+        <name>ArrayList arrayList = emptyList.with(<["1"]:(literal.(type))(); separator=", ">);
+        <name>ArrayList arrayList0 = new <name>ArrayList().with(<["1", "2"]:(literal.(type))(); separator=", ">);
+        <name>ArrayList arrayList1 = new <name>ArrayList().with(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
+        <name>ArrayList arrayList2 = new <name>ArrayList().with(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">);
+        <name>ArrayList arrayList3 = new <name>ArrayList().with(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
+        Assert.assertSame(emptyList, arrayList);
+        Assert.assertEquals(<name>ArrayList.newListWith(<(literal.(type))("1")>), arrayList);
+        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2"]:(literal.(type))(); separator=", ">), arrayList0);
+        Assert.assertEquals(this.list, arrayList1);
+        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">), arrayList2);
+        Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">), arrayList3);
     }
 }
 

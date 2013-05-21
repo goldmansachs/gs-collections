@@ -43,6 +43,8 @@ import net.jcip.annotations.NotThreadSafe;
 
 /**
  * BooleanArrayList is similar to {@link FastList}, and is memory-optimized for boolean primitives.
+ *
+ * @since 3.0.
  */
 @NotThreadSafe
 public final class BooleanArrayList
