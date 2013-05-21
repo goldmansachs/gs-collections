@@ -27,7 +27,7 @@ import org.junit.Test;
 
 /**
  * Abstract JUnit test for {@link Mutable<name>List}.
- * This file was automatically generated from template file abstractPrimitiveListTest.stg.
+ * This file was automatically generated from template file abstractPrimitiveListTestCase.stg.
  */
 public abstract class Abstract<name>ListTestCase extends Abstract<name>CollectionTestCase
 {
