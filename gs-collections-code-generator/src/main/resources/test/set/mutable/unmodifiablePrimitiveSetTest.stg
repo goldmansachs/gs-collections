@@ -17,109 +17,159 @@ body(type, wrapperName, name) ::= <<
 
 package com.gs.collections.impl.set.mutable.primitive;
 
-import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
+import java.util.NoSuchElementException;
+
 import com.gs.collections.api.iterator.<name>Iterator;
-import com.gs.collections.api.set.MutableSet;
-import com.gs.collections.api.set.primitive.Mutable<name>Set;
-import com.gs.collections.impl.collection.mutable.primitive.AbstractUnmodifiable<name>CollectionTestCase;
-import com.gs.collections.impl.set.mutable.UnifiedSet;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * This file was automatically generated from template file unmodifiablePrimitiveSetTest.stg.
  * JUnit test for {@link Unmodifiable<name>Set}.
+ * This file was automatically generated from template file unmodifiablePrimitiveSetTest.stg.
  */
-public class Unmodifiable<name>SetTest extends AbstractUnmodifiable<name>CollectionTestCase
+public class Unmodifiable<name>SetTest extends Abstract<name>SetTestCase
 {
-    private final Mutable<name>Set set = this.classUnderTest();
-
     @Override
-    protected final Mutable<name>Set classUnderTest()
+    protected final Unmodifiable<name>Set classUnderTest()
     {
         return new Unmodifiable<name>Set(<name>HashSet.newSetWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
     }
 
     @Override
-    protected Mutable<name>Set getEmptyCollection()
+    protected Unmodifiable<name>Set getEmptyCollection()
     {
         return new Unmodifiable<name>Set(new <name>HashSet());
     }
 
     @Override
-    protected Mutable<name>Set getEmptyModifiableCollection()
-    {
-        return new <name>HashSet();
-    }
-
-    @Override
-    protected Mutable<name>Collection newSynchronizedCollectionWith(<type>... elements)
-    {
-        return <name>HashSet.newSetWith(elements).asSynchronized();
-    }
-
-    @Override
-    protected Mutable<name>Collection newUnmodifiableCollectionWith(<type>... elements)
-    {
-        return <name>HashSet.newSetWith(elements).asUnmodifiable();
-    }
-
-    @Override
-    protected MutableSet\<<wrapperName>\> getEmptyObjectCollection()
-    {
-        return UnifiedSet.newSet();
-    }
-
-    @Override
-    protected Mutable<name>Set newWith(<type>... elements)
+    protected Unmodifiable<name>Set newWith(<type>... elements)
     {
         return new Unmodifiable<name>Set(<name>HashSet.newSetWith(elements));
     }
 
     @Override
-    protected Mutable<name>Set newModifiableCollectionWith(<type>... elements)
+    @Test(expected = UnsupportedOperationException.class)
+    public void clear()
     {
-        return <name>HashSet.newSetWith(elements);
+        this.classUnderTest().clear();
     }
 
     @Override
-    protected MutableSet\<<wrapperName>\> newObjectCollectionWith(<wrapperName>... elements)
+    @Test(expected = UnsupportedOperationException.class)
+    public void add()
     {
-        return UnifiedSet.newSetWith(elements);
+        this.getEmptyCollection().add(<(literal.(type))("1")>);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void addAllArray()
+    {
+        this.classUnderTest().addAll();
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void addAllIterable()
+    {
+        this.classUnderTest().addAll(this.getEmptyMutableCollection());
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void remove()
+    {
+        this.classUnderTest().remove(<(literal.(type))("1")>);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void removeAll()
+    {
+        this.classUnderTest().removeAll();
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void removeAllIterable()
+    {
+        this.classUnderTest().removeAll(this.getEmptyMutableCollection());
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void with()
+    {
+        this.getEmptyCollection().with(<["1"]:(literal.(type))(); separator=", ">);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void withAll()
+    {
+        this.getEmptyCollection().withAll(this.newMutableCollectionWith(<(literal.(type))("1")>));
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void without()
+    {
+        this.newWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">).without(<(literal.(type))("9")>);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void withoutAll()
+    {
+        this.newWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">).withoutAll(this.newMutableCollectionWith(<["8", "9",]:(literal.(type))(); separator=", ">));
     }
 
     @Override
     @Test
-    public void iterator()
+    public void contains()
     {
-        <name>Iterator iterator = this.set.<type>Iterator();
-        Assert.assertTrue(iterator.hasNext());
-        Mutable<name>Collection actual = this.getEmptyModifiableCollection();
-        actual.add(iterator.next());
-        Assert.assertTrue(iterator.hasNext());
-        actual.add(iterator.next());
-        Assert.assertTrue(iterator.hasNext());
-        actual.add(iterator.next());
-        Assert.assertFalse(iterator.hasNext());
-        Assert.assertEquals(this.newModifiableCollectionWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), actual);
+        Unmodifiable<name>Set set = this.newWith(<["14", "2", "30", "31", "32", "35", "0", "1"]:(literal.(type))(); separator=", ">);
+        Assert.assertFalse(set.contains(<(literal.(type))("29")>));
+        Assert.assertFalse(set.contains(<(literal.(type))("49")>));
+
+        <type>[] numbers = {<["14", "2", "30", "31", "32", "35", "0", "1"]:(literal.(type))(); separator=", ">};
+        for (<type> number : numbers)
+        {
+            Assert.assertTrue(set.contains(number));
+        }
+
+        Assert.assertFalse(set.contains(<(literal.(type))("-1")>));
+        Assert.assertFalse(set.contains(<(literal.(type))("29")>));
+        Assert.assertFalse(set.contains(<(literal.(type))("49")>));
+
+        Unmodifiable<name>Set set1 = this.newWith(<["0", "1", "1", "2", "2", "2"]:(literal.(type))(); separator=", ">);
+        Assert.assertTrue(set1.contains(<(literal.(type))("0")>));
+        Assert.assertTrue(set1.contains(<(literal.(type))("1")>));
+        Assert.assertTrue(set1.contains(<(literal.(type))("2")>));
+        Assert.assertFalse(set1.contains(<(literal.(type))("3")>));
     }
 
     @Override
-    @Test
-    public void testEquals()
+    @Test(expected = NoSuchElementException.class)
+    public void <type>Iterator_throws_non_empty_list()
     {
-        super.testEquals();
-        Mutable<name>Collection set1 = this.newWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">);
-        Mutable<name>Collection set2 = this.newWith(<["4", "3", "2", "1"]:(literal.(type))(); separator=", ">);
-        Assert.assertEquals(set1, set2);
+        Unmodifiable<name>Set set = this.newWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
+        <name>Iterator iterator = set.<type>Iterator();
+        while (iterator.hasNext())
+        {
+            iterator.next();
+        }
+        iterator.next();
     }
 
     @Override
     @Test
     public void asUnmodifiable()
     {
+        Unmodifiable<name>Set set = this.classUnderTest();
         super.asUnmodifiable();
-        Assert.assertSame(this.set, this.set.asUnmodifiable());
+        Assert.assertSame(set, set.asUnmodifiable());
+        Assert.assertEquals(set, set.asUnmodifiable());
     }
 }
 

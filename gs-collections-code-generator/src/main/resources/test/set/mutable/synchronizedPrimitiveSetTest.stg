@@ -17,119 +17,44 @@ body(type, wrapperName, name) ::= <<
 
 package com.gs.collections.impl.set.mutable.primitive;
 
-import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
-import com.gs.collections.api.iterator.<name>Iterator;
-import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
-import com.gs.collections.impl.collection.mutable.primitive.AbstractSynchronized<name>CollectionTestCase;
-import com.gs.collections.impl.set.mutable.UnifiedSet;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * This file was automatically generated from template file synchronizedPrimitiveSetTest.stg.
  * JUnit test for {@link Synchronized<name>Set}.
+ * This file was automatically generated from template file synchronizedPrimitiveSetTest.stg.
  */
-public class Synchronized<name>SetTest extends AbstractSynchronized<name>CollectionTestCase
+public class Synchronized<name>SetTest extends Abstract<name>SetTestCase
 {
-    private final Mutable<name>Set set = this.classUnderTest();
-
     @Override
-    protected final Mutable<name>Set classUnderTest()
+    protected final Synchronized<name>Set classUnderTest()
     {
         return new Synchronized<name>Set(<name>HashSet.newSetWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
     }
 
     @Override
-    protected final Mutable<name>Set classUnderTestWithLock()
-    {
-        return new Synchronized<name>Set(<name>HashSet.newSetWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), new Object());
-    }
-
-    @Override
-    protected Mutable<name>Set getEmptyCollection()
+    protected Synchronized<name>Set getEmptyCollection()
     {
         return new Synchronized<name>Set(new <name>HashSet());
     }
 
     @Override
-    protected Mutable<name>Set getEmptyUnSynchronizedCollection()
-    {
-        return new <name>HashSet();
-    }
-
-    @Override
-    protected MutableSet\<<wrapperName>\> getEmptyObjectCollection()
-    {
-        return UnifiedSet.newSet();
-    }
-
-    @Override
-    protected Mutable<name>Set newWith(<type>... elements)
+    protected Synchronized<name>Set newWith(<type>... elements)
     {
         return new Synchronized<name>Set(<name>HashSet.newSetWith(elements));
     }
 
     @Override
-    protected Mutable<name>Set newUnSynchronizedCollectionWith(<type>... elements)
-    {
-        return <name>HashSet.newSetWith(elements);
-    }
-
-    @Override
-    protected MutableSet\<<wrapperName>\> newObjectCollectionWith(<wrapperName>... elements)
-    {
-        return UnifiedSet.newSetWith(elements);
-    }
-
-    @Override
-    protected Mutable<name>Set newUnmodifiableCollectionWith(<type>... elements)
-    {
-        return new Unmodifiable<name>Set(<name>HashSet.newSetWith(elements));
-    }
-
-    @Override
     @Test
-    public void addAllArray()
+    public void asSynchronized()
     {
-        super.addAllArray();
-        Assert.assertFalse(this.set.addAll(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
-        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), this.set);
-    }
-
-    @Override
-    @Test
-    public void addAllIterable()
-    {
-        super.addAllIterable();
-        Assert.assertFalse(this.set.addAll(<name>HashSet.newSetWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">)));
-        Assert.assertEquals(<name>HashSet.newSetWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), this.set);
-    }
-
-    @Override
-    @Test
-    public void iterator()
-    {
-        <name>Iterator iterator = this.set.<type>Iterator();
-        Assert.assertTrue(iterator.hasNext());
-        Mutable<name>Collection actual = this.getEmptyUnSynchronizedCollection();
-        actual.add(iterator.next());
-        Assert.assertTrue(iterator.hasNext());
-        actual.add(iterator.next());
-        Assert.assertTrue(iterator.hasNext());
-        actual.add(iterator.next());
-        Assert.assertFalse(iterator.hasNext());
-        Assert.assertEquals(this.newUnSynchronizedCollectionWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), actual);
-    }
-
-    @Override
-    @Test
-    public void testEquals()
-    {
-        super.testEquals();
-        Mutable<name>Collection set1 = this.newWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">);
-        Mutable<name>Collection set2 = this.newWith(<["4", "3", "2", "1"]:(literal.(type))(); separator=", ">);
-        Assert.assertEquals(set1, set2);
+        super.asSynchronized();
+        Synchronized<name>Set set = this.classUnderTest();
+        Mutable<name>Set setWithLockObject = new Synchronized<name>Set(<name>HashSet.newSetWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), new Object());
+        Assert.assertEquals(set, setWithLockObject);
+        Assert.assertSame(setWithLockObject, setWithLockObject.asSynchronized());
+        Assert.assertSame(set, set.asSynchronized());
     }
 }
 

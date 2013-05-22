@@ -490,7 +490,7 @@ public abstract class AbstractBooleanCollectionTestCase
             }
         };
         Assert.assertEquals(this.newObjectCollectionWith(false, true, false), this.classUnderTest().collect(booleanToObjectFunction));
-        Assert.assertEquals(this.getEmptyObjectCollection(), new BooleanArrayList().collect(booleanToObjectFunction));
+        Assert.assertEquals(this.getEmptyObjectCollection(), this.getEmptyCollection().collect(booleanToObjectFunction));
     }
 
     @Test
@@ -510,7 +510,7 @@ public abstract class AbstractBooleanCollectionTestCase
         MutableBooleanCollection collection4 = this.newWith(true, true, true);
 
         Verify.assertEqualsAndHashCode(collection1, collection2);
-        Verify.assertEqualsAndHashCode(new BooleanArrayList(), this.getEmptyCollection());
+        Verify.assertEqualsAndHashCode(this.getEmptyCollection(), this.getEmptyCollection());
         Verify.assertPostSerializedEqualsAndHashCode(collection1);
         Verify.assertPostSerializedEqualsAndHashCode(this.getEmptyCollection());
         Assert.assertNotEquals(collection1, collection3);
@@ -600,7 +600,7 @@ public abstract class AbstractBooleanCollectionTestCase
     public void asLazy()
     {
         MutableBooleanCollection collection = this.classUnderTest();
-        Assert.assertEquals(collection.toList(), collection.asLazy().toList());
+        Assert.assertEquals(collection.toBag(), collection.asLazy().toBag());
         Verify.assertInstanceOf(LazyBooleanIterable.class, collection.asLazy());
     }
 

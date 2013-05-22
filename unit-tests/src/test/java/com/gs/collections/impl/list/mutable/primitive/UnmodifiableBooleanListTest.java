@@ -52,16 +52,14 @@ public class UnmodifiableBooleanListTest extends AbstractBooleanListTestCase
     @Test(expected = UnsupportedOperationException.class)
     public void addAtIndex()
     {
-        MutableBooleanList emptyList = new UnmodifiableBooleanList(new BooleanArrayList());
-        emptyList.addAtIndex(0, true);
+        new UnmodifiableBooleanList(new BooleanArrayList()).addAtIndex(0, true);
     }
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
     public void addAtIndex_throws_index_greater_than_size()
     {
-        MutableBooleanList emptyList = new UnmodifiableBooleanList(new BooleanArrayList());
-        emptyList.addAtIndex(1, false);
+        new UnmodifiableBooleanList(new BooleanArrayList()).addAtIndex(1, false);
     }
 
     @Override
