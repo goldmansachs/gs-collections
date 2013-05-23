@@ -24,8 +24,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * This file was automatically generated from template file synchronizedPrimitiveBooleanHashMapTest.stg.
  * JUnit test for {@link Synchronized<name>BooleanHashMap}.
+ * This file was automatically generated from template file synchronizedPrimitiveBooleanHashMapTest.stg.
  */
 public class Synchronized<name>BooleanHashMapTest extends Abstract<name>BooleanHashMapTestCase
 {

@@ -23,10 +23,10 @@ import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 
 /**
- * This file was automatically generated from template file primitiveIterable.stg.
  * <name>Iterable is an interface which is memory-optimized for <type> primitives.
  * It is inspired by the interface RichIterable, and contains a subset of the internal iterator methods on RichIterable like collect, sum, etc.
  * The API also includes an external iterator method, which returns an <name>Iterator. <name>Iterator helps iterate over the <name>Iterable without boxing the primitives.
+ * This file was automatically generated from template file primitiveIterable.stg.
  */
 public interface <name>Iterable extends PrimitiveIterable
 {

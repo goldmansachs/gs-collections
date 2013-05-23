@@ -14,8 +14,8 @@ body(type, name) ::= <<
 package com.gs.collections.api.iterator;
 
 /**
- * This file was automatically generated from template file primitiveIterator.stg.
  * <name>Iterator is an iterator over a <name>Iterable.
+ * This file was automatically generated from template file primitiveIterator.stg.
  *
  * @since 3.0.
  */

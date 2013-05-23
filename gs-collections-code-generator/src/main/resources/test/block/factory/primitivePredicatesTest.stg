@@ -20,8 +20,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * This file was automatically generated from template file primitivePredicatesTest.stg.
  * Provides a set of common tests of predicates for <type> values.
+ * This file was automatically generated from template file primitivePredicatesTest.stg.
  */
 public final class <name>PredicatesTest
 {

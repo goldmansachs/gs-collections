@@ -44,8 +44,8 @@ import com.gs.collections.impl.stack.mutable.ArrayStack;
 import net.jcip.annotations.NotThreadSafe;
 
 /**
- * This file was automatically generated from template file primitiveArrayStack.stg.
  * <name>ArrayStack is similar to {@link ArrayStack}, and is memory-optimized for <type> primitives.
+ * This file was automatically generated from template file primitiveArrayStack.stg.
  */
 @NotThreadSafe
 public final class <name>ArrayStack

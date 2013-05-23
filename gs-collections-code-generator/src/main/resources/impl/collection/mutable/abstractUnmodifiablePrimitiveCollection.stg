@@ -29,8 +29,8 @@ import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import net.jcip.annotations.ThreadSafe;
 
 /**
- * This file was automatically generated from template file abstractUnmodifiablePrimitiveCollection.stg.
  * Abstract JUnit test for {@link AbstractUnmodifiable<name>Collection}s.
+ * This file was automatically generated from template file abstractUnmodifiablePrimitiveCollection.stg.
  *
  * @since 3.1.
  */

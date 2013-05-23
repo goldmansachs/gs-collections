@@ -16,8 +16,8 @@ package com.gs.collections.api.block.procedure.primitive;
 import java.io.Serializable;
 
 /**
- * This file was automatically generated from template file objectPrimitiveProcedure.stg.
  * A two argument procedure that takes a type T and primitive <type> as the arguments.
+ * This file was automatically generated from template file objectPrimitiveProcedure.stg.
  *
  * @since 3.0.
  */

@@ -38,8 +38,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * This file was automatically generated from template file primitiveBooleanHashMapKeysViewTest.stg.
  * JUnit test for {@link <name>BooleanHashMap#keysView}.
+ * This file was automatically generated from template file primitiveBooleanHashMapKeysViewTest.stg.
  */
 public class <name>BooleanHashMapKeysViewTest
 {

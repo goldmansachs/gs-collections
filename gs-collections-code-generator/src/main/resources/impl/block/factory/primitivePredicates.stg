@@ -19,8 +19,8 @@ package com.gs.collections.impl.block.factory.primitive;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 
 /**
- * This file was automatically generated from template file primitivePredicates.stg.
  * Provides a set of common predicates for <type> values.
+ * This file was automatically generated from template file primitivePredicates.stg.
  */
 public final class <name>Predicates
 {
