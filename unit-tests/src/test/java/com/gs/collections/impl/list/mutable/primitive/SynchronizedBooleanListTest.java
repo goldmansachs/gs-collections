@@ -26,7 +26,7 @@ import org.junit.Test;
 public class SynchronizedBooleanListTest extends AbstractBooleanListTestCase
 {
     @Override
-    protected final SynchronizedBooleanList classUnderTest()
+    protected SynchronizedBooleanList classUnderTest()
     {
         return new SynchronizedBooleanList(BooleanArrayList.newListWith(true, false, true));
     }
@@ -53,5 +53,6 @@ public class SynchronizedBooleanListTest extends AbstractBooleanListTestCase
         Assert.assertEquals(list, listWithLockObject);
         Assert.assertSame(listWithLockObject, listWithLockObject.asSynchronized());
         Assert.assertSame(list, list.asSynchronized());
+        Assert.assertEquals(list, list.asSynchronized());
     }
 }

@@ -28,7 +28,7 @@ import org.junit.Test;
 public class Synchronized<name>ListTest extends Abstract<name>ListTestCase
 {
     @Override
-    protected final Synchronized<name>List classUnderTest()
+    protected Synchronized<name>List classUnderTest()
     {
         return new Synchronized<name>List(<name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
     }
@@ -55,6 +55,7 @@ public class Synchronized<name>ListTest extends Abstract<name>ListTestCase
         Assert.assertEquals(list, listWithLockObject);
         Assert.assertSame(listWithLockObject, listWithLockObject.asSynchronized());
         Assert.assertSame(list, list.asSynchronized());
+        Assert.assertEquals(list, list.asSynchronized());
     }
 }
 

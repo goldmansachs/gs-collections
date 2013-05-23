@@ -26,7 +26,7 @@ import org.junit.Test;
 public class SynchronizedBooleanSetTest extends AbstractBooleanSetTestCase
 {
     @Override
-    protected final SynchronizedBooleanSet classUnderTest()
+    protected SynchronizedBooleanSet classUnderTest()
     {
         return new SynchronizedBooleanSet(BooleanHashSet.newSetWith(true, false, true));
     }
@@ -53,5 +53,6 @@ public class SynchronizedBooleanSetTest extends AbstractBooleanSetTestCase
         Assert.assertEquals(set, setWithLockObject);
         Assert.assertSame(setWithLockObject, setWithLockObject.asSynchronized());
         Assert.assertSame(set, set.asSynchronized());
+        Assert.assertEquals(set, set.asSynchronized());
     }
 }

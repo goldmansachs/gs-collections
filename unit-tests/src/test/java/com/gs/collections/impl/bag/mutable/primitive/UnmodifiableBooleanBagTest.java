@@ -16,95 +16,54 @@
 
 package com.gs.collections.impl.bag.mutable.primitive;
 
+import java.util.NoSuchElementException;
+
 import com.gs.collections.api.bag.primitive.MutableBooleanBag;
-import com.gs.collections.api.block.procedure.primitive.BooleanIntProcedure;
-import com.gs.collections.api.collection.MutableCollection;
-import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
 import com.gs.collections.api.iterator.BooleanIterator;
-import com.gs.collections.impl.bag.mutable.HashBag;
-import com.gs.collections.impl.collection.mutable.primitive.AbstractUnmodifiableBooleanCollectionTestCase;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
-import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
  * JUnit test for {@link UnmodifiableBooleanBag}.
  */
-public class UnmodifiableBooleanBagTest extends AbstractUnmodifiableBooleanCollectionTestCase
+public class UnmodifiableBooleanBagTest extends AbstractBooleanBagTestCase
 {
+    private final MutableBooleanBag bag = this.classUnderTest();
+
     @Override
-    protected final MutableBooleanBag classUnderTest()
+    protected final UnmodifiableBooleanBag classUnderTest()
     {
         return new UnmodifiableBooleanBag(BooleanHashBag.newBagWith(true, false, true));
     }
 
     @Override
-    protected MutableBooleanBag getEmptyCollection()
+    protected UnmodifiableBooleanBag getEmptyCollection()
     {
         return new UnmodifiableBooleanBag(new BooleanHashBag());
     }
 
     @Override
-    protected MutableBooleanBag getEmptyModifiableCollection()
-    {
-        return new BooleanHashBag();
-    }
-
-    @Override
-    protected MutableCollection<Boolean> getEmptyObjectCollection()
-    {
-        return HashBag.newBag();
-    }
-
-    @Override
-    protected MutableBooleanBag newWith(boolean... elements)
+    protected UnmodifiableBooleanBag newWith(boolean... elements)
     {
         return new UnmodifiableBooleanBag(BooleanHashBag.newBagWith(elements));
     }
 
     @Override
-    protected BooleanHashBag newModifiableCollectionWith(boolean... elements)
-    {
-        return BooleanHashBag.newBagWith(elements);
-    }
-
-    @Override
-    protected MutableCollection<Object> newObjectCollectionWith(Object... elements)
-    {
-        return HashBag.newBagWith(elements);
-    }
-
-    @Override
-    protected MutableBooleanCollection newSynchronizedCollectionWith(boolean... elements)
-    {
-        return BooleanHashBag.newBagWith(elements).asSynchronized();
-    }
-
-    private final MutableBooleanBag bag = this.classUnderTest();
-
     @Test(expected = UnsupportedOperationException.class)
     public void addOccurrences()
     {
         this.bag.addOccurrences(false, 3);
     }
 
-    @Test
-    public void forEachWithOccurrences()
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void addOccurrences_throws()
     {
-        final StringBuilder stringBuilder = new StringBuilder();
-        this.bag.forEachWithOccurrences(new BooleanIntProcedure()
-        {
-            public void value(boolean argument1, int argument2)
-            {
-                stringBuilder.append(argument1).append(argument2);
-            }
-        });
-        String string = stringBuilder.toString();
-        Assert.assertTrue("true2false1".equals(string)
-                || "false1true2".equals(string));
+        this.getEmptyCollection().addOccurrences(true, -1);
     }
 
+    @Override
     @Test(expected = UnsupportedOperationException.class)
     public void removeOccurrences()
     {
@@ -112,29 +71,153 @@ public class UnmodifiableBooleanBagTest extends AbstractUnmodifiableBooleanColle
     }
 
     @Override
-    @Test
-    public void iterator()
+    @Test(expected = UnsupportedOperationException.class)
+    public void removeOccurrences_throws()
     {
-        BooleanArrayList list = BooleanArrayList.newListWith(true, false, true);
-        BooleanIterator iterator = this.bag.booleanIterator();
-        for (int i = 0; i < 3; i++)
+        this.getEmptyCollection().removeOccurrences(true, -1);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void clear()
+    {
+        this.classUnderTest().clear();
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void add()
+    {
+        this.getEmptyCollection().add(true);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void addAllArray()
+    {
+        this.classUnderTest().addAll(true, false, true);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void addAllIterable()
+    {
+        this.classUnderTest().addAll(this.getEmptyMutableCollection());
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void remove()
+    {
+        this.classUnderTest().remove(false);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void removeAll()
+    {
+        this.classUnderTest().removeAll(true, false);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void removeAllIterable()
+    {
+        this.classUnderTest().removeAll(this.getEmptyMutableCollection());
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void with()
+    {
+        this.getEmptyCollection().with(true);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void withAll()
+    {
+        this.getEmptyCollection().withAll(this.newMutableCollectionWith(true));
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void without()
+    {
+        this.newWith(true, false, true, false, true).without(true);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void withoutAll()
+    {
+        this.newWith(true, false, true, false, true).withoutAll(this.newMutableCollectionWith(false, false));
+    }
+
+    @Override
+    @Test(expected = NoSuchElementException.class)
+    public void iterator_throws_non_empty_list()
+    {
+        UnmodifiableBooleanBag collection = this.newWith(true, true, true);
+        BooleanIterator iterator = collection.booleanIterator();
+        while (iterator.hasNext())
         {
-            Assert.assertTrue(iterator.hasNext());
-            Assert.assertTrue(list.remove(iterator.next()));
+            Assert.assertTrue(iterator.next());
         }
-        Assert.assertTrue(list.isEmpty());
-        Assert.assertFalse(iterator.hasNext());
+        iterator.next();
     }
 
     @Override
     @Test
-    public void testEquals()
+    public void containsAllArray()
     {
-        super.testEquals();
-        Assert.assertNotEquals(this.getEmptyCollection(), this.bag);
-        Assert.assertNotEquals(this.newWith(true), this.bag);
-        Assert.assertNotEquals(this.newWith(false), this.bag);
-        Verify.assertEqualsAndHashCode(this.newModifiableCollectionWith(false, true, true), this.bag);
-        Verify.assertEqualsAndHashCode(this.newModifiableCollectionWith(true, false, true), this.bag);
+        UnmodifiableBooleanBag collection = this.classUnderTest();
+        Assert.assertTrue(collection.containsAll(true));
+        Assert.assertTrue(collection.containsAll(true, false, true));
+        Assert.assertTrue(collection.containsAll(true, false));
+        Assert.assertTrue(collection.containsAll(true, true));
+        Assert.assertTrue(collection.containsAll(false, false));
+        UnmodifiableBooleanBag emptyCollection = this.getEmptyCollection();
+        Assert.assertFalse(emptyCollection.containsAll(true));
+        Assert.assertFalse(emptyCollection.containsAll(false));
+        Assert.assertFalse(emptyCollection.containsAll(false, true, false));
+        Assert.assertFalse(this.newWith(true, true).containsAll(false, true, false));
+
+        UnmodifiableBooleanBag trueCollection = this.newWith(true, true, true, true);
+        Assert.assertFalse(trueCollection.containsAll(true, false));
+        UnmodifiableBooleanBag falseCollection = this.newWith(false, false, false, false);
+        Assert.assertFalse(falseCollection.containsAll(true, false));
+    }
+
+    @Override
+    @Test
+    public void containsAllIterable()
+    {
+        UnmodifiableBooleanBag emptyCollection = this.getEmptyCollection();
+        Assert.assertTrue(emptyCollection.containsAll(new BooleanArrayList()));
+        Assert.assertFalse(emptyCollection.containsAll(BooleanArrayList.newListWith(true)));
+        Assert.assertFalse(emptyCollection.containsAll(BooleanArrayList.newListWith(false)));
+        UnmodifiableBooleanBag collection = this.newWith(true, true, false, false, false);
+        Assert.assertTrue(collection.containsAll(BooleanArrayList.newListWith(true)));
+        Assert.assertTrue(collection.containsAll(BooleanArrayList.newListWith(false)));
+        Assert.assertTrue(collection.containsAll(BooleanArrayList.newListWith(true, false)));
+        Assert.assertTrue(collection.containsAll(BooleanArrayList.newListWith(true, true)));
+        Assert.assertTrue(collection.containsAll(BooleanArrayList.newListWith(false, false)));
+        Assert.assertTrue(collection.containsAll(BooleanArrayList.newListWith(true, false, true)));
+        Assert.assertFalse(this.newWith(true, true).containsAll(BooleanArrayList.newListWith(false, true, false)));
+
+        UnmodifiableBooleanBag trueCollection = this.newWith(true, true, true, true);
+        Assert.assertFalse(trueCollection.containsAll(BooleanArrayList.newListWith(true, false)));
+        UnmodifiableBooleanBag falseCollection = this.newWith(false, false, false, false);
+        Assert.assertFalse(falseCollection.containsAll(BooleanArrayList.newListWith(true, false)));
+    }
+
+    @Override
+    @Test
+    public void asUnmodifiable()
+    {
+        super.asUnmodifiable();
+        Assert.assertSame(this.bag, this.bag.asUnmodifiable());
+        Assert.assertEquals(this.bag, this.bag.asUnmodifiable());
     }
 }

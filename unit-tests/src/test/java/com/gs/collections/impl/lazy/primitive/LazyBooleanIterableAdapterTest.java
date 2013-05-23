@@ -40,7 +40,7 @@ public class LazyBooleanIterableAdapterTest
             new LazyBooleanIterableAdapter(BooleanArrayList.newListWith(true, false, true));
 
     @Test
-    public void byteIterator()
+    public void booleanIterator()
     {
         int sum = 0;
         for (BooleanIterator iterator = this.iterable.booleanIterator(); iterator.hasNext(); )

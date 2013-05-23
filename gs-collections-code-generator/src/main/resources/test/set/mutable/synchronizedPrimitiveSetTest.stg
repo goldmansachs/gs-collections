@@ -28,7 +28,7 @@ import org.junit.Test;
 public class Synchronized<name>SetTest extends Abstract<name>SetTestCase
 {
     @Override
-    protected final Synchronized<name>Set classUnderTest()
+    protected Synchronized<name>Set classUnderTest()
     {
         return new Synchronized<name>Set(<name>HashSet.newSetWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
     }
@@ -55,6 +55,7 @@ public class Synchronized<name>SetTest extends Abstract<name>SetTestCase
         Assert.assertEquals(set, setWithLockObject);
         Assert.assertSame(setWithLockObject, setWithLockObject.asSynchronized());
         Assert.assertSame(set, set.asSynchronized());
+        Assert.assertEquals(set, set.asSynchronized());
     }
 }
 

@@ -151,6 +151,7 @@ public class UnmodifiableBooleanSetTest extends AbstractBooleanSetTestCase
         Assert.assertFalse(emptyCollection.containsAll(true));
         Assert.assertFalse(emptyCollection.containsAll(false));
         Assert.assertFalse(emptyCollection.containsAll(false, true, false));
+        Assert.assertFalse(this.newWith(true, true).containsAll(false, true, false));
 
         UnmodifiableBooleanSet trueCollection = this.newWith(true, true, true, true);
         Assert.assertFalse(trueCollection.containsAll(true, false));
@@ -170,7 +171,10 @@ public class UnmodifiableBooleanSetTest extends AbstractBooleanSetTestCase
         Assert.assertTrue(collection.containsAll(BooleanArrayList.newListWith(true)));
         Assert.assertTrue(collection.containsAll(BooleanArrayList.newListWith(false)));
         Assert.assertTrue(collection.containsAll(BooleanArrayList.newListWith(true, false)));
+        Assert.assertTrue(collection.containsAll(BooleanArrayList.newListWith(true, true)));
+        Assert.assertTrue(collection.containsAll(BooleanArrayList.newListWith(false, false)));
         Assert.assertTrue(collection.containsAll(BooleanArrayList.newListWith(true, false, true)));
+        Assert.assertFalse(this.newWith(true, true).containsAll(BooleanArrayList.newListWith(false, true, false)));
 
         UnmodifiableBooleanSet trueCollection = this.newWith(true, true, true, true);
         Assert.assertFalse(trueCollection.containsAll(BooleanArrayList.newListWith(true, false)));
