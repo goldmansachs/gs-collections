@@ -37,7 +37,8 @@ import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
 /**
- * A synchronized view of a set.
+ * A synchronized view of a {@link Set}. It is imperative that the user manually synchronize on the collection when iterating over it using the
+ * standard JDK iterator or JDK 5 for loop.
  *
  * @see MutableSet#asSynchronized()
  */

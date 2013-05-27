@@ -38,7 +38,8 @@ import com.gs.collections.impl.factory.Lists;
 import net.jcip.annotations.GuardedBy;
 
 /**
- * A synchronized view of a list.
+ * A synchronized view of a {@link List}. It is imperative that the user manually synchronize on the collection when iterating over it using the
+ * standard JDK iterator or JDK 5 for loop.
  *
  * @see MutableList#asSynchronized()
  */

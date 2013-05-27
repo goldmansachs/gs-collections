@@ -169,9 +169,12 @@ public abstract class AbstractSynchronized<name>Collection
         }
     }
 
+    /**
+     * Must be called in a synchronized block.
+     */
     public <name>Iterator <type>Iterator()
     {
-        return this.collection.<type>Iterator();  // this must be manually synchronized by the developer
+        return this.collection.<type>Iterator();
     }
 
     public void forEach(<name>Procedure procedure)

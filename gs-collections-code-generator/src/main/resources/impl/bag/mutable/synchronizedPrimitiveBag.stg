@@ -16,22 +16,32 @@ body(type, name) ::= <<
 
 package com.gs.collections.impl.bag.mutable.primitive;
 
+import java.util.Collection;
+import java.util.Collections;
+
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.bag.primitive.Immutable<name>Bag;
+import com.gs.collections.api.bag.primitive.<name>Bag;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
+import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.impl.collection.mutable.primitive.AbstractSynchronized<name>Collection;
 import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
 /**
+ * A synchronized view of <article.(type)> {@link <name>Bag}. It is imperative that the user manually synchronize on the collection when iterating over it using the
+ * {@link <name>Iterator}.
+ * \<p>
  * This file was automatically generated from template file synchronizedPrimitiveBag.stg.
+ * \</p>
  *
+ * @see Collections#synchronizedCollection(Collection)
  * @since 3.1.
  */
 @ThreadSafe

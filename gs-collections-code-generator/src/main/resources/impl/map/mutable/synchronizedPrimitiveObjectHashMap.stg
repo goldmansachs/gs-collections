@@ -20,6 +20,7 @@ package com.gs.collections.impl.map.mutable.primitive;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -51,6 +52,7 @@ import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.primitive.Immutable<name>ObjectMap;
+import com.gs.collections.api.map.primitive.<name>ObjectMap;
 import com.gs.collections.api.map.primitive.Mutable<name>ObjectMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.MutableMultimap;
@@ -61,8 +63,13 @@ import com.gs.collections.api.tuple.Pair;
 import net.jcip.annotations.GuardedBy;
 
 /**
+ * A synchronized view of <article.(type)> {@link <name>ObjectMap}. It is imperative that the user manually synchronize on the collection when iterating over it using the
+ * standard JDK iterator or JDK 5 for loop.
+ * \<p>
  * This file was automatically generated from template file synchronizedPrimitiveObjectHashMap.stg.
+ * \</p>
  *
+ * @see Collections#synchronizedCollection(Collection)
  * @since 3.1.
  */
 public final class Synchronized<name>ObjectHashMap\<V>
@@ -930,9 +937,11 @@ public final class Synchronized<name>ObjectHashMap\<V>
         }
     }
 
+    /**
+     * Must be called in a synchronized block.
+     */
     public Iterator\<V> iterator()
     {
-        // this must be manually synchronized by developer
         return this.map.iterator();
     }
 }

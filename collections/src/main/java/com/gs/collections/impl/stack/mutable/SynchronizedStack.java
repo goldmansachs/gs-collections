@@ -18,6 +18,7 @@ package com.gs.collections.impl.stack.mutable;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -57,10 +58,15 @@ import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 
+/**
+ * A synchronized view of a {@link MutableStack}. It is imperative that the user manually synchronize on the collection when iterating over it using the
+ * standard JDK iterator or JDK 5 for loop.
+ *
+ * @see Collections#synchronizedCollection(Collection)
+ */
 public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
 {
     private static final long serialVersionUID = 1L;
-
     private final Object lock;
     private final MutableStack<T> delegate;
 

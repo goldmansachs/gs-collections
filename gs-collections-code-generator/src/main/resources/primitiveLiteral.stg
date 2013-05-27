@@ -267,3 +267,8 @@ cast ::= [
     "double": "doubleCast",
     default: "no matching cast"
 ]
+
+article ::= [
+    "int": "an",
+    default: "a"
+]

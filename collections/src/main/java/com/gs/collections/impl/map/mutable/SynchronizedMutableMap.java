@@ -43,8 +43,10 @@ import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.LazyIterate;
 
 /**
- * A synchronized view of a Map.
+ * A synchronized view of a {@link Map}. It is imperative that the user manually synchronize on the collection when iterating over it using the
+ * standard JDK iterator or JDK 5 for loop.
  *
+ * @see MutableMap#asSynchronized()
  * @see SynchronizedMutableMap#of(Map)
  */
 public class SynchronizedMutableMap<K, V>

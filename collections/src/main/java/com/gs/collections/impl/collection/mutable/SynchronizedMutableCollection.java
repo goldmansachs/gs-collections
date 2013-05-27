@@ -63,7 +63,8 @@ import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
 /**
- * A synchronized view of a collection.
+ * A synchronized view of a {@link Collection}. It is imperative that the user manually synchronize on the collection when iterating over it using the
+ * standard JDK iterator or JDK 5 for loop.
  *
  * @see MutableCollection#asSynchronized()
  */
@@ -172,9 +173,12 @@ public class SynchronizedMutableCollection<T>
         }
     }
 
+    /**
+     * Must be called in a synchronized block.
+     */
     public Iterator<T> iterator()
     {
-        return this.collection.iterator();  // this must be manually synchronized by the developer
+        return this.collection.iterator();
     }
 
     public boolean add(T o)

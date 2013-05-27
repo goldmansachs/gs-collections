@@ -17,6 +17,8 @@ body(type, name) ::= <<
 package com.gs.collections.impl.map.mutable.primitive;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Collections;
 
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.Lazy<name>Iterable;
@@ -39,15 +41,19 @@ import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import net.jcip.annotations.GuardedBy;
 
 /**
+ * A synchronized view of an Object<name>Map. It is imperative that the user manually synchronize on the collection when iterating over it using the
+ * <name>Iterator.
+ * \<p>
  * This file was automatically generated from template file synchronizedObjectPrimitiveHashMap.stg.
+ * \</p>
  *
+ * @see Collections#synchronizedCollection(Collection)
  * @since 3.1.
  */
 public final class SynchronizedObject<name>HashMap\<V>
         implements MutableObject<name>Map\<V>, Serializable
 {
     private static final long serialVersionUID = 1L;
-
     private final Object lock;
     @GuardedBy("this.lock")
     private final MutableObject<name>Map\<V> map;
@@ -191,12 +197,12 @@ public final class SynchronizedObject<name>HashMap\<V>
         }
     }
 
+    /**
+     * Must be called in a synchronized block.
+     */
     public <name>Iterator <type>Iterator()
     {
-        synchronized (this.lock)
-        {
-            return this.map.<type>Iterator();
-        }
+        return this.map.<type>Iterator();
     }
 
     public void forEach(<name>Procedure procedure)
