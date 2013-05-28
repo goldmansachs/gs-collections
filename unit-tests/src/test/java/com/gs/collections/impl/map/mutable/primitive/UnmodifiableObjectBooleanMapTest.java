@@ -24,7 +24,7 @@ import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class UnmodifiableObjectBooleanMapTest extends AbstractMutableObjectBooleanHashMapTestCase
+public class UnmodifiableObjectBooleanMapTest extends AbstractMutableObjectBooleanMapTestCase
 {
     private final UnmodifiableObjectBooleanMap<String> map = this.classUnderTest();
 
@@ -110,7 +110,7 @@ public class UnmodifiableObjectBooleanMapTest extends AbstractMutableObjectBoole
     @Test(expected = UnsupportedOperationException.class)
     public void putDuplicateWithRemovedSlot()
     {
-        String collision1 = AbstractMutableObjectBooleanHashMapTestCase.generateCollisions().getFirst();
+        String collision1 = AbstractMutableObjectBooleanMapTestCase.generateCollisions().getFirst();
         this.getEmptyMap().put(collision1, true);
     }
 

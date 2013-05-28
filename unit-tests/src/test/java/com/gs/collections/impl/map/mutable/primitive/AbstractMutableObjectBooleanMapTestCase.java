@@ -39,7 +39,7 @@ import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
-public abstract class AbstractMutableObjectBooleanHashMapTestCase
+public abstract class AbstractMutableObjectBooleanMapTestCase
 {
     protected abstract MutableObjectBooleanMap<String> classUnderTest();
 
@@ -250,21 +250,21 @@ public abstract class AbstractMutableObjectBooleanHashMapTestCase
         {
             public void run()
             {
-                AbstractMutableObjectBooleanHashMapTestCase.this.map.getOrThrow("0");
+                AbstractMutableObjectBooleanMapTestCase.this.map.getOrThrow("0");
             }
         });
         Verify.assertThrows(IllegalStateException.class, new Runnable()
         {
             public void run()
             {
-                AbstractMutableObjectBooleanHashMapTestCase.this.map.getOrThrow("5");
+                AbstractMutableObjectBooleanMapTestCase.this.map.getOrThrow("5");
             }
         });
         Verify.assertThrows(IllegalStateException.class, new Runnable()
         {
             public void run()
             {
-                AbstractMutableObjectBooleanHashMapTestCase.this.map.getOrThrow(null);
+                AbstractMutableObjectBooleanMapTestCase.this.map.getOrThrow(null);
             }
         });
 
@@ -1116,7 +1116,7 @@ public abstract class AbstractMutableObjectBooleanHashMapTestCase
     @Test
     public void asSynchronized()
     {
-        Verify.assertInstanceOf(SynchronizedObjectBooleanHashMap.class, this.map.asSynchronized());
-        Assert.assertEquals(new SynchronizedObjectBooleanHashMap<String>(this.map), this.map.asSynchronized());
+        Verify.assertInstanceOf(SynchronizedObjectBooleanMap.class, this.map.asSynchronized());
+        Assert.assertEquals(new SynchronizedObjectBooleanMap<String>(this.map), this.map.asSynchronized());
     }
 }

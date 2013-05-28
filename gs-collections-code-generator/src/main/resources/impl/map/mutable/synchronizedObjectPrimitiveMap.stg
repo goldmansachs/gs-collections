@@ -5,7 +5,7 @@ import "primitiveLiteral.stg"
 
 targetPath() ::= "com/gs/collections/impl/map/mutable/primitive"
 
-fileName(primitive) ::= "SynchronizedObject<primitive.name>HashMap"
+fileName(primitive) ::= "SynchronizedObject<primitive.name>Map"
 
 class(primitive) ::= <<
 <body(primitive.type, primitive.name)>
@@ -45,15 +45,13 @@ import net.jcip.annotations.GuardedBy;
  * A synchronized view of an {@link Object<name>Map}. It is imperative that the user manually synchronize on the collection when iterating over it using the
  * <name>Iterator.
  * \<p>
- * This file was automatically generated from template file synchronizedObjectPrimitiveHashMap.stg.
+ * This file was automatically generated from template file synchronizedObjectPrimitiveMap.stg.
  * \</p>
  *
  * @see Collections#synchronizedCollection(Collection)
  * @since 3.1.
- * @deprecated since 3.2. Use {@link SynchronizedObject<name>Map} instead.
  */
-@Deprecated
-public final class SynchronizedObject<name>HashMap\<V>
+public final class SynchronizedObject<name>Map\<V>
         implements MutableObject<name>Map\<V>, Serializable
 {
     private static final long serialVersionUID = 1L;
@@ -61,12 +59,12 @@ public final class SynchronizedObject<name>HashMap\<V>
     @GuardedBy("this.lock")
     private final MutableObject<name>Map\<V> map;
 
-    SynchronizedObject<name>HashMap(MutableObject<name>Map\<V> map)
+    SynchronizedObject<name>Map(MutableObject<name>Map\<V> map)
     {
         this(map, null);
     }
 
-    SynchronizedObject<name>HashMap(MutableObject<name>Map\<V> map, Object newLock)
+    SynchronizedObject<name>Map(MutableObject<name>Map\<V> map, Object newLock)
     {
         this.map = map;
         this.lock = newLock == null ? this : newLock;

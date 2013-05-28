@@ -24,7 +24,7 @@ import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class ObjectBooleanHashMapTest extends AbstractMutableObjectBooleanHashMapTestCase
+public class ObjectBooleanHashMapTest extends AbstractMutableObjectBooleanMapTestCase
 {
     @Override
     protected ObjectBooleanHashMap<String> classUnderTest()

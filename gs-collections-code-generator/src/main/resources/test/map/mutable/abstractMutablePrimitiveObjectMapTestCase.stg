@@ -6,7 +6,7 @@ isTest() ::= "true"
 
 targetPath() ::= "com/gs/collections/impl/map/mutable/primitive"
 
-fileName(primitive) ::= "AbstractMutable<primitive.name>ObjectHashMapTestCase"
+fileName(primitive) ::= "AbstractMutable<primitive.name>ObjectMapTestCase"
 
 skipBoolean() ::= "true"
 
@@ -68,9 +68,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * This file was automatically generated from template file abstractMutablePrimitiveObjectHashMapTestCase.stg.
+ * This file was automatically generated from template file abstractMutablePrimitiveObjectMapTestCase.stg.
  */
-public abstract class AbstractMutable<name>ObjectHashMapTestCase
+public abstract class AbstractMutable<name>ObjectMapTestCase
 {
     private final Mutable<name>ObjectMap\<String> map = this.classUnderTest();
 
@@ -149,10 +149,10 @@ public abstract class AbstractMutable<name>ObjectHashMapTestCase
         Assert.assertNull(this.map.removeKey(<(literal.(type))("35")>));
         Assert.assertFalse(this.map.containsValue(null));
 
-        Assert.assertNull(this.map.put(generateCollisions().getFirst(), "collision1"));
-        Assert.assertNull(this.map.put(generateCollisions().get(1), "collision2"));
-        Assert.assertEquals("collision2", this.map.removeKey(generateCollisions().get(1)));
-        Assert.assertEquals("collision1", this.map.removeKey(generateCollisions().getFirst()));
+        Assert.assertNull(this.map.put(AbstractMutable<name>ObjectMapTestCase.generateCollisions().getFirst(), "collision1"));
+        Assert.assertNull(this.map.put(AbstractMutable<name>ObjectMapTestCase.generateCollisions().get(1), "collision2"));
+        Assert.assertEquals("collision2", this.map.removeKey(AbstractMutable<name>ObjectMapTestCase.generateCollisions().get(1)));
+        Assert.assertEquals("collision1", this.map.removeKey(AbstractMutable<name>ObjectMapTestCase.generateCollisions().getFirst()));
 
         Mutable<name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one");
         Assert.assertEquals("zero", map1.removeKey(<(literal.(type))("0")>));
@@ -204,10 +204,10 @@ public abstract class AbstractMutable<name>ObjectHashMapTestCase
     @Test
     public void putDuplicateWithRemovedSlot()
     {
-        <type> collision1 = generateCollisions().getFirst();
-        <type> collision2 = generateCollisions().get(1);
-        <type> collision3 = generateCollisions().get(2);
-        <type> collision4 = generateCollisions().get(3);
+        <type> collision1 = AbstractMutable<name>ObjectMapTestCase.generateCollisions().getFirst();
+        <type> collision2 = AbstractMutable<name>ObjectMapTestCase.generateCollisions().get(1);
+        <type> collision3 = AbstractMutable<name>ObjectMapTestCase.generateCollisions().get(2);
+        <type> collision4 = AbstractMutable<name>ObjectMapTestCase.generateCollisions().get(3);
 
         Mutable<name>ObjectMap\<String> hashMap = <name>ObjectHashMap.newMap();
         Assert.assertNull(hashMap.put(collision1, "collision1"));
@@ -2605,8 +2605,8 @@ public abstract class AbstractMutable<name>ObjectHashMapTestCase
     @Test
     public void asSynchronized()
     {
-        Verify.assertInstanceOf(Synchronized<name>ObjectHashMap.class, this.map.asSynchronized());
-        Assert.assertEquals(new Synchronized<name>ObjectHashMap\<String>(this.map), this.map.asSynchronized());
+        Verify.assertInstanceOf(Synchronized<name>ObjectMap.class, this.map.asSynchronized());
+        Assert.assertEquals(new Synchronized<name>ObjectMap\<String>(this.map), this.map.asSynchronized());
     }
 }
 

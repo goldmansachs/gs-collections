@@ -5,7 +5,7 @@ import "primitiveLiteral.stg"
 
 targetPath() ::= "com/gs/collections/impl/map/mutable/primitive"
 
-fileName(primitive) ::= "Synchronized<primitive.name>ObjectHashMap"
+fileName(primitive) ::= "Synchronized<primitive.name>ObjectMap"
 
 skipBoolean() ::= "true"
 
@@ -66,15 +66,13 @@ import net.jcip.annotations.GuardedBy;
  * A synchronized view of <article.(type)> {@link <name>ObjectMap}. It is imperative that the user manually synchronize on the collection when iterating over it using the
  * standard JDK iterator or JDK 5 for loop.
  * \<p>
- * This file was automatically generated from template file synchronizedPrimitiveObjectHashMap.stg.
+ * This file was automatically generated from template file synchronizedPrimitiveObjectMap.stg.
  * \</p>
  *
  * @see Collections#synchronizedCollection(Collection)
  * @since 3.1.
- * @deprecated since 3.2. Use {@link Synchronized<name>ObjectMap} instead.
  */
-@Deprecated
-public final class Synchronized<name>ObjectHashMap\<V>
+public final class Synchronized<name>ObjectMap\<V>
         implements Mutable<name>ObjectMap\<V>, Serializable
 {
     private static final long serialVersionUID = 1L;
@@ -82,12 +80,12 @@ public final class Synchronized<name>ObjectHashMap\<V>
     @GuardedBy("this.lock")
     private final Mutable<name>ObjectMap\<V> map;
 
-    Synchronized<name>ObjectHashMap(Mutable<name>ObjectMap\<V> map)
+    Synchronized<name>ObjectMap(Mutable<name>ObjectMap\<V> map)
     {
         this(map, null);
     }
 
-    Synchronized<name>ObjectHashMap(Mutable<name>ObjectMap\<V> map, Object newLock)
+    Synchronized<name>ObjectMap(Mutable<name>ObjectMap\<V> map, Object newLock)
     {
         this.map = map;
         this.lock = newLock == null ? this : newLock;

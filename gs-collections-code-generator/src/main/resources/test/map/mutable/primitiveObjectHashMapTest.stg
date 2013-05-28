@@ -28,7 +28,7 @@ import org.junit.Test;
  * JUnit test for {@link <name>ObjectHashMap}.
  * This file was automatically generated from template file primitiveObjectHashMapTest.stg.
  */
-public class <name>ObjectHashMapTest extends AbstractMutable<name>ObjectHashMapTestCase
+public class <name>ObjectHashMapTest extends AbstractMutable<name>ObjectMapTestCase
 {
     private final <name>ObjectHashMap\<String> map = this.classUnderTest();
 

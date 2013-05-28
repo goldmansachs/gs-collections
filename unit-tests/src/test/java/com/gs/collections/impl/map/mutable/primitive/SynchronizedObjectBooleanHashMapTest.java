@@ -16,10 +16,11 @@
 
 package com.gs.collections.impl.map.mutable.primitive;
 
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class SynchronizedObjectBooleanHashMapTest extends AbstractMutableObjectBooleanHashMapTestCase
+public class SynchronizedObjectBooleanHashMapTest extends AbstractMutableObjectBooleanMapTestCase
 {
     @Override
     protected SynchronizedObjectBooleanHashMap<String> classUnderTest()
@@ -63,7 +64,8 @@ public class SynchronizedObjectBooleanHashMapTest extends AbstractMutableObjectB
     @Test
     public void asSynchronized()
     {
-        super.asSynchronized();
+        Verify.assertInstanceOf(SynchronizedObjectBooleanHashMap.class, this.map.asSynchronized());
+        Assert.assertEquals(new SynchronizedObjectBooleanHashMap<String>(this.map), this.map.asSynchronized());
         Assert.assertSame(this.map, this.map.asSynchronized());
     }
 }

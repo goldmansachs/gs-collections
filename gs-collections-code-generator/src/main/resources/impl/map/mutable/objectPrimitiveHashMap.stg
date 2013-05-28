@@ -208,7 +208,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
 
     public MutableObject<name>Map\<K> asSynchronized()
     {
-        return new SynchronizedObject<name>HashMap\<K>(this);
+        return new SynchronizedObject<name>Map\<K>(this);
     }
 
     public ImmutableObject<name>Map\<K> toImmutable()

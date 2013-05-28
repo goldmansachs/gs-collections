@@ -2185,7 +2185,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
 
     public Mutable<name>ObjectMap\<V> asSynchronized()
     {
-        return new Synchronized<name>ObjectHashMap\<V>(this);
+        return new Synchronized<name>ObjectMap\<V>(this);
     }
 
     public Immutable<name>ObjectMap\<V> toImmutable()

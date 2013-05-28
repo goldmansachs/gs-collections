@@ -601,7 +601,7 @@ public final class Unmodifiable<name>ObjectMap\<V>
 
     public Mutable<name>ObjectMap\<V> asSynchronized()
     {
-        return new Synchronized<name>ObjectHashMap\<V>(this);
+        return new Synchronized<name>ObjectMap\<V>(this);
     }
 
     public Immutable<name>ObjectMap\<V> toImmutable()

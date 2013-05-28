@@ -140,7 +140,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
 
     public MutableObjectBooleanMap<K> asSynchronized()
     {
-        return new SynchronizedObjectBooleanHashMap<K>(this);
+        return new SynchronizedObjectBooleanMap<K>(this);
     }
 
     public ImmutableObjectBooleanMap<K> toImmutable()

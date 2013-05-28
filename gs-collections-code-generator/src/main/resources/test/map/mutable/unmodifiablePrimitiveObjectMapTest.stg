@@ -38,7 +38,7 @@ import org.junit.Test;
  * JUnit test for {@link Unmodifiable<name>ObjectMap}.
  * This file was automatically generated from template file unmodifiablePrimitiveObjectMapTest.stg.
  */
-public class Unmodifiable<name>ObjectMapTest extends AbstractMutable<name>ObjectHashMapTestCase
+public class Unmodifiable<name>ObjectMapTest extends AbstractMutable<name>ObjectMapTestCase
 {
     private final Unmodifiable<name>ObjectMap\<String> map = this.classUnderTest();
 
@@ -118,7 +118,7 @@ public class Unmodifiable<name>ObjectMapTest extends AbstractMutable<name>Object
     @Test(expected = UnsupportedOperationException.class)
     public void putDuplicateWithRemovedSlot()
     {
-        <type> collision1 = AbstractMutable<name>ObjectHashMapTestCase.generateCollisions().getFirst();
+        <type> collision1 = AbstractMutable<name>ObjectMapTestCase.generateCollisions().getFirst();
         this.getEmptyMap().put(collision1, "one");
     }
 

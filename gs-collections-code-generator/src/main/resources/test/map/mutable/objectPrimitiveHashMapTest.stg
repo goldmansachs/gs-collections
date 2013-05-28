@@ -31,7 +31,7 @@ import org.junit.Test;
  * JUnit test for {@link Object<name>HashMap}.
  * This file was automatically generated from template file objectPrimitiveHashMapTest.stg.
  */
-public class Object<name>HashMapTest extends AbstractMutableObject<name>HashMapTestCase
+public class Object<name>HashMapTest extends AbstractMutableObject<name>MapTestCase
 {
     @Override
     protected Object<name>HashMap\<String> classUnderTest()
@@ -155,16 +155,16 @@ public class Object<name>HashMapTest extends AbstractMutableObject<name>HashMapT
         Assert.assertEquals(Object<name>HashMap.newMap(), this.map);
         Verify.assertEmpty(this.map);
 
-        this.map.put(AbstractMutableObject<name>HashMapTestCase.generateCollisions().get(0), <(literal.(type))("1")>);
-        this.map.put(AbstractMutableObject<name>HashMapTestCase.generateCollisions().get(1), <(literal.(type))("2")>);
+        this.map.put(AbstractMutableObject<name>MapTestCase.generateCollisions().get(0), <(literal.(type))("1")>);
+        this.map.put(AbstractMutableObject<name>MapTestCase.generateCollisions().get(1), <(literal.(type))("2")>);
 
-        Assert.assertEquals(<(literal.(type))("1")>, this.map.get(AbstractMutableObject<name>HashMapTestCase.generateCollisions().get(0))<delta.(type)>);
-        Assert.assertEquals(<(literal.(type))("1")>, this.map.removeKeyIfAbsent(AbstractMutableObject<name>HashMapTestCase.generateCollisions().get(0), <(literal.(type))("100")>)<delta.(type)>);
-        Assert.assertEquals(<(literal.(type))("0")>, this.map.get(AbstractMutableObject<name>HashMapTestCase.generateCollisions().get(0))<delta.(type)>);
+        Assert.assertEquals(<(literal.(type))("1")>, this.map.get(AbstractMutableObject<name>MapTestCase.generateCollisions().get(0))<delta.(type)>);
+        Assert.assertEquals(<(literal.(type))("1")>, this.map.removeKeyIfAbsent(AbstractMutableObject<name>MapTestCase.generateCollisions().get(0), <(literal.(type))("100")>)<delta.(type)>);
+        Assert.assertEquals(<(literal.(type))("0")>, this.map.get(AbstractMutableObject<name>MapTestCase.generateCollisions().get(0))<delta.(type)>);
 
-        Assert.assertEquals(<(literal.(type))("2")>, this.map.get(AbstractMutableObject<name>HashMapTestCase.generateCollisions().get(1))<delta.(type)>);
-        Assert.assertEquals(<(literal.(type))("2")>, this.map.removeKeyIfAbsent(AbstractMutableObject<name>HashMapTestCase.generateCollisions().get(1), <(literal.(type))("100")>)<delta.(type)>);
-        Assert.assertEquals(<(literal.(type))("0")>, this.map.get(AbstractMutableObject<name>HashMapTestCase.generateCollisions().get(1))<delta.(type)>);
+        Assert.assertEquals(<(literal.(type))("2")>, this.map.get(AbstractMutableObject<name>MapTestCase.generateCollisions().get(1))<delta.(type)>);
+        Assert.assertEquals(<(literal.(type))("2")>, this.map.removeKeyIfAbsent(AbstractMutableObject<name>MapTestCase.generateCollisions().get(1), <(literal.(type))("100")>)<delta.(type)>);
+        Assert.assertEquals(<(literal.(type))("0")>, this.map.get(AbstractMutableObject<name>MapTestCase.generateCollisions().get(1))<delta.(type)>);
 
         this.map.put(null, <(literal.(type))("3")>);
 
