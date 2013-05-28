@@ -11,7 +11,7 @@ skipBoolean() ::= "true"
 
 targetPath() ::= "com/gs/collections/impl/map/mutable/primitive"
 
-fileName(primitive1, primitive2, sameTwoPrimitives) ::= "Abstract<primitive1.name><primitive2.name>HashMapTestCase"
+fileName(primitive1, primitive2, sameTwoPrimitives) ::= "Abstract<primitive1.name><primitive2.name>MapTestCase"
 
 class(primitive1, primitive2, sameTwoPrimitives) ::= <<
 <body(primitive1.type, primitive2.type, primitive1.name, primitive2.name)>
@@ -53,9 +53,9 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * This file was automatically generated from template file abstractPrimitivePrimitiveHashMapTestCase.stg.
+ * This file was automatically generated from template file abstractPrimitivePrimitiveMapTestCase.stg.
  */
-public abstract class Abstract<name1><name2>HashMapTestCase
+public abstract class Abstract<name1><name2>MapTestCase
 {
     private final Mutable<name1><name2>Map map = this.classUnderTest();
 
@@ -132,16 +132,16 @@ public abstract class Abstract<name1><name2>HashMapTestCase
         Assert.assertEquals(new <name1><name2>HashMap(), this.map);
         Verify.assertEmpty(this.map);
 
-        this.map.put(Abstract<name1><name2>HashMapTestCase.generateCollisions().get(0), <(literal.(type2))("1")>);
-        this.map.put(Abstract<name1><name2>HashMapTestCase.generateCollisions().get(1), <(literal.(type2))("2")>);
+        this.map.put(Abstract<name1><name2>MapTestCase.generateCollisions().get(0), <(literal.(type2))("1")>);
+        this.map.put(Abstract<name1><name2>MapTestCase.generateCollisions().get(1), <(literal.(type2))("2")>);
 
-        Assert.assertEquals(<(wideLiteral.(type2))("1")>, this.map.get(Abstract<name1><name2>HashMapTestCase.generateCollisions().get(0))<(wideDelta.(type2))>);
-        this.map.removeKey(Abstract<name1><name2>HashMapTestCase.generateCollisions().get(0));
-        Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.get(Abstract<name1><name2>HashMapTestCase.generateCollisions().get(0))<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("1")>, this.map.get(Abstract<name1><name2>MapTestCase.generateCollisions().get(0))<(wideDelta.(type2))>);
+        this.map.removeKey(Abstract<name1><name2>MapTestCase.generateCollisions().get(0));
+        Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.get(Abstract<name1><name2>MapTestCase.generateCollisions().get(0))<(wideDelta.(type2))>);
 
-        Assert.assertEquals(<(wideLiteral.(type2))("2")>, this.map.get(Abstract<name1><name2>HashMapTestCase.generateCollisions().get(1))<(wideDelta.(type2))>);
-        this.map.removeKey(Abstract<name1><name2>HashMapTestCase.generateCollisions().get(1));
-        Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.get(Abstract<name1><name2>HashMapTestCase.generateCollisions().get(1))<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("2")>, this.map.get(Abstract<name1><name2>MapTestCase.generateCollisions().get(1))<(wideDelta.(type2))>);
+        this.map.removeKey(Abstract<name1><name2>MapTestCase.generateCollisions().get(1));
+        Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.get(Abstract<name1><name2>MapTestCase.generateCollisions().get(1))<(wideDelta.(type2))>);
     }
 
     @Test
@@ -178,16 +178,16 @@ public abstract class Abstract<name1><name2>HashMapTestCase
         Assert.assertEquals(new <name1><name2>HashMap(), this.map);
         Verify.assertEmpty(this.map);
 
-        this.map.put(Abstract<name1><name2>HashMapTestCase.generateCollisions().get(0), <(literal.(type2))("1")>);
-        this.map.put(Abstract<name1><name2>HashMapTestCase.generateCollisions().get(1), <(literal.(type2))("2")>);
+        this.map.put(Abstract<name1><name2>MapTestCase.generateCollisions().get(0), <(literal.(type2))("1")>);
+        this.map.put(Abstract<name1><name2>MapTestCase.generateCollisions().get(1), <(literal.(type2))("2")>);
 
-        Assert.assertEquals(<(wideLiteral.(type2))("1")>, this.map.get(Abstract<name1><name2>HashMapTestCase.generateCollisions().get(0))<(wideDelta.(type2))>);
-        Assert.assertEquals(<(literal.(type2))("1")>, this.map.removeKeyIfAbsent(Abstract<name1><name2>HashMapTestCase.generateCollisions().get(0), <(literal.(type2))("100")>)<(wideDelta.(type2))>);
-        Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.get(Abstract<name1><name2>HashMapTestCase.generateCollisions().get(0))<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("1")>, this.map.get(Abstract<name1><name2>MapTestCase.generateCollisions().get(0))<(wideDelta.(type2))>);
+        Assert.assertEquals(<(literal.(type2))("1")>, this.map.removeKeyIfAbsent(Abstract<name1><name2>MapTestCase.generateCollisions().get(0), <(literal.(type2))("100")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.get(Abstract<name1><name2>MapTestCase.generateCollisions().get(0))<(wideDelta.(type2))>);
 
-        Assert.assertEquals(<(wideLiteral.(type2))("2")>, this.map.get(Abstract<name1><name2>HashMapTestCase.generateCollisions().get(1))<(wideDelta.(type2))>);
-        Assert.assertEquals(<(literal.(type2))("2")>, this.map.removeKeyIfAbsent(Abstract<name1><name2>HashMapTestCase.generateCollisions().get(1), <(literal.(type2))("100")>)<(wideDelta.(type2))>);
-        Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.get(Abstract<name1><name2>HashMapTestCase.generateCollisions().get(1))<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("2")>, this.map.get(Abstract<name1><name2>MapTestCase.generateCollisions().get(1))<(wideDelta.(type2))>);
+        Assert.assertEquals(<(literal.(type2))("2")>, this.map.removeKeyIfAbsent(Abstract<name1><name2>MapTestCase.generateCollisions().get(1), <(literal.(type2))("100")>)<(wideDelta.(type2))>);
+        Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.map.get(Abstract<name1><name2>MapTestCase.generateCollisions().get(1))<(wideDelta.(type2))>);
     }
 
     @Test
@@ -215,10 +215,10 @@ public abstract class Abstract<name1><name2>HashMapTestCase
     @Test
     public void putDuplicateWithRemovedSlot()
     {
-        <type1> collision1 = Abstract<name1><name2>HashMapTestCase.generateCollisions().getFirst();
-        <type1> collision2 = Abstract<name1><name2>HashMapTestCase.generateCollisions().get(1);
-        <type1> collision3 = Abstract<name1><name2>HashMapTestCase.generateCollisions().get(2);
-        <type1> collision4 = Abstract<name1><name2>HashMapTestCase.generateCollisions().get(3);
+        <type1> collision1 = Abstract<name1><name2>MapTestCase.generateCollisions().getFirst();
+        <type1> collision2 = Abstract<name1><name2>MapTestCase.generateCollisions().get(1);
+        <type1> collision3 = Abstract<name1><name2>MapTestCase.generateCollisions().get(2);
+        <type1> collision4 = Abstract<name1><name2>MapTestCase.generateCollisions().get(3);
 
         Mutable<name1><name2>Map hashMap = this.getEmptyMap();
         hashMap.put(collision1, <(literal.(type2))("1")>);
@@ -309,21 +309,21 @@ public abstract class Abstract<name1><name2>HashMapTestCase
         {
             public void run()
             {
-                Abstract<name1><name2>HashMapTestCase.this.map.getOrThrow(<(literal.(type1))("0")>);
+                Abstract<name1><name2>MapTestCase.this.map.getOrThrow(<(literal.(type1))("0")>);
             }
         });
         Verify.assertThrows(IllegalStateException.class, new Runnable()
         {
             public void run()
             {
-                Abstract<name1><name2>HashMapTestCase.this.map.getOrThrow(<(literal.(type1))("1")>);
+                Abstract<name1><name2>MapTestCase.this.map.getOrThrow(<(literal.(type1))("1")>);
             }
         });
         Verify.assertThrows(IllegalStateException.class, new Runnable()
         {
             public void run()
             {
-                Abstract<name1><name2>HashMapTestCase.this.map.getOrThrow(<(literal.(type1))("33")>);
+                Abstract<name1><name2>MapTestCase.this.map.getOrThrow(<(literal.(type1))("33")>);
             }
         });
 
@@ -1327,7 +1327,7 @@ public abstract class Abstract<name1><name2>HashMapTestCase
         {
             public void run()
             {
-                Abstract<name1><name2>HashMapTestCase.this.getEmptyMap().<type2>Iterator().next();
+                Abstract<name1><name2>MapTestCase.this.getEmptyMap().<type2>Iterator().next();
             }
         });
     }
@@ -1335,8 +1335,8 @@ public abstract class Abstract<name1><name2>HashMapTestCase
     @Test
     public void asSynchronized()
     {
-        Verify.assertInstanceOf(Synchronized<name1><name2>HashMap.class, this.map.asSynchronized());
-        Assert.assertEquals(new Synchronized<name1><name2>HashMap(this.map), this.map.asSynchronized());
+        Verify.assertInstanceOf(Synchronized<name1><name2>Map.class, this.map.asSynchronized());
+        Assert.assertEquals(new Synchronized<name1><name2>Map(this.map), this.map.asSynchronized());
     }
 
     @Test

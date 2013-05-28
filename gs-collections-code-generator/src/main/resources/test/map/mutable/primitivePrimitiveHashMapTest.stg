@@ -32,7 +32,7 @@ import org.junit.Test;
  * JUnit test for {@link <name1><name2>HashMap}.
  * This file was automatically generated from template file primitivePrimitiveHashMapTest.stg.
  */
-public class <name1><name2>HashMapTest extends Abstract<name1><name2>HashMapTestCase
+public class <name1><name2>HashMapTest extends Abstract<name1><name2>MapTestCase
 {
     @Override
     protected <name1><name2>HashMap classUnderTest()

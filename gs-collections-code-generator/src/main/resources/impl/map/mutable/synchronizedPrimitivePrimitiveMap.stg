@@ -9,7 +9,7 @@ skipBooleanKeys() ::= "true"
 
 targetPath() ::= "com/gs/collections/impl/map/mutable/primitive"
 
-fileName(primitive1, primitive2, sameTwoPrimitives) ::= "Synchronized<primitive1.name><primitive2.name>HashMap"
+fileName(primitive1, primitive2, sameTwoPrimitives) ::= "Synchronized<primitive1.name><primitive2.name>Map"
 
 class(primitive1, primitive2, sameTwoPrimitives) ::= <<
 <body(primitive1.type, primitive2.type, primitive1.name, primitive2.name)>
@@ -53,15 +53,13 @@ import net.jcip.annotations.GuardedBy;
  * A synchronized view of <article.(type1)> {@link <name1><name2>Map}. It is imperative that the user manually synchronize on the collection when iterating over it using the
  * {@link <name2>Iterator}.
  * \<p>
- * This file was automatically generated from template file synchronizedPrimitivePrimitiveHashMap.stg.
+ * This file was automatically generated from template file synchronizedPrimitivePrimitiveMap.stg.
  * \</p>
  *
  * @see Collections#synchronizedCollection(Collection)
  * @since 3.1.
- * @deprecated since 3.2. Use {@link Synchronized<name1><name2>Map} instead.
  */
-@Deprecated
-public final class Synchronized<name1><name2>HashMap
+public final class Synchronized<name1><name2>Map
         implements Mutable<name1><name2>Map, Serializable
 {
     private static final long serialVersionUID = 1L;
@@ -69,12 +67,12 @@ public final class Synchronized<name1><name2>HashMap
     @GuardedBy("this.lock")
     private final Mutable<name1><name2>Map map;
 
-    Synchronized<name1><name2>HashMap(Mutable<name1><name2>Map map)
+    Synchronized<name1><name2>Map(Mutable<name1><name2>Map map)
     {
         this(map, null);
     }
 
-    Synchronized<name1><name2>HashMap(Mutable<name1><name2>Map map, Object newLock)
+    Synchronized<name1><name2>Map(Mutable<name1><name2>Map map, Object newLock)
     {
         this.map = map;
         this.lock = newLock == null ? this : newLock;
@@ -241,7 +239,7 @@ public final class Synchronized<name1><name2>HashMap
     }
 
     /**
-     * Must be called in a synchronized block.
+     * This must be manually synchronized by the developer.
      */
     public <name2>Iterator <type2>Iterator()
     {

@@ -31,7 +31,7 @@ import org.junit.Test;
  * JUnit test for {@link <name>BooleanHashMap}.
  * This file was automatically generated from template file primitiveBooleanHashMapTest.stg.
  */
-public class <name>BooleanHashMapTest extends Abstract<name>BooleanHashMapTestCase
+public class <name>BooleanHashMapTest extends Abstract<name>BooleanMapTestCase
 {
     private final <name>BooleanHashMap map = this.classUnderTest();
 

@@ -293,7 +293,7 @@ public final class Unmodifiable<name1><name2>HashMap
 
     public Mutable<name1><name2>Map asSynchronized()
     {
-        return new Synchronized<name1><name2>HashMap(this);
+        return new Synchronized<name1><name2>Map(this);
     }
 
     public Immutable<name1><name2>Map toImmutable()

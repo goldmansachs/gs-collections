@@ -34,7 +34,7 @@ import org.junit.Test;
  * JUnit test for {@link Unmodifiable<name>BooleanHashMap}.
  * This file was automatically generated from template file unmodifiablePrimitiveBooleanHashMapTest.stg.
  */
-public class Unmodifiable<name>BooleanHashMapTest extends Abstract<name>BooleanHashMapTestCase
+public class Unmodifiable<name>BooleanHashMapTest extends Abstract<name>BooleanMapTestCase
 {
     private final Unmodifiable<name>BooleanHashMap map = this.classUnderTest();
 
@@ -133,7 +133,7 @@ public class Unmodifiable<name>BooleanHashMapTest extends Abstract<name>BooleanH
     @Test(expected = UnsupportedOperationException.class)
     public void putDuplicateWithRemovedSlot()
     {
-        <type> collision1 = Abstract<name>BooleanHashMapTestCase.generateCollisions().getFirst();
+        <type> collision1 = Abstract<name>BooleanMapTestCase.generateCollisions().getFirst();
 
         Unmodifiable<name>BooleanHashMap hashMap = this.getEmptyMap();
         hashMap.put(collision1, true);

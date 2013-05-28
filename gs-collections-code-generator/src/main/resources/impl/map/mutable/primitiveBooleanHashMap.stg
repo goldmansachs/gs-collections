@@ -117,7 +117,7 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
 
     public Mutable<name>BooleanMap asSynchronized()
     {
-        return new Synchronized<name>BooleanHashMap(this);
+        return new Synchronized<name>BooleanMap(this);
     }
 
     public Immutable<name>BooleanMap toImmutable()
