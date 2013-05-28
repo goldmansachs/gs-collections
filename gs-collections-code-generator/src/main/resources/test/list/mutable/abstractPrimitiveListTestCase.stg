@@ -20,7 +20,7 @@ package com.gs.collections.impl.list.mutable.primitive;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
-import com.gs.collections.impl.collection.mutable.primitive.Abstract<name>CollectionTestCase;
+import com.gs.collections.impl.collection.mutable.primitive.AbstractMutable<name>CollectionTestCase;
 import com.gs.collections.impl.list.mutable.FastList;
 import org.junit.Assert;
 import org.junit.Test;
@@ -29,7 +29,7 @@ import org.junit.Test;
  * Abstract JUnit test for {@link Mutable<name>List}.
  * This file was automatically generated from template file abstractPrimitiveListTestCase.stg.
  */
-public abstract class Abstract<name>ListTestCase extends Abstract<name>CollectionTestCase
+public abstract class Abstract<name>ListTestCase extends AbstractMutable<name>CollectionTestCase
 {
     @Override
     protected abstract Mutable<name>List classUnderTest();

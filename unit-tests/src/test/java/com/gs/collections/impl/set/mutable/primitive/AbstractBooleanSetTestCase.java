@@ -28,7 +28,7 @@ import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
-import com.gs.collections.impl.collection.mutable.primitive.AbstractBooleanCollectionTestCase;
+import com.gs.collections.impl.collection.mutable.primitive.AbstractMutableBooleanCollectionTestCase;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
@@ -36,7 +36,7 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-public abstract class AbstractBooleanSetTestCase extends AbstractBooleanCollectionTestCase
+public abstract class AbstractBooleanSetTestCase extends AbstractMutableBooleanCollectionTestCase
 {
     private MutableBooleanSet set0;
     private MutableBooleanSet set1;

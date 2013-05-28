@@ -151,7 +151,7 @@ public class Unmodifiable<name>SetTest extends Abstract<name>SetTestCase
 
     @Override
     @Test(expected = NoSuchElementException.class)
-    public void <type>Iterator_throws_non_empty_list()
+    public void <type>Iterator_throws_non_empty_collection()
     {
         Unmodifiable<name>Set set = this.newWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
         <name>Iterator iterator = set.<type>Iterator();

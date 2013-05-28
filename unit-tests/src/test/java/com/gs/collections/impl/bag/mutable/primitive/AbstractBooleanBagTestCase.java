@@ -25,7 +25,7 @@ import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.impl.bag.mutable.HashBag;
-import com.gs.collections.impl.collection.mutable.primitive.AbstractBooleanCollectionTestCase;
+import com.gs.collections.impl.collection.mutable.primitive.AbstractMutableBooleanCollectionTestCase;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -34,7 +34,7 @@ import org.junit.Test;
 /**
  * Abstract JUnit test for {@link MutableBooleanBag}.
  */
-public abstract class AbstractBooleanBagTestCase extends AbstractBooleanCollectionTestCase
+public abstract class AbstractBooleanBagTestCase extends AbstractMutableBooleanCollectionTestCase
 {
     @Override
     protected abstract MutableBooleanBag classUnderTest();

@@ -26,7 +26,7 @@ import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
-import com.gs.collections.impl.collection.mutable.primitive.Abstract<name>CollectionTestCase;
+import com.gs.collections.impl.collection.mutable.primitive.AbstractMutable<name>CollectionTestCase;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
@@ -37,7 +37,7 @@ import org.junit.Test;
  * Abstract JUnit test for {@link Mutable<name>Set}.
  * This file was automatically generated from template file abstractPrimitiveSetTestCase.stg.
  */
-public abstract class Abstract<name>SetTestCase extends Abstract<name>CollectionTestCase
+public abstract class Abstract<name>SetTestCase extends AbstractMutable<name>CollectionTestCase
 {
     protected static <name>ArrayList generateCollisions1()
     {

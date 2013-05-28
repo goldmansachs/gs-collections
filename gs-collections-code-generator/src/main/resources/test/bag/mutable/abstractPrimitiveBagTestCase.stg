@@ -27,7 +27,7 @@ import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
-import com.gs.collections.impl.collection.mutable.primitive.Abstract<name>CollectionTestCase;
+import com.gs.collections.impl.collection.mutable.primitive.AbstractMutable<name>CollectionTestCase;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -37,7 +37,7 @@ import org.junit.Test;
  * JUnit test for {@link <name>HashBag}.
  * This file was automatically generated from template file abstractPrimitiveBagTestCase.stg.
  */
-public abstract class Abstract<name>BagTestCase extends Abstract<name>CollectionTestCase
+public abstract class Abstract<name>BagTestCase extends AbstractMutable<name>CollectionTestCase
 {
     @Override
     protected abstract Mutable<name>Bag classUnderTest();

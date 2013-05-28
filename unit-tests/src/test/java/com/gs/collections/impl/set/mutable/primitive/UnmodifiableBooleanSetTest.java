@@ -126,7 +126,7 @@ public class UnmodifiableBooleanSetTest extends AbstractBooleanSetTestCase
 
     @Override
     @Test(expected = NoSuchElementException.class)
-    public void iterator_throws_non_empty_list()
+    public void iterator_throws_non_empty_collection()
     {
         UnmodifiableBooleanSet collection = this.newWith(true, true, true);
         BooleanIterator iterator = collection.booleanIterator();

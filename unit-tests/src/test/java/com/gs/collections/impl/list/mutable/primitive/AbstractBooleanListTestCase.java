@@ -20,7 +20,7 @@ import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
-import com.gs.collections.impl.collection.mutable.primitive.AbstractBooleanCollectionTestCase;
+import com.gs.collections.impl.collection.mutable.primitive.AbstractMutableBooleanCollectionTestCase;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -29,7 +29,7 @@ import org.junit.Test;
 /**
  * Abstract JUnit test for {@link MutableBooleanList}.
  */
-public abstract class AbstractBooleanListTestCase extends AbstractBooleanCollectionTestCase
+public abstract class AbstractBooleanListTestCase extends AbstractMutableBooleanCollectionTestCase
 {
     @Override
     protected abstract MutableBooleanList classUnderTest();

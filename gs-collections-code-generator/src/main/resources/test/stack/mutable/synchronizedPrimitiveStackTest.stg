@@ -247,7 +247,7 @@ public class Synchronized<name>StackTest
     }
 
     @Test(expected = NoSuchElementException.class)
-    public void iterator_throws_non_empty_list()
+    public void iterator_throws_non_empty_stack()
     {
         Mutable<name>Stack stack1 = new Synchronized<name>Stack(new <name>ArrayStack());
         stack1.push(<(literal.(type))("1")>);

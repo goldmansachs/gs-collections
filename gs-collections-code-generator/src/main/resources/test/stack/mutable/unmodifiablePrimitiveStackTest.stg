@@ -146,6 +146,8 @@ public class Unmodifiable<name>StackTest
     @Test
     public void containsAllArray()
     {
+        Assert.assertTrue(this.stack.contains(<(literal.(type))("1")>));
+        Assert.assertFalse(this.stack.contains(<(literal.(type))("10")>));
         Assert.assertTrue(this.stack.containsAll(<(literal.(type))("1")>));
         Assert.assertTrue(this.stack.containsAll(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
         Assert.assertFalse(this.stack.containsAll(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">));
@@ -197,7 +199,7 @@ public class Unmodifiable<name>StackTest
     }
 
     @Test(expected = NoSuchElementException.class)
-    public void iterator_throws_non_empty_list()
+    public void iterator_throws_non_empty_stack()
     {
         <name>ArrayStack modifiableStack = new <name>ArrayStack();
         Mutable<name>Stack unmodifiableStack = new Unmodifiable<name>Stack(modifiableStack);

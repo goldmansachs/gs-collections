@@ -156,7 +156,7 @@ public class UnmodifiableBooleanBagTest extends AbstractBooleanBagTestCase
 
     @Override
     @Test(expected = NoSuchElementException.class)
-    public void iterator_throws_non_empty_list()
+    public void iterator_throws_non_empty_collection()
     {
         UnmodifiableBooleanBag collection = this.newWith(true, true, true);
         BooleanIterator iterator = collection.booleanIterator();
