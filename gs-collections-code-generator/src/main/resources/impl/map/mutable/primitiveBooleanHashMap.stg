@@ -1517,6 +1517,12 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
             <name>BooleanHashMap.this.forEachKey(procedure);
         }
 
+        @Override
+        public String toString()
+        {
+            return this.makeString("[", ", ", "]");
+        }
+
         public String makeString()
         {
             return this.makeString(", ");
@@ -1784,6 +1790,10 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
 
         public double average()
         {
+            if (this.isEmpty())
+            {
+                throw new ArithmeticException();
+            }
             return <castSum.(type)>this.sum() / (double) this.size();
         }
 
@@ -1791,7 +1801,7 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
         {
             if (this.isEmpty())
             {
-                throw new NoSuchElementException();
+                throw new ArithmeticException();
             }
             <type>[] sortedArray = this.toSortedArray();
             int middleIndex = sortedArray.length >\> 1;

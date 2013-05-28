@@ -1256,6 +1256,12 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             <name1><name2>HashMap.this.forEachKey(procedure);
         }
 
+        @Override
+        public String toString()
+        {
+            return this.makeString("[", ", ", "]");
+        }
+
         public String makeString()
         {
             return this.makeString(", ");
@@ -1473,6 +1479,10 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
 
         public double average()
         {
+            if (this.isEmpty())
+            {
+                throw new ArithmeticException();
+            }
             return <castSum.(type1)>this.sum() / (double) this.size();
         }
 
@@ -1480,7 +1490,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         {
             if (this.isEmpty())
             {
-                throw new NoSuchElementException();
+                throw new ArithmeticException();
             }
             <type1>[] sortedArray = this.toSortedArray();
             int middleIndex = sortedArray.length >\> 1;
