@@ -19,10 +19,13 @@ package com.gs.collections.impl.math;
 import java.io.Serializable;
 
 /**
- * A sum is a mutable or immutable object that may have either other objects or values added to it
+ * A sum is a mutable or immutable object that may have either other objects or values added to it.
+ *
+ * @deprecated
  */
+@Deprecated
 public interface Sum
-        extends Serializable
+    extends Serializable
 {
     Sum add(Object number);
 

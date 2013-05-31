@@ -18,8 +18,14 @@ package com.gs.collections.impl.math;
 
 import com.gs.collections.impl.parallel.AbstractProcedureCombiner;
 
+/**
+ * Combines instances of SumProcedure.
+ *
+ * @deprecated
+ */
+@Deprecated
 public final class SumCombiner<T>
-        extends AbstractProcedureCombiner<SumProcedure<T>>
+    extends AbstractProcedureCombiner<SumProcedure<T>>
 {
     private static final long serialVersionUID = 1L;
     private final Sum sum;

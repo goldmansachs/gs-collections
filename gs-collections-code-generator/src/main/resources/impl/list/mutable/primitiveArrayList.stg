@@ -27,6 +27,8 @@ import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
+import com.gs.collections.api.block.function.primitive.Object<name>IntToObjectFunction;
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
@@ -496,6 +498,26 @@ public final class <name>ArrayList
         }
     }
 
+    public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
+    {
+        T result = injectedValue;
+        for (int i = 0; i \< this.size; i++)
+        {
+            result = function.valueOf(result, this.items[i]);
+        }
+        return result;
+    }
+
+    public \<T> T injectIntoWithIndex(T injectedValue, Object<name>IntToObjectFunction\<? super T, ? extends T> function)
+    {
+        T result = injectedValue;
+        for (int i = 0; i \< this.size; i++)
+        {
+            result = function.valueOf(result, this.items[i], i);
+        }
+        return result;
+    }
+
     public int count(<name>Predicate predicate)
     {
         int count = 0;
@@ -658,6 +680,20 @@ public final class <name>ArrayList
             result += this.items[i];
         }
         return result;
+    }
+
+    public <wideType.(type)> dotProduct(<name>List list)
+    {
+        if (this.size != list.size())
+        {
+            throw new IllegalArgumentException("Lists used in dotProduct must be the same size");
+        }
+        <wideType.(type)> sum = <wideZero.(type)>;
+        for (int i = 0; i \< this.size; i++)
+        {
+            sum += <castWideType.(type)>this.items[i] * list.get(i);
+        }
+        return sum;
     }
 
     public double average()

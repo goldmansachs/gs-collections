@@ -132,6 +132,17 @@ wideType ::= [
     default: "no matching wide type"
 ]
 
+castWideType ::= [
+    "byte": "(long) ",
+    "short": "(long) ",
+    "char": "(long) ",
+    "int": "(long) ",
+    "long": "",
+    "float": "(double) ",
+    "double": "",
+    default: "no matching wide type"
+]
+
 castDouble ::= [
     "byte": "(double) ",
     "short": "(double) ",

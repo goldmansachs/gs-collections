@@ -26,9 +26,12 @@ import com.gs.collections.impl.parallel.ProcedureFactory;
  * either via a forEach() or injectInto() call.  SumProcedure returns optimized iterator blocks
  * for specialized iterator subclasses of Function which result in less garbage created for
  * summing iterator attributes of collections.
+ *
+ * @deprecated
  */
+@Deprecated
 public class SumProcedure<T>
-        implements Procedure<T>, Function2<Sum, T, Sum>, ProcedureFactory<SumProcedure<T>>
+    implements Procedure<T>, Function2<Sum, T, Sum>, ProcedureFactory<SumProcedure<T>>
 {
     private static final long serialVersionUID = 1L;
     private static final SumProcedure<?> NUMBER = new SumProcedure<Object>();

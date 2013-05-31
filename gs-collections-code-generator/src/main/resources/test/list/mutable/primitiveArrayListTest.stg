@@ -19,6 +19,16 @@ package com.gs.collections.impl.list.mutable.primitive;
 
 import java.lang.reflect.Field;
 
+import com.gs.collections.api.block.function.primitive.Object<name>IntToObjectFunction;
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
+import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
+import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
+import com.gs.collections.impl.math.Mutable<wrapperName>;
+import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -99,6 +109,51 @@ public class <name>ArrayListTest extends Abstract<name>ListTestCase
         Verify.assertSize(3, this.list);
     }
 
+    @Test
+    public void dotProduct()
+    {
+        <name>ArrayList list1 = <name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
+        <name>ArrayList list2 = <name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
+        Assert.assertEquals(<(wideLiteral.(type))("14")>, list1.dotProduct(list2)<(wideDelta.(type))>);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void dotProduct_throwsOnListsOfDifferentSizes()
+    {
+        <name>ArrayList list1 = <name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
+        <name>ArrayList list2 = <name>ArrayList.newListWith(<["1", "2"]:(literal.(type))(); separator=", ">);
+        list1.dotProduct(list2);
+    }
+
+    @Test
+    public void injectIntoWithIndex()
+    {
+        <name>ArrayList list1 = <name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
+        final <name>ArrayList list2 = <name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
+        Mutable<wrapperName> result = list1.injectIntoWithIndex(new Mutable<wrapperName>(<(literal.(type))("0")>), new Object<name>IntToObjectFunction\<Mutable<wrapperName>, Mutable<wrapperName>\>()
+        {
+            public Mutable<wrapperName> valueOf(Mutable<wrapperName> object, <type> value, int index)
+            {
+                return object.add(<(castIntToNarrowType.(type))("value * list2.get(index)")>);
+            }
+        });
+        Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("14")>), result);
+    }
+
+    @Test
+    public void injectInto()
+    {
+        <name>ArrayList arrayList = <name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
+        Mutable<wrapperName> result = arrayList.injectInto(new Mutable<wrapperName>(<(literal.(type))("0")>), new Object<name>ToObjectFunction\<Mutable<wrapperName>, Mutable<wrapperName>\>()
+        {
+            public Mutable<wrapperName> valueOf(Mutable<wrapperName> object, <type> value)
+            {
+                return object.add(<(castIntToNarrowType.(type))("value")>);
+            }
+        });
+        Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("6")>), result);
+    }
+    
     @Override
     @Test
     public void with()

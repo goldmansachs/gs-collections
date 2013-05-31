@@ -18,9 +18,12 @@ package com.gs.collections.impl.math;
 
 /**
  * A mutable sum which uses a long as the storage mechanism
+ *
+ * @deprecated use MutableLong instead
  */
+@Deprecated
 public final class LongSum
-        implements Sum
+    implements Sum
 {
     private static final long serialVersionUID = 1L;
 
@@ -44,7 +47,7 @@ public final class LongSum
 
     public Sum add(int value)
     {
-        this.add(value);
+        this.add((long) value);
         return this;
     }
 
