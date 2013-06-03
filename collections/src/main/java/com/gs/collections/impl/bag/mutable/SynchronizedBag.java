@@ -17,8 +17,8 @@
 package com.gs.collections.impl.bag.mutable;
 
 import java.util.Collection;
+import java.util.Collections;
 
-import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
@@ -36,8 +36,8 @@ import com.gs.collections.impl.factory.Bags;
 import net.jcip.annotations.GuardedBy;
 
 /**
- * A synchronized view of a {@link Bag}. It is imperative that the user manually synchronize on the collection when iterating over it using the
- * standard JDK iterator or JDK 5 for loop.
+ * A synchronized view of a {@link MutableBag}. It is imperative that the user manually synchronize on the collection when iterating over it using the
+ * standard JDK iterator or JDK 5 for loop, as per {@link Collections#synchronizedCollection(Collection)}.
  *
  * @see MutableBag#asSynchronized()
  * @since 1.0

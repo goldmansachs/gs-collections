@@ -60,9 +60,9 @@ import com.gs.collections.impl.map.mutable.UnifiedMap;
 
 /**
  * A synchronized view of a {@link MutableStack}. It is imperative that the user manually synchronize on the collection when iterating over it using the
- * standard JDK iterator or JDK 5 for loop.
+ * standard JDK iterator or JDK 5 for loop, as per {@link Collections#synchronizedCollection(Collection)}.
  *
- * @see Collections#synchronizedCollection(Collection)
+ * @see MutableStack#asSynchronized()
  */
 public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
 {

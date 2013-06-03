@@ -32,20 +32,20 @@ import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.stack.primitive.Immutable<name>Stack;
-import com.gs.collections.api.stack.primitive.<name>Stack;
 import com.gs.collections.api.stack.primitive.Mutable<name>Stack;
 import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
 /**
- * A synchronized view of <article.(type)> {@link <name>Stack}. It is imperative that the user manually synchronize on the collection when iterating over it using the
- * {@link <name>Iterator}.
+ * A synchronized view of a {@link Mutable<name>Stack}. It is imperative that the user manually synchronize on the collection when iterating over it using the
+ * {@link <name>Iterator}, as per {@link Collections#synchronizedCollection(Collection)}.
  * \<p>
  * This file was automatically generated from template file synchronizedPrimitiveStack.stg.
  * \</p>
  *
- * @see Collections#synchronizedCollection(Collection)
+ * @see Mutable<name>Stack#asSynchronized()
+ * @see MutableStack#asSynchronized()
  * @since 3.1.
  */
 @ThreadSafe

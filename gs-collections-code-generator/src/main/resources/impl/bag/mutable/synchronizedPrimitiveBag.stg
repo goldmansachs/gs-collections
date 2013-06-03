@@ -23,7 +23,6 @@ import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.bag.primitive.Immutable<name>Bag;
-import com.gs.collections.api.bag.primitive.<name>Bag;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
@@ -35,13 +34,14 @@ import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
 /**
- * A synchronized view of <article.(type)> {@link <name>Bag}. It is imperative that the user manually synchronize on the collection when iterating over it using the
- * {@link <name>Iterator}.
+ * A synchronized view of a {@link Mutable<name>Bag}. It is imperative that the user manually synchronize on the collection when iterating over it using the
+ * {@link <name>Iterator}, as per {@link Collections#synchronizedCollection(Collection)}.
  * \<p>
  * This file was automatically generated from template file synchronizedPrimitiveBag.stg.
  * \</p>
  *
- * @see Collections#synchronizedCollection(Collection)
+ * @see Mutable<name>Bag#asSynchronized()
+ * @see MutableBag#asSynchronized()
  * @since 3.1.
  */
 @ThreadSafe

@@ -43,20 +43,21 @@ import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.collection.primitive.Mutable<name2>Collection;
 import com.gs.collections.api.iterator.<name2>Iterator;
 import com.gs.collections.api.list.primitive.Mutable<name2>List;
+import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.primitive.Immutable<name1><name2>Map;
-import com.gs.collections.api.map.primitive.<name1><name2>Map;
 import com.gs.collections.api.map.primitive.Mutable<name1><name2>Map;
 import com.gs.collections.api.set.primitive.Mutable<name2>Set;
 import net.jcip.annotations.GuardedBy;
 
 /**
- * A synchronized view of <article.(type1)> {@link <name1><name2>Map}. It is imperative that the user manually synchronize on the collection when iterating over it using the
- * {@link <name2>Iterator}.
+ * A synchronized view of a {@link Mutable<name1><name2>Map}. It is imperative that the user manually synchronize on the collection when iterating over it using the
+ * {@link <name2>Iterator}, as per {@link Collections#synchronizedCollection(Collection)}.
  * \<p>
  * This file was automatically generated from template file synchronizedPrimitivePrimitiveHashMap.stg.
  * \</p>
  *
- * @see Collections#synchronizedCollection(Collection)
+ * @see Mutable<name1><name2>Map#asSynchronized()
+ * @see MutableMap#asSynchronized()
  * @since 3.1.
  * @deprecated since 3.2. Use {@link Synchronized<name1><name2>Map} instead.
  */

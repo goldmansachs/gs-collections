@@ -17,6 +17,7 @@
 package com.gs.collections.impl.set.mutable;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Set;
 
 import com.gs.collections.api.LazyIterable;
@@ -37,8 +38,8 @@ import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
 /**
- * A synchronized view of a {@link Set}. It is imperative that the user manually synchronize on the collection when iterating over it using the
- * standard JDK iterator or JDK 5 for loop.
+ * A synchronized view of a {@link MutableSet}. It is imperative that the user manually synchronize on the collection when iterating over it using the
+ * standard JDK iterator or JDK 5 for loop, as per {@link Collections#synchronizedCollection(Collection)}.
  *
  * @see MutableSet#asSynchronized()
  */

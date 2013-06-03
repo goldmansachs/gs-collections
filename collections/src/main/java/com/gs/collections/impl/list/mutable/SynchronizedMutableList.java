@@ -17,6 +17,7 @@
 package com.gs.collections.impl.list.mutable;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
@@ -38,8 +39,8 @@ import com.gs.collections.impl.factory.Lists;
 import net.jcip.annotations.GuardedBy;
 
 /**
- * A synchronized view of a {@link List}. It is imperative that the user manually synchronize on the collection when iterating over it using the
- * standard JDK iterator or JDK 5 for loop.
+ * A synchronized view of a {@link MutableList}. It is imperative that the user manually synchronize on the collection when iterating over it using the
+ * standard JDK iterator or JDK 5 for loop, as per {@link Collections#synchronizedCollection(Collection)}.
  *
  * @see MutableList#asSynchronized()
  */

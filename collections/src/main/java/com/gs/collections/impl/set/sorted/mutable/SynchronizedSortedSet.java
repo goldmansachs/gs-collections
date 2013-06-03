@@ -17,6 +17,7 @@
 package com.gs.collections.impl.set.sorted.mutable;
 
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Set;
 import java.util.SortedSet;
@@ -40,8 +41,8 @@ import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
 /**
- * A synchronized view of a {@link SortedSet}. It is imperative that the user manually synchronize on the collection when iterating over it using the
- * standard JDK iterator or JDK 5 for loop.
+ * A synchronized view of a {@link MutableSortedSet}. It is imperative that the user manually synchronize on the collection when iterating over it using the
+ * standard JDK iterator or JDK 5 for loop, as per {@link Collections#synchronizedCollection(Collection)}.
  *
  * @see MutableSortedSet#asSynchronized()
  */

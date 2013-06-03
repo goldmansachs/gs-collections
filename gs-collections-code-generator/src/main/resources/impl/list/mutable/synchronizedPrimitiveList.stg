@@ -26,7 +26,6 @@ import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.Immutable<name>List;
-import com.gs.collections.api.list.primitive.<name>List;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.impl.collection.mutable.primitive.AbstractSynchronized<name>Collection;
 import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
@@ -34,13 +33,14 @@ import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
 /**
- * A synchronized view of <article.(type)> {@link <name>List}. It is imperative that the user manually synchronize on the collection when iterating over it using the
- * {@link <name>Iterator}.
+ * A synchronized view of a {@link Mutable<name>List}. It is imperative that the user manually synchronize on the collection when iterating over it using the
+ * {@link <name>Iterator}, as per {@link Collections#synchronizedCollection(Collection)}.
  * \<p>
  * This file was automatically generated from template file synchronizedPrimitiveList.stg.
  * \</p>
  *
- * @see Collections#synchronizedCollection(Collection)
+ * @see Mutable<name>List#asSynchronized()
+ * @see MutableList#asSynchronized()
  * @since 3.1.
  */
 @ThreadSafe
