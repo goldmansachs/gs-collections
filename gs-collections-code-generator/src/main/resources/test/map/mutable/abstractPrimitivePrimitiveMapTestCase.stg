@@ -1342,8 +1342,8 @@ public abstract class Abstract<name1><name2>MapTestCase
     @Test
     public void asUnmodifiable()
     {
-        Verify.assertInstanceOf(Unmodifiable<name1><name2>HashMap.class, this.map.asUnmodifiable());
-        Assert.assertEquals(new Unmodifiable<name1><name2>HashMap(this.map), this.map.asUnmodifiable());
+        Verify.assertInstanceOf(Unmodifiable<name1><name2>Map.class, this.map.asUnmodifiable());
+        Assert.assertEquals(new Unmodifiable<name1><name2>Map(this.map), this.map.asUnmodifiable());
     }
 
     @Test

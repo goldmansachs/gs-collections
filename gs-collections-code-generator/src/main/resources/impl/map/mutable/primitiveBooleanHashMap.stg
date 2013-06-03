@@ -112,7 +112,7 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
 
     public Mutable<name>BooleanMap asUnmodifiable()
     {
-        return new Unmodifiable<name>BooleanHashMap(this);
+        return new Unmodifiable<name>BooleanMap(this);
     }
 
     public Mutable<name>BooleanMap asSynchronized()

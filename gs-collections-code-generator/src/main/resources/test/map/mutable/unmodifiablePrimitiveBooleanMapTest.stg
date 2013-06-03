@@ -9,7 +9,7 @@ isTest() ::= "true"
 
 targetPath() ::= "com/gs/collections/impl/map/mutable/primitive"
 
-fileName(primitive) ::= "Unmodifiable<primitive.name>BooleanHashMapTest"
+fileName(primitive) ::= "Unmodifiable<primitive.name>BooleanMapTest"
 
 class(primitive) ::= <<
 <body(primitive.type, primitive.name)>
@@ -31,47 +31,47 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * JUnit test for {@link Unmodifiable<name>BooleanHashMap}.
- * This file was automatically generated from template file unmodifiablePrimitiveBooleanHashMapTest.stg.
+ * JUnit test for {@link Unmodifiable<name>BooleanMap}.
+ * This file was automatically generated from template file unmodifiablePrimitiveBooleanMapTest.stg.
  */
-public class Unmodifiable<name>BooleanHashMapTest extends Abstract<name>BooleanMapTestCase
+public class Unmodifiable<name>BooleanMapTest extends Abstract<name>BooleanMapTestCase
 {
-    private final Unmodifiable<name>BooleanHashMap map = this.classUnderTest();
+    private final Unmodifiable<name>BooleanMap map = this.classUnderTest();
 
     @Override
-    protected Unmodifiable<name>BooleanHashMap classUnderTest()
+    protected Unmodifiable<name>BooleanMap classUnderTest()
     {
-        return new Unmodifiable<name>BooleanHashMap(<name>BooleanHashMap.newWithKeysValues(<(literal.(type))("0")>, true, <(literal.(type))("31")>, false, <(literal.(type))("32")>, true));
+        return new Unmodifiable<name>BooleanMap(<name>BooleanHashMap.newWithKeysValues(<(literal.(type))("0")>, true, <(literal.(type))("31")>, false, <(literal.(type))("32")>, true));
     }
 
     @Override
-    protected Unmodifiable<name>BooleanHashMap newWithKeysValues(<type> key1, boolean value1)
+    protected Unmodifiable<name>BooleanMap newWithKeysValues(<type> key1, boolean value1)
     {
-        return new Unmodifiable<name>BooleanHashMap(new <name>BooleanHashMap(1).withKeyValue(key1, value1));
+        return new Unmodifiable<name>BooleanMap(new <name>BooleanHashMap(1).withKeyValue(key1, value1));
     }
 
     @Override
-	protected Unmodifiable<name>BooleanHashMap newWithKeysValues(<type> key1, boolean value1, <type> key2, boolean value2)
+	protected Unmodifiable<name>BooleanMap newWithKeysValues(<type> key1, boolean value1, <type> key2, boolean value2)
     {
-        return new Unmodifiable<name>BooleanHashMap(new <name>BooleanHashMap(2).withKeysValues(key1, value1, key2, value2));
+        return new Unmodifiable<name>BooleanMap(new <name>BooleanHashMap(2).withKeysValues(key1, value1, key2, value2));
     }
 
     @Override
-	protected Unmodifiable<name>BooleanHashMap newWithKeysValues(<type> key1, boolean value1, <type> key2, boolean value2, <type> key3, boolean value3)
+	protected Unmodifiable<name>BooleanMap newWithKeysValues(<type> key1, boolean value1, <type> key2, boolean value2, <type> key3, boolean value3)
     {
-        return new Unmodifiable<name>BooleanHashMap(new <name>BooleanHashMap(3).withKeysValues(key1, value1, key2, value2, key3, value3));
+        return new Unmodifiable<name>BooleanMap(new <name>BooleanHashMap(3).withKeysValues(key1, value1, key2, value2, key3, value3));
     }
 
     @Override
-	protected Unmodifiable<name>BooleanHashMap newWithKeysValues(<type> key1, boolean value1, <type> key2, boolean value2, <type> key3, boolean value3, <type> key4, boolean value4)
+	protected Unmodifiable<name>BooleanMap newWithKeysValues(<type> key1, boolean value1, <type> key2, boolean value2, <type> key3, boolean value3, <type> key4, boolean value4)
     {
-        return new Unmodifiable<name>BooleanHashMap(new <name>BooleanHashMap(4).withKeysValues(key1, value1, key2, value2, key3, value3, key4, value4));
+        return new Unmodifiable<name>BooleanMap(new <name>BooleanHashMap(4).withKeysValues(key1, value1, key2, value2, key3, value3, key4, value4));
     }
          
     @Override
-	protected Unmodifiable<name>BooleanHashMap getEmptyMap()
+	protected Unmodifiable<name>BooleanMap getEmptyMap()
     {
-        return new Unmodifiable<name>BooleanHashMap(new <name>BooleanHashMap());
+        return new Unmodifiable<name>BooleanMap(new <name>BooleanHashMap());
     }
 
     @Override
@@ -135,7 +135,7 @@ public class Unmodifiable<name>BooleanHashMapTest extends Abstract<name>BooleanM
     {
         <type> collision1 = Abstract<name>BooleanMapTestCase.generateCollisions().getFirst();
 
-        Unmodifiable<name>BooleanHashMap hashMap = this.getEmptyMap();
+        Unmodifiable<name>BooleanMap hashMap = this.getEmptyMap();
         hashMap.put(collision1, true);
     }
 
@@ -175,7 +175,7 @@ public class Unmodifiable<name>BooleanHashMapTest extends Abstract<name>BooleanM
         {
             public void run()
             {
-                Unmodifiable<name>BooleanHashMapTest.this.map.getOrThrow(<(literal.(type))("33")>);
+                Unmodifiable<name>BooleanMapTest.this.map.getOrThrow(<(literal.(type))("33")>);
             }
         });
     }
@@ -359,8 +359,7 @@ public class Unmodifiable<name>BooleanHashMapTest extends Abstract<name>BooleanM
     @Test
     public void asUnmodifiable()
     {
-        Verify.assertInstanceOf(Unmodifiable<name>BooleanHashMap.class, this.map.asUnmodifiable());
-        Assert.assertEquals(new Unmodifiable<name>BooleanHashMap(this.map), this.map.asUnmodifiable());
+        super.asUnmodifiable();
         Assert.assertSame(this.map, this.map.asUnmodifiable());
     }
 

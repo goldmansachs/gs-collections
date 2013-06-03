@@ -154,7 +154,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
 
     public Mutable<name1><name2>Map asUnmodifiable()
     {
-        return new Unmodifiable<name1><name2>HashMap(this);
+        return new Unmodifiable<name1><name2>Map(this);
     }
 
     public Mutable<name1><name2>Map asSynchronized()

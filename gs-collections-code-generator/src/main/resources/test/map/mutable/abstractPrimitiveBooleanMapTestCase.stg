@@ -1271,8 +1271,8 @@ public abstract class Abstract<name>BooleanMapTestCase
     @Test
     public void asUnmodifiable()
     {
-        Verify.assertInstanceOf(Unmodifiable<name>BooleanHashMap.class, this.map.asUnmodifiable());
-        Assert.assertEquals(new Unmodifiable<name>BooleanHashMap(this.map), this.map.asUnmodifiable());
+        Verify.assertInstanceOf(Unmodifiable<name>BooleanMap.class, this.map.asUnmodifiable());
+        Assert.assertEquals(new Unmodifiable<name>BooleanMap(this.map), this.map.asUnmodifiable());
     }
 
     @Test
