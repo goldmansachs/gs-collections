@@ -32,12 +32,6 @@ public class SynchronizedBooleanBagTest extends AbstractBooleanBagTestCase
     }
 
     @Override
-    protected MutableBooleanBag getEmptyCollection()
-    {
-        return new SynchronizedBooleanBag(new BooleanHashBag());
-    }
-
-    @Override
     protected SynchronizedBooleanBag newWith(boolean... elements)
     {
         return new SynchronizedBooleanBag(BooleanHashBag.newBagWith(elements));

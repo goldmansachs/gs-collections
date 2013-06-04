@@ -31,12 +31,6 @@ public class BooleanHashSetTest extends AbstractBooleanSetTestCase
     }
 
     @Override
-    protected BooleanHashSet getEmptyCollection()
-    {
-        return new BooleanHashSet();
-    }
-
-    @Override
     protected BooleanHashSet newWith(boolean... elements)
     {
         return BooleanHashSet.newSetWith(elements);
@@ -56,7 +50,7 @@ public class BooleanHashSetTest extends AbstractBooleanSetTestCase
     public void newCollection()
     {
         super.newCollection();
-        BooleanHashSet set0 = this.getEmptyCollection();
+        BooleanHashSet set0 = this.newWith();
         BooleanHashSet set1 = this.newWith(false);
         BooleanHashSet set2 = this.newWith(true);
         BooleanHashSet set3 = this.newWith(true, false);

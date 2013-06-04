@@ -71,21 +71,6 @@ public abstract class Abstract<name>SetTestCase extends AbstractMutable<name>Col
     protected abstract Mutable<name>Set classUnderTest();
 
     @Override
-    protected abstract Mutable<name>Set getEmptyCollection();
-
-    @Override
-    protected Mutable<name>Set getEmptyMutableCollection()
-    {
-        return new <name>HashSet();
-    }
-
-    @Override
-    protected MutableSet\<<wrapperName>\> getEmptyObjectCollection()
-    {
-        return UnifiedSet.newSet();
-    }
-
-    @Override
     protected abstract Mutable<name>Set newWith(<type>... elements);
 
     @Override
@@ -143,7 +128,7 @@ public abstract class Abstract<name>SetTestCase extends AbstractMutable<name>Col
     public void add()
     {
         super.add();
-        Mutable<name>Set set = this.getEmptyCollection();
+        Mutable<name>Set set = this.newWith();
         Assert.assertTrue(set.add(<(literal.(type))("14")>));
         Assert.assertFalse(set.add(<(literal.(type))("14")>));
         Assert.assertTrue(set.add(<(literal.(type))("2")>));
@@ -190,7 +175,7 @@ public abstract class Abstract<name>SetTestCase extends AbstractMutable<name>Col
     {
         super.remove();
         Mutable<name>Set set = this.newWith(<["0", "1", "31"]:(literal.(type))(); separator=", ">, Abstract<name>SetTestCase.generateCollisions1().getFirst(), Abstract<name>SetTestCase.generateCollisions1().get(1));
-        Assert.assertFalse(this.getEmptyCollection().remove(<(literal.(type))("15")>));
+        Assert.assertFalse(this.newWith().remove(<(literal.(type))("15")>));
         Assert.assertFalse(set.remove(<(literal.(type))("15")>));
         Assert.assertTrue(set.remove(<(literal.(type))("0")>));
         Assert.assertEquals(<name>HashSet.newSetWith(<["1", "31"]:(literal.(type))(); separator=", ">, Abstract<name>SetTestCase.generateCollisions1().getFirst(), Abstract<name>SetTestCase.generateCollisions1().get(1)), set);

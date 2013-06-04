@@ -35,12 +35,6 @@ public class <name>HashSetTest extends Abstract<name>SetTestCase
     }
 
     @Override
-    protected <name>HashSet getEmptyCollection()
-    {
-        return new <name>HashSet();
-    }
-
-    @Override
     protected <name>HashSet newWith(<type>... elements)
     {
         return <name>HashSet.newSetWith(elements);

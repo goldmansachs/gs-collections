@@ -37,12 +37,6 @@ public class BooleanArrayListTest extends AbstractBooleanListTestCase
     }
 
     @Override
-    protected BooleanArrayList getEmptyCollection()
-    {
-        return new BooleanArrayList();
-    }
-
-    @Override
     protected BooleanArrayList newWith(boolean... elements)
     {
         return BooleanArrayList.newListWith(elements);

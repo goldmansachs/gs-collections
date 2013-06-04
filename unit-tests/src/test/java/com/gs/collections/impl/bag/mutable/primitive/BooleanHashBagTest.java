@@ -37,12 +37,6 @@ public class BooleanHashBagTest extends AbstractBooleanBagTestCase
     }
 
     @Override
-    protected BooleanHashBag getEmptyCollection()
-    {
-        return new BooleanHashBag();
-    }
-
-    @Override
     protected BooleanHashBag newWith(boolean... elements)
     {
         return BooleanHashBag.newBagWith(elements);

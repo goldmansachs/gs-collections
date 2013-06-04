@@ -34,12 +34,6 @@ public class Synchronized<name>SetTest extends Abstract<name>SetTestCase
     }
 
     @Override
-    protected Synchronized<name>Set getEmptyCollection()
-    {
-        return new Synchronized<name>Set(new <name>HashSet());
-    }
-
-    @Override
     protected Synchronized<name>Set newWith(<type>... elements)
     {
         return new Synchronized<name>Set(<name>HashSet.newSetWith(elements));

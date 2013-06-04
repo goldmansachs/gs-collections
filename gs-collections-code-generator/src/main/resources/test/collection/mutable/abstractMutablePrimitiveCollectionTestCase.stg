@@ -38,12 +38,6 @@ public abstract class AbstractMutable<name>CollectionTestCase extends Abstract<n
     protected abstract Mutable<name>Collection classUnderTest();
 
     @Override
-    protected abstract Mutable<name>Collection getEmptyCollection();
-
-    @Override
-    protected abstract Mutable<name>Collection getEmptyMutableCollection();
-
-    @Override
     protected abstract Mutable<name>Collection newWith(<type>... elements);
 
     @Override
@@ -52,7 +46,7 @@ public abstract class AbstractMutable<name>CollectionTestCase extends Abstract<n
     @Test
     public void clear()
     {
-        Mutable<name>Collection emptyCollection = this.getEmptyCollection();
+        Mutable<name>Collection emptyCollection = this.newWith();
         emptyCollection.clear();
         Verify.assertSize(0, emptyCollection);
 
@@ -77,7 +71,7 @@ public abstract class AbstractMutable<name>CollectionTestCase extends Abstract<n
         Mutable<name>Collection collection2 = this.newWith(<["0", "1", "1", "2", "2", "2"]:(literal.(type))(); separator=", ">);
         collection2.clear();
         Verify.assertSize(0, collection2);
-        Assert.assertEquals(this.getEmptyMutableCollection(), collection2);
+        Assert.assertEquals(this.newMutableCollectionWith(), collection2);
     }
 
     @Override
@@ -105,7 +99,7 @@ public abstract class AbstractMutable<name>CollectionTestCase extends Abstract<n
     @Test
     public void add()
     {
-        Mutable<name>Collection emptyCollection = this.getEmptyCollection();
+        Mutable<name>Collection emptyCollection = this.newWith();
         Assert.assertTrue(emptyCollection.add(<(literal.(type))("1")>));
         Assert.assertEquals(this.newMutableCollectionWith(<(literal.(type))("1")>), emptyCollection);
         Mutable<name>Collection collection = this.classUnderTest();
@@ -126,7 +120,7 @@ public abstract class AbstractMutable<name>CollectionTestCase extends Abstract<n
     public void addAllIterable()
     {
         Mutable<name>Collection collection = this.classUnderTest();
-        Assert.assertFalse(collection.addAll(this.getEmptyMutableCollection()));
+        Assert.assertFalse(collection.addAll(this.newMutableCollectionWith()));
         Assert.assertTrue(collection.addAll(this.newMutableCollectionWith(<["4", "5", "6"]:(literal.(type))(); separator=", ">)));
         Assert.assertEquals(this.newMutableCollectionWith(<["1", "2", "3", "4", "5", "6"]:(literal.(type))(); separator=", ">), collection);
     }
@@ -151,14 +145,14 @@ public abstract class AbstractMutable<name>CollectionTestCase extends Abstract<n
         Assert.assertTrue(collection.removeAll(<["1", "5"]:(literal.(type))(); separator=", ">));
         Assert.assertEquals(this.newMutableCollectionWith(<["2", "3"]:(literal.(type))(); separator=", ">), collection);
         Assert.assertTrue(collection.removeAll(<["3", "2"]:(literal.(type))(); separator=", ">));
-        Assert.assertEquals(this.getEmptyMutableCollection(), collection);
+        Assert.assertEquals(this.newMutableCollectionWith(), collection);
     }
 
     @Test
     public void removeAllIterable()
     {
         Mutable<name>Collection collection = this.classUnderTest();
-        Assert.assertFalse(collection.removeAll(this.getEmptyMutableCollection()));
+        Assert.assertFalse(collection.removeAll(this.newMutableCollectionWith()));
         Assert.assertFalse(collection.removeAll(this.newMutableCollectionWith(<(literal.(type))("-1")>)));
         Assert.assertEquals(this.newMutableCollectionWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), collection);
         Assert.assertTrue(collection.removeAll(this.newMutableCollectionWith(<["1", "5"]:(literal.(type))(); separator=", ">)));
@@ -171,12 +165,12 @@ public abstract class AbstractMutable<name>CollectionTestCase extends Abstract<n
     @Test
     public void with()
     {
-        Mutable<name>Collection emptyCollection = this.getEmptyCollection();
+        Mutable<name>Collection emptyCollection = this.newWith();
         Mutable<name>Collection collection = emptyCollection.with(<["1"]:(literal.(type))(); separator=", ">);
-        Mutable<name>Collection collection0 = this.getEmptyCollection().with(<(literal.(type))("1")>).with(<(literal.(type))("2")>);
-        Mutable<name>Collection collection1 = this.getEmptyCollection().with(<(literal.(type))("1")>).with(<(literal.(type))("2")>).with(<(literal.(type))("3")>);
-        Mutable<name>Collection collection2 = this.getEmptyCollection().with(<(literal.(type))("1")>).with(<(literal.(type))("2")>).with(<(literal.(type))("3")>).with(<(literal.(type))("4")>);
-        Mutable<name>Collection collection3 = this.getEmptyCollection().with(<(literal.(type))("1")>).with(<(literal.(type))("2")>).with(<(literal.(type))("3")>).with(<(literal.(type))("4")>).with(<(literal.(type))("5")>);
+        Mutable<name>Collection collection0 = this.newWith().with(<(literal.(type))("1")>).with(<(literal.(type))("2")>);
+        Mutable<name>Collection collection1 = this.newWith().with(<(literal.(type))("1")>).with(<(literal.(type))("2")>).with(<(literal.(type))("3")>);
+        Mutable<name>Collection collection2 = this.newWith().with(<(literal.(type))("1")>).with(<(literal.(type))("2")>).with(<(literal.(type))("3")>).with(<(literal.(type))("4")>);
+        Mutable<name>Collection collection3 = this.newWith().with(<(literal.(type))("1")>).with(<(literal.(type))("2")>).with(<(literal.(type))("3")>).with(<(literal.(type))("4")>).with(<(literal.(type))("5")>);
         Assert.assertSame(emptyCollection, collection);
         Assert.assertEquals(this.newMutableCollectionWith(<(literal.(type))("1")>), collection);
         Assert.assertEquals(this.newMutableCollectionWith(<["1", "2"]:(literal.(type))(); separator=", ">), collection0);
@@ -188,12 +182,12 @@ public abstract class AbstractMutable<name>CollectionTestCase extends Abstract<n
     @Test
     public void withAll()
     {
-        Mutable<name>Collection emptyCollection = this.getEmptyCollection();
+        Mutable<name>Collection emptyCollection = this.newWith();
         Mutable<name>Collection collection = emptyCollection.withAll(this.newMutableCollectionWith(<(literal.(type))("1")>));
-        Mutable<name>Collection collection0 = this.getEmptyCollection().withAll(this.newMutableCollectionWith(<["1", "2"]:(literal.(type))(); separator=", ">));
-        Mutable<name>Collection collection1 = this.getEmptyCollection().withAll(this.newMutableCollectionWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
-        Mutable<name>Collection collection2 = this.getEmptyCollection().withAll(this.newMutableCollectionWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">));
-        Mutable<name>Collection collection3 = this.getEmptyCollection().withAll(this.newMutableCollectionWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">));
+        Mutable<name>Collection collection0 = this.newWith().withAll(this.newMutableCollectionWith(<["1", "2"]:(literal.(type))(); separator=", ">));
+        Mutable<name>Collection collection1 = this.newWith().withAll(this.newMutableCollectionWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
+        Mutable<name>Collection collection2 = this.newWith().withAll(this.newMutableCollectionWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">));
+        Mutable<name>Collection collection3 = this.newWith().withAll(this.newMutableCollectionWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">));
         Assert.assertSame(emptyCollection, collection);
         Assert.assertEquals(this.newMutableCollectionWith(<(literal.(type))("1")>), collection);
         Assert.assertEquals(this.newMutableCollectionWith(<["1", "2"]:(literal.(type))(); separator=", ">), collection0);
@@ -212,8 +206,8 @@ public abstract class AbstractMutable<name>CollectionTestCase extends Abstract<n
         Assert.assertEquals(this.newMutableCollectionWith(<["3", "4", "5"]:(literal.(type))(); separator=", ">), collection.without(<(literal.(type))("2")>));
         Assert.assertEquals(this.newMutableCollectionWith(<["4", "5"]:(literal.(type))(); separator=", ">), collection.without(<(literal.(type))("3")>));
         Assert.assertEquals(this.newMutableCollectionWith(<(literal.(type))("5")>), collection.without(<(literal.(type))("4")>));
-        Assert.assertEquals(this.getEmptyMutableCollection(), collection.without(<(literal.(type))("5")>));
-        Assert.assertEquals(this.getEmptyMutableCollection(), collection.without(<(literal.(type))("6")>));
+        Assert.assertEquals(this.newMutableCollectionWith(), collection.without(<(literal.(type))("5")>));
+        Assert.assertEquals(this.newMutableCollectionWith(), collection.without(<(literal.(type))("6")>));
     }
 
     @Test
@@ -224,8 +218,8 @@ public abstract class AbstractMutable<name>CollectionTestCase extends Abstract<n
         Assert.assertEquals(this.newMutableCollectionWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">), collection.withoutAll(this.newMutableCollectionWith(<["8", "9",]:(literal.(type))(); separator=", ">)));
         Assert.assertEquals(this.newMutableCollectionWith(<["2", "3", "4"]:(literal.(type))(); separator=", ">), collection.withoutAll(this.newMutableCollectionWith(<["1", "5",]:(literal.(type))(); separator=", ">)));
         Assert.assertEquals(this.newMutableCollectionWith(<["3", "4",]:(literal.(type))(); separator=", ">), collection.withoutAll(this.newMutableCollectionWith(<["2", "20",]:(literal.(type))(); separator=", ">)));
-        Assert.assertEquals(this.getEmptyMutableCollection(), collection.withoutAll(this.newMutableCollectionWith(<["3", "4",]:(literal.(type))(); separator=", ">)));
-        Assert.assertEquals(this.getEmptyMutableCollection(), collection.withoutAll(this.newMutableCollectionWith(<(literal.(type))("9")>)));
+        Assert.assertEquals(this.newMutableCollectionWith(), collection.withoutAll(this.newMutableCollectionWith(<["3", "4",]:(literal.(type))(); separator=", ">)));
+        Assert.assertEquals(this.newMutableCollectionWith(), collection.withoutAll(this.newMutableCollectionWith(<(literal.(type))("9")>)));
     }
 
     @Test
@@ -258,7 +252,7 @@ public abstract class AbstractMutable<name>CollectionTestCase extends Abstract<n
     public void <type>Iterator_throws_non_empty_collection()
     {
         super.<type>Iterator_throws_non_empty_collection();
-        Mutable<name>Collection collection = this.getEmptyCollection();
+        Mutable<name>Collection collection = this.newWith();
         collection.add(<(literal.(type))("1")>);
         collection.add(<(literal.(type))("2")>);
         collection.add(<(literal.(type))("3")>);

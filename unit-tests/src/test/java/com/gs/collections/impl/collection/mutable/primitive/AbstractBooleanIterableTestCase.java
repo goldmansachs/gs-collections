@@ -40,12 +40,6 @@ public abstract class AbstractBooleanIterableTestCase
 {
     protected abstract BooleanIterable classUnderTest();
 
-    protected abstract BooleanIterable getEmptyCollection();
-
-    protected abstract BooleanIterable getEmptyMutableCollection();
-
-    protected abstract MutableCollection<Boolean> getEmptyObjectCollection();
-
     protected abstract BooleanIterable newWith(boolean... elements);
 
     protected abstract BooleanIterable newMutableCollectionWith(boolean... elements);
@@ -69,7 +63,7 @@ public abstract class AbstractBooleanIterableTestCase
     @Test
     public void isEmpty()
     {
-        Verify.assertEmpty(this.getEmptyCollection());
+        Verify.assertEmpty(this.newWith());
         Verify.assertNotEmpty(this.classUnderTest());
         Verify.assertNotEmpty(this.newWith(false));
         Verify.assertNotEmpty(this.newWith(true));
@@ -78,7 +72,7 @@ public abstract class AbstractBooleanIterableTestCase
     @Test
     public void notEmpty()
     {
-        Assert.assertFalse(this.getEmptyCollection().notEmpty());
+        Assert.assertFalse(this.newWith().notEmpty());
         Assert.assertTrue(this.classUnderTest().notEmpty());
         Assert.assertTrue(this.newWith(false).notEmpty());
         Assert.assertTrue(this.newWith(true).notEmpty());
@@ -87,7 +81,7 @@ public abstract class AbstractBooleanIterableTestCase
     @Test
     public void contains()
     {
-        BooleanIterable emptyCollection = this.getEmptyCollection();
+        BooleanIterable emptyCollection = this.newWith();
         Assert.assertFalse(emptyCollection.contains(true));
         Assert.assertFalse(emptyCollection.contains(false));
         Assert.assertTrue(this.classUnderTest().contains(true));
@@ -105,7 +99,7 @@ public abstract class AbstractBooleanIterableTestCase
         Assert.assertTrue(iterable.containsAll(true, false));
         Assert.assertTrue(iterable.containsAll(true, true));
         Assert.assertTrue(iterable.containsAll(false, false));
-        BooleanIterable emptyCollection = this.getEmptyCollection();
+        BooleanIterable emptyCollection = this.newWith();
         Assert.assertFalse(emptyCollection.containsAll(true));
         Assert.assertFalse(emptyCollection.containsAll(false));
         Assert.assertFalse(emptyCollection.containsAll(false, true, false));
@@ -120,7 +114,7 @@ public abstract class AbstractBooleanIterableTestCase
     @Test
     public void containsAllIterable()
     {
-        BooleanIterable emptyCollection = this.getEmptyCollection();
+        BooleanIterable emptyCollection = this.newWith();
         Assert.assertTrue(emptyCollection.containsAll(new BooleanArrayList()));
         Assert.assertFalse(emptyCollection.containsAll(BooleanArrayList.newListWith(true)));
         Assert.assertFalse(emptyCollection.containsAll(BooleanArrayList.newListWith(false)));
@@ -169,7 +163,7 @@ public abstract class AbstractBooleanIterableTestCase
     @Test(expected = NoSuchElementException.class)
     public void iterator_throws_emptyList()
     {
-        this.getEmptyCollection().booleanIterator().next();
+        this.newWith().booleanIterator().next();
     }
 
     @Test
@@ -201,7 +195,7 @@ public abstract class AbstractBooleanIterableTestCase
     @Test
     public void size()
     {
-        Verify.assertSize(0, this.getEmptyCollection());
+        Verify.assertSize(0, this.newWith());
         Verify.assertSize(1, this.newWith(true));
         Verify.assertSize(1, this.newWith(false));
         Verify.assertSize(2, this.newWith(true, false));
@@ -211,7 +205,7 @@ public abstract class AbstractBooleanIterableTestCase
     public void count()
     {
         Assert.assertEquals(2L, this.newWith(true, false, true).count(BooleanPredicates.isTrue()));
-        Assert.assertEquals(0L, this.getEmptyCollection().count(BooleanPredicates.isFalse()));
+        Assert.assertEquals(0L, this.newWith().count(BooleanPredicates.isFalse()));
 
         BooleanIterable iterable = this.newWith(true, false, false, true, true, true);
         Assert.assertEquals(4L, iterable.count(BooleanPredicates.isTrue()));
@@ -224,7 +218,7 @@ public abstract class AbstractBooleanIterableTestCase
     {
         Assert.assertTrue(this.classUnderTest().anySatisfy(BooleanPredicates.isTrue()));
         Assert.assertFalse(this.newWith(true, true).anySatisfy(BooleanPredicates.isFalse()));
-        Assert.assertFalse(this.getEmptyCollection().anySatisfy(BooleanPredicates.isFalse()));
+        Assert.assertFalse(this.newWith().anySatisfy(BooleanPredicates.isFalse()));
         Assert.assertTrue(this.newWith(true).anySatisfy(BooleanPredicates.isTrue()));
         Assert.assertFalse(this.newWith(false).anySatisfy(BooleanPredicates.isTrue()));
         Assert.assertTrue(this.newWith(false, false, false).anySatisfy(BooleanPredicates.isFalse()));
@@ -234,8 +228,8 @@ public abstract class AbstractBooleanIterableTestCase
     public void allSatisfy()
     {
         Assert.assertFalse(this.classUnderTest().allSatisfy(BooleanPredicates.isTrue()));
-        Assert.assertTrue(this.getEmptyCollection().allSatisfy(BooleanPredicates.isTrue()));
-        Assert.assertTrue(this.getEmptyCollection().allSatisfy(BooleanPredicates.isFalse()));
+        Assert.assertTrue(this.newWith().allSatisfy(BooleanPredicates.isTrue()));
+        Assert.assertTrue(this.newWith().allSatisfy(BooleanPredicates.isFalse()));
         Assert.assertTrue(this.newWith(false, false).allSatisfy(BooleanPredicates.isFalse()));
         Assert.assertFalse(this.newWith(true, false).allSatisfy(BooleanPredicates.isTrue()));
         Assert.assertTrue(this.newWith(true, true, true).allSatisfy(BooleanPredicates.isTrue()));
@@ -246,8 +240,8 @@ public abstract class AbstractBooleanIterableTestCase
     public void noneSatisfy()
     {
         Assert.assertFalse(this.classUnderTest().noneSatisfy(BooleanPredicates.isTrue()));
-        Assert.assertTrue(this.getEmptyCollection().noneSatisfy(BooleanPredicates.isTrue()));
-        Assert.assertTrue(this.getEmptyCollection().noneSatisfy(BooleanPredicates.isFalse()));
+        Assert.assertTrue(this.newWith().noneSatisfy(BooleanPredicates.isTrue()));
+        Assert.assertTrue(this.newWith().noneSatisfy(BooleanPredicates.isFalse()));
         Assert.assertTrue(this.newWith(false, false).noneSatisfy(BooleanPredicates.isTrue()));
         Assert.assertTrue(this.newWith(true, true).noneSatisfy(BooleanPredicates.isFalse()));
         Assert.assertFalse(this.newWith(true, true).noneSatisfy(BooleanPredicates.isTrue()));
@@ -317,13 +311,13 @@ public abstract class AbstractBooleanIterableTestCase
             }
         };
         Assert.assertEquals(this.newObjectCollectionWith(false, true, false), this.classUnderTest().collect(booleanToObjectFunction));
-        Assert.assertEquals(this.getEmptyObjectCollection(), this.getEmptyCollection().collect(booleanToObjectFunction));
+        Assert.assertEquals(this.newObjectCollectionWith(), this.newWith().collect(booleanToObjectFunction));
     }
 
     @Test
     public void toArray()
     {
-        Assert.assertEquals(0L, this.getEmptyCollection().toArray().length);
+        Assert.assertEquals(0L, this.newWith().toArray().length);
         Assert.assertTrue(Arrays.equals(new boolean[]{false, true}, this.newWith(true, false).toArray())
                 || Arrays.equals(new boolean[]{true, false}, this.newWith(true, false).toArray()));
     }
@@ -338,19 +332,19 @@ public abstract class AbstractBooleanIterableTestCase
         BooleanIterable iterable5 = this.newWith(true, true, false, false, false);
 
         Verify.assertEqualsAndHashCode(iterable1, iterable2);
-        Verify.assertEqualsAndHashCode(this.getEmptyCollection(), this.getEmptyCollection());
+        Verify.assertEqualsAndHashCode(this.newWith(), this.newWith());
         Verify.assertPostSerializedEqualsAndHashCode(iterable1);
         Verify.assertPostSerializedEqualsAndHashCode(iterable5);
-        Verify.assertPostSerializedEqualsAndHashCode(this.getEmptyCollection());
+        Verify.assertPostSerializedEqualsAndHashCode(this.newWith());
         Assert.assertNotEquals(iterable1, iterable3);
         Assert.assertNotEquals(iterable1, iterable4);
-        Assert.assertNotEquals(this.getEmptyCollection(), this.newWith(true));
+        Assert.assertNotEquals(this.newWith(), this.newWith(true));
     }
 
     @Test
     public void testHashCode()
     {
-        Assert.assertEquals(this.getEmptyObjectCollection().hashCode(), this.getEmptyCollection().hashCode());
+        Assert.assertEquals(this.newObjectCollectionWith().hashCode(), this.newWith().hashCode());
         Assert.assertEquals(this.newObjectCollectionWith(true, false, true).hashCode(),
                 this.newWith(true, false, true).hashCode());
         Assert.assertEquals(this.newObjectCollectionWith(true).hashCode(),
@@ -362,7 +356,7 @@ public abstract class AbstractBooleanIterableTestCase
     @Test
     public void testToString()
     {
-        Assert.assertEquals("[]", this.getEmptyCollection().toString());
+        Assert.assertEquals("[]", this.newWith().toString());
         Assert.assertEquals("[true]", this.newWith(true).toString());
         BooleanIterable iterable = this.newWith(true, false);
         Assert.assertTrue("[true, false]".equals(iterable.toString())
@@ -373,7 +367,7 @@ public abstract class AbstractBooleanIterableTestCase
     public void makeString()
     {
         Assert.assertEquals("true", this.newWith(true).makeString("/"));
-        Assert.assertEquals("", this.getEmptyCollection().makeString());
+        Assert.assertEquals("", this.newWith().makeString());
         BooleanIterable iterable = this.newWith(true, false);
         Assert.assertTrue("true, false".equals(iterable.makeString())
                 || "false, true".equals(iterable.makeString()));
@@ -387,7 +381,7 @@ public abstract class AbstractBooleanIterableTestCase
     public void appendString()
     {
         StringBuilder appendable = new StringBuilder();
-        this.getEmptyCollection().appendString(appendable);
+        this.newWith().appendString(appendable);
         Assert.assertEquals("", appendable.toString());
         StringBuilder appendable1 = new StringBuilder();
         this.newWith(true).appendString(appendable1);

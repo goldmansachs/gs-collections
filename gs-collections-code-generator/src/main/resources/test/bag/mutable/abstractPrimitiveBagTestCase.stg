@@ -43,21 +43,6 @@ public abstract class Abstract<name>BagTestCase extends AbstractMutable<name>Col
     protected abstract Mutable<name>Bag classUnderTest();
 
     @Override
-    protected abstract Mutable<name>Bag getEmptyCollection();
-
-    @Override
-    protected Mutable<name>Bag getEmptyMutableCollection()
-    {
-        return new <name>HashBag();
-    }
-
-    @Override
-    protected MutableBag\<<wrapperName>\> getEmptyObjectCollection()
-    {
-        return HashBag.newBag();
-    }
-
-    @Override
     protected abstract Mutable<name>Bag newWith(<type>... elements);
 
     @Override
@@ -75,7 +60,7 @@ public abstract class Abstract<name>BagTestCase extends AbstractMutable<name>Col
     @Test
     public void sizeDistinct()
     {
-        Assert.assertEquals(0L, this.getEmptyCollection().sizeDistinct());
+        Assert.assertEquals(0L, this.newWith().sizeDistinct());
         Assert.assertEquals(3L, this.newWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">).sizeDistinct());
         Assert.assertEquals(3L, this.newWith(<["0", "1", "1", "2", "2", "2"]:(literal.(type))(); separator=", ">).sizeDistinct());
     }
@@ -83,7 +68,7 @@ public abstract class Abstract<name>BagTestCase extends AbstractMutable<name>Col
     @Test
     public void addOccurrences()
     {
-        Mutable<name>Bag bag = this.getEmptyCollection();
+        Mutable<name>Bag bag = this.newWith();
         bag.addOccurrences(<(literal.(type))("100")>, 3);
         Assert.assertEquals(<name>HashBag.newBagWith(<["100", "100", "100"]:(literal.(type))(); separator=", ">), bag);
         bag.addOccurrences(<(literal.(type))("100")>, 2);
@@ -95,13 +80,13 @@ public abstract class Abstract<name>BagTestCase extends AbstractMutable<name>Col
     @Test(expected = IllegalArgumentException.class)
     public void addOccurrences_throws()
     {
-        this.getEmptyCollection().addOccurrences(<(literal.(type))("100")>, -1);
+        this.newWith().addOccurrences(<(literal.(type))("100")>, -1);
     }
 
     @Test
     public void removeOccurrences()
     {
-        Mutable<name>Bag bag = this.getEmptyCollection();
+        Mutable<name>Bag bag = this.newWith();
         Assert.assertFalse(bag.removeOccurrences(<(literal.(type))("100")>, 2));
         bag.addOccurrences(<(literal.(type))("100")>, 5);
         Assert.assertTrue(bag.removeOccurrences(<(literal.(type))("100")>, 2));
@@ -117,7 +102,7 @@ public abstract class Abstract<name>BagTestCase extends AbstractMutable<name>Col
     @Test(expected = IllegalArgumentException.class)
     public void removeOccurrences_throws()
     {
-        this.getEmptyCollection().removeOccurrences(<(literal.(type))("100")>, -1);
+        this.newWith().removeOccurrences(<(literal.(type))("100")>, -1);
     }
 
     @Test
@@ -141,7 +126,7 @@ public abstract class Abstract<name>BagTestCase extends AbstractMutable<name>Col
     public void add()
     {
         super.add();
-        Mutable<name>Bag bag = this.getEmptyCollection();
+        Mutable<name>Bag bag = this.newWith();
         Assert.assertTrue(bag.add(<(literal.(type))("100")>));
         Assert.assertEquals(<name>HashBag.newBagWith(<(literal.(type))("100")>), bag);
         Assert.assertTrue(bag.add(<(literal.(type))("100")>));
@@ -153,7 +138,7 @@ public abstract class Abstract<name>BagTestCase extends AbstractMutable<name>Col
     public void addAllIterable()
     {
         super.addAllIterable();
-        Mutable<name>Bag bag = this.getEmptyCollection();
+        Mutable<name>Bag bag = this.newWith();
         Assert.assertTrue(bag.addAll(<name>ArrayList.newListWith(<["1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">)));
         Assert.assertFalse(bag.addAll(new <name>ArrayList()));
         Assert.assertEquals(<name>HashBag.newBagWith(<["1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">), bag);
@@ -166,7 +151,7 @@ public abstract class Abstract<name>BagTestCase extends AbstractMutable<name>Col
     public void remove()
     {
         super.remove();
-        Mutable<name>Bag bag = this.getEmptyCollection();
+        Mutable<name>Bag bag = this.newWith();
         Assert.assertFalse(bag.remove(<(literal.(type))("100")>));
         Assert.assertEquals(new <name>HashBag(), bag);
         Assert.assertTrue(bag.add(<(literal.(type))("100")>));

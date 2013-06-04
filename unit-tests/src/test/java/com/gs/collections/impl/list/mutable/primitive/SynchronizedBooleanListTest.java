@@ -32,12 +32,6 @@ public class SynchronizedBooleanListTest extends AbstractBooleanListTestCase
     }
 
     @Override
-    protected SynchronizedBooleanList getEmptyCollection()
-    {
-        return new SynchronizedBooleanList(new BooleanArrayList());
-    }
-
-    @Override
     protected SynchronizedBooleanList newWith(boolean... elements)
     {
         return new SynchronizedBooleanList(BooleanArrayList.newListWith(elements));

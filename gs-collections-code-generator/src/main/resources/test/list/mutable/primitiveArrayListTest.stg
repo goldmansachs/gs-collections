@@ -48,12 +48,6 @@ public class <name>ArrayListTest extends Abstract<name>ListTestCase
     }
 
     @Override
-    protected <name>ArrayList getEmptyCollection()
-    {
-        return new <name>ArrayList();
-    }
-
-    @Override
     protected <name>ArrayList newWith(<type>... elements)
     {
         return <name>ArrayList.newListWith(elements);

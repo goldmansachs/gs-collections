@@ -44,12 +44,6 @@ public abstract class Abstract<name>IterableTestCase
 {
     protected abstract <name>Iterable classUnderTest();
 
-    protected abstract <name>Iterable getEmptyCollection();
-
-    protected abstract <name>Iterable getEmptyMutableCollection();
-
-    protected abstract MutableCollection\<<wrapperName>\> getEmptyObjectCollection();
-
     protected abstract <name>Iterable newWith(<type>... elements);
 
     protected abstract <name>Iterable newMutableCollectionWith(<type>... elements);
@@ -75,7 +69,7 @@ public abstract class Abstract<name>IterableTestCase
     @Test
     public void isEmpty()
     {
-        Verify.assertEmpty(this.getEmptyCollection());
+        Verify.assertEmpty(this.newWith());
         Verify.assertNotEmpty(this.classUnderTest());
         Verify.assertNotEmpty(this.newWith(<["0", "1", "31", "32"]:(literal.(type))(); separator=", ">));
         Verify.assertNotEmpty(this.newWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">));
@@ -87,7 +81,7 @@ public abstract class Abstract<name>IterableTestCase
     @Test
     public void notEmpty()
     {
-        Assert.assertFalse(this.getEmptyCollection().notEmpty());
+        Assert.assertFalse(this.newWith().notEmpty());
         Assert.assertTrue(this.classUnderTest().notEmpty());
         Assert.assertTrue(this.newWith(<["0", "1", "31", "32"]:(literal.(type))(); separator=", ">).notEmpty());
         Assert.assertTrue(this.newWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">).notEmpty());
@@ -153,8 +147,8 @@ public abstract class Abstract<name>IterableTestCase
     public void containsAllIterable()
     {
         <name>Iterable iterable = this.classUnderTest();
-        Assert.assertTrue(this.getEmptyCollection().containsAll(new <name>ArrayList()));
-        Assert.assertFalse(this.getEmptyCollection().containsAll(<name>ArrayList.newListWith(<(literal.(type))("1")>)));
+        Assert.assertTrue(this.newWith().containsAll(new <name>ArrayList()));
+        Assert.assertFalse(this.newWith().containsAll(<name>ArrayList.newListWith(<(literal.(type))("1")>)));
         Assert.assertTrue(iterable.containsAll(<name>ArrayList.newListWith(<(literal.(type))("1")>)));
         Assert.assertTrue(iterable.containsAll(<name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">)));
         Assert.assertFalse(iterable.containsAll(<name>ArrayList.newListWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">)));
@@ -225,7 +219,7 @@ public abstract class Abstract<name>IterableTestCase
     @Test
     public void size()
     {
-        Verify.assertSize(0, this.getEmptyCollection());
+        Verify.assertSize(0, this.newWith());
         Verify.assertSize(3, this.classUnderTest());
     }
 
@@ -359,7 +353,7 @@ public abstract class Abstract<name>IterableTestCase
     @Test(expected = NoSuchElementException.class)
     public void max_throws_emptyCollection()
     {
-        this.getEmptyCollection().max();
+        this.newWith().max();
     }
 
     @Test
@@ -371,22 +365,22 @@ public abstract class Abstract<name>IterableTestCase
     @Test(expected = NoSuchElementException.class)
     public void min_throws_emptyCollection()
     {
-        this.getEmptyCollection().min();
+        this.newWith().min();
     }
 
     @Test
     public void minIfEmpty()
     {
-        Assert.assertEquals(<(wideLiteral.(type))("5")>, this.getEmptyCollection().minIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
-        Assert.assertEquals(<(wideLiteral.(type))("0")>, this.getEmptyCollection().minIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("5")>, this.newWith().minIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("0")>, this.newWith().minIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
         Assert.assertEquals(<(wideLiteral.(type))("0")>, this.newWith(<["1", "0", "9", "7"]:(literal.(type))(); separator=", ">).minIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
     }
 
     @Test
     public void maxIfEmpty()
     {
-        Assert.assertEquals(<(wideLiteral.(type))("5")>, this.getEmptyCollection().maxIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
-        Assert.assertEquals(<(wideLiteral.(type))("0")>, this.getEmptyCollection().maxIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("5")>, this.newWith().maxIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("0")>, this.newWith().maxIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
         Assert.assertEquals(<(wideLiteral.(type))("9")>, this.newWith(<["1", "0", "9", "7"]:(literal.(type))(); separator=", ">).maxIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
     }
 
@@ -407,7 +401,7 @@ public abstract class Abstract<name>IterableTestCase
     @Test(expected = ArithmeticException.class)
     public void averageThrowsOnEmpty()
     {
-        this.getEmptyCollection().average();
+        this.newWith().average();
     }
 
     @Test
@@ -422,7 +416,7 @@ public abstract class Abstract<name>IterableTestCase
     @Test(expected = ArithmeticException.class)
     public void medianThrowsOnEmpty()
     {
-        this.getEmptyCollection().median();
+        this.newWith().median();
     }
 
     @Test
@@ -438,7 +432,7 @@ public abstract class Abstract<name>IterableTestCase
                 || Arrays.equals(new <type>[]{<["31", "1"]:(literal.(type))(); separator=", ">}, this.newWith(<["1", "31"]:(literal.(type))(); separator=", ">).toArray()));
         Assert.assertTrue(Arrays.equals(new <type>[]{<["31", "35"]:(literal.(type))(); separator=", ">}, this.newWith(<["31", "35"]:(literal.(type))(); separator=", ">).toArray())
                 || Arrays.equals(new <type>[]{<["35", "31"]:(literal.(type))(); separator=", ">}, this.newWith(<["31", "35"]:(literal.(type))(); separator=", ">).toArray()));
-        Assert.assertArrayEquals(new <type>[]{}, this.getEmptyCollection().toArray()<(delta.(type))>);
+        Assert.assertArrayEquals(new <type>[]{}, this.newWith().toArray()<(delta.(type))>);
     }
 
     @Test
@@ -467,14 +461,14 @@ public abstract class Abstract<name>IterableTestCase
         Verify.assertPostSerializedEqualsAndHashCode(iterable1);
         Verify.assertPostSerializedEqualsAndHashCode(iterable5);
         Verify.assertPostSerializedEqualsAndHashCode(iterable6);
-        Verify.assertPostSerializedEqualsAndHashCode(this.getEmptyCollection());
+        Verify.assertPostSerializedEqualsAndHashCode(this.newWith());
         Assert.assertNotEquals(iterable1, iterable3);
         Assert.assertNotEquals(iterable1, iterable4);
         Assert.assertNotEquals(iterable6, iterable7);
         Assert.assertNotEquals(iterable6, iterable8);
         Assert.assertNotEquals(iterable9, iterable10);
         Assert.assertNotEquals(iterable9, iterable11);
-        Assert.assertNotEquals(this.getEmptyCollection(), this.newWith(<(literal.(type))("100")>));
+        Assert.assertNotEquals(this.newWith(), this.newWith(<(literal.(type))("100")>));
     }
 
     @Test
@@ -485,13 +479,13 @@ public abstract class Abstract<name>IterableTestCase
         Assert.assertNotEquals(this.newObjectCollectionWith(<["32"]:(literal.(type))(); separator=", ">).hashCode(), this.newWith(<["0"]:(literal.(type))(); separator=", ">).hashCode());
         Assert.assertEquals(this.newObjectCollectionWith(<["31", "32", "50"]:(literal.(type))(); separator=", ">).hashCode(), this.newWith(<["31", "32", "50"]:(literal.(type))(); separator=", ">).hashCode());
         Assert.assertEquals(this.newObjectCollectionWith(<["32", "50", "60"]:(literal.(type))(); separator=", ">).hashCode(), this.newWith(<["32", "50", "60"]:(literal.(type))(); separator=", ">).hashCode());
-        Assert.assertEquals(this.getEmptyObjectCollection().hashCode(), this.getEmptyCollection().hashCode());
+        Assert.assertEquals(this.newObjectCollectionWith().hashCode(), this.newWith().hashCode());
     }
 
     @Test
     public void testToString()
     {
-        Assert.assertEquals("[]", this.getEmptyCollection().toString());
+        Assert.assertEquals("[]", this.newWith().toString());
         Assert.assertEquals("[<(toStringLiteral.(type))("1")>]", this.newWith(<(literal.(type))("1")>).toString());
         Assert.assertEquals("[<(toStringLiteral.(type))("31")>]", this.newWith(<(literal.(type))("31")>).toString());
         Assert.assertEquals("[<(toStringLiteral.(type))("32")>]", this.newWith(<(literal.(type))("32")>).toString());
@@ -533,7 +527,7 @@ public abstract class Abstract<name>IterableTestCase
         Assert.assertEquals("<(toStringLiteral.(type))("31")>", this.newWith(<(literal.(type))("31")>).makeString());
         Assert.assertEquals("<(toStringLiteral.(type))("32")>", this.newWith(<(literal.(type))("32")>).makeString());
         Assert.assertEquals(iterable.toString(), iterable.makeString("[", ", ", "]"));
-        Assert.assertEquals("", this.getEmptyCollection().makeString());
+        Assert.assertEquals("", this.newWith().makeString());
 
         <name>Iterable iterable1 = this.newWith(<["0", "31"]:(literal.(type))(); separator=", ">);
         Assert.assertTrue(
@@ -580,7 +574,7 @@ public abstract class Abstract<name>IterableTestCase
     public void appendString()
     {
         StringBuilder appendable = new StringBuilder();
-        this.getEmptyCollection().appendString(appendable);
+        this.newWith().appendString(appendable);
         Assert.assertEquals("", appendable.toString());
         StringBuilder appendable1 = new StringBuilder();
         this.newWith(<(literal.(type))("1")>).appendString(appendable1);

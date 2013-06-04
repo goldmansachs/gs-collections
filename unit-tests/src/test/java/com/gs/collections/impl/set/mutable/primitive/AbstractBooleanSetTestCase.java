@@ -47,21 +47,6 @@ public abstract class AbstractBooleanSetTestCase extends AbstractMutableBooleanC
     protected abstract MutableBooleanSet classUnderTest();
 
     @Override
-    protected abstract MutableBooleanSet getEmptyCollection();
-
-    @Override
-    protected MutableBooleanSet getEmptyMutableCollection()
-    {
-        return new BooleanHashSet();
-    }
-
-    @Override
-    protected MutableSet<Boolean> getEmptyObjectCollection()
-    {
-        return UnifiedSet.newSet();
-    }
-
-    @Override
     protected abstract MutableBooleanSet newWith(boolean... elements);
 
     @Override
@@ -79,7 +64,7 @@ public abstract class AbstractBooleanSetTestCase extends AbstractMutableBooleanC
     @Before
     public void setup()
     {
-        this.set0 = this.getEmptyCollection();
+        this.set0 = this.newWith();
         this.set1 = this.newWith(false);
         this.set2 = this.newWith(true);
         this.set3 = this.newWith(true, false);
@@ -192,7 +177,7 @@ public abstract class AbstractBooleanSetTestCase extends AbstractMutableBooleanC
     {
         Assert.assertTrue(this.set0.add(true));
         Assert.assertEquals(BooleanHashSet.newSetWith(true), this.set0);
-        MutableBooleanSet set = this.getEmptyCollection();
+        MutableBooleanSet set = this.newWith();
         Assert.assertTrue(set.add(false));
         Assert.assertEquals(BooleanHashSet.newSetWith(false), set);
         Assert.assertFalse(this.set1.add(false));
@@ -341,11 +326,11 @@ public abstract class AbstractBooleanSetTestCase extends AbstractMutableBooleanC
     public void with()
     {
         super.with();
-        MutableBooleanCollection emptySet = this.getEmptyCollection();
+        MutableBooleanCollection emptySet = this.newWith();
         MutableBooleanCollection set = emptySet.with(false);
-        MutableBooleanSet set1 = this.getEmptyCollection().with(true);
-        MutableBooleanSet set2 = this.getEmptyCollection().with(true).with(false);
-        MutableBooleanSet set3 = this.getEmptyCollection().with(false).with(true);
+        MutableBooleanSet set1 = this.newWith().with(true);
+        MutableBooleanSet set2 = this.newWith().with(true).with(false);
+        MutableBooleanSet set3 = this.newWith().with(false).with(true);
         Assert.assertSame(emptySet, set);
         Assert.assertEquals(this.set1, set);
         Assert.assertEquals(this.set2, set1);
@@ -359,11 +344,11 @@ public abstract class AbstractBooleanSetTestCase extends AbstractMutableBooleanC
     public void withAll()
     {
         super.withAll();
-        MutableBooleanCollection emptySet = this.getEmptyCollection();
+        MutableBooleanCollection emptySet = this.newWith();
         MutableBooleanCollection set = emptySet.withAll(BooleanArrayList.newListWith(false));
-        MutableBooleanSet set1 = this.getEmptyCollection().withAll(BooleanArrayList.newListWith(true));
-        MutableBooleanSet set2 = this.getEmptyCollection().withAll(BooleanArrayList.newListWith(true, false));
-        MutableBooleanSet set3 = this.getEmptyCollection().withAll(BooleanArrayList.newListWith(true, false));
+        MutableBooleanSet set1 = this.newWith().withAll(BooleanArrayList.newListWith(true));
+        MutableBooleanSet set2 = this.newWith().withAll(BooleanArrayList.newListWith(true, false));
+        MutableBooleanSet set3 = this.newWith().withAll(BooleanArrayList.newListWith(true, false));
         Assert.assertSame(emptySet, set);
         Assert.assertEquals(this.set1, set);
         Assert.assertEquals(this.set2, set1);

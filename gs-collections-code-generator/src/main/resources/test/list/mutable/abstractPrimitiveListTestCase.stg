@@ -35,21 +35,6 @@ public abstract class Abstract<name>ListTestCase extends AbstractMutable<name>Co
     protected abstract Mutable<name>List classUnderTest();
 
     @Override
-    protected abstract Mutable<name>List getEmptyCollection();
-
-    @Override
-    protected Mutable<name>List getEmptyMutableCollection()
-    {
-        return new <name>ArrayList();
-    }
-
-    @Override
-    protected MutableList\<<wrapperName>\> getEmptyObjectCollection()
-    {
-        return FastList.newList();
-    }
-
-    @Override
     protected abstract Mutable<name>List newWith(<type>... elements);
 
     @Override
@@ -96,7 +81,7 @@ public abstract class Abstract<name>ListTestCase extends AbstractMutable<name>Co
     @Test(expected = IndexOutOfBoundsException.class)
     public void getFirst_emptyList_throws()
     {
-        this.getEmptyCollection().getFirst();
+        this.newWith().getFirst();
     }
 
     @Test
@@ -110,7 +95,7 @@ public abstract class Abstract<name>ListTestCase extends AbstractMutable<name>Co
     @Test(expected = IndexOutOfBoundsException.class)
     public void getLast_emptyList_throws()
     {
-        this.getEmptyCollection().getLast();
+        this.newWith().getLast();
     }
 
     @Test
@@ -134,7 +119,7 @@ public abstract class Abstract<name>ListTestCase extends AbstractMutable<name>Co
     @Test
     public void addAtIndex()
     {
-        Mutable<name>List emptyList = this.getEmptyCollection();
+        Mutable<name>List emptyList = this.newWith();
         emptyList.addAtIndex(0, <(literal.(type))("1")>);
         Assert.assertEquals(this.newMutableCollectionWith(<(literal.(type))("1")>), emptyList);
         Mutable<name>List arrayList = this.classUnderTest();
@@ -147,7 +132,7 @@ public abstract class Abstract<name>ListTestCase extends AbstractMutable<name>Co
     @Test(expected = IndexOutOfBoundsException.class)
     public void addAtIndex_throws_index_greater_than_size()
     {
-        this.getEmptyCollection().addAtIndex(1, <(literal.(type))("0")>);
+        this.newWith().addAtIndex(1, <(literal.(type))("0")>);
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
@@ -217,7 +202,7 @@ public abstract class Abstract<name>ListTestCase extends AbstractMutable<name>Co
     @Test(expected = IndexOutOfBoundsException.class)
     public void removeAtIndex_throws_index_greater_than_size()
     {
-        this.getEmptyCollection().removeAtIndex(1);
+        this.newWith().removeAtIndex(1);
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
@@ -259,8 +244,8 @@ public abstract class Abstract<name>ListTestCase extends AbstractMutable<name>Co
     @Test
     public void reverseThis()
     {
-        Assert.assertEquals(new <name>ArrayList(), this.getEmptyCollection().reverseThis());
-        Mutable<name>List emptyList = this.getEmptyCollection();
+        Assert.assertEquals(new <name>ArrayList(), this.newWith().reverseThis());
+        Mutable<name>List emptyList = this.newWith();
         Assert.assertSame(emptyList, emptyList.reverseThis());
         Assert.assertEquals(<name>ArrayList.newListWith(<["3"]:(literal.(type))(); separator=", ">), this.newWith(<["3"]:(literal.(type))(); separator=", ">).reverseThis());
         Assert.assertEquals(<name>ArrayList.newListWith(<["3", "1"]:(literal.(type))(); separator=", ">), this.newWith(<["1", "3"]:(literal.(type))(); separator=", ">).reverseThis());
@@ -273,8 +258,8 @@ public abstract class Abstract<name>ListTestCase extends AbstractMutable<name>Co
     @Test
     public void sortThis()
     {
-        Assert.assertEquals(new <name>ArrayList(), this.getEmptyCollection().sortThis());
-        Mutable<name>List emptyList = this.getEmptyCollection();
+        Assert.assertEquals(new <name>ArrayList(), this.newWith().sortThis());
+        Mutable<name>List emptyList = this.newWith();
         Assert.assertSame(emptyList, emptyList.sortThis());
         Assert.assertEquals(<name>ArrayList.newListWith(<["3"]:(literal.(type))(); separator=", ">), this.newWith(<["3"]:(literal.(type))(); separator=", ">).sortThis());
         Assert.assertEquals(<name>ArrayList.newListWith(<["1", "3"]:(literal.(type))(); separator=", ">), this.newWith(<["3", "1"]:(literal.(type))(); separator=", ">).sortThis());
@@ -287,8 +272,8 @@ public abstract class Abstract<name>ListTestCase extends AbstractMutable<name>Co
     @Test
     public void toReversed()
     {
-        Assert.assertEquals(new <name>ArrayList(), this.getEmptyCollection().toReversed());
-        Mutable<name>List emptyList = this.getEmptyCollection();
+        Assert.assertEquals(new <name>ArrayList(), this.newWith().toReversed());
+        Mutable<name>List emptyList = this.newWith();
         Assert.assertNotSame(emptyList, emptyList.toReversed());
         Assert.assertEquals(<name>ArrayList.newListWith(<["3", "1", "9", "7"]:(literal.(type))(); separator=", ">), this.newWith(<["7", "9", "1", "3"]:(literal.(type))(); separator=", ">).toReversed());
         Mutable<name>List evenList = this.newWith(<["3", "1", "9", "7"]:(literal.(type))(); separator=", ">);

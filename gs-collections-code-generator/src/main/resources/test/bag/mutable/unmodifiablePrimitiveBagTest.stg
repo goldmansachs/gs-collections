@@ -38,12 +38,6 @@ public class Unmodifiable<name>BagTest extends Abstract<name>BagTestCase
     }
 
     @Override
-    protected Unmodifiable<name>Bag getEmptyCollection()
-    {
-        return new Unmodifiable<name>Bag(new <name>HashBag());
-    }
-
-    @Override
     protected Unmodifiable<name>Bag newWith(<type>... elements)
     {
         return new Unmodifiable<name>Bag(<name>HashBag.newBagWith(elements));
@@ -60,7 +54,7 @@ public class Unmodifiable<name>BagTest extends Abstract<name>BagTestCase
     @Test(expected = UnsupportedOperationException.class)
     public void addOccurrences_throws()
     {
-        this.getEmptyCollection().addOccurrences(<(literal.(type))("1")>, -1);
+        this.newWith().addOccurrences(<(literal.(type))("1")>, -1);
     }
 
     @Override
@@ -74,7 +68,7 @@ public class Unmodifiable<name>BagTest extends Abstract<name>BagTestCase
     @Test(expected = UnsupportedOperationException.class)
     public void removeOccurrences_throws()
     {
-        this.getEmptyCollection().removeOccurrences(<(literal.(type))("1")>, -1);
+        this.newWith().removeOccurrences(<(literal.(type))("1")>, -1);
     }
 
     @Override
@@ -88,7 +82,7 @@ public class Unmodifiable<name>BagTest extends Abstract<name>BagTestCase
     @Test(expected = UnsupportedOperationException.class)
     public void add()
     {
-        this.getEmptyCollection().add(<(literal.(type))("1")>);
+        this.newWith().add(<(literal.(type))("1")>);
     }
 
     @Override
@@ -102,7 +96,7 @@ public class Unmodifiable<name>BagTest extends Abstract<name>BagTestCase
     @Test(expected = UnsupportedOperationException.class)
     public void addAllIterable()
     {
-        this.classUnderTest().addAll(this.getEmptyMutableCollection());
+        this.classUnderTest().addAll(this.newMutableCollectionWith());
     }
 
     @Override
@@ -123,21 +117,21 @@ public class Unmodifiable<name>BagTest extends Abstract<name>BagTestCase
     @Test(expected = UnsupportedOperationException.class)
     public void removeAllIterable()
     {
-        this.classUnderTest().removeAll(this.getEmptyMutableCollection());
+        this.classUnderTest().removeAll(this.newMutableCollectionWith());
     }
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
     public void with()
     {
-        this.getEmptyCollection().with(<["1"]:(literal.(type))(); separator=", ">);
+        this.newWith().with(<["1"]:(literal.(type))(); separator=", ">);
     }
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
     public void withAll()
     {
-        this.getEmptyCollection().withAll(this.newMutableCollectionWith(<(literal.(type))("1")>));
+        this.newWith().withAll(this.newMutableCollectionWith(<(literal.(type))("1")>));
     }
 
     @Override

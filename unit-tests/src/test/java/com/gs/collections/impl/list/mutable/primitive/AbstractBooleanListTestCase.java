@@ -35,21 +35,6 @@ public abstract class AbstractBooleanListTestCase extends AbstractMutableBoolean
     protected abstract MutableBooleanList classUnderTest();
 
     @Override
-    protected abstract MutableBooleanList getEmptyCollection();
-
-    @Override
-    protected MutableBooleanList getEmptyMutableCollection()
-    {
-        return new BooleanArrayList();
-    }
-
-    @Override
-    protected MutableList<Boolean> getEmptyObjectCollection()
-    {
-        return FastList.newList();
-    }
-
-    @Override
     protected abstract MutableBooleanList newWith(boolean... elements);
 
     @Override
@@ -82,7 +67,7 @@ public abstract class AbstractBooleanListTestCase extends AbstractMutableBoolean
     @Test(expected = IndexOutOfBoundsException.class)
     public void get_throws_empty_list()
     {
-        this.getEmptyCollection().get(0);
+        this.newWith().get(0);
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
@@ -102,7 +87,7 @@ public abstract class AbstractBooleanListTestCase extends AbstractMutableBoolean
     @Test(expected = IndexOutOfBoundsException.class)
     public void getFirst_emptyList_throws()
     {
-        this.getEmptyCollection().getFirst();
+        this.newWith().getFirst();
     }
 
     @Test
@@ -117,7 +102,7 @@ public abstract class AbstractBooleanListTestCase extends AbstractMutableBoolean
     @Test(expected = IndexOutOfBoundsException.class)
     public void getLast_emptyList_throws()
     {
-        this.getEmptyCollection().getLast();
+        this.newWith().getLast();
     }
 
     @Test
@@ -127,7 +112,7 @@ public abstract class AbstractBooleanListTestCase extends AbstractMutableBoolean
         Assert.assertEquals(0L, arrayList.indexOf(true));
         Assert.assertEquals(1L, arrayList.indexOf(false));
         Assert.assertEquals(-1L, this.newWith(false, false).indexOf(true));
-        MutableBooleanList emptyList = this.getEmptyCollection();
+        MutableBooleanList emptyList = this.newWith();
         Assert.assertEquals(-1L, emptyList.indexOf(true));
         Assert.assertEquals(-1L, emptyList.indexOf(false));
     }
@@ -139,7 +124,7 @@ public abstract class AbstractBooleanListTestCase extends AbstractMutableBoolean
         Assert.assertEquals(2L, list.lastIndexOf(true));
         Assert.assertEquals(1L, list.lastIndexOf(false));
         Assert.assertEquals(-1L, this.newWith(false, false).lastIndexOf(true));
-        MutableBooleanList emptyList = this.getEmptyCollection();
+        MutableBooleanList emptyList = this.newWith();
         Assert.assertEquals(-1L, emptyList.lastIndexOf(true));
         Assert.assertEquals(-1L, emptyList.lastIndexOf(false));
     }
@@ -147,7 +132,7 @@ public abstract class AbstractBooleanListTestCase extends AbstractMutableBoolean
     @Test
     public void addAtIndex()
     {
-        MutableBooleanList emptyList = this.getEmptyCollection();
+        MutableBooleanList emptyList = this.newWith();
         emptyList.addAtIndex(0, false);
         Assert.assertEquals(BooleanArrayList.newListWith(false), emptyList);
         MutableBooleanList list = this.classUnderTest();
@@ -160,7 +145,7 @@ public abstract class AbstractBooleanListTestCase extends AbstractMutableBoolean
     @Test(expected = IndexOutOfBoundsException.class)
     public void addAtIndex_throws_index_greater_than_size()
     {
-        this.getEmptyCollection().addAtIndex(1, false);
+        this.newWith().addAtIndex(1, false);
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
@@ -208,7 +193,7 @@ public abstract class AbstractBooleanListTestCase extends AbstractMutableBoolean
     @Test(expected = IndexOutOfBoundsException.class)
     public void addAll_throws_index_greater_than_size_empty_list()
     {
-        this.getEmptyCollection().addAllAtIndex(1, false);
+        this.newWith().addAllAtIndex(1, false);
     }
 
     @Override
@@ -270,7 +255,7 @@ public abstract class AbstractBooleanListTestCase extends AbstractMutableBoolean
     @Test(expected = IndexOutOfBoundsException.class)
     public void removeAtIndex_throws_index_greater_than_size()
     {
-        this.getEmptyCollection().removeAtIndex(1);
+        this.newWith().removeAtIndex(1);
     }
 
     @Test(expected = IndexOutOfBoundsException.class)
@@ -292,7 +277,7 @@ public abstract class AbstractBooleanListTestCase extends AbstractMutableBoolean
     @Test(expected = IndexOutOfBoundsException.class)
     public void set_throws_index_greater_than_size()
     {
-        this.getEmptyCollection().set(1, false);
+        this.newWith().set(1, false);
     }
 
     @Override
@@ -337,7 +322,7 @@ public abstract class AbstractBooleanListTestCase extends AbstractMutableBoolean
                 sum[0] += each + " ";
             }
         });
-        this.getEmptyCollection().forEach(new BooleanProcedure()
+        this.newWith().forEach(new BooleanProcedure()
         {
             public void value(boolean each)
             {
@@ -400,7 +385,7 @@ public abstract class AbstractBooleanListTestCase extends AbstractMutableBoolean
     {
         super.testToString();
         Assert.assertEquals("[true, false, true]", this.classUnderTest().toString());
-        Assert.assertEquals("[]", this.getEmptyCollection().toString());
+        Assert.assertEquals("[]", this.newWith().toString());
     }
 
     @Override
@@ -412,7 +397,7 @@ public abstract class AbstractBooleanListTestCase extends AbstractMutableBoolean
         Assert.assertEquals("true", this.newWith(true).makeString("/"));
         Assert.assertEquals("true/false/true", this.classUnderTest().makeString("/"));
         Assert.assertEquals(this.classUnderTest().toString(), this.classUnderTest().makeString("[", ", ", "]"));
-        Assert.assertEquals("", this.getEmptyCollection().makeString());
+        Assert.assertEquals("", this.newWith().makeString());
     }
 
     @Override
@@ -421,7 +406,7 @@ public abstract class AbstractBooleanListTestCase extends AbstractMutableBoolean
     {
         super.appendString();
         StringBuilder appendable = new StringBuilder();
-        this.getEmptyCollection().appendString(appendable);
+        this.newWith().appendString(appendable);
         Assert.assertEquals("", appendable.toString());
         StringBuilder appendable2 = new StringBuilder();
         this.classUnderTest().appendString(appendable2);

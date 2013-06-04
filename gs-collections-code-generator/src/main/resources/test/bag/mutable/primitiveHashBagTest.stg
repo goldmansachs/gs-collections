@@ -36,12 +36,6 @@ public class <name>HashBagTest extends Abstract<name>BagTestCase
     }
 
     @Override
-    protected <name>HashBag getEmptyCollection()
-    {
-        return new <name>HashBag();
-    }
-
-    @Override
     protected <name>HashBag newWith(<type>... elements)
     {
         return <name>HashBag.newBagWith(elements);

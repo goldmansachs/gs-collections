@@ -38,12 +38,6 @@ public class Unmodifiable<name>ListTest extends Abstract<name>ListTestCase
     }
 
     @Override
-    protected Unmodifiable<name>List getEmptyCollection()
-    {
-        return new Unmodifiable<name>List(new <name>ArrayList());
-    }
-
-    @Override
     protected Unmodifiable<name>List newWith(<type>... elements)
     {
         return new Unmodifiable<name>List(<name>ArrayList.newListWith(elements));
@@ -137,7 +131,7 @@ public class Unmodifiable<name>ListTest extends Abstract<name>ListTestCase
     @Test(expected = UnsupportedOperationException.class)
     public void add()
     {
-        this.getEmptyCollection().add(<(literal.(type))("1")>);
+        this.newWith().add(<(literal.(type))("1")>);
     }
 
     @Override
@@ -151,7 +145,7 @@ public class Unmodifiable<name>ListTest extends Abstract<name>ListTestCase
     @Test(expected = UnsupportedOperationException.class)
     public void addAllIterable()
     {
-        this.classUnderTest().addAll(this.getEmptyMutableCollection());
+        this.classUnderTest().addAll(this.newMutableCollectionWith());
     }
 
     @Override
@@ -172,21 +166,21 @@ public class Unmodifiable<name>ListTest extends Abstract<name>ListTestCase
     @Test(expected = UnsupportedOperationException.class)
     public void removeAllIterable()
     {
-        this.classUnderTest().removeAll(this.getEmptyMutableCollection());
+        this.classUnderTest().removeAll(this.newMutableCollectionWith());
     }
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
     public void with()
     {
-        this.getEmptyCollection().with(<["1"]:(literal.(type))(); separator=", ">);
+        this.newWith().with(<["1"]:(literal.(type))(); separator=", ">);
     }
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
     public void withAll()
     {
-        this.getEmptyCollection().withAll(this.newMutableCollectionWith(<(literal.(type))("1")>));
+        this.newWith().withAll(this.newMutableCollectionWith(<(literal.(type))("1")>));
     }
 
     @Override

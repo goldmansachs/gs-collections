@@ -32,12 +32,6 @@ public class SynchronizedBooleanSetTest extends AbstractBooleanSetTestCase
     }
 
     @Override
-    protected SynchronizedBooleanSet getEmptyCollection()
-    {
-        return new SynchronizedBooleanSet(new BooleanHashSet());
-    }
-
-    @Override
     protected SynchronizedBooleanSet newWith(boolean... elements)
     {
         return new SynchronizedBooleanSet(BooleanHashSet.newSetWith(elements));

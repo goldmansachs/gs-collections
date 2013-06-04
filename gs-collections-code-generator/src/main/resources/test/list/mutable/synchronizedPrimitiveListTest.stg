@@ -34,12 +34,6 @@ public class Synchronized<name>ListTest extends Abstract<name>ListTestCase
     }
 
     @Override
-    protected Synchronized<name>List getEmptyCollection()
-    {
-        return new Synchronized<name>List(new <name>ArrayList());
-    }
-
-    @Override
     protected Synchronized<name>List newWith(<type>... elements)
     {
         return new Synchronized<name>List(<name>ArrayList.newListWith(elements));

@@ -34,12 +34,6 @@ public class Synchronized<name>BagTest extends Abstract<name>BagTestCase
     }
 
     @Override
-    protected Synchronized<name>Bag getEmptyCollection()
-    {
-        return new Synchronized<name>Bag(new <name>HashBag());
-    }
-
-    @Override
     protected Synchronized<name>Bag newWith(<type>... elements)
     {
         return new Synchronized<name>Bag(<name>HashBag.newBagWith(elements));

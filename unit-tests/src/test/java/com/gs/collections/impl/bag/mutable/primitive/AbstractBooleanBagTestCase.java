@@ -40,21 +40,6 @@ public abstract class AbstractBooleanBagTestCase extends AbstractMutableBooleanC
     protected abstract MutableBooleanBag classUnderTest();
 
     @Override
-    protected abstract MutableBooleanBag getEmptyCollection();
-
-    @Override
-    protected MutableBooleanBag getEmptyMutableCollection()
-    {
-        return new BooleanHashBag();
-    }
-
-    @Override
-    protected MutableBag<Boolean> getEmptyObjectCollection()
-    {
-        return HashBag.newBag();
-    }
-
-    @Override
     protected abstract MutableBooleanBag newWith(boolean... elements);
 
     @Override
@@ -72,7 +57,7 @@ public abstract class AbstractBooleanBagTestCase extends AbstractMutableBooleanC
     @Test
     public void sizeDistinct()
     {
-        Assert.assertEquals(0L, this.getEmptyCollection().sizeDistinct());
+        Assert.assertEquals(0L, this.newWith().sizeDistinct());
         Assert.assertEquals(1L, this.newWith(true).sizeDistinct());
         Assert.assertEquals(1L, this.newWith(true, true, true).sizeDistinct());
         Assert.assertEquals(2L, this.newWith(true, false, true, false, true).sizeDistinct());
@@ -83,7 +68,7 @@ public abstract class AbstractBooleanBagTestCase extends AbstractMutableBooleanC
     public void addAllIterable()
     {
         super.addAllIterable();
-        MutableBooleanBag bag = this.getEmptyCollection();
+        MutableBooleanBag bag = this.newWith();
         Assert.assertTrue(bag.addAll(BooleanArrayList.newListWith(true, false, true, false, true)));
         Assert.assertFalse(bag.addAll(new BooleanArrayList()));
         Assert.assertEquals(BooleanHashBag.newBagWith(true, false, true, false, true), bag);
@@ -94,7 +79,7 @@ public abstract class AbstractBooleanBagTestCase extends AbstractMutableBooleanC
     @Test
     public void addOccurrences()
     {
-        MutableBooleanBag bag = this.getEmptyCollection();
+        MutableBooleanBag bag = this.newWith();
         bag.addOccurrences(false, 3);
         Assert.assertEquals(BooleanHashBag.newBagWith(false, false, false), bag);
         bag.addOccurrences(false, 2);
@@ -110,13 +95,13 @@ public abstract class AbstractBooleanBagTestCase extends AbstractMutableBooleanC
     @Test(expected = IllegalArgumentException.class)
     public void addOccurrences_throws()
     {
-        this.getEmptyCollection().addOccurrences(true, -1);
+        this.newWith().addOccurrences(true, -1);
     }
 
     @Test
     public void removeOccurrences()
     {
-        MutableBooleanBag bag1 = this.getEmptyCollection();
+        MutableBooleanBag bag1 = this.newWith();
         Assert.assertFalse(bag1.removeOccurrences(true, 5));
         bag1.addOccurrences(true, 5);
         Assert.assertTrue(bag1.removeOccurrences(true, 2));
@@ -128,7 +113,7 @@ public abstract class AbstractBooleanBagTestCase extends AbstractMutableBooleanC
         Assert.assertFalse(bag1.removeOccurrences(true, 5));
         Assert.assertEquals(new BooleanHashBag(), bag1);
 
-        MutableBooleanBag bag2 = this.getEmptyCollection();
+        MutableBooleanBag bag2 = this.newWith();
         Assert.assertFalse(bag2.removeOccurrences(false, 5));
         bag2.addOccurrences(false, 5);
         Assert.assertTrue(bag2.removeOccurrences(false, 2));
@@ -144,7 +129,7 @@ public abstract class AbstractBooleanBagTestCase extends AbstractMutableBooleanC
     @Test(expected = IllegalArgumentException.class)
     public void removeOccurrences_throws()
     {
-        this.getEmptyCollection().removeOccurrences(true, -1);
+        this.newWith().removeOccurrences(true, -1);
     }
 
     @Test
