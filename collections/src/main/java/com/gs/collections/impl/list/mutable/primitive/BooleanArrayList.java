@@ -28,6 +28,7 @@ import com.gs.collections.api.LazyBooleanIterable;
 import com.gs.collections.api.bag.primitive.MutableBooleanBag;
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
+import com.gs.collections.api.block.procedure.primitive.BooleanIntProcedure;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.list.MutableList;
@@ -424,6 +425,14 @@ public final class BooleanArrayList
         for (int i = 0; i < this.size; i++)
         {
             procedure.value(this.items.get(i));
+        }
+    }
+
+    public void forEachWithIndex(BooleanIntProcedure procedure)
+    {
+        for (int i = 0; i < this.size; i++)
+        {
+            procedure.value(this.items.get(i), i);
         }
     }
 

@@ -31,6 +31,7 @@ import com.gs.collections.api.block.function.primitive.Object<name>IntToObjectFu
 import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.MutableList;
@@ -495,6 +496,14 @@ public final class <name>ArrayList
         for (int i = 0; i \< this.size; i++)
         {
             procedure.value(this.items[i]);
+        }
+    }
+
+    public void forEachWithIndex(<name>IntProcedure procedure)
+    {
+        for (int i = 0; i \< this.size; i++)
+        {
+            procedure.value(this.items[i], i);
         }
     }
 

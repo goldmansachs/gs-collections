@@ -23,6 +23,7 @@ import com.gs.collections.api.block.function.primitive.Object<name>IntToObjectFu
 import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
+import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
@@ -146,6 +147,22 @@ public class <name>ArrayListTest extends Abstract<name>ListTestCase
             }
         });
         Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("6")>), result);
+    }
+
+
+    @Test
+    public void forEachWithIndex()
+    {
+        final <wideType.(type)>[] sum = new <wideType.(type)>[1];
+        this.classUnderTest().forEachWithIndex(new <name>IntProcedure()
+        {
+            public void value(<type> each, int index)
+            {
+                sum[0] += (each + index);
+            }
+        });
+
+        Assert.assertEquals(<(wideLiteral.(type))("9")>, sum[0]<wideDelta.(type)>);
     }
     
     @Override

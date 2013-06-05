@@ -213,7 +213,7 @@ public abstract class Abstract<name>IterableTestCase
             }
         });
 
-        Assert.assertEquals(<(wideLiteral.(type))("6")>, sum[0]<(wideDelta.(type))>);
+        Assert.assertEquals(<(wideLiteral.(type))("6")>, sum[0]<wideDelta.(type)>);
     }
 
     @Test
