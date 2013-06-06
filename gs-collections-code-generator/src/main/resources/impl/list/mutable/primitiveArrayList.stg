@@ -59,7 +59,6 @@ public final class <name>ArrayList
     private static final <type>[] DEFAULT_SIZED_EMPTY_ARRAY = {};
     private static final <type>[] ZERO_SIZED_ARRAY = {};
     private static final int MAXIMUM_ARRAY_SIZE = Integer.MAX_VALUE - 8;
-
     private int size;
     private transient <type>[] items = DEFAULT_SIZED_EMPTY_ARRAY;
 
@@ -151,7 +150,7 @@ public final class <name>ArrayList
 
     public boolean containsAll(<name>Iterable source)
     {
-        for (<name>Iterator iterator = source.<type>Iterator(); iterator.hasNext();)
+        for (<name>Iterator iterator = source.<type>Iterator(); iterator.hasNext(); )
         {
             if (!this.contains(iterator.next()))
             {
@@ -386,12 +385,12 @@ public final class <name>ArrayList
     public boolean removeAll(<name>Iterable source)
     {
         boolean modified = false;
-        <name>Iterator iterator = source.<type>Iterator();
-        while (iterator.hasNext())
+        for (int index = 0; index \< this.size; index++)
         {
-            <type> item = iterator.next();
-            if (this.remove(item))
+            if (source.contains(this.get(index)))
             {
+                this.removeAtIndex(index);
+                index--;
                 modified = true;
             }
         }
@@ -400,15 +399,21 @@ public final class <name>ArrayList
 
     public boolean removeAll(<type>... source)
     {
-        boolean modified = false;
-        for (<type> i : source)
+        <name>HashSet set = <name>HashSet.newSetWith(source);
+        <type>[] newItems = new <type>[this.size];
+        int count = 0;
+        int oldSize = this.size;
+        for (int index = 0; index \< this.size; index++)
         {
-            if (this.remove(i))
+            if (!set.contains(this.items[index]))
             {
-                modified = true;
+                newItems[count] = this.items[index];
+                count++;
             }
         }
-        return modified;
+        this.items = newItems;
+        this.size = count;
+        return oldSize != this.size;
     }
 
     public <type> removeAtIndex(int index)

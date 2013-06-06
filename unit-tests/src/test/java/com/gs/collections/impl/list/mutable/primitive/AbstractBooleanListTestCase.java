@@ -207,39 +207,6 @@ public abstract class AbstractBooleanListTestCase extends AbstractMutableBoolean
         Assert.assertEquals(BooleanArrayList.newListWith(false, true), list);
     }
 
-    @Override
-    @Test
-    public void removeAll()
-    {
-        MutableBooleanList list = this.classUnderTest();
-        Assert.assertFalse(list.removeAll());
-        MutableBooleanList booleanArrayList = this.newWith(false, false);
-        Assert.assertFalse(booleanArrayList.removeAll(true));
-        Assert.assertEquals(BooleanArrayList.newListWith(false, false), booleanArrayList);
-        Assert.assertTrue(list.removeAll(true, false));
-        Assert.assertEquals(BooleanArrayList.newListWith(true), list);
-        Assert.assertTrue(list.removeAll(true));
-        Assert.assertEquals(new BooleanArrayList(), list);
-    }
-
-    @Override
-    @Test
-    public void removeAllIterable()
-    {
-        super.removeAllIterable();
-        MutableBooleanList list = this.classUnderTest();
-        Assert.assertFalse(list.removeAll(new BooleanArrayList()));
-        MutableBooleanList booleanArrayList = this.newWith(false, false);
-        Assert.assertFalse(booleanArrayList.removeAll(new BooleanArrayList(true)));
-        Assert.assertEquals(BooleanArrayList.newListWith(false, false), booleanArrayList);
-        Assert.assertTrue(list.removeAll(new BooleanArrayList(true)));
-        Assert.assertEquals(BooleanArrayList.newListWith(false, true), list);
-        Assert.assertTrue(list.removeAll(BooleanArrayList.newListWith(true, false)));
-        Assert.assertEquals(new BooleanArrayList(), list);
-        Assert.assertFalse(list.removeAll(BooleanArrayList.newListWith(true, false)));
-        Assert.assertEquals(new BooleanArrayList(), list);
-    }
-
     @Test
     public void removeAtIndex()
     {
@@ -278,19 +245,6 @@ public abstract class AbstractBooleanListTestCase extends AbstractMutableBoolean
     public void set_throws_index_greater_than_size()
     {
         this.newWith().set(1, false);
-    }
-
-    @Override
-    @Test
-    public void withoutAll()
-    {
-        super.withoutAll();
-        Assert.assertEquals(BooleanArrayList.newListWith(true, true, true), this.newWith(true, true, true).withoutAll(BooleanArrayList.newListWith(false)));
-        MutableBooleanList mainArrayList = this.newWith(true, false, false, true, false);
-        Assert.assertEquals(BooleanArrayList.newListWith(false, true, false), mainArrayList.withoutAll(BooleanArrayList.newListWith(true, false)));
-        Assert.assertEquals(new BooleanArrayList(false), mainArrayList.withoutAll(BooleanArrayList.newListWith(true, false)));
-        Assert.assertEquals(new BooleanArrayList(), mainArrayList.withoutAll(BooleanArrayList.newListWith(false)));
-        Assert.assertEquals(new BooleanArrayList(), mainArrayList.withoutAll(BooleanArrayList.newListWith(true)));
     }
 
     @Override

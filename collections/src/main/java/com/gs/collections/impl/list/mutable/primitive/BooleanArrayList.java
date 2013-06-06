@@ -52,7 +52,6 @@ public final class BooleanArrayList
         implements MutableBooleanList, Externalizable
 {
     private static final long serialVersionUID = 1L;
-
     private int size;
     private transient BitSet items;
 
@@ -323,12 +322,12 @@ public final class BooleanArrayList
     public boolean removeAll(BooleanIterable source)
     {
         boolean modified = false;
-        BooleanIterator iterator = source.booleanIterator();
-        while (iterator.hasNext())
+        for (int i = 0; i < this.size; i++)
         {
-            boolean item = iterator.next();
-            if (this.remove(item))
+            if (source.contains(this.items.get(i)))
             {
+                this.removeAtIndex(i);
+                i--;
                 modified = true;
             }
         }
@@ -337,12 +336,43 @@ public final class BooleanArrayList
 
     public boolean removeAll(boolean... source)
     {
-        boolean modified = false;
-        for (boolean i : source)
+        if (this.isEmpty() || source.length == 0)
         {
-            modified = this.remove(i);
+            return false;
         }
-        return modified;
+        BooleanHashSet set = BooleanHashSet.newSetWith(source);
+        if (set.size() == 2)
+        {
+            this.items = null;
+            this.size = 0;
+            return true;
+        }
+        int oldSize = this.size;
+        int trueCount = this.getTrueCount();
+        if (set.contains(true))
+        {
+            this.size -= trueCount;
+            this.items.set(0, this.size, false);
+        }
+        else
+        {
+            this.size = trueCount;
+            this.items.set(0, this.size, true);
+        }
+        return oldSize != this.size;
+    }
+
+    private int getTrueCount()
+    {
+        int count = 0;
+        for (int i = 0; i < this.size; i++)
+        {
+            if (this.items.get(i))
+            {
+                count++;
+            }
+        }
+        return count;
     }
 
     public boolean removeAtIndex(int index)

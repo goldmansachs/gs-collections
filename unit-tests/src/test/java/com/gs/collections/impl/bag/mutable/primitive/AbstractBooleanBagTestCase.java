@@ -158,50 +158,6 @@ public abstract class AbstractBooleanBagTestCase extends AbstractMutableBooleanC
 
     @Override
     @Test
-    public void removeAll()
-    {
-        super.removeAll();
-        MutableBooleanBag bag = this.newWith(true, false, true, false, true);
-        Assert.assertFalse(bag.removeAll());
-        Assert.assertTrue(bag.removeAll(true, true));
-        Assert.assertEquals(BooleanHashBag.newBagWith(false, false), bag);
-
-        MutableBooleanBag bag2 = this.newWith(true, false, true, false, true);
-        Assert.assertFalse(bag2.removeAll());
-        Assert.assertTrue(bag2.removeAll(true, false));
-        Assert.assertEquals(new BooleanHashBag(), bag2);
-    }
-
-    @Override
-    @Test
-    public void removeAllIterable()
-    {
-        super.removeAllIterable();
-        MutableBooleanBag bag = this.newWith(true, false, true, false, true);
-        Assert.assertFalse(bag.removeAll(new BooleanArrayList()));
-        Assert.assertTrue(bag.removeAll(BooleanArrayList.newListWith(true, true)));
-        Assert.assertEquals(BooleanHashBag.newBagWith(false, false), bag);
-        Assert.assertTrue(bag.removeAll(BooleanArrayList.newListWith(false, false)));
-        Assert.assertEquals(new BooleanHashBag(), bag);
-
-        MutableBooleanBag bag2 = this.newWith(true, false, true, false, true);
-        Assert.assertTrue(bag2.removeAll(BooleanHashBag.newBagWith(true, false)));
-        Assert.assertEquals(new BooleanHashBag(), bag2);
-    }
-
-    @Override
-    @Test
-    public void withoutAll()
-    {
-        super.withoutAll();
-        MutableBooleanBag bag = this.newWith(true, false, true, false, true);
-        Assert.assertEquals(BooleanHashBag.newBagWith(true, true, true), bag.withoutAll(BooleanHashBag.newBagWith(false, false)));
-        Assert.assertEquals(new BooleanHashBag(), bag.withoutAll(BooleanHashBag.newBagWith(true, false)));
-        Assert.assertEquals(new BooleanHashBag(), bag.withoutAll(BooleanHashBag.newBagWith(true, false)));
-    }
-
-    @Override
-    @Test
     public void booleanIterator()
     {
         BooleanArrayList list = BooleanArrayList.newListWith(true, false, true);

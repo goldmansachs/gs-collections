@@ -164,32 +164,6 @@ public abstract class Abstract<name>BagTestCase extends AbstractMutable<name>Col
 
     @Test
     @Override
-    public void removeAll()
-    {
-        super.removeAll();
-        Mutable<name>Bag bag = this.newWith(<["0", "1", "1", "2", "2", "2"]:(literal.(type))(); separator=", ">);
-        Assert.assertFalse(bag.removeAll());
-        Assert.assertTrue(bag.removeAll(<["0", "1"]:(literal.(type))(); separator=", ">));
-        Assert.assertEquals(<name>HashBag.newBagWith(<["2", "2", "2"]:(literal.(type))(); separator=", ">), bag);
-    }
-
-    @Test
-    @Override
-    public void removeAllIterable()
-    {
-        super.removeAllIterable();
-        Mutable<name>Bag bag = this.newWith(<["0", "1", "1", "2", "2", "2"]:(literal.(type))(); separator=", ">);
-        Assert.assertFalse(bag.removeAll(new <name>ArrayList()));
-        Assert.assertTrue(bag.removeAll(<name>ArrayList.newListWith(<["0", "1"]:(literal.(type))(); separator=", ">)));
-        Assert.assertEquals(<name>HashBag.newBagWith(<["2", "2", "2"]:(literal.(type))(); separator=", ">), bag);
-
-        Mutable<name>Bag bag2 = this.newWith(<["0", "1", "1", "2", "2", "2"]:(literal.(type))(); separator=", ">);
-        Assert.assertTrue(bag2.removeAll(<name>HashBag.newBagWith(<["0", "1", "1"]:(literal.(type))(); separator=", ">)));
-        Assert.assertEquals(<name>HashBag.newBagWith(<["2", "2", "2"]:(literal.(type))(); separator=", ">), bag2);
-    }
-
-    @Test
-    @Override
     public void <type>Iterator()
     {
         Mutable<name>Bag bag = this.newWith(<["1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">);

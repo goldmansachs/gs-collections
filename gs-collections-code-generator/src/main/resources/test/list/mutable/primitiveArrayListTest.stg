@@ -21,15 +21,8 @@ import java.lang.reflect.Field;
 
 import com.gs.collections.api.block.function.primitive.Object<name>IntToObjectFunction;
 import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
-import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
-import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
-import com.gs.collections.api.iterator.<name>Iterator;
-import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
-import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
 import com.gs.collections.impl.math.Mutable<wrapperName>;
-import com.gs.collections.impl.list.mutable.FastList;
-import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
