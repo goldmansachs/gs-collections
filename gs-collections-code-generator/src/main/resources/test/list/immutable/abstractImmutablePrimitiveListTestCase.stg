@@ -1,0 +1,237 @@
+import "copyright.stg"
+import "primitiveLiteral.stg"
+
+isTest() ::= "true"
+
+targetPath() ::= "com/gs/collections/impl/list/immutable/primitive"
+
+fileName(primitive) ::= "AbstractImmutable<primitive.name>ListTestCase"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.wrapperName, primitive.name)>
+>>
+
+body(type, wrapperName, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.list.immutable.primitive;
+
+import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.Immutable<name>List;
+import com.gs.collections.api.list.primitive.Mutable<name>List;
+import com.gs.collections.impl.collection.immutable.primitive.AbstractImmutable<name>CollectionTestCase;
+import com.gs.collections.impl.factory.primitive.<name>Lists;
+import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
+import com.gs.collections.impl.test.Verify;
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * Abstract JUnit test for {@link Immutable<name>List}.
+ * This file was automatically generated from template file abstractImmutablePrimitiveListTestCase.stg.
+ */
+public abstract class AbstractImmutable<name>ListTestCase extends AbstractImmutable<name>CollectionTestCase
+{
+    @Override
+    protected abstract Immutable<name>List classUnderTest();
+
+    @Override
+    protected Immutable<name>List newWith(<type>... elements)
+    {
+        return <name>Lists.immutable.of(elements);
+    }
+
+    @Override
+    protected Mutable<name>List newMutableCollectionWith(<type>... elements)
+    {
+        return <name>ArrayList.newListWith(elements);
+    }
+
+    @Override
+    protected MutableList\<<wrapperName>\> newObjectCollectionWith(<wrapperName>... elements)
+    {
+        return FastList.newListWith(elements);
+    }
+
+    @Test
+    public void get()
+    {
+        Immutable<name>List list = this.classUnderTest();
+        for (int i = 0; i \< list.size(); i++)
+        {
+            Assert.assertEquals(i + 1, list.get(i)<(wideDelta.(type))>);
+        }
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void get_throws_index_greater_than_size()
+    {
+        this.classUnderTest().get(this.classUnderTest().size());
+    }
+
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void get_throws_index_negative()
+    {
+        this.classUnderTest().get(-1);
+    }
+
+    @Test
+    public void getFirst()
+    {
+        Assert.assertEquals(<(wideLiteral.(type))("1")>, this.classUnderTest().getFirst()<(wideDelta.(type))>);
+    }
+
+    @Test
+    public void getLast()
+    {
+        Immutable<name>List list = this.classUnderTest();
+        Assert.assertEquals(list.size(), list.getLast()<(wideDelta.(type))>);
+    }
+
+    @Test
+    public void indexOf()
+    {
+        Immutable<name>List list = this.classUnderTest();
+        for (int i = 0; i \< list.size(); i++)
+        {
+            Assert.assertEquals(i, list.indexOf(<(castIntToPrimitiveTypes.(type))>(i + 1)));
+        }
+        Assert.assertEquals(-1L, list.indexOf(<(castIntToPrimitiveTypes.(type))>(list.size() + 1))<(wideDelta.(type))>);
+
+        Immutable<name>List arrayList = this.newWith(<["1", "2", "1"]:(literal.(type))(); separator=", ">);
+        Assert.assertEquals(0L, arrayList.indexOf(<(literal.(type))("1")>));
+        Assert.assertEquals(1L, arrayList.indexOf(<(literal.(type))("2")>));
+        Assert.assertEquals(-1L, arrayList.indexOf(<(literal.(type))("9")>));
+    }
+
+    @Test
+    public void lastIndexOf()
+    {
+        Immutable<name>List list = this.classUnderTest();
+        for (int i = 0; i \< list.size(); i++)
+        {
+            Assert.assertEquals(i, list.lastIndexOf(<(castIntToPrimitiveTypes.(type))>(i + 1)));
+        }
+        Assert.assertEquals(-1L, list.lastIndexOf(<(castIntToPrimitiveTypes.(type))>(list.size() + 1))<(wideDelta.(type))>);
+
+        Immutable<name>List arrayList = this.newWith(<["1", "2", "1"]:(literal.(type))(); separator=", ">);
+        Assert.assertEquals(2L, arrayList.lastIndexOf(<(literal.(type))("1")>));
+        Assert.assertEquals(1L, arrayList.lastIndexOf(<(literal.(type))("2")>));
+        Assert.assertEquals(-1L, arrayList.lastIndexOf(<(literal.(type))("9")>));
+    }
+
+    @Override
+    @Test
+    public void <type>Iterator()
+    {
+        <name>Iterator iterator = this.classUnderTest().<type>Iterator();
+        for (int i = 0; iterator.hasNext(); i++)
+        {
+            Assert.assertEquals(i + 1, iterator.next()<(wideDelta.(type))>);
+        }
+        Assert.assertFalse(iterator.hasNext());
+    }
+
+    @Override
+    @Test
+    public void toArray()
+    {
+        super.toArray();
+        Immutable<name>List list = this.classUnderTest();
+        <type>[] array = list.toArray();
+        Assert.assertEquals(list.size(), array.length);
+        for (int i = 0; i \< list.size(); i++)
+        {
+            Assert.assertEquals(list.get(i), array[i]<(wideDelta.(type))>);
+        }
+    }
+
+    @Override
+    @Test
+    public void testEquals()
+    {
+        super.testEquals();
+        Immutable<name>List list1 = this.newWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">);
+        Immutable<name>List list2 = this.newWith(<["4", "3", "2", "1"]:(literal.(type))(); separator=", ">);
+        Assert.assertNotEquals(list1, list2);
+    }
+
+    @Override
+    @Test
+    public void testToString()
+    {
+        super.testToString();
+        StringBuilder expectedString = new StringBuilder("[");
+        int size = this.classUnderTest().size();
+        for (int i = 0; i \< size; i++)
+        {
+            expectedString.append(<(castIntToPrimitiveTypes.(type))>(i + 1));
+            expectedString.append(i == size - 1 ? "" : ", ");
+        }
+        expectedString.append(']');
+        Assert.assertEquals(expectedString.toString(), this.classUnderTest().toString());
+    }
+
+    @Override
+    @Test
+    public void makeString()
+    {
+        super.makeString();
+        Immutable<name>List list = this.classUnderTest();
+        StringBuilder expectedString = new StringBuilder("");
+        StringBuilder expectedString1 = new StringBuilder("");
+        int size = list.size();
+        for (int i = 0; i \< size; i++)
+        {
+            expectedString.append(<(castIntToPrimitiveTypes.(type))>(i + 1));
+            expectedString1.append(<(castIntToPrimitiveTypes.(type))>(i + 1));
+            expectedString.append(i == size - 1 ? "" : ", ");
+            expectedString1.append(i == size - 1 ? "" : "/");
+        }
+        Assert.assertEquals(expectedString.toString(), list.makeString());
+        Assert.assertEquals(expectedString1.toString(), list.makeString("/"));
+        Assert.assertEquals(this.classUnderTest().toString(), this.classUnderTest().makeString("[", ", ", "]"));
+    }
+
+    @Override
+    @Test
+    public void appendString()
+    {
+        super.appendString();
+        StringBuilder expectedString = new StringBuilder("");
+        StringBuilder expectedString1 = new StringBuilder("");
+        int size = this.classUnderTest().size();
+        for (int i = 0; i \< size; i++)
+        {
+            expectedString.append(<(castIntToPrimitiveTypes.(type))>(i + 1));
+            expectedString1.append(<(castIntToPrimitiveTypes.(type))>(i + 1));
+            expectedString.append(i == size - 1 ? "" : ", ");
+            expectedString1.append(i == size - 1 ? "" : "/");
+        }
+        Immutable<name>List list = this.classUnderTest();
+        StringBuilder appendable2 = new StringBuilder();
+        list.appendString(appendable2);
+        Assert.assertEquals(expectedString.toString(), appendable2.toString());
+        StringBuilder appendable3 = new StringBuilder();
+        list.appendString(appendable3, "/");
+        Assert.assertEquals(expectedString1.toString(), appendable3.toString());
+        StringBuilder appendable4 = new StringBuilder();
+        this.classUnderTest().appendString(appendable4, "[", ", ", "]");
+        Assert.assertEquals(this.classUnderTest().toString(), appendable4.toString());
+    }
+
+    @Override
+    @Test
+    public void toList()
+    {
+        super.toList();
+        Immutable<name>List immutableList = this.classUnderTest();
+        Mutable<name>List list = immutableList.toList();
+        Verify.assertEqualsAndHashCode(immutableList, list);
+        Assert.assertNotSame(immutableList, list);
+    }
+}
+
+>>

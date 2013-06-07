@@ -24,6 +24,7 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.Immutable<name>List;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.impl.collection.mutable.primitive.AbstractUnmodifiable<name>Collection;
+import com.gs.collections.impl.factory.primitive.<name>Lists;
 import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
 import net.jcip.annotations.NotThreadSafe;
 
@@ -164,7 +165,7 @@ public final class Unmodifiable<name>List
 
     public Immutable<name>List toImmutable()
     {
-        throw new UnsupportedOperationException("toImmutable not implemented yet");
+        return <name>Lists.immutable.ofAll(this);
     }
 
     public Mutable<name>List reverseThis()

@@ -1,0 +1,56 @@
+import "copyright.stg"
+
+targetPath() ::= "com/gs/collections/api/factory/list/primitive"
+
+fileName(primitive) ::= "Immutable<primitive.name>ListFactory"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.api.factory.list.primitive;
+
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.list.primitive.Immutable<name>List;
+
+/**
+ * A factory which creates instances of type {@link Immutable<name>List}.
+ * This file was automatically generated from template file immutablePrimitiveListFactory.stg.
+ *
+ * @since 3.2.
+ */
+public interface Immutable<name>ListFactory
+{
+    /**
+     * Same as {@link #with()}.
+     */
+    Immutable<name>List of();
+
+    Immutable<name>List with();
+
+    /**
+     * Same as {@link #with(<type>)}.
+     */
+    Immutable<name>List of(<type> one);
+
+    Immutable<name>List with(<type> one);
+
+    /**
+     * Same as {@link #with(<type>[])}.
+     */
+    Immutable<name>List of(<type>... items);
+
+    Immutable<name>List with(<type>... items);
+
+    /**
+     * Same as {@link #withAll(<name>Iterable)}.
+     */
+    Immutable<name>List ofAll(<name>Iterable items);
+
+    Immutable<name>List withAll(<name>Iterable items);
+}
+
+>>

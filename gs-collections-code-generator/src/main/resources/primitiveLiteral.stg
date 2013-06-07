@@ -283,3 +283,12 @@ article ::= [
     "int": "an",
     default: "a"
 ]
+
+castIntToPrimitiveTypes ::= [
+    "byte": "(byte) ",
+    "short": "(short) ",
+    "char": "(char) ",
+    "float": "(float) ",
+    "double": "(double) ",
+    default: ""
+]

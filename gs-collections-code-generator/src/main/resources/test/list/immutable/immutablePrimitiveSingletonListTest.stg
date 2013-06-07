@@ -1,0 +1,44 @@
+import "copyright.stg"
+import "primitiveLiteral.stg"
+
+isTest() ::= "true"
+
+targetPath() ::= "com/gs/collections/impl/list/immutable/primitive"
+
+fileName(primitive) ::= "Immutable<primitive.name>SingletonListTest"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.wrapperName, primitive.name)>
+>>
+
+body(type, wrapperName, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.list.immutable.primitive;
+
+import com.gs.collections.api.list.primitive.Immutable<name>List;
+import com.gs.collections.impl.factory.primitive.<name>Lists;
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * JUnit test for {@link Immutable<name>SingletonList}.
+ */
+public class Immutable<name>SingletonListTest extends AbstractImmutable<name>ListTestCase
+{
+    @Override
+    protected Immutable<name>List classUnderTest()
+    {
+        return <name>Lists.immutable.of(<(literal.(type))("1")>);
+    }
+
+    @Override
+    @Test
+    public void testEquals()
+    {
+        super.testEquals();
+        Assert.assertNotEquals(this.newWith(<(literal.(type))("1")>), this.newWith());
+    }
+}
+
+>>

@@ -1,0 +1,36 @@
+import "copyright.stg"
+
+targetPath() ::= "com/gs/collections/impl/factory/primitive"
+
+fileName(primitive) ::= "<primitive.name>Lists"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.factory.primitive;
+
+import com.gs.collections.api.factory.list.primitive.Immutable<name>ListFactory;
+import com.gs.collections.impl.list.immutable.primitive.Immutable<name>ListFactoryImpl;
+
+/**
+ * <name>Lists is a static utility for creating {@link Immutable<name>ListFactory}.
+ * This file was automatically generated from template file primitiveLists.stg.
+ *
+ * @since 3.2.
+ */
+@SuppressWarnings("ConstantNamingConvention")
+public final class <name>Lists
+{
+    public static final Immutable<name>ListFactory immutable = new Immutable<name>ListFactoryImpl();
+
+    private <name>Lists()
+    {
+        throw new AssertionError("Suppress default constructor for noninstantiability");
+    }
+}
+
+>>

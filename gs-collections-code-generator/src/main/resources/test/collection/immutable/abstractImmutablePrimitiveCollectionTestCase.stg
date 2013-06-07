@@ -1,0 +1,117 @@
+import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+
+isTest() ::= "true"
+
+targetPath() ::= "com/gs/collections/impl/collection/immutable/primitive"
+
+fileName(primitive) ::= "AbstractImmutable<primitive.name>CollectionTestCase"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.wrapperName, primitive.name)>
+>>
+
+body(type, wrapperName, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.collection.immutable.primitive;
+
+import com.gs.collections.api.collection.primitive.Immutable<name>Collection;
+import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
+import com.gs.collections.api.list.primitive.Immutable<name>List;
+import com.gs.collections.api.list.primitive.Mutable<name>List;
+import com.gs.collections.impl.collection.mutable.primitive.Abstract<name>IterableTestCase;
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * Abstract JUnit test for {@link Immutable<name>Collection}s.
+ * This file was automatically generated from template file abstractImmutablePrimitiveCollectionTestCase.stg.
+ */
+public abstract class AbstractImmutable<name>CollectionTestCase extends Abstract<name>IterableTestCase
+{
+    @Override
+    protected abstract Immutable<name>Collection classUnderTest();
+
+    @Override
+    protected abstract Immutable<name>List newWith(<type>... elements);
+
+    @Override
+    protected abstract Mutable<name>Collection newMutableCollectionWith(<type>... elements);
+
+    @Test
+    public void testNewWith()
+    {
+        Immutable<name>Collection immutableCollection = this.classUnderTest();
+        Mutable<name>List list = immutableCollection.toList();
+        Immutable<name>Collection collection = immutableCollection.newWith(<(literal.(type))("1")>);
+        Immutable<name>Collection collection0 = immutableCollection.newWith(<(literal.(type))("1")>).newWith(<(literal.(type))("2")>);
+        Immutable<name>Collection collection1 = immutableCollection.newWith(<(literal.(type))("1")>).newWith(<(literal.(type))("2")>).newWith(<(literal.(type))("3")>);
+        Immutable<name>Collection collection2 = immutableCollection.newWith(<(literal.(type))("1")>).newWith(<(literal.(type))("2")>).newWith(<(literal.(type))("3")>).newWith(<(literal.(type))("4")>);
+        Immutable<name>Collection collection3 = immutableCollection.newWith(<(literal.(type))("1")>).newWith(<(literal.(type))("2")>).newWith(<(literal.(type))("3")>).newWith(<(literal.(type))("4")>).newWith(<(literal.(type))("5")>);
+        Assert.assertEquals(list, immutableCollection);
+        Assert.assertEquals(list.with(<(literal.(type))("1")>), collection);
+        Assert.assertEquals(list.with(<(literal.(type))("2")>), collection0);
+        Assert.assertEquals(list.with(<(literal.(type))("3")>), collection1);
+        Assert.assertEquals(list.with(<(literal.(type))("4")>), collection2);
+        Assert.assertEquals(list.with(<(literal.(type))("5")>), collection3);
+    }
+
+    @Test
+    public void newWithAll()
+    {
+        Immutable<name>Collection immutableCollection = this.classUnderTest();
+        Mutable<name>List list = immutableCollection.toList();
+        Immutable<name>Collection collection = immutableCollection.newWithAll(this.newMutableCollectionWith(<(literal.(type))("1")>));
+        Immutable<name>Collection collection0 = immutableCollection.newWithAll(this.newMutableCollectionWith(<["1", "2"]:(literal.(type))(); separator=", ">));
+        Immutable<name>Collection collection1 = immutableCollection.newWithAll(this.newMutableCollectionWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
+        Immutable<name>Collection collection2 = immutableCollection.newWithAll(this.newMutableCollectionWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">));
+        Immutable<name>Collection collection3 = immutableCollection.newWithAll(this.newMutableCollectionWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">));
+        Assert.assertEquals(list, immutableCollection);
+        Assert.assertEquals(list.with(<(literal.(type))("1")>), collection);
+        Assert.assertEquals(list.with(<(literal.(type))("2")>), collection0);
+        Assert.assertEquals(list.with(<(literal.(type))("3")>), collection1);
+        Assert.assertEquals(list.with(<(literal.(type))("4")>), collection2);
+        Assert.assertEquals(list.with(<(literal.(type))("5")>), collection3);
+    }
+
+    @Test
+    public void newWithout()
+    {
+        Immutable<name>Collection collection = this.classUnderTest();
+        int size = collection.size();
+        Assert.assertSame(collection, collection.newWithout(<(castIntToPrimitiveTypes.(type))>(size + 1)));
+        Mutable<name>List list = collection.toList();
+        Assert.assertEquals(list, collection.newWithout(<(castIntToPrimitiveTypes.(type))>(size + 1)));
+
+        Immutable<name>Collection collection1 = collection.newWithout(<(literal.(type))("1")>);
+        Assert.assertNotSame(collection, collection1);
+        Assert.assertEquals(list.without(<(literal.(type))("1")>), collection1);
+        Assert.assertEquals(this.classUnderTest(), collection);
+    }
+
+    @Test
+    public void newWithoutAll()
+    {
+        Immutable<name>Collection collection = this.classUnderTest();
+        Mutable<name>List list = collection.toList();
+        int size = collection.size();
+        Assert.assertEquals(list, collection.newWithoutAll(this.newMutableCollectionWith(<(castIntToPrimitiveTypes.(type))>(size + 1), <(castIntToPrimitiveTypes.(type))>(size + 2))));
+        list.removeAll(<["1", "2"]:(literal.(type))(); separator=", ">);
+        Assert.assertEquals(list, collection.newWithoutAll(this.newMutableCollectionWith(<["1", "2"]:(literal.(type))(); separator=", ">)));
+        Mutable<name>List list1 = collection.toList();
+        list1.removeAll(<(literal.(type))("2")>);
+        Assert.assertEquals(list1, collection.newWithoutAll(this.newMutableCollectionWith(<(literal.(type))("2")>, <(castIntToPrimitiveTypes.(type))>(size + 1))));
+        Assert.assertEquals(this.classUnderTest(), collection);
+
+        Immutable<name>Collection collection1 = this.newWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
+        Assert.assertEquals(this.newMutableCollectionWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">), collection1.newWithoutAll(this.newMutableCollectionWith(<["8", "9"]:(literal.(type))(); separator=", ">)));
+        Assert.assertEquals(this.newMutableCollectionWith(<["2", "3", "4"]:(literal.(type))(); separator=", ">), collection1.newWithoutAll(this.newMutableCollectionWith(<["1", "5"]:(literal.(type))(); separator=", ">)));
+        Assert.assertEquals(this.newMutableCollectionWith(<["1", "3", "4", "5"]:(literal.(type))(); separator=", ">), collection1.newWithoutAll(this.newMutableCollectionWith(<["2", "20"]:(literal.(type))(); separator=", ">)));
+        Assert.assertEquals(this.newMutableCollectionWith(), this.newWith().newWithoutAll(this.newMutableCollectionWith(<["3", "4"]:(literal.(type))(); separator=", ">)));
+    }
+}
+
+>>

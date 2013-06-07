@@ -84,6 +84,14 @@ public abstract class AbstractMutableBooleanCollectionTestCase extends AbstractB
 
     @Override
     @Test
+    public void testEquals()
+    {
+        super.testEquals();
+        Verify.assertPostSerializedEqualsAndHashCode(this.newWith());
+    }
+
+    @Override
+    @Test
     public void containsAllArray()
     {
         super.containsAllArray();

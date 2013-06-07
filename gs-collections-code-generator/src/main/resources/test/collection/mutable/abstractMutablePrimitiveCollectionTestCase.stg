@@ -76,6 +76,14 @@ public abstract class AbstractMutable<name>CollectionTestCase extends Abstract<n
 
     @Override
     @Test
+    public void testEquals()
+    {
+        super.testEquals();
+        Verify.assertPostSerializedEqualsAndHashCode(this.newWith());
+    }
+
+    @Override
+    @Test
     public void contains()
     {
         super.contains();

@@ -1,0 +1,545 @@
+import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+
+targetPath() ::= "com/gs/collections/impl/list/immutable/primitive"
+
+fileName(primitive) ::= "Immutable<primitive.name>ArrayList"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.list.immutable.primitive;
+
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.Arrays;
+import java.util.NoSuchElementException;
+
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.Lazy<name>Iterable;
+import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
+import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.list.ImmutableList;
+import com.gs.collections.api.list.primitive.Immutable<name>List;
+import com.gs.collections.api.list.primitive.<name>List;
+import com.gs.collections.api.list.primitive.Mutable<name>List;
+import com.gs.collections.api.set.primitive.Mutable<name>Set;
+import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
+import com.gs.collections.impl.factory.primitive.<name>Lists;
+import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
+import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
+import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
+import net.jcip.annotations.Immutable;
+
+/**
+ * Immutable<name>ArrayList is the non-modifiable equivalent of {@link <name>ArrayList}.
+ * It wraps a Java <type> array.
+ * This file was automatically generated from template file immutablePrimitiveArrayList.stg.
+ *
+ * @since 3.2.
+ */
+@Immutable
+final class Immutable<name>ArrayList
+        implements Immutable<name>List, Serializable
+{
+    private static final long serialVersionUID = 1L;
+    private final <type>[] items;
+
+    private Immutable<name>ArrayList(<type>[] newElements)
+    {
+        if (newElements.length \<= 1)
+        {
+            throw new IllegalArgumentException("Use <name>Lists.immutable.of() to instantiate an optimized collection");
+        }
+        this.items = newElements;
+    }
+
+    public static Immutable<name>ArrayList newList(<name>Iterable iterable)
+    {
+        return new Immutable<name>ArrayList(iterable.toArray());
+    }
+
+    public static Immutable<name>ArrayList newListWith(<type>... elements)
+    {
+        <type>[] newArray = new <type>[elements.length];
+        System.arraycopy(elements, 0, newArray, 0, elements.length);
+        return new Immutable<name>ArrayList(newArray);
+    }
+
+    public <type> get(int index)
+    {
+        return this.items[index];
+    }
+
+    public <type> getFirst()
+    {
+        return this.items[0];
+    }
+
+    public <type> getLast()
+    {
+        return this.items[this.items.length - 1];
+    }
+
+    public int indexOf(<type> value)
+    {
+        for (int i = 0; i \< this.items.length; i++)
+        {
+            if (<(equals.(type))("this.items[i]", "value")>)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public int lastIndexOf(<type> value)
+    {
+        for (int i = this.items.length - 1; i >= 0; i--)
+        {
+            if (<(equals.(type))("this.items[i]", "value")>)
+            {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    public <name>Iterator <type>Iterator()
+    {
+        return new Internal<name>Iterator();
+    }
+
+    public void forEach(<name>Procedure procedure)
+    {
+        for (int i = 0; i \< this.items.length; i++)
+        {
+            procedure.value(this.items[i]);
+        }
+    }
+
+    public int count(<name>Predicate predicate)
+    {
+        int count = 0;
+        for (int i = 0; i \< this.items.length; i++)
+        {
+            if (predicate.accept(this.items[i]))
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public boolean anySatisfy(<name>Predicate predicate)
+    {
+        for (int i = 0; i \< this.items.length; i++)
+        {
+            if (predicate.accept(this.items[i]))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean allSatisfy(<name>Predicate predicate)
+    {
+        for (int i = 0; i \< this.items.length; i++)
+        {
+            if (!predicate.accept(this.items[i]))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean noneSatisfy(<name>Predicate predicate)
+    {
+        for (int i = 0; i \< this.items.length; i++)
+        {
+            if (predicate.accept(this.items[i]))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public Immutable<name>List select(<name>Predicate predicate)
+    {
+        <name>ArrayList result = new <name>ArrayList();
+        for (int i = 0; i \< this.items.length; i++)
+        {
+            <type> item = this.items[i];
+            if (predicate.accept(item))
+            {
+                result.add(item);
+            }
+        }
+        return result.toImmutable();
+    }
+
+    public Immutable<name>List reject(<name>Predicate predicate)
+    {
+        <name>ArrayList result = new <name>ArrayList();
+        for (int i = 0; i \< this.items.length; i++)
+        {
+            <type> item = this.items[i];
+            if (!predicate.accept(item))
+            {
+                result.add(item);
+            }
+        }
+        return result.toImmutable();
+    }
+
+    public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
+    {
+        for (int i = 0; i \< this.items.length; i++)
+        {
+            <type> item = this.items[i];
+            if (predicate.accept(item))
+            {
+                return item;
+            }
+        }
+        return ifNone;
+    }
+
+    public \<V> ImmutableList\<V> collect(<name>ToObjectFunction\<? extends V> function)
+    {
+        FastList\<V> target = FastList.newList(this.items.length);
+        for (int i = 0; i \< this.items.length; i++)
+        {
+            target.add(function.valueOf(this.items[i]));
+        }
+        return target.toImmutable();
+    }
+
+    public <wideType.(type)> sum()
+    {
+        <wideType.(type)> result = <wideZero.(type)>;
+        for (int i = 0; i \< this.items.length; i++)
+        {
+            result += this.items[i];
+        }
+        return result;
+    }
+
+    public <type> max()
+    {
+        <type> max = this.items[0];
+        for (int i = 1; i \< this.items.length; i++)
+        {
+            <type> value = this.items[i];
+            if (<(lessThan.(type))("max", "value")>)
+            {
+                max = value;
+            }
+        }
+        return max;
+    }
+
+    public <type> maxIfEmpty(<type> defaultValue)
+    {
+        return this.max();
+    }
+
+    public <type> min()
+    {
+        <type> min = this.items[0];
+        for (int i = 1; i \< this.items.length; i++)
+        {
+            <type> value = this.items[i];
+            if (<(lessThan.(type))("value", "min")>)
+            {
+                min = value;
+            }
+        }
+        return min;
+    }
+
+    public <type> minIfEmpty(<type> defaultValue)
+    {
+        return this.min();
+    }
+
+    public double average()
+    {
+        return <castSum.(type)>this.sum() / (double) this.size();
+    }
+
+    public double median()
+    {
+        <type>[] sortedArray = this.toSortedArray();
+        int middleIndex = sortedArray.length >\> 1;
+        if (sortedArray.length > 1 && (sortedArray.length & 1) == 0)
+        {
+            <type> first = sortedArray[middleIndex];
+            <type> second = sortedArray[middleIndex - 1];
+            return (<castDouble.(type)>first + <castDouble.(type)>second) / 2.0;
+        }
+        return <castDouble.(type)>sortedArray[middleIndex];
+    }
+
+    public <type>[] toSortedArray()
+    {
+        <type>[] array = this.toArray();
+        Arrays.sort(array);
+        return array;
+    }
+
+    public Mutable<name>List toSortedList()
+    {
+        return <name>ArrayList.newList(this).sortThis();
+    }
+
+    public <type>[] toArray()
+    {
+        <type>[] newItems = new <type>[this.items.length];
+        System.arraycopy(this.items, 0, newItems, 0, this.items.length);
+        return newItems;
+    }
+
+    public boolean contains(<type> value)
+    {
+        for (int i = 0; i \< this.items.length; i++)
+        {
+            if (<(equals.(type))("this.items[i]", "value")>)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean containsAll(<type>... source)
+    {
+        for (<type> value : source)
+        {
+            if (!this.contains(value))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean containsAll(<name>Iterable source)
+    {
+        for (<name>Iterator iterator = source.<type>Iterator(); iterator.hasNext(); )
+        {
+            if (!this.contains(iterator.next()))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public Mutable<name>List toList()
+    {
+        return <name>ArrayList.newList(this);
+    }
+
+    public Mutable<name>Set toSet()
+    {
+        return <name>HashSet.newSet(this);
+    }
+
+    public Mutable<name>Bag toBag()
+    {
+        return <name>HashBag.newBag(this);
+    }
+
+    public Lazy<name>Iterable asLazy()
+    {
+        return new Lazy<name>IterableAdapter(this);
+    }
+
+    public Immutable<name>List newWith(<type> element)
+    {
+        <type>[] newItems = new <type>[this.items.length + 1];
+        System.arraycopy(this.items, 0, newItems, 0, this.items.length);
+        newItems[this.items.length] = element;
+        return new Immutable<name>ArrayList(newItems);
+    }
+
+    public Immutable<name>List newWithout(<type> element)
+    {
+        int index = this.indexOf(element);
+        if (index != -1)
+        {
+            <type>[] newItems = new <type>[this.items.length - 1];
+            System.arraycopy(this.items, 0, newItems, 0, index);
+            System.arraycopy(this.items, index + 1, newItems, index, this.items.length - index - 1);
+            return <name>Lists.immutable.of(newItems);
+        }
+        return this;
+    }
+
+    public Immutable<name>List newWithAll(<name>Iterable elements)
+    {
+        <type>[] newItems = new <type>[this.items.length + elements.size()];
+        System.arraycopy(this.items, 0, newItems, 0, this.items.length);
+        int index = 0;
+        for (<name>Iterator iterator = elements.<type>Iterator(); iterator.hasNext(); index++)
+        {
+            newItems[this.items.length + index] = iterator.next();
+        }
+        return new Immutable<name>ArrayList(newItems);
+    }
+
+    public Immutable<name>List newWithoutAll(<name>Iterable elements)
+    {
+        Mutable<name>List mutable<name>List = this.toList();
+        mutable<name>List.removeAll(elements);
+        return mutable<name>List.toImmutable();
+    }
+
+    public int size()
+    {
+        return this.items.length;
+    }
+
+    public boolean isEmpty()
+    {
+        return false;
+    }
+
+    public boolean notEmpty()
+    {
+        return true;
+    }
+
+    @Override
+    public boolean equals(Object otherList)
+    {
+        if (otherList == this)
+        {
+            return true;
+        }
+        if (!(otherList instanceof <name>List))
+        {
+            return false;
+        }
+        <name>List list = (<name>List) otherList;
+        if (this.items.length != list.size())
+        {
+            return false;
+        }
+        for (int i = 0; i \< this.items.length; i++)
+        {
+            if (<(notEquals.(type))("this.items[i]", "list.get(i)")>)
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int hashCode = 1;
+        for (int i = 0; i \< this.items.length; i++)
+        {
+            <type> item = this.items[i];
+            hashCode = 31 * hashCode + <(hashCode.(type))("item")>;
+        }
+        return hashCode;
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.makeString("[", ", ", "]");
+    }
+
+    public String makeString()
+    {
+        return this.makeString(", ");
+    }
+
+    public String makeString(String separator)
+    {
+        return this.makeString("", separator, "");
+    }
+
+    public String makeString(String start, String separator, String end)
+    {
+        Appendable stringBuilder = new StringBuilder();
+        this.appendString(stringBuilder, start, separator, end);
+        return stringBuilder.toString();
+    }
+
+    public void appendString(Appendable appendable)
+    {
+        this.appendString(appendable, ", ");
+    }
+
+    public void appendString(Appendable appendable, String separator)
+    {
+        this.appendString(appendable, "", separator, "");
+    }
+
+    public void appendString(Appendable appendable, String start, String separator, String end)
+    {
+        try
+        {
+            appendable.append(start);
+            for (int i = 0; i \< this.items.length; i++)
+            {
+                if (i > 0)
+                {
+                    appendable.append(separator);
+                }
+                <type> value = this.items[i];
+                appendable.append(String.valueOf(value));
+            }
+            appendable.append(end);
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    private class Internal<name>Iterator implements <name>Iterator
+    {
+        /**
+         * Index of element to be returned by subsequent call to next.
+         */
+        private int currentIndex;
+
+        public boolean hasNext()
+        {
+            return this.currentIndex != Immutable<name>ArrayList.this.items.length;
+        }
+
+        public <type> next()
+        {
+            if (!this.hasNext())
+            {
+                throw new NoSuchElementException();
+            }
+            <type> next = Immutable<name>ArrayList.this.items[this.currentIndex];
+            this.currentIndex++;
+            return next;
+        }
+    }
+}
+
+>>

@@ -39,6 +39,7 @@ import com.gs.collections.api.list.primitive.ImmutableBooleanList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
+import com.gs.collections.impl.factory.primitive.BooleanLists;
 import com.gs.collections.impl.lazy.primitive.LazyBooleanIterableAdapter;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
@@ -51,7 +52,7 @@ import net.jcip.annotations.NotThreadSafe;
  */
 @NotThreadSafe
 public final class BooleanArrayList
-    implements MutableBooleanList, Externalizable
+        implements MutableBooleanList, Externalizable
 {
     private static final long serialVersionUID = 1L;
     private int size;
@@ -594,7 +595,7 @@ public final class BooleanArrayList
 
     public ImmutableBooleanList toImmutable()
     {
-        throw new UnsupportedOperationException("toImmutable not implemented yet");
+        return BooleanLists.immutable.ofAll(this);
     }
 
     public BooleanArrayList toReversed()
@@ -707,10 +708,10 @@ public final class BooleanArrayList
     }
 
     public void appendString(
-        Appendable appendable,
-        String start,
-        String separator,
-        String end)
+            Appendable appendable,
+            String start,
+            String separator,
+            String end)
     {
         try
         {

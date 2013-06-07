@@ -1,0 +1,145 @@
+import "copyright.stg"
+import "primitiveLiteral.stg"
+
+isTest() ::= "true"
+
+targetPath() ::= "com/gs/collections/impl/list/immutable/primitive"
+
+fileName(primitive) ::= "Immutable<primitive.name>EmptyListTest"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.wrapperName, primitive.name)>
+>>
+
+body(type, wrapperName, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.list.immutable.primitive;
+
+import java.util.NoSuchElementException;
+
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.collection.primitive.Immutable<name>Collection;
+import com.gs.collections.api.list.primitive.Immutable<name>List;
+import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
+import com.gs.collections.impl.factory.primitive.<name>Lists;
+import com.gs.collections.impl.test.Verify;
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * JUnit test for {@link Immutable<name>EmptyList}.
+ */
+public class Immutable<name>EmptyListTest extends AbstractImmutable<name>ListTestCase
+{
+    @Override
+    protected Immutable<name>List classUnderTest()
+    {
+        return Immutable<name>EmptyList.INSTANCE;
+    }
+
+    @Override
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void get()
+    {
+        this.classUnderTest().get(1);
+    }
+
+    @Override
+    @Test
+    public void newWithout()
+    {
+        Immutable<name>Collection emptyCollection = this.classUnderTest();
+        Immutable<name>Collection newCollection = emptyCollection.newWithout(<(literal.(type))("9")>);
+        Assert.assertEquals(this.newMutableCollectionWith(), newCollection);
+        Assert.assertSame(emptyCollection, newCollection);
+        Assert.assertEquals(this.newMutableCollectionWith(), emptyCollection);
+    }
+
+    @Override
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void getFirst()
+    {
+        this.classUnderTest().getFirst();
+    }
+
+    @Override
+    @Test(expected = IndexOutOfBoundsException.class)
+    public void getLast()
+    {
+        this.classUnderTest().getLast();
+    }
+
+    @Override
+    @Test
+    public void isEmpty()
+    {
+        Verify.assertEmpty(this.classUnderTest());
+    }
+
+    @Override
+    @Test
+    public void notEmpty()
+    {
+        Assert.assertFalse(this.classUnderTest().notEmpty());
+    }
+
+    @Override
+    @Test
+    public void select()
+    {
+        super.select();
+        <name>Iterable iterable = this.classUnderTest();
+        Verify.assertEmpty(iterable.select(<name>Predicates.lessThan(<(literal.(type))("4")>)));
+        <name>Iterable <type>Iterable = iterable.select(<name>Predicates.greaterThan(<(literal.(type))("4")>));
+        Verify.assertEmpty(<type>Iterable);
+        Assert.assertSame(iterable, <type>Iterable);
+    }
+
+    @Override
+    @Test
+    public void reject()
+    {
+        super.reject();
+        <name>Iterable iterable = this.classUnderTest();
+        Verify.assertEmpty(iterable.reject(<name>Predicates.lessThan(<(literal.(type))("4")>)));
+        <name>Iterable <type>Iterable = iterable.reject(<name>Predicates.greaterThan(<(literal.(type))("4")>));
+        Verify.assertEmpty(<type>Iterable);
+        Assert.assertSame(iterable, <type>Iterable);
+    }
+
+    @Override
+    @Test
+    public void testEquals()
+    {
+        Verify.assertEqualsAndHashCode(this.classUnderTest(), this.classUnderTest());
+        Verify.assertEqualsAndHashCode(this.newMutableCollectionWith(), this.classUnderTest());
+        Verify.assertPostSerializedIdentity(this.newWith());
+        Assert.assertNotEquals(this.classUnderTest(), this.newWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
+        Assert.assertNotEquals(this.classUnderTest(), this.newWith(<(literal.(type))("1")>));
+    }
+
+    @Override
+    @Test(expected = ArithmeticException.class)
+    public void average()
+    {
+        this.classUnderTest().average();
+    }
+
+    @Override
+    @Test(expected = NoSuchElementException.class)
+    public void max()
+    {
+        this.classUnderTest().max();
+    }
+
+    @Override
+    @Test(expected = NoSuchElementException.class)
+    public void min()
+    {
+        this.classUnderTest().min();
+    }
+}
+
+>>

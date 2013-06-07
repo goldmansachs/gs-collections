@@ -49,15 +49,25 @@ public abstract class AbstractBooleanIterableTestCase
     @Test
     public void newCollectionWith()
     {
-        BooleanIterable iterable = this.classUnderTest();
+        BooleanIterable iterable = this.newWith(true, false, true);
         Verify.assertSize(3, iterable);
         Assert.assertTrue(iterable.containsAll(true, false, true));
+
+        BooleanIterable iterable1 = this.newWith();
+        Verify.assertEmpty(iterable1);
+        Assert.assertFalse(iterable1.containsAll(true, false, true));
+
+        BooleanIterable iterable2 = this.newWith(true);
+        Verify.assertSize(1, iterable2);
+        Assert.assertFalse(iterable2.containsAll(true, false, true));
+        Assert.assertTrue(iterable2.containsAll(true, true));
     }
 
     @Test
     public void newCollection()
     {
-        Assert.assertEquals(this.newMutableCollectionWith(true, false, true), this.classUnderTest());
+        Assert.assertEquals(this.newMutableCollectionWith(), this.newWith());
+        Assert.assertEquals(this.newMutableCollectionWith(true, false, true), this.newWith(true, false, true));
     }
 
     @Test
@@ -84,8 +94,10 @@ public abstract class AbstractBooleanIterableTestCase
         BooleanIterable emptyCollection = this.newWith();
         Assert.assertFalse(emptyCollection.contains(true));
         Assert.assertFalse(emptyCollection.contains(false));
-        Assert.assertTrue(this.classUnderTest().contains(true));
-        Assert.assertTrue(this.classUnderTest().contains(false));
+        BooleanIterable booleanIterable = this.classUnderTest();
+        int size = booleanIterable.size();
+        Assert.assertEquals(size >= 1, booleanIterable.contains(true));
+        Assert.assertEquals(size >= 2, booleanIterable.contains(false));
         Assert.assertFalse(this.newWith(true, true, true).contains(false));
         Assert.assertFalse(this.newWith(false, false, false).contains(true));
     }
@@ -94,11 +106,13 @@ public abstract class AbstractBooleanIterableTestCase
     public void containsAllArray()
     {
         BooleanIterable iterable = this.classUnderTest();
-        Assert.assertTrue(iterable.containsAll(true));
-        Assert.assertTrue(iterable.containsAll(true, false, true));
-        Assert.assertTrue(iterable.containsAll(true, false));
-        Assert.assertTrue(iterable.containsAll(true, true));
-        Assert.assertTrue(iterable.containsAll(false, false));
+        int size = iterable.size();
+        Assert.assertEquals(size >= 1, iterable.containsAll(true));
+        Assert.assertEquals(size >= 2, iterable.containsAll(true, false, true));
+        Assert.assertEquals(size >= 2, iterable.containsAll(true, false));
+        Assert.assertEquals(size >= 1, iterable.containsAll(true, true));
+        Assert.assertEquals(size >= 2, iterable.containsAll(false, false));
+
         BooleanIterable emptyCollection = this.newWith();
         Assert.assertFalse(emptyCollection.containsAll(true));
         Assert.assertFalse(emptyCollection.containsAll(false));
@@ -118,6 +132,12 @@ public abstract class AbstractBooleanIterableTestCase
         Assert.assertTrue(emptyCollection.containsAll(new BooleanArrayList()));
         Assert.assertFalse(emptyCollection.containsAll(BooleanArrayList.newListWith(true)));
         Assert.assertFalse(emptyCollection.containsAll(BooleanArrayList.newListWith(false)));
+        BooleanIterable booleanIterable = this.classUnderTest();
+        int size = booleanIterable.size();
+        Assert.assertTrue(booleanIterable.containsAll(new BooleanArrayList()));
+        Assert.assertEquals(size >= 1, booleanIterable.containsAll(BooleanArrayList.newListWith(true)));
+        Assert.assertEquals(size >= 2, booleanIterable.containsAll(BooleanArrayList.newListWith(false)));
+        Assert.assertEquals(size >= 2, booleanIterable.containsAll(BooleanArrayList.newListWith(true, false)));
         BooleanIterable iterable = this.newWith(true, true, false, false, false);
         Assert.assertTrue(iterable.containsAll(BooleanArrayList.newListWith(true)));
         Assert.assertTrue(iterable.containsAll(BooleanArrayList.newListWith(false)));
@@ -178,7 +198,9 @@ public abstract class AbstractBooleanIterableTestCase
             }
         });
 
-        Assert.assertEquals(2L, sum[0]);
+        int size = this.classUnderTest().size();
+        int halfSize = size / 2;
+        Assert.assertEquals((size & 1) == 0 ? halfSize : halfSize + 1, sum[0]);
 
         final long[] sum1 = new long[1];
         this.newWith(true, false, false, true, true, true).forEach(new BooleanProcedure()
@@ -211,14 +233,24 @@ public abstract class AbstractBooleanIterableTestCase
         Assert.assertEquals(4L, iterable.count(BooleanPredicates.isTrue()));
         Assert.assertEquals(2L, iterable.count(BooleanPredicates.isFalse()));
         Assert.assertEquals(6L, iterable.count(BooleanPredicates.or(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())));
+
+        BooleanIterable iterable1 = this.classUnderTest();
+        int size = iterable1.size();
+        int halfSize = size / 2;
+        Assert.assertEquals((size & 1) == 1 ? halfSize + 1 : halfSize, iterable1.count(BooleanPredicates.isTrue()));
+        Assert.assertEquals(halfSize, iterable1.count(BooleanPredicates.isFalse()));
     }
 
     @Test
     public void anySatisfy()
     {
-        Assert.assertTrue(this.classUnderTest().anySatisfy(BooleanPredicates.isTrue()));
+        BooleanIterable booleanIterable = this.classUnderTest();
+        int size = booleanIterable.size();
+        Assert.assertEquals(size >= 1, booleanIterable.anySatisfy(BooleanPredicates.isTrue()));
+        Assert.assertEquals(size >= 2, booleanIterable.anySatisfy(BooleanPredicates.isFalse()));
         Assert.assertFalse(this.newWith(true, true).anySatisfy(BooleanPredicates.isFalse()));
         Assert.assertFalse(this.newWith().anySatisfy(BooleanPredicates.isFalse()));
+        Assert.assertFalse(this.newWith().anySatisfy(BooleanPredicates.isTrue()));
         Assert.assertTrue(this.newWith(true).anySatisfy(BooleanPredicates.isTrue()));
         Assert.assertFalse(this.newWith(false).anySatisfy(BooleanPredicates.isTrue()));
         Assert.assertTrue(this.newWith(false, false, false).anySatisfy(BooleanPredicates.isFalse()));
@@ -227,7 +259,10 @@ public abstract class AbstractBooleanIterableTestCase
     @Test
     public void allSatisfy()
     {
-        Assert.assertFalse(this.classUnderTest().allSatisfy(BooleanPredicates.isTrue()));
+        BooleanIterable booleanIterable = this.classUnderTest();
+        int size = booleanIterable.size();
+        Assert.assertEquals(size <= 1, booleanIterable.allSatisfy(BooleanPredicates.isTrue()));
+        Assert.assertEquals(size == 0, booleanIterable.allSatisfy(BooleanPredicates.isFalse()));
         Assert.assertTrue(this.newWith().allSatisfy(BooleanPredicates.isTrue()));
         Assert.assertTrue(this.newWith().allSatisfy(BooleanPredicates.isFalse()));
         Assert.assertTrue(this.newWith(false, false).allSatisfy(BooleanPredicates.isFalse()));
@@ -239,7 +274,10 @@ public abstract class AbstractBooleanIterableTestCase
     @Test
     public void noneSatisfy()
     {
-        Assert.assertFalse(this.classUnderTest().noneSatisfy(BooleanPredicates.isTrue()));
+        BooleanIterable booleanIterable = this.classUnderTest();
+        int size = booleanIterable.size();
+        Assert.assertEquals(size == 0, booleanIterable.noneSatisfy(BooleanPredicates.isTrue()));
+        Assert.assertEquals(size <= 1, booleanIterable.noneSatisfy(BooleanPredicates.isFalse()));
         Assert.assertTrue(this.newWith().noneSatisfy(BooleanPredicates.isTrue()));
         Assert.assertTrue(this.newWith().noneSatisfy(BooleanPredicates.isFalse()));
         Assert.assertTrue(this.newWith(false, false).noneSatisfy(BooleanPredicates.isTrue()));
@@ -252,8 +290,10 @@ public abstract class AbstractBooleanIterableTestCase
     public void select()
     {
         BooleanIterable iterable = this.classUnderTest();
-        Verify.assertSize(2, iterable.select(BooleanPredicates.isTrue()));
-        Verify.assertSize(1, iterable.select(BooleanPredicates.isFalse()));
+        int size = iterable.size();
+        int halfSize = size / 2;
+        Verify.assertSize((size & 1) == 1 ? halfSize + 1 : halfSize, iterable.select(BooleanPredicates.isTrue()));
+        Verify.assertSize(halfSize, iterable.select(BooleanPredicates.isFalse()));
 
         BooleanIterable iterable1 = this.newWith(false, true, false, false, true, true, true);
         Assert.assertEquals(this.newWith(true, true, true, true), iterable1.select(BooleanPredicates.isTrue()));
@@ -264,8 +304,10 @@ public abstract class AbstractBooleanIterableTestCase
     public void reject()
     {
         BooleanIterable iterable = this.classUnderTest();
-        Verify.assertSize(1, iterable.reject(BooleanPredicates.isTrue()));
-        Verify.assertSize(2, iterable.reject(BooleanPredicates.isFalse()));
+        int size = iterable.size();
+        int halfSize = size / 2;
+        Verify.assertSize(halfSize, iterable.reject(BooleanPredicates.isTrue()));
+        Verify.assertSize((size & 1) == 1 ? halfSize + 1 : halfSize, iterable.reject(BooleanPredicates.isFalse()));
 
         BooleanIterable iterable1 = this.newWith(false, true, false, false, true, true, true);
         Assert.assertEquals(this.newWith(false, false, false), iterable1.reject(BooleanPredicates.isTrue()));
@@ -276,7 +318,8 @@ public abstract class AbstractBooleanIterableTestCase
     public void detectIfNone()
     {
         BooleanIterable iterable = this.classUnderTest();
-        Assert.assertFalse(iterable.detectIfNone(BooleanPredicates.isFalse(), true));
+        int size = iterable.size();
+        Assert.assertEquals(size < 2, iterable.detectIfNone(BooleanPredicates.isFalse(), true));
         Assert.assertTrue(iterable.detectIfNone(BooleanPredicates.and(BooleanPredicates.isTrue(), BooleanPredicates.isFalse()), true));
 
         BooleanIterable iterable1 = this.newWith(true, true, true);
@@ -295,7 +338,12 @@ public abstract class AbstractBooleanIterableTestCase
     @Test
     public void collect()
     {
-        Assert.assertEquals(this.newObjectCollectionWith(1, 0, 1), this.classUnderTest().collect(new BooleanToObjectFunction<Object>()
+        MutableCollection<Object> expected = this.newObjectCollectionWith();
+        for (int i = 0; i < this.classUnderTest().size(); i++)
+        {
+            expected.add((i & 1) == 0 ? 1 : 0);
+        }
+        Assert.assertEquals(expected, this.classUnderTest().collect(new BooleanToObjectFunction<Object>()
         {
             public Object valueOf(boolean value)
             {
@@ -310,8 +358,9 @@ public abstract class AbstractBooleanIterableTestCase
                 return !parameter;
             }
         };
-        Assert.assertEquals(this.newObjectCollectionWith(false, true, false), this.classUnderTest().collect(booleanToObjectFunction));
+        Assert.assertEquals(this.newObjectCollectionWith(false, true, false), this.newWith(true, false, true).collect(booleanToObjectFunction));
         Assert.assertEquals(this.newObjectCollectionWith(), this.newWith().collect(booleanToObjectFunction));
+        Assert.assertEquals(this.newObjectCollectionWith(true), this.newWith(false).collect(booleanToObjectFunction));
     }
 
     @Test
@@ -335,7 +384,6 @@ public abstract class AbstractBooleanIterableTestCase
         Verify.assertEqualsAndHashCode(this.newWith(), this.newWith());
         Verify.assertPostSerializedEqualsAndHashCode(iterable1);
         Verify.assertPostSerializedEqualsAndHashCode(iterable5);
-        Verify.assertPostSerializedEqualsAndHashCode(this.newWith());
         Assert.assertNotEquals(iterable1, iterable3);
         Assert.assertNotEquals(iterable1, iterable4);
         Assert.assertNotEquals(this.newWith(), this.newWith(true));
@@ -411,14 +459,17 @@ public abstract class AbstractBooleanIterableTestCase
     @Test
     public void toSet()
     {
-        Assert.assertEquals(BooleanHashSet.newSetWith(true, false, true), this.classUnderTest().toSet());
+        Assert.assertEquals(BooleanHashSet.newSetWith(), this.newWith().toSet());
+        Assert.assertEquals(BooleanHashSet.newSetWith(true), this.newWith(true).toSet());
         Assert.assertEquals(BooleanHashSet.newSetWith(true, false), this.newWith(true, false, false, true, true, true).toSet());
     }
 
     @Test
     public void toBag()
     {
-        Assert.assertEquals(BooleanHashBag.newBagWith(true, false, true), this.classUnderTest().toBag());
+        Assert.assertEquals(BooleanHashBag.newBagWith(), this.newWith().toBag());
+        Assert.assertEquals(BooleanHashBag.newBagWith(true), this.newWith(true).toBag());
+        Assert.assertEquals(BooleanHashBag.newBagWith(true, false, true), this.newWith(true, false, true).toBag());
         Assert.assertEquals(BooleanHashBag.newBagWith(false, false, true, true, true, true), this.newWith(true, false, false, true, true, true).toBag());
     }
 

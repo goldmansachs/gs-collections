@@ -19,6 +19,7 @@ package com.gs.collections.impl.list.mutable.primitive;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.ImmutableBooleanList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.impl.collection.mutable.primitive.AbstractMutableBooleanCollectionTestCase;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -379,5 +380,12 @@ public abstract class AbstractBooleanListTestCase extends AbstractMutableBoolean
     {
         super.toList();
         Assert.assertEquals(BooleanArrayList.newListWith(true, false, true), this.classUnderTest().toList());
+    }
+
+    @Test
+    public void toImmutable()
+    {
+        ImmutableBooleanList immutable = this.classUnderTest().toImmutable();
+        Assert.assertEquals(BooleanArrayList.newListWith(true, false, true), immutable);
     }
 }
