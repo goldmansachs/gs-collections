@@ -23,6 +23,7 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
@@ -373,6 +374,21 @@ public class <name>ArrayStackTest
        });
        Assert.assertEquals("<["0","1", "2", "3","4"]:(toStringLiteral.(type))(); separator=", ">", actualValues.makeString());
     }
+
+    @Test
+    public void injectInto()
+    {
+        <name>ArrayStack stack = <name>ArrayStack.newStackFromTopToBottom(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
+        <wrapperName> sum = stack.injectInto(<wrapperName>.valueOf(<(literal.(type))("1")>), new Object<name>ToObjectFunction\<<wrapperName>, <wrapperName>\>()
+        {
+            public <wrapperName> valueOf(<wrapperName> result, <type> value)
+            {
+                return <wrapperName>.valueOf((<type>) (result + value));
+            }
+        });
+        Assert.assertEquals(<wrapperName>.valueOf(<(literal.(type))("16")>), sum);
+    }
+
 
     @Test
     public void toSortedArray()

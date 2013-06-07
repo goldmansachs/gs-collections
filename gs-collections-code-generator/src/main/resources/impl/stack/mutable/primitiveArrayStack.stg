@@ -26,6 +26,7 @@ import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
@@ -248,9 +249,16 @@ public final class <name>ArrayStack
         return this.delegate.asReversed().detectIfNone(predicate, ifNone);
     }
 
+
     public \<V> MutableStack\<V> collect(<name>ToObjectFunction\<? extends V> function)
     {
         return ArrayStack.newStackFromTopToBottom(this.delegate.asReversed().collect(function));
+    }
+
+    public \<V> V injectInto(V injectedValue, Object<name>ToObjectFunction\<? super V, ? extends V> function)
+    {
+        //TODO changed to asReversed() once added to IntIterable
+        return this.delegate.toReversed().injectInto(injectedValue, function);
     }
 
     <(arithmeticMethods.(type))(type)>

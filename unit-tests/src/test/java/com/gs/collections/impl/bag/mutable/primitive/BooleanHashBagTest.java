@@ -18,6 +18,7 @@ package com.gs.collections.impl.bag.mutable.primitive;
 
 import java.util.NoSuchElementException;
 
+import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
@@ -129,5 +130,24 @@ public class BooleanHashBagTest extends AbstractBooleanBagTestCase
         super.toList();
         MutableBooleanList list = this.newWith(true, true, true, false).toList();
         Assert.assertEquals(list, BooleanArrayList.newListWith(false, true, true, true));
+    }
+
+    @Test
+    public void injectInto()
+    {
+        BooleanHashBag hashBag = BooleanHashBag.newBagWith(true, true, true, false, false, true);
+        Integer total = hashBag.injectInto(Integer.valueOf(2), new ObjectBooleanToObjectFunction<Integer, Integer>()
+        {
+            public Integer valueOf(Integer result, boolean value)
+            {
+                if (value)
+                {
+                    return result += 2;
+                }
+
+                return result;
+            }
+        });
+        Assert.assertEquals(Integer.valueOf(10), total);
     }
 }

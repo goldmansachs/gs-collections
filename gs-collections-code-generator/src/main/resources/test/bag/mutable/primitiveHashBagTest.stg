@@ -18,6 +18,7 @@ body(type, name, wrapperName) ::= <<
 
 package com.gs.collections.impl.bag.mutable.primitive;
 
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -70,6 +71,21 @@ public class <name>HashBagTest extends Abstract<name>BagTestCase
         Assert.assertEquals(<name>HashBag.newBagWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), hashBag1);
         Assert.assertEquals(<name>HashBag.newBagWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">), hashBag2);
         Assert.assertEquals(<name>HashBag.newBagWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">), hashBag3);
+    }
+
+
+    @Test
+    public void injectInto()
+    {
+        <name>HashBag hashBag = <name>HashBag.newBagWith(<["1", "1", "2", "2", "2", "2", "3"]:(literal.(type))(); separator=", ">);
+        <wrapperName> sum = hashBag.injectInto(<wrapperName>.valueOf(<(literal.(type))("4")>), new Object<name>ToObjectFunction\<<wrapperName>, <wrapperName>\>()
+        {
+            public <wrapperName> valueOf(<wrapperName> result, <type> value)
+            {
+                return <wrapperName>.valueOf((<type>) (result + value));
+            }
+        });
+        Assert.assertEquals(<wrapperName>.valueOf(<(literal.(type))("17")>), sum);
     }
 }
 

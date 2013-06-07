@@ -30,6 +30,7 @@ import com.gs.collections.api.bag.primitive.<name>Bag;
 import com.gs.collections.api.bag.primitive.Immutable<name>Bag;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.function.primitive.IntToIntFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
@@ -442,6 +443,17 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
                 }
             }
         });
+        return result;
+    }
+
+    public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
+    {
+        T result = injectedValue;
+        <name>Iterator it = this.<type>Iterator();
+        while (it.hasNext())
+        {
+            result = function.valueOf(result, it.next());
+        }
         return result;
     }
 

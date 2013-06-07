@@ -22,6 +22,7 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.LazyBooleanIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
+import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
@@ -363,6 +364,25 @@ public class BooleanArrayStackTest
             }
         });
         Assert.assertEquals("false, false, true, false, true", actualValues.makeString());
+    }
+
+    @Test
+    public void injectInto()
+    {
+        BooleanArrayStack stack = BooleanArrayStack.newStackFromTopToBottom(true, true, false, true, false);
+        Integer total = stack.injectInto(Integer.valueOf(0), new ObjectBooleanToObjectFunction<Integer, Integer>()
+        {
+            public Integer valueOf(Integer result, boolean value)
+            {
+                if (value)
+                {
+                    return result += 2;
+                }
+
+                return result;
+            }
+        });
+        Assert.assertEquals(Integer.valueOf(6), total);
     }
 
     @Test

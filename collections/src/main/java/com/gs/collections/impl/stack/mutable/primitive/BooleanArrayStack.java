@@ -26,6 +26,7 @@ import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.LazyBooleanIterable;
 import com.gs.collections.api.bag.primitive.MutableBooleanBag;
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
+import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
@@ -264,6 +265,11 @@ public final class BooleanArrayStack implements MutableBooleanStack, Externaliza
     public <V> MutableStack<V> collect(BooleanToObjectFunction<? extends V> function)
     {
         return ArrayStack.newStackFromTopToBottom(this.delegate.asReversed().collect(function));
+    }
+
+    public <V> V injectInto(V injectedValue, ObjectBooleanToObjectFunction<? super V, ? extends V> function)
+    {
+        return this.delegate.toReversed().injectInto(injectedValue, function);
     }
 
     public boolean[] toArray()

@@ -29,6 +29,7 @@ import com.gs.collections.api.bag.primitive.BooleanBag;
 import com.gs.collections.api.bag.primitive.ImmutableBooleanBag;
 import com.gs.collections.api.bag.primitive.MutableBooleanBag;
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
+import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
 import com.gs.collections.api.block.procedure.primitive.BooleanIntProcedure;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
@@ -463,6 +464,17 @@ public final class BooleanHashBag implements MutableBooleanBag, Externalizable
                 }
             }
         });
+        return result;
+    }
+
+    public <T> T injectInto(T injectedValue, ObjectBooleanToObjectFunction<? super T, ? extends T> function)
+    {
+        T result = injectedValue;
+        BooleanIterator it = this.booleanIterator();
+        while (it.hasNext())
+        {
+            result = function.valueOf(result, it.next());
+        }
         return result;
     }
 
