@@ -27,6 +27,8 @@ import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.LazyBooleanIterable;
 import com.gs.collections.api.bag.primitive.MutableBooleanBag;
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
+import com.gs.collections.api.block.function.primitive.ObjectBooleanIntToObjectFunction;
+import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
 import com.gs.collections.api.block.procedure.primitive.BooleanIntProcedure;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
@@ -49,7 +51,7 @@ import net.jcip.annotations.NotThreadSafe;
  */
 @NotThreadSafe
 public final class BooleanArrayList
-        implements MutableBooleanList, Externalizable
+    implements MutableBooleanList, Externalizable
 {
     private static final long serialVersionUID = 1L;
     private int size;
@@ -466,6 +468,26 @@ public final class BooleanArrayList
         }
     }
 
+    public <T> T injectInto(T injectedValue, ObjectBooleanToObjectFunction<? super T, ? extends T> function)
+    {
+        T result = injectedValue;
+        for (int i = 0; i < this.size; i++)
+        {
+            result = function.valueOf(result, this.items.get(i));
+        }
+        return result;
+    }
+
+    public <T> T injectIntoWithIndex(T injectedValue, ObjectBooleanIntToObjectFunction<? super T, ? extends T> function)
+    {
+        T result = injectedValue;
+        for (int i = 0; i < this.size; i++)
+        {
+            result = function.valueOf(result, this.items.get(i), i);
+        }
+        return result;
+    }
+
     public int count(BooleanPredicate predicate)
     {
         int count = 0;
@@ -685,10 +707,10 @@ public final class BooleanArrayList
     }
 
     public void appendString(
-            Appendable appendable,
-            String start,
-            String separator,
-            String end)
+        Appendable appendable,
+        String start,
+        String separator,
+        String end)
     {
         try
         {

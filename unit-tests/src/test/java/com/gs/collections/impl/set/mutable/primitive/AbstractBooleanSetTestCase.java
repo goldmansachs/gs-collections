@@ -21,6 +21,7 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.LazyBooleanIterable;
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
+import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
 import com.gs.collections.api.iterator.BooleanIterator;
@@ -30,6 +31,7 @@ import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
 import com.gs.collections.impl.collection.mutable.primitive.AbstractMutableBooleanCollectionTestCase;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.math.MutableInteger;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -409,7 +411,7 @@ public abstract class AbstractBooleanSetTestCase extends AbstractMutableBooleanC
 
         Assert.assertEquals(2L, this.set3.toArray().length);
         Assert.assertTrue(Arrays.equals(new boolean[]{false, true}, this.set3.toArray())
-                || Arrays.equals(new boolean[]{true, false}, this.set3.toArray()));
+            || Arrays.equals(new boolean[]{true, false}, this.set3.toArray()));
     }
 
     @Override
@@ -421,7 +423,7 @@ public abstract class AbstractBooleanSetTestCase extends AbstractMutableBooleanC
         Assert.assertEquals(BooleanArrayList.newListWith(false), this.set1.toList());
         Assert.assertEquals(BooleanArrayList.newListWith(true), this.set2.toList());
         Assert.assertTrue(BooleanArrayList.newListWith(false, true).equals(this.set3.toList())
-                || BooleanArrayList.newListWith(true, false).equals(this.set3.toList()));
+            || BooleanArrayList.newListWith(true, false).equals(this.set3.toList()));
     }
 
     @Override
@@ -579,6 +581,22 @@ public abstract class AbstractBooleanSetTestCase extends AbstractMutableBooleanC
         Assert.assertTrue("truefalse".equals(sum[3]) || "falsetrue".equals(sum[3]));
     }
 
+    @Test
+    public void injectInto()
+    {
+        ObjectBooleanToObjectFunction<MutableInteger, MutableInteger> function = new ObjectBooleanToObjectFunction<MutableInteger, MutableInteger>()
+        {
+            public MutableInteger valueOf(MutableInteger object, boolean value)
+            {
+                return object.add(value ? 1 : 0);
+            }
+        };
+        Assert.assertEquals(new MutableInteger(1), BooleanHashSet.newSetWith(true, false, true).injectInto(new MutableInteger(0), function));
+        Assert.assertEquals(new MutableInteger(1), BooleanHashSet.newSetWith(true).injectInto(new MutableInteger(0), function));
+        Assert.assertEquals(new MutableInteger(0), BooleanHashSet.newSetWith(false).injectInto(new MutableInteger(0), function));
+        Assert.assertEquals(new MutableInteger(0), new BooleanHashSet().injectInto(new MutableInteger(0), function));
+    }
+
     @Override
     @Test
     public void size()
@@ -726,7 +744,7 @@ public abstract class AbstractBooleanSetTestCase extends AbstractMutableBooleanC
         Assert.assertEquals("[false]", this.set1.toString());
         Assert.assertEquals("[true]", this.set2.toString());
         Assert.assertTrue("[true, false]".equals(this.set3.toString())
-                || "[false, true]".equals(this.set3.toString()));
+            || "[false, true]".equals(this.set3.toString()));
 
     }
 
@@ -739,19 +757,19 @@ public abstract class AbstractBooleanSetTestCase extends AbstractMutableBooleanC
         Assert.assertEquals("false", this.set1.makeString());
         Assert.assertEquals("true", this.set2.makeString());
         Assert.assertTrue("true, false".equals(this.set3.makeString())
-                || "false, true".equals(this.set3.makeString()));
+            || "false, true".equals(this.set3.makeString()));
 
         Assert.assertEquals("", this.set0.makeString("/"));
         Assert.assertEquals("false", this.set1.makeString("/"));
         Assert.assertEquals("true", this.set2.makeString("/"));
         Assert.assertTrue(this.set3.makeString("/"), "true/false".equals(this.set3.makeString("/"))
-                || "false/true".equals(this.set3.makeString("/")));
+            || "false/true".equals(this.set3.makeString("/")));
 
         Assert.assertEquals("[]", this.set0.makeString("[", "/", "]"));
         Assert.assertEquals("[false]", this.set1.makeString("[", "/", "]"));
         Assert.assertEquals("[true]", this.set2.makeString("[", "/", "]"));
         Assert.assertTrue(this.set3.makeString("[", "/", "]"), "[true/false]".equals(this.set3.makeString("[", "/", "]"))
-                || "[false/true]".equals(this.set3.makeString("[", "/", "]")));
+            || "[false/true]".equals(this.set3.makeString("[", "/", "]")));
     }
 
     @Override
@@ -774,12 +792,12 @@ public abstract class AbstractBooleanSetTestCase extends AbstractMutableBooleanC
         StringBuilder appendable3 = new StringBuilder();
         this.set3.appendString(appendable3);
         Assert.assertTrue("true, false".equals(appendable3.toString())
-                || "false, true".equals(appendable3.toString()));
+            || "false, true".equals(appendable3.toString()));
 
         StringBuilder appendable4 = new StringBuilder();
         this.set3.appendString(appendable4, "[", ", ", "]");
         Assert.assertTrue("[true, false]".equals(appendable4.toString())
-                || "[false, true]".equals(appendable4.toString()));
+            || "[false, true]".equals(appendable4.toString()));
     }
 
     @Override

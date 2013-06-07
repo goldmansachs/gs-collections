@@ -18,6 +18,7 @@ package com.gs.collections.impl.set.mutable.primitive;
 
 import java.lang.reflect.Field;
 
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import org.junit.Assert;
 import org.junit.Test;
@@ -77,6 +78,20 @@ public class <name>HashSetTest extends Abstract<name>SetTestCase
         <name>HashSet hashSetFromSet = <name>HashSet.newSet(set);
         Assert.assertEquals(set, hashSetFromList);
         Assert.assertEquals(set, hashSetFromSet);
+    }
+
+    @Test
+    public void injectInto()
+    {
+        <name>HashSet set = <name>HashSet.newSetWith(<["0", "1", "31"]:(literal.(type))(); separator=", ">);
+        <wrapperName> sum = set.injectInto(<wrapperName>.valueOf(<(literal.(type))("0")>), new Object<name>ToObjectFunction\<<wrapperName>, <wrapperName>\>()
+        {
+            public <wrapperName> valueOf(<wrapperName> result, <type> value)
+            {
+                return <wrapperName>.valueOf((<type>)(result + value));
+            }
+        });
+        Assert.assertEquals(<wrapperName>.valueOf(<(literal.(type))("32")>), sum);
     }
 
     @Test

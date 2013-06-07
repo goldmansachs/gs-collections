@@ -26,6 +26,7 @@ import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.LazyBooleanIterable;
 import com.gs.collections.api.bag.primitive.MutableBooleanBag;
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
+import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
@@ -277,6 +278,28 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
                 procedure.value(false);
                 procedure.value(true);
                 return;
+            default:
+                throw new AssertionError("Invalid state");
+        }
+    }
+
+    public <T> T injectInto(T injectedValue, ObjectBooleanToObjectFunction<? super T, ? extends T> function)
+    {
+        T result = injectedValue;
+        switch (this.state)
+        {
+            case 0:
+                return result;
+            case 1:
+                result = function.valueOf(result, false);
+                return result;
+            case 2:
+                result = function.valueOf(result, true);
+                return result;
+            case 3:
+                result = function.valueOf(result, false);
+                result = function.valueOf(result, true);
+                return result;
             default:
                 throw new AssertionError("Invalid state");
         }

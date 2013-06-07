@@ -115,4 +115,12 @@ public class MutableInteger extends Number implements Comparable<MutableInteger>
     {
         return (double) this.value;
     }
+
+    @Override
+    public String toString()
+    {
+        return "MutableInteger{" +
+            "value=" + this.value +
+            '}';
+    }
 }

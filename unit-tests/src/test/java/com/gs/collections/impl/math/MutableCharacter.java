@@ -138,4 +138,12 @@ public class MutableCharacter implements Comparable<MutableCharacter>, Serializa
     {
         return (double) this.value;
     }
+
+    @Override
+    public String toString()
+    {
+        return "MutableCharacter{" +
+            "value=" + this.value +
+            '}';
+    }
 }

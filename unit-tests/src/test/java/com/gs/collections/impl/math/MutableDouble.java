@@ -116,4 +116,12 @@ public final class MutableDouble extends Number implements Comparable<MutableDou
     {
         return this.value;
     }
+
+    @Override
+    public String toString()
+    {
+        return "MutableDouble{" +
+            "value=" + this.value +
+            '}';
+    }
 }

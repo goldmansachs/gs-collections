@@ -19,7 +19,10 @@ package com.gs.collections.impl.list.mutable.primitive;
 import java.lang.reflect.Field;
 import java.util.BitSet;
 
+import com.gs.collections.api.block.function.primitive.ObjectBooleanIntToObjectFunction;
+import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.BooleanIntProcedure;
+import com.gs.collections.impl.math.MutableInteger;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -100,6 +103,34 @@ public class BooleanArrayListTest extends AbstractBooleanListTestCase
         Assert.assertEquals(BooleanArrayList.newListWith(true, true, false), arrayList1);
         Assert.assertEquals(BooleanArrayList.newListWith(true, true, false, true), arrayList2);
         Assert.assertEquals(BooleanArrayList.newListWith(true, true, false, true, false), arrayList3);
+    }
+
+    @Test
+    public void injectIntoWithIndex()
+    {
+        BooleanArrayList list = BooleanArrayList.newListWith(true, false, true);
+        MutableInteger result = list.injectIntoWithIndex(new MutableInteger(0), new ObjectBooleanIntToObjectFunction<MutableInteger, MutableInteger>()
+        {
+            public MutableInteger valueOf(MutableInteger object, boolean value, int index)
+            {
+                return object.add((value ? 1 : 0) + index);
+            }
+        });
+        Assert.assertEquals(new MutableInteger(5), result);
+    }
+
+    @Test
+    public void injectInto()
+    {
+        BooleanArrayList list = BooleanArrayList.newListWith(true, false, true);
+        MutableInteger result = list.injectInto(new MutableInteger(0), new ObjectBooleanToObjectFunction<MutableInteger, MutableInteger>()
+        {
+            public MutableInteger valueOf(MutableInteger object, boolean value)
+            {
+                return object.add(value ? 1 : 0);
+            }
+        });
+        Assert.assertEquals(new MutableInteger(2), result);
     }
 
     @Test

@@ -115,4 +115,12 @@ public final class MutableLong extends Number implements Comparable<MutableLong>
     {
         return (double) this.value;
     }
+
+    @Override
+    public String toString()
+    {
+        return "MutableLong{" +
+            "value=" + this.value +
+            '}';
+    }
 }

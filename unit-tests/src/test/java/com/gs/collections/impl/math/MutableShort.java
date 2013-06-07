@@ -122,4 +122,12 @@ public class MutableShort extends Number implements Comparable<MutableShort>
     {
         return this.value;
     }
+
+    @Override
+    public String toString()
+    {
+        return "MutableShort{" +
+            "value=" + this.value +
+            '}';
+    }
 }

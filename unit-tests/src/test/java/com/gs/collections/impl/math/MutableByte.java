@@ -121,4 +121,12 @@ public class MutableByte extends Number implements Comparable<MutableByte>
     {
         return this.value;
     }
+
+    @Override
+    public String toString()
+    {
+        return "MutableByte{" +
+            "value=" + this.value +
+            '}';
+    }
 }

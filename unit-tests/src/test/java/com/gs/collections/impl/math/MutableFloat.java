@@ -116,4 +116,12 @@ public final class MutableFloat extends Number implements Comparable<MutableFloa
     {
         return (double) this.value;
     }
+
+    @Override
+    public String toString()
+    {
+        return "MutableFloat{" +
+            "value=" + this.value +
+            '}';
+    }
 }
