@@ -14,16 +14,17 @@ targetPath() ::= "com/gs/collections/impl/map/mutable/primitive"
 fileName(primitive1, primitive2, sameTwoPrimitives) ::= "<primitive1.name><primitive2.name>HashMapTest"
 
 class(primitive1, primitive2, sameTwoPrimitives) ::= <<
-<body(primitive1.type, primitive2.type, primitive1.name, primitive2.name)>
+<body(primitive1.type, primitive2.type, primitive1.name, primitive2.name, primitive1.wrapperName, primitive2.wrapperName)>
 >>
 
-body(type1, type2, name1, name2) ::= <<
+body(type1, type2, name1, name2, wrapperName1, wrapperName2) ::= <<
 <copyright()>
 
 package com.gs.collections.impl.map.mutable.primitive;
 
 import java.lang.reflect.Field;
 
+import com.gs.collections.api.block.function.primitive.Object<name2>ToObjectFunction;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -159,6 +160,20 @@ public class <name1><name2>HashMapTest extends Abstract<name1><name2>MapTestCase
         Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>, <(literal.(type1))("2")>, <(literal.(type2))("2")>), hashMap0);
         Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>, <(literal.(type1))("2")>, <(literal.(type2))("2")>, <(literal.(type1))("3")>, <(literal.(type2))("3")>), hashMap1);
         Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>, <(literal.(type1))("2")>, <(literal.(type2))("2")>, <(literal.(type1))("3")>, <(literal.(type2))("3")>, <(literal.(type1))("4")>, <(literal.(type2))("4")>), hashMap2);
+    }
+
+    @Test
+    public void injectInto()
+    {
+        <name1><name2>HashMap hashMap = new <name1><name2>HashMap().withKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("2")>, <(literal.(type1))("2")>, <(literal.(type2))("3")>, <(literal.(type1))("3")>, <(literal.(type2))("4")>, <(literal.(type1))("4")>, <(literal.(type2))("5")>);
+        <wrapperName2> sum = hashMap.injectInto(<wrapperName2>.valueOf(<(literal.(type2))("1")>), new Object<name2>ToObjectFunction\<<wrapperName2>, <wrapperName2>\>()
+        {
+            public <wrapperName2> valueOf(<wrapperName2> result, <type2> value)
+            {
+                return <wrapperName2>.valueOf((<type2>) (result + value));
+            }
+        });
+        Assert.assertEquals(<wrapperName2>.valueOf(<(literal.(type2))("15")>), sum);
     }
 }
 

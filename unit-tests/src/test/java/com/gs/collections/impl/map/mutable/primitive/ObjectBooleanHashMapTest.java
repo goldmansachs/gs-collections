@@ -20,6 +20,7 @@ import java.lang.reflect.Field;
 import java.util.BitSet;
 
 import com.gs.collections.api.block.function.primitive.BooleanToBooleanFunction;
+import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -265,5 +266,26 @@ public class ObjectBooleanHashMapTest extends AbstractMutableObjectBooleanMapTes
         Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(1, true, 2, false), hashMap0);
         Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(1, false, 2, false, 3, true), hashMap1);
         Assert.assertEquals(ObjectBooleanHashMap.newWithKeysValues(1, true, 2, true, 3, false, 4, false), hashMap2);
+    }
+
+    @Test
+    public void injectInto()
+    {
+        ObjectBooleanHashMap<Integer> hashMap0 = new ObjectBooleanHashMap<Integer>().withKeysValues(1, true, 2, true, 3, false, 4, false);
+
+        Integer total = hashMap0.injectInto(Integer.valueOf(0), new ObjectBooleanToObjectFunction<Integer, Integer>()
+        {
+            public Integer valueOf(Integer result, boolean value)
+            {
+                if (value)
+                {
+                    return result += 2;
+                }
+
+                return result;
+            }
+        });
+
+        Assert.assertEquals(Integer.valueOf(4), total);
     }
 }

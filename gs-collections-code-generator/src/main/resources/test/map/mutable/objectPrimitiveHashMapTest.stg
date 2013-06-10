@@ -23,6 +23,7 @@ package com.gs.collections.impl.map.mutable.primitive;
 import java.lang.reflect.Field;
 
 import com.gs.collections.api.block.function.primitive.<name>To<name>Function;
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -275,6 +276,20 @@ public class Object<name>HashMapTest extends AbstractMutableObject<name>MapTestC
         Assert.assertEquals(Object<name>HashMap.newWithKeysValues(1, <(literal.(type))("1")>, 2, <(literal.(type))("2")>), hashMap0);
         Assert.assertEquals(Object<name>HashMap.newWithKeysValues(1, <(literal.(type))("1")>, 2, <(literal.(type))("2")>, 3, <(literal.(type))("3")>), hashMap1);
         Assert.assertEquals(Object<name>HashMap.newWithKeysValues(1, <(literal.(type))("1")>, 2, <(literal.(type))("2")>, 3, <(literal.(type))("3")>, 4, <(literal.(type))("4")>), hashMap2);
+    }
+
+    @Test
+    public void injectInto()
+    {
+        Object<name>HashMap\<Integer> hashMap = new Object<name>HashMap\<Integer>().withKeysValues(1, <(literal.(type))("2")>, 2, <(literal.(type))("3")>, 3, <(literal.(type))("4")>, 4, <(literal.(type))("5")>);
+        <wrapperName> sum = hashMap.injectInto(<wrapperName>.valueOf(<(literal.(type))("1")>), new Object<name>ToObjectFunction\<<wrapperName>, <wrapperName>\>()
+        {
+            public <wrapperName> valueOf(<wrapperName> result, <type> value)
+            {
+                return <wrapperName>.valueOf((<type>) (result + value));
+            }
+        });
+        Assert.assertEquals(<wrapperName>.valueOf(<(literal.(type))("15")>), sum);
     }
 }
 

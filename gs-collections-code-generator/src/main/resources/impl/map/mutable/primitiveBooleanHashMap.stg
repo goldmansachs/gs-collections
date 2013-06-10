@@ -39,6 +39,7 @@ import com.gs.collections.api.block.function.primitive.BooleanToBooleanFunction;
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
 import com.gs.collections.api.block.function.primitive.<name>ToBooleanFunction;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
 import com.gs.collections.api.block.predicate.primitive.<name>BooleanPredicate;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
@@ -1052,6 +1053,33 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
                 result.put(this.keys[i], this.values.get(i));
             }
         }
+        return result;
+    }
+
+    public \<V> V injectInto(V injectedValue, ObjectBooleanToObjectFunction\<? super V, ? extends V> function)
+    {
+        V result = injectedValue;
+
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey)
+            {
+                result = function.valueOf(result, this.sentinelValues.zeroValue);
+            }
+            if (this.sentinelValues.containsOneKey)
+            {
+                result = function.valueOf(result, this.sentinelValues.oneValue);
+            }
+        }
+
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                result = function.valueOf(result, this.values.get(i));
+            }
+        }
+
         return result;
     }
 

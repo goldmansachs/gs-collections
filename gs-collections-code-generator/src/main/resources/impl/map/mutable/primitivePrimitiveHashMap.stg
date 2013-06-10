@@ -40,6 +40,7 @@ import com.gs.collections.api.block.function.primitive.<name2>Function;
 import com.gs.collections.api.block.function.primitive.<name2>Function0;
 import com.gs.collections.api.block.function.primitive.<name2>To<name2>Function;
 import com.gs.collections.api.block.function.primitive.<name2>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.Object<name2>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name1><name2>Predicate;
 import com.gs.collections.api.block.predicate.primitive.<name1>Predicate;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.block.predicate.primitive.<name2>Predicate;<endif>
@@ -956,6 +957,15 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         return true;
     }
 
+    public \<V> V injectInto(V injectedValue, Object<name2>ToObjectFunction\<? super V, ? extends V> function)
+    {
+        V result = injectedValue;
+
+        <forEachKeyValue("injectInto")>
+
+        return result;
+    }
+
     public <type2> max()
     {
         if (this.isEmpty())
@@ -1647,6 +1657,10 @@ return <value>;
 
 hashCode(key, value) ::= <<
 result += <(hashCode.(type1))({<key>})> ^ <(hashCode.(type2))({<value>})>;
+>>
+
+injectInto(key, value) ::= <<
+result = function.valueOf(result, <value>);
 >>
 
 forEachKeyValue(procedure) ::= <<
