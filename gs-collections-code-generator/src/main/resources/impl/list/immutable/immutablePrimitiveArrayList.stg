@@ -122,18 +122,18 @@ final class Immutable<name>ArrayList
 
     public void forEach(<name>Procedure procedure)
     {
-        for (int i = 0; i \< this.items.length; i++)
+        for (<type> item : this.items)
         {
-            procedure.value(this.items[i]);
+            procedure.value(item);
         }
     }
 
     public int count(<name>Predicate predicate)
     {
         int count = 0;
-        for (int i = 0; i \< this.items.length; i++)
+        for (<type> item : this.items)
         {
-            if (predicate.accept(this.items[i]))
+            if (predicate.accept(item))
             {
                 count++;
             }
@@ -143,9 +143,9 @@ final class Immutable<name>ArrayList
 
     public boolean anySatisfy(<name>Predicate predicate)
     {
-        for (int i = 0; i \< this.items.length; i++)
+        for (<type> item : this.items)
         {
-            if (predicate.accept(this.items[i]))
+            if (predicate.accept(item))
             {
                 return true;
             }
@@ -155,9 +155,9 @@ final class Immutable<name>ArrayList
 
     public boolean allSatisfy(<name>Predicate predicate)
     {
-        for (int i = 0; i \< this.items.length; i++)
+        for (<type> item : this.items)
         {
-            if (!predicate.accept(this.items[i]))
+            if (!predicate.accept(item))
             {
                 return false;
             }
@@ -167,9 +167,9 @@ final class Immutable<name>ArrayList
 
     public boolean noneSatisfy(<name>Predicate predicate)
     {
-        for (int i = 0; i \< this.items.length; i++)
+        for (<type> item : this.items)
         {
-            if (predicate.accept(this.items[i]))
+            if (predicate.accept(item))
             {
                 return false;
             }
@@ -180,9 +180,8 @@ final class Immutable<name>ArrayList
     public Immutable<name>List select(<name>Predicate predicate)
     {
         <name>ArrayList result = new <name>ArrayList();
-        for (int i = 0; i \< this.items.length; i++)
+        for (<type> item : this.items)
         {
-            <type> item = this.items[i];
             if (predicate.accept(item))
             {
                 result.add(item);
@@ -194,9 +193,8 @@ final class Immutable<name>ArrayList
     public Immutable<name>List reject(<name>Predicate predicate)
     {
         <name>ArrayList result = new <name>ArrayList();
-        for (int i = 0; i \< this.items.length; i++)
+        for (<type> item : this.items)
         {
-            <type> item = this.items[i];
             if (!predicate.accept(item))
             {
                 result.add(item);
@@ -207,9 +205,8 @@ final class Immutable<name>ArrayList
 
     public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
     {
-        for (int i = 0; i \< this.items.length; i++)
+        for (<type> item : this.items)
         {
-            <type> item = this.items[i];
             if (predicate.accept(item))
             {
                 return item;
@@ -221,9 +218,9 @@ final class Immutable<name>ArrayList
     public \<V> ImmutableList\<V> collect(<name>ToObjectFunction\<? extends V> function)
     {
         FastList\<V> target = FastList.newList(this.items.length);
-        for (int i = 0; i \< this.items.length; i++)
+        for (<type> item : this.items)
         {
-            target.add(function.valueOf(this.items[i]));
+            target.add(function.valueOf(item));
         }
         return target.toImmutable();
     }
@@ -231,9 +228,9 @@ final class Immutable<name>ArrayList
     public <wideType.(type)> sum()
     {
         <wideType.(type)> result = <wideZero.(type)>;
-        for (int i = 0; i \< this.items.length; i++)
+        for (<type> item : this.items)
         {
-            result += this.items[i];
+            result += item;
         }
         return result;
     }
@@ -315,9 +312,9 @@ final class Immutable<name>ArrayList
 
     public boolean contains(<type> value)
     {
-        for (int i = 0; i \< this.items.length; i++)
+        for (<type> item : this.items)
         {
-            if (<(equals.(type))("this.items[i]", "value")>)
+            if (<(equals.(type))("item", "value")>)
             {
                 return true;
             }
@@ -454,9 +451,8 @@ final class Immutable<name>ArrayList
     public int hashCode()
     {
         int hashCode = 1;
-        for (int i = 0; i \< this.items.length; i++)
+        for (<type> item : this.items)
         {
-            <type> item = this.items[i];
             hashCode = 31 * hashCode + <(hashCode.(type))("item")>;
         }
         return hashCode;

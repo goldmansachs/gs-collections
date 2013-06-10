@@ -254,9 +254,8 @@ final class ImmutableBooleanArrayList
 
     public boolean[] toArray()
     {
-        int size = this.size;
-        boolean[] newItems = new boolean[size];
-        for (int i = 0; i < size; i++)
+        boolean[] newItems = new boolean[this.size];
+        for (int i = 0; i < this.size; i++)
         {
             newItems[i] = this.items.get(i);
         }
@@ -512,15 +511,15 @@ final class ImmutableBooleanArrayList
 
         public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
         {
-            int size = in.readInt();
-            BitSet newItems = new BitSet(size);
+            int inputSize = in.readInt();
+            BitSet newItems = new BitSet(inputSize);
 
-            for (int i = 0; i < size; i++)
+            for (int i = 0; i < inputSize; i++)
             {
                 newItems.set(i, in.readBoolean());
             }
 
-            this.list = new ImmutableBooleanArrayList(newItems, size);
+            this.list = new ImmutableBooleanArrayList(newItems, inputSize);
         }
 
         protected Object readResolve()
