@@ -54,11 +54,11 @@ public class Immutable<name>ListFactoryImpl implements Immutable<name>ListFactor
     {
         if (items == null || items.length == 0)
         {
-            return this.of();
+            return this.with();
         }
         if (items.length == 1)
         {
-            return this.of(items[0]);
+            return this.with(items[0]);
         }
         return Immutable<name>ArrayList.newListWith(items);
     }
@@ -75,7 +75,7 @@ public class Immutable<name>ListFactoryImpl implements Immutable<name>ListFactor
             return (Immutable<name>List) items;
         }
 
-        return this.of(items.toArray());
+        return this.with(items.toArray());
     }
 }
 

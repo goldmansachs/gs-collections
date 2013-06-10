@@ -595,7 +595,15 @@ public final class BooleanArrayList
 
     public ImmutableBooleanList toImmutable()
     {
-        return BooleanLists.immutable.ofAll(this);
+        if (this.size == 0)
+        {
+            return BooleanLists.immutable.with();
+        }
+        if (this.size == 1)
+        {
+            return BooleanLists.immutable.with(this.items.get(0));
+        }
+        return BooleanLists.immutable.with(this.toArray());
     }
 
     public BooleanArrayList toReversed()

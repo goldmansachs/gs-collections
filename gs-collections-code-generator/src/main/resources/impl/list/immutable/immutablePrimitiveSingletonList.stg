@@ -193,12 +193,12 @@ final class Immutable<name>SingletonList implements Immutable<name>List, Seriali
 
     public Immutable<name>List newWith(<type> element)
     {
-        return <name>Lists.immutable.of(this.element1, element);
+        return <name>Lists.immutable.with(this.element1, element);
     }
 
     public Immutable<name>List newWithout(<type> element)
     {
-        return <(equals.(type))("this.element1", "element")> ? <name>Lists.immutable.of() : this;
+        return <(equals.(type))("this.element1", "element")> ? <name>Lists.immutable.with() : this;
     }
 
     public Immutable<name>List newWithAll(<name>Iterable elements)
@@ -210,7 +210,7 @@ final class Immutable<name>SingletonList implements Immutable<name>List, Seriali
 
     public Immutable<name>List newWithoutAll(<name>Iterable elements)
     {
-        return elements.contains(this.element1) ? <name>Lists.immutable.of() : this;
+        return elements.contains(this.element1) ? <name>Lists.immutable.with() : this;
     }
 
     public int size()

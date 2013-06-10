@@ -170,7 +170,7 @@ final class Immutable<name>EmptyList implements Immutable<name>List, Serializabl
 
     public Immutable<name>List newWith(<type> element)
     {
-        return <name>Lists.immutable.of(element);
+        return <name>Lists.immutable.with(element);
     }
 
     public Immutable<name>List newWithout(<type> element)
@@ -180,7 +180,7 @@ final class Immutable<name>EmptyList implements Immutable<name>List, Serializabl
 
     public Immutable<name>List newWithAll(<name>Iterable elements)
     {
-        return <name>Lists.immutable.ofAll(elements);
+        return <name>Lists.immutable.withAll(elements);
     }
 
     public Immutable<name>List newWithoutAll(<name>Iterable elements)

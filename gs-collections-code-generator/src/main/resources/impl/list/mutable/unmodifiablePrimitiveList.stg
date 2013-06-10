@@ -165,7 +165,16 @@ public final class Unmodifiable<name>List
 
     public Immutable<name>List toImmutable()
     {
-        return <name>Lists.immutable.ofAll(this);
+        int size = this.size();
+        if (size == 0)
+        {
+            return <name>Lists.immutable.with();
+        }
+        if (size == 1)
+        {
+            return <name>Lists.immutable.with(this.getFirst());
+        }
+        return <name>Lists.immutable.with(this.toArray());
     }
 
     public Mutable<name>List reverseThis()

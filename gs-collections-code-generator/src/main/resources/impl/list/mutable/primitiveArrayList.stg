@@ -885,7 +885,15 @@ public final class <name>ArrayList
 
     public Immutable<name>List toImmutable()
     {
-        return <name>Lists.immutable.ofAll(this);
+        if (this.items.length == 0)
+        {
+            return <name>Lists.immutable.with();
+        }
+        if (this.items.length == 1)
+        {
+            return <name>Lists.immutable.with(this.items[0]);
+        }
+        return <name>Lists.immutable.with(this.toArray());
     }
 
     public void writeExternal(ObjectOutput out) throws IOException
@@ -1281,7 +1289,6 @@ public final class <name>ArrayList
             }
         }
     }
-
 }
 
 >>

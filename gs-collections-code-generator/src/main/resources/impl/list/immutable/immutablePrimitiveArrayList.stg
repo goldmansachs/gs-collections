@@ -59,7 +59,7 @@ final class Immutable<name>ArrayList
     {
         if (newElements.length \<= 1)
         {
-            throw new IllegalArgumentException("Use <name>Lists.immutable.of() to instantiate an optimized collection");
+            throw new IllegalArgumentException("Use <name>Lists.immutable.with() to instantiate an optimized collection");
         }
         this.items = newElements;
     }
@@ -382,7 +382,7 @@ final class Immutable<name>ArrayList
             <type>[] newItems = new <type>[this.items.length - 1];
             System.arraycopy(this.items, 0, newItems, 0, index);
             System.arraycopy(this.items, index + 1, newItems, index, this.items.length - index - 1);
-            return <name>Lists.immutable.of(newItems);
+            return <name>Lists.immutable.with(newItems);
         }
         return this;
     }

@@ -62,7 +62,7 @@ final class ImmutableBooleanArrayList
     {
         if (newElements.length <= 1)
         {
-            throw new IllegalArgumentException("Use BooleanLists.immutable.of() to instantiate an optimized collection");
+            throw new IllegalArgumentException("Use BooleanLists.immutable.with() to instantiate an optimized collection");
         }
         this.size = newElements.length;
         this.items = new BitSet(newElements.length);
@@ -342,7 +342,7 @@ final class ImmutableBooleanArrayList
             {
                 newItems[i - 1] = this.items.get(i);
             }
-            return BooleanLists.immutable.of(newItems);
+            return BooleanLists.immutable.with(newItems);
         }
         return this;
     }
