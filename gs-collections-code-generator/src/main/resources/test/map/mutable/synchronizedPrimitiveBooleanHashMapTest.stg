@@ -61,7 +61,7 @@ public class Synchronized<name>BooleanHashMapTest extends Abstract<name>BooleanM
     {
         return new Synchronized<name>BooleanHashMap(new <name>BooleanHashMap(4).withKeysValues(key1, value1, key2, value2, key3, value3, key4, value4));
     }
-         
+
     @Override
     protected Synchronized<name>BooleanHashMap getEmptyMap()
     {

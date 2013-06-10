@@ -1069,13 +1069,13 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
 >>
 
 betweenZeroAndThirtyOne ::= [
-     "byte": "intBetweenZeroAndThirtyOne",
-     "short": "intBetweenZeroAndThirtyOne",
-     "char": "intBetweenZeroAndThirtyOne",
-     "int": "intBetweenZeroAndThirtyOne",
-     "long": "intBetweenZeroAndThirtyOne",
-     "float": "floatBetweenZeroAndThirtyOne",
-     "double": "floatBetweenZeroAndThirtyOne"
+"byte": "intBetweenZeroAndThirtyOne",
+"short": "intBetweenZeroAndThirtyOne",
+"char": "intBetweenZeroAndThirtyOne",
+"int": "intBetweenZeroAndThirtyOne",
+"long": "intBetweenZeroAndThirtyOne",
+"float": "floatBetweenZeroAndThirtyOne",
+"double": "floatBetweenZeroAndThirtyOne"
 ]
 
 intBetweenZeroAndThirtyOne(value) ::= <<

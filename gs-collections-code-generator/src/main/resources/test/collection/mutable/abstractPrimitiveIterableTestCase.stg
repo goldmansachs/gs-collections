@@ -66,7 +66,7 @@ public abstract class Abstract<name>IterableTestCase
         Verify.assertSize(1, iterable2);
         Assert.assertFalse(iterable2.containsAll(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
     }
-     
+
     @Test
     public void newCollection()
     {
@@ -580,7 +580,7 @@ public abstract class Abstract<name>IterableTestCase
                 iterable3.toString(),
                 iterable3.toString().equals("[<["32", "33"]:(toStringLiteral.(type))(); separator=", ">]")
                         || iterable3.toString().equals("[<["33", "32"]:(toStringLiteral.(type))(); separator=", ">]"));
- 
+
         <name>Iterable iterable4 = this.newWith(<["0", "1"]:(literal.(type))(); separator=", ">);
         Assert.assertTrue(
                 iterable4.toString(),

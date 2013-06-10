@@ -249,7 +249,6 @@ public final class <name>ArrayStack
         return this.delegate.asReversed().detectIfNone(predicate, ifNone);
     }
 
-
     public \<V> MutableStack\<V> collect(<name>ToObjectFunction\<? extends V> function)
     {
         return ArrayStack.newStackFromTopToBottom(this.delegate.asReversed().collect(function));

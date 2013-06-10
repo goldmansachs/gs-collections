@@ -60,7 +60,7 @@ public class Synchronized<name>BooleanMapTest extends Abstract<name>BooleanMapTe
     {
         return new Synchronized<name>BooleanMap(new <name>BooleanHashMap(4).withKeysValues(key1, value1, key2, value2, key3, value3, key4, value4));
     }
-         
+
     @Override
     protected Synchronized<name>BooleanMap getEmptyMap()
     {

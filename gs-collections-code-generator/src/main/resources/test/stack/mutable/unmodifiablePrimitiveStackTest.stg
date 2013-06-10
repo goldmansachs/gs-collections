@@ -116,7 +116,7 @@ public class Unmodifiable<name>StackTest
         Verify.assertSize(3, this.stack);
         Assert.assertTrue(this.stack.containsAll(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
     }
-     
+
     @Test
     public void newStack()
     {

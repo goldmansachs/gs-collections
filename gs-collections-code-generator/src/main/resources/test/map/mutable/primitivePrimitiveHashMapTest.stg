@@ -63,7 +63,7 @@ public class <name1><name2>HashMapTest extends Abstract<name1><name2>MapTestCase
     {
         return new <name1><name2>HashMap(4).withKeysValues(key1, value1, key2, value2, key3, value3, key4, value4);
     }
-         
+
     @Override
 	protected <name1><name2>HashMap getEmptyMap()
     {

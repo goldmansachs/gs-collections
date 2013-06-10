@@ -423,7 +423,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
             return this.sentinelValues.oneValue;
         }
         int index = this.probe(key);
-        if(<(equals.(type))("this.keys[this.probe(key)]", "key")>)
+        if (<(equals.(type))("this.keys[this.probe(key)]", "key")>)
         {
             return this.values[index];
         }
@@ -1589,26 +1589,26 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
 
     public boolean noneSatisfy(Predicate\<? super V> predicate)
     {
-         if (this.sentinelValues != null)
-         {
-             if (this.sentinelValues.containsZeroKey && predicate.accept(this.sentinelValues.zeroValue))
-             {
-                 return false;
-             }
-             if (this.sentinelValues.containsOneKey && predicate.accept(this.sentinelValues.oneValue))
-             {
-                 return false;
-             }
-         }
-         for (int i = 0; i \< this.keys.length; i++)
-         {
-             if (isNonSentinel(this.keys[i]) && predicate.accept(this.values[i]))
-             {
-                 return false;
-             }
-         }
-         return true;
-     }
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey && predicate.accept(this.sentinelValues.zeroValue))
+            {
+                return false;
+            }
+            if (this.sentinelValues.containsOneKey && predicate.accept(this.sentinelValues.oneValue))
+            {
+                return false;
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values[i]))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
 
     public \<IV> IV injectInto(IV injectedValue, Function2\<? super IV, ? super V, ? extends IV> function)
     {

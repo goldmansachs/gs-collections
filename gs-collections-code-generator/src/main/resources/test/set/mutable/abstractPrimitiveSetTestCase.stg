@@ -406,7 +406,7 @@ public abstract class Abstract<name>SetTestCase extends AbstractMutable<name>Col
         Verify.assertInstanceOf(Synchronized<name>Set.class, set.asSynchronized());
         Assert.assertEquals(new Synchronized<name>Set(set), set.asSynchronized());
     }
-   
+
     @Override
     @Test
     public void asUnmodifiable()

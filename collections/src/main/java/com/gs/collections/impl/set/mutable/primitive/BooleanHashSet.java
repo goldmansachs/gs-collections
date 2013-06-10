@@ -45,11 +45,11 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
 {
     private static final long serialVersionUID = 1L;
 
-    /* state = 0 ==> []
-       state = 1 ==> [F]
-       state = 2 ==> [T]
-       state = 3 ==> [T, F]
-     */
+    /*
+    state = 1 ==> [F]
+    state = 2 ==> [T]
+    state = 3 ==> [T, F]
+    */
     private int state;
 
     private static class EmptyBooleanIterator implements BooleanIterator

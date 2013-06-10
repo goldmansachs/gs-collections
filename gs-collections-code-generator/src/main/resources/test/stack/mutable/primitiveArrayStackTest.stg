@@ -69,7 +69,6 @@ public class <name>ArrayStackTest
         Assert.assertEquals(<name>ArrayStack.newStackFromTopToBottom(<["3"]:(literal.(type))(); separator=", ">, <["2"]:(literal.(type))(); separator=", ">, <["1"]:(literal.(type))(); separator=", ">), stack2);
         Assert.assertEquals(<name>ArrayList.newListWith(<["3"]:(literal.(type))(); separator=", ">, <["2"]:(literal.(type))(); separator=", ">), stack2.peek(2));
 
-
         <name>ArrayStack stack8 = <name>ArrayStack.newStackFromTopToBottom(<["1"]:(literal.(type))(); separator=", ">, <["2"]:(literal.(type))(); separator=", ">, <["3"]:(literal.(type))(); separator=", ">, <["4"]:(literal.(type))(); separator=", ">);
         Verify.assertSize(0, stack8.pop(0));
         Assert.assertEquals(<name>ArrayStack.newStackFromTopToBottom(<["1"]:(literal.(type))(); separator=", ">, <["2"]:(literal.(type))(); separator=", ">, <["3"]:(literal.(type))(); separator=", ">, <["4"]:(literal.(type))(); separator=", ">), stack8);
@@ -323,7 +322,6 @@ public class <name>ArrayStackTest
         Verify.assertSize(0, stack2);
     }
 
-
     @Test
     public void anySatisfy()
     {
@@ -366,13 +364,13 @@ public class <name>ArrayStackTest
     {
         <name>ArrayStack stack = <name>ArrayStack.newStackFromTopToBottom(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
         RichIterable\<<wrapperName>\> actualValues = stack.collect(new <name>ToObjectFunction\<<wrapperName>\>()
-       {
-           public <wrapperName> valueOf(<type> parameter)
-           {
-               return <(castIntToNarrowType.(type))("parameter - 1")>;
-           }
-       });
-       Assert.assertEquals("<["0","1", "2", "3","4"]:(toStringLiteral.(type))(); separator=", ">", actualValues.makeString());
+        {
+            public <wrapperName> valueOf(<type> parameter)
+            {
+                return <(castIntToNarrowType.(type))("parameter - 1")>;
+            }
+        });
+        Assert.assertEquals("<["0","1", "2", "3","4"]:(toStringLiteral.(type))(); separator=", ">", actualValues.makeString());
     }
 
     @Test
@@ -462,8 +460,8 @@ public class <name>ArrayStackTest
     public void makeStringWithStartEndAndSeparator()
     {
         <name>ArrayStack stack = <name>ArrayStack.newStackFromTopToBottom(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
-        Assert.assertEquals("{<["1", "2", "3","4","5"]:(toStringLiteral.(type))(); separator="|">}", stack.makeString("{","|","}"));
-        Assert.assertEquals("{}", <name>ArrayStack.newStackFromTopToBottom().makeString("{","|","}"));
+        Assert.assertEquals("{<["1", "2", "3","4","5"]:(toStringLiteral.(type))(); separator="|">}", stack.makeString("{", "|", "}"));
+        Assert.assertEquals("{}", <name>ArrayStack.newStackFromTopToBottom().makeString("{", "|", "}"));
     }
 
     @Test
@@ -483,10 +481,10 @@ public class <name>ArrayStackTest
     {
         <name>ArrayStack stack = <name>ArrayStack.newStackFromTopToBottom(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
         StringBuilder appendable1 = new StringBuilder();
-        stack.appendString(appendable1,"|");
+        stack.appendString(appendable1, "|");
         Assert.assertEquals("<["1", "2", "3","4","5"]:(toStringLiteral.(type))(); separator="|">", appendable1.toString());
         StringBuilder appendable2 = new StringBuilder();
-        <name>ArrayStack.newStackFromTopToBottom().appendString(appendable2,"|");
+        <name>ArrayStack.newStackFromTopToBottom().appendString(appendable2, "|");
         Assert.assertEquals("", appendable2.toString());
     }
 
@@ -495,10 +493,10 @@ public class <name>ArrayStackTest
     {
         <name>ArrayStack stack = <name>ArrayStack.newStackFromTopToBottom(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
         StringBuilder appendable1 = new StringBuilder();
-        stack.appendString(appendable1,"{","|","}");
+        stack.appendString(appendable1,"{", "|", "}");
         Assert.assertEquals("{<["1", "2", "3","4","5"]:(toStringLiteral.(type))(); separator="|">}", appendable1.toString());
         StringBuilder appendable2 = new StringBuilder();
-        <name>ArrayStack.newStackFromTopToBottom().appendString(appendable2,"{","|","}");
+        <name>ArrayStack.newStackFromTopToBottom().appendString(appendable2,"{", "|", "}");
         Assert.assertEquals("{}", appendable2.toString());
     }
 
@@ -615,14 +613,14 @@ public class <name>ArrayStackTest
     @Test(expected = IllegalArgumentException.class)
     public void pop_with_negative_count_throws_exception()
     {
-        <name>ArrayStack stack =  <name>ArrayStack.newStackFromTopToBottom(<["1"]:(literal.(type))(); separator=", ">);
+        <name>ArrayStack stack = <name>ArrayStack.newStackFromTopToBottom(<["1"]:(literal.(type))(); separator=", ">);
         stack.pop(-1);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void pop_with_count_greater_than_stack_size_throws_exception()
     {
-        <name>ArrayStack stack =  <name>ArrayStack.newStackFromTopToBottom(<["1"]:(literal.(type))(); separator=", ">);
+        <name>ArrayStack stack = <name>ArrayStack.newStackFromTopToBottom(<["1"]:(literal.(type))(); separator=", ">);
         stack.pop(2);
     }
 
@@ -636,14 +634,14 @@ public class <name>ArrayStackTest
     @Test(expected = IllegalArgumentException.class)
     public void peek_at_index_less_than_zero_throws_exception()
     {
-        <name>ArrayStack stack =  <name>ArrayStack.newStackFromTopToBottom(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
+        <name>ArrayStack stack = <name>ArrayStack.newStackFromTopToBottom(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
         stack.peekAt(-1);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void peek_at_index_greater_than_size_throws_exception()
     {
-        <name>ArrayStack stack =  <name>ArrayStack.newStackFromTopToBottom(<["1"]:(literal.(type))(); separator=", ">);
+        <name>ArrayStack stack = <name>ArrayStack.newStackFromTopToBottom(<["1"]:(literal.(type))(); separator=", ">);
         stack.peekAt(1);
     }
 
