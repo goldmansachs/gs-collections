@@ -29,6 +29,18 @@ public static final Function<Person, String> TO_LAST_NAME = new Function<Person,
         return person.lastName;
     }
 };
+
+```
+When Java 8 is released, the Function can be replaced with a lambda:
+
+```java
+MutableList<String> sortedLastNames = people.collect(person -> person.getLastName()).sortThis();
+```
+
+Or, a method reference:
+
+```java
+MutableList<String> sortedLastNames = people.collect(Person::getLastName).sortThis();
 ```
 
 ## Why GS Collections?
