@@ -60,6 +60,8 @@ public interface <name>ObjectMap\<V> extends RichIterable\<V>
      */
     @Override
     int hashCode();
+
+    Immutable<name>ObjectMap\<V> toImmutable();
 }
 
 >>

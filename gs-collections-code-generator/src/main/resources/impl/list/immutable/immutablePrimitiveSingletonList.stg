@@ -191,6 +191,11 @@ final class Immutable<name>SingletonList implements Immutable<name>List, Seriali
         return new Lazy<name>IterableAdapter(this);
     }
 
+    public Immutable<name>List toImmutable()
+    {
+        return this;
+    }
+
     public Immutable<name>List newWith(<type> element)
     {
         return <name>Lists.immutable.with(this.element1, element);

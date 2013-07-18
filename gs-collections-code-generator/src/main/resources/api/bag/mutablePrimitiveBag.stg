@@ -40,8 +40,6 @@ public interface Mutable<name>Bag extends Mutable<name>Collection, <name>Bag
     Mutable<name>Bag asUnmodifiable();
 
     Mutable<name>Bag asSynchronized();
-
-    Immutable<name>Bag toImmutable();
 }
 
 >>

@@ -366,6 +366,11 @@ final class Immutable<name>ArrayList
         return new Lazy<name>IterableAdapter(this);
     }
 
+    public Immutable<name>List toImmutable()
+    {
+        return this;
+    }
+
     public Immutable<name>List newWith(<type> element)
     {
         <type>[] newItems = new <type>[this.items.length + 1];

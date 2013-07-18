@@ -45,6 +45,8 @@ public interface Object<name>Map\<K> extends <name>Iterable
     Object<name>Map\<K> select(Object<name>Predicate\<? super K> predicate);
 
     Object<name>Map\<K> reject(Object<name>Predicate\<? super K> predicate);
+
+    ImmutableObject<name>Map\<K> toImmutable();
 }
 
 >>

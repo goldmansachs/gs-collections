@@ -55,6 +55,8 @@ public interface <name>List extends <name>Iterable
      */
     @Override
     int hashCode();
+
+    Immutable<name>List toImmutable();
 }
 
 >>

@@ -53,8 +53,6 @@ public interface Mutable<name>Stack extends <name>Stack
     Mutable<name>Stack asUnmodifiable();
 
     Mutable<name>Stack asSynchronized();
-
-    Immutable<name>Stack toImmutable();
 }
 
 >>

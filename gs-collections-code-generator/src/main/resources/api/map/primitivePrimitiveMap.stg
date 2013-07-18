@@ -66,6 +66,8 @@ public interface <name1><name2>Map extends <name2>Iterable
      */
     @Override
     int hashCode();
+
+    Immutable<name1><name2>Map toImmutable();
 }
 
 >>

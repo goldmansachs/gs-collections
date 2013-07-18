@@ -29,7 +29,9 @@ import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.primitive.IntIntProcedure;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.iterator.IntIterator;
+import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.ImmutableIntList;
 import com.gs.collections.api.list.primitive.IntList;
 import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.set.primitive.MutableIntSet;
@@ -45,7 +47,7 @@ import com.gs.collections.impl.set.mutable.primitive.IntHashSet;
  * An IntInterval is a range of ints that may be iterated over using a step value.
  */
 public final class IntInterval
-        implements IntList, Serializable
+        implements ImmutableIntList, Serializable
 {
     private static final long serialVersionUID = 1L;
 
@@ -608,14 +610,14 @@ public final class IntInterval
         return this.indexOf(value);
     }
 
-    public IntList select(IntPredicate predicate)
+    public ImmutableIntList select(IntPredicate predicate)
     {
-        return IntArrayList.newList(new SelectIntIterable(this, predicate));
+        return IntArrayList.newList(new SelectIntIterable(this, predicate)).toImmutable();
     }
 
-    public IntList reject(IntPredicate predicate)
+    public ImmutableIntList reject(IntPredicate predicate)
     {
-        return IntArrayList.newList(new SelectIntIterable(this, IntPredicates.not(predicate)));
+        return IntArrayList.newList(new SelectIntIterable(this, IntPredicates.not(predicate))).toImmutable();
     }
 
     public int detectIfNone(IntPredicate predicate, int ifNone)
@@ -623,9 +625,9 @@ public final class IntInterval
         return new SelectIntIterable(this, predicate).detectIfNone(predicate, ifNone);
     }
 
-    public <V> MutableList<V> collect(IntToObjectFunction<? extends V> function)
+    public <V> ImmutableList<V> collect(IntToObjectFunction<? extends V> function)
     {
-        return new CollectIntToObjectIterable<V>(this, function).toList();
+        return new CollectIntToObjectIterable<V>(this, function).toList().toImmutable();
     }
 
     public long sum()
@@ -714,6 +716,31 @@ public final class IntInterval
     public LazyIntIterable asLazy()
     {
         return new LazyIntIterableAdapter(this);
+    }
+
+    public ImmutableIntList toImmutable()
+    {
+        return this;
+    }
+
+    public ImmutableIntList newWith(int element)
+    {
+        return IntArrayList.newList(this).with(element).toImmutable();
+    }
+
+    public ImmutableIntList newWithout(int element)
+    {
+        return IntArrayList.newList(this).without(element).toImmutable();
+    }
+
+    public ImmutableIntList newWithAll(IntIterable elements)
+    {
+        return IntArrayList.newList(this).withAll(elements).toImmutable();
+    }
+
+    public ImmutableIntList newWithoutAll(IntIterable elements)
+    {
+        return IntArrayList.newList(this).withoutAll(elements).toImmutable();
     }
 
     private class IntIntervalIterator implements IntIterator

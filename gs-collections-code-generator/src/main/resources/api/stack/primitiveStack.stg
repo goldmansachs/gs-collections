@@ -61,6 +61,8 @@ public interface <name>Stack extends <name>Iterable
      */
     @Override
     int hashCode();
+
+    Immutable<name>Stack toImmutable();
 }
 
 >>

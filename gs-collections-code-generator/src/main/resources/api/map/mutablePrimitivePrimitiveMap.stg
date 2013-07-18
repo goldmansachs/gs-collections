@@ -72,8 +72,6 @@ public interface Mutable<name1><name2>Map extends <name1><name2>Map
     Mutable<name1><name2>Map asUnmodifiable();
 
     Mutable<name1><name2>Map asSynchronized();
-
-    Immutable<name1><name2>Map toImmutable();
 }
 
 >>

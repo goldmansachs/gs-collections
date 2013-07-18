@@ -5,7 +5,7 @@ import "primitiveLiteral.stg"
 
 targetPath() ::= "com/gs/collections/impl/set/mutable/primitive"
 
-fileName(primitive) ::= "<primitive.name>HashSet"
+fileName(primitive) ::= "Immutable<primitive.name>HashSet"
 
 class(primitive) ::= <<
 <body(primitive.type, primitive.name)>
@@ -32,6 +32,7 @@ import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
+import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.primitive.Immutable<name>Set;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
@@ -44,73 +45,42 @@ import com.gs.collections.impl.set.mutable.UnifiedSet;
 /**
  * This file was automatically generated from template file primitiveHashSet.stg.
  *
- * @since 3.0.
+ * @since 4.0.
  */
-public final class <name>HashSet implements Mutable<name>Set, Externalizable
+public class Immutable<name>HashSet implements Immutable<name>Set, Externalizable
 {
     private static final long serialVersionUID = 1L;
-    private static final float DEFAULT_LOAD_FACTOR = 0.50f;
-    private static final int DEFAULT_INITIAL_CAPACITY = 8;
     private static final <type> EMPTY = <(literal.(type))("0")>;
     private static final <type> REMOVED = <(literal.(type))("1")>;
     private static final <type>[] EMPTY_TABLE = new <type>[0];
-
     private <type>[] table;
-    private float loadFactor = DEFAULT_LOAD_FACTOR;
-    private int maxSize;
     private int occupied;
     // The 32 bits of this integer indicate whether the items <(literal.(type))("0")> to <(literal.(type))("31")> are present in the set.
     private int zeroToThirtyOne;
     private int zeroToThirtyOneOccupied;
-    private transient boolean copyOnWrite;
 
-    public <name>HashSet()
+    public Immutable<name>HashSet()
     {
-        this.allocate(DEFAULT_INITIAL_CAPACITY \<\< 1);
+        //for externalizable
+        this.table = EMPTY_TABLE;
     }
 
-    public <name>HashSet(int initialCapacity)
+    protected Immutable<name>HashSet(<type>[] table, int occupied, int zeroToThirtyOne, int zeroToThirtyOneOccupied)
     {
-        this(initialCapacity, DEFAULT_LOAD_FACTOR);
+        this.occupied = occupied;
+        this.zeroToThirtyOneOccupied = zeroToThirtyOneOccupied;
+        this.zeroToThirtyOne = zeroToThirtyOne;
+        this.table = table;
     }
 
-    public <name>HashSet(int initialCapacity, float loadFactor)
+    private static boolean isBetweenZeroAndThirtyOne(<type> value)
     {
-        if (initialCapacity \< 0)
-        {
-            throw new IllegalArgumentException("initial capacity cannot be less than 0");
-        }
-        this.loadFactor = loadFactor;
-        this.init(this.fastCeil(initialCapacity / loadFactor));
+        return <(betweenZeroAndThirtyOne.(type))("value")>;
     }
 
-    public <name>HashSet(<name>HashSet set)
+    private static boolean isNonSentinel(<type> value)
     {
-        this.maxSize = set.maxSize;
-        this.loadFactor = set.loadFactor;
-        this.occupied = set.occupied;
-        this.zeroToThirtyOneOccupied = set.zeroToThirtyOneOccupied;
-        this.zeroToThirtyOne = set.zeroToThirtyOne;
-        this.allocateTable(set.table.length);
-
-        System.arraycopy(set.table, 0, this.table, 0, set.table.length);
-    }
-
-    public static <name>HashSet newSetWith(<type>... source)
-    {
-        <name>HashSet result = new <name>HashSet();
-        result.addAll(source);
-        return result;
-    }
-
-    public static <name>HashSet newSet(<name>Iterable source)
-    {
-        if (source instanceof <name>HashSet)
-        {
-            return new <name>HashSet((<name>HashSet) source);
-        }
-
-        return <name>HashSet.newSetWith(source.toArray());
+        return <(notEquals.(type))("value", "EMPTY")> && <(notEquals.(type))("value", "REMOVED")>;
     }
 
     private int fastCeil(float v)
@@ -123,7 +93,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         return possibleResult;
     }
 
-    private int init(int initialCapacity)
+    private void init(int initialCapacity)
     {
         int capacity = 1;
         while (capacity \< initialCapacity)
@@ -131,35 +101,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
             capacity \<\<= 1;
         }
 
-        return this.allocate(capacity);
-    }
-
-    private int allocate(int capacity)
-    {
-        this.allocateTable(capacity);
-        this.computeMaxSize(capacity);
-        return capacity;
-    }
-
-    private void allocateTable(int sizeToAllocate)
-    {
-        this.table = new <type>[sizeToAllocate];
-    }
-
-    private void computeMaxSize(int capacity)
-    {
-        // need at least one free slot for open addressing
-        this.maxSize = Math.min(capacity - 1, (int) (capacity * this.loadFactor));
-    }
-
-    private static boolean isBetweenZeroAndThirtyOne(<type> value)
-    {
-        return <(betweenZeroAndThirtyOne.(type))("value")>;
-    }
-
-    private static boolean isNonSentinel(<type> value)
-    {
-        return <(notEquals.(type))("value", "EMPTY")> && <(notEquals.(type))("value", "REMOVED")>;
+        this.table = new <type>[capacity];
     }
 
     public int size()
@@ -177,21 +119,31 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         return this.size() != 0;
     }
 
-    public void clear()
+    private boolean add(<type> element)
     {
-        this.zeroToThirtyOneOccupied = 0;
-        this.occupied = 0;
+        if (isBetweenZeroAndThirtyOne(element))
+        {
+            int initial = this.zeroToThirtyOne;
+            this.zeroToThirtyOne |= 1 \<\< <(castRealTypeToInt.(type))("element")>;
+            if (this.zeroToThirtyOne != initial)
+            {
+                this.zeroToThirtyOneOccupied++;
+                return true;
+            }
+            return false;
+        }
 
-        this.zeroToThirtyOne = 0;
-        if (this.copyOnWrite)
+        int index = this.probe(element);
+
+        if (<(equals.(type))("this.table[index]", "element")>)
         {
-            this.table = new <type>[this.table.length];
-            this.copyOnWrite = false;
+            // element already present in set
+            return false;
         }
-        else
-        {
-            Arrays.fill(this.table, EMPTY);
-        }
+
+        this.table[index] = element;
+        ++this.occupied;
+        return true;
     }
 
     public boolean contains(<type> value)
@@ -226,186 +178,6 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
             }
         }
         return true;
-    }
-
-    private void copyTable()
-    {
-        this.copyOnWrite = false;
-        <type>[] copy = new <type>[this.table.length];
-        System.arraycopy(this.table, 0, copy, 0,
-                         Math.min(this.table.length, this.table.length));
-        this.table = copy;
-    }
-
-    public boolean add(<type> element)
-    {
-        if (isBetweenZeroAndThirtyOne(element))
-        {
-            int initial = this.zeroToThirtyOne;
-            this.zeroToThirtyOne |= 1 \<\< <(castRealTypeToInt.(type))("element")>;
-            if (this.zeroToThirtyOne != initial)
-            {
-                this.zeroToThirtyOneOccupied++;
-                return true;
-            }
-            return false;
-        }
-
-        int index = this.probe(element);
-
-        if (<(equals.(type))("this.table[index]", "element")>)
-        {
-            // element already present in set
-            return false;
-        }
-
-        if (this.copyOnWrite)
-        {
-            this.copyTable();
-        }
-        this.table[index] = element;
-        ++this.occupied;
-        if (this.occupied > this.maxSize)
-        {
-            this.rehash();
-        }
-        return true;
-    }
-
-    public boolean addAll(<name>Iterable source)
-    {
-        if (source.isEmpty())
-        {
-            return false;
-        }
-        int oldSize = this.size();
-        if (source instanceof <name>HashSet)
-        {
-            <name>HashSet hashSet = (<name>HashSet) source;
-            this.zeroToThirtyOne |= hashSet.zeroToThirtyOne;
-            this.zeroToThirtyOneOccupied = Integer.bitCount(this.zeroToThirtyOne);
-            for (<type> item : hashSet.table)
-            {
-                if (isNonSentinel(item))
-                {
-                    this.add(item);
-                }
-            }
-        }
-        else
-        {
-            <name>Iterator iterator = source.<type>Iterator();
-            while (iterator.hasNext())
-            {
-                <type> item = iterator.next();
-                this.add(item);
-            }
-        }
-        return this.size() != oldSize;
-    }
-
-    public boolean addAll(<type>... source)
-    {
-        int oldSize = this.size();
-        for (<type> item : source)
-        {
-            this.add(item);
-        }
-        return this.size() != oldSize;
-    }
-
-    public boolean remove(<type> value)
-    {
-        if (isBetweenZeroAndThirtyOne(value))
-        {
-            int initial = this.zeroToThirtyOne;
-            this.zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
-            if (this.zeroToThirtyOne == initial)
-            {
-                return false;
-            }
-            this.zeroToThirtyOneOccupied--;
-            return true;
-        }
-        int index = this.probe(value);
-        if (<(equals.(type))("this.table[index]", "value")>)
-        {
-            if (this.copyOnWrite)
-            {
-                this.copyTable();
-            }
-            this.table[index] = REMOVED;
-            this.occupied--;
-            return true;
-        }
-        return false;
-    }
-
-    public boolean removeAll(<name>Iterable source)
-    {
-        if (source.isEmpty())
-        {
-            return false;
-        }
-        int oldSize = this.size();
-        if (source instanceof <name>HashSet)
-        {
-            <name>HashSet hashSet = (<name>HashSet) source;
-            this.zeroToThirtyOne &= ~hashSet.zeroToThirtyOne;
-            this.zeroToThirtyOneOccupied = Integer.bitCount(this.zeroToThirtyOne);
-            for (<type> item : hashSet.table)
-            {
-                if (isNonSentinel(item))
-                {
-                    this.remove(item);
-                }
-            }
-        }
-        else
-        {
-            <name>Iterator iterator = source.<type>Iterator();
-            while (iterator.hasNext())
-            {
-                <type> item = iterator.next();
-                this.remove(item);
-            }
-        }
-        return this.size() != oldSize;
-    }
-
-    public boolean removeAll(<type>... source)
-    {
-        if (source.length == 0)
-        {
-            return false;
-        }
-        int oldSize = this.size();
-        for (<type> item : source)
-        {
-            this.remove(item);
-        }
-        return this.size() != oldSize;
-    }
-
-    private void rehash()
-    {
-        this.rehash(this.table.length \<\< 1);
-    }
-
-    private void rehash(int newCapacity)
-    {
-        int oldLength = this.table.length;
-        <type>[] old = this.table;
-        this.allocate(newCapacity);
-        this.occupied = 0;
-
-        for (int i = 0; i \< oldLength; i++)
-        {
-            if (isNonSentinel(old[i]))
-            {
-                this.add(old[i]);
-            }
-        }
     }
 
     // exposed for testing
@@ -451,28 +223,24 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
     // exposed for testing
     <(spread.(type))(type, "table")>
 
-    public <name>HashSet with(<type> element)
+    public Immutable<name>Set newWith(<type> element)
     {
-        this.add(element);
-        return this;
+        return <name>HashSet.newSet(this).with(element).toImmutable();
     }
 
-    public <name>HashSet without(<type> element)
+    public Immutable<name>Set newWithout(<type> element)
     {
-        this.remove(element);
-        return this;
+        return <name>HashSet.newSet(this).without(element).toImmutable();
     }
 
-    public <name>HashSet withAll(<name>Iterable elements)
+    public Immutable<name>Set newWithAll(<name>Iterable elements)
     {
-        this.addAll(elements.toArray());
-        return this;
+        return <name>HashSet.newSet(this).withAll(elements).toImmutable();
     }
 
-    public <name>HashSet withoutAll(<name>Iterable elements)
+    public Immutable<name>Set newWithoutAll(<name>Iterable elements)
     {
-        this.removeAll(elements);
-        return this;
+        return <name>HashSet.newSet(this).withoutAll(elements).toImmutable();
     }
 
     public <name>Iterator <type>Iterator()
@@ -625,7 +393,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         return true;
     }
 
-    public <name>HashSet select(<name>Predicate predicate)
+    public Immutable<name>Set select(<name>Predicate predicate)
     {
         <name>HashSet result = new <name>HashSet();
 
@@ -650,10 +418,10 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
                 }
             }
         }
-        return result;
+        return result.toImmutable();
     }
 
-    public Mutable<name>Set reject(<name>Predicate predicate)
+    public Immutable<name>Set reject(<name>Predicate predicate)
     {
         <name>HashSet result = new <name>HashSet();
 
@@ -678,7 +446,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
                 }
             }
         }
-        return result;
+        return result.toImmutable();
     }
 
     public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
@@ -707,7 +475,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         return ifNone;
     }
 
-    public \<V> MutableSet\<V> collect(<name>ToObjectFunction\<? extends V> function)
+    public \<V> ImmutableSet\<V> collect(<name>ToObjectFunction\<? extends V> function)
     {
         MutableSet\<V> target = UnifiedSet.newSet(this.size());
 
@@ -726,7 +494,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
                 target.add(function.valueOf(value));
             }
         }
-        return target;
+        return target.toImmutable();
     }
 
     public <wideType.(type)> sum()
@@ -1006,24 +774,9 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         return new Lazy<name>IterableAdapter(this);
     }
 
-    public Mutable<name>Set asUnmodifiable()
-    {
-        return new Unmodifiable<name>Set(this);
-    }
-
-    public Mutable<name>Set asSynchronized()
-    {
-        return new Synchronized<name>Set(this);
-    }
-
     public Immutable<name>Set toImmutable()
     {
-        if (this.occupied == 0)
-        {
-            return new Immutable<name>HashSet(EMPTY_TABLE, this.occupied, this.zeroToThirtyOne, this.zeroToThirtyOneOccupied);
-        }
-        this.copyOnWrite = true;
-        return new Immutable<name>HashSet(this.table, this.occupied, this.zeroToThirtyOne, this.zeroToThirtyOneOccupied);
+        return this;
     }
 
     public void writeExternal(ObjectOutput out) throws IOException
@@ -1050,6 +803,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
     public void readExternal(ObjectInput in) throws IOException
     {
         int size = in.readInt();
+        this.init(this.fastCeil(size / 0.5f));
 
         for (int i = 0; i \< size; i++)
         {
@@ -1065,7 +819,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
 
         public boolean hasNext()
         {
-            return this.count \< <name>HashSet.this.size();
+            return this.count \< Immutable<name>HashSet.this.size();
         }
 
         public <type> next()
@@ -1078,7 +832,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
 
             while (this.zeroToThirtyOne \< 32)
             {
-                if (<name>HashSet.this.contains(this.zeroToThirtyOne))
+                if (Immutable<name>HashSet.this.contains(this.zeroToThirtyOne))
                 {
                     <type> result = this.zeroToThirtyOne;
                     this.zeroToThirtyOne++;
@@ -1087,7 +841,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
                 this.zeroToThirtyOne++;
             }
 
-            <type>[] table = <name>HashSet.this.table;
+            <type>[] table = Immutable<name>HashSet.this.table;
             while (!isNonSentinel(table[this.position]))
             {
                 this.position++;

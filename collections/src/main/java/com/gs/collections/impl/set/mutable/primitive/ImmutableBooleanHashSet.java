@@ -31,6 +31,7 @@ import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
+import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.primitive.BooleanSet;
 import com.gs.collections.api.set.primitive.ImmutableBooleanSet;
@@ -41,7 +42,7 @@ import com.gs.collections.impl.lazy.primitive.LazyBooleanIterableAdapter;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 
-public class BooleanHashSet implements MutableBooleanSet, Externalizable
+public class ImmutableBooleanHashSet implements ImmutableBooleanSet, Externalizable
 {
     private static final long serialVersionUID = 1L;
 
@@ -130,33 +131,17 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
         }
     }
 
-    public BooleanHashSet()
+    public ImmutableBooleanHashSet()
     {
+        //for externalizable
     }
 
-    public BooleanHashSet(BooleanHashSet set)
+    protected ImmutableBooleanHashSet(int state)
     {
-        this.state = set.state;
+        this.state = state;
     }
 
-    public static BooleanHashSet newSetWith(boolean... source)
-    {
-        BooleanHashSet hashSet = new BooleanHashSet();
-        hashSet.addAll(source);
-        return hashSet;
-    }
-
-    public static BooleanHashSet newSet(BooleanIterable source)
-    {
-        if (source instanceof BooleanHashSet)
-        {
-            return new BooleanHashSet((BooleanHashSet) source);
-        }
-
-        return BooleanHashSet.newSetWith(source.toArray());
-    }
-
-    public boolean add(boolean element)
+    private boolean add(boolean element)
     {
         if (this.contains(element))
         {
@@ -166,26 +151,7 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
         return true;
     }
 
-    public boolean addAll(boolean... source)
-    {
-        int initialState = this.state;
-        for (boolean item : source)
-        {
-            if (this.state == 3)
-            {
-                return this.state != initialState;
-            }
-            this.add(item);
-        }
-        return this.state != initialState;
-    }
-
-    public boolean addAll(BooleanIterable source)
-    {
-        return this.addAll(source.toArray());
-    }
-
-    public boolean remove(boolean value)
+    private boolean remove(boolean value)
     {
         if (!this.contains(value))
         {
@@ -196,53 +162,40 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
         return initialState != this.state;
     }
 
-    public boolean removeAll(BooleanIterable source)
+    public ImmutableBooleanSet newWith(boolean element)
     {
-        if (this.isEmpty() || source.isEmpty())
-        {
-            return false;
-        }
-        boolean modified = false;
-        BooleanIterator iterator = source.booleanIterator();
-        while (iterator.hasNext())
-        {
-            if (this.state == 0)
-            {
-                return modified;
-            }
-            boolean item = iterator.next();
-            if (this.remove(item))
-            {
-                modified = true;
-            }
-        }
-        return modified;
+        ImmutableBooleanHashSet set = new ImmutableBooleanHashSet(this.state);
+        set.add(element);
+        return set;
     }
 
-    public boolean removeAll(boolean... source)
+    public ImmutableBooleanSet newWithout(boolean element)
     {
-        if (this.isEmpty() || source.length == 0)
-        {
-            return false;
-        }
-        boolean modified = false;
-        for (boolean item : source)
-        {
-            if (this.state == 0)
-            {
-                return modified;
-            }
-            if (this.remove(item))
-            {
-                modified = true;
-            }
-        }
-        return modified;
+        ImmutableBooleanHashSet set = new ImmutableBooleanHashSet(this.state);
+        set.remove(element);
+        return set;
     }
 
-    public void clear()
+    public ImmutableBooleanSet newWithAll(BooleanIterable elements)
     {
-        this.state = 0;
+        ImmutableBooleanHashSet set = new ImmutableBooleanHashSet(this.state);
+        BooleanIterator booleanIterator = elements.booleanIterator();
+        while (booleanIterator.hasNext())
+        {
+            set.add(booleanIterator.next());
+        }
+        return set;
+    }
+
+    public ImmutableBooleanSet newWithoutAll(BooleanIterable elements)
+    {
+        ImmutableBooleanHashSet set = new ImmutableBooleanHashSet(this.state);
+        BooleanIterator booleanIterator = elements.booleanIterator();
+        while (booleanIterator.hasNext())
+        {
+            set.remove(booleanIterator.next());
+        }
+        return set;
     }
 
     public BooleanIterator booleanIterator()
@@ -346,25 +299,25 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
         return this.state != 0 && this.count(predicate) == 0;
     }
 
-    public BooleanHashSet select(BooleanPredicate predicate)
+    public ImmutableBooleanSet select(BooleanPredicate predicate)
     {
         BooleanHashSet set = new BooleanHashSet();
         switch (this.state)
         {
             case 0:
-                return set;
+                return set.toImmutable();
             case 1:
                 if (predicate.accept(false))
                 {
                     set.add(false);
                 }
-                return set;
+                return set.toImmutable();
             case 2:
                 if (predicate.accept(true))
                 {
                     set.add(true);
                 }
-                return set;
+                return set.toImmutable();
             case 3:
                 if (predicate.accept(false))
                 {
@@ -374,13 +327,13 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
                 {
                     set.add(true);
                 }
-                return set;
+                return set.toImmutable();
             default:
                 throw new AssertionError("Invalid state");
         }
     }
 
-    public BooleanHashSet reject(BooleanPredicate predicate)
+    public ImmutableBooleanSet reject(BooleanPredicate predicate)
     {
         return this.select(BooleanPredicates.not(predicate));
     }
@@ -410,21 +363,21 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
         }
     }
 
-    public <V> MutableSet<V> collect(BooleanToObjectFunction<? extends V> function)
+    public <V> ImmutableSet<V> collect(BooleanToObjectFunction<? extends V> function)
     {
         UnifiedSet<V> target = UnifiedSet.newSet(this.size());
         switch (this.state)
         {
             case 0:
-                return target;
+                return target.toImmutable();
             case 1:
-                return target.with(function.valueOf(false));
+                return target.with(function.valueOf(false)).toImmutable();
             case 2:
-                return target.with(function.valueOf(true));
+                return target.with(function.valueOf(true)).toImmutable();
             case 3:
                 target.add(function.valueOf(false));
                 target.add(function.valueOf(true));
-                return target;
+                return target.toImmutable();
             default:
                 throw new AssertionError("Invalid state");
         }
@@ -492,59 +445,9 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
         return true;
     }
 
-    public BooleanHashSet with(boolean element)
-    {
-        if (this.state == 3)
-        {
-            return this;
-        }
-        this.add(element);
-        return this;
-    }
-
-    public BooleanHashSet without(boolean element)
-    {
-        if (this.state == 0)
-        {
-            return this;
-        }
-        this.remove(element);
-        return this;
-    }
-
-    public BooleanHashSet withAll(BooleanIterable elements)
-    {
-        if (this.state == 3)
-        {
-            return this;
-        }
-        this.addAll(elements.toArray());
-        return this;
-    }
-
-    public BooleanHashSet withoutAll(BooleanIterable elements)
-    {
-        if (this.state == 0)
-        {
-            return this;
-        }
-        this.removeAll(elements);
-        return this;
-    }
-
-    public MutableBooleanSet asUnmodifiable()
-    {
-        return new UnmodifiableBooleanSet(this);
-    }
-
-    public MutableBooleanSet asSynchronized()
-    {
-        return new SynchronizedBooleanSet(this);
-    }
-
     public ImmutableBooleanSet toImmutable()
     {
-        return new ImmutableBooleanHashSet(this.state);
+        return this;
     }
 
     public int size()

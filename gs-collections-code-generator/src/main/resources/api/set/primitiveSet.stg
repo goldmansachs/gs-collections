@@ -43,6 +43,8 @@ public interface <name>Set extends <name>Iterable
      */
     @Override
     int hashCode();
+
+    Immutable<name>Set toImmutable();
 }
 
 >>

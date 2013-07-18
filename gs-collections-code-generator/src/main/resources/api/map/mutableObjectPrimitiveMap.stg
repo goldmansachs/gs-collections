@@ -59,8 +59,6 @@ public interface MutableObject<name>Map\<K> extends Object<name>Map\<K>
     MutableObject<name>Map\<K> asUnmodifiable();
 
     MutableObject<name>Map\<K> asSynchronized();
-
-    ImmutableObject<name>Map\<K> toImmutable();
 }
 
 >>

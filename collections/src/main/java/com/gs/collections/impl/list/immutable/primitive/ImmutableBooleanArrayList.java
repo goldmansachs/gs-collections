@@ -318,6 +318,11 @@ final class ImmutableBooleanArrayList
         return new LazyBooleanIterableAdapter(this);
     }
 
+    public ImmutableBooleanList toImmutable()
+    {
+        return this;
+    }
+
     public ImmutableBooleanList newWith(boolean element)
     {
         BitSet newItems = (BitSet) this.items.clone();
