@@ -58,6 +58,9 @@ public interface <name>Bag extends <name>Iterable
     @Override
     int hashCode();
 
+    /**
+     * Returns an immutable copy of this bag. If the bag is immutable, it returns itself.
+     */
     Immutable<name>Bag toImmutable();
 }
 

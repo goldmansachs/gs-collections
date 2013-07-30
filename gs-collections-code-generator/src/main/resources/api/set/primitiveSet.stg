@@ -44,6 +44,9 @@ public interface <name>Set extends <name>Iterable
     @Override
     int hashCode();
 
+    /**
+     * Returns an immutable copy of this set. If the set is immutable, it returns itself.
+     */
     Immutable<name>Set toImmutable();
 }
 

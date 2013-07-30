@@ -56,6 +56,9 @@ public interface <name>List extends <name>Iterable
     @Override
     int hashCode();
 
+    /**
+     * Returns an immutable copy of this list. If the list is immutable, it returns itself.
+     */
     Immutable<name>List toImmutable();
 }
 

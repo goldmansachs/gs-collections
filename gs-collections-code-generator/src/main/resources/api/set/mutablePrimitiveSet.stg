@@ -36,6 +36,11 @@ public interface Mutable<name>Set extends Mutable<name>Collection, <name>Set
     Mutable<name>Set asUnmodifiable();
 
     Mutable<name>Set asSynchronized();
+
+    /**
+     * Returns an immutable copy of this set.
+     */
+    Immutable<name>Set toImmutable();
 }
 
 >>

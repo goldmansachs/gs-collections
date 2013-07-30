@@ -848,7 +848,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
 
     public <type> max()
     {
-        if(this.isEmpty())
+        if (this.isEmpty())
         {
             throw new NoSuchElementException();
         }
@@ -868,7 +868,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
 
     public <type> min()
     {
-        if(this.isEmpty())
+        if (this.isEmpty())
         {
             throw new NoSuchElementException();
         }
@@ -888,7 +888,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
 
     public <type> maxIfEmpty(<type> defaultValue)
     {
-        if(this.isEmpty())
+        if (this.isEmpty())
         {
             return defaultValue;
         }
@@ -908,7 +908,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
 
     public <type> minIfEmpty(<type> defaultValue)
     {
-        if(this.isEmpty())
+        if (this.isEmpty())
         {
             return defaultValue;
         }
@@ -1098,7 +1098,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
 
         public <type> next()
         {
-            if(!this.hasNext())
+            if (!this.hasNext())
             {
                 throw new NoSuchElementException();
             }

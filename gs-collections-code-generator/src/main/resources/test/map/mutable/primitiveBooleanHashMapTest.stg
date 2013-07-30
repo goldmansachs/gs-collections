@@ -49,25 +49,25 @@ public class <name>BooleanHashMapTest extends Abstract<name>BooleanMapTestCase
     }
 
     @Override
-	protected <name>BooleanHashMap newWithKeysValues(<type> key1, boolean value1, <type> key2, boolean value2)
+    protected <name>BooleanHashMap newWithKeysValues(<type> key1, boolean value1, <type> key2, boolean value2)
     {
         return new <name>BooleanHashMap(2).withKeysValues(key1, value1, key2, value2);
     }
 
     @Override
-	protected <name>BooleanHashMap newWithKeysValues(<type> key1, boolean value1, <type> key2, boolean value2, <type> key3, boolean value3)
+    protected <name>BooleanHashMap newWithKeysValues(<type> key1, boolean value1, <type> key2, boolean value2, <type> key3, boolean value3)
     {
         return new <name>BooleanHashMap(3).withKeysValues(key1, value1, key2, value2, key3, value3);
     }
 
     @Override
-	protected <name>BooleanHashMap newWithKeysValues(<type> key1, boolean value1, <type> key2, boolean value2, <type> key3, boolean value3, <type> key4, boolean value4)
+    protected <name>BooleanHashMap newWithKeysValues(<type> key1, boolean value1, <type> key2, boolean value2, <type> key3, boolean value3, <type> key4, boolean value4)
     {
         return new <name>BooleanHashMap(4).withKeysValues(key1, value1, key2, value2, key3, value3, key4, value4);
     }
 
     @Override
-	protected <name>BooleanHashMap getEmptyMap()
+    protected <name>BooleanHashMap getEmptyMap()
     {
         return new <name>BooleanHashMap();
     }

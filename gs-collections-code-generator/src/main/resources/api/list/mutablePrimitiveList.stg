@@ -51,6 +51,11 @@ public interface Mutable<name>List extends Mutable<name>Collection, <name>List
     Mutable<name>List asUnmodifiable();
 
     Mutable<name>List asSynchronized();
+
+    /**
+     * Returns an immutable copy of this list.
+     */
+    Immutable<name>List toImmutable();
 }
 
 >>

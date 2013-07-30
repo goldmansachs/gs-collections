@@ -48,25 +48,25 @@ public class <name1><name2>HashMapTest extends Abstract<name1><name2>MapTestCase
     }
 
     @Override
-	protected <name1><name2>HashMap newWithKeysValues(<type1> key1, <type2> value1, <type1> key2, <type2> value2)
+    protected <name1><name2>HashMap newWithKeysValues(<type1> key1, <type2> value1, <type1> key2, <type2> value2)
     {
         return new <name1><name2>HashMap(2).withKeysValues(key1, value1, key2, value2);
     }
 
     @Override
-	protected <name1><name2>HashMap newWithKeysValues(<type1> key1, <type2> value1, <type1> key2, <type2> value2, <type1> key3, <type2> value3)
+    protected <name1><name2>HashMap newWithKeysValues(<type1> key1, <type2> value1, <type1> key2, <type2> value2, <type1> key3, <type2> value3)
     {
         return new <name1><name2>HashMap(3).withKeysValues(key1, value1, key2, value2, key3, value3);
     }
 
     @Override
-	protected <name1><name2>HashMap newWithKeysValues(<type1> key1, <type2> value1, <type1> key2, <type2> value2, <type1> key3, <type2> value3, <type1> key4, <type2> value4)
+    protected <name1><name2>HashMap newWithKeysValues(<type1> key1, <type2> value1, <type1> key2, <type2> value2, <type1> key3, <type2> value3, <type1> key4, <type2> value4)
     {
         return new <name1><name2>HashMap(4).withKeysValues(key1, value1, key2, value2, key3, value3, key4, value4);
     }
 
     @Override
-	protected <name1><name2>HashMap getEmptyMap()
+    protected <name1><name2>HashMap getEmptyMap()
     {
         return new <name1><name2>HashMap();
     }

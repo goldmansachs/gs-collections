@@ -233,7 +233,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         this.copyOnWrite = false;
         <type>[] copy = new <type>[this.table.length];
         System.arraycopy(this.table, 0, copy, 0,
-                         Math.min(this.table.length, this.table.length));
+        Math.min(this.table.length, this.table.length));
         this.table = copy;
     }
 
