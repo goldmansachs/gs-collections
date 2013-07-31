@@ -16,13 +16,15 @@
 
 package com.gs.collections.impl.factory;
 
+import com.gs.collections.api.factory.stack.ImmutableStackFactory;
 import com.gs.collections.api.factory.stack.MutableStackFactory;
+import com.gs.collections.impl.stack.immutable.ImmutableStackFactoryImpl;
 import com.gs.collections.impl.stack.mutable.MutableStackFactoryImpl;
 
 @SuppressWarnings("ConstantNamingConvention")
 public final class Stacks
 {
-    //    public static final ImmutableStackFactory immutable = new ImmutableStackFactoryImpl();
+    public static final ImmutableStackFactory immutable = new ImmutableStackFactoryImpl();
     public static final MutableStackFactory mutable = new MutableStackFactoryImpl();
 
     private Stacks()

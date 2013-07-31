@@ -60,6 +60,7 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
+import com.gs.collections.impl.factory.Stacks;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
@@ -239,17 +240,17 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
 
     public int size()
     {
-        return this.delegate.asReversed().size();
+        return this.delegate.size();
     }
 
     public boolean isEmpty()
     {
-        return this.delegate.asReversed().isEmpty();
+        return this.delegate.isEmpty();
     }
 
     public boolean notEmpty()
     {
-        return this.delegate.asReversed().notEmpty();
+        return this.delegate.notEmpty();
     }
 
     public T getFirst()
@@ -264,22 +265,22 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
 
     public boolean contains(Object object)
     {
-        return this.delegate.contains(object);
+        return this.delegate.asReversed().contains(object);
     }
 
     public boolean containsAllIterable(Iterable<?> source)
     {
-        return this.delegate.containsAllIterable(source);
+        return this.delegate.asReversed().containsAllIterable(source);
     }
 
     public boolean containsAll(Collection<?> source)
     {
-        return this.delegate.containsAll(source);
+        return this.delegate.asReversed().containsAll(source);
     }
 
     public boolean containsAllArguments(Object... elements)
     {
-        return this.delegate.containsAllArguments(elements);
+        return this.delegate.asReversed().containsAllArguments(elements);
     }
 
     public <V> ArrayStack<V> collect(Function<? super T, ? extends V> function)
@@ -599,7 +600,7 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
 
     public ImmutableStack<T> toImmutable()
     {
-        throw new UnsupportedOperationException();
+        return Stacks.immutable.withAll(this.delegate);
     }
 
     public <V extends Comparable<? super V>> MutableSortedSet<T> toSortedSetBy(Function<? super T, ? extends V> function)

@@ -132,6 +132,14 @@ public abstract class StackIterableTestCase
     }
 
     @Test
+    public void peek()
+    {
+        Assert.assertEquals("3", this.newStackWith("1", "2", "3").peek());
+        Assert.assertEquals(FastList.newListWith(), this.newStackWith("1", "2", "3").peek(0));
+        Assert.assertEquals(FastList.newListWith("3", "2"), this.newStackWith("1", "2", "3").peek(2));
+    }
+
+    @Test
     public void peekAt()
     {
         Assert.assertEquals("3", this.newStackWith("1", "2", "3").peekAt(0));
