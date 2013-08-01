@@ -219,4 +219,15 @@ public interface MapIterable<K, V> extends RichIterable<V>
      */
     @Override
     int hashCode();
+
+    /**
+     * Returns a string representation of this MapIterable. The string representation consists of a list of the
+     * map's key-value pairs in the order they are returned by its iterator. The key and value in each key-value pair are separated
+     * by a colon (<tt>":"</tt>) and each pair is enclosed in square brackets (<tt>"[]"</tt>). Adjacent key-value pairs
+     * are separated by the characters <tt>", "</tt> (comma and space). Keys and values are converted to strings as by
+     * {@link String#valueOf(Object)}.
+     *
+     * @return a string representation of this MapIterable
+     */
+    String toString();
 }

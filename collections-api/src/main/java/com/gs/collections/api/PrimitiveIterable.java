@@ -45,6 +45,17 @@ public interface PrimitiveIterable
     boolean notEmpty();
 
     /**
+     * Returns a string representation of this PrimitiveIterable.  The string representation consists of a list of the
+     * PrimitiveIterable's elements in the order they are returned by its iterator, enclosed in square brackets
+     * (<tt>"[]"</tt>).  Adjacent elements are separated by the characters <tt>", "</tt> (comma and space).  Elements
+     * are converted to strings as by String#valueOf().
+     *
+     * @return a string representation of this PrimitiveIterable
+     */
+    @Override
+    String toString();
+
+    /**
      * Returns a string representation of this collection by delegating to {@link #makeString(String)} and defaulting
      * the separator parameter to the characters <tt>", "</tt> (comma and space).
      *
