@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.api.tuple.Pair;
@@ -52,7 +53,8 @@ public abstract class UnmodifiableMutableCollectionTestCase<T>
     @Test(expected = UnsupportedOperationException.class)
     public void removeIf()
     {
-        this.getCollection().removeIf(null);
+        Predicate<Object> predicate = null;
+        this.getCollection().removeIf(predicate);
     }
 
     @Test(expected = UnsupportedOperationException.class)

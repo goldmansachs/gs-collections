@@ -19,6 +19,7 @@ package com.gs.collections.impl;
 import java.util.Iterator;
 import java.util.Map;
 
+import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
@@ -60,7 +61,8 @@ public class UnmodifiableMapEntrySetTest extends UnmodifiableMutableCollectionTe
     @Test(expected = NullPointerException.class)
     public void removeIf()
     {
-        this.getCollection().removeIf(null);
+        Predicate<Object> predicate = null;
+        this.getCollection().removeIf(predicate);
     }
 
     @Override
