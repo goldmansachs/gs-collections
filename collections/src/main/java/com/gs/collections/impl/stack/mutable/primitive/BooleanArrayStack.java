@@ -38,6 +38,7 @@ import com.gs.collections.api.stack.primitive.BooleanStack;
 import com.gs.collections.api.stack.primitive.ImmutableBooleanStack;
 import com.gs.collections.api.stack.primitive.MutableBooleanStack;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
+import com.gs.collections.impl.factory.primitive.BooleanStacks;
 import com.gs.collections.impl.lazy.primitive.LazyBooleanIterableAdapter;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
@@ -172,7 +173,7 @@ public final class BooleanArrayStack implements MutableBooleanStack, Externaliza
 
     public ImmutableBooleanStack toImmutable()
     {
-        throw new UnsupportedOperationException("toImmutable not implemented yet");
+        return BooleanStacks.immutable.withAll(this.delegate);
     }
 
     public boolean peek()

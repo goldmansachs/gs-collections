@@ -21,12 +21,13 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.LazyBooleanIterable;
+import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
-import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
+import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
 import com.gs.collections.impl.test.Verify;
@@ -44,7 +45,7 @@ public abstract class AbstractBooleanIterableTestCase
 
     protected abstract BooleanIterable newMutableCollectionWith(boolean... elements);
 
-    protected abstract MutableCollection<Object> newObjectCollectionWith(Object... elements);
+    protected abstract RichIterable<Object> newObjectCollectionWith(Object... elements);
 
     @Test
     public void newCollectionWith()
@@ -338,11 +339,12 @@ public abstract class AbstractBooleanIterableTestCase
     @Test
     public void collect()
     {
-        MutableCollection<Object> expected = this.newObjectCollectionWith();
+        FastList<Object> objects = FastList.newListWith();
         for (int i = 0; i < this.classUnderTest().size(); i++)
         {
-            expected.add((i & 1) == 0 ? 1 : 0);
+            objects.add((i & 1) == 0 ? 1 : 0);
         }
+        RichIterable<Object> expected = this.newObjectCollectionWith(objects.toArray());
         Assert.assertEquals(expected, this.classUnderTest().collect(new BooleanToObjectFunction<Object>()
         {
             public Object valueOf(boolean value)
@@ -367,6 +369,7 @@ public abstract class AbstractBooleanIterableTestCase
     public void toArray()
     {
         Assert.assertEquals(0L, this.newWith().toArray().length);
+        Assert.assertTrue(Arrays.equals(new boolean[]{true}, this.newWith(true).toArray()));
         Assert.assertTrue(Arrays.equals(new boolean[]{false, true}, this.newWith(true, false).toArray())
                 || Arrays.equals(new boolean[]{true, false}, this.newWith(true, false).toArray()));
     }
@@ -379,14 +382,17 @@ public abstract class AbstractBooleanIterableTestCase
         BooleanIterable iterable3 = this.newWith(false, false, false, true);
         BooleanIterable iterable4 = this.newWith(true, true, true);
         BooleanIterable iterable5 = this.newWith(true, true, false, false, false);
+        BooleanIterable iterable6 = this.newWith(true);
 
         Verify.assertEqualsAndHashCode(iterable1, iterable2);
         Verify.assertEqualsAndHashCode(this.newWith(), this.newWith());
+        Verify.assertPostSerializedEqualsAndHashCode(iterable6);
         Verify.assertPostSerializedEqualsAndHashCode(iterable1);
         Verify.assertPostSerializedEqualsAndHashCode(iterable5);
         Assert.assertNotEquals(iterable1, iterable3);
         Assert.assertNotEquals(iterable1, iterable4);
         Assert.assertNotEquals(this.newWith(), this.newWith(true));
+        Assert.assertNotEquals(iterable6, this.newWith(true, false));
     }
 
     @Test
@@ -416,6 +422,8 @@ public abstract class AbstractBooleanIterableTestCase
     {
         Assert.assertEquals("true", this.newWith(true).makeString("/"));
         Assert.assertEquals("", this.newWith().makeString());
+        Assert.assertEquals("", this.newWith().makeString("/"));
+        Assert.assertEquals("[]", this.newWith().makeString("[", "/", "]"));
         BooleanIterable iterable = this.newWith(true, false);
         Assert.assertTrue("true, false".equals(iterable.makeString())
                 || "false, true".equals(iterable.makeString()));
@@ -431,6 +439,10 @@ public abstract class AbstractBooleanIterableTestCase
         StringBuilder appendable = new StringBuilder();
         this.newWith().appendString(appendable);
         Assert.assertEquals("", appendable.toString());
+        this.newWith().appendString(appendable, "/");
+        Assert.assertEquals("", appendable.toString());
+        this.newWith().appendString(appendable, "[", "/", "]");
+        Assert.assertEquals("[]", appendable.toString());
         StringBuilder appendable1 = new StringBuilder();
         this.newWith(true).appendString(appendable1);
         Assert.assertEquals("true", appendable1.toString());
@@ -454,6 +466,10 @@ public abstract class AbstractBooleanIterableTestCase
         BooleanIterable iterable = this.newWith(true, false);
         Assert.assertTrue(BooleanArrayList.newListWith(false, true).equals(iterable.toList())
                 || BooleanArrayList.newListWith(true, false).equals(iterable.toList()));
+        BooleanIterable iterable1 = this.newWith(true);
+        Assert.assertEquals(BooleanArrayList.newListWith(true), iterable1.toList());
+        BooleanIterable iterable0 = this.newWith();
+        Assert.assertEquals(BooleanArrayList.newListWith(), iterable0.toList());
     }
 
     @Test

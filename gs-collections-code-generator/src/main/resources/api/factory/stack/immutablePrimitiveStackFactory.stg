@@ -1,0 +1,63 @@
+import "copyright.stg"
+
+targetPath() ::= "com/gs/collections/api/factory/stack/primitive"
+
+fileName(primitive) ::= "Immutable<primitive.name>StackFactory"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.api.factory.stack.primitive;
+
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.stack.primitive.Immutable<name>Stack;
+
+/**
+ * A factory which creates instances of type {@link Immutable<name>Stack}.
+ * This file was automatically generated from template file immutablePrimitiveStackFactory.stg.
+ *
+ * @since 4.0.
+ */
+public interface Immutable<name>StackFactory
+{
+    /**
+     * Same as {@link #with()}.
+     */
+    Immutable<name>Stack of();
+
+    Immutable<name>Stack with();
+
+    /**
+     * Same as {@link #with(<type>)}.
+     */
+    Immutable<name>Stack of(<type> one);
+
+    Immutable<name>Stack with(<type> one);
+
+    /**
+     * Same as {@link #with(<type>[])}.
+     */
+    Immutable<name>Stack of(<type>... items);
+
+    Immutable<name>Stack with(<type>... items);
+
+    /**
+     * Same as {@link #withAll(<name>Iterable)}.
+     */
+    Immutable<name>Stack ofAll(<name>Iterable items);
+
+    Immutable<name>Stack withAll(<name>Iterable items);
+    
+    /**
+     * Same as {@link #withAllReversed(<name>Iterable)}.
+     */
+    Immutable<name>Stack ofAllReversed(<name>Iterable items);
+
+    Immutable<name>Stack withAllReversed(<name>Iterable items);
+}
+
+>>

@@ -1,0 +1,153 @@
+import "copyright.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+
+isTest() ::= "true"
+
+skipBoolean() ::="true"
+
+targetPath() ::= "com/gs/collections/impl/stack/immutable/primitive"
+
+fileName(primitive) ::= "Immutable<primitive.name>EmptyStackTest"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.wrapperName, primitive.name)>
+>>
+
+body(type, wrapperName, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.stack.immutable.primitive;
+
+import java.util.EmptyStackException;
+import java.util.NoSuchElementException;
+
+import com.gs.collections.api.iterator.<name>Iterator;
+import com.gs.collections.api.stack.primitive.Immutable<name>Stack;
+import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
+import com.gs.collections.impl.test.Verify;
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * JUnit test for {@link Immutable<name>EmptyStack}.
+ * This file was automatically generated from template file immutablePrimitiveEmptyStackTest.stg.
+ */
+public class Immutable<name>EmptyStackTest extends AbstractImmutable<name>StackTestCase
+{
+    @Override
+    protected Immutable<name>Stack classUnderTest()
+    {
+        return Immutable<name>EmptyStack.INSTANCE;
+    }
+
+    @Override
+    @Test(expected = EmptyStackException.class)
+    public void pop()
+    {
+        this.classUnderTest().pop();
+    }
+
+    @Override
+    @Test(expected = EmptyStackException.class)
+    public void pop_with_count_greater_than_stack_size_throws_exception()
+    {
+        this.classUnderTest().pop(1);
+    }
+
+    @Override
+    @Test
+    public void popWithCount()
+    {
+        Immutable<name>Stack stack = this.classUnderTest();
+        Immutable<name>Stack stack1 = stack.pop(0);
+        Assert.assertSame(stack1, stack);
+        Assert.assertEquals(this.classUnderTest(), stack);
+    }
+
+    @Override
+    @Test
+    public void <type>Iterator()
+    {
+        <name>Iterator iterator = this.classUnderTest().<type>Iterator();
+        Assert.assertFalse(iterator.hasNext());
+    }
+
+    @Override
+    @Test(expected = EmptyStackException.class)
+    public void peek()
+    {
+        this.classUnderTest().peek();
+    }
+
+    @Test
+    public void peekWithCount()
+    {
+        Assert.assertEquals(<name>ArrayList.newListWith(), this.classUnderTest().peek(0));
+        Verify.assertThrows(EmptyStackException.class, new Runnable()
+        {
+            public void run()
+            {
+                Immutable<name>EmptyStackTest.this.classUnderTest().peek(1);
+            }
+        });
+    }
+
+    @Override
+    @Test(expected = EmptyStackException.class)
+    public void peek_at_index_equal_to_size_throws_exception()
+    {
+        this.classUnderTest().peekAt(0);
+    }
+
+    @Override
+    @Test(expected = EmptyStackException.class)
+    public void peek_at_index_greater_than_size_throws_exception()
+    {
+        this.classUnderTest().peekAt(1);
+    }
+
+    @Override
+    @Test(expected = ArithmeticException.class)
+    public void average()
+    {
+        this.classUnderTest().average();
+    }
+
+    @Override
+    @Test(expected = NoSuchElementException.class)
+    public void max()
+    {
+        this.classUnderTest().max();
+    }
+
+    @Override
+    @Test(expected = NoSuchElementException.class)
+    public void min()
+    {
+        this.classUnderTest().min();
+    }
+
+    @Override
+    @Test
+    public void notEmpty()
+    {
+        Assert.assertFalse(this.newWith().notEmpty());
+    }
+
+    @Override
+    @Test
+    public void isEmpty()
+    {
+        Verify.assertEmpty(this.newWith());
+    }
+
+    @Override
+    public void testEquals()
+    {
+        super.testEquals();
+        Verify.assertPostSerializedIdentity(this.classUnderTest());
+    }
+}
+
+>>

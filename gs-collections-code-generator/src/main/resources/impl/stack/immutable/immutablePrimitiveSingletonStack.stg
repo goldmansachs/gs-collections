@@ -3,9 +3,9 @@ import "primitiveEquals.stg"
 import "primitiveHashCode.stg"
 import "primitiveLiteral.stg"
 
-targetPath() ::= "com/gs/collections/impl/list/immutable/primitive"
+targetPath() ::= "com/gs/collections/impl/stack/immutable/primitive"
 
-fileName(primitive) ::= "Immutable<primitive.name>SingletonList"
+fileName(primitive) ::= "Immutable<primitive.name>SingletonStack"
 
 class(primitive) ::= <<
 <body(primitive.type, primitive.name)>
@@ -14,7 +14,7 @@ class(primitive) ::= <<
 body(type, name) ::= <<
 <copyright()>
 
-package com.gs.collections.impl.list.immutable.primitive;
+package com.gs.collections.impl.stack.immutable.primitive;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -26,66 +26,39 @@ import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
-import com.gs.collections.api.list.ImmutableList;
-import com.gs.collections.api.list.primitive.Immutable<name>List;
 import com.gs.collections.api.list.primitive.<name>List;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
+import com.gs.collections.api.stack.ImmutableStack;
+import com.gs.collections.api.stack.primitive.<name>Stack;
+import com.gs.collections.api.stack.primitive.Immutable<name>Stack;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
-import com.gs.collections.impl.factory.primitive.<name>Lists;
+import com.gs.collections.impl.factory.Stacks;
+import com.gs.collections.impl.factory.primitive.<name>Stacks;
 import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
-import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
+import com.gs.collections.impl.stack.mutable.primitive.<name>ArrayStack;
 import net.jcip.annotations.Immutable;
 
 /**
- * Immutable<name>SingletonList is an optimization for {@link Immutable<name>List} of size 1.
- * This file was automatically generated from template file immutablePrimitiveSingletonList.stg.
+ * Immutable<name>SingletonStack is an optimization for {@link Immutable<name>Stack} of size 1.
+ * This file was automatically generated from template file immutablePrimitiveSingletonStack.stg.
  */
 @Immutable
-final class Immutable<name>SingletonList implements Immutable<name>List, Serializable
+final class Immutable<name>SingletonStack implements Immutable<name>Stack, Serializable
 {
     private static final long serialVersionUID = 1L;
     private final <type> element1;
 
-    Immutable<name>SingletonList(<type> element)
+    Immutable<name>SingletonStack(<type> element)
     {
         this.element1 = element;
     }
 
-    public <type> get(int index)
-    {
-        if (index == 0)
-        {
-            return this.element1;
-        }
-        throw new IndexOutOfBoundsException("Index: " + index + ", Size: 1");
-    }
-
-    public <type> getFirst()
-    {
-        return this.element1;
-    }
-
-    public <type> getLast()
-    {
-        return this.element1;
-    }
-
-    public int indexOf(<type> value)
-    {
-        return <(equals.(type))("this.element1", "value")> ? 0 : -1;
-    }
-
-    public int lastIndexOf(<type> value)
-    {
-        return <(equals.(type))("this.element1", "value")> ? 0 : -1;
-    }
-
     public <name>Iterator <type>Iterator()
     {
-        return <name>ArrayList.newListWith(this.element1).<type>Iterator();
+        return <name>ArrayStack.newStackWith(this.element1).<type>Iterator();
     }
 
     public void forEach(<name>Procedure procedure)
@@ -113,16 +86,45 @@ final class Immutable<name>SingletonList implements Immutable<name>List, Seriali
         return !predicate.accept(this.element1);
     }
 
-    public Immutable<name>List select(<name>Predicate predicate)
+    public <type> peek()
     {
-        return predicate.accept(this.element1) ? <name>ArrayList.newListWith(this.element1).toImmutable()
-                : new <name>ArrayList().toImmutable();
+        return this.element1;
     }
 
-    public Immutable<name>List reject(<name>Predicate predicate)
+    public <name>List peek(int count)
     {
-        return predicate.accept(this.element1) ? new <name>ArrayList().toImmutable()
-                : <name>ArrayList.newListWith(this.element1).toImmutable();
+        this.checkNegativeCount(count);
+        if (count == 0)
+        {
+            return new <name>ArrayList(0);
+        }
+        if (count == 1)
+        {
+            return <name>ArrayList.newListWith(this.element1);
+        }
+        throw new IllegalArgumentException("Count must be less than or equal to size: Count = " + count + " Size = 1");
+    }
+
+    public <type> peekAt(int index)
+    {
+        this.checkNegativeCount(index);
+        if (index == 0)
+        {
+            return this.element1;
+        }
+        throw new IllegalArgumentException("Index must be less than size: Index = " + index + " Size = 1");
+    }
+
+    public Immutable<name>Stack select(<name>Predicate predicate)
+    {
+        return predicate.accept(this.element1) ? <name>Stacks.immutable.with(this.element1)
+                : <name>Stacks.immutable.with();
+    }
+
+    public Immutable<name>Stack reject(<name>Predicate predicate)
+    {
+        return predicate.accept(this.element1) ? <name>Stacks.immutable.with()
+                : <name>Stacks.immutable.with(this.element1);
     }
 
     public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
@@ -130,9 +132,9 @@ final class Immutable<name>SingletonList implements Immutable<name>List, Seriali
         return predicate.accept(this.element1) ? this.element1 : ifNone;
     }
 
-    public \<V> ImmutableList\<V> collect(<name>ToObjectFunction\<? extends V> function)
+    public \<V> ImmutableStack\<V> collect(<name>ToObjectFunction\<? extends V> function)
     {
-        return FastList.\<V>newListWith(function.valueOf(this.element1)).toImmutable();
+        return Stacks.immutable.with(function.valueOf(this.element1));
     }
 
     <(arithmeticMethods.(type))(name, type)>
@@ -190,31 +192,41 @@ final class Immutable<name>SingletonList implements Immutable<name>List, Seriali
         return new Lazy<name>IterableAdapter(this);
     }
 
-    public Immutable<name>List toImmutable()
+    public Immutable<name>Stack toImmutable()
     {
         return this;
     }
 
-    public Immutable<name>List newWith(<type> element)
+    public Immutable<name>Stack push(<type> element)
     {
-        return <name>Lists.immutable.with(this.element1, element);
+        return <name>Stacks.immutable.with(this.element1, element);
     }
 
-    public Immutable<name>List newWithout(<type> element)
+    public Immutable<name>Stack pop()
     {
-        return <(equals.(type))("this.element1", "element")> ? <name>Lists.immutable.with() : this;
+        return <name>Stacks.immutable.with();
     }
 
-    public Immutable<name>List newWithAll(<name>Iterable elements)
+    public Immutable<name>Stack pop(int count)
     {
-        <name>ArrayList arrayList = <name>ArrayList.newListWith(this.element1);
-        arrayList.addAll(elements);
-        return arrayList.toImmutable();
+        this.checkNegativeCount(count);
+        if (count == 0)
+        {
+            return this;
+        }
+        if (count == 1)
+        {
+            return <name>Stacks.immutable.with();
+        }
+        throw new IllegalArgumentException("Count must be less than size: Count = " + count + " Size = 1");
     }
 
-    public Immutable<name>List newWithoutAll(<name>Iterable elements)
+    private void checkNegativeCount(int count)
     {
-        return elements.contains(this.element1) ? <name>Lists.immutable.with() : this;
+        if (count \< 0)
+        {
+            throw new IllegalArgumentException("Count must be positive but was " + count);
+        }
     }
 
     public int size()
@@ -233,22 +245,22 @@ final class Immutable<name>SingletonList implements Immutable<name>List, Seriali
     }
 
     @Override
-    public boolean equals(Object otherList)
+    public boolean equals(Object otherStack)
     {
-        if (otherList == this)
+        if (otherStack == this)
         {
             return true;
         }
-        if (!(otherList instanceof <name>List))
+        if (!(otherStack instanceof <name>Stack))
         {
             return false;
         }
-        <name>List list = (<name>List) otherList;
-        if (list.size() != 1)
+        <name>Stack stack = (<name>Stack) otherStack;
+        if (stack.size() != 1)
         {
             return false;
         }
-        return <(equals.(type))("this.element1", "list.get(0)")>;
+        return <(equals.(type))("this.element1", "stack.peek()")>;
     }
 
     @Override

@@ -1,0 +1,111 @@
+import "copyright.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+
+isTest() ::= "true"
+
+skipBoolean() ::="true"
+
+targetPath() ::= "com/gs/collections/impl/stack/immutable/primitive"
+
+fileName(primitive) ::= "Immutable<primitive.name>SingletonStackTest"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.wrapperName, primitive.name)>
+>>
+
+body(type, wrapperName, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.stack.immutable.primitive;
+
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.stack.primitive.Immutable<name>Stack;
+import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
+import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
+import com.gs.collections.impl.stack.mutable.primitive.<name>ArrayStack;
+import com.gs.collections.impl.test.Verify;
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * JUnit test for {@link Immutable<name>SingletonStack}.
+ * This file was automatically generated from template file immutablePrimitiveSingletonStackTest.stg.
+ */
+public class Immutable<name>SingletonStackTest extends AbstractImmutable<name>StackTestCase
+{
+    @Override
+    protected Immutable<name>Stack classUnderTest()
+    {
+        return new Immutable<name>SingletonStack(<(literal.(type))("1")>);
+    }
+
+    @Override
+    @Test
+    public void pop()
+    {
+        Immutable<name>Stack stack = this.classUnderTest();
+        Immutable<name>Stack modified = stack.pop();
+        Verify.assertEmpty( modified);
+        Verify.assertSize(1, stack);
+        Assert.assertNotSame(modified, stack);
+        Assert.assertEquals(this.classUnderTest(), stack);
+    }
+
+    @Override
+    @Test
+    public void popWithCount()
+    {
+        Immutable<name>Stack stack = this.classUnderTest();
+        Immutable<name>Stack stack1 = stack.pop(0);
+        Assert.assertSame(stack1, stack);
+        Assert.assertEquals(this.classUnderTest(), stack);
+        Immutable<name>Stack modified = stack.pop(1);
+        Verify.assertEmpty( modified);
+        Verify.assertSize(1, stack);
+        Assert.assertNotSame(modified, stack);
+        Assert.assertEquals(this.classUnderTest(), stack);
+    }
+
+    @Override
+    @Test
+    public void detectIfNone()
+    {
+        <name>Iterable iterable = this.classUnderTest();
+        Assert.assertEquals(<(wideLiteral.(type))("0")>, iterable.detectIfNone(<name>Predicates.equal(<(literal.(type))("4")>), <(literal.(type))("0")>)<wideDelta.(type)>);
+        Assert.assertEquals(<(wideLiteral.(type))("1")>, iterable.detectIfNone(<name>Predicates.lessThan(<(literal.(type))("4")>), <(literal.(type))("0")>)<wideDelta.(type)>);
+    }
+
+    @Override
+    @Test
+    public void peek()
+    {
+        Assert.assertEquals(this.classUnderTest().size(), this.classUnderTest().peek()<wideDelta.(type)>);
+        Assert.assertEquals(<name>ArrayList.newListWith(), this.classUnderTest().peek(0));
+        Assert.assertEquals(<name>ArrayList.newListWith(<(literal.(type))("1")>),
+                this.classUnderTest().peek(1));
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Immutable<name>SingletonStackTest.this.classUnderTest().peek(2);
+            }
+        });
+    }
+
+    @Override
+    @Test
+    public void testEquals()
+    {
+        Immutable<name>Stack stack = this.classUnderTest();
+        Assert.assertEquals(stack, stack);
+        Verify.assertPostSerializedEqualsAndHashCode(stack);
+        Assert.assertEquals(stack, <name>ArrayStack.newStackWith(<(literal.(type))("1")>));
+        Assert.assertNotEquals(stack, this.newWith(<(literal.(type))("1")>, <(literal.(type))("2")>));
+        Assert.assertNotEquals(stack, <name>ArrayList.newListWith(<(literal.(type))("1")>));
+        Assert.assertEquals(stack, this.newWith(<(literal.(type))("1")>));
+        Assert.assertNotEquals(stack, this.newWith());
+    }
+}
+
+>>

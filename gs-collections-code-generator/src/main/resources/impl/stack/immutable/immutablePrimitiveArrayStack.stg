@@ -3,9 +3,9 @@ import "primitiveEquals.stg"
 import "primitiveHashCode.stg"
 import "primitiveLiteral.stg"
 
-targetPath() ::= "com/gs/collections/impl/stack/mutable/primitive"
+targetPath() ::= "com/gs/collections/impl/stack/immutable/primitive"
 
-fileName(primitive) ::= "<primitive.name>ArrayStack"
+fileName(primitive) ::= "Immutable<primitive.name>ArrayStack"
 
 class(primitive) ::= <<
 <body(primitive.type, primitive.name)>
@@ -14,130 +14,124 @@ class(primitive) ::= <<
 body(type, name) ::= <<
 <copyright()>
 
-package com.gs.collections.impl.stack.mutable.primitive;
+package com.gs.collections.impl.stack.immutable.primitive;
 
 import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
-import java.util.EmptyStackException;
+import java.io.Serializable;
 
-import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.Lazy<name>Iterable;
+import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
-import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.primitive.<name>List;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
-import com.gs.collections.api.stack.MutableStack;
+import com.gs.collections.api.stack.ImmutableStack;
 import com.gs.collections.api.stack.primitive.<name>Stack;
 import com.gs.collections.api.stack.primitive.Immutable<name>Stack;
-import com.gs.collections.api.stack.primitive.Mutable<name>Stack;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
+import com.gs.collections.impl.block.procedure.checked.primitive.Checked<name>Procedure;
+import com.gs.collections.impl.factory.Stacks;
 import com.gs.collections.impl.factory.primitive.<name>Stacks;
 import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
-import com.gs.collections.impl.stack.mutable.ArrayStack;
-import net.jcip.annotations.NotThreadSafe;
+import com.gs.collections.impl.stack.mutable.primitive.<name>ArrayStack;
+import net.jcip.annotations.Immutable;
 
 /**
- * <name>ArrayStack is similar to {@link ArrayStack}, and is memory-optimized for <type> primitives.
- * This file was automatically generated from template file primitiveArrayStack.stg.
+ * Immutable<name>ArrayStack is the non-modifiable equivalent of {@link <name>ArrayStack}.
+ * This file was automatically generated from template file immutablePrimitiveArrayStack.stg.
+ *
+ * @since 4.0.
  */
-@NotThreadSafe
-public final class <name>ArrayStack
-        implements Mutable<name>Stack, Externalizable
+@Immutable
+class Immutable<name>ArrayStack
+        implements Immutable<name>Stack, Serializable
 {
     private static final long serialVersionUID = 1L;
+    private final <name>ArrayList delegate;
 
-    private transient <name>ArrayList delegate;
-
-    public <name>ArrayStack()
+    private Immutable<name>ArrayStack(<type>[] newElements)
     {
-        this.delegate = new <name>ArrayList();
+        this.checkOptimizedSize(newElements.length);
+        this.delegate = new <name>ArrayList(newElements);
     }
 
-    private <name>ArrayStack(int size)
+    private Immutable<name>ArrayStack(<name>ArrayList newElements)
     {
-        this.delegate = new <name>ArrayList(size);
+        this.checkOptimizedSize(newElements.size());
+        this.delegate = newElements;
     }
 
-    private <name>ArrayStack(<type>... items)
+    private void checkOptimizedSize(int length)
     {
-        this.delegate = new <name>ArrayList(items);
-    }
-
-    public static <name>ArrayStack newStackFromTopToBottom(<type>... items)
-    {
-        <name>ArrayStack stack = new <name>ArrayStack(items.length);
-        for (int i = items.length - 1; i >= 0; i--)
+        if (length \<= 1)
         {
-            stack.push(items[i]);
-        }
-        return stack;
-    }
-
-    public static <name>ArrayStack newStackWith(<type>... items)
-    {
-        return new <name>ArrayStack(items);
-    }
-
-    public static <name>ArrayStack newStack(<name>Iterable items)
-    {
-        <name>ArrayStack stack = new <name>ArrayStack(items.size());
-        stack.delegate = <name>ArrayList.newList(items);
-        return stack;
-    }
-
-    public static <name>ArrayStack newStackFromTopToBottom(<name>Iterable items)
-    {
-        <name>ArrayStack stack = new <name>ArrayStack(items.size());
-        stack.delegate = <name>ArrayList.newList(items).reverseThis();
-        return stack;
-    }
-
-    public void push(<type> item)
-    {
-        this.delegate.add(item);
-    }
-
-    public <type> pop()
-    {
-        this.checkEmptyStack();
-        return this.delegate.removeAtIndex(this.delegate.size() - 1);
-    }
-
-    private void checkEmptyStack()
-    {
-        if (this.delegate.isEmpty())
-        {
-            throw new EmptyStackException();
+            throw new IllegalArgumentException("Use <name>Stacks.immutable.with() to instantiate an optimized collection");
         }
     }
 
-    public <name>List pop(int count)
+    public static Immutable<name>ArrayStack newStack(<name>Iterable iterable)
     {
-        this.checkPositiveValueForCount(count);
-        this.checkSizeLessThanCount(count);
+        return new Immutable<name>ArrayStack(iterable.toArray());
+    }
+
+    public static Immutable<name>ArrayStack newStackWith(<type>... elements)
+    {
+        <type>[] newArray = new <type>[elements.length];
+        System.arraycopy(elements, 0, newArray, 0, elements.length);
+        return new Immutable<name>ArrayStack(newArray);
+    }
+
+    public static Immutable<name>ArrayStack newStackFromTopToBottom(<type>... items)
+    {
+        return new Immutable<name>ArrayStack(<name>ArrayList.newListWith(items).reverseThis());
+    }
+
+    public static Immutable<name>ArrayStack newStackFromTopToBottom(<name>Iterable items)
+    {
+        return new Immutable<name>ArrayStack(<name>ArrayList.newList(items).reverseThis());
+    }
+
+    public Immutable<name>Stack push(<type> item)
+    {
+        <name>ArrayList newDelegate = <name>ArrayList.newList(this.delegate);
+        newDelegate.add(item);
+        return new Immutable<name>ArrayStack(newDelegate);
+    }
+
+    public Immutable<name>Stack pop()
+    {
+        <name>ArrayList newDelegate = <name>ArrayList.newList(this.delegate);
+        newDelegate.removeAtIndex(this.delegate.size() - 1);
+        return <name>Stacks.immutable.with(newDelegate.toArray());
+    }
+
+    public Immutable<name>Stack pop(int count)
+    {
+        this.checkNegativeCount(count);
         if (count == 0)
         {
-            return new <name>ArrayList(0);
+            return this;
         }
-        Mutable<name>List subList = new <name>ArrayList(count);
+        this.checkSizeLessThanCount(count);
+        <name>ArrayList newDelegate = <name>ArrayList.newList(this.delegate);
         while (count > 0)
         {
-            subList.add(this.pop());
+            newDelegate.removeAtIndex(newDelegate.size() - 1);
             count--;
         }
-        return subList;
+        return <name>Stacks.immutable.with(newDelegate.toArray());
     }
 
-    private void checkPositiveValueForCount(int count)
+    private void checkNegativeCount(int count)
     {
         if (count \< 0)
         {
@@ -145,37 +139,18 @@ public final class <name>ArrayStack
         }
     }
 
-    private void checkSizeLessThanCount(int count)
-    {
-        if (this.delegate.size() \< count)
-        {
-            throw new IllegalArgumentException("Count must be less than size: Count = " + count + " Size = " + this.delegate.size());
-        }
-    }
-
-    public Mutable<name>Stack select(<name>Predicate predicate)
-    {
-        return newStackFromTopToBottom(this.delegate.asReversed().select(predicate));
-    }
-
-    public Mutable<name>Stack reject(<name>Predicate predicate)
-    {
-        return newStackFromTopToBottom(this.delegate.asReversed().reject(predicate));
-    }
-
     public <type> peek()
     {
-        this.checkEmptyStack();
         return this.delegate.getLast();
     }
 
     public <name>List peek(int count)
     {
-        this.checkPositiveValueForCount(count);
+        this.checkNegativeCount(count);
         this.checkSizeLessThanCount(count);
         if (count == 0)
         {
-            return new <name>ArrayList(0);
+            return new <name>ArrayList();
         }
         Mutable<name>List subList = new <name>ArrayList(count);
         int index = this.delegate.size() - 1;
@@ -210,21 +185,6 @@ public final class <name>ArrayStack
         this.delegate.asReversed().forEach(procedure);
     }
 
-    public int size()
-    {
-        return this.delegate.size();
-    }
-
-    public boolean isEmpty()
-    {
-        return this.delegate.isEmpty();
-    }
-
-    public boolean notEmpty()
-    {
-        return this.delegate.notEmpty();
-    }
-
     public int count(<name>Predicate predicate)
     {
         return this.delegate.asReversed().count(predicate);
@@ -245,20 +205,24 @@ public final class <name>ArrayStack
         return this.delegate.asReversed().noneSatisfy(predicate);
     }
 
+    public Immutable<name>Stack select(<name>Predicate predicate)
+    {
+        return <name>Stacks.immutable.withAllReversed(this.delegate.asReversed().select(predicate));
+    }
+
+    public Immutable<name>Stack reject(<name>Predicate predicate)
+    {
+        return <name>Stacks.immutable.withAllReversed(this.delegate.asReversed().reject(predicate));
+    }
+
     public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
     {
         return this.delegate.asReversed().detectIfNone(predicate, ifNone);
     }
 
-    public \<V> MutableStack\<V> collect(<name>ToObjectFunction\<? extends V> function)
+    public \<V> ImmutableStack\<V> collect(<name>ToObjectFunction\<? extends V> function)
     {
-        return ArrayStack.newStackFromTopToBottom(this.delegate.asReversed().collect(function));
-    }
-
-    public \<V> V injectInto(V injectedValue, Object<name>ToObjectFunction\<? super V, ? extends V> function)
-    {
-        //TODO changed to asReversed() once added to IntIterable
-        return this.delegate.toReversed().injectInto(injectedValue, function);
+        return Stacks.immutable.withAllReversed(this.delegate.asReversed().collect(function));
     }
 
     <(arithmeticMethods.(type))(type)>
@@ -283,9 +247,44 @@ public final class <name>ArrayStack
         return this.delegate.asReversed().containsAll(source);
     }
 
-    public void clear()
+    public Mutable<name>List toList()
     {
-        this.delegate.clear();
+        return <name>ArrayList.newList(this);
+    }
+
+    public Mutable<name>Set toSet()
+    {
+        return <name>HashSet.newSet(this);
+    }
+
+    public Mutable<name>Bag toBag()
+    {
+        return <name>HashBag.newBag(this);
+    }
+
+    public Lazy<name>Iterable asLazy()
+    {
+        return new Lazy<name>IterableAdapter(this);
+    }
+
+    public Immutable<name>Stack toImmutable()
+    {
+        return this;
+    }
+
+    public int size()
+    {
+        return this.delegate.size();
+    }
+
+    public boolean isEmpty()
+    {
+        return false;
+    }
+
+    public boolean notEmpty()
+    {
+        return true;
     }
 
     @Override
@@ -359,78 +358,87 @@ public final class <name>ArrayStack
         this.delegate.asReversed().appendString(appendable, separator);
     }
 
-    public void appendString(
-            Appendable appendable,
-            String start,
-            String separator,
-            String end)
+    public void appendString(Appendable appendable, String start, String separator, String end)
     {
         this.delegate.asReversed().appendString(appendable, start, separator, end);
     }
 
-    public Mutable<name>List toList()
+    private void checkSizeLessThanCount(int count)
     {
-        return <name>ArrayList.newList(this);
-    }
-
-    public Mutable<name>List toSortedList()
-    {
-        return <name>ArrayList.newList(this).sortThis();
-    }
-
-    public Mutable<name>Set toSet()
-    {
-        return <name>HashSet.newSet(this);
-    }
-
-    public Mutable<name>Bag toBag()
-    {
-        return <name>HashBag.newBag(this);
-    }
-
-    public Lazy<name>Iterable asLazy()
-    {
-        return new Lazy<name>IterableAdapter(this);
-    }
-
-    public Mutable<name>Stack asUnmodifiable()
-    {
-        return new Unmodifiable<name>Stack(this);
-    }
-
-    public Mutable<name>Stack asSynchronized()
-    {
-        return new Synchronized<name>Stack(this);
-    }
-
-    public Immutable<name>Stack toImmutable()
-    {
-        return <name>Stacks.immutable.withAll(this.delegate);
-    }
-
-    public void writeExternal(ObjectOutput out) throws IOException
-    {
-        out.writeInt(this.size());
-        <name>Iterator iterator = this.delegate.asReversed().<type>Iterator();
-        while (iterator.hasNext())
+        if (this.delegate.size() \< count)
         {
-            <type> each = iterator.next();
-            out.write<name>(each);
+            throw new IllegalArgumentException("Count must be less than size: Count = " + count + " Size = " + this.delegate.size());
         }
     }
-
-    public void readExternal(ObjectInput in) throws IOException
+    
+    private Object writeReplace()
     {
-        int size = in.readInt();
-        <type>[] array = new <type>[size];
-        for (int i = size - 1; i >= 0; i--)
+        return new Immutable<name>StackSerializationProxy(this);
+    }
+    
+    private static class Immutable<name>StackSerializationProxy implements Externalizable
+    {
+        private static final long serialVersionUID = 1L;
+
+        private <name>Stack stack;
+
+        @SuppressWarnings("UnusedDeclaration")
+        public Immutable<name>StackSerializationProxy()
         {
-            array[i] = in.read<name>();
+            // Empty constructor for Externalizable class
         }
-        this.delegate = <name>ArrayList.newListWith(array);
+
+        protected Immutable<name>StackSerializationProxy(<name>Stack stack)
+        {
+            this.stack = stack;
+        }
+
+        public void writeExternal(final ObjectOutput out) throws IOException
+        {
+            out.writeInt(this.stack.size());
+            try
+            {
+                this.stack.forEach(new Checked<name>Procedure()
+                {
+                    @Override
+                    public void safeValue(<type> item) throws IOException
+                    {
+                        out.write<name>(item);
+                    }
+                });
+            }
+            catch (RuntimeException e)
+            {
+                if (e.getCause() instanceof IOException)
+                {
+                    throw (IOException) e.getCause();
+                }
+                throw e;
+            }
+        }
+
+        public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
+        {
+            int size = in.readInt();
+            <name>ArrayList deserializedDelegate = new <name>ArrayList(size);
+
+            for (int i = 0; i \< size; i++)
+            {
+                deserializedDelegate.add(in.read<name>());
+            }
+
+            this.stack = Immutable<name>ArrayStack.newStackFromTopToBottom(deserializedDelegate);
+        }
+
+        protected Object readResolve()
+        {
+            return this.stack;
+        }
     }
 }
+
 >>
+
 arithmeticMethods ::= [
     "byte": "allMethods",
     "short": "allMethods",
@@ -454,6 +462,11 @@ public <type> max()
     return this.delegate.max();
 }
 
+public <type> maxIfEmpty(<type> defaultValue)
+{
+    return this.max();
+}
+
 public <type> min()
 {
     return this.delegate.min();
@@ -461,20 +474,7 @@ public <type> min()
 
 public <type> minIfEmpty(<type> defaultValue)
 {
-    if (this.isEmpty())
-    {
-        return defaultValue;
-    }
     return this.min();
-}
-
-public <type> maxIfEmpty(<type> defaultValue)
-{
-    if (this.isEmpty())
-    {
-        return defaultValue;
-    }
-    return this.max();
 }
 
 public double average()
@@ -490,6 +490,11 @@ public double median()
 public <type>[] toSortedArray()
 {
     return this.delegate.toSortedArray();
+}
+
+public Mutable<name>List toSortedList()
+{
+    return <name>ArrayList.newList(this).sortThis();
 }
 >>
 

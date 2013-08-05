@@ -74,7 +74,6 @@ public class Immutable<name>ListFactoryImpl implements Immutable<name>ListFactor
         {
             return (Immutable<name>List) items;
         }
-
         return this.with(items.toArray());
     }
 }

@@ -676,7 +676,7 @@ final class ImmutableArrayStack<T> implements ImmutableStack<T>, Serializable
         return new ImmutableStackSerializationProxy<T>(this);
     }
 
-    protected static class ImmutableStackSerializationProxy<T> implements Externalizable
+    private static class ImmutableStackSerializationProxy<T> implements Externalizable
     {
         private static final long serialVersionUID = 1L;
 

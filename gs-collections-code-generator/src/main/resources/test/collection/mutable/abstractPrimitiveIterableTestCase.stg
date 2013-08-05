@@ -23,10 +23,10 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.Lazy<name>Iterable;
+import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
-import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
@@ -48,7 +48,7 @@ public abstract class Abstract<name>IterableTestCase
 
     protected abstract <name>Iterable newMutableCollectionWith(<type>... elements);
 
-    protected abstract MutableCollection\<<wrapperName>\> newObjectCollectionWith(<wrapperName>... elements);
+    protected abstract RichIterable\<<wrapperName>\> newObjectCollectionWith(<wrapperName>... elements);
     
     @Test
     public void newCollectionWith()
@@ -526,11 +526,14 @@ public abstract class Abstract<name>IterableTestCase
         <name>Iterable iterable9 = this.newWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">);
         <name>Iterable iterable10 = this.newWith(<["0", "1", "3"]:(literal.(type))(); separator=", ">);
         <name>Iterable iterable11 = this.newWith(<["3", "1", "2"]:(literal.(type))(); separator=", ">);
+        <name>Iterable iterable12 = this.newWith(<["3"]:(literal.(type))(); separator=", ">);
 
         Verify.assertEqualsAndHashCode(iterable1, iterable2);
         Verify.assertPostSerializedEqualsAndHashCode(iterable1);
+        Verify.assertPostSerializedEqualsAndHashCode(iterable12);
         Verify.assertPostSerializedEqualsAndHashCode(iterable5);
         Verify.assertPostSerializedEqualsAndHashCode(iterable6);
+        Assert.assertNotEquals(iterable12, iterable11);
         Assert.assertNotEquals(iterable1, iterable3);
         Assert.assertNotEquals(iterable1, iterable4);
         Assert.assertNotEquals(iterable6, iterable7);
@@ -597,6 +600,8 @@ public abstract class Abstract<name>IterableTestCase
         Assert.assertEquals("<(toStringLiteral.(type))("32")>", this.newWith(<(literal.(type))("32")>).makeString());
         Assert.assertEquals(iterable.toString(), iterable.makeString("[", ", ", "]"));
         Assert.assertEquals("", this.newWith().makeString());
+        Assert.assertEquals("", this.newWith().makeString("/"));
+        Assert.assertEquals("[]", this.newWith().makeString("[", ", ", "]"));
 
         <name>Iterable iterable1 = this.newWith(<["0", "31"]:(literal.(type))(); separator=", ">);
         Assert.assertTrue(
@@ -645,6 +650,10 @@ public abstract class Abstract<name>IterableTestCase
         StringBuilder appendable = new StringBuilder();
         this.newWith().appendString(appendable);
         Assert.assertEquals("", appendable.toString());
+        this.newWith().appendString(appendable, "/");
+        Assert.assertEquals("", appendable.toString());
+        this.newWith().appendString(appendable, "[", ", ", "]");
+        Assert.assertEquals("[]", appendable.toString());
         StringBuilder appendable1 = new StringBuilder();
         this.newWith(<(literal.(type))("1")>).appendString(appendable1);
         Assert.assertEquals("<(toStringLiteral.(type))("1")>", appendable1.toString());

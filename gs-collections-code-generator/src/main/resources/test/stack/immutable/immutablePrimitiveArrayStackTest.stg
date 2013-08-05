@@ -1,0 +1,54 @@
+import "copyright.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+
+isTest() ::= "true"
+
+skipBoolean() ::="true"
+
+targetPath() ::= "com/gs/collections/impl/stack/immutable/primitive"
+
+fileName(primitive) ::= "Immutable<primitive.name>ArrayStackTest"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.wrapperName, primitive.name)>
+>>
+
+body(type, wrapperName, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.stack.immutable.primitive;
+
+import com.gs.collections.api.stack.primitive.Immutable<name>Stack;
+import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
+import com.gs.collections.impl.stack.mutable.primitive.<name>ArrayStack;
+import org.junit.Assert;
+import org.junit.Test;
+
+
+/**
+ * JUnit test for {@link Immutable<name>ArrayStack}.
+ * This file was automatically generated from template file immutablePrimitiveArrayStackTest.stg.
+ */
+public class Immutable<name>ArrayStackTest extends AbstractImmutable<name>StackTestCase
+{
+    @Override
+    protected Immutable<name>Stack classUnderTest()
+    {
+        return Immutable<name>ArrayStack.newStackWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
+    }
+
+    @Test
+    public void newWithIterable()
+    {
+        Assert.assertEquals(<name>ArrayStack.newStackWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), this.newWithIterable(<name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">)));
+    }
+
+    @Test
+    public void newWithTopToBottom()
+    {
+        Assert.assertEquals(<name>ArrayStack.newStackFromTopToBottom(<["1", "2", "3"]:(literal.(type))(); separator=", ">), this.newWithTopToBottom(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
+    }
+}
+
+>>
