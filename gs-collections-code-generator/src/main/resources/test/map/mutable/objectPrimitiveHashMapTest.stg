@@ -227,6 +227,31 @@ public class Object<name>HashMapTest extends AbstractMutableObject<name>MapTestC
     }
 
     @Test
+    public void testPutAll()
+    {
+        Object<name>HashMap\<<wrapperName>\> hashMap = Object<name>HashMap.newMap();
+        Object<name>HashMap\<<wrapperName>\> copyMap = Object<name>HashMap.newMap();
+
+        for (<type> i = 1; i \< 11; i++)
+        {
+            Assert.assertFalse(hashMap.containsKey(i));
+            copyMap.put(i, i);
+        }
+
+        Verify.assertSize(10, copyMap);
+        Verify.assertSize(0, hashMap);
+        hashMap.putAll(copyMap);
+        Verify.assertSize(10, hashMap);
+
+        for (<type> i = 1; i \< 11; i++)
+        {
+            Assert.assertTrue(hashMap.containsKey(i));
+        }
+
+        Assert.assertEquals(hashMap , copyMap);
+    }
+
+    @Test
     public void updateValue()
     {
         <name>To<name>Function incrementFunction = new <name>To<name>Function()

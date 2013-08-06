@@ -392,6 +392,17 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         }
     }
 
+    public void putAll(Object<name>Map\<K> map)
+    {
+        map.forEachKeyValue(new Object<name>Procedure\<K>()
+        {
+            public void value(K key, <type> value)
+            {
+                Object<name>HashMap.this.put(key, value);
+            }
+        });
+    }
+
     private static Object toSentinelIfNull(Object key)
     {
         return key == null ? NULL_KEY : key;

@@ -336,6 +336,17 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         return null;
     }
 
+    public void putAll(<name>ObjectMap\<V> map)
+    {
+        map.forEachKeyValue(new <name>ObjectProcedure\<V>()
+        {
+            public void value(<type> key, V value)
+            {
+                <name>ObjectHashMap.this.put(key, value);
+            }
+        });
+    }
+
     public boolean containsKey(<type> key)
     {
         if (isEmptyKey(key))

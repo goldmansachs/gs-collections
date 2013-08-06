@@ -26,6 +26,7 @@ import java.lang.reflect.Field;
 
 import com.gs.collections.api.block.function.primitive.Object<name2>ToObjectFunction;
 import com.gs.collections.impl.test.Verify;
+import com.gs.collections.api.map.primitive.Mutable<name1><name2>Map;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -146,6 +147,32 @@ public class <name1><name2>HashMapTest extends Abstract<name1><name2>MapTestCase
         hashMap.put(<(literal.(type1))("10")>, <(literal.(type2))("10")>);
         Assert.assertEquals(32L, ((<type1>[]) keys.get(hashMap)).length);
         Assert.assertEquals(32L, ((<type2>[]) values.get(hashMap)).length);
+    }
+
+    @Test
+    public void testPutAll()
+    {
+        Mutable<name1><name2>Map hashMap = new <name1><name2>HashMap();
+        Mutable<name1><name2>Map copyMap = new <name1><name2>HashMap();
+
+        for (int i = 2; i \< 10; i++)
+        {
+            Assert.assertFalse(copyMap.containsKey(<(castFromInt.(type1))("i")>));
+            copyMap.put(<(castFromInt.(type1))("i")>, <(castFromInt.(type2))("i")>);
+        }
+
+        Verify.assertSize(8, copyMap);
+        Verify.assertSize(0, hashMap);
+        hashMap.putAll(copyMap);
+        Verify.assertSize(8, hashMap);
+
+        for (int i = 2; i \< 10; i++)
+        {
+            Assert.assertTrue(hashMap.containsKey(<(castFromInt.(type1))("i")>));
+            Assert.assertTrue(hashMap.containsValue(<(castFromInt.(type2))("i")>));
+        }
+
+        Assert.assertEquals(copyMap , hashMap);
     }
 
     @Override

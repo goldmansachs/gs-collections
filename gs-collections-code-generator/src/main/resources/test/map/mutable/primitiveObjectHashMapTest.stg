@@ -138,6 +138,32 @@ public class <name>ObjectHashMapTest extends AbstractMutable<name>ObjectMapTestC
         Assert.assertEquals(32L, ((Object[]) values.get(hashMap)).length);
     }
 
+    @Test
+    public void testPutAll()
+    {
+        <name>ObjectHashMap\<String> hashMap = <name>ObjectHashMap.newMap();
+        <name>ObjectHashMap\<String> copyMap = <name>ObjectHashMap.newMap();
+
+        for (<type> i = <(literal.(type))("1")>; i \< <(literal.(type))("10")>; i++)
+        {
+            Assert.assertFalse(copyMap.containsKey(i));
+            copyMap.put(i, String.valueOf(i));
+        }
+
+        Assert.assertEquals(9 , copyMap.size());
+        Assert.assertEquals(0 , hashMap.size());
+
+        hashMap.putAll(copyMap);
+        Assert.assertEquals(9 , hashMap.size());
+
+        for (<type> i = <(literal.(type))("1")>; i \< <(literal.(type))("10")>; i++)
+        {
+            Assert.assertTrue(hashMap.containsKey(i));
+        }
+
+        Assert.assertEquals(hashMap , copyMap);
+    }
+
     @Override
     @Test
     public void withKeysValues()

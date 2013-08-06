@@ -284,6 +284,13 @@ public class Unmodifiable<name1><name2>MapTest extends Abstract<name1><name2>Map
         this.map.getIfAbsentPutWithKey(<(literal.(type1))("10")>, function);
     }
 
+    @Test(expected = UnsupportedOperationException.class)
+    public void putAllThrowsException()
+    {
+        Unmodifiable<name1><name2>Map copyMap = new Unmodifiable<name1><name2>Map(<name1><name2>HashMap.newWithKeysValues(<["0", "31", "32"]:keyValue(); separator=", ">));
+        this.map.putAll(copyMap);
+    }
+
     @Override
     @Test(expected = UnsupportedOperationException.class)
     public void updateValue()

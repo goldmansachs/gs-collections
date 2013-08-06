@@ -379,6 +379,17 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
         }
     }
 
+    public void putAll(<name>BooleanMap map)
+    {
+        map.forEachKeyValue(new <name>BooleanProcedure()
+        {
+            public void value(<type> key, boolean value)
+            {
+                <name>BooleanHashMap.this.put(key, value);
+            }
+        });
+    }
+
     public boolean containsKey(<type> key)
     {
         if (isEmptyKey(key))

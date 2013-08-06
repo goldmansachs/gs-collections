@@ -42,6 +42,7 @@ import com.gs.collections.api.collection.primitive.Mutable<name2>Collection;
 import com.gs.collections.api.iterator.<name2>Iterator;
 import com.gs.collections.api.list.primitive.Mutable<name2>List;
 import com.gs.collections.api.map.primitive.Immutable<name1><name2>Map;
+import com.gs.collections.api.map.primitive.<name1><name2>Map;
 import com.gs.collections.api.map.primitive.Mutable<name1><name2>Map;
 import com.gs.collections.api.set.primitive.Mutable<name2>Set;
 
@@ -84,6 +85,11 @@ public final class Unmodifiable<name1><name2>Map
     public void put(<type1> key, <type2> value)
     {
         throw new UnsupportedOperationException("Cannot call put() on " + this.getClass().getSimpleName());
+    }
+
+    public void putAll(<name1><name2>Map map)
+    {
+        throw new UnsupportedOperationException("Cannot call putAll() on " + this.getClass().getSimpleName());
     }
 
     public void removeKey(<type1> key)

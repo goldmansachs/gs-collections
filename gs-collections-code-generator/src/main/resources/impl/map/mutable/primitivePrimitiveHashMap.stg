@@ -353,6 +353,17 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         }
     }
 
+    public void putAll(<name1><name2>Map map)
+    {
+        map.forEachKeyValue(new <name1><name2>Procedure()
+        {
+            public void value(<type1> key, <type2> value)
+            {
+                <name1><name2>HashMap.this.put(key ,value);
+            }
+        });
+    }
+
     public boolean containsKey(<type1> key)
     {
         if (isEmptyKey(key))
