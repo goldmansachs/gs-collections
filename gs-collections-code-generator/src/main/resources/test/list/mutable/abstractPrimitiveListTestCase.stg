@@ -100,6 +100,22 @@ public abstract class Abstract<name>ListTestCase extends AbstractMutable<name>Co
     }
 
     @Test
+    public void dotProduct()
+    {
+        Mutable<name>List list1 = this.newWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
+        Mutable<name>List list2 = this.newWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
+        Assert.assertEquals(<(wideLiteral.(type))("14")>, list1.dotProduct(list2)<(wideDelta.(type))>);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void dotProduct_throwsOnListsOfDifferentSizes()
+    {
+        Mutable<name>List list1 = this.newWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
+        Mutable<name>List list2 = this.newWith(<["1", "2"]:(literal.(type))(); separator=", ">);
+        list1.dotProduct(list2);
+    }
+
+    @Test
     public void indexOf()
     {
         Mutable<name>List arrayList = this.newWith(<["1", "2", "1"]:(literal.(type))(); separator=", ">);

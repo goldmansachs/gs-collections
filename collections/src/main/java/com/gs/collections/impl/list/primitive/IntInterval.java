@@ -30,7 +30,6 @@ import com.gs.collections.api.block.procedure.primitive.IntIntProcedure;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.iterator.IntIterator;
 import com.gs.collections.api.list.ImmutableList;
-import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.ImmutableIntList;
 import com.gs.collections.api.list.primitive.IntList;
 import com.gs.collections.api.list.primitive.MutableIntList;
@@ -464,6 +463,20 @@ public final class IntInterval
     public int size()
     {
         return (this.to - this.from) / this.step + 1;
+    }
+
+    public long dotProduct(IntList list)
+    {
+        if (this.size() != list.size())
+        {
+            throw new IllegalArgumentException("Lists used in dotProduct must be the same size");
+        }
+        long sum = 0L;
+        for (int i = 0; i < this.size(); i++)
+        {
+            sum += (long) this.get(i) * list.get(i);
+        }
+        return sum;
     }
 
     public boolean isEmpty()

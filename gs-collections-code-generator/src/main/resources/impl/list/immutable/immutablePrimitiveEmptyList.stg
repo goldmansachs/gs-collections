@@ -344,6 +344,15 @@ public Mutable<name>List toSortedList()
     return new <name>ArrayList();
 }
 
+public <wideType.(type)> dotProduct(<name>List list)
+{
+    if (!list.isEmpty())
+    {
+        throw new IllegalArgumentException("Lists used in dotProduct must be the same size");
+    }
+    return 0;
+}
+
 >>
 
 noMethods(name, type) ::= ""

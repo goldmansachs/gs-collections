@@ -21,6 +21,7 @@ import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.<name>List;
 import com.gs.collections.api.list.primitive.Immutable<name>List;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.impl.collection.mutable.primitive.AbstractUnmodifiable<name>Collection;
@@ -205,6 +206,11 @@ allMethods(name, type) ::=<<
 public Mutable<name>List sortThis()
 {
     throw new UnsupportedOperationException("Cannot call sortThis on an unmodifiable collection");
+}
+
+public <wideType.(type)> dotProduct(<name>List list)
+{
+    return this.getMutable<name>List().dotProduct(list);
 }
 
 >>

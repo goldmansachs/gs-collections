@@ -148,6 +148,22 @@ public class IntIntervalTest
     }
 
     @Test
+    public void dotProduct()
+    {
+        IntInterval list1 = this.intInterval;
+        IntInterval list2 = IntInterval.oneTo(3);
+        Assert.assertEquals(14, list1.dotProduct(list2));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void dotProduct_throwsOnListsOfDifferentSizes()
+    {
+        IntInterval list1 = this.intInterval;
+        IntInterval list2 = IntInterval.oneTo(4);
+        list1.dotProduct(list2);
+    }
+
+    @Test
     public void empty()
     {
         Assert.assertTrue(this.intInterval.notEmpty());

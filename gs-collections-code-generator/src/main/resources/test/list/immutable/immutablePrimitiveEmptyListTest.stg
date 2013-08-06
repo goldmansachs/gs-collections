@@ -140,6 +140,22 @@ public class Immutable<name>EmptyListTest extends AbstractImmutable<name>ListTes
     {
         this.classUnderTest().min();
     }
+
+    @Test
+    public void dotProduct()
+    {
+        Immutable<name>EmptyList list1 = new Immutable<name>EmptyList();
+        Immutable<name>EmptyList list2 = new Immutable<name>EmptyList();
+        Assert.assertEquals(<(wideLiteral.(type))("0")>, list1.dotProduct(list2)<(wideDelta.(type))>);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void dotProduct_throwsOnListsOfDifferentSizes()
+    {
+        Immutable<name>EmptyList list1 = new Immutable<name>EmptyList();
+        Immutable<name>ArrayList list2 = Immutable<name>ArrayList.newListWith(<["1", "2"]:(literal.(type))(); separator=", ">);
+        list1.dotProduct(list2);
+    }
 }
 
 >>

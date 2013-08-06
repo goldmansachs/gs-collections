@@ -2,6 +2,7 @@ import "copyright.stg"
 import "primitiveEquals.stg"
 import "primitiveHashCode.stg"
 import "primitiveAPI.stg"
+import "primitiveLiteral.stg"
 
 targetPath() ::= "com/gs/collections/api/list/primitive"
 
@@ -38,6 +39,7 @@ public interface <name>List extends <name>Iterable
 
     int indexOf(<type> value);
 
+    <(arithmeticMethods.(type))(name, type)>
     int lastIndexOf(<type> value);
 
     <sharedAPI(fileName(primitive), name)>
@@ -63,3 +65,20 @@ public interface <name>List extends <name>Iterable
 }
 
 >>
+arithmeticMethods ::= [
+"byte": "allMethods",
+"short": "allMethods",
+"char": "allMethods",
+"int": "allMethods",
+"long": "allMethods",
+"float": "allMethods",
+"double": "allMethods",
+"boolean": "noMethods"
+]
+
+allMethods(name, type) ::=<<
+<wideType.(type)> dotProduct(<name>List list);
+
+>>
+
+noMethods(name, type) ::= ""

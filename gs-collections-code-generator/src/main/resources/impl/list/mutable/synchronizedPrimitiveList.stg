@@ -25,6 +25,7 @@ import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.<name>List;
 import com.gs.collections.api.list.primitive.Immutable<name>List;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.impl.collection.mutable.primitive.AbstractSynchronized<name>Collection;
@@ -297,6 +298,11 @@ public Mutable<name>List sortThis()
         this.getMutable<name>List().sortThis();
     }
     return this;
+}
+
+public <wideType.(type)> dotProduct(<name>List list)
+{
+    return this.getMutable<name>List().dotProduct(list);
 }
 
 >>

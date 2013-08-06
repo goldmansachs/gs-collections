@@ -364,6 +364,15 @@ public Mutable<name>List toSortedList()
     return <name>ArrayList.newListWith(this.element1);
 }
 
+public <wideType.(type)> dotProduct(<name>List list)
+{
+    if (list.size() != 1)
+    {
+        throw new IllegalArgumentException("Lists used in dotProduct must be the same size");
+    }
+    return <castWideType.(type)>this.element1 * list.getFirst();
+}
+
 >>
 
 noMethods(name, type) ::= ""

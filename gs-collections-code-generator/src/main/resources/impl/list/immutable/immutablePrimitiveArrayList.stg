@@ -298,6 +298,20 @@ final class Immutable<name>ArrayList
         return array;
     }
 
+    public <wideType.(type)> dotProduct(<name>List list)
+    {
+        if (this.size() != list.size())
+        {
+            throw new IllegalArgumentException("Lists used in dotProduct must be the same size");
+        }
+        <wideType.(type)> sum = <wideZero.(type)>;
+        for (int i = 0; i \< this.size(); i++)
+        {
+            sum += <castWideType.(type)>this.items[i] * list.get(i);
+        }
+        return sum;
+    }
+
     public Mutable<name>List toSortedList()
     {
         return <name>ArrayList.newList(this).sortThis();

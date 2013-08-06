@@ -23,6 +23,7 @@ import org.junit.Test;
 
 /**
  * JUnit test for {@link Immutable<name>SingletonList}.
+ * This file was automatically generated from template file immutablePrimitiveSingletonListTest.stg.
  */
 public class Immutable<name>SingletonListTest extends AbstractImmutable<name>ListTestCase
 {
@@ -38,6 +39,21 @@ public class Immutable<name>SingletonListTest extends AbstractImmutable<name>Lis
     {
         super.testEquals();
         Assert.assertNotEquals(this.newWith(<(literal.(type))("1")>), this.newWith());
+    }
+
+    @Test
+    public void dotProduct()
+    {
+        Immutable<name>SingletonList list1 = new Immutable<name>SingletonList(<(literal.(type))("3")>);
+        Immutable<name>SingletonList list2 = new Immutable<name>SingletonList(<(literal.(type))("3")>);
+        Assert.assertEquals(<(wideLiteral.(type))("9")>, list1.dotProduct(list2)<(wideDelta.(type))>);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void dotProduct_throwsOnListsOfDifferentSizes()
+    {
+        Immutable<name>ArrayList list = Immutable<name>ArrayList.newListWith(<["1", "2"]:(literal.(type))(); separator=", ">);
+        this.classUnderTest().dotProduct(list);
     }
 }
 
