@@ -1,0 +1,100 @@
+import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveLiteral.stg"
+
+isTest() ::= "true"
+
+targetPath() ::= "com/gs/collections/impl/bag/immutable/primitive"
+
+fileName(primitive) ::= "Immutable<primitive.name>EmptyBagTest"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name, primitive.wrapperName)>
+>>
+
+body(type, name, wrapperName) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.bag.immutable.primitive;
+
+import java.util.NoSuchElementException;
+
+import com.gs.collections.api.bag.primitive.Immutable<name>Bag;
+import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
+import com.gs.collections.impl.factory.primitive.<name>Bags;
+import com.gs.collections.impl.test.Verify;
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * JUnit test for {@link Immutable<name>EmptyBag}.
+ * This file was automatically generated from template file immutablePrimitiveEmptyBagTest.stg.
+ */
+public class Immutable<name>EmptyBagTest extends AbstractImmutable<name>BagTestCase
+{
+    @Override
+    protected final Immutable<name>Bag classUnderTest()
+    {
+        return <name>Bags.immutable.of();
+    }
+
+    @Override
+    @Test(expected = ArithmeticException.class)
+    public void average()
+    {
+        this.classUnderTest().average();
+    }
+
+    @Override
+    @Test(expected = NoSuchElementException.class)
+    public void max()
+    {
+        this.classUnderTest().max();
+    }
+
+    @Override
+    @Test(expected = NoSuchElementException.class)
+    public void min()
+    {
+        this.classUnderTest().min();
+    }
+
+    @Override
+    @Test
+    public void notEmpty()
+    {
+        Assert.assertFalse(this.classUnderTest().notEmpty());
+    }
+
+    @Override
+    @Test
+    public void isEmpty()
+    {
+        Verify.assertEmpty(this.newWith());
+    }
+
+    @Override
+    @Test
+    public void forEachWithOccurrences()
+    {
+        final StringBuilder stringBuilder = new StringBuilder();
+        this.classUnderTest().forEachWithOccurrences(new <name>IntProcedure()
+        {
+            public void value(<type> argument1, int argument2)
+            {
+                stringBuilder.append(argument1).append(argument2);
+            }
+        });
+        String string = stringBuilder.toString();
+        Assert.assertEquals("", string);
+    }
+
+    @Test
+    public void occurrencesOf()
+    {
+        Assert.assertEquals(0, this.classUnderTest().occurrencesOf(<(literal.(type))("1")>));
+        Assert.assertEquals(0, this.classUnderTest().occurrencesOf(<(literal.(type))("2")>));
+        Assert.assertEquals(0, this.classUnderTest().occurrencesOf(<(literal.(type))("3")>));
+    }
+}
+>>

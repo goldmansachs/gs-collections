@@ -25,7 +25,7 @@ import org.junit.Test;
  * JUnit test for {@link Synchronized<name>Bag}.
  * This file was automatically generated from template file synchronizedPrimitiveBagTest.stg.
  */
-public class Synchronized<name>BagTest extends Abstract<name>BagTestCase
+public class Synchronized<name>BagTest extends AbstractMutable<name>BagTestCase
 {
     @Override
     protected Synchronized<name>Bag classUnderTest()

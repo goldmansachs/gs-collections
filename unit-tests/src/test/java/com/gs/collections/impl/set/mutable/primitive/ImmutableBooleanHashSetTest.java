@@ -176,7 +176,7 @@ public class ImmutableBooleanHashSetTest extends AbstractImmutableBooleanCollect
 
         Assert.assertEquals(2L, this.set3.toArray().length);
         Assert.assertTrue(Arrays.equals(new boolean[]{false, true}, this.set3.toArray())
-            || Arrays.equals(new boolean[]{true, false}, this.set3.toArray()));
+                || Arrays.equals(new boolean[]{true, false}, this.set3.toArray()));
     }
 
     @Override
@@ -188,7 +188,7 @@ public class ImmutableBooleanHashSetTest extends AbstractImmutableBooleanCollect
         Assert.assertEquals(BooleanArrayList.newListWith(false), this.set1.toList());
         Assert.assertEquals(BooleanArrayList.newListWith(true), this.set2.toList());
         Assert.assertTrue(BooleanArrayList.newListWith(false, true).equals(this.set3.toList())
-            || BooleanArrayList.newListWith(true, false).equals(this.set3.toList()));
+                || BooleanArrayList.newListWith(true, false).equals(this.set3.toList()));
     }
 
     @Override
@@ -509,7 +509,7 @@ public class ImmutableBooleanHashSetTest extends AbstractImmutableBooleanCollect
         Assert.assertEquals("[false]", this.set1.toString());
         Assert.assertEquals("[true]", this.set2.toString());
         Assert.assertTrue("[true, false]".equals(this.set3.toString())
-            || "[false, true]".equals(this.set3.toString()));
+                || "[false, true]".equals(this.set3.toString()));
 
     }
 
@@ -522,19 +522,19 @@ public class ImmutableBooleanHashSetTest extends AbstractImmutableBooleanCollect
         Assert.assertEquals("false", this.set1.makeString());
         Assert.assertEquals("true", this.set2.makeString());
         Assert.assertTrue("true, false".equals(this.set3.makeString())
-            || "false, true".equals(this.set3.makeString()));
+                || "false, true".equals(this.set3.makeString()));
 
         Assert.assertEquals("", this.set0.makeString("/"));
         Assert.assertEquals("false", this.set1.makeString("/"));
         Assert.assertEquals("true", this.set2.makeString("/"));
         Assert.assertTrue(this.set3.makeString("/"), "true/false".equals(this.set3.makeString("/"))
-            || "false/true".equals(this.set3.makeString("/")));
+                || "false/true".equals(this.set3.makeString("/")));
 
         Assert.assertEquals("[]", this.set0.makeString("[", "/", "]"));
         Assert.assertEquals("[false]", this.set1.makeString("[", "/", "]"));
         Assert.assertEquals("[true]", this.set2.makeString("[", "/", "]"));
         Assert.assertTrue(this.set3.makeString("[", "/", "]"), "[true/false]".equals(this.set3.makeString("[", "/", "]"))
-            || "[false/true]".equals(this.set3.makeString("[", "/", "]")));
+                || "[false/true]".equals(this.set3.makeString("[", "/", "]")));
     }
 
     @Override
@@ -557,12 +557,12 @@ public class ImmutableBooleanHashSetTest extends AbstractImmutableBooleanCollect
         StringBuilder appendable3 = new StringBuilder();
         this.set3.appendString(appendable3);
         Assert.assertTrue("true, false".equals(appendable3.toString())
-            || "false, true".equals(appendable3.toString()));
+                || "false, true".equals(appendable3.toString()));
 
         StringBuilder appendable4 = new StringBuilder();
         this.set3.appendString(appendable4, "[", ", ", "]");
         Assert.assertTrue("[true, false]".equals(appendable4.toString())
-            || "[false, true]".equals(appendable4.toString()));
+                || "[false, true]".equals(appendable4.toString()));
     }
 
     @Override
@@ -577,15 +577,16 @@ public class ImmutableBooleanHashSetTest extends AbstractImmutableBooleanCollect
         Assert.assertEquals(this.set3, this.set3.asLazy().toSet());
     }
 
-    protected void assertSizeAndContains(ImmutableBooleanCollection collection, boolean... elements)
+    private void assertSizeAndContains(ImmutableBooleanCollection collection, boolean... elements)
     {
         Assert.assertEquals(elements.length, collection.size());
-        for(boolean i: elements)
+        for (boolean i : elements)
         {
             Assert.assertTrue(collection.contains(i));
         }
     }
 
+    @Override
     @Test
     public void testNewWith()
     {
@@ -597,6 +598,7 @@ public class ImmutableBooleanHashSetTest extends AbstractImmutableBooleanCollect
         this.assertSizeAndContains(collection0, true, false);
     }
 
+    @Override
     @Test
     public void newWithAll()
     {
@@ -610,6 +612,7 @@ public class ImmutableBooleanHashSetTest extends AbstractImmutableBooleanCollect
         this.assertSizeAndContains(collection1, true, false);
     }
 
+    @Override
     @Test
     public void newWithout()
     {
@@ -621,6 +624,7 @@ public class ImmutableBooleanHashSetTest extends AbstractImmutableBooleanCollect
         this.assertSizeAndContains(collection2, false);
     }
 
+    @Override
     @Test
     public void newWithoutAll()
     {

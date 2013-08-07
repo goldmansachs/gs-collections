@@ -81,7 +81,17 @@
     <Match>
         <!--Eq: Equals checks for incompatible operand (EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS)-->
         <Bug pattern="EQ_CHECK_FOR_OPERAND_NOT_COMPATIBLE_WITH_THIS" />
-        <Class name="com.gs.collections.impl.bag.immutable.ImmutableHashBag" />
+        <Or>
+            <Class name="com.gs.collections.impl.bag.immutable.ImmutableHashBag" />
+            <Class name="com.gs.collections.impl.bag.immutable.primitive.ImmutableIntHashBag" />
+            <Class name="com.gs.collections.impl.bag.immutable.primitive.ImmutableFloatHashBag" />
+            <Class name="com.gs.collections.impl.bag.immutable.primitive.ImmutableLongHashBag" />
+            <Class name="com.gs.collections.impl.bag.immutable.primitive.ImmutableDoubleHashBag" />
+            <Class name="com.gs.collections.impl.bag.immutable.primitive.ImmutableByteHashBag" />
+            <Class name="com.gs.collections.impl.bag.immutable.primitive.ImmutableShortHashBag" />
+            <Class name="com.gs.collections.impl.bag.immutable.primitive.ImmutableCharHashBag" />
+            <Class name="com.gs.collections.impl.bag.immutable.primitive.ImmutableBooleanHashBag" />
+        </Or>
     </Match>
 
     <Match>

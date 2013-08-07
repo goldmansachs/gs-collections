@@ -1,0 +1,47 @@
+import "copyright.stg"
+
+targetPath() ::= "com/gs/collections/impl/block/procedure/checked/primitive"
+
+fileName(primitive) ::= "Checked<primitive.name>IntProcedure"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.block.procedure.checked.primitive;
+
+import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
+
+/**
+ * This file was automatically generated from template file checkedPrimitiveIntProcedure.stg.
+ *
+ * @since 4.0.
+ */
+public abstract class Checked<name>IntProcedure implements <name>IntProcedure
+{
+    private static final long serialVersionUID = 1L;
+
+    public final void value(<type> item, int index)
+    {
+        try
+        {
+            this.safeValue(item, index);
+        }
+        catch (RuntimeException e)
+        {
+            throw e;
+        }
+        catch (Exception e)
+        {
+            throw new RuntimeException("Checked exception caught in <name>IntProcedure", e);
+        }
+    }
+
+    @SuppressWarnings("ProhibitedExceptionDeclared")
+    public abstract void safeValue(<type> item, int index) throws Exception;
+}
+
+>>

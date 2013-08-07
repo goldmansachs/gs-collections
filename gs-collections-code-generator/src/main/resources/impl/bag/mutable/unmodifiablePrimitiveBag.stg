@@ -25,6 +25,7 @@ import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
 import com.gs.collections.impl.collection.mutable.primitive.AbstractUnmodifiable<name>Collection;
+import com.gs.collections.impl.factory.primitive.<name>Bags;
 import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
 import net.jcip.annotations.NotThreadSafe;
 
@@ -139,7 +140,7 @@ public final class Unmodifiable<name>Bag
 
     public Immutable<name>Bag toImmutable()
     {
-        throw new UnsupportedOperationException("toImmutable not implemented yet");
+        return <name>Bags.immutable.withAll(this);
     }
 }
 

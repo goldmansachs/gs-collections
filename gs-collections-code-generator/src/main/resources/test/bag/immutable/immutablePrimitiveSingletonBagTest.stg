@@ -1,0 +1,54 @@
+import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveLiteral.stg"
+
+isTest() ::= "true"
+
+targetPath() ::= "com/gs/collections/impl/bag/immutable/primitive"
+
+fileName(primitive) ::= "Immutable<primitive.name>SingletonBagTest"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name, primitive.wrapperName)>
+>>
+
+body(type, name, wrapperName) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.bag.immutable.primitive;
+
+import com.gs.collections.api.bag.primitive.Immutable<name>Bag;
+import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
+import com.gs.collections.impl.factory.primitive.<name>Bags;
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * JUnit test for {@link Immutable<name>SingletonBag}.
+ * This file was automatically generated from template file immutablePrimitiveSingletonBagTest.stg.
+ */
+public class Immutable<name>SingletonBagTest extends AbstractImmutable<name>BagTestCase
+{
+    @Override
+    protected final Immutable<name>Bag classUnderTest()
+    {
+        return <name>Bags.immutable.of(<(literal.(type))("1")>);
+    }
+
+    @Override
+    @Test
+    public void forEachWithOccurrences()
+    {
+        final StringBuilder stringBuilder = new StringBuilder();
+        this.classUnderTest().forEachWithOccurrences(new <name>IntProcedure()
+        {
+            public void value(<type> argument1, int argument2)
+            {
+                stringBuilder.append(argument1).append(argument2);
+            }
+        });
+        String string = stringBuilder.toString();
+        Assert.assertEquals("<(toStringLiteral.(type))("1")>1", string);
+    }
+}
+>>

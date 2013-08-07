@@ -28,7 +28,7 @@ import org.junit.Test;
  * JUnit test for {@link <name>HashBag}.
  * This file was automatically generated from template file primitiveHashBagTest.stg.
  */
-public class <name>HashBagTest extends Abstract<name>BagTestCase
+public class <name>HashBagTest extends AbstractMutable<name>BagTestCase
 {
     @Override
     protected final <name>HashBag classUnderTest()

@@ -27,7 +27,7 @@ import org.junit.Test;
  * JUnit test for {@link Unmodifiable<name>Bag}.
  * This file was automatically generated from template file unmodifiablePrimitiveBagTest.stg.
  */
-public class Unmodifiable<name>BagTest extends Abstract<name>BagTestCase
+public class Unmodifiable<name>BagTest extends AbstractMutable<name>BagTestCase
 {
     private final Unmodifiable<name>Bag bag = this.classUnderTest();
 

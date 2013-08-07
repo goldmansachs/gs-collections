@@ -23,7 +23,7 @@ import org.junit.Test;
 /**
  * JUnit test for {@link SynchronizedBooleanBag}.
  */
-public class SynchronizedBooleanBagTest extends AbstractBooleanBagTestCase
+public class SynchronizedBooleanBagTest extends AbstractMutableBooleanBagTestCase
 {
     @Override
     protected final SynchronizedBooleanBag classUnderTest()

@@ -33,6 +33,7 @@ import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.stack.primitive.Immutable<name>Stack;
 import com.gs.collections.api.stack.primitive.Mutable<name>Stack;
+import com.gs.collections.impl.factory.primitive.<name>Stacks;
 import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
@@ -384,7 +385,7 @@ public final class Synchronized<name>Stack
 
     public Immutable<name>Stack toImmutable()
     {
-        throw new UnsupportedOperationException("toImmutable not implemented yet");
+        return <name>Stacks.immutable.withAllReversed(this);
     }
 }
 >>

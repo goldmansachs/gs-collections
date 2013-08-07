@@ -29,7 +29,7 @@ import org.junit.Test;
 /**
  * JUnit test for {@link BooleanHashBag}.
  */
-public class BooleanHashBagTest extends AbstractBooleanBagTestCase
+public class BooleanHashBagTest extends AbstractMutableBooleanBagTestCase
 {
     @Override
     protected BooleanHashBag classUnderTest()

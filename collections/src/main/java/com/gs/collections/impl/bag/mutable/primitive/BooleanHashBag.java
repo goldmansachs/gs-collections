@@ -37,6 +37,7 @@ import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
 import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.impl.factory.primitive.BooleanBags;
 import com.gs.collections.impl.lazy.primitive.LazyBooleanIterableAdapter;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
@@ -175,7 +176,7 @@ public final class BooleanHashBag implements MutableBooleanBag, Externalizable
 
     public ImmutableBooleanBag toImmutable()
     {
-        throw new UnsupportedOperationException("toImmutable not implemented yet");
+        return BooleanBags.immutable.withAll(this);
     }
 
     public boolean contains(boolean value)

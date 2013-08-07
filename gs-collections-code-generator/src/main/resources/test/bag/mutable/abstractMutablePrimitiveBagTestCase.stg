@@ -7,7 +7,7 @@ isTest() ::= "true"
 
 targetPath() ::= "com/gs/collections/impl/bag/mutable/primitive"
 
-fileName(primitive) ::= "Abstract<primitive.name>BagTestCase"
+fileName(primitive) ::= "AbstractMutable<primitive.name>BagTestCase"
 
 class(primitive) ::= <<
 <body(primitive.type, primitive.name, primitive.wrapperName)>
@@ -21,6 +21,7 @@ package com.gs.collections.impl.bag.mutable.primitive;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.primitive.Immutable<name>Bag;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
@@ -37,7 +38,7 @@ import org.junit.Test;
  * JUnit test for {@link <name>HashBag}.
  * This file was automatically generated from template file abstractPrimitiveBagTestCase.stg.
  */
-public abstract class Abstract<name>BagTestCase extends AbstractMutable<name>CollectionTestCase
+public abstract class AbstractMutable<name>BagTestCase extends AbstractMutable<name>CollectionTestCase
 {
     @Override
     protected abstract Mutable<name>Bag classUnderTest();
@@ -153,12 +154,17 @@ public abstract class Abstract<name>BagTestCase extends AbstractMutable<name>Col
         super.remove();
         Mutable<name>Bag bag = this.newWith();
         Assert.assertFalse(bag.remove(<(literal.(type))("100")>));
+        Verify.assertSize(0, bag);
         Assert.assertEquals(new <name>HashBag(), bag);
         Assert.assertTrue(bag.add(<(literal.(type))("100")>));
+        Verify.assertSize(1, bag);
         Assert.assertTrue(bag.add(<(literal.(type))("100")>));
+        Verify.assertSize(2, bag);
         Assert.assertTrue(bag.remove(<(literal.(type))("100")>));
+        Verify.assertSize(1, bag);
         Assert.assertEquals(<name>HashBag.newBagWith(<(literal.(type))("100")>), bag);
         Assert.assertTrue(bag.remove(<(literal.(type))("100")>));
+        Verify.assertSize(0, bag);
         Assert.assertEquals(new <name>HashBag(), bag);
     }
 
@@ -275,6 +281,14 @@ public abstract class Abstract<name>BagTestCase extends AbstractMutable<name>Col
     {
         super.toSortedList();
         Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">), this.newWith(<["1", "2", "2", "3", "3", "3"]:(literal.(type))(); separator=", ">).toSortedList());
+    }
+
+    @Test
+    public void toImmutable()
+    {
+        Assert.assertEquals(this.classUnderTest(), this.classUnderTest().toImmutable());
+        Assert.assertNotSame(this.classUnderTest(), this.classUnderTest().toImmutable());
+        Verify.assertInstanceOf(Immutable<name>Bag.class, this.classUnderTest().toImmutable());
     }
 }
 

@@ -270,6 +270,8 @@ public abstract class AbstractImmutableBooleanListTestCase extends AbstractImmut
         Verify.assertEqualsAndHashCode(this.classUnderTest(), list);
         Assert.assertNotSame(this.classUnderTest(), list);
     }
+
+    @Override
     @Test
     public void testNewWith()
     {
@@ -291,6 +293,7 @@ public abstract class AbstractImmutableBooleanListTestCase extends AbstractImmut
         Assert.assertEquals(list, collection4);
     }
 
+    @Override
     @Test
     public void newWithAll()
     {
@@ -312,6 +315,7 @@ public abstract class AbstractImmutableBooleanListTestCase extends AbstractImmut
         Assert.assertEquals(list, collection4);
     }
 
+    @Override
     @Test
     public void newWithout()
     {
@@ -327,6 +331,7 @@ public abstract class AbstractImmutableBooleanListTestCase extends AbstractImmut
         Assert.assertEquals(this.classUnderTest(), collection);
     }
 
+    @Override
     @Test
     public void newWithoutAll()
     {

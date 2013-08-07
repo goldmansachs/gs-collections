@@ -27,7 +27,7 @@ import org.junit.Test;
 /**
  * JUnit test for {@link UnmodifiableBooleanBag}.
  */
-public class UnmodifiableBooleanBagTest extends AbstractBooleanBagTestCase
+public class UnmodifiableBooleanBagTest extends AbstractMutableBooleanBagTestCase
 {
     private final MutableBooleanBag bag = this.classUnderTest();
 
