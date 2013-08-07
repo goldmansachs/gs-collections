@@ -37,6 +37,7 @@
             <Class name="com.gs.collections.impl.map.strategy.mutable.UnifiedMapWithHashingStrategy" />
             <Class name="com.gs.collections.impl.map.mutable.UnmodifiableMutableMap" />
             <Class name="com.gs.collections.impl.map.sorted.mutable.UnmodifiableTreeMap" />
+            <Class name="com.gs.collections.impl.list.mutable.UnmodifiableMutableList" />
             <Class name="com.gs.collections.impl.set.mutable.UnmodifiableMutableSet" />
             <Class name="com.gs.collections.impl.set.sorted.mutable.SynchronizedSortedSet" />
             <Class name="com.gs.collections.impl.set.sorted.mutable.UnmodifiableSortedSet" />

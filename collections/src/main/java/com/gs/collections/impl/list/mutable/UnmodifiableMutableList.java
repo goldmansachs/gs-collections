@@ -20,6 +20,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.RandomAccess;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
@@ -42,7 +43,7 @@ import com.gs.collections.impl.stack.mutable.ArrayStack;
  *
  * @see MutableList#asUnmodifiable()
  */
-public final class UnmodifiableMutableList<T>
+public class UnmodifiableMutableList<T>
         extends UnmodifiableMutableCollection<T>
         implements MutableList<T>
 {
@@ -63,6 +64,10 @@ public final class UnmodifiableMutableList<T>
         if (list == null)
         {
             throw new IllegalArgumentException("cannot create an UnmodifiableMutableList for null");
+        }
+        if (list instanceof RandomAccess)
+        {
+            return new RandomAccessUnmodifiableMutableList<E>(RandomAccessListAdapter.adapt(list));
         }
         return new UnmodifiableMutableList<E>(ListAdapter.adapt(list));
     }
@@ -338,5 +343,21 @@ public final class UnmodifiableMutableList<T>
     public MutableList<T> withoutAll(Iterable<? extends T> elements)
     {
         throw new UnsupportedOperationException("Cannot call withoutAll() on " + this.getClass().getSimpleName());
+    }
+
+    private static final class RandomAccessUnmodifiableMutableList<T> extends UnmodifiableMutableList<T> implements RandomAccess
+    {
+        private static final long serialVersionUID = 1L;
+
+        RandomAccessUnmodifiableMutableList(MutableList<? extends T> mutableList)
+        {
+            super(mutableList);
+        }
+
+        @Override
+        public RandomAccessUnmodifiableMutableList<T> clone()
+        {
+            return this;
+        }
     }
 }

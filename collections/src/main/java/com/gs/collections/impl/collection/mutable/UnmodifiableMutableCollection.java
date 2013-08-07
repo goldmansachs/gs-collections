@@ -58,7 +58,6 @@ import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.utility.LazyIterate;
-import com.gs.collections.impl.utility.internal.IterableIterate;
 
 /**
  * An unmodifiable view of a collection.
@@ -581,39 +580,37 @@ public class UnmodifiableMutableCollection<T>
     @Override
     public String toString()
     {
-        return this.makeString("[", ", ", "]");
+        return this.getMutableCollection().toString();
     }
 
     public String makeString()
     {
-        return this.makeString(", ");
+        return this.getMutableCollection().makeString();
     }
 
     public String makeString(String separator)
     {
-        return this.makeString("", separator, "");
+        return this.getMutableCollection().makeString(separator);
     }
 
     public String makeString(String start, String separator, String end)
     {
-        Appendable stringBuilder = new StringBuilder();
-        this.appendString(stringBuilder, start, separator, end);
-        return stringBuilder.toString();
+        return this.getMutableCollection().makeString(start, separator, end);
     }
 
     public void appendString(Appendable appendable)
     {
-        this.appendString(appendable, ", ");
+        this.getMutableCollection().appendString(appendable);
     }
 
     public void appendString(Appendable appendable, String separator)
     {
-        this.appendString(appendable, "", separator, "");
+        this.getMutableCollection().appendString(appendable, separator);
     }
 
     public void appendString(Appendable appendable, String start, String separator, String end)
     {
-        IterableIterate.appendString(this, appendable, start, separator, end);
+        this.getMutableCollection().appendString(appendable, start, separator, end);
     }
 
     public <V> MutableMultimap<V, T> groupBy(Function<? super T, ? extends V> function)

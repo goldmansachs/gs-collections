@@ -274,4 +274,10 @@ public abstract class UnmodifiableMutableListTestCase extends UnmodifiableMemory
             }
         });
     }
+
+    @Test
+    public void testEquals()
+    {
+        Assert.assertEquals(this.getCollection(), this.getCollection());
+    }
 }
