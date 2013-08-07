@@ -276,4 +276,9 @@ final class ImmutableTripletonMap<K, V>
                 return Maps.immutable.of();
         }
     }
+
+    private Object writeReplace()
+    {
+        return new ImmutableMapSerializationProxy<K, V>(this);
+    }
 }

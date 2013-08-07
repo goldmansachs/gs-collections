@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.map.strategy.immutable;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
 
@@ -44,7 +45,7 @@ import net.jcip.annotations.Immutable;
  * @see ImmutableMap
  */
 public class ImmutableUnifiedMapWithHashingStrategy<K, V>
-        extends AbstractImmutableMap<K, V> implements BatchIterable<V>
+        extends AbstractImmutableMap<K, V> implements BatchIterable<V>, Serializable
 {
     private final UnifiedMapWithHashingStrategy<K, V> delegate;
 
@@ -247,5 +248,10 @@ public class ImmutableUnifiedMapWithHashingStrategy<K, V>
     {
         MutableMap<K, V> result = MapIterate.rejectMapOnEntry(this, predicate, this.delegate.newEmpty());
         return result.toImmutable();
+    }
+
+    private Object writeReplace()
+    {
+        return new ImmutableMapSerializationProxy<K, V>(this);
     }
 }

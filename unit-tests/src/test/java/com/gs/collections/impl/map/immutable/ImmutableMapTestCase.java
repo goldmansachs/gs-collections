@@ -81,6 +81,7 @@ public abstract class ImmutableMapTestCase
     {
         MutableMap<Integer, String> expected = this.equalUnifiedMap();
         Verify.assertEqualsAndHashCode(expected, this.classUnderTest());
+        Verify.assertPostSerializedEqualsAndHashCode(this.classUnderTest());
     }
 
     @Test

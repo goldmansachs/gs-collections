@@ -16,6 +16,10 @@
 
 package com.gs.collections.impl.map.immutable;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
@@ -38,6 +42,7 @@ import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
+import com.gs.collections.impl.block.procedure.checked.CheckedProcedure2;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.AbstractMapIterable;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
@@ -272,5 +277,67 @@ public abstract class AbstractImmutableMap<K, V>
         MutableMap<K2, V2> map = UnifiedMap.newMap();
         this.forEach(new NonMutatingAggregationProcedure<V, K2, V2>(map, groupBy, zeroValueFactory, nonMutatingAggregator));
         return map.toImmutable();
+    }
+
+    protected static class ImmutableMapSerializationProxy<K, V> implements Externalizable
+    {
+        private static final long serialVersionUID = 1L;
+
+        private ImmutableMap<K, V> map;
+
+        @SuppressWarnings("UnusedDeclaration")
+        public ImmutableMapSerializationProxy()
+        {
+            // Empty constructor for Externalizable class
+        }
+
+        public ImmutableMapSerializationProxy(ImmutableMap<K, V> map)
+        {
+            this.map = map;
+        }
+
+        public void writeExternal(final ObjectOutput out) throws IOException
+        {
+            out.writeInt(this.map.size());
+            try
+            {
+                this.map.forEachKeyValue(new CheckedProcedure2<K, V>()
+                {
+                    @Override
+                    public void safeValue(K key, V value) throws IOException
+                    {
+                        out.writeObject(key);
+                        out.writeObject(value);
+                    }
+                }
+                );
+            }
+            catch (RuntimeException e)
+            {
+                if (e.getCause() instanceof IOException)
+                {
+                    throw (IOException) e.getCause();
+                }
+                throw e;
+            }
+        }
+
+        public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
+        {
+            int size = in.readInt();
+            MutableMap<K, V> deserializedMap = UnifiedMap.newMap(size);
+
+            for (int i = 0; i < size; i++)
+            {
+                deserializedMap.put((K) in.readObject(), (V) in.readObject());
+            }
+
+            this.map = deserializedMap.toImmutable();
+        }
+
+        protected Object readResolve()
+        {
+            return this.map;
+        }
     }
 }

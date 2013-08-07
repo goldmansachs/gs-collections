@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.map.immutable;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
@@ -37,8 +38,9 @@ import net.jcip.annotations.Immutable;
  * @see ImmutableMap
  */
 public class ImmutableUnifiedMap<K, V>
-        extends AbstractImmutableMap<K, V> implements BatchIterable<V>
+        extends AbstractImmutableMap<K, V> implements BatchIterable<V>, Serializable
 {
+    private static final long serialVersionUID = 1L;
     private final UnifiedMap<K, V> delegate;
 
     public ImmutableUnifiedMap(Map<K, V> delegate)
@@ -151,5 +153,10 @@ public class ImmutableUnifiedMap<K, V>
     public <P> void forEachWith(Procedure2<? super V, ? super P> procedure, P parameter)
     {
         this.delegate.forEachWith(procedure, parameter);
+    }
+
+    protected Object writeReplace()
+    {
+        return new ImmutableMapSerializationProxy<K, V>(this);
     }
 }

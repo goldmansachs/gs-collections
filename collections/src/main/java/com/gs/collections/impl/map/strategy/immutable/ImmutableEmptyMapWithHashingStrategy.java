@@ -222,4 +222,9 @@ final class ImmutableEmptyMapWithHashingStrategy<K, V>
     {
         return this;
     }
+
+    private Object writeReplace()
+    {
+        return new ImmutableMapSerializationProxy<K, V>(this);
+    }
 }

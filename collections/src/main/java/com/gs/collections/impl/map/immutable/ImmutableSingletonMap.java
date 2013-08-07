@@ -194,4 +194,9 @@ final class ImmutableSingletonMap<K, V>
         }
         return null;
     }
+
+    private Object writeReplace()
+    {
+        return new ImmutableMapSerializationProxy<K, V>(this);
+    }
 }

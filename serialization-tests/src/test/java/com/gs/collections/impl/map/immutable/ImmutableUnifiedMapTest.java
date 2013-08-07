@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.map.strategy.immutable;
+package com.gs.collections.impl.map.immutable;
 
-import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.test.Verify;
+import com.gs.collections.impl.tuple.Tuples;
 import org.junit.Test;
 
-public class ImmutableEmptyMapWithHashingStrategyTest
+public class ImmutableUnifiedMapTest
 {
     @Test
     public void serializedForm()
@@ -29,7 +29,12 @@ public class ImmutableEmptyMapWithHashingStrategyTest
                 1L,
                 "rO0ABXNyAFljb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAuaW1tdXRhYmxlLkFic3RyYWN0SW1t\n"
                         + "dXRhYmxlTWFwJEltbXV0YWJsZU1hcFNlcmlhbGl6YXRpb25Qcm94eQAAAAAAAAABDAAAeHB3BAAA\n"
-                        + "AAB4",
-                new ImmutableEmptyMapWithHashingStrategy<Object, Object>(HashingStrategies.<Object>defaultStrategy()));
+                        + "AARzcgARamF2YS5sYW5nLkludGVnZXIS4qCk94GHOAIAAUkABXZhbHVleHIAEGphdmEubGFuZy5O\n"
+                        + "dW1iZXKGrJUdC5TgiwIAAHhwAAAAAXEAfgAEc3EAfgACAAAAAnEAfgAFc3EAfgACAAAAA3EAfgAG\n"
+                        + "c3EAfgACAAAABHEAfgAHeA==",
+                new ImmutableUnifiedMap<Integer, Integer>(Tuples.pair(1, 1)
+                        , Tuples.pair(2, 2)
+                        , Tuples.pair(3, 3)
+                        , Tuples.pair(4, 4)));
     }
 }

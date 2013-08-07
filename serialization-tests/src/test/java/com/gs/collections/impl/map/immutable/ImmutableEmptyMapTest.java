@@ -26,8 +26,9 @@ public class ImmutableEmptyMapTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyADdjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAuaW1tdXRhYmxlLkltbXV0YWJsZUVt\n"
-                        + "cHR5TWFwAAAAAAAAAAECAAB4cA==",
+                "rO0ABXNyAFljb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAuaW1tdXRhYmxlLkFic3RyYWN0SW1t\n"
+                        + "dXRhYmxlTWFwJEltbXV0YWJsZU1hcFNlcmlhbGl6YXRpb25Qcm94eQAAAAAAAAABDAAAeHB3BAAA\n"
+                        + "AAB4",
                 ImmutableEmptyMap.INSTANCE);
     }
 }

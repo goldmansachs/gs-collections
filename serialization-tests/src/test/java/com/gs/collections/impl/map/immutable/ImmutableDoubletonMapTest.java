@@ -26,9 +26,9 @@ public class ImmutableDoubletonMapTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyADtjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAuaW1tdXRhYmxlLkltbXV0YWJsZURv\n"
-                        + "dWJsZXRvbk1hcAAAAAAAAAABAgAETAAEa2V5MXQAEkxqYXZhL2xhbmcvT2JqZWN0O0wABGtleTJx\n"
-                        + "AH4AAUwABnZhbHVlMXEAfgABTAAGdmFsdWUycQB+AAF4cHQAAWF0AAFicHA=",
+                "rO0ABXNyAFljb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAuaW1tdXRhYmxlLkFic3RyYWN0SW1t\n"
+                        + "dXRhYmxlTWFwJEltbXV0YWJsZU1hcFNlcmlhbGl6YXRpb25Qcm94eQAAAAAAAAABDAAAeHB3BAAA\n"
+                        + "AAJ0AAFhcHQAAWJweA==",
                 new ImmutableDoubletonMap<String, Object>("a", null, "b", null));
     }
 }
