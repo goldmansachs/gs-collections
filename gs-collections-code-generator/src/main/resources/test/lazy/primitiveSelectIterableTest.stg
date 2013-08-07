@@ -32,6 +32,10 @@ import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * JUnit test for {@link Select<name>Iterable}.
+ * This file was automatically generated from template file primitiveSelectIterableTest.stg.
+ */
 public class Select<name>IterableTest
 {
     private final Select<name>Iterable iterable =

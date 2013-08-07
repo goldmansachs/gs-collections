@@ -15,7 +15,9 @@ body(type, name) ::= <<
 package com.gs.collections.api.collection.primitive;
 
 import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.collection.ImmutableCollection;
 
 /**
  * This file was automatically generated from template file immutablePrimitiveCollection.stg.
@@ -24,6 +26,8 @@ import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
  */
 public interface Immutable<name>Collection extends <name>Iterable
 {
+    \<V> ImmutableCollection\<V> collect(<name>ToObjectFunction\<? extends V> function);
+    
     <sharedAPI(fileName(primitive), name)>
 
     <immutableAPI(fileName(primitive), type, name)>

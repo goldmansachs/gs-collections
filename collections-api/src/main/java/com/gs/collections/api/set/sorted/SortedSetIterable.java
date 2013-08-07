@@ -60,7 +60,7 @@ public interface SortedSetIterable<T>
 
     /**
      * Returns the set of all objects that are a member of exactly one of {@code this} and {@code setB} (elements which
-     * are in one of the sets, but not in both). For instance, for the sets [1, 2, 3] and [2, 3, 4] , the symmetric
+     * are in one of the sets, but not in both). For instance, for the sets [1, 2, 3] and [2, 3, 4], the symmetric
      * difference set is [1, 4] . It is the set difference of the union and the intersection.
      */
     SortedSetIterable<T> symmetricDifference(SetIterable<? extends T> setB);
