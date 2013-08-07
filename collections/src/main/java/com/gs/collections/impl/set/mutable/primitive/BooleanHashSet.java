@@ -343,7 +343,7 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
 
     public boolean noneSatisfy(BooleanPredicate predicate)
     {
-        return this.state != 0 && this.count(predicate) == 0;
+        return this.count(predicate) == 0;
     }
 
     public BooleanHashSet select(BooleanPredicate predicate)

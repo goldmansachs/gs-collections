@@ -2190,10 +2190,8 @@ public abstract class AbstractMutable<name>ObjectMapTestCase
         Mutable<name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one");
         Mutable<name>ObjectMap\<String> map2 = this.newWithKeysValues(<(literal.(type))("2")>, "two", <(literal.(type))("3")>, "three");
 
-        FastListMultimap\<Character, String> expected1 = FastListMultimap.newMultimap(Tuples.pair('z', "zero")
-                , Tuples.pair('o', "one"));
-        FastListMultimap\<Character, String> expected2 = FastListMultimap.newMultimap(Tuples.pair('t', "two")
-                , Tuples.pair('t', "three"));
+        FastListMultimap\<Character, String> expected1 = FastListMultimap.newMultimap(Tuples.pair('z', "zero"), Tuples.pair('o', "one"));
+        FastListMultimap\<Character, String> expected2 = FastListMultimap.newMultimap(Tuples.pair('t', "two"), Tuples.pair('t', "three"));
 
         Function\<String, Character> firstChar = new Function\<String, Character>()
         {
@@ -2254,8 +2252,7 @@ public abstract class AbstractMutable<name>ObjectMapTestCase
             }
         };
 
-        FastListMultimap\<Character, String> expected = FastListMultimap.newMultimap(Tuples.pair('z', "zero"), Tuples.pair('e', "zero"), Tuples.pair('r', "zero"), Tuples.pair('o', "zero")
-                , Tuples.pair('n', "nine"), Tuples.pair('i', "nine"), Tuples.pair('e', "nine"));
+        FastListMultimap\<Character, String> expected = FastListMultimap.newMultimap(Tuples.pair('z', "zero"), Tuples.pair('e', "zero"), Tuples.pair('r', "zero"), Tuples.pair('o', "zero"), Tuples.pair('n', "nine"), Tuples.pair('i', "nine"), Tuples.pair('e', "nine"));
         final Multimap\<Character, String> actual = map1.groupByEach(toChars);
         final Multimap\<Character, String> actual1 = map1.groupByEach(toChars, FastListMultimap.\<Character, String>newMultimap());
 

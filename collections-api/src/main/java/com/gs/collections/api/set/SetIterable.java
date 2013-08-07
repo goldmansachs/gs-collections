@@ -54,7 +54,7 @@ public interface SetIterable<T> extends RichIterable<T>
 
     /**
      * Returns the set of all members of {@code this} that are not members of {@code subtrahendSet}. The difference of
-     * [1,2,3] and [2,3,4] is [1].
+     * [1, 2, 3] and [2, 3, 4] is [1].
      */
     SetIterable<T> difference(SetIterable<? extends T> subtrahendSet);
 
@@ -65,8 +65,8 @@ public interface SetIterable<T> extends RichIterable<T>
 
     /**
      * Returns the set of all objects that are a member of exactly one of {@code this} and {@code setB} (elements which
-     * are in one of the sets, but not in both). For instance, for the sets [1,2,3] and [2,3,4] , the symmetric
-     * difference set is [1,4] . It is the set difference of the union and the intersection.
+     * are in one of the sets, but not in both). For instance, for the sets [1, 2, 3] and [2, 3, 4] , the symmetric
+     * difference set is [1, 4] . It is the set difference of the union and the intersection.
      */
     SetIterable<T> symmetricDifference(SetIterable<? extends T> setB);
 
@@ -77,13 +77,13 @@ public interface SetIterable<T> extends RichIterable<T>
 
     /**
      * Returns {@literal true} if all the members of {@code this} are also members of {@code candidateSuperset}.
-     * For example, [1,2] is a subset of [1,2,3], but [1,4] is not.
+     * For example, [1, 2] is a subset of [1, 2, 3], but [1, 4] is not.
      */
     boolean isSubsetOf(SetIterable<? extends T> candidateSuperset);
 
     /**
      * Returns {@literal true} if all the members of {@code this} are also members of {@code candidateSuperset} and the
-     * two sets are not equal. For example, [1,2] is a proper subset of [1,2,3], but [1,2,3] is not.
+     * two sets are not equal. For example, [1, 2] is a proper subset of [1, 2, 3], but [1, 2, 3] is not.
      */
     boolean isProperSubsetOf(SetIterable<? extends T> candidateSuperset);
 

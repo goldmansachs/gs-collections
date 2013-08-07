@@ -172,7 +172,7 @@ public class <name1><name2>HashMapTest extends Abstract<name1><name2>MapTestCase
             Assert.assertTrue(hashMap.containsValue(<(castFromInt.(type2))("i")>));
         }
 
-        Assert.assertEquals(copyMap , hashMap);
+        Assert.assertEquals(copyMap, hashMap);
     }
 
     @Override

@@ -411,7 +411,7 @@ public abstract class AbstractBooleanSetTestCase extends AbstractMutableBooleanC
 
         Assert.assertEquals(2L, this.set3.toArray().length);
         Assert.assertTrue(Arrays.equals(new boolean[]{false, true}, this.set3.toArray())
-            || Arrays.equals(new boolean[]{true, false}, this.set3.toArray()));
+                || Arrays.equals(new boolean[]{true, false}, this.set3.toArray()));
     }
 
     @Override
@@ -423,7 +423,7 @@ public abstract class AbstractBooleanSetTestCase extends AbstractMutableBooleanC
         Assert.assertEquals(BooleanArrayList.newListWith(false), this.set1.toList());
         Assert.assertEquals(BooleanArrayList.newListWith(true), this.set2.toList());
         Assert.assertTrue(BooleanArrayList.newListWith(false, true).equals(this.set3.toList())
-            || BooleanArrayList.newListWith(true, false).equals(this.set3.toList()));
+                || BooleanArrayList.newListWith(true, false).equals(this.set3.toList()));
     }
 
     @Override
@@ -655,7 +655,7 @@ public abstract class AbstractBooleanSetTestCase extends AbstractMutableBooleanC
     @Test
     public void noneSatisfy()
     {
-        Assert.assertFalse(this.set0.noneSatisfy(BooleanPredicates.or(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())));
+        Assert.assertTrue(this.set0.noneSatisfy(BooleanPredicates.or(BooleanPredicates.isTrue(), BooleanPredicates.isFalse())));
         Assert.assertFalse(this.set1.noneSatisfy(BooleanPredicates.isFalse()));
         Assert.assertTrue(this.set1.noneSatisfy(BooleanPredicates.isTrue()));
         Assert.assertFalse(this.set2.noneSatisfy(BooleanPredicates.isTrue()));
@@ -744,7 +744,7 @@ public abstract class AbstractBooleanSetTestCase extends AbstractMutableBooleanC
         Assert.assertEquals("[false]", this.set1.toString());
         Assert.assertEquals("[true]", this.set2.toString());
         Assert.assertTrue("[true, false]".equals(this.set3.toString())
-            || "[false, true]".equals(this.set3.toString()));
+                || "[false, true]".equals(this.set3.toString()));
 
     }
 
@@ -757,19 +757,19 @@ public abstract class AbstractBooleanSetTestCase extends AbstractMutableBooleanC
         Assert.assertEquals("false", this.set1.makeString());
         Assert.assertEquals("true", this.set2.makeString());
         Assert.assertTrue("true, false".equals(this.set3.makeString())
-            || "false, true".equals(this.set3.makeString()));
+                || "false, true".equals(this.set3.makeString()));
 
         Assert.assertEquals("", this.set0.makeString("/"));
         Assert.assertEquals("false", this.set1.makeString("/"));
         Assert.assertEquals("true", this.set2.makeString("/"));
         Assert.assertTrue(this.set3.makeString("/"), "true/false".equals(this.set3.makeString("/"))
-            || "false/true".equals(this.set3.makeString("/")));
+                || "false/true".equals(this.set3.makeString("/")));
 
         Assert.assertEquals("[]", this.set0.makeString("[", "/", "]"));
         Assert.assertEquals("[false]", this.set1.makeString("[", "/", "]"));
         Assert.assertEquals("[true]", this.set2.makeString("[", "/", "]"));
         Assert.assertTrue(this.set3.makeString("[", "/", "]"), "[true/false]".equals(this.set3.makeString("[", "/", "]"))
-            || "[false/true]".equals(this.set3.makeString("[", "/", "]")));
+                || "[false/true]".equals(this.set3.makeString("[", "/", "]")));
     }
 
     @Override
@@ -792,12 +792,12 @@ public abstract class AbstractBooleanSetTestCase extends AbstractMutableBooleanC
         StringBuilder appendable3 = new StringBuilder();
         this.set3.appendString(appendable3);
         Assert.assertTrue("true, false".equals(appendable3.toString())
-            || "false, true".equals(appendable3.toString()));
+                || "false, true".equals(appendable3.toString()));
 
         StringBuilder appendable4 = new StringBuilder();
         this.set3.appendString(appendable4, "[", ", ", "]");
         Assert.assertTrue("[true, false]".equals(appendable4.toString())
-            || "[false, true]".equals(appendable4.toString()));
+                || "[false, true]".equals(appendable4.toString()));
     }
 
     @Override

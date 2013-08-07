@@ -248,7 +248,7 @@ public class Object<name>HashMapTest extends AbstractMutableObject<name>MapTestC
             Assert.assertTrue(hashMap.containsKey(i));
         }
 
-        Assert.assertEquals(hashMap , copyMap);
+        Assert.assertEquals(hashMap, copyMap);
     }
 
     @Test

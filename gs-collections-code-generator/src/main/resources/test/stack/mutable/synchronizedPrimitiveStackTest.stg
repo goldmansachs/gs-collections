@@ -100,14 +100,14 @@ public class Synchronized<name>StackTest
     @Test
     public void peekAtIndex()
     {
-        Mutable<name>Stack stack1 = new Synchronized<name>Stack(<name>ArrayStack.newStackFromTopToBottom(<["1", "2", "3", "4" ,"5"]:(literal.(type))(); separator=", ">));
+        Mutable<name>Stack stack1 = new Synchronized<name>Stack(<name>ArrayStack.newStackFromTopToBottom(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">));
         Verify.assertSize(5, stack1);
         Assert.assertEquals(<(wideLiteral.(type))("1")>, stack1.peekAt(0)<(wideDelta.(type))>);
         Assert.assertEquals(<(wideLiteral.(type))("2")>, stack1.peekAt(1)<(wideDelta.(type))>);
         Assert.assertEquals(<(wideLiteral.(type))("3")>, stack1.peekAt(2)<(wideDelta.(type))>);
         Assert.assertEquals(<(wideLiteral.(type))("4")>, stack1.peekAt(3)<(wideDelta.(type))>);
         Assert.assertEquals(<(wideLiteral.(type))("5")>, stack1.peekAt(4)<(wideDelta.(type))>);
-        Mutable<name>Stack stack2 = new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["5", "4", "3", "2" ,"1"]:(literal.(type))(); separator=", ">));
+        Mutable<name>Stack stack2 = new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["5", "4", "3", "2", "1"]:(literal.(type))(); separator=", ">));
         Verify.assertSize(5, stack2);
         Assert.assertEquals(<(wideLiteral.(type))("1")>, stack2.peekAt(0)<(wideDelta.(type))>);
         Assert.assertEquals(<(wideLiteral.(type))("2")>, stack2.peekAt(1)<(wideDelta.(type))>);
@@ -146,7 +146,7 @@ public class Synchronized<name>StackTest
     @Test(expected = IllegalArgumentException.class)
     public void peek_at_index_less_than_zero_throws_exception()
     {
-        new Synchronized<name>Stack(<name>ArrayStack.newStackFromTopToBottom(<["1", "2", "3", "4" ,"5"]:(literal.(type))(); separator=", ">)).peek(-1);
+        new Synchronized<name>Stack(<name>ArrayStack.newStackFromTopToBottom(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">)).peek(-1);
     }
 
     @Test(expected = IllegalArgumentException.class)

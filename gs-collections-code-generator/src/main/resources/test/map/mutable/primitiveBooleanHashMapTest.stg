@@ -172,12 +172,12 @@ public class <name>BooleanHashMapTest extends Abstract<name>BooleanMapTestCase
             copyMap.put(i, (<(castRealTypeToInt.(type))("i")> & 1) == <(literal.(type))("0")>);
         }
 
-        Verify.assertSize(10 , copyMap);
-        Verify.assertSize(0  , hashMap);
+        Verify.assertSize(10, copyMap);
+        Verify.assertSize(0, hashMap);
 
         hashMap.putAll(copyMap);
 
-        Verify.assertSize(10  , hashMap);
+        Verify.assertSize(10, hashMap);
 
         for (<type> i = <(literal.(type))("1")>; i \< 11; i++)
         {
@@ -185,7 +185,7 @@ public class <name>BooleanHashMapTest extends Abstract<name>BooleanMapTestCase
             Assert.assertTrue(copyMap.containsKey(i));
         }
 
-        Assert.assertEquals(hashMap , copyMap);
+        Assert.assertEquals(hashMap, copyMap);
     }
 
     @Override

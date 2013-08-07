@@ -359,7 +359,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         {
             public void value(<type1> key, <type2> value)
             {
-                <name1><name2>HashMap.this.put(key ,value);
+                <name1><name2>HashMap.this.put(key, value);
             }
         });
     }

@@ -1150,8 +1150,8 @@ public final class Iterate
     /**
      * Flattens a collection of collections into one "flat" collection.
      *
-     * @param iterable A list of lists, e.g. { { 1,2,3 } , { 4,5 }, { 6 } }
-     * @return A flattened list, e.g. { 1,2,3,4,5,6 }
+     * @param iterable A list of lists, e.g. { { 1, 2, 3 }, { 4, 5 }, { 6 } }
+     * @return A flattened list, e.g. { 1, 2, 3, 4, 5, 6 }
      */
     public static <T> Collection<T> flatten(Iterable<? extends Iterable<T>> iterable)
     {

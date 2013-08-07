@@ -54,20 +54,20 @@ public interface SortedSetIterable<T>
 
     /**
      * Returns the set of all members of {@code this} that are not members of {@code subtrahendSet}. The difference of
-     * [1,2,3] and [2,3,4] is [1].
+     * [1, 2, 3] and [2, 3, 4] is [1].
      */
     SortedSetIterable<T> difference(SetIterable<? extends T> subtrahendSet);
 
     /**
      * Returns the set of all objects that are a member of exactly one of {@code this} and {@code setB} (elements which
-     * are in one of the sets, but not in both). For instance, for the sets [1,2,3] and [2,3,4] , the symmetric
-     * difference set is [1,4] . It is the set difference of the union and the intersection.
+     * are in one of the sets, but not in both). For instance, for the sets [1, 2, 3] and [2, 3, 4] , the symmetric
+     * difference set is [1, 4] . It is the set difference of the union and the intersection.
      */
     SortedSetIterable<T> symmetricDifference(SetIterable<? extends T> setB);
 
     /**
      * Returns the set whose members are all possible subsets of {@code this}. For example, the powerset of [1, 2] is
-     * [[], [1], [2], [1,2]].
+     * [[], [1], [2], [1, 2]].
      */
     SortedSetIterable<SortedSetIterable<T>> powerSet();
 
