@@ -56,6 +56,7 @@ public class SetMultimapMemoryTest
             this.data = TestDataFactory.createImmutableList(size);
         }
 
+        @Override
         public HashMultimap<Integer, Integer> value()
         {
             final HashMultimap<Integer, Integer> mm = HashMultimap.create();
@@ -82,6 +83,7 @@ public class SetMultimapMemoryTest
             this.data = TestDataFactory.createImmutableList(size);
         }
 
+        @Override
         public UnifiedSetMultimap<Integer, Integer> value()
         {
             final UnifiedSetMultimap<Integer, Integer> mm = UnifiedSetMultimap.newMultimap();

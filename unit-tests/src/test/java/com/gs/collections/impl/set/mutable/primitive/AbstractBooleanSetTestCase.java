@@ -745,7 +745,6 @@ public abstract class AbstractBooleanSetTestCase extends AbstractMutableBooleanC
         Assert.assertEquals("[true]", this.set2.toString());
         Assert.assertTrue("[true, false]".equals(this.set3.toString())
                 || "[false, true]".equals(this.set3.toString()));
-
     }
 
     @Override
@@ -835,5 +834,4 @@ public abstract class AbstractBooleanSetTestCase extends AbstractMutableBooleanC
         Assert.assertEquals(new UnmodifiableBooleanSet(this.set2), this.set2.asUnmodifiable());
         Assert.assertEquals(new UnmodifiableBooleanSet(this.set3), this.set3.asUnmodifiable());
     }
-
 }

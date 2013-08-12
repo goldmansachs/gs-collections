@@ -66,5 +66,4 @@ public class BooleanHashSetTest extends AbstractBooleanSetTestCase
         Assert.assertEquals(set2, setFromSet2);
         Assert.assertEquals(set3, setFromSet3);
     }
-
 }

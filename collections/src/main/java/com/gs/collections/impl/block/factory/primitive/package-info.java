@@ -15,6 +15,6 @@
  */
 
 /**
- * This package contains factory implementations for primitive functions, primitive predicates,primitive procedures and primitive comparators.
+ * This package contains factory implementations for primitive functions, primitive predicates, primitive procedures and primitive comparators.
  */
 package com.gs.collections.impl.block.factory.primitive;

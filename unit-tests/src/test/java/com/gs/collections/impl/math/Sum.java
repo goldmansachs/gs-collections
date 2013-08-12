@@ -21,11 +21,11 @@ import java.io.Serializable;
 /**
  * A sum is a mutable or immutable object that may have either other objects or values added to it.
  *
- * @deprecated
+ * @deprecated Don't use in new tests
  */
 @Deprecated
 public interface Sum
-    extends Serializable
+        extends Serializable
 {
     Sum add(Object number);
 

@@ -66,6 +66,7 @@ public class ImmutableListMemoryTest
             this.size = size;
         }
 
+        @Override
         public com.gs.collections.api.list.ImmutableList<String> value()
         {
             return FastList.newList(Collections.nCopies(this.size, "dummy")).toImmutable();
@@ -81,6 +82,7 @@ public class ImmutableListMemoryTest
             this.size = size;
         }
 
+        @Override
         public ImmutableList<String> value()
         {
             return ImmutableList.<String>builder().addAll(Collections.nCopies(this.size, "dummy")).build();
@@ -96,6 +98,7 @@ public class ImmutableListMemoryTest
             this.size = size;
         }
 
+        @Override
         public List<String> value()
         {
             if (this.size == 0)

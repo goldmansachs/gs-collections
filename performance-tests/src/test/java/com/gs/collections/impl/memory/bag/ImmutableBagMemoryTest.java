@@ -59,6 +59,7 @@ public class ImmutableBagMemoryTest
             this.size = size;
         }
 
+        @Override
         public ImmutableBag<Integer> value()
         {
             HashBag<Integer> bag = HashBag.newBag();
@@ -79,6 +80,7 @@ public class ImmutableBagMemoryTest
             this.size = size;
         }
 
+        @Override
         public ImmutableMultiset<Integer> value()
         {
             ImmutableMultiset.Builder<Integer> builder = ImmutableMultiset.builder();

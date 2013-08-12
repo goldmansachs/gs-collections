@@ -21,6 +21,8 @@ import org.junit.Test;
 
 public class SynchronizedObjectBooleanMapTest extends AbstractMutableObjectBooleanMapTestCase
 {
+    private final SynchronizedObjectBooleanMap<String> map = this.classUnderTest();
+
     @Override
     protected SynchronizedObjectBooleanMap<String> classUnderTest()
     {
@@ -56,8 +58,6 @@ public class SynchronizedObjectBooleanMapTest extends AbstractMutableObjectBoole
     {
         return new SynchronizedObjectBooleanMap<T>(new ObjectBooleanHashMap<T>());
     }
-
-    private final SynchronizedObjectBooleanMap<String> map = this.classUnderTest();
 
     @Override
     @Test

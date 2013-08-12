@@ -343,7 +343,6 @@ public abstract class AbstractMutableBooleanCollectionTestCase extends AbstractB
         MutableBooleanCollection mutableBooleanCollection = trueCollection.withoutAll(BooleanArrayList.newListWith(true));
         Assert.assertEquals(this.newMutableCollectionWith(), mutableBooleanCollection);
         Assert.assertSame(trueCollection, mutableBooleanCollection);
-
     }
 
     @Override
@@ -379,5 +378,4 @@ public abstract class AbstractMutableBooleanCollectionTestCase extends AbstractB
         Assert.assertEquals(this.newWith(true, false, true).asUnmodifiable(), this.classUnderTest().asUnmodifiable());
         Assert.assertEquals(this.classUnderTest(), this.classUnderTest().asUnmodifiable());
     }
-
 }

@@ -21,9 +21,12 @@ import java.util.Random;
 
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class HashSetAddTest
 {
+private static final Logger LOGGER = LoggerFactory.getLogger(HashSetAddTest.class);
     @Test
     @Category(PerformanceTests.class)
     public void testHashPutMonomorphic()
@@ -59,7 +62,7 @@ public class HashSetAddTest
             this.runHashPut(objects, 1000000, 1);
         }
         long time = System.currentTimeMillis() - now;
-        System.out.println("HashSet, set size 1,000,000, " + type + ' ' + objects[0].getClass() + " puts/msec: " + 100000000 / time);
+        LOGGER.info("HashSet, set size 1,000,000, {} {} puts/msec: {}", type, objects[0].getClass(), 100000000 / time);
     }
 
     public void runHashPut(Object[] objects, int length, int runs)

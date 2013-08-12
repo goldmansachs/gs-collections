@@ -109,7 +109,7 @@ public class Immutable<name>HashSetTest extends AbstractImmutable<name>Collectio
         super.isEmpty();
         Assert.assertFalse(this.newWith(<["0", "1", "31"]:(literal.(type))(); separator=", ">, Abstract<name>SetTestCase.generateCollisions1().getFirst(), Abstract<name>SetTestCase.generateCollisions1().get(1)).isEmpty());
     }
-            
+
     @Override
     @Test
     public void notEmpty()
@@ -288,7 +288,6 @@ public class Immutable<name>HashSetTest extends AbstractImmutable<name>Collectio
         Assert.assertEquals(set.toSet(), set.asLazy().toSet());
         Verify.assertInstanceOf(Lazy<name>Iterable.class, set.asLazy());
     }
-
 }
 
 >>

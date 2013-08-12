@@ -166,7 +166,6 @@ public final class Synchronized<name>Set
     {
         throw new UnsupportedOperationException("toImmutable not implemented yet");
     }
-
 }
 
 >>

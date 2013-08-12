@@ -368,7 +368,6 @@ public class UnmodifiableBooleanStackTest
         MutableBooleanStack stack1 = new UnmodifiableBooleanStack(BooleanArrayStack.newStackWith(true, false));
         Assert.assertEquals(BooleanArrayList.newListWith(false, true), stack1.toList());
         Assert.assertEquals(BooleanArrayList.newListWith(true, false, true), this.stack.toList());
-
     }
 
     @Test

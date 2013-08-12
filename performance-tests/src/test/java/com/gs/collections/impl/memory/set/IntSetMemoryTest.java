@@ -60,6 +60,7 @@ public class IntSetMemoryTest
             this.data = TestDataFactory.createRandomSet(size);
         }
 
+        @Override
         public IntHashSet value()
         {
             final IntHashSet set = new IntHashSet();
@@ -83,6 +84,7 @@ public class IntSetMemoryTest
             this.data = TestDataFactory.createRandomSet(size);
         }
 
+        @Override
         public TIntHashSet value()
         {
             final TIntHashSet set = new TIntHashSet();
@@ -106,6 +108,7 @@ public class IntSetMemoryTest
             this.data = TestDataFactory.createRandomSet(size);
         }
 
+        @Override
         public HashSet<Integer> value()
         {
             final HashSet<Integer> set = new HashSet<Integer>();

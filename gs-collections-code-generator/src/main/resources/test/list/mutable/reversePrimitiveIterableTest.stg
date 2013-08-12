@@ -257,7 +257,6 @@ public class Reverse<name>IterableTest
     public void toArray()
     {
         Assert.assertArrayEquals(new <type>[]{<["3", "4", "2", "1"]:(literal.(type))(); separator=", ">}, <name>ArrayList.newListWith(<["1", "2", "4", "3"]:(literal.(type))(); separator=", ">).asReversed().toArray()<(delta.(type))>);
-
     }
 
     @Test

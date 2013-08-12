@@ -21,11 +21,11 @@ import com.gs.collections.impl.parallel.AbstractProcedureCombiner;
 /**
  * Combines instances of SumProcedure.
  *
- * @deprecated
+ * @deprecated Don't use in new tests
  */
 @Deprecated
 public final class SumCombiner<T>
-    extends AbstractProcedureCombiner<SumProcedure<T>>
+        extends AbstractProcedureCombiner<SumProcedure<T>>
 {
     private static final long serialVersionUID = 1L;
     private final Sum sum;

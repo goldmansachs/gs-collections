@@ -21,9 +21,13 @@ import java.util.Random;
 
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ArrayListAddTest
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ArrayListAddTest.class);
+
     @Test
     @Category(PerformanceTests.class)
     public void runArrayListAdd()
@@ -90,7 +94,7 @@ public class ArrayListAddTest
             this.runArrayListAdd(objects, 1000000, 10);
         }
         long time = System.currentTimeMillis() - now;
-        System.out.println("ArrayList, list size 1,000,000, " + type + " adds/msec: " + 1000000000 / time);
+        LOGGER.info("ArrayList, list size 1,000,000, {} adds/msec: {}", type, 1000000000 / time);
     }
 
     private void runStringArrayListAdd(String type)
@@ -104,5 +108,4 @@ public class ArrayListAddTest
         }
         this.runArrayListAdds(type, strings);
     }
-
 }

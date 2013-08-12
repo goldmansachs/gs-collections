@@ -27,8 +27,8 @@ public class ImmutableByteHashBagTest
         Verify.assertSerializedForm(
                 1L,
                 "rO0ABXNyAGdjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5iYWcuaW1tdXRhYmxlLnByaW1pdGl2ZS5J\n"
-                        + "bW11dGFibGVCeXRlSGFzaEJhZyRJbW11dGFibGVCeXRlQmFnU2VyaWFsaXphdGlvblByb3h5AAAA\n" +
-                        "AAAAAAEMAAB4cHcOAAAAAgEAAAABAgAAAAF4",
+                        + "bW11dGFibGVCeXRlSGFzaEJhZyRJbW11dGFibGVCeXRlQmFnU2VyaWFsaXphdGlvblByb3h5AAAA\n"
+                        + "AAAAAAEMAAB4cHcOAAAAAgEAAAABAgAAAAF4",
                 ImmutableByteHashBag.newBagWith((byte) 1, (byte) 2));
     }
 }

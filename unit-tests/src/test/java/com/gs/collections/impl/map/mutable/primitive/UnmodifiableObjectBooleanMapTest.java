@@ -179,7 +179,6 @@ public class UnmodifiableObjectBooleanMapTest extends AbstractMutableObjectBoole
         };
 
         Assert.assertTrue(this.map.getIfAbsentPutWith("0", functionLengthEven, "zeroValue"));
-
     }
 
     @Test(expected = UnsupportedOperationException.class)

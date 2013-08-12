@@ -277,7 +277,6 @@ public class IntIntervalTest
     public void toArray()
     {
         Assert.assertArrayEquals(new int[]{1, 2, 3, 4}, IntInterval.oneTo(4).toArray());
-
     }
 
     @Test

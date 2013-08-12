@@ -156,5 +156,4 @@ public class BooleanArrayListTest extends AbstractBooleanListTestCase
         Assert.assertEquals("0:true1:false2:true", sum[0]);
         Assert.assertEquals("", sum[1]);
     }
-
 }

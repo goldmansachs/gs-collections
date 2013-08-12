@@ -510,7 +510,6 @@ public class ImmutableBooleanHashSetTest extends AbstractImmutableBooleanCollect
         Assert.assertEquals("[true]", this.set2.toString());
         Assert.assertTrue("[true, false]".equals(this.set3.toString())
                 || "[false, true]".equals(this.set3.toString()));
-
     }
 
     @Override

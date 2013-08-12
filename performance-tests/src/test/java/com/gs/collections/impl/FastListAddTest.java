@@ -21,9 +21,13 @@ import java.util.Random;
 import com.gs.collections.impl.list.mutable.FastList;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FastListAddTest
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(FastListAddTest.class);
+
     @Test
     @Category(PerformanceTests.class)
     public void runFastListAdd()
@@ -36,7 +40,6 @@ public class FastListAddTest
         this.runLongFastListAdd("long");
         this.runIntegerFastListAdd("integer");
         this.runStringFastListAdd("string");
-
     }
 
     private void runIntegerFastListAdd(String type)
@@ -91,7 +94,7 @@ public class FastListAddTest
             this.runFastListAdd(objects, 1000000, 10);
         }
         long time = System.currentTimeMillis() - now;
-        System.out.println("FastList, list size 1,000,000, " + type + " adds/msec: " + 1000000000 / time);
+        LOGGER.info("FastList, list size 1,000,000, {} adds/msec: {}", type, 1000000000 / time);
     }
 
     public void runFastListAdd(Object[] objects, int length, int runs)

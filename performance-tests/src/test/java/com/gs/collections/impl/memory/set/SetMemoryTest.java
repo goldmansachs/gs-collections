@@ -80,6 +80,7 @@ public class SetMemoryTest
             super(size);
         }
 
+        @Override
         public HashSet<Integer> value()
         {
             return this.fill(new HashSet<Integer>());
@@ -95,6 +96,7 @@ public class SetMemoryTest
             super(size);
         }
 
+        @Override
         public THashSet<Integer> value()
         {
             return this.fill(new THashSet());
@@ -110,6 +112,7 @@ public class SetMemoryTest
             super(size);
         }
 
+        @Override
         public UnifiedSet<Integer> value()
         {
             return this.fill(new UnifiedSet<Integer>());

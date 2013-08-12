@@ -29,7 +29,7 @@ public interface UnsortedSetIterable<T>
 {
     /**
      * Returns the set whose members are all possible subsets of {@code this}. For example, the powerset of [1, 2] is
-     * [[], [1], [2], [1,2]].
+     * [[], [1], [2], [1, 2]].
      */
     UnsortedSetIterable<UnsortedSetIterable<T>> powerSet();
 

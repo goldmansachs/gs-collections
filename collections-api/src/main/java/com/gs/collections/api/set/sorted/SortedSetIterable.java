@@ -72,7 +72,7 @@ public interface SortedSetIterable<T>
     SortedSetIterable<SortedSetIterable<T>> powerSet();
 
     /**
-     * Returns the set whose members are all possible ordered pairs (a,b) where a is a member of {@code this} and b is a
+     * Returns the set whose members are all possible ordered pairs (a, b) where a is a member of {@code this} and b is a
      * member of {@code set}.
      */
     <B> LazyIterable<Pair<T, B>> cartesianProduct(SetIterable<B> set);

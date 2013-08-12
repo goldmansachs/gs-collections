@@ -74,5 +74,4 @@ trait ListIterableTestTrait extends InternalIterableTestTrait
 
         Assert.assertEquals(3, count)
     }
-
 }

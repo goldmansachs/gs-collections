@@ -90,7 +90,7 @@ public final class FJIterate
      * <p/>
      * e.g.
      * <pre>
-     * {@code final ConcurrentMutableMap<Integer,Object> chm = new ConcurrentHashMap<Integer,Object>();}
+     * {@code final ConcurrentMutableMap<Integer, Object> chm = new ConcurrentHashMap<Integer, Object>();}
      * FJIterate.<b>forEachWithIndex</b>(collection, new ObjectIntProcedure()
      * {
      *     public void value(Object object, int index)
@@ -113,7 +113,7 @@ public final class FJIterate
      * is executed against the specified executor.
      * <p/>
      * <pre>e.g.
-     * {@code final ConcurrentMutableMap<Integer,Object> chm = new ConcurrentHashMap<Integer,Object>();}
+     * {@code final ConcurrentMutableMap<Integer, Object> chm = new ConcurrentHashMap<Integer, Object>();}
      * FJIterate.<b>forEachWithIndex</b>(collection, new ObjectIntProcedure()
      * {
      *     public void value(Object object, int index)
@@ -246,7 +246,7 @@ public final class FJIterate
      * <p/>
      * e.g.
      * <pre>
-     * {@code final ConcurrentMutableMap<Object,Boolean> chm = new ConcurrentHashMap<Object,Boolean>();}
+     * {@code final ConcurrentMutableMap<Object, Boolean> chm = new ConcurrentHashMap<Object, Boolean>();}
      * FJIterate.<b>forEach</b>(collection, new Procedure()
      * {
      *     public void value(Object object)
@@ -267,7 +267,7 @@ public final class FJIterate
      * <p/>
      * e.g.
      * <pre>
-     * {@code final ConcurrentMutableMap<Object,Boolean> chm = new ConcurrentHashMap<Object,Boolean>();}
+     * {@code final ConcurrentMutableMap<Object, Boolean> chm = new ConcurrentHashMap<Object, Boolean>();}
      * FJIterate.<b>forEachBatchSize</b>(collection, new Procedure()
      * {
      *     public void value(Object object)

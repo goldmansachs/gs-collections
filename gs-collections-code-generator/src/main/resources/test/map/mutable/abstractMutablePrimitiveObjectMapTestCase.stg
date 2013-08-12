@@ -77,11 +77,11 @@ public abstract class AbstractMutable<name>ObjectMapTestCase
     protected abstract Mutable<name>ObjectMap\<String> classUnderTest();
 
     protected abstract \<T> Mutable<name>ObjectMap\<T> newWithKeysValues(<type> key1, T value1);
-                                                    
+
     protected abstract \<T> Mutable<name>ObjectMap\<T> newWithKeysValues(<type> key1, T value1, <type> key2, T value2);
-                                                    
+
     protected abstract \<T> Mutable<name>ObjectMap\<T> newWithKeysValues(<type> key1, T value1, <type> key2, T value2, <type> key3, T value3);
-                                                    
+
     protected abstract \<T> Mutable<name>ObjectMap\<T> getEmptyMap();
 
     protected static <name>ArrayList generateCollisions()
@@ -1057,7 +1057,6 @@ public abstract class AbstractMutable<name>ObjectMapTestCase
                 || "Start-nine-one".equals(map2.injectInto("Start", concat)));
         Assert.assertTrue("Start-five-nine".equals(map3.injectInto("Start", concat))
                 || "Start-nine-five".equals(map3.injectInto("Start", concat)));
-
     }
 
     @Test
@@ -2072,7 +2071,6 @@ public abstract class AbstractMutable<name>ObjectMapTestCase
                 map4.toString(),
                 "[<(toStringLiteral.(type))("32")>=thirtyTwo, <(toStringLiteral.(type))("33")>=thirtyThree]".equals(map4.toString())
                         || "[<(toStringLiteral.(type))("33")>=thirtyThree, <(toStringLiteral.(type))("32")>=thirtyTwo]".equals(map4.toString()));
-
     }
 
     @Test

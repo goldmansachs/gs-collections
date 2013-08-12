@@ -27,6 +27,8 @@ import org.junit.Test;
 
 public class ObjectBooleanHashMapTest extends AbstractMutableObjectBooleanMapTestCase
 {
+    private final ObjectBooleanHashMap<String> map = this.classUnderTest();
+
     @Override
     protected ObjectBooleanHashMap<String> classUnderTest()
     {
@@ -62,8 +64,6 @@ public class ObjectBooleanHashMapTest extends AbstractMutableObjectBooleanMapTes
     {
         return new ObjectBooleanHashMap<T>();
     }
-
-    private final ObjectBooleanHashMap<String> map = this.classUnderTest();
 
     @Test
     public void defaultInitialCapacity() throws Exception

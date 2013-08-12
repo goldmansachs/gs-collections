@@ -49,9 +49,18 @@ import org.junit.After;
 import org.junit.Assert;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SerialParallelPerformanceTest
 {
+    public static final Predicate<Integer> PREDICATE_1 = Predicates.greaterThan(0).and(IntegerPredicates.isOdd());
+    public static final Predicate<Integer> PREDICATE_2 = IntegerPredicates.isPositive().and(IntegerPredicates.isEven());
+    public static final Predicate<Integer> PREDICATE_3 = IntegerPredicates.isOdd().and(IntegerPredicates.isNegative());
+    public static final MutableList<Predicate<Integer>> PREDICATES = FastList.newListWith(PREDICATE_1, PREDICATE_2, PREDICATE_3);
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(SerialParallelPerformanceTest.class);
+
     private static final int SCALE_FACTOR = Integer.parseInt(System.getProperty("scaleFactor", "100"));
 
     private static final int WARM_UP_COUNT = Integer.parseInt(System.getProperty("WarmupCount", "100"));
@@ -114,10 +123,6 @@ public class SerialParallelPerformanceTest
             return aggregate + 1;
         }
     };
-    public static final Predicate<Integer> PREDICATE_1 = Predicates.greaterThan(0).and(IntegerPredicates.isOdd());
-    public static final Predicate<Integer> PREDICATE_2 = IntegerPredicates.isPositive().and(IntegerPredicates.isEven());
-    public static final Predicate<Integer> PREDICATE_3 = IntegerPredicates.isOdd().and(IntegerPredicates.isNegative());
-    public static final MutableList<Predicate<Integer>> PREDICATES = FastList.newListWith(PREDICATE_1, PREDICATE_2, PREDICATE_3);
 
     @Test
     @Category(ParallelTests.class)
@@ -273,14 +278,14 @@ public class SerialParallelPerformanceTest
 
     public void printMachineAndTestConfiguration(String serialParallelAlgorithm)
     {
-        System.out.println("*** Algorithm: " + serialParallelAlgorithm);
-        System.out.println("Available Processors: " + Runtime.getRuntime().availableProcessors());
-        System.out.println("Default Thread Pool Size: " + ParallelIterate.getDefaultMaxThreadPoolSize());
-        System.out.println("Default Task Count: " + ParallelIterate.getDefaultTaskCount());
-        System.out.println("Scale Factor: " + SCALE_FACTOR);
-        System.out.println("Warm up count: " + WARM_UP_COUNT);
-        System.out.println("Parallel Run Count: " + PARALLEL_RUN_COUNT);
-        System.out.println("Serial** Run Count: " + SERIAL_RUN_COUNT);
+        LOGGER.info("*** Algorithm: {}", serialParallelAlgorithm);
+        LOGGER.info("Available Processors: {}", Runtime.getRuntime().availableProcessors());
+        LOGGER.info("Default Thread Pool Size: {}", ParallelIterate.getDefaultMaxThreadPoolSize());
+        LOGGER.info("Default Task Count: {}", ParallelIterate.getDefaultTaskCount());
+        LOGGER.info("Scale Factor: {}", SCALE_FACTOR);
+        LOGGER.info("Warm up count: {}", WARM_UP_COUNT);
+        LOGGER.info("Parallel Run Count: {}", PARALLEL_RUN_COUNT);
+        LOGGER.info("Serial** Run Count: {}", SERIAL_RUN_COUNT);
     }
 
     private MutableList<Integer> getSizes()
@@ -1254,7 +1259,7 @@ public class SerialParallelPerformanceTest
 
         private static void doLog(String message, int count, long total, double average)
         {
-            System.out.println(message + " Count: " + count + " Total(ms): " + TimeKeeper.longNanosToMillisString(total) + " Avg(ms): " + TimeKeeper.doubleNanosToMillisString(average));
+            LOGGER.info("{} Count: {} Total(ms): {} Avg(ms): {}", message, count, TimeKeeper.longNanosToMillisString(total), TimeKeeper.doubleNanosToMillisString(average));
         }
 
         public static double logAverageMillisecondsToRun(

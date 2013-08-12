@@ -66,6 +66,7 @@ public class ImmutableSetMemoryTest
             this.size = size;
         }
 
+        @Override
         public com.gs.collections.api.set.ImmutableSet<Integer> value()
         {
             UnifiedSet<Integer> set = UnifiedSet.newSet(this.size);
@@ -86,6 +87,7 @@ public class ImmutableSetMemoryTest
             this.size = size;
         }
 
+        @Override
         public ImmutableSet<Integer> value()
         {
             ImmutableSet.Builder<Integer> builder = ImmutableSet.builder();
@@ -106,6 +108,7 @@ public class ImmutableSetMemoryTest
             this.size = size;
         }
 
+        @Override
         public Set<Integer> value()
         {
             if (this.size == 0)

@@ -24,9 +24,13 @@ import java.util.Random;
 import com.gs.collections.impl.list.Interval;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ArrayListAddAllTest
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ArrayListAddAllTest.class);
+
     @Test
     @Category(PerformanceTests.class)
     public void runArrayListAddAll()
@@ -94,19 +98,19 @@ public class ArrayListAddAllTest
             this.runArrayListAddAll(listToAddAll, 1000);
         }
         long time1 = System.currentTimeMillis() - now1;
-        System.out.println("ArrayList, list size 100,000, " + type + " addAll/msec: " + 100000 / time1);
+        LOGGER.info("ArrayList, list size 100,000, {} addAll/msec: {}", type, 100000 / time1);
         long now2 = System.currentTimeMillis();
         this.runArrayListAddAll(new ArrayList<Object>(Interval.oneTo(100)), 100000000);
         long time2 = System.currentTimeMillis() - now2;
-        System.out.println("ArrayList, list size 100, addAll/msec: " + 100000000 / time2);
+        LOGGER.info("ArrayList, list size 100, addAll/msec: {}", 100000000 / time2);
         long now3 = System.currentTimeMillis();
         this.runArrayListAddAll(new ArrayList<Object>(Interval.oneTo(1)), 1000000000);
         long time3 = System.currentTimeMillis() - now3;
-        System.out.println("ArrayList, list size 1, addAll/msec: " + 1000000000 / time3);
+        LOGGER.info("ArrayList, list size 1, addAll/msec: {}", 1000000000 / time3);
         long now4 = System.currentTimeMillis();
         this.runArrayListAddAll(new ArrayList<Object>(), 1000000000);
         long time4 = System.currentTimeMillis() - now4;
-        System.out.println("ArrayList, list size (empty), addAll/msec: " + 1000000000 / time4);
+        LOGGER.info("ArrayList, list size (empty), addAll/msec: {}", 1000000000 / time4);
     }
 
     public void runArrayListAddAll(List<Object> objects, long runs)

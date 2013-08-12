@@ -60,6 +60,7 @@ public class IntListMemoryTest
             this.data = TestDataFactory.create(size);
         }
 
+        @Override
         public IntArrayList value()
         {
             final IntArrayList list = new IntArrayList();
@@ -83,6 +84,7 @@ public class IntListMemoryTest
             this.data = TestDataFactory.create(size);
         }
 
+        @Override
         public TIntArrayList value()
         {
             final TIntArrayList list = new TIntArrayList();
@@ -106,6 +108,7 @@ public class IntListMemoryTest
             this.data = TestDataFactory.create(size);
         }
 
+        @Override
         public ArrayList<Integer> value()
         {
             final ArrayList<Integer> list = new ArrayList<Integer>();

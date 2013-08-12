@@ -144,5 +144,4 @@ public class MapsTest
         MutableSortedMapFactory factory = SortedMaps.mutable;
         Assert.assertEquals(UnifiedMap.newWithKeysValues(1, 2, 3, 4), factory.ofSortedMap(UnifiedMap.newWithKeysValues(1, 2, 3, 4)));
     }
-
 }

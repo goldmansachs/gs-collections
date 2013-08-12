@@ -19,11 +19,11 @@ package com.gs.collections.impl.math;
 /**
  * A mutable sum which uses an int as the storage mechanism.
  *
- * @deprecated
+ * @deprecated Don't use in new tests
  */
 @Deprecated
 public final class IntegerSum
-    implements Sum
+        implements Sum
 {
     private static final long serialVersionUID = 1L;
 

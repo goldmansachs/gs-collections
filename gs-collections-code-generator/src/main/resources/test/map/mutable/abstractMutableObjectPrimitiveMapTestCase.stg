@@ -138,7 +138,6 @@ public abstract class AbstractMutableObject<name>MapTestCase
         Assert.assertEquals(<(literal.(type))("3")>, this.map.get(null)<delta.(type)>);
         this.map.removeKey(null);
         Assert.assertEquals(<(literal.(type))("0")>, this.map.get(null)<delta.(type)>);
-
     }
 
     @Test

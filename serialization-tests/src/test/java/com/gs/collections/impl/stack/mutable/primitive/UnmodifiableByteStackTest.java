@@ -26,11 +26,11 @@ public class UnmodifiableByteStackTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyAEVjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zdGFjay5tdXRhYmxlLnByaW1pdGl2ZS5V\n" +
-                        "bm1vZGlmaWFibGVCeXRlU3RhY2sAAAAAAAAAAQIAAUwABXN0YWNrdAA5TGNvbS9ncy9jb2xsZWN0\n" +
-                        "aW9ucy9hcGkvc3RhY2svcHJpbWl0aXZlL011dGFibGVCeXRlU3RhY2s7eHBzcgA+Y29tLmdzLmNv\n" +
-                        "bGxlY3Rpb25zLmltcGwuc3RhY2subXV0YWJsZS5wcmltaXRpdmUuQnl0ZUFycmF5U3RhY2sAAAAA\n" +
-                        "AAAAAQwAAHhwdwQAAAAAeA==",
+                "rO0ABXNyAEVjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zdGFjay5tdXRhYmxlLnByaW1pdGl2ZS5V\n"
+                        + "bm1vZGlmaWFibGVCeXRlU3RhY2sAAAAAAAAAAQIAAUwABXN0YWNrdAA5TGNvbS9ncy9jb2xsZWN0\n"
+                        + "aW9ucy9hcGkvc3RhY2svcHJpbWl0aXZlL011dGFibGVCeXRlU3RhY2s7eHBzcgA+Y29tLmdzLmNv\n"
+                        + "bGxlY3Rpb25zLmltcGwuc3RhY2subXV0YWJsZS5wcmltaXRpdmUuQnl0ZUFycmF5U3RhY2sAAAAA\n"
+                        + "AAAAAQwAAHhwdwQAAAAAeA==",
                 new UnmodifiableByteStack(new ByteArrayStack()));
     }
 }

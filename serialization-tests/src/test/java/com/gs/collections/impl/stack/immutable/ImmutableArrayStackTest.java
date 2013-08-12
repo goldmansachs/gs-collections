@@ -53,5 +53,4 @@ public class ImmutableArrayStackTest
                         + "BAAAAAVwcHBwcHg=",
                 ImmutableArrayStack.newStackWith(null, null, null, null, null));
     }
-
 }

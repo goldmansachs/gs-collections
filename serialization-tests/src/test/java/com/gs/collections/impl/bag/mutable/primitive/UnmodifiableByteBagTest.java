@@ -26,13 +26,13 @@ public class UnmodifiableByteBagTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyAEFjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5iYWcubXV0YWJsZS5wcmltaXRpdmUuVW5t\n" +
-                        "b2RpZmlhYmxlQnl0ZUJhZwAAAAAAAAABAgAAeHIAV2NvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLmNv\n" +
-                        "bGxlY3Rpb24ubXV0YWJsZS5wcmltaXRpdmUuQWJzdHJhY3RVbm1vZGlmaWFibGVCeXRlQ29sbGVj\n" +
-                        "dGlvbgAAAAAAAAABAgABTAAKY29sbGVjdGlvbnQAQ0xjb20vZ3MvY29sbGVjdGlvbnMvYXBpL2Nv\n" +
-                        "bGxlY3Rpb24vcHJpbWl0aXZlL011dGFibGVCeXRlQ29sbGVjdGlvbjt4cHNyADljb20uZ3MuY29s\n" +
-                        "bGVjdGlvbnMuaW1wbC5iYWcubXV0YWJsZS5wcmltaXRpdmUuQnl0ZUhhc2hCYWcAAAAAAAAAAQwA\n" +
-                        "AHhwdwQAAAAAeA==",
+                "rO0ABXNyAEFjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5iYWcubXV0YWJsZS5wcmltaXRpdmUuVW5t\n"
+                        + "b2RpZmlhYmxlQnl0ZUJhZwAAAAAAAAABAgAAeHIAV2NvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLmNv\n"
+                        + "bGxlY3Rpb24ubXV0YWJsZS5wcmltaXRpdmUuQWJzdHJhY3RVbm1vZGlmaWFibGVCeXRlQ29sbGVj\n"
+                        + "dGlvbgAAAAAAAAABAgABTAAKY29sbGVjdGlvbnQAQ0xjb20vZ3MvY29sbGVjdGlvbnMvYXBpL2Nv\n"
+                        + "bGxlY3Rpb24vcHJpbWl0aXZlL011dGFibGVCeXRlQ29sbGVjdGlvbjt4cHNyADljb20uZ3MuY29s\n"
+                        + "bGVjdGlvbnMuaW1wbC5iYWcubXV0YWJsZS5wcmltaXRpdmUuQnl0ZUhhc2hCYWcAAAAAAAAAAQwA\n"
+                        + "AHhwdwQAAAAAeA==",
                 new UnmodifiableByteBag(new ByteHashBag()));
     }
 }

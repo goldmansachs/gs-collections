@@ -54,6 +54,7 @@ public class BagMemoryTest
             this.data = TestDataFactory.createRandomImmutableList(size);
         }
 
+        @Override
         public HashMultiset<Integer> value()
         {
             final HashMultiset<Integer> hashMultiset = HashMultiset.create();
@@ -77,6 +78,7 @@ public class BagMemoryTest
             this.data = TestDataFactory.createRandomImmutableList(size);
         }
 
+        @Override
         public HashBag<Integer> value()
         {
             final HashBag<Integer> hashBag = HashBag.newBag();

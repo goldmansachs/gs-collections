@@ -32,7 +32,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <clover.version>3.1.8</clover.version>
-        <checkstyle.version>2.9.1</checkstyle.version>
+        <checkstyle.version>2.10</checkstyle.version>
 
         <!-- this setting is needed for TeamCity -->
         <maven.deploy.skip>true</maven.deploy.skip>
@@ -95,6 +95,18 @@
             <groupId>net.sf.trove4j</groupId>
             <artifactId>trove4j</artifactId>
             <version>3.0.3</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>1.7.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>ch.qos.logback</groupId>
+            <artifactId>logback-classic</artifactId>
+            <version>1.0.13</version>
         </dependency>
 
     </dependencies>

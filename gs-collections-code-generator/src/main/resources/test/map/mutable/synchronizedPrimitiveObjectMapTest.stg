@@ -28,7 +28,6 @@ import org.junit.Test;
  */
 public class Synchronized<name>ObjectMapTest extends AbstractMutable<name>ObjectMapTestCase
 {
-
     private final Synchronized<name>ObjectMap\<String> map = this.classUnderTest();
 
     @Override

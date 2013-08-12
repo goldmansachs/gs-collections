@@ -21,9 +21,13 @@ import java.util.Random;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class UnifiedSetAddTest
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(UnifiedSetAddTest.class);
+
     @Test
     @Category(PerformanceTests.class)
     public void testUnifiedPutMonomorphic()
@@ -73,7 +77,7 @@ public class UnifiedSetAddTest
             this.runUnifiedPut(objects, 1000000, 1);
         }
         long time = System.currentTimeMillis() - now;
-        System.out.println("UnifiedSet, set size 1,000,000, " + type + ' ' + objects[0].getClass() + " puts/msec: " + 100000000 / time);
+        LOGGER.info("UnifiedSet, set size 1,000,000, {} {} puts/msec: {}", type, objects[0].getClass(), 100000000 / time);
     }
 
     private void runLongUnifiedPut(String type)

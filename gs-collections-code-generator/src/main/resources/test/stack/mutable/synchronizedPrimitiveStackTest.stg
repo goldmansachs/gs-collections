@@ -39,7 +39,7 @@ import org.junit.Test;
 public class Synchronized<name>StackTest
 {
     private final Mutable<name>Stack stack = new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
-    
+
     @Test
     public void push()
     {
@@ -154,7 +154,7 @@ public class Synchronized<name>StackTest
     {
         new Synchronized<name>Stack(<name>ArrayStack.newStackFromTopToBottom(<(literal.(type))("1")>)).peekAt(1);
     }
-    
+
     @Test
     public void newStackWith()
     {
@@ -167,7 +167,7 @@ public class Synchronized<name>StackTest
     {
         Assert.assertEquals(<name>ArrayStack.newStackWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), this.stack);
     }
-    
+
     @Test
     public void isEmpty()
     {
@@ -309,7 +309,7 @@ public class Synchronized<name>StackTest
         Assert.assertFalse(new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["1", "0", "2"]:(literal.(type))(); separator=", ">)).noneSatisfy(<name>Predicates.greaterThan(<(literal.(type))("0")>)));
         Assert.assertTrue(new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">)).noneSatisfy(<name>Predicates.greaterThan(<(literal.(type))("3")>)));
     }
-    
+
     @Test
     public void collect()
     {
@@ -325,7 +325,6 @@ public class Synchronized<name>StackTest
     @Test
     public void select()
     {
-        
         Verify.assertSize(3, this.stack.select(<name>Predicates.lessThan(<(literal.(type))("4")>)));
         Verify.assertSize(2, this.stack.select(<name>Predicates.lessThan(<(literal.(type))("3")>)));
     }
@@ -333,7 +332,6 @@ public class Synchronized<name>StackTest
     @Test
     public void reject()
     {
-        
         Verify.assertSize(0, this.stack.reject(<name>Predicates.lessThan(<(literal.(type))("4")>)));
         Verify.assertSize(1, this.stack.reject(<name>Predicates.lessThan(<(literal.(type))("3")>)));
     }
@@ -341,7 +339,6 @@ public class Synchronized<name>StackTest
     @Test
     public void detectIfNone()
     {
-        
         Assert.assertEquals(<(wideLiteral.(type))("3")>, this.stack.detectIfNone(<name>Predicates.lessThan(<(literal.(type))("4")>), <(literal.(type))("0")>)<(wideDelta.(type))>);
         Assert.assertEquals(<(wideLiteral.(type))("0")>, this.stack.detectIfNone(<name>Predicates.greaterThan(<(literal.(type))("3")>), <(literal.(type))("0")>)<(wideDelta.(type))>);
     }
@@ -474,7 +471,6 @@ public class Synchronized<name>StackTest
     @Test
     public void makeString()
     {
-        
         Assert.assertEquals("<(toStringLiteral.(type))("1")>", new Synchronized<name>Stack(<name>ArrayStack.newStackWith(<(literal.(type))("1")>)).makeString("/"));
         Assert.assertEquals(this.stack.toString(), this.stack.makeString("[", ", ", "]"));
         Assert.assertEquals("", new Synchronized<name>Stack(new <name>ArrayStack()).makeString());
@@ -514,7 +510,6 @@ public class Synchronized<name>StackTest
     public void toList()
     {
         Assert.assertEquals(<name>ArrayList.newListWith(<["3", "2", "1"]:(literal.(type))(); separator=", ">), this.stack.toList());
-
     }
 
     @Test
@@ -532,7 +527,6 @@ public class Synchronized<name>StackTest
     @Test
     public void asLazy()
     {
-        
         Assert.assertEquals(this.stack.toList(), this.stack.asLazy().toList());
     }
 

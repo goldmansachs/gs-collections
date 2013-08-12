@@ -79,6 +79,7 @@ public class ConcurrentMapMemoryTest
             super(size);
         }
 
+        @Override
         public ConcurrentHashMap<Integer, String> value()
         {
             return this.fill(new ConcurrentHashMap<Integer, String>());
@@ -94,6 +95,7 @@ public class ConcurrentMapMemoryTest
             super(size);
         }
 
+        @Override
         public com.gs.collections.impl.map.mutable.ConcurrentHashMap<Integer, String> value()
         {
             return this.fill(new com.gs.collections.impl.map.mutable.ConcurrentHashMap<Integer, String>());

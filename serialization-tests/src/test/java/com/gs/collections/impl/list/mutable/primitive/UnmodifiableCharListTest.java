@@ -34,6 +34,5 @@ public class UnmodifiableCharListTest
                         + "b2xsZWN0aW9ucy5pbXBsLmxpc3QubXV0YWJsZS5wcmltaXRpdmUuQ2hhckFycmF5TGlzdAAAAAAA\n"
                         + "AAABDAAAeHB3BAAAAAB4",
                 new UnmodifiableCharList(new CharArrayList()));
-
     }
 }

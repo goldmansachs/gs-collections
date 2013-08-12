@@ -117,8 +117,6 @@
 
         <!-- Checks for common coding problems               -->
         <!-- See http://checkstyle.sf.net/config_coding.html -->
-        <module name="DoubleCheckedLocking" />
-
         <module name="EmptyStatement" />
 
         <!-- Effective Java Item 8 - Always override hashCode when you override equals -->
@@ -213,7 +211,7 @@
 
         <module name="AvoidStaticImport">
             <property name="excludes"
-                value="org.junit.Assert.*,com.gs.collections.impl.test.Verify.*,com.gs.collections.impl.factory.Iterables.*" />
+                value="org.junit.Assert.*,org.hamcrest.CoreMatchers.*,com.gs.collections.impl.test.Verify.*,com.gs.collections.impl.factory.Iterables.*" />
         </module>
 
         <module name="MissingDeprecated" />

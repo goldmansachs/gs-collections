@@ -27,11 +27,11 @@ import com.gs.collections.impl.parallel.ProcedureFactory;
  * for specialized iterator subclasses of Function which result in less garbage created for
  * summing iterator attributes of collections.
  *
- * @deprecated
+ * @deprecated Don't use in new tests
  */
 @Deprecated
 public class SumProcedure<T>
-    implements Procedure<T>, Function2<Sum, T, Sum>, ProcedureFactory<SumProcedure<T>>
+        implements Procedure<T>, Function2<Sum, T, Sum>, ProcedureFactory<SumProcedure<T>>
 {
     private static final long serialVersionUID = 1L;
     private static final SumProcedure<?> NUMBER = new SumProcedure<Object>();

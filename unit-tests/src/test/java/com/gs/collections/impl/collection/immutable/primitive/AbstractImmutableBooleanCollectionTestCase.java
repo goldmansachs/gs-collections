@@ -122,5 +122,4 @@ public abstract class AbstractImmutableBooleanCollectionTestCase extends Abstrac
         this.assertSizeAndOccurrences(collection0, 0, 0);
         this.assertSizeAndOccurrences(collection4, 0, 0);
     }
-
 }

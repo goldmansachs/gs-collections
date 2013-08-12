@@ -41,6 +41,8 @@ import org.junit.Test;
 
 public abstract class AbstractMutableObjectBooleanMapTestCase
 {
+    private final MutableObjectBooleanMap<String> map = this.classUnderTest();
+
     protected abstract MutableObjectBooleanMap<String> classUnderTest();
 
     protected abstract <T> MutableObjectBooleanMap<T> newWithKeysValues(T key1, boolean value1);
@@ -52,8 +54,6 @@ public abstract class AbstractMutableObjectBooleanMapTestCase
     protected abstract <T> MutableObjectBooleanMap<T> newWithKeysValues(T key1, boolean value1, T key2, boolean value2, T key3, boolean value3, T key4, boolean value4);
 
     protected abstract <T> MutableObjectBooleanMap<T> getEmptyMap();
-
-    private final MutableObjectBooleanMap<String> map = this.classUnderTest();
 
     protected static MutableList<String> generateCollisions()
     {

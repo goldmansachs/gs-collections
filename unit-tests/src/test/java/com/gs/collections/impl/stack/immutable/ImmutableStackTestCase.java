@@ -32,5 +32,4 @@ public abstract class ImmutableStackTestCase extends StackIterableTestCase
 
     @Override
     protected abstract <T> ImmutableStack<T> newStack(Iterable<T> elements);
-
 }

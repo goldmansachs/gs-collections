@@ -26,13 +26,13 @@ public class UnmodifiableIntSetTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyAEBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQubXV0YWJsZS5wcmltaXRpdmUuVW5t\n" +
-                        "b2RpZmlhYmxlSW50U2V0AAAAAAAAAAECAAB4cgBWY29tLmdzLmNvbGxlY3Rpb25zLmltcGwuY29s\n" +
-                        "bGVjdGlvbi5tdXRhYmxlLnByaW1pdGl2ZS5BYnN0cmFjdFVubW9kaWZpYWJsZUludENvbGxlY3Rp\n" +
-                        "b24AAAAAAAAAAQIAAUwACmNvbGxlY3Rpb250AEJMY29tL2dzL2NvbGxlY3Rpb25zL2FwaS9jb2xs\n" +
-                        "ZWN0aW9uL3ByaW1pdGl2ZS9NdXRhYmxlSW50Q29sbGVjdGlvbjt4cHNyADhjb20uZ3MuY29sbGVj\n" +
-                        "dGlvbnMuaW1wbC5zZXQubXV0YWJsZS5wcmltaXRpdmUuSW50SGFzaFNldAAAAAAAAAABDAAAeHB3\n" +
-                        "BAAAAAB4",
+                "rO0ABXNyAEBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQubXV0YWJsZS5wcmltaXRpdmUuVW5t\n"
+                        + "b2RpZmlhYmxlSW50U2V0AAAAAAAAAAECAAB4cgBWY29tLmdzLmNvbGxlY3Rpb25zLmltcGwuY29s\n"
+                        + "bGVjdGlvbi5tdXRhYmxlLnByaW1pdGl2ZS5BYnN0cmFjdFVubW9kaWZpYWJsZUludENvbGxlY3Rp\n"
+                        + "b24AAAAAAAAAAQIAAUwACmNvbGxlY3Rpb250AEJMY29tL2dzL2NvbGxlY3Rpb25zL2FwaS9jb2xs\n"
+                        + "ZWN0aW9uL3ByaW1pdGl2ZS9NdXRhYmxlSW50Q29sbGVjdGlvbjt4cHNyADhjb20uZ3MuY29sbGVj\n"
+                        + "dGlvbnMuaW1wbC5zZXQubXV0YWJsZS5wcmltaXRpdmUuSW50SGFzaFNldAAAAAAAAAABDAAAeHB3\n"
+                        + "BAAAAAB4",
                 new UnmodifiableIntSet(new IntHashSet()));
     }
 }

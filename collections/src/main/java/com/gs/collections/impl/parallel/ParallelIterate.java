@@ -84,7 +84,7 @@ public final class ParallelIterate
      * <p/>
      * e.g.
      * <pre>
-     * {@code final Map<Integer,Object> chm = new ConcurrentHashMap<Integer,Object>();}
+     * {@code final Map<Integer, Object> chm = new ConcurrentHashMap<Integer, Object>();}
      * ParallelIterate.<b>forEachWithIndex</b>(collection, new ObjectIntProcedure()
      * {
      *     public void value(Object object, int index)
@@ -107,7 +107,7 @@ public final class ParallelIterate
      * is executed against the specified executor.
      * <p/>
      * <pre>e.g.
-     * {@code final Map<Integer,Object> chm = new ConcurrentHashMap<Integer,Object>();}
+     * {@code final Map<Integer, Object> chm = new ConcurrentHashMap<Integer, Object>();}
      * ParallelIterate.<b>forEachWithIndex</b>(collection, new ObjectIntProcedure()
      * {
      *     public void value(Object object, int index)
@@ -251,7 +251,7 @@ public final class ParallelIterate
      * <p/>
      * e.g.
      * <pre>
-     * {@code final Map<Object,Boolean> chm = new ConcurrentHashMap<Object,Boolean>();}
+     * {@code final Map<Object, Boolean> chm = new ConcurrentHashMap<Object, Boolean>();}
      * ParallelIterate.<b>forEach</b>(collection, new Procedure()
      * {
      *     public void value(Object object)
@@ -272,7 +272,7 @@ public final class ParallelIterate
      * <p/>
      * e.g.
      * <pre>
-     * {@code final Map<Object,Boolean> chm = new ConcurrentHashMap<Object,Boolean>();}
+     * {@code final Map<Object, Boolean> chm = new ConcurrentHashMap<Object, Boolean>();}
      * ParallelIterate.<b>forEachBatchSize</b>(collection, new Procedure()
      * {
      *     public void value(Object object)

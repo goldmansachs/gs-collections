@@ -201,10 +201,10 @@ public class StringIterateTest
     @Test
     public void csvTokensToSortedList()
     {
-        String tokens = " Ted , Mary ";
+        String tokens = " Ted, Mary ";
         MutableList<String> results = StringIterate.csvTokensToSortedList(tokens);
         Verify.assertSize(2, results);
-        Verify.assertStartsWith(results, " Mary ", " Ted ");
+        Verify.assertStartsWith(results, " Mary ", " Ted");
     }
 
     @Test
@@ -416,7 +416,7 @@ public class StringIterateTest
     @Test
     public void forEachTrimmedToken()
     {
-        String tokens = "1 ,2 ";
+        String tokens = " 1,2 ";
         final MutableList<Integer> list = Lists.mutable.of();
         StringIterate.forEachTrimmedToken(tokens, ",", new CheckedProcedure<String>()
         {
@@ -434,7 +434,7 @@ public class StringIterateTest
     @Test
     public void csvTrimmedTokenToList()
     {
-        String tokens = "1 ,2 ";
+        String tokens = " 1,2 ";
         Assert.assertEquals(FastList.newListWith("1", "2"), StringIterate.csvTrimmedTokensToList(tokens));
     }
 

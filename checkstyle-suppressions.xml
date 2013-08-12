@@ -63,4 +63,6 @@
 
     <suppress checks="IllegalImport" files="ConcurrentHashMapUnsafe.java" />
 
+    <suppress checks="RegexpHeader" files="MemoryTestBench.java" />
+
 </suppressions>

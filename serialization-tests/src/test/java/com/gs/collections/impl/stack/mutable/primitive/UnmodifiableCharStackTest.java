@@ -26,11 +26,11 @@ public class UnmodifiableCharStackTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyAEVjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zdGFjay5tdXRhYmxlLnByaW1pdGl2ZS5V\n" +
-                        "bm1vZGlmaWFibGVDaGFyU3RhY2sAAAAAAAAAAQIAAUwABXN0YWNrdAA5TGNvbS9ncy9jb2xsZWN0\n" +
-                        "aW9ucy9hcGkvc3RhY2svcHJpbWl0aXZlL011dGFibGVDaGFyU3RhY2s7eHBzcgA+Y29tLmdzLmNv\n" +
-                        "bGxlY3Rpb25zLmltcGwuc3RhY2subXV0YWJsZS5wcmltaXRpdmUuQ2hhckFycmF5U3RhY2sAAAAA\n" +
-                        "AAAAAQwAAHhwdwQAAAAAeA==",
+                "rO0ABXNyAEVjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zdGFjay5tdXRhYmxlLnByaW1pdGl2ZS5V\n"
+                        + "bm1vZGlmaWFibGVDaGFyU3RhY2sAAAAAAAAAAQIAAUwABXN0YWNrdAA5TGNvbS9ncy9jb2xsZWN0\n"
+                        + "aW9ucy9hcGkvc3RhY2svcHJpbWl0aXZlL011dGFibGVDaGFyU3RhY2s7eHBzcgA+Y29tLmdzLmNv\n"
+                        + "bGxlY3Rpb25zLmltcGwuc3RhY2subXV0YWJsZS5wcmltaXRpdmUuQ2hhckFycmF5U3RhY2sAAAAA\n"
+                        + "AAAAAQwAAHhwdwQAAAAAeA==",
                 new UnmodifiableCharStack(new CharArrayStack()));
     }
 }

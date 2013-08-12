@@ -110,8 +110,8 @@ public class SynchronizedMutableSet2Test extends AbstractMutableSetTestCase
         Assert.assertNotNull(this.newWith(1, 2, 3).getFirst());
         Assert.assertNull(this.classUnderTest().getFirst());
         Assert.assertEquals(Integer.valueOf(1), this.newWith(1).getFirst());
-        Integer first = this.newWith(1, 2).getFirst();
-        Assert.assertTrue(first.equals(1) || first.equals(2));
+        int first = this.newWith(1, 2).getFirst().intValue();
+        Assert.assertTrue(first == 1 || first == 2);
     }
 
     @Test
@@ -121,8 +121,8 @@ public class SynchronizedMutableSet2Test extends AbstractMutableSetTestCase
         Assert.assertNotNull(this.newWith(1, 2, 3).getLast());
         Assert.assertNull(this.classUnderTest().getLast());
         Assert.assertEquals(Integer.valueOf(1), this.newWith(1).getLast());
-        Integer last = this.newWith(1, 2).getLast();
-        Assert.assertTrue(last.equals(1) || last.equals(2));
+        int last = this.newWith(1, 2).getLast().intValue();
+        Assert.assertTrue(last == 1 || last == 2);
     }
 
     @Test

@@ -324,5 +324,4 @@ public class IterablesTest
         Verify.assertEqualsAndHashCode(expected, actual);
         Verify.assertInstanceOf(clazz, actual);
     }
-
 }

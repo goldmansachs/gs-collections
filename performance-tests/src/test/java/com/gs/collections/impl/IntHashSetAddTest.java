@@ -21,9 +21,13 @@ import java.util.Random;
 import com.gs.collections.impl.set.mutable.primitive.IntHashSet;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class IntHashSetAddTest
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(IntHashSetAddTest.class);
+
     @Test
     @Category(PerformanceTests.class)
     public void testHashPut()
@@ -58,20 +62,20 @@ public class IntHashSetAddTest
             this.runHashContains(this.runHashPut(values, 1000000, 1), values, 1000000, 1);
         }
         IntHashSet set = null;
-        long now = System.currentTimeMillis();
+        long now1 = System.currentTimeMillis();
         for (int i = 0; i < 100; i++)
         {
             set = this.runHashPut(values, 1000000, 1);
         }
-        long time = System.currentTimeMillis() - now;
-        System.out.println("IntHashSet, set size 1,000,000, puts/msec: " + 100000000 / time);
-        now = System.currentTimeMillis();
+        long time1 = System.currentTimeMillis() - now1;
+        LOGGER.info("IntHashSet, set size 1,000,000, puts/msec: {}", 100000000 / time1);
+        long now2 = System.currentTimeMillis();
         for (int i = 0; i < 100; i++)
         {
             this.runHashContains(this.runHashPut(values, 1000000, 1), values, 1000000, 1);
         }
-        time = System.currentTimeMillis() - now;
-        System.out.println("IntHashSet, set size 1,000,000, contains/msec: " + 100000000 / time);
+        long time2 = System.currentTimeMillis() - now2;
+        LOGGER.info("IntHashSet, set size 1,000,000, contains/msec: {}", 100000000 / time2);
     }
 
     public IntHashSet runHashPut(int[] values, int length, int runs)

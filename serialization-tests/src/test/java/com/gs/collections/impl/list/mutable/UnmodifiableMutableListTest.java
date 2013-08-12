@@ -52,6 +52,5 @@ public class UnmodifiableMutableListTest
                         + "cHRlcgAAAAAAAAABAgABTAAIZGVsZWdhdGV0ABBMamF2YS91dGlsL0xpc3Q7eHBzcgAUamF2YS51\n"
                         + "dGlsLkxpbmtlZExpc3QMKVNdSmCIIgMAAHhwdwQAAAAAeA==",
                 UnmodifiableMutableList.of(new LinkedList<Object>()));
-
     }
 }

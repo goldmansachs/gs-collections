@@ -31,7 +31,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <clover.version>3.1.8</clover.version>
-        <checkstyle.version>2.9.1</checkstyle.version>
+        <checkstyle.version>2.10</checkstyle.version>
 
         <!-- this setting is needed for TeamCity -->
         <maven.deploy.skip>${build.is.personal}</maven.deploy.skip>

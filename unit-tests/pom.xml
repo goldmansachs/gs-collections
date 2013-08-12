@@ -34,7 +34,7 @@
 
         <slf4j.version>1.7.2</slf4j.version>
         <clover.version>3.1.8</clover.version>
-        <checkstyle.version>2.9.1</checkstyle.version>
+        <checkstyle.version>2.10</checkstyle.version>
         <sonar.surefire.reportsPath>${project.basedir}/target/clover/surefire-reports</sonar.surefire.reportsPath>
 
         <maven.deploy.skip>true</maven.deploy.skip>

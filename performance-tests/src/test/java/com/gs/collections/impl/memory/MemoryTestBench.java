@@ -23,9 +23,13 @@ import java.text.NumberFormat;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.impl.list.Interval;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-public class MemoryTestBench
+public final class MemoryTestBench
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MemoryTestBench.class);
+
     private static final GCAndSleepProcedure GC_AND_SLEEP_PROCEDURE = new GCAndSleepProcedure();
     private static final Interval GC_INTERVAL = Interval.oneTo(20);
     private final Class<?> clazz;
@@ -84,15 +88,12 @@ public class MemoryTestBench
     {
         String memoryUsedInBytes = NumberFormat.getInstance().format(this.calculateMemoryUsage(factory));
         String sizeFormatted = NumberFormat.getInstance().format(size);
-        System.out.println(
-                category + " " +
-                        this.clazz.getName() + " " +
-                        "size " + sizeFormatted + " " +
-                        "bytes " + memoryUsedInBytes);
+        LOGGER.info("{} {} size {} bytes {}", category, this.clazz.getName(), sizeFormatted, memoryUsedInBytes);
     }
 
     private static class GCAndSleepProcedure implements IntProcedure
     {
+        @Override
         public void value(int each)
         {
             System.gc();

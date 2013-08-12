@@ -84,7 +84,6 @@ public class ParallelMapIteratePutTest
         }
         Collections.shuffle(Arrays.asList(contents), new Random(SEED));
         this.runAllPutTests(contents, constContents);
-
     }
 
     private void runAllPutTests(Integer[] contents, Integer[] constContents)
@@ -145,7 +144,7 @@ public class ParallelMapIteratePutTest
         }
     }
 
-    private static class PutRunner1 implements Runnable
+    private static final class PutRunner1 implements Runnable
     {
         private final Map<Integer, Integer> map;
         private final Integer[] contents;

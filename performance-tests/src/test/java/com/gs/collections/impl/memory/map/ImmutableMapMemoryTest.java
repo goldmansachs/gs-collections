@@ -66,6 +66,7 @@ public class ImmutableMapMemoryTest
             this.size = size;
         }
 
+        @Override
         public com.gs.collections.api.map.ImmutableMap<Integer, String> value()
         {
             UnifiedMap<Integer, String> map = UnifiedMap.newMap(this.size);
@@ -86,6 +87,7 @@ public class ImmutableMapMemoryTest
             this.size = size;
         }
 
+        @Override
         public ImmutableMap<Integer, String> value()
         {
             ImmutableMap.Builder<Integer, String> builder = ImmutableMap.builder();
@@ -106,6 +108,7 @@ public class ImmutableMapMemoryTest
             this.size = size;
         }
 
+        @Override
         public Map<Integer, String> value()
         {
             if (this.size == 0)

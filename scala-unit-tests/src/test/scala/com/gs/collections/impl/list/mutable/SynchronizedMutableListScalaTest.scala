@@ -20,7 +20,6 @@ import com.gs.collections.impl.collection.mutable.SynchronizedMutableCollectionT
 
 class SynchronizedMutableListScalaTest extends SynchronizedMutableCollectionTestTrait
 {
-
     import org.junit.Test
 
     val classUnderTest = FastList.newListWith[String]("1", "2", "3").asSynchronized

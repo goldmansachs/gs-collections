@@ -327,7 +327,6 @@ public class ArrayIterateTest
                 ArrayIterate.partition(new Integer[]{1, 2, 3, 4, 5}, Predicates.greaterThan(3));
         Assert.assertEquals(iBag(4, 5), result.getSelected().toBag());
         Assert.assertEquals(iBag(1, 2, 3), result.getRejected().toBag());
-
     }
 
     @Test

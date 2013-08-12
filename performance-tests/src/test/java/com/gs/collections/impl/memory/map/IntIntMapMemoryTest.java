@@ -61,6 +61,7 @@ public class IntIntMapMemoryTest
             this.data = TestDataFactory.createRandomSet(size);
         }
 
+        @Override
         public IntIntHashMap value()
         {
             final IntIntHashMap map = new IntIntHashMap();
@@ -84,6 +85,7 @@ public class IntIntMapMemoryTest
             this.data = TestDataFactory.create(size);
         }
 
+        @Override
         public TIntIntHashMap value()
         {
             final TIntIntHashMap map = new TIntIntHashMap();
@@ -107,6 +109,7 @@ public class IntIntMapMemoryTest
             this.data = TestDataFactory.create(size);
         }
 
+        @Override
         public HashMap<Integer, Integer> value()
         {
             final HashMap<Integer, Integer> map = new HashMap<Integer, Integer>();

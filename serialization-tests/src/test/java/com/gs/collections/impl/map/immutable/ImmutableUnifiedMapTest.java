@@ -32,9 +32,10 @@ public class ImmutableUnifiedMapTest
                         + "AARzcgARamF2YS5sYW5nLkludGVnZXIS4qCk94GHOAIAAUkABXZhbHVleHIAEGphdmEubGFuZy5O\n"
                         + "dW1iZXKGrJUdC5TgiwIAAHhwAAAAAXEAfgAEc3EAfgACAAAAAnEAfgAFc3EAfgACAAAAA3EAfgAG\n"
                         + "c3EAfgACAAAABHEAfgAHeA==",
-                new ImmutableUnifiedMap<Integer, Integer>(Tuples.pair(1, 1)
-                        , Tuples.pair(2, 2)
-                        , Tuples.pair(3, 3)
-                        , Tuples.pair(4, 4)));
+                new ImmutableUnifiedMap<Integer, Integer>(
+                        Tuples.pair(1, 1),
+                        Tuples.pair(2, 2),
+                        Tuples.pair(3, 3),
+                        Tuples.pair(4, 4)));
     }
 }

@@ -86,6 +86,7 @@ public class MapMemoryTest
             super(size);
         }
 
+        @Override
         public HashMap<Integer, String> value()
         {
             return this.fill(new HashMap<Integer, String>());
@@ -101,6 +102,7 @@ public class MapMemoryTest
             super(size);
         }
 
+        @Override
         public THashMap<Integer, String> value()
         {
             return this.fill(new THashMap());
@@ -116,6 +118,7 @@ public class MapMemoryTest
             super(size);
         }
 
+        @Override
         @SuppressWarnings("UseOfObsoleteCollectionType")
         public Hashtable<Integer, String> value()
         {
@@ -132,6 +135,7 @@ public class MapMemoryTest
             super(size);
         }
 
+        @Override
         public UnifiedMap<Integer, String> value()
         {
             return this.fill(new UnifiedMap<Integer, String>());

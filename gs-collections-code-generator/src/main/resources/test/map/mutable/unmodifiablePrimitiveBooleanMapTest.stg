@@ -362,7 +362,6 @@ public class Unmodifiable<name>BooleanMapTest extends Abstract<name>BooleanMapTe
         super.asUnmodifiable();
         Assert.assertSame(this.map, this.map.asUnmodifiable());
     }
-
 }
 
 >>

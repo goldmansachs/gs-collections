@@ -66,7 +66,6 @@ public class BooleanArrayStackTest extends AbstractMutableBooleanStackTestCase
     protected MutableBooleanStack newWithIterableTopToBottom(BooleanIterable iterable)
     {
         return BooleanArrayStack.newStackFromTopToBottom(iterable);
-
     }
 
     @Override

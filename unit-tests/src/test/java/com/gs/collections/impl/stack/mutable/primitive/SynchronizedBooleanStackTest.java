@@ -375,7 +375,6 @@ public class SynchronizedBooleanStackTest
         MutableBooleanStack stack1 = new SynchronizedBooleanStack(BooleanArrayStack.newStackWith(true, false));
         Assert.assertEquals("[false, true]", stack1.toString());
         Assert.assertEquals("[true, false, true]", this.stack.toString());
-
     }
 
     @Test
@@ -418,7 +417,6 @@ public class SynchronizedBooleanStackTest
         MutableBooleanStack stack1 = new SynchronizedBooleanStack(BooleanArrayStack.newStackWith(true, false));
         Assert.assertEquals(BooleanArrayList.newListWith(false, true), stack1.toList());
         Assert.assertEquals(BooleanArrayList.newListWith(true, false, true), this.stack.toList());
-
     }
 
     @Test

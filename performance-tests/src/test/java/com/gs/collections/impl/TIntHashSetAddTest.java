@@ -21,9 +21,13 @@ import java.util.Random;
 import gnu.trove.set.hash.TIntHashSet;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class TIntHashSetAddTest
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(TIntHashSetAddTest.class);
+
     @Test
     @Category(PerformanceTests.class)
     public void testHashPut()
@@ -58,20 +62,20 @@ public class TIntHashSetAddTest
             this.runHashContains(this.runHashPut(values, 1000000, 1), values, 1000000, 1);
         }
         TIntHashSet set = null;
-        long now = System.currentTimeMillis();
+        long now1 = System.currentTimeMillis();
         for (int i = 0; i < 100; i++)
         {
             set = this.runHashPut(values, 1000000, 1);
         }
-        long time = System.currentTimeMillis() - now;
-        System.out.println("TIntHashSet, set size 1,000,000, puts/msec: " + 100000000 / time);
-        now = System.currentTimeMillis();
+        long time1 = System.currentTimeMillis() - now1;
+        LOGGER.info("TIntHashSet, set size 1,000,000, puts/msec: {}", 100000000 / time1);
+        long now2 = System.currentTimeMillis();
         for (int i = 0; i < 100; i++)
         {
             this.runHashContains(this.runHashPut(values, 1000000, 1), values, 1000000, 1);
         }
-        time = System.currentTimeMillis() - now;
-        System.out.println("TIntHashSet, set size 1,000,000, contains/msec: " + 100000000 / time);
+        long time2 = System.currentTimeMillis() - now2;
+        LOGGER.info("TIntHashSet, set size 1,000,000, contains/msec: {}", 100000000 / time2);
     }
 
     public TIntHashSet runHashPut(int[] values, int length, int runs)

@@ -23,9 +23,13 @@ import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FastListAddAllTest
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(FastListAddAllTest.class);
+
     @Test
     @Category(PerformanceTests.class)
     public void runFastListAddAll()
@@ -93,19 +97,19 @@ public class FastListAddAllTest
             this.runFastListAddAll(listToAddAll, 1000);
         }
         long time1 = System.currentTimeMillis() - now1;
-        System.out.println("FastList, list size 100,000, " + type + " addAll/msec: " + 100000 / time1);
+        LOGGER.info("FastList, list size 100,000, {} addAll/msec: {}", type, 100000 / time1);
         long now2 = System.currentTimeMillis();
         this.runFastListAddAll(FastList.newList(Interval.oneTo(100)), 100000000);
         long time2 = System.currentTimeMillis() - now2;
-        System.out.println("FastList, list size 100, addAll/msec: " + 100000000 / time2);
+        LOGGER.info("FastList, list size 100, addAll/msec: {}", 100000000 / time2);
         long now3 = System.currentTimeMillis();
         this.runFastListAddAll(FastList.newListWith(Integer.valueOf(1)), 1000000000);
         long time3 = System.currentTimeMillis() - now3;
-        System.out.println("FastList, list size 1, addAll/msec: " + 1000000000 / time3);
+        LOGGER.info("FastList, list size 1, addAll/msec: {}", 1000000000 / time3);
         long now4 = System.currentTimeMillis();
         this.runFastListAddAll(FastList.newList(), 10000000000L);
         long time4 = System.currentTimeMillis() - now4;
-        System.out.println("FastList, list size (empty), addAll/msec: " + 10000000000L / time4);
+        LOGGER.info("FastList, list size (empty), addAll/msec: {}", 10000000000L / time4);
     }
 
     public void runFastListAddAll(List<?> objects, long runs)
