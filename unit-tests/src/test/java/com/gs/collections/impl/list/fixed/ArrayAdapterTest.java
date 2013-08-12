@@ -583,12 +583,12 @@ public class ArrayAdapterTest extends AbstractListTestCase
 
         List<Integer> arrayList = new ArrayList<Integer>();
         ByteArrayOutputStream stream2 = SerializeTestHelper.getByteArrayOutputStream(arrayList);
-        LOGGER.info("ArrayList size: " + stream2.size());
-        LOGGER.info(stream2.toString());
+        LOGGER.info("ArrayList size: {}", stream2.size());
+        LOGGER.info("{}", stream2);
 
         ByteArrayOutputStream stream1 = SerializeTestHelper.getByteArrayOutputStream(mutableArrayList);
-        LOGGER.info("ArrayAdapter size: " + stream1.size());
-        LOGGER.info(stream1.toString());
+        LOGGER.info("ArrayAdapter size: {}", stream1.size());
+        LOGGER.info("{}", stream1);
     }
 
     @Override

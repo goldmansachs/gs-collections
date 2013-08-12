@@ -411,6 +411,7 @@ public final class ConcurrentMutableHashMap<K, V>
         }
     }
 
+    @Override
     public V updateValue(K key, Function0<? extends V> factory, Function<? super V, ? extends V> function)
     {
         while (true)
@@ -436,6 +437,7 @@ public final class ConcurrentMutableHashMap<K, V>
         }
     }
 
+    @Override
     public <P> V updateValueWith(K key, Function0<? extends V> factory, Function2<? super V, ? super P, ? extends V> function, P parameter)
     {
         while (true)

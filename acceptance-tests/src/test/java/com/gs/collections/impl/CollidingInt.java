@@ -58,6 +58,7 @@ public class CollidingInt implements Serializable, Comparable<CollidingInt>
         return this.value;
     }
 
+    @Override
     public int compareTo(CollidingInt o)
     {
         int result = Integer.valueOf(this.value).compareTo(o.value);

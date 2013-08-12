@@ -59,6 +59,7 @@ public class ParallelArrayIterateAcceptanceTest
         private static final long serialVersionUID = 1L;
         private final ExecutorService executorService = ParallelIterate.newPooledExecutor("ParallelArrayIterateAcceptanceTest", false);
 
+        @Override
         public void value(Integer object)
         {
             int level = object.intValue();

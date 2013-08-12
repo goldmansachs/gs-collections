@@ -68,7 +68,7 @@ public class LazyIterableAdapterTest extends AbstractLazyIterableTestCase
                 sum.add(object);
                 sum.add(index);
 
-                LOGGER.info("value=" + object + " index=" + index);
+                LOGGER.info("value={} index={}", object, index);
             }
         });
         Assert.assertEquals(25, sum.getValue().intValue());

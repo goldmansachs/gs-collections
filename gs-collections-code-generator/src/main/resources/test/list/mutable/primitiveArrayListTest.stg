@@ -97,6 +97,7 @@ public class <name>ArrayListTest extends Abstract<name>ListTestCase
         Verify.assertSize(3, this.list);
     }
 
+    @Override
     @Test
     public void dotProduct()
     {
@@ -105,6 +106,7 @@ public class <name>ArrayListTest extends Abstract<name>ListTestCase
         Assert.assertEquals(<(wideLiteral.(type))("14")>, list1.dotProduct(list2)<(wideDelta.(type))>);
     }
 
+    @Override
     @Test(expected = IllegalArgumentException.class)
     public void dotProduct_throwsOnListsOfDifferentSizes()
     {
@@ -136,7 +138,7 @@ public class <name>ArrayListTest extends Abstract<name>ListTestCase
         {
             public Mutable<wrapperName> valueOf(Mutable<wrapperName> object, <type> value)
             {
-                return object.add(<(castIntToNarrowType.(type))("value")>);
+                return object.add(value);
             }
         });
         Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("6")>), result);
@@ -151,13 +153,13 @@ public class <name>ArrayListTest extends Abstract<name>ListTestCase
         {
             public void value(<type> each, int index)
             {
-                sum[0] += (each + index);
+                sum[0] += each + index;
             }
         });
 
         Assert.assertEquals(<(wideLiteral.(type))("9")>, sum[0]<wideDelta.(type)>);
     }
-    
+
     @Override
     @Test
     public void with()

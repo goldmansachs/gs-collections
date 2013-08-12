@@ -2019,6 +2019,7 @@ public final class ConcurrentHashMap<K, V>
         Iterate.forEachWith(this.values(), procedure, parameter);
     }
 
+    @Override
     public V updateValue(K key, Function0<? extends V> factory, Function<? super V, ? extends V> function)
     {
         int hash = this.hash(key);
@@ -2083,6 +2084,7 @@ public final class ConcurrentHashMap<K, V>
         }
     }
 
+    @Override
     public <P> V updateValueWith(K key, Function0<? extends V> factory, Function2<? super V, ? super P, ? extends V> function, P parameter)
     {
         int hash = this.hash(key);

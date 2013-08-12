@@ -630,6 +630,7 @@ public class ParallelIterateTest
         private static final long serialVersionUID = 1L;
         private final ExecutorService executorService = ParallelIterate.newPooledExecutor("ParallelIterateTest", false);
 
+        @Override
         public void value(Integer level)
         {
             if (level > 0)
@@ -695,16 +696,19 @@ public class ParallelIterateTest
             this.sum = newSum;
         }
 
+        @Override
         public SumProcedure create()
         {
             return new SumProcedure(new IntegerSum(0));
         }
 
+        @Override
         public IntegerSum value(IntegerSum s1, Integer s2)
         {
             return s1.add(s2);
         }
 
+        @Override
         public void value(Integer object)
         {
             this.sum.add(object);
@@ -727,6 +731,7 @@ public class ParallelIterateTest
             this.sum = initialSum;
         }
 
+        @Override
         public void combineOne(SumProcedure sumProcedure)
         {
             this.sum.add(sumProcedure.getSum());

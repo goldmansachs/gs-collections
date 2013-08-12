@@ -1619,7 +1619,7 @@ public class UnifiedMapTest
             long startTime = System.nanoTime();
             UnifiedMapTest.runMapGet(map, keys, n);
             long runTimes = System.nanoTime() - startTime;
-            LOGGER.info(mapName + " get: " + (double) runTimes / (double) n / size + " ns per get on map size " + size);
+            LOGGER.info("{} get: {} ns per get on map size {}", mapName, (double) runTimes / (double) n / size, size);
         }
         map = null;
         System.gc();
@@ -1663,8 +1663,7 @@ public class UnifiedMapTest
             long startTime = System.nanoTime();
             UnifiedMapTest.runMapGet(map, keys, n);
             long runTimes = System.nanoTime() - startTime;
-            LOGGER.info(mapName + " with " + (1 << shift) + " collisions. get: " + (double) runTimes / (double) n / size
-                    + " ns per get");
+            LOGGER.info("{} with {} collisions. get: {} ns per get", mapName, 1 << shift, (double) runTimes / (double) n / size);
         }
     }
 
@@ -1709,16 +1708,19 @@ public class UnifiedMapTest
             this.value = value;
         }
 
+        @Override
         public CollidingInt getKey()
         {
             return this.key;
         }
 
+        @Override
         public String getValue()
         {
             return this.value;
         }
 
+        @Override
         public String setValue(String value)
         {
             String ret = this.value;

@@ -213,14 +213,14 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
         MutableList<Integer> mutableArrayList = ArrayListAdapter.newList();
 
         ByteArrayOutputStream stream1 = SerializeTestHelper.getByteArrayOutputStream(mutableArrayList);
-        LOGGER.info("ArrayListAdapter size: " + stream1.size());
-        LOGGER.info(stream1.toString());
+        LOGGER.info("ArrayListAdapter size: {}", stream1.size());
+        LOGGER.info("{}", stream1);
         Assert.assertTrue(stream1.size() > 0);
 
         List<Integer> arrayList = new ArrayList<Integer>();
         ByteArrayOutputStream stream2 = SerializeTestHelper.getByteArrayOutputStream(arrayList);
-        LOGGER.info("ArrayList size: " + stream2.size());
-        LOGGER.info(stream2.toString());
+        LOGGER.info("ArrayList size: {}", stream2.size());
+        LOGGER.info("{}", stream2);
         Assert.assertTrue(stream2.size() > 0);
     }
 
