@@ -21,6 +21,7 @@ import com.gs.collections.api.block.function.{Function, Function0, Function2, Fu
 import com.gs.collections.api.block.predicate.{Predicate2, Predicate}
 import com.gs.collections.api.block.procedure.{Procedure2, Procedure}
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure
+import com.gs.collections.api.block.function.primitive.{DoubleFunction, IntFunction}
 
 object Prelude
 {
@@ -93,5 +94,17 @@ object Prelude
         new Comparator[T]
         {
             def compare(o1: T, o2: T) = closure(o1, o2)
+        }
+
+    implicit def closure2IntFunction[T](closure: (T) => Int) =
+        new IntFunction[T]
+        {
+            def intValueOf(i: T) = closure(i)
+        }
+
+    implicit def closure2DoubleFunction[T](closure: (T) => Double) =
+        new DoubleFunction[T]
+        {
+            def doubleValueOf(i: T) = closure(i)
         }
 }

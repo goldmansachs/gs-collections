@@ -119,7 +119,7 @@ public final class MultiReaderFastList<T>
 
     UntouchableMutableList<T> asReadUntouchable()
     {
-        return new UntouchableMutableList<T>(this.asUnmodifiable());
+        return new UntouchableMutableList<T>(this.delegate.asUnmodifiable());
     }
 
     UntouchableMutableList<T> asWriteUntouchable()
@@ -162,7 +162,7 @@ public final class MultiReaderFastList<T>
         this.acquireReadLock();
         try
         {
-            return this.delegate.clone().asSynchronized();
+            return SynchronizedMutableList.of(this);
         }
         finally
         {
@@ -175,7 +175,7 @@ public final class MultiReaderFastList<T>
         this.acquireReadLock();
         try
         {
-            return this.delegate.asUnmodifiable();
+            return UnmodifiableMutableList.of(this);
         }
         finally
         {
@@ -188,7 +188,7 @@ public final class MultiReaderFastList<T>
         this.acquireReadLock();
         try
         {
-            return this.delegate.toImmutable();
+            return Lists.immutable.ofAll(this.delegate);
         }
         finally
         {

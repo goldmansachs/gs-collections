@@ -143,13 +143,27 @@ public final class MultiReaderUnifiedSet<T>
             this.unlockReadLock();
         }
     }
+    public void withWriteLockAndDelegate(Procedure<MutableSet<T>> procedure)
+    {
+        this.acquireWriteLock();
+        try
+        {
+            UntouchableMutableSet<T> untouchableSet = this.asWriteUntouchable();
+            procedure.value(untouchableSet);
+            untouchableSet.becomeUseless();
+        }
+        finally
+        {
+            this.unlockWriteLock();
+        }
+    }
 
     public MutableSet<T> asSynchronized()
     {
         this.acquireReadLock();
         try
         {
-            return this.delegate.clone().asSynchronized();
+            return SynchronizedMutableSet.of(this);
         }
         finally
         {
@@ -175,7 +189,7 @@ public final class MultiReaderUnifiedSet<T>
         this.acquireReadLock();
         try
         {
-            return this.delegate.asUnmodifiable();
+            return UnmodifiableMutableSet.of(this);
         }
         finally
         {
