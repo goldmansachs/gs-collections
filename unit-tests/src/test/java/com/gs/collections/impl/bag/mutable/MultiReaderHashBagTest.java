@@ -243,7 +243,7 @@ public class MultiReaderHashBagTest extends AbstractCollectionTestCase
         MutableBag<Integer> bag = MultiReaderHashBag.newBagWith(1, 1, 2, 2, 2, 3);
         MutableBag<Integer> results = bag.selectByOccurrences(IntPredicates.isEven());
         Verify.assertSize(2, results);
-        MutableBagTestCase. assertBagsEqual(results, MultiReaderHashBag.newBagWith(1, 1));
+        MutableBagTestCase.assertBagsEqual(results, MultiReaderHashBag.newBagWith(1, 1));
     }
 
     @Override
