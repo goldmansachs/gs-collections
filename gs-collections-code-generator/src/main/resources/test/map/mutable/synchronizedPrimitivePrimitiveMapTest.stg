@@ -29,7 +29,7 @@ import org.junit.Test;
  * JUnit test for {@link Synchronized<name1><name2>Map}.
  * This file was automatically generated from template file synchronizedPrimitivePrimitiveMapTest.stg.
  */
-public class Synchronized<name1><name2>MapTest extends Abstract<name1><name2>MapTestCase
+public class Synchronized<name1><name2>MapTest extends AbstractMutable<name1><name2>MapTestCase
 {
     private final Synchronized<name1><name2>Map map = this.classUnderTest();
 

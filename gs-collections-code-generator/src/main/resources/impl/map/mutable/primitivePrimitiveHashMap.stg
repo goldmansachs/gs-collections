@@ -61,6 +61,7 @@ import com.gs.collections.api.set.primitive.Mutable<name1>Set;
 import com.gs.collections.impl.bag.mutable.primitive.<name1>HashBag;
 <if(!sameTwoPrimitives)>import com.gs.collections.impl.bag.mutable.primitive.<name2>HashBag;<endif>
 import com.gs.collections.impl.block.factory.primitive.<name1>Predicates;
+import com.gs.collections.impl.factory.primitive.<name1><name2>Maps;
 import com.gs.collections.impl.lazy.primitive.Collect<name1>ToObjectIterable;
 import com.gs.collections.impl.lazy.primitive.Lazy<name2>IterableAdapter;
 import com.gs.collections.impl.lazy.primitive.Select<name1>Iterable;
@@ -95,6 +96,13 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
     public <name1><name2>HashMap()
     {
         this.allocate(DEFAULT_INITIAL_CAPACITY \<\< 1);
+    }
+
+    public <name1><name2>HashMap(<name1><name2>Map map)
+    {
+        this(Math.max(map.size(), DEFAULT_INITIAL_CAPACITY), DEFAULT_LOAD_FACTOR);
+
+        this.putAll(map);
     }
 
     public <name1><name2>HashMap(int initialCapacity)
@@ -165,7 +173,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
 
     public Immutable<name1><name2>Map toImmutable()
     {
-        throw new UnsupportedOperationException("toImmutable not implemented yet");
+        return <name1><name2>Maps.immutable.ofAll(this);
     }
 
     private int init(int initialCapacity)

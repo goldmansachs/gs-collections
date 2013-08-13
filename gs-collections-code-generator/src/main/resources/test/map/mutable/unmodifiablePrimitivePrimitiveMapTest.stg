@@ -35,7 +35,7 @@ import org.junit.Test;
  * JUnit test for {@link Unmodifiable<name1><name2>Map}.
  * This file was automatically generated from template file unmodifiablePrimitivePrimitiveMapTest.stg.
  */
-public class Unmodifiable<name1><name2>MapTest extends Abstract<name1><name2>MapTestCase
+public class Unmodifiable<name1><name2>MapTest extends AbstractMutable<name1><name2>MapTestCase
 {
     private final Unmodifiable<name1><name2>Map map = this.classUnderTest();
 
@@ -135,7 +135,7 @@ public class Unmodifiable<name1><name2>MapTest extends Abstract<name1><name2>Map
     @Test(expected = UnsupportedOperationException.class)
     public void putDuplicateWithRemovedSlot()
     {
-        <type1> collision1 = Abstract<name1><name2>MapTestCase.generateCollisions().getFirst();
+        <type1> collision1 = AbstractMutable<name1><name2>MapTestCase.generateCollisions().getFirst();
 
         Unmodifiable<name1><name2>Map hashMap = this.getEmptyMap();
         hashMap.put(collision1, <(literal.(type2))("1")>);

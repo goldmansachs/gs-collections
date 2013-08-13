@@ -60,6 +60,7 @@ import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
+import com.gs.collections.impl.factory.primitive.<name>BooleanMaps;
 import com.gs.collections.impl.lazy.primitive.Collect<name>ToObjectIterable;
 import com.gs.collections.impl.lazy.primitive.LazyBooleanIterableAdapter;
 import com.gs.collections.impl.lazy.primitive.Select<name>Iterable;
@@ -101,6 +102,13 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
         this(initialCapacity, DEFAULT_LOAD_FACTOR);
     }
 
+    public <name>BooleanHashMap(<name>BooleanMap map)
+    {
+        this(Math.max(map.size(), DEFAULT_INITIAL_CAPACITY), DEFAULT_LOAD_FACTOR);
+
+        this.putAll(map);
+    }
+
     public <name>BooleanHashMap(int initialCapacity, float loadFactor)
     {
         if (initialCapacity \< 0)
@@ -123,7 +131,7 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
 
     public Immutable<name>BooleanMap toImmutable()
     {
-        throw new UnsupportedOperationException("toImmutable not implemented yet");
+        return <name>BooleanMaps.immutable.withAll(this);
     }
 
     public static <name>BooleanHashMap newWithKeysValues(<type> key1, boolean value1)

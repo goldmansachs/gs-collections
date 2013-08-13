@@ -1,0 +1,439 @@
+import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+
+hasTwoPrimitives() ::= "true"
+
+skipBooleanKeys() ::= "true"
+
+targetPath() ::= "com/gs/collections/impl/map/immutable/primitive"
+
+fileName(primitive1, primitive2, sameTwoPrimitives) ::= "Immutable<primitive1.name><primitive2.name>HashMap"
+
+class(primitive1, primitive2, sameTwoPrimitives) ::= <<
+<body(primitive1.type, primitive2.type, primitive1.name, primitive2.name)>
+>>
+
+body(type1, type2, name1, name2) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.map.immutable.primitive;
+
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.io.Serializable;
+
+import com.gs.collections.api.<name2>Iterable;
+<if(!sameTwoPrimitives)>import com.gs.collections.api.<name1>Iterable;<endif>
+import com.gs.collections.api.Lazy<name2>Iterable;
+<if(!sameTwoPrimitives)>import com.gs.collections.api.Lazy<name1>Iterable;<endif>
+import com.gs.collections.api.bag.primitive.Mutable<name2>Bag;
+import com.gs.collections.api.block.function.primitive.<name2>ToObjectFunction;
+import com.gs.collections.api.block.predicate.primitive.<name2>Predicate;
+import com.gs.collections.api.block.predicate.primitive.<name1><name2>Predicate;
+import com.gs.collections.api.block.procedure.primitive.<name2>Procedure;
+import com.gs.collections.api.block.procedure.primitive.<name1><name2>Procedure;
+<if(!sameTwoPrimitives)>import com.gs.collections.api.block.procedure.primitive.<name1>Procedure;<endif>
+import com.gs.collections.api.collection.ImmutableCollection;
+import com.gs.collections.api.collection.primitive.Immutable<name2>Collection;
+import com.gs.collections.api.iterator.<name2>Iterator;
+<if(!sameTwoPrimitives)>import com.gs.collections.api.iterator.<name1>Iterator;<endif>
+import com.gs.collections.api.list.primitive.Mutable<name2>List;
+import com.gs.collections.api.map.primitive.<name1><name2>Map;
+import com.gs.collections.api.map.primitive.Immutable<name1><name2>Map;
+import com.gs.collections.api.map.primitive.Mutable<name1><name2>Map;
+import com.gs.collections.api.set.primitive.Mutable<name2>Set;
+import com.gs.collections.impl.block.procedure.checked.primitive.Checked<name1><name2>Procedure;
+import com.gs.collections.impl.map.mutable.primitive.<name1><name2>HashMap;
+
+/**
+ * Immutable<name1><name2>HashMap is the non-modifiable equivalent of {@link <name1><name2>HashMap}.
+ * This file was automatically generated from template file immutablePrimitivePrimitiveHashMap.stg.
+ *
+ * @since 4.0.
+ */
+final class Immutable<name1><name2>HashMap implements Immutable<name1><name2>Map, Serializable
+{
+
+    private static final long serialVersionUID = 1L;
+    private final Mutable<name1><name2>Map delegate;
+
+    Immutable<name1><name2>HashMap(<name1><name2>Map delegate)
+    {
+        this.delegate = new <name1><name2>HashMap(delegate);
+    }
+
+    public <type2> get(<type1> key)
+    {
+        return this.delegate.get(key);
+    }
+
+    public <type2> getIfAbsent(<type1> key, <type2> ifAbsent)
+    {
+        return this.delegate.getIfAbsent(key, ifAbsent);
+    }
+
+    public <type2> getOrThrow(<type1> key)
+    {
+        return this.delegate.getOrThrow(key);
+    }
+
+    public boolean containsKey(<type1> key)
+    {
+        return this.delegate.containsKey(key);
+    }
+
+    public boolean containsValue(<type2> value)
+    {
+        return this.delegate.containsValue(value);
+    }
+
+    public void forEachValue(<name2>Procedure procedure)
+    {
+        this.delegate.forEachValue(procedure);
+    }
+
+    public void forEachKey(<name1>Procedure procedure)
+    {
+        this.delegate.forEachKey(procedure);
+    }
+
+    public void forEachKeyValue(<name1><name2>Procedure procedure)
+    {
+        this.delegate.forEachKeyValue(procedure);
+    }
+
+    public Lazy<name1>Iterable keysView()
+    {
+        return this.delegate.keysView();
+    }
+
+    public Immutable<name1><name2>Map select(<name1><name2>Predicate predicate)
+    {
+        return this.delegate.select(predicate).toImmutable();
+    }
+
+    public Immutable<name1><name2>Map reject(<name1><name2>Predicate predicate)
+    {
+        return this.delegate.reject(predicate).toImmutable();
+    }
+
+    public Immutable<name1><name2>Map toImmutable()
+    {
+        return this;
+    }
+
+    public <name2>Iterator <type2>Iterator()
+    {
+        return this.delegate.<type2>Iterator();
+    }
+
+    public void forEach(<name2>Procedure procedure)
+    {
+        this.delegate.forEach(procedure);
+    }
+
+    public int count(<name2>Predicate predicate)
+    {
+        return this.delegate.count(predicate);
+    }
+
+    public boolean anySatisfy(<name2>Predicate predicate)
+    {
+        return this.delegate.anySatisfy(predicate);
+    }
+
+    public boolean allSatisfy(<name2>Predicate predicate)
+    {
+        return this.delegate.allSatisfy(predicate);
+    }
+
+    public boolean noneSatisfy(<name2>Predicate predicate)
+    {
+        return this.delegate.noneSatisfy(predicate);
+    }
+
+    public Immutable<name2>Collection select(<name2>Predicate predicate)
+    {
+        return this.delegate.select(predicate).toImmutable();
+    }
+
+    public Immutable<name2>Collection reject(<name2>Predicate predicate)
+    {
+        return this.delegate.reject(predicate).toImmutable();
+    }
+
+    public <type2> detectIfNone(<name2>Predicate predicate, <type2> ifNone)
+    {
+        return this.delegate.detectIfNone(predicate, ifNone);
+    }
+
+    public \<V> ImmutableCollection\<V> collect(<name2>ToObjectFunction\<? extends V> function)
+    {
+        return this.delegate.collect(function).toImmutable();
+    }
+
+    <(arithmeticMethods.(type2))()>
+    public <type2>[] toArray()
+    {
+        return this.delegate.toArray();
+    }
+
+    public boolean contains(<type2> value)
+    {
+        return this.delegate.contains(value);
+    }
+
+    public boolean containsAll(<type2>... source)
+    {
+        return this.delegate.containsAll(source);
+    }
+
+    public boolean containsAll(<name2>Iterable source)
+    {
+        return this.delegate.containsAll(source);
+    }
+
+    public Mutable<name2>List toList()
+    {
+        return this.delegate.toList();
+    }
+
+    public Mutable<name2>Set toSet()
+    {
+        return this.delegate.toSet();
+    }
+
+    public Mutable<name2>Bag toBag()
+    {
+        return this.delegate.toBag();
+    }
+
+    public Lazy<name2>Iterable asLazy()
+    {
+        return this.delegate.asLazy();
+    }
+
+    public Immutable<name1><name2>Map newWithKeyValue(<type1> key, <type2> value)
+    {
+        Mutable<name1><name2>Map map = new <name1><name2>HashMap(this.size() + 1);
+        map.putAll(this);
+        map.put(key, value);
+        return map.toImmutable();
+    }
+
+    public Immutable<name1><name2>Map newWithoutKey(<type1> key)
+    {
+        Mutable<name1><name2>Map map = new <name1><name2>HashMap(this.size());
+        map.putAll(this);
+        map.removeKey(key);
+        return map.toImmutable();
+    }
+
+    public Immutable<name1><name2>Map newWithoutAllKeys(<name1>Iterable keys)
+    {
+        Mutable<name1><name2>Map map = new <name1><name2>HashMap(this.size());
+        map.putAll(this);
+        <name1>Iterator iterator = keys.<type1>Iterator();
+        while (iterator.hasNext())
+        {
+            map.removeKey(iterator.next());
+        }
+        return map.toImmutable();
+    }
+
+    public int size()
+    {
+        return this.delegate.size();
+    }
+
+    public boolean isEmpty()
+    {
+        return this.delegate.isEmpty();
+    }
+
+    public boolean notEmpty()
+    {
+        return this.delegate.notEmpty();
+    }
+
+    public String makeString()
+    {
+        return this.delegate.makeString();
+    }
+
+    public String makeString(String separator)
+    {
+        return this.delegate.makeString(separator);
+    }
+
+    public String makeString(String start, String separator, String end)
+    {
+        return this.delegate.makeString(start, separator, end);
+    }
+
+    public void appendString(Appendable appendable)
+    {
+        this.delegate.appendString(appendable);
+    }
+
+    public void appendString(Appendable appendable, String separator)
+    {
+        this.delegate.appendString(appendable, separator);
+    }
+
+    public void appendString(Appendable appendable, String start, String separator, String end)
+    {
+        this.delegate.appendString(appendable, start, separator, end);
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        return this.delegate.equals(obj);
+    }
+
+    @Override
+    public int hashCode()
+    {
+        return this.delegate.hashCode();
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.delegate.toString();
+    }
+
+    private Object writeReplace()
+    {
+        return new Immutable<name1><name2>MapSerializationProxy(this);
+    }
+
+    protected static class Immutable<name1><name2>MapSerializationProxy implements Externalizable
+    {
+        private static final long serialVersionUID = 1L;
+
+        private <name1><name2>Map map;
+
+        @SuppressWarnings("UnusedDeclaration")
+        public Immutable<name1><name2>MapSerializationProxy()
+        {
+            // Empty constructor for Externalizable class
+        }
+
+        protected Immutable<name1><name2>MapSerializationProxy(<name1><name2>Map map)
+        {
+            this.map = map;
+        }
+
+        public void writeExternal(final ObjectOutput out) throws IOException
+        {
+            out.writeInt(this.map.size());
+            try
+            {
+                this.map.forEachKeyValue(new Checked<name1><name2>Procedure()
+                {
+                    @Override
+                    public void safeValue(<type1> key, <type2> value) throws IOException
+                    {
+                        out.write<name1>(key);
+                        out.write<name2>(value);
+                    }
+                });
+            }
+            catch (RuntimeException e)
+            {
+                if (e.getCause() instanceof IOException)
+                {
+                    throw (IOException) e.getCause();
+                }
+                throw e;
+            }
+        }
+
+        public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
+        {
+            int size = in.readInt();
+            Mutable<name1><name2>Map deserializedMap = new <name1><name2>HashMap();
+
+            for (int i = 0; i \< size; i++)
+            {
+                deserializedMap.put(in.read<name1>(), in.read<name2>());
+            }
+
+            this.map = deserializedMap;
+        }
+
+        protected Object readResolve()
+        {
+            return this.map.toImmutable();
+        }
+    }
+}
+
+>>
+
+arithmeticMethods ::= [
+    "byte": "allMethods",
+    "short": "allMethods",
+    "char": "allMethods",
+    "int": "allMethods",
+    "long": "allMethods",
+    "float": "allMethods",
+    "double": "allMethods",
+    "boolean": "noMethods"
+    ]
+
+allMethods() ::= <<
+public <wideType.(type2)> sum()
+{
+    return this.delegate.sum();
+}
+
+public <type2> max()
+{
+    return this.delegate.max();
+}
+
+public <type2> maxIfEmpty(<type2> defaultValue)
+{
+    return this.delegate.maxIfEmpty(defaultValue);
+}
+
+public <type2> min()
+{
+    return this.delegate.min();
+}
+
+public <type2> minIfEmpty(<type2> defaultValue)
+{
+    return this.delegate.minIfEmpty(defaultValue);
+}
+
+public double average()
+{
+    return this.delegate.average();
+}
+
+public double median()
+{
+    return this.delegate.median();
+}
+
+public <type2>[] toSortedArray()
+{
+    return this.delegate.toSortedArray();
+}
+
+public Mutable<name2>List toSortedList()
+{
+    return this.delegate.toSortedList();
+}
+
+>>
+
+noMethods() ::= ""

@@ -27,10 +27,8 @@ import org.junit.Test;
  * JUnit test for {@link Synchronized<name>BooleanMap}.
  * This file was automatically generated from template file synchronizedPrimitiveBooleanMapTest.stg.
  */
-public class Synchronized<name>BooleanMapTest extends Abstract<name>BooleanMapTestCase
+public class Synchronized<name>BooleanMapTest extends AbstractMutable<name>BooleanMapTestCase
 {
-    private final Synchronized<name>BooleanMap map = this.classUnderTest();
-
     @Override
     protected Synchronized<name>BooleanMap classUnderTest()
     {
@@ -72,7 +70,8 @@ public class Synchronized<name>BooleanMapTest extends Abstract<name>BooleanMapTe
     public void asSynchronized()
     {
         super.asSynchronized();
-        Assert.assertSame(this.map, this.map.asSynchronized());
+        Synchronized<name>BooleanMap map1 = this.classUnderTest();
+        Assert.assertSame(map1, map1.asSynchronized());
     }
 }
 

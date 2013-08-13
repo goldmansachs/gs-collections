@@ -34,10 +34,8 @@ import org.junit.Test;
  * JUnit test for {@link Unmodifiable<name>BooleanMap}.
  * This file was automatically generated from template file unmodifiablePrimitiveBooleanMapTest.stg.
  */
-public class Unmodifiable<name>BooleanMapTest extends Abstract<name>BooleanMapTestCase
+public class Unmodifiable<name>BooleanMapTest extends AbstractMutable<name>BooleanMapTestCase
 {
-    private final Unmodifiable<name>BooleanMap map = this.classUnderTest();
-
     @Override
     protected Unmodifiable<name>BooleanMap classUnderTest()
     {
@@ -78,62 +76,62 @@ public class Unmodifiable<name>BooleanMapTest extends Abstract<name>BooleanMapTe
     @Test(expected = UnsupportedOperationException.class)
     public void clear()
     {
-        this.map.clear();
+        this.classUnderTest().clear();
     }
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
     public void removeKey()
     {
-        this.map.removeKey(<(literal.(type))("5")>);
+        this.classUnderTest().removeKey(<(literal.(type))("5")>);
     }
 
     @Override
     @Test
     public void removeKeyIfAbsent()
     {
-        Assert.assertTrue(this.map.removeKeyIfAbsent(<(literal.(type))("10")>, true));
+        Assert.assertTrue(this.classUnderTest().removeKeyIfAbsent(<(literal.(type))("10")>, true));
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void removeKeyIfAbsentThrowsException()
     {
-        this.map.removeKeyIfAbsent(<(literal.(type))("0")>, true);
+        this.classUnderTest().removeKeyIfAbsent(<(literal.(type))("0")>, true);
     }
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
     public void put()
     {
-        this.map.put(<(literal.(type))("0")>, true);
+        this.classUnderTest().put(<(literal.(type))("0")>, true);
     }
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
     public void withKeysValues()
     {
-        this.map.withKeyValue(<(literal.(type))("1")>, true);
+        this.classUnderTest().withKeyValue(<(literal.(type))("1")>, true);
     }
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
     public void withoutKey()
     {
-        this.map.withoutKey(<(literal.(type))("32")>);
+        this.classUnderTest().withoutKey(<(literal.(type))("32")>);
     }
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
     public void withoutAllKeys()
     {
-        this.map.withoutAllKeys(<name>ArrayList.newListWith(<(literal.(type))("0")>, <(literal.(type))("32")>));
+        this.classUnderTest().withoutAllKeys(<name>ArrayList.newListWith(<(literal.(type))("0")>, <(literal.(type))("32")>));
     }
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
     public void putDuplicateWithRemovedSlot()
     {
-        <type> collision1 = Abstract<name>BooleanMapTestCase.generateCollisions().getFirst();
+        <type> collision1 = AbstractMutable<name>BooleanMapTestCase.generateCollisions().getFirst();
 
         Unmodifiable<name>BooleanMap hashMap = this.getEmptyMap();
         hashMap.put(collision1, true);
@@ -143,39 +141,39 @@ public class Unmodifiable<name>BooleanMapTest extends Abstract<name>BooleanMapTe
     @Test
     public void get()
     {
-        Assert.assertTrue(this.map.get(<(literal.(type))("0")>));
-        Assert.assertFalse(this.map.get(<(literal.(type))("31")>));
-        Assert.assertTrue(this.map.get(<(literal.(type))("32")>));
+        Assert.assertTrue(this.classUnderTest().get(<(literal.(type))("0")>));
+        Assert.assertFalse(this.classUnderTest().get(<(literal.(type))("31")>));
+        Assert.assertTrue(this.classUnderTest().get(<(literal.(type))("32")>));
 
-        Assert.assertFalse(this.map.get(<(literal.(type))("1")>));
-        Assert.assertFalse(this.map.get(<(literal.(type))("33")>));
+        Assert.assertFalse(this.classUnderTest().get(<(literal.(type))("1")>));
+        Assert.assertFalse(this.classUnderTest().get(<(literal.(type))("33")>));
     }
 
     @Override
     @Test
     public void getIfAbsent()
     {
-        Assert.assertTrue(this.map.getIfAbsent(<(literal.(type))("0")>, false));
-        Assert.assertFalse(this.map.getIfAbsent(<(literal.(type))("31")>, true));
-        Assert.assertTrue(this.map.getIfAbsent(<(literal.(type))("32")>, false));
+        Assert.assertTrue(this.classUnderTest().getIfAbsent(<(literal.(type))("0")>, false));
+        Assert.assertFalse(this.classUnderTest().getIfAbsent(<(literal.(type))("31")>, true));
+        Assert.assertTrue(this.classUnderTest().getIfAbsent(<(literal.(type))("32")>, false));
 
-        Assert.assertFalse(this.map.getIfAbsent(<(literal.(type))("1")>, false));
-        Assert.assertTrue(this.map.getIfAbsent(<(literal.(type))("1")>, true));
+        Assert.assertFalse(this.classUnderTest().getIfAbsent(<(literal.(type))("1")>, false));
+        Assert.assertTrue(this.classUnderTest().getIfAbsent(<(literal.(type))("1")>, true));
     }
 
     @Override
     @Test
     public void getOrThrow()
     {
-        Assert.assertTrue(this.map.getOrThrow(<(literal.(type))("0")>));
-        Assert.assertFalse(this.map.getOrThrow(<(literal.(type))("31")>));
-        Assert.assertTrue(this.map.getOrThrow(<(literal.(type))("32")>));
+        Assert.assertTrue(this.classUnderTest().getOrThrow(<(literal.(type))("0")>));
+        Assert.assertFalse(this.classUnderTest().getOrThrow(<(literal.(type))("31")>));
+        Assert.assertTrue(this.classUnderTest().getOrThrow(<(literal.(type))("32")>));
 
         Verify.assertThrows(IllegalStateException.class, new Runnable()
         {
             public void run()
             {
-                Unmodifiable<name>BooleanMapTest.this.map.getOrThrow(<(literal.(type))("33")>);
+                Unmodifiable<name>BooleanMapTest.this.classUnderTest().getOrThrow(<(literal.(type))("33")>);
             }
         });
     }
@@ -184,13 +182,13 @@ public class Unmodifiable<name>BooleanMapTest extends Abstract<name>BooleanMapTe
     @Test
     public void getIfAbsentPut()
     {
-        Assert.assertTrue(this.map.getIfAbsentPut(<(literal.(type))("0")>, false));
+        Assert.assertTrue(this.classUnderTest().getIfAbsentPut(<(literal.(type))("0")>, false));
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void getIfAbsentPutThrowsException()
     {
-        this.map.getIfAbsentPut(<(literal.(type))("10")>, true);
+        this.classUnderTest().getIfAbsentPut(<(literal.(type))("10")>, true);
     }
 
     @Override
@@ -205,7 +203,7 @@ public class Unmodifiable<name>BooleanMapTest extends Abstract<name>BooleanMapTe
             }
         };
 
-        Assert.assertTrue(this.map.getIfAbsentPut(<(literal.(type))("0")>, factory));
+        Assert.assertTrue(this.classUnderTest().getIfAbsentPut(<(literal.(type))("0")>, factory));
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -219,7 +217,7 @@ public class Unmodifiable<name>BooleanMapTest extends Abstract<name>BooleanMapTe
             }
         };
 
-        this.map.getIfAbsentPut(<(literal.(type))("10")>, factory);
+        this.classUnderTest().getIfAbsentPut(<(literal.(type))("10")>, factory);
     }
 
     @Override
@@ -234,7 +232,7 @@ public class Unmodifiable<name>BooleanMapTest extends Abstract<name>BooleanMapTe
             }
         };
 
-        Assert.assertTrue(this.map.getIfAbsentPutWith(<(literal.(type))("0")>, functionLengthEven, "12345678"));
+        Assert.assertTrue(this.classUnderTest().getIfAbsentPutWith(<(literal.(type))("0")>, functionLengthEven, "12345678"));
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -248,7 +246,7 @@ public class Unmodifiable<name>BooleanMapTest extends Abstract<name>BooleanMapTe
             }
         };
 
-        this.map.getIfAbsentPutWith(<(literal.(type))("10")>, functionLengthEven, "unused");
+        this.classUnderTest().getIfAbsentPutWith(<(literal.(type))("10")>, functionLengthEven, "unused");
     }
 
     @Override
@@ -263,7 +261,7 @@ public class Unmodifiable<name>BooleanMapTest extends Abstract<name>BooleanMapTe
             }
         };
 
-        Assert.assertTrue(this.map.getIfAbsentPutWithKey(<(literal.(type))("0")>, keyIsEven));
+        Assert.assertTrue(this.classUnderTest().getIfAbsentPutWithKey(<(literal.(type))("0")>, keyIsEven));
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -277,7 +275,7 @@ public class Unmodifiable<name>BooleanMapTest extends Abstract<name>BooleanMapTe
             }
         };
 
-        this.map.getIfAbsentPutWithKey(<(literal.(type))("10")>, keyIsEven);
+        this.classUnderTest().getIfAbsentPutWithKey(<(literal.(type))("10")>, keyIsEven);
     }
 
     @Override
@@ -292,15 +290,15 @@ public class Unmodifiable<name>BooleanMapTest extends Abstract<name>BooleanMapTe
             }
         };
 
-        this.map.updateValue(<(literal.(type))("0")>, false, flip);
+        this.classUnderTest().updateValue(<(literal.(type))("0")>, false, flip);
     }
 
     @Override
     @Test
     public void contains()
     {
-        Assert.assertTrue(this.map.contains(true));
-        Assert.assertTrue(this.map.contains(false));
+        Assert.assertTrue(this.classUnderTest().contains(true));
+        Assert.assertTrue(this.classUnderTest().contains(false));
         Assert.assertFalse(this.getEmptyMap().contains(false));
     }
 
@@ -308,20 +306,20 @@ public class Unmodifiable<name>BooleanMapTest extends Abstract<name>BooleanMapTe
     @Test
     public void containsKey()
     {
-        Assert.assertTrue(this.map.containsKey(<(literal.(type))("0")>));
-        Assert.assertTrue(this.map.containsKey(<(literal.(type))("31")>));
-        Assert.assertTrue(this.map.containsKey(<(literal.(type))("32")>));
-        Assert.assertFalse(this.map.containsKey(<(literal.(type))("1")>));
-        Assert.assertFalse(this.map.containsKey(<(literal.(type))("5")>));
-        Assert.assertFalse(this.map.containsKey(<(literal.(type))("35")>));
+        Assert.assertTrue(this.classUnderTest().containsKey(<(literal.(type))("0")>));
+        Assert.assertTrue(this.classUnderTest().containsKey(<(literal.(type))("31")>));
+        Assert.assertTrue(this.classUnderTest().containsKey(<(literal.(type))("32")>));
+        Assert.assertFalse(this.classUnderTest().containsKey(<(literal.(type))("1")>));
+        Assert.assertFalse(this.classUnderTest().containsKey(<(literal.(type))("5")>));
+        Assert.assertFalse(this.classUnderTest().containsKey(<(literal.(type))("35")>));
     }
 
     @Override
     @Test
     public void containsValue()
     {
-        Assert.assertTrue(this.map.containsValue(true));
-        Assert.assertTrue(this.map.containsValue(false));
+        Assert.assertTrue(this.classUnderTest().containsValue(true));
+        Assert.assertTrue(this.classUnderTest().containsValue(false));
         Assert.assertFalse(this.getEmptyMap().containsValue(false));
     }
 
@@ -329,9 +327,9 @@ public class Unmodifiable<name>BooleanMapTest extends Abstract<name>BooleanMapTe
     @Test
     public void containsAll()
     {
-        Assert.assertTrue(this.map.containsAll(true, false));
-        Assert.assertTrue(this.map.containsAll(true, true));
-        Assert.assertTrue(this.map.containsAll(false, false));
+        Assert.assertTrue(this.classUnderTest().containsAll(true, false));
+        Assert.assertTrue(this.classUnderTest().containsAll(true, true));
+        Assert.assertTrue(this.classUnderTest().containsAll(false, false));
         Assert.assertFalse(this.getEmptyMap().containsAll(false, true));
     }
 
@@ -339,9 +337,9 @@ public class Unmodifiable<name>BooleanMapTest extends Abstract<name>BooleanMapTe
     @Test
     public void containsAllIterable()
     {
-        Assert.assertTrue(this.map.containsAll(BooleanArrayList.newListWith(true, false)));
-        Assert.assertTrue(this.map.containsAll(BooleanArrayList.newListWith(true, true)));
-        Assert.assertTrue(this.map.containsAll(BooleanArrayList.newListWith(false, false)));
+        Assert.assertTrue(this.classUnderTest().containsAll(BooleanArrayList.newListWith(true, false)));
+        Assert.assertTrue(this.classUnderTest().containsAll(BooleanArrayList.newListWith(true, true)));
+        Assert.assertTrue(this.classUnderTest().containsAll(BooleanArrayList.newListWith(false, false)));
         Assert.assertFalse(this.getEmptyMap().containsAll(BooleanArrayList.newListWith(false, false)));
     }
 
@@ -352,7 +350,7 @@ public class Unmodifiable<name>BooleanMapTest extends Abstract<name>BooleanMapTe
         Verify.assertSize(0, this.getEmptyMap());
         Verify.assertSize(1, this.newWithKeysValues(<(literal.(type))("0")>, false));
         Verify.assertSize(1, this.newWithKeysValues(<(literal.(type))("1")>, true));
-        Verify.assertSize(3, this.map);
+        Verify.assertSize(3, this.classUnderTest());
     }
 
     @Override
@@ -360,7 +358,8 @@ public class Unmodifiable<name>BooleanMapTest extends Abstract<name>BooleanMapTe
     public void asUnmodifiable()
     {
         super.asUnmodifiable();
-        Assert.assertSame(this.map, this.map.asUnmodifiable());
+        Unmodifiable<name>BooleanMap map1 = this.classUnderTest();
+        Assert.assertSame(map1, map1.asUnmodifiable());
     }
 }
 
