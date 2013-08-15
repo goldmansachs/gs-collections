@@ -301,7 +301,7 @@ public final class UnmodifiableObject<name>Map\<V>
     {
         return this.map.toString();
     }
-    
+
     public String makeString()
     {
         return this.map.makeString();

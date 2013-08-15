@@ -81,9 +81,9 @@ public abstract class AbstractMutable<name>StackTestCase extends Abstract<name>S
     {
         Mutable<name>Stack stack = this.classUnderTest();
         int size = stack.size();
-        Assert.assertEquals(<name>ArrayList.newListWith(<(castIntToPrimitiveTypes.(type))>size, <(castIntToPrimitiveTypes.(type))>(size - 1)), stack.peek(2));
+        Assert.assertEquals(<name>ArrayList.newListWith(<(castIntToNarrowType.(type))("size")>, <(castIntToNarrowTypeWithParens.(type))("size - 1")>), stack.peek(2));
         stack.pop(2);
-        Assert.assertEquals(<name>ArrayList.newListWith(<(castIntToPrimitiveTypes.(type))>(size - 2)), stack.peek(1));
+        Assert.assertEquals(<name>ArrayList.newListWith(<(castIntToNarrowTypeWithParens.(type))("size - 2")>), stack.peek(1));
     }
 
     @Test(expected = EmptyStackException.class)
@@ -138,7 +138,7 @@ public abstract class AbstractMutable<name>StackTestCase extends Abstract<name>S
         Verify.assertSize(size + 1, stack);
         stack.pop();
         Verify.assertSize(size, stack);
-        Assert.assertEquals(<name>ArrayList.newListWith(<(castIntToPrimitiveTypes.(type))>size, <(castIntToPrimitiveTypes.(type))>(size - 1)), stack.peek(2));
+        Assert.assertEquals(<name>ArrayList.newListWith(<(castIntToNarrowType.(type))("size")>, <(castIntToNarrowTypeWithParens.(type))("size - 1")>), stack.peek(2));
     }
 
     @Test
@@ -148,7 +148,7 @@ public abstract class AbstractMutable<name>StackTestCase extends Abstract<name>S
         int size = stack.size();
         for (int i = 0; i \< size; i++)
         {
-            Assert.assertEquals(<(castIntToPrimitiveTypes.(type))>(size - i), stack.pop()<wideDelta.(type)>);
+            Assert.assertEquals(<(castIntToNarrowTypeWithParens.(type))("size - i")>, stack.pop()<wideDelta.(type)>);
             Verify.assertSize(size - i - 1, stack);
         }
     }
@@ -157,7 +157,7 @@ public abstract class AbstractMutable<name>StackTestCase extends Abstract<name>S
     public void popWithCount()
     {
         int size = this.classUnderTest().size();
-        Assert.assertEquals(<name>ArrayList.newListWith(<(castIntToPrimitiveTypes.(type))>size, <(castIntToPrimitiveTypes.(type))>(size - 1)), this.classUnderTest().pop(2));
+        Assert.assertEquals(<name>ArrayList.newListWith(<(castIntToNarrowType.(type))("size")>, <(castIntToNarrowTypeWithParens.(type))("size - 1")>), this.classUnderTest().pop(2));
     }
 
     @Test

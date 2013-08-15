@@ -299,7 +299,7 @@ public class Unmodifiable<name1><name2>MapTest extends AbstractMutable<name1><na
         {
             public <type2> valueOf(<type2> value)
             {
-                return <(castIntToNarrowType.(type2))({value + <(literal.(type2))("1")>})>;
+                return <(castIntToNarrowTypeWithParens.(type2))({value + <(literal.(type2))("1")>})>;
             }
         };
         this.map.updateValue(<keyValue("0")>, incrementFunction);

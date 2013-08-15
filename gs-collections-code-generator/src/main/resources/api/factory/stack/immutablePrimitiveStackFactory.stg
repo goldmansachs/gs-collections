@@ -51,7 +51,7 @@ public interface Immutable<name>StackFactory
     Immutable<name>Stack ofAll(<name>Iterable items);
 
     Immutable<name>Stack withAll(<name>Iterable items);
-    
+
     /**
      * Same as {@link #withAllReversed(<name>Iterable)}.
      */

@@ -317,7 +317,7 @@ public class Synchronized<name>StackTest
         {
             public <wrapperName> valueOf(<type> parameter)
             {
-                return <(castIntToNarrowType.(type))("parameter - 1")>;
+                return <(castIntToNarrowTypeWithParens.(type))("parameter - 1")>;
             }
         }));
     }

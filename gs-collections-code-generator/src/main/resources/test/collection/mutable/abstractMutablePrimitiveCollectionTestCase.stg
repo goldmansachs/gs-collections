@@ -206,7 +206,7 @@ public abstract class AbstractMutable<name>CollectionTestCase extends Abstract<n
         Assert.assertEquals(this.newMutableCollectionWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">), collection2);
         Assert.assertEquals(this.newMutableCollectionWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">), collection3);
     }
-    
+
     @Test
     public void withAll()
     {

@@ -2358,7 +2358,7 @@ public abstract class AbstractMutable<name>ObjectMapTestCase
     @Test
     public void withKeysValues()
     {
-        Mutable<name>ObjectMap\<String> emptyMap = this.\<String>getEmptyMap();
+        Mutable<name>ObjectMap\<String> emptyMap = this.getEmptyMap();
         Mutable<name>ObjectMap\<String> hashMap = emptyMap.withKeyValue(<(literal.(type))("1")>, "one");
         Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one"), hashMap);
         Assert.assertSame(emptyMap, hashMap);

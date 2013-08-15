@@ -189,7 +189,7 @@ public class Reverse<name>IterableTest
         {
             public <wrapperName> valueOf(<type> parameter)
             {
-                return <(castIntToNarrowType.(type))("parameter - 1")>;
+                return <(castIntToNarrowTypeWithParens.(type))("parameter - 1")>;
             }
         }));
     }

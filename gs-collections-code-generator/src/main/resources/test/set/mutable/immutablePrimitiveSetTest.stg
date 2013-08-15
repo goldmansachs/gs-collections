@@ -226,11 +226,11 @@ public class Immutable<name>HashSetTest extends AbstractImmutable<name>Collectio
     {
         super.collect();
         Immutable<name>Set set = this.newWith(<["0", "1", "31"]:(literal.(type))(); separator=", ">, Abstract<name>SetTestCase.generateCollisions1().getFirst(), Abstract<name>SetTestCase.generateCollisions1().get(1));
-        Assert.assertEquals(UnifiedSet.newSetWith(<["-1", "0", "30"]:(literal.(type))(); separator=", ">, <(castIntToNarrowType.(type))({Abstract<name>SetTestCase.generateCollisions1().getFirst() - 1})>, <(castIntToNarrowType.(type))({Abstract<name>SetTestCase.generateCollisions1().get(1) - 1})>), set.collect(new <name>ToObjectFunction\<<wrapperName>\>()
+        Assert.assertEquals(UnifiedSet.newSetWith(<["-1", "0", "30"]:(literal.(type))(); separator=", ">, <(castIntToNarrowTypeWithParens.(type))({Abstract<name>SetTestCase.generateCollisions1().getFirst() - 1})>, <(castIntToNarrowTypeWithParens.(type))({Abstract<name>SetTestCase.generateCollisions1().get(1) - 1})>), set.collect(new <name>ToObjectFunction\<<wrapperName>\>()
         {
             public <wrapperName> valueOf(<type> byteParameter)
             {
-                return <(castIntToNarrowType.(type))("byteParameter - 1")>;
+                return <(castIntToNarrowTypeWithParens.(type))("byteParameter - 1")>;
             }
         }));
     }

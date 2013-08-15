@@ -25,7 +25,7 @@ package com.gs.collections.impl.map.mutable.primitive;
 import com.gs.collections.api.block.function.primitive.<name1>To<name2>Function;
 import com.gs.collections.api.block.function.primitive.<name2>Function;
 import com.gs.collections.api.block.function.primitive.<name2>Function0;
-import com.gs.collections.api.block.function.primitive.<name2>To<name2>Function;
+<if(!sameTwoPrimitives)>import com.gs.collections.api.block.function.primitive.<name2>To<name2>Function;<endif>
 import com.gs.collections.api.map.primitive.Mutable<name1><name2>Map;
 import com.gs.collections.impl.list.mutable.primitive.<name1>ArrayList;
 import com.gs.collections.impl.map.primitive.Abstract<name1><name2>MapTestCase;
@@ -554,7 +554,7 @@ public abstract class AbstractMutable<name1><name2>MapTestCase extends Abstract<
         {
             public <type2> valueOf(<type2> value)
             {
-                return <(castIntToNarrowType.(type2))({value + <(literal.(type2))("1")>})>;
+                return <(castIntToNarrowTypeWithParens.(type2))({value + <(literal.(type2))("1")>})>;
             }
         };
 

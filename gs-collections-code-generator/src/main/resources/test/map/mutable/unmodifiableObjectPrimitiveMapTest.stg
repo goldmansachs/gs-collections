@@ -187,7 +187,7 @@ public class UnmodifiableObject<name>MapTest extends AbstractMutableObject<name>
         {
             public <type> <type>ValueOf(String string)
             {
-                return <(castIntToNarrowTypeWithoutBrackets.(type))("string.length()")>;
+                return <(castIntToNarrowType.(type))("string.length()")>;
             }
         };
 
@@ -201,7 +201,7 @@ public class UnmodifiableObject<name>MapTest extends AbstractMutableObject<name>
         {
             public <type> <type>ValueOf(String string)
             {
-                return <(castIntToNarrowTypeWithoutBrackets.(type))("string.length()")>;
+                return <(castIntToNarrowType.(type))("string.length()")>;
             }
         };
 
@@ -216,7 +216,7 @@ public class UnmodifiableObject<name>MapTest extends AbstractMutableObject<name>
         {
             public <type> <type>ValueOf(Integer anObject)
             {
-                return anObject == null ? <(literal.(type))("32")> : <(castIntToNarrowTypeWithoutBrackets.(type))("anObject.intValue()")>;
+                return anObject == null ? <(literal.(type))("32")> : <(castIntToNarrowType.(type))("anObject.intValue()")>;
             }
         };
 
@@ -230,7 +230,7 @@ public class UnmodifiableObject<name>MapTest extends AbstractMutableObject<name>
         {
             public <type> <type>ValueOf(Integer anObject)
             {
-                return anObject == null ? <(literal.(type))("32")> : <(castIntToNarrowTypeWithoutBrackets.(type))("anObject.intValue()")>;
+                return anObject == null ? <(literal.(type))("32")> : <(castIntToNarrowType.(type))("anObject.intValue()")>;
             }
         };
 

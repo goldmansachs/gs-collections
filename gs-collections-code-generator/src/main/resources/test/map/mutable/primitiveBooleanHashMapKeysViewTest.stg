@@ -241,11 +241,11 @@ public class <name>BooleanHashMapKeysViewTest
     @Test
     public void collect()
     {
-        Assert.assertEquals(UnifiedSet.newSetWith(<(literal.(type))("-1")>, <(literal.(type))("0")>, <(literal.(type))("30")>, <(castIntToNarrowType.(type))("generateCollisions1().getFirst() - 1")>, <(castIntToNarrowType.(type))("generateCollisions1().get(1) - 1")>), this.iterable.collect(new <name>ToObjectFunction\<<wrapperName>\>()
+        Assert.assertEquals(UnifiedSet.newSetWith(<(literal.(type))("-1")>, <(literal.(type))("0")>, <(literal.(type))("30")>, <(castIntToNarrowTypeWithParens.(type))("generateCollisions1().getFirst() - 1")>, <(castIntToNarrowTypeWithParens.(type))("generateCollisions1().get(1) - 1")>), this.iterable.collect(new <name>ToObjectFunction\<<wrapperName>\>()
         {
             public <wrapperName> valueOf(<type> parameter)
             {
-                return <(castIntToNarrowType.(type))("parameter - 1")>;
+                return <(castIntToNarrowTypeWithParens.(type))("parameter - 1")>;
             }
         }).toSet());
     }

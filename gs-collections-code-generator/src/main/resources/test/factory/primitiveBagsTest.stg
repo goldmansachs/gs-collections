@@ -20,7 +20,6 @@ package com.gs.collections.impl.factory.primitive;
 import com.gs.collections.api.bag.primitive.Immutable<name>Bag;
 import com.gs.collections.api.factory.bag.primitive.Immutable<name>BagFactory;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
-import com.gs.collections.impl.factory.primitive.<name>Bags;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;

@@ -757,7 +757,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         {
             throw new NoSuchElementException();
         }
-        <type> max = <(castIntToNarrowType.(type))("31 - Integer.numberOfLeadingZeros(this.zeroToThirtyOne)")>;
+        <type> max = <(castIntToNarrowTypeWithParens.(type))("31 - Integer.numberOfLeadingZeros(this.zeroToThirtyOne)")>;
         boolean isMaxSet = this.zeroToThirtyOneOccupied != 0;
 
         for (<type> value : this.table)

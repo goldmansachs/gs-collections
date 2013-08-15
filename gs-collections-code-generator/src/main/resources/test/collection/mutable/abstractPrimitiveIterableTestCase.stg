@@ -49,7 +49,7 @@ public abstract class Abstract<name>IterableTestCase
     protected abstract <name>Iterable newMutableCollectionWith(<type>... elements);
 
     protected abstract RichIterable\<<wrapperName>\> newObjectCollectionWith(<wrapperName>... elements);
-    
+
     @Test
     public void newCollectionWith()
     {
@@ -74,7 +74,7 @@ public abstract class Abstract<name>IterableTestCase
         Assert.assertEquals(this.newMutableCollectionWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), this.newWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
         Assert.assertEquals(this.newMutableCollectionWith(<["0", "1", "31", "32"]:(literal.(type))(); separator=", ">), this.newWith(<["0", "1", "31", "32"]:(literal.(type))(); separator=", ">));
     }
-    
+
     @Test
     public void isEmpty()
     {
@@ -123,18 +123,18 @@ public abstract class Abstract<name>IterableTestCase
         Assert.assertFalse(iterable1.contains(<(literal.(type))("3")>));
 
         <name>Iterable iterable2 = this.classUnderTest();
-        for (int i = 1; i \<= iterable2.size(); i++)
+        for (<type> each = 1; each \<= iterable2.size(); each++)
         {
-            Assert.assertTrue(iterable2.contains(<(castIntToPrimitiveTypes.(type))>i));
+            Assert.assertTrue(iterable2.contains(each));
         }
-        Assert.assertFalse(iterable2.contains(<(castIntToPrimitiveTypes.(type))>(iterable2.size() + 1)));
+        Assert.assertFalse(iterable2.contains(<(castIntToNarrowTypeWithParens.(type))("iterable2.size() + 1")>));
     }
 
     @Test
     public void containsAllArray()
     {
         Assert.assertTrue(this.classUnderTest().containsAll(this.classUnderTest().toArray()));
-        Assert.assertFalse(this.classUnderTest().containsAll(<(castIntToPrimitiveTypes.(type))>(this.classUnderTest().size() + 1)));
+        Assert.assertFalse(this.classUnderTest().containsAll(<(castIntToNarrowTypeWithParens.(type))("this.classUnderTest().size() + 1")>));
 
         <name>Iterable iterable = this.newWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
         Assert.assertTrue(iterable.containsAll(<(literal.(type))("1")>));
@@ -167,7 +167,7 @@ public abstract class Abstract<name>IterableTestCase
     {
         <name>Iterable source = this.classUnderTest();
         Assert.assertTrue(source.containsAll(this.classUnderTest()));
-        Assert.assertFalse(source.containsAll(<name>ArrayList.newListWith(<(castIntToPrimitiveTypes.(type))>(source.size() + 1))));
+        Assert.assertFalse(source.containsAll(<name>ArrayList.newListWith(<(castIntToNarrowTypeWithParens.(type))("source.size() + 1")>)));
 
         <name>Iterable iterable = this.newWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
         Assert.assertTrue(this.newWith().containsAll(new <name>ArrayList()));
@@ -333,7 +333,7 @@ public abstract class Abstract<name>IterableTestCase
         Assert.assertEquals(size \<= 3, iterable1.noneSatisfy(<name>Predicates.greaterThan(<(literal.(type))("3")>)));
         Assert.assertEquals(size == 0, iterable1.noneSatisfy(<name>Predicates.lessThan(<(literal.(type))("3")>)));
     }
-    
+
     @Test
     public void collect()
     {
@@ -341,7 +341,7 @@ public abstract class Abstract<name>IterableTestCase
         {
             public <wrapperName> valueOf(<type> parameter)
             {
-                return <(castIntToNarrowType.(type))("parameter - 1")>;
+                return <(castIntToNarrowTypeWithParens.(type))("parameter - 1")>;
             }
         };
         Assert.assertEquals(this.newObjectCollectionWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">), this.newWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">).collect(function));
@@ -501,10 +501,10 @@ public abstract class Abstract<name>IterableTestCase
     {
         <name>Iterable iterable = this.classUnderTest();
         int size = iterable.size();
-        <type> array[] = new <type>[size];
+        <type>[] array = new <type>[size];
         for (int i = 0; i \< size; i++)
         {
-            array[i] = <(castIntToPrimitiveTypes.(type))>(i + 1);
+            array[i] = <(castIntToNarrowTypeWithParens.(type))("i + 1")>;
         }
 
         Assert.assertArrayEquals(array, iterable.toSortedArray()<(delta.(type))>);

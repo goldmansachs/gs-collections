@@ -43,7 +43,7 @@ import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 
 /**
- * This file was automatically generated from template file primitiveHashSet.stg.
+ * This file was automatically generated from template file primitiveImmutableHashSet.stg.
  *
  * @since 4.0.
  */
@@ -525,7 +525,7 @@ public class Immutable<name>HashSet implements Immutable<name>Set, Externalizabl
         {
             throw new NoSuchElementException();
         }
-        <type> max = <(castIntToNarrowType.(type))("31 - Integer.numberOfLeadingZeros(this.zeroToThirtyOne)")>;
+        <type> max = <(castIntToNarrowTypeWithParens.(type))("31 - Integer.numberOfLeadingZeros(this.zeroToThirtyOne)")>;
         boolean isMaxSet = this.zeroToThirtyOneOccupied != 0;
 
         for (<type> value : this.table)

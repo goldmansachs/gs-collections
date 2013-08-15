@@ -76,7 +76,7 @@ public class Immutable<name>StackFactoryImpl implements Immutable<name>StackFact
         }
         return this.with(items.toArray());
     }
-    
+
     public Immutable<name>Stack ofAllReversed(<name>Iterable items)
     {
         return this.withAllReversed(items);

@@ -370,12 +370,12 @@ class Immutable<name>ArrayStack
             throw new IllegalArgumentException("Count must be less than size: Count = " + count + " Size = " + this.delegate.size());
         }
     }
-    
+
     private Object writeReplace()
     {
         return new Immutable<name>StackSerializationProxy(this);
     }
-    
+
     private static class Immutable<name>StackSerializationProxy implements Externalizable
     {
         private static final long serialVersionUID = 1L;

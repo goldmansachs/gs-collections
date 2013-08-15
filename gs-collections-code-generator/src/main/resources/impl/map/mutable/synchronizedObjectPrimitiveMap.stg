@@ -436,7 +436,7 @@ public final class SynchronizedObject<name>Map\<V>
             return this.map.toString();
         }
     }
-    
+
     public String makeString()
     {
         synchronized (this.lock)

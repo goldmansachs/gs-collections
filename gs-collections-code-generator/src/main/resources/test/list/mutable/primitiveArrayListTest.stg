@@ -124,7 +124,7 @@ public class <name>ArrayListTest extends Abstract<name>ListTestCase
         {
             public Mutable<wrapperName> valueOf(Mutable<wrapperName> object, <type> value, int index)
             {
-                return object.add(<(castIntToNarrowType.(type))("value * list2.get(index)")>);
+                return object.add(<(castIntToNarrowTypeWithParens.(type))("value * list2.get(index)")>);
             }
         });
         Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("14")>), result);

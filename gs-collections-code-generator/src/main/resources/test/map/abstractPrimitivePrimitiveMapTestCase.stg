@@ -32,7 +32,7 @@ import com.gs.collections.api.block.function.primitive.<name2>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name1><name2>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name1><name2>Procedure;
 import com.gs.collections.api.block.procedure.primitive.<name1>Procedure;
-import com.gs.collections.api.block.procedure.primitive.<name2>Procedure;
+<if(!sameTwoPrimitives)>import com.gs.collections.api.block.procedure.primitive.<name2>Procedure;<endif>
 import com.gs.collections.api.iterator.<name2>Iterator;
 import com.gs.collections.api.map.primitive.<name1><name2>Map;
 import com.gs.collections.api.map.primitive.Immutable<name1><name2>Map;
@@ -42,7 +42,7 @@ import com.gs.collections.impl.bag.mutable.primitive.<name2>HashBag;
 import com.gs.collections.impl.block.factory.primitive.<name2>Predicates;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.primitive.<name1>ArrayList;
-import com.gs.collections.impl.list.mutable.primitive.<name2>ArrayList;
+<if(!sameTwoPrimitives)>import com.gs.collections.impl.list.mutable.primitive.<name2>ArrayList;<endif>
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.mutable.primitive.<name1><name2>HashMap;
 import com.gs.collections.impl.set.mutable.primitive.<name2>HashSet;
@@ -95,7 +95,6 @@ public abstract class Abstract<name1><name2>MapTestCase
         Assert.assertEquals(<(wideLiteral.(type2))("31")>, this.map.getOrThrow(<(literal.(type1))("31")>)<wideDelta.(type2)>);
         Assert.assertEquals(<(wideLiteral.(type2))("32")>, this.map.getOrThrow(<(literal.(type1))("32")>)<wideDelta.(type2)>);
 
-        
         Verify.assertThrows(IllegalStateException.class, new Runnable()
         {
             public void run()
@@ -746,7 +745,7 @@ public abstract class Abstract<name1><name2>MapTestCase
         {
             public <primitive2.wrapperName> valueOf(<type2> parameter)
             {
-                return <(castIntToNarrowType.(type2))("parameter + 1")>;
+                return <(castIntToNarrowTypeWithParens.(type2))("parameter + 1")>;
             }
         };
         RichIterable\<<primitive2.wrapperName>\> objects = map.collect(function);

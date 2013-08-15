@@ -27,7 +27,7 @@ import com.gs.collections.api.collection.ImmutableCollection;
 public interface Immutable<name>Collection extends <name>Iterable
 {
     \<V> ImmutableCollection\<V> collect(<name>ToObjectFunction\<? extends V> function);
-    
+
     <sharedAPI(fileName(primitive), name)>
 
     <immutableAPI(fileName(primitive), type, name)>

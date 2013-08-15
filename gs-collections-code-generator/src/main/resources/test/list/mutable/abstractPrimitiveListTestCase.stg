@@ -351,7 +351,7 @@ public abstract class Abstract<name>ListTestCase extends AbstractMutable<name>Co
         super.toList();
         Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), this.classUnderTest().toList());
     }
-    
+
     @Test
     public void toImmutable()
     {

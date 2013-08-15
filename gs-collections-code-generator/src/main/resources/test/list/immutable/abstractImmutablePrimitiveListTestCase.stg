@@ -96,9 +96,9 @@ public abstract class AbstractImmutable<name>ListTestCase extends AbstractImmuta
         Immutable<name>List list = this.classUnderTest();
         for (int i = 0; i \< list.size(); i++)
         {
-            Assert.assertEquals(i, list.indexOf(<(castIntToPrimitiveTypes.(type))>(i + 1)));
+            Assert.assertEquals(i, list.indexOf(<(castIntToNarrowTypeWithParens.(type))("i + 1")>));
         }
-        Assert.assertEquals(-1L, list.indexOf(<(castIntToPrimitiveTypes.(type))>(list.size() + 1))<(wideDelta.(type))>);
+        Assert.assertEquals(-1L, list.indexOf(<(castIntToNarrowTypeWithParens.(type))("list.size() + 1")>)<(wideDelta.(type))>);
 
         Immutable<name>List arrayList = this.newWith(<["1", "2", "1"]:(literal.(type))(); separator=", ">);
         Assert.assertEquals(0L, arrayList.indexOf(<(literal.(type))("1")>));
@@ -112,9 +112,9 @@ public abstract class AbstractImmutable<name>ListTestCase extends AbstractImmuta
         Immutable<name>List list = this.classUnderTest();
         for (int i = 0; i \< list.size(); i++)
         {
-            Assert.assertEquals(i, list.lastIndexOf(<(castIntToPrimitiveTypes.(type))>(i + 1)));
+            Assert.assertEquals(i, list.lastIndexOf(<(castIntToNarrowTypeWithParens.(type))("i + 1")>));
         }
-        Assert.assertEquals(-1L, list.lastIndexOf(<(castIntToPrimitiveTypes.(type))>(list.size() + 1))<(wideDelta.(type))>);
+        Assert.assertEquals(-1L, list.lastIndexOf(<(castIntToNarrowTypeWithParens.(type))("list.size() + 1")>)<(wideDelta.(type))>);
 
         Immutable<name>List arrayList = this.newWith(<["1", "2", "1"]:(literal.(type))(); separator=", ">);
         Assert.assertEquals(2L, arrayList.lastIndexOf(<(literal.(type))("1")>));
@@ -165,10 +165,10 @@ public abstract class AbstractImmutable<name>ListTestCase extends AbstractImmuta
         super.testToString();
         StringBuilder expectedString = new StringBuilder("[");
         int size = this.classUnderTest().size();
-        for (int i = 0; i \< size; i++)
+        for (<type> each = 0; each \< size; each++)
         {
-            expectedString.append(<(castIntToPrimitiveTypes.(type))>(i + 1));
-            expectedString.append(i == size - 1 ? "" : ", ");
+            expectedString.append(<(castFromIntWithParens.(type))({each + <(literal.(type))("1")>})>);
+            expectedString.append(<(castRealTypeToInt.(type))("each")> == size - 1 ? "" : ", ");
         }
         expectedString.append(']');
         Assert.assertEquals(expectedString.toString(), this.classUnderTest().toString());
@@ -183,12 +183,12 @@ public abstract class AbstractImmutable<name>ListTestCase extends AbstractImmuta
         StringBuilder expectedString = new StringBuilder("");
         StringBuilder expectedString1 = new StringBuilder("");
         int size = list.size();
-        for (int i = 0; i \< size; i++)
+        for (<type> each = 0; each \< size; each++)
         {
-            expectedString.append(<(castIntToPrimitiveTypes.(type))>(i + 1));
-            expectedString1.append(<(castIntToPrimitiveTypes.(type))>(i + 1));
-            expectedString.append(i == size - 1 ? "" : ", ");
-            expectedString1.append(i == size - 1 ? "" : "/");
+            expectedString.append(<(castFromIntWithParens.(type))({each + <(literal.(type))("1")>})>);
+            expectedString1.append(<(castFromIntWithParens.(type))({each + <(literal.(type))("1")>})>);
+            expectedString.append(<(castRealTypeToInt.(type))("each")> == size - 1 ? "" : ", ");
+            expectedString1.append(<(castRealTypeToInt.(type))("each")> == size - 1 ? "" : "/");
         }
         Assert.assertEquals(expectedString.toString(), list.makeString());
         Assert.assertEquals(expectedString1.toString(), list.makeString("/"));
@@ -203,12 +203,12 @@ public abstract class AbstractImmutable<name>ListTestCase extends AbstractImmuta
         StringBuilder expectedString = new StringBuilder("");
         StringBuilder expectedString1 = new StringBuilder("");
         int size = this.classUnderTest().size();
-        for (int i = 0; i \< size; i++)
+        for (<type> each = 0; each \< size; each++)
         {
-            expectedString.append(<(castIntToPrimitiveTypes.(type))>(i + 1));
-            expectedString1.append(<(castIntToPrimitiveTypes.(type))>(i + 1));
-            expectedString.append(i == size - 1 ? "" : ", ");
-            expectedString1.append(i == size - 1 ? "" : "/");
+            expectedString.append(<(castFromIntWithParens.(type))({each + <(literal.(type))("1")>})>);
+            expectedString1.append(<(castFromIntWithParens.(type))({each + <(literal.(type))("1")>})>);
+            expectedString.append(<(castRealTypeToInt.(type))("each")> == size - 1 ? "" : ", ");
+            expectedString1.append(<(castRealTypeToInt.(type))("each")> == size - 1 ? "" : "/");
         }
         Immutable<name>List list = this.classUnderTest();
         StringBuilder appendable2 = new StringBuilder();

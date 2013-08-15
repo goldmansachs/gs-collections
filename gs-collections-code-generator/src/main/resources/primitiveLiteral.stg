@@ -165,10 +165,10 @@ castSum ::= [
     default: "no matching sum cast"
 ]
 
-castIntToNarrowType ::= [
-    "byte": "byteCastExpression",
-    "short": "shortCastExpression",
-    "char": "charCastExpression",
+castIntToNarrowTypeWithParens ::= [
+    "byte": "byteCastWithParens",
+    "short": "shortCastWithParens",
+    "char": "charCastWithParens",
     "int": "noCast",
     "long": "noCast",
     "float": "noCast",
@@ -176,10 +176,10 @@ castIntToNarrowType ::= [
     default: "no matching narrow cast"
 ]
 
-castIntToNarrowTypeWithoutBrackets ::= [
-    "byte": "byteCastExpressionWithoutBrackets",
-    "short": "shortCastExpressionWithoutBrackets",
-    "char": "charCastExpressionWithoutBrackets",
+castIntToNarrowType ::= [
+    "byte": "byteCast",
+    "short": "shortCast",
+    "char": "charCast",
     "int": "noCast",
     "long": "noCast",
     "float": "noCast",
@@ -188,30 +188,6 @@ castIntToNarrowTypeWithoutBrackets ::= [
 
 noCast(item) ::= <<
 <item>
->>
-
-shortCastExpression(item) ::= <<
-(short) (<item>)
->>
-
-byteCastExpression(item) ::= <<
-(byte) (<item>)
->>
-
-charCastExpression(item) ::= <<
-(char) (<item>)
->>
-
-shortCastExpressionWithoutBrackets(item) ::= <<
-(short) <item>
->>
-
-byteCastExpressionWithoutBrackets(item) ::= <<
-(byte) <item>
->>
-
-charCastExpressionWithoutBrackets(item) ::= <<
-(char) <item>
 >>
 
 castRealTypeToInt ::= [
@@ -253,6 +229,34 @@ doubleCast(item) ::= <<
 (double) <item>
 >>
 
+intCastWithParens(item) ::= <<
+(int) (<item>)
+>>
+
+shortCastWithParens(item) ::= <<
+(short) (<item>)
+>>
+
+byteCastWithParens(item) ::= <<
+(byte) (<item>)
+>>
+
+charCastWithParens(item) ::= <<
+(char) (<item>)
+>>
+
+longCastWithParens(item) ::= <<
+(long) (<item>)
+>>
+
+floatCastWithParens(item) ::= <<
+(float) (<item>)
+>>
+
+doubleCastWithParens(item) ::= <<
+(double) (<item>)
+>>
+
 castFromInt ::= [
     "byte": "byteCast",
     "short": "shortCast",
@@ -261,6 +265,17 @@ castFromInt ::= [
     "long": "longCast",
     "float": "floatCast",
     "double": "doubleCast",
+    default: "no matching int cast"
+]
+
+castFromIntWithParens ::= [
+    "byte": "byteCastWithParens",
+    "short": "shortCastWithParens",
+    "char": "charCastWithParens",
+    "int": "noCast",
+    "long": "longCastWithParens",
+    "float": "floatCastWithParens",
+    "double": "doubleCastWithParens",
     default: "no matching int cast"
 ]
 
@@ -282,13 +297,4 @@ cast ::= [
 article ::= [
     "int": "an",
     default: "a"
-]
-
-castIntToPrimitiveTypes ::= [
-    "byte": "(byte) ",
-    "short": "(short) ",
-    "char": "(char) ",
-    "float": "(float) ",
-    "double": "(double) ",
-    default: ""
 ]

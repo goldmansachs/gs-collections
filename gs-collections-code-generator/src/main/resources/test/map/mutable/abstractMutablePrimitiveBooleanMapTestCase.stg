@@ -558,6 +558,7 @@ public abstract class AbstractMutable<name>BooleanMapTestCase extends Abstract<n
         Assert.assertFalse(this.map.contains(true));
     }
 
+    @Override
     @Test
     public void containsAll()
     {

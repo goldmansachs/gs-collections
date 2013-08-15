@@ -116,9 +116,9 @@ public abstract class AbstractImmutable<name>CollectionTestCase extends Abstract
 
         this.assertSizeAndContains(collection6);
         this.assertSizeAndContains(collection5);
-        this.assertSizeAndContains(collection4, <(literal.(type))("1")>);                                                                           
-        this.assertSizeAndContains(collection0, <(literal.(type))("1")>, <(literal.(type))("2")>);                                                  
-        this.assertSizeAndContains(collection1, <(literal.(type))("1")>, <(literal.(type))("2")>, <(literal.(type))("3")>);                         
+        this.assertSizeAndContains(collection4, <(literal.(type))("1")>);
+        this.assertSizeAndContains(collection0, <(literal.(type))("1")>, <(literal.(type))("2")>);
+        this.assertSizeAndContains(collection1, <(literal.(type))("1")>, <(literal.(type))("2")>, <(literal.(type))("3")>);
         this.assertSizeAndContains(collection2, <(literal.(type))("1")>, <(literal.(type))("2")>, <(literal.(type))("3")>, <(literal.(type))("4")>);
     }
 }

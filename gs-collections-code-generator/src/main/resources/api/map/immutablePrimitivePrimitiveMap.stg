@@ -34,7 +34,7 @@ public interface Immutable<name1><name2>Map extends <name1><name2>Map
     Immutable<name1><name2>Map select(<name1><name2>Predicate predicate);
 
     Immutable<name1><name2>Map reject(<name1><name2>Predicate predicate);
-    
+
     Immutable<name2>Collection select(<name2>Predicate predicate);
 
     Immutable<name2>Collection reject(<name2>Predicate predicate);

@@ -258,7 +258,7 @@ public class Object<name>HashMapTest extends AbstractMutableObject<name>MapTestC
         {
             public <type> valueOf(<type> value)
             {
-                return <(castIntToNarrowType.(type))("value + 1")>;
+                return <(castIntToNarrowTypeWithParens.(type))("value + 1")>;
             }
         };
 

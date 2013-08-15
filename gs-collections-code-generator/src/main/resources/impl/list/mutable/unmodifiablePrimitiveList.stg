@@ -50,7 +50,7 @@ public final class Unmodifiable<name>List
     {
         return (Mutable<name>List) this.get<name>Collection();
     }
-    
+
     public <type> get(int index)
     {
         return this.getMutable<name>List().get(index);
