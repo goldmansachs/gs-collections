@@ -5,9 +5,7 @@ import "primitiveLiteral.stg"
 
 targetPath() ::= "com/gs/collections/impl/map/immutable/primitive"
 
-fileName(primitive) ::= "AbstractImmutable<primitive.name>ObjectMap"
-
-skipBoolean() ::= "true"
+fileName(primitive) ::= "AbstractImmutableObject<primitive.name>Map"
 
 class(primitive) ::= <<
 <body(primitive.type, primitive.name)>
@@ -23,32 +21,32 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-import com.gs.collections.api.map.primitive.Immutable<name>ObjectMap;
-import com.gs.collections.api.map.primitive.<name>ObjectMap;
-import com.gs.collections.api.map.primitive.Mutable<name>ObjectMap;
-import com.gs.collections.impl.block.procedure.checked.primitive.Checked<name>ObjectProcedure;
-import com.gs.collections.impl.map.mutable.primitive.<name>ObjectHashMap;
+import com.gs.collections.api.map.primitive.ImmutableObject<name>Map;
+import com.gs.collections.api.map.primitive.Object<name>Map;
+import com.gs.collections.api.map.primitive.MutableObject<name>Map;
+import com.gs.collections.impl.block.procedure.checked.primitive.CheckedObject<name>Procedure;
+import com.gs.collections.impl.map.mutable.primitive.Object<name>HashMap;
 
 /**
- * This file was automatically generated from template file abstractImmutablePrimitiveObjectMap.stg.
+ * This file was automatically generated from template file abstractImmutableObjectPrimitiveMap.stg.
  *
  * @since 4.0.
  */
-public abstract class AbstractImmutable<name>ObjectMap\<V> implements Immutable<name>ObjectMap\<V>
+public abstract class AbstractImmutableObject<name>Map\<V> implements ImmutableObject<name>Map\<V>
 {
-    protected static class Immutable<name>ObjectMapSerializationProxy\<V> implements Externalizable
+    protected static class ImmutableObject<name>MapSerializationProxy\<V> implements Externalizable
     {
         private static final long serialVersionUID = 1L;
 
-        private <name>ObjectMap\<V> map;
+        private Object<name>Map\<V> map;
 
         @SuppressWarnings("UnusedDeclaration")
-        public Immutable<name>ObjectMapSerializationProxy()
+        public ImmutableObject<name>MapSerializationProxy()
         {
             // Empty constructor for Externalizable class
         }
 
-        protected Immutable<name>ObjectMapSerializationProxy(<name>ObjectMap\<V> map)
+        protected ImmutableObject<name>MapSerializationProxy(Object<name>Map\<V> map)
         {
             this.map = map;
         }
@@ -58,13 +56,13 @@ public abstract class AbstractImmutable<name>ObjectMap\<V> implements Immutable<
             out.writeInt(this.map.size());
             try
             {
-                this.map.forEachKeyValue(new Checked<name>ObjectProcedure\<V>()
+                this.map.forEachKeyValue(new CheckedObject<name>Procedure\<V>()
                 {
                     @Override
-                    public void safeValue(<type> key, V value) throws IOException
+                    public void safeValue(V key, <type> value) throws IOException
                     {
-                        out.write<name>(key);
-                        out.writeObject(value);
+                        out.writeObject(key);
+                        out.write<name>(value);
                     }
                 });
             }
@@ -81,11 +79,11 @@ public abstract class AbstractImmutable<name>ObjectMap\<V> implements Immutable<
         public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
         {
             int size = in.readInt();
-            Mutable<name>ObjectMap\<V> deserializedMap = new <name>ObjectHashMap\<V>();
+            MutableObject<name>Map\<V> deserializedMap = new Object<name>HashMap\<V>();
 
             for (int i = 0; i \< size; i++)
             {
-                deserializedMap.put(in.read<name>(), (V) in.readObject());
+                deserializedMap.put((V) in.readObject(), in.read<name>());
             }
 
             this.map = deserializedMap;

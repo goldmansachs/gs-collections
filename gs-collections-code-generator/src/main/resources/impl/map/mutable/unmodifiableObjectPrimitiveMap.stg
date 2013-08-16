@@ -35,7 +35,9 @@ import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.map.primitive.ImmutableObject<name>Map;
 import com.gs.collections.api.map.primitive.MutableObject<name>Map;
+import com.gs.collections.api.map.primitive.Object<name>Map;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
+import com.gs.collections.impl.factory.primitive.Object<name>Maps;
 
 /**
  * This file was automatically generated from template file unmodifiableObjectPrimitiveMap.stg.
@@ -76,6 +78,11 @@ public final class UnmodifiableObject<name>Map\<K>
     public void put(K key, <type> value)
     {
         throw new UnsupportedOperationException("Cannot call put() on " + this.getClass().getSimpleName());
+    }
+
+    public void putAll(Object<name>Map\<? extends K> map)
+    {
+        throw new UnsupportedOperationException("Cannot call putAll() on " + this.getClass().getSimpleName());
     }
 
     public void removeKey(K key)
@@ -276,7 +283,7 @@ public final class UnmodifiableObject<name>Map\<K>
 
     public ImmutableObject<name>Map\<K> toImmutable()
     {
-        throw new UnsupportedOperationException("toImmutable not implemented yet");
+        return Object<name>Maps.immutable.withAll(this);
     }
 
     public int size()

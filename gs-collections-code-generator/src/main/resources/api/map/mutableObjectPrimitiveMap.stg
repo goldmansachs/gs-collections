@@ -32,6 +32,8 @@ public interface MutableObject<name>Map\<K> extends Object<name>Map\<K>
 
     void put(K key, <type> value);
 
+    void putAll(Object<name>Map\<? extends K> map);
+
     void removeKey(K key);
 
     void remove(K key);

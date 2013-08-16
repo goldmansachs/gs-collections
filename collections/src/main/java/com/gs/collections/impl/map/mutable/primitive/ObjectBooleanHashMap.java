@@ -47,6 +47,7 @@ import com.gs.collections.api.map.primitive.MutableObjectBooleanMap;
 import com.gs.collections.api.map.primitive.ObjectBooleanMap;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
+import com.gs.collections.impl.factory.primitive.ObjectBooleanMaps;
 import com.gs.collections.impl.lazy.primitive.LazyBooleanIterableAdapter;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
@@ -119,6 +120,13 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         this(initialCapacity, DEFAULT_LOAD_FACTOR);
     }
 
+    public ObjectBooleanHashMap(ObjectBooleanMap<? extends K> map)
+    {
+        this(Math.max(map.size(), DEFAULT_INITIAL_CAPACITY), DEFAULT_LOAD_FACTOR);
+
+        this.putAll(map);
+    }
+
     public ObjectBooleanHashMap(int initialCapacity, float loadFactor)
     {
         if (initialCapacity < 0)
@@ -146,7 +154,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
 
     public ImmutableObjectBooleanMap<K> toImmutable()
     {
-        throw new UnsupportedOperationException("toImmutable not implemented yet");
+        return ObjectBooleanMaps.immutable.withAll(this);
     }
 
     public static <K> ObjectBooleanHashMap<K> newWithKeysValues(K key1, boolean value1)
@@ -387,6 +395,17 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         {
             this.rehash();
         }
+    }
+
+    public void putAll(ObjectBooleanMap<? extends K> map)
+    {
+        map.forEachKeyValue(new ObjectBooleanProcedure<K>()
+        {
+            public void value(K each, boolean parameter)
+            {
+                ObjectBooleanHashMap.this.put(each, parameter);
+            }
+        });
     }
 
     private static Object toSentinelIfNull(Object key)

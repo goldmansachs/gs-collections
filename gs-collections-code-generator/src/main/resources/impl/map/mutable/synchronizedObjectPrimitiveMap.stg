@@ -38,7 +38,9 @@ import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.primitive.ImmutableObject<name>Map;
 import com.gs.collections.api.map.primitive.MutableObject<name>Map;
+import com.gs.collections.api.map.primitive.Object<name>Map;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
+import com.gs.collections.impl.factory.primitive.Object<name>Maps;
 import net.jcip.annotations.GuardedBy;
 
 /**
@@ -84,6 +86,14 @@ public final class SynchronizedObject<name>Map\<K>
         synchronized (this.lock)
         {
             this.map.put(key, value);
+        }
+    }
+
+    public void putAll(Object<name>Map\<? extends K> map)
+    {
+        synchronized (this.lock)
+        {
+            this.map.putAll(map);
         }
     }
 
@@ -399,7 +409,7 @@ public final class SynchronizedObject<name>Map\<K>
 
     public ImmutableObject<name>Map\<K> toImmutable()
     {
-        throw new UnsupportedOperationException("toImmutable not implemented yet");
+        return Object<name>Maps.immutable.withAll(this);
     }
 
     public int size()

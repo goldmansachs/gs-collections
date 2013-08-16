@@ -1,0 +1,36 @@
+import "copyright.stg"
+
+targetPath() ::= "com/gs/collections/impl/factory/primitive"
+
+fileName(primitive) ::= "Object<primitive.name>Maps"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.factory.primitive;
+
+import com.gs.collections.api.factory.map.primitive.ImmutableObject<name>MapFactory;
+import com.gs.collections.impl.map.immutable.primitive.ImmutableObject<name>MapFactoryImpl;
+
+/**
+ * <name>ObjectMaps is a static utility for creating {@link ImmutableObject<name>MapFactory}.
+ * This file was automatically generated from template file objectPrimitiveMaps.stg.
+ *
+ * @since 4.0.
+ */
+@SuppressWarnings("ConstantNamingConvention")
+public final class Object<name>Maps
+{
+    public static final ImmutableObject<name>MapFactory immutable = new ImmutableObject<name>MapFactoryImpl();
+
+    private Object<name>Maps()
+    {
+        throw new AssertionError("Suppress default constructor for noninstantiability");
+    }
+}
+
+>>

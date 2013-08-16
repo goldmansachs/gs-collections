@@ -48,6 +48,7 @@ import com.gs.collections.api.map.primitive.MutableObject<name>Map;
 import com.gs.collections.api.map.primitive.Object<name>Map;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
+import com.gs.collections.impl.factory.primitive.Object<name>Maps;
 import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
@@ -132,6 +133,13 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         this.init(this.fastCeil(initialCapacity / loadFactor));
     }
 
+    public Object<name>HashMap(Object<name>Map\<? extends K> map)
+    {
+        this(Math.max(map.size(), DEFAULT_INITIAL_CAPACITY), DEFAULT_LOAD_FACTOR);
+
+        this.putAll(map);
+    }
+
     public static \<K> Object<name>HashMap\<K> newMap()
     {
         return new Object<name>HashMap\<K>();
@@ -214,7 +222,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
 
     public ImmutableObject<name>Map\<K> toImmutable()
     {
-        throw new UnsupportedOperationException("toImmutable not implemented yet");
+        return Object<name>Maps.immutable.withAll(this);
     }
 
     private int init(int initialCapacity)
@@ -392,7 +400,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         }
     }
 
-    public void putAll(Object<name>Map\<K> map)
+    public void putAll(Object<name>Map\<? extends K> map)
     {
         map.forEachKeyValue(new Object<name>Procedure\<K>()
         {

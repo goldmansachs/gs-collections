@@ -99,6 +99,14 @@
             <Class name="com.gs.collections.impl.map.immutable.primitive.ImmutableShortObjectHashMap" />
             <Class name="com.gs.collections.impl.map.immutable.primitive.ImmutableByteObjectHashMap" />
             <Class name="com.gs.collections.impl.map.immutable.primitive.ImmutableCharObjectHashMap" />
+            <Class name="com.gs.collections.impl.map.immutable.primitive.ImmutableObjectIntHashMap" />
+            <Class name="com.gs.collections.impl.map.immutable.primitive.ImmutableObjectFloatHashMap" />
+            <Class name="com.gs.collections.impl.map.immutable.primitive.ImmutableObjectDoubleHashMap" />
+            <Class name="com.gs.collections.impl.map.immutable.primitive.ImmutableObjectLongHashMap" />
+            <Class name="com.gs.collections.impl.map.immutable.primitive.ImmutableObjectShortHashMap" />
+            <Class name="com.gs.collections.impl.map.immutable.primitive.ImmutableObjectByteHashMap" />
+            <Class name="com.gs.collections.impl.map.immutable.primitive.ImmutableObjectCharHashMap" />
+            <Class name="com.gs.collections.impl.map.immutable.primitive.ImmutableObjectBooleanHashMap" />
             <Class name="com.gs.collections.impl.map.immutable.primitive.ImmutableIntIntHashMap" />
             <Class name="com.gs.collections.impl.map.immutable.primitive.ImmutableIntFloatHashMap" />
             <Class name="com.gs.collections.impl.map.immutable.primitive.ImmutableIntDoubleHashMap" />
