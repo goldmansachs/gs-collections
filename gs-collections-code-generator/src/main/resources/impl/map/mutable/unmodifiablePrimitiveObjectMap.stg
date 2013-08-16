@@ -59,6 +59,7 @@ import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.UnmodifiableIteratorAdapter;
+import com.gs.collections.impl.factory.primitive.<name>ObjectMaps;
 
 /**
  * This file was automatically generated from template file unmodifiablePrimitiveObjectMap.stg.
@@ -611,7 +612,7 @@ public final class Unmodifiable<name>ObjectMap\<V>
 
     public Immutable<name>ObjectMap\<V> toImmutable()
     {
-        throw new UnsupportedOperationException("toImmutable not implemented yet");
+        return <name>ObjectMaps.immutable.withAll(this);
     }
 
     public void forEach(Procedure\<? super V> procedure)

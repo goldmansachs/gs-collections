@@ -22,7 +22,7 @@ import com.gs.collections.api.map.primitive.<name1><name2>Map;
 
 /**
  * A factory which creates instances of type {@link Immutable<name1><name2>Map}.
- * This file was automatically generated from template file immutablePrimitiveBagFactory.stg.
+ * This file was automatically generated from template file immutablePrimitivePrimitiveMapFactory.stg.
  *
  * @since 4.0.
  */

@@ -1,0 +1,177 @@
+import "copyright.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+
+isTest() ::= "true"
+
+targetPath() ::= "com/gs/collections/impl/map/immutable/primitive"
+
+fileName(primitive) ::= "Immutable<primitive.name>ObjectEmptyMapTest"
+
+skipBoolean() ::= "true"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.map.immutable.primitive;
+
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.map.primitive.Immutable<name>ObjectMap;
+import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.test.Verify;
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * JUnit test for {@link Immutable<name>ObjectEmptyMap}.
+ * This file was automatically generated from template file primitiveObjectEmptyMapTest.stg.
+ */
+public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>ObjectMapTestCase
+{
+    @Override
+    protected Immutable<name>ObjectMap\<String> classUnderTest()
+    {
+        return (Immutable<name>ObjectMap\<String>) Immutable<name>ObjectEmptyMap.INSTANCE;
+    }
+
+    @Override
+    @Test
+    public void containsValue()
+    {
+        Assert.assertFalse(this.classUnderTest().containsValue(null));
+        Assert.assertFalse(this.classUnderTest().containsValue("zero"));
+        Assert.assertFalse(this.classUnderTest().containsValue("thirtyOne"));
+        Assert.assertFalse(this.classUnderTest().containsValue("thirtyTwo"));
+    }
+
+    @Override
+    @Test
+    public void contains()
+    {
+        Assert.assertFalse(this.classUnderTest().contains(null));
+        Assert.assertFalse(this.classUnderTest().contains("zero"));
+        Assert.assertFalse(this.classUnderTest().contains("thirtyOne"));
+        Assert.assertFalse(this.classUnderTest().contains("thirtyTwo"));
+    }
+
+    @Override
+    @Test
+    public void containsAllIterable()
+    {
+        Assert.assertFalse(this.classUnderTest().containsAllIterable(FastList.newListWith("zero", "thirtyOne")));
+        Assert.assertFalse(this.classUnderTest().containsAllIterable(FastList.newListWith("zero", "thirtyOne", "thirtyTwo")));
+        Assert.assertFalse(this.classUnderTest().containsAllIterable(FastList.newListWith("zero", "one", "thirtyTwo")));
+        Assert.assertFalse(this.classUnderTest().containsAllIterable(FastList.newListWith("two", "one", "nine")));
+        Assert.assertTrue(this.classUnderTest().containsAllIterable(FastList.newListWith()));
+    }
+
+    @Override
+    @Test
+    public void containsAll()
+    {
+        Assert.assertFalse(this.classUnderTest().containsAll(FastList.newListWith("zero", "thirtyOne")));
+        Assert.assertFalse(this.classUnderTest().containsAll(FastList.newListWith("zero", "thirtyOne", "thirtyTwo")));
+        Assert.assertFalse(this.classUnderTest().containsAll(FastList.newListWith("zero", "one", "thirtyTwo")));
+        Assert.assertFalse(this.classUnderTest().containsAll(FastList.newListWith("two", "one", "nine")));
+        Assert.assertTrue(this.classUnderTest().containsAll(FastList.newListWith()));
+    }
+
+    @Override
+    @Test
+    public void containsAllArguments()
+    {
+        Assert.assertFalse(this.classUnderTest().containsAllArguments("zero", "thirtyOne"));
+        Assert.assertFalse(this.classUnderTest().containsAllArguments("zero", "thirtyOne", "thirtyTwo"));
+        Assert.assertFalse(this.classUnderTest().containsAllArguments("zero", "one", "thirtyTwo"));
+        Assert.assertFalse(this.classUnderTest().containsAllArguments("two", "one", "nine"));
+        Assert.assertTrue(this.classUnderTest().containsAllArguments());
+    }
+
+    @Override
+    @Test
+    public void containsKey()
+    {
+        Assert.assertFalse(this.classUnderTest().containsKey(<(literal.(type))("0")>));
+        Assert.assertFalse(this.classUnderTest().containsKey(<(literal.(type))("31")>));
+        Assert.assertFalse(this.classUnderTest().containsKey(<(literal.(type))("32")>));
+        Assert.assertFalse(this.classUnderTest().containsKey(<(literal.(type))("1")>));
+        Assert.assertFalse(this.classUnderTest().containsKey(<(literal.(type))("5")>));
+        Assert.assertFalse(this.classUnderTest().containsKey(<(literal.(type))("35")>));
+    }
+
+    @Override
+    @Test
+    public void getIfAbsent()
+    {
+        Function0\<String> ifAbsent = new Function0\<String>()
+        {
+            public String value()
+            {
+                return "ifAbsent";
+            }
+        };
+
+        Assert.assertEquals("ifAbsent", this.classUnderTest().getIfAbsent(<(literal.(type))("0")>, ifAbsent));
+        Assert.assertEquals("ifAbsent", this.classUnderTest().getIfAbsent(<(literal.(type))("31")>, ifAbsent));
+        Assert.assertEquals("ifAbsent", this.classUnderTest().getIfAbsent(<(literal.(type))("32")>, ifAbsent));
+
+        Assert.assertEquals("ifAbsent", this.classUnderTest().getIfAbsent(<(literal.(type))("1")>, ifAbsent));
+        Assert.assertEquals("ifAbsent", this.classUnderTest().getIfAbsent(<(literal.(type))("33")>, ifAbsent));
+    }
+
+    @Override
+    @Test
+    public void get()
+    {
+        Assert.assertNull(this.classUnderTest().get(<(literal.(type))("0")>));
+        Assert.assertNull(this.classUnderTest().get(<(literal.(type))("31")>));
+        Assert.assertNull(this.classUnderTest().get(<(literal.(type))("32")>));
+        Assert.assertNull(this.classUnderTest().get(<(literal.(type))("1")>));
+        Assert.assertNull(this.classUnderTest().get(<(literal.(type))("33")>));
+    }
+
+    @Override
+    @Test
+    public void iterator()
+    {
+        final Iterator\<String> iterator = this.classUnderTest().iterator();
+        Assert.assertFalse(iterator.hasNext());
+        Verify.assertThrows(NoSuchElementException.class, new Runnable()
+        {
+            public void run()
+            {
+                iterator.next();
+            }
+        });
+        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
+        {
+            public void run()
+            {
+                iterator.remove();
+            }
+        });
+    }
+
+    @Override
+    @Test
+    public void isEmpty()
+    {
+        Assert.assertTrue(this.classUnderTest().isEmpty());
+    }
+
+    @Override
+    @Test
+    public void notEmpty()
+    {
+        Assert.assertFalse(this.classUnderTest().notEmpty());
+    }
+}
+
+>>

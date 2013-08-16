@@ -1,0 +1,96 @@
+import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+
+targetPath() ::= "com/gs/collections/impl/map/immutable/primitive"
+
+fileName(primitive) ::= "AbstractImmutable<primitive.name>ObjectMap"
+
+skipBoolean() ::= "true"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.map.immutable.primitive;
+
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+
+import com.gs.collections.api.map.primitive.Immutable<name>ObjectMap;
+import com.gs.collections.api.map.primitive.<name>ObjectMap;
+import com.gs.collections.api.map.primitive.Mutable<name>ObjectMap;
+import com.gs.collections.impl.block.procedure.checked.primitive.Checked<name>ObjectProcedure;
+import com.gs.collections.impl.map.mutable.primitive.<name>ObjectHashMap;
+
+public abstract class AbstractImmutable<name>ObjectMap\<V> implements Immutable<name>ObjectMap\<V>
+{
+    protected static class Immutable<name>ObjectMapSerializationProxy\<V> implements Externalizable
+    {
+        private static final long serialVersionUID = 1L;
+
+        private <name>ObjectMap\<V> map;
+
+        @SuppressWarnings("UnusedDeclaration")
+        public Immutable<name>ObjectMapSerializationProxy()
+        {
+            // Empty constructor for Externalizable class
+        }
+
+        protected Immutable<name>ObjectMapSerializationProxy(<name>ObjectMap\<V> map)
+        {
+            this.map = map;
+        }
+
+        public void writeExternal(final ObjectOutput out) throws IOException
+        {
+            out.writeInt(this.map.size());
+            try
+            {
+                this.map.forEachKeyValue(new Checked<name>ObjectProcedure\<V>()
+                {
+                    @Override
+                    public void safeValue(<type> key, V value) throws IOException
+                    {
+                        out.write<name>(key);
+                        out.writeObject(value);
+                    }
+                });
+            }
+            catch (RuntimeException e)
+            {
+                if (e.getCause() instanceof IOException)
+                {
+                    throw (IOException) e.getCause();
+                }
+                throw e;
+            }
+        }
+
+        public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
+        {
+            int size = in.readInt();
+            Mutable<name>ObjectMap\<V> deserializedMap = new <name>ObjectHashMap\<V>();
+
+            for (int i = 0; i \< size; i++)
+            {
+                deserializedMap.put(in.read<name>(), (V) in.readObject());
+            }
+
+            this.map = deserializedMap;
+        }
+
+        protected Object readResolve()
+        {
+            return this.map.toImmutable();
+        }
+    }
+}
+
+>>

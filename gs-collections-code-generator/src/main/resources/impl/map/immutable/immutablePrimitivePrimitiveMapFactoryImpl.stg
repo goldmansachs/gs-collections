@@ -23,7 +23,7 @@ import com.gs.collections.api.map.primitive.<name1><name2>Map;
 
 /**
  * Immutable<name1><name2>MapFactoryImpl is a factory implementation which creates instances of type {@link Immutable<name1><name2>Map}.
- * This file was automatically generated from template file immutablePrimitiveMapFactoryImpl.stg.
+ * This file was automatically generated from template file immutablePrimitivePrimitiveMapFactoryImpl.stg.
  *
  * @since 4.0.
  */

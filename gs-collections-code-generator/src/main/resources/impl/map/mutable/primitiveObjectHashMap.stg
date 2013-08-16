@@ -86,6 +86,7 @@ import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.LazyIterate;
 import com.gs.collections.impl.utility.internal.IterableIterate;
+import com.gs.collections.impl.factory.primitive.<name>ObjectMaps;
 
 /**
  * This file was automatically generated from template file primitiveObjectHashMap.stg.
@@ -115,6 +116,13 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
     public <name>ObjectHashMap(int initialCapacity)
     {
         this(initialCapacity, DEFAULT_LOAD_FACTOR);
+    }
+
+    public <name>ObjectHashMap(<name>ObjectMap\<? extends V> map)
+    {
+        this(Math.max(map.size(), DEFAULT_INITIAL_CAPACITY), DEFAULT_LOAD_FACTOR);
+
+        this.putAll(map);
     }
 
     public <name>ObjectHashMap(int initialCapacity, float loadFactor)
@@ -336,7 +344,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         return null;
     }
 
-    public void putAll(<name>ObjectMap\<V> map)
+    public void putAll(<name>ObjectMap\<? extends V> map)
     {
         map.forEachKeyValue(new <name>ObjectProcedure\<V>()
         {
@@ -2206,7 +2214,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
 
     public Immutable<name>ObjectMap\<V> toImmutable()
     {
-        throw new UnsupportedOperationException("toImmutable not implemented yet");
+        return <name>ObjectMaps.immutable.withAll(this);
     }
 
     public Iterator\<V> iterator()

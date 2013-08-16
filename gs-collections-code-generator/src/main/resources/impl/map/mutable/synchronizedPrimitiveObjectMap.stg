@@ -59,6 +59,7 @@ import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.factory.primitive.<name>ObjectMaps;
 import net.jcip.annotations.GuardedBy;
 
 /**
@@ -917,7 +918,7 @@ public final class Synchronized<name>ObjectMap\<V>
 
     public Immutable<name>ObjectMap\<V> toImmutable()
     {
-        throw new UnsupportedOperationException("toImmutable not implemented yet");
+        return <name>ObjectMaps.immutable.withAll(this);
     }
 
     public void forEach(Procedure\<? super V> procedure)

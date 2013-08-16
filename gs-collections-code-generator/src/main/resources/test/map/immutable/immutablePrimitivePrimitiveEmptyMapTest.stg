@@ -221,6 +221,7 @@ public class Immutable<name1><name2>EmptyMapTest extends AbstractImmutable<name1
     }
 
     @Override
+    @Test
     public void reject()
     {
         Assert.assertEquals(this.classUnderTest(), this.classUnderTest().reject(new <name1><name2>Predicate()
@@ -233,6 +234,7 @@ public class Immutable<name1><name2>EmptyMapTest extends AbstractImmutable<name1
     }
 
     @Override
+    @Test
     public void select_value()
     {
         Assert.assertEquals(<name2>ArrayList.newListWith(), this.classUnderTest().select(new <name2>Predicate()
@@ -245,6 +247,7 @@ public class Immutable<name1><name2>EmptyMapTest extends AbstractImmutable<name1
     }
 
     @Override
+    @Test
     public void reject_value()
     {
         Assert.assertEquals(new <name2>ArrayList(), this.classUnderTest().reject(new <name2>Predicate()
@@ -257,6 +260,7 @@ public class Immutable<name1><name2>EmptyMapTest extends AbstractImmutable<name1
     }
 
     @Override
+    @Test
     public void count()
     {
         Assert.assertEquals(0, this.classUnderTest().count(new <name2>Predicate()
@@ -269,6 +273,7 @@ public class Immutable<name1><name2>EmptyMapTest extends AbstractImmutable<name1
     }
 
     @Override
+    @Test
     public void sum()
     {
         Assert.assertEquals(<(wideLiteral.(type2))("0")>, this.classUnderTest().sum()<wideDelta.(type2)>);

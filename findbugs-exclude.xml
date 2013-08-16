@@ -92,6 +92,13 @@
             <Class name="com.gs.collections.impl.bag.immutable.primitive.ImmutableShortHashBag" />
             <Class name="com.gs.collections.impl.bag.immutable.primitive.ImmutableCharHashBag" />
             <Class name="com.gs.collections.impl.bag.immutable.primitive.ImmutableBooleanHashBag" />
+            <Class name="com.gs.collections.impl.map.immutable.primitive.ImmutableIntObjectHashMap" />
+            <Class name="com.gs.collections.impl.map.immutable.primitive.ImmutableFloatObjectHashMap" />
+            <Class name="com.gs.collections.impl.map.immutable.primitive.ImmutableDoubleObjectHashMap" />
+            <Class name="com.gs.collections.impl.map.immutable.primitive.ImmutableLongObjectHashMap" />
+            <Class name="com.gs.collections.impl.map.immutable.primitive.ImmutableShortObjectHashMap" />
+            <Class name="com.gs.collections.impl.map.immutable.primitive.ImmutableByteObjectHashMap" />
+            <Class name="com.gs.collections.impl.map.immutable.primitive.ImmutableCharObjectHashMap" />
             <Class name="com.gs.collections.impl.map.immutable.primitive.ImmutableIntIntHashMap" />
             <Class name="com.gs.collections.impl.map.immutable.primitive.ImmutableIntFloatHashMap" />
             <Class name="com.gs.collections.impl.map.immutable.primitive.ImmutableIntDoubleHashMap" />
