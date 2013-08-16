@@ -55,7 +55,7 @@
             conf="compile"
             changing="true" />
 
-        <dependency org="commons-codec" name="commons-codec" rev="1.6" conf="compile" />
+        <dependency org="commons-codec" name="commons-codec" rev="1.8" conf="compile" />
 
         <dependency org="junit" name="junit" rev="${junit.version}" conf="compile" />
         <dependency org="org.hamcrest" name="hamcrest-core" rev="1.3" conf="compile" />

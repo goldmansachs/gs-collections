@@ -41,7 +41,7 @@ class ScalaAnagramTest
                 .values
                 .filter(_.size > SIZE_THRESHOLD)
                 .toList
-                .sort(_.size > _.size)
+                .sortWith(_.size > _.size)
                 .map(list => list.size + ": " + list)
                 .foreach(log)
     }
@@ -53,7 +53,7 @@ class ScalaAnagramTest
                 .values
                 .filter(list => list.size > SIZE_THRESHOLD)
                 .toList
-                .sort((list1, list2) => list1.size > list2.size)
+                .sortWith((list1, list2) => list1.size > list2.size)
                 .map(list => list.size + ": " + list)
                 .foreach(listString => log(listString))
     }

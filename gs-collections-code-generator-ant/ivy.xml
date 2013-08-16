@@ -48,7 +48,7 @@
             rev="${build.version.full}"
             conf="compile"
             changing="true" />
-        <dependency org="org.apache.ant" name="ant" rev="1.8.4" conf="compile" />
+        <dependency org="org.apache.ant" name="ant" rev="1.9.2" conf="compile" />
 
     </dependencies>
 

@@ -4,9 +4,7 @@
     <option name="USE_PROJECT_PROFILE" value="true" />
     <version value="1.0" />
     <info color="ffa500">
-      <option name="FOREGROUND" />
       <option name="BACKGROUND" value="f6ebbc" />
-      <option name="FONT_TYPE" value="0" />
       <option name="EFFECT_COLOR" value="ffa500" />
       <option name="EFFECT_TYPE" value="1" />
       <option name="ERROR_STRIPE_COLOR" value="ffa500" />
@@ -14,14 +12,7 @@
       <option name="myVal" value="50" />
       <option name="myExternalName" value="INSPECTION" />
       <option name="myDefaultAttributes">
-        <value>
-          <option name="FOREGROUND" />
-          <option name="BACKGROUND" />
-          <option name="FONT_TYPE" value="0" />
-          <option name="EFFECT_COLOR" />
-          <option name="EFFECT_TYPE" value="0" />
-          <option name="ERROR_STRIPE_COLOR" />
-        </value>
+        <value />
       </option>
     </info>
     <list size="7">

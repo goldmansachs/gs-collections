@@ -1,13 +1,13 @@
 <component name="libraryTable">
   <library name="Maven: org.antlr:ST4:4.0.7">
     <CLASSES>
-      <root url="jar://$MAVEN_REPOSITORY$/org/antlr/ST4/4.0.7/ST4-4.0.7.jar!/" />
+      <root url="jar://H:/.m2/org/antlr/ST4/4.0.7/ST4-4.0.7.jar!/" />
     </CLASSES>
     <JAVADOC>
-      <root url="jar://$MAVEN_REPOSITORY$/org/antlr/ST4/4.0.7/ST4-4.0.7-javadoc.jar!/" />
+      <root url="jar://H:/.m2/org/antlr/ST4/4.0.7/ST4-4.0.7-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://$MAVEN_REPOSITORY$/org/antlr/ST4/4.0.7/ST4-4.0.7-sources.jar!/" />
+      <root url="jar://H:/.m2/org/antlr/ST4/4.0.7/ST4-4.0.7-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

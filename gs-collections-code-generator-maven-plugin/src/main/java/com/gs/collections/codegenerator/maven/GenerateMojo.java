@@ -63,33 +63,37 @@ public class GenerateMojo extends AbstractMojo
         else
         {
             this.getLog().info("Generating sources to " + this.project.getArtifactId());
-            List<URL> urls = Arrays.asList(((URLClassLoader) GenerateMojo.class.getClassLoader()).getURLs());
+        }
 
-            final boolean[] error = new boolean[1];
-            GsCollectionsCodeGenerator.ErrorListener errorListener = new GsCollectionsCodeGenerator.ErrorListener()
+        List<URL> urls = Arrays.asList(((URLClassLoader) GenerateMojo.class.getClassLoader()).getURLs());
+
+        final boolean[] error = new boolean[1];
+        GsCollectionsCodeGenerator.ErrorListener errorListener = new GsCollectionsCodeGenerator.ErrorListener()
+        {
+            public void error(String string)
             {
-                public void error(String string)
-                {
-                    GenerateMojo.this.getLog().error(string);
-                    error[0] = true;
-                }
-            };
-            GsCollectionsCodeGenerator gsCollectionsCodeGenerator =
-                    new GsCollectionsCodeGenerator(this.templateDirectory, this.project.getBasedir(), urls, errorListener);
+                GenerateMojo.this.getLog().error(string);
+                error[0] = true;
+            }
+        };
+        GsCollectionsCodeGenerator gsCollectionsCodeGenerator =
+                new GsCollectionsCodeGenerator(this.templateDirectory, this.project.getBasedir(), urls, errorListener);
+        if (!this.skipCodeGen)
+        {
             gsCollectionsCodeGenerator.generate();
-            if (error[0])
-            {
-                throw new MojoExecutionException("Error(s) during code generation.");
-            }
+        }
+        if (error[0])
+        {
+            throw new MojoExecutionException("Error(s) during code generation.");
+        }
 
-            if (gsCollectionsCodeGenerator.isTest())
-            {
-                this.project.addTestCompileSourceRoot(GsCollectionsCodeGenerator.GENERATED_TEST_SOURCES_LOCATION);
-            }
-            else
-            {
-                this.project.addCompileSourceRoot(GsCollectionsCodeGenerator.GENERATED_SOURCES_LOCATION);
-            }
+        if (gsCollectionsCodeGenerator.isTest())
+        {
+            this.project.addTestCompileSourceRoot(GsCollectionsCodeGenerator.GENERATED_TEST_SOURCES_LOCATION);
+        }
+        else
+        {
+            this.project.addCompileSourceRoot(GsCollectionsCodeGenerator.GENERATED_SOURCES_LOCATION);
         }
     }
 }

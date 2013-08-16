@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.slf4j:slf4j-nop:1.7.5">
+    <CLASSES>
+      <root url="jar://H:/.m2/org/slf4j/slf4j-nop/1.7.5/slf4j-nop-1.7.5.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://H:/.m2/org/slf4j/slf4j-nop/1.7.5/slf4j-nop-1.7.5-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://H:/.m2/org/slf4j/slf4j-nop/1.7.5/slf4j-nop-1.7.5-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
