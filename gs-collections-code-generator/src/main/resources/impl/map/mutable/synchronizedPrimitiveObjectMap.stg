@@ -107,6 +107,14 @@ public final class Synchronized<name>ObjectMap\<V>
         }
     }
 
+    public V remove(<type> key)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.remove(key);
+        }
+    }
+
     public V getIfAbsentPut(<type> key, Function0\<? extends V> function)
     {
         synchronized (this.lock)

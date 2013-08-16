@@ -755,6 +755,11 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         return null;
     }
 
+    public V remove(<type> key)
+    {
+        return this.removeKey(key);
+    }
+
     @Override
     public boolean equals(Object obj)
     {

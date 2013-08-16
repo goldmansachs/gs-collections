@@ -52,20 +52,20 @@ import net.jcip.annotations.GuardedBy;
  * @see MutableMap#asSynchronized()
  * @since 3.1.
  */
-public final class SynchronizedObject<name>Map\<V>
-        implements MutableObject<name>Map\<V>, Serializable
+public final class SynchronizedObject<name>Map\<K>
+        implements MutableObject<name>Map\<K>, Serializable
 {
     private static final long serialVersionUID = 1L;
     private final Object lock;
     @GuardedBy("this.lock")
-    private final MutableObject<name>Map\<V> map;
+    private final MutableObject<name>Map\<K> map;
 
-    SynchronizedObject<name>Map(MutableObject<name>Map\<V> map)
+    SynchronizedObject<name>Map(MutableObject<name>Map\<K> map)
     {
         this(map, null);
     }
 
-    SynchronizedObject<name>Map(MutableObject<name>Map\<V> map, Object newLock)
+    SynchronizedObject<name>Map(MutableObject<name>Map\<K> map, Object newLock)
     {
         this.map = map;
         this.lock = newLock == null ? this : newLock;
@@ -79,7 +79,7 @@ public final class SynchronizedObject<name>Map\<V>
         }
     }
 
-    public void put(V key, <type> value)
+    public void put(K key, <type> value)
     {
         synchronized (this.lock)
         {
@@ -87,7 +87,7 @@ public final class SynchronizedObject<name>Map\<V>
         }
     }
 
-    public void removeKey(V key)
+    public void removeKey(K key)
     {
         synchronized (this.lock)
         {
@@ -95,7 +95,23 @@ public final class SynchronizedObject<name>Map\<V>
         }
     }
 
-    public <type> getIfAbsentPut(V key, <name>Function0 function)
+    public void remove(K key)
+    {
+        synchronized (this.lock)
+        {
+            this.map.removeKey(key);
+        }
+    }
+
+    public <type> removeKeyIfAbsent(K key, <type> value)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.removeKeyIfAbsent(key, value);
+        }
+    }
+
+    public <type> getIfAbsentPut(K key, <name>Function0 function)
     {
         synchronized (this.lock)
         {
@@ -103,7 +119,7 @@ public final class SynchronizedObject<name>Map\<V>
         }
     }
 
-    public <type> getIfAbsentPutWithKey(V key, <name>Function\<? super V> function)
+    public <type> getIfAbsentPutWithKey(K key, <name>Function\<? super K> function)
     {
         synchronized (this.lock)
         {
@@ -111,7 +127,7 @@ public final class SynchronizedObject<name>Map\<V>
         }
     }
 
-    public \<P> <type> getIfAbsentPutWith(V key, <name>Function\<? super P> function, P parameter)
+    public \<P> <type> getIfAbsentPutWith(K key, <name>Function\<? super P> function, P parameter)
     {
         synchronized (this.lock)
         {
@@ -167,7 +183,7 @@ public final class SynchronizedObject<name>Map\<V>
         }
     }
 
-    public void forEachKey(Procedure\<? super V> procedure)
+    public void forEachKey(Procedure\<? super K> procedure)
     {
         synchronized (this.lock)
         {
@@ -175,7 +191,7 @@ public final class SynchronizedObject<name>Map\<V>
         }
     }
 
-    public void forEachKeyValue(Object<name>Procedure\<? super V> procedure)
+    public void forEachKeyValue(Object<name>Procedure\<? super K> procedure)
     {
         synchronized (this.lock)
         {
@@ -183,7 +199,7 @@ public final class SynchronizedObject<name>Map\<V>
         }
     }
 
-    public MutableObject<name>Map\<V> select(Object<name>Predicate\<? super V> predicate)
+    public MutableObject<name>Map\<K> select(Object<name>Predicate\<? super K> predicate)
     {
         synchronized (this.lock)
         {
@@ -191,7 +207,7 @@ public final class SynchronizedObject<name>Map\<V>
         }
     }
 
-    public MutableObject<name>Map\<V> reject(Object<name>Predicate\<? super V> predicate)
+    public MutableObject<name>Map\<K> reject(Object<name>Predicate\<? super K> predicate)
     {
         synchronized (this.lock)
         {
@@ -344,7 +360,7 @@ public final class SynchronizedObject<name>Map\<V>
         }
     }
 
-    public MutableObject<name>Map\<V> withKeyValue(V key, <type> value)
+    public MutableObject<name>Map\<K> withKeyValue(K key, <type> value)
     {
         synchronized (this.lock)
         {
@@ -353,7 +369,7 @@ public final class SynchronizedObject<name>Map\<V>
         return this;
     }
 
-    public MutableObject<name>Map\<V> withoutKey(V key)
+    public MutableObject<name>Map\<K> withoutKey(K key)
     {
         synchronized (this.lock)
         {
@@ -362,7 +378,7 @@ public final class SynchronizedObject<name>Map\<V>
         return this;
     }
 
-    public MutableObject<name>Map\<V> withoutAllKeys(Iterable\<? extends V> keys)
+    public MutableObject<name>Map\<K> withoutAllKeys(Iterable\<? extends K> keys)
     {
         synchronized (this.lock)
         {
@@ -371,17 +387,17 @@ public final class SynchronizedObject<name>Map\<V>
         return this;
     }
 
-    public MutableObject<name>Map\<V> asUnmodifiable()
+    public MutableObject<name>Map\<K> asUnmodifiable()
     {
-        return new UnmodifiableObject<name>Map\<V>(this);
+        return new UnmodifiableObject<name>Map\<K>(this);
     }
 
-    public MutableObject<name>Map\<V> asSynchronized()
+    public MutableObject<name>Map\<K> asSynchronized()
     {
         return this;
     }
 
-    public ImmutableObject<name>Map\<V> toImmutable()
+    public ImmutableObject<name>Map\<K> toImmutable()
     {
         throw new UnsupportedOperationException("toImmutable not implemented yet");
     }

@@ -98,6 +98,11 @@ public final class Unmodifiable<name1><name2>Map
         throw new UnsupportedOperationException("Cannot call removeKey() on " + this.getClass().getSimpleName());
     }
 
+    public void remove(<type1> key)
+    {
+        throw new UnsupportedOperationException("Cannot call remove() on " + this.getClass().getSimpleName());
+    }
+
     public <type2> removeKeyIfAbsent(<type1> key, <type2> value)
     {
         if (this.map.containsKey(key))

@@ -101,6 +101,11 @@ public final class Unmodifiable<name>ObjectMap\<V>
         throw new UnsupportedOperationException("Cannot call removeKey() on " + this.getClass().getSimpleName());
     }
 
+    public V remove(<type> key)
+    {
+        throw new UnsupportedOperationException("Cannot call remove() on " + this.getClass().getSimpleName());
+    }
+
     public V getIfAbsentPut(<type> key, Function0\<? extends V> function)
     {
         return this.getIfAbsentThrow(key);

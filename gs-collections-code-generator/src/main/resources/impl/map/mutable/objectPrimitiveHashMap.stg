@@ -533,6 +533,11 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         }
     }
 
+    public void remove(K key)
+    {
+        this.removeKey(key);
+    }
+
     public <type> removeKeyIfAbsent(K key, <type> value)
     {
         int index = this.probe(key);

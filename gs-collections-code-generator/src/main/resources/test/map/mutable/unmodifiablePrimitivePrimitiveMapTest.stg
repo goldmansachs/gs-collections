@@ -90,6 +90,13 @@ public class Unmodifiable<name1><name2>MapTest extends AbstractMutable<name1><na
     }
 
     @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void remove()
+    {
+        this.map.remove(<(literal.(type1))("5")>);
+    }
+
+    @Override
     @Test
     public void removeKeyIfAbsent()
     {

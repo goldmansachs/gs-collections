@@ -88,6 +88,13 @@ public class Unmodifiable<name>ObjectMapTest extends AbstractMutable<name>Object
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
+    public void remove()
+    {
+        this.map.remove(<(literal.(type))("5")>);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
     public void put()
     {
         this.map.put(<(literal.(type))("0")>, "one");

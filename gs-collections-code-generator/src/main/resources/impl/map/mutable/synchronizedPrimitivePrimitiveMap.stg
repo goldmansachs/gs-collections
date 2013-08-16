@@ -113,6 +113,14 @@ public final class Synchronized<name1><name2>Map
         }
     }
 
+    public void remove(<type1> key)
+    {
+        synchronized (this.lock)
+        {
+            this.map.remove(key);
+        }
+    }
+
     public <type2> removeKeyIfAbsent(<type1> key, <type2> value)
     {
         synchronized (this.lock)

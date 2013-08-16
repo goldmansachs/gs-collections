@@ -814,6 +814,11 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
         }
     }
 
+    public void remove(<type> key)
+    {
+        this.removeKey(key);
+    }
+
     public boolean removeKeyIfAbsent(<type> key, boolean value)
     {
         if (isEmptyKey(key))

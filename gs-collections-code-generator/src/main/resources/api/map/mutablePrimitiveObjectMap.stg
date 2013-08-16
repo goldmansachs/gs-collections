@@ -35,6 +35,8 @@ public interface Mutable<name>ObjectMap\<V> extends <name>ObjectMap\<V>, Mutable
 
     V removeKey(<type> key);
 
+    V remove(<type> key);
+
     V getIfAbsentPut(<type> key, Function0\<? extends V> function);
 
     V getIfAbsentPutWithKey(<type> key, <name>ToObjectFunction\<? extends V> function);

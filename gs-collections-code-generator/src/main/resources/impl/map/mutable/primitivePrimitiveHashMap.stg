@@ -605,6 +605,11 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         }
     }
 
+    public void remove(<type1> key)
+    {
+        this.removeKey(key);
+    }
+
     public <type2> removeKeyIfAbsent(<type1> key, <type2> value)
     {
         if (isEmptyKey(key))

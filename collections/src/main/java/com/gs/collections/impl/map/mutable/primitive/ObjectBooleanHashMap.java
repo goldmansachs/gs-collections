@@ -519,6 +519,11 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         }
     }
 
+    public void remove(K key)
+    {
+        this.removeKey(key);
+    }
+
     public boolean removeKeyIfAbsent(K key, boolean value)
     {
         int index = this.probe(key);
