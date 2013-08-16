@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.set.mutable.primitive;
+package com.gs.collections.impl.set.immutable.primitive;
 
+import com.gs.collections.impl.set.mutable.primitive.CharHashSet;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Test;
 
-public class ImmutableBooleanHashSetTest
+public class ImmutableCharHashSetTest
 {
     @Test
     public void serializedForm()
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyAEVjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQubXV0YWJsZS5wcmltaXRpdmUuSW1t\n"
-                        + "dXRhYmxlQm9vbGVhbkhhc2hTZXQAAAAAAAAAAQwAAHhwdwQAAAAAeA==",
-                new BooleanHashSet().toImmutable());
+                "rO0ABXNyAEVjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQuaW1tdXRhYmxlLnByaW1pdGl2ZS5J\n"
+                        + "bW11dGFibGVDaGFyRW1wdHlTZXQAAAAAAAAAAQIAAHhw",
+                new CharHashSet().toImmutable());
     }
 }

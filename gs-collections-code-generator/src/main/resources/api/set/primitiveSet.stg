@@ -45,6 +45,11 @@ public interface <name>Set extends <name>Iterable
     int hashCode();
 
     /**
+     * Returns a frozen copy of this set. If the set is frozen, it returns itself. A frozen copy is the same thing as an immutable copy without safe-publish guarantees.
+     */
+    <name>Set freeze();
+
+    /**
      * Returns an immutable copy of this set. If the set is immutable, it returns itself.
      */
     Immutable<name>Set toImmutable();

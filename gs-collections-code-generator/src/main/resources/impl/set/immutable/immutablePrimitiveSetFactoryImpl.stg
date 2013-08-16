@@ -1,0 +1,82 @@
+import "copyright.stg"
+
+targetPath() ::= "com/gs/collections/impl/set/immutable/primitive"
+
+fileName(primitive) ::= "Immutable<primitive.name>SetFactoryImpl"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.set.immutable.primitive;
+
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.factory.set.primitive.Immutable<name>SetFactory;
+import com.gs.collections.api.set.primitive.Immutable<name>Set;
+import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
+
+/**
+ * Immutable<name>SetFactoryImpl is a factory implementation which creates instances of type {@link Immutable<name>Set}.
+ * This file was automatically generated from template file immutablePrimitiveSetFactoryImpl.stg.
+ *
+ * @since 4.0.
+ */
+public class Immutable<name>SetFactoryImpl implements Immutable<name>SetFactory
+{
+    public Immutable<name>Set of()
+    {
+        return this.with();
+    }
+
+    public Immutable<name>Set with()
+    {
+        return Immutable<name>EmptySet.INSTANCE;
+    }
+
+    public Immutable<name>Set of(<type> one)
+    {
+        return this.with(one);
+    }
+
+    public Immutable<name>Set with(<type> one)
+    {
+        return new Immutable<name>SingletonSet(one);
+    }
+
+    public Immutable<name>Set of(<type>... items)
+    {
+        return this.with(items);
+    }
+
+    public Immutable<name>Set with(<type>... items)
+    {
+        if (items == null || items.length == 0)
+        {
+            return this.with();
+        }
+        if (items.length == 1)
+        {
+            return this.with(items[0]);
+        }
+        return <name>HashSet.newSetWith(items).toImmutable();
+    }
+
+    public Immutable<name>Set ofAll(<name>Iterable items)
+    {
+        return this.withAll(items);
+    }
+
+    public Immutable<name>Set withAll(<name>Iterable items)
+    {
+        if (items instanceof Immutable<name>Set)
+        {
+            return (Immutable<name>Set) items;
+        }
+        return this.with(items.toArray());
+    }
+}
+
+>>

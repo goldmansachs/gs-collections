@@ -37,6 +37,7 @@ import com.gs.collections.api.set.primitive.ImmutableBooleanSet;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
+import com.gs.collections.impl.factory.primitive.BooleanSets;
 import com.gs.collections.impl.lazy.primitive.LazyBooleanIterableAdapter;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -45,11 +46,10 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
 {
     private static final long serialVersionUID = 1L;
 
-    /*
-    state = 1 ==> [F]
-    state = 2 ==> [T]
-    state = 3 ==> [T, F]
-    */
+    // state = 0 ==> []
+    // state = 1 ==> [F]
+    // state = 2 ==> [T]
+    // state = 3 ==> [T, F]
     private int state;
 
     private static class EmptyBooleanIterator implements BooleanIterator
@@ -542,9 +542,26 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
         return new SynchronizedBooleanSet(this);
     }
 
+    public BooleanSet freeze()
+    {
+        return this.toImmutable();
+    }
+
     public ImmutableBooleanSet toImmutable()
     {
-        return new ImmutableBooleanHashSet(this.state);
+        switch (this.state)
+        {
+            case 0:
+                return BooleanSets.immutable.with();
+            case 1:
+                return BooleanSets.immutable.with(false);
+            case 2:
+                return BooleanSets.immutable.with(true);
+            case 3:
+                return BooleanSets.immutable.with(false, true);
+            default:
+                throw new AssertionError("Invalid state");
+        }
     }
 
     public int size()

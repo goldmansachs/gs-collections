@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.set.mutable.primitive;
+package com.gs.collections.impl.set.immutable.primitive;
 
+import com.gs.collections.impl.set.mutable.primitive.ByteHashSet;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Test;
 
@@ -26,8 +27,8 @@ public class ImmutableByteHashSetTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyAEJjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQubXV0YWJsZS5wcmltaXRpdmUuSW1t\n"
-                        + "dXRhYmxlQnl0ZUhhc2hTZXQAAAAAAAAAAQwAAHhwdwQAAAAAeA==",
+                "rO0ABXNyAEVjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQuaW1tdXRhYmxlLnByaW1pdGl2ZS5J\n"
+                        + "bW11dGFibGVCeXRlRW1wdHlTZXQAAAAAAAAAAQIAAHhw",
                 new ByteHashSet().toImmutable());
     }
 }

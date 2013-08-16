@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.set.mutable.primitive;
+package com.gs.collections.impl.set.immutable.primitive;
 
+import com.gs.collections.impl.set.mutable.primitive.LongHashSet;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Test;
 
-public class ImmutableFloatHashSetTest
+public class ImmutableLongHashSetTest
 {
     @Test
     public void serializedForm()
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyAENjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQubXV0YWJsZS5wcmltaXRpdmUuSW1t\n"
-                        + "dXRhYmxlRmxvYXRIYXNoU2V0AAAAAAAAAAEMAAB4cHcEAAAAAHg=",
-                new FloatHashSet().toImmutable());
+                "rO0ABXNyAEVjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQuaW1tdXRhYmxlLnByaW1pdGl2ZS5J\n"
+                        + "bW11dGFibGVMb25nRW1wdHlTZXQAAAAAAAAAAQIAAHhw",
+                new LongHashSet().toImmutable());
     }
 }

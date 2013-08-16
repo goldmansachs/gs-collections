@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.set.mutable.primitive;
+package com.gs.collections.impl.set.immutable.primitive;
 
+import com.gs.collections.impl.set.mutable.primitive.DoubleHashSet;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Test;
 
-public class ImmutableIntHashSetTest
+public class ImmutableDoubleHashSetTest
 {
     @Test
     public void serializedForm()
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyAEFjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQubXV0YWJsZS5wcmltaXRpdmUuSW1t\n"
-                        + "dXRhYmxlSW50SGFzaFNldAAAAAAAAAABDAAAeHB3BAAAAAB4",
-                new IntHashSet().toImmutable());
+                "rO0ABXNyAEdjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQuaW1tdXRhYmxlLnByaW1pdGl2ZS5J\n"
+                        + "bW11dGFibGVEb3VibGVFbXB0eVNldAAAAAAAAAABAgAAeHA=",
+                new DoubleHashSet().toImmutable());
     }
 }

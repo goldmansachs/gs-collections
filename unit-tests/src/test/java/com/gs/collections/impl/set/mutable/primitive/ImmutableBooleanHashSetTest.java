@@ -225,10 +225,10 @@ public class ImmutableBooleanHashSetTest extends AbstractImmutableBooleanCollect
         Verify.assertEqualsAndHashCode(this.newWith(false, true), this.set3);
         Verify.assertEqualsAndHashCode(this.newWith(true, false), this.set3);
 
-        Verify.assertPostSerializedEqualsAndHashCode(this.set0);
-        Verify.assertPostSerializedEqualsAndHashCode(this.set1);
-        Verify.assertPostSerializedEqualsAndHashCode(this.set2);
-        Verify.assertPostSerializedEqualsAndHashCode(this.set3);
+        Verify.assertPostSerializedIdentity(this.set0);
+        Verify.assertPostSerializedIdentity(this.set1);
+        Verify.assertPostSerializedIdentity(this.set2);
+        Verify.assertPostSerializedIdentity(this.set3);
     }
 
     @Override

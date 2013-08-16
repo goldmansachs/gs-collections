@@ -22,6 +22,7 @@ import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.primitive.Immutable<name>Set;
+import com.gs.collections.api.set.primitive.<name>Set;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.impl.collection.mutable.primitive.AbstractUnmodifiable<name>Collection;
 import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
@@ -111,9 +112,14 @@ public final class Unmodifiable<name>Set
         return new Synchronized<name>Set(this);
     }
 
+    public <name>Set freeze()
+    {
+        return this.getMutable<name>Set().freeze();
+    }
+
     public Immutable<name>Set toImmutable()
     {
-        throw new UnsupportedOperationException("toImmutable not implemented yet");
+        return this.getMutable<name>Set().toImmutable();
     }
 }
 

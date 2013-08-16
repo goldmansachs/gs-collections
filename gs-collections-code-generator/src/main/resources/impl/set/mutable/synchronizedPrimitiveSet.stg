@@ -26,6 +26,7 @@ import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.primitive.Immutable<name>Set;
+import com.gs.collections.api.set.primitive.<name>Set;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.impl.collection.mutable.primitive.AbstractSynchronized<name>Collection;
 import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
@@ -162,9 +163,20 @@ public final class Synchronized<name>Set
         return this;
     }
 
+    public <name>Set freeze()
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>Set().freeze();
+        }
+    }
+
     public Immutable<name>Set toImmutable()
     {
-        throw new UnsupportedOperationException("toImmutable not implemented yet");
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>Set().toImmutable();
+        }
     }
 }
 

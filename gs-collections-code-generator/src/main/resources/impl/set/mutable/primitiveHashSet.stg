@@ -20,6 +20,7 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.io.Serializable;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
@@ -32,13 +33,16 @@ import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
+import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.primitive.Immutable<name>Set;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.api.set.primitive.<name>Set;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
+import com.gs.collections.impl.factory.primitive.<name>Sets;
 import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
+import com.gs.collections.impl.set.immutable.primitive.Immutable<name>SetSerializationProxy;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 
 /**
@@ -53,7 +57,6 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
     private static final int DEFAULT_INITIAL_CAPACITY = 8;
     private static final <type> EMPTY = <(literal.(type))("0")>;
     private static final <type> REMOVED = <(literal.(type))("1")>;
-    private static final <type>[] EMPTY_TABLE = new <type>[0];
 
     private <type>[] table;
     private float loadFactor = DEFAULT_LOAD_FACTOR;
@@ -1016,14 +1019,28 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         return new Synchronized<name>Set(this);
     }
 
-    public Immutable<name>Set toImmutable()
+    public <name>Set freeze()
     {
-        if (this.occupied == 0)
+        if (this.size() == 0)
         {
-            return new Immutable<name>HashSet(EMPTY_TABLE, this.occupied, this.zeroToThirtyOne, this.zeroToThirtyOneOccupied);
+            return <name>Sets.immutable.with();
         }
         this.copyOnWrite = true;
         return new Immutable<name>HashSet(this.table, this.occupied, this.zeroToThirtyOne, this.zeroToThirtyOneOccupied);
+    }
+
+    public Immutable<name>Set toImmutable()
+    {
+        if (this.size() == 0)
+        {
+            return <name>Sets.immutable.with();
+        }
+        if (this.size() == 1)
+        {
+            return <name>Sets.immutable.with(this.<type>Iterator().next());
+        }
+        <name>HashSet mutableSet = <name>HashSet.newSetWith(this.toArray());
+        return new Immutable<name>HashSet(mutableSet.table, mutableSet.occupied, mutableSet.zeroToThirtyOne, mutableSet.zeroToThirtyOneOccupied);
     }
 
     public void writeExternal(ObjectOutput out) throws IOException
@@ -1054,6 +1071,737 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         for (int i = 0; i \< size; i++)
         {
             this.add(in.read<name>());
+        }
+    }
+
+    private static final class Immutable<name>HashSet implements Immutable<name>Set, Serializable
+    {
+        private static final long serialVersionUID = 1L;
+        private final <type>[] table;
+        private final int occupied;
+        // The 32 bits of this integer indicate whether the items <(literal.(type))("0")> to <(literal.(type))("31")> are present in the set.
+        private final int zeroToThirtyOne;
+        private final int zeroToThirtyOneOccupied;
+
+        private Immutable<name>HashSet(<type>[] table, int occupied, int zeroToThirtyOne, int zeroToThirtyOneOccupied)
+        {
+            this.checkOptimizedSize(occupied + zeroToThirtyOneOccupied);
+            this.occupied = occupied;
+            this.zeroToThirtyOneOccupied = zeroToThirtyOneOccupied;
+            this.zeroToThirtyOne = zeroToThirtyOne;
+            this.table = table;
+        }
+
+        private void checkOptimizedSize(int length)
+        {
+            if (length \<= 1)
+            {
+                throw new IllegalArgumentException("Use <name>Sets.immutable.with() to instantiate an optimized collection");
+            }
+        }
+
+        public static Immutable<name>Set newSetWith(<type>... elements)
+        {
+            return <name>HashSet.newSetWith(elements).toImmutable();
+        }
+
+        public int size()
+        {
+            return this.occupied + this.zeroToThirtyOneOccupied;
+        }
+
+        public boolean isEmpty()
+        {
+            return this.size() == 0;
+        }
+
+        public boolean notEmpty()
+        {
+            return this.size() != 0;
+        }
+
+        public boolean contains(<type> value)
+        {
+            if (isBetweenZeroAndThirtyOne(value))
+            {
+                int temp = this.zeroToThirtyOne;
+                return ((temp >\>> <(castRealTypeToInt.(type))("value")>) & 1) != 0;
+            }
+            return <(equals.(type))("this.table[this.probe(value)]", "value")>;
+        }
+
+        public boolean containsAll(<type>... source)
+        {
+            for (<type> item : source)
+            {
+                if (!this.contains(item))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public boolean containsAll(<name>Iterable source)
+        {
+            for (<name>Iterator iterator = source.<type>Iterator(); iterator.hasNext();)
+            {
+                if (!this.contains(iterator.next()))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        // exposed for testing
+        int probe(<type> element)
+        {
+            int index = this.spread(element);
+            <type> valueAtIndex = this.table[index];
+
+            if (<(equals.(type))("valueAtIndex", "element")> || <(equals.(type))("valueAtIndex", "EMPTY")>)
+            {
+                return index;
+            }
+
+            int removedIndex = <(equals.(type))("valueAtIndex", "REMOVED")> ? index : -1;
+            int nextIndex = index;
+            int probe = 17;
+
+            // loop until an empty slot is reached
+            while (true)
+            {
+                // Probe algorithm: 17 * n * (n+1) / 2 where n = number of collisions
+                nextIndex = (nextIndex + probe) & this.table.length - 1;
+                probe += 17;
+
+                if (<(equals.(type))("this.table[nextIndex]", "element")>)
+                {
+                    return nextIndex;
+                }
+                if (<(equals.(type))("this.table[nextIndex]", "REMOVED")>)
+                {
+                    if (removedIndex == -1)
+                    {
+                        removedIndex = nextIndex;
+                    }
+                }
+                else if (<(equals.(type))("this.table[nextIndex]", "EMPTY")>)
+                {
+                    return removedIndex == -1 ? nextIndex : removedIndex;
+                }
+            }
+        }
+
+        // exposed for testing
+        <(spread.(type))(type, "table")>
+
+        public Immutable<name>Set newWith(<type> element)
+        {
+            return <name>HashSet.newSet(this).with(element).toImmutable();
+        }
+
+        public Immutable<name>Set newWithout(<type> element)
+        {
+            return <name>HashSet.newSet(this).without(element).toImmutable();
+        }
+
+        public Immutable<name>Set newWithAll(<name>Iterable elements)
+        {
+            return <name>HashSet.newSet(this).withAll(elements).toImmutable();
+        }
+
+        public Immutable<name>Set newWithoutAll(<name>Iterable elements)
+        {
+            return <name>HashSet.newSet(this).withoutAll(elements).toImmutable();
+        }
+
+        public <name>Iterator <type>Iterator()
+        {
+            return new Internal<name>Iterator();
+        }
+
+        public void forEach(<name>Procedure procedure)
+        {
+            int zeroToThirtyOne = this.zeroToThirtyOne;
+            while (zeroToThirtyOne != 0)
+            {
+                <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+                procedure.value(value);
+                zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
+            }
+
+            for (<type> value : this.table)
+            {
+                if (isNonSentinel(value))
+                {
+                    procedure.value(value);
+                }
+            }
+        }
+
+        public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
+        {
+            T result = injectedValue;
+            int zeroToThirtyOne = this.zeroToThirtyOne;
+            while (zeroToThirtyOne != 0)
+            {
+                <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+                result = function.valueOf(result, value);
+                zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
+            }
+
+            for (<type> value : this.table)
+            {
+                if (isNonSentinel(value))
+                {
+                    result = function.valueOf(result, value);
+                }
+            }
+            return result;
+        }
+
+        public int count(<name>Predicate predicate)
+        {
+            int count = 0;
+            int zeroToThirtyOne = this.zeroToThirtyOne;
+            while (zeroToThirtyOne != 0)
+            {
+                <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+                if (predicate.accept(value))
+                {
+                    count++;
+                }
+                zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
+            }
+
+            for (<type> value : this.table)
+            {
+                if (isNonSentinel(value))
+                {
+                    if (predicate.accept(value))
+                    {
+                        count++;
+                    }
+                }
+            }
+            return count;
+        }
+
+        public boolean anySatisfy(<name>Predicate predicate)
+        {
+            int zeroToThirtyOne = this.zeroToThirtyOne;
+            while (zeroToThirtyOne != 0)
+            {
+                <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+                if (predicate.accept(value))
+                {
+                    return true;
+                }
+                zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
+            }
+
+            for (<type> value : this.table)
+            {
+                if (isNonSentinel(value))
+                {
+                    if (predicate.accept(value))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public boolean allSatisfy(<name>Predicate predicate)
+        {
+            int zeroToThirtyOne = this.zeroToThirtyOne;
+            while (zeroToThirtyOne != 0)
+            {
+                <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+                if (!predicate.accept(value))
+                {
+                    return false;
+                }
+                zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
+            }
+
+            for (<type> value : this.table)
+            {
+                if (isNonSentinel(value))
+                {
+                    if (!predicate.accept(value))
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        public boolean noneSatisfy(<name>Predicate predicate)
+        {
+            int zeroToThirtyOne = this.zeroToThirtyOne;
+            while (zeroToThirtyOne != 0)
+            {
+                <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+                if (predicate.accept(value))
+                {
+                    return false;
+                }
+                zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
+            }
+
+            for (<type> value : this.table)
+            {
+                if (isNonSentinel(value))
+                {
+                    if (predicate.accept(value))
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
+
+        public Immutable<name>Set select(<name>Predicate predicate)
+        {
+            <name>HashSet result = new <name>HashSet();
+
+            int zeroToThirtyOne = this.zeroToThirtyOne;
+            while (zeroToThirtyOne != 0)
+            {
+                <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+                if (predicate.accept(value))
+                {
+                    result.add(value);
+                }
+                zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
+            }
+
+            for (<type> value : this.table)
+            {
+                if (isNonSentinel(value))
+                {
+                    if (predicate.accept(value))
+                    {
+                        result.add(value);
+                    }
+                }
+            }
+            return result.toImmutable();
+        }
+
+        public Immutable<name>Set reject(<name>Predicate predicate)
+        {
+            <name>HashSet result = new <name>HashSet();
+
+            int zeroToThirtyOne = this.zeroToThirtyOne;
+            while (zeroToThirtyOne != 0)
+            {
+                <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+                if (!predicate.accept(value))
+                {
+                    result.add(value);
+                }
+                zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
+            }
+
+            for (<type> value : this.table)
+            {
+                if (isNonSentinel(value))
+                {
+                    if (!predicate.accept(value))
+                    {
+                        result.add(value);
+                    }
+                }
+            }
+            return result.toImmutable();
+        }
+
+        public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
+        {
+            int zeroToThirtyOne = this.zeroToThirtyOne;
+            while (zeroToThirtyOne != 0)
+            {
+                <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+                if (predicate.accept(value))
+                {
+                    return value;
+                }
+                zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
+            }
+
+            for (<type> value : this.table)
+            {
+                if (isNonSentinel(value))
+                {
+                    if (predicate.accept(value))
+                    {
+                        return value;
+                    }
+                }
+            }
+            return ifNone;
+        }
+
+        public \<V> ImmutableSet\<V> collect(<name>ToObjectFunction\<? extends V> function)
+        {
+            MutableSet\<V> target = UnifiedSet.newSet(this.size());
+
+            int zeroToThirtyOne = this.zeroToThirtyOne;
+            while (zeroToThirtyOne != 0)
+            {
+                <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+                target.add(function.valueOf(value));
+                zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
+            }
+
+            for (<type> value : this.table)
+            {
+                if (isNonSentinel(value))
+                {
+                    target.add(function.valueOf(value));
+                }
+            }
+            return target.toImmutable();
+        }
+
+        public <wideType.(type)> sum()
+        {
+            <wideType.(type)> result = <wideZero.(type)>;
+
+            int zeroToThirtyOne = this.zeroToThirtyOne;
+            while (zeroToThirtyOne != 0)
+            {
+                <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+                result += value;
+                zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
+            }
+
+            for (<type> value : this.table)
+            {
+                if (isNonSentinel(value))
+                {
+                    result += value;
+                }
+            }
+            return result;
+        }
+
+        public <type> max()
+        {
+            if (this.isEmpty())
+            {
+                throw new NoSuchElementException();
+            }
+            <type> max = <(castIntToNarrowTypeWithParens.(type))("31 - Integer.numberOfLeadingZeros(this.zeroToThirtyOne)")>;
+            boolean isMaxSet = this.zeroToThirtyOneOccupied != 0;
+
+            for (<type> value : this.table)
+            {
+                if (isNonSentinel(value) && (!isMaxSet || <(lessThan.(type))("max", "value")>))
+                {
+                    max = value;
+                    isMaxSet = true;
+                }
+            }
+            return max;
+        }
+
+        public <type> min()
+        {
+            if (this.isEmpty())
+            {
+                throw new NoSuchElementException();
+            }
+            <type> min = <(castFromInt.(type))("Integer.numberOfTrailingZeros(this.zeroToThirtyOne)")>;
+            boolean isMinSet = this.zeroToThirtyOneOccupied != 0;
+
+            for (<type> value : this.table)
+            {
+                if (isNonSentinel(value) && (!isMinSet || <(lessThan.(type))("value", "min")>))
+                {
+                    min = value;
+                    isMinSet = true;
+                }
+            }
+            return min;
+        }
+
+        public <type> minIfEmpty(<type> defaultValue)
+        {
+            if (this.isEmpty())
+            {
+                return defaultValue;
+            }
+            return this.min();
+        }
+
+        public <type> maxIfEmpty(<type> defaultValue)
+        {
+            if (this.isEmpty())
+            {
+                return defaultValue;
+            }
+            return this.max();
+        }
+
+        public double average()
+        {
+            if (this.isEmpty())
+            {
+                throw new ArithmeticException();
+            }
+            return <castSum.(type)>this.sum() / (double) this.size();
+        }
+
+        public double median()
+        {
+            if (this.isEmpty())
+            {
+                throw new ArithmeticException();
+            }
+            <type>[] sortedArray = this.toSortedArray();
+            int middleIndex = sortedArray.length >\> 1;
+            if (sortedArray.length > 1 && (sortedArray.length & 1) == 0)
+            {
+                <type> first = sortedArray[middleIndex];
+                <type> second = sortedArray[middleIndex - 1];
+                return (<castDouble.(type)>first + <castDouble.(type)>second) / 2.0;
+            }
+            return <castDouble.(type)>sortedArray[middleIndex];
+        }
+
+        public <type>[] toArray()
+        {
+            <type>[] array = new <type>[this.size()];
+
+            int j = 0;
+            int zeroToThirtyOne = this.zeroToThirtyOne;
+            while (zeroToThirtyOne != 0)
+            {
+                <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+                array[j] = value;
+                j++;
+                zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
+            }
+
+            for (int i = 0; i \< this.table.length && j \< this.size(); i++)
+            {
+                if (isNonSentinel(this.table[i]))
+                {
+                    array[j] = this.table[i];
+                    j++;
+                }
+            }
+            return array;
+        }
+
+        public <type>[] toSortedArray()
+        {
+            <type>[] array = this.toArray();
+            Arrays.sort(array);
+            return array;
+        }
+
+        @Override
+        public boolean equals(Object obj)
+        {
+            if (this == obj)
+            {
+                return true;
+            }
+
+            if (!(obj instanceof <name>Set))
+            {
+                return false;
+            }
+
+            <name>Set other = (<name>Set) obj;
+            return this.size() == other.size() && this.containsAll(other.toArray());
+        }
+
+        @Override
+        public int hashCode()
+        {
+            int result = 0;
+            int zeroToThirtyOne = this.zeroToThirtyOne;
+            while (zeroToThirtyOne != 0)
+            {
+                <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+                result += <(hashCode.(type))("value")>;
+                zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
+            }
+            if (this.table != null)
+            {
+                for (int i = 0; i \< this.table.length; i++)
+                {
+                    if (isNonSentinel(this.table[i]))
+                    {
+                        result += <(hashCode.(type))("this.table[i]")>;
+                    }
+                }
+            }
+            return result;
+        }
+
+        @Override
+        public String toString()
+        {
+            return this.makeString("[", ", ", "]");
+        }
+
+        public String makeString()
+        {
+            return this.makeString(", ");
+        }
+
+        public String makeString(String separator)
+        {
+            return this.makeString("", separator, "");
+        }
+
+        public String makeString(String start, String separator, String end)
+        {
+            Appendable stringBuilder = new StringBuilder();
+            this.appendString(stringBuilder, start, separator, end);
+            return stringBuilder.toString();
+        }
+
+        public void appendString(Appendable appendable)
+        {
+            this.appendString(appendable, ", ");
+        }
+
+        public void appendString(Appendable appendable, String separator)
+        {
+            this.appendString(appendable, "", separator, "");
+        }
+
+        public void appendString(Appendable appendable, String start, String separator, String end)
+        {
+            try
+            {
+                appendable.append(start);
+
+                int count = 0;
+                int zeroToThirtyOne = this.zeroToThirtyOne;
+                while (zeroToThirtyOne != 0)
+                {
+                    <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+                    if (count > 0)
+                    {
+                        appendable.append(separator);
+                    }
+                    count++;
+                    appendable.append(String.valueOf(value));
+                    zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
+                }
+
+                for (<type> value : this.table)
+                {
+                    if (isNonSentinel(value))
+                    {
+                        if (count > 0)
+                        {
+                            appendable.append(separator);
+                        }
+                        count++;
+                        appendable.append(String.valueOf(value));
+                    }
+                }
+                appendable.append(end);
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public Mutable<name>List toList()
+        {
+            return <name>ArrayList.newList(this);
+        }
+
+        public Mutable<name>List toSortedList()
+        {
+            return <name>ArrayList.newList(this).sortThis();
+        }
+
+        public Mutable<name>Set toSet()
+        {
+            return <name>HashSet.newSet(this);
+        }
+
+        public Mutable<name>Bag toBag()
+        {
+            return <name>HashBag.newBag(this);
+        }
+
+        public Lazy<name>Iterable asLazy()
+        {
+            return new Lazy<name>IterableAdapter(this);
+        }
+
+        public <name>Set freeze()
+        {
+            return this;
+        }
+
+        public Immutable<name>Set toImmutable()
+        {
+            return this;
+        }
+
+        private Object writeReplace()
+        {
+            return new Immutable<name>SetSerializationProxy(this);
+        }
+
+        private class Internal<name>Iterator implements <name>Iterator
+        {
+            private int count;
+            private int position;
+            private <type> zeroToThirtyOne;
+
+            public boolean hasNext()
+            {
+                return this.count \< Immutable<name>HashSet.this.size();
+            }
+
+            public <type> next()
+            {
+                if (!this.hasNext())
+                {
+                    throw new NoSuchElementException("next() called, but the iterator is exhausted");
+                }
+                this.count++;
+
+                while (this.zeroToThirtyOne \< 32)
+                {
+                    if (Immutable<name>HashSet.this.contains(this.zeroToThirtyOne))
+                    {
+                        <type> result = this.zeroToThirtyOne;
+                        this.zeroToThirtyOne++;
+                        return result;
+                    }
+                    this.zeroToThirtyOne++;
+                }
+
+                <type>[] table = Immutable<name>HashSet.this.table;
+                while (!isNonSentinel(table[this.position]))
+                {
+                    this.position++;
+                }
+                <type> result = table[this.position];
+                this.position++;
+                return result;
+            }
         }
     }
 
