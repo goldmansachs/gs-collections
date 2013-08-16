@@ -1,13 +1,13 @@
 <component name="libraryTable">
   <library name="Maven: classworlds:classworlds:1.1-alpha-2">
     <CLASSES>
-      <root url="jar://H:/.m2/classworlds/classworlds/1.1-alpha-2/classworlds-1.1-alpha-2.jar!/" />
+      <root url="jar:/$MAVEN_REPOSITORY$/classworlds/classworlds/1.1-alpha-2/classworlds-1.1-alpha-2.jar!/" />
     </CLASSES>
     <JAVADOC>
-      <root url="jar://H:/.m2/classworlds/classworlds/1.1-alpha-2/classworlds-1.1-alpha-2-javadoc.jar!/" />
+      <root url="jar:/$MAVEN_REPOSITORY$/classworlds/classworlds/1.1-alpha-2/classworlds-1.1-alpha-2-javadoc.jar!/" />
     </JAVADOC>
     <SOURCES>
-      <root url="jar://H:/.m2/classworlds/classworlds/1.1-alpha-2/classworlds-1.1-alpha-2-sources.jar!/" />
+      <root url="jar:/$MAVEN_REPOSITORY$/classworlds/classworlds/1.1-alpha-2/classworlds-1.1-alpha-2-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
