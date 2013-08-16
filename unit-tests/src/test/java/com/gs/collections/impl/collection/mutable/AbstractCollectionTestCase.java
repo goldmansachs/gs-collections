@@ -37,6 +37,14 @@ import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
@@ -49,11 +57,20 @@ import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.ByteHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.CharHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.DoubleHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.FloatHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.IntHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.LongHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.ShortHashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
+import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.block.function.PassThruFunction0;
@@ -297,6 +314,62 @@ public abstract class AbstractCollectionTestCase
                 this.newWith(1, 2, 3, 4).collect(
                         Functions.getToString(),
                         UnifiedSet.<String>newSet()), "1", "2", "3", "4");
+    }
+
+    @Test
+    public void collectBoolean()
+    {
+        MutableBooleanCollection result = this.newWith(1, 0).collectBoolean(PrimitiveFunctions.integerIsPositive());
+        Assert.assertEquals(BooleanHashBag.newBagWith(true, false), result.toBag());
+    }
+
+    @Test
+    public void collectByte()
+    {
+        MutableByteCollection result = this.newWith(1, 2, 3, 4).collectByte(PrimitiveFunctions.unboxIntegerToByte());
+        Assert.assertEquals(ByteHashBag.newBagWith((byte) 1, (byte) 2, (byte) 3, (byte) 4), result.toBag());
+    }
+
+    @Test
+    public void collectChar()
+    {
+        MutableCharCollection result = this.newWith(1, 2, 3, 4).collectChar(PrimitiveFunctions.unboxIntegerToChar());
+        Assert.assertEquals(CharHashBag.newBagWith((char) 1, (char) 2, (char) 3, (char) 4), result.toBag());
+    }
+
+    @Test
+    public void collectDouble()
+    {
+        MutableDoubleCollection result = this.newWith(1, 2, 3, 4).collectDouble(PrimitiveFunctions.unboxIntegerToDouble());
+        Assert.assertEquals(DoubleHashBag.newBagWith(1.0d, 2.0d, 3.0d, 4.0d), result.toBag());
+    }
+
+    @Test
+    public void collectFloat()
+    {
+        MutableFloatCollection result = this.newWith(1, 2, 3, 4).collectFloat(PrimitiveFunctions.unboxIntegerToFloat());
+        Assert.assertEquals(FloatHashBag.newBagWith(1.0f, 2.0f, 3.0f, 4.0f), result.toBag());
+    }
+
+    @Test
+    public void collectInt()
+    {
+        MutableIntCollection result = this.newWith(1, 2, 3, 4).collectInt(PrimitiveFunctions.unboxIntegerToInt());
+        Assert.assertEquals(IntHashBag.newBagWith(1, 2, 3, 4), result.toBag());
+    }
+
+    @Test
+    public void collectLong()
+    {
+        MutableLongCollection result = this.newWith(1, 2, 3, 4).collectLong(PrimitiveFunctions.unboxIntegerToLong());
+        Assert.assertEquals(LongHashBag.newBagWith(1, 2, 3, 4), result.toBag());
+    }
+
+    @Test
+    public void collectShort()
+    {
+        MutableShortCollection result = this.newWith(1, 2, 3, 4).collectShort(PrimitiveFunctions.unboxIntegerToShort());
+        Assert.assertEquals(ShortHashBag.newBagWith((short) 1, (short) 2, (short) 3, (short) 4), result.toBag());
     }
 
     @Test

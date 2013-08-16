@@ -31,6 +31,9 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
@@ -39,6 +42,7 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -56,6 +60,14 @@ import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.stack.ImmutableStack;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.stack.StackIterable;
+import com.gs.collections.api.stack.primitive.MutableBooleanStack;
+import com.gs.collections.api.stack.primitive.MutableByteStack;
+import com.gs.collections.api.stack.primitive.MutableCharStack;
+import com.gs.collections.api.stack.primitive.MutableDoubleStack;
+import com.gs.collections.api.stack.primitive.MutableFloatStack;
+import com.gs.collections.api.stack.primitive.MutableIntStack;
+import com.gs.collections.api.stack.primitive.MutableLongStack;
+import com.gs.collections.api.stack.primitive.MutableShortStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
@@ -66,6 +78,14 @@ import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.partition.stack.PartitionArrayStack;
+import com.gs.collections.impl.stack.mutable.primitive.BooleanArrayStack;
+import com.gs.collections.impl.stack.mutable.primitive.ByteArrayStack;
+import com.gs.collections.impl.stack.mutable.primitive.CharArrayStack;
+import com.gs.collections.impl.stack.mutable.primitive.DoubleArrayStack;
+import com.gs.collections.impl.stack.mutable.primitive.FloatArrayStack;
+import com.gs.collections.impl.stack.mutable.primitive.IntArrayStack;
+import com.gs.collections.impl.stack.mutable.primitive.LongArrayStack;
+import com.gs.collections.impl.stack.mutable.primitive.ShortArrayStack;
 import com.gs.collections.impl.utility.LazyIterate;
 
 /**
@@ -286,6 +306,110 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
     public <V> ArrayStack<V> collect(Function<? super T, ? extends V> function)
     {
         return ArrayStack.newStackFromTopToBottom(this.delegate.asReversed().collect(function));
+    }
+
+    public MutableBooleanStack collectBoolean(final BooleanFunction<? super T> booleanFunction)
+    {
+        final BooleanArrayStack result = new BooleanArrayStack();
+        this.delegate.forEach(new Procedure<T>()
+        {
+            public void value(T each)
+            {
+                result.push(booleanFunction.booleanValueOf(each));
+            }
+        });
+        return result;
+    }
+
+    public MutableByteStack collectByte(final ByteFunction<? super T> byteFunction)
+    {
+        final ByteArrayStack result = new ByteArrayStack();
+        this.delegate.forEach(new Procedure<T>()
+        {
+            public void value(T each)
+            {
+                result.push(byteFunction.byteValueOf(each));
+            }
+        });
+        return result;
+    }
+
+    public MutableCharStack collectChar(final CharFunction<? super T> charFunction)
+    {
+        final CharArrayStack result = new CharArrayStack();
+        this.delegate.forEach(new Procedure<T>()
+        {
+            public void value(T each)
+            {
+                result.push(charFunction.charValueOf(each));
+            }
+        });
+        return result;
+    }
+
+    public MutableDoubleStack collectDouble(final DoubleFunction<? super T> doubleFunction)
+    {
+        final DoubleArrayStack result = new DoubleArrayStack();
+        this.delegate.forEach(new Procedure<T>()
+        {
+            public void value(T each)
+            {
+                result.push(doubleFunction.doubleValueOf(each));
+            }
+        });
+        return result;
+    }
+
+    public MutableFloatStack collectFloat(final FloatFunction<? super T> floatFunction)
+    {
+        final FloatArrayStack result = new FloatArrayStack();
+        this.delegate.forEach(new Procedure<T>()
+        {
+            public void value(T each)
+            {
+                result.push(floatFunction.floatValueOf(each));
+            }
+        });
+        return result;
+    }
+
+    public MutableIntStack collectInt(final IntFunction<? super T> intFunction)
+    {
+        final IntArrayStack result = new IntArrayStack();
+        this.delegate.forEach(new Procedure<T>()
+        {
+            public void value(T each)
+            {
+                result.push(intFunction.intValueOf(each));
+            }
+        });
+        return result;
+    }
+
+    public MutableLongStack collectLong(final LongFunction<? super T> longFunction)
+    {
+        final LongArrayStack result = new LongArrayStack();
+        this.delegate.forEach(new Procedure<T>()
+        {
+            public void value(T each)
+            {
+                result.push(longFunction.longValueOf(each));
+            }
+        });
+        return result;
+    }
+
+    public MutableShortStack collectShort(final ShortFunction<? super T> shortFunction)
+    {
+        final ShortArrayStack result = new ShortArrayStack();
+        this.delegate.forEach(new Procedure<T>()
+        {
+            public void value(T each)
+            {
+                result.push(shortFunction.shortValueOf(each));
+            }
+        });
+        return result;
     }
 
     public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)

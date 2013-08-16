@@ -25,6 +25,9 @@ import java.util.RandomAccess;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
@@ -33,6 +36,7 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -41,6 +45,14 @@ import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.ImmutableBooleanList;
+import com.gs.collections.api.list.primitive.ImmutableByteList;
+import com.gs.collections.api.list.primitive.ImmutableCharList;
+import com.gs.collections.api.list.primitive.ImmutableDoubleList;
+import com.gs.collections.api.list.primitive.ImmutableFloatList;
+import com.gs.collections.api.list.primitive.ImmutableIntList;
+import com.gs.collections.api.list.primitive.ImmutableLongList;
+import com.gs.collections.api.list.primitive.ImmutableShortList;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.list.ImmutableListMultimap;
 import com.gs.collections.api.partition.list.PartitionImmutableList;
@@ -247,6 +259,54 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
         MutableList<V> result = Lists.mutable.of();
         this.forEach(new CollectProcedure<T, V>(function, result));
         return result.toImmutable();
+    }
+
+    @Override
+    public ImmutableBooleanList collectBoolean(BooleanFunction<? super T> booleanFunction)
+    {
+        return (ImmutableBooleanList) super.collectBoolean(booleanFunction);
+    }
+
+    @Override
+    public ImmutableByteList collectByte(ByteFunction<? super T> function)
+    {
+        return (ImmutableByteList) super.collectByte(function);
+    }
+
+    @Override
+    public ImmutableCharList collectChar(CharFunction<? super T> charFunction)
+    {
+        return (ImmutableCharList) super.collectChar(charFunction);
+    }
+
+    @Override
+    public ImmutableDoubleList collectDouble(DoubleFunction<? super T> doubleFunction)
+    {
+        return (ImmutableDoubleList) super.collectDouble(doubleFunction);
+    }
+
+    @Override
+    public ImmutableFloatList collectFloat(FloatFunction<? super T> floatFunction)
+    {
+        return (ImmutableFloatList) super.collectFloat(floatFunction);
+    }
+
+    @Override
+    public ImmutableIntList collectInt(IntFunction<? super T> intFunction)
+    {
+        return (ImmutableIntList) super.collectInt(intFunction);
+    }
+
+    @Override
+    public ImmutableLongList collectLong(LongFunction<? super T> longFunction)
+    {
+        return (ImmutableLongList) super.collectLong(longFunction);
+    }
+
+    @Override
+    public ImmutableShortList collectShort(ShortFunction<? super T> shortFunction)
+    {
+        return (ImmutableShortList) super.collectShort(shortFunction);
     }
 
     public <V> ImmutableList<V> collectIf(

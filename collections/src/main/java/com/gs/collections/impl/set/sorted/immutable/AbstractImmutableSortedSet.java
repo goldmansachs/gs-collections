@@ -23,10 +23,26 @@ import java.util.SortedSet;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.ImmutableBooleanList;
+import com.gs.collections.api.list.primitive.ImmutableByteList;
+import com.gs.collections.api.list.primitive.ImmutableCharList;
+import com.gs.collections.api.list.primitive.ImmutableDoubleList;
+import com.gs.collections.api.list.primitive.ImmutableFloatList;
+import com.gs.collections.api.list.primitive.ImmutableIntList;
+import com.gs.collections.api.list.primitive.ImmutableLongList;
+import com.gs.collections.api.list.primitive.ImmutableShortList;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.sortedset.ImmutableSortedSetMultimap;
 import com.gs.collections.api.partition.set.sorted.PartitionImmutableSortedSet;
@@ -46,8 +62,24 @@ import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.block.procedure.RejectProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.block.procedure.SelectProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectBooleanProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectByteProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectCharProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectDoubleProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectFloatProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectIntProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectLongProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectShortProcedure;
 import com.gs.collections.impl.collection.immutable.AbstractImmutableCollection;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
+import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
+import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
+import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
+import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
+import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.multimap.set.sorted.TreeSortedSetMultimap;
 import com.gs.collections.impl.partition.set.sorted.PartitionTreeSortedSet;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
@@ -119,6 +151,70 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
     protected MutableCollection<T> newMutable(int size)
     {
         return TreeSortedSet.newSet(this.comparator());
+    }
+
+    @Override
+    public ImmutableBooleanList collectBoolean(BooleanFunction<? super T> booleanFunction)
+    {
+        BooleanArrayList result = new BooleanArrayList(this.size());
+        this.forEach(new CollectBooleanProcedure<T>(booleanFunction, result));
+        return result.toImmutable();
+    }
+
+    @Override
+    public ImmutableByteList collectByte(ByteFunction<? super T> byteFunction)
+    {
+        ByteArrayList result = new ByteArrayList(this.size());
+        this.forEach(new CollectByteProcedure<T>(byteFunction, result));
+        return result.toImmutable();
+    }
+
+    @Override
+    public ImmutableCharList collectChar(CharFunction<? super T> charFunction)
+    {
+        CharArrayList result = new CharArrayList(this.size());
+        this.forEach(new CollectCharProcedure<T>(charFunction, result));
+        return result.toImmutable();
+    }
+
+    @Override
+    public ImmutableDoubleList collectDouble(DoubleFunction<? super T> doubleFunction)
+    {
+        DoubleArrayList result = new DoubleArrayList(this.size());
+        this.forEach(new CollectDoubleProcedure<T>(doubleFunction, result));
+        return result.toImmutable();
+    }
+
+    @Override
+    public ImmutableFloatList collectFloat(FloatFunction<? super T> floatFunction)
+    {
+        FloatArrayList result = new FloatArrayList(this.size());
+        this.forEach(new CollectFloatProcedure<T>(floatFunction, result));
+        return result.toImmutable();
+    }
+
+    @Override
+    public ImmutableIntList collectInt(IntFunction<? super T> intFunction)
+    {
+        IntArrayList result = new IntArrayList(this.size());
+        this.forEach(new CollectIntProcedure<T>(intFunction, result));
+        return result.toImmutable();
+    }
+
+    @Override
+    public ImmutableLongList collectLong(LongFunction<? super T> longFunction)
+    {
+        LongArrayList result = new LongArrayList(this.size());
+        this.forEach(new CollectLongProcedure<T>(longFunction, result));
+        return result.toImmutable();
+    }
+
+    @Override
+    public ImmutableShortList collectShort(ShortFunction<? super T> shortFunction)
+    {
+        ShortArrayList result = new ShortArrayList(this.size());
+        this.forEach(new CollectShortProcedure<T>(shortFunction, result));
+        return result.toImmutable();
     }
 
     public ImmutableSortedSet<T> select(Predicate<? super T> predicate)

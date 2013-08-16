@@ -24,17 +24,41 @@ import java.util.RandomAccess;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.MutableBooleanList;
+import com.gs.collections.api.list.primitive.MutableByteList;
+import com.gs.collections.api.list.primitive.MutableCharList;
+import com.gs.collections.api.list.primitive.MutableDoubleList;
+import com.gs.collections.api.list.primitive.MutableFloatList;
+import com.gs.collections.api.list.primitive.MutableIntList;
+import com.gs.collections.api.list.primitive.MutableLongList;
+import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
+import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
+import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
+import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
+import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
+import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.ArrayListIterate;
@@ -274,6 +298,118 @@ public final class ArrayListAdapter<T>
     public <V> ArrayListAdapter<V> collect(Function<? super T, ? extends V> function)
     {
         return this.wrap(ArrayListIterate.collect(this.delegate, function));
+    }
+
+    @Override
+    public MutableBooleanList collectBoolean(final BooleanFunction<? super T> booleanFunction)
+    {
+        final BooleanArrayList result = new BooleanArrayList(this.size());
+        this.forEach(new Procedure<T>()
+        {
+            public void value(T each)
+            {
+                result.add(booleanFunction.booleanValueOf(each));
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public MutableByteList collectByte(final ByteFunction<? super T> byteFunction)
+    {
+        final ByteArrayList result = new ByteArrayList(this.size());
+        this.forEach(new Procedure<T>()
+        {
+            public void value(T each)
+            {
+                result.add(byteFunction.byteValueOf(each));
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public MutableCharList collectChar(final CharFunction<? super T> charFunction)
+    {
+        final CharArrayList result = new CharArrayList(this.size());
+        this.forEach(new Procedure<T>()
+        {
+            public void value(T each)
+            {
+                result.add(charFunction.charValueOf(each));
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public MutableDoubleList collectDouble(final DoubleFunction<? super T> doubleFunction)
+    {
+        final DoubleArrayList result = new DoubleArrayList(this.size());
+        this.forEach(new Procedure<T>()
+        {
+            public void value(T each)
+            {
+                result.add(doubleFunction.doubleValueOf(each));
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public MutableFloatList collectFloat(final FloatFunction<? super T> floatFunction)
+    {
+        final FloatArrayList result = new FloatArrayList(this.size());
+        this.forEach(new Procedure<T>()
+        {
+            public void value(T each)
+            {
+                result.add(floatFunction.floatValueOf(each));
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public MutableIntList collectInt(final IntFunction<? super T> intFunction)
+    {
+        final IntArrayList result = new IntArrayList(this.size());
+        this.forEach(new Procedure<T>()
+        {
+            public void value(T each)
+            {
+                result.add(intFunction.intValueOf(each));
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public MutableLongList collectLong(final LongFunction<? super T> longFunction)
+    {
+        final LongArrayList result = new LongArrayList(this.size());
+        this.forEach(new Procedure<T>()
+        {
+            public void value(T each)
+            {
+                result.add(longFunction.longValueOf(each));
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public MutableShortList collectShort(final ShortFunction<? super T> shortFunction)
+    {
+        final ShortArrayList result = new ShortArrayList(this.size());
+        this.forEach(new Procedure<T>()
+        {
+            public void value(T each)
+            {
+                result.add(shortFunction.shortValueOf(each));
+            }
+        });
+        return result;
     }
 
     @Override

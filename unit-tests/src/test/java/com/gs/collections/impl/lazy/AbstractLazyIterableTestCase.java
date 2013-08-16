@@ -39,6 +39,7 @@ import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
+import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.block.function.PassThruFunction0;
@@ -46,6 +47,14 @@ import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
+import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
+import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
+import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
+import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
+import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
@@ -166,6 +175,70 @@ public abstract class AbstractLazyIterableTestCase
         Assert.assertEquals(
                 FastList.newListWith("1", "2", "3", "4", "5", "6", "7"),
                 this.lazyIterable.collect(Functions.getToString()).toList());
+    }
+
+    @Test
+    public void collectBoolean()
+    {
+        Assert.assertEquals(
+                BooleanArrayList.newListWith(true, true, true, true, true, true, true),
+                this.lazyIterable.collectBoolean(PrimitiveFunctions.integerIsPositive()).toList());
+    }
+
+    @Test
+    public void collectByte()
+    {
+        Assert.assertEquals(
+                ByteArrayList.newListWith((byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5, (byte) 6, (byte) 7),
+                this.lazyIterable.collectByte(PrimitiveFunctions.unboxIntegerToByte()).toList());
+    }
+
+    @Test
+    public void collectChar()
+    {
+        Assert.assertEquals(
+                CharArrayList.newListWith((char) 1, (char) 2, (char) 3, (char) 4, (char) 5, (char) 6, (char) 7),
+                this.lazyIterable.collectChar(PrimitiveFunctions.unboxIntegerToChar()).toList());
+    }
+
+    @Test
+    public void collectDouble()
+    {
+        Assert.assertEquals(
+                DoubleArrayList.newListWith(1.0d, 2.0d, 3.0d, 4.0d, 5.0d, 6.0d, 7.0d),
+                this.lazyIterable.collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).toList());
+    }
+
+    @Test
+    public void collectFloat()
+    {
+        Assert.assertEquals(
+                FloatArrayList.newListWith(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f),
+                this.lazyIterable.collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).toList());
+    }
+
+    @Test
+    public void collectInt()
+    {
+        Assert.assertEquals(
+                IntArrayList.newListWith(1, 2, 3, 4, 5, 6, 7),
+                this.lazyIterable.collectInt(PrimitiveFunctions.unboxIntegerToInt()).toList());
+    }
+
+    @Test
+    public void collectLong()
+    {
+        Assert.assertEquals(
+                LongArrayList.newListWith(1L, 2L, 3L, 4L, 5L, 6L, 7L),
+                this.lazyIterable.collectLong(PrimitiveFunctions.unboxIntegerToLong()).toList());
+    }
+
+    @Test
+    public void collectShort()
+    {
+        Assert.assertEquals(
+                ShortArrayList.newListWith((short) 1, (short) 2, (short) 3, (short) 4, (short) 5, (short) 6, (short) 7),
+                this.lazyIterable.collectShort(PrimitiveFunctions.unboxIntegerToShort()).toList());
     }
 
     @Test

@@ -24,9 +24,33 @@ import java.io.ObjectOutput;
 import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.primitive.ImmutableBooleanBag;
+import com.gs.collections.api.bag.primitive.ImmutableByteBag;
+import com.gs.collections.api.bag.primitive.ImmutableCharBag;
+import com.gs.collections.api.bag.primitive.ImmutableDoubleBag;
+import com.gs.collections.api.bag.primitive.ImmutableFloatBag;
+import com.gs.collections.api.bag.primitive.ImmutableIntBag;
+import com.gs.collections.api.bag.primitive.ImmutableLongBag;
+import com.gs.collections.api.bag.primitive.ImmutableShortBag;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.ByteHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.CharHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.DoubleHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.FloatHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.IntHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.LongHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.ShortHashBag;
 import com.gs.collections.impl.block.procedure.checked.CheckedObjectIntProcedure;
 import com.gs.collections.impl.collection.immutable.AbstractImmutableCollection;
 import com.gs.collections.impl.factory.Bags;
@@ -42,6 +66,118 @@ public abstract class AbstractImmutableBag<T>
     protected MutableCollection<T> newMutable(int size)
     {
         return Bags.mutable.of();
+    }
+
+    @Override
+    public ImmutableBooleanBag collectBoolean(final BooleanFunction<? super T> booleanFunction)
+    {
+        final BooleanHashBag result = new BooleanHashBag();
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                result.addOccurrences(booleanFunction.booleanValueOf(each), occurrences);
+            }
+        });
+        return result.toImmutable();
+    }
+
+    @Override
+    public ImmutableByteBag collectByte(final ByteFunction<? super T> byteFunction)
+    {
+        final ByteHashBag result = new ByteHashBag(this.size());
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                result.addOccurrences(byteFunction.byteValueOf(each), occurrences);
+            }
+        });
+        return result.toImmutable();
+    }
+
+    @Override
+    public ImmutableCharBag collectChar(final CharFunction<? super T> charFunction)
+    {
+        final CharHashBag result = new CharHashBag(this.size());
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                result.addOccurrences(charFunction.charValueOf(each), occurrences);
+            }
+        });
+        return result.toImmutable();
+    }
+
+    @Override
+    public ImmutableDoubleBag collectDouble(final DoubleFunction<? super T> doubleFunction)
+    {
+        final DoubleHashBag result = new DoubleHashBag(this.size());
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                result.addOccurrences(doubleFunction.doubleValueOf(each), occurrences);
+            }
+        });
+        return result.toImmutable();
+    }
+
+    @Override
+    public ImmutableFloatBag collectFloat(final FloatFunction<? super T> floatFunction)
+    {
+        final FloatHashBag result = new FloatHashBag(this.size());
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                result.addOccurrences(floatFunction.floatValueOf(each), occurrences);
+            }
+        });
+        return result.toImmutable();
+    }
+
+    @Override
+    public ImmutableIntBag collectInt(final IntFunction<? super T> intFunction)
+    {
+        final IntHashBag result = new IntHashBag(this.size());
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                result.addOccurrences(intFunction.intValueOf(each), occurrences);
+            }
+        });
+        return result.toImmutable();
+    }
+
+    @Override
+    public ImmutableLongBag collectLong(final LongFunction<? super T> longFunction)
+    {
+        final LongHashBag result = new LongHashBag(this.size());
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                result.addOccurrences(longFunction.longValueOf(each), occurrences);
+            }
+        });
+        return result.toImmutable();
+    }
+
+    @Override
+    public ImmutableShortBag collectShort(final ShortFunction<? super T> shortFunction)
+    {
+        final ShortHashBag result = new ShortHashBag(this.size());
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                result.addOccurrences(shortFunction.shortValueOf(each), occurrences);
+            }
+        });
+        return result.toImmutable();
     }
 
     public String toStringOfItemToCount()

@@ -28,16 +28,32 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
 import com.gs.collections.api.block.function.primitive.FloatObjectToFloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.MutableBooleanList;
+import com.gs.collections.api.list.primitive.MutableByteList;
+import com.gs.collections.api.list.primitive.MutableCharList;
+import com.gs.collections.api.list.primitive.MutableDoubleList;
+import com.gs.collections.api.list.primitive.MutableFloatList;
+import com.gs.collections.api.list.primitive.MutableIntList;
+import com.gs.collections.api.list.primitive.MutableLongList;
+import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
@@ -49,6 +65,14 @@ import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
+import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
+import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
+import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
+import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
+import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.partition.list.PartitionFastList;
@@ -350,6 +374,174 @@ public final class ArrayListIterate
             Function<? super T, ? extends A> function)
     {
         return ArrayListIterate.collect(list, function, new ArrayList<A>(list.size()));
+    }
+
+    /**
+     * @see Iterate#collectBoolean(Iterable, BooleanFunction)
+     */
+    public static <T> MutableBooleanList collectBoolean(
+            ArrayList<T> list,
+            BooleanFunction<? super T> booleanFunction)
+    {
+        int size = list.size();
+        if (ArrayListIterate.isOptimizableArrayList(list, size))
+        {
+            MutableBooleanList result = new BooleanArrayList(size);
+            T[] elements = ArrayListIterate.getInternalArray(list);
+            for (int i = 0; i < size; i++)
+            {
+                result.add(booleanFunction.booleanValueOf(elements[i]));
+            }
+            return result;
+        }
+        return RandomAccessListIterate.collectBoolean(list, booleanFunction);
+    }
+
+    /**
+     * @see Iterate#collectByte(Iterable, ByteFunction)
+     */
+    public static <T> MutableByteList collectByte(
+            ArrayList<T> list,
+            ByteFunction<? super T> byteFunction)
+    {
+        int size = list.size();
+        if (ArrayListIterate.isOptimizableArrayList(list, size))
+        {
+            MutableByteList result = new ByteArrayList(size);
+            T[] elements = ArrayListIterate.getInternalArray(list);
+            for (int i = 0; i < size; i++)
+            {
+                result.add(byteFunction.byteValueOf(elements[i]));
+            }
+            return result;
+        }
+        return RandomAccessListIterate.collectByte(list, byteFunction);
+    }
+
+    /**
+     * @see Iterate#collectChar(Iterable, CharFunction)
+     */
+    public static <T> MutableCharList collectChar(
+            ArrayList<T> list,
+            CharFunction<? super T> charFunction)
+    {
+        int size = list.size();
+        if (ArrayListIterate.isOptimizableArrayList(list, size))
+        {
+            MutableCharList result = new CharArrayList(size);
+            T[] elements = ArrayListIterate.getInternalArray(list);
+            for (int i = 0; i < size; i++)
+            {
+                result.add(charFunction.charValueOf(elements[i]));
+            }
+            return result;
+        }
+        return RandomAccessListIterate.collectChar(list, charFunction);
+    }
+
+    /**
+     * @see Iterate#collectDouble(Iterable, DoubleFunction)
+     */
+    public static <T> MutableDoubleList collectDouble(
+            ArrayList<T> list,
+            DoubleFunction<? super T> doubleFunction)
+    {
+        int size = list.size();
+        if (ArrayListIterate.isOptimizableArrayList(list, size))
+        {
+            MutableDoubleList result = new DoubleArrayList(size);
+            T[] elements = ArrayListIterate.getInternalArray(list);
+            for (int i = 0; i < size; i++)
+            {
+                result.add(doubleFunction.doubleValueOf(elements[i]));
+            }
+            return result;
+        }
+        return RandomAccessListIterate.collectDouble(list, doubleFunction);
+    }
+
+    /**
+     * @see Iterate#collectFloat(Iterable, FloatFunction)
+     */
+    public static <T> MutableFloatList collectFloat(
+            ArrayList<T> list,
+            FloatFunction<? super T> floatFunction)
+    {
+        int size = list.size();
+        if (ArrayListIterate.isOptimizableArrayList(list, size))
+        {
+            MutableFloatList result = new FloatArrayList(size);
+            T[] elements = ArrayListIterate.getInternalArray(list);
+            for (int i = 0; i < size; i++)
+            {
+                result.add(floatFunction.floatValueOf(elements[i]));
+            }
+            return result;
+        }
+        return RandomAccessListIterate.collectFloat(list, floatFunction);
+    }
+
+    /**
+     * @see Iterate#collectInt(Iterable, IntFunction)
+     */
+    public static <T> MutableIntList collectInt(
+            ArrayList<T> list,
+            IntFunction<? super T> intFunction)
+    {
+        int size = list.size();
+        if (ArrayListIterate.isOptimizableArrayList(list, size))
+        {
+            MutableIntList result = new IntArrayList(size);
+            T[] elements = ArrayListIterate.getInternalArray(list);
+            for (int i = 0; i < size; i++)
+            {
+                result.add(intFunction.intValueOf(elements[i]));
+            }
+            return result;
+        }
+        return RandomAccessListIterate.collectInt(list, intFunction);
+    }
+
+    /**
+     * @see Iterate#collectLong(Iterable, LongFunction)
+     */
+    public static <T> MutableLongList collectLong(
+            ArrayList<T> list,
+            LongFunction<? super T> longFunction)
+    {
+        int size = list.size();
+        if (ArrayListIterate.isOptimizableArrayList(list, size))
+        {
+            MutableLongList result = new LongArrayList(size);
+            T[] elements = ArrayListIterate.getInternalArray(list);
+            for (int i = 0; i < size; i++)
+            {
+                result.add(longFunction.longValueOf(elements[i]));
+            }
+            return result;
+        }
+        return RandomAccessListIterate.collectLong(list, longFunction);
+    }
+
+    /**
+     * @see Iterate#collectShort(Iterable, ShortFunction)
+     */
+    public static <T> MutableShortList collectShort(
+            ArrayList<T> list,
+            ShortFunction<? super T> shortFunction)
+    {
+        int size = list.size();
+        if (ArrayListIterate.isOptimizableArrayList(list, size))
+        {
+            MutableShortList result = new ShortArrayList(size);
+            T[] elements = ArrayListIterate.getInternalArray(list);
+            for (int i = 0; i < size; i++)
+            {
+                result.add(shortFunction.shortValueOf(elements[i]));
+            }
+            return result;
+        }
+        return RandomAccessListIterate.collectShort(list, shortFunction);
     }
 
     /**

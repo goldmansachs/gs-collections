@@ -28,6 +28,9 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
@@ -36,12 +39,21 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.MutableBooleanList;
+import com.gs.collections.api.list.primitive.MutableByteList;
+import com.gs.collections.api.list.primitive.MutableCharList;
+import com.gs.collections.api.list.primitive.MutableDoubleList;
+import com.gs.collections.api.list.primitive.MutableFloatList;
+import com.gs.collections.api.list.primitive.MutableIntList;
+import com.gs.collections.api.list.primitive.MutableLongList;
+import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
@@ -52,6 +64,14 @@ import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
+import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
+import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
+import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
+import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
+import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.partition.list.PartitionFastList;
@@ -312,6 +332,134 @@ public final class RandomAccessListIterate
             targetCollection.add(function.valueOf(list.get(i)));
         }
         return targetCollection;
+    }
+
+    /**
+     * @see Iterate#collectBoolean(Iterable, BooleanFunction)
+     */
+    public static <T> MutableBooleanList collectBoolean(
+            List<T> list,
+            BooleanFunction<? super T> booleanFunction)
+    {
+        int size = list.size();
+        MutableBooleanList result = new BooleanArrayList(size);
+        for (int i = 0; i < size; i++)
+        {
+            result.add(booleanFunction.booleanValueOf(list.get(i)));
+        }
+        return result;
+    }
+
+    /**
+     * @see Iterate#collectByte(Iterable, ByteFunction)
+     */
+    public static <T> MutableByteList collectByte(
+            List<T> list,
+            ByteFunction<? super T> byteFunction)
+    {
+        int size = list.size();
+        MutableByteList result = new ByteArrayList(size);
+        for (int i = 0; i < size; i++)
+        {
+            result.add(byteFunction.byteValueOf(list.get(i)));
+        }
+        return result;
+    }
+
+    /**
+     * @see Iterate#collectChar(Iterable, CharFunction)
+     */
+    public static <T> MutableCharList collectChar(
+            List<T> list,
+            CharFunction<? super T> charFunction)
+    {
+        int size = list.size();
+        MutableCharList result = new CharArrayList(size);
+        for (int i = 0; i < size; i++)
+        {
+            result.add(charFunction.charValueOf(list.get(i)));
+        }
+        return result;
+    }
+
+    /**
+     * @see Iterate#collectDouble(Iterable, DoubleFunction)
+     */
+    public static <T> MutableDoubleList collectDouble(
+            List<T> list,
+            DoubleFunction<? super T> doubleFunction)
+    {
+        int size = list.size();
+        MutableDoubleList result = new DoubleArrayList(size);
+        for (int i = 0; i < size; i++)
+        {
+            result.add(doubleFunction.doubleValueOf(list.get(i)));
+        }
+        return result;
+    }
+
+    /**
+     * @see Iterate#collectFloat(Iterable, FloatFunction)
+     */
+    public static <T> MutableFloatList collectFloat(
+            List<T> list,
+            FloatFunction<? super T> floatFunction)
+    {
+        int size = list.size();
+        MutableFloatList result = new FloatArrayList(size);
+        for (int i = 0; i < size; i++)
+        {
+            result.add(floatFunction.floatValueOf(list.get(i)));
+        }
+        return result;
+    }
+
+    /**
+     * @see Iterate#collectInt(Iterable, IntFunction)
+     */
+    public static <T> MutableIntList collectInt(
+            List<T> list,
+            IntFunction<? super T> intFunction)
+    {
+        int size = list.size();
+        MutableIntList result = new IntArrayList(size);
+        for (int i = 0; i < size; i++)
+        {
+            result.add(intFunction.intValueOf(list.get(i)));
+        }
+        return result;
+    }
+
+    /**
+     * @see Iterate#collectLong(Iterable, LongFunction)
+     */
+    public static <T> MutableLongList collectLong(
+            List<T> list,
+            LongFunction<? super T> longFunction)
+    {
+        int size = list.size();
+        MutableLongList result = new LongArrayList(size);
+        for (int i = 0; i < size; i++)
+        {
+            result.add(longFunction.longValueOf(list.get(i)));
+        }
+        return result;
+    }
+
+    /**
+     * @see Iterate#collectShort(Iterable, ShortFunction)
+     */
+    public static <T> MutableShortList collectShort(
+            List<T> list,
+            ShortFunction<? super T> shortFunction)
+    {
+        int size = list.size();
+        MutableShortList result = new ShortArrayList(size);
+        for (int i = 0; i < size; i++)
+        {
+            result.add(shortFunction.shortValueOf(list.get(i)));
+        }
+        return result;
     }
 
     /**

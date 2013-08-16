@@ -29,6 +29,9 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
@@ -37,6 +40,7 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -44,6 +48,14 @@ import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
@@ -459,6 +471,70 @@ public class SynchronizedMutableCollection<T>
         synchronized (this.lock)
         {
             return this.collection.collect(function);
+        }
+    }
+
+    public MutableBooleanCollection collectBoolean(BooleanFunction<? super T> booleanFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.collectBoolean(booleanFunction);
+        }
+    }
+
+    public MutableByteCollection collectByte(ByteFunction<? super T> byteFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.collectByte(byteFunction);
+        }
+    }
+
+    public MutableCharCollection collectChar(CharFunction<? super T> charFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.collectChar(charFunction);
+        }
+    }
+
+    public MutableDoubleCollection collectDouble(DoubleFunction<? super T> doubleFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.collectDouble(doubleFunction);
+        }
+    }
+
+    public MutableFloatCollection collectFloat(FloatFunction<? super T> floatFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.collectFloat(floatFunction);
+        }
+    }
+
+    public MutableIntCollection collectInt(IntFunction<? super T> intFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.collectInt(intFunction);
+        }
+    }
+
+    public MutableLongCollection collectLong(LongFunction<? super T> longFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.collectLong(longFunction);
+        }
+    }
+
+    public MutableShortCollection collectShort(ShortFunction<? super T> shortFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.collectShort(shortFunction);
         }
     }
 

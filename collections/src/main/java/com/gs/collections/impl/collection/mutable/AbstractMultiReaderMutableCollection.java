@@ -28,6 +28,9 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
@@ -36,12 +39,21 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
@@ -637,6 +649,110 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         try
         {
             return this.getDelegate().collect(function, target);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public MutableBooleanCollection collectBoolean(BooleanFunction<? super T> booleanFunction)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.getDelegate().collectBoolean(booleanFunction);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public MutableByteCollection collectByte(ByteFunction<? super T> byteFunction)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.getDelegate().collectByte(byteFunction);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public MutableCharCollection collectChar(CharFunction<? super T> charFunction)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.getDelegate().collectChar(charFunction);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public MutableDoubleCollection collectDouble(DoubleFunction<? super T> doubleFunction)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.getDelegate().collectDouble(doubleFunction);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public MutableFloatCollection collectFloat(FloatFunction<? super T> floatFunction)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.getDelegate().collectFloat(floatFunction);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public MutableIntCollection collectInt(IntFunction<? super T> intFunction)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.getDelegate().collectInt(intFunction);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public MutableLongCollection collectLong(LongFunction<? super T> longFunction)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.getDelegate().collectLong(longFunction);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public MutableShortCollection collectShort(ShortFunction<? super T> shortFunction)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.getDelegate().collectShort(shortFunction);
         }
         finally
         {
@@ -1437,6 +1553,46 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
                 R target)
         {
             return this.delegate.collect(function, target);
+        }
+
+        public MutableBooleanCollection collectBoolean(BooleanFunction<? super T> booleanFunction)
+        {
+            return this.delegate.collectBoolean(booleanFunction);
+        }
+
+        public MutableByteCollection collectByte(ByteFunction<? super T> byteFunction)
+        {
+            return this.delegate.collectByte(byteFunction);
+        }
+
+        public MutableCharCollection collectChar(CharFunction<? super T> charFunction)
+        {
+            return this.delegate.collectChar(charFunction);
+        }
+
+        public MutableDoubleCollection collectDouble(DoubleFunction<? super T> doubleFunction)
+        {
+            return this.delegate.collectDouble(doubleFunction);
+        }
+
+        public MutableFloatCollection collectFloat(FloatFunction<? super T> floatFunction)
+        {
+            return this.delegate.collectFloat(floatFunction);
+        }
+
+        public MutableIntCollection collectInt(IntFunction<? super T> intFunction)
+        {
+            return this.delegate.collectInt(intFunction);
+        }
+
+        public MutableLongCollection collectLong(LongFunction<? super T> longFunction)
+        {
+            return this.delegate.collectLong(longFunction);
+        }
+
+        public MutableShortCollection collectShort(ShortFunction<? super T> shortFunction)
+        {
+            return this.delegate.collectShort(shortFunction);
         }
 
         public <V, R extends Collection<V>> R flatCollect(

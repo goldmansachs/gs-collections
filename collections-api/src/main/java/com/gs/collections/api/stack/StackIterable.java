@@ -21,11 +21,27 @@ import java.util.List;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.multimap.list.ListMultimap;
 import com.gs.collections.api.partition.stack.PartitionStack;
+import com.gs.collections.api.stack.primitive.BooleanStack;
+import com.gs.collections.api.stack.primitive.ByteStack;
+import com.gs.collections.api.stack.primitive.CharStack;
+import com.gs.collections.api.stack.primitive.DoubleStack;
+import com.gs.collections.api.stack.primitive.FloatStack;
+import com.gs.collections.api.stack.primitive.IntStack;
+import com.gs.collections.api.stack.primitive.LongStack;
+import com.gs.collections.api.stack.primitive.ShortStack;
 import com.gs.collections.api.tuple.Pair;
 
 /**
@@ -103,6 +119,22 @@ public interface StackIterable<T> extends RichIterable<T>
     PartitionStack<T> partition(Predicate<? super T> predicate);
 
     <V> StackIterable<V> collect(Function<? super T, ? extends V> function);
+
+    BooleanStack collectBoolean(BooleanFunction<? super T> booleanFunction);
+
+    ByteStack collectByte(ByteFunction<? super T> byteFunction);
+
+    CharStack collectChar(CharFunction<? super T> charFunction);
+
+    DoubleStack collectDouble(DoubleFunction<? super T> doubleFunction);
+
+    FloatStack collectFloat(FloatFunction<? super T> floatFunction);
+
+    IntStack collectInt(IntFunction<? super T> intFunction);
+
+    LongStack collectLong(LongFunction<? super T> longFunction);
+
+    ShortStack collectShort(ShortFunction<? super T> shortFunction);
 
     <V> StackIterable<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 

@@ -849,4 +849,28 @@ public abstract class AbstractImmutableSortedSetTestCase
 
     @Test
     public abstract void tailSet();
+
+    @Test
+    public abstract void collectBoolean();
+
+    @Test
+    public abstract void collectByte();
+
+    @Test
+    public abstract void collectChar();
+
+    @Test
+    public abstract void collectDouble();
+
+    @Test
+    public abstract void collectFloat();
+
+    @Test
+    public abstract void collectInt();
+
+    @Test
+    public abstract void collectLong();
+
+    @Test
+    public abstract void collectShort();
 }

@@ -21,7 +21,6 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Iterator;
-import java.util.RandomAccess;
 import java.util.concurrent.locks.ReadWriteLock;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
@@ -29,11 +28,26 @@ import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.primitive.MutableBooleanBag;
+import com.gs.collections.api.bag.primitive.MutableByteBag;
+import com.gs.collections.api.bag.primitive.MutableCharBag;
+import com.gs.collections.api.bag.primitive.MutableDoubleBag;
+import com.gs.collections.api.bag.primitive.MutableFloatBag;
+import com.gs.collections.api.bag.primitive.MutableIntBag;
+import com.gs.collections.api.bag.primitive.MutableLongBag;
+import com.gs.collections.api.bag.primitive.MutableShortBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
-
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
@@ -42,12 +56,10 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.partition.bag.PartitionMutableBag;
 import com.gs.collections.api.tuple.Pair;
-import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.collection.mutable.AbstractMultiReaderMutableCollection;
 import com.gs.collections.impl.factory.Bags;
+import com.gs.collections.impl.factory.Iterables;
 import com.gs.collections.impl.utility.LazyIterate;
-
-import static com.gs.collections.impl.factory.Iterables.*;
 
 /**
  * MultiReaderHashBag provides a thread-safe wrapper around a HashBag, using a ReentrantReadWriteLock. In order to
@@ -254,6 +266,118 @@ public final class MultiReaderHashBag<T>
         try
         {
             return this.delegate.collect(function);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    @Override
+    public MutableBooleanBag collectBoolean(BooleanFunction<? super T> booleanFunction)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.collectBoolean(booleanFunction);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    @Override
+    public MutableByteBag collectByte(ByteFunction<? super T> byteFunction)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.collectByte(byteFunction);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    @Override
+    public MutableCharBag collectChar(CharFunction<? super T> charFunction)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.collectChar(charFunction);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    @Override
+    public MutableDoubleBag collectDouble(DoubleFunction<? super T> doubleFunction)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.collectDouble(doubleFunction);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    @Override
+    public MutableFloatBag collectFloat(FloatFunction<? super T> floatFunction)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.collectFloat(floatFunction);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    @Override
+    public MutableIntBag collectInt(IntFunction<? super T> intFunction)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.collectInt(intFunction);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    @Override
+    public MutableLongBag collectLong(LongFunction<? super T> longFunction)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.collectLong(longFunction);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    @Override
+    public MutableShortBag collectShort(ShortFunction<? super T> shortFunction)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.collectShort(shortFunction);
         }
         finally
         {
@@ -578,7 +702,7 @@ public final class MultiReaderHashBag<T>
             extends UntouchableMutableCollection<T>
             implements MutableBag<T>
     {
-        private final MutableList<UntouchableIterator<T>> requestedIterators = mList();
+        private final MutableList<UntouchableIterator<T>> requestedIterators = Iterables.mList();
 
         private UntouchableMutableBag(MutableBag<T> newDelegate)
         {
@@ -671,6 +795,54 @@ public final class MultiReaderHashBag<T>
         public <V> MutableBag<V> collect(Function<? super T, ? extends V> function)
         {
             return this.getDelegate().collect(function);
+        }
+
+        @Override
+        public MutableBooleanBag collectBoolean(BooleanFunction<? super T> booleanFunction)
+        {
+            return this.getDelegate().collectBoolean(booleanFunction);
+        }
+
+        @Override
+        public MutableByteBag collectByte(ByteFunction<? super T> byteFunction)
+        {
+            return this.getDelegate().collectByte(byteFunction);
+        }
+
+        @Override
+        public MutableCharBag collectChar(CharFunction<? super T> charFunction)
+        {
+            return this.getDelegate().collectChar(charFunction);
+        }
+
+        @Override
+        public MutableDoubleBag collectDouble(DoubleFunction<? super T> doubleFunction)
+        {
+            return this.getDelegate().collectDouble(doubleFunction);
+        }
+
+        @Override
+        public MutableFloatBag collectFloat(FloatFunction<? super T> floatFunction)
+        {
+            return this.getDelegate().collectFloat(floatFunction);
+        }
+
+        @Override
+        public MutableIntBag collectInt(IntFunction<? super T> intFunction)
+        {
+            return this.getDelegate().collectInt(intFunction);
+        }
+
+        @Override
+        public MutableLongBag collectLong(LongFunction<? super T> longFunction)
+        {
+            return this.getDelegate().collectLong(longFunction);
+        }
+
+        @Override
+        public MutableShortBag collectShort(ShortFunction<? super T> shortFunction)
+        {
+            return this.getDelegate().collectShort(shortFunction);
         }
 
         public <V> MutableBag<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)

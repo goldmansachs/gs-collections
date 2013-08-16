@@ -19,10 +19,26 @@ package com.gs.collections.api.set;
 import java.util.Set;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
 import com.gs.collections.api.partition.set.PartitionImmutableSet;
+import com.gs.collections.api.set.primitive.ImmutableBooleanSet;
+import com.gs.collections.api.set.primitive.ImmutableByteSet;
+import com.gs.collections.api.set.primitive.ImmutableCharSet;
+import com.gs.collections.api.set.primitive.ImmutableDoubleSet;
+import com.gs.collections.api.set.primitive.ImmutableFloatSet;
+import com.gs.collections.api.set.primitive.ImmutableIntSet;
+import com.gs.collections.api.set.primitive.ImmutableLongSet;
+import com.gs.collections.api.set.primitive.ImmutableShortSet;
 import com.gs.collections.api.tuple.Pair;
 import net.jcip.annotations.Immutable;
 
@@ -53,6 +69,22 @@ public interface ImmutableSet<T>
     <S> ImmutableSet<S> selectInstancesOf(Class<S> clazz);
 
     <V> ImmutableSet<V> collect(Function<? super T, ? extends V> function);
+
+    ImmutableBooleanSet collectBoolean(BooleanFunction<? super T> booleanFunction);
+
+    ImmutableByteSet collectByte(ByteFunction<? super T> byteFunction);
+
+    ImmutableCharSet collectChar(CharFunction<? super T> charFunction);
+
+    ImmutableDoubleSet collectDouble(DoubleFunction<? super T> doubleFunction);
+
+    ImmutableFloatSet collectFloat(FloatFunction<? super T> floatFunction);
+
+    ImmutableIntSet collectInt(IntFunction<? super T> intFunction);
+
+    ImmutableLongSet collectLong(LongFunction<? super T> longFunction);
+
+    ImmutableShortSet collectShort(ShortFunction<? super T> shortFunction);
 
     <V> ImmutableSet<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 

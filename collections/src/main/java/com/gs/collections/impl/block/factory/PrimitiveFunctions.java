@@ -16,17 +16,25 @@
 
 package com.gs.collections.impl.block.factory;
 
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
 import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 
 public final class PrimitiveFunctions
 {
+    private static final IntegerIsPositive INTEGER_IS_POSITIVE = new IntegerIsPositive();
     private static final UnboxNumberToInt UNBOX_NUMBER_TO_INT = new UnboxNumberToInt();
+    private static final UnboxIntegerToByte UNBOX_INTEGER_TO_BYTE = new UnboxIntegerToByte();
+    private static final UnboxIntegerToChar UNBOX_INTEGER_TO_CHAR = new UnboxIntegerToChar();
     private static final UnboxIntegerToInt UNBOX_INTEGER_TO_INT = new UnboxIntegerToInt();
     private static final UnboxIntegerToFloat UNBOX_INTEGER_TO_FLOAT = new UnboxIntegerToFloat();
     private static final UnboxIntegerToLong UNBOX_INTEGER_TO_LONG = new UnboxIntegerToLong();
+    private static final UnboxIntegerToShort UNBOX_INTEGER_TO_SHORT = new UnboxIntegerToShort();
     private static final UnboxIntegerToDouble UNBOX_INTEGER_TO_DOUBLE = new UnboxIntegerToDouble();
     private static final UnboxDoubleToDouble UNBOX_DOUBLE_TO_DOUBLE = new UnboxDoubleToDouble();
     private static final UnboxFloatToFloat UNBOX_FLOAT_TO_FLOAT = new UnboxFloatToFloat();
@@ -39,9 +47,24 @@ public final class PrimitiveFunctions
         throw new AssertionError("Suppress default constructor for noninstantiability");
     }
 
+    public static BooleanFunction<Integer> integerIsPositive()
+    {
+        return INTEGER_IS_POSITIVE;
+    }
+
     public static IntFunction<Number> unboxNumberToInt()
     {
         return UNBOX_NUMBER_TO_INT;
+    }
+
+    public static ByteFunction<Integer> unboxIntegerToByte()
+    {
+        return UNBOX_INTEGER_TO_BYTE;
+    }
+
+    public static CharFunction<Integer> unboxIntegerToChar()
+    {
+        return UNBOX_INTEGER_TO_CHAR;
     }
 
     public static IntFunction<Integer> unboxIntegerToInt()
@@ -74,6 +97,11 @@ public final class PrimitiveFunctions
         return UNBOX_INTEGER_TO_LONG;
     }
 
+    public static ShortFunction<Integer> unboxIntegerToShort()
+    {
+        return UNBOX_INTEGER_TO_SHORT;
+    }
+
     public static DoubleFunction<Integer> unboxIntegerToDouble()
     {
         return UNBOX_INTEGER_TO_DOUBLE;
@@ -89,6 +117,17 @@ public final class PrimitiveFunctions
         return UNBOX_FLOAT_TO_FLOAT;
     }
 
+    private static class IntegerIsPositive
+            implements BooleanFunction<Integer>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public boolean booleanValueOf(Integer integer)
+        {
+            return integer.intValue() > 0;
+        }
+    }
+
     private static class UnboxNumberToInt
             implements IntFunction<Number>
     {
@@ -97,6 +136,28 @@ public final class PrimitiveFunctions
         public int intValueOf(Number number)
         {
             return number.intValue();
+        }
+    }
+
+    private static class UnboxIntegerToByte
+            implements ByteFunction<Integer>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public byte byteValueOf(Integer integer)
+        {
+            return integer.byteValue();
+        }
+    }
+
+    private static class UnboxIntegerToChar
+            implements CharFunction<Integer>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public char charValueOf(Integer integer)
+        {
+            return (char) integer.intValue();
         }
     }
 
@@ -130,6 +191,17 @@ public final class PrimitiveFunctions
         public long longValueOf(Integer integer)
         {
             return integer;
+        }
+    }
+
+    private static class UnboxIntegerToShort
+            implements ShortFunction<Integer>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public short shortValueOf(Integer integer)
+        {
+            return integer.shortValue();
         }
     }
 

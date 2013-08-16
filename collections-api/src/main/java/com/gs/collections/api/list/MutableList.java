@@ -21,9 +21,25 @@ import java.util.List;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.list.primitive.MutableBooleanList;
+import com.gs.collections.api.list.primitive.MutableByteList;
+import com.gs.collections.api.list.primitive.MutableCharList;
+import com.gs.collections.api.list.primitive.MutableDoubleList;
+import com.gs.collections.api.list.primitive.MutableFloatList;
+import com.gs.collections.api.list.primitive.MutableIntList;
+import com.gs.collections.api.list.primitive.MutableLongList;
+import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
@@ -59,6 +75,22 @@ public interface MutableList<T>
     <S> MutableList<S> selectInstancesOf(Class<S> clazz);
 
     <V> MutableList<V> collect(Function<? super T, ? extends V> function);
+
+    MutableBooleanList collectBoolean(BooleanFunction<? super T> booleanFunction);
+
+    MutableByteList collectByte(ByteFunction<? super T> byteFunction);
+
+    MutableCharList collectChar(CharFunction<? super T> charFunction);
+
+    MutableDoubleList collectDouble(DoubleFunction<? super T> doubleFunction);
+
+    MutableFloatList collectFloat(FloatFunction<? super T> floatFunction);
+
+    MutableIntList collectInt(IntFunction<? super T> intFunction);
+
+    MutableLongList collectLong(LongFunction<? super T> longFunction);
+
+    MutableShortList collectShort(ShortFunction<? super T> shortFunction);
 
     <P, V> MutableList<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
 

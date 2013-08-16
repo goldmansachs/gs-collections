@@ -88,4 +88,59 @@ public final class StringFunctionsTest
     {
         StringFunctions.subString(2, 4).valueOf(null);
     }
+
+    @Test
+    public void toPrimitiveBoolean()
+    {
+        Assert.assertTrue(StringFunctions.toPrimitiveBoolean().booleanValueOf("true"));
+        Assert.assertFalse(StringFunctions.toPrimitiveBoolean().booleanValueOf("nah"));
+    }
+
+    @Test
+    public void toPrimitiveByte()
+    {
+        Assert.assertEquals((byte) 16, StringFunctions.toPrimitiveByte().byteValueOf("16"));
+    }
+
+    @Test
+    public void toPrimitiveChar()
+    {
+        Assert.assertEquals('X', StringFunctions.toFirstChar().charValueOf("X-ray"));
+    }
+
+    @Test(expected = StringIndexOutOfBoundsException.class)
+    public void toPrimitiveCharWithEmptyString()
+    {
+        StringFunctions.toFirstChar().charValueOf("");
+    }
+
+    @Test
+    public void toPrimitiveDouble()
+    {
+        Assert.assertEquals(3.14159265359d, StringFunctions.toPrimitiveDouble().doubleValueOf("3.14159265359"), 0.0);
+    }
+
+    @Test
+    public void toPrimitiveFloat()
+    {
+        Assert.assertEquals(3.1415d, StringFunctions.toPrimitiveFloat().floatValueOf("3.1415"), 0.00001);
+    }
+
+    @Test
+    public void toPrimitiveInt()
+    {
+        Assert.assertEquals(256, StringFunctions.toPrimitiveInt().intValueOf("256"));
+    }
+
+    @Test
+    public void toPrimitiveLong()
+    {
+        Assert.assertEquals(0x7fffffffffffffffL, StringFunctions.toPrimitiveLong().longValueOf("9223372036854775807"));
+    }
+
+    @Test
+    public void toPrimitiveShort()
+    {
+        Assert.assertEquals(-32768, StringFunctions.toPrimitiveShort().shortValueOf("-32768"));
+    }
 }

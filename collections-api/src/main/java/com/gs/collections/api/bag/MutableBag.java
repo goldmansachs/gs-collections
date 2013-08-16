@@ -16,8 +16,24 @@
 
 package com.gs.collections.api.bag;
 
+import com.gs.collections.api.bag.primitive.MutableBooleanBag;
+import com.gs.collections.api.bag.primitive.MutableByteBag;
+import com.gs.collections.api.bag.primitive.MutableCharBag;
+import com.gs.collections.api.bag.primitive.MutableDoubleBag;
+import com.gs.collections.api.bag.primitive.MutableFloatBag;
+import com.gs.collections.api.bag.primitive.MutableIntBag;
+import com.gs.collections.api.bag.primitive.MutableLongBag;
+import com.gs.collections.api.bag.primitive.MutableShortBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
@@ -65,6 +81,22 @@ public interface MutableBag<T>
     <S> MutableBag<S> selectInstancesOf(Class<S> clazz);
 
     <V> MutableBag<V> collect(Function<? super T, ? extends V> function);
+
+    MutableBooleanBag collectBoolean(BooleanFunction<? super T> booleanFunction);
+
+    MutableByteBag collectByte(ByteFunction<? super T> byteFunction);
+
+    MutableCharBag collectChar(CharFunction<? super T> charFunction);
+
+    MutableDoubleBag collectDouble(DoubleFunction<? super T> doubleFunction);
+
+    MutableFloatBag collectFloat(FloatFunction<? super T> floatFunction);
+
+    MutableIntBag collectInt(IntFunction<? super T> intFunction);
+
+    MutableLongBag collectLong(LongFunction<? super T> longFunction);
+
+    MutableShortBag collectShort(ShortFunction<? super T> shortFunction);
 
     <P, V> MutableBag<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
 

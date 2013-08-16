@@ -28,6 +28,9 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
@@ -36,6 +39,7 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -52,6 +56,14 @@ import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.stack.ImmutableStack;
 import com.gs.collections.api.stack.MutableStack;
+import com.gs.collections.api.stack.primitive.MutableBooleanStack;
+import com.gs.collections.api.stack.primitive.MutableByteStack;
+import com.gs.collections.api.stack.primitive.MutableCharStack;
+import com.gs.collections.api.stack.primitive.MutableDoubleStack;
+import com.gs.collections.api.stack.primitive.MutableFloatStack;
+import com.gs.collections.api.stack.primitive.MutableIntStack;
+import com.gs.collections.api.stack.primitive.MutableLongStack;
+import com.gs.collections.api.stack.primitive.MutableShortStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.UnmodifiableIteratorAdapter;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
@@ -234,6 +246,70 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
         synchronized (this.lock)
         {
             return this.delegate.collect(function);
+        }
+    }
+
+    public MutableBooleanStack collectBoolean(BooleanFunction<? super T> booleanFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.collectBoolean(booleanFunction);
+        }
+    }
+
+    public MutableByteStack collectByte(ByteFunction<? super T> byteFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.collectByte(byteFunction);
+        }
+    }
+
+    public MutableCharStack collectChar(CharFunction<? super T> charFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.collectChar(charFunction);
+        }
+    }
+
+    public MutableDoubleStack collectDouble(DoubleFunction<? super T> doubleFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.collectDouble(doubleFunction);
+        }
+    }
+
+    public MutableFloatStack collectFloat(FloatFunction<? super T> floatFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.collectFloat(floatFunction);
+        }
+    }
+
+    public MutableIntStack collectInt(IntFunction<? super T> intFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.collectInt(intFunction);
+        }
+    }
+
+    public MutableLongStack collectLong(LongFunction<? super T> longFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.collectLong(longFunction);
+        }
+    }
+
+    public MutableShortStack collectShort(ShortFunction<? super T> shortFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.collectShort(shortFunction);
         }
     }
 

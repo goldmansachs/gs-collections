@@ -28,6 +28,14 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.MutableBooleanList;
+import com.gs.collections.api.list.primitive.MutableByteList;
+import com.gs.collections.api.list.primitive.MutableCharList;
+import com.gs.collections.api.list.primitive.MutableDoubleList;
+import com.gs.collections.api.list.primitive.MutableFloatList;
+import com.gs.collections.api.list.primitive.MutableIntList;
+import com.gs.collections.api.list.primitive.MutableLongList;
+import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
@@ -37,6 +45,7 @@ import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.ObjectIntProcedures;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
+import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.Procedures2;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.block.function.MaxSizeFunction;
@@ -45,6 +54,14 @@ import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
+import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
+import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
+import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
+import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
+import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.math.IntegerSum;
 import com.gs.collections.impl.math.Sum;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
@@ -60,6 +77,8 @@ import static com.gs.collections.impl.factory.Iterables.*;
  */
 public class ArrayListIterateTest
 {
+    private static final int OVER_OPTIMIZED_LIMIT = 101;
+
     private static final class ThisIsNotAnArrayList<T>
             extends ArrayList<T>
     {
@@ -363,6 +382,199 @@ public class ArrayListIterateTest
         //List<String> newCollection = ArrayListIterate.collect(list, ArrayListIterateTest.TO_STRING_FUNCTION);
         Verify.assertSize(10, newCollection);
         Verify.assertContainsAll(newCollection, "null", "false", "true");
+    }
+
+    @Test
+    public void collectBoolean()
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        list.add(-1);
+        list.add(0);
+        list.add(4);
+        MutableBooleanList actual = ArrayListIterate.collectBoolean(list, PrimitiveFunctions.integerIsPositive());
+        Assert.assertEquals(BooleanArrayList.newListWith(false, false, true), actual);
+    }
+
+    @Test
+    public void collectBooleanOverOptimizeLimit()
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>(Interval.zeroTo(OVER_OPTIMIZED_LIMIT));
+        MutableBooleanList actual = ArrayListIterate.collectBoolean(list, PrimitiveFunctions.integerIsPositive());
+        BooleanArrayList expected = new BooleanArrayList(list.size());
+        expected.add(false);
+        for (int i = 1; i <= OVER_OPTIMIZED_LIMIT; i++)
+        {
+            expected.add(true);
+        }
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void collectByte()
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        list.add(-1);
+        list.add(0);
+        list.add(4);
+        MutableByteList actual = ArrayListIterate.collectByte(list, PrimitiveFunctions.unboxIntegerToByte());
+        Assert.assertEquals(ByteArrayList.newListWith((byte) -1, (byte) 0, (byte) 4), actual);
+    }
+
+    @Test
+    public void collectByteOverOptimizeLimit()
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>(Interval.zeroTo(OVER_OPTIMIZED_LIMIT));
+        MutableByteList actual = ArrayListIterate.collectByte(list, PrimitiveFunctions.unboxIntegerToByte());
+        ByteArrayList expected = new ByteArrayList(list.size());
+        for (int i = 0; i <= OVER_OPTIMIZED_LIMIT; i++)
+        {
+            expected.add((byte) i);
+        }
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void collectChar()
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        list.add(-1);
+        list.add(0);
+        list.add(4);
+        MutableCharList actual = ArrayListIterate.collectChar(list, PrimitiveFunctions.unboxIntegerToChar());
+        Assert.assertEquals(CharArrayList.newListWith((char) -1, (char) 0, (char) 4), actual);
+    }
+
+    @Test
+    public void collectCharOverOptimizeLimit()
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>(Interval.zeroTo(OVER_OPTIMIZED_LIMIT));
+        MutableCharList actual = ArrayListIterate.collectChar(list, PrimitiveFunctions.unboxIntegerToChar());
+        CharArrayList expected = new CharArrayList(list.size());
+        for (int i = 0; i <= OVER_OPTIMIZED_LIMIT; i++)
+        {
+            expected.add((char) i);
+        }
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void collectDouble()
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        list.add(-1);
+        list.add(0);
+        list.add(4);
+        MutableDoubleList actual = ArrayListIterate.collectDouble(list, PrimitiveFunctions.unboxIntegerToDouble());
+        Assert.assertEquals(DoubleArrayList.newListWith(-1.0d, 0.0d, 4.0d), actual);
+    }
+
+    @Test
+    public void collectDoubleOverOptimizeLimit()
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>(Interval.zeroTo(OVER_OPTIMIZED_LIMIT));
+        MutableDoubleList actual = ArrayListIterate.collectDouble(list, PrimitiveFunctions.unboxIntegerToDouble());
+        DoubleArrayList expected = new DoubleArrayList(list.size());
+        for (int i = 0; i <= OVER_OPTIMIZED_LIMIT; i++)
+        {
+            expected.add((double) i);
+        }
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void collectFloat()
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        list.add(-1);
+        list.add(0);
+        list.add(4);
+        MutableFloatList actual = ArrayListIterate.collectFloat(list, PrimitiveFunctions.unboxIntegerToFloat());
+        Assert.assertEquals(FloatArrayList.newListWith(-1.0f, 0.0f, 4.0f), actual);
+    }
+
+    @Test
+    public void collectFloatOverOptimizeLimit()
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>(Interval.zeroTo(OVER_OPTIMIZED_LIMIT));
+        MutableFloatList actual = ArrayListIterate.collectFloat(list, PrimitiveFunctions.unboxIntegerToFloat());
+        FloatArrayList expected = new FloatArrayList(list.size());
+        for (int i = 0; i <= OVER_OPTIMIZED_LIMIT; i++)
+        {
+            expected.add((float) i);
+        }
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void collectInt()
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        list.add(-1);
+        list.add(0);
+        list.add(4);
+        MutableIntList actual = ArrayListIterate.collectInt(list, PrimitiveFunctions.unboxIntegerToInt());
+        Assert.assertEquals(IntArrayList.newListWith(-1, 0, 4), actual);
+    }
+
+    @Test
+    public void collectIntOverOptimizeLimit()
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>(Interval.zeroTo(OVER_OPTIMIZED_LIMIT));
+        MutableIntList actual = ArrayListIterate.collectInt(list, PrimitiveFunctions.unboxIntegerToInt());
+        IntArrayList expected = new IntArrayList(list.size());
+        for (int i = 0; i <= OVER_OPTIMIZED_LIMIT; i++)
+        {
+            expected.add(i);
+        }
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void collectLong()
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        list.add(-1);
+        list.add(0);
+        list.add(4);
+        MutableLongList actual = ArrayListIterate.collectLong(list, PrimitiveFunctions.unboxIntegerToLong());
+        Assert.assertEquals(LongArrayList.newListWith(-1L, 0L, 4L), actual);
+    }
+
+    @Test
+    public void collectLongOverOptimizeLimit()
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>(Interval.zeroTo(OVER_OPTIMIZED_LIMIT));
+        MutableLongList actual = ArrayListIterate.collectLong(list, PrimitiveFunctions.unboxIntegerToLong());
+        LongArrayList expected = new LongArrayList(list.size());
+        for (int i = 0; i <= OVER_OPTIMIZED_LIMIT; i++)
+        {
+            expected.add((long) i);
+        }
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void collectShort()
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        list.add(-1);
+        list.add(0);
+        list.add(4);
+        MutableShortList actual = ArrayListIterate.collectShort(list, PrimitiveFunctions.unboxIntegerToShort());
+        Assert.assertEquals(ShortArrayList.newListWith((short) -1, (short) 0, (short) 4), actual);
+    }
+
+    @Test
+    public void collectShortOverOptimizeLimit()
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>(Interval.zeroTo(OVER_OPTIMIZED_LIMIT));
+        MutableShortList actual = ArrayListIterate.collectShort(list, PrimitiveFunctions.unboxIntegerToShort());
+        ShortArrayList expected = new ShortArrayList(list.size());
+        for (int i = 0; i <= OVER_OPTIMIZED_LIMIT; i++)
+        {
+            expected.add((short) i);
+        }
+        Assert.assertEquals(expected, actual);
     }
 
     @Test

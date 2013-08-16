@@ -132,7 +132,7 @@ public interface MapIterable<K, V> extends RichIterable<V>
      * <pre>e.g.
      * peopleByCity.select(new Predicate2&lt;City, Person&gt;()
      * {
-     *     public boolean value(City city, Person person)
+     *     public boolean accept(City city, Person person)
      *     {
      *         return city.getName().equals("Anytown") && person.getLastName().equals("Smith");
      *     }
@@ -146,7 +146,7 @@ public interface MapIterable<K, V> extends RichIterable<V>
      * a new map.  The map returned will use the values projected from the function rather than the original values.
      * <p/>
      * <pre>e.g.
-     * peopleByCity.collect(new Function2&lt;City, Person, String&gt;()
+     * peopleByCity.collectValues(new Function2&lt;City, Person, String&gt;()
      * {
      *     public String value(City city, Person person)
      *     {
@@ -162,7 +162,7 @@ public interface MapIterable<K, V> extends RichIterable<V>
      * a new map.  The map returned will use the values projected from the function rather than the original values.
      * <p/>
      * <pre>e.g.
-     * peopleByCity.project(new Function2&lt;City, Person, String&gt;()
+     * peopleByCity.collect(new Function2&lt;City, Person, String&gt;()
      * {
      *     public String value(City city, Person person)
      *     {
@@ -180,7 +180,7 @@ public interface MapIterable<K, V> extends RichIterable<V>
      * <pre>e.g.
      * peopleByCity.reject(new Predicate2&lt;City, Person&gt;()
      * {
-     *     public boolean value(City city, Person person)
+     *     public boolean accept(City city, Person person)
      *     {
      *         return city.getName().equals("Anytown") && person.getLastName().equals("Smith");
      *     }
@@ -199,7 +199,7 @@ public interface MapIterable<K, V> extends RichIterable<V>
      * <pre>e.g.
      * peopleByCity.detect(new Predicate2&lt;City, Person&gt;()
      * {
-     *     public boolean value(City city, Person person)
+     *     public boolean accept(City city, Person person)
      *     {
      *         return city.getName().equals("Anytown") && person.getLastName().equals("Smith");
      *     }

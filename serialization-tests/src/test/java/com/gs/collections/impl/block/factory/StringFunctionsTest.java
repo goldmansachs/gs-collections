@@ -27,7 +27,9 @@ public class StringFunctionsTest
         Verify.assertSerializedForm(
                 1L,
                 "rO0ABXNyAERjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlN0cmluZ0Z1bmN0\n"
-                        + "aW9ucyRMZW5ndGhGdW5jdGlvbgAAAAAAAAABAgAAeHA=",
+                        + "aW9ucyRMZW5ndGhGdW5jdGlvbgAAAAAAAAABAgAAeHIARGNvbS5ncy5jb2xsZWN0aW9ucy5pbXBs\n"
+                        + "LmJsb2NrLmZ1bmN0aW9uLnByaW1pdGl2ZS5JbnRlZ2VyRnVuY3Rpb25JbXBsAAAAAAAAAAECAAB4\n"
+                        + "cA==",
                 StringFunctions.length());
     }
 
@@ -70,5 +72,85 @@ public class StringFunctionsTest
                         + "aW9ucyRTdWJTdHJpbmdGdW5jdGlvbgAAAAAAAAABAgACSQAKYmVnaW5JbmRleEkACGVuZEluZGV4\n"
                         + "eHAAAAAAAAAAAQ==",
                 StringFunctions.subString(0, 1));
+    }
+
+    @Test
+    public void toPrimitiveBoolean()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAFBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlN0cmluZ0Z1bmN0\n"
+                        + "aW9ucyRUb1ByaW1pdGl2ZUJvb2xlYW5GdW5jdGlvbgAAAAAAAAABAgAAeHA=",
+                StringFunctions.toPrimitiveBoolean());
+    }
+
+    @Test
+    public void toPrimitiveByte()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAE1jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlN0cmluZ0Z1bmN0\n"
+                        + "aW9ucyRUb1ByaW1pdGl2ZUJ5dGVGdW5jdGlvbgAAAAAAAAABAgAAeHA=",
+                StringFunctions.toPrimitiveByte());
+    }
+
+    @Test
+    public void toFirstLetter()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAEljb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlN0cmluZ0Z1bmN0\n"
+                        + "aW9ucyRGaXJzdExldHRlckZ1bmN0aW9uAAAAAAAAAAECAAB4cA==",
+                StringFunctions.firstLetter());
+    }
+
+    @Test
+    public void toPrimitiveDouble()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAE9jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlN0cmluZ0Z1bmN0\n"
+                        + "aW9ucyRUb1ByaW1pdGl2ZURvdWJsZUZ1bmN0aW9uAAAAAAAAAAECAAB4cA==",
+                StringFunctions.toPrimitiveDouble());
+    }
+
+    @Test
+    public void toPrimitiveFloat()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAE5jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlN0cmluZ0Z1bmN0\n"
+                        + "aW9ucyRUb1ByaW1pdGl2ZUZsb2F0RnVuY3Rpb24AAAAAAAAAAQIAAHhw",
+                StringFunctions.toPrimitiveFloat());
+    }
+
+    @Test
+    public void toPrimitiveInt()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAExjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlN0cmluZ0Z1bmN0\n"
+                        + "aW9ucyRUb1ByaW1pdGl2ZUludEZ1bmN0aW9uAAAAAAAAAAECAAB4cA==",
+                StringFunctions.toPrimitiveInt());
+    }
+
+    @Test
+    public void toPrimitiveLong()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAE1jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlN0cmluZ0Z1bmN0\n"
+                        + "aW9ucyRUb1ByaW1pdGl2ZUxvbmdGdW5jdGlvbgAAAAAAAAABAgAAeHA=",
+                StringFunctions.toPrimitiveLong());
+    }
+
+    @Test
+    public void toPrimitiveShort()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAE5jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlN0cmluZ0Z1bmN0\n"
+                        + "aW9ucyRUb1ByaW1pdGl2ZVNob3J0RnVuY3Rpb24AAAAAAAAAAQIAAHhw",
+                StringFunctions.toPrimitiveShort());
     }
 }

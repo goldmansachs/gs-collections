@@ -17,8 +17,24 @@
 package com.gs.collections.api.set;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.multimap.set.SetMultimap;
+import com.gs.collections.api.set.primitive.BooleanSet;
+import com.gs.collections.api.set.primitive.ByteSet;
+import com.gs.collections.api.set.primitive.CharSet;
+import com.gs.collections.api.set.primitive.DoubleSet;
+import com.gs.collections.api.set.primitive.FloatSet;
+import com.gs.collections.api.set.primitive.IntSet;
+import com.gs.collections.api.set.primitive.LongSet;
+import com.gs.collections.api.set.primitive.ShortSet;
 import com.gs.collections.api.tuple.Pair;
 
 /**
@@ -34,6 +50,22 @@ public interface UnsortedSetIterable<T>
     UnsortedSetIterable<UnsortedSetIterable<T>> powerSet();
 
     <V> UnsortedSetIterable<V> collect(Function<? super T, ? extends V> function);
+
+    BooleanSet collectBoolean(BooleanFunction<? super T> booleanFunction);
+
+    ByteSet collectByte(ByteFunction<? super T> byteFunction);
+
+    CharSet collectChar(CharFunction<? super T> charFunction);
+
+    DoubleSet collectDouble(DoubleFunction<? super T> doubleFunction);
+
+    FloatSet collectFloat(FloatFunction<? super T> floatFunction);
+
+    IntSet collectInt(IntFunction<? super T> intFunction);
+
+    LongSet collectLong(LongFunction<? super T> longFunction);
+
+    ShortSet collectShort(ShortFunction<? super T> shortFunction);
 
     <V> UnsortedSetIterable<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 

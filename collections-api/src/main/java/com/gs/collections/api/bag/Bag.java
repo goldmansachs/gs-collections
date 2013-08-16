@@ -19,7 +19,23 @@ package com.gs.collections.api.bag;
 import java.util.Map;
 
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.bag.primitive.BooleanBag;
+import com.gs.collections.api.bag.primitive.ByteBag;
+import com.gs.collections.api.bag.primitive.CharBag;
+import com.gs.collections.api.bag.primitive.DoubleBag;
+import com.gs.collections.api.bag.primitive.FloatBag;
+import com.gs.collections.api.bag.primitive.IntBag;
+import com.gs.collections.api.bag.primitive.LongBag;
+import com.gs.collections.api.bag.primitive.ShortBag;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
@@ -110,6 +126,22 @@ public interface Bag<T>
     <S> Bag<S> selectInstancesOf(Class<S> clazz);
 
     <V> Bag<V> collect(Function<? super T, ? extends V> function);
+
+    BooleanBag collectBoolean(BooleanFunction<? super T> booleanFunction);
+
+    ByteBag collectByte(ByteFunction<? super T> byteFunction);
+
+    CharBag collectChar(CharFunction<? super T> charFunction);
+
+    DoubleBag collectDouble(DoubleFunction<? super T> doubleFunction);
+
+    FloatBag collectFloat(FloatFunction<? super T> floatFunction);
+
+    IntBag collectInt(IntFunction<? super T> intFunction);
+
+    LongBag collectLong(LongFunction<? super T> longFunction);
+
+    ShortBag collectShort(ShortFunction<? super T> shortFunction);
 
     <V> Bag<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 

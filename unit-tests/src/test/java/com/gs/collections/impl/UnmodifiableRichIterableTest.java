@@ -37,6 +37,7 @@ import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
+import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.StringPredicates;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.factory.Lists;
@@ -44,6 +45,14 @@ import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.factory.SortedSets;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
+import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
+import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
+import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
+import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
+import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.utility.StringIterate;
@@ -214,6 +223,70 @@ public class UnmodifiableRichIterableTest
         Assert.assertEquals(
                 this.mutableCollection.collect(Functions.getStringPassThru(), Lists.mutable.<String>of()),
                 this.unmodifiableCollection.collect(Functions.getStringPassThru(), Lists.mutable.<String>of()));
+    }
+
+    @Test
+    public void collectBoolean()
+    {
+        Assert.assertEquals(
+                BooleanArrayList.newListWith(false, false, true),
+                this.newWith(-1, 0, 1).collectBoolean(PrimitiveFunctions.integerIsPositive()));
+    }
+
+    @Test
+    public void collectByte()
+    {
+        Assert.assertEquals(
+                ByteArrayList.newListWith((byte) 1, (byte) 2, (byte) 3),
+                this.newWith(1, 2, 3).collectByte(PrimitiveFunctions.unboxIntegerToByte()));
+    }
+
+    @Test
+    public void collectChar()
+    {
+        Assert.assertEquals(
+                CharArrayList.newListWith((char) 1, (char) 2, (char) 3),
+                this.newWith(1, 2, 3).collectChar(PrimitiveFunctions.unboxIntegerToChar()));
+    }
+
+    @Test
+    public void collectDouble()
+    {
+        Assert.assertEquals(
+                DoubleArrayList.newListWith(1.0d, 2.0d, 3.0d),
+                this.newWith(1, 2, 3).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()));
+    }
+
+    @Test
+    public void collectFloat()
+    {
+        Assert.assertEquals(
+                FloatArrayList.newListWith(1.0f, 2.0f, 3.0f),
+                this.newWith(1, 2, 3).collectFloat(PrimitiveFunctions.unboxIntegerToFloat()));
+    }
+
+    @Test
+    public void collectInt()
+    {
+        Assert.assertEquals(
+                IntArrayList.newListWith(1, 2, 3),
+                this.newWith(1, 2, 3).collectInt(PrimitiveFunctions.unboxIntegerToInt()));
+    }
+
+    @Test
+    public void collectLong()
+    {
+        Assert.assertEquals(
+                LongArrayList.newListWith(1L, 2L, 3L),
+                this.newWith(1, 2, 3).collectLong(PrimitiveFunctions.unboxIntegerToLong()));
+    }
+
+    @Test
+    public void collectShort()
+    {
+        Assert.assertEquals(
+                ShortArrayList.newListWith((short) 1, (short) 2, (short) 3),
+                this.newWith(1, 2, 3).collectShort(PrimitiveFunctions.unboxIntegerToShort()));
     }
 
     @Test

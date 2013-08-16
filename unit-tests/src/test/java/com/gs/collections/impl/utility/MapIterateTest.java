@@ -28,13 +28,30 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.ByteHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.CharHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.DoubleHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.FloatHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.IntHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.LongHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.ShortHashBag;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.block.predicate.MapEntryPredicate;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
@@ -655,6 +672,62 @@ public class MapIterateTest
     {
         MutableList<String> result = MapIterate.collect(newLittleMap(), Functions.getToString());
         Assert.assertEquals(FastList.newListWith("1", "2").toBag(), result.toBag());
+    }
+
+    @Test
+    public void collectBoolean()
+    {
+        MutableBooleanCollection result = MapIterate.collectBoolean(MapIterateTest.newLittleMap(), PrimitiveFunctions.integerIsPositive());
+        Assert.assertEquals(BooleanHashBag.newBagWith(true, true), result.toBag());
+    }
+
+    @Test
+    public void collectByte()
+    {
+        MutableByteCollection result = MapIterate.collectByte(MapIterateTest.newLittleMap(), PrimitiveFunctions.unboxIntegerToByte());
+        Assert.assertEquals(ByteHashBag.newBagWith((byte) 1, (byte) 2), result.toBag());
+    }
+
+    @Test
+    public void collectChar()
+    {
+        MutableCharCollection result = MapIterate.collectChar(MapIterateTest.newLittleMap(), PrimitiveFunctions.unboxIntegerToChar());
+        Assert.assertEquals(CharHashBag.newBagWith((char) 1, (char) 2), result.toBag());
+    }
+
+    @Test
+    public void collectDouble()
+    {
+        MutableDoubleCollection result = MapIterate.collectDouble(MapIterateTest.newLittleMap(), PrimitiveFunctions.unboxIntegerToDouble());
+        Assert.assertEquals(DoubleHashBag.newBagWith(1, 2), result.toBag());
+    }
+
+    @Test
+    public void collectFloat()
+    {
+        MutableFloatCollection result = MapIterate.collectFloat(MapIterateTest.newLittleMap(), PrimitiveFunctions.unboxIntegerToFloat());
+        Assert.assertEquals(FloatHashBag.newBagWith(1, 2), result.toBag());
+    }
+
+    @Test
+    public void collectInt()
+    {
+        MutableIntCollection result = MapIterate.collectInt(MapIterateTest.newLittleMap(), PrimitiveFunctions.unboxIntegerToInt());
+        Assert.assertEquals(IntHashBag.newBagWith(1, 2), result.toBag());
+    }
+
+    @Test
+    public void collectLong()
+    {
+        MutableLongCollection result = MapIterate.collectLong(MapIterateTest.newLittleMap(), PrimitiveFunctions.unboxIntegerToLong());
+        Assert.assertEquals(LongHashBag.newBagWith(1L, 2L), result.toBag());
+    }
+
+    @Test
+    public void collectShort()
+    {
+        MutableShortCollection result = MapIterate.collectShort(MapIterateTest.newLittleMap(), PrimitiveFunctions.unboxIntegerToShort());
+        Assert.assertEquals(ShortHashBag.newBagWith((short) 1, (short) 2), result.toBag());
     }
 
     @Test

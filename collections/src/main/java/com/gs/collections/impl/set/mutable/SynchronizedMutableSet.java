@@ -23,6 +23,14 @@ import java.util.Set;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
@@ -31,6 +39,14 @@ import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.UnsortedSetIterable;
+import com.gs.collections.api.set.primitive.MutableBooleanSet;
+import com.gs.collections.api.set.primitive.MutableByteSet;
+import com.gs.collections.api.set.primitive.MutableCharSet;
+import com.gs.collections.api.set.primitive.MutableDoubleSet;
+import com.gs.collections.api.set.primitive.MutableFloatSet;
+import com.gs.collections.api.set.primitive.MutableIntSet;
+import com.gs.collections.api.set.primitive.MutableLongSet;
+import com.gs.collections.api.set.primitive.MutableShortSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.collection.mutable.SynchronizedMutableCollection;
 import com.gs.collections.impl.factory.Sets;
@@ -126,6 +142,78 @@ public class SynchronizedMutableSet<T>
         synchronized (this.getLock())
         {
             return this.getMutableSet().collect(function);
+        }
+    }
+
+    @Override
+    public MutableBooleanSet collectBoolean(BooleanFunction<? super T> booleanFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableSet().collectBoolean(booleanFunction);
+        }
+    }
+
+    @Override
+    public MutableByteSet collectByte(ByteFunction<? super T> byteFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableSet().collectByte(byteFunction);
+        }
+    }
+
+    @Override
+    public MutableCharSet collectChar(CharFunction<? super T> charFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableSet().collectChar(charFunction);
+        }
+    }
+
+    @Override
+    public MutableDoubleSet collectDouble(DoubleFunction<? super T> doubleFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableSet().collectDouble(doubleFunction);
+        }
+    }
+
+    @Override
+    public MutableFloatSet collectFloat(FloatFunction<? super T> floatFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableSet().collectFloat(floatFunction);
+        }
+    }
+
+    @Override
+    public MutableIntSet collectInt(IntFunction<? super T> intFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableSet().collectInt(intFunction);
+        }
+    }
+
+    @Override
+    public MutableLongSet collectLong(LongFunction<? super T> longFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableSet().collectLong(longFunction);
+        }
+    }
+
+    @Override
+    public MutableShortSet collectShort(ShortFunction<? super T> shortFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableSet().collectShort(shortFunction);
         }
     }
 

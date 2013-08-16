@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.partition.set.sorted.PartitionImmutableSortedSet;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
@@ -29,10 +30,19 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.SortedSets;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
+import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
+import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
+import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
+import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
+import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
@@ -512,5 +522,75 @@ public class ImmutableEmptySortedSetTest extends AbstractImmutableSortedSetTestC
     public void tailSet()
     {
         this.classUnderTest().castToSortedSet().tailSet(1);
+    }
+
+    @Override
+    @Test
+    public void collectBoolean()
+    {
+        ImmutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());
+        Assert.assertEquals(BooleanArrayList.newListWith(), integers.collectBoolean(PrimitiveFunctions.integerIsPositive()));
+    }
+
+    @Override
+    @Test
+    public void collectByte()
+    {
+        ImmutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());
+        Assert.assertEquals(ByteArrayList.newListWith(), integers.collectByte(PrimitiveFunctions.unboxIntegerToByte()));
+    }
+
+    @Override
+    @Test
+    public void collectChar()
+    {
+        ImmutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());
+        Assert.assertEquals(CharArrayList.newListWith(), integers.collectChar(new CharFunction<Integer>()
+        {
+            public char charValueOf(Integer integer)
+            {
+                return (char) (integer.intValue() + 64);
+            }
+        }));
+    }
+
+    @Override
+    @Test
+    public void collectDouble()
+    {
+        ImmutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());
+        Assert.assertEquals(DoubleArrayList.newListWith(), integers.collectDouble(PrimitiveFunctions.unboxIntegerToDouble()));
+    }
+
+    @Override
+    @Test
+    public void collectFloat()
+    {
+        ImmutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());
+        Assert.assertEquals(FloatArrayList.newListWith(), integers.collectFloat(PrimitiveFunctions.unboxIntegerToFloat()));
+    }
+
+    @Override
+    @Test
+    public void collectInt()
+    {
+        ImmutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());
+        Assert.assertEquals(IntArrayList.newListWith(), integers.collectInt(PrimitiveFunctions.unboxIntegerToInt()));
+    }
+
+    @Override
+    @Test
+    public void collectLong()
+    {
+        ImmutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());
+        Assert.assertEquals(LongArrayList.newListWith(), integers.collectLong(PrimitiveFunctions.unboxIntegerToLong()));
+    }
+
+    @Override
+    @Test
+    public void collectShort()
+    {
+        ImmutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());
+        Assert.assertEquals(ShortArrayList.newListWith(), integers.collectShort(PrimitiveFunctions.unboxIntegerToShort()));
     }
 }

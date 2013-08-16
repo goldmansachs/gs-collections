@@ -32,13 +32,25 @@ import java.util.Set;
 import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.primitive.MutableBooleanBag;
+import com.gs.collections.api.bag.primitive.MutableByteBag;
+import com.gs.collections.api.bag.primitive.MutableCharBag;
+import com.gs.collections.api.bag.primitive.MutableDoubleBag;
+import com.gs.collections.api.bag.primitive.MutableFloatBag;
+import com.gs.collections.api.bag.primitive.MutableIntBag;
+import com.gs.collections.api.bag.primitive.MutableLongBag;
+import com.gs.collections.api.bag.primitive.MutableShortBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
 import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
@@ -52,6 +64,14 @@ import com.gs.collections.api.partition.bag.PartitionMutableBag;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.Counter;
+import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.ByteHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.CharHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.DoubleHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.FloatHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.IntHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.LongHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.ShortHashBag;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
@@ -482,6 +502,118 @@ public class HashBag<T>
             }
         });
         return target;
+    }
+
+    @Override
+    public MutableBooleanBag collectBoolean(final BooleanFunction<? super T> booleanFunction)
+    {
+        final BooleanHashBag result = new BooleanHashBag();
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                result.addOccurrences(booleanFunction.booleanValueOf(each), occurrences);
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public MutableByteBag collectByte(final ByteFunction<? super T> byteFunction)
+    {
+        final ByteHashBag result = new ByteHashBag();
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                result.addOccurrences(byteFunction.byteValueOf(each), occurrences);
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public MutableCharBag collectChar(final CharFunction<? super T> charFunction)
+    {
+        final CharHashBag result = new CharHashBag();
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                result.addOccurrences(charFunction.charValueOf(each), occurrences);
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public MutableDoubleBag collectDouble(final DoubleFunction<? super T> doubleFunction)
+    {
+        final DoubleHashBag result = new DoubleHashBag();
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                result.addOccurrences(doubleFunction.doubleValueOf(each), occurrences);
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public MutableFloatBag collectFloat(final FloatFunction<? super T> floatFunction)
+    {
+        final FloatHashBag result = new FloatHashBag();
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                result.addOccurrences(floatFunction.floatValueOf(each), occurrences);
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public MutableIntBag collectInt(final IntFunction<? super T> intFunction)
+    {
+        final IntHashBag result = new IntHashBag();
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                result.addOccurrences(intFunction.intValueOf(each), occurrences);
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public MutableLongBag collectLong(final LongFunction<? super T> longFunction)
+    {
+        final LongHashBag result = new LongHashBag();
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                result.addOccurrences(longFunction.longValueOf(each), occurrences);
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public MutableShortBag collectShort(final ShortFunction<? super T> shortFunction)
+    {
+        final ShortHashBag result = new ShortHashBag();
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                result.addOccurrences(shortFunction.shortValueOf(each), occurrences);
+            }
+        });
+        return result;
     }
 
     @Override

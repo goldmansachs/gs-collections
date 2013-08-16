@@ -20,11 +20,27 @@ import java.util.Set;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.partition.set.PartitionMutableSet;
+import com.gs.collections.api.set.primitive.MutableBooleanSet;
+import com.gs.collections.api.set.primitive.MutableByteSet;
+import com.gs.collections.api.set.primitive.MutableCharSet;
+import com.gs.collections.api.set.primitive.MutableDoubleSet;
+import com.gs.collections.api.set.primitive.MutableFloatSet;
+import com.gs.collections.api.set.primitive.MutableIntSet;
+import com.gs.collections.api.set.primitive.MutableLongSet;
+import com.gs.collections.api.set.primitive.MutableShortSet;
 import com.gs.collections.api.tuple.Pair;
 
 /**
@@ -58,6 +74,22 @@ public interface MutableSet<T>
     <S> MutableSet<S> selectInstancesOf(Class<S> clazz);
 
     <V> MutableSet<V> collect(Function<? super T, ? extends V> function);
+
+    MutableBooleanSet collectBoolean(BooleanFunction<? super T> booleanFunction);
+
+    MutableByteSet collectByte(ByteFunction<? super T> byteFunction);
+
+    MutableCharSet collectChar(CharFunction<? super T> charFunction);
+
+    MutableDoubleSet collectDouble(DoubleFunction<? super T> doubleFunction);
+
+    MutableFloatSet collectFloat(FloatFunction<? super T> floatFunction);
+
+    MutableIntSet collectInt(IntFunction<? super T> intFunction);
+
+    MutableLongSet collectLong(LongFunction<? super T> longFunction);
+
+    MutableShortSet collectShort(ShortFunction<? super T> shortFunction);
 
     <P, V> MutableSet<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
 

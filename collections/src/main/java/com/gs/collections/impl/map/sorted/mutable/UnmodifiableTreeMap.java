@@ -27,6 +27,9 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
@@ -35,6 +38,7 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -42,6 +46,14 @@ import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.MutableBooleanList;
+import com.gs.collections.api.list.primitive.MutableByteList;
+import com.gs.collections.api.list.primitive.MutableCharList;
+import com.gs.collections.api.list.primitive.MutableDoubleList;
+import com.gs.collections.api.list.primitive.MutableFloatList;
+import com.gs.collections.api.list.primitive.MutableIntList;
+import com.gs.collections.api.list.primitive.MutableLongList;
+import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.ImmutableSortedMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
@@ -628,6 +640,46 @@ public class UnmodifiableTreeMap<K, V>
     public <R> MutableList<R> collect(Function<? super V, ? extends R> function)
     {
         return this.getMutableSortedMap().collect(function);
+    }
+
+    public MutableBooleanList collectBoolean(BooleanFunction<? super V> booleanFunction)
+    {
+        return this.getMutableSortedMap().collectBoolean(booleanFunction);
+    }
+
+    public MutableByteList collectByte(ByteFunction<? super V> byteFunction)
+    {
+        return this.getMutableSortedMap().collectByte(byteFunction);
+    }
+
+    public MutableCharList collectChar(CharFunction<? super V> charFunction)
+    {
+        return this.getMutableSortedMap().collectChar(charFunction);
+    }
+
+    public MutableDoubleList collectDouble(DoubleFunction<? super V> doubleFunction)
+    {
+        return this.getMutableSortedMap().collectDouble(doubleFunction);
+    }
+
+    public MutableFloatList collectFloat(FloatFunction<? super V> floatFunction)
+    {
+        return this.getMutableSortedMap().collectFloat(floatFunction);
+    }
+
+    public MutableIntList collectInt(IntFunction<? super V> intFunction)
+    {
+        return this.getMutableSortedMap().collectInt(intFunction);
+    }
+
+    public MutableLongList collectLong(LongFunction<? super V> longFunction)
+    {
+        return this.getMutableSortedMap().collectLong(longFunction);
+    }
+
+    public MutableShortList collectShort(ShortFunction<? super V> shortFunction)
+    {
+        return this.getMutableSortedMap().collectShort(shortFunction);
     }
 
     public <R> MutableList<R> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function)

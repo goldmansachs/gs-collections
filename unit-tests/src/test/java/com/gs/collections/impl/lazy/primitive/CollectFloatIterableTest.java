@@ -81,10 +81,10 @@ public class CollectFloatIterableTest
     @Test
     public void count()
     {
-        Assert.assertEquals(1, this.floatIterable.count(FloatPredicates.equal(1.0f)));
-        Assert.assertEquals(3, this.floatIterable.count(FloatPredicates.lessThan(4.0f)));
-        Assert.assertEquals(2, this.floatIterable.count(FloatPredicates.greaterThan(1.0f)));
-        Assert.assertEquals(3, FastList.<Float>newListWith(1.0001f, 1.0002f, 1.0003f, 1.01f, 1.02f)
+        Assert.assertEquals(1L, this.floatIterable.count(FloatPredicates.equal(1.0f)));
+        Assert.assertEquals(3L, this.floatIterable.count(FloatPredicates.lessThan(4.0f)));
+        Assert.assertEquals(2L, this.floatIterable.count(FloatPredicates.greaterThan(1.0f)));
+        Assert.assertEquals(3L, FastList.<Float>newListWith(1.0001f, 1.0002f, 1.0003f, 1.01f, 1.02f)
                 .asLazy()
                 .collectFloat(PrimitiveFunctions.unboxFloatToFloat())
                 .count(FloatPredicates.equal(1.0f, 0.001f)));
@@ -96,6 +96,13 @@ public class CollectFloatIterableTest
         Assert.assertTrue(this.floatIterable.anySatisfy(FloatPredicates.greaterThan(1.0f)));
         Assert.assertTrue(this.floatIterable.anySatisfy(FloatPredicates.equal(1.0f)));
         Assert.assertFalse(this.floatIterable.anySatisfy(FloatPredicates.greaterThan(4.0f)));
+    }
+
+    @Test
+    public void noneSatisfy()
+    {
+        Assert.assertFalse(this.floatIterable.noneSatisfy(FloatPredicates.greaterThan(2.0f)));
+        Assert.assertTrue(this.floatIterable.noneSatisfy(FloatPredicates.greaterThan(4.0f)));
     }
 
     @Test
@@ -198,13 +205,15 @@ public class CollectFloatIterableTest
     @Test
     public void toArray()
     {
-        Assert.assertArrayEquals(new float[]{1.0f, 2.0f, 3.0f, 4.0f}, Interval.oneTo(4).collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).toArray(), 0.0f);
+        Assert.assertArrayEquals(new float[]{1.0f, 2.0f, 3.0f, 4.0f},
+                Interval.oneTo(4).collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).toArray(), 0.0f);
     }
 
     @Test
     public void toSortedArray()
     {
-        Assert.assertArrayEquals(new float[]{1.0f, 2.0f, 3.0f, 4.0f}, Interval.fromTo(4, 1).collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).toSortedArray(), 0.0f);
+        Assert.assertArrayEquals(new float[]{1.0f, 2.0f, 3.0f, 4.0f},
+                Interval.fromTo(4, 1).collectFloat(PrimitiveFunctions.unboxIntegerToFloat()).toSortedArray(), 0.0f);
     }
 
     @Test

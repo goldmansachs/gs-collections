@@ -20,8 +20,24 @@ import java.util.Comparator;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.list.ListIterable;
+import com.gs.collections.api.list.primitive.BooleanList;
+import com.gs.collections.api.list.primitive.ByteList;
+import com.gs.collections.api.list.primitive.CharList;
+import com.gs.collections.api.list.primitive.DoubleList;
+import com.gs.collections.api.list.primitive.FloatList;
+import com.gs.collections.api.list.primitive.IntList;
+import com.gs.collections.api.list.primitive.LongList;
+import com.gs.collections.api.list.primitive.ShortList;
 import com.gs.collections.api.multimap.sortedset.SortedSetMultimap;
 import com.gs.collections.api.partition.set.sorted.PartitionSortedSet;
 import com.gs.collections.api.set.SetIterable;
@@ -86,6 +102,22 @@ public interface SortedSetIterable<T>
     <S> SortedSetIterable<S> selectInstancesOf(Class<S> clazz);
 
     <V> ListIterable<V> collect(Function<? super T, ? extends V> function);
+
+    BooleanList collectBoolean(BooleanFunction<? super T> booleanFunction);
+
+    ByteList collectByte(ByteFunction<? super T> byteFunction);
+
+    CharList collectChar(CharFunction<? super T> charFunction);
+
+    DoubleList collectDouble(DoubleFunction<? super T> doubleFunction);
+
+    FloatList collectFloat(FloatFunction<? super T> floatFunction);
+
+    IntList collectInt(IntFunction<? super T> intFunction);
+
+    LongList collectLong(LongFunction<? super T> longFunction);
+
+    ShortList collectShort(ShortFunction<? super T> shortFunction);
 
     <V> ListIterable<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 

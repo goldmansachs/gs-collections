@@ -22,11 +22,27 @@ import java.util.SortedMap;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.MutableBooleanList;
+import com.gs.collections.api.list.primitive.MutableByteList;
+import com.gs.collections.api.list.primitive.MutableCharList;
+import com.gs.collections.api.list.primitive.MutableDoubleList;
+import com.gs.collections.api.list.primitive.MutableFloatList;
+import com.gs.collections.api.list.primitive.MutableIntList;
+import com.gs.collections.api.list.primitive.MutableLongList;
+import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
@@ -159,6 +175,22 @@ public interface MutableSortedMap<K, V>
     <R> MutableSortedMap<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function);
 
     <R> MutableList<R> collect(Function<? super V, ? extends R> function);
+
+    MutableBooleanList collectBoolean(BooleanFunction<? super V> booleanFunction);
+
+    MutableByteList collectByte(ByteFunction<? super V> byteFunction);
+
+    MutableCharList collectChar(CharFunction<? super V> charFunction);
+
+    MutableDoubleList collectDouble(DoubleFunction<? super V> doubleFunction);
+
+    MutableFloatList collectFloat(FloatFunction<? super V> floatFunction);
+
+    MutableIntList collectInt(IntFunction<? super V> intFunction);
+
+    MutableLongList collectLong(LongFunction<? super V> longFunction);
+
+    MutableShortList collectShort(ShortFunction<? super V> shortFunction);
 
     <R> MutableList<R> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function);
 

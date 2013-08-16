@@ -16,7 +16,23 @@
 
 package com.gs.collections.api.bag;
 
+import com.gs.collections.api.bag.primitive.ImmutableBooleanBag;
+import com.gs.collections.api.bag.primitive.ImmutableByteBag;
+import com.gs.collections.api.bag.primitive.ImmutableCharBag;
+import com.gs.collections.api.bag.primitive.ImmutableDoubleBag;
+import com.gs.collections.api.bag.primitive.ImmutableFloatBag;
+import com.gs.collections.api.bag.primitive.ImmutableIntBag;
+import com.gs.collections.api.bag.primitive.ImmutableLongBag;
+import com.gs.collections.api.bag.primitive.ImmutableShortBag;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.collection.ImmutableCollection;
@@ -48,6 +64,22 @@ public interface ImmutableBag<T> extends Bag<T>, ImmutableCollection<T>
     <S> ImmutableBag<S> selectInstancesOf(Class<S> clazz);
 
     <V> ImmutableBag<V> collect(Function<? super T, ? extends V> function);
+
+    ImmutableBooleanBag collectBoolean(BooleanFunction<? super T> booleanFunction);
+
+    ImmutableByteBag collectByte(ByteFunction<? super T> byteFunction);
+
+    ImmutableCharBag collectChar(CharFunction<? super T> charFunction);
+
+    ImmutableDoubleBag collectDouble(DoubleFunction<? super T> doubleFunction);
+
+    ImmutableFloatBag collectFloat(FloatFunction<? super T> floatFunction);
+
+    ImmutableIntBag collectInt(IntFunction<? super T> intFunction);
+
+    ImmutableLongBag collectLong(LongFunction<? super T> longFunction);
+
+    ImmutableShortBag collectShort(ShortFunction<? super T> shortFunction);
 
     <V> ImmutableBag<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 

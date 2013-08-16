@@ -23,10 +23,26 @@ import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.MutableBooleanList;
+import com.gs.collections.api.list.primitive.MutableByteList;
+import com.gs.collections.api.list.primitive.MutableCharList;
+import com.gs.collections.api.list.primitive.MutableDoubleList;
+import com.gs.collections.api.list.primitive.MutableFloatList;
+import com.gs.collections.api.list.primitive.MutableIntList;
+import com.gs.collections.api.list.primitive.MutableLongList;
+import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.ImmutableSortedMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
@@ -38,8 +54,24 @@ import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectBooleanProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectByteProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectCharProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectDoubleProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectFloatProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectIntProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectLongProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectShortProcedure;
 import com.gs.collections.impl.factory.SortedMaps;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
+import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
+import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
+import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
+import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
+import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.map.AbstractMapIterable;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
@@ -117,6 +149,70 @@ public abstract class AbstractMutableSortedMap<K, V> extends AbstractMapIterable
     public <K2, V2> MutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function)
     {
         return MapIterate.collect(this, function, UnifiedMap.<K2, V2>newMap(this.size()));
+    }
+
+    @Override
+    public MutableBooleanList collectBoolean(BooleanFunction<? super V> booleanFunction)
+    {
+        BooleanArrayList result = new BooleanArrayList(this.size());
+        this.forEach(new CollectBooleanProcedure<V>(booleanFunction, result));
+        return result;
+    }
+
+    @Override
+    public MutableByteList collectByte(ByteFunction<? super V> byteFunction)
+    {
+        ByteArrayList result = new ByteArrayList(this.size());
+        this.forEach(new CollectByteProcedure<V>(byteFunction, result));
+        return result;
+    }
+
+    @Override
+    public MutableCharList collectChar(CharFunction<? super V> charFunction)
+    {
+        CharArrayList result = new CharArrayList(this.size());
+        this.forEach(new CollectCharProcedure<V>(charFunction, result));
+        return result;
+    }
+
+    @Override
+    public MutableDoubleList collectDouble(DoubleFunction<? super V> doubleFunction)
+    {
+        DoubleArrayList result = new DoubleArrayList(this.size());
+        this.forEach(new CollectDoubleProcedure<V>(doubleFunction, result));
+        return result;
+    }
+
+    @Override
+    public MutableFloatList collectFloat(FloatFunction<? super V> floatFunction)
+    {
+        FloatArrayList result = new FloatArrayList(this.size());
+        this.forEach(new CollectFloatProcedure<V>(floatFunction, result));
+        return result;
+    }
+
+    @Override
+    public MutableIntList collectInt(IntFunction<? super V> intFunction)
+    {
+        IntArrayList result = new IntArrayList(this.size());
+        this.forEach(new CollectIntProcedure<V>(intFunction, result));
+        return result;
+    }
+
+    @Override
+    public MutableLongList collectLong(LongFunction<? super V> longFunction)
+    {
+        LongArrayList result = new LongArrayList(this.size());
+        this.forEach(new CollectLongProcedure<V>(longFunction, result));
+        return result;
+    }
+
+    @Override
+    public MutableShortList collectShort(ShortFunction<? super V> shortFunction)
+    {
+        ShortArrayList result = new ShortArrayList(this.size());
+        this.forEach(new CollectShortProcedure<V>(shortFunction, result));
+        return result;
     }
 
     public <E> MutableSortedMap<K, V> collectKeysAndValues(Collection<E> collection, Function<? super E, ? extends K> keyFunction, Function<? super E, ? extends V> valueFunction)

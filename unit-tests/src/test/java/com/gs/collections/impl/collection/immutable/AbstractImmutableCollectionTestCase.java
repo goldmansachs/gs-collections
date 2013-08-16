@@ -25,13 +25,28 @@ import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.ByteToObjectFunction;
+import com.gs.collections.api.block.function.primitive.CharToObjectFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.DoubleToObjectFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.FloatToObjectFunction;
 import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.IntToObjectFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.LongToObjectFunction;
+import com.gs.collections.api.block.function.primitive.ShortToObjectFunction;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.collection.primitive.ImmutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.ImmutableByteCollection;
+import com.gs.collections.api.collection.primitive.ImmutableCharCollection;
+import com.gs.collections.api.collection.primitive.ImmutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.ImmutableFloatCollection;
+import com.gs.collections.api.collection.primitive.ImmutableIntCollection;
+import com.gs.collections.api.collection.primitive.ImmutableLongCollection;
+import com.gs.collections.api.collection.primitive.ImmutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.partition.PartitionImmutableCollection;
@@ -42,6 +57,7 @@ import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
+import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.factory.Lists;
@@ -265,6 +281,126 @@ public abstract class AbstractImmutableCollectionTestCase
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         Assert.assertEquals(integers, integers.collect(Functions.getIntegerPassThru()));
+    }
+
+    @Test
+    public void collectBoolean()
+    {
+        ImmutableCollection<Integer> integers = this.classUnderTest();
+        ImmutableBooleanCollection immutableCollection = integers.collectBoolean(PrimitiveFunctions.integerIsPositive());
+        Verify.assertSize(1, immutableCollection);
+    }
+
+    @Test
+    public void collectByte()
+    {
+        ImmutableCollection<Integer> integers = this.classUnderTest();
+        ImmutableByteCollection immutableCollection = integers.collectByte(PrimitiveFunctions.unboxIntegerToByte());
+        Verify.assertSize(integers.size(), immutableCollection);
+        ByteToObjectFunction<Integer> function = new ByteToObjectFunction<Integer>()
+        {
+            public Integer valueOf(byte byteParameter)
+            {
+                return Integer.valueOf(byteParameter);
+            }
+        };
+        Assert.assertEquals(integers, immutableCollection.collect(function));
+    }
+
+    @Test
+    public void collectChar()
+    {
+        ImmutableCollection<Integer> integers = this.classUnderTest();
+        ImmutableCharCollection immutableCollection = integers.collectChar(PrimitiveFunctions.unboxIntegerToChar());
+        Verify.assertSize(integers.size(), immutableCollection);
+        CharToObjectFunction<Integer> function = new CharToObjectFunction<Integer>()
+        {
+            public Integer valueOf(char charParameter)
+            {
+                return Integer.valueOf(charParameter);
+            }
+        };
+        Assert.assertEquals(integers, immutableCollection.collect(function));
+    }
+
+    @Test
+    public void collectDouble()
+    {
+        ImmutableCollection<Integer> integers = this.classUnderTest();
+        ImmutableDoubleCollection immutableCollection = integers.collectDouble(PrimitiveFunctions.unboxIntegerToDouble());
+        Verify.assertSize(integers.size(), immutableCollection);
+        DoubleToObjectFunction<Integer> function = new DoubleToObjectFunction<Integer>()
+        {
+            public Integer valueOf(double doubleParameter)
+            {
+                return Integer.valueOf((int) doubleParameter);
+            }
+        };
+        Assert.assertEquals(integers, immutableCollection.collect(function));
+    }
+
+    @Test
+    public void collectFloat()
+    {
+        ImmutableCollection<Integer> integers = this.classUnderTest();
+        ImmutableFloatCollection immutableCollection = integers.collectFloat(PrimitiveFunctions.unboxIntegerToFloat());
+        Verify.assertSize(integers.size(), immutableCollection);
+        FloatToObjectFunction<Integer> function = new FloatToObjectFunction<Integer>()
+        {
+            public Integer valueOf(float floatParameter)
+            {
+                return Integer.valueOf((int) floatParameter);
+            }
+        };
+        Assert.assertEquals(integers, immutableCollection.collect(function));
+    }
+
+    @Test
+    public void collectInt()
+    {
+        ImmutableCollection<Integer> integers = this.classUnderTest();
+        ImmutableIntCollection immutableCollection = integers.collectInt(PrimitiveFunctions.unboxIntegerToInt());
+        Verify.assertSize(integers.size(), immutableCollection);
+        IntToObjectFunction<Integer> function = new IntToObjectFunction<Integer>()
+        {
+            public Integer valueOf(int intParameter)
+            {
+                return Integer.valueOf(intParameter);
+            }
+        };
+        Assert.assertEquals(integers, immutableCollection.collect(function));
+    }
+
+    @Test
+    public void collectLong()
+    {
+        ImmutableCollection<Integer> integers = this.classUnderTest();
+        ImmutableLongCollection immutableCollection = integers.collectLong(PrimitiveFunctions.unboxIntegerToLong());
+        Verify.assertSize(integers.size(), immutableCollection);
+        LongToObjectFunction<Integer> function = new LongToObjectFunction<Integer>()
+        {
+            public Integer valueOf(long longParameter)
+            {
+                return Integer.valueOf((int) longParameter);
+            }
+        };
+        Assert.assertEquals(integers, immutableCollection.collect(function));
+    }
+
+    @Test
+    public void collectShort()
+    {
+        ImmutableCollection<Integer> integers = this.classUnderTest();
+        ImmutableShortCollection immutableCollection = integers.collectShort(PrimitiveFunctions.unboxIntegerToShort());
+        Verify.assertSize(integers.size(), immutableCollection);
+        ShortToObjectFunction<Integer> function = new ShortToObjectFunction<Integer>()
+        {
+            public Integer valueOf(short shortParameter)
+            {
+                return Integer.valueOf(shortParameter);
+            }
+        };
+        Assert.assertEquals(integers, immutableCollection.collect(function));
     }
 
     @Test

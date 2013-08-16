@@ -22,8 +22,16 @@ import java.util.Map;
 import java.util.SortedMap;
 import java.util.concurrent.ConcurrentMap;
 
+import com.gs.collections.api.BooleanIterable;
+import com.gs.collections.api.ByteIterable;
+import com.gs.collections.api.CharIterable;
+import com.gs.collections.api.DoubleIterable;
+import com.gs.collections.api.FloatIterable;
+import com.gs.collections.api.IntIterable;
 import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.LongIterable;
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.ShortIterable;
 import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
@@ -47,11 +55,20 @@ import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.IntegerWithCast;
 import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.ByteHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.CharHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.DoubleHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.FloatHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.IntHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.LongHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.ShortHashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
+import com.gs.collections.impl.block.factory.StringFunctions;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.block.function.PassThruFunction0;
@@ -221,6 +238,70 @@ public abstract class MapIterableTestCase
             }
         });
         Assert.assertEquals(UnifiedMap.newWithKeysValues(1, "1:enO", 2, "2:owT", 3, "3:eerhT"), actual);
+    }
+
+    @Test
+    public void collectBoolean()
+    {
+        MapIterable<String, String> map = this.newMapWithKeysValues("One", "true", "Two", "nah", "Three", "TrUe");
+        BooleanIterable actual = map.collectBoolean(StringFunctions.toPrimitiveBoolean());
+        Assert.assertEquals(BooleanHashBag.newBagWith(true, false, true), actual.toBag());
+    }
+
+    @Test
+    public void collectByte()
+    {
+        MapIterable<String, String> map = this.newMapWithKeysValues("One", "1", "Two", "2", "Three", "3");
+        ByteIterable actual = map.collectByte(StringFunctions.toPrimitiveByte());
+        Assert.assertEquals(ByteHashBag.newBagWith((byte) 1, (byte) 2, (byte) 3), actual.toBag());
+    }
+
+    @Test
+    public void collectChar()
+    {
+        MapIterable<String, String> map = this.newMapWithKeysValues("One", "A1", "Two", "B", "Three", "C#++");
+        CharIterable actual = map.collectChar(StringFunctions.toFirstChar());
+        Assert.assertEquals(CharHashBag.newBagWith('A', 'B', 'C'), actual.toBag());
+    }
+
+    @Test
+    public void collectDouble()
+    {
+        MapIterable<String, String> map = this.newMapWithKeysValues("One", "1", "Two", "2", "Three", "3");
+        DoubleIterable actual = map.collectDouble(StringFunctions.toPrimitiveDouble());
+        Assert.assertEquals(DoubleHashBag.newBagWith(1.0d, 2.0d, 3.0d), actual.toBag());
+    }
+
+    @Test
+    public void collectFloat()
+    {
+        MapIterable<String, String> map = this.newMapWithKeysValues("One", "1", "Two", "2", "Three", "3");
+        FloatIterable actual = map.collectFloat(StringFunctions.toPrimitiveFloat());
+        Assert.assertEquals(FloatHashBag.newBagWith(1.0f, 2.0f, 3.0f), actual.toBag());
+    }
+
+    @Test
+    public void collectInt()
+    {
+        MapIterable<String, String> map = this.newMapWithKeysValues("One", "1", "Two", "2", "Three", "3");
+        IntIterable actual = map.collectInt(StringFunctions.toPrimitiveInt());
+        Assert.assertEquals(IntHashBag.newBagWith(1, 2, 3), actual.toBag());
+    }
+
+    @Test
+    public void collectLong()
+    {
+        MapIterable<String, String> map = this.newMapWithKeysValues("One", "1", "Two", "2", "Three", "3");
+        LongIterable actual = map.collectLong(StringFunctions.toPrimitiveLong());
+        Assert.assertEquals(LongHashBag.newBagWith(1L, 2L, 3L), actual.toBag());
+    }
+
+    @Test
+    public void collectShort()
+    {
+        MapIterable<String, String> map = this.newMapWithKeysValues("One", "1", "Two", "2", "Three", "3");
+        ShortIterable actual = map.collectShort(StringFunctions.toPrimitiveShort());
+        Assert.assertEquals(ShortHashBag.newBagWith((short) 1, (short) 2, (short) 3), actual.toBag());
     }
 
     @Test

@@ -24,9 +24,18 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.primitive.ImmutableBooleanBag;
+import com.gs.collections.api.bag.primitive.ImmutableByteBag;
+import com.gs.collections.api.bag.primitive.ImmutableCharBag;
+import com.gs.collections.api.bag.primitive.ImmutableDoubleBag;
+import com.gs.collections.api.bag.primitive.ImmutableFloatBag;
+import com.gs.collections.api.bag.primitive.ImmutableIntBag;
+import com.gs.collections.api.bag.primitive.ImmutableLongBag;
+import com.gs.collections.api.bag.primitive.ImmutableShortBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
 import com.gs.collections.api.block.function.primitive.IntFunction;
@@ -290,6 +299,98 @@ public abstract class ImmutableBagTestCase
     public void testCollect()
     {
         Assert.assertEquals(this.newBag(), this.newBag().collect(Functions.getStringPassThru()));
+    }
+
+    @Test
+    public void collectBoolean()
+    {
+        ImmutableBooleanBag result = this.newBag().collectBoolean(new BooleanFunction<String>()
+        {
+            public boolean booleanValueOf(String s)
+            {
+                return "4".equals(s);
+            }
+        });
+        Assert.assertEquals(2, result.sizeDistinct());
+        Assert.assertEquals(4, result.occurrencesOf(true));
+        Assert.assertEquals(6, result.occurrencesOf(false));
+    }
+
+    @Test
+    public void collectByte()
+    {
+        ImmutableByteBag result = this.newBag().collectByte(StringFunctions.toPrimitiveByte());
+        Assert.assertEquals(this.numKeys(), result.sizeDistinct());
+        for (int i = 1; i <= this.numKeys(); i++)
+        {
+            Assert.assertEquals(i, result.occurrencesOf((byte) i));
+        }
+    }
+
+    @Test
+    public void collectChar()
+    {
+        ImmutableCharBag result = this.newBag().collectChar(StringFunctions.toFirstChar());
+        Assert.assertEquals(this.numKeys(), result.sizeDistinct());
+        for (int i = 1; i <= this.numKeys(); i++)
+        {
+            Assert.assertEquals(i, result.occurrencesOf((char) ((int) '0' + i)));
+        }
+    }
+
+    @Test
+    public void collectDouble()
+    {
+        ImmutableDoubleBag result = this.newBag().collectDouble(StringFunctions.toPrimitiveDouble());
+        Assert.assertEquals(this.numKeys(), result.sizeDistinct());
+        for (int i = 1; i <= this.numKeys(); i++)
+        {
+            Assert.assertEquals(i, result.occurrencesOf(i));
+        }
+    }
+
+    @Test
+    public void collectFloat()
+    {
+        ImmutableFloatBag result = this.newBag().collectFloat(StringFunctions.toPrimitiveFloat());
+        Assert.assertEquals(this.numKeys(), result.sizeDistinct());
+        for (int i = 1; i <= this.numKeys(); i++)
+        {
+            Assert.assertEquals(i, result.occurrencesOf(i));
+        }
+    }
+
+    @Test
+    public void collectInt()
+    {
+        ImmutableIntBag result = this.newBag().collectInt(StringFunctions.toPrimitiveInt());
+        Assert.assertEquals(this.numKeys(), result.sizeDistinct());
+        for (int i = 1; i <= this.numKeys(); i++)
+        {
+            Assert.assertEquals(i, result.occurrencesOf(i));
+        }
+    }
+
+    @Test
+    public void collectLong()
+    {
+        ImmutableLongBag result = this.newBag().collectLong(StringFunctions.toPrimitiveLong());
+        Assert.assertEquals(this.numKeys(), result.sizeDistinct());
+        for (int i = 1; i <= this.numKeys(); i++)
+        {
+            Assert.assertEquals(i, result.occurrencesOf(i));
+        }
+    }
+
+    @Test
+    public void collectShort()
+    {
+        ImmutableShortBag result = this.newBag().collectShort(StringFunctions.toPrimitiveShort());
+        Assert.assertEquals(this.numKeys(), result.sizeDistinct());
+        for (int i = 1; i <= this.numKeys(); i++)
+        {
+            Assert.assertEquals(i, result.occurrencesOf((short) i));
+        }
     }
 
     @Test

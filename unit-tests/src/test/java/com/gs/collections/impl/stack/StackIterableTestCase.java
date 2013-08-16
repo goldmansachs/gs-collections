@@ -47,7 +47,9 @@ import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
+import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.Procedures;
+import com.gs.collections.impl.block.factory.StringFunctions;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.block.function.PassThruFunction0;
@@ -61,6 +63,14 @@ import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
+import com.gs.collections.impl.stack.mutable.primitive.BooleanArrayStack;
+import com.gs.collections.impl.stack.mutable.primitive.ByteArrayStack;
+import com.gs.collections.impl.stack.mutable.primitive.CharArrayStack;
+import com.gs.collections.impl.stack.mutable.primitive.DoubleArrayStack;
+import com.gs.collections.impl.stack.mutable.primitive.FloatArrayStack;
+import com.gs.collections.impl.stack.mutable.primitive.IntArrayStack;
+import com.gs.collections.impl.stack.mutable.primitive.LongArrayStack;
+import com.gs.collections.impl.stack.mutable.primitive.ShortArrayStack;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
 import org.junit.Assert;
@@ -243,6 +253,70 @@ public abstract class StackIterableTestCase
         Assert.assertEquals(
                 FastList.newListWith("true", "false", "null"),
                 stack.collect(Functions.getToString(), FastList.<String>newList()));
+    }
+
+    @Test
+    public void collectBoolean()
+    {
+        StackIterable<String> stack = this.newStackFromTopToBottom("true", "nah", "TrUe");
+        Assert.assertEquals(BooleanArrayStack.newStackFromTopToBottom(true, false, true),
+                stack.collectBoolean(StringFunctions.toPrimitiveBoolean()));
+    }
+
+    @Test
+    public void collectByte()
+    {
+        StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
+        Assert.assertEquals(ByteArrayStack.newStackFromTopToBottom((byte) 1, (byte) 2, (byte) 3),
+                stack.collectByte(PrimitiveFunctions.unboxIntegerToByte()));
+    }
+
+    @Test
+    public void collectChar()
+    {
+        StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
+        Assert.assertEquals(CharArrayStack.newStackFromTopToBottom((char) 1, (char) 2, (char) 3),
+                stack.collectChar(PrimitiveFunctions.unboxIntegerToChar()));
+    }
+
+    @Test
+    public void collectDouble()
+    {
+        StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
+        Assert.assertEquals(DoubleArrayStack.newStackFromTopToBottom(1, 2, 3),
+                stack.collectDouble(PrimitiveFunctions.unboxIntegerToDouble()));
+    }
+
+    @Test
+    public void collectFloat()
+    {
+        StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
+        Assert.assertEquals(FloatArrayStack.newStackFromTopToBottom(1, 2, 3),
+                stack.collectFloat(PrimitiveFunctions.unboxIntegerToFloat()));
+    }
+
+    @Test
+    public void collectInt()
+    {
+        StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
+        Assert.assertEquals(IntArrayStack.newStackFromTopToBottom(1, 2, 3),
+                stack.collectInt(PrimitiveFunctions.unboxIntegerToInt()));
+    }
+
+    @Test
+    public void collectLong()
+    {
+        StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
+        Assert.assertEquals(LongArrayStack.newStackFromTopToBottom(1, 2, 3),
+                stack.collectLong(PrimitiveFunctions.unboxIntegerToLong()));
+    }
+
+    @Test
+    public void collectShort()
+    {
+        StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
+        Assert.assertEquals(ShortArrayStack.newStackFromTopToBottom((short) 1, (short) 2, (short) 3),
+                stack.collectShort(PrimitiveFunctions.unboxIntegerToShort()));
     }
 
     @Test

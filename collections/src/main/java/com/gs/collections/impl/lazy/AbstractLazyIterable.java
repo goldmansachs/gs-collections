@@ -20,16 +20,23 @@ import java.lang.reflect.Array;
 import java.util.Collection;
 import java.util.Comparator;
 
-import com.gs.collections.api.DoubleIterable;
-import com.gs.collections.api.FloatIterable;
-import com.gs.collections.api.IntIterable;
+import com.gs.collections.api.LazyBooleanIterable;
+import com.gs.collections.api.LazyByteIterable;
+import com.gs.collections.api.LazyCharIterable;
+import com.gs.collections.api.LazyDoubleIterable;
+import com.gs.collections.api.LazyFloatIterable;
+import com.gs.collections.api.LazyIntIterable;
 import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.LongIterable;
+import com.gs.collections.api.LazyLongIterable;
+import com.gs.collections.api.LazyShortIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
@@ -38,6 +45,7 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure2;
@@ -62,10 +70,14 @@ import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.lazy.primitive.CollectBooleanIterable;
+import com.gs.collections.impl.lazy.primitive.CollectByteIterable;
+import com.gs.collections.impl.lazy.primitive.CollectCharIterable;
 import com.gs.collections.impl.lazy.primitive.CollectDoubleIterable;
 import com.gs.collections.impl.lazy.primitive.CollectFloatIterable;
 import com.gs.collections.impl.lazy.primitive.CollectIntIterable;
 import com.gs.collections.impl.lazy.primitive.CollectLongIterable;
+import com.gs.collections.impl.lazy.primitive.CollectShortIterable;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
@@ -232,24 +244,44 @@ public abstract class AbstractLazyIterable<T>
         return LazyIterate.collect(this, function);
     }
 
-    public IntIterable collectInt(IntFunction<? super T> function)
+    public LazyBooleanIterable collectBoolean(BooleanFunction<? super T> booleanFunction)
     {
-        return new CollectIntIterable<T>(this, function);
+        return new CollectBooleanIterable<T>(this, booleanFunction);
     }
 
-    public FloatIterable collectFloat(FloatFunction<? super T> function)
+    public LazyByteIterable collectByte(ByteFunction<? super T> byteFunction)
     {
-        return new CollectFloatIterable<T>(this, function);
+        return new CollectByteIterable<T>(this, byteFunction);
     }
 
-    public DoubleIterable collectDouble(DoubleFunction<? super T> function)
+    public LazyCharIterable collectChar(CharFunction<? super T> charFunction)
     {
-        return new CollectDoubleIterable<T>(this, function);
+        return new CollectCharIterable<T>(this, charFunction);
     }
 
-    public LongIterable collectLong(LongFunction<? super T> function)
+    public LazyDoubleIterable collectDouble(DoubleFunction<? super T> doubleFunction)
     {
-        return new CollectLongIterable<T>(this, function);
+        return new CollectDoubleIterable<T>(this, doubleFunction);
+    }
+
+    public LazyFloatIterable collectFloat(FloatFunction<? super T> floatFunction)
+    {
+        return new CollectFloatIterable<T>(this, floatFunction);
+    }
+
+    public LazyIntIterable collectInt(IntFunction<? super T> intFunction)
+    {
+        return new CollectIntIterable<T>(this, intFunction);
+    }
+
+    public LazyLongIterable collectLong(LongFunction<? super T> longFunction)
+    {
+        return new CollectLongIterable<T>(this, longFunction);
+    }
+
+    public LazyShortIterable collectShort(ShortFunction<? super T> shortFunction)
+    {
+        return new CollectShortIterable<T>(this, shortFunction);
     }
 
     public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)

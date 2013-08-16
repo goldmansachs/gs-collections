@@ -17,6 +17,7 @@
 package com.gs.collections.impl.utility;
 
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.utility.internal.IterableIterate;
 import org.junit.Assert;
@@ -46,6 +47,166 @@ public class IterateNullTest
             public void run()
             {
                 ArrayIterate.collect(null, Functions.getPassThru());
+            }
+        });
+    }
+
+    @Test
+    public void collectBoolean()
+    {
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.collectBoolean(null, PrimitiveFunctions.integerIsPositive());
+            }
+        });
+
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                ArrayIterate.collectBoolean(null, PrimitiveFunctions.integerIsPositive());
+            }
+        });
+    }
+
+    @Test
+    public void collectByte()
+    {
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.collectByte(null, PrimitiveFunctions.unboxIntegerToByte());
+            }
+        });
+
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                ArrayIterate.collectByte(null, PrimitiveFunctions.unboxIntegerToByte());
+            }
+        });
+    }
+
+    @Test
+    public void collectChar()
+    {
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.collectChar(null, PrimitiveFunctions.unboxIntegerToChar());
+            }
+        });
+
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                ArrayIterate.collectChar(null, PrimitiveFunctions.unboxIntegerToChar());
+            }
+        });
+    }
+
+    @Test
+    public void collectDouble()
+    {
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.collectDouble(null, PrimitiveFunctions.unboxIntegerToDouble());
+            }
+        });
+
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                ArrayIterate.collectDouble(null, PrimitiveFunctions.unboxIntegerToDouble());
+            }
+        });
+    }
+
+    @Test
+    public void collectFloat()
+    {
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.collectFloat(null, PrimitiveFunctions.unboxIntegerToFloat());
+            }
+        });
+
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                ArrayIterate.collectFloat(null, PrimitiveFunctions.unboxIntegerToFloat());
+            }
+        });
+    }
+
+    @Test
+    public void collectInt()
+    {
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.collectInt(null, PrimitiveFunctions.unboxIntegerToInt());
+            }
+        });
+
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                ArrayIterate.collectInt(null, PrimitiveFunctions.unboxIntegerToInt());
+            }
+        });
+    }
+
+    @Test
+    public void collectLong()
+    {
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.collectLong(null, PrimitiveFunctions.unboxIntegerToLong());
+            }
+        });
+
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                ArrayIterate.collectLong(null, PrimitiveFunctions.unboxIntegerToLong());
+            }
+        });
+    }
+
+    @Test
+    public void collectShort()
+    {
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.collectShort(null, PrimitiveFunctions.unboxIntegerToShort());
+            }
+        });
+
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                ArrayIterate.collectShort(null, PrimitiveFunctions.unboxIntegerToShort());
             }
         });
     }

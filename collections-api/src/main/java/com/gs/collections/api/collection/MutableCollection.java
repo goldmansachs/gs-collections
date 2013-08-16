@@ -23,9 +23,25 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
@@ -240,6 +256,22 @@ public interface MutableCollection<T>
      * </pre>
      */
     <V> MutableCollection<V> collect(Function<? super T, ? extends V> function);
+
+    MutableBooleanCollection collectBoolean(BooleanFunction<? super T> booleanFunction);
+
+    MutableByteCollection collectByte(ByteFunction<? super T> byteFunction);
+
+    MutableCharCollection collectChar(CharFunction<? super T> charFunction);
+
+    MutableDoubleCollection collectDouble(DoubleFunction<? super T> doubleFunction);
+
+    MutableFloatCollection collectFloat(FloatFunction<? super T> floatFunction);
+
+    MutableIntCollection collectInt(IntFunction<? super T> intFunction);
+
+    MutableLongCollection collectLong(LongFunction<? super T> longFunction);
+
+    MutableShortCollection collectShort(ShortFunction<? super T> shortFunction);
 
     /**
      * Same as collect with a Function2 and specified parameter which is passed to the block

@@ -24,12 +24,28 @@ import java.util.ListIterator;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.MutableBooleanList;
+import com.gs.collections.api.list.primitive.MutableByteList;
+import com.gs.collections.api.list.primitive.MutableCharList;
+import com.gs.collections.api.list.primitive.MutableDoubleList;
+import com.gs.collections.api.list.primitive.MutableFloatList;
+import com.gs.collections.api.list.primitive.MutableIntList;
+import com.gs.collections.api.list.primitive.MutableLongList;
+import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.stack.MutableStack;
@@ -148,6 +164,78 @@ public class SynchronizedMutableList<T>
         synchronized (this.getLock())
         {
             return this.getMutableList().collect(function);
+        }
+    }
+
+    @Override
+    public MutableBooleanList collectBoolean(BooleanFunction<? super T> booleanFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableList().collectBoolean(booleanFunction);
+        }
+    }
+
+    @Override
+    public MutableByteList collectByte(ByteFunction<? super T> byteFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableList().collectByte(byteFunction);
+        }
+    }
+
+    @Override
+    public MutableCharList collectChar(CharFunction<? super T> charFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableList().collectChar(charFunction);
+        }
+    }
+
+    @Override
+    public MutableDoubleList collectDouble(DoubleFunction<? super T> doubleFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableList().collectDouble(doubleFunction);
+        }
+    }
+
+    @Override
+    public MutableFloatList collectFloat(FloatFunction<? super T> floatFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableList().collectFloat(floatFunction);
+        }
+    }
+
+    @Override
+    public MutableIntList collectInt(IntFunction<? super T> intFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableList().collectInt(intFunction);
+        }
+    }
+
+    @Override
+    public MutableLongList collectLong(LongFunction<? super T> longFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableList().collectLong(longFunction);
+        }
+    }
+
+    @Override
+    public MutableShortList collectShort(ShortFunction<? super T> shortFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableList().collectShort(shortFunction);
         }
     }
 

@@ -21,7 +21,9 @@ import java.util.Iterator;
 import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.primitive.ImmutableBooleanBag;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
@@ -568,5 +570,21 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
         ImmutableBag<Number> numbers = new ImmutableSingletonBag<Number>(1);
         Assert.assertEquals(iBag(1), numbers.selectInstancesOf(Integer.class));
         Assert.assertEquals(iBag(), numbers.selectInstancesOf(Double.class));
+    }
+
+    @Override
+    @Test
+    public void collectBoolean()
+    {
+        ImmutableBooleanBag result = this.newBag().collectBoolean(new BooleanFunction<String>()
+        {
+            public boolean booleanValueOf(String s)
+            {
+                return "4".equals(s);
+            }
+        });
+        Assert.assertEquals(1, result.sizeDistinct());
+        Assert.assertEquals(0, result.occurrencesOf(true));
+        Assert.assertEquals(1, result.occurrencesOf(false));
     }
 }

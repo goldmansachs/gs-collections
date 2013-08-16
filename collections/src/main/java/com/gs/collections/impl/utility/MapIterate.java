@@ -24,10 +24,26 @@ import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MapIterable;
@@ -42,7 +58,23 @@ import com.gs.collections.impl.block.procedure.MapEntryToProcedure2;
 import com.gs.collections.impl.block.procedure.MapPutProcedure;
 import com.gs.collections.impl.block.procedure.RejectProcedure;
 import com.gs.collections.impl.block.procedure.SelectProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectBooleanProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectByteProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectCharProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectDoubleProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectFloatProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectIntProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectLongProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectShortProcedure;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
+import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
+import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
+import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
+import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
+import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.map.mutable.MapAdapter;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.tuple.AbstractImmutableEntry;
@@ -404,6 +436,102 @@ public final class MapIterate
             Function<? super V, ? extends A> function)
     {
         return collect(map, function, FastList.<A>newList(map.size()));
+    }
+
+    /**
+     * @see RichIterable#collectBoolean(BooleanFunction)
+     */
+    public static <K, V> MutableBooleanCollection collectBoolean(
+            Map<K, V> map,
+            BooleanFunction<? super V> booleanFunction)
+    {
+        BooleanArrayList result = new BooleanArrayList(map.size());
+        MapIterate.forEachValue(map, new CollectBooleanProcedure<V>(booleanFunction, result));
+        return result;
+    }
+
+    /**
+     * @see RichIterable#collectByte(ByteFunction)
+     */
+    public static <K, V> MutableByteCollection collectByte(
+            Map<K, V> map,
+            ByteFunction<? super V> byteFunction)
+    {
+        ByteArrayList result = new ByteArrayList(map.size());
+        MapIterate.forEachValue(map, new CollectByteProcedure<V>(byteFunction, result));
+        return result;
+    }
+
+    /**
+     * @see RichIterable#collectChar(CharFunction)
+     */
+    public static <K, V> MutableCharCollection collectChar(
+            Map<K, V> map,
+            CharFunction<? super V> charFunction)
+    {
+        CharArrayList result = new CharArrayList(map.size());
+        MapIterate.forEachValue(map, new CollectCharProcedure<V>(charFunction, result));
+        return result;
+    }
+
+    /**
+     * @see RichIterable#collectDouble(DoubleFunction)
+     */
+    public static <K, V> MutableDoubleCollection collectDouble(
+            Map<K, V> map,
+            DoubleFunction<? super V> doubleFunction)
+    {
+        DoubleArrayList result = new DoubleArrayList(map.size());
+        MapIterate.forEachValue(map, new CollectDoubleProcedure<V>(doubleFunction, result));
+        return result;
+    }
+
+    /**
+     * @see RichIterable#collectFloat(FloatFunction)
+     */
+    public static <K, V> MutableFloatCollection collectFloat(
+            Map<K, V> map,
+            FloatFunction<? super V> floatFunction)
+    {
+        FloatArrayList result = new FloatArrayList(map.size());
+        MapIterate.forEachValue(map, new CollectFloatProcedure<V>(floatFunction, result));
+        return result;
+    }
+
+    /**
+     * @see RichIterable#collectInt(IntFunction)
+     */
+    public static <K, V> MutableIntCollection collectInt(
+            Map<K, V> map,
+            IntFunction<? super V> intFunction)
+    {
+        IntArrayList result = new IntArrayList(map.size());
+        MapIterate.forEachValue(map, new CollectIntProcedure<V>(intFunction, result));
+        return result;
+    }
+
+    /**
+     * @see RichIterable#collectLong(LongFunction)
+     */
+    public static <K, V> MutableLongCollection collectLong(
+            Map<K, V> map,
+            LongFunction<? super V> longFunction)
+    {
+        LongArrayList result = new LongArrayList(map.size());
+        MapIterate.forEachValue(map, new CollectLongProcedure<V>(longFunction, result));
+        return result;
+    }
+
+    /**
+     * @see RichIterable#collectShort(ShortFunction)
+     */
+    public static <K, V> MutableShortCollection collectShort(
+            Map<K, V> map,
+            ShortFunction<? super V> shortFunction)
+    {
+        ShortArrayList result = new ShortArrayList(map.size());
+        MapIterate.forEachValue(map, new CollectShortProcedure<V>(shortFunction, result));
+        return result;
     }
 
     /**

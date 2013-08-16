@@ -18,8 +18,24 @@ package com.gs.collections.impl.bag.mutable;
 
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.primitive.MutableBooleanBag;
+import com.gs.collections.api.bag.primitive.MutableByteBag;
+import com.gs.collections.api.bag.primitive.MutableCharBag;
+import com.gs.collections.api.bag.primitive.MutableDoubleBag;
+import com.gs.collections.api.bag.primitive.MutableFloatBag;
+import com.gs.collections.api.bag.primitive.MutableIntBag;
+import com.gs.collections.api.bag.primitive.MutableLongBag;
+import com.gs.collections.api.bag.primitive.MutableShortBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
@@ -151,6 +167,54 @@ public class UnmodifiableBag<T>
     public <V> MutableBag<V> collect(Function<? super T, ? extends V> function)
     {
         return this.getMutableBag().collect(function);
+    }
+
+    @Override
+    public MutableBooleanBag collectBoolean(BooleanFunction<? super T> booleanFunction)
+    {
+        return this.getMutableBag().collectBoolean(booleanFunction);
+    }
+
+    @Override
+    public MutableByteBag collectByte(ByteFunction<? super T> byteFunction)
+    {
+        return this.getMutableBag().collectByte(byteFunction);
+    }
+
+    @Override
+    public MutableCharBag collectChar(CharFunction<? super T> charFunction)
+    {
+        return this.getMutableBag().collectChar(charFunction);
+    }
+
+    @Override
+    public MutableDoubleBag collectDouble(DoubleFunction<? super T> doubleFunction)
+    {
+        return this.getMutableBag().collectDouble(doubleFunction);
+    }
+
+    @Override
+    public MutableFloatBag collectFloat(FloatFunction<? super T> floatFunction)
+    {
+        return this.getMutableBag().collectFloat(floatFunction);
+    }
+
+    @Override
+    public MutableIntBag collectInt(IntFunction<? super T> intFunction)
+    {
+        return this.getMutableBag().collectInt(intFunction);
+    }
+
+    @Override
+    public MutableLongBag collectLong(LongFunction<? super T> longFunction)
+    {
+        return this.getMutableBag().collectLong(longFunction);
+    }
+
+    @Override
+    public MutableShortBag collectShort(ShortFunction<? super T> shortFunction)
+    {
+        return this.getMutableBag().collectShort(shortFunction);
     }
 
     @Override

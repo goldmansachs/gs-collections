@@ -17,8 +17,11 @@
 package com.gs.collections.impl.set.fixed;
 
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.impl.block.factory.StringFunctions;
 import com.gs.collections.impl.collection.mutable.UnmodifiableMutableCollectionTestCase;
 import com.gs.collections.impl.factory.Sets;
+import com.gs.collections.impl.test.Verify;
+import org.junit.Test;
 
 public class QuadrupletonSetAsUnmodifiableTest extends UnmodifiableMutableCollectionTestCase<String>
 {
@@ -26,5 +29,61 @@ public class QuadrupletonSetAsUnmodifiableTest extends UnmodifiableMutableCollec
     protected MutableCollection<String> getCollection()
     {
         return Sets.fixedSize.of("1", "2", "3", "4").asUnmodifiable();
+    }
+
+    @Override
+    @Test
+    public void collectBoolean()
+    {
+        Verify.assertSize(1, this.getCollection().collectBoolean(StringFunctions.toPrimitiveBoolean()));
+    }
+
+    @Override
+    @Test
+    public void collectByte()
+    {
+        Verify.assertSize(this.getCollection().size(), this.getCollection().collectByte(StringFunctions.toPrimitiveByte()));
+    }
+
+    @Override
+    @Test
+    public void collectChar()
+    {
+        Verify.assertSize(this.getCollection().size(), this.getCollection().collectChar(StringFunctions.toFirstChar()));
+    }
+
+    @Override
+    @Test
+    public void collectDouble()
+    {
+        Verify.assertSize(this.getCollection().size(), this.getCollection().collectDouble(StringFunctions.toPrimitiveDouble()));
+    }
+
+    @Override
+    @Test
+    public void collectFloat()
+    {
+        Verify.assertSize(this.getCollection().size(), this.getCollection().collectFloat(StringFunctions.toPrimitiveFloat()));
+    }
+
+    @Override
+    @Test
+    public void collectInt()
+    {
+        Verify.assertSize(this.getCollection().size(), this.getCollection().collectInt(StringFunctions.toPrimitiveInt()));
+    }
+
+    @Override
+    @Test
+    public void collectLong()
+    {
+        Verify.assertSize(this.getCollection().size(), this.getCollection().collectLong(StringFunctions.toPrimitiveLong()));
+    }
+
+    @Override
+    @Test
+    public void collectShort()
+    {
+        Verify.assertSize(this.getCollection().size(), this.getCollection().collectShort(StringFunctions.toPrimitiveShort()));
     }
 }

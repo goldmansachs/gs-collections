@@ -21,8 +21,24 @@ import java.util.Collections;
 
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.primitive.MutableBooleanBag;
+import com.gs.collections.api.bag.primitive.MutableByteBag;
+import com.gs.collections.api.bag.primitive.MutableCharBag;
+import com.gs.collections.api.bag.primitive.MutableDoubleBag;
+import com.gs.collections.api.bag.primitive.MutableFloatBag;
+import com.gs.collections.api.bag.primitive.MutableIntBag;
+import com.gs.collections.api.bag.primitive.MutableLongBag;
+import com.gs.collections.api.bag.primitive.MutableShortBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
@@ -99,6 +115,78 @@ public class SynchronizedBag<T>
         synchronized (this.getLock())
         {
             return this.getMutableBag().collect(function);
+        }
+    }
+
+    @Override
+    public MutableBooleanBag collectBoolean(BooleanFunction<? super T> booleanFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableBag().collectBoolean(booleanFunction);
+        }
+    }
+
+    @Override
+    public MutableByteBag collectByte(ByteFunction<? super T> byteFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableBag().collectByte(byteFunction);
+        }
+    }
+
+    @Override
+    public MutableCharBag collectChar(CharFunction<? super T> charFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableBag().collectChar(charFunction);
+        }
+    }
+
+    @Override
+    public MutableDoubleBag collectDouble(DoubleFunction<? super T> doubleFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableBag().collectDouble(doubleFunction);
+        }
+    }
+
+    @Override
+    public MutableFloatBag collectFloat(FloatFunction<? super T> floatFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableBag().collectFloat(floatFunction);
+        }
+    }
+
+    @Override
+    public MutableIntBag collectInt(IntFunction<? super T> function)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableBag().collectInt(function);
+        }
+    }
+
+    @Override
+    public MutableLongBag collectLong(LongFunction<? super T> longFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableBag().collectLong(longFunction);
+        }
+    }
+
+    @Override
+    public MutableShortBag collectShort(ShortFunction<? super T> shortFunction)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableBag().collectShort(shortFunction);
         }
     }
 

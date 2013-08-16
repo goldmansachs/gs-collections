@@ -31,17 +31,34 @@ import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.MutableBooleanList;
+import com.gs.collections.api.list.primitive.MutableByteList;
+import com.gs.collections.api.list.primitive.MutableCharList;
+import com.gs.collections.api.list.primitive.MutableDoubleList;
+import com.gs.collections.api.list.primitive.MutableFloatList;
+import com.gs.collections.api.list.primitive.MutableIntList;
+import com.gs.collections.api.list.primitive.MutableLongList;
+import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.collection.mutable.AbstractCollectionTestCase;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Stacks;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.fixed.ArrayAdapter;
+import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
+import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
+import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
+import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
+import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
+import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
@@ -81,6 +98,70 @@ public abstract class AbstractListTestCase
     protected <T> MutableList<T> newWith(T... littleElements)
     {
         return (MutableList<T>) super.newWith(littleElements);
+    }
+
+    @Override
+    public void collectBoolean()
+    {
+        super.collectBoolean();
+        MutableBooleanList result = this.newWith(-1, 0, 1, 4).collectBoolean(PrimitiveFunctions.integerIsPositive());
+        Assert.assertEquals(BooleanArrayList.newListWith(false, false, true, true), result);
+    }
+
+    @Override
+    public void collectByte()
+    {
+        super.collectByte();
+        MutableByteList result = this.newWith(1, 2, 3, 4).collectByte(PrimitiveFunctions.unboxIntegerToByte());
+        Assert.assertEquals(ByteArrayList.newListWith((byte) 1, (byte) 2, (byte) 3, (byte) 4), result);
+    }
+
+    @Override
+    public void collectChar()
+    {
+        super.collectChar();
+        MutableCharList result = this.newWith(1, 2, 3, 4).collectChar(PrimitiveFunctions.unboxIntegerToChar());
+        Assert.assertEquals(CharArrayList.newListWith((char) 1, (char) 2, (char) 3, (char) 4), result);
+    }
+
+    @Override
+    public void collectDouble()
+    {
+        super.collectDouble();
+        MutableDoubleList result = this.newWith(1, 2, 3, 4).collectDouble(PrimitiveFunctions.unboxIntegerToDouble());
+        Assert.assertEquals(DoubleArrayList.newListWith(1.0d, 2.0d, 3.0d, 4.0d), result);
+    }
+
+    @Override
+    public void collectFloat()
+    {
+        super.collectFloat();
+        MutableFloatList result = this.newWith(1, 2, 3, 4).collectFloat(PrimitiveFunctions.unboxIntegerToFloat());
+        Assert.assertEquals(FloatArrayList.newListWith(1.0f, 2.0f, 3.0f, 4.0f), result);
+    }
+
+    @Override
+    public void collectInt()
+    {
+        super.collectInt();
+        MutableIntList result = this.newWith(1, 2, 3, 4).collectInt(PrimitiveFunctions.unboxIntegerToInt());
+        Assert.assertEquals(IntArrayList.newListWith(1, 2, 3, 4), result);
+    }
+
+    @Override
+    public void collectLong()
+    {
+        super.collectLong();
+        MutableLongList result = this.newWith(1, 2, 3, 4).collectLong(PrimitiveFunctions.unboxIntegerToLong());
+        Assert.assertEquals(LongArrayList.newListWith(1L, 2L, 3L, 4L), result);
+    }
+
+    @Override
+    public void collectShort()
+    {
+        super.collectShort();
+        MutableShortList result = this.newWith(1, 2, 3, 4).collectShort(PrimitiveFunctions.unboxIntegerToShort());
+        Assert.assertEquals(ShortArrayList.newListWith((short) 1, (short) 2, (short) 3, (short) 4), result);
     }
 
     @Override

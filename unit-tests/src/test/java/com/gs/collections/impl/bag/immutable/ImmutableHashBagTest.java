@@ -17,6 +17,8 @@
 package com.gs.collections.impl.bag.immutable;
 
 import com.gs.collections.api.bag.ImmutableBag;
+import com.gs.collections.api.bag.primitive.ImmutableBooleanBag;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -59,5 +61,21 @@ public class ImmutableHashBagTest extends ImmutableBagTestCase
         ImmutableBag<Number> numbers = ImmutableHashBag.<Number>newBagWith(1, 2.0, 2.0, 3, 3, 3, 4.0, 4.0, 4.0, 4.0);
         Assert.assertEquals(iBag(1, 3, 3, 3), numbers.selectInstancesOf(Integer.class));
         Assert.assertEquals(iBag(2.0, 2.0, 4.0, 4.0, 4.0, 4.0), numbers.selectInstancesOf(Double.class));
+    }
+
+    @Override
+    @Test
+    public void collectBoolean()
+    {
+        ImmutableBooleanBag result = this.newBag().collectBoolean(new BooleanFunction<String>()
+        {
+            public boolean booleanValueOf(String s)
+            {
+                return "4".equals(s);
+            }
+        });
+        Assert.assertEquals(2, result.sizeDistinct());
+        Assert.assertEquals(4, result.occurrencesOf(true));
+        Assert.assertEquals(6, result.occurrencesOf(false));
     }
 }

@@ -47,14 +47,29 @@ import com.gs.collections.api.block.procedure.primitive.<name>ObjectProcedure;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.primitive.Immutable<name>ObjectMap;
-import com.gs.collections.api.map.primitive.<name>ObjectMap;
+import com.gs.collections.api.map.primitive.ByteObjectMap;
+import com.gs.collections.api.map.primitive.CharObjectMap;
+import com.gs.collections.api.map.primitive.DoubleObjectMap;
+import com.gs.collections.api.map.primitive.FloatObjectMap;
+import com.gs.collections.api.map.primitive.IntObjectMap;
+import com.gs.collections.api.map.primitive.LongObjectMap;
+import com.gs.collections.api.map.primitive.ShortObjectMap;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.StringFunctions;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
+import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
+import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
+import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
+import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
+import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.mutable.primitive.<name>ObjectHashMap;
 import com.gs.collections.impl.map.mutable.primitive.<name>ObjectHashMapTest;
@@ -229,6 +244,70 @@ public abstract class Abstract<name>ObjectMapTestCase
                 return object.toUpperCase();
             }
         }, FastList.\<String>newList()));
+    }
+
+    @Test
+    public void collectBoolean()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "true", <(literal.(type))("1")>, "false", <(literal.(type))("2")>, "nah");
+
+        Assert.assertEquals(BooleanArrayList.newListWith(true, false, false), map1.collectBoolean(StringFunctions.toPrimitiveBoolean()));
+    }
+
+    @Test
+    public void collectByte()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "0", <(literal.(type))("1")>, "1", <(literal.(type))("2")>, "9");
+
+        Assert.assertEquals(ByteArrayList.newListWith((byte) 0, (byte) 1, (byte) 9), map1.collectByte(StringFunctions.toPrimitiveByte()));
+    }
+
+    @Test
+    public void collectChar()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "0", <(literal.(type))("1")>, "1", <(literal.(type))("2")>, "9");
+
+        Assert.assertEquals(CharArrayList.newListWith((char) 0, (char) 1, (char) 9), map1.collectChar(StringFunctions.toPrimitiveChar()));
+    }
+
+    @Test
+    public void collectDouble()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "0", <(literal.(type))("1")>, "1", <(literal.(type))("2")>, "9");
+
+        Assert.assertEquals(DoubleArrayList.newListWith(0.0d, 1.0d, 9.0d), map1.collectDouble(StringFunctions.toPrimitiveDouble()));
+    }
+
+    @Test
+    public void collectFloat()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "0", <(literal.(type))("1")>, "1", <(literal.(type))("2")>, "9");
+
+        Assert.assertEquals(FloatArrayList.newListWith(0.0f, 1.0f, 9.0f), map1.collectFloat(StringFunctions.toPrimitiveFloat()));
+    }
+
+    @Test
+    public void collectInt()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "0", <(literal.(type))("1")>, "1", <(literal.(type))("2")>, "9");
+
+        Assert.assertEquals(IntArrayList.newListWith(0, 1, 9), map1.collectInt(StringFunctions.toPrimitiveInt()));
+    }
+
+    @Test
+    public void collectLong()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "0", <(literal.(type))("1")>, "1", <(literal.(type))("2")>, "9");
+
+        Assert.assertEquals(LongArrayList.newListWith(0L, 1L, 9L), map1.collectLong(StringFunctions.toPrimitiveLong()));
+    }
+
+    @Test
+    public void collectShort()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "0", <(literal.(type))("1")>, "1", <(literal.(type))("2")>, "9");
+
+        Assert.assertEquals(ShortArrayList.newListWith((short) 0, (short) 1, (short) 9), map1.collectShort(StringFunctions.toPrimitiveShort()));
     }
 
     @Test

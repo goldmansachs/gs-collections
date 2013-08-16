@@ -35,6 +35,9 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
@@ -43,6 +46,7 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -58,6 +62,14 @@ import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.Pool;
 import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.UnsortedSetIterable;
+import com.gs.collections.api.set.primitive.MutableBooleanSet;
+import com.gs.collections.api.set.primitive.MutableByteSet;
+import com.gs.collections.api.set.primitive.MutableCharSet;
+import com.gs.collections.api.set.primitive.MutableDoubleSet;
+import com.gs.collections.api.set.primitive.MutableFloatSet;
+import com.gs.collections.api.set.primitive.MutableIntSet;
+import com.gs.collections.api.set.primitive.MutableLongSet;
+import com.gs.collections.api.set.primitive.MutableShortSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
@@ -79,6 +91,14 @@ import com.gs.collections.impl.block.procedure.RejectProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.block.procedure.SelectProcedure;
 import com.gs.collections.impl.block.procedure.ZipWithIndexProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectBooleanProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectByteProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectCharProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectDoubleProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectFloatProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectIntProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectLongProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectShortProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -87,6 +107,14 @@ import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
 import com.gs.collections.impl.parallel.BatchIterable;
 import com.gs.collections.impl.partition.set.PartitionUnifiedSet;
+import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
+import com.gs.collections.impl.set.mutable.primitive.ByteHashSet;
+import com.gs.collections.impl.set.mutable.primitive.CharHashSet;
+import com.gs.collections.impl.set.mutable.primitive.DoubleHashSet;
+import com.gs.collections.impl.set.mutable.primitive.FloatHashSet;
+import com.gs.collections.impl.set.mutable.primitive.IntHashSet;
+import com.gs.collections.impl.set.mutable.primitive.LongHashSet;
+import com.gs.collections.impl.set.mutable.primitive.ShortHashSet;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.ArrayIterate;
@@ -791,6 +819,62 @@ public class UnifiedSet<K>
     public <V> UnifiedSet<V> collect(Function<? super K, ? extends V> function)
     {
         return this.collect(function, UnifiedSet.<V>newSet());
+    }
+
+    public MutableBooleanSet collectBoolean(BooleanFunction<? super K> booleanFunction)
+    {
+        BooleanHashSet result = new BooleanHashSet();
+        this.forEach(new CollectBooleanProcedure<K>(booleanFunction, result));
+        return result;
+    }
+
+    public MutableByteSet collectByte(ByteFunction<? super K> byteFunction)
+    {
+        ByteHashSet result = new ByteHashSet(this.size());
+        this.forEach(new CollectByteProcedure<K>(byteFunction, result));
+        return result;
+    }
+
+    public MutableCharSet collectChar(CharFunction<? super K> charFunction)
+    {
+        CharHashSet result = new CharHashSet(this.size());
+        this.forEach(new CollectCharProcedure<K>(charFunction, result));
+        return result;
+    }
+
+    public MutableDoubleSet collectDouble(DoubleFunction<? super K> doubleFunction)
+    {
+        DoubleHashSet result = new DoubleHashSet(this.size());
+        this.forEach(new CollectDoubleProcedure<K>(doubleFunction, result));
+        return result;
+    }
+
+    public MutableFloatSet collectFloat(FloatFunction<? super K> floatFunction)
+    {
+        FloatHashSet result = new FloatHashSet(this.size());
+        this.forEach(new CollectFloatProcedure<K>(floatFunction, result));
+        return result;
+    }
+
+    public MutableIntSet collectInt(IntFunction<? super K> intFunction)
+    {
+        IntHashSet result = new IntHashSet(this.size());
+        this.forEach(new CollectIntProcedure<K>(intFunction, result));
+        return result;
+    }
+
+    public MutableLongSet collectLong(LongFunction<? super K> longFunction)
+    {
+        LongHashSet result = new LongHashSet(this.size());
+        this.forEach(new CollectLongProcedure<K>(longFunction, result));
+        return result;
+    }
+
+    public MutableShortSet collectShort(ShortFunction<? super K> shortFunction)
+    {
+        ShortHashSet result = new ShortHashSet(this.size());
+        this.forEach(new CollectShortProcedure<K>(shortFunction, result));
+        return result;
     }
 
     public <V, R extends Collection<V>> R collect(Function<? super K, ? extends V> function, R target)

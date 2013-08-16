@@ -25,10 +25,26 @@ import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
@@ -184,6 +200,78 @@ public class SynchronizedMutableMap<K, V>
         synchronized (this.lock)
         {
             return this.getMutableMap().collect(function);
+        }
+    }
+
+    @Override
+    public MutableBooleanCollection collectBoolean(BooleanFunction<? super V> booleanFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.getMutableMap().collectBoolean(booleanFunction);
+        }
+    }
+
+    @Override
+    public MutableByteCollection collectByte(ByteFunction<? super V> byteFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.getMutableMap().collectByte(byteFunction);
+        }
+    }
+
+    @Override
+    public MutableCharCollection collectChar(CharFunction<? super V> charFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.getMutableMap().collectChar(charFunction);
+        }
+    }
+
+    @Override
+    public MutableDoubleCollection collectDouble(DoubleFunction<? super V> doubleFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.getMutableMap().collectDouble(doubleFunction);
+        }
+    }
+
+    @Override
+    public MutableFloatCollection collectFloat(FloatFunction<? super V> floatFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.getMutableMap().collectFloat(floatFunction);
+        }
+    }
+
+    @Override
+    public MutableIntCollection collectInt(IntFunction<? super V> intFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.getMutableMap().collectInt(intFunction);
+        }
+    }
+
+    @Override
+    public MutableLongCollection collectLong(LongFunction<? super V> longFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.getMutableMap().collectLong(longFunction);
+        }
+    }
+
+    @Override
+    public MutableShortCollection collectShort(ShortFunction<? super V> shortFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.getMutableMap().collectShort(shortFunction);
         }
     }
 

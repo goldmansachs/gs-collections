@@ -13,6 +13,15 @@ class(primitive) ::= <<
 <body(primitive.type, primitive.name)>
 >>
 
+collectPrimitive(name, type) ::= <<
+public Mutable<name>Collection collect<name>(<name>Function\<? super V> <type>Function)
+{
+    <name>ArrayList result = new <name>ArrayList(this.size());
+    this.forEach(new Collect<name>Procedure\<V>(<type>Function, result));
+    return result;
+}
+>>
+
 body(type, name) ::= <<
 <copyright()>
 
@@ -36,6 +45,9 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
@@ -45,6 +57,7 @@ import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.<name>ObjectPredicate;
@@ -54,6 +67,14 @@ import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.<name>ObjectProcedure;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
@@ -74,9 +95,25 @@ import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectBooleanProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectByteProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectCharProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectDoubleProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectFloatProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectIntProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectLongProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectShortProcedure;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
+import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
+import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
+import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
+import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
+import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
@@ -1392,6 +1429,22 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
     {
         return this.collect(function, FastList.\<V1>newList(this.size()));
     }
+
+    <collectPrimitive("Boolean", "boolean")>
+
+    <collectPrimitive("Byte", "byte")>
+
+    <collectPrimitive("Char", "char")>
+
+    <collectPrimitive("Double", "double")>
+
+    <collectPrimitive("Float", "float")>
+
+    <collectPrimitive("Int", "int")>
+
+    <collectPrimitive("Long", "long")>
+
+    <collectPrimitive("Short", "short")>
 
     public \<P, V1, R extends Collection\<V1>\> R collectWith(Function2\<? super V, ? super P, ? extends V1> function, P parameter, R targetCollection)
     {

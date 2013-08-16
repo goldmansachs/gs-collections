@@ -29,6 +29,9 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
@@ -37,12 +40,21 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.collection.primitive.ImmutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.ImmutableByteCollection;
+import com.gs.collections.api.collection.primitive.ImmutableCharCollection;
+import com.gs.collections.api.collection.primitive.ImmutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.ImmutableFloatCollection;
+import com.gs.collections.api.collection.primitive.ImmutableIntCollection;
+import com.gs.collections.api.collection.primitive.ImmutableLongCollection;
+import com.gs.collections.api.collection.primitive.ImmutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
@@ -59,7 +71,23 @@ import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.RejectProcedure;
 import com.gs.collections.impl.block.procedure.SelectProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectBooleanProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectByteProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectCharProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectDoubleProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectFloatProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectIntProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectLongProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectShortProcedure;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
+import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
+import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
+import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
+import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
+import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -511,6 +539,62 @@ public abstract class AbstractImmutableCollection<T> implements ImmutableCollect
     }
 
     protected abstract MutableCollection<T> newMutable(int size);
+
+    public ImmutableBooleanCollection collectBoolean(BooleanFunction<? super T> booleanFunction)
+    {
+        BooleanArrayList result = new BooleanArrayList(this.size());
+        this.forEach(new CollectBooleanProcedure<T>(booleanFunction, result));
+        return result.toImmutable();
+    }
+
+    public ImmutableByteCollection collectByte(ByteFunction<? super T> byteFunction)
+    {
+        ByteArrayList result = new ByteArrayList(this.size());
+        this.forEach(new CollectByteProcedure<T>(byteFunction, result));
+        return result.toImmutable();
+    }
+
+    public ImmutableCharCollection collectChar(CharFunction<? super T> charFunction)
+    {
+        CharArrayList result = new CharArrayList(this.size());
+        this.forEach(new CollectCharProcedure<T>(charFunction, result));
+        return result.toImmutable();
+    }
+
+    public ImmutableDoubleCollection collectDouble(DoubleFunction<? super T> doubleFunction)
+    {
+        DoubleArrayList result = new DoubleArrayList(this.size());
+        this.forEach(new CollectDoubleProcedure<T>(doubleFunction, result));
+        return result.toImmutable();
+    }
+
+    public ImmutableFloatCollection collectFloat(FloatFunction<? super T> floatFunction)
+    {
+        FloatArrayList result = new FloatArrayList(this.size());
+        this.forEach(new CollectFloatProcedure<T>(floatFunction, result));
+        return result.toImmutable();
+    }
+
+    public ImmutableIntCollection collectInt(IntFunction<? super T> intFunction)
+    {
+        IntArrayList result = new IntArrayList(this.size());
+        this.forEach(new CollectIntProcedure<T>(intFunction, result));
+        return result.toImmutable();
+    }
+
+    public ImmutableLongCollection collectLong(LongFunction<? super T> longFunction)
+    {
+        LongArrayList result = new LongArrayList(this.size());
+        this.forEach(new CollectLongProcedure<T>(longFunction, result));
+        return result.toImmutable();
+    }
+
+    public ImmutableShortCollection collectShort(ShortFunction<? super T> shortFunction)
+    {
+        ShortArrayList result = new ShortArrayList(this.size());
+        this.forEach(new CollectShortProcedure<T>(shortFunction, result));
+        return result.toImmutable();
+    }
 
     public <K, V> ImmutableMap<K, V> aggregateInPlaceBy(
             Function<? super T, ? extends K> groupBy,

@@ -19,10 +19,26 @@ package com.gs.collections.api.stack;
 import java.util.Collection;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.api.partition.stack.PartitionStack;
+import com.gs.collections.api.stack.primitive.MutableBooleanStack;
+import com.gs.collections.api.stack.primitive.MutableByteStack;
+import com.gs.collections.api.stack.primitive.MutableCharStack;
+import com.gs.collections.api.stack.primitive.MutableDoubleStack;
+import com.gs.collections.api.stack.primitive.MutableFloatStack;
+import com.gs.collections.api.stack.primitive.MutableIntStack;
+import com.gs.collections.api.stack.primitive.MutableLongStack;
+import com.gs.collections.api.stack.primitive.MutableShortStack;
 import com.gs.collections.api.tuple.Pair;
 
 public interface MutableStack<T> extends StackIterable<T>
@@ -69,6 +85,22 @@ public interface MutableStack<T> extends StackIterable<T>
     PartitionStack<T> partition(Predicate<? super T> predicate);
 
     <V> MutableStack<V> collect(Function<? super T, ? extends V> function);
+
+    MutableBooleanStack collectBoolean(BooleanFunction<? super T> booleanFunction);
+
+    MutableByteStack collectByte(ByteFunction<? super T> byteFunction);
+
+    MutableCharStack collectChar(CharFunction<? super T> charFunction);
+
+    MutableDoubleStack collectDouble(DoubleFunction<? super T> doubleFunction);
+
+    MutableFloatStack collectFloat(FloatFunction<? super T> floatFunction);
+
+    MutableIntStack collectInt(IntFunction<? super T> intFunction);
+
+    MutableLongStack collectLong(LongFunction<? super T> longFunction);
+
+    MutableShortStack collectShort(ShortFunction<? super T> shortFunction);
 
     <V> MutableStack<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 

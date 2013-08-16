@@ -19,8 +19,24 @@ package com.gs.collections.api.list;
 import java.util.List;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.collection.ImmutableCollection;
+import com.gs.collections.api.list.primitive.ImmutableBooleanList;
+import com.gs.collections.api.list.primitive.ImmutableByteList;
+import com.gs.collections.api.list.primitive.ImmutableCharList;
+import com.gs.collections.api.list.primitive.ImmutableDoubleList;
+import com.gs.collections.api.list.primitive.ImmutableFloatList;
+import com.gs.collections.api.list.primitive.ImmutableIntList;
+import com.gs.collections.api.list.primitive.ImmutableLongList;
+import com.gs.collections.api.list.primitive.ImmutableShortList;
 import com.gs.collections.api.multimap.list.ImmutableListMultimap;
 import com.gs.collections.api.partition.list.PartitionImmutableList;
 import com.gs.collections.api.tuple.Pair;
@@ -53,6 +69,22 @@ public interface ImmutableList<T>
     <S> ImmutableList<S> selectInstancesOf(Class<S> clazz);
 
     <V> ImmutableList<V> collect(Function<? super T, ? extends V> function);
+
+    ImmutableBooleanList collectBoolean(BooleanFunction<? super T> booleanFunction);
+
+    ImmutableByteList collectByte(ByteFunction<? super T> byteFunction);
+
+    ImmutableCharList collectChar(CharFunction<? super T> charFunction);
+
+    ImmutableDoubleList collectDouble(DoubleFunction<? super T> doubleFunction);
+
+    ImmutableFloatList collectFloat(FloatFunction<? super T> floatFunction);
+
+    ImmutableIntList collectInt(IntFunction<? super T> intFunction);
+
+    ImmutableLongList collectLong(LongFunction<? super T> longFunction);
+
+    ImmutableShortList collectShort(ShortFunction<? super T> shortFunction);
 
     <V> ImmutableList<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 

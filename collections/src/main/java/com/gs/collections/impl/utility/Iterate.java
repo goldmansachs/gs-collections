@@ -32,6 +32,9 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
@@ -40,12 +43,21 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
@@ -980,6 +992,294 @@ public final class Iterate
             return IterableIterate.collect(iterable, function);
         }
         throw new IllegalArgumentException("Cannot perform a collect on null");
+    }
+
+    /**
+     * Returns a new collection with the results of applying the specified booleanFunction for each element of the iterable.
+     * <p/>
+     * <pre>e.g.
+     * return Iterate.collectBoolean(collection, new BooleanFunction&lt;Person&gt;()
+     * {
+     *     public boolean booleanValueOf(Person person)
+     *     {
+     *         return person.canVote();
+     *     }
+     * });
+     * </pre>
+     */
+    public static <T> MutableBooleanCollection collectBoolean(
+            Iterable<T> iterable,
+            BooleanFunction<? super T> booleanFunction)
+    {
+        if (iterable instanceof MutableCollection)
+        {
+            return ((MutableCollection<T>) iterable).collectBoolean(booleanFunction);
+        }
+        if (iterable instanceof ArrayList)
+        {
+            return ArrayListIterate.collectBoolean((ArrayList<T>) iterable, booleanFunction);
+        }
+        if (iterable instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.collectBoolean((List<T>) iterable, booleanFunction);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.collectBoolean(iterable, booleanFunction);
+        }
+        throw new IllegalArgumentException("Cannot perform a collectBoolean on null");
+    }
+
+    /**
+     * Returns a new collection with the results of applying the specified byteFunction for each element of the iterable.
+     * <p/>
+     * <pre>e.g.
+     * return Iterate.collectByte(collection, new ByteFunction&lt;Person&gt;()
+     * {
+     *     public byte byteValueOf(Person person)
+     *     {
+     *         return person.getAge();
+     *     }
+     * });
+     * </pre>
+     */
+    public static <T> MutableByteCollection collectByte(
+            Iterable<T> iterable,
+            ByteFunction<? super T> byteFunction)
+    {
+        if (iterable instanceof MutableCollection)
+        {
+            return ((MutableCollection<T>) iterable).collectByte(byteFunction);
+        }
+        if (iterable instanceof ArrayList)
+        {
+            return ArrayListIterate.collectByte((ArrayList<T>) iterable, byteFunction);
+        }
+        if (iterable instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.collectByte((List<T>) iterable, byteFunction);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.collectByte(iterable, byteFunction);
+        }
+        throw new IllegalArgumentException("Cannot perform a collectByte on null");
+    }
+
+    /**
+     * Returns a new collection with the results of applying the specified charFunction for each element of the iterable.
+     * <p/>
+     * <pre>e.g.
+     * return Iterate.collectChar(collection, new CharFunction&lt;Person&gt;()
+     * {
+     *     public char charValueOf(Person person)
+     *     {
+     *         return person.getMiddleInitial();
+     *     }
+     * });
+     * </pre>
+     */
+    public static <T> MutableCharCollection collectChar(
+            Iterable<T> iterable,
+            CharFunction<? super T> charFunction)
+    {
+        if (iterable instanceof MutableCollection)
+        {
+            return ((MutableCollection<T>) iterable).collectChar(charFunction);
+        }
+        if (iterable instanceof ArrayList)
+        {
+            return ArrayListIterate.collectChar((ArrayList<T>) iterable, charFunction);
+        }
+        if (iterable instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.collectChar((List<T>) iterable, charFunction);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.collectChar(iterable, charFunction);
+        }
+        throw new IllegalArgumentException("Cannot perform a collectChar on null");
+    }
+
+    /**
+     * Returns a new collection with the results of applying the specified doubleFunction for each element of the iterable.
+     * <p/>
+     * <pre>e.g.
+     * return Iterate.collectDouble(collection, new DoubleFunction&lt;Person&gt;()
+     * {
+     *     public double doubleValueOf(Person person)
+     *     {
+     *         return person.getAge();
+     *     }
+     * });
+     * </pre>
+     */
+    public static <T> MutableDoubleCollection collectDouble(
+            Iterable<T> iterable,
+            DoubleFunction<? super T> doubleFunction)
+    {
+        if (iterable instanceof MutableCollection)
+        {
+            return ((MutableCollection<T>) iterable).collectDouble(doubleFunction);
+        }
+        if (iterable instanceof ArrayList)
+        {
+            return ArrayListIterate.collectDouble((ArrayList<T>) iterable, doubleFunction);
+        }
+        if (iterable instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.collectDouble((List<T>) iterable, doubleFunction);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.collectDouble(iterable, doubleFunction);
+        }
+        throw new IllegalArgumentException("Cannot perform a collectDouble on null");
+    }
+
+    /**
+     * Returns a new collection with the results of applying the specified floatFunction for each element of the iterable.
+     * <p/>
+     * <pre>e.g.
+     * return Iterate.collectFloat(collection, new FloatFunction&lt;Person&gt;()
+     * {
+     *     public float floatValueOf(Person person)
+     *     {
+     *         return person.getAge();
+     *     }
+     * });
+     * </pre>
+     */
+    public static <T> MutableFloatCollection collectFloat(
+            Iterable<T> iterable,
+            FloatFunction<? super T> floatFunction)
+    {
+        if (iterable instanceof MutableCollection)
+        {
+            return ((MutableCollection<T>) iterable).collectFloat(floatFunction);
+        }
+        if (iterable instanceof ArrayList)
+        {
+            return ArrayListIterate.collectFloat((ArrayList<T>) iterable, floatFunction);
+        }
+        if (iterable instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.collectFloat((List<T>) iterable, floatFunction);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.collectFloat(iterable, floatFunction);
+        }
+        throw new IllegalArgumentException("Cannot perform a collectFloat on null");
+    }
+
+    /**
+     * Returns a new collection with the results of applying the specified intFunction for each element of the iterable.
+     * <p/>
+     * <pre>e.g.
+     * return Iterate.collectInt(collection, new IntFunction&lt;Person&gt;()
+     * {
+     *     public int intValueOf(Person person)
+     *     {
+     *         return person.getAge();
+     *     }
+     * });
+     * </pre>
+     */
+    public static <T> MutableIntCollection collectInt(
+            Iterable<T> iterable,
+            IntFunction<? super T> intFunction)
+    {
+        if (iterable instanceof MutableCollection)
+        {
+            return ((MutableCollection<T>) iterable).collectInt(intFunction);
+        }
+        if (iterable instanceof ArrayList)
+        {
+            return ArrayListIterate.collectInt((ArrayList<T>) iterable, intFunction);
+        }
+        if (iterable instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.collectInt((List<T>) iterable, intFunction);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.collectInt(iterable, intFunction);
+        }
+        throw new IllegalArgumentException("Cannot perform a collectInt on null");
+    }
+
+    /**
+     * Returns a new collection with the results of applying the specified longFunction for each element of the iterable.
+     * <p/>
+     * <pre>e.g.
+     * return Iterate.collectLong(collection, new LongFunction&lt;Person&gt;()
+     * {
+     *     public long longValueOf(Person person)
+     *     {
+     *         return person.getGuid();
+     *     }
+     * });
+     * </pre>
+     */
+    public static <T> MutableLongCollection collectLong(
+            Iterable<T> iterable,
+            LongFunction<? super T> longFunction)
+    {
+        if (iterable instanceof MutableCollection)
+        {
+            return ((MutableCollection<T>) iterable).collectLong(longFunction);
+        }
+        if (iterable instanceof ArrayList)
+        {
+            return ArrayListIterate.collectLong((ArrayList<T>) iterable, longFunction);
+        }
+        if (iterable instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.collectLong((List<T>) iterable, longFunction);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.collectLong(iterable, longFunction);
+        }
+        throw new IllegalArgumentException("Cannot perform a collectLong on null");
+    }
+
+    /**
+     * Returns a new collection with the results of applying the specified shortFunction for each element of the iterable.
+     * <p/>
+     * <pre>e.g.
+     * return Iterate.collectShort(collection, new ShortFunction&lt;Person&gt;()
+     * {
+     *     public short shortValueOf(Person person)
+     *     {
+     *         return person.getAge();
+     *     }
+     * });
+     * </pre>
+     */
+    public static <T> MutableShortCollection collectShort(
+            Iterable<T> iterable,
+            ShortFunction<? super T> shortFunction)
+    {
+        if (iterable instanceof MutableCollection)
+        {
+            return ((MutableCollection<T>) iterable).collectShort(shortFunction);
+        }
+        if (iterable instanceof ArrayList)
+        {
+            return ArrayListIterate.collectShort((ArrayList<T>) iterable, shortFunction);
+        }
+        if (iterable instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.collectShort((List<T>) iterable, shortFunction);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.collectShort(iterable, shortFunction);
+        }
+        throw new IllegalArgumentException("Cannot perform a collectShort on null");
     }
 
     /**

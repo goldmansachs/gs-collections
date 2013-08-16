@@ -24,9 +24,25 @@ import java.util.SortedSet;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.MutableBooleanList;
+import com.gs.collections.api.list.primitive.MutableByteList;
+import com.gs.collections.api.list.primitive.MutableCharList;
+import com.gs.collections.api.list.primitive.MutableDoubleList;
+import com.gs.collections.api.list.primitive.MutableFloatList;
+import com.gs.collections.api.list.primitive.MutableIntList;
+import com.gs.collections.api.list.primitive.MutableLongList;
+import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.multimap.sortedset.MutableSortedSetMultimap;
 import com.gs.collections.api.partition.set.sorted.PartitionMutableSortedSet;
 import com.gs.collections.api.set.SetIterable;
@@ -154,6 +170,54 @@ public class UnmodifiableSortedSet<T>
     public <V> MutableList<V> collect(Function<? super T, ? extends V> function)
     {
         return this.getSortedSet().collect(function);
+    }
+
+    @Override
+    public MutableBooleanList collectBoolean(BooleanFunction<? super T> booleanFunction)
+    {
+        return this.getSortedSet().collectBoolean(booleanFunction);
+    }
+
+    @Override
+    public MutableByteList collectByte(ByteFunction<? super T> byteFunction)
+    {
+        return this.getSortedSet().collectByte(byteFunction);
+    }
+
+    @Override
+    public MutableCharList collectChar(CharFunction<? super T> charFunction)
+    {
+        return this.getSortedSet().collectChar(charFunction);
+    }
+
+    @Override
+    public MutableDoubleList collectDouble(DoubleFunction<? super T> doubleFunction)
+    {
+        return this.getSortedSet().collectDouble(doubleFunction);
+    }
+
+    @Override
+    public MutableFloatList collectFloat(FloatFunction<? super T> floatFunction)
+    {
+        return this.getSortedSet().collectFloat(floatFunction);
+    }
+
+    @Override
+    public MutableIntList collectInt(IntFunction<? super T> intFunction)
+    {
+        return this.getSortedSet().collectInt(intFunction);
+    }
+
+    @Override
+    public MutableLongList collectLong(LongFunction<? super T> longFunction)
+    {
+        return this.getSortedSet().collectLong(longFunction);
+    }
+
+    @Override
+    public MutableShortList collectShort(ShortFunction<? super T> shortFunction)
+    {
+        return this.getSortedSet().collectShort(shortFunction);
     }
 
     @Override

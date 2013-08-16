@@ -21,6 +21,14 @@ import java.util.Iterator;
 import java.util.List;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.partition.PartitionMutableCollection;
@@ -174,6 +182,110 @@ public abstract class UnmodifiableMutableCollectionTestCase<T>
     {
         Assert.assertEquals(this.getCollection(), this.getCollection().collect(Functions.<Object>getPassThru()));
         Assert.assertNotEquals(this.getCollection(), this.getCollection().collect(Functions.getToClass()));
+    }
+
+    @Test
+    public void collectInt()
+    {
+        IntFunction<T> intFunction = new IntFunction<T>()
+        {
+            public int intValueOf(T anObject)
+            {
+                return anObject == null ? 0 : 1;
+            }
+        };
+        Verify.assertSize(this.getCollection().size(), this.getCollection().collectInt(intFunction));
+    }
+
+    @Test
+    public void collectBoolean()
+    {
+        BooleanFunction<T> booleanFunction = new BooleanFunction<T>()
+        {
+            public boolean booleanValueOf(T anObject)
+            {
+                return anObject == null;
+            }
+        };
+        Verify.assertSize(this.getCollection().size(), this.getCollection().collectBoolean(booleanFunction));
+    }
+
+    @Test
+    public void collectByte()
+    {
+        ByteFunction<T> byteFunction = new ByteFunction<T>()
+        {
+            public byte byteValueOf(T anObject)
+            {
+                return anObject == null ? (byte) 0 : (byte) 1;
+            }
+        };
+        Verify.assertSize(this.getCollection().size(), this.getCollection().collectByte(byteFunction));
+    }
+
+    @Test
+    public void collectChar()
+    {
+        CharFunction<T> charFunction = new CharFunction<T>()
+        {
+            public char charValueOf(T anObject)
+            {
+                return anObject == null ? '0' : '1';
+            }
+        };
+        Verify.assertSize(this.getCollection().size(), this.getCollection().collectChar(charFunction));
+    }
+
+    @Test
+    public void collectDouble()
+    {
+        DoubleFunction<T> doubleFunction = new DoubleFunction<T>()
+        {
+            public double doubleValueOf(T anObject)
+            {
+                return anObject == null ? 0.0d : 1.0d;
+            }
+        };
+        Verify.assertSize(this.getCollection().size(), this.getCollection().collectDouble(doubleFunction));
+    }
+
+    @Test
+    public void collectFloat()
+    {
+        FloatFunction<T> floatFunction = new FloatFunction<T>()
+        {
+            public float floatValueOf(T anObject)
+            {
+                return anObject == null ? 0.0f : 1.0f;
+            }
+        };
+        Verify.assertSize(this.getCollection().size(), this.getCollection().collectFloat(floatFunction));
+    }
+
+    @Test
+    public void collectLong()
+    {
+        LongFunction<T> longFunction = new LongFunction<T>()
+        {
+            public long longValueOf(T anObject)
+            {
+                return anObject == null ? 0L : 1L;
+            }
+        };
+        Verify.assertSize(this.getCollection().size(), this.getCollection().collectLong(longFunction));
+    }
+
+    @Test
+    public void collectShort()
+    {
+        ShortFunction<T> shortFunction = new ShortFunction<T>()
+        {
+            public short shortValueOf(T anObject)
+            {
+                return (short) (anObject == null ? 0 : 1);
+            }
+        };
+        Verify.assertSize(this.getCollection().size(), this.getCollection().collectShort(shortFunction));
     }
 
     @Test

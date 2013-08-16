@@ -21,12 +21,23 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 
+import com.gs.collections.api.BooleanIterable;
+import com.gs.collections.api.ByteIterable;
+import com.gs.collections.api.CharIterable;
+import com.gs.collections.api.DoubleIterable;
+import com.gs.collections.api.FloatIterable;
+import com.gs.collections.api.IntIterable;
 import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.LongIterable;
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.ShortIterable;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
@@ -35,6 +46,7 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -696,6 +708,70 @@ public abstract class SynchronizedMapIterable<K, V>
         synchronized (this.lock)
         {
             return this.mapIterable.collect(function, target);
+        }
+    }
+
+    public BooleanIterable collectBoolean(BooleanFunction<? super V> booleanFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.mapIterable.collectBoolean(booleanFunction);
+        }
+    }
+
+    public ByteIterable collectByte(ByteFunction<? super V> byteFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.mapIterable.collectByte(byteFunction);
+        }
+    }
+
+    public CharIterable collectChar(CharFunction<? super V> charFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.mapIterable.collectChar(charFunction);
+        }
+    }
+
+    public DoubleIterable collectDouble(DoubleFunction<? super V> doubleFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.mapIterable.collectDouble(doubleFunction);
+        }
+    }
+
+    public FloatIterable collectFloat(FloatFunction<? super V> floatFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.mapIterable.collectFloat(floatFunction);
+        }
+    }
+
+    public IntIterable collectInt(IntFunction<? super V> intFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.mapIterable.collectInt(intFunction);
+        }
+    }
+
+    public LongIterable collectLong(LongFunction<? super V> longFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.mapIterable.collectLong(longFunction);
+        }
+    }
+
+    public ShortIterable collectShort(ShortFunction<? super V> shortFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.mapIterable.collectShort(shortFunction);
         }
     }
 

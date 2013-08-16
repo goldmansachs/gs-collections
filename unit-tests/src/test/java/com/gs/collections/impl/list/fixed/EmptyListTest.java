@@ -21,6 +21,7 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.test.Verify;
@@ -170,5 +171,19 @@ public class EmptyListTest
     {
         MutableList<Integer> list = new EmptyList<Integer>();
         Assert.assertEquals(list, list.withoutAll(FastList.newListWith(1, 2)));
+    }
+
+    @Test
+    public void collectPrimitives()
+    {
+        MutableList<Integer> list = new EmptyList<Integer>();
+        Verify.assertEmpty(list.collectBoolean(PrimitiveFunctions.integerIsPositive()));
+        Verify.assertEmpty(list.collectByte(PrimitiveFunctions.unboxIntegerToByte()));
+        Verify.assertEmpty(list.collectChar(PrimitiveFunctions.unboxIntegerToChar()));
+        Verify.assertEmpty(list.collectDouble(PrimitiveFunctions.unboxIntegerToDouble()));
+        Verify.assertEmpty(list.collectFloat(PrimitiveFunctions.unboxIntegerToFloat()));
+        Verify.assertEmpty(list.collectInt(PrimitiveFunctions.unboxIntegerToInt()));
+        Verify.assertEmpty(list.collectLong(PrimitiveFunctions.unboxIntegerToLong()));
+        Verify.assertEmpty(list.collectShort(PrimitiveFunctions.unboxIntegerToShort()));
     }
 }

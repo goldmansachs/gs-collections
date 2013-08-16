@@ -96,6 +96,13 @@ public class CollectIntIterableTest
     }
 
     @Test
+    public void noneSatisfy()
+    {
+        Assert.assertFalse(this.intIterable.noneSatisfy(IntPredicates.greaterThan(2)));
+        Assert.assertTrue(this.intIterable.noneSatisfy(IntPredicates.greaterThan(4)));
+    }
+
+    @Test
     public void allSatisfy()
     {
         Assert.assertTrue(this.intIterable.allSatisfy(IntPredicates.lessThan(4)));
@@ -195,13 +202,15 @@ public class CollectIntIterableTest
     @Test
     public void toArray()
     {
-        Assert.assertArrayEquals(new int[]{1, 2, 3, 4}, Interval.oneTo(4).collectInt(PrimitiveFunctions.unboxIntegerToInt()).toArray());
+        Assert.assertArrayEquals(new int[]{1, 2, 3, 4},
+                Interval.oneTo(4).collectInt(PrimitiveFunctions.unboxIntegerToInt()).toArray());
     }
 
     @Test
     public void toSortedArray()
     {
-        Assert.assertArrayEquals(new int[]{1, 2, 3, 4}, Interval.fromTo(4, 1).collectInt(PrimitiveFunctions.unboxIntegerToInt()).toSortedArray());
+        Assert.assertArrayEquals(new int[]{1, 2, 3, 4},
+                Interval.fromTo(4, 1).collectInt(PrimitiveFunctions.unboxIntegerToInt()).toSortedArray());
     }
 
     @Test

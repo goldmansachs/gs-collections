@@ -28,6 +28,7 @@ import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.collection.primitive.ImmutableBooleanCollection;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.partition.list.PartitionImmutableList;
@@ -36,6 +37,7 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.ObjectIntProcedures;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.collection.immutable.AbstractImmutableCollectionTestCase;
 import com.gs.collections.impl.factory.Lists;
@@ -499,5 +501,14 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
         PartitionImmutableList<Integer> partitionNone = this.classUnderTest().partitionWhile(Predicates.lessThan(0));
         Assert.assertEquals(Lists.immutable.of(), partitionNone.getSelected());
         Assert.assertEquals(this.classUnderTest(), partitionNone.getRejected());
+    }
+
+    @Override
+    @Test
+    public void collectBoolean()
+    {
+        ImmutableCollection<Integer> integers = this.classUnderTest();
+        ImmutableBooleanCollection immutableCollection = integers.collectBoolean(PrimitiveFunctions.integerIsPositive());
+        Verify.assertSize(integers.size(), immutableCollection);
     }
 }

@@ -27,6 +27,7 @@ import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
@@ -37,10 +38,12 @@ import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
+import com.gs.collections.impl.block.factory.StringFunctions;
 import com.gs.collections.impl.block.factory.StringPredicates;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
@@ -97,6 +100,11 @@ public class UnmodifiableMutableCollectionTest
         Verify.assertSize(4,
                 this.unmodifiableCollection.collect(Functions.getStringPassThru(),
                         FastList.<String>newList()));
+
+        MutableIntCollection intLengths = this.mutableCollection.collectInt(StringFunctions.length());
+        Assert.assertEquals(intLengths,
+                this.unmodifiableCollection.collectInt(StringFunctions.length()));
+        Assert.assertEquals(IntArrayList.newListWith(9, 8, 6, 9), intLengths);
 
         Function<String, Collection<String>> flattenFunction = new Function<String, Collection<String>>()
         {

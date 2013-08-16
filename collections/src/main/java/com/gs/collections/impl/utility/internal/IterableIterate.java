@@ -27,6 +27,9 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
@@ -35,11 +38,20 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
@@ -260,6 +272,86 @@ public final class IterableIterate
             R targetCollection)
     {
         return IteratorIterate.collect(iterable.iterator(), function, targetCollection);
+    }
+
+    /**
+     * @see Iterate#collectBoolean(Iterable, BooleanFunction)
+     */
+    public static <T> MutableBooleanCollection collectBoolean(
+            Iterable<T> iterable,
+            BooleanFunction<? super T> booleanFunction)
+    {
+        return IteratorIterate.collectBoolean(iterable.iterator(), booleanFunction);
+    }
+
+    /**
+     * @see Iterate#collectByte(Iterable, ByteFunction)
+     */
+    public static <T> MutableByteCollection collectByte(
+            Iterable<T> iterable,
+            ByteFunction<? super T> byteFunction)
+    {
+        return IteratorIterate.collectByte(iterable.iterator(), byteFunction);
+    }
+
+    /**
+     * @see Iterate#collectChar(Iterable, CharFunction)
+     */
+    public static <T> MutableCharCollection collectChar(
+            Iterable<T> iterable,
+            CharFunction<? super T> charFunction)
+    {
+        return IteratorIterate.collectChar(iterable.iterator(), charFunction);
+    }
+
+    /**
+     * @see Iterate#collectDouble(Iterable, DoubleFunction)
+     */
+    public static <T> MutableDoubleCollection collectDouble(
+            Iterable<T> iterable,
+            DoubleFunction<? super T> doubleFunction)
+    {
+        return IteratorIterate.collectDouble(iterable.iterator(), doubleFunction);
+    }
+
+    /**
+     * @see Iterate#collectFloat(Iterable, FloatFunction)
+     */
+    public static <T> MutableFloatCollection collectFloat(
+            Iterable<T> iterable,
+            FloatFunction<? super T> floatFunction)
+    {
+        return IteratorIterate.collectFloat(iterable.iterator(), floatFunction);
+    }
+
+    /**
+     * @see Iterate#collectInt(Iterable, IntFunction)
+     */
+    public static <T> MutableIntCollection collectInt(
+            Iterable<T> iterable,
+            IntFunction<? super T> intFunction)
+    {
+        return IteratorIterate.collectInt(iterable.iterator(), intFunction);
+    }
+
+    /**
+     * @see Iterate#collectLong(Iterable, LongFunction)
+     */
+    public static <T> MutableLongCollection collectLong(
+            Iterable<T> iterable,
+            LongFunction<? super T> longFunction)
+    {
+        return IteratorIterate.collectLong(iterable.iterator(), longFunction);
+    }
+
+    /**
+     * @see Iterate#collectShort(Iterable, ShortFunction)
+     */
+    public static <T> MutableShortCollection collectShort(
+            Iterable<T> iterable,
+            ShortFunction<? super T> shortFunction)
+    {
+        return IteratorIterate.collectShort(iterable.iterator(), shortFunction);
     }
 
     /**

@@ -33,6 +33,9 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
@@ -41,12 +44,21 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.MutableBooleanList;
+import com.gs.collections.api.list.primitive.MutableByteList;
+import com.gs.collections.api.list.primitive.MutableCharList;
+import com.gs.collections.api.list.primitive.MutableDoubleList;
+import com.gs.collections.api.list.primitive.MutableFloatList;
+import com.gs.collections.api.list.primitive.MutableIntList;
+import com.gs.collections.api.list.primitive.MutableLongList;
+import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Twin;
@@ -59,6 +71,14 @@ import com.gs.collections.impl.block.procedure.FastListCollectProcedure;
 import com.gs.collections.impl.block.procedure.FastListRejectProcedure;
 import com.gs.collections.impl.block.procedure.FastListSelectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
+import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
+import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
+import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
+import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
+import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
+import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.parallel.BatchIterable;
 import com.gs.collections.impl.partition.list.PartitionFastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -764,6 +784,94 @@ public class FastList<T>
     public <V> FastList<V> collect(Function<? super T, ? extends V> function)
     {
         return this.collect(function, FastList.<V>newList(this.size()));
+    }
+
+    @Override
+    public MutableBooleanList collectBoolean(BooleanFunction<? super T> booleanFunction)
+    {
+        BooleanArrayList result = new BooleanArrayList(this.size);
+        for (int i = 0; i < this.size; i++)
+        {
+            result.add(booleanFunction.booleanValueOf(this.items[i]));
+        }
+        return result;
+    }
+
+    @Override
+    public MutableByteList collectByte(ByteFunction<? super T> byteFunction)
+    {
+        ByteArrayList result = new ByteArrayList(this.size);
+        for (int i = 0; i < this.size; i++)
+        {
+            result.add(byteFunction.byteValueOf(this.items[i]));
+        }
+        return result;
+    }
+
+    @Override
+    public MutableCharList collectChar(CharFunction<? super T> charFunction)
+    {
+        CharArrayList result = new CharArrayList(this.size);
+        for (int i = 0; i < this.size; i++)
+        {
+            result.add(charFunction.charValueOf(this.items[i]));
+        }
+        return result;
+    }
+
+    @Override
+    public MutableDoubleList collectDouble(DoubleFunction<? super T> doubleFunction)
+    {
+        DoubleArrayList result = new DoubleArrayList(this.size);
+        for (int i = 0; i < this.size; i++)
+        {
+            result.add(doubleFunction.doubleValueOf(this.items[i]));
+        }
+        return result;
+    }
+
+    @Override
+    public MutableFloatList collectFloat(FloatFunction<? super T> floatFunction)
+    {
+        FloatArrayList result = new FloatArrayList(this.size);
+        for (int i = 0; i < this.size; i++)
+        {
+            result.add(floatFunction.floatValueOf(this.items[i]));
+        }
+        return result;
+    }
+
+    @Override
+    public MutableIntList collectInt(IntFunction<? super T> intFunction)
+    {
+        IntArrayList result = new IntArrayList(this.size);
+        for (int i = 0; i < this.size; i++)
+        {
+            result.add(intFunction.intValueOf(this.items[i]));
+        }
+        return result;
+    }
+
+    @Override
+    public MutableLongList collectLong(LongFunction<? super T> longFunction)
+    {
+        LongArrayList result = new LongArrayList(this.size);
+        for (int i = 0; i < this.size; i++)
+        {
+            result.add(longFunction.longValueOf(this.items[i]));
+        }
+        return result;
+    }
+
+    @Override
+    public MutableShortList collectShort(ShortFunction<? super T> shortFunction)
+    {
+        ShortArrayList result = new ShortArrayList(this.size);
+        for (int i = 0; i < this.size; i++)
+        {
+            result.add(shortFunction.shortValueOf(this.items[i]));
+        }
+        return result;
     }
 
     @Override

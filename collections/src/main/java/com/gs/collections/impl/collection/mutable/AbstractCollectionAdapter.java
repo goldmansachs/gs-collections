@@ -27,6 +27,9 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
@@ -35,12 +38,21 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
@@ -249,6 +261,46 @@ public abstract class AbstractCollectionAdapter<T>
     public <V> MutableCollection<V> collect(Function<? super T, ? extends V> function)
     {
         return this.wrap(Iterate.collect(this.getDelegate(), function));
+    }
+
+    public MutableBooleanCollection collectBoolean(BooleanFunction<? super T> booleanFunction)
+    {
+        return Iterate.collectBoolean(this.getDelegate(), booleanFunction);
+    }
+
+    public MutableByteCollection collectByte(ByteFunction<? super T> byteFunction)
+    {
+        return Iterate.collectByte(this.getDelegate(), byteFunction);
+    }
+
+    public MutableCharCollection collectChar(CharFunction<? super T> charFunction)
+    {
+        return Iterate.collectChar(this.getDelegate(), charFunction);
+    }
+
+    public MutableDoubleCollection collectDouble(DoubleFunction<? super T> doubleFunction)
+    {
+        return Iterate.collectDouble(this.getDelegate(), doubleFunction);
+    }
+
+    public MutableFloatCollection collectFloat(FloatFunction<? super T> floatFunction)
+    {
+        return Iterate.collectFloat(this.getDelegate(), floatFunction);
+    }
+
+    public MutableIntCollection collectInt(IntFunction<? super T> intFunction)
+    {
+        return Iterate.collectInt(this.getDelegate(), intFunction);
+    }
+
+    public MutableLongCollection collectLong(LongFunction<? super T> longFunction)
+    {
+        return Iterate.collectLong(this.getDelegate(), longFunction);
+    }
+
+    public MutableShortCollection collectShort(ShortFunction<? super T> shortFunction)
+    {
+        return Iterate.collectShort(this.getDelegate(), shortFunction);
     }
 
     public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)

@@ -41,6 +41,14 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
@@ -58,6 +66,7 @@ import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.ObjectIntProcedures;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
+import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.StringFunctions;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.block.function.MaxSizeFunction;
@@ -1168,6 +1177,166 @@ public class IterateTest
             public void run()
             {
                 Iterate.collect(null, Functions.<Object>getPassThru());
+            }
+        });
+    }
+
+    @Test
+    public void collectBoolean()
+    {
+        this.iterables.forEach(new Procedure<Iterable<Integer>>()
+        {
+            public void value(Iterable<Integer> each)
+            {
+                MutableBooleanCollection result = Iterate.collectBoolean(each, PrimitiveFunctions.integerIsPositive());
+                Assert.assertTrue(result.containsAll(true, true, true, true, true));
+            }
+        });
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.collectBoolean(null, PrimitiveFunctions.integerIsPositive());
+            }
+        });
+    }
+
+    @Test
+    public void collectByte()
+    {
+        this.iterables.forEach(new Procedure<Iterable<Integer>>()
+        {
+            public void value(Iterable<Integer> each)
+            {
+                MutableByteCollection result = Iterate.collectByte(each, PrimitiveFunctions.unboxIntegerToByte());
+                Assert.assertTrue(result.containsAll((byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5));
+            }
+        });
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.collectByte(null, PrimitiveFunctions.unboxIntegerToByte());
+            }
+        });
+    }
+
+    @Test
+    public void collectChar()
+    {
+        this.iterables.forEach(new Procedure<Iterable<Integer>>()
+        {
+            public void value(Iterable<Integer> each)
+            {
+                MutableCharCollection result = Iterate.collectChar(each, PrimitiveFunctions.unboxIntegerToChar());
+                Assert.assertTrue(result.containsAll((char) 1, (char) 2, (char) 3, (char) 4, (char) 5));
+            }
+        });
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.collectChar(null, PrimitiveFunctions.unboxIntegerToChar());
+            }
+        });
+    }
+
+    @Test
+    public void collectDouble()
+    {
+        this.iterables.forEach(new Procedure<Iterable<Integer>>()
+        {
+            public void value(Iterable<Integer> each)
+            {
+                MutableDoubleCollection result = Iterate.collectDouble(each, PrimitiveFunctions.unboxIntegerToDouble());
+                Assert.assertTrue(result.containsAll(1.0d, 2.0d, 3.0d, 4.0d, 5.0d));
+            }
+        });
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.collectDouble(null, PrimitiveFunctions.unboxIntegerToDouble());
+            }
+        });
+    }
+
+    @Test
+    public void collectFloat()
+    {
+        this.iterables.forEach(new Procedure<Iterable<Integer>>()
+        {
+            public void value(Iterable<Integer> each)
+            {
+                MutableFloatCollection result = Iterate.collectFloat(each, PrimitiveFunctions.unboxIntegerToFloat());
+                Assert.assertTrue(result.containsAll(1.0f, 2.0f, 3.0f, 4.0f, 5.0f));
+            }
+        });
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.collectFloat(null, PrimitiveFunctions.unboxIntegerToFloat());
+            }
+        });
+    }
+
+    @Test
+    public void collectInt()
+    {
+        this.iterables.forEach(new Procedure<Iterable<Integer>>()
+        {
+            public void value(Iterable<Integer> each)
+            {
+                MutableIntCollection result = Iterate.collectInt(each, PrimitiveFunctions.unboxIntegerToInt());
+                Assert.assertTrue(result.containsAll(1, 2, 3, 4, 5));
+            }
+        });
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.collectInt(null, PrimitiveFunctions.unboxIntegerToInt());
+            }
+        });
+    }
+
+    @Test
+    public void collectLong()
+    {
+        this.iterables.forEach(new Procedure<Iterable<Integer>>()
+        {
+            public void value(Iterable<Integer> each)
+            {
+                MutableLongCollection result = Iterate.collectLong(each, PrimitiveFunctions.unboxIntegerToLong());
+                Assert.assertTrue(result.containsAll(1L, 2L, 3L, 4L, 5L));
+            }
+        });
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.collectLong(null, PrimitiveFunctions.unboxIntegerToLong());
+            }
+        });
+    }
+
+    @Test
+    public void collectShort()
+    {
+        this.iterables.forEach(new Procedure<Iterable<Integer>>()
+        {
+            public void value(Iterable<Integer> each)
+            {
+                MutableShortCollection result = Iterate.collectShort(each, PrimitiveFunctions.unboxIntegerToShort());
+                Assert.assertTrue(result.containsAll((short) 1, (short) 2, (short) 3, (short) 4, (short) 5));
+            }
+        });
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.collectShort(null, PrimitiveFunctions.unboxIntegerToShort());
             }
         });
     }

@@ -27,10 +27,26 @@ import java.util.Set;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.ImmutableCollection;
+import com.gs.collections.api.collection.primitive.ImmutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.ImmutableByteCollection;
+import com.gs.collections.api.collection.primitive.ImmutableCharCollection;
+import com.gs.collections.api.collection.primitive.ImmutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.ImmutableFloatCollection;
+import com.gs.collections.api.collection.primitive.ImmutableIntCollection;
+import com.gs.collections.api.collection.primitive.ImmutableLongCollection;
+import com.gs.collections.api.collection.primitive.ImmutableShortCollection;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.ImmutableMultimap;
@@ -43,7 +59,23 @@ import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.block.procedure.checked.CheckedProcedure2;
+import com.gs.collections.impl.block.procedure.primitive.CollectBooleanProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectByteProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectCharProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectDoubleProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectFloatProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectIntProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectLongProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectShortProcedure;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
+import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
+import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
+import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
+import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
+import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.map.AbstractMapIterable;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
@@ -197,6 +229,70 @@ public abstract class AbstractImmutableMap<K, V>
     public <R> ImmutableCollection<R> collect(Function<? super V, ? extends R> function)
     {
         return this.collect(function, FastList.<R>newList(this.size())).toImmutable();
+    }
+
+    @Override
+    public ImmutableBooleanCollection collectBoolean(BooleanFunction<? super V> booleanFunction)
+    {
+        BooleanArrayList result = new BooleanArrayList(this.size());
+        this.forEach(new CollectBooleanProcedure<V>(booleanFunction, result));
+        return result.toImmutable();
+    }
+
+    @Override
+    public ImmutableByteCollection collectByte(ByteFunction<? super V> byteFunction)
+    {
+        ByteArrayList result = new ByteArrayList(this.size());
+        this.forEach(new CollectByteProcedure<V>(byteFunction, result));
+        return result.toImmutable();
+    }
+
+    @Override
+    public ImmutableCharCollection collectChar(CharFunction<? super V> charFunction)
+    {
+        CharArrayList result = new CharArrayList(this.size());
+        this.forEach(new CollectCharProcedure<V>(charFunction, result));
+        return result.toImmutable();
+    }
+
+    @Override
+    public ImmutableDoubleCollection collectDouble(DoubleFunction<? super V> doubleFunction)
+    {
+        DoubleArrayList result = new DoubleArrayList(this.size());
+        this.forEach(new CollectDoubleProcedure<V>(doubleFunction, result));
+        return result.toImmutable();
+    }
+
+    @Override
+    public ImmutableFloatCollection collectFloat(FloatFunction<? super V> floatFunction)
+    {
+        FloatArrayList result = new FloatArrayList(this.size());
+        this.forEach(new CollectFloatProcedure<V>(floatFunction, result));
+        return result.toImmutable();
+    }
+
+    @Override
+    public ImmutableIntCollection collectInt(IntFunction<? super V> intFunction)
+    {
+        IntArrayList result = new IntArrayList(this.size());
+        this.forEach(new CollectIntProcedure<V>(intFunction, result));
+        return result.toImmutable();
+    }
+
+    @Override
+    public ImmutableLongCollection collectLong(LongFunction<? super V> longFunction)
+    {
+        LongArrayList result = new LongArrayList(this.size());
+        this.forEach(new CollectLongProcedure<V>(longFunction, result));
+        return result.toImmutable();
+    }
+
+    @Override
+    public ImmutableShortCollection collectShort(ShortFunction<? super V> shortFunction)
+    {
+        ShortArrayList result = new ShortArrayList(this.size());
+        this.forEach(new CollectShortProcedure<V>(shortFunction, result));
+        return result.toImmutable();
     }
 
     @Override

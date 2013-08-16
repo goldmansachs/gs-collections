@@ -17,15 +17,34 @@
 package com.gs.collections.impl.block.factory;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
+import com.gs.collections.impl.block.function.primitive.IntegerFunctionImpl;
 
 public final class StringFunctions
 {
     private static final Function<String, String> TO_UPPER_CASE = new ToUpperCaseFunction();
     private static final Function<String, String> TO_LOWER_CASE = new ToLowerCaseFunction();
-    private static final Function<String, Integer> LENGTH = new LengthFunction();
+    private static final IntegerFunctionImpl<String> LENGTH = new LengthFunction();
     private static final Function<String, String> TRIM = new TrimFunction();
     private static final Function<String, Character> FIRST_LETTER = new FirstLetterFunction();
     private static final Function<String, Integer> TO_INTEGER = new ToIntegerFunction();
+
+    private static final BooleanFunction<String> TO_PRIMITIVE_BOOLEAN = new ToPrimitiveBooleanFunction();
+    private static final ByteFunction<String> TO_PRIMITIVE_BYTE = new ToPrimitiveByteFunction();
+    private static final CharFunction<String> TO_PRIMITIVE_CHAR = new ToPrimitiveCharFunction();
+    private static final CharFunction<String> TO_FIRST_CHAR = new ToFirstCharFunction();
+    private static final DoubleFunction<String> TO_PRIMITIVE_DOUBLE = new ToPrimitiveDoubleFunction();
+    private static final FloatFunction<String> TO_PRIMITIVE_FLOAT = new ToPrimitiveFloatFunction();
+    private static final IntFunction<String> TO_PRIMITIVE_INT = new ToPrimitiveIntFunction();
+    private static final LongFunction<String> TO_PRIMITIVE_LONG = new ToPrimitiveLongFunction();
+    private static final ShortFunction<String> TO_PRIMITIVE_SHORT = new ToPrimitiveShortFunction();
 
     private StringFunctions()
     {
@@ -47,7 +66,55 @@ public final class StringFunctions
         return TO_INTEGER;
     }
 
-    public static Function<String, Integer> length()
+    public static BooleanFunction<String> toPrimitiveBoolean()
+    {
+        return TO_PRIMITIVE_BOOLEAN;
+    }
+
+    public static ByteFunction<String> toPrimitiveByte()
+    {
+        return TO_PRIMITIVE_BYTE;
+    }
+
+    public static CharFunction<String> toPrimitiveChar()
+    {
+        return TO_PRIMITIVE_CHAR;
+    }
+
+    /**
+     * @throws StringIndexOutOfBoundsException if the String is empty
+     */
+    public static CharFunction<String> toFirstChar()
+    {
+        return TO_FIRST_CHAR;
+    }
+
+    public static DoubleFunction<String> toPrimitiveDouble()
+    {
+        return TO_PRIMITIVE_DOUBLE;
+    }
+
+    public static FloatFunction<String> toPrimitiveFloat()
+    {
+        return TO_PRIMITIVE_FLOAT;
+    }
+
+    public static IntFunction<String> toPrimitiveInt()
+    {
+        return TO_PRIMITIVE_INT;
+    }
+
+    public static LongFunction<String> toPrimitiveLong()
+    {
+        return TO_PRIMITIVE_LONG;
+    }
+
+    public static ShortFunction<String> toPrimitiveShort()
+    {
+        return TO_PRIMITIVE_SHORT;
+    }
+
+    public static IntegerFunctionImpl<String> length()
     {
         return LENGTH;
     }
@@ -105,11 +172,11 @@ public final class StringFunctions
         }
     }
 
-    private static final class LengthFunction implements Function<String, Integer>
+    private static final class LengthFunction extends IntegerFunctionImpl<String>
     {
         private static final long serialVersionUID = 1L;
 
-        public Integer valueOf(String string)
+        public int intValueOf(String string)
         {
             return string.length();
         }
@@ -155,6 +222,96 @@ public final class StringFunctions
         public Integer valueOf(String string)
         {
             return Integer.valueOf(string);
+        }
+    }
+
+    private static final class ToPrimitiveBooleanFunction implements BooleanFunction<String>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public boolean booleanValueOf(String string)
+        {
+            return Boolean.parseBoolean(string);
+        }
+    }
+
+    private static final class ToPrimitiveByteFunction implements ByteFunction<String>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public byte byteValueOf(String string)
+        {
+            return Byte.parseByte(string);
+        }
+    }
+
+    private static final class ToFirstCharFunction implements CharFunction<String>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public char charValueOf(String string)
+        {
+            return string.charAt(0);
+        }
+    }
+
+    private static final class ToPrimitiveCharFunction implements CharFunction<String>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public char charValueOf(String string)
+        {
+            return (char) Integer.parseInt(string);
+        }
+    }
+
+    private static final class ToPrimitiveDoubleFunction implements DoubleFunction<String>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public double doubleValueOf(String string)
+        {
+            return Double.parseDouble(string);
+        }
+    }
+
+    private static final class ToPrimitiveFloatFunction implements FloatFunction<String>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public float floatValueOf(String string)
+        {
+            return Float.parseFloat(string);
+        }
+    }
+
+    private static final class ToPrimitiveIntFunction implements IntFunction<String>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public int intValueOf(String string)
+        {
+            return Integer.parseInt(string);
+        }
+    }
+
+    private static final class ToPrimitiveLongFunction implements LongFunction<String>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public long longValueOf(String string)
+        {
+            return Long.parseLong(string);
+        }
+    }
+
+    private static final class ToPrimitiveShortFunction implements ShortFunction<String>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public short shortValueOf(String string)
+        {
+            return Short.parseShort(string);
         }
     }
 

@@ -30,6 +30,14 @@ import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -40,6 +48,14 @@ import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.UnsortedSetIterable;
+import com.gs.collections.api.set.primitive.MutableBooleanSet;
+import com.gs.collections.api.set.primitive.MutableByteSet;
+import com.gs.collections.api.set.primitive.MutableCharSet;
+import com.gs.collections.api.set.primitive.MutableDoubleSet;
+import com.gs.collections.api.set.primitive.MutableFloatSet;
+import com.gs.collections.api.set.primitive.MutableIntSet;
+import com.gs.collections.api.set.primitive.MutableLongSet;
+import com.gs.collections.api.set.primitive.MutableShortSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.collection.mutable.AbstractMultiReaderMutableCollection;
 import com.gs.collections.impl.factory.Sets;
@@ -217,6 +233,118 @@ public final class MultiReaderUnifiedSet<T>
         try
         {
             return this.delegate.collect(function);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    @Override
+    public MutableBooleanSet collectBoolean(BooleanFunction<? super T> booleanFunction)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.collectBoolean(booleanFunction);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    @Override
+    public MutableByteSet collectByte(ByteFunction<? super T> byteFunction)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.collectByte(byteFunction);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    @Override
+    public MutableCharSet collectChar(CharFunction<? super T> charFunction)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.collectChar(charFunction);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    @Override
+    public MutableDoubleSet collectDouble(DoubleFunction<? super T> doubleFunction)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.collectDouble(doubleFunction);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    @Override
+    public MutableFloatSet collectFloat(FloatFunction<? super T> floatFunction)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.collectFloat(floatFunction);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    @Override
+    public MutableIntSet collectInt(IntFunction<? super T> intFunction)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.collectInt(intFunction);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    @Override
+    public MutableLongSet collectLong(LongFunction<? super T> longFunction)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.collectLong(longFunction);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    @Override
+    public MutableShortSet collectShort(ShortFunction<? super T> shortFunction)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.collectShort(shortFunction);
         }
         finally
         {
@@ -498,6 +626,54 @@ public final class MultiReaderUnifiedSet<T>
         public <V> MutableSet<V> collect(Function<? super T, ? extends V> function)
         {
             return this.getDelegate().collect(function);
+        }
+
+        @Override
+        public MutableBooleanSet collectBoolean(BooleanFunction<? super T> booleanFunction)
+        {
+            return this.getDelegate().collectBoolean(booleanFunction);
+        }
+
+        @Override
+        public MutableByteSet collectByte(ByteFunction<? super T> byteFunction)
+        {
+            return this.getDelegate().collectByte(byteFunction);
+        }
+
+        @Override
+        public MutableCharSet collectChar(CharFunction<? super T> charFunction)
+        {
+            return this.getDelegate().collectChar(charFunction);
+        }
+
+        @Override
+        public MutableDoubleSet collectDouble(DoubleFunction<? super T> doubleFunction)
+        {
+            return this.getDelegate().collectDouble(doubleFunction);
+        }
+
+        @Override
+        public MutableFloatSet collectFloat(FloatFunction<? super T> floatFunction)
+        {
+            return this.getDelegate().collectFloat(floatFunction);
+        }
+
+        @Override
+        public MutableIntSet collectInt(IntFunction<? super T> intFunction)
+        {
+            return this.getDelegate().collectInt(intFunction);
+        }
+
+        @Override
+        public MutableLongSet collectLong(LongFunction<? super T> longFunction)
+        {
+            return this.getDelegate().collectLong(longFunction);
+        }
+
+        @Override
+        public MutableShortSet collectShort(ShortFunction<? super T> shortFunction)
+        {
+            return this.getDelegate().collectShort(shortFunction);
         }
 
         public <V> MutableSet<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)

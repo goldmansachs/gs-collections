@@ -19,10 +19,14 @@ package com.gs.collections.api;
 import java.util.Collection;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
 import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.tuple.Pair;
 
@@ -98,22 +102,42 @@ public interface LazyIterable<T>
     <R extends Collection<T>> R into(R target);
 
     /**
-     * Returns a lazy IntIterable which will transform the underlying iterable data to int values based on the function.
+     * Returns a lazy BooleanIterable which will transform the underlying iterable data to boolean values based on the booleanFunction.
      */
-    IntIterable collectInt(IntFunction<? super T> function);
+    LazyBooleanIterable collectBoolean(BooleanFunction<? super T> booleanFunction);
 
     /**
-     * Returns a lazy FloatIterable which will transform the underlying iterable data to float values based on the function.
+     * Returns a lazy ByteIterable which will transform the underlying iterable data to byte values based on the byteFunction.
      */
-    FloatIterable collectFloat(FloatFunction<? super T> function);
+    LazyByteIterable collectByte(ByteFunction<? super T> byteFunction);
 
     /**
-     * Returns a lazy LongIterable which will transform the underlying iterable data to long values based on the function.
+     * Returns a lazy CharIterable which will transform the underlying iterable data to char values based on the charFunction.
      */
-    LongIterable collectLong(LongFunction<? super T> function);
+    LazyCharIterable collectChar(CharFunction<? super T> charFunction);
 
     /**
-     * Returns a lazy DoubleIterable which will transform the underlying iterable data to double values based on the function.
+     * Returns a lazy DoubleIterable which will transform the underlying iterable data to double values based on the doubleFunction.
      */
-    DoubleIterable collectDouble(DoubleFunction<? super T> function);
+    LazyDoubleIterable collectDouble(DoubleFunction<? super T> doubleFunction);
+
+    /**
+     * Returns a lazy FloatIterable which will transform the underlying iterable data to float values based on the floatFunction.
+     */
+    LazyFloatIterable collectFloat(FloatFunction<? super T> floatFunction);
+
+    /**
+     * Returns a lazy IntIterable which will transform the underlying iterable data to int values based on the intFunction.
+     */
+    LazyIntIterable collectInt(IntFunction<? super T> intFunction);
+
+    /**
+     * Returns a lazy LongIterable which will transform the underlying iterable data to long values based on the longFunction.
+     */
+    LazyLongIterable collectLong(LongFunction<? super T> longFunction);
+
+    /**
+     * Returns a lazy ShortIterable which will transform the underlying iterable data to short values based on the shortFunction.
+     */
+    LazyShortIterable collectShort(ShortFunction<? super T> shortFunction);
 }

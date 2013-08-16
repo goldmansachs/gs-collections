@@ -18,9 +18,19 @@ package com.gs.collections.impl.bag.mutable;
 
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.ByteHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.CharHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.DoubleHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.FloatHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.IntHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.LongHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.ShortHashBag;
+import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.primitive.IntPredicates;
 import com.gs.collections.impl.collection.mutable.UnmodifiableMutableCollectionTestCase;
 import com.gs.collections.impl.factory.Bags;
@@ -118,5 +128,83 @@ public class UnmodifiableBagTest
     {
         MutableBag<Integer> integers = UnmodifiableBag.of(HashBag.newBagWith(1, 1, 1, 1, 2, 2, 2, 3, 3, 4));
         Assert.assertEquals(iBag(1, 1, 1, 1, 3, 3), integers.selectByOccurrences(IntPredicates.isEven()));
+    }
+
+    @Override
+    @Test
+    public void collectBoolean()
+    {
+        MutableBag<Integer> integers = UnmodifiableBag.of(HashBag.newBagWith(0, 1, 2, 2));
+        Assert.assertEquals(BooleanHashBag.newBagWith(false, true, true, true),
+                integers.collectBoolean(PrimitiveFunctions.integerIsPositive()));
+    }
+
+    @Override
+    @Test
+    public void collectByte()
+    {
+        MutableBag<Integer> integers = UnmodifiableBag.of(HashBag.newBagWith(1, 2, 2, 3, 3, 3));
+        Assert.assertEquals(ByteHashBag.newBagWith((byte) 1, (byte) 2, (byte) 2, (byte) 3, (byte) 3, (byte) 3),
+                integers.collectByte(PrimitiveFunctions.unboxIntegerToByte()));
+    }
+
+    @Override
+    @Test
+    public void collectChar()
+    {
+        MutableBag<Integer> integers = UnmodifiableBag.of(HashBag.newBagWith(1, 2, 2, 3, 3, 3));
+        Assert.assertEquals(CharHashBag.newBagWith('A', 'B', 'B', 'C', 'C', 'C'),
+                integers.collectChar(new CharFunction<Integer>()
+                {
+                    public char charValueOf(Integer integer)
+                    {
+                        return (char) (integer.intValue() + 64);
+                    }
+                }));
+    }
+
+    @Override
+    @Test
+    public void collectDouble()
+    {
+        MutableBag<Integer> integers = UnmodifiableBag.of(HashBag.newBagWith(1, 2, 2, 3, 3, 3));
+        Assert.assertEquals(DoubleHashBag.newBagWith(1.0d, 2.0d, 2.0d, 3.0d, 3.0d, 3.0d),
+                integers.collectDouble(PrimitiveFunctions.unboxIntegerToDouble()));
+    }
+
+    @Override
+    @Test
+    public void collectFloat()
+    {
+        MutableBag<Integer> integers = UnmodifiableBag.of(HashBag.newBagWith(1, 2, 2, 3, 3, 3));
+        Assert.assertEquals(FloatHashBag.newBagWith(1.0f, 2.0f, 2.0f, 3.0f, 3.0f, 3.0f),
+                integers.collectFloat(PrimitiveFunctions.unboxIntegerToFloat()));
+    }
+
+    @Override
+    @Test
+    public void collectInt()
+    {
+        MutableBag<Integer> integers = UnmodifiableBag.of(HashBag.newBagWith(1, 2, 2, 3, 3, 3));
+        Assert.assertEquals(IntHashBag.newBagWith(1, 2, 2, 3, 3, 3),
+                integers.collectInt(PrimitiveFunctions.unboxIntegerToInt()));
+    }
+
+    @Override
+    @Test
+    public void collectLong()
+    {
+        MutableBag<Integer> integers = UnmodifiableBag.of(HashBag.newBagWith(1, 2, 2, 3, 3, 3));
+        Assert.assertEquals(LongHashBag.newBagWith(1L, 2L, 2L, 3L, 3L, 3L),
+                integers.collectLong(PrimitiveFunctions.unboxIntegerToLong()));
+    }
+
+    @Override
+    @Test
+    public void collectShort()
+    {
+        MutableBag<Integer> integers = UnmodifiableBag.of(HashBag.newBagWith(1, 2, 2, 3, 3, 3));
+        Assert.assertEquals(ShortHashBag.newBagWith((short) 1, (short) 2, (short) 2, (short) 3, (short) 3, (short) 3),
+                integers.collectShort(PrimitiveFunctions.unboxIntegerToShort()));
     }
 }

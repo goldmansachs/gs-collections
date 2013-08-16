@@ -27,15 +27,31 @@ import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.MutableBooleanList;
+import com.gs.collections.api.list.primitive.MutableByteList;
+import com.gs.collections.api.list.primitive.MutableCharList;
+import com.gs.collections.api.list.primitive.MutableDoubleList;
+import com.gs.collections.api.list.primitive.MutableFloatList;
+import com.gs.collections.api.list.primitive.MutableIntList;
+import com.gs.collections.api.list.primitive.MutableLongList;
+import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
@@ -51,6 +67,14 @@ import com.gs.collections.impl.block.procedure.MaxComparatorProcedure;
 import com.gs.collections.impl.block.procedure.MinComparatorProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
+import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
+import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
+import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
+import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
+import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.partition.list.PartitionFastList;
@@ -566,6 +590,158 @@ public final class ArrayIterate
             targetCollection.add(function.valueOf(each));
         }
         return targetCollection;
+    }
+
+    /**
+     * @see Iterate#collectBoolean(Iterable, BooleanFunction)
+     */
+    public static <T> MutableBooleanList collectBoolean(
+            T[] objectArray,
+            BooleanFunction<? super T> booleanFunction)
+    {
+        if (objectArray == null)
+        {
+            throw new IllegalArgumentException("Cannot perform a collectBoolean on null");
+        }
+        MutableBooleanList result = new BooleanArrayList(objectArray.length);
+        for (T each : objectArray)
+        {
+            result.add(booleanFunction.booleanValueOf(each));
+        }
+        return result;
+    }
+
+    /**
+     * @see Iterate#collectByte(Iterable, ByteFunction)
+     */
+    public static <T> MutableByteList collectByte(
+            T[] objectArray,
+            ByteFunction<? super T> byteFunction)
+    {
+        if (objectArray == null)
+        {
+            throw new IllegalArgumentException("Cannot perform a collectByte on null");
+        }
+        MutableByteList result = new ByteArrayList(objectArray.length);
+        for (T each : objectArray)
+        {
+            result.add(byteFunction.byteValueOf(each));
+        }
+        return result;
+    }
+
+    /**
+     * @see Iterate#collectChar(Iterable, CharFunction)
+     */
+    public static <T> MutableCharList collectChar(
+            T[] objectArray,
+            CharFunction<? super T> charFunction)
+    {
+        if (objectArray == null)
+        {
+            throw new IllegalArgumentException("Cannot perform a collectChar on null");
+        }
+        MutableCharList result = new CharArrayList(objectArray.length);
+        for (T each : objectArray)
+        {
+            result.add(charFunction.charValueOf(each));
+        }
+        return result;
+    }
+
+    /**
+     * @see Iterate#collectDouble(Iterable, DoubleFunction)
+     */
+    public static <T> MutableDoubleList collectDouble(
+            T[] objectArray,
+            DoubleFunction<? super T> doubleFunction)
+    {
+        if (objectArray == null)
+        {
+            throw new IllegalArgumentException("Cannot perform a collectDouble on null");
+        }
+        MutableDoubleList result = new DoubleArrayList(objectArray.length);
+        for (T each : objectArray)
+        {
+            result.add(doubleFunction.doubleValueOf(each));
+        }
+        return result;
+    }
+
+    /**
+     * @see Iterate#collectFloat(Iterable, FloatFunction)
+     */
+    public static <T> MutableFloatList collectFloat(
+            T[] objectArray,
+            FloatFunction<? super T> floatFunction)
+    {
+        if (objectArray == null)
+        {
+            throw new IllegalArgumentException("Cannot perform a collectFloat on null");
+        }
+        MutableFloatList result = new FloatArrayList(objectArray.length);
+        for (T each : objectArray)
+        {
+            result.add(floatFunction.floatValueOf(each));
+        }
+        return result;
+    }
+
+    /**
+     * @see Iterate#collectInt(Iterable, IntFunction)
+     */
+    public static <T> MutableIntList collectInt(
+            T[] objectArray,
+            IntFunction<? super T> intFunction)
+    {
+        if (objectArray == null)
+        {
+            throw new IllegalArgumentException("Cannot perform a collectInt on null");
+        }
+        MutableIntList result = new IntArrayList(objectArray.length);
+        for (T each : objectArray)
+        {
+            result.add(intFunction.intValueOf(each));
+        }
+        return result;
+    }
+
+    /**
+     * @see Iterate#collectLong(Iterable, LongFunction)
+     */
+    public static <T> MutableLongList collectLong(
+            T[] objectArray,
+            LongFunction<? super T> longFunction)
+    {
+        if (objectArray == null)
+        {
+            throw new IllegalArgumentException("Cannot perform a collectLong on null");
+        }
+        MutableLongList result = new LongArrayList(objectArray.length);
+        for (T each : objectArray)
+        {
+            result.add(longFunction.longValueOf(each));
+        }
+        return result;
+    }
+
+    /**
+     * @see Iterate#collectShort(Iterable, ShortFunction)
+     */
+    public static <T> MutableShortList collectShort(
+            T[] objectArray,
+            ShortFunction<? super T> shortFunction)
+    {
+        if (objectArray == null)
+        {
+            throw new IllegalArgumentException("Cannot perform a collectShort on null");
+        }
+        MutableShortList result = new ShortArrayList(objectArray.length);
+        for (T each : objectArray)
+        {
+            result.add(shortFunction.shortValueOf(each));
+        }
+        return result;
     }
 
     /**

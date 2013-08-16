@@ -23,10 +23,12 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.set.primitive.ImmutableBooleanSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
@@ -301,5 +303,14 @@ public abstract class AbstractImmutableEmptySetTestCase extends AbstractImmutabl
         Assert.assertEquals(
                 UnifiedSet.newSetWith(999),
                 this.classUnderTest().symmetricDifferenceInto(UnifiedSet.newSetWith(999), UnifiedSet.<Integer>newSet()));
+    }
+
+    @Override
+    @Test
+    public void collectBoolean()
+    {
+        ImmutableSet<Integer> integers = this.classUnderTest();
+        ImmutableBooleanSet actual = integers.collectBoolean(PrimitiveFunctions.integerIsPositive());
+        Verify.assertEmpty(actual);
     }
 }

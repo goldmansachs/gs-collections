@@ -17,9 +17,25 @@
 package com.gs.collections.api.stack;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.multimap.list.ImmutableListMultimap;
 import com.gs.collections.api.partition.stack.PartitionImmutableStack;
+import com.gs.collections.api.stack.primitive.ImmutableBooleanStack;
+import com.gs.collections.api.stack.primitive.ImmutableByteStack;
+import com.gs.collections.api.stack.primitive.ImmutableCharStack;
+import com.gs.collections.api.stack.primitive.ImmutableDoubleStack;
+import com.gs.collections.api.stack.primitive.ImmutableFloatStack;
+import com.gs.collections.api.stack.primitive.ImmutableIntStack;
+import com.gs.collections.api.stack.primitive.ImmutableLongStack;
+import com.gs.collections.api.stack.primitive.ImmutableShortStack;
 import com.gs.collections.api.tuple.Pair;
 
 public interface ImmutableStack<T> extends StackIterable<T>
@@ -37,6 +53,22 @@ public interface ImmutableStack<T> extends StackIterable<T>
     PartitionImmutableStack<T> partition(Predicate<? super T> predicate);
 
     <V> ImmutableStack<V> collect(Function<? super T, ? extends V> function);
+
+    ImmutableBooleanStack collectBoolean(BooleanFunction<? super T> booleanFunction);
+
+    ImmutableByteStack collectByte(ByteFunction<? super T> byteFunction);
+
+    ImmutableCharStack collectChar(CharFunction<? super T> charFunction);
+
+    ImmutableDoubleStack collectDouble(DoubleFunction<? super T> doubleFunction);
+
+    ImmutableFloatStack collectFloat(FloatFunction<? super T> floatFunction);
+
+    ImmutableIntStack collectInt(IntFunction<? super T> intFunction);
+
+    ImmutableLongStack collectLong(LongFunction<? super T> longFunction);
+
+    ImmutableShortStack collectShort(ShortFunction<? super T> shortFunction);
 
     <V> ImmutableStack<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 

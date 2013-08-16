@@ -24,10 +24,26 @@ import java.util.SortedMap;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.ImmutableList;
+import com.gs.collections.api.list.primitive.ImmutableBooleanList;
+import com.gs.collections.api.list.primitive.ImmutableByteList;
+import com.gs.collections.api.list.primitive.ImmutableCharList;
+import com.gs.collections.api.list.primitive.ImmutableDoubleList;
+import com.gs.collections.api.list.primitive.ImmutableFloatList;
+import com.gs.collections.api.list.primitive.ImmutableIntList;
+import com.gs.collections.api.list.primitive.ImmutableLongList;
+import com.gs.collections.api.list.primitive.ImmutableShortList;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.ImmutableSortedMap;
@@ -41,7 +57,23 @@ import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectBooleanProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectByteProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectCharProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectDoubleProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectFloatProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectIntProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectLongProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectShortProcedure;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
+import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
+import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
+import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
+import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
+import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.map.AbstractMapIterable;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
@@ -189,6 +221,70 @@ public abstract class AbstractImmutableSortedMap<K, V>
     public <R> ImmutableList<R> collect(Function<? super V, ? extends R> function)
     {
         return this.collect(function, FastList.<R>newList(this.size())).toImmutable();
+    }
+
+    @Override
+    public ImmutableBooleanList collectBoolean(BooleanFunction<? super V> booleanFunction)
+    {
+        BooleanArrayList result = new BooleanArrayList(this.size());
+        this.forEach(new CollectBooleanProcedure<V>(booleanFunction, result));
+        return result.toImmutable();
+    }
+
+    @Override
+    public ImmutableByteList collectByte(ByteFunction<? super V> byteFunction)
+    {
+        ByteArrayList result = new ByteArrayList(this.size());
+        this.forEach(new CollectByteProcedure<V>(byteFunction, result));
+        return result.toImmutable();
+    }
+
+    @Override
+    public ImmutableCharList collectChar(CharFunction<? super V> charFunction)
+    {
+        CharArrayList result = new CharArrayList(this.size());
+        this.forEach(new CollectCharProcedure<V>(charFunction, result));
+        return result.toImmutable();
+    }
+
+    @Override
+    public ImmutableDoubleList collectDouble(DoubleFunction<? super V> doubleFunction)
+    {
+        DoubleArrayList result = new DoubleArrayList(this.size());
+        this.forEach(new CollectDoubleProcedure<V>(doubleFunction, result));
+        return result.toImmutable();
+    }
+
+    @Override
+    public ImmutableFloatList collectFloat(FloatFunction<? super V> floatFunction)
+    {
+        FloatArrayList result = new FloatArrayList(this.size());
+        this.forEach(new CollectFloatProcedure<V>(floatFunction, result));
+        return result.toImmutable();
+    }
+
+    @Override
+    public ImmutableIntList collectInt(IntFunction<? super V> intFunction)
+    {
+        IntArrayList result = new IntArrayList(this.size());
+        this.forEach(new CollectIntProcedure<V>(intFunction, result));
+        return result.toImmutable();
+    }
+
+    @Override
+    public ImmutableLongList collectLong(LongFunction<? super V> longFunction)
+    {
+        LongArrayList result = new LongArrayList(this.size());
+        this.forEach(new CollectLongProcedure<V>(longFunction, result));
+        return result.toImmutable();
+    }
+
+    @Override
+    public ImmutableShortList collectShort(ShortFunction<? super V> shortFunction)
+    {
+        ShortArrayList result = new ShortArrayList(this.size());
+        this.forEach(new CollectShortProcedure<V>(shortFunction, result));
+        return result.toImmutable();
     }
 
     public <K2, V2> ImmutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function)

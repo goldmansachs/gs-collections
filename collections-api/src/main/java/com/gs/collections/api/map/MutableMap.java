@@ -22,10 +22,26 @@ import java.util.Map;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.api.tuple.Pair;
@@ -149,6 +165,22 @@ public interface MutableMap<K, V>
     MutableMap<K, V> reject(Predicate2<? super K, ? super V> predicate);
 
     <R> MutableCollection<R> collect(Function<? super V, ? extends R> function);
+
+    MutableBooleanCollection collectBoolean(BooleanFunction<? super V> booleanFunction);
+
+    MutableByteCollection collectByte(ByteFunction<? super V> byteFunction);
+
+    MutableCharCollection collectChar(CharFunction<? super V> charFunction);
+
+    MutableDoubleCollection collectDouble(DoubleFunction<? super V> doubleFunction);
+
+    MutableFloatCollection collectFloat(FloatFunction<? super V> floatFunction);
+
+    MutableIntCollection collectInt(IntFunction<? super V> intFunction);
+
+    MutableLongCollection collectLong(LongFunction<? super V> longFunction);
+
+    MutableShortCollection collectShort(ShortFunction<? super V> shortFunction);
 
     <R> MutableCollection<R> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function);
 

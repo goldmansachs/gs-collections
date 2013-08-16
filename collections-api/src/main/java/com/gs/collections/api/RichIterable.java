@@ -24,6 +24,9 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
@@ -32,6 +35,7 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure2;
@@ -303,6 +307,150 @@ public interface
      * @since 1.0
      */
     <V> RichIterable<V> collect(Function<? super T, ? extends V> function);
+
+    /**
+     * Returns a new primitive {@code boolean} iterable with the results of applying the specified function on each element
+     * of the source collection.  This method is also commonly called transform or map.
+     * <p/>
+     * <pre>e.g.
+     * return people.collectBoolean(new BooleanFunction&lt;Person&gt;()
+     * {
+     *     public boolean booleanValueOf(Person person)
+     *     {
+     *         return person.hasDrivingLicense();
+     *     }
+     * });
+     * </pre>
+     *
+     * @since 4.0
+     */
+    BooleanIterable collectBoolean(BooleanFunction<? super T> booleanFunction);
+
+    /**
+     * Returns a new primitive {@code byte} iterable with the results of applying the specified function on each element
+     * of the source collection.  This method is also commonly called transform or map.
+     * <p/>
+     * <pre>e.g.
+     * return people.collectByte(new ByteFunction&lt;Person&gt;()
+     * {
+     *     public byte byteValueOf(Person person)
+     *     {
+     *         return person.getCode();
+     *     }
+     * });
+     * </pre>
+     *
+     * @since 4.0
+     */
+    ByteIterable collectByte(ByteFunction<? super T> byteFunction);
+
+    /**
+     * Returns a new primitive {@code char} iterable with the results of applying the specified function on each element
+     * of the source collection.  This method is also commonly called transform or map.
+     * <p/>
+     * <pre>e.g.
+     * return people.collectChar(new CharFunction&lt;Person&gt;()
+     * {
+     *     public char charValueOf(Person person)
+     *     {
+     *         return person.getMiddleInitial();
+     *     }
+     * });
+     * </pre>
+     *
+     * @since 4.0
+     */
+    CharIterable collectChar(CharFunction<? super T> charFunction);
+
+    /**
+     * Returns a new primitive {@code double} iterable with the results of applying the specified function on each element
+     * of the source collection.  This method is also commonly called transform or map.
+     * <p/>
+     * <pre>e.g.
+     * return people.collectDouble(new DoubleFunction&lt;Person&gt;()
+     * {
+     *     public double doubleValueOf(Person person)
+     *     {
+     *         return person.getMilesFromNorthPole();
+     *     }
+     * });
+     * </pre>
+     *
+     * @since 4.0
+     */
+    DoubleIterable collectDouble(DoubleFunction<? super T> doubleFunction);
+
+    /**
+     * Returns a new primitive {@code float} iterable with the results of applying the specified function on each element
+     * of the source collection.  This method is also commonly called transform or map.
+     * <p/>
+     * <pre>e.g.
+     * return people.collectFloat(new FloatFunction&lt;Person&gt;()
+     * {
+     *     public float floatValueOf(Person person)
+     *     {
+     *         return person.getHeightInInches();
+     *     }
+     * });
+     * </pre>
+     *
+     * @since 4.0
+     */
+    FloatIterable collectFloat(FloatFunction<? super T> floatFunction);
+
+    /**
+     * Returns a new primitive {@code int} iterable with the results of applying the specified function on each element
+     * of the source collection.  This method is also commonly called transform or map.
+     * <p/>
+     * <pre>e.g.
+     * return people.collectInt(new IntFunction&lt;Person&gt;()
+     * {
+     *     public int intValueOf(Person person)
+     *     {
+     *         return person.getAge();
+     *     }
+     * });
+     * </pre>
+     *
+     * @since 4.0
+     */
+    IntIterable collectInt(IntFunction<? super T> intFunction);
+
+    /**
+     * Returns a new primitive {@code long} iterable with the results of applying the specified function on each element
+     * of the source collection.  This method is also commonly called transform or map.
+     * <p/>
+     * <pre>e.g.
+     * return people.collectLong(new LongFunction&lt;Person&gt;()
+     * {
+     *     public long longValueOf(Person person)
+     *     {
+     *         return person.getGuid();
+     *     }
+     * });
+     * </pre>
+     *
+     * @since 4.0
+     */
+    LongIterable collectLong(LongFunction<? super T> longFunction);
+
+    /**
+     * Returns a new primitive {@code short} iterable with the results of applying the specified function on each element
+     * of the source collection.  This method is also commonly called transform or map.
+     * <p/>
+     * <pre>e.g.
+     * return people.collectShort(new ShortFunction&lt;Person&gt;()
+     * {
+     *     public short shortValueOf(Person person)
+     *     {
+     *         return person.getNumberOfJunkMailItemsReceivedPerMonth();
+     *     }
+     * });
+     * </pre>
+     *
+     * @since 4.0
+     */
+    ShortIterable collectShort(ShortFunction<? super T> shortFunction);
 
     /**
      * Same as {@link #collect(Function)}, except that the results are gathered into the specified {@code target}

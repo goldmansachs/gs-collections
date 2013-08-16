@@ -21,10 +21,26 @@ import java.util.Map;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.ImmutableCollection;
+import com.gs.collections.api.collection.primitive.ImmutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.ImmutableByteCollection;
+import com.gs.collections.api.collection.primitive.ImmutableCharCollection;
+import com.gs.collections.api.collection.primitive.ImmutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.ImmutableFloatCollection;
+import com.gs.collections.api.collection.primitive.ImmutableIntCollection;
+import com.gs.collections.api.collection.primitive.ImmutableLongCollection;
+import com.gs.collections.api.collection.primitive.ImmutableShortCollection;
 import com.gs.collections.api.multimap.ImmutableMultimap;
 import com.gs.collections.api.partition.PartitionImmutableCollection;
 import com.gs.collections.api.tuple.Pair;
@@ -61,6 +77,22 @@ public interface ImmutableMap<K, V>
     MutableMap<K, V> toMap();
 
     <R> ImmutableCollection<R> collect(Function<? super V, ? extends R> function);
+
+    ImmutableBooleanCollection collectBoolean(BooleanFunction<? super V> booleanFunction);
+
+    ImmutableByteCollection collectByte(ByteFunction<? super V> byteFunction);
+
+    ImmutableCharCollection collectChar(CharFunction<? super V> charFunction);
+
+    ImmutableDoubleCollection collectDouble(DoubleFunction<? super V> doubleFunction);
+
+    ImmutableFloatCollection collectFloat(FloatFunction<? super V> floatFunction);
+
+    ImmutableIntCollection collectInt(IntFunction<? super V> intFunction);
+
+    ImmutableLongCollection collectLong(LongFunction<? super V> longFunction);
+
+    ImmutableShortCollection collectShort(ShortFunction<? super V> shortFunction);
 
     <R> ImmutableCollection<R> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function);
 

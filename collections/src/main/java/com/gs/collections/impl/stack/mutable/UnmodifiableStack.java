@@ -27,6 +27,9 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
@@ -35,6 +38,7 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -51,6 +55,14 @@ import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.stack.ImmutableStack;
 import com.gs.collections.api.stack.MutableStack;
+import com.gs.collections.api.stack.primitive.MutableBooleanStack;
+import com.gs.collections.api.stack.primitive.MutableByteStack;
+import com.gs.collections.api.stack.primitive.MutableCharStack;
+import com.gs.collections.api.stack.primitive.MutableDoubleStack;
+import com.gs.collections.api.stack.primitive.MutableFloatStack;
+import com.gs.collections.api.stack.primitive.MutableIntStack;
+import com.gs.collections.api.stack.primitive.MutableLongStack;
+import com.gs.collections.api.stack.primitive.MutableShortStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.UnmodifiableIteratorAdapter;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
@@ -135,6 +147,46 @@ public final class UnmodifiableStack<T> implements MutableStack<T>, Serializable
     public <V> MutableStack<V> collect(Function<? super T, ? extends V> function)
     {
         return this.mutableStack.collect(function);
+    }
+
+    public MutableBooleanStack collectBoolean(BooleanFunction<? super T> booleanFunction)
+    {
+        return this.mutableStack.collectBoolean(booleanFunction);
+    }
+
+    public MutableByteStack collectByte(ByteFunction<? super T> byteFunction)
+    {
+        return this.mutableStack.collectByte(byteFunction);
+    }
+
+    public MutableCharStack collectChar(CharFunction<? super T> charFunction)
+    {
+        return this.mutableStack.collectChar(charFunction);
+    }
+
+    public MutableDoubleStack collectDouble(DoubleFunction<? super T> doubleFunction)
+    {
+        return this.mutableStack.collectDouble(doubleFunction);
+    }
+
+    public MutableFloatStack collectFloat(FloatFunction<? super T> floatFunction)
+    {
+        return this.mutableStack.collectFloat(floatFunction);
+    }
+
+    public MutableIntStack collectInt(IntFunction<? super T> function)
+    {
+        return this.mutableStack.collectInt(function);
+    }
+
+    public MutableLongStack collectLong(LongFunction<? super T> longFunction)
+    {
+        return this.mutableStack.collectLong(longFunction);
+    }
+
+    public MutableShortStack collectShort(ShortFunction<? super T> shortFunction)
+    {
+        return this.mutableStack.collectShort(shortFunction);
     }
 
     public <V> MutableStack<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)

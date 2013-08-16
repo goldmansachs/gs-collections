@@ -25,11 +25,27 @@ import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.MutableBooleanList;
+import com.gs.collections.api.list.primitive.MutableByteList;
+import com.gs.collections.api.list.primitive.MutableCharList;
+import com.gs.collections.api.list.primitive.MutableDoubleList;
+import com.gs.collections.api.list.primitive.MutableFloatList;
+import com.gs.collections.api.list.primitive.MutableIntList;
+import com.gs.collections.api.list.primitive.MutableLongList;
+import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.ImmutableSortedMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
@@ -394,6 +410,78 @@ public class SynchronizedSortedMap<K, V>
         synchronized (this.lock)
         {
             return this.getSortedMap().collect(function);
+        }
+    }
+
+    @Override
+    public MutableBooleanList collectBoolean(BooleanFunction<? super V> booleanFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.getSortedMap().collectBoolean(booleanFunction);
+        }
+    }
+
+    @Override
+    public MutableByteList collectByte(ByteFunction<? super V> byteFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.getSortedMap().collectByte(byteFunction);
+        }
+    }
+
+    @Override
+    public MutableCharList collectChar(CharFunction<? super V> charFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.getSortedMap().collectChar(charFunction);
+        }
+    }
+
+    @Override
+    public MutableDoubleList collectDouble(DoubleFunction<? super V> doubleFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.getSortedMap().collectDouble(doubleFunction);
+        }
+    }
+
+    @Override
+    public MutableFloatList collectFloat(FloatFunction<? super V> floatFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.getSortedMap().collectFloat(floatFunction);
+        }
+    }
+
+    @Override
+    public MutableIntList collectInt(IntFunction<? super V> intFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.getSortedMap().collectInt(intFunction);
+        }
+    }
+
+    @Override
+    public MutableLongList collectLong(LongFunction<? super V> longFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.getSortedMap().collectLong(longFunction);
+        }
+    }
+
+    @Override
+    public MutableShortList collectShort(ShortFunction<? super V> shortFunction)
+    {
+        synchronized (this.lock)
+        {
+            return this.getSortedMap().collectShort(shortFunction);
         }
     }
 

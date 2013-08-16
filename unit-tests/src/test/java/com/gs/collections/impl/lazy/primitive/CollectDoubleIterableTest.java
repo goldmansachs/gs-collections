@@ -99,6 +99,13 @@ public class CollectDoubleIterableTest
     }
 
     @Test
+    public void noneSatisfy()
+    {
+        Assert.assertFalse(this.doubleIterable.noneSatisfy(DoublePredicates.greaterThan(2.0d)));
+        Assert.assertTrue(this.doubleIterable.noneSatisfy(DoublePredicates.greaterThan(4.0d)));
+    }
+
+    @Test
     public void allSatisfy()
     {
         Assert.assertTrue(this.doubleIterable.allSatisfy(DoublePredicates.lessThan(4.0d)));
@@ -198,13 +205,15 @@ public class CollectDoubleIterableTest
     @Test
     public void toArray()
     {
-        Assert.assertArrayEquals(new double[]{1.0d, 2.0d, 3.0d, 4.0d}, Interval.oneTo(4).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).toArray(), 0.0d);
+        Assert.assertArrayEquals(new double[]{1.0d, 2.0d, 3.0d, 4.0d},
+                Interval.oneTo(4).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).toArray(), 0.0d);
     }
 
     @Test
     public void toSortedArray()
     {
-        Assert.assertArrayEquals(new double[]{1.0d, 2.0d, 3.0d, 4.0d}, Interval.fromTo(4, 1).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).toSortedArray(), 0.0d);
+        Assert.assertArrayEquals(new double[]{1.0d, 2.0d, 3.0d, 4.0d},
+                Interval.fromTo(4, 1).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).toSortedArray(), 0.0d);
     }
 
     @Test

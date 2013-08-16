@@ -41,6 +41,7 @@ import com.gs.collections.impl.block.factory.Functions2;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
+import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.block.function.MaxSizeFunction;
 import com.gs.collections.impl.block.function.MinSizeFunction;
@@ -49,6 +50,14 @@ import com.gs.collections.impl.block.procedure.MapPutProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
+import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
+import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
+import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
+import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
+import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.test.Verify;
@@ -367,6 +376,78 @@ public class ArrayIterateTest
         Assert.assertEquals(
                 iList("true", "false", "null"),
                 ArrayIterate.collect(objectArray, Functions.getToString()));
+    }
+
+    @Test
+    public void collectBoolean()
+    {
+        Integer[] objectArray = {-1, 0, 42};
+        Assert.assertEquals(
+                BooleanArrayList.newListWith(false, false, true),
+                ArrayIterate.collectBoolean(objectArray, PrimitiveFunctions.integerIsPositive()));
+    }
+
+    @Test
+    public void collectByte()
+    {
+        Integer[] objectArray = {-1, 0, 42};
+        Assert.assertEquals(
+                ByteArrayList.newListWith((byte) -1, (byte) 0, (byte) 42),
+                ArrayIterate.collectByte(objectArray, PrimitiveFunctions.unboxIntegerToByte()));
+    }
+
+    @Test
+    public void collectChar()
+    {
+        Integer[] objectArray = {-1, 0, 42};
+        Assert.assertEquals(
+                CharArrayList.newListWith((char) -1, (char) 0, (char) 42),
+                ArrayIterate.collectChar(objectArray, PrimitiveFunctions.unboxIntegerToChar()));
+    }
+
+    @Test
+    public void collectDouble()
+    {
+        Integer[] objectArray = {-1, 0, 42};
+        Assert.assertEquals(
+                DoubleArrayList.newListWith(-1.0d, 0.0d, 42.0d),
+                ArrayIterate.collectDouble(objectArray, PrimitiveFunctions.unboxIntegerToDouble()));
+    }
+
+    @Test
+    public void collectFloat()
+    {
+        Integer[] objectArray = {-1, 0, 42};
+        Assert.assertEquals(
+                FloatArrayList.newListWith(-1.0f, 0.0f, 42.0f),
+                ArrayIterate.collectFloat(objectArray, PrimitiveFunctions.unboxIntegerToFloat()));
+    }
+
+    @Test
+    public void collectInt()
+    {
+        Integer[] objectArray = {-1, 0, 42};
+        Assert.assertEquals(
+                IntArrayList.newListWith(-1, 0, 42),
+                ArrayIterate.collectInt(objectArray, PrimitiveFunctions.unboxIntegerToInt()));
+    }
+
+    @Test
+    public void collectLong()
+    {
+        Integer[] objectArray = {-1, 0, 42};
+        Assert.assertEquals(
+                LongArrayList.newListWith(-1L, 0L, 42L),
+                ArrayIterate.collectLong(objectArray, PrimitiveFunctions.unboxIntegerToLong()));
+    }
+
+    @Test
+    public void collectShort()
+    {
+        Integer[] objectArray = {-1, 0, 42};
+        Assert.assertEquals(
+                ShortArrayList.newListWith((short) -1, (short) 0, (short) 42),
+                ArrayIterate.collectShort(objectArray, PrimitiveFunctions.unboxIntegerToShort()));
     }
 
     @Test
