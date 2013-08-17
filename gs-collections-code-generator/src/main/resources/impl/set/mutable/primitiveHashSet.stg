@@ -1025,6 +1025,10 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         {
             return <name>Sets.immutable.with();
         }
+        if (this.size() == 1)
+        {
+            return <name>Sets.immutable.with(this.<type>Iterator().next());
+        }
         this.copyOnWrite = true;
         return new Immutable<name>HashSet(this.table, this.occupied, this.zeroToThirtyOne, this.zeroToThirtyOneOccupied);
     }

@@ -1,0 +1,59 @@
+import "copyright.stg"
+import "primitiveLiteral.stg"
+
+isTest() ::= "true"
+
+skipBoolean() ::= "true"
+
+targetPath() ::= "com/gs/collections/impl/set/immutable/primitive"
+
+fileName(primitive) ::= "Immutable<primitive.name>HashSetTest"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.wrapperName, primitive.name)>
+>>
+
+body(type, wrapperName, name) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.set.immutable.primitive;
+
+import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.set.primitive.Immutable<name>Set;
+import com.gs.collections.api.set.primitive.Mutable<name>Set;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.impl.set.mutable.primitive.AbstractImmutable<name>HashSetTestCase;
+import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
+
+/**
+ * JUnit test for {@link Immutable<name>Set}.
+ * This file was automatically generated from template file immutablePrimitiveSetTest.stg.
+ */
+public class Immutable<name>HashSetTest extends AbstractImmutable<name>HashSetTestCase
+{
+    @Override
+    protected Immutable<name>Set classUnderTest()
+    {
+        return <name>HashSet.newSetWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">).toImmutable();
+    }
+
+    @Override
+    protected Immutable<name>Set newWith(<type>... elements)
+    {
+        return <name>HashSet.newSetWith(elements).toImmutable();
+    }
+
+    @Override
+    protected Mutable<name>Set newMutableCollectionWith(<type>... elements)
+    {
+        return <name>HashSet.newSetWith(elements);
+    }
+
+    @Override
+    protected MutableSet\<<wrapperName>\> newObjectCollectionWith(<wrapperName>... elements)
+    {
+        return UnifiedSet.newSetWith(elements);
+    }
+}
+
+>>
