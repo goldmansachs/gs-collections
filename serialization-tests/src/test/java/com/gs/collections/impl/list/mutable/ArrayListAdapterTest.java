@@ -24,11 +24,23 @@ public class ArrayListAdapterTest
     @Test
     public void serializedForm()
     {
-        Verify.assertSerializedForm(
-                1L,
-                "rO0ABXNyADVjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5saXN0Lm11dGFibGUuQXJyYXlMaXN0QWRh\n"
-                        + "cHRlcgAAAAAAAAABAgABTAAIZGVsZWdhdGV0ABVMamF2YS91dGlsL0FycmF5TGlzdDt4cHNyABNq\n"
-                        + "YXZhLnV0aWwuQXJyYXlMaXN0eIHSHZnHYZ0DAAFJAARzaXpleHAAAAAAdwQAAAAKeA==",
-                ArrayListAdapter.newList());
+        if (System.getProperty("java.version").startsWith("1.8."))
+        {
+            Verify.assertSerializedForm(
+                    1L,
+                    "rO0ABXNyADVjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5saXN0Lm11dGFibGUuQXJyYXlMaXN0QWRh\n"
+                            + "cHRlcgAAAAAAAAABAgABTAAIZGVsZWdhdGV0ABVMamF2YS91dGlsL0FycmF5TGlzdDt4cHNyABNq\n"
+                            + "YXZhLnV0aWwuQXJyYXlMaXN0eIHSHZnHYZ0DAAFJAARzaXpleHAAAAAAdwQAAAAAeA==",
+                    ArrayListAdapter.newList());
+        }
+        else
+        {
+            Verify.assertSerializedForm(
+                    1L,
+                    "rO0ABXNyADVjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5saXN0Lm11dGFibGUuQXJyYXlMaXN0QWRh\n"
+                            + "cHRlcgAAAAAAAAABAgABTAAIZGVsZWdhdGV0ABVMamF2YS91dGlsL0FycmF5TGlzdDt4cHNyABNq\n"
+                            + "YXZhLnV0aWwuQXJyYXlMaXN0eIHSHZnHYZ0DAAFJAARzaXpleHAAAAAAdwQAAAAKeA==",
+                    ArrayListAdapter.newList());
+        }
     }
 }

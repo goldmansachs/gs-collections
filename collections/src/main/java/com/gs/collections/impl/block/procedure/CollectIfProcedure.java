@@ -16,12 +16,12 @@
 
 package com.gs.collections.impl.block.procedure;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.impl.list.mutable.FastList;
 
 public final class CollectIfProcedure<T, V>
         implements Procedure<T>
@@ -34,7 +34,7 @@ public final class CollectIfProcedure<T, V>
     public CollectIfProcedure(int taskSize, Function<? super T, ? extends V> function,
             Predicate<? super T> predicate)
     {
-        this(new ArrayList<V>(taskSize), function, predicate);
+        this(FastList.<V>newList(taskSize), function, predicate);
     }
 
     public CollectIfProcedure(Collection<V> targetCollection, Function<? super T, ? extends V> function,
