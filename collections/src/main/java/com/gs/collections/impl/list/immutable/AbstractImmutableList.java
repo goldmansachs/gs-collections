@@ -160,21 +160,21 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
     public ImmutableList<T> newWithout(T element)
     {
         int indexToRemove = this.indexOf(element);
-        if (indexToRemove > 0)
+        if (indexToRemove < 0)
         {
-            T[] results = (T[]) new Object[this.size() - 1];
-            int currentIndex = 0;
-            for (int i = 0; i < this.size(); i++)
-            {
-                T item = this.get(i);
-                if (i != indexToRemove)
-                {
-                    results[currentIndex++] = item;
-                }
-            }
-            return Lists.immutable.of(results);
+            return this;
         }
-        return this;
+        T[] results = (T[]) new Object[this.size() - 1];
+        int currentIndex = 0;
+        for (int i = 0; i < this.size(); i++)
+        {
+            T item = this.get(i);
+            if (i != indexToRemove)
+            {
+                results[currentIndex++] = item;
+            }
+        }
+        return Lists.immutable.of(results);
     }
 
     public ImmutableList<T> newWithAll(Iterable<? extends T> elements)

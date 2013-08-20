@@ -84,9 +84,13 @@ public class ImmutableArrayListTest
     public void newWithOut()
     {
         ImmutableList<Integer> list = this.newList(1, 2, 3, 4);
-        ImmutableList<Integer> without = list.newWithout(4);
-        Assert.assertNotEquals(list, without);
-        Assert.assertEquals(FastList.newListWith(1, 2, 3), without);
+        ImmutableList<Integer> without4 = list.newWithout(4);
+        Assert.assertNotEquals(list, without4);
+        Assert.assertEquals(FastList.newListWith(1, 2, 3), without4);
+
+        ImmutableList<Integer> without1 = list.newWithout(1);
+        Assert.assertNotEquals(list, without1);
+        Assert.assertEquals(FastList.newListWith(2, 3, 4), without1);
     }
 
     @Test
