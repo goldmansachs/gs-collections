@@ -47,6 +47,7 @@ import net.jcip.annotations.Immutable;
 public class ImmutableUnifiedMapWithHashingStrategy<K, V>
         extends AbstractImmutableMap<K, V> implements BatchIterable<V>, Serializable
 {
+    private static final long serialVersionUID = 1L;
     private final UnifiedMapWithHashingStrategy<K, V> delegate;
 
     public ImmutableUnifiedMapWithHashingStrategy(UnifiedMapWithHashingStrategy<K, V> delegate)
@@ -250,8 +251,8 @@ public class ImmutableUnifiedMapWithHashingStrategy<K, V>
         return result.toImmutable();
     }
 
-    private Object writeReplace()
+    protected Object writeReplace()
     {
-        return new ImmutableMapSerializationProxy<K, V>(this);
+        return new ImmutableMapWithHashingStrategySerializationProxy<K, V>(this, this.delegate.hashingStrategy());
     }
 }

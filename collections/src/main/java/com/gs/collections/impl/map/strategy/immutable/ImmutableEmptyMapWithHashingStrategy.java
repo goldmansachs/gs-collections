@@ -225,6 +225,6 @@ final class ImmutableEmptyMapWithHashingStrategy<K, V>
 
     private Object writeReplace()
     {
-        return new ImmutableMapSerializationProxy<K, V>(this);
+        return new ImmutableMapWithHashingStrategySerializationProxy<K, V>(this, this.hashingStrategy);
     }
 }
