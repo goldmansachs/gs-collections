@@ -18,6 +18,7 @@ package com.gs.collections.impl.block.function;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.impl.block.factory.StringFunctions;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -41,6 +42,13 @@ public final class StringFunctionsTest
         Assert.assertEquals("lower", function.valueOf("Lower"));
         Assert.assertEquals("lower", function.valueOf("lower"));
         Assert.assertSame("lower", function.valueOf("lower"));
+    }
+
+    @Test
+    public void toInteger()
+    {
+        Assert.assertEquals(-42L, StringFunctions.toInteger().valueOf("-42").longValue());
+        Verify.assertInstanceOf(Integer.class, StringFunctions.toInteger().valueOf("10"));
     }
 
     @Test
@@ -103,9 +111,15 @@ public final class StringFunctionsTest
     }
 
     @Test
-    public void toPrimitiveChar()
+    public void toFirstChar()
     {
         Assert.assertEquals('X', StringFunctions.toFirstChar().charValueOf("X-ray"));
+    }
+
+    @Test
+    public void toPrimitiveChar()
+    {
+        Assert.assertEquals('A', StringFunctions.toPrimitiveChar().charValueOf("65"));
     }
 
     @Test(expected = StringIndexOutOfBoundsException.class)

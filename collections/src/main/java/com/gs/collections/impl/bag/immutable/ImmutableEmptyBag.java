@@ -70,19 +70,19 @@ import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.EmptyIterator;
 import com.gs.collections.impl.bag.mutable.HashBag;
-import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
-import com.gs.collections.impl.bag.mutable.primitive.ByteHashBag;
-import com.gs.collections.impl.bag.mutable.primitive.CharHashBag;
-import com.gs.collections.impl.bag.mutable.primitive.DoubleHashBag;
-import com.gs.collections.impl.bag.mutable.primitive.FloatHashBag;
-import com.gs.collections.impl.bag.mutable.primitive.IntHashBag;
-import com.gs.collections.impl.bag.mutable.primitive.LongHashBag;
-import com.gs.collections.impl.bag.mutable.primitive.ShortHashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.factory.Stacks;
+import com.gs.collections.impl.factory.primitive.BooleanBags;
+import com.gs.collections.impl.factory.primitive.ByteBags;
+import com.gs.collections.impl.factory.primitive.CharBags;
+import com.gs.collections.impl.factory.primitive.DoubleBags;
+import com.gs.collections.impl.factory.primitive.FloatBags;
+import com.gs.collections.impl.factory.primitive.IntBags;
+import com.gs.collections.impl.factory.primitive.LongBags;
+import com.gs.collections.impl.factory.primitive.ShortBags;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
@@ -292,50 +292,42 @@ final class ImmutableEmptyBag<T>
 
     public ImmutableBooleanBag collectBoolean(BooleanFunction<? super T> booleanFunction)
     {
-        // TODO Optimize to not generate garbage
-        return new BooleanHashBag().toImmutable();
+        return BooleanBags.immutable.of();
     }
 
     public ImmutableByteBag collectByte(ByteFunction<? super T> byteFunction)
     {
-        // TODO Optimize to not generate garbage
-        return new ByteHashBag().toImmutable();
+        return ByteBags.immutable.of();
     }
 
     public ImmutableCharBag collectChar(CharFunction<? super T> charFunction)
     {
-        // TODO Optimize to not generate garbage
-        return new CharHashBag().toImmutable();
+        return CharBags.immutable.of();
     }
 
     public ImmutableDoubleBag collectDouble(DoubleFunction<? super T> doubleFunction)
     {
-        // TODO Optimize to not generate garbage
-        return new DoubleHashBag().toImmutable();
+        return DoubleBags.immutable.of();
     }
 
     public ImmutableFloatBag collectFloat(FloatFunction<? super T> floatFunction)
     {
-        // TODO Optimize to not generate garbage
-        return new FloatHashBag().toImmutable();
+        return FloatBags.immutable.of();
     }
 
     public ImmutableIntBag collectInt(IntFunction<? super T> function)
     {
-        // TODO Optimize to not generate garbage
-        return new IntHashBag().toImmutable();
+        return IntBags.immutable.of();
     }
 
     public ImmutableLongBag collectLong(LongFunction<? super T> longFunction)
     {
-        // TODO Optimize to not generate garbage
-        return new LongHashBag().toImmutable();
+        return LongBags.immutable.of();
     }
 
     public ImmutableShortBag collectShort(ShortFunction<? super T> shortFunction)
     {
-        // TODO Optimize to not generate garbage
-        return new ShortHashBag().toImmutable();
+        return ShortBags.immutable.of();
     }
 
     public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)

@@ -27,7 +27,14 @@ import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
 import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
@@ -38,12 +45,20 @@ import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
-import com.gs.collections.impl.block.factory.StringFunctions;
+import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.StringPredicates;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
+import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
+import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
+import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
+import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
@@ -101,11 +116,6 @@ public class UnmodifiableMutableCollectionTest
                 this.unmodifiableCollection.collect(Functions.getStringPassThru(),
                         FastList.<String>newList()));
 
-        MutableIntCollection intLengths = this.mutableCollection.collectInt(StringFunctions.length());
-        Assert.assertEquals(intLengths,
-                this.unmodifiableCollection.collectInt(StringFunctions.length()));
-        Assert.assertEquals(IntArrayList.newListWith(9, 8, 6, 9), intLengths);
-
         Function<String, Collection<String>> flattenFunction = new Function<String, Collection<String>>()
         {
             public Collection<String> valueOf(String object)
@@ -140,6 +150,45 @@ public class UnmodifiableMutableCollectionTest
                 this.unmodifiableCollection.toSortedList(Collections.reverseOrder()));
         Verify.assertSize(4, this.unmodifiableCollection.toSet());
         Verify.assertSize(4, this.unmodifiableCollection.toMap(Functions.getStringPassThru(), Functions.getStringPassThru()));
+    }
+
+    @Test
+    public void delegatingCollectPrimitiveMethods()
+    {
+        MutableCollection<Integer> mutable = Interval.oneTo(4).toList();
+        MutableCollection<Integer> unmodifiable = new UnmodifiableMutableCollection<Integer>(mutable);
+
+        MutableBooleanCollection expectedBooleans = mutable.collectBoolean(PrimitiveFunctions.integerIsPositive());
+        Assert.assertEquals(expectedBooleans, unmodifiable.collectBoolean(PrimitiveFunctions.integerIsPositive()));
+        Assert.assertEquals(BooleanArrayList.newListWith(true, true, true, true), expectedBooleans);
+
+        MutableByteCollection expectedBytes = mutable.collectByte(PrimitiveFunctions.unboxIntegerToByte());
+        Assert.assertEquals(expectedBytes, unmodifiable.collectByte(PrimitiveFunctions.unboxIntegerToByte()));
+        Assert.assertEquals(ByteArrayList.newListWith((byte) 1, (byte) 2, (byte) 3, (byte) 4), expectedBytes);
+
+        MutableCharCollection expectedChars = mutable.collectChar(PrimitiveFunctions.unboxIntegerToChar());
+        Assert.assertEquals(expectedChars, unmodifiable.collectChar(PrimitiveFunctions.unboxIntegerToChar()));
+        Assert.assertEquals(CharArrayList.newListWith((char) 1, (char) 2, (char) 3, (char) 4), expectedChars);
+
+        MutableDoubleCollection expectedDoubles = mutable.collectDouble(PrimitiveFunctions.unboxIntegerToDouble());
+        Assert.assertEquals(expectedDoubles, unmodifiable.collectDouble(PrimitiveFunctions.unboxIntegerToDouble()));
+        Assert.assertEquals(DoubleArrayList.newListWith(1.0d, 2.0d, 3.0d, 4.0d), expectedDoubles);
+
+        MutableFloatCollection expectedFloats = mutable.collectFloat(PrimitiveFunctions.unboxIntegerToFloat());
+        Assert.assertEquals(expectedFloats, unmodifiable.collectFloat(PrimitiveFunctions.unboxIntegerToFloat()));
+        Assert.assertEquals(FloatArrayList.newListWith(1.0f, 2.0f, 3.0f, 4.0f), expectedFloats);
+
+        MutableIntCollection expectedInts = mutable.collectInt(PrimitiveFunctions.unboxIntegerToInt());
+        Assert.assertEquals(expectedInts, unmodifiable.collectInt(PrimitiveFunctions.unboxIntegerToInt()));
+        Assert.assertEquals(IntArrayList.newListWith(1, 2, 3, 4), expectedInts);
+
+        MutableLongCollection expectedLongs = mutable.collectLong(PrimitiveFunctions.unboxIntegerToLong());
+        Assert.assertEquals(expectedLongs, unmodifiable.collectLong(PrimitiveFunctions.unboxIntegerToLong()));
+        Assert.assertEquals(LongArrayList.newListWith(1L, 2L, 3L, 4L), expectedLongs);
+
+        MutableShortCollection expectedShorts = mutable.collectShort(PrimitiveFunctions.unboxIntegerToShort());
+        Assert.assertEquals(expectedShorts, unmodifiable.collectShort(PrimitiveFunctions.unboxIntegerToShort()));
+        Assert.assertEquals(ShortArrayList.newListWith((short) 1, (short) 2, (short) 3, (short) 4), expectedShorts);
     }
 
     @Test

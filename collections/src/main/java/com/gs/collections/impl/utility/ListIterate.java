@@ -28,6 +28,9 @@ import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
@@ -36,6 +39,7 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -44,6 +48,14 @@ import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.MutableBooleanList;
+import com.gs.collections.api.list.primitive.MutableByteList;
+import com.gs.collections.api.list.primitive.MutableCharList;
+import com.gs.collections.api.list.primitive.MutableDoubleList;
+import com.gs.collections.api.list.primitive.MutableFloatList;
+import com.gs.collections.api.list.primitive.MutableIntList;
+import com.gs.collections.api.list.primitive.MutableLongList;
+import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
@@ -274,6 +286,118 @@ public final class ListIterate
             return RandomAccessListIterate.collect(list, function, targetCollection);
         }
         return IterableIterate.collect(list, function, targetCollection);
+    }
+
+    /**
+     * @see Iterate#collectBoolean(Iterable, BooleanFunction)
+     */
+    public static <T> MutableBooleanList collectBoolean(
+            List<T> list,
+            BooleanFunction<? super T> booleanFunction)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.collectBoolean(list, booleanFunction);
+        }
+        return (MutableBooleanList) IterableIterate.collectBoolean(list, booleanFunction);
+    }
+
+    /**
+     * @see Iterate#collectByte(Iterable, ByteFunction)
+     */
+    public static <T> MutableByteList collectByte(
+            List<T> list,
+            ByteFunction<? super T> byteFunction)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.collectByte(list, byteFunction);
+        }
+        return (MutableByteList) IterableIterate.collectByte(list, byteFunction);
+    }
+
+    /**
+     * @see Iterate#collectChar(Iterable, CharFunction)
+     */
+    public static <T> MutableCharList collectChar(
+            List<T> list,
+            CharFunction<? super T> charFunction)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.collectChar(list, charFunction);
+        }
+        return (MutableCharList) IterableIterate.collectChar(list, charFunction);
+    }
+
+    /**
+     * @see Iterate#collectDouble(Iterable, DoubleFunction)
+     */
+    public static <T> MutableDoubleList collectDouble(
+            List<T> list,
+            DoubleFunction<? super T> doubleFunction)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.collectDouble(list, doubleFunction);
+        }
+        return (MutableDoubleList) IterableIterate.collectDouble(list, doubleFunction);
+    }
+
+    /**
+     * @see Iterate#collectFloat(Iterable, FloatFunction)
+     */
+    public static <T> MutableFloatList collectFloat(
+            List<T> list,
+            FloatFunction<? super T> floatFunction)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.collectFloat(list, floatFunction);
+        }
+        return (MutableFloatList) IterableIterate.collectFloat(list, floatFunction);
+    }
+
+    /**
+     * @see Iterate#collectInt(Iterable, IntFunction)
+     */
+    public static <T> MutableIntList collectInt(
+            List<T> list,
+            IntFunction<? super T> intFunction)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.collectInt(list, intFunction);
+        }
+        return (MutableIntList) IterableIterate.collectInt(list, intFunction);
+    }
+
+    /**
+     * @see Iterate#collectLong(Iterable, LongFunction)
+     */
+    public static <T> MutableLongList collectLong(
+            List<T> list,
+            LongFunction<? super T> longFunction)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.collectLong(list, longFunction);
+        }
+        return (MutableLongList) IterableIterate.collectLong(list, longFunction);
+    }
+
+    /**
+     * @see Iterate#collectShort(Iterable, ShortFunction)
+     */
+    public static <T> MutableShortList collectShort(
+            List<T> list,
+            ShortFunction<? super T> shortFunction)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.collectShort(list, shortFunction);
+        }
+        return (MutableShortList) IterableIterate.collectShort(list, shortFunction);
     }
 
     /**
