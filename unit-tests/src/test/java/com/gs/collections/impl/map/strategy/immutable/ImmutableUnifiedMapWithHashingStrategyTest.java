@@ -25,6 +25,8 @@ import com.gs.collections.impl.map.strategy.mutable.UnifiedMapWithHashingStrateg
 import com.gs.collections.impl.math.IntegerSum;
 import com.gs.collections.impl.math.Sum;
 import com.gs.collections.impl.parallel.BatchIterable;
+import com.gs.collections.impl.test.SerializeTestHelper;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -43,6 +45,15 @@ public class ImmutableUnifiedMapWithHashingStrategyTest extends ImmutableMapTest
             return object1.equals(object2);
         }
     });
+
+    @Override
+    @Test
+    public void equalsAndHashCode()
+    {
+        super.equalsAndHashCode();
+        ImmutableMap<Integer, String> deserialized = SerializeTestHelper.serializeDeserialize(this.classUnderTest());
+        Verify.assertInstanceOf(ImmutableUnifiedMapWithHashingStrategy.class, deserialized);
+    }
 
     @Override
     protected ImmutableMap<Integer, String> classUnderTest()
