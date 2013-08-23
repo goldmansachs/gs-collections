@@ -77,13 +77,13 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
         @Override
         public boolean equals(Object obj)
         {
-            throw new AssertionError();
+            throw new RuntimeException("Possible corruption through unsynchronized concurrent modification.");
         }
 
         @Override
         public int hashCode()
         {
-            throw new AssertionError();
+            throw new RuntimeException("Possible corruption through unsynchronized concurrent modification.");
         }
 
         @Override
@@ -98,19 +98,19 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
         @Override
         public boolean equals(Object obj)
         {
-            throw new AssertionError();
+            throw new RuntimeException("Possible corruption through unsynchronized concurrent modification.");
         }
 
         @Override
         public int hashCode()
         {
-            throw new AssertionError();
+            throw new RuntimeException("Possible corruption through unsynchronized concurrent modification.");
         }
 
         @Override
         public String toString()
         {
-            return "UnifiedMap.CHAINED_KEY";
+            return "UnifiedMapWithHashingStrategy.CHAINED_KEY";
         }
     };
 

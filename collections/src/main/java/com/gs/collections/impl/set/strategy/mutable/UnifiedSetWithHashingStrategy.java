@@ -137,13 +137,13 @@ public class UnifiedSetWithHashingStrategy<K>
         @Override
         public boolean equals(Object obj)
         {
-            throw new AssertionError();
+            throw new RuntimeException("Possible corruption through unsynchronized concurrent modification.");
         }
 
         @Override
         public int hashCode()
         {
-            throw new AssertionError();
+            throw new RuntimeException("Possible corruption through unsynchronized concurrent modification.");
         }
 
         @Override

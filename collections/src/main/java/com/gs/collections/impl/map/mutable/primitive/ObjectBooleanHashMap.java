@@ -64,13 +64,13 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         @Override
         public boolean equals(Object obj)
         {
-            throw new AssertionError();
+            throw new RuntimeException("Possible corruption through unsynchronized concurrent modification.");
         }
 
         @Override
         public int hashCode()
         {
-            throw new AssertionError();
+            throw new RuntimeException("Possible corruption through unsynchronized concurrent modification.");
         }
 
         @Override
@@ -84,13 +84,13 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         @Override
         public boolean equals(Object obj)
         {
-            throw new AssertionError();
+            throw new RuntimeException("Possible corruption through unsynchronized concurrent modification.");
         }
 
         @Override
         public int hashCode()
         {
-            throw new AssertionError();
+            throw new RuntimeException("Possible corruption through unsynchronized concurrent modification.");
         }
 
         @Override
