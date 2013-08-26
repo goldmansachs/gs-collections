@@ -92,6 +92,20 @@ public class UnmodifiableMutableCollection<T>
         this.collection = mutableCollection;
     }
 
+    /**
+     * This method will take a MutableCollection and wrap it directly in a UnmodifiableMutableCollection.  It will
+     * take any other non-GS-collection and first adapt it will a CollectionAdapter, and then return a
+     * UnmodifiableMutableCollection that wraps the adapter.
+     */
+    public static <E, C extends Collection<E>> UnmodifiableMutableCollection<E> of(C collection)
+    {
+        if (collection == null)
+        {
+            throw new IllegalArgumentException("cannot create a UnmodifiableMutableCollection for null");
+        }
+        return new UnmodifiableMutableCollection<E>(CollectionAdapter.adapt(collection));
+    }
+
     public int size()
     {
         return this.collection.size();
@@ -155,20 +169,6 @@ public class UnmodifiableMutableCollection<T>
     public void clear()
     {
         throw new UnsupportedOperationException("Cannot clear an UnmodifiableMutableCollection.");
-    }
-
-    /**
-     * This method will take a MutableCollection and wrap it directly in a UnmodifiableMutableCollection.  It will
-     * take any other non-GS-collection and first adapt it will a CollectionAdapter, and then return a
-     * UnmodifiableMutableCollection that wraps the adapter.
-     */
-    public static <E, C extends Collection<E>> UnmodifiableMutableCollection<E> of(C collection)
-    {
-        if (collection == null)
-        {
-            throw new IllegalArgumentException("cannot create a UnmodifiableMutableCollection for null");
-        }
-        return new UnmodifiableMutableCollection<E>(CollectionAdapter.adapt(collection));
     }
 
     protected MutableCollection<T> getMutableCollection()

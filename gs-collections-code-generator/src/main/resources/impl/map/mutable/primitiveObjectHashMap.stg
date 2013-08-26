@@ -39,9 +39,11 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -61,6 +63,7 @@ import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.<name>ObjectPredicate;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
@@ -77,6 +80,7 @@ import com.gs.collections.api.collection.primitive.MutableLongCollection;
 import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.primitive.<name>ObjectMap;
 import com.gs.collections.api.map.primitive.Immutable<name>ObjectMap;
@@ -85,10 +89,15 @@ import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.set.primitive.Immutable<name>Set;
+import com.gs.collections.api.set.primitive.<name>Set;
+import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions0;
+import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Procedures2;
 import com.gs.collections.impl.block.procedure.MapCollectProcedure;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
@@ -105,6 +114,9 @@ import com.gs.collections.impl.block.procedure.primitive.CollectLongProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectShortProcedure;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.factory.Sets;
+import com.gs.collections.impl.factory.primitive.<name>Sets;
+import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
@@ -119,6 +131,9 @@ import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.partition.list.PartitionFastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
+import com.gs.collections.impl.set.mutable.primitive.Synchronized<name>Set;
+import com.gs.collections.impl.set.mutable.primitive.Unmodifiable<name>Set;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.LazyIterate;
@@ -2424,6 +2439,816 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
             {
                 <name>ObjectHashMap.this.removeKey(this.currentKey);
             }
+        }
+    }
+
+    public Mutable<name>Set keySet()
+    {
+        return new KeySet();
+    }
+
+    private class KeySet implements Mutable<name>Set
+    {
+        public <name>Iterator <type>Iterator()
+        {
+            return new KeysSetIterator();
+        }
+
+        public void forEach(<name>Procedure procedure)
+        {
+            <name>ObjectHashMap.this.forEachKey(procedure);
+        }
+
+        public int count(<name>Predicate predicate)
+        {
+            int count = 0;
+            if (<name>ObjectHashMap.this.sentinelValues != null)
+            {
+                if (<name>ObjectHashMap.this.sentinelValues.containsZeroKey && predicate.accept(EMPTY))
+                {
+                    count++;
+                }
+                if (<name>ObjectHashMap.this.sentinelValues.containsOneKey && predicate.accept(REMOVED))
+                {
+                    count++;
+                }
+            }
+            for (<type> key : <name>ObjectHashMap.this.keys)
+            {
+                if (isNonSentinel(key) && predicate.accept(key))
+                {
+                    count++;
+                }
+            }
+            return count;
+        }
+
+        public boolean anySatisfy(<name>Predicate predicate)
+        {
+            if (<name>ObjectHashMap.this.sentinelValues != null)
+            {
+                if (<name>ObjectHashMap.this.sentinelValues.containsZeroKey && predicate.accept(EMPTY))
+                {
+                    return true;
+                }
+                if (<name>ObjectHashMap.this.sentinelValues.containsOneKey && predicate.accept(REMOVED))
+                {
+                    return true;
+                }
+            }
+            for (<type> key : <name>ObjectHashMap.this.keys)
+            {
+                if (isNonSentinel(key) && predicate.accept(key))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public boolean allSatisfy(<name>Predicate predicate)
+        {
+            if (<name>ObjectHashMap.this.sentinelValues != null)
+            {
+                if (<name>ObjectHashMap.this.sentinelValues.containsZeroKey && !predicate.accept(EMPTY))
+                {
+                    return false;
+                }
+                if (<name>ObjectHashMap.this.sentinelValues.containsOneKey && !predicate.accept(REMOVED))
+                {
+                    return false;
+                }
+            }
+            for (<type> key : <name>ObjectHashMap.this.keys)
+            {
+                if (isNonSentinel(key) && !predicate.accept(key))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public boolean noneSatisfy(<name>Predicate predicate)
+        {
+            if (<name>ObjectHashMap.this.sentinelValues != null)
+            {
+                if (<name>ObjectHashMap.this.sentinelValues.containsZeroKey && predicate.accept(EMPTY))
+                {
+                    return false;
+                }
+                if (<name>ObjectHashMap.this.sentinelValues.containsOneKey && predicate.accept(REMOVED))
+                {
+                    return false;
+                }
+            }
+            for (<type> key : <name>ObjectHashMap.this.keys)
+            {
+                if (isNonSentinel(key) && predicate.accept(key))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public boolean add(<type> element)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public boolean addAll(<type>... source)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public boolean addAll(<name>Iterable source)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public boolean remove(<type> key)
+        {
+            int oldSize = <name>ObjectHashMap.this.size();
+            <name>ObjectHashMap.this.removeKey(key);
+            return oldSize != <name>ObjectHashMap.this.size();
+        }
+
+        public boolean removeAll(<name>Iterable source)
+        {
+            int oldSize = <name>ObjectHashMap.this.size();
+            <name>Iterator iterator = source.<type>Iterator();
+            while (iterator.hasNext())
+            {
+                <name>ObjectHashMap.this.removeKey(iterator.next());
+            }
+            return oldSize != <name>ObjectHashMap.this.size();
+        }
+
+        public boolean removeAll(<type>... source)
+        {
+            int oldSize = <name>ObjectHashMap.this.size();
+            for (<type> item : source)
+            {
+                <name>ObjectHashMap.this.removeKey(item);
+            }
+            return oldSize != <name>ObjectHashMap.this.size();
+        }
+
+        public void clear()
+        {
+            <name>ObjectHashMap.this.clear();
+        }
+
+        public Mutable<name>Set select(<name>Predicate predicate)
+        {
+            Mutable<name>Set result = new <name>HashSet();
+            if (<name>ObjectHashMap.this.sentinelValues != null)
+            {
+                if (<name>ObjectHashMap.this.sentinelValues.containsZeroKey && predicate.accept(EMPTY))
+                {
+                    result.add(EMPTY);
+                }
+                if (<name>ObjectHashMap.this.sentinelValues.containsOneKey && predicate.accept(REMOVED))
+                {
+                    result.add(REMOVED);
+                }
+            }
+            for (<type> key : <name>ObjectHashMap.this.keys)
+            {
+                if (isNonSentinel(key) && predicate.accept(key))
+                {
+                    result.add(key);
+                }
+            }
+            return result;
+        }
+
+        public Mutable<name>Set reject(<name>Predicate predicate)
+        {
+            Mutable<name>Set result = new <name>HashSet();
+            if (<name>ObjectHashMap.this.sentinelValues != null)
+            {
+                if (<name>ObjectHashMap.this.sentinelValues.containsZeroKey && !predicate.accept(EMPTY))
+                {
+                    result.add(EMPTY);
+                }
+                if (<name>ObjectHashMap.this.sentinelValues.containsOneKey && !predicate.accept(REMOVED))
+                {
+                    result.add(REMOVED);
+                }
+            }
+            for (<type> key : <name>ObjectHashMap.this.keys)
+            {
+                if (isNonSentinel(key) && !predicate.accept(key))
+                {
+                    result.add(key);
+                }
+            }
+            return result;
+        }
+
+        public Mutable<name>Set with(<type> element)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public Mutable<name>Set without(<type> element)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public Mutable<name>Set withAll(<name>Iterable elements)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public Mutable<name>Set withoutAll(<name>Iterable elements)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
+        {
+            if (<name>ObjectHashMap.this.sentinelValues != null)
+            {
+                if (<name>ObjectHashMap.this.sentinelValues.containsZeroKey && predicate.accept(EMPTY))
+                {
+                    return EMPTY;
+                }
+                if (<name>ObjectHashMap.this.sentinelValues.containsOneKey && predicate.accept(REMOVED))
+                {
+                    return REMOVED;
+                }
+            }
+            for (<type> key : <name>ObjectHashMap.this.keys)
+            {
+                if (isNonSentinel(key) && predicate.accept(key))
+                {
+                    return key;
+                }
+            }
+            return ifNone;
+        }
+
+        public \<V> MutableSet\<V> collect(<name>ToObjectFunction\<? extends V> function)
+        {
+            MutableSet\<V> result = Sets.mutable.with();
+            if (<name>ObjectHashMap.this.sentinelValues != null)
+            {
+                if (<name>ObjectHashMap.this.sentinelValues.containsZeroKey)
+                {
+                    result.add(function.valueOf(EMPTY));
+                }
+                if (<name>ObjectHashMap.this.sentinelValues.containsOneKey)
+                {
+                    result.add(function.valueOf(REMOVED));
+                }
+            }
+            for (<type> key : <name>ObjectHashMap.this.keys)
+            {
+                if (isNonSentinel(key))
+                {
+                    result.add(function.valueOf(key));
+                }
+            }
+            return result;
+        }
+
+        public Mutable<name>Set asUnmodifiable()
+        {
+            return Unmodifiable<name>Set.of(this);
+        }
+
+        public Mutable<name>Set asSynchronized()
+        {
+            return Synchronized<name>Set.of(this);
+        }
+
+        public <wideType.(type)> sum()
+        {
+            <wideType.(type)> sum = <wideZero.(type)>;
+            if (<name>ObjectHashMap.this.sentinelValues != null)
+            {
+                if (<name>ObjectHashMap.this.sentinelValues.containsZeroKey)
+                {
+                    sum += EMPTY;
+                }
+                if (<name>ObjectHashMap.this.sentinelValues.containsOneKey)
+                {
+                    sum += REMOVED;
+                }
+            }
+            for (<type> key : <name>ObjectHashMap.this.keys)
+            {
+                if (isNonSentinel(key))
+                {
+                    sum += key;
+                }
+            }
+            return sum;
+        }
+
+        public <type> max()
+        {
+            if (<name>ObjectHashMap.this.isEmpty())
+            {
+                throw new NoSuchElementException();
+            }
+
+            <type> max = <zero.(type)>;
+            boolean isMaxSet = false;
+
+            if (<name>ObjectHashMap.this.sentinelValues != null)
+            {
+                if (<name>ObjectHashMap.this.sentinelValues.containsZeroKey)
+                {
+                    max = EMPTY;
+                    isMaxSet = true;
+                }
+                if (<name>ObjectHashMap.this.sentinelValues.containsOneKey && (!isMaxSet || <(lessThan.(type))("max", "REMOVED")>))
+                {
+                    max = REMOVED;
+                    isMaxSet = true;
+                }
+            }
+            for (int i = 0; i \< <name>ObjectHashMap.this.keys.length; i++)
+            {
+                if (isNonSentinel(<name>ObjectHashMap.this.keys[i]) && (!isMaxSet || <(lessThan.(type))({max}, {<name>ObjectHashMap.this.keys[i]})>))
+                {
+                    max = <name>ObjectHashMap.this.keys[i];
+                    isMaxSet = true;
+                }
+            }
+            return max;
+        }
+
+        public <type> maxIfEmpty(<type> defaultValue)
+        {
+            if (<name>ObjectHashMap.this.isEmpty())
+            {
+                return defaultValue;
+            }
+
+            return this.max();
+        }
+
+        public <type> min()
+        {
+            if (<name>ObjectHashMap.this.isEmpty())
+            {
+                throw new NoSuchElementException();
+            }
+
+            <type> min = <zero.(type)>;
+            boolean isMinSet = false;
+
+            if (<name>ObjectHashMap.this.sentinelValues != null)
+            {
+                if (<name>ObjectHashMap.this.sentinelValues.containsZeroKey)
+                {
+                    min = EMPTY;
+                    isMinSet = true;
+                }
+                if (<name>ObjectHashMap.this.sentinelValues.containsOneKey && (!isMinSet || <(lessThan.(type))("REMOVED", "min")>))
+                {
+                    min = REMOVED;
+                    isMinSet = true;
+                }
+            }
+            for (int i = 0; i \< <name>ObjectHashMap.this.keys.length; i++)
+            {
+                if (isNonSentinel(<name>ObjectHashMap.this.keys[i]) && (!isMinSet || <(lessThan.(type))({<name>ObjectHashMap.this.keys[i]}, {min})>))
+                {
+                    min = <name>ObjectHashMap.this.keys[i];
+                    isMinSet = true;
+                }
+            }
+            return min;
+        }
+
+        public <type> minIfEmpty(<type> defaultValue)
+        {
+            if (<name>ObjectHashMap.this.isEmpty())
+            {
+                return defaultValue;
+            }
+
+            return this.min();
+        }
+
+        public double average()
+        {
+            if (<name>ObjectHashMap.this.isEmpty())
+            {
+                throw new ArithmeticException();
+            }
+            return (double) this.sum() / (double) this.size();
+        }
+
+        public double median()
+        {
+            if (<name>ObjectHashMap.this.isEmpty())
+            {
+                throw new ArithmeticException();
+            }
+            <type>[] sortedArray = this.toSortedArray();
+            int middleIndex = sortedArray.length >\> 1;
+            if (sortedArray.length > 1 && (sortedArray.length & 1) == 0)
+            {
+                <type> first = sortedArray[middleIndex];
+                <type> second = sortedArray[middleIndex - 1];
+                return ((double) first + (double) second) / 2.0;
+            }
+            return (double) sortedArray[middleIndex];
+        }
+
+        public <type>[] toSortedArray()
+        {
+            <type>[] array = this.toArray();
+            Arrays.sort(array);
+            return array;
+        }
+
+        public Mutable<name>List toSortedList()
+        {
+            return <name>ArrayList.newList(this).sortThis();
+        }
+
+        public <type>[] toArray()
+        {
+            int size = <name>ObjectHashMap.this.size();
+            final <type>[] result = new <type>[size];
+            <name>ObjectHashMap.this.forEachKey(new <name>Procedure()
+            {
+                private int index;
+
+                public void value(<type> each)
+                {
+                    result[this.index] = each;
+                    this.index++;
+                }
+            });
+            return result;
+        }
+
+        public boolean contains(<type> value)
+        {
+            return <name>ObjectHashMap.this.containsKey(value);
+        }
+
+        public boolean containsAll(<type>... source)
+        {
+            for (<type> item : source)
+            {
+                if (!<name>ObjectHashMap.this.containsKey(item))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public boolean containsAll(<name>Iterable source)
+        {
+            <name>Iterator iterator = source.<type>Iterator();
+            while (iterator.hasNext())
+            {
+                if (!<name>ObjectHashMap.this.containsKey(iterator.next()))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public Mutable<name>List toList()
+        {
+            return <name>ArrayList.newList(this);
+        }
+
+        public Mutable<name>Set toSet()
+        {
+            return <name>HashSet.newSet(this);
+        }
+
+        public Mutable<name>Bag toBag()
+        {
+            return <name>HashBag.newBag(this);
+        }
+
+        public Lazy<name>Iterable asLazy()
+        {
+            return new Lazy<name>IterableAdapter(this);
+        }
+
+        public <name>Set freeze()
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public Immutable<name>Set toImmutable()
+        {
+            return <name>Sets.immutable.withAll(this);
+        }
+
+        public int size()
+        {
+            return <name>ObjectHashMap.this.size();
+        }
+
+        public boolean isEmpty()
+        {
+            return <name>ObjectHashMap.this.isEmpty();
+        }
+
+        public boolean notEmpty()
+        {
+            return <name>ObjectHashMap.this.notEmpty();
+        }
+
+        @Override
+        public boolean equals(Object obj)
+        {
+            if (this == obj)
+            {
+                return true;
+            }
+
+            if (!(obj instanceof <name>Set))
+            {
+                return false;
+            }
+
+            <name>Set other = (<name>Set) obj;
+            return this.size() == other.size() && this.containsAll(other.toArray());
+        }
+
+        @Override
+        public int hashCode()
+        {
+            int result = 0;
+
+            if (<name>ObjectHashMap.this.sentinelValues != null)
+            {
+                if (<name>ObjectHashMap.this.sentinelValues.containsZeroKey)
+                {
+                    result += <(hashCode.(type))("EMPTY")>;
+                }
+                if (<name>ObjectHashMap.this.sentinelValues.containsOneKey)
+                {
+                    result += <(hashCode.(type))("REMOVED")>;
+                }
+            }
+            for (int i = 0; i \< <name>ObjectHashMap.this.keys.length; i++)
+            {
+                if (isNonSentinel(<name>ObjectHashMap.this.keys[i]))
+                {
+                    result += <(hashCode.(type))({<name>ObjectHashMap.this.keys[i]})>;
+                }
+            }
+
+            return result;
+        }
+
+        @Override
+        public String toString()
+        {
+            return this.makeString("[", ", ", "]");
+        }
+
+        public String makeString()
+        {
+            return this.makeString(", ");
+        }
+
+        public String makeString(String separator)
+        {
+            return this.makeString("", separator, "");
+        }
+
+        public String makeString(String start, String separator, String end)
+        {
+            Appendable stringBuilder = new StringBuilder();
+            this.appendString(stringBuilder, start, separator, end);
+            return stringBuilder.toString();
+        }
+
+        public void appendString(Appendable appendable)
+        {
+            this.appendString(appendable, ", ");
+        }
+
+        public void appendString(Appendable appendable, String separator)
+        {
+            this.appendString(appendable, "", separator, "");
+        }
+
+        public void appendString(Appendable appendable, String start, String separator, String end)
+        {
+            try
+            {
+                appendable.append(start);
+                boolean first = true;
+                if (<name>ObjectHashMap.this.sentinelValues != null)
+                {
+                    if (<name>ObjectHashMap.this.sentinelValues.containsZeroKey)
+                    {
+                        appendable.append(String.valueOf(EMPTY));
+                        first = false;
+                    }
+                    if (<name>ObjectHashMap.this.sentinelValues.containsOneKey)
+                    {
+                        if (!first)
+                        {
+                            appendable.append(separator);
+                        }
+                        appendable.append(String.valueOf(REMOVED));
+                        first = false;
+                    }
+                }
+                for (<type> key : <name>ObjectHashMap.this.keys)
+                {
+                    if (isNonSentinel(key))
+                    {
+                        if (!first)
+                        {
+                            appendable.append(separator);
+                        }
+                        appendable.append(String.valueOf(key));
+                        first = false;
+                    }
+                }
+                appendable.append(end);
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    private class KeysSetIterator implements <name>Iterator
+    {
+        private int count;
+        private int position;
+        private boolean handledZeroKey;
+        private boolean handledOneKey;
+
+        public boolean hasNext()
+        {
+            return this.count != <name>ObjectHashMap.this.size();
+        }
+
+        public <type> next()
+        {
+            if (!this.hasNext())
+            {
+                throw new NoSuchElementException();
+            }
+            this.count++;
+            if (!this.handledZeroKey)
+            {
+                this.handledZeroKey = true;
+                if (<name>ObjectHashMap.this.containsKey(EMPTY))
+                {
+                    return <name>ObjectHashMap.EMPTY;
+                }
+            }
+            if (!this.handledOneKey)
+            {
+                this.handledOneKey = true;
+                if (<name>ObjectHashMap.this.containsKey(REMOVED))
+                {
+                    return <name>ObjectHashMap.REMOVED;
+                }
+            }
+            <type>[] keys = <name>ObjectHashMap.this.keys;
+            while (!isNonSentinel(keys[this.position]))
+            {
+                this.position++;
+            }
+            <type> result = <name>ObjectHashMap.this.keys[this.position];
+            this.position++;
+            return result;
+        }
+    }
+
+    public Collection\<V> values()
+    {
+        return new ValuesCollection();
+    }
+
+    protected class ValuesCollection implements Collection\<V>
+    {
+        public boolean add(V v)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public boolean addAll(Collection\<? extends V> collection)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public void clear()
+        {
+            <name>ObjectHashMap.this.clear();
+        }
+
+        public boolean contains(Object o)
+        {
+            return <name>ObjectHashMap.this.containsValue(o);
+        }
+
+        public boolean containsAll(Collection\<?> collection)
+        {
+            // todo: this is N^2. if c is large, we should copy the values to a set.
+            return Iterate.allSatisfy(collection, Predicates.in(this));
+        }
+
+        public boolean isEmpty()
+        {
+            return <name>ObjectHashMap.this.isEmpty();
+        }
+
+        public Iterator\<V> iterator()
+        {
+            return <name>ObjectHashMap.this.iterator();
+        }
+
+        public boolean remove(Object o)
+        {
+            // this is so slow that the extra overhead of the iterator won't be noticeable
+            if (o == null)
+            {
+                for (Iterator\<V> it = this.iterator(); it.hasNext(); )
+                {
+                    if (it.next() == null)
+                    {
+                        it.remove();
+                        return true;
+                    }
+                }
+            }
+            else
+            {
+                for (Iterator\<V> it = this.iterator(); it.hasNext(); )
+                {
+                    V o2 = it.next();
+                    if (o == o2 || o2.equals(o))
+                    {
+                        it.remove();
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
+
+        public boolean removeAll(Collection\<?> collection)
+        {
+            // todo: this is N^2. if c is large, we should copy the values to a set.
+            boolean changed = false;
+
+            for (Object obj : collection)
+            {
+                if (this.remove(obj))
+                {
+                    changed = true;
+                }
+            }
+            return changed;
+        }
+
+        public boolean retainAll(Collection\<?> collection)
+        {
+            boolean modified = false;
+            Iterator\<V> e = this.iterator();
+            while (e.hasNext())
+            {
+                if (!collection.contains(e.next()))
+                {
+                    e.remove();
+                    modified = true;
+                }
+            }
+            return modified;
+        }
+
+        public int size()
+        {
+            return <name>ObjectHashMap.this.size();
+        }
+
+        public Object[] toArray()
+        {
+            return <name>ObjectHashMap.this.toArray();
+        }
+
+        public \<T> T[] toArray(T[] result)
+        {
+            return <name>ObjectHashMap.this.toArray(result);
         }
     }
 }

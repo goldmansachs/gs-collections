@@ -61,21 +61,30 @@ public final class Synchronized<name>Set
         super(set, newLock);
     }
 
+    /**
+     * This method will take a Mutable<name>Set and wrap it directly in a Synchronized<name>Set.
+     */
+    public static Synchronized<name>Set of(Mutable<name>Set set)
+    {
+        return new Synchronized<name>Set(set);
+    }
+
+    /**
+     * This method will take a Mutable<name>Set and wrap it directly in a Synchronized<name>Set.
+     * Additionally, a developer specifies which lock to use with the collection.
+     */
+    public static Synchronized<name>Set of(Mutable<name>Set set, Object lock)
+    {
+        return new Synchronized<name>Set(set, lock);
+    }
+
     @GuardedBy("getLock()")
     private Mutable<name>Set getMutable<name>Set()
     {
         return (Mutable<name>Set) this.get<name>Collection();
     }
 
-    public Synchronized<name>Set with(<type> element)
-    {
-        synchronized (this.getLock())
-        {
-            this.getMutable<name>Set().add(element);
-        }
-        return this;
-    }
-
+    @Override
     public Synchronized<name>Set without(<type> element)
     {
         synchronized (this.getLock())
@@ -85,6 +94,17 @@ public final class Synchronized<name>Set
         return this;
     }
 
+    @Override
+    public Synchronized<name>Set with(<type> element)
+    {
+        synchronized (this.getLock())
+        {
+            this.getMutable<name>Set().add(element);
+        }
+        return this;
+    }
+
+    @Override
     public Synchronized<name>Set withAll(<name>Iterable elements)
     {
         synchronized (this.getLock())
@@ -94,6 +114,7 @@ public final class Synchronized<name>Set
         return this;
     }
 
+    @Override
     public Synchronized<name>Set withoutAll(<name>Iterable elements)
     {
         synchronized (this.getLock())
@@ -103,6 +124,7 @@ public final class Synchronized<name>Set
         return this;
     }
 
+    @Override
     public Mutable<name>Set select(<name>Predicate predicate)
     {
         synchronized (this.getLock())
@@ -111,6 +133,7 @@ public final class Synchronized<name>Set
         }
     }
 
+    @Override
     public Mutable<name>Set reject(<name>Predicate predicate)
     {
         synchronized (this.getLock())
@@ -119,6 +142,7 @@ public final class Synchronized<name>Set
         }
     }
 
+    @Override
     public \<V> MutableSet\<V> collect(<name>ToObjectFunction\<? extends V> function)
     {
         synchronized (this.getLock())
@@ -145,6 +169,7 @@ public final class Synchronized<name>Set
         }
     }
 
+    @Override
     public Lazy<name>Iterable asLazy()
     {
         synchronized (this.getLock())
@@ -153,11 +178,13 @@ public final class Synchronized<name>Set
         }
     }
 
+    @Override
     public Mutable<name>Set asUnmodifiable()
     {
         return new Unmodifiable<name>Set(this);
     }
 
+    @Override
     public Mutable<name>Set asSynchronized()
     {
         return this;
@@ -171,6 +198,7 @@ public final class Synchronized<name>Set
         }
     }
 
+    @Override
     public Immutable<name>Set toImmutable()
     {
         synchronized (this.getLock())

@@ -22,9 +22,12 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.reflect.Array;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.Lazy<name>Iterable;
@@ -42,6 +45,7 @@ import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.block.procedure.primitive.Object<name>Procedure;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.collection.primitive.Immutable<name>Collection;
 import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.MutableList;
@@ -51,7 +55,10 @@ import com.gs.collections.api.map.primitive.MutableObject<name>Map;
 import com.gs.collections.api.map.primitive.Object<name>Map;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
+import com.gs.collections.impl.collection.mutable.primitive.Synchronized<name>Collection;
+import com.gs.collections.impl.collection.mutable.primitive.Unmodifiable<name>Collection;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
+import com.gs.collections.impl.factory.primitive.<name>Lists;
 import com.gs.collections.impl.factory.primitive.Object<name>Maps;
 import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -1150,6 +1157,520 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         public boolean hasNext()
         {
             return this.count != Object<name>HashMap.this.size();
+        }
+    }
+
+    public Set\<K> keySet()
+    {
+        return new KeySet();
+    }
+
+    public Mutable<name>Collection values()
+    {
+        return new ValuesCollection();
+    }
+
+    private class KeySet implements Set\<K>
+    {
+        public boolean add(K key)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public boolean addAll(Collection\<? extends K> collection)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public void clear()
+        {
+            Object<name>HashMap.this.clear();
+        }
+
+        public boolean contains(Object o)
+        {
+            return Object<name>HashMap.this.containsKey(o);
+        }
+
+        public boolean containsAll(Collection\<?> collection)
+        {
+            for (Object aCollection : collection)
+            {
+                if (!Object<name>HashMap.this.containsKey(aCollection))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public boolean isEmpty()
+        {
+            return Object<name>HashMap.this.isEmpty();
+        }
+
+        public Iterator\<K> iterator()
+        {
+            return new KeySetIterator();
+        }
+
+        public boolean remove(Object key)
+        {
+            int oldSize = Object<name>HashMap.this.size();
+            Object<name>HashMap.this.removeKey((K) key);
+            return oldSize != Object<name>HashMap.this.size();
+        }
+
+        public boolean removeAll(Collection\<?> collection)
+        {
+            int oldSize = Object<name>HashMap.this.size();
+            for (Object object : collection)
+            {
+                Object<name>HashMap.this.removeKey((K) object);
+            }
+            return oldSize != Object<name>HashMap.this.size();
+        }
+
+        public boolean retainAll(Collection\<?> collection)
+        {
+            int oldSize = Object<name>HashMap.this.size();
+            Iterator\<K> iterator = this.iterator();
+            while (iterator.hasNext())
+            {
+                K next = iterator.next();
+                if (!collection.contains(next))
+                {
+                    this.remove(next);
+                }
+            }
+            return oldSize != Object<name>HashMap.this.size();
+        }
+
+        public int size()
+        {
+            return Object<name>HashMap.this.size();
+        }
+
+        private void copyKeys(Object[] result)
+        {
+            int count = 0;
+            for (int i = 0; i \< Object<name>HashMap.this.keys.length; i++)
+            {
+                Object key = Object<name>HashMap.this.keys[i];
+                if (Object<name>HashMap.isNonSentinel(key))
+                {
+                    result[count++] = Object<name>HashMap.this.keys[i];
+                }
+            }
+        }
+
+        @Override
+        public boolean equals(Object obj)
+        {
+            if (obj instanceof Set)
+            {
+                Set\<?> other = (Set\<?>) obj;
+                if (other.size() == this.size())
+                {
+                    return this.containsAll(other);
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode()
+        {
+            int hashCode = 0;
+            Object[] table = Object<name>HashMap.this.keys;
+            for (int i = 0; i \< table.length; i++)
+            {
+                Object key = table[i];
+                if (Object<name>HashMap.isNonSentinel(key))
+                {
+                    K nonSentinelKey = Object<name>HashMap.this.toNonSentinel(key);
+                    hashCode += nonSentinelKey == null ? 0 : nonSentinelKey.hashCode();
+                }
+            }
+            return hashCode;
+        }
+
+        public Object[] toArray()
+        {
+            int size = Object<name>HashMap.this.size();
+            Object[] result = new Object[size];
+            this.copyKeys(result);
+            return result;
+        }
+
+        public \<T> T[] toArray(T[] result)
+        {
+            int size = Object<name>HashMap.this.size();
+            if (result.length \< size)
+            {
+                result = (T[]) Array.newInstance(result.getClass().getComponentType(), size);
+            }
+            this.copyKeys(result);
+            if (size \< result.length)
+            {
+                result[size] = null;
+            }
+            return result;
+        }
+    }
+
+    private class KeySetIterator implements Iterator\<K>
+    {
+        private int count;
+        private int position;
+        private K currentKey;
+        private boolean isCurrentKeySet;
+
+        public boolean hasNext()
+        {
+            return this.count \< Object<name>HashMap.this.size();
+        }
+
+        public void remove()
+        {
+            if (!this.isCurrentKeySet)
+            {
+                throw new IllegalStateException();
+            }
+
+            this.isCurrentKeySet = false;
+            this.count--;
+
+            if (isNonSentinel(this.currentKey))
+            {
+                int index = this.position - 1;
+                Object<name>HashMap.this.keys[index] = REMOVED_KEY;
+                Object<name>HashMap.this.occupied--;
+                Object<name>HashMap.this.values[index] = EMPTY_VALUE;
+            }
+            else
+            {
+                Object<name>HashMap.this.removeKey(this.currentKey);
+            }
+        }
+
+        public K next()
+        {
+            if (!this.hasNext())
+            {
+                throw new NoSuchElementException();
+            }
+            this.count++;
+            Object[] keys = Object<name>HashMap.this.keys;
+            while (!isNonSentinel(keys[this.position]))
+            {
+                this.position++;
+            }
+            this.currentKey = (K) Object<name>HashMap.this.keys[this.position];
+            this.isCurrentKeySet = true;
+            this.position++;
+            return Object<name>HashMap.this.toNonSentinel(this.currentKey);
+        }
+    }
+
+    private class ValuesCollection implements Mutable<name>Collection
+    {
+        public void clear()
+        {
+            Object<name>HashMap.this.clear();
+        }
+
+        public Mutable<name>Collection select(<name>Predicate predicate)
+        {
+            return Object<name>HashMap.this.select(predicate);
+        }
+
+        public Mutable<name>Collection reject(<name>Predicate predicate)
+        {
+            return Object<name>HashMap.this.reject(predicate);
+        }
+
+        public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
+        {
+            return Object<name>HashMap.this.detectIfNone(predicate, ifNone);
+        }
+
+        public \<V> MutableCollection\<V> collect(<name>ToObjectFunction\<? extends V> function)
+        {
+            return Object<name>HashMap.this.collect(function);
+        }
+
+        public <wideType.(type)> sum()
+        {
+            return Object<name>HashMap.this.sum();
+        }
+
+        public <type> max()
+        {
+            return Object<name>HashMap.this.max();
+        }
+
+        public <type> maxIfEmpty(<type> defaultValue)
+        {
+            return Object<name>HashMap.this.maxIfEmpty(defaultValue);
+        }
+
+        public <type> min()
+        {
+            return Object<name>HashMap.this.min();
+        }
+
+        public <type> minIfEmpty(<type> defaultValue)
+        {
+            return Object<name>HashMap.this.minIfEmpty(defaultValue);
+        }
+
+        public double average()
+        {
+            return Object<name>HashMap.this.average();
+        }
+
+        public double median()
+        {
+            return Object<name>HashMap.this.median();
+        }
+
+        public <type>[] toSortedArray()
+        {
+            return Object<name>HashMap.this.toSortedArray();
+        }
+
+        public Mutable<name>List toSortedList()
+        {
+            return Object<name>HashMap.this.toSortedList();
+        }
+
+        public Mutable<name>Collection with(<type> element)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public Mutable<name>Collection without(<type> element)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public Mutable<name>Collection withAll(<name>Iterable elements)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public Mutable<name>Collection withoutAll(<name>Iterable elements)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public Mutable<name>Collection asUnmodifiable()
+        {
+            return Unmodifiable<name>Collection.of(this);
+        }
+
+        public Mutable<name>Collection asSynchronized()
+        {
+            return Synchronized<name>Collection.of(this);
+        }
+
+        public Immutable<name>Collection toImmutable()
+        {
+            return <name>Lists.immutable.withAll(this);
+        }
+
+        public boolean contains(<type> value)
+        {
+            return Object<name>HashMap.this.containsValue(value);
+        }
+
+        public boolean containsAll(<type>... source)
+        {
+            return Object<name>HashMap.this.containsAll(source);
+        }
+
+        public boolean containsAll(<name>Iterable source)
+        {
+            return Object<name>HashMap.this.containsAll(source);
+        }
+
+        public Mutable<name>List toList()
+        {
+            return Object<name>HashMap.this.toList();
+        }
+
+        public Mutable<name>Set toSet()
+        {
+            return Object<name>HashMap.this.toSet();
+        }
+
+        public Mutable<name>Bag toBag()
+        {
+            return Object<name>HashMap.this.toBag();
+        }
+
+        public Lazy<name>Iterable asLazy()
+        {
+            return new Lazy<name>IterableAdapter(this);
+        }
+
+        public boolean isEmpty()
+        {
+            return Object<name>HashMap.this.isEmpty();
+        }
+
+        public boolean notEmpty()
+        {
+            return Object<name>HashMap.this.notEmpty();
+        }
+
+        public String makeString()
+        {
+            return this.makeString(", ");
+        }
+
+        public String makeString(String separator)
+        {
+            return this.makeString("", separator, "");
+        }
+
+        public String makeString(String start, String separator, String end)
+        {
+            Appendable stringBuilder = new StringBuilder();
+            this.appendString(stringBuilder, start, separator, end);
+            return stringBuilder.toString();
+        }
+
+        public void appendString(Appendable appendable)
+        {
+            this.appendString(appendable, ", ");
+        }
+
+        public void appendString(Appendable appendable, String separator)
+        {
+            this.appendString(appendable, "", separator, "");
+        }
+
+        public void appendString(Appendable appendable, String start, String separator, String end)
+        {
+            try
+            {
+                appendable.append(start);
+
+                boolean first = true;
+
+                for (int i = 0; i \< Object<name>HashMap.this.keys.length; i++)
+                {
+                    Object key = Object<name>HashMap.this.keys[i];
+                    if (isNonSentinel(key))
+                    {
+                        if (!first)
+                        {
+                            appendable.append(separator);
+                        }
+                        appendable.append(String.valueOf(Object<name>HashMap.this.values[i]));
+                        first = false;
+                    }
+                }
+                appendable.append(end);
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public <name>Iterator <type>Iterator()
+        {
+            return Object<name>HashMap.this.<type>Iterator();
+        }
+
+        public void forEach(<name>Procedure procedure)
+        {
+            Object<name>HashMap.this.forEach(procedure);
+        }
+
+        public int count(<name>Predicate predicate)
+        {
+            return Object<name>HashMap.this.count(predicate);
+        }
+
+        public boolean anySatisfy(<name>Predicate predicate)
+        {
+            return Object<name>HashMap.this.anySatisfy(predicate);
+        }
+
+        public boolean allSatisfy(<name>Predicate predicate)
+        {
+            return Object<name>HashMap.this.allSatisfy(predicate);
+        }
+
+        public boolean noneSatisfy(<name>Predicate predicate)
+        {
+            return Object<name>HashMap.this.noneSatisfy(predicate);
+        }
+
+        public boolean add(<type> element)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public boolean addAll(<type>... source)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public boolean addAll(<name>Iterable source)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public boolean remove(<type> item)
+        {
+            int oldSize = Object<name>HashMap.this.size();
+
+            for (int i = 0; i \< Object<name>HashMap.this.keys.length; i++)
+            {
+                if (isNonSentinel(Object<name>HashMap.this.keys[i]) && <(equals.(type))({item}, {Object<name>HashMap.this.values[i]})>)
+                {
+                    Object<name>HashMap.this.removeKey((K) Object<name>HashMap.this.keys[i]);
+                }
+            }
+            return oldSize != Object<name>HashMap.this.size();
+        }
+
+        public boolean removeAll(<name>Iterable source)
+        {
+            int oldSize = Object<name>HashMap.this.size();
+
+            <name>Iterator iterator = source.<type>Iterator();
+            while (iterator.hasNext())
+            {
+                this.remove(iterator.next());
+            }
+            return oldSize != Object<name>HashMap.this.size();
+        }
+
+        public boolean removeAll(<type>... source)
+        {
+            int oldSize = Object<name>HashMap.this.size();
+
+            for (<type> item : source)
+            {
+                this.remove(item);
+            }
+            return oldSize != Object<name>HashMap.this.size();
+        }
+
+        public int size()
+        {
+            return Object<name>HashMap.this.size();
+        }
+
+        public <type>[] toArray()
+        {
+            return Object<name>HashMap.this.toArray();
         }
     }
 

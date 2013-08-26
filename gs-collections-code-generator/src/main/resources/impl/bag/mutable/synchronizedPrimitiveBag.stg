@@ -68,6 +68,7 @@ public final class Synchronized<name>Bag
         return (Mutable<name>Bag) this.get<name>Collection();
     }
 
+    @Override
     public Synchronized<name>Bag with(<type> element)
     {
         synchronized (this.getLock())
@@ -77,6 +78,7 @@ public final class Synchronized<name>Bag
         return this;
     }
 
+    @Override
     public Synchronized<name>Bag without(<type> element)
     {
         synchronized (this.getLock())
@@ -86,6 +88,7 @@ public final class Synchronized<name>Bag
         return this;
     }
 
+    @Override
     public Synchronized<name>Bag withAll(<name>Iterable elements)
     {
         synchronized (this.getLock())
@@ -95,6 +98,7 @@ public final class Synchronized<name>Bag
         return this;
     }
 
+    @Override
     public Synchronized<name>Bag withoutAll(<name>Iterable elements)
     {
         synchronized (this.getLock())
@@ -144,6 +148,7 @@ public final class Synchronized<name>Bag
         }
     }
 
+    @Override
     public Mutable<name>Bag select(<name>Predicate predicate)
     {
         synchronized (this.getLock())
@@ -152,6 +157,7 @@ public final class Synchronized<name>Bag
         }
     }
 
+    @Override
     public Mutable<name>Bag reject(<name>Predicate predicate)
     {
         synchronized (this.getLock())
@@ -160,6 +166,7 @@ public final class Synchronized<name>Bag
         }
     }
 
+    @Override
     public \<V> MutableBag\<V> collect(<name>ToObjectFunction\<? extends V> function)
     {
         synchronized (this.getLock())
@@ -186,6 +193,7 @@ public final class Synchronized<name>Bag
         }
     }
 
+    @Override
     public Lazy<name>Iterable asLazy()
     {
         synchronized (this.getLock())
@@ -194,16 +202,19 @@ public final class Synchronized<name>Bag
         }
     }
 
+    @Override
     public Mutable<name>Bag asUnmodifiable()
     {
         return new Unmodifiable<name>Bag(this);
     }
 
+    @Override
     public Mutable<name>Bag asSynchronized()
     {
         return this;
     }
 
+    @Override
     public Immutable<name>Bag toImmutable()
     {
         return <name>Bags.immutable.withAll(this);

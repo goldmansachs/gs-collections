@@ -20,9 +20,13 @@ import java.io.Externalizable;
 import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
+import java.lang.reflect.Array;
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.LazyBooleanIterable;
@@ -38,6 +42,7 @@ import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectBooleanProcedure;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.collection.primitive.ImmutableBooleanCollection;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.list.MutableList;
@@ -47,6 +52,9 @@ import com.gs.collections.api.map.primitive.MutableObjectBooleanMap;
 import com.gs.collections.api.map.primitive.ObjectBooleanMap;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
+import com.gs.collections.impl.collection.mutable.primitive.SynchronizedBooleanCollection;
+import com.gs.collections.impl.collection.mutable.primitive.UnmodifiableBooleanCollection;
+import com.gs.collections.impl.factory.primitive.BooleanLists;
 import com.gs.collections.impl.factory.primitive.ObjectBooleanMaps;
 import com.gs.collections.impl.lazy.primitive.LazyBooleanIterableAdapter;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -76,7 +84,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         @Override
         public String toString()
         {
-            return "ObjectIntHashMap.NULL_KEY";
+            return "ObjectBooleanHashMap.NULL_KEY";
         }
     };
     private static final Object REMOVED_KEY = new Object()
@@ -96,7 +104,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         @Override
         public String toString()
         {
-            return "ObjectIntHashMap.REMOVED_KEY";
+            return "ObjectBooleanHashMap.REMOVED_KEY";
         }
     };
 
@@ -968,6 +976,474 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         for (int i = 0; i < size; i++)
         {
             this.put((K) in.readObject(), in.readBoolean());
+        }
+    }
+
+    public Set<K> keySet()
+    {
+        return new KeySet();
+    }
+
+    public MutableBooleanCollection values()
+    {
+        return new ValuesCollection();
+    }
+
+    private class KeySet implements Set<K>
+    {
+        public boolean add(K key)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public boolean addAll(Collection<? extends K> collection)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public void clear()
+        {
+            ObjectBooleanHashMap.this.clear();
+        }
+
+        public boolean contains(Object o)
+        {
+            return ObjectBooleanHashMap.this.containsKey(o);
+        }
+
+        public boolean containsAll(Collection<?> collection)
+        {
+            for (Object aCollection : collection)
+            {
+                if (!ObjectBooleanHashMap.this.containsKey(aCollection))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public boolean isEmpty()
+        {
+            return ObjectBooleanHashMap.this.isEmpty();
+        }
+
+        public Iterator<K> iterator()
+        {
+            return new KeySetIterator();
+        }
+
+        public boolean remove(Object key)
+        {
+            int oldSize = ObjectBooleanHashMap.this.size();
+            ObjectBooleanHashMap.this.removeKey((K) key);
+            return oldSize != ObjectBooleanHashMap.this.size();
+        }
+
+        public boolean removeAll(Collection<?> collection)
+        {
+            int oldSize = ObjectBooleanHashMap.this.size();
+            for (Object object : collection)
+            {
+                ObjectBooleanHashMap.this.removeKey((K) object);
+            }
+            return oldSize != ObjectBooleanHashMap.this.size();
+        }
+
+        public boolean retainAll(Collection<?> collection)
+        {
+            int oldSize = ObjectBooleanHashMap.this.size();
+            Iterator<K> iterator = this.iterator();
+            while (iterator.hasNext())
+            {
+                K next = iterator.next();
+                if (!collection.contains(next))
+                {
+                    this.remove(next);
+                }
+            }
+            return oldSize != ObjectBooleanHashMap.this.size();
+        }
+
+        public int size()
+        {
+            return ObjectBooleanHashMap.this.size();
+        }
+
+        private void copyKeys(Object[] result)
+        {
+            int count = 0;
+            for (int i = 0; i < ObjectBooleanHashMap.this.keys.length; i++)
+            {
+                Object key = ObjectBooleanHashMap.this.keys[i];
+                if (ObjectBooleanHashMap.isNonSentinel(key))
+                {
+                    result[count++] = ObjectBooleanHashMap.this.keys[i];
+                }
+            }
+        }
+
+        @Override
+        public boolean equals(Object obj)
+        {
+            if (obj instanceof Set)
+            {
+                Set<?> other = (Set<?>) obj;
+                if (other.size() == this.size())
+                {
+                    return this.containsAll(other);
+                }
+            }
+            return false;
+        }
+
+        @Override
+        public int hashCode()
+        {
+            int hashCode = 0;
+            Object[] table = ObjectBooleanHashMap.this.keys;
+            for (int i = 0; i < table.length; i++)
+            {
+                Object key = table[i];
+                if (ObjectBooleanHashMap.isNonSentinel(key))
+                {
+                    K nonSentinelKey = ObjectBooleanHashMap.this.toNonSentinel(key);
+                    hashCode += nonSentinelKey == null ? 0 : nonSentinelKey.hashCode();
+                }
+            }
+            return hashCode;
+        }
+
+        public Object[] toArray()
+        {
+            int size = ObjectBooleanHashMap.this.size();
+            Object[] result = new Object[size];
+            this.copyKeys(result);
+            return result;
+        }
+
+        public <T> T[] toArray(T[] result)
+        {
+            int size = ObjectBooleanHashMap.this.size();
+            if (result.length < size)
+            {
+                result = (T[]) Array.newInstance(result.getClass().getComponentType(), size);
+            }
+            this.copyKeys(result);
+            if (size < result.length)
+            {
+                result[size] = null;
+            }
+            return result;
+        }
+    }
+
+    private class KeySetIterator implements Iterator<K>
+    {
+        private int count;
+        private int position;
+        private K currentKey;
+        private boolean isCurrentKeySet;
+
+        public boolean hasNext()
+        {
+            return this.count < ObjectBooleanHashMap.this.size();
+        }
+
+        public void remove()
+        {
+            if (!this.isCurrentKeySet)
+            {
+                throw new IllegalStateException();
+            }
+
+            this.isCurrentKeySet = false;
+            this.count--;
+
+            if (isNonSentinel(this.currentKey))
+            {
+                int index = this.position - 1;
+                ObjectBooleanHashMap.this.keys[index] = REMOVED_KEY;
+                ObjectBooleanHashMap.this.occupied--;
+                ObjectBooleanHashMap.this.values.set(index, EMPTY_VALUE);
+            }
+            else
+            {
+                ObjectBooleanHashMap.this.removeKey(this.currentKey);
+            }
+        }
+
+        public K next()
+        {
+            if (!this.hasNext())
+            {
+                throw new NoSuchElementException();
+            }
+            this.count++;
+            Object[] keys = ObjectBooleanHashMap.this.keys;
+            while (!isNonSentinel(keys[this.position]))
+            {
+                this.position++;
+            }
+            this.currentKey = (K) ObjectBooleanHashMap.this.keys[this.position];
+            this.isCurrentKeySet = true;
+            this.position++;
+            return ObjectBooleanHashMap.this.toNonSentinel(this.currentKey);
+        }
+    }
+
+    private class ValuesCollection implements MutableBooleanCollection
+    {
+        public void clear()
+        {
+            ObjectBooleanHashMap.this.clear();
+        }
+
+        public MutableBooleanCollection select(BooleanPredicate predicate)
+        {
+            return ObjectBooleanHashMap.this.select(predicate);
+        }
+
+        public MutableBooleanCollection reject(BooleanPredicate predicate)
+        {
+            return ObjectBooleanHashMap.this.reject(predicate);
+        }
+
+        public boolean detectIfNone(BooleanPredicate predicate, boolean ifNone)
+        {
+            return ObjectBooleanHashMap.this.detectIfNone(predicate, ifNone);
+        }
+
+        public <V> MutableCollection<V> collect(BooleanToObjectFunction<? extends V> function)
+        {
+            return ObjectBooleanHashMap.this.collect(function);
+        }
+
+        public MutableBooleanCollection with(boolean element)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public MutableBooleanCollection without(boolean element)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public MutableBooleanCollection withAll(BooleanIterable elements)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public MutableBooleanCollection withoutAll(BooleanIterable elements)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public MutableBooleanCollection asUnmodifiable()
+        {
+            return UnmodifiableBooleanCollection.of(this);
+        }
+
+        public MutableBooleanCollection asSynchronized()
+        {
+            return SynchronizedBooleanCollection.of(this);
+        }
+
+        public ImmutableBooleanCollection toImmutable()
+        {
+            return BooleanLists.immutable.withAll(this);
+        }
+
+        public boolean contains(boolean value)
+        {
+            return ObjectBooleanHashMap.this.containsValue(value);
+        }
+
+        public boolean containsAll(boolean... source)
+        {
+            return ObjectBooleanHashMap.this.containsAll(source);
+        }
+
+        public boolean containsAll(BooleanIterable source)
+        {
+            return ObjectBooleanHashMap.this.containsAll(source);
+        }
+
+        public MutableBooleanList toList()
+        {
+            return ObjectBooleanHashMap.this.toList();
+        }
+
+        public MutableBooleanSet toSet()
+        {
+            return ObjectBooleanHashMap.this.toSet();
+        }
+
+        public MutableBooleanBag toBag()
+        {
+            return ObjectBooleanHashMap.this.toBag();
+        }
+
+        public LazyBooleanIterable asLazy()
+        {
+            return new LazyBooleanIterableAdapter(this);
+        }
+
+        public boolean isEmpty()
+        {
+            return ObjectBooleanHashMap.this.isEmpty();
+        }
+
+        public boolean notEmpty()
+        {
+            return ObjectBooleanHashMap.this.notEmpty();
+        }
+
+        public String makeString()
+        {
+            return this.makeString(", ");
+        }
+
+        public String makeString(String separator)
+        {
+            return this.makeString("", separator, "");
+        }
+
+        public String makeString(String start, String separator, String end)
+        {
+            Appendable stringBuilder = new StringBuilder();
+            this.appendString(stringBuilder, start, separator, end);
+            return stringBuilder.toString();
+        }
+
+        public void appendString(Appendable appendable)
+        {
+            this.appendString(appendable, ", ");
+        }
+
+        public void appendString(Appendable appendable, String separator)
+        {
+            this.appendString(appendable, "", separator, "");
+        }
+
+        public void appendString(Appendable appendable, String start, String separator, String end)
+        {
+            try
+            {
+                appendable.append(start);
+
+                boolean first = true;
+
+                for (int i = 0; i < ObjectBooleanHashMap.this.keys.length; i++)
+                {
+                    Object key = ObjectBooleanHashMap.this.keys[i];
+                    if (isNonSentinel(key))
+                    {
+                        if (!first)
+                        {
+                            appendable.append(separator);
+                        }
+                        appendable.append(String.valueOf(ObjectBooleanHashMap.this.values.get(i)));
+                        first = false;
+                    }
+                }
+                appendable.append(end);
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public BooleanIterator booleanIterator()
+        {
+            return ObjectBooleanHashMap.this.booleanIterator();
+        }
+
+        public void forEach(BooleanProcedure procedure)
+        {
+            ObjectBooleanHashMap.this.forEach(procedure);
+        }
+
+        public int count(BooleanPredicate predicate)
+        {
+            return ObjectBooleanHashMap.this.count(predicate);
+        }
+
+        public boolean anySatisfy(BooleanPredicate predicate)
+        {
+            return ObjectBooleanHashMap.this.anySatisfy(predicate);
+        }
+
+        public boolean allSatisfy(BooleanPredicate predicate)
+        {
+            return ObjectBooleanHashMap.this.allSatisfy(predicate);
+        }
+
+        public boolean noneSatisfy(BooleanPredicate predicate)
+        {
+            return ObjectBooleanHashMap.this.noneSatisfy(predicate);
+        }
+
+        public boolean add(boolean element)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public boolean addAll(boolean... source)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public boolean addAll(BooleanIterable source)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public boolean remove(boolean element)
+        {
+            for (int i = 0; i < ObjectBooleanHashMap.this.values.size(); i++)
+            {
+                if (ObjectBooleanHashMap.this.values.get(i) == element && ObjectBooleanHashMap.isNonSentinel(ObjectBooleanHashMap.this.keys[i]))
+                {
+                    ObjectBooleanHashMap.this.removeKey(ObjectBooleanHashMap.this.toNonSentinel((K) ObjectBooleanHashMap.this.keys[i]));
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public boolean removeAll(BooleanIterable source)
+        {
+            int oldSize = ObjectBooleanHashMap.this.size();
+
+            BooleanIterator iterator = source.booleanIterator();
+            while (iterator.hasNext())
+            {
+                this.remove(iterator.next());
+            }
+            return oldSize != ObjectBooleanHashMap.this.size();
+        }
+
+        public boolean removeAll(boolean... source)
+        {
+            int oldSize = ObjectBooleanHashMap.this.size();
+
+            for (boolean item : source)
+            {
+                this.remove(item);
+            }
+            return oldSize != ObjectBooleanHashMap.this.size();
+        }
+
+        public int size()
+        {
+            return ObjectBooleanHashMap.this.size();
+        }
+
+        public boolean[] toArray()
+        {
+            return ObjectBooleanHashMap.this.toArray();
         }
     }
 

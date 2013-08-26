@@ -101,36 +101,43 @@ public final class Unmodifiable<name>List
         throw new UnsupportedOperationException("Cannot call set on an unmodifiable collection");
     }
 
+    @Override
     public Unmodifiable<name>List with(<type> element)
     {
         throw new UnsupportedOperationException("Cannot call with on an unmodifiable collection");
     }
 
+    @Override
     public Unmodifiable<name>List without(<type> element)
     {
         throw new UnsupportedOperationException("Cannot call without on an unmodifiable collection");
     }
 
+    @Override
     public Unmodifiable<name>List withAll(<name>Iterable elements)
     {
         throw new UnsupportedOperationException("Cannot call withAll on an unmodifiable collection");
     }
 
+    @Override
     public Unmodifiable<name>List withoutAll(<name>Iterable elements)
     {
         throw new UnsupportedOperationException("Cannot call withoutAll on an unmodifiable collection");
     }
 
+    @Override
     public Mutable<name>List select(<name>Predicate predicate)
     {
         return this.getMutable<name>List().select(predicate);
     }
 
+    @Override
     public Mutable<name>List reject(<name>Predicate predicate)
     {
         return this.getMutable<name>List().reject(predicate);
     }
 
+    @Override
     public \<V> MutableList\<V> collect(<name>ToObjectFunction\<? extends V> function)
     {
         return this.getMutable<name>List().collect(function);
@@ -149,21 +156,25 @@ public final class Unmodifiable<name>List
         return this.getMutable<name>List().hashCode();
     }
 
+    @Override
     public Lazy<name>Iterable asLazy()
     {
         return new Lazy<name>IterableAdapter(this);
     }
 
+    @Override
     public Mutable<name>List asUnmodifiable()
     {
         return this;
     }
 
+    @Override
     public Mutable<name>List asSynchronized()
     {
         return new Synchronized<name>List(this);
     }
 
+    @Override
     public Immutable<name>List toImmutable()
     {
         int size = this.size();

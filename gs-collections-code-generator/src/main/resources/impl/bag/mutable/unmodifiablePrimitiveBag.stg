@@ -51,21 +51,25 @@ public final class Unmodifiable<name>Bag
         return (Mutable<name>Bag) this.get<name>Collection();
     }
 
+    @Override
     public Unmodifiable<name>Bag with(<type> element)
     {
         throw new UnsupportedOperationException("Cannot use with on an Unmodifiable<name>Bag");
     }
 
+    @Override
     public Unmodifiable<name>Bag without(<type> element)
     {
         throw new UnsupportedOperationException("Cannot use without on an Unmodifiable<name>Bag");
     }
 
+    @Override
     public Unmodifiable<name>Bag withAll(<name>Iterable elements)
     {
         throw new UnsupportedOperationException("Cannot use withAll on an Unmodifiable<name>Bag");
     }
 
+    @Override
     public Unmodifiable<name>Bag withoutAll(<name>Iterable elements)
     {
         throw new UnsupportedOperationException("Cannot use withoutAll on an Unmodifiable<name>Bag");
@@ -96,16 +100,19 @@ public final class Unmodifiable<name>Bag
         this.getMutable<name>Bag().forEachWithOccurrences(procedure);
     }
 
+    @Override
     public Mutable<name>Bag select(<name>Predicate predicate)
     {
         return this.getMutable<name>Bag().select(predicate);
     }
 
+    @Override
     public Mutable<name>Bag reject(<name>Predicate predicate)
     {
         return this.getMutable<name>Bag().reject(predicate);
     }
 
+    @Override
     public \<V> MutableBag\<V> collect(<name>ToObjectFunction\<? extends V> function)
     {
         return this.getMutable<name>Bag().collect(function);
@@ -123,21 +130,25 @@ public final class Unmodifiable<name>Bag
         return this.getMutable<name>Bag().hashCode();
     }
 
+    @Override
     public Lazy<name>Iterable asLazy()
     {
         return new Lazy<name>IterableAdapter(this);
     }
 
+    @Override
     public Mutable<name>Bag asUnmodifiable()
     {
         return this;
     }
 
+    @Override
     public Mutable<name>Bag asSynchronized()
     {
         return new Synchronized<name>Bag(this);
     }
 
+    @Override
     public Immutable<name>Bag toImmutable()
     {
         return <name>Bags.immutable.withAll(this);

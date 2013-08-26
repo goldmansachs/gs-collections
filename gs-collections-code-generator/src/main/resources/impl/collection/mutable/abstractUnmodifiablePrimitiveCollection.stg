@@ -19,17 +19,21 @@ package com.gs.collections.impl.collection.mutable.primitive;
 import java.io.Serializable;
 
 import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
+import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.collection.primitive.Immutable<name>Collection;
 import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
+import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
 import net.jcip.annotations.ThreadSafe;
 
 /**
- * Abstract JUnit test for {@link AbstractUnmodifiable<name>Collection}s.
  * This file was automatically generated from template file abstractUnmodifiablePrimitiveCollection.stg.
  *
  * @since 3.1.
@@ -145,6 +149,61 @@ public abstract class AbstractUnmodifiable<name>Collection
     public boolean noneSatisfy(<name>Predicate predicate)
     {
         return this.collection.noneSatisfy(predicate);
+    }
+
+    public Mutable<name>Collection select(<name>Predicate predicate)
+    {
+        return this.collection.select(predicate);
+    }
+
+    public Mutable<name>Collection reject(<name>Predicate predicate)
+    {
+        return this.collection.reject(predicate);
+    }
+
+    public \<V> MutableCollection\<V> collect(<name>ToObjectFunction\<? extends V> function)
+    {
+        return this.collection.collect(function);
+    }
+
+    public Mutable<name>Collection with(<type> element)
+    {
+        throw new UnsupportedOperationException("Cannot call with() on " + this.getClass().getSimpleName());
+    }
+
+    public Mutable<name>Collection without(<type> element)
+    {
+        throw new UnsupportedOperationException("Cannot call without() on " + this.getClass().getSimpleName());
+    }
+
+    public Mutable<name>Collection withAll(<name>Iterable elements)
+    {
+        throw new UnsupportedOperationException("Cannot call withAll() on " + this.getClass().getSimpleName());
+    }
+
+    public Mutable<name>Collection withoutAll(<name>Iterable elements)
+    {
+        throw new UnsupportedOperationException("Cannot call withoutAll() on " + this.getClass().getSimpleName());
+    }
+
+    public Mutable<name>Collection asUnmodifiable()
+    {
+        return this;
+    }
+
+    public Mutable<name>Collection asSynchronized()
+    {
+        return new Synchronized<name>Collection(this);
+    }
+
+    public Immutable<name>Collection toImmutable()
+    {
+        return this.collection.toImmutable();
+    }
+
+    public Lazy<name>Iterable asLazy()
+    {
+        return new Lazy<name>IterableAdapter(this);
     }
 
     public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)

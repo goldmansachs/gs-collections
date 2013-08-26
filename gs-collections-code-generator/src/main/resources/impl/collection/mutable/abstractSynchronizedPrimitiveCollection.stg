@@ -19,13 +19,18 @@ package com.gs.collections.impl.collection.mutable.primitive;
 import java.io.Serializable;
 
 import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
+import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.collection.primitive.Immutable<name>Collection;
 import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
+import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
@@ -95,6 +100,89 @@ public abstract class AbstractSynchronized<name>Collection
         {
             this.collection.clear();
         }
+    }
+
+    public Mutable<name>Collection select(<name>Predicate predicate)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.select(predicate);
+        }
+    }
+
+    public Mutable<name>Collection reject(<name>Predicate predicate)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.reject(predicate);
+        }
+    }
+
+    public \<V> MutableCollection\<V> collect(<name>ToObjectFunction\<? extends V> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.collect(function);
+        }
+    }
+
+    public Mutable<name>Collection with(<type> element)
+    {
+        synchronized (this.lock)
+        {
+            this.add(element);
+        }
+        return this;
+    }
+
+    public Mutable<name>Collection without(<type> element)
+    {
+        synchronized (this.lock)
+        {
+            this.remove(element);
+        }
+        return this;
+    }
+
+    public Mutable<name>Collection withAll(<name>Iterable elements)
+    {
+        synchronized (this.lock)
+        {
+            this.addAll(elements);
+        }
+        return this;
+    }
+
+    public Mutable<name>Collection withoutAll(<name>Iterable elements)
+    {
+        synchronized (this.lock)
+        {
+            this.removeAll(elements);
+        }
+        return this;
+    }
+
+    public Mutable<name>Collection asUnmodifiable()
+    {
+        return new Unmodifiable<name>Collection(this);
+    }
+
+    public Mutable<name>Collection asSynchronized()
+    {
+        return this;
+    }
+
+    public Immutable<name>Collection toImmutable()
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.toImmutable();
+        }
+    }
+
+    public Lazy<name>Iterable asLazy()
+    {
+        return new Lazy<name>IterableAdapter(this);
     }
 
     public boolean contains(<type> value)

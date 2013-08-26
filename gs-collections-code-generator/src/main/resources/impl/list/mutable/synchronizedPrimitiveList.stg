@@ -148,6 +148,7 @@ public final class Synchronized<name>List
         }
     }
 
+    @Override
     public Synchronized<name>List with(<type> element)
     {
         synchronized (this.getLock())
@@ -157,6 +158,7 @@ public final class Synchronized<name>List
         return this;
     }
 
+    @Override
     public Synchronized<name>List without(<type> element)
     {
         synchronized (this.getLock())
@@ -166,6 +168,7 @@ public final class Synchronized<name>List
         return this;
     }
 
+    @Override
     public Synchronized<name>List withAll(<name>Iterable elements)
     {
         synchronized (this.getLock())
@@ -175,6 +178,7 @@ public final class Synchronized<name>List
         return this;
     }
 
+    @Override
     public Synchronized<name>List withoutAll(<name>Iterable elements)
     {
         synchronized (this.getLock())
@@ -184,6 +188,7 @@ public final class Synchronized<name>List
         return this;
     }
 
+    @Override
     public Mutable<name>List select(<name>Predicate predicate)
     {
         synchronized (this.getLock())
@@ -192,6 +197,7 @@ public final class Synchronized<name>List
         }
     }
 
+    @Override
     public Mutable<name>List reject(<name>Predicate predicate)
     {
         synchronized (this.getLock())
@@ -200,6 +206,7 @@ public final class Synchronized<name>List
         }
     }
 
+    @Override
     public \<V> MutableList\<V> collect(<name>ToObjectFunction\<? extends V> function)
     {
         synchronized (this.getLock())
@@ -227,6 +234,7 @@ public final class Synchronized<name>List
         }
     }
 
+    @Override
     public Lazy<name>Iterable asLazy()
     {
         synchronized (this.getLock())
@@ -235,16 +243,19 @@ public final class Synchronized<name>List
         }
     }
 
+    @Override
     public Mutable<name>List asUnmodifiable()
     {
         return new Unmodifiable<name>List(this);
     }
 
+    @Override
     public Mutable<name>List asSynchronized()
     {
         return this;
     }
 
+    @Override
     public Immutable<name>List toImmutable()
     {
         int size = this.size();
