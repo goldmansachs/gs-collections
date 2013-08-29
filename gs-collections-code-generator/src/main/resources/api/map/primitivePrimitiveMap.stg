@@ -25,6 +25,8 @@ import com.gs.collections.api.block.predicate.primitive.<name1><name2>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name1><name2>Procedure;
 import com.gs.collections.api.block.procedure.primitive.<name1>Procedure;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.block.procedure.primitive.<name2>Procedure;<endif>
+import com.gs.collections.api.collection.primitive.Mutable<name2>Collection;
+import com.gs.collections.api.set.primitive.Mutable<name1>Set;
 
 /**
  * This file was automatically generated from template file primitivePrimitiveMap.stg.
@@ -79,6 +81,10 @@ public interface <name1><name2>Map extends <name2>Iterable
     String toString();
 
     Immutable<name1><name2>Map toImmutable();
+
+    Mutable<name1>Set keySet();
+
+    Mutable<name2>Collection values();
 }
 
 >>

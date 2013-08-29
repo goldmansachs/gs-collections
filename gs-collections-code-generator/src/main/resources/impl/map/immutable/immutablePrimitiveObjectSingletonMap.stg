@@ -78,6 +78,7 @@ import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.UnmodifiableIteratorAdapter;
@@ -197,6 +198,16 @@ final class Immutable<name>ObjectSingletonMap\<V> extends AbstractImmutable<name
     public int size()
     {
         return 1;
+    }
+
+    public Mutable<name>Set keySet()
+    {
+        throw new UnsupportedOperationException("keySet is not implemented yet!");
+    }
+
+    public Collection\<V> values()
+    {
+        throw new UnsupportedOperationException("values is not implemented yet!");
     }
 
     @Override

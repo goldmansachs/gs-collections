@@ -45,7 +45,6 @@ import org.junit.Test;
  */
 public class Immutable<name1><name2>SingletonMapTest extends AbstractImmutable<name1><name2>MapTestCase
 {
-
     @Override
     protected Immutable<name1><name2>Map classUnderTest()
     {

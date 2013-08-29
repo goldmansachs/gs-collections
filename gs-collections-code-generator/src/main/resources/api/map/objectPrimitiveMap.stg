@@ -13,11 +13,14 @@ body(type, name) ::= <<
 
 package com.gs.collections.api.map.primitive;
 
+import java.util.Set;
+
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.block.predicate.primitive.Object<name>Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.Object<name>Procedure;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
+import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
 
 /**
  * This file was automatically generated from template file objectPrimitiveMap.stg.
@@ -58,6 +61,10 @@ public interface Object<name>Map\<K> extends <name>Iterable
     String toString();
 
     ImmutableObject<name>Map\<K> toImmutable();
+
+    Set\<K> keySet();
+
+    Mutable<name>Collection values();
 }
 
 >>

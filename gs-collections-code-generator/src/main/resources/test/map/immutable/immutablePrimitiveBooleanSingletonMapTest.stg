@@ -43,7 +43,6 @@ import org.junit.Test;
  */
 public class Immutable<name>BooleanSingletonMapTest extends AbstractImmutable<name>BooleanMapTestCase
 {
-
     @Override
     protected Immutable<name>BooleanMap classUnderTest()
     {

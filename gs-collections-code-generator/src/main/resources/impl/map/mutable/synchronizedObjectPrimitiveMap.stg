@@ -19,6 +19,7 @@ package com.gs.collections.impl.map.mutable.primitive;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Set;
 
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.Lazy<name>Iterable;
@@ -434,6 +435,16 @@ public final class SynchronizedObject<name>Map\<K>
         {
             return this.map.notEmpty();
         }
+    }
+
+    public Set\<K> keySet()
+    {
+        throw new UnsupportedOperationException("keySet is not implemented yet!");
+    }
+
+    public Mutable<name>Collection values()
+    {
+        throw new UnsupportedOperationException("values is not implemented yet!");
     }
 
     @Override

@@ -25,10 +25,6 @@ body(type, name) ::= <<
 
 package com.gs.collections.impl.map.immutable.primitive;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Comparator;
@@ -82,6 +78,7 @@ import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.UnmodifiableIteratorAdapter;
@@ -597,6 +594,16 @@ final class Immutable<name>ObjectHashMap\<V> extends AbstractImmutable<name>Obje
     public Iterator\<V> iterator()
     {
         return new UnmodifiableIteratorAdapter\<V>(this.delegate.iterator());
+    }
+
+    public Mutable<name>Set keySet()
+    {
+        throw new UnsupportedOperationException("keySet is not implemented yet!");
+    }
+
+    public Collection\<V> values()
+    {
+        throw new UnsupportedOperationException("values is not implemented yet!");
     }
 
     @Override

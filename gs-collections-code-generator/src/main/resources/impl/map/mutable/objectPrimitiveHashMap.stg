@@ -1676,7 +1676,6 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
 
     private class KeysView extends AbstractLazyIterable\<K>
     {
-
         public void forEach(Procedure\<? super K> procedure)
         {
             for (int i = 0; i \< Object<name>HashMap.this.keys.length; i++)

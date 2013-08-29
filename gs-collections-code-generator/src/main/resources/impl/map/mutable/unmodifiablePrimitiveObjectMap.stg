@@ -75,6 +75,7 @@ import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.UnmodifiableIteratorAdapter;
@@ -540,6 +541,16 @@ public final class Unmodifiable<name>ObjectMap\<V>
     public double sumOfDouble(DoubleFunction\<? super V> function)
     {
         return this.map.sumOfDouble(function);
+    }
+
+    public Mutable<name>Set keySet()
+    {
+        throw new UnsupportedOperationException("keySet is not implemented yet!");
+    }
+
+    public Collection\<V> values()
+    {
+        throw new UnsupportedOperationException("values is not implemented yet!");
     }
 
     @Override

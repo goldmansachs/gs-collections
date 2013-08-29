@@ -108,7 +108,6 @@ class MultiReaderHashBagScalaTest extends MultiReaderHashBagTestTrait
     @Test
     def removeOccurrences_safe
     {
-
         this.assertWritersBlocked
         {
             this.classUnderTest.removeOccurrences(1, 1)

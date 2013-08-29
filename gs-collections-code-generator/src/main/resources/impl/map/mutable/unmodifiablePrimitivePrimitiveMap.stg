@@ -44,6 +44,7 @@ import com.gs.collections.api.list.primitive.Mutable<name2>List;
 import com.gs.collections.api.map.primitive.Immutable<name1><name2>Map;
 import com.gs.collections.api.map.primitive.<name1><name2>Map;
 import com.gs.collections.api.map.primitive.Mutable<name1><name2>Map;
+<if(!sameTwoPrimitives)>import com.gs.collections.api.set.primitive.Mutable<name1>Set;<endif>
 import com.gs.collections.api.set.primitive.Mutable<name2>Set;
 import com.gs.collections.impl.factory.primitive.<name1><name2>Maps;
 
@@ -326,6 +327,16 @@ public final class Unmodifiable<name1><name2>Map
     public boolean notEmpty()
     {
         return this.map.notEmpty();
+    }
+
+    public Mutable<name1>Set keySet()
+    {
+        throw new UnsupportedOperationException("keySet is not implemented yet!");
+    }
+
+    public Mutable<name2>Collection values()
+    {
+        throw new UnsupportedOperationException("values is not implemented yet!");
     }
 
     @Override

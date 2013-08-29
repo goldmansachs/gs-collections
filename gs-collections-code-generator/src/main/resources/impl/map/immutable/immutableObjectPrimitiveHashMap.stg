@@ -18,6 +18,7 @@ package com.gs.collections.impl.map.immutable.primitive;
 
 import java.io.Serializable;
 import java.util.Iterator;
+import java.util.Set;
 
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.Lazy<name>Iterable;
@@ -31,6 +32,7 @@ import com.gs.collections.api.block.procedure.primitive.Object<name>Procedure;
 import com.gs.collections.api.map.primitive.Object<name>Map;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.collection.primitive.Immutable<name>Collection;
+import com.gs.collections.api.collection.primitive.Mutable<name>Collection;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.map.primitive.ImmutableObject<name>Map;
@@ -241,6 +243,16 @@ final class ImmutableObject<name>HashMap\<K> extends AbstractImmutableObject<nam
     public boolean notEmpty()
     {
         return this.delegate.notEmpty();
+    }
+
+    public Set\<K> keySet()
+    {
+        throw new UnsupportedOperationException("keySet is not implemented yet!");
+    }
+
+    public Mutable<name>Collection values()
+    {
+        throw new UnsupportedOperationException("values is not implemented yet!");
     }
 
     @Override
