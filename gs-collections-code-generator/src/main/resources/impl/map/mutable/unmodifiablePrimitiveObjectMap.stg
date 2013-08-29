@@ -132,6 +132,11 @@ public final class Unmodifiable<name>ObjectMap\<V>
         return this.getIfAbsentThrow(key);
     }
 
+    public V getIfAbsentPut(<type> key, V value)
+    {
+        return this.getIfAbsentThrow(key);
+    }
+
     public V getIfAbsentPutWithKey(<type> key, <name>ToObjectFunction\<? extends V> function)
     {
         return this.getIfAbsentThrow(key);

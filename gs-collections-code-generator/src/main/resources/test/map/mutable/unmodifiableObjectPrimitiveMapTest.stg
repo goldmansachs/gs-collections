@@ -22,6 +22,8 @@ package com.gs.collections.impl.map.mutable.primitive;
 
 import com.gs.collections.api.block.function.primitive.<name>Function;
 import com.gs.collections.api.block.function.primitive.<name>Function0;
+import com.gs.collections.api.block.function.primitive.<name>To<name>Function;
+import com.gs.collections.api.map.primitive.MutableObject<name>Map;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -159,6 +161,19 @@ public class UnmodifiableObject<name>MapTest extends AbstractMutableObject<name>
 
     @Override
     @Test
+    public void getIfAbsentPut_Value()
+    {
+        Assert.assertEquals(<(wideLiteral.(type))("0")>, this.map.getIfAbsentPut("0", <(literal.(type))("100")>)<delta.(type)>);
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void getIfAbsentPut_ValueThrowsException()
+    {
+        this.map.getIfAbsentPut("10", <(literal.(type))("100")>);
+    }
+
+    @Override
+    @Test
     public void getIfAbsentPut_Function()
     {
         <name>Function0 factory = new <name>Function0()
@@ -179,7 +194,7 @@ public class UnmodifiableObject<name>MapTest extends AbstractMutableObject<name>
         {
             public <type> value()
             {
-                return <(literal.(type))("100")>;
+                throw new AssertionError();
             }
         };
 
@@ -208,7 +223,7 @@ public class UnmodifiableObject<name>MapTest extends AbstractMutableObject<name>
         {
             public <type> <type>ValueOf(String string)
             {
-                return <(castIntToNarrowType.(type))("string.length()")>;
+                throw new AssertionError();
             }
         };
 
@@ -237,11 +252,27 @@ public class UnmodifiableObject<name>MapTest extends AbstractMutableObject<name>
         {
             public <type> <type>ValueOf(Integer anObject)
             {
-                return anObject == null ? <(literal.(type))("32")> : <(castIntToNarrowType.(type))("anObject.intValue()")>;
+                throw new AssertionError();
             }
         };
 
         this.\<Integer>getEmptyMap().getIfAbsentPutWithKey(10, function);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void updateValue()
+    {
+        <name>To<name>Function incrementFunction = new <name>To<name>Function()
+        {
+            public <type> valueOf(<type> value)
+            {
+                throw new AssertionError();
+            }
+        };
+
+        MutableObject<name>Map\<Integer> map1 = this.getEmptyMap();
+        map1.updateValue(0, <(literal.(type))("0")>, incrementFunction);
     }
 
     @Override

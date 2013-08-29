@@ -1748,7 +1748,6 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
             {
                 return this.count != Object<name>HashMap.this.size();
             }
-
         }
     }
 }

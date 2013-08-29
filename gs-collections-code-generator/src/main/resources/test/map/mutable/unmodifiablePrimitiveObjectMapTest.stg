@@ -163,7 +163,20 @@ public class Unmodifiable<name>ObjectMapTest extends AbstractMutable<name>Object
 
     @Override
     @Test
-    public void getIfAbsentPut()
+    public void getIfAbsentPut_Value()
+    {
+        Assert.assertEquals("zero", this.map.getIfAbsentPut(<(literal.(type))("0")>, "zeroValue"));
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void getIfAbsentPut_Value_throws()
+    {
+        this.map.getIfAbsentPut(<(literal.(type))("1")>, "oneValue");
+    }
+
+    @Override
+    @Test
+    public void getIfAbsentPut_Function()
     {
         Assert.assertEquals("zero", this.map.getIfAbsentPut(<(literal.(type))("0")>, new Function0\<String>()
         {
@@ -175,7 +188,7 @@ public class Unmodifiable<name>ObjectMapTest extends AbstractMutable<name>Object
     }
 
     @Test(expected = UnsupportedOperationException.class)
-    public void getIfAbsentPutThrowsException()
+    public void getIfAbsentPut_Function_throws()
     {
         this.map.getIfAbsentPut(<(literal.(type))("1")>, new Function0\<String>()
         {

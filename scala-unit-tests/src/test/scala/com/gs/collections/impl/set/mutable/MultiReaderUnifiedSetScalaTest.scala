@@ -665,7 +665,6 @@ class MultiReaderUnifiedSetScalaTest extends MultiReaderUnifiedSetTestTrait
         this.assertWritersBlocked
         {
             this.classUnderTest.chunk(2)
-
         }
         this.assertReadersNotBlocked
         {
@@ -735,7 +734,6 @@ class MultiReaderUnifiedSetScalaTest extends MultiReaderUnifiedSetTestTrait
                 (_: Int, _: Int) => true
             }, 1
             )
-
         }
         this.assertReadersNotBlocked
         {
@@ -1006,7 +1004,6 @@ class MultiReaderUnifiedSetScalaTest extends MultiReaderUnifiedSetTestTrait
         this.assertWritersBlocked
         {
             this.classUnderTest.contains(1)
-
         }
         this.assertReadersNotBlocked
         {
@@ -1020,7 +1017,6 @@ class MultiReaderUnifiedSetScalaTest extends MultiReaderUnifiedSetTestTrait
         this.assertWritersBlocked
         {
             this.classUnderTest.containsAll(FastList.newListWith(1, 2))
-
         }
         this.assertReadersNotBlocked
         {
@@ -1034,7 +1030,6 @@ class MultiReaderUnifiedSetScalaTest extends MultiReaderUnifiedSetTestTrait
         this.assertWritersBlocked
         {
             this.classUnderTest.containsAll(FastList.newListWith(1, 2))
-
         }
         this.assertReadersNotBlocked
         {
@@ -1048,7 +1043,6 @@ class MultiReaderUnifiedSetScalaTest extends MultiReaderUnifiedSetTestTrait
         this.assertWritersBlocked
         {
             this.classUnderTest.containsAllArguments("1", "2")
-
         }
         this.assertReadersNotBlocked
         {

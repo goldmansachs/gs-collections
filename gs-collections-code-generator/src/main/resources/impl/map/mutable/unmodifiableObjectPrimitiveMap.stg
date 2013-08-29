@@ -24,6 +24,7 @@ import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.block.function.primitive.<name>Function;
 import com.gs.collections.api.block.function.primitive.<name>Function0;
+import com.gs.collections.api.block.function.primitive.<name>To<name>Function;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.predicate.primitive.Object<name>Predicate;
@@ -101,6 +102,11 @@ public final class UnmodifiableObject<name>Map\<K>
         throw new UnsupportedOperationException("Cannot call removeKeyIfAbsent() on " + this.getClass().getSimpleName());
     }
 
+    public <type> getIfAbsentPut(K key, <type> value)
+    {
+        return this.getIfAbsentThrow(key);
+    }
+
     public <type> getIfAbsentPut(K key, <name>Function0 function)
     {
         return this.getIfAbsentThrow(key);
@@ -114,6 +120,11 @@ public final class UnmodifiableObject<name>Map\<K>
     public \<P> <type> getIfAbsentPutWith(K key, <name>Function\<? super P> function, P parameter)
     {
         return this.getIfAbsentThrow(key);
+    }
+
+    public <type> updateValue(K key, <type> initialValueIfAbsent, <name>To<name>Function function)
+    {
+        throw new UnsupportedOperationException("Cannot call updateValue() on " + this.getClass().getSimpleName());
     }
 
     public <type> get(Object key)

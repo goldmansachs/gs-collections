@@ -252,7 +252,6 @@ public abstract class Abstract<name>BooleanMapTestCase
                 map4.toString(),
                 "[<(toStringLiteral.(type))("32")>=true, <(toStringLiteral.(type))("33")>=false]".equals(map4.toString())
                         || "[<(toStringLiteral.(type))("33")>=false, <(toStringLiteral.(type))("32")>=true]".equals(map4.toString()));
-
     }
 
     @Test
@@ -541,7 +540,6 @@ public abstract class Abstract<name>BooleanMapTestCase
                 appendable6.toString(),
                 "<(toStringLiteral.(type))("0")>=true/<(toStringLiteral.(type))("1")>=false".equals(appendable6.toString())
                         || "<(toStringLiteral.(type))("1")>=false/<(toStringLiteral.(type))("0")>=true".equals(appendable6.toString()));
-
     }
 
     @Test

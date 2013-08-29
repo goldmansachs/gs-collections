@@ -267,7 +267,64 @@ public abstract class AbstractMutable<name>ObjectMapTestCase extends Abstract<na
     }
 
     @Test
-    public void getIfAbsentPut()
+    public void getIfAbsentPut_Value()
+    {
+        Assert.assertEquals("zero", this.map.getIfAbsentPut(<(literal.(type))("0")>, "zeroValue"));
+        Mutable<name>ObjectMap\<String> expected = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("31")>, "thirtyOne", <(literal.(type))("32")>, "thirtyTwo");
+        Assert.assertEquals(expected, this.map);
+
+        Assert.assertEquals("oneValue", this.map.getIfAbsentPut(<(literal.(type))("1")>, "oneValue"));
+        expected.put(<(literal.(type))("1")>, "oneValue");
+        Assert.assertEquals(expected, this.map);
+
+        Assert.assertNull(this.map.getIfAbsentPut(<(literal.(type))("2")>, new Function0\<String>()
+        {
+            public String value()
+            {
+                return null;
+            }
+        }));
+        expected.put(<(literal.(type))("2")>, null);
+        Assert.assertEquals(expected, this.map);
+
+        Assert.assertEquals("thirtyTwo", this.map.getIfAbsentPut(<(literal.(type))("32")>, "thirtyTwoValue"));
+        Assert.assertEquals(expected, this.map);
+
+        Assert.assertEquals("thirtyThreeValue", this.map.getIfAbsentPut(<(literal.(type))("33")>, "thirtyThreeValue"));
+        expected.put(<(literal.(type))("33")>, "thirtyThreeValue");
+        Assert.assertEquals(expected, this.map);
+
+        Assert.assertNull(this.map.getIfAbsentPut(<(literal.(type))("34")>, new Function0\<String>()
+        {
+            public String value()
+            {
+                return null;
+            }
+        }));
+        expected.put(<(literal.(type))("34")>, null);
+        Assert.assertEquals(expected, this.map);
+
+        Mutable<name>ObjectMap\<String> emptyMap = <name>ObjectHashMap.newMap();
+        Assert.assertEquals("zeroValue", emptyMap.getIfAbsentPut(<(literal.(type))("0")>, "zeroValue"));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zeroValue"), emptyMap);
+
+        Assert.assertEquals("oneValue", emptyMap.getIfAbsentPut(<(literal.(type))("1")>, "oneValue"));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zeroValue", <(literal.(type))("1")>, "oneValue"), emptyMap);
+
+        Assert.assertEquals("oneValue", emptyMap.getIfAbsentPut(<(literal.(type))("1")>, "twoValue"));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zeroValue", <(literal.(type))("1")>, "oneValue"), emptyMap);
+        Assert.assertEquals("zeroValue", emptyMap.removeKey(<(literal.(type))("0")>));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "oneValue"), emptyMap);
+        Assert.assertEquals("zeroValue", emptyMap.getIfAbsentPut(<(literal.(type))("0")>, "zeroValue"));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zeroValue", <(literal.(type))("1")>, "oneValue"), emptyMap);
+
+        Mutable<name>ObjectMap\<String> emptyMap1 = <name>ObjectHashMap.newMap();
+        Assert.assertEquals("oneValue", emptyMap1.getIfAbsentPut(<(literal.(type))("1")>, "oneValue"));
+        Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "oneValue"), emptyMap1);
+    }
+
+    @Test
+    public void getIfAbsentPut_Function()
     {
         Assert.assertEquals("zero", this.map.getIfAbsentPut(<(literal.(type))("0")>, new Function0\<String>()
         {

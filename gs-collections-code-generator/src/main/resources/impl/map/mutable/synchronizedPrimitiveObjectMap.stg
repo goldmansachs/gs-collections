@@ -139,6 +139,14 @@ public final class Synchronized<name>ObjectMap\<V>
         }
     }
 
+    public V getIfAbsentPut(<type> key, V value)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.getIfAbsentPut(key, value);
+        }
+    }
+
     public V getIfAbsentPut(<type> key, Function0\<? extends V> function)
     {
         synchronized (this.lock)

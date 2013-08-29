@@ -501,6 +501,53 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         return ifAbsent.value();
     }
 
+    public V getIfAbsentPut(<type> key, V value)
+    {
+        if (isEmptyKey(key))
+        {
+            if (this.sentinelValues == null)
+            {
+                this.sentinelValues = new SentinelValues\<V>();
+                this.sentinelValues.containsZeroKey = true;
+                this.sentinelValues.zeroValue = value;
+                return value;
+            }
+            if (this.sentinelValues.containsZeroKey)
+            {
+                return this.sentinelValues.zeroValue;
+            }
+            this.sentinelValues.containsZeroKey = true;
+            this.sentinelValues.zeroValue = value;
+            return value;
+        }
+        if (isRemovedKey(key))
+        {
+            if (this.sentinelValues == null)
+            {
+                this.sentinelValues = new SentinelValues\<V>();
+                this.sentinelValues.containsOneKey = true;
+                this.sentinelValues.oneValue = value;
+                return value;
+            }
+            if (this.sentinelValues.containsOneKey)
+            {
+                return this.sentinelValues.oneValue;
+            }
+            this.sentinelValues.containsOneKey = true;
+            this.sentinelValues.oneValue = value;
+            return value;
+        }
+        int index = this.probe(key);
+        if (<(equals.(type))("this.keys[index]", "key")>)
+        {
+            return this.values[index];
+        }
+        this.keys[index] = key;
+        this.occupied++;
+        this.values[index] = value;
+        return value;
+    }
+
     public V getIfAbsentPut(<type> key, Function0\<? extends V> function)
     {
         if (isEmptyKey(key))

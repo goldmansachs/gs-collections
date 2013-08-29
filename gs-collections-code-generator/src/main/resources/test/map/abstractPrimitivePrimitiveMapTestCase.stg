@@ -260,7 +260,6 @@ public abstract class Abstract<name1><name2>MapTestCase
                 map4.toString(),
                 "[<(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>, <(toStringLiteral.(type1))("33")>=<(toStringLiteral.(type2))("33")>]".equals(map4.toString())
                         || "[<(toStringLiteral.(type1))("33")>=<(toStringLiteral.(type2))("33")>, <(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>]".equals(map4.toString()));
-
     }
 
     @Test
@@ -661,7 +660,6 @@ public abstract class Abstract<name1><name2>MapTestCase
                 appendable6.toString(),
                 "<(toStringLiteral.(type1))("0")>=<(toStringLiteral.(type2))("0")>/<(toStringLiteral.(type1))("1")>=<(toStringLiteral.(type2))("1")>".equals(appendable6.toString())
                         || "<(toStringLiteral.(type1))("1")>=<(toStringLiteral.(type2))("1")>/<(toStringLiteral.(type1))("0")>=<(toStringLiteral.(type2))("0")>".equals(appendable6.toString()));
-
     }
 
     @Test

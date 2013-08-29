@@ -26,6 +26,7 @@ import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.block.function.primitive.<name>Function;
 import com.gs.collections.api.block.function.primitive.<name>Function0;
+import com.gs.collections.api.block.function.primitive.<name>To<name>Function;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.predicate.primitive.Object<name>Predicate;
@@ -122,6 +123,14 @@ public final class SynchronizedObject<name>Map\<K>
         }
     }
 
+    public <type> getIfAbsentPut(K key, <type> value)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.getIfAbsentPut(key, value);
+        }
+    }
+
     public <type> getIfAbsentPut(K key, <name>Function0 function)
     {
         synchronized (this.lock)
@@ -143,6 +152,14 @@ public final class SynchronizedObject<name>Map\<K>
         synchronized (this.lock)
         {
             return this.map.getIfAbsentPutWith(key, function, parameter);
+        }
+    }
+
+    public <type> updateValue(K key, <type> initialValueIfAbsent, <name>To<name>Function function)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.updateValue(key, initialValueIfAbsent, function);
         }
     }
 

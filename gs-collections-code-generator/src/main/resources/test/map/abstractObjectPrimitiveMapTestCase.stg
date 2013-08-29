@@ -121,7 +121,6 @@ public abstract class AbstractObject<name>MapTestCase
         Verify.assertSize(2, this.newWithKeysValues(0, <(literal.(type))("0")>, 5, <(literal.(type))("5")>));
         Verify.assertSize(3, this.newWithKeysValues(1, <(literal.(type))("1")>, 0, <(literal.(type))("0")>, 5, <(literal.(type))("5")>));
         Verify.assertSize(2, this.newWithKeysValues(6, <(literal.(type))("6")>, 5, <(literal.(type))("5")>));
-
     }
 
     @Test
