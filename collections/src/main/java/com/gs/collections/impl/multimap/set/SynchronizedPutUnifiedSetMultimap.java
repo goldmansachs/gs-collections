@@ -45,7 +45,7 @@ public final class SynchronizedPutUnifiedSetMultimap<K, V>
     {
     }
 
-    public SynchronizedPutUnifiedSetMultimap(int initialCapacity, float loadFactor, int concurrencyLevel)
+    public SynchronizedPutUnifiedSetMultimap(int initialCapacity)
     {
         super(ConcurrentHashMap.<K, MutableSet<V>>newMap(initialCapacity));
     }
@@ -80,7 +80,7 @@ public final class SynchronizedPutUnifiedSetMultimap<K, V>
 
     public static <K, V> SynchronizedPutUnifiedSetMultimap<K, V> newMultimap(int initiaCapacity, float loadFactor, int concurrencyLevel)
     {
-        return new SynchronizedPutUnifiedSetMultimap<K, V>(initiaCapacity, loadFactor, concurrencyLevel);
+        return new SynchronizedPutUnifiedSetMultimap<K, V>(initiaCapacity);
     }
 
     public static <K, V> SynchronizedPutUnifiedSetMultimap<K, V> newMultimap(Multimap<? extends K, ? extends V> multimap)

@@ -46,7 +46,7 @@ public final class SynchronizedPutFastListMultimap<K, V>
     {
     }
 
-    public SynchronizedPutFastListMultimap(int initialCapacity, float loadFactor, int concurrencyLevel)
+    public SynchronizedPutFastListMultimap(int initialCapacity)
     {
         super(ConcurrentHashMap.<K, MutableList<V>>newMap(initialCapacity));
     }
@@ -81,7 +81,7 @@ public final class SynchronizedPutFastListMultimap<K, V>
 
     public static <K, V> SynchronizedPutFastListMultimap<K, V> newMultimap(int initiaCapacity, float loadFactor, int concurrencyLevel)
     {
-        return new SynchronizedPutFastListMultimap<K, V>(initiaCapacity, loadFactor, concurrencyLevel);
+        return new SynchronizedPutFastListMultimap<K, V>(initiaCapacity);
     }
 
     public static <K, V> SynchronizedPutFastListMultimap<K, V> newMultimap(Multimap<? extends K, ? extends V> multimap)

@@ -2039,6 +2039,8 @@ public class UnifiedSetWithHashingStrategy<K>
                         }
                         bucket.three = null;
                         return;
+                    default:
+                        throw new AssertionError();
                 }
             }
             while (true);
@@ -2072,6 +2074,8 @@ public class UnifiedSetWithHashingStrategy<K>
                         return bucket.three;
                     case 4:
                         return null; // this happens when a bucket is exactly full and we're iterating
+                    default:
+                        throw new AssertionError();
                 }
             }
             while (true);

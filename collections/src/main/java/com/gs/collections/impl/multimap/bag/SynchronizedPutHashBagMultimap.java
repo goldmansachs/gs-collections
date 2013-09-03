@@ -45,7 +45,7 @@ public final class SynchronizedPutHashBagMultimap<K, V>
     {
     }
 
-    public SynchronizedPutHashBagMultimap(int initialCapacity, float loadFactor, int concurrencyLevel)
+    public SynchronizedPutHashBagMultimap(int initialCapacity)
     {
         super(ConcurrentHashMap.<K, MutableBag<V>>newMap(initialCapacity));
     }
@@ -79,7 +79,7 @@ public final class SynchronizedPutHashBagMultimap<K, V>
 
     public static <K, V> SynchronizedPutHashBagMultimap<K, V> newMultimap(int initialCapacity, float loadFactor, int concurrencyLevel)
     {
-        return new SynchronizedPutHashBagMultimap<K, V>(initialCapacity, loadFactor, concurrencyLevel);
+        return new SynchronizedPutHashBagMultimap<K, V>(initialCapacity);
     }
 
     public static <K, V> SynchronizedPutHashBagMultimap<K, V> newMultimap(Multimap<? extends K, ? extends V> multimap)
