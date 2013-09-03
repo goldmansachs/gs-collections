@@ -30,7 +30,7 @@ public class SynchronizedDoubleByteMapTest
                         + "Y2hyb25pemVkRG91YmxlQnl0ZU1hcAAAAAAAAAABAgACTAAEbG9ja3QAEkxqYXZhL2xhbmcvT2Jq\n"
                         + "ZWN0O0wAA21hcHQAO0xjb20vZ3MvY29sbGVjdGlvbnMvYXBpL21hcC9wcmltaXRpdmUvTXV0YWJs\n"
                         + "ZURvdWJsZUJ5dGVNYXA7eHBxAH4AA3NyAD9jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0\n"
-                        + "YWJsZS5wcmltaXRpdmUuRG91YmxlQnl0ZUhhc2hNYXAAAAAAAAAAAQwAAHhwdwgAAAAAPwAAAHg=\n",
+                        + "YWJsZS5wcmltaXRpdmUuRG91YmxlQnl0ZUhhc2hNYXAAAAAAAAAAAQwAAHhwdwQAAAAAeA==",
                 new SynchronizedDoubleByteMap(new DoubleByteHashMap()));
     }
 }

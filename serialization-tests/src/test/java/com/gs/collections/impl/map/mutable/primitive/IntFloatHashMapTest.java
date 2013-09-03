@@ -27,7 +27,7 @@ public class IntFloatHashMapTest
         Verify.assertSerializedForm(
                 1L,
                 "rO0ABXNyAD1jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5wcmltaXRpdmUuSW50\n"
-                        + "RmxvYXRIYXNoTWFwAAAAAAAAAAEMAAB4cHcIAAAAAD8AAAB4",
+                        + "RmxvYXRIYXNoTWFwAAAAAAAAAAEMAAB4cHcEAAAAAHg=",
                 new IntFloatHashMap());
     }
 }

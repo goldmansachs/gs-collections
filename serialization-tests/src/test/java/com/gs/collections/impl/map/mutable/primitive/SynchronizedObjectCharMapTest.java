@@ -30,7 +30,7 @@ public class SynchronizedObjectCharMapTest
                         + "Y2hyb25pemVkT2JqZWN0Q2hhck1hcAAAAAAAAAABAgACTAAEbG9ja3QAEkxqYXZhL2xhbmcvT2Jq\n"
                         + "ZWN0O0wAA21hcHQAO0xjb20vZ3MvY29sbGVjdGlvbnMvYXBpL21hcC9wcmltaXRpdmUvTXV0YWJs\n"
                         + "ZU9iamVjdENoYXJNYXA7eHBxAH4AA3NyAD9jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0\n"
-                        + "YWJsZS5wcmltaXRpdmUuT2JqZWN0Q2hhckhhc2hNYXAAAAAAAAAAAQwAAHhwdwgAAAAAPwAAAHg=\n",
+                        + "YWJsZS5wcmltaXRpdmUuT2JqZWN0Q2hhckhhc2hNYXAAAAAAAAAAAQwAAHhwdwQAAAAAeA==",
                 new SynchronizedObjectCharMap<Object>(new ObjectCharHashMap<Object>()));
     }
 }

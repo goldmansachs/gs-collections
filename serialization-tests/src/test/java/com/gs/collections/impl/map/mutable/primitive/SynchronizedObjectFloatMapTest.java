@@ -30,8 +30,7 @@ public class SynchronizedObjectFloatMapTest
                         + "Y2hyb25pemVkT2JqZWN0RmxvYXRNYXAAAAAAAAAAAQIAAkwABGxvY2t0ABJMamF2YS9sYW5nL09i\n"
                         + "amVjdDtMAANtYXB0ADxMY29tL2dzL2NvbGxlY3Rpb25zL2FwaS9tYXAvcHJpbWl0aXZlL011dGFi\n"
                         + "bGVPYmplY3RGbG9hdE1hcDt4cHEAfgADc3IAQGNvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLm1hcC5t\n"
-                        + "dXRhYmxlLnByaW1pdGl2ZS5PYmplY3RGbG9hdEhhc2hNYXAAAAAAAAAAAQwAAHhwdwgAAAAAPwAA\n"
-                        + "AHg=",
+                        + "dXRhYmxlLnByaW1pdGl2ZS5PYmplY3RGbG9hdEhhc2hNYXAAAAAAAAAAAQwAAHhwdwQAAAAAeA==\n",
                 new SynchronizedObjectFloatMap<Object>(new ObjectFloatHashMap<Object>()));
     }
 }

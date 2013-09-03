@@ -30,7 +30,7 @@ public class SynchronizedShortFloatMapTest
                         + "Y2hyb25pemVkU2hvcnRGbG9hdE1hcAAAAAAAAAABAgACTAAEbG9ja3QAEkxqYXZhL2xhbmcvT2Jq\n"
                         + "ZWN0O0wAA21hcHQAO0xjb20vZ3MvY29sbGVjdGlvbnMvYXBpL21hcC9wcmltaXRpdmUvTXV0YWJs\n"
                         + "ZVNob3J0RmxvYXRNYXA7eHBxAH4AA3NyAD9jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0\n"
-                        + "YWJsZS5wcmltaXRpdmUuU2hvcnRGbG9hdEhhc2hNYXAAAAAAAAAAAQwAAHhwdwgAAAAAPwAAAHg=\n",
+                        + "YWJsZS5wcmltaXRpdmUuU2hvcnRGbG9hdEhhc2hNYXAAAAAAAAAAAQwAAHhwdwQAAAAAeA==",
                 new SynchronizedShortFloatMap(new ShortFloatHashMap()));
     }
 }

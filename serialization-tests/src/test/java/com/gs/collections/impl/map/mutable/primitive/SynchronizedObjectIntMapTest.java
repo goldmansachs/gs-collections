@@ -30,7 +30,7 @@ public class SynchronizedObjectIntMapTest
                         + "Y2hyb25pemVkT2JqZWN0SW50TWFwAAAAAAAAAAECAAJMAARsb2NrdAASTGphdmEvbGFuZy9PYmpl\n"
                         + "Y3Q7TAADbWFwdAA6TGNvbS9ncy9jb2xsZWN0aW9ucy9hcGkvbWFwL3ByaW1pdGl2ZS9NdXRhYmxl\n"
                         + "T2JqZWN0SW50TWFwO3hwcQB+AANzcgA+Y29tLmdzLmNvbGxlY3Rpb25zLmltcGwubWFwLm11dGFi\n"
-                        + "bGUucHJpbWl0aXZlLk9iamVjdEludEhhc2hNYXAAAAAAAAAAAQwAAHhwdwgAAAAAPwAAAHg=",
+                        + "bGUucHJpbWl0aXZlLk9iamVjdEludEhhc2hNYXAAAAAAAAAAAQwAAHhwdwQAAAAAeA==",
                 new SynchronizedObjectIntMap<Object>(new ObjectIntHashMap<Object>()));
     }
 }

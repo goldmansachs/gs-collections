@@ -30,7 +30,7 @@ public class UnmodifiableByteCharMapTest
                         + "b2RpZmlhYmxlQnl0ZUNoYXJNYXAAAAAAAAAAAQIAAUwAA21hcHQAOUxjb20vZ3MvY29sbGVjdGlv\n"
                         + "bnMvYXBpL21hcC9wcmltaXRpdmUvTXV0YWJsZUJ5dGVDaGFyTWFwO3hwc3IAPWNvbS5ncy5jb2xs\n"
                         + "ZWN0aW9ucy5pbXBsLm1hcC5tdXRhYmxlLnByaW1pdGl2ZS5CeXRlQ2hhckhhc2hNYXAAAAAAAAAA\n"
-                        + "AQwAAHhwdwgAAAAAPwAAAHg=",
+                        + "AQwAAHhwdwQAAAAAeA==",
                 new UnmodifiableByteCharMap(new ByteCharHashMap()));
     }
 }

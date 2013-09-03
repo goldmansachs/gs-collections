@@ -387,6 +387,20 @@ public abstract class AbstractMutable<name1><name2>MapTestCase extends Abstract<
     }
 
     @Test
+    public void put_every_slot()
+    {
+        <name1><name2>HashMap hashMap = new <name1><name2>HashMap();
+        for (int i = 2; i \< 100; i++)
+        {
+            Assert.assertEquals(<(literal.(type2))("0")>, hashMap.get(<(castFromInt.(type1))("i")>)<(wideDelta.(type2))>);
+            hashMap.put(<(castFromInt.(type1))("i")>, <(castFromInt.(type2))("i")>);
+            Assert.assertEquals(<(castFromInt.(type2))("i")>, hashMap.get(<(castFromInt.(type1))("i")>)<(wideDelta.(type2))>);
+            hashMap.remove(<(castFromInt.(type1))("i")>);
+            Assert.assertEquals(<(literal.(type2))("0")>, hashMap.get(<(castFromInt.(type1))("i")>)<(wideDelta.(type2))>);
+        }
+    }
+
+    @Test
     public void putDuplicateWithRemovedSlot()
     {
         <type1> collision1 = AbstractMutable<name1><name2>MapTestCase.generateCollisions().getFirst();
@@ -627,6 +641,7 @@ public abstract class AbstractMutable<name1><name2>MapTestCase extends Abstract<
         Assert.assertEquals(<(wideLiteral.(type2))("2")>, map3.updateValue(<(literal.(type1))("33")>, <(literal.(type2))("0")>, incrementFunction)<(wideDelta.(type2))>);
         Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("33")>, <(literal.(type2))("2")>), map3);
     }
+
 
     @Test
     public void withoutKey()

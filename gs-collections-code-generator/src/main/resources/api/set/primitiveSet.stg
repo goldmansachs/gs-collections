@@ -28,10 +28,6 @@ import com.gs.collections.api.set.SetIterable;
  */
 public interface <name>Set extends <name>Iterable
 {
-    <sharedAPI(fileName(primitive), name)>
-
-    \<V> SetIterable\<V> collect(<name>ToObjectFunction\<? extends V> function);
-
     /**
      * Follows the same general contract as {@link Set#equals(Object)}.
      */
@@ -43,6 +39,10 @@ public interface <name>Set extends <name>Iterable
      */
     @Override
     int hashCode();
+
+    <sharedAPI(fileName(primitive), name)>
+
+    \<V> SetIterable\<V> collect(<name>ToObjectFunction\<? extends V> function);
 
     /**
      * Returns a frozen copy of this set. If the set is frozen, it returns itself. A frozen copy is the same thing as an immutable copy without safe-publish guarantees.

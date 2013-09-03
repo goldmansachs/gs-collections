@@ -11,10 +11,10 @@ fileName(primitive) ::= "AbstractMutable<primitive.name>ObjectMapTestCase"
 skipBoolean() ::= "true"
 
 class(primitive) ::= <<
-<body(primitive.type, primitive.name)>
+<body(primitive.type, primitive.name, primitive.wrapperName)>
 >>
 
-body(type, name) ::= <<
+body(type, name, wrapperName) ::= <<
 <copyright()>
 
 package com.gs.collections.impl.map.mutable.primitive;

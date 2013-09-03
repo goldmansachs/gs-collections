@@ -27,7 +27,7 @@ public class FloatDoubleHashMapTest
         Verify.assertSerializedForm(
                 1L,
                 "rO0ABXNyAEBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5wcmltaXRpdmUuRmxv\n"
-                        + "YXREb3VibGVIYXNoTWFwAAAAAAAAAAEMAAB4cHcIAAAAAD8AAAB4",
+                        + "YXREb3VibGVIYXNoTWFwAAAAAAAAAAEMAAB4cHcEAAAAAHg=",
                 new FloatDoubleHashMap());
     }
 }

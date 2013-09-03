@@ -27,7 +27,7 @@ public class IntLongHashMapTest
         Verify.assertSerializedForm(
                 1L,
                 "rO0ABXNyADxjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5wcmltaXRpdmUuSW50\n"
-                        + "TG9uZ0hhc2hNYXAAAAAAAAAAAQwAAHhwdwgAAAAAPwAAAHg=",
+                        + "TG9uZ0hhc2hNYXAAAAAAAAAAAQwAAHhwdwQAAAAAeA==",
                 new IntLongHashMap());
     }
 }

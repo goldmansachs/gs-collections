@@ -27,7 +27,7 @@ public class IntIntHashMapTest
         Verify.assertSerializedForm(
                 1L,
                 "rO0ABXNyADtjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5wcmltaXRpdmUuSW50\n"
-                        + "SW50SGFzaE1hcAAAAAAAAAABDAAAeHB3CAAAAAA/AAAAeA==",
+                        + "SW50SGFzaE1hcAAAAAAAAAABDAAAeHB3BAAAAAB4",
                 new IntIntHashMap());
     }
 }

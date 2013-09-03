@@ -11,16 +11,22 @@ fileName(primitive) ::= "<primitive.name>ObjectHashMapTest"
 skipBoolean() ::= "true"
 
 class(primitive) ::= <<
-<body(primitive.type, primitive.name)>
+<body(primitive.type, primitive.name, primitive.wrapperName)>
 >>
 
-body(type, name) ::= <<
+body(type, name, wrapperName) ::= <<
 <copyright()>
 
 package com.gs.collections.impl.map.mutable.primitive;
 
 import java.lang.reflect.Field;
 
+import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.map.primitive.Mutable<name>ObjectMap;
+import com.gs.collections.impl.block.factory.Functions0;
+import com.gs.collections.impl.block.function.AddFunction;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -30,8 +36,6 @@ import org.junit.Test;
  */
 public class <name>ObjectHashMapTest extends AbstractMutable<name>ObjectMapTestCase
 {
-    private final <name>ObjectHashMap\<String> map = this.classUnderTest();
-
     @Override
     protected <name>ObjectHashMap\<String> classUnderTest()
     {
@@ -176,6 +180,102 @@ public class <name>ObjectHashMapTest extends AbstractMutable<name>ObjectMapTestC
         Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("2")>, "two"), hashMap0);
         Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("2")>, "two", <(literal.(type))("3")>, "three"), hashMap1);
         Assert.assertEquals(<name>ObjectHashMap.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("2")>, "two", <(literal.(type))("3")>, "three").withKeyValue(<(literal.(type))("4")>, "four"), hashMap2);
+    }
+
+    @Test
+    public void put_every_slot()
+    {
+        Mutable<name>ObjectMap\<String> hashMap = this.getEmptyMap();
+        for (<type> i = <(literal.(type))("2")>; i \< <(literal.(type))("100")>; i++)
+        {
+            Assert.assertNull(hashMap.get(i));
+            Assert.assertNull(hashMap.put(i, String.valueOf(i)));
+            Assert.assertEquals(String.valueOf(i), hashMap.remove(i));
+        }
+    }
+
+    @Test
+    public void getIfAbsentPut_every_slot()
+    {
+        Mutable<name>ObjectMap\<String> hashMap = this.getEmptyMap();
+        for (<type> i = <(literal.(type))("2")>; i \< <(literal.(type))("100")>; i++)
+        {
+            Assert.assertNull(hashMap.get(i));
+            Assert.assertEquals("value", hashMap.getIfAbsentPut(i, Functions0.value("value")));
+        }
+    }
+
+    @Test
+    public void getIfAbsentPutWith_every_slot()
+    {
+        Function\<String, String> toUpperCase = new Function\<String, String>()
+        {
+            public String valueOf(String string)
+            {
+                return string.toUpperCase();
+            }
+        };
+
+        Mutable<name>ObjectMap\<String> hashMap = this.getEmptyMap();
+        for (<type> each = <(literal.(type))("2")>; each \< <(literal.(type))("100")>; each++)
+        {
+            Assert.assertNull(hashMap.get(each));
+            Assert.assertEquals("VALUE", hashMap.getIfAbsentPutWith(each, toUpperCase, "value"));
+        }
+    }
+
+    @Test
+    public void getIfAbsentPutWithKey_every_slot()
+    {
+        <name>ToObjectFunction\<<wrapperName>\> toWrapper = new <name>ToObjectFunction\<<wrapperName>\>()
+        {
+            public <wrapperName> valueOf(<type> each)
+            {
+                return <wrapperName>.valueOf(each);
+            }
+        };
+
+        Mutable<name>ObjectMap\<<wrapperName>\> hashMap = this.getEmptyMap();
+
+        for (<type> each = <(literal.(type))("2")>; each \< <(literal.(type))("100")>; each++)
+        {
+            Assert.assertNull(hashMap.get(each));
+            Assert.assertEquals(<wrapperName>.valueOf(each), hashMap.getIfAbsentPutWithKey(each, toWrapper));
+        }
+    }
+
+    @Test
+    public void updateValue_every_slot()
+    {
+        Function\<Integer, Integer> incrementFunction = new Function\<Integer, Integer>()
+        {
+            public Integer valueOf(Integer integer)
+            {
+                return integer + 1;
+            }
+        };
+
+        Mutable<name>ObjectMap\<Integer> hashMap = this.getEmptyMap();
+
+        for (<type> each = <(literal.(type))("2")>; each \< <(literal.(type))("100")>; each++)
+        {
+            Assert.assertNull(hashMap.get(each));
+            Assert.assertEquals(1L, hashMap.updateValue(each, Functions0.value(0), incrementFunction).intValue());
+        }
+    }
+
+    @Test
+    public void updateValueWith_every_slot()
+    {
+        Function2\<Integer, Integer, Integer> incrementFunction = AddFunction.INTEGER;
+
+        Mutable<name>ObjectMap\<Integer> hashMap = this.getEmptyMap();
+
+        for (<type> each = <(literal.(type))("2")>; each \< <(literal.(type))("100")>; each++)
+        {
+            Assert.assertNull(hashMap.get(each));
+            Assert.assertEquals(1L, hashMap.updateValueWith(each, Functions0.value(0), incrementFunction, 1).longValue());
+        }
     }
 }
 

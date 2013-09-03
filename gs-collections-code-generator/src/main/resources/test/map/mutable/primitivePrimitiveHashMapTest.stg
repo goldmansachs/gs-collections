@@ -25,6 +25,7 @@ package com.gs.collections.impl.map.mutable.primitive;
 import java.lang.reflect.Field;
 
 import com.gs.collections.api.block.function.primitive.Object<name2>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.<name2>To<name2>Function;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.api.map.primitive.Mutable<name1><name2>Map;
 import org.junit.Assert;
@@ -201,6 +202,27 @@ public class <name1><name2>HashMapTest extends AbstractMutable<name1><name2>MapT
             }
         });
         Assert.assertEquals(<wrapperName2>.valueOf(<(literal.(type2))("15")>), sum);
+    }
+
+    @Test
+    public void updateValue_every_slot()
+    {
+        <name2>To<name2>Function incrementFunction = new <name2>To<name2>Function()
+        {
+            public <type2> valueOf(<type2> value)
+            {
+                return <(castIntToNarrowTypeWithParens.(type2))({value + <(literal.(type2))("1")>})>;
+            }
+        };
+
+        Mutable<name1><name2>Map hashMap = this.getEmptyMap();
+
+        for (int i = 2; i \< 100; i++)
+        {
+            Assert.assertEquals(<(literal.(type2))("0")>, hashMap.get(<(castFromInt.(type1))("i")>)<(wideDelta.(type2))>);
+            Assert.assertEquals(<(wideLiteral.(type2))("1")>, hashMap.updateValue(<(castFromInt.(type1))("i")>, <(literal.(type2))("0")>, incrementFunction)<(wideDelta.(type2))>);
+            Assert.assertEquals(<(castFromInt.(type2))("1")>, hashMap.get(<(castFromInt.(type1))("i")>)<(wideDelta.(type2))>);
+        }
     }
 }
 

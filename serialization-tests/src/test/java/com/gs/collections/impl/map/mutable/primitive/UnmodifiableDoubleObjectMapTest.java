@@ -30,7 +30,7 @@ public class UnmodifiableDoubleObjectMapTest
                         + "b2RpZmlhYmxlRG91YmxlT2JqZWN0TWFwAAAAAAAAAAECAAFMAANtYXB0AD1MY29tL2dzL2NvbGxl\n"
                         + "Y3Rpb25zL2FwaS9tYXAvcHJpbWl0aXZlL011dGFibGVEb3VibGVPYmplY3RNYXA7eHBzcgBBY29t\n"
                         + "LmdzLmNvbGxlY3Rpb25zLmltcGwubWFwLm11dGFibGUucHJpbWl0aXZlLkRvdWJsZU9iamVjdEhh\n"
-                        + "c2hNYXAAAAAAAAAAAQwAAHhwdwgAAAAAPwAAAHg=",
+                        + "c2hNYXAAAAAAAAAAAQwAAHhwdwQAAAAAeA==",
                 new UnmodifiableDoubleObjectMap<Object>(new DoubleObjectHashMap<Object>()));
     }
 }

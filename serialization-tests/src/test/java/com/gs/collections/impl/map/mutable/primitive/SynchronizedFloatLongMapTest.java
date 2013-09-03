@@ -30,7 +30,7 @@ public class SynchronizedFloatLongMapTest
                         + "Y2hyb25pemVkRmxvYXRMb25nTWFwAAAAAAAAAAECAAJMAARsb2NrdAASTGphdmEvbGFuZy9PYmpl\n"
                         + "Y3Q7TAADbWFwdAA6TGNvbS9ncy9jb2xsZWN0aW9ucy9hcGkvbWFwL3ByaW1pdGl2ZS9NdXRhYmxl\n"
                         + "RmxvYXRMb25nTWFwO3hwcQB+AANzcgA+Y29tLmdzLmNvbGxlY3Rpb25zLmltcGwubWFwLm11dGFi\n"
-                        + "bGUucHJpbWl0aXZlLkZsb2F0TG9uZ0hhc2hNYXAAAAAAAAAAAQwAAHhwdwgAAAAAPwAAAHg=",
+                        + "bGUucHJpbWl0aXZlLkZsb2F0TG9uZ0hhc2hNYXAAAAAAAAAAAQwAAHhwdwQAAAAAeA==",
                 new SynchronizedFloatLongMap(new FloatLongHashMap()));
     }
 }

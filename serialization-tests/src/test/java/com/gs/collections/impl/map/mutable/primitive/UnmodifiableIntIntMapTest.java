@@ -30,7 +30,7 @@ public class UnmodifiableIntIntMapTest
                         + "b2RpZmlhYmxlSW50SW50TWFwAAAAAAAAAAECAAFMAANtYXB0ADdMY29tL2dzL2NvbGxlY3Rpb25z\n"
                         + "L2FwaS9tYXAvcHJpbWl0aXZlL011dGFibGVJbnRJbnRNYXA7eHBzcgA7Y29tLmdzLmNvbGxlY3Rp\n"
                         + "b25zLmltcGwubWFwLm11dGFibGUucHJpbWl0aXZlLkludEludEhhc2hNYXAAAAAAAAAAAQwAAHhw\n"
-                        + "dwgAAAAAPwAAAHg=",
+                        + "dwQAAAAAeA==",
                 new UnmodifiableIntIntMap(new IntIntHashMap()));
     }
 }

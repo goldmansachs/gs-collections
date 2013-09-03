@@ -29,9 +29,9 @@ public interface Mutable<name>Set extends Mutable<name>Collection, <name>Set
 {
     <sharedAPI(fileName(primitive), name)>
 
-    <mutableAPI(fileName(primitive), type, name)>
-
     \<V> MutableSet\<V> collect(<name>ToObjectFunction\<? extends V> function);
+
+    <mutableAPI(fileName(primitive), type, name)>
 
     Mutable<name>Set asUnmodifiable();
 

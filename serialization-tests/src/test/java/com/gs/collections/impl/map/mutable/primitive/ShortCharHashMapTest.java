@@ -27,7 +27,7 @@ public class ShortCharHashMapTest
         Verify.assertSerializedForm(
                 1L,
                 "rO0ABXNyAD5jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5wcmltaXRpdmUuU2hv\n"
-                        + "cnRDaGFySGFzaE1hcAAAAAAAAAABDAAAeHB3CAAAAAA/AAAAeA==",
+                        + "cnRDaGFySGFzaE1hcAAAAAAAAAABDAAAeHB3BAAAAAB4",
                 new ShortCharHashMap());
     }
 }

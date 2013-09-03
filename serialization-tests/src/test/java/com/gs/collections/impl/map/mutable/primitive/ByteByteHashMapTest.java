@@ -27,7 +27,7 @@ public class ByteByteHashMapTest
         Verify.assertSerializedForm(
                 1L,
                 "rO0ABXNyAD1jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5wcmltaXRpdmUuQnl0\n"
-                        + "ZUJ5dGVIYXNoTWFwAAAAAAAAAAEMAAB4cHcIAAAAAD8AAAB4",
+                        + "ZUJ5dGVIYXNoTWFwAAAAAAAAAAEMAAB4cHcEAAAAAHg=",
                 new ByteByteHashMap());
     }
 }

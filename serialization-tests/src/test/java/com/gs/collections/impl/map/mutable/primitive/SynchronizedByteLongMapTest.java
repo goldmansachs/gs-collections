@@ -30,7 +30,7 @@ public class SynchronizedByteLongMapTest
                         + "Y2hyb25pemVkQnl0ZUxvbmdNYXAAAAAAAAAAAQIAAkwABGxvY2t0ABJMamF2YS9sYW5nL09iamVj\n"
                         + "dDtMAANtYXB0ADlMY29tL2dzL2NvbGxlY3Rpb25zL2FwaS9tYXAvcHJpbWl0aXZlL011dGFibGVC\n"
                         + "eXRlTG9uZ01hcDt4cHEAfgADc3IAPWNvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLm1hcC5tdXRhYmxl\n"
-                        + "LnByaW1pdGl2ZS5CeXRlTG9uZ0hhc2hNYXAAAAAAAAAAAQwAAHhwdwgAAAAAPwAAAHg=",
+                        + "LnByaW1pdGl2ZS5CeXRlTG9uZ0hhc2hNYXAAAAAAAAAAAQwAAHhwdwQAAAAAeA==",
                 new SynchronizedByteLongMap(new ByteLongHashMap()));
     }
 }

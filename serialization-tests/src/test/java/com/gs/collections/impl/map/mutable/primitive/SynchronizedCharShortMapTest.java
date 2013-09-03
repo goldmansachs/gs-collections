@@ -30,7 +30,7 @@ public class SynchronizedCharShortMapTest
                         + "Y2hyb25pemVkQ2hhclNob3J0TWFwAAAAAAAAAAECAAJMAARsb2NrdAASTGphdmEvbGFuZy9PYmpl\n"
                         + "Y3Q7TAADbWFwdAA6TGNvbS9ncy9jb2xsZWN0aW9ucy9hcGkvbWFwL3ByaW1pdGl2ZS9NdXRhYmxl\n"
                         + "Q2hhclNob3J0TWFwO3hwcQB+AANzcgA+Y29tLmdzLmNvbGxlY3Rpb25zLmltcGwubWFwLm11dGFi\n"
-                        + "bGUucHJpbWl0aXZlLkNoYXJTaG9ydEhhc2hNYXAAAAAAAAAAAQwAAHhwdwgAAAAAPwAAAHg=",
+                        + "bGUucHJpbWl0aXZlLkNoYXJTaG9ydEhhc2hNYXAAAAAAAAAAAQwAAHhwdwQAAAAAeA==",
                 new SynchronizedCharShortMap(new CharShortHashMap()));
     }
 }

@@ -264,7 +264,7 @@ public final class Unmodifiable<name>ObjectMap\<V>
 
     public PartitionMutableCollection\<V> partition(Predicate\<? super V> predicate)
     {
-        return (PartitionMutableCollection\<V>) this.map.partition(predicate);
+        return this.map.partition(predicate);
     }
 
     public \<S> MutableCollection\<S> selectInstancesOf(Class\<S> clazz)

@@ -27,7 +27,7 @@ public class CharIntHashMapTest
         Verify.assertSerializedForm(
                 1L,
                 "rO0ABXNyADxjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5wcmltaXRpdmUuQ2hh\n"
-                        + "ckludEhhc2hNYXAAAAAAAAAAAQwAAHhwdwgAAAAAPwAAAHg=",
+                        + "ckludEhhc2hNYXAAAAAAAAAAAQwAAHhwdwQAAAAAeA==",
                 new CharIntHashMap());
     }
 }

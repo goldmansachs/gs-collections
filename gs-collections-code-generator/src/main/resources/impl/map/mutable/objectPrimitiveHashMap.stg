@@ -73,6 +73,12 @@ import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Externalizable
 {
     public static final <type> EMPTY_VALUE = <zero.(type)>;
+
+    private static final long serialVersionUID = 1L;
+    private static final int OCCUPIED_DATA_RATIO = 2;
+    private static final int OCCUPIED_SENTINEL_RATIO = 4;
+    private static final int DEFAULT_INITIAL_CAPACITY = 8;
+
     private static final Object NULL_KEY = new Object()
     {
         @Override
@@ -93,6 +99,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
             return "Object<name>HashMap.NULL_KEY";
         }
     };
+
     private static final Object REMOVED_KEY = new Object()
     {
         @Override
@@ -114,40 +121,45 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         }
     };
 
-    private static final float DEFAULT_LOAD_FACTOR = 0.5f;
-    private static final int DEFAULT_INITIAL_CAPACITY = 8;
-    private static final long serialVersionUID = 1L;
-    private int occupied;
-    private int maxSize;
-
     private Object[] keys;
     private <type>[] values;
-    private float loadFactor = DEFAULT_LOAD_FACTOR;
+
+    private int occupiedWithData;
+    private int occupiedWithSentinels;
 
     public Object<name>HashMap()
     {
-        this.allocate(DEFAULT_INITIAL_CAPACITY \<\< 1);
+        this.allocateTable(DEFAULT_INITIAL_CAPACITY \<\< 1);
     }
 
     public Object<name>HashMap(int initialCapacity)
-    {
-        this(initialCapacity, DEFAULT_LOAD_FACTOR);
-    }
-
-    public Object<name>HashMap(int initialCapacity, float loadFactor)
     {
         if (initialCapacity \< 0)
         {
             throw new IllegalArgumentException("initial capacity cannot be less than 0");
         }
-        this.loadFactor = loadFactor;
-        this.init(this.fastCeil(initialCapacity / loadFactor));
+        int capacity = this.smallestPowerOfTwoGreaterThan(this.fastCeil(initialCapacity * OCCUPIED_DATA_RATIO));
+        this.allocateTable(capacity);
+    }
+
+    private int smallestPowerOfTwoGreaterThan(int n)
+    {
+        return n > 1 ? Integer.highestOneBit(n - 1) \<\< 1 : 1;
+    }
+
+    private int fastCeil(float v)
+    {
+        int possibleResult = (int) v;
+        if (v - possibleResult > 0.0F)
+        {
+            possibleResult++;
+        }
+        return possibleResult;
     }
 
     public Object<name>HashMap(Object<name>Map\<? extends K> map)
     {
-        this(Math.max(map.size(), DEFAULT_INITIAL_CAPACITY), DEFAULT_LOAD_FACTOR);
-
+        this(Math.max(map.size(), DEFAULT_INITIAL_CAPACITY));
         this.putAll(map);
     }
 
@@ -174,6 +186,348 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
     public static \<K> Object<name>HashMap\<K> newWithKeysValues(K key1, <type> value1, K key2, <type> value2, K key3, <type> value3, K key4, <type> value4)
     {
         return new Object<name>HashMap\<K>(4).withKeysValues(key1, value1, key2, value2, key3, value3, key4, value4);
+    }
+
+    @Override
+    public boolean equals(Object obj)
+    {
+        if (this == obj)
+        {
+            return true;
+        }
+
+        if (!(obj instanceof Object<name>Map))
+        {
+            return false;
+        }
+
+        Object<name>Map\<K> other = (Object<name>Map\<K>) obj;
+
+        if (this.size() != other.size())
+        {
+            return false;
+        }
+
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && (!other.containsKey(this.toNonSentinel(this.keys[i])) || <(notEquals.(type))("this.values[i]", "other.getOrThrow(this.toNonSentinel(this.keys[i]))")>))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = 0;
+
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                result += (this.toNonSentinel(this.keys[i]) == null ? 0 : this.keys[i].hashCode()) ^ <(hashCode.(type))("this.values[i]")>;
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.makeString("[", ", ", "]");
+    }
+
+    public int size()
+    {
+        return this.occupiedWithData;
+    }
+
+    public boolean isEmpty()
+    {
+        return this.size() == 0;
+    }
+
+    public boolean notEmpty()
+    {
+        return this.size() != 0;
+    }
+
+    public String makeString()
+    {
+        return this.makeString(", ");
+    }
+
+    public String makeString(String separator)
+    {
+        return this.makeString("", separator, "");
+    }
+
+    public String makeString(String start, String separator, String end)
+    {
+        Appendable stringBuilder = new StringBuilder();
+        this.appendString(stringBuilder, start, separator, end);
+        return stringBuilder.toString();
+    }
+
+    public void appendString(Appendable appendable)
+    {
+        this.appendString(appendable, ", ");
+    }
+
+    public void appendString(Appendable appendable, String separator)
+    {
+        this.appendString(appendable, "", separator, "");
+    }
+
+    public void appendString(Appendable appendable, String start, String separator, String end)
+    {
+        try
+        {
+            appendable.append(start);
+
+            boolean first = true;
+
+            for (int i = 0; i \< this.keys.length; i++)
+            {
+                Object key = this.keys[i];
+                if (isNonSentinel(key))
+                {
+                    if (!first)
+                    {
+                        appendable.append(separator);
+                    }
+                    appendable.append(String.valueOf(this.toNonSentinel(key))).append("=").append(String.valueOf(this.values[i]));
+                    first = false;
+                }
+            }
+            appendable.append(end);
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public <name>Iterator <type>Iterator()
+    {
+        return new Internal<name>Iterator();
+    }
+
+    public <type>[] toArray()
+    {
+        <type>[] result = new <type>[this.size()];
+        int index = 0;
+
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                result[index] = this.values[i];
+                index++;
+            }
+        }
+        return result;
+    }
+
+    public boolean contains(<type> value)
+    {
+        return this.containsValue(value);
+    }
+
+    public boolean containsAll(<type>... source)
+    {
+        for (<type> item : source)
+        {
+            if (!this.containsValue(item))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean containsAll(<name>Iterable source)
+    {
+        return this.containsAll(source.toArray());
+    }
+
+    public void clear()
+    {
+        this.occupiedWithData = 0;
+        Arrays.fill(this.keys, null);
+        Arrays.fill(this.values, EMPTY_VALUE);
+    }
+
+    public void put(K key, <type> value)
+    {
+        int index = this.probe(key);
+
+        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
+        {
+            // key already present in map
+            this.values[index] = value;
+            return;
+        }
+
+        if (this.keys[index] == REMOVED_KEY)
+        {
+            --this.occupiedWithSentinels;
+        }
+        this.keys[index] = toSentinelIfNull(key);
+        this.values[index] = value;
+        ++this.occupiedWithData;
+        if (this.occupiedWithData > this.maxOccupiedWithData())
+        {
+            this.rehashAndGrow();
+        }
+    }
+
+    public void putAll(Object<name>Map\<? extends K> map)
+    {
+        map.forEachKeyValue(new Object<name>Procedure\<K>()
+        {
+            public void value(K key, <type> value)
+            {
+                Object<name>HashMap.this.put(key, value);
+            }
+        });
+    }
+
+    public void removeKey(K key)
+    {
+        int index = this.probe(key);
+        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
+        {
+            this.keys[index] = REMOVED_KEY;
+            this.values[index] = EMPTY_VALUE;
+            this.occupiedWithData--;
+            this.occupiedWithSentinels++;
+            if (this.occupiedWithSentinels > this.maxOccupiedWithSentinels())
+            {
+                this.rehash();
+            }
+        }
+    }
+
+    public void remove(K key)
+    {
+        this.removeKey(key);
+    }
+
+    public <type> removeKeyIfAbsent(K key, <type> value)
+    {
+        int index = this.probe(key);
+        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
+        {
+            this.keys[index] = REMOVED_KEY;
+            <type> oldValue = this.values[index];
+            this.values[index] = EMPTY_VALUE;
+            this.occupiedWithData--;
+            this.occupiedWithSentinels++;
+            if (this.occupiedWithSentinels > this.maxOccupiedWithSentinels())
+            {
+                this.rehash();
+            }
+
+            return oldValue;
+        }
+        return value;
+    }
+
+    public <type> getIfAbsentPut(K key, <type> value)
+    {
+        int index = this.probe(key);
+        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
+        {
+            return this.values[index];
+        }
+        this.keys[index] = toSentinelIfNull(key);
+        this.values[index] = value;
+        ++this.occupiedWithData;
+        if (this.occupiedWithData > this.maxOccupiedWithData())
+        {
+            this.rehashAndGrow();
+        }
+        return value;
+    }
+
+    public <type> getIfAbsentPut(K key, <name>Function0 function)
+    {
+        int index = this.probe(key);
+        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
+        {
+            return this.values[index];
+        }
+        this.keys[index] = toSentinelIfNull(key);
+        <type> value = function.value();
+        this.values[index] = value;
+        ++this.occupiedWithData;
+        if (this.occupiedWithData > this.maxOccupiedWithData())
+        {
+            this.rehashAndGrow();
+        }
+        return value;
+    }
+
+    public \<P> <type> getIfAbsentPutWith(K key, <name>Function\<? super P> function, P parameter)
+    {
+        int index = this.probe(key);
+        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
+        {
+            return this.values[index];
+        }
+        this.keys[index] = toSentinelIfNull(key);
+        <type> value = function.<type>ValueOf(parameter);
+        this.values[index] = value;
+        ++this.occupiedWithData;
+        if (this.occupiedWithData > this.maxOccupiedWithData())
+        {
+            this.rehashAndGrow();
+        }
+        return value;
+    }
+
+    public <type> getIfAbsentPutWithKey(K key, <name>Function\<? super K> function)
+    {
+        int index = this.probe(key);
+        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
+        {
+            return this.values[index];
+        }
+        this.keys[index] = toSentinelIfNull(key);
+        <type> value = function.<type>ValueOf(key);
+        this.values[index] = value;
+        ++this.occupiedWithData;
+        if (this.occupiedWithData > this.maxOccupiedWithData())
+        {
+            this.rehashAndGrow();
+        }
+        return value;
+    }
+
+    public <type> updateValue(K key, <type> initialValueIfAbsent, <name>To<name>Function function)
+    {
+        int index = this.probe(key);
+        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
+        {
+            this.values[index] = function.valueOf(this.values[index]);
+            return this.values[index];
+        }
+        if (this.keys[index] == REMOVED_KEY)
+        {
+            --this.occupiedWithSentinels;
+        }
+        this.keys[index] = toSentinelIfNull(key);
+        <type> value = function.valueOf(initialValueIfAbsent);
+        this.values[index] = value;
+        ++this.occupiedWithData;
+        if (this.occupiedWithData > this.maxOccupiedWithData())
+        {
+            this.rehashAndGrow();
+        }
+        return value;
     }
 
     public Object<name>HashMap\<K> withKeyValue(K key1, <type> value1)
@@ -236,210 +590,9 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         return Object<name>Maps.immutable.withAll(this);
     }
 
-    private int init(int initialCapacity)
-    {
-        int capacity = 1;
-        while (capacity \< initialCapacity)
-        {
-            capacity \<\<= 1;
-        }
-        return this.allocate(capacity);
-    }
-
-    private int fastCeil(float v)
-    {
-        int possibleResult = (int) v;
-        if (v - possibleResult > 0.0F)
-        {
-            possibleResult++;
-        }
-        return possibleResult;
-    }
-
-    private static boolean isRemovedKey(Object key)
-    {
-        return key == REMOVED_KEY;
-    }
-
-    private int allocate(int capacity)
-    {
-        this.allocateTable(capacity);
-        this.computeMaxSize(capacity);
-        return capacity;
-    }
-
-    private void allocateTable(int sizeToAllocate)
-    {
-        this.keys = new Object[sizeToAllocate];
-        this.values = new <type>[sizeToAllocate];
-    }
-
-    private void computeMaxSize(int capacity)
-    {
-        // need at least one free slot for open addressing
-        this.maxSize = Math.min(capacity - 1, (int) (capacity * this.loadFactor));
-    }
-
-    private static \<K> boolean isNonSentinel(K key)
-    {
-        return key != null && !isRemovedKey(key);
-    }
-
-    public int size()
-    {
-        return this.occupied;
-    }
-
-    public boolean isEmpty()
-    {
-        return this.occupied == 0;
-    }
-
-    public boolean notEmpty()
-    {
-        return this.occupied != 0;
-    }
-
-    private void rehash()
-    {
-        this.rehash(this.keys.length \<\< 1);
-    }
-
-    private void rehash(int newCapacity)
-    {
-        int oldLength = this.keys.length;
-        Object[] old = this.keys;
-        <type>[] oldValues = this.values;
-        this.allocate(newCapacity);
-        this.occupied = 0;
-
-        for (int i = 0; i \< oldLength; i++)
-        {
-            if (isNonSentinel(old[i]))
-            {
-                this.put(this.toNonSentinel(old[i]), oldValues[i]);
-            }
-        }
-    }
-
-    private K toNonSentinel(Object key)
-    {
-        return key == NULL_KEY ? null : (K) key;
-    }
-
-    // exposed for testing
-    int probe(Object element)
-    {
-        int index = this.spread(element);
-
-        int removedIndex = -1;
-        if (isRemovedKey(this.keys[index]))
-        {
-            removedIndex = index;
-        }
-
-        else if (this.keys[index] == null || nullSafeEquals(this.toNonSentinel(this.keys[index]), element))
-        {
-            return index;
-        }
-
-        int nextIndex = index;
-        int probe = 17;
-
-        // loop until an empty slot is reached
-        while (true)
-        {
-            // Probe algorithm: 17*n*(n+1)/2 where n = no. of collisions
-            nextIndex += probe;
-            probe += 17;
-            nextIndex &= this.keys.length - 1;
-
-            if (isRemovedKey(this.keys[nextIndex]))
-            {
-                if (removedIndex == -1)
-                {
-                    removedIndex = nextIndex;
-                }
-            }
-            else if (nullSafeEquals(this.toNonSentinel(this.keys[nextIndex]), element))
-            {
-                return nextIndex;
-            }
-            else if (this.keys[nextIndex] == null)
-            {
-                return removedIndex == -1 ? nextIndex : removedIndex;
-            }
-        }
-    }
-
-    // exposed for testing
-    int spread(Object element)
-    {
-        // This function ensures that hashCodes that differ only by
-        // constant multiples at each bit position have a bounded
-        // number of collisions (approximately 8 at default load factor).
-        int h = element == null ? 0 : element.hashCode();
-        h ^= h >\>> 20 ^ h >\>> 12;
-        h ^= h >\>> 7 ^ h >\>> 4;
-        return (h & (this.keys.length >\> 1) - 1) \<\< 1;
-    }
-
-    public void clear()
-    {
-        this.occupied = 0;
-        Arrays.fill(this.keys, null);
-        Arrays.fill(this.values, EMPTY_VALUE);
-    }
-
-    public void put(K key, <type> value)
-    {
-        int index = this.probe(key);
-
-        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
-        {
-            // key already present in map
-            this.values[index] = value;
-            return;
-        }
-
-        this.keys[index] = toSentinelIfNull(key);
-        this.values[index] = value;
-        ++this.occupied;
-        if (this.occupied > this.maxSize)
-        {
-            this.rehash();
-        }
-    }
-
-    public void putAll(Object<name>Map\<? extends K> map)
-    {
-        map.forEachKeyValue(new Object<name>Procedure\<K>()
-        {
-            public void value(K key, <type> value)
-            {
-                Object<name>HashMap.this.put(key, value);
-            }
-        });
-    }
-
-    private static Object toSentinelIfNull(Object key)
-    {
-        return key == null ? NULL_KEY : key;
-    }
-
     public <type> get(Object key)
     {
         return this.getIfAbsent(key, EMPTY_VALUE);
-    }
-
-    public <type> getIfAbsent(Object key, <type> ifAbsent)
-    {
-        int index = this.probe(key);
-        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
-        {
-            return this.values[index];
-        }
-        return ifAbsent;
     }
 
     public <type> getOrThrow(Object key)
@@ -452,75 +605,14 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         throw new IllegalStateException("Key " + key + " not present.");
     }
 
-    public <type> getIfAbsentPut(K key, <type> value)
+    public <type> getIfAbsent(Object key, <type> ifAbsent)
     {
         int index = this.probe(key);
         if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
         {
             return this.values[index];
         }
-        this.keys[index] = toSentinelIfNull(key);
-        this.occupied++;
-        this.values[index] = value;
-        return value;
-    }
-
-    public <type> getIfAbsentPut(K key, <name>Function0 function)
-    {
-        int index = this.probe(key);
-        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
-        {
-            return this.values[index];
-        }
-        this.keys[index] = toSentinelIfNull(key);
-        this.occupied++;
-        <type> value = function.value();
-        this.values[index] = value;
-        return value;
-    }
-
-    public \<P> <type> getIfAbsentPutWith(K key, <name>Function\<? super P> function, P parameter)
-    {
-        int index = this.probe(key);
-        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
-        {
-            return this.values[index];
-        }
-        this.keys[index] = toSentinelIfNull(key);
-        this.occupied++;
-        <type> value = function.<type>ValueOf(parameter);
-        this.values[index] = value;
-        return value;
-    }
-
-    public <type> getIfAbsentPutWithKey(K key, <name>Function\<? super K> function)
-    {
-        int index = this.probe(key);
-        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
-        {
-            return this.values[index];
-        }
-        this.keys[index] = toSentinelIfNull(key);
-        this.occupied++;
-        <type> value = function.<type>ValueOf(key);
-        this.values[index] = value;
-        return value;
-    }
-
-    public <type> updateValue(K key, <type> initialValueIfAbsent, <name>To<name>Function function)
-    {
-        int index = this.probe(key);
-        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
-        {
-            this.values[index] = function.valueOf(this.values[index]);
-        }
-        else
-        {
-            this.keys[index] = toSentinelIfNull(key);
-            this.occupied++;
-            this.values[index] = function.valueOf(initialValueIfAbsent);
-        }
-        return this.values[index];
+        return ifAbsent;
     }
 
     public boolean containsKey(Object key)
@@ -539,92 +631,6 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
             }
         }
         return false;
-    }
-
-    public void removeKey(K key)
-    {
-        int index = this.probe(key);
-        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
-        {
-            this.keys[index] = REMOVED_KEY;
-            this.occupied--;
-            this.values[index] = EMPTY_VALUE;
-        }
-    }
-
-    public void remove(K key)
-    {
-        this.removeKey(key);
-    }
-
-    public <type> removeKeyIfAbsent(K key, <type> value)
-    {
-        int index = this.probe(key);
-        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
-        {
-            this.keys[index] = REMOVED_KEY;
-            this.occupied--;
-            <type> oldValue = this.values[index];
-            this.values[index] = EMPTY_VALUE;
-            return oldValue;
-        }
-        return value;
-    }
-
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (this == obj)
-        {
-            return true;
-        }
-
-        if (!(obj instanceof Object<name>Map))
-        {
-            return false;
-        }
-
-        Object<name>Map\<K> other = (Object<name>Map\<K>) obj;
-
-        if (this.size() != other.size())
-        {
-            return false;
-        }
-
-        for (int i = 0; i \< this.keys.length; i++)
-        {
-            if (isNonSentinel(this.keys[i]) && (!other.containsKey(this.toNonSentinel(this.keys[i])) || <(notEquals.(type))("this.values[i]", "other.getOrThrow(this.toNonSentinel(this.keys[i]))")>))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int result = 0;
-
-        for (int i = 0; i \< this.keys.length; i++)
-        {
-            if (isNonSentinel(this.keys[i]))
-            {
-                result += (this.toNonSentinel(this.keys[i]) == null ? 0 : this.keys[i].hashCode()) ^ <(hashCode.(type))("this.values[i]")>;
-            }
-        }
-        return result;
-    }
-
-    @Override
-    public String toString()
-    {
-        return this.makeString("[", ", ", "]");
-    }
-
-    public <name>Iterator <type>Iterator()
-    {
-        return new Internal<name>Iterator();
     }
 
     public void forEach(<name>Procedure procedure)
@@ -665,62 +671,6 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         }
     }
 
-    public String makeString()
-    {
-        return this.makeString(", ");
-    }
-
-    public String makeString(String separator)
-    {
-        return this.makeString("", separator, "");
-    }
-
-    public String makeString(String start, String separator, String end)
-    {
-        Appendable stringBuilder = new StringBuilder();
-        this.appendString(stringBuilder, start, separator, end);
-        return stringBuilder.toString();
-    }
-
-    public void appendString(Appendable appendable)
-    {
-        this.appendString(appendable, ", ");
-    }
-
-    public void appendString(Appendable appendable, String separator)
-    {
-        this.appendString(appendable, "", separator, "");
-    }
-
-    public void appendString(Appendable appendable, String start, String separator, String end)
-    {
-        try
-        {
-            appendable.append(start);
-
-            boolean first = true;
-
-            for (int i = 0; i \< this.keys.length; i++)
-            {
-                Object key = this.keys[i];
-                if (isNonSentinel(key))
-                {
-                    if (!first)
-                    {
-                        appendable.append(separator);
-                    }
-                    appendable.append(String.valueOf(this.toNonSentinel(key))).append("=").append(String.valueOf(this.values[i]));
-                    first = false;
-                }
-            }
-            appendable.append(end);
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
-
     public Object<name>HashMap\<K> select(Object<name>Predicate\<? super K> predicate)
     {
         Object<name>HashMap\<K> result = Object<name>HashMap.newMap();
@@ -747,56 +697,6 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
             }
         }
         return result;
-    }
-
-    public int count(<name>Predicate predicate)
-    {
-        int count = 0;
-
-        for (int i = 0; i \< this.keys.length; i++)
-        {
-            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values[i]))
-            {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    public boolean anySatisfy(<name>Predicate predicate)
-    {
-        for (int i = 0; i \< this.keys.length; i++)
-        {
-            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values[i]))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean allSatisfy(<name>Predicate predicate)
-    {
-        for (int i = 0; i \< this.keys.length; i++)
-        {
-            if (isNonSentinel(this.keys[i]) && !predicate.accept(this.values[i]))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean noneSatisfy(<name>Predicate predicate)
-    {
-        for (int i = 0; i \< this.keys.length; i++)
-        {
-            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values[i]))
-            {
-                return false;
-            }
-        }
-        return true;
     }
 
     public Mutable<name>Collection select(<name>Predicate predicate)
@@ -850,6 +750,56 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
             }
         }
         return result;
+    }
+
+    public int count(<name>Predicate predicate)
+    {
+        int count = 0;
+
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values[i]))
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public boolean anySatisfy(<name>Predicate predicate)
+    {
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values[i]))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean allSatisfy(<name>Predicate predicate)
+    {
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && !predicate.accept(this.values[i]))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean noneSatisfy(<name>Predicate predicate)
+    {
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values[i]))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     public \<V> V injectInto(V injectedValue, Object<name>ToObjectFunction\<? super V, ? extends V> function)
@@ -987,51 +937,6 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         return (double) sortedArray[middleIndex];
     }
 
-    public <type>[] toSortedArray()
-    {
-        <type>[] array = this.toArray();
-        Arrays.sort(array);
-        return array;
-    }
-
-    public <type>[] toArray()
-    {
-        <type>[] result = new <type>[this.size()];
-        int index = 0;
-
-        for (int i = 0; i \< this.keys.length; i++)
-        {
-            if (isNonSentinel(this.keys[i]))
-            {
-                result[index] = this.values[i];
-                index++;
-            }
-        }
-        return result;
-    }
-
-    public boolean contains(<type> value)
-    {
-        return this.containsValue(value);
-    }
-
-    public boolean containsAll(<type>... source)
-    {
-        for (<type> item : source)
-        {
-            if (!this.containsValue(item))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean containsAll(<name>Iterable source)
-    {
-        return this.containsAll(source.toArray());
-    }
-
     public Mutable<name>List toList()
     {
         Mutable<name>List result = new <name>ArrayList(this.size());
@@ -1044,11 +949,6 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
             }
         }
         return result;
-    }
-
-    public Mutable<name>List toSortedList()
-    {
-        return this.toList().sortThis();
     }
 
     public Mutable<name>Set toSet()
@@ -1084,6 +984,138 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         return new Lazy<name>IterableAdapter(this);
     }
 
+    public <type>[] toSortedArray()
+    {
+        <type>[] array = this.toArray();
+        Arrays.sort(array);
+        return array;
+    }
+
+    public Mutable<name>List toSortedList()
+    {
+        return this.toList().sortThis();
+    }
+
+    public void writeExternal(ObjectOutput out) throws IOException
+    {
+        out.writeInt(this.size());
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]))
+            {
+                out.writeObject(this.toNonSentinel(this.keys[i]));
+                out.write<name>(this.values[i]);
+            }
+        }
+    }
+
+    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
+    {
+        int size = in.readInt();
+        for (int i = 0; i \< size; i++)
+        {
+            this.put((K) in.readObject(), in.read<name>());
+        }
+    }
+
+    public LazyIterable\<K> keysView()
+    {
+        return new KeysView();
+    }
+
+    /**
+     * Rehashes every element in the set into a new backing table of the smallest possible size and eliminating removed sentinels.
+     */
+    public void compact()
+    {
+        this.rehash(this.smallestPowerOfTwoGreaterThan(this.size()));
+    }
+
+    private void rehash()
+    {
+        this.rehash(this.keys.length);
+    }
+
+    private void rehashAndGrow()
+    {
+        this.rehash(this.keys.length \<\< 1);
+    }
+
+    private void rehash(int newCapacity)
+    {
+        int oldLength = this.keys.length;
+        Object[] old = this.keys;
+        <type>[] oldValues = this.values;
+        this.allocateTable(newCapacity);
+        this.occupiedWithData = 0;
+        this.occupiedWithSentinels = 0;
+
+        for (int i = 0; i \< oldLength; i++)
+        {
+            if (isNonSentinel(old[i]))
+            {
+                this.put(this.toNonSentinel(old[i]), oldValues[i]);
+            }
+        }
+    }
+
+    // exposed for testing
+    int probe(Object element)
+    {
+        int index = this.spread(element);
+
+        int removedIndex = -1;
+        if (isRemovedKey(this.keys[index]))
+        {
+            removedIndex = index;
+        }
+
+        else if (this.keys[index] == null || nullSafeEquals(this.toNonSentinel(this.keys[index]), element))
+        {
+            return index;
+        }
+
+        int nextIndex = index;
+        int probe = 17;
+
+        // loop until an empty slot is reached
+        while (true)
+        {
+            // Probe algorithm: 17*n*(n+1)/2 where n = no. of collisions
+            nextIndex += probe;
+            probe += 17;
+            nextIndex &= this.keys.length - 1;
+
+            if (isRemovedKey(this.keys[nextIndex]))
+            {
+                if (removedIndex == -1)
+                {
+                    removedIndex = nextIndex;
+                }
+            }
+            else if (nullSafeEquals(this.toNonSentinel(this.keys[nextIndex]), element))
+            {
+                return nextIndex;
+            }
+            else if (this.keys[nextIndex] == null)
+            {
+                return removedIndex == -1 ? nextIndex : removedIndex;
+            }
+        }
+    }
+
+    // exposed for testing
+    int spread(Object element)
+    {
+        // This function ensures that hashCodes that differ only by
+        // constant multiples at each bit position have a bounded
+        // number of collisions (approximately 8 at default load factor).
+        int h = element == null ? 0 : element.hashCode();
+        h ^= h >\>> 20 ^ h >\>> 12;
+        h ^= h >\>> 7 ^ h >\>> 4;
+        return h & (this.keys.length - 1);
+    }
+
     private static boolean nullSafeEquals(Object value, Object other)
     {
         if (value == null)
@@ -1100,35 +1132,42 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         return false;
     }
 
-    public void writeExternal(ObjectOutput out) throws IOException
+    private void allocateTable(int sizeToAllocate)
     {
-        out.writeInt(this.size());
-        out.writeFloat(this.loadFactor);
-        for (int i = 0; i \< this.keys.length; i++)
-        {
-            if (isNonSentinel(this.keys[i]))
-            {
-                out.writeObject(this.toNonSentinel(this.keys[i]));
-                out.write<name>(this.values[i]);
-            }
-        }
+        this.keys = new Object[sizeToAllocate];
+        this.values = new <type>[sizeToAllocate];
     }
 
-    public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
+    private static boolean isRemovedKey(Object key)
     {
-        int size = in.readInt();
-        this.loadFactor = in.readFloat();
-        this.init(Math.max((int) (size / this.loadFactor) + 1,
-                DEFAULT_INITIAL_CAPACITY));
-        for (int i = 0; i \< size; i++)
-        {
-            this.put((K) in.readObject(), in.read<name>());
-        }
+        return key == REMOVED_KEY;
     }
 
-    public LazyIterable\<K> keysView()
+    private static \<K> boolean isNonSentinel(K key)
     {
-        return new KeysView();
+        return key != null && !isRemovedKey(key);
+    }
+
+    private K toNonSentinel(Object key)
+    {
+        return key == NULL_KEY ? null : (K) key;
+    }
+
+    private static Object toSentinelIfNull(Object key)
+    {
+        return key == null ? NULL_KEY : key;
+    }
+
+    private int maxOccupiedWithData()
+    {
+        int capacity = this.keys.length;
+        // need at least one free slot for open addressing
+        return Math.min(capacity - 1, capacity / OCCUPIED_DATA_RATIO);
+    }
+
+    private int maxOccupiedWithSentinels()
+    {
+        return this.keys.length / OCCUPIED_SENTINEL_RATIO;
     }
 
     private class Internal<name>Iterator implements <name>Iterator
@@ -1172,98 +1211,6 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
 
     private class KeySet implements Set\<K>
     {
-        public boolean add(K key)
-        {
-            throw new UnsupportedOperationException();
-        }
-
-        public boolean addAll(Collection\<? extends K> collection)
-        {
-            throw new UnsupportedOperationException();
-        }
-
-        public void clear()
-        {
-            Object<name>HashMap.this.clear();
-        }
-
-        public boolean contains(Object o)
-        {
-            return Object<name>HashMap.this.containsKey(o);
-        }
-
-        public boolean containsAll(Collection\<?> collection)
-        {
-            for (Object aCollection : collection)
-            {
-                if (!Object<name>HashMap.this.containsKey(aCollection))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        public boolean isEmpty()
-        {
-            return Object<name>HashMap.this.isEmpty();
-        }
-
-        public Iterator\<K> iterator()
-        {
-            return new KeySetIterator();
-        }
-
-        public boolean remove(Object key)
-        {
-            int oldSize = Object<name>HashMap.this.size();
-            Object<name>HashMap.this.removeKey((K) key);
-            return oldSize != Object<name>HashMap.this.size();
-        }
-
-        public boolean removeAll(Collection\<?> collection)
-        {
-            int oldSize = Object<name>HashMap.this.size();
-            for (Object object : collection)
-            {
-                Object<name>HashMap.this.removeKey((K) object);
-            }
-            return oldSize != Object<name>HashMap.this.size();
-        }
-
-        public boolean retainAll(Collection\<?> collection)
-        {
-            int oldSize = Object<name>HashMap.this.size();
-            Iterator\<K> iterator = this.iterator();
-            while (iterator.hasNext())
-            {
-                K next = iterator.next();
-                if (!collection.contains(next))
-                {
-                    this.remove(next);
-                }
-            }
-            return oldSize != Object<name>HashMap.this.size();
-        }
-
-        public int size()
-        {
-            return Object<name>HashMap.this.size();
-        }
-
-        private void copyKeys(Object[] result)
-        {
-            int count = 0;
-            for (int i = 0; i \< Object<name>HashMap.this.keys.length; i++)
-            {
-                Object key = Object<name>HashMap.this.keys[i];
-                if (Object<name>HashMap.isNonSentinel(key))
-                {
-                    result[count++] = Object<name>HashMap.this.keys[i];
-                }
-            }
-        }
-
         @Override
         public boolean equals(Object obj)
         {
@@ -1295,6 +1242,21 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
             return hashCode;
         }
 
+        public int size()
+        {
+            return Object<name>HashMap.this.size();
+        }
+
+        public boolean isEmpty()
+        {
+            return Object<name>HashMap.this.isEmpty();
+        }
+
+        public boolean contains(Object o)
+        {
+            return Object<name>HashMap.this.containsKey(o);
+        }
+
         public Object[] toArray()
         {
             int size = Object<name>HashMap.this.size();
@@ -1317,6 +1279,83 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
             }
             return result;
         }
+
+        public boolean add(K key)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public boolean remove(Object key)
+        {
+            int oldSize = Object<name>HashMap.this.size();
+            Object<name>HashMap.this.removeKey((K) key);
+            return oldSize != Object<name>HashMap.this.size();
+        }
+
+        public boolean containsAll(Collection\<?> collection)
+        {
+            for (Object aCollection : collection)
+            {
+                if (!Object<name>HashMap.this.containsKey(aCollection))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public boolean addAll(Collection\<? extends K> collection)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public boolean retainAll(Collection\<?> collection)
+        {
+            int oldSize = Object<name>HashMap.this.size();
+            Iterator\<K> iterator = this.iterator();
+            while (iterator.hasNext())
+            {
+                K next = iterator.next();
+                if (!collection.contains(next))
+                {
+                    this.remove(next);
+                }
+            }
+            return oldSize != Object<name>HashMap.this.size();
+        }
+
+        public boolean removeAll(Collection\<?> collection)
+        {
+            int oldSize = Object<name>HashMap.this.size();
+            for (Object object : collection)
+            {
+                Object<name>HashMap.this.removeKey((K) object);
+            }
+            return oldSize != Object<name>HashMap.this.size();
+        }
+
+        public void clear()
+        {
+            Object<name>HashMap.this.clear();
+        }
+
+        public Iterator\<K> iterator()
+        {
+            return new KeySetIterator();
+        }
+
+        private void copyKeys(Object[] result)
+        {
+            int count = 0;
+            for (int i = 0; i \< Object<name>HashMap.this.keys.length; i++)
+            {
+                Object key = Object<name>HashMap.this.keys[i];
+                if (Object<name>HashMap.isNonSentinel(key))
+                {
+                    result[count++] = Object<name>HashMap.this.keys[i];
+                }
+            }
+        }
     }
 
     private class KeySetIterator implements Iterator\<K>
@@ -1329,29 +1368,6 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         public boolean hasNext()
         {
             return this.count \< Object<name>HashMap.this.size();
-        }
-
-        public void remove()
-        {
-            if (!this.isCurrentKeySet)
-            {
-                throw new IllegalStateException();
-            }
-
-            this.isCurrentKeySet = false;
-            this.count--;
-
-            if (isNonSentinel(this.currentKey))
-            {
-                int index = this.position - 1;
-                Object<name>HashMap.this.keys[index] = REMOVED_KEY;
-                Object<name>HashMap.this.occupied--;
-                Object<name>HashMap.this.values[index] = EMPTY_VALUE;
-            }
-            else
-            {
-                Object<name>HashMap.this.removeKey(this.currentKey);
-            }
         }
 
         public K next()
@@ -1371,148 +1387,41 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
             this.position++;
             return Object<name>HashMap.this.toNonSentinel(this.currentKey);
         }
+
+        public void remove()
+        {
+            if (!this.isCurrentKeySet)
+            {
+                throw new IllegalStateException();
+            }
+
+            this.isCurrentKeySet = false;
+            this.count--;
+
+            if (isNonSentinel(this.currentKey))
+            {
+                int index = this.position - 1;
+                Object<name>HashMap.this.keys[index] = REMOVED_KEY;
+                Object<name>HashMap.this.values[index] = EMPTY_VALUE;
+                Object<name>HashMap.this.occupiedWithData--;
+                Object<name>HashMap.this.occupiedWithSentinels++;
+                if (Object<name>HashMap.this.occupiedWithSentinels > Object<name>HashMap.this.maxOccupiedWithSentinels())
+                {
+                    Object<name>HashMap.this.rehash();
+                }
+            }
+            else
+            {
+                Object<name>HashMap.this.removeKey(this.currentKey);
+            }
+        }
     }
 
     private class ValuesCollection implements Mutable<name>Collection
     {
-        public void clear()
+        public int size()
         {
-            Object<name>HashMap.this.clear();
-        }
-
-        public Mutable<name>Collection select(<name>Predicate predicate)
-        {
-            return Object<name>HashMap.this.select(predicate);
-        }
-
-        public Mutable<name>Collection reject(<name>Predicate predicate)
-        {
-            return Object<name>HashMap.this.reject(predicate);
-        }
-
-        public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
-        {
-            return Object<name>HashMap.this.detectIfNone(predicate, ifNone);
-        }
-
-        public \<V> MutableCollection\<V> collect(<name>ToObjectFunction\<? extends V> function)
-        {
-            return Object<name>HashMap.this.collect(function);
-        }
-
-        public <wideType.(type)> sum()
-        {
-            return Object<name>HashMap.this.sum();
-        }
-
-        public <type> max()
-        {
-            return Object<name>HashMap.this.max();
-        }
-
-        public <type> maxIfEmpty(<type> defaultValue)
-        {
-            return Object<name>HashMap.this.maxIfEmpty(defaultValue);
-        }
-
-        public <type> min()
-        {
-            return Object<name>HashMap.this.min();
-        }
-
-        public <type> minIfEmpty(<type> defaultValue)
-        {
-            return Object<name>HashMap.this.minIfEmpty(defaultValue);
-        }
-
-        public double average()
-        {
-            return Object<name>HashMap.this.average();
-        }
-
-        public double median()
-        {
-            return Object<name>HashMap.this.median();
-        }
-
-        public <type>[] toSortedArray()
-        {
-            return Object<name>HashMap.this.toSortedArray();
-        }
-
-        public Mutable<name>List toSortedList()
-        {
-            return Object<name>HashMap.this.toSortedList();
-        }
-
-        public Mutable<name>Collection with(<type> element)
-        {
-            throw new UnsupportedOperationException();
-        }
-
-        public Mutable<name>Collection without(<type> element)
-        {
-            throw new UnsupportedOperationException();
-        }
-
-        public Mutable<name>Collection withAll(<name>Iterable elements)
-        {
-            throw new UnsupportedOperationException();
-        }
-
-        public Mutable<name>Collection withoutAll(<name>Iterable elements)
-        {
-            throw new UnsupportedOperationException();
-        }
-
-        public Mutable<name>Collection asUnmodifiable()
-        {
-            return Unmodifiable<name>Collection.of(this);
-        }
-
-        public Mutable<name>Collection asSynchronized()
-        {
-            return Synchronized<name>Collection.of(this);
-        }
-
-        public Immutable<name>Collection toImmutable()
-        {
-            return <name>Lists.immutable.withAll(this);
-        }
-
-        public boolean contains(<type> value)
-        {
-            return Object<name>HashMap.this.containsValue(value);
-        }
-
-        public boolean containsAll(<type>... source)
-        {
-            return Object<name>HashMap.this.containsAll(source);
-        }
-
-        public boolean containsAll(<name>Iterable source)
-        {
-            return Object<name>HashMap.this.containsAll(source);
-        }
-
-        public Mutable<name>List toList()
-        {
-            return Object<name>HashMap.this.toList();
-        }
-
-        public Mutable<name>Set toSet()
-        {
-            return Object<name>HashMap.this.toSet();
-        }
-
-        public Mutable<name>Bag toBag()
-        {
-            return Object<name>HashMap.this.toBag();
-        }
-
-        public Lazy<name>Iterable asLazy()
-        {
-            return new Lazy<name>IterableAdapter(this);
+            return Object<name>HashMap.this.size();
         }
 
         public boolean isEmpty()
@@ -1581,36 +1490,6 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
             }
         }
 
-        public <name>Iterator <type>Iterator()
-        {
-            return Object<name>HashMap.this.<type>Iterator();
-        }
-
-        public void forEach(<name>Procedure procedure)
-        {
-            Object<name>HashMap.this.forEach(procedure);
-        }
-
-        public int count(<name>Predicate predicate)
-        {
-            return Object<name>HashMap.this.count(predicate);
-        }
-
-        public boolean anySatisfy(<name>Predicate predicate)
-        {
-            return Object<name>HashMap.this.anySatisfy(predicate);
-        }
-
-        public boolean allSatisfy(<name>Predicate predicate)
-        {
-            return Object<name>HashMap.this.allSatisfy(predicate);
-        }
-
-        public boolean noneSatisfy(<name>Predicate predicate)
-        {
-            return Object<name>HashMap.this.noneSatisfy(predicate);
-        }
-
         public boolean add(<type> element)
         {
             throw new UnsupportedOperationException();
@@ -1663,14 +1542,179 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
             return oldSize != Object<name>HashMap.this.size();
         }
 
-        public int size()
+        public void clear()
         {
-            return Object<name>HashMap.this.size();
+            Object<name>HashMap.this.clear();
+        }
+
+        public Mutable<name>Collection with(<type> element)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public Mutable<name>Collection without(<type> element)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public Mutable<name>Collection withAll(<name>Iterable elements)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public Mutable<name>Collection withoutAll(<name>Iterable elements)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public Mutable<name>Collection asUnmodifiable()
+        {
+            return Unmodifiable<name>Collection.of(this);
+        }
+
+        public Mutable<name>Collection asSynchronized()
+        {
+            return Synchronized<name>Collection.of(this);
+        }
+
+        public Immutable<name>Collection toImmutable()
+        {
+            return <name>Lists.immutable.withAll(this);
+        }
+
+        public <name>Iterator <type>Iterator()
+        {
+            return Object<name>HashMap.this.<type>Iterator();
         }
 
         public <type>[] toArray()
         {
             return Object<name>HashMap.this.toArray();
+        }
+
+        public boolean contains(<type> value)
+        {
+            return Object<name>HashMap.this.containsValue(value);
+        }
+
+        public boolean containsAll(<type>... source)
+        {
+            return Object<name>HashMap.this.containsAll(source);
+        }
+
+        public boolean containsAll(<name>Iterable source)
+        {
+            return Object<name>HashMap.this.containsAll(source);
+        }
+
+        public void forEach(<name>Procedure procedure)
+        {
+            Object<name>HashMap.this.forEach(procedure);
+        }
+
+        public Mutable<name>Collection select(<name>Predicate predicate)
+        {
+            return Object<name>HashMap.this.select(predicate);
+        }
+
+        public Mutable<name>Collection reject(<name>Predicate predicate)
+        {
+            return Object<name>HashMap.this.reject(predicate);
+        }
+
+        public \<V> MutableCollection\<V> collect(<name>ToObjectFunction\<? extends V> function)
+        {
+            return Object<name>HashMap.this.collect(function);
+        }
+
+        public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
+        {
+            return Object<name>HashMap.this.detectIfNone(predicate, ifNone);
+        }
+
+        public int count(<name>Predicate predicate)
+        {
+            return Object<name>HashMap.this.count(predicate);
+        }
+
+        public boolean anySatisfy(<name>Predicate predicate)
+        {
+            return Object<name>HashMap.this.anySatisfy(predicate);
+        }
+
+        public boolean allSatisfy(<name>Predicate predicate)
+        {
+            return Object<name>HashMap.this.allSatisfy(predicate);
+        }
+
+        public boolean noneSatisfy(<name>Predicate predicate)
+        {
+            return Object<name>HashMap.this.noneSatisfy(predicate);
+        }
+
+        public Mutable<name>List toList()
+        {
+            return Object<name>HashMap.this.toList();
+        }
+
+        public Mutable<name>Set toSet()
+        {
+            return Object<name>HashMap.this.toSet();
+        }
+
+        public Mutable<name>Bag toBag()
+        {
+            return Object<name>HashMap.this.toBag();
+        }
+
+        public Lazy<name>Iterable asLazy()
+        {
+            return new Lazy<name>IterableAdapter(this);
+        }
+
+        public <type>[] toSortedArray()
+        {
+            return Object<name>HashMap.this.toSortedArray();
+        }
+
+        public Mutable<name>List toSortedList()
+        {
+            return Object<name>HashMap.this.toSortedList();
+        }
+
+        public <wideType.(type)> sum()
+        {
+            return Object<name>HashMap.this.sum();
+        }
+
+        public <type> max()
+        {
+            return Object<name>HashMap.this.max();
+        }
+
+        public <type> maxIfEmpty(<type> defaultValue)
+        {
+            return Object<name>HashMap.this.maxIfEmpty(defaultValue);
+        }
+
+        public <type> min()
+        {
+            return Object<name>HashMap.this.min();
+        }
+
+        public <type> minIfEmpty(<type> defaultValue)
+        {
+            return Object<name>HashMap.this.minIfEmpty(defaultValue);
+        }
+
+        public double average()
+        {
+            return Object<name>HashMap.this.average();
+        }
+
+        public double median()
+        {
+            return Object<name>HashMap.this.median();
         }
     }
 

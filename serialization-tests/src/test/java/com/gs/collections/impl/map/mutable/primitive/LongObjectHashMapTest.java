@@ -27,7 +27,7 @@ public class LongObjectHashMapTest
         Verify.assertSerializedForm(
                 1L,
                 "rO0ABXNyAD9jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5wcmltaXRpdmUuTG9u\n"
-                        + "Z09iamVjdEhhc2hNYXAAAAAAAAAAAQwAAHhwdwgAAAAAPwAAAHg=",
+                        + "Z09iamVjdEhhc2hNYXAAAAAAAAAAAQwAAHhwdwQAAAAAeA==",
                 new LongObjectHashMap<Object>());
     }
 }

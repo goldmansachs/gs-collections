@@ -30,7 +30,7 @@ public class UnmodifiableFloatObjectMapTest
                         + "b2RpZmlhYmxlRmxvYXRPYmplY3RNYXAAAAAAAAAAAQIAAUwAA21hcHQAPExjb20vZ3MvY29sbGVj\n"
                         + "dGlvbnMvYXBpL21hcC9wcmltaXRpdmUvTXV0YWJsZUZsb2F0T2JqZWN0TWFwO3hwc3IAQGNvbS5n\n"
                         + "cy5jb2xsZWN0aW9ucy5pbXBsLm1hcC5tdXRhYmxlLnByaW1pdGl2ZS5GbG9hdE9iamVjdEhhc2hN\n"
-                        + "YXAAAAAAAAAAAQwAAHhwdwgAAAAAPwAAAHg=",
+                        + "YXAAAAAAAAAAAQwAAHhwdwQAAAAAeA==",
                 new UnmodifiableFloatObjectMap<Object>(new FloatObjectHashMap<Object>()));
     }
 }

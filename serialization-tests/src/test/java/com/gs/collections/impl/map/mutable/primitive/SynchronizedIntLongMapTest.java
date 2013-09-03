@@ -30,7 +30,7 @@ public class SynchronizedIntLongMapTest
                         + "Y2hyb25pemVkSW50TG9uZ01hcAAAAAAAAAABAgACTAAEbG9ja3QAEkxqYXZhL2xhbmcvT2JqZWN0\n"
                         + "O0wAA21hcHQAOExjb20vZ3MvY29sbGVjdGlvbnMvYXBpL21hcC9wcmltaXRpdmUvTXV0YWJsZUlu\n"
                         + "dExvbmdNYXA7eHBxAH4AA3NyADxjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5w\n"
-                        + "cmltaXRpdmUuSW50TG9uZ0hhc2hNYXAAAAAAAAAAAQwAAHhwdwgAAAAAPwAAAHg=",
+                        + "cmltaXRpdmUuSW50TG9uZ0hhc2hNYXAAAAAAAAAAAQwAAHhwdwQAAAAAeA==",
                 new SynchronizedIntLongMap(new IntLongHashMap()));
     }
 }

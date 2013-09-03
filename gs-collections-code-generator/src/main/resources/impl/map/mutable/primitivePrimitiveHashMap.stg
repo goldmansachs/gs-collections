@@ -95,107 +95,42 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
     private static final <type1> EMPTY_KEY = <(literal.(type1))("0")>;
     private static final <type1> REMOVED_KEY = <(literal.(type1))("1")>;
 
-    private static final float DEFAULT_LOAD_FACTOR = 0.5f;
+    private static final int OCCUPIED_DATA_RATIO = 2;
+    private static final int OCCUPIED_SENTINEL_RATIO = 4;
     private static final int DEFAULT_INITIAL_CAPACITY = 8;
-    private int occupied;
-    private int maxSize;
 
     private <type1>[] keys;
     private <type2>[] values;
-    private float loadFactor = DEFAULT_LOAD_FACTOR;
+
+    private int occupiedWithData;
+    private int occupiedWithSentinels;
+
     private SentinelValues sentinelValues;
 
     public <name1><name2>HashMap()
     {
-        this.allocate(DEFAULT_INITIAL_CAPACITY \<\< 1);
-    }
-
-    public <name1><name2>HashMap(<name1><name2>Map map)
-    {
-        this(Math.max(map.size(), DEFAULT_INITIAL_CAPACITY), DEFAULT_LOAD_FACTOR);
-
-        this.putAll(map);
+        this.allocateTable(DEFAULT_INITIAL_CAPACITY \<\< 1);
     }
 
     public <name1><name2>HashMap(int initialCapacity)
-    {
-        this(initialCapacity, DEFAULT_LOAD_FACTOR);
-    }
-
-    public <name1><name2>HashMap(int initialCapacity, float loadFactor)
     {
         if (initialCapacity \< 0)
         {
             throw new IllegalArgumentException("initial capacity cannot be less than 0");
         }
-        this.loadFactor = loadFactor;
-        this.init(this.fastCeil(initialCapacity / loadFactor));
+        int capacity = this.smallestPowerOfTwoGreaterThan(this.fastCeil(initialCapacity * OCCUPIED_DATA_RATIO));
+        this.allocateTable(capacity);
     }
 
-    public static <name1><name2>HashMap newWithKeysValues(<type1> key1, <type2> value1)
+    private int smallestPowerOfTwoGreaterThan(int n)
     {
-        return new <name1><name2>HashMap(1).withKeyValue(key1, value1);
+        return n > 1 ? Integer.highestOneBit(n - 1) \<\< 1 : 1;
     }
 
-    <newWithKeysValues(["1", "2"])>
-
-    <newWithKeysValues(["1", "2", "3"])>
-
-    <newWithKeysValues(["1", "2", "3", "4"])>
-
-    public <name1><name2>HashMap withKeyValue(<type1> key1, <type2> value1)
+    public <name1><name2>HashMap(<name1><name2>Map map)
     {
-        this.put(key1, value1);
-        return this;
-    }
-
-    <withKeysValues(["1", "2"])>
-
-    <withKeysValues(["1", "2", "3"])>
-
-    <withKeysValues(["1", "2", "3", "4"])>
-
-    public <name1><name2>HashMap withoutKey(<type1> key)
-    {
-        this.removeKey(key);
-        return this;
-    }
-
-    public <name1><name2>HashMap withoutAllKeys(<name1>Iterable keys)
-    {
-        keys.forEach(new <name1>Procedure()
-        {
-            public void value(<type1> key)
-            {
-                <name1><name2>HashMap.this.removeKey(key);
-            }
-        });
-        return this;
-    }
-
-    public Mutable<name1><name2>Map asUnmodifiable()
-    {
-        return new Unmodifiable<name1><name2>Map(this);
-    }
-
-    public Mutable<name1><name2>Map asSynchronized()
-    {
-        return new Synchronized<name1><name2>Map(this);
-    }
-
-    public Immutable<name1><name2>Map toImmutable()
-    {
-        return <name1><name2>Maps.immutable.ofAll(this);
-    }
-
-    private int init(int initialCapacity)
-    {
-        int capacity = 1;
-        while (capacity \< initialCapacity)
-        {
-            capacity \<\<= 1;
-        }
-        return this.allocate(capacity);
+        this(Math.max(map.size(), DEFAULT_INITIAL_CAPACITY));
+        this.putAll(map);
     }
 
     private int fastCeil(float v)
@@ -208,469 +143,16 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         return possibleResult;
     }
 
-    private static boolean isEmptyKey(<type1> key)
+    public static <name1><name2>HashMap newWithKeysValues(<type1> key1, <type2> value1)
     {
-        return <(equals.(type1))("key", "EMPTY_KEY")>;
+        return new <name1><name2>HashMap(1).withKeyValue(key1, value1);
     }
 
-    private static boolean isRemovedKey(<type1> key)
-    {
-        return <(equals.(type1))("key", "REMOVED_KEY")>;
-    }
+    <newWithKeysValues(["1", "2"])>
 
-    private static boolean isNonSentinel(<type1> key)
-    {
-        return !isEmptyKey(key) && !isRemovedKey(key);
-    }
+    <newWithKeysValues(["1", "2", "3"])>
 
-    private int allocate(int capacity)
-    {
-        this.allocateTable(capacity);
-        this.computeMaxSize(capacity);
-        return capacity;
-    }
-
-    private void allocateTable(int sizeToAllocate)
-    {
-        this.keys = new <type1>[sizeToAllocate];
-        this.values = new <type2>[sizeToAllocate];
-    }
-
-    private void computeMaxSize(int capacity)
-    {
-        // need at least one free slot for open addressing
-        this.maxSize = Math.min(capacity - 1, (int) (capacity * this.loadFactor));
-    }
-
-    public int size()
-    {
-        return this.occupied + (this.sentinelValues == null ? 0 : this.sentinelValues.size());
-    }
-
-    public boolean isEmpty()
-    {
-        return this.occupied == 0 && (this.sentinelValues == null || this.sentinelValues.size() == 0);
-    }
-
-    public boolean notEmpty()
-    {
-        return this.occupied != 0 || (this.sentinelValues != null && this.sentinelValues.size() != 0);
-    }
-
-    private void rehash()
-    {
-        this.rehash(this.keys.length \<\< 1);
-    }
-
-    private void rehash(int newCapacity)
-    {
-        int oldLength = this.keys.length;
-        <type1>[] old = this.keys;
-        <type2>[] oldValues = this.values;
-        this.allocate(newCapacity);
-        this.occupied = 0;
-
-        for (int i = 0; i \< oldLength; i++)
-        {
-            if (isNonSentinel(old[i]))
-            {
-                this.put(old[i], oldValues[i]);
-            }
-        }
-    }
-
-    // exposed for testing
-    int probe(<type1> element)
-    {
-        int index = this.spread(element);
-        <type1> keyAtIndex = this.keys[index];
-
-        if (<(equals.(type1))("keyAtIndex", "element")> || <(equals.(type1))("keyAtIndex", "EMPTY_KEY")>)
-        {
-            return index;
-        }
-
-        int removedIndex = <(equals.(type1))("keyAtIndex", "REMOVED_KEY")> ? index : -1;
-        int nextIndex = index;
-        int probe = 17;
-
-        // loop until an empty slot is reached
-        while (true)
-        {
-            // Probe algorithm: 17*n*(n+1)/2 where n = number of collisions
-            nextIndex += probe;
-            probe += 17;
-            nextIndex &= this.keys.length - 1;
-
-            if (<(equals.(type1))("this.keys[nextIndex]", "element")>)
-            {
-                return nextIndex;
-            }
-            if (<(equals.(type1))("this.keys[nextIndex]", "REMOVED_KEY")>)
-            {
-                if (removedIndex == -1)
-                {
-                    removedIndex = nextIndex;
-                }
-            }
-            else if (<(equals.(type1))("this.keys[nextIndex]", "EMPTY_KEY")>)
-            {
-                return removedIndex == -1 ? nextIndex : removedIndex;
-            }
-        }
-    }
-
-    // exposed for testing
-    <(spread.(type1))(type1, "keys")>
-
-    public void clear()
-    {
-        this.sentinelValues = null;
-        this.occupied = 0;
-        Arrays.fill(this.keys, EMPTY_KEY);
-        Arrays.fill(this.values, EMPTY_VALUE);
-    }
-
-    public void put(<type1> key, <type2> value)
-    {
-        if (isEmptyKey(key))
-        {
-            if (this.sentinelValues == null)
-            {
-                this.sentinelValues = new SentinelValues();
-            }
-            this.sentinelValues.containsZeroKey = true;
-            this.sentinelValues.zeroValue = value;
-            return;
-        }
-
-        if (isRemovedKey(key))
-        {
-            if (this.sentinelValues == null)
-            {
-                this.sentinelValues = new SentinelValues();
-            }
-            this.sentinelValues.containsOneKey = true;
-            this.sentinelValues.oneValue = value;
-            return;
-        }
-
-        int index = this.probe(key);
-
-        if (<(equals.(type1))("this.keys[index]", "key")>)
-        {
-            // key already present in map
-            this.values[index] = value;
-            return;
-        }
-
-        this.keys[index] = key;
-        this.values[index] = value;
-        ++this.occupied;
-        if (this.occupied > this.maxSize)
-        {
-            this.rehash();
-        }
-    }
-
-    public void putAll(<name1><name2>Map map)
-    {
-        map.forEachKeyValue(new <name1><name2>Procedure()
-        {
-            public void value(<type1> key, <type2> value)
-            {
-                <name1><name2>HashMap.this.put(key, value);
-            }
-        });
-    }
-
-    public boolean containsKey(<type1> key)
-    {
-        if (isEmptyKey(key))
-        {
-            return this.sentinelValues != null && this.sentinelValues.containsZeroKey;
-        }
-        if (isRemovedKey(key))
-        {
-            return this.sentinelValues != null && this.sentinelValues.containsOneKey;
-        }
-        return <(equals.(type1))("this.keys[this.probe(key)]", "key")>;
-    }
-
-    public boolean containsValue(<type2> value)
-    {
-        if (this.sentinelValues != null && this.sentinelValues.containsValue(value))
-        {
-            return true;
-        }
-        for (int i = 0; i \< this.values.length; i++)
-        {
-            if (isNonSentinel(this.keys[i]) && <(equals.(type2))("this.values[i]", "value")>)
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean contains(<type2> value)
-    {
-        return this.containsValue(value);
-    }
-
-    public boolean containsAll(<type2>... source)
-    {
-        for (<type2> each : source)
-        {
-            if (!this.contains(each))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean containsAll(<name2>Iterable source)
-    {
-        return source.allSatisfy(new <name2>Predicate()
-        {
-            public boolean accept(<type2> value)
-            {
-                return <name1><name2>HashMap.this.contains(value);
-            }
-        });
-    }
-
-    public <type2> get(<type1> key)
-    {
-        return this.getIfAbsent(key, EMPTY_VALUE);
-    }
-
-    public <type2> getIfAbsent(<type1> key, <type2> ifAbsent)
-    {
-        if (isEmptyKey(key))
-        {
-            if (this.sentinelValues == null || !this.sentinelValues.containsZeroKey)
-            {
-                return ifAbsent;
-            }
-            return this.sentinelValues.zeroValue;
-        }
-        if (isRemovedKey(key))
-        {
-            if (this.sentinelValues == null || !this.sentinelValues.containsOneKey)
-            {
-                return ifAbsent;
-            }
-            return this.sentinelValues.oneValue;
-        }
-        int index = this.probe(key);
-        if (<(equals.(type1))("this.keys[index]", "key")>)
-        {
-            return this.values[index];
-        }
-        return ifAbsent;
-    }
-
-    public <type2> getOrThrow(<type1> key)
-    {
-        if (isEmptyKey(key))
-        {
-            if (this.sentinelValues == null || !this.sentinelValues.containsZeroKey)
-            {
-                throw new IllegalStateException("Key " + key + " not present.");
-            }
-            return this.sentinelValues.zeroValue;
-        }
-        if (isRemovedKey(key))
-        {
-            if (this.sentinelValues == null || !this.sentinelValues.containsOneKey)
-            {
-                throw new IllegalStateException("Key " + key + " not present.");
-            }
-            return this.sentinelValues.oneValue;
-        }
-        int index = this.probe(key);
-        if (isNonSentinel(this.keys[index]))
-        {
-            return this.values[index];
-        }
-        throw new IllegalStateException("Key " + key + " not present.");
-    }
-
-    public <type2> getIfAbsentPut(<type1> key, <type2> value)
-    {
-        <getIfAbsentPut("")>
-    }
-
-    public <type2> getIfAbsentPut(<type1> key, <name2>Function0 function)
-    {
-        <getIfAbsentPut({<type2> value = function.value();})>
-    }
-
-    public \<P> <type2> getIfAbsentPutWith(<type1> key, <name2>Function\<? super P> function, P parameter)
-    {
-        <getIfAbsentPut({<type2> value = function.<type2>ValueOf(parameter);})>
-    }
-
-    public <type2> getIfAbsentPutWithKey(<type1> key, <name1>To<name2>Function function)
-    {
-        <getIfAbsentPut({<type2> value = function.valueOf(key);})>
-    }
-
-    public <type2> updateValue(<type1> key, <type2> initialValueIfAbsent, <name2>To<name2>Function function)
-    {
-        if (isEmptyKey(key))
-        {
-            if (this.sentinelValues == null)
-            {
-                this.sentinelValues = new SentinelValues();
-                this.sentinelValues.containsZeroKey = true;
-                this.sentinelValues.zeroValue = function.valueOf(initialValueIfAbsent);
-            }
-            else if (this.sentinelValues.containsZeroKey)
-            {
-                this.sentinelValues.zeroValue = function.valueOf(this.sentinelValues.zeroValue);
-            }
-            else
-            {
-                this.sentinelValues.containsZeroKey = true;
-                this.sentinelValues.zeroValue = function.valueOf(initialValueIfAbsent);
-            }
-            return this.sentinelValues.zeroValue;
-        }
-        if (isRemovedKey(key))
-        {
-            if (this.sentinelValues == null)
-            {
-                this.sentinelValues = new SentinelValues();
-                this.sentinelValues.containsOneKey = true;
-                this.sentinelValues.oneValue = function.valueOf(initialValueIfAbsent);
-            }
-            else if (this.sentinelValues.containsOneKey)
-            {
-                this.sentinelValues.oneValue = function.valueOf(this.sentinelValues.oneValue);
-            }
-            else
-            {
-                this.sentinelValues.containsOneKey = true;
-                this.sentinelValues.oneValue = function.valueOf(initialValueIfAbsent);
-            }
-            return this.sentinelValues.oneValue;
-        }
-        int index = this.probe(key);
-        if (<(equals.(type1))("this.keys[index]", "key")>)
-        {
-            this.values[index] = function.valueOf(this.values[index]);
-        }
-        else
-        {
-            this.keys[index] = key;
-            this.occupied++;
-            this.values[index] = function.valueOf(initialValueIfAbsent);
-        }
-        return this.values[index];
-    }
-
-    public void removeKey(<type1> key)
-    {
-        if (isEmptyKey(key))
-        {
-            if (this.sentinelValues == null || !this.sentinelValues.containsZeroKey)
-            {
-                return;
-            }
-            if (this.sentinelValues.containsOneKey)
-            {
-                this.sentinelValues.containsZeroKey = false;
-                this.sentinelValues.zeroValue = EMPTY_VALUE;
-            }
-            else
-            {
-                this.sentinelValues = null;
-            }
-            return;
-        }
-        if (isRemovedKey(key))
-        {
-            if (this.sentinelValues == null || !this.sentinelValues.containsOneKey)
-            {
-                return;
-            }
-            if (this.sentinelValues.containsZeroKey)
-            {
-                this.sentinelValues.containsOneKey = false;
-                this.sentinelValues.oneValue = EMPTY_VALUE;
-            }
-            else
-            {
-                this.sentinelValues = null;
-            }
-            return;
-        }
-        int index = this.probe(key);
-        if (<(equals.(type1))("this.keys[index]", "key")>)
-        {
-            this.keys[index] = REMOVED_KEY;
-            this.occupied--;
-            this.values[index] = EMPTY_VALUE;
-        }
-    }
-
-    public void remove(<type1> key)
-    {
-        this.removeKey(key);
-    }
-
-    public <type2> removeKeyIfAbsent(<type1> key, <type2> value)
-    {
-        if (isEmptyKey(key))
-        {
-            if (this.sentinelValues == null || !this.sentinelValues.containsZeroKey)
-            {
-                return value;
-            }
-            <type2> oldValue = this.sentinelValues.zeroValue;
-            if (this.sentinelValues.containsOneKey)
-            {
-                this.sentinelValues.containsZeroKey = false;
-                this.sentinelValues.zeroValue = EMPTY_VALUE;
-            }
-            else
-            {
-                this.sentinelValues = null;
-            }
-            return oldValue;
-        }
-        if (isRemovedKey(key))
-        {
-            if (this.sentinelValues == null || !this.sentinelValues.containsOneKey)
-            {
-                return value;
-            }
-            <type2> oldValue = this.sentinelValues.oneValue;
-            if (this.sentinelValues.containsZeroKey)
-            {
-                this.sentinelValues.containsOneKey = false;
-                this.sentinelValues.oneValue = EMPTY_VALUE;
-            }
-            else
-            {
-                this.sentinelValues = null;
-            }
-            return oldValue;
-        }
-        int index = this.probe(key);
-        if (<(equals.(type1))("this.keys[index]", "key")>)
-        {
-            this.keys[index] = REMOVED_KEY;
-            this.occupied--;
-            <type2> oldValue = this.values[index];
-            this.values[index] = EMPTY_VALUE;
-            return oldValue;
-        }
-        return value;
-    }
+    <newWithKeysValues(["1", "2", "3", "4"])>
 
     @Override
     public boolean equals(Object obj)
@@ -739,63 +221,19 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         return this.makeString("[", ", ", "]");
     }
 
-    public <name2>Iterator <type2>Iterator()
+    public int size()
     {
-        return new Internal<name2>Iterator();
+        return this.occupiedWithData + (this.sentinelValues == null ? 0 : this.sentinelValues.size());
     }
 
-    public void forEach(<name2>Procedure procedure)
+    public boolean isEmpty()
     {
-        this.forEachValue(procedure);
+        return this.occupiedWithData == 0 && (this.sentinelValues == null || this.sentinelValues.size() == 0);
     }
 
-    public void forEachValue(<name2>Procedure procedure)
+    public boolean notEmpty()
     {
-        <forEachValue("executeProcedure")>
-    }
-
-    public void forEachKey(<name1>Procedure procedure)
-    {
-        <forEachKey("executeProcedure")>
-    }
-
-    public void forEachKeyValue(<name1><name2>Procedure procedure)
-    {
-        <forEachKeyValue("executeProcedure2")>
-    }
-
-    public <name1><name2>HashMap select(<name1><name2>Predicate predicate)
-    {
-        <name1><name2>HashMap result = new <name1><name2>HashMap();
-
-        <forEachKeyValueSatisfying("select2")>
-
-        return result;
-    }
-
-    public <name1><name2>HashMap reject(<name1><name2>Predicate predicate)
-    {
-        <name1><name2>HashMap result = new <name1><name2>HashMap();
-
-        if (this.sentinelValues != null)
-        {
-            if (this.sentinelValues.containsZeroKey && !predicate.accept(EMPTY_KEY, this.sentinelValues.zeroValue))
-            {
-                result.put(EMPTY_KEY, this.sentinelValues.zeroValue);
-            }
-            if (this.sentinelValues.containsOneKey && !predicate.accept(REMOVED_KEY, this.sentinelValues.oneValue))
-            {
-                result.put(REMOVED_KEY, this.sentinelValues.oneValue);
-            }
-        }
-        for (int i = 0; i \< this.keys.length; i++)
-        {
-            if (isNonSentinel(this.keys[i]) && !predicate.accept(this.keys[i], this.values[i]))
-            {
-                result.put(this.keys[i], this.values[i]);
-            }
-        }
-        return result;
+        return this.occupiedWithData != 0 || (this.sentinelValues != null && this.sentinelValues.size() != 0);
     }
 
     public String makeString()
@@ -871,6 +309,54 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         }
     }
 
+    public <name2>Iterator <type2>Iterator()
+    {
+        return new Internal<name2>Iterator();
+    }
+
+    public <type2>[] toArray()
+    {
+        <type2>[] array = new <type2>[this.size()];
+        int index = 0;
+
+        <forEachValue("toArray")>
+
+        return array;
+    }
+
+    public boolean contains(<type2> value)
+    {
+        return this.containsValue(value);
+    }
+
+    public boolean containsAll(<type2>... source)
+    {
+        for (<type2> each : source)
+        {
+            if (!this.contains(each))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean containsAll(<name2>Iterable source)
+    {
+        return source.allSatisfy(new <name2>Predicate()
+        {
+            public boolean accept(<type2> value)
+            {
+                return <name1><name2>HashMap.this.contains(value);
+            }
+        });
+    }
+
+    public void forEach(<name2>Procedure procedure)
+    {
+        this.forEachValue(procedure);
+    }
+
     public Mutable<name2>Collection select(<name2>Predicate predicate)
     {
         <name2>ArrayList result = new <name2>ArrayList();
@@ -904,12 +390,6 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         return result;
     }
 
-    public <type2> detectIfNone(<name2>Predicate predicate, <type2> value)
-    {
-        <forEachValueSatisfying("detectIfNone")>
-        return value;
-    }
-
     public \<V> MutableCollection\<V> collect(<name2>ToObjectFunction\<? extends V> function)
     {
         FastList\<V> target = FastList.newList(this.size());
@@ -932,6 +412,12 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             }
         }
         return target;
+    }
+
+    public <type2> detectIfNone(<name2>Predicate predicate, <type2> value)
+    {
+        <forEachValueSatisfying("detectIfNone")>
+        return value;
     }
 
     public int count(<name2>Predicate predicate)
@@ -1002,6 +488,478 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         return result;
     }
 
+    public Mutable<name2>List toList()
+    {
+        return <name2>ArrayList.newList(this);
+    }
+
+    public Mutable<name2>Set toSet()
+    {
+        return <name2>HashSet.newSet(this);
+    }
+
+    public Mutable<name2>Bag toBag()
+    {
+        return <name2>HashBag.newBag(this);
+    }
+
+    public Lazy<name2>Iterable asLazy()
+    {
+        return new Lazy<name2>IterableAdapter(this);
+    }
+
+    public void clear()
+    {
+        this.sentinelValues = null;
+        this.occupiedWithData = 0;
+        this.occupiedWithSentinels = 0;
+        Arrays.fill(this.keys, EMPTY_KEY);
+        Arrays.fill(this.values, EMPTY_VALUE);
+    }
+
+    public void put(<type1> key, <type2> value)
+    {
+        if (isEmptyKey(key))
+        {
+            if (this.sentinelValues == null)
+            {
+                this.sentinelValues = new SentinelValues();
+            }
+            this.sentinelValues.containsZeroKey = true;
+            this.sentinelValues.zeroValue = value;
+            return;
+        }
+
+        if (isRemovedKey(key))
+        {
+            if (this.sentinelValues == null)
+            {
+                this.sentinelValues = new SentinelValues();
+            }
+            this.sentinelValues.containsOneKey = true;
+            this.sentinelValues.oneValue = value;
+            return;
+        }
+
+        int index = this.probe(key);
+
+        if (<(equals.(type1))("this.keys[index]", "key")>)
+        {
+            // key already present in map
+            this.values[index] = value;
+            return;
+        }
+
+        if (<(equals.(type1))("this.keys[index]", "REMOVED_KEY")>)
+        {
+            --this.occupiedWithSentinels;
+        }
+        this.keys[index] = key;
+        this.values[index] = value;
+        ++this.occupiedWithData;
+        if (this.occupiedWithData > this.maxOccupiedWithData())
+        {
+            this.rehashAndGrow();
+        }
+    }
+
+    public void putAll(<name1><name2>Map map)
+    {
+        map.forEachKeyValue(new <name1><name2>Procedure()
+        {
+            public void value(<type1> key, <type2> value)
+            {
+                <name1><name2>HashMap.this.put(key, value);
+            }
+        });
+    }
+
+    public void removeKey(<type1> key)
+    {
+        if (isEmptyKey(key))
+        {
+            if (this.sentinelValues == null || !this.sentinelValues.containsZeroKey)
+            {
+                return;
+            }
+            if (this.sentinelValues.containsOneKey)
+            {
+                this.sentinelValues.containsZeroKey = false;
+                this.sentinelValues.zeroValue = EMPTY_VALUE;
+            }
+            else
+            {
+                this.sentinelValues = null;
+            }
+            return;
+        }
+        if (isRemovedKey(key))
+        {
+            if (this.sentinelValues == null || !this.sentinelValues.containsOneKey)
+            {
+                return;
+            }
+            if (this.sentinelValues.containsZeroKey)
+            {
+                this.sentinelValues.containsOneKey = false;
+                this.sentinelValues.oneValue = EMPTY_VALUE;
+            }
+            else
+            {
+                this.sentinelValues = null;
+            }
+            return;
+        }
+        int index = this.probe(key);
+        if (<(equals.(type1))("this.keys[index]", "key")>)
+        {
+            this.keys[index] = REMOVED_KEY;
+            this.values[index] = EMPTY_VALUE;
+            this.occupiedWithData--;
+            this.occupiedWithSentinels++;
+            if (this.occupiedWithSentinels > this.maxOccupiedWithSentinels())
+            {
+                this.rehash();
+            }
+        }
+    }
+
+    public void remove(<type1> key)
+    {
+        this.removeKey(key);
+    }
+
+    public <type2> removeKeyIfAbsent(<type1> key, <type2> value)
+    {
+        if (isEmptyKey(key))
+        {
+            if (this.sentinelValues == null || !this.sentinelValues.containsZeroKey)
+            {
+                return value;
+            }
+            <type2> oldValue = this.sentinelValues.zeroValue;
+            if (this.sentinelValues.containsOneKey)
+            {
+                this.sentinelValues.containsZeroKey = false;
+                this.sentinelValues.zeroValue = EMPTY_VALUE;
+            }
+            else
+            {
+                this.sentinelValues = null;
+            }
+            return oldValue;
+        }
+        if (isRemovedKey(key))
+        {
+            if (this.sentinelValues == null || !this.sentinelValues.containsOneKey)
+            {
+                return value;
+            }
+            <type2> oldValue = this.sentinelValues.oneValue;
+            if (this.sentinelValues.containsZeroKey)
+            {
+                this.sentinelValues.containsOneKey = false;
+                this.sentinelValues.oneValue = EMPTY_VALUE;
+            }
+            else
+            {
+                this.sentinelValues = null;
+            }
+            return oldValue;
+        }
+        int index = this.probe(key);
+        if (<(equals.(type1))("this.keys[index]", "key")>)
+        {
+            this.keys[index] = REMOVED_KEY;
+            <type2> oldValue = this.values[index];
+            this.values[index] = EMPTY_VALUE;
+            this.occupiedWithData--;
+            this.occupiedWithSentinels++;
+            if (this.occupiedWithSentinels > this.maxOccupiedWithSentinels())
+            {
+                this.rehash();
+            }
+
+            return oldValue;
+        }
+        return value;
+    }
+
+    public <type2> getIfAbsentPut(<type1> key, <type2> value)
+    {
+        <getIfAbsentPut("")>
+    }
+
+    public <type2> getIfAbsentPut(<type1> key, <name2>Function0 function)
+    {
+        <getIfAbsentPut({<type2> value = function.value();})>
+    }
+
+    public \<P> <type2> getIfAbsentPutWith(<type1> key, <name2>Function\<? super P> function, P parameter)
+    {
+        <getIfAbsentPut({<type2> value = function.<type2>ValueOf(parameter);})>
+    }
+
+    public <type2> getIfAbsentPutWithKey(<type1> key, <name1>To<name2>Function function)
+    {
+        <getIfAbsentPut({<type2> value = function.valueOf(key);})>
+    }
+
+    public <type2> updateValue(<type1> key, <type2> initialValueIfAbsent, <name2>To<name2>Function function)
+    {
+        if (isEmptyKey(key))
+        {
+            if (this.sentinelValues == null)
+            {
+                this.sentinelValues = new SentinelValues();
+                this.sentinelValues.containsZeroKey = true;
+                this.sentinelValues.zeroValue = function.valueOf(initialValueIfAbsent);
+            }
+            else if (this.sentinelValues.containsZeroKey)
+            {
+                this.sentinelValues.zeroValue = function.valueOf(this.sentinelValues.zeroValue);
+            }
+            else
+            {
+                this.sentinelValues.containsZeroKey = true;
+                this.sentinelValues.zeroValue = function.valueOf(initialValueIfAbsent);
+            }
+            return this.sentinelValues.zeroValue;
+        }
+        if (isRemovedKey(key))
+        {
+            if (this.sentinelValues == null)
+            {
+                this.sentinelValues = new SentinelValues();
+                this.sentinelValues.containsOneKey = true;
+                this.sentinelValues.oneValue = function.valueOf(initialValueIfAbsent);
+            }
+            else if (this.sentinelValues.containsOneKey)
+            {
+                this.sentinelValues.oneValue = function.valueOf(this.sentinelValues.oneValue);
+            }
+            else
+            {
+                this.sentinelValues.containsOneKey = true;
+                this.sentinelValues.oneValue = function.valueOf(initialValueIfAbsent);
+            }
+            return this.sentinelValues.oneValue;
+        }
+        int index = this.probe(key);
+        if (<(equals.(type1))("this.keys[index]", "key")>)
+        {
+            this.values[index] = function.valueOf(this.values[index]);
+            return this.values[index];
+        }
+        if (<(equals.(type1))("this.keys[index]", "REMOVED_KEY")>)
+        {
+            --this.occupiedWithSentinels;
+        }
+        this.keys[index] = key;
+        <type2> value = function.valueOf(initialValueIfAbsent);
+        this.values[index] = value;
+        ++this.occupiedWithData;
+        if (this.occupiedWithData > this.maxOccupiedWithData())
+        {
+            this.rehashAndGrow();
+        }
+        return value;
+    }
+
+    public <name1><name2>HashMap withKeyValue(<type1> key1, <type2> value1)
+    {
+        this.put(key1, value1);
+        return this;
+    }
+
+    <withKeysValues(["1", "2"])>
+
+    <withKeysValues(["1", "2", "3"])>
+
+    <withKeysValues(["1", "2", "3", "4"])>
+
+    public <name1><name2>HashMap withoutKey(<type1> key)
+    {
+        this.removeKey(key);
+        return this;
+    }
+
+    public <name1><name2>HashMap withoutAllKeys(<name1>Iterable keys)
+    {
+        keys.forEach(new <name1>Procedure()
+        {
+            public void value(<type1> key)
+            {
+                <name1><name2>HashMap.this.removeKey(key);
+            }
+        });
+        return this;
+    }
+
+    public Mutable<name1><name2>Map asUnmodifiable()
+    {
+        return new Unmodifiable<name1><name2>Map(this);
+    }
+
+    public Mutable<name1><name2>Map asSynchronized()
+    {
+        return new Synchronized<name1><name2>Map(this);
+    }
+
+    public Immutable<name1><name2>Map toImmutable()
+    {
+        return <name1><name2>Maps.immutable.ofAll(this);
+    }
+
+    public <type2> get(<type1> key)
+    {
+        return this.getIfAbsent(key, EMPTY_VALUE);
+    }
+
+    public <type2> getIfAbsent(<type1> key, <type2> ifAbsent)
+    {
+        if (isEmptyKey(key))
+        {
+            if (this.sentinelValues == null || !this.sentinelValues.containsZeroKey)
+            {
+                return ifAbsent;
+            }
+            return this.sentinelValues.zeroValue;
+        }
+        if (isRemovedKey(key))
+        {
+            if (this.sentinelValues == null || !this.sentinelValues.containsOneKey)
+            {
+                return ifAbsent;
+            }
+            return this.sentinelValues.oneValue;
+        }
+        int index = this.probe(key);
+        if (<(equals.(type1))("this.keys[index]", "key")>)
+        {
+            return this.values[index];
+        }
+        return ifAbsent;
+    }
+
+    public <type2> getOrThrow(<type1> key)
+    {
+        if (isEmptyKey(key))
+        {
+            if (this.sentinelValues == null || !this.sentinelValues.containsZeroKey)
+            {
+                throw new IllegalStateException("Key " + key + " not present.");
+            }
+            return this.sentinelValues.zeroValue;
+        }
+        if (isRemovedKey(key))
+        {
+            if (this.sentinelValues == null || !this.sentinelValues.containsOneKey)
+            {
+                throw new IllegalStateException("Key " + key + " not present.");
+            }
+            return this.sentinelValues.oneValue;
+        }
+        int index = this.probe(key);
+        if (isNonSentinel(this.keys[index]))
+        {
+            return this.values[index];
+        }
+        throw new IllegalStateException("Key " + key + " not present.");
+    }
+
+    public boolean containsKey(<type1> key)
+    {
+        if (isEmptyKey(key))
+        {
+            return this.sentinelValues != null && this.sentinelValues.containsZeroKey;
+        }
+        if (isRemovedKey(key))
+        {
+            return this.sentinelValues != null && this.sentinelValues.containsOneKey;
+        }
+        return <(equals.(type1))("this.keys[this.probe(key)]", "key")>;
+    }
+
+    public boolean containsValue(<type2> value)
+    {
+        if (this.sentinelValues != null && this.sentinelValues.containsValue(value))
+        {
+            return true;
+        }
+        for (int i = 0; i \< this.values.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && <(equals.(type2))("this.values[i]", "value")>)
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public void forEachValue(<name2>Procedure procedure)
+    {
+        <forEachValue("executeProcedure")>
+    }
+
+    public void forEachKey(<name1>Procedure procedure)
+    {
+        <forEachKey("executeProcedure")>
+    }
+
+    public void forEachKeyValue(<name1><name2>Procedure procedure)
+    {
+        <forEachKeyValue("executeProcedure2")>
+    }
+
+    public Lazy<name1>Iterable keysView()
+    {
+        return new KeysView();
+    }
+
+    public <name1><name2>HashMap select(<name1><name2>Predicate predicate)
+    {
+        <name1><name2>HashMap result = new <name1><name2>HashMap();
+
+        <forEachKeyValueSatisfying("select2")>
+
+        return result;
+    }
+
+    public <name1><name2>HashMap reject(<name1><name2>Predicate predicate)
+    {
+        <name1><name2>HashMap result = new <name1><name2>HashMap();
+
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey && !predicate.accept(EMPTY_KEY, this.sentinelValues.zeroValue))
+            {
+                result.put(EMPTY_KEY, this.sentinelValues.zeroValue);
+            }
+            if (this.sentinelValues.containsOneKey && !predicate.accept(REMOVED_KEY, this.sentinelValues.oneValue))
+            {
+                result.put(REMOVED_KEY, this.sentinelValues.oneValue);
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && !predicate.accept(this.keys[i], this.values[i]))
+            {
+                result.put(this.keys[i], this.values[i]);
+            }
+        }
+        return result;
+    }
+
+    public <wideType.(type2)> sum()
+    {
+        <wideType.(type2)> result = <wideZero.(type2)>;
+
+        <forEachValue("sum")>
+
+        return result;
+    }
+
     public <type2> max()
     {
         if (this.isEmpty())
@@ -1019,6 +977,15 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             }
         }
         return max;
+    }
+
+    public <type2> maxIfEmpty(<type2> defaultValue)
+    {
+        if (this.isEmpty())
+        {
+            return defaultValue;
+        }
+        return this.max();
     }
 
     public <type2> min()
@@ -1049,24 +1016,6 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         return this.min();
     }
 
-    public <type2> maxIfEmpty(<type2> defaultValue)
-    {
-        if (this.isEmpty())
-        {
-            return defaultValue;
-        }
-        return this.max();
-    }
-
-    public <wideType.(type2)> sum()
-    {
-        <wideType.(type2)> result = <wideZero.(type2)>;
-
-        <forEachValue("sum")>
-
-        return result;
-    }
-
     public double average()
     {
         if (this.isEmpty())
@@ -1093,16 +1042,6 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         return <castDouble.(type2)>sortedArray[middleIndex];
     }
 
-    public <type2>[] toArray()
-    {
-        <type2>[] array = new <type2>[this.size()];
-        int index = 0;
-
-        <forEachValue("toArray")>
-
-        return array;
-    }
-
     public <type2>[] toSortedArray()
     {
         <type2>[] array = this.toArray();
@@ -1110,40 +1049,14 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         return array;
     }
 
-    public Mutable<name2>List toList()
-    {
-        return <name2>ArrayList.newList(this);
-    }
-
     public Mutable<name2>List toSortedList()
     {
         return <name2>ArrayList.newList(this).sortThis();
     }
 
-    public Mutable<name2>Set toSet()
-    {
-        return <name2>HashSet.newSet(this);
-    }
-
-    public Mutable<name2>Bag toBag()
-    {
-        return <name2>HashBag.newBag(this);
-    }
-
-    public Lazy<name2>Iterable asLazy()
-    {
-        return new Lazy<name2>IterableAdapter(this);
-    }
-
-    public Lazy<name1>Iterable keysView()
-    {
-        return new KeysView();
-    }
-
     public void writeExternal(ObjectOutput out) throws IOException
     {
         out.writeInt(this.size());
-        out.writeFloat(this.loadFactor);
         if (this.sentinelValues != null)
         {
             if (this.sentinelValues.containsZeroKey)
@@ -1170,13 +1083,123 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
     {
         int size = in.readInt();
-        this.loadFactor = in.readFloat();
-        this.init(Math.max((int) (size / this.loadFactor) + 1,
-                DEFAULT_INITIAL_CAPACITY));
         for (int i = 0; i \< size; i++)
         {
             this.put(in.read<name1>(), in.read<name2>());
         }
+    }
+
+    /**
+     * Rehashes every element in the set into a new backing table of the smallest possible size and eliminating removed sentinels.
+     */
+    public void compact()
+    {
+        this.rehash(this.smallestPowerOfTwoGreaterThan(this.size()));
+    }
+
+    private void rehash()
+    {
+        this.rehash(this.keys.length);
+    }
+
+    private void rehashAndGrow()
+    {
+        this.rehash(this.keys.length \<\< 1);
+    }
+
+    private void rehash(int newCapacity)
+    {
+        int oldLength = this.keys.length;
+        <type1>[] old = this.keys;
+        <type2>[] oldValues = this.values;
+        this.allocateTable(newCapacity);
+        this.occupiedWithData = 0;
+        this.occupiedWithSentinels = 0;
+
+        for (int i = 0; i \< oldLength; i++)
+        {
+            if (isNonSentinel(old[i]))
+            {
+                this.put(old[i], oldValues[i]);
+            }
+        }
+    }
+
+    // exposed for testing
+    int probe(<type1> element)
+    {
+        int index = this.spread(element);
+        <type1> keyAtIndex = this.keys[index];
+
+        if (<(equals.(type1))("keyAtIndex", "element")> || <(equals.(type1))("keyAtIndex", "EMPTY_KEY")>)
+        {
+            return index;
+        }
+
+        int removedIndex = <(equals.(type1))("keyAtIndex", "REMOVED_KEY")> ? index : -1;
+        int nextIndex = index;
+        int probe = 17;
+
+        // loop until an empty slot is reached
+        while (true)
+        {
+            // Probe algorithm: 17*n*(n+1)/2 where n = number of collisions
+            nextIndex += probe;
+            probe += 17;
+            nextIndex &= this.keys.length - 1;
+
+            if (<(equals.(type1))("this.keys[nextIndex]", "element")>)
+            {
+                return nextIndex;
+            }
+            if (<(equals.(type1))("this.keys[nextIndex]", "REMOVED_KEY")>)
+            {
+                if (removedIndex == -1)
+                {
+                    removedIndex = nextIndex;
+                }
+            }
+            else if (<(equals.(type1))("this.keys[nextIndex]", "EMPTY_KEY")>)
+            {
+                return removedIndex == -1 ? nextIndex : removedIndex;
+            }
+        }
+    }
+
+    // exposed for testing
+    <(spread.(type1))(type1, "keys")>
+
+    private void allocateTable(int sizeToAllocate)
+    {
+        this.keys = new <type1>[sizeToAllocate];
+        this.values = new <type2>[sizeToAllocate];
+    }
+
+    private static boolean isEmptyKey(<type1> key)
+    {
+        return <(equals.(type1))("key", "EMPTY_KEY")>;
+    }
+
+    private static boolean isRemovedKey(<type1> key)
+    {
+        return <(equals.(type1))("key", "REMOVED_KEY")>;
+    }
+
+    private static boolean isNonSentinel(<type1> key)
+    {
+        return !isEmptyKey(key) && !isRemovedKey(key);
+    }
+
+    private int maxOccupiedWithData()
+    {
+        int capacity = this.keys.length;
+        // need at least one free slot for open addressing
+        return Math.min(capacity - 1, capacity / OCCUPIED_DATA_RATIO);
+    }
+
+    private int maxOccupiedWithSentinels()
+    {
+        return this.keys.length / OCCUPIED_SENTINEL_RATIO;
     }
 
     private static final class SentinelValues
@@ -1249,6 +1272,17 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
 
     private class KeysView implements Lazy<name1>Iterable
     {
+        @Override
+        public String toString()
+        {
+            return this.makeString("[", ", ", "]");
+        }
+
+        public int size()
+        {
+            return <name1><name2>HashMap.this.size();
+        }
+
         public boolean isEmpty()
         {
             return <name1><name2>HashMap.this.isEmpty();
@@ -1257,55 +1291,6 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         public boolean notEmpty()
         {
             return <name1><name2>HashMap.this.notEmpty();
-        }
-
-        public int size()
-        {
-            return <name1><name2>HashMap.this.size();
-        }
-
-        public boolean contains(<type1> key)
-        {
-            return <name1><name2>HashMap.this.containsKey(key);
-        }
-
-        public boolean containsAll(<type1>... keys)
-        {
-            for (<type1> key : keys)
-            {
-                if (!<name1><name2>HashMap.this.containsKey(key))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        public boolean containsAll(<name1>Iterable source)
-        {
-            return source.allSatisfy(new <name1>Predicate()
-            {
-                public boolean accept(<type1> key)
-                {
-                    return <name1><name2>HashMap.this.containsKey(key);
-                }
-            });
-        }
-
-        public <name1>Iterator <type1>Iterator()
-        {
-            return new KeySetIterator();
-        }
-
-        public void forEach(<name1>Procedure procedure)
-        {
-            <name1><name2>HashMap.this.forEachKey(procedure);
-        }
-
-        @Override
-        public String toString()
-        {
-            return this.makeString("[", ", ", "]");
         }
 
         public String makeString()
@@ -1376,6 +1361,44 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             {
                 throw new RuntimeException(e);
             }
+        }
+
+        public <name1>Iterator <type1>Iterator()
+        {
+            return new KeySetIterator();
+        }
+
+        public boolean contains(<type1> key)
+        {
+            return <name1><name2>HashMap.this.containsKey(key);
+        }
+
+        public boolean containsAll(<type1>... keys)
+        {
+            for (<type1> key : keys)
+            {
+                if (!<name1><name2>HashMap.this.containsKey(key))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        public boolean containsAll(<name1>Iterable source)
+        {
+            return source.allSatisfy(new <name1>Predicate()
+            {
+                public boolean accept(<type1> key)
+                {
+                    return <name1><name2>HashMap.this.containsKey(key);
+                }
+            });
+        }
+
+        public void forEach(<name1>Procedure procedure)
+        {
+            <name1><name2>HashMap.this.forEachKey(procedure);
         }
 
         public int count(<name1>Predicate predicate)
@@ -2833,9 +2856,13 @@ if (<(equals.(type1))("this.keys[index]", "key")>)
     return this.values[index];
 }
 this.keys[index] = key;
-this.occupied++;
 <function>
 this.values[index] = value;
+++this.occupiedWithData;
+if (this.occupiedWithData > this.maxOccupiedWithData())
+{
+    this.rehashAndGrow();
+}
 return value;
 >>
 

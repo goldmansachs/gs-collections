@@ -27,7 +27,7 @@ public class ShortDoubleHashMapTest
         Verify.assertSerializedForm(
                 1L,
                 "rO0ABXNyAEBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5wcmltaXRpdmUuU2hv\n"
-                        + "cnREb3VibGVIYXNoTWFwAAAAAAAAAAEMAAB4cHcIAAAAAD8AAAB4",
+                        + "cnREb3VibGVIYXNoTWFwAAAAAAAAAAEMAAB4cHcEAAAAAHg=",
                 new ShortDoubleHashMap());
     }
 }

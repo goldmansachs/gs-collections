@@ -27,7 +27,7 @@ public class CharObjectHashMapTest
         Verify.assertSerializedForm(
                 1L,
                 "rO0ABXNyAD9jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5wcmltaXRpdmUuQ2hh\n"
-                        + "ck9iamVjdEhhc2hNYXAAAAAAAAAAAQwAAHhwdwgAAAAAPwAAAHg=",
+                        + "ck9iamVjdEhhc2hNYXAAAAAAAAAAAQwAAHhwdwQAAAAAeA==",
                 new CharObjectHashMap<Object>());
     }
 }

@@ -257,6 +257,7 @@ public abstract class AbstractMutableObject<name>MapTestCase extends AbstractObj
         Assert.assertEquals(<(literal.(type))("6")>, this.map.get(null)<delta.(type)>);
     }
 
+    @Override
     @Test
     public void getOrThrow()
     {
@@ -572,6 +573,7 @@ public abstract class AbstractMutableObject<name>MapTestCase extends AbstractObj
         Assert.assertEquals(Object<name>HashMap.newWithKeysValues(1, <(literal.(type))("1")>, 2, <(literal.(type))("2")>), mapWithout);
     }
 
+    @Override
     @Test
     public void contains()
     {

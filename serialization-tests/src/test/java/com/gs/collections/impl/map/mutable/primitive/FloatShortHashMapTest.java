@@ -27,7 +27,7 @@ public class FloatShortHashMapTest
         Verify.assertSerializedForm(
                 1L,
                 "rO0ABXNyAD9jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5wcmltaXRpdmUuRmxv\n"
-                        + "YXRTaG9ydEhhc2hNYXAAAAAAAAAAAQwAAHhwdwgAAAAAPwAAAHg=",
+                        + "YXRTaG9ydEhhc2hNYXAAAAAAAAAAAQwAAHhwdwQAAAAAeA==",
                 new FloatShortHashMap());
     }
 }

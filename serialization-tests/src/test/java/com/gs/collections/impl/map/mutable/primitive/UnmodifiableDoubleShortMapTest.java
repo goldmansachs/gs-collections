@@ -30,7 +30,7 @@ public class UnmodifiableDoubleShortMapTest
                         + "b2RpZmlhYmxlRG91YmxlU2hvcnRNYXAAAAAAAAAAAQIAAUwAA21hcHQAPExjb20vZ3MvY29sbGVj\n"
                         + "dGlvbnMvYXBpL21hcC9wcmltaXRpdmUvTXV0YWJsZURvdWJsZVNob3J0TWFwO3hwc3IAQGNvbS5n\n"
                         + "cy5jb2xsZWN0aW9ucy5pbXBsLm1hcC5tdXRhYmxlLnByaW1pdGl2ZS5Eb3VibGVTaG9ydEhhc2hN\n"
-                        + "YXAAAAAAAAAAAQwAAHhwdwgAAAAAPwAAAHg=",
+                        + "YXAAAAAAAAAAAQwAAHhwdwQAAAAAeA==",
                 new UnmodifiableDoubleShortMap(new DoubleShortHashMap()));
     }
 }

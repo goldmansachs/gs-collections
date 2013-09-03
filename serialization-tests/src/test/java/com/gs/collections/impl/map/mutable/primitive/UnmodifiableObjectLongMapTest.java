@@ -30,7 +30,7 @@ public class UnmodifiableObjectLongMapTest
                         + "b2RpZmlhYmxlT2JqZWN0TG9uZ01hcAAAAAAAAAABAgABTAADbWFwdAA7TGNvbS9ncy9jb2xsZWN0\n"
                         + "aW9ucy9hcGkvbWFwL3ByaW1pdGl2ZS9NdXRhYmxlT2JqZWN0TG9uZ01hcDt4cHNyAD9jb20uZ3Mu\n"
                         + "Y29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5wcmltaXRpdmUuT2JqZWN0TG9uZ0hhc2hNYXAA\n"
-                        + "AAAAAAAAAQwAAHhwdwgAAAAAPwAAAHg=",
+                        + "AAAAAAAAAQwAAHhwdwQAAAAAeA==",
                 new UnmodifiableObjectLongMap<Object>(new ObjectLongHashMap<Object>()));
     }
 }

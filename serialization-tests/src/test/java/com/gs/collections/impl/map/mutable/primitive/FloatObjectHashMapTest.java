@@ -27,7 +27,7 @@ public class FloatObjectHashMapTest
         Verify.assertSerializedForm(
                 1L,
                 "rO0ABXNyAEBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5wcmltaXRpdmUuRmxv\n"
-                        + "YXRPYmplY3RIYXNoTWFwAAAAAAAAAAEMAAB4cHcIAAAAAD8AAAB4",
+                        + "YXRPYmplY3RIYXNoTWFwAAAAAAAAAAEMAAB4cHcEAAAAAHg=",
                 new FloatObjectHashMap<Object>());
     }
 }

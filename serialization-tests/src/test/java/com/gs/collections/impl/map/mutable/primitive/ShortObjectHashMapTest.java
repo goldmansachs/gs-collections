@@ -27,7 +27,7 @@ public class ShortObjectHashMapTest
         Verify.assertSerializedForm(
                 1L,
                 "rO0ABXNyAEBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5wcmltaXRpdmUuU2hv\n"
-                        + "cnRPYmplY3RIYXNoTWFwAAAAAAAAAAEMAAB4cHcIAAAAAD8AAAB4",
+                        + "cnRPYmplY3RIYXNoTWFwAAAAAAAAAAEMAAB4cHcEAAAAAHg=",
                 new ShortObjectHashMap<Object>());
     }
 }

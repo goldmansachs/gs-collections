@@ -27,7 +27,7 @@ public class IntObjectHashMapTest
         Verify.assertSerializedForm(
                 1L,
                 "rO0ABXNyAD5jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5wcmltaXRpdmUuSW50\n"
-                        + "T2JqZWN0SGFzaE1hcAAAAAAAAAABDAAAeHB3CAAAAAA/AAAAeA==",
+                        + "T2JqZWN0SGFzaE1hcAAAAAAAAAABDAAAeHB3BAAAAAB4",
                 new IntObjectHashMap<Object>());
     }
 }

@@ -30,7 +30,7 @@ public class UnmodifiableObjectShortMapTest
                         + "b2RpZmlhYmxlT2JqZWN0U2hvcnRNYXAAAAAAAAAAAQIAAUwAA21hcHQAPExjb20vZ3MvY29sbGVj\n"
                         + "dGlvbnMvYXBpL21hcC9wcmltaXRpdmUvTXV0YWJsZU9iamVjdFNob3J0TWFwO3hwc3IAQGNvbS5n\n"
                         + "cy5jb2xsZWN0aW9ucy5pbXBsLm1hcC5tdXRhYmxlLnByaW1pdGl2ZS5PYmplY3RTaG9ydEhhc2hN\n"
-                        + "YXAAAAAAAAAAAQwAAHhwdwgAAAAAPwAAAHg=",
+                        + "YXAAAAAAAAAAAQwAAHhwdwQAAAAAeA==",
                 new UnmodifiableObjectShortMap<Object>(new ObjectShortHashMap<Object>()));
     }
 }

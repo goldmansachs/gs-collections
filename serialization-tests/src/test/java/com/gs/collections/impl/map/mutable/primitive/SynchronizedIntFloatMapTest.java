@@ -30,7 +30,7 @@ public class SynchronizedIntFloatMapTest
                         + "Y2hyb25pemVkSW50RmxvYXRNYXAAAAAAAAAAAQIAAkwABGxvY2t0ABJMamF2YS9sYW5nL09iamVj\n"
                         + "dDtMAANtYXB0ADlMY29tL2dzL2NvbGxlY3Rpb25zL2FwaS9tYXAvcHJpbWl0aXZlL011dGFibGVJ\n"
                         + "bnRGbG9hdE1hcDt4cHEAfgADc3IAPWNvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLm1hcC5tdXRhYmxl\n"
-                        + "LnByaW1pdGl2ZS5JbnRGbG9hdEhhc2hNYXAAAAAAAAAAAQwAAHhwdwgAAAAAPwAAAHg=",
+                        + "LnByaW1pdGl2ZS5JbnRGbG9hdEhhc2hNYXAAAAAAAAAAAQwAAHhwdwQAAAAAeA==",
                 new SynchronizedIntFloatMap(new IntFloatHashMap()));
     }
 }

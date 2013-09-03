@@ -30,7 +30,7 @@ public class UnmodifiableDoubleFloatMapTest
                         + "b2RpZmlhYmxlRG91YmxlRmxvYXRNYXAAAAAAAAAAAQIAAUwAA21hcHQAPExjb20vZ3MvY29sbGVj\n"
                         + "dGlvbnMvYXBpL21hcC9wcmltaXRpdmUvTXV0YWJsZURvdWJsZUZsb2F0TWFwO3hwc3IAQGNvbS5n\n"
                         + "cy5jb2xsZWN0aW9ucy5pbXBsLm1hcC5tdXRhYmxlLnByaW1pdGl2ZS5Eb3VibGVGbG9hdEhhc2hN\n"
-                        + "YXAAAAAAAAAAAQwAAHhwdwgAAAAAPwAAAHg=",
+                        + "YXAAAAAAAAAAAQwAAHhwdwQAAAAAeA==",
                 new UnmodifiableDoubleFloatMap(new DoubleFloatHashMap()));
     }
 }

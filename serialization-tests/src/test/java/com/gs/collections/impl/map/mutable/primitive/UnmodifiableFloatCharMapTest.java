@@ -30,7 +30,7 @@ public class UnmodifiableFloatCharMapTest
                         + "b2RpZmlhYmxlRmxvYXRDaGFyTWFwAAAAAAAAAAECAAFMAANtYXB0ADpMY29tL2dzL2NvbGxlY3Rp\n"
                         + "b25zL2FwaS9tYXAvcHJpbWl0aXZlL011dGFibGVGbG9hdENoYXJNYXA7eHBzcgA+Y29tLmdzLmNv\n"
                         + "bGxlY3Rpb25zLmltcGwubWFwLm11dGFibGUucHJpbWl0aXZlLkZsb2F0Q2hhckhhc2hNYXAAAAAA\n"
-                        + "AAAAAQwAAHhwdwgAAAAAPwAAAHg=",
+                        + "AAAAAQwAAHhwdwQAAAAAeA==",
                 new UnmodifiableFloatCharMap(new FloatCharHashMap()));
     }
 }

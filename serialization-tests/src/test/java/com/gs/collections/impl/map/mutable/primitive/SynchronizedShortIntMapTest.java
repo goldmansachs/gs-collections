@@ -30,7 +30,7 @@ public class SynchronizedShortIntMapTest
                         + "Y2hyb25pemVkU2hvcnRJbnRNYXAAAAAAAAAAAQIAAkwABGxvY2t0ABJMamF2YS9sYW5nL09iamVj\n"
                         + "dDtMAANtYXB0ADlMY29tL2dzL2NvbGxlY3Rpb25zL2FwaS9tYXAvcHJpbWl0aXZlL011dGFibGVT\n"
                         + "aG9ydEludE1hcDt4cHEAfgADc3IAPWNvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLm1hcC5tdXRhYmxl\n"
-                        + "LnByaW1pdGl2ZS5TaG9ydEludEhhc2hNYXAAAAAAAAAAAQwAAHhwdwgAAAAAPwAAAHg=",
+                        + "LnByaW1pdGl2ZS5TaG9ydEludEhhc2hNYXAAAAAAAAAAAQwAAHhwdwQAAAAAeA==",
                 new SynchronizedShortIntMap(new ShortIntHashMap()));
     }
 }

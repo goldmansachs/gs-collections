@@ -27,7 +27,7 @@ public class IntShortHashMapTest
         Verify.assertSerializedForm(
                 1L,
                 "rO0ABXNyAD1jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5wcmltaXRpdmUuSW50\n"
-                        + "U2hvcnRIYXNoTWFwAAAAAAAAAAEMAAB4cHcIAAAAAD8AAAB4",
+                        + "U2hvcnRIYXNoTWFwAAAAAAAAAAEMAAB4cHcEAAAAAHg=",
                 new IntShortHashMap());
     }
 }

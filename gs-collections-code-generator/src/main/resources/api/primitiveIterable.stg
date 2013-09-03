@@ -32,7 +32,23 @@ public interface <name>Iterable extends PrimitiveIterable
 {
     <name>Iterator <type>Iterator();
 
+    <type>[] toArray();
+
+    boolean contains(<type> value);
+
+    boolean containsAll(<type>... source);
+
+    boolean containsAll(<name>Iterable source);
+
     void forEach(<name>Procedure procedure);
+
+    <name>Iterable select(<name>Predicate predicate);
+
+    <name>Iterable reject(<name>Predicate predicate);
+
+    \<V> RichIterable\<V> collect(<name>ToObjectFunction\<? extends V> function);
+
+    <type> detectIfNone(<name>Predicate predicate, <type> ifNone);
 
     int count(<name>Predicate predicate);
 
@@ -42,23 +58,6 @@ public interface <name>Iterable extends PrimitiveIterable
 
     boolean noneSatisfy(<name>Predicate predicate);
 
-    <name>Iterable select(<name>Predicate predicate);
-
-    <name>Iterable reject(<name>Predicate predicate);
-
-    <type> detectIfNone(<name>Predicate predicate, <type> ifNone);
-
-    \<V> RichIterable\<V> collect(<name>ToObjectFunction\<? extends V> function);
-
-    <(arithmeticMethods.(type))()>
-    <type>[] toArray();
-
-    boolean contains(<type> value);
-
-    boolean containsAll(<type>... source);
-
-    boolean containsAll(<name>Iterable source);
-
     Mutable<name>List toList();
 
     Mutable<name>Set toSet();
@@ -66,6 +65,8 @@ public interface <name>Iterable extends PrimitiveIterable
     Mutable<name>Bag toBag();
 
     Lazy<name>Iterable asLazy();
+
+    <(arithmeticMethods.(type))()>
 }
 
 >>

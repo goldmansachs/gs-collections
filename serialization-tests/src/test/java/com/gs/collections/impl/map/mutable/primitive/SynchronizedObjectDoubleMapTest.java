@@ -30,8 +30,8 @@ public class SynchronizedObjectDoubleMapTest
                         + "Y2hyb25pemVkT2JqZWN0RG91YmxlTWFwAAAAAAAAAAECAAJMAARsb2NrdAASTGphdmEvbGFuZy9P\n"
                         + "YmplY3Q7TAADbWFwdAA9TGNvbS9ncy9jb2xsZWN0aW9ucy9hcGkvbWFwL3ByaW1pdGl2ZS9NdXRh\n"
                         + "YmxlT2JqZWN0RG91YmxlTWFwO3hwcQB+AANzcgBBY29tLmdzLmNvbGxlY3Rpb25zLmltcGwubWFw\n"
-                        + "Lm11dGFibGUucHJpbWl0aXZlLk9iamVjdERvdWJsZUhhc2hNYXAAAAAAAAAAAQwAAHhwdwgAAAAA\n"
-                        + "PwAAAHg=",
+                        + "Lm11dGFibGUucHJpbWl0aXZlLk9iamVjdERvdWJsZUhhc2hNYXAAAAAAAAAAAQwAAHhwdwQAAAAA\n"
+                        + "eA==",
                 new SynchronizedObjectDoubleMap<Object>(new ObjectDoubleHashMap<Object>()));
     }
 }

@@ -30,7 +30,7 @@ public class UnmodifiableObjectIntMapTest
                         + "b2RpZmlhYmxlT2JqZWN0SW50TWFwAAAAAAAAAAECAAFMAANtYXB0ADpMY29tL2dzL2NvbGxlY3Rp\n"
                         + "b25zL2FwaS9tYXAvcHJpbWl0aXZlL011dGFibGVPYmplY3RJbnRNYXA7eHBzcgA+Y29tLmdzLmNv\n"
                         + "bGxlY3Rpb25zLmltcGwubWFwLm11dGFibGUucHJpbWl0aXZlLk9iamVjdEludEhhc2hNYXAAAAAA\n"
-                        + "AAAAAQwAAHhwdwgAAAAAPwAAAHg=",
+                        + "AAAAAQwAAHhwdwQAAAAAeA==",
                 new UnmodifiableObjectIntMap<Object>(new ObjectIntHashMap<Object>()));
     }
 }

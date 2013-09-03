@@ -21,9 +21,13 @@ body(type, name, wrapperName) ::= <<
 package com.gs.collections.impl.map.mutable.primitive;
 
 import java.lang.reflect.Field;
+import java.util.Iterator;
 
+import com.gs.collections.api.block.function.primitive.<name>Function;
+import com.gs.collections.api.block.function.primitive.<name>Function0;
 import com.gs.collections.api.block.function.primitive.<name>To<name>Function;
 import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
+import com.gs.collections.api.map.primitive.MutableObject<name>Map;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -178,10 +182,10 @@ public class Object<name>HashMapTest extends AbstractMutableObject<name>MapTestC
     public void putWithRehash() throws Exception
     {
         Object<name>HashMap\<<wrapperName>\> hashMap = Object<name>HashMap.newMap();
-        for (<type> i = 2; i \< 10; i++)
+        for (<type> each = 2; each \< 10; each++)
         {
-            Assert.assertFalse(hashMap.containsKey(i));
-            hashMap.put(i, i);
+            Assert.assertFalse(hashMap.containsKey(each));
+            hashMap.put(each, each);
         }
 
         Field keys = Object<name>HashMap.class.getDeclaredField("keys");
@@ -191,10 +195,10 @@ public class Object<name>HashMapTest extends AbstractMutableObject<name>MapTestC
         Assert.assertEquals(16L, ((Object[]) keys.get(hashMap)).length);
         Assert.assertEquals(16L, ((<type>[]) values.get(hashMap)).length);
         Verify.assertSize(8, hashMap);
-        for (<type> i = 2; i \< 10; i++)
+        for (<type> each = 2; each \< 10; each++)
         {
-            Assert.assertTrue(hashMap.containsKey(i));
-            Assert.assertTrue(hashMap.containsValue(i));
+            Assert.assertTrue(hashMap.containsKey(each));
+            Assert.assertTrue(hashMap.containsValue(each));
         }
         hashMap.put(<(literal.(type))("10")>, <(literal.(type))("10")>);
         Assert.assertEquals(32L, ((Object[]) keys.get(hashMap)).length);
@@ -207,10 +211,10 @@ public class Object<name>HashMapTest extends AbstractMutableObject<name>MapTestC
         Object<name>HashMap\<<wrapperName>\> hashMap = Object<name>HashMap.newMap();
         Object<name>HashMap\<<wrapperName>\> copyMap = Object<name>HashMap.newMap();
 
-        for (<type> i = 1; i \< 11; i++)
+        for (<type> each = 1; each \< 11; each++)
         {
-            Assert.assertFalse(hashMap.containsKey(i));
-            copyMap.put(i, i);
+            Assert.assertFalse(hashMap.containsKey(each));
+            copyMap.put(each, each);
         }
 
         Verify.assertSize(10, copyMap);
@@ -218,9 +222,9 @@ public class Object<name>HashMapTest extends AbstractMutableObject<name>MapTestC
         hashMap.putAll(copyMap);
         Verify.assertSize(10, hashMap);
 
-        for (<type> i = 1; i \< 11; i++)
+        for (<type> each = 1; each \< 11; each++)
         {
-            Assert.assertTrue(hashMap.containsKey(i));
+            Assert.assertTrue(hashMap.containsKey(each));
         }
 
         Assert.assertEquals(hashMap, copyMap);
@@ -252,6 +256,132 @@ public class Object<name>HashMapTest extends AbstractMutableObject<name>MapTestC
             }
         });
         Assert.assertEquals(<wrapperName>.valueOf(<(literal.(type))("15")>), sum);
+    }
+
+    @Test
+    public void put_every_slot()
+    {
+        Object<name>HashMap\<String> hashMap = Object<name>HashMap.newMap();
+        for (<type> each = <(literal.(type))("2")>; each \< <(literal.(type))("100")>; each++)
+        {
+            Assert.assertEquals(<(literal.(type))("0")>, hashMap.get(String.valueOf(each))<delta.(type)>);
+            hashMap.put(String.valueOf(each), each);
+            Assert.assertEquals(each, hashMap.get(String.valueOf(each))<delta.(type)>);
+            hashMap.remove(String.valueOf(each));
+            Assert.assertEquals(<(literal.(type))("0")>, hashMap.get(String.valueOf(each))<delta.(type)>);
+        }
+    }
+
+    @Test
+    public void remove_iterator_every_slot()
+    {
+        Object<name>HashMap\<String> hashMap = Object<name>HashMap.newMap();
+        for (<type> each = <(literal.(type))("2")>; each \< <(literal.(type))("100")>; each++)
+        {
+            Assert.assertEquals(<(literal.(type))("0")>, hashMap.get(String.valueOf(each))<delta.(type)>);
+            hashMap.put(String.valueOf(each), each);
+            Iterator\<String> iterator = hashMap.keySet().iterator();
+            Assert.assertTrue(iterator.hasNext());
+            Assert.assertEquals(String.valueOf(each), iterator.next());
+            iterator.remove();
+            Assert.assertEquals(<(literal.(type))("0")>, hashMap.get(String.valueOf(each))<delta.(type)>);
+        }
+    }
+
+    @Test
+    public void getIfAbsentPut_every_slot()
+    {
+        Object<name>HashMap\<String> hashMap = Object<name>HashMap.newMap();
+        for (<type> each = <(literal.(type))("2")>; each \< <(literal.(type))("100")>; each++)
+        {
+            Assert.assertEquals(<(literal.(type))("0")>, hashMap.get(String.valueOf(each))<delta.(type)>);
+            hashMap.getIfAbsentPut(String.valueOf(each), each);
+            Assert.assertEquals(each, hashMap.get(String.valueOf(each))<delta.(type)>);
+        }
+    }
+
+    @Test
+    public void getIfAbsentPutWith_every_slot()
+    {
+        <name>Function\<String> functionLength = new <name>Function\<String>()
+        {
+            public <type> <type>ValueOf(String string)
+            {
+                return <(castIntToNarrowType.(type))("string.length()")>;
+            }
+        };
+
+        MutableObject<name>Map\<String> hashMap = this.getEmptyMap();
+
+        for (<type> each = <(literal.(type))("2")>; each \< <(literal.(type))("100")>; each++)
+        {
+            Assert.assertEquals(<(literal.(type))("0")>, hashMap.get(String.valueOf(each))<delta.(type)>);
+            Assert.assertEquals(<(literal.(type))("9")>, hashMap.getIfAbsentPutWith(String.valueOf(each), functionLength, "123456789")<delta.(type)>);
+            Assert.assertEquals(<(literal.(type))("9")>, hashMap.get(String.valueOf(each))<delta.(type)>);
+        }
+    }
+
+    @Test
+    public void getIfAbsentPutWithKey_every_slot()
+    {
+        <name>Function\<<wrapperName>\> function = new <name>Function\<<wrapperName>\>()
+        {
+            public <type> <type>ValueOf(<wrapperName> each)
+            {
+                return each.<type>Value();
+            }
+        };
+
+        MutableObject<name>Map\<<wrapperName>\> hashMap = this.getEmptyMap();
+
+        for (<type> each = <(literal.(type))("2")>; each \< <(literal.(type))("100")>; each++)
+        {
+            Assert.assertEquals(<(literal.(type))("0")>, hashMap.get(each)<delta.(type)>);
+            Assert.assertEquals(each, hashMap.getIfAbsentPutWithKey(each, function)<delta.(type)>);
+            Assert.assertEquals(each, hashMap.get(each)<delta.(type)>);
+        }
+    }
+
+    @Test
+    public void getIfAbsentPut_Function_every_slot()
+    {
+        <name>Function0 factory = new <name>Function0()
+        {
+            public <type> value()
+            {
+                return <(literal.(type))("100")>;
+            }
+        };
+
+        MutableObject<name>Map\<String> hashMap = this.getEmptyMap();
+
+        for (<type> each = <(literal.(type))("2")>; each \< <(literal.(type))("100")>; each++)
+        {
+            Assert.assertEquals(<(literal.(type))("0")>, hashMap.get(String.valueOf(each))<delta.(type)>);
+            Assert.assertEquals(<(literal.(type))("100")>, hashMap.getIfAbsentPut(String.valueOf(each), factory)<delta.(type)>);
+            Assert.assertEquals(<(literal.(type))("100")>, hashMap.get(String.valueOf(each))<delta.(type)>);
+        }
+    }
+
+    @Test
+    public void updateValue_every_slot()
+    {
+        <name>To<name>Function incrementFunction = new <name>To<name>Function()
+        {
+            public <type> valueOf(<type> value)
+            {
+                return <(castIntToNarrowTypeWithParens.(type))("value + 1")>;
+            }
+        };
+
+        Object<name>HashMap\<String> hashMap = new Object<name>HashMap\<String>();
+
+        for (<type> each = <(literal.(type))("2")>; each \< <(literal.(type))("100")>; each++)
+        {
+            Assert.assertEquals(<(literal.(type))("0")>, hashMap.get(String.valueOf(each))<delta.(type)>);
+            Assert.assertEquals(each + 1, hashMap.updateValue(String.valueOf(each), each, incrementFunction)<delta.(type)>);
+            Assert.assertEquals(each + 1, hashMap.get(String.valueOf(each))<delta.(type)>);
+        }
     }
 }
 

@@ -30,8 +30,7 @@ public class SynchronizedFloatDoubleMapTest
                         + "Y2hyb25pemVkRmxvYXREb3VibGVNYXAAAAAAAAAAAQIAAkwABGxvY2t0ABJMamF2YS9sYW5nL09i\n"
                         + "amVjdDtMAANtYXB0ADxMY29tL2dzL2NvbGxlY3Rpb25zL2FwaS9tYXAvcHJpbWl0aXZlL011dGFi\n"
                         + "bGVGbG9hdERvdWJsZU1hcDt4cHEAfgADc3IAQGNvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLm1hcC5t\n"
-                        + "dXRhYmxlLnByaW1pdGl2ZS5GbG9hdERvdWJsZUhhc2hNYXAAAAAAAAAAAQwAAHhwdwgAAAAAPwAA\n"
-                        + "AHg=",
+                        + "dXRhYmxlLnByaW1pdGl2ZS5GbG9hdERvdWJsZUhhc2hNYXAAAAAAAAAAAQwAAHhwdwQAAAAAeA==\n",
                 new SynchronizedFloatDoubleMap(new FloatDoubleHashMap()));
     }
 }

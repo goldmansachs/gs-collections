@@ -53,15 +53,15 @@ import com.gs.collections.impl.set.mutable.UnifiedSet;
 public final class <name>HashSet implements Mutable<name>Set, Externalizable
 {
     private static final long serialVersionUID = 1L;
-    private static final float DEFAULT_LOAD_FACTOR = 0.50f;
+    private static final int OCCUPIED_DATA_RATIO = 2;
+    private static final int OCCUPIED_SENTINEL_RATIO = 4;
     private static final int DEFAULT_INITIAL_CAPACITY = 8;
     private static final <type> EMPTY = <(literal.(type))("0")>;
     private static final <type> REMOVED = <(literal.(type))("1")>;
 
     private <type>[] table;
-    private float loadFactor = DEFAULT_LOAD_FACTOR;
-    private int maxSize;
-    private int occupied;
+    private int occupiedWithData;
+    private int occupiedWithSentinels;
     // The 32 bits of this integer indicate whether the items <(literal.(type))("0")> to <(literal.(type))("31")> are present in the set.
     private int zeroToThirtyOne;
     private int zeroToThirtyOneOccupied;
@@ -69,51 +69,22 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
 
     public <name>HashSet()
     {
-        this.allocate(DEFAULT_INITIAL_CAPACITY \<\< 1);
+        this.allocateTable(DEFAULT_INITIAL_CAPACITY \<\< 1);
     }
 
     public <name>HashSet(int initialCapacity)
-    {
-        this(initialCapacity, DEFAULT_LOAD_FACTOR);
-    }
-
-    public <name>HashSet(int initialCapacity, float loadFactor)
     {
         if (initialCapacity \< 0)
         {
             throw new IllegalArgumentException("initial capacity cannot be less than 0");
         }
-        this.loadFactor = loadFactor;
-        this.init(this.fastCeil(initialCapacity / loadFactor));
+        int capacity = this.smallestPowerOfTwoGreaterThan(this.fastCeil(initialCapacity * OCCUPIED_DATA_RATIO));
+        this.allocateTable(capacity);
     }
 
-    public <name>HashSet(<name>HashSet set)
+    private int smallestPowerOfTwoGreaterThan(int n)
     {
-        this.maxSize = set.maxSize;
-        this.loadFactor = set.loadFactor;
-        this.occupied = set.occupied;
-        this.zeroToThirtyOneOccupied = set.zeroToThirtyOneOccupied;
-        this.zeroToThirtyOne = set.zeroToThirtyOne;
-        this.allocateTable(set.table.length);
-
-        System.arraycopy(set.table, 0, this.table, 0, set.table.length);
-    }
-
-    public static <name>HashSet newSetWith(<type>... source)
-    {
-        <name>HashSet result = new <name>HashSet();
-        result.addAll(source);
-        return result;
-    }
-
-    public static <name>HashSet newSet(<name>Iterable source)
-    {
-        if (source instanceof <name>HashSet)
-        {
-            return new <name>HashSet((<name>HashSet) source);
-        }
-
-        return <name>HashSet.newSetWith(source.toArray());
+        return n > 1 ? Integer.highestOneBit(n - 1) \<\< 1 : 1;
     }
 
     private int fastCeil(float v)
@@ -126,33 +97,32 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         return possibleResult;
     }
 
-    private int init(int initialCapacity)
+    public <name>HashSet(<name>HashSet set)
     {
-        int capacity = 1;
-        while (capacity \< initialCapacity)
+        this.occupiedWithData = set.occupiedWithData;
+        this.occupiedWithSentinels = set.occupiedWithSentinels;
+        this.zeroToThirtyOneOccupied = set.zeroToThirtyOneOccupied;
+        this.zeroToThirtyOne = set.zeroToThirtyOne;
+        this.allocateTable(set.table.length);
+
+        System.arraycopy(set.table, 0, this.table, 0, set.table.length);
+    }
+
+    public static <name>HashSet newSet(<name>Iterable source)
+    {
+        if (source instanceof <name>HashSet)
         {
-            capacity \<\<= 1;
+            return new <name>HashSet((<name>HashSet) source);
         }
 
-        return this.allocate(capacity);
+        return <name>HashSet.newSetWith(source.toArray());
     }
 
-    private int allocate(int capacity)
+    public static <name>HashSet newSetWith(<type>... source)
     {
-        this.allocateTable(capacity);
-        this.computeMaxSize(capacity);
-        return capacity;
-    }
-
-    private void allocateTable(int sizeToAllocate)
-    {
-        this.table = new <type>[sizeToAllocate];
-    }
-
-    private void computeMaxSize(int capacity)
-    {
-        // need at least one free slot for open addressing
-        this.maxSize = Math.min(capacity - 1, (int) (capacity * this.loadFactor));
+        <name>HashSet result = new <name>HashSet();
+        result.addAll(source);
+        return result;
     }
 
     private static boolean isBetweenZeroAndThirtyOne(<type> value)
@@ -160,14 +130,56 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         return <(betweenZeroAndThirtyOne.(type))("value")>;
     }
 
-    private static boolean isNonSentinel(<type> value)
+    @Override
+    public boolean equals(Object obj)
     {
-        return <(notEquals.(type))("value", "EMPTY")> && <(notEquals.(type))("value", "REMOVED")>;
+        if (this == obj)
+        {
+            return true;
+        }
+
+        if (!(obj instanceof <name>Set))
+        {
+            return false;
+        }
+
+        <name>Set other = (<name>Set) obj;
+        return this.size() == other.size() && this.containsAll(other.toArray());
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = 0;
+        int zeroToThirtyOne = this.zeroToThirtyOne;
+        while (zeroToThirtyOne != 0)
+        {
+            <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            result += <(hashCode.(type))("value")>;
+            zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
+        }
+        if (this.table != null)
+        {
+            for (int i = 0; i \< this.table.length; i++)
+            {
+                if (isNonSentinel(this.table[i]))
+                {
+                    result += <(hashCode.(type))("this.table[i]")>;
+                }
+            }
+        }
+        return result;
+    }
+
+    @Override
+    public String toString()
+    {
+        return this.makeString("[", ", ", "]");
     }
 
     public int size()
     {
-        return this.occupied + this.zeroToThirtyOneOccupied;
+        return this.occupiedWithData + this.zeroToThirtyOneOccupied;
     }
 
     public boolean isEmpty()
@@ -180,64 +192,71 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         return this.size() != 0;
     }
 
-    public void clear()
+    public String makeString()
     {
-        this.zeroToThirtyOneOccupied = 0;
-        this.occupied = 0;
-
-        this.zeroToThirtyOne = 0;
-        if (this.copyOnWrite)
-        {
-            this.table = new <type>[this.table.length];
-            this.copyOnWrite = false;
-        }
-        else
-        {
-            Arrays.fill(this.table, EMPTY);
-        }
+        return this.makeString(", ");
     }
 
-    public boolean contains(<type> value)
+    public String makeString(String separator)
     {
-        if (isBetweenZeroAndThirtyOne(value))
-        {
-            int temp = this.zeroToThirtyOne;
-            return ((temp >\>> <(castRealTypeToInt.(type))("value")>) & 1) != 0;
-        }
-        return <(equals.(type))("this.table[this.probe(value)]", "value")>;
+        return this.makeString("", separator, "");
     }
 
-    public boolean containsAll(<type>... source)
+    public String makeString(String start, String separator, String end)
     {
-        for (<type> item : source)
+        Appendable stringBuilder = new StringBuilder();
+        this.appendString(stringBuilder, start, separator, end);
+        return stringBuilder.toString();
+    }
+
+    public void appendString(Appendable appendable)
+    {
+        this.appendString(appendable, ", ");
+    }
+
+    public void appendString(Appendable appendable, String separator)
+    {
+        this.appendString(appendable, "", separator, "");
+    }
+
+    public void appendString(Appendable appendable, String start, String separator, String end)
+    {
+        try
         {
-            if (!this.contains(item))
+            appendable.append(start);
+
+            int count = 0;
+            int zeroToThirtyOne = this.zeroToThirtyOne;
+            while (zeroToThirtyOne != 0)
             {
-                return false;
+                <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+                if (count > 0)
+                {
+                    appendable.append(separator);
+                }
+                count++;
+                appendable.append(String.valueOf(value));
+                zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
             }
-        }
-        return true;
-    }
 
-    public boolean containsAll(<name>Iterable source)
-    {
-        for (<name>Iterator iterator = source.<type>Iterator(); iterator.hasNext();)
-        {
-            if (!this.contains(iterator.next()))
+            for (<type> value : this.table)
             {
-                return false;
+                if (isNonSentinel(value))
+                {
+                    if (count > 0)
+                    {
+                        appendable.append(separator);
+                    }
+                    count++;
+                    appendable.append(String.valueOf(value));
+                }
             }
+            appendable.append(end);
         }
-        return true;
-    }
-
-    private void copyTable()
-    {
-        this.copyOnWrite = false;
-        <type>[] copy = new <type>[this.table.length];
-        System.arraycopy(this.table, 0, copy, 0,
-        Math.min(this.table.length, this.table.length));
-        this.table = copy;
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
     }
 
     public boolean add(<type> element)
@@ -266,13 +285,27 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         {
             this.copyTable();
         }
-        this.table[index] = element;
-        ++this.occupied;
-        if (this.occupied > this.maxSize)
+        if (<(equals.(type))("this.table[index]", "REMOVED")>)
         {
-            this.rehash();
+            --this.occupiedWithSentinels;
+        }
+        this.table[index] = element;
+        ++this.occupiedWithData;
+        if (this.occupiedWithData > this.maxOccupiedWithData())
+        {
+            this.rehashAndGrow();
         }
         return true;
+    }
+
+    public boolean addAll(<type>... source)
+    {
+        int oldSize = this.size();
+        for (<type> item : source)
+        {
+            this.add(item);
+        }
+        return this.size() != oldSize;
     }
 
     public boolean addAll(<name>Iterable source)
@@ -307,16 +340,6 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         return this.size() != oldSize;
     }
 
-    public boolean addAll(<type>... source)
-    {
-        int oldSize = this.size();
-        for (<type> item : source)
-        {
-            this.add(item);
-        }
-        return this.size() != oldSize;
-    }
-
     public boolean remove(<type> value)
     {
         if (isBetweenZeroAndThirtyOne(value))
@@ -338,7 +361,13 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
                 this.copyTable();
             }
             this.table[index] = REMOVED;
-            this.occupied--;
+            this.occupiedWithData--;
+            this.occupiedWithSentinels++;
+            if (this.occupiedWithSentinels > this.maxOccupiedWithSentinels())
+            {
+                this.rehash();
+            }
+
             return true;
         }
         return false;
@@ -390,69 +419,23 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         return this.size() != oldSize;
     }
 
-    private void rehash()
+    public void clear()
     {
-        this.rehash(this.table.length \<\< 1);
-    }
+        this.zeroToThirtyOneOccupied = 0;
+        this.occupiedWithData = 0;
+        this.occupiedWithSentinels = 0;
 
-    private void rehash(int newCapacity)
-    {
-        int oldLength = this.table.length;
-        <type>[] old = this.table;
-        this.allocate(newCapacity);
-        this.occupied = 0;
-
-        for (int i = 0; i \< oldLength; i++)
+        this.zeroToThirtyOne = 0;
+        if (this.copyOnWrite)
         {
-            if (isNonSentinel(old[i]))
-            {
-                this.add(old[i]);
-            }
+            this.table = new <type>[this.table.length];
+            this.copyOnWrite = false;
+        }
+        else
+        {
+            Arrays.fill(this.table, EMPTY);
         }
     }
-
-    // exposed for testing
-    int probe(<type> element)
-    {
-        int index = this.spread(element);
-        <type> valueAtIndex = this.table[index];
-
-        if (<(equals.(type))("valueAtIndex", "element")> || <(equals.(type))("valueAtIndex", "EMPTY")>)
-        {
-            return index;
-        }
-
-        int removedIndex = <(equals.(type))("valueAtIndex", "REMOVED")> ? index : -1;
-        int nextIndex = index;
-        int probe = 17;
-
-        // loop until an empty slot is reached
-        while (true)
-        {
-            // Probe algorithm: 17 * n * (n+1) / 2 where n = number of collisions
-            nextIndex = (nextIndex + probe) & this.table.length - 1;
-            probe += 17;
-
-            if (<(equals.(type))("this.table[nextIndex]", "element")>)
-            {
-                return nextIndex;
-            }
-            if (<(equals.(type))("this.table[nextIndex]", "REMOVED")>)
-            {
-                if (removedIndex == -1)
-                {
-                    removedIndex = nextIndex;
-                }
-            }
-            else if (<(equals.(type))("this.table[nextIndex]", "EMPTY")>)
-            {
-                return removedIndex == -1 ? nextIndex : removedIndex;
-            }
-        }
-    }
-
-    // exposed for testing
-    <(spread.(type))(type, "table")>
 
     public <name>HashSet with(<type> element)
     {
@@ -478,9 +461,92 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         return this;
     }
 
+    public Mutable<name>Set asUnmodifiable()
+    {
+        return new Unmodifiable<name>Set(this);
+    }
+
+    public Mutable<name>Set asSynchronized()
+    {
+        return new Synchronized<name>Set(this);
+    }
+
+    public Immutable<name>Set toImmutable()
+    {
+        if (this.size() == 0)
+        {
+            return <name>Sets.immutable.with();
+        }
+        if (this.size() == 1)
+        {
+            return <name>Sets.immutable.with(this.<type>Iterator().next());
+        }
+        <name>HashSet mutableSet = <name>HashSet.newSetWith(this.toArray());
+        return new Immutable<name>HashSet(mutableSet.table, mutableSet.occupiedWithData, mutableSet.zeroToThirtyOne, mutableSet.zeroToThirtyOneOccupied);
+    }
+
     public <name>Iterator <type>Iterator()
     {
         return new Internal<name>Iterator();
+    }
+
+    public <type>[] toArray()
+    {
+        <type>[] array = new <type>[this.size()];
+
+        int j = 0;
+        int zeroToThirtyOne = this.zeroToThirtyOne;
+        while (zeroToThirtyOne != 0)
+        {
+            <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            array[j] = value;
+            j++;
+            zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
+        }
+
+        for (int i = 0; i \< this.table.length && j \< this.size(); i++)
+        {
+            if (isNonSentinel(this.table[i]))
+            {
+                array[j] = this.table[i];
+                j++;
+            }
+        }
+        return array;
+    }
+
+    public boolean contains(<type> value)
+    {
+        if (isBetweenZeroAndThirtyOne(value))
+        {
+            int temp = this.zeroToThirtyOne;
+            return ((temp >\>> <(castRealTypeToInt.(type))("value")>) & 1) != 0;
+        }
+        return <(equals.(type))("this.table[this.probe(value)]", "value")>;
+    }
+
+    public boolean containsAll(<type>... source)
+    {
+        for (<type> item : source)
+        {
+            if (!this.contains(item))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public boolean containsAll(<name>Iterable source)
+    {
+        for (<name>Iterator iterator = source.<type>Iterator(); iterator.hasNext();)
+        {
+            if (!this.contains(iterator.next()))
+            {
+                return false;
+            }
+        }
+        return true;
     }
 
     public void forEach(<name>Procedure procedure)
@@ -502,14 +568,18 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         }
     }
 
-    public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
+    public <name>HashSet select(<name>Predicate predicate)
     {
-        T result = injectedValue;
+        <name>HashSet result = new <name>HashSet();
+
         int zeroToThirtyOne = this.zeroToThirtyOne;
         while (zeroToThirtyOne != 0)
         {
             <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
-            result = function.valueOf(result, value);
+            if (predicate.accept(value))
+            {
+                result.add(value);
+            }
             zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
         }
 
@@ -517,10 +587,89 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         {
             if (isNonSentinel(value))
             {
-                result = function.valueOf(result, value);
+                if (predicate.accept(value))
+                {
+                    result.add(value);
+                }
             }
         }
         return result;
+    }
+
+    public Mutable<name>Set reject(<name>Predicate predicate)
+    {
+        <name>HashSet result = new <name>HashSet();
+
+        int zeroToThirtyOne = this.zeroToThirtyOne;
+        while (zeroToThirtyOne != 0)
+        {
+            <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            if (!predicate.accept(value))
+            {
+                result.add(value);
+            }
+            zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
+        }
+
+        for (<type> value : this.table)
+        {
+            if (isNonSentinel(value))
+            {
+                if (!predicate.accept(value))
+                {
+                    result.add(value);
+                }
+            }
+        }
+        return result;
+    }
+
+    public \<V> MutableSet\<V> collect(<name>ToObjectFunction\<? extends V> function)
+    {
+        MutableSet\<V> target = UnifiedSet.newSet(this.size());
+
+        int zeroToThirtyOne = this.zeroToThirtyOne;
+        while (zeroToThirtyOne != 0)
+        {
+            <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            target.add(function.valueOf(value));
+            zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
+        }
+
+        for (<type> value : this.table)
+        {
+            if (isNonSentinel(value))
+            {
+                target.add(function.valueOf(value));
+            }
+        }
+        return target;
+    }
+
+    public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
+    {
+        int zeroToThirtyOne = this.zeroToThirtyOne;
+        while (zeroToThirtyOne != 0)
+        {
+            <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            if (predicate.accept(value))
+            {
+                return value;
+            }
+            zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
+        }
+
+        for (<type> value : this.table)
+        {
+            if (isNonSentinel(value))
+            {
+                if (predicate.accept(value))
+                {
+                    return value;
+                }
+            }
+        }
+        return ifNone;
     }
 
     public int count(<name>Predicate predicate)
@@ -628,108 +777,24 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         return true;
     }
 
-    public <name>HashSet select(<name>Predicate predicate)
+    public Mutable<name>List toList()
     {
-        <name>HashSet result = new <name>HashSet();
-
-        int zeroToThirtyOne = this.zeroToThirtyOne;
-        while (zeroToThirtyOne != 0)
-        {
-            <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
-            if (predicate.accept(value))
-            {
-                result.add(value);
-            }
-            zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
-        }
-
-        for (<type> value : this.table)
-        {
-            if (isNonSentinel(value))
-            {
-                if (predicate.accept(value))
-                {
-                    result.add(value);
-                }
-            }
-        }
-        return result;
+        return <name>ArrayList.newList(this);
     }
 
-    public Mutable<name>Set reject(<name>Predicate predicate)
+    public Mutable<name>Set toSet()
     {
-        <name>HashSet result = new <name>HashSet();
-
-        int zeroToThirtyOne = this.zeroToThirtyOne;
-        while (zeroToThirtyOne != 0)
-        {
-            <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
-            if (!predicate.accept(value))
-            {
-                result.add(value);
-            }
-            zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
-        }
-
-        for (<type> value : this.table)
-        {
-            if (isNonSentinel(value))
-            {
-                if (!predicate.accept(value))
-                {
-                    result.add(value);
-                }
-            }
-        }
-        return result;
+        return <name>HashSet.newSet(this);
     }
 
-    public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
+    public Mutable<name>Bag toBag()
     {
-        int zeroToThirtyOne = this.zeroToThirtyOne;
-        while (zeroToThirtyOne != 0)
-        {
-            <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
-            if (predicate.accept(value))
-            {
-                return value;
-            }
-            zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
-        }
-
-        for (<type> value : this.table)
-        {
-            if (isNonSentinel(value))
-            {
-                if (predicate.accept(value))
-                {
-                    return value;
-                }
-            }
-        }
-        return ifNone;
+        return <name>HashBag.newBag(this);
     }
 
-    public \<V> MutableSet\<V> collect(<name>ToObjectFunction\<? extends V> function)
+    public Lazy<name>Iterable asLazy()
     {
-        MutableSet\<V> target = UnifiedSet.newSet(this.size());
-
-        int zeroToThirtyOne = this.zeroToThirtyOne;
-        while (zeroToThirtyOne != 0)
-        {
-            <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
-            target.add(function.valueOf(value));
-            zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
-        }
-
-        for (<type> value : this.table)
-        {
-            if (isNonSentinel(value))
-            {
-                target.add(function.valueOf(value));
-            }
-        }
-        return target;
+        return new Lazy<name>IterableAdapter(this);
     }
 
     public <wideType.(type)> sum()
@@ -774,6 +839,15 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         return max;
     }
 
+    public <type> maxIfEmpty(<type> defaultValue)
+    {
+        if (this.isEmpty())
+        {
+            return defaultValue;
+        }
+        return this.max();
+    }
+
     public <type> min()
     {
         if (this.isEmpty())
@@ -803,15 +877,6 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         return this.min();
     }
 
-    public <type> maxIfEmpty(<type> defaultValue)
-    {
-        if (this.isEmpty())
-        {
-            return defaultValue;
-        }
-        return this.max();
-    }
-
     public double average()
     {
         if (this.isEmpty())
@@ -838,31 +903,6 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         return <castDouble.(type)>sortedArray[middleIndex];
     }
 
-    public <type>[] toArray()
-    {
-        <type>[] array = new <type>[this.size()];
-
-        int j = 0;
-        int zeroToThirtyOne = this.zeroToThirtyOne;
-        while (zeroToThirtyOne != 0)
-        {
-            <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
-            array[j] = value;
-            j++;
-            zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
-        }
-
-        for (int i = 0; i \< this.table.length && j \< this.size(); i++)
-        {
-            if (isNonSentinel(this.table[i]))
-            {
-                array[j] = this.table[i];
-                j++;
-            }
-        }
-        return array;
-    }
-
     public <type>[] toSortedArray()
     {
         <type>[] array = this.toArray();
@@ -870,153 +910,9 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         return array;
     }
 
-    @Override
-    public boolean equals(Object obj)
-    {
-        if (this == obj)
-        {
-            return true;
-        }
-
-        if (!(obj instanceof <name>Set))
-        {
-            return false;
-        }
-
-        <name>Set other = (<name>Set) obj;
-        return this.size() == other.size() && this.containsAll(other.toArray());
-    }
-
-    @Override
-    public int hashCode()
-    {
-        int result = 0;
-        int zeroToThirtyOne = this.zeroToThirtyOne;
-        while (zeroToThirtyOne != 0)
-        {
-            <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
-            result += <(hashCode.(type))("value")>;
-            zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
-        }
-        if (this.table != null)
-        {
-            for (int i = 0; i \< this.table.length; i++)
-            {
-                if (isNonSentinel(this.table[i]))
-                {
-                    result += <(hashCode.(type))("this.table[i]")>;
-                }
-            }
-        }
-        return result;
-    }
-
-    @Override
-    public String toString()
-    {
-        return this.makeString("[", ", ", "]");
-    }
-
-    public String makeString()
-    {
-        return this.makeString(", ");
-    }
-
-    public String makeString(String separator)
-    {
-        return this.makeString("", separator, "");
-    }
-
-    public String makeString(String start, String separator, String end)
-    {
-        Appendable stringBuilder = new StringBuilder();
-        this.appendString(stringBuilder, start, separator, end);
-        return stringBuilder.toString();
-    }
-
-    public void appendString(Appendable appendable)
-    {
-        this.appendString(appendable, ", ");
-    }
-
-    public void appendString(Appendable appendable, String separator)
-    {
-        this.appendString(appendable, "", separator, "");
-    }
-
-    public void appendString(Appendable appendable, String start, String separator, String end)
-    {
-        try
-        {
-            appendable.append(start);
-
-            int count = 0;
-            int zeroToThirtyOne = this.zeroToThirtyOne;
-            while (zeroToThirtyOne != 0)
-            {
-                <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
-                if (count > 0)
-                {
-                    appendable.append(separator);
-                }
-                count++;
-                appendable.append(String.valueOf(value));
-                zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
-            }
-
-            for (<type> value : this.table)
-            {
-                if (isNonSentinel(value))
-                {
-                    if (count > 0)
-                    {
-                        appendable.append(separator);
-                    }
-                    count++;
-                    appendable.append(String.valueOf(value));
-                }
-            }
-            appendable.append(end);
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public Mutable<name>List toList()
-    {
-        return <name>ArrayList.newList(this);
-    }
-
     public Mutable<name>List toSortedList()
     {
         return <name>ArrayList.newList(this).sortThis();
-    }
-
-    public Mutable<name>Set toSet()
-    {
-        return <name>HashSet.newSet(this);
-    }
-
-    public Mutable<name>Bag toBag()
-    {
-        return <name>HashBag.newBag(this);
-    }
-
-    public Lazy<name>Iterable asLazy()
-    {
-        return new Lazy<name>IterableAdapter(this);
-    }
-
-    public Mutable<name>Set asUnmodifiable()
-    {
-        return new Unmodifiable<name>Set(this);
-    }
-
-    public Mutable<name>Set asSynchronized()
-    {
-        return new Synchronized<name>Set(this);
     }
 
     public <name>Set freeze()
@@ -1030,21 +926,7 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
             return <name>Sets.immutable.with(this.<type>Iterator().next());
         }
         this.copyOnWrite = true;
-        return new Immutable<name>HashSet(this.table, this.occupied, this.zeroToThirtyOne, this.zeroToThirtyOneOccupied);
-    }
-
-    public Immutable<name>Set toImmutable()
-    {
-        if (this.size() == 0)
-        {
-            return <name>Sets.immutable.with();
-        }
-        if (this.size() == 1)
-        {
-            return <name>Sets.immutable.with(this.<type>Iterator().next());
-        }
-        <name>HashSet mutableSet = <name>HashSet.newSetWith(this.toArray());
-        return new Immutable<name>HashSet(mutableSet.table, mutableSet.occupied, mutableSet.zeroToThirtyOne, mutableSet.zeroToThirtyOneOccupied);
+        return new Immutable<name>HashSet(this.table, this.occupiedWithData, this.zeroToThirtyOne, this.zeroToThirtyOneOccupied);
     }
 
     public void writeExternal(ObjectOutput out) throws IOException
@@ -1078,6 +960,136 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         }
     }
 
+    public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
+    {
+        T result = injectedValue;
+        int zeroToThirtyOne = this.zeroToThirtyOne;
+        while (zeroToThirtyOne != 0)
+        {
+            <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+            result = function.valueOf(result, value);
+            zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
+        }
+
+        for (<type> value : this.table)
+        {
+            if (isNonSentinel(value))
+            {
+                result = function.valueOf(result, value);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Rehashes every element in the set into a new backing table of the smallest possible size and eliminating removed sentinels.
+     */
+    public void compact()
+    {
+        this.rehash(this.smallestPowerOfTwoGreaterThan(this.size()));
+    }
+
+    private void rehash()
+    {
+        this.rehash(this.table.length);
+    }
+
+    private void rehashAndGrow()
+    {
+        this.rehash(this.table.length \<\< 1);
+    }
+
+    private void rehash(int newCapacity)
+    {
+        int oldLength = this.table.length;
+        <type>[] old = this.table;
+        this.allocateTable(newCapacity);
+        this.occupiedWithData = 0;
+        this.occupiedWithSentinels = 0;
+
+        for (int i = 0; i \< oldLength; i++)
+        {
+            if (isNonSentinel(old[i]))
+            {
+                this.add(old[i]);
+            }
+        }
+    }
+
+    private void allocateTable(int sizeToAllocate)
+    {
+        this.table = new <type>[sizeToAllocate];
+    }
+
+    // exposed for testing
+    int probe(<type> element)
+    {
+        int index = this.spread(element);
+        <type> valueAtIndex = this.table[index];
+
+        if (<(equals.(type))("valueAtIndex", "element")> || <(equals.(type))("valueAtIndex", "EMPTY")>)
+        {
+            return index;
+        }
+
+        int removedIndex = <(equals.(type))("valueAtIndex", "REMOVED")> ? index : -1;
+        int nextIndex = index;
+        int probe = 17;
+
+        // loop until an empty slot is reached
+        while (true)
+        {
+            // Probe algorithm: 17 * n * (n+1) / 2 where n = number of collisions
+            nextIndex = (nextIndex + probe) & this.table.length - 1;
+            probe += 17;
+
+            if (<(equals.(type))("this.table[nextIndex]", "element")>)
+            {
+                return nextIndex;
+            }
+            if (<(equals.(type))("this.table[nextIndex]", "REMOVED")>)
+            {
+                if (removedIndex == -1)
+                {
+                    removedIndex = nextIndex;
+                }
+            }
+            else if (<(equals.(type))("this.table[nextIndex]", "EMPTY")>)
+            {
+                return removedIndex == -1 ? nextIndex : removedIndex;
+            }
+        }
+    }
+
+    // exposed for testing
+    <(spread.(type))(type, "table")>
+
+    private void copyTable()
+    {
+        this.copyOnWrite = false;
+        <type>[] copy = new <type>[this.table.length];
+        System.arraycopy(this.table, 0, copy, 0,
+        Math.min(this.table.length, this.table.length));
+        this.table = copy;
+    }
+
+    private int maxOccupiedWithData()
+    {
+        int capacity = this.table.length;
+        // need at least one free slot for open addressing
+        return Math.min(capacity - 1, capacity / OCCUPIED_DATA_RATIO);
+    }
+
+    private int maxOccupiedWithSentinels()
+    {
+        return this.table.length / OCCUPIED_SENTINEL_RATIO;
+    }
+
+    private static boolean isNonSentinel(<type> value)
+    {
+        return <(notEquals.(type))("value", "EMPTY")> && <(notEquals.(type))("value", "REMOVED")>;
+    }
+
     private static final class Immutable<name>HashSet implements Immutable<name>Set, Serializable
     {
         private static final long serialVersionUID = 1L;
@@ -1109,6 +1121,73 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
             return <name>HashSet.newSetWith(elements).toImmutable();
         }
 
+        @Override
+        public boolean equals(Object obj)
+        {
+            if (this == obj)
+            {
+                return true;
+            }
+
+            if (!(obj instanceof <name>Set))
+            {
+                return false;
+            }
+
+            <name>Set other = (<name>Set) obj;
+            return this.size() == other.size() && this.containsAll(other.toArray());
+        }
+
+        @Override
+        public int hashCode()
+        {
+            int result = 0;
+            int zeroToThirtyOne = this.zeroToThirtyOne;
+            while (zeroToThirtyOne != 0)
+            {
+                <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+                result += <(hashCode.(type))("value")>;
+                zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
+            }
+            if (this.table != null)
+            {
+                for (int i = 0; i \< this.table.length; i++)
+                {
+                    if (isNonSentinel(this.table[i]))
+                    {
+                        result += <(hashCode.(type))("this.table[i]")>;
+                    }
+                }
+            }
+            return result;
+        }
+
+        @Override
+        public String toString()
+        {
+            return this.makeString("[", ", ", "]");
+        }
+
+        public Immutable<name>Set newWith(<type> element)
+        {
+            return <name>HashSet.newSet(this).with(element).toImmutable();
+        }
+
+        public Immutable<name>Set newWithout(<type> element)
+        {
+            return <name>HashSet.newSet(this).without(element).toImmutable();
+        }
+
+        public Immutable<name>Set newWithAll(<name>Iterable elements)
+        {
+            return <name>HashSet.newSet(this).withAll(elements).toImmutable();
+        }
+
+        public Immutable<name>Set newWithoutAll(<name>Iterable elements)
+        {
+            return <name>HashSet.newSet(this).withoutAll(elements).toImmutable();
+        }
+
         public int size()
         {
             return this.occupied + this.zeroToThirtyOneOccupied;
@@ -1122,6 +1201,103 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         public boolean notEmpty()
         {
             return this.size() != 0;
+        }
+
+        public String makeString()
+        {
+            return this.makeString(", ");
+        }
+
+        public String makeString(String separator)
+        {
+            return this.makeString("", separator, "");
+        }
+
+        public String makeString(String start, String separator, String end)
+        {
+            Appendable stringBuilder = new StringBuilder();
+            this.appendString(stringBuilder, start, separator, end);
+            return stringBuilder.toString();
+        }
+
+        public void appendString(Appendable appendable)
+        {
+            this.appendString(appendable, ", ");
+        }
+
+        public void appendString(Appendable appendable, String separator)
+        {
+            this.appendString(appendable, "", separator, "");
+        }
+
+        public void appendString(Appendable appendable, String start, String separator, String end)
+        {
+            try
+            {
+                appendable.append(start);
+
+                int count = 0;
+                int zeroToThirtyOne = this.zeroToThirtyOne;
+                while (zeroToThirtyOne != 0)
+                {
+                    <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+                    if (count > 0)
+                    {
+                        appendable.append(separator);
+                    }
+                    count++;
+                    appendable.append(String.valueOf(value));
+                    zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
+                }
+
+                for (<type> value : this.table)
+                {
+                    if (isNonSentinel(value))
+                    {
+                        if (count > 0)
+                        {
+                            appendable.append(separator);
+                        }
+                        count++;
+                        appendable.append(String.valueOf(value));
+                    }
+                }
+                appendable.append(end);
+            }
+            catch (IOException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+
+        public <name>Iterator <type>Iterator()
+        {
+            return new Internal<name>Iterator();
+        }
+
+        public <type>[] toArray()
+        {
+            <type>[] array = new <type>[this.size()];
+
+            int j = 0;
+            int zeroToThirtyOne = this.zeroToThirtyOne;
+            while (zeroToThirtyOne != 0)
+            {
+                <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+                array[j] = value;
+                j++;
+                zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
+            }
+
+            for (int i = 0; i \< this.table.length && j \< this.size(); i++)
+            {
+                if (isNonSentinel(this.table[i]))
+                {
+                    array[j] = this.table[i];
+                    j++;
+                }
+            }
+            return array;
         }
 
         public boolean contains(<type> value)
@@ -1158,74 +1334,6 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
             return true;
         }
 
-        // exposed for testing
-        int probe(<type> element)
-        {
-            int index = this.spread(element);
-            <type> valueAtIndex = this.table[index];
-
-            if (<(equals.(type))("valueAtIndex", "element")> || <(equals.(type))("valueAtIndex", "EMPTY")>)
-            {
-                return index;
-            }
-
-            int removedIndex = <(equals.(type))("valueAtIndex", "REMOVED")> ? index : -1;
-            int nextIndex = index;
-            int probe = 17;
-
-            // loop until an empty slot is reached
-            while (true)
-            {
-                // Probe algorithm: 17 * n * (n+1) / 2 where n = number of collisions
-                nextIndex = (nextIndex + probe) & this.table.length - 1;
-                probe += 17;
-
-                if (<(equals.(type))("this.table[nextIndex]", "element")>)
-                {
-                    return nextIndex;
-                }
-                if (<(equals.(type))("this.table[nextIndex]", "REMOVED")>)
-                {
-                    if (removedIndex == -1)
-                    {
-                        removedIndex = nextIndex;
-                    }
-                }
-                else if (<(equals.(type))("this.table[nextIndex]", "EMPTY")>)
-                {
-                    return removedIndex == -1 ? nextIndex : removedIndex;
-                }
-            }
-        }
-
-        // exposed for testing
-        <(spread.(type))(type, "table")>
-
-        public Immutable<name>Set newWith(<type> element)
-        {
-            return <name>HashSet.newSet(this).with(element).toImmutable();
-        }
-
-        public Immutable<name>Set newWithout(<type> element)
-        {
-            return <name>HashSet.newSet(this).without(element).toImmutable();
-        }
-
-        public Immutable<name>Set newWithAll(<name>Iterable elements)
-        {
-            return <name>HashSet.newSet(this).withAll(elements).toImmutable();
-        }
-
-        public Immutable<name>Set newWithoutAll(<name>Iterable elements)
-        {
-            return <name>HashSet.newSet(this).withoutAll(elements).toImmutable();
-        }
-
-        public <name>Iterator <type>Iterator()
-        {
-            return new Internal<name>Iterator();
-        }
-
         public void forEach(<name>Procedure procedure)
         {
             int zeroToThirtyOne = this.zeroToThirtyOne;
@@ -1245,14 +1353,18 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
             }
         }
 
-        public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
+        public Immutable<name>Set select(<name>Predicate predicate)
         {
-            T result = injectedValue;
+            <name>HashSet result = new <name>HashSet();
+
             int zeroToThirtyOne = this.zeroToThirtyOne;
             while (zeroToThirtyOne != 0)
             {
                 <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
-                result = function.valueOf(result, value);
+                if (predicate.accept(value))
+                {
+                    result.add(value);
+                }
                 zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
             }
 
@@ -1260,10 +1372,89 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
             {
                 if (isNonSentinel(value))
                 {
-                    result = function.valueOf(result, value);
+                    if (predicate.accept(value))
+                    {
+                        result.add(value);
+                    }
                 }
             }
-            return result;
+            return result.toImmutable();
+        }
+
+        public Immutable<name>Set reject(<name>Predicate predicate)
+        {
+            <name>HashSet result = new <name>HashSet();
+
+            int zeroToThirtyOne = this.zeroToThirtyOne;
+            while (zeroToThirtyOne != 0)
+            {
+                <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+                if (!predicate.accept(value))
+                {
+                    result.add(value);
+                }
+                zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
+            }
+
+            for (<type> value : this.table)
+            {
+                if (isNonSentinel(value))
+                {
+                    if (!predicate.accept(value))
+                    {
+                        result.add(value);
+                    }
+                }
+            }
+            return result.toImmutable();
+        }
+
+        public \<V> ImmutableSet\<V> collect(<name>ToObjectFunction\<? extends V> function)
+        {
+            MutableSet\<V> target = UnifiedSet.newSet(this.size());
+
+            int zeroToThirtyOne = this.zeroToThirtyOne;
+            while (zeroToThirtyOne != 0)
+            {
+                <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+                target.add(function.valueOf(value));
+                zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
+            }
+
+            for (<type> value : this.table)
+            {
+                if (isNonSentinel(value))
+                {
+                    target.add(function.valueOf(value));
+                }
+            }
+            return target.toImmutable();
+        }
+
+        public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
+        {
+            int zeroToThirtyOne = this.zeroToThirtyOne;
+            while (zeroToThirtyOne != 0)
+            {
+                <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+                if (predicate.accept(value))
+                {
+                    return value;
+                }
+                zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
+            }
+
+            for (<type> value : this.table)
+            {
+                if (isNonSentinel(value))
+                {
+                    if (predicate.accept(value))
+                    {
+                        return value;
+                    }
+                }
+            }
+            return ifNone;
         }
 
         public int count(<name>Predicate predicate)
@@ -1371,108 +1562,24 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
             return true;
         }
 
-        public Immutable<name>Set select(<name>Predicate predicate)
+        public Mutable<name>List toList()
         {
-            <name>HashSet result = new <name>HashSet();
-
-            int zeroToThirtyOne = this.zeroToThirtyOne;
-            while (zeroToThirtyOne != 0)
-            {
-                <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
-                if (predicate.accept(value))
-                {
-                    result.add(value);
-                }
-                zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
-            }
-
-            for (<type> value : this.table)
-            {
-                if (isNonSentinel(value))
-                {
-                    if (predicate.accept(value))
-                    {
-                        result.add(value);
-                    }
-                }
-            }
-            return result.toImmutable();
+            return <name>ArrayList.newList(this);
         }
 
-        public Immutable<name>Set reject(<name>Predicate predicate)
+        public Mutable<name>Set toSet()
         {
-            <name>HashSet result = new <name>HashSet();
-
-            int zeroToThirtyOne = this.zeroToThirtyOne;
-            while (zeroToThirtyOne != 0)
-            {
-                <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
-                if (!predicate.accept(value))
-                {
-                    result.add(value);
-                }
-                zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
-            }
-
-            for (<type> value : this.table)
-            {
-                if (isNonSentinel(value))
-                {
-                    if (!predicate.accept(value))
-                    {
-                        result.add(value);
-                    }
-                }
-            }
-            return result.toImmutable();
+            return <name>HashSet.newSet(this);
         }
 
-        public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
+        public Mutable<name>Bag toBag()
         {
-            int zeroToThirtyOne = this.zeroToThirtyOne;
-            while (zeroToThirtyOne != 0)
-            {
-                <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
-                if (predicate.accept(value))
-                {
-                    return value;
-                }
-                zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
-            }
-
-            for (<type> value : this.table)
-            {
-                if (isNonSentinel(value))
-                {
-                    if (predicate.accept(value))
-                    {
-                        return value;
-                    }
-                }
-            }
-            return ifNone;
+            return <name>HashBag.newBag(this);
         }
 
-        public \<V> ImmutableSet\<V> collect(<name>ToObjectFunction\<? extends V> function)
+        public Lazy<name>Iterable asLazy()
         {
-            MutableSet\<V> target = UnifiedSet.newSet(this.size());
-
-            int zeroToThirtyOne = this.zeroToThirtyOne;
-            while (zeroToThirtyOne != 0)
-            {
-                <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
-                target.add(function.valueOf(value));
-                zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
-            }
-
-            for (<type> value : this.table)
-            {
-                if (isNonSentinel(value))
-                {
-                    target.add(function.valueOf(value));
-                }
-            }
-            return target.toImmutable();
+            return new Lazy<name>IterableAdapter(this);
         }
 
         public <wideType.(type)> sum()
@@ -1517,6 +1624,15 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
             return max;
         }
 
+        public <type> maxIfEmpty(<type> defaultValue)
+        {
+            if (this.isEmpty())
+            {
+                return defaultValue;
+            }
+            return this.max();
+        }
+
         public <type> min()
         {
             if (this.isEmpty())
@@ -1546,15 +1662,6 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
             return this.min();
         }
 
-        public <type> maxIfEmpty(<type> defaultValue)
-        {
-            if (this.isEmpty())
-            {
-                return defaultValue;
-            }
-            return this.max();
-        }
-
         public double average()
         {
             if (this.isEmpty())
@@ -1581,31 +1688,6 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
             return <castDouble.(type)>sortedArray[middleIndex];
         }
 
-        public <type>[] toArray()
-        {
-            <type>[] array = new <type>[this.size()];
-
-            int j = 0;
-            int zeroToThirtyOne = this.zeroToThirtyOne;
-            while (zeroToThirtyOne != 0)
-            {
-                <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
-                array[j] = value;
-                j++;
-                zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
-            }
-
-            for (int i = 0; i \< this.table.length && j \< this.size(); i++)
-            {
-                if (isNonSentinel(this.table[i]))
-                {
-                    array[j] = this.table[i];
-                    j++;
-                }
-            }
-            return array;
-        }
-
         public <type>[] toSortedArray()
         {
             <type>[] array = this.toArray();
@@ -1613,143 +1695,30 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
             return array;
         }
 
-        @Override
-        public boolean equals(Object obj)
-        {
-            if (this == obj)
-            {
-                return true;
-            }
-
-            if (!(obj instanceof <name>Set))
-            {
-                return false;
-            }
-
-            <name>Set other = (<name>Set) obj;
-            return this.size() == other.size() && this.containsAll(other.toArray());
-        }
-
-        @Override
-        public int hashCode()
-        {
-            int result = 0;
-            int zeroToThirtyOne = this.zeroToThirtyOne;
-            while (zeroToThirtyOne != 0)
-            {
-                <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
-                result += <(hashCode.(type))("value")>;
-                zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
-            }
-            if (this.table != null)
-            {
-                for (int i = 0; i \< this.table.length; i++)
-                {
-                    if (isNonSentinel(this.table[i]))
-                    {
-                        result += <(hashCode.(type))("this.table[i]")>;
-                    }
-                }
-            }
-            return result;
-        }
-
-        @Override
-        public String toString()
-        {
-            return this.makeString("[", ", ", "]");
-        }
-
-        public String makeString()
-        {
-            return this.makeString(", ");
-        }
-
-        public String makeString(String separator)
-        {
-            return this.makeString("", separator, "");
-        }
-
-        public String makeString(String start, String separator, String end)
-        {
-            Appendable stringBuilder = new StringBuilder();
-            this.appendString(stringBuilder, start, separator, end);
-            return stringBuilder.toString();
-        }
-
-        public void appendString(Appendable appendable)
-        {
-            this.appendString(appendable, ", ");
-        }
-
-        public void appendString(Appendable appendable, String separator)
-        {
-            this.appendString(appendable, "", separator, "");
-        }
-
-        public void appendString(Appendable appendable, String start, String separator, String end)
-        {
-            try
-            {
-                appendable.append(start);
-
-                int count = 0;
-                int zeroToThirtyOne = this.zeroToThirtyOne;
-                while (zeroToThirtyOne != 0)
-                {
-                    <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
-                    if (count > 0)
-                    {
-                        appendable.append(separator);
-                    }
-                    count++;
-                    appendable.append(String.valueOf(value));
-                    zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
-                }
-
-                for (<type> value : this.table)
-                {
-                    if (isNonSentinel(value))
-                    {
-                        if (count > 0)
-                        {
-                            appendable.append(separator);
-                        }
-                        count++;
-                        appendable.append(String.valueOf(value));
-                    }
-                }
-                appendable.append(end);
-            }
-            catch (IOException e)
-            {
-                throw new RuntimeException(e);
-            }
-        }
-
-        public Mutable<name>List toList()
-        {
-            return <name>ArrayList.newList(this);
-        }
-
         public Mutable<name>List toSortedList()
         {
             return <name>ArrayList.newList(this).sortThis();
         }
 
-        public Mutable<name>Set toSet()
+        public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
         {
-            return <name>HashSet.newSet(this);
-        }
+            T result = injectedValue;
+            int zeroToThirtyOne = this.zeroToThirtyOne;
+            while (zeroToThirtyOne != 0)
+            {
+                <type> value = <(castFromInt.(type))("Integer.numberOfTrailingZeros(zeroToThirtyOne)")>;
+                result = function.valueOf(result, value);
+                zeroToThirtyOne &= ~(1 \<\< <(castRealTypeToInt.(type))("value")>);
+            }
 
-        public Mutable<name>Bag toBag()
-        {
-            return <name>HashBag.newBag(this);
-        }
-
-        public Lazy<name>Iterable asLazy()
-        {
-            return new Lazy<name>IterableAdapter(this);
+            for (<type> value : this.table)
+            {
+                if (isNonSentinel(value))
+                {
+                    result = function.valueOf(result, value);
+                }
+            }
+            return result;
         }
 
         public <name>Set freeze()
@@ -1766,6 +1735,49 @@ public final class <name>HashSet implements Mutable<name>Set, Externalizable
         {
             return new Immutable<name>SetSerializationProxy(this);
         }
+
+        // exposed for testing
+        int probe(<type> element)
+        {
+            int index = this.spread(element);
+            <type> valueAtIndex = this.table[index];
+
+            if (<(equals.(type))("valueAtIndex", "element")> || <(equals.(type))("valueAtIndex", "EMPTY")>)
+            {
+                return index;
+            }
+
+            int removedIndex = <(equals.(type))("valueAtIndex", "REMOVED")> ? index : -1;
+            int nextIndex = index;
+            int probe = 17;
+
+            // loop until an empty slot is reached
+            while (true)
+            {
+                // Probe algorithm: 17 * n * (n+1) / 2 where n = number of collisions
+                nextIndex = (nextIndex + probe) & this.table.length - 1;
+                probe += 17;
+
+                if (<(equals.(type))("this.table[nextIndex]", "element")>)
+                {
+                    return nextIndex;
+                }
+                if (<(equals.(type))("this.table[nextIndex]", "REMOVED")>)
+                {
+                    if (removedIndex == -1)
+                    {
+                        removedIndex = nextIndex;
+                    }
+                }
+                else if (<(equals.(type))("this.table[nextIndex]", "EMPTY")>)
+                {
+                    return removedIndex == -1 ? nextIndex : removedIndex;
+                }
+            }
+        }
+
+        // exposed for testing
+        <(spread.(type))(type, "table")>
 
         private class Internal<name>Iterator implements <name>Iterator
         {

@@ -30,8 +30,7 @@ public class SynchronizedShortObjectMapTest
                         + "Y2hyb25pemVkU2hvcnRPYmplY3RNYXAAAAAAAAAAAQIAAkwABGxvY2t0ABJMamF2YS9sYW5nL09i\n"
                         + "amVjdDtMAANtYXB0ADxMY29tL2dzL2NvbGxlY3Rpb25zL2FwaS9tYXAvcHJpbWl0aXZlL011dGFi\n"
                         + "bGVTaG9ydE9iamVjdE1hcDt4cHEAfgADc3IAQGNvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLm1hcC5t\n"
-                        + "dXRhYmxlLnByaW1pdGl2ZS5TaG9ydE9iamVjdEhhc2hNYXAAAAAAAAAAAQwAAHhwdwgAAAAAPwAA\n"
-                        + "AHg=",
+                        + "dXRhYmxlLnByaW1pdGl2ZS5TaG9ydE9iamVjdEhhc2hNYXAAAAAAAAAAAQwAAHhwdwQAAAAAeA==\n",
                 new SynchronizedShortObjectMap<Object>(new ShortObjectHashMap<Object>()));
     }
 }

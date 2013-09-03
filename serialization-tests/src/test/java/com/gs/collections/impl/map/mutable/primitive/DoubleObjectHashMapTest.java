@@ -27,7 +27,7 @@ public class DoubleObjectHashMapTest
         Verify.assertSerializedForm(
                 1L,
                 "rO0ABXNyAEFjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5wcmltaXRpdmUuRG91\n"
-                        + "YmxlT2JqZWN0SGFzaE1hcAAAAAAAAAABDAAAeHB3CAAAAAA/AAAAeA==",
+                        + "YmxlT2JqZWN0SGFzaE1hcAAAAAAAAAABDAAAeHB3BAAAAAB4",
                 new DoubleObjectHashMap<Object>());
     }
 }

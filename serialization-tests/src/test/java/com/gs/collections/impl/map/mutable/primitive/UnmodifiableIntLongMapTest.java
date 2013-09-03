@@ -30,7 +30,7 @@ public class UnmodifiableIntLongMapTest
                         + "b2RpZmlhYmxlSW50TG9uZ01hcAAAAAAAAAABAgABTAADbWFwdAA4TGNvbS9ncy9jb2xsZWN0aW9u\n"
                         + "cy9hcGkvbWFwL3ByaW1pdGl2ZS9NdXRhYmxlSW50TG9uZ01hcDt4cHNyADxjb20uZ3MuY29sbGVj\n"
                         + "dGlvbnMuaW1wbC5tYXAubXV0YWJsZS5wcmltaXRpdmUuSW50TG9uZ0hhc2hNYXAAAAAAAAAAAQwA\n"
-                        + "AHhwdwgAAAAAPwAAAHg=",
+                        + "AHhwdwQAAAAAeA==",
                 new UnmodifiableIntLongMap(new IntLongHashMap()));
     }
 }

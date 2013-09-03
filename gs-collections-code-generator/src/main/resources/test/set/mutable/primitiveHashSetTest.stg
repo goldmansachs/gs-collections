@@ -133,6 +133,26 @@ public class <name>HashSetTest extends Abstract<name>SetTestCase
     }
 
     @Test
+    public void addEverySlot()
+    {
+        this.addAndRemoveData(new <name>HashSet());
+        this.addAndRemoveData(new <name>HashSet(4));
+        this.addAndRemoveData(new <name>HashSet(2));
+        this.addAndRemoveData(new <name>HashSet(1));
+        this.addAndRemoveData(new <name>HashSet(0));
+    }
+
+    private void addAndRemoveData(<name>HashSet hashSet)
+    {
+        for (<type> i = <(literal.(type))("100")>; i \< <(literal.(type))("200")>; i++)
+        {
+            Assert.assertFalse(hashSet.contains(i));
+            Assert.assertTrue(hashSet.add(i));
+            Assert.assertTrue(hashSet.remove(i));
+        }
+    }
+
+    @Test
     public void addDuplicateWithRemovedSlot()
     {
         <type> collision1 = Abstract<name>SetTestCase.generateCollisions1().getFirst();

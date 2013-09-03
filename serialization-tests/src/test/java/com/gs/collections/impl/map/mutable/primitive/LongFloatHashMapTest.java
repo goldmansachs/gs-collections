@@ -27,7 +27,7 @@ public class LongFloatHashMapTest
         Verify.assertSerializedForm(
                 1L,
                 "rO0ABXNyAD5jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5wcmltaXRpdmUuTG9u\n"
-                        + "Z0Zsb2F0SGFzaE1hcAAAAAAAAAABDAAAeHB3CAAAAAA/AAAAeA==",
+                        + "Z0Zsb2F0SGFzaE1hcAAAAAAAAAABDAAAeHB3BAAAAAB4",
                 new LongFloatHashMap());
     }
 }
