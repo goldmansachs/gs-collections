@@ -23,7 +23,7 @@
 
     <groupId>com.goldmansachs</groupId>
     <artifactId>performance-tests</artifactId>
-    <version>3.3.0-SNAPSHOT</version>
+    <version>4.0.0</version>
 
     <name>Goldman Sachs Collections Performance Test Suite</name>
 
@@ -47,28 +47,28 @@
         <dependency>
             <groupId>com.goldmansachs</groupId>
             <artifactId>gs-collections-api</artifactId>
-            <version>3.3.0-SNAPSHOT</version>
+            <version>4.0.0</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>com.goldmansachs</groupId>
             <artifactId>gs-collections</artifactId>
-            <version>3.3.0-SNAPSHOT</version>
+            <version>4.0.0</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>com.goldmansachs</groupId>
             <artifactId>gs-collections-testutils</artifactId>
-            <version>3.3.0-SNAPSHOT</version>
+            <version>4.0.0</version>
             <scope>test</scope>
         </dependency>
 
         <dependency>
             <groupId>com.goldmansachs</groupId>
             <artifactId>gs-collections-forkjoin</artifactId>
-            <version>3.3.0-SNAPSHOT</version>
+            <version>4.0.0</version>
             <scope>test</scope>
         </dependency>
 
