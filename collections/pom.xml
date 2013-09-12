@@ -339,7 +339,7 @@
                         <comparisonArtifact>
                             <groupId>com.goldmansachs</groupId>
                             <artifactId>gs-collections</artifactId>
-                            <version>3.0.0</version>
+                            <version>4.0.0</version>
                         </comparisonArtifact>
                     </comparisonArtifacts>
                     <textOutputFile>${project.build.directory}/clirr.txt</textOutputFile>

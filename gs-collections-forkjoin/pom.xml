@@ -332,7 +332,7 @@
                         <comparisonArtifact>
                             <groupId>com.goldmansachs</groupId>
                             <artifactId>gs-collections-forkjoin</artifactId>
-                            <version>3.1.0</version>
+                            <version>4.0.0</version>
                         </comparisonArtifact>
                     </comparisonArtifacts>
                     <textOutputFile>${project.build.directory}/clirr.txt</textOutputFile>
