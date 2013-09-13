@@ -249,7 +249,7 @@
                     <includes>
                         <include>**/*Test.java</include>
                     </includes>
-                    <argLine>-XX:-OmitStackTraceInFastThrow</argLine>
+                    <argLine>-XX:-OmitStackTraceInFastThrow -Xmx4096m -XX:MaxPermSize=1024m</argLine>
                     <runOrder>random</runOrder>
                 </configuration>
             </plugin>
