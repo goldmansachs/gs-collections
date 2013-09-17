@@ -1,0 +1,31 @@
+compare ::= [
+    "boolean": "booleanCompare",
+    "byte": "smallCompare",
+    "short": "smallCompare",
+    "char": "smallCompare",
+    "int": "operatorCompare",
+    "long": "operatorCompare",
+    "float": "floatCompare",
+    "double": "doubleCompare",
+    default: "no matching Compare"
+]
+
+operatorCompare(left, right) ::= <<
+<left> \< <right> ? -1 : <left> > <right> ? 1 : 0
+>>
+
+smallCompare(left, right) ::= <<
+<left> - <right>
+>>
+
+booleanCompare(left,right) ::=<<
+<left> == <right> ? 0 : <left> ? 1 : -1
+>>
+
+doubleCompare(left, right) ::= <<
+Double.compare(<left>, <right>)
+>>
+
+floatCompare(left, right) ::= <<
+Float.compare(<left>, <right>)
+>>

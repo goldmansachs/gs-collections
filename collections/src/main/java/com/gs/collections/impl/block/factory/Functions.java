@@ -20,17 +20,27 @@ import java.util.Map;
 
 import com.gs.collections.api.block.SerializableComparator;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
 import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.block.comparator.primitive.BooleanFunctionComparator;
+import com.gs.collections.impl.block.comparator.primitive.ByteFunctionComparator;
+import com.gs.collections.impl.block.comparator.primitive.CharFunctionComparator;
 import com.gs.collections.impl.block.comparator.primitive.DoubleFunctionComparator;
+import com.gs.collections.impl.block.comparator.primitive.FloatFunctionComparator;
 import com.gs.collections.impl.block.comparator.primitive.IntFunctionComparator;
 import com.gs.collections.impl.block.comparator.primitive.LongFunctionComparator;
+import com.gs.collections.impl.block.comparator.primitive.ShortFunctionComparator;
 import com.gs.collections.impl.block.function.CaseFunction;
 import com.gs.collections.impl.block.function.IfFunction;
 import com.gs.collections.impl.block.function.checked.CheckedFunction;
@@ -227,6 +237,31 @@ public final class Functions
     public static Function<Object, String> getToString()
     {
         return TO_STRING_FUNCTION;
+    }
+
+    public static <T> SerializableComparator<T> toBooleanComparator(BooleanFunction<T> function)
+    {
+        return new BooleanFunctionComparator<T>(function);
+    }
+
+    public static <T> SerializableComparator<T> toByteComparator(ByteFunction<T> function)
+    {
+        return new ByteFunctionComparator<T>(function);
+    }
+
+    public static <T> SerializableComparator<T> toCharComparator(CharFunction<T> function)
+    {
+        return new CharFunctionComparator<T>(function);
+    }
+
+    public static <T> SerializableComparator<T> toFloatComparator(FloatFunction<T> function)
+    {
+        return new FloatFunctionComparator<T>(function);
+    }
+
+    public static <T> SerializableComparator<T> toShortComparator(ShortFunction<T> function)
+    {
+        return new ShortFunctionComparator<T>(function);
     }
 
     public static <T> SerializableComparator<T> toIntComparator(IntFunction<T> function)

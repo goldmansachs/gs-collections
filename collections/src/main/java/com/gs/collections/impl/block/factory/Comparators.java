@@ -21,9 +21,14 @@ import java.util.Comparator;
 
 import com.gs.collections.api.block.SerializableComparator;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
 import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.set.sorted.SortedSetIterable;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.comparator.FunctionComparator;
@@ -300,19 +305,47 @@ public final class Comparators
 
     public static <T, V extends Comparable<? super V>> SerializableComparator<T> byFunction(Function<? super T, ? extends V> function)
     {
-        if (function instanceof IntFunction)
-        {
-            return Functions.toIntComparator((IntFunction<T>) function);
-        }
-        if (function instanceof DoubleFunction)
-        {
-            return Functions.toDoubleComparator((DoubleFunction<T>) function);
-        }
-        if (function instanceof LongFunction)
-        {
-            return Functions.toLongComparator((LongFunction<T>) function);
-        }
         return Comparators.byFunction(function, naturalOrder());
+    }
+
+    public static <T> SerializableComparator<T> byBooleanFunction(BooleanFunction<T> function)
+    {
+        return Functions.toBooleanComparator(function);
+    }
+
+    public static <T> SerializableComparator<T> byByteFunction(ByteFunction<T> function)
+    {
+        return Functions.toByteComparator(function);
+    }
+
+    public static <T> SerializableComparator<T> byCharFunction(CharFunction<T> function)
+    {
+        return Functions.toCharComparator(function);
+    }
+
+    public static <T> SerializableComparator<T> byDoubleFunction(DoubleFunction<T> function)
+    {
+        return Functions.toDoubleComparator(function);
+    }
+
+    public static <T> SerializableComparator<T> byFloatFunction(FloatFunction<T> function)
+    {
+        return Functions.toFloatComparator(function);
+    }
+
+    public static <T> SerializableComparator<T> byIntFunction(IntFunction<T> function)
+    {
+        return Functions.toIntComparator(function);
+    }
+
+    public static <T> SerializableComparator<T> byLongFunction(LongFunction<T> function)
+    {
+        return Functions.toLongComparator(function);
+    }
+
+    public static <T> SerializableComparator<T> byShortFunction(ShortFunction<T> function)
+    {
+        return Functions.toShortComparator(function);
     }
 
     public static <T, V> SerializableComparator<T> byFunction(
