@@ -305,6 +305,38 @@ public final class Comparators
 
     public static <T, V extends Comparable<? super V>> SerializableComparator<T> byFunction(Function<? super T, ? extends V> function)
     {
+        if (function instanceof BooleanFunction)
+        {
+            return Functions.toBooleanComparator((BooleanFunction<T>) function);
+        }
+        if (function instanceof ByteFunction)
+        {
+            return Functions.toByteComparator((ByteFunction<T>) function);
+        }
+        if (function instanceof CharFunction)
+        {
+            return Functions.toCharComparator((CharFunction<T>) function);
+        }
+        if (function instanceof DoubleFunction)
+        {
+            return Functions.toDoubleComparator((DoubleFunction<T>) function);
+        }
+        if (function instanceof FloatFunction)
+        {
+            return Functions.toFloatComparator((FloatFunction<T>) function);
+        }
+        if (function instanceof IntFunction)
+        {
+            return Functions.toIntComparator((IntFunction<T>) function);
+        }
+        if (function instanceof LongFunction)
+        {
+            return Functions.toLongComparator((LongFunction<T>) function);
+        }
+        if (function instanceof ShortFunction)
+        {
+            return Functions.toShortComparator((ShortFunction<T>) function);
+        }
         return Comparators.byFunction(function, naturalOrder());
     }
 
