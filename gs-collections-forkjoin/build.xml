@@ -17,8 +17,12 @@
   -->
 
 <project name="gs-collections-forkjoin" default="test" basedir=".">
-    <import file="../common-build.xml" />
-
     <property name="src.dir" location="src/main/java" />
     <property name="testsrc.dir" location="src/test/java" />
+    <property name="ivy.pom.name" value="Goldman Sachs Collections Fork Join Utilities" />
+    <property name="javadoc.title" value="Goldman Sachs Collections Fork Join Utilities" />
+    <property name="source.level" value="1.7" />
+    <property name="target.level" value="1.7" />
+
+    <import file="../common-build.xml" />
 </project>

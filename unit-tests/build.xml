@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  ~ Copyright 2011 Goldman Sachs.
+  ~ Copyright 2013 Goldman Sachs.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -17,13 +17,14 @@
   -->
 
 <project name="unit-tests" default="test" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
-
-    <import file="../common-build.xml" />
-
     <property name="src.dir" location="src/main/java" />
     <property name="generatedsrc.dir" location="target/generated-sources/main/java" />
     <property name="generatedtestsrc.dir" location="target/generated-test-sources/main/java" />
     <property name="testsrc.dir" location="src/test/java" />
+    <property name="source.level" value="1.5" />
+    <property name="target.level" value="1.5" />
+
+    <import file="../common-build.xml" />
 
     <target name="generate-sources" description="Generates Sources" depends="-ivy-init">
         <ivy:cachepath pathid="generate.classpath" conf="generate-sources" />

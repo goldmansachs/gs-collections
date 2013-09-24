@@ -30,6 +30,46 @@
 
     <name>Goldman Sachs Collections Fork Join Utilities</name>
 
+    <description>GS Collections is a collections framework for Java. It has JDK-compatible List, Set and Map
+        implementations with a rich API and set of utility classes that work with any JDK compatible Collections,
+        Arrays, Maps or Strings. The iteration protocol was inspired by the Smalltalk collection framework.
+    </description>
+
+    <url>https://github.com/goldmansachs/gs-collections</url>
+
+    <inceptionYear>2004</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>scm:git:git@github.com:goldmansachs/gs-collections.git</url>
+        <connection>scm:git:git@github.com:goldmansachs/gs-collections.git</connection>
+        <developerConnection>scm:git:git@github.com:goldmansachs/gs-collections.git</developerConnection>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>Craig P. Motlin</name>
+            <email>craig.motlin@gs.com</email>
+        </developer>
+
+        <developer>
+            <name>Donald Raab</name>
+            <email>donald.raab@gs.com</email>
+        </developer>
+
+        <developer>
+            <name>Bhavana Hindupur</name>
+            <email>bhavana.hindupur@gs.com</email>
+        </developer>
+    </developers>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
@@ -289,8 +329,8 @@
             <plugin>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <configuration>
-                    <doctitle>Goldman Sachs Collections Fork Join - ${project.version}</doctitle>
-                    <windowtitle>Goldman Sachs Collections Fork Join - ${project.version}</windowtitle>
+                    <doctitle>Goldman Sachs Collections Fork Join Utilities - ${project.version}</doctitle>
+                    <windowtitle>Goldman Sachs Collections Fork Join Utilities - ${project.version}</windowtitle>
                     <show>public</show>
                     <links>
                         <link>http://java.sun.com/j2se/1.5.0/docs/api/</link>
@@ -342,19 +382,4 @@
         </plugins>
     </build>
 
-    <distributionManagement>
-
-        <repository>
-            <id>repository</id>
-            <name>releases</name>
-            <url>${repository.url}</url>
-        </repository>
-
-        <snapshotRepository>
-            <id>repository</id>
-            <name>snapshots</name>
-            <url>${repository.url}</url>
-        </snapshotRepository>
-
-    </distributionManagement>
 </project>

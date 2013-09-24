@@ -30,7 +30,8 @@
         <conf name="sources" />
 
         <conf name="compile" transitive="false" />
-        <conf name="runtime" extends="compile" />
+        <conf name="optional" transitive="false" />
+        <conf name="runtime" extends="compile, optional" />
         <conf name="compile-test" transitive="false" extends="compile" />
         <conf name="test" extends="runtime, compile-test" />
     </configurations>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2011 Goldman Sachs.
+  ~ Copyright 2013 Goldman Sachs.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -31,7 +31,8 @@
         <conf name="generate-sources" />
 
         <conf name="compile" transitive="false" />
-        <conf name="runtime" extends="compile" />
+        <conf name="optional" transitive="false" />
+        <conf name="runtime" extends="compile, optional" />
         <conf name="compile-test" transitive="false" extends="compile" />
         <conf name="test" extends="runtime, compile-test" />
     </configurations>
@@ -40,6 +41,7 @@
         <artifact />
         <artifact type="pom" />
         <artifact type="source" ext="jar" extra:classifier="sources" />
+        <artifact type="javadoc" ext="jar" extra:classifier="javadoc" />
     </publications>
 
     <dependencies defaultconfmapping="*->default">
@@ -52,7 +54,7 @@
         </dependency>
 
         <!-- compile -->
-        <dependency org="net.jcip" name="jcip-annotations" rev="${jcip.version}" conf="compile" />
+        <dependency org="net.jcip" name="jcip-annotations" rev="${jcip.version}" conf="optional" />
 
         <!-- test -->
         <conflict manager="strict" />

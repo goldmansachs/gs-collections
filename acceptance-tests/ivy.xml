@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2011 Goldman Sachs.
+  ~ Copyright 2013 Goldman Sachs.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -24,7 +24,8 @@
 
     <configurations>
         <conf name="compile" transitive="false" />
-        <conf name="runtime" extends="compile" />
+        <conf name="optional" transitive="false" />
+        <conf name="runtime" extends="compile, optional" />
         <conf name="compile-test" transitive="false" extends="compile" />
         <conf name="test" extends="runtime, compile-test" />
     </configurations>
@@ -35,22 +36,22 @@
         <dependency org="com.goldmansachs"
             name="gs-collections-api"
             rev="${build.version.full}"
-            conf="compile-test"
+            conf="compile-test->default,optional"
             changing="true" />
         <dependency org="com.goldmansachs"
             name="gs-collections"
             rev="${build.version.full}"
-            conf="compile-test"
+            conf="compile-test->default,optional"
             changing="true" />
         <dependency org="com.goldmansachs"
             name="gs-collections-testutils"
             rev="${build.version.full}"
-            conf="compile-test"
+            conf="compile-test->default,optional"
             changing="true" />
         <dependency org="com.goldmansachs"
             name="gs-collections-forkjoin"
             rev="${build.version.full}"
-            conf="compile-test"
+            conf="compile-test->default,optional"
             changing="true" />
 
         <dependency org="junit" name="junit" rev="${junit.version}" conf="compile-test" />

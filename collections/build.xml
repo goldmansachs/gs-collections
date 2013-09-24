@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  ~ Copyright 2011 Goldman Sachs.
+  ~ Copyright 2013 Goldman Sachs.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -17,12 +17,21 @@
   -->
 
 <project name="gs-collections" default="test" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
-    <import file="../common-build.xml" />
-
     <property name="src.dir" location="src/main/java" />
     <property name="generatedsrc.dir" location="target/generated-sources/java" />
     <property name="generatedtestsrc.dir" location="target/generated-test-sources/java" />
     <property name="testsrc.dir" location="src/test/java" />
+    <property name="ivy.pom.name" value="Goldman Sachs Collections Main Library" />
+    <property name="javadoc.title" value="Goldman Sachs Collections" />
+    <property name="source.level" value="1.5" />
+    <property name="target.level" value="1.5" />
+
+    <import file="../common-build.xml" />
+
+    <union id="all-sources">
+        <fileset dir="${src.dir}" />
+        <fileset dir="${generatedsrc.dir}" />
+    </union>
 
     <target name="generate-sources" description="Generates Sources" depends="-ivy-init">
         <ivy:cachepath pathid="generate.classpath" conf="generate-sources" />
@@ -32,7 +41,7 @@
         <generate templateDirectory="impl" />
     </target>
 
-    <target name="install" depends="-ivy-init, jar, source-jar, ivy-make-pom"
+    <target name="install" depends="-ivy-init, jar, source-jar, javadoc-jar, ivy-make-pom"
         description="installs the module to the local ivy cache">
         <ivy:resolve conf="default, master, sources, compile, runtime, compile-test, test" />
         <ivy:publish resolver="local" overwrite="true" pubrevision="${build.version.full}">
@@ -43,13 +52,4 @@
     <!-- No tests to run in this module -->
     <target name="test" depends="install" description="Run the test cases" />
 
-    <target name="source-jar" depends="-deploy-properties" description="Builds the source jar for the application">
-        <jar
-            jarfile="${source.jar.name}"
-            compress="true"
-            index="false">
-            <fileset dir="${src.dir}" />
-            <fileset dir="${generatedsrc.dir}" />
-        </jar>
-    </target>
 </project>

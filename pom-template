@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>${ivy.pom.groupId}</groupId>
+    <artifactId>${ivy.pom.artifactId}</artifactId>
+    <packaging>${ivy.pom.packaging}</packaging>
+    <version>${ivy.pom.version}</version>
+    <name>${ivy.pom.name}</name>
+
+    <description>GS Collections is a collections framework for Java. It has JDK-compatible List, Set and Map
+        implementations with a rich API and set of utility classes that work with any JDK compatible Collections,
+        Arrays, Maps or Strings. The iteration protocol was inspired by the Smalltalk collection framework.
+    </description>
+
+    <url>https://github.com/goldmansachs/gs-collections</url>
+
+    <inceptionYear>2004</inceptionYear>
+
+    <licenses>
+        <license>
+            <name>The Apache Software License, Version 2.0</name>
+            <url>http://www.apache.org/licenses/LICENSE-2.0.txt</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
+
+    <scm>
+        <url>scm:git:git@github.com:goldmansachs/gs-collections.git</url>
+        <connection>scm:git:git@github.com:goldmansachs/gs-collections.git</connection>
+        <developerConnection>scm:git:git@github.com:goldmansachs/gs-collections.git</developerConnection>
+    </scm>
+
+    <developers>
+        <developer>
+            <name>Craig P. Motlin</name>
+            <email>craig.motlin@gs.com</email>
+        </developer>
+
+        <developer>
+            <name>Donald Raab</name>
+            <email>donald.raab@gs.com</email>
+        </developer>
+
+        <developer>
+            <name>Bhavana Hindupur</name>
+            <email>bhavana.hindupur@gs.com</email>
+        </developer>
+    </developers>
+</project>

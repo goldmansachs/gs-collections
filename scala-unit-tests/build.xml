@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <!--
-  ~ Copyright 2011 Goldman Sachs.
+  ~ Copyright 2013 Goldman Sachs.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -17,11 +17,10 @@
   -->
 
 <project name="scala-unit-tests" default="test" basedir="." xmlns:ivy="antlib:org.apache.ivy.ant">
-
-    <import file="../common-build.xml" />
-
     <property name="src.dir" location="src/main/scala" />
     <property name="testsrc.dir" location="src/test/scala" />
+
+    <import file="../common-build.xml" />
 
     <target name="-scala-init" depends="-ivy-init">
         <ivy:cachepath pathid="scala.classpath" conf="scala" />

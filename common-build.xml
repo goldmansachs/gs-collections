@@ -1,5 +1,5 @@
 <!--
-  ~ Copyright 2012 Goldman Sachs.
+  ~ Copyright 2013 Goldman Sachs.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -112,17 +112,15 @@
         unless="compile.uptodate"
         description="Compile the code">
 
-        <ivy:cachepath pathid="compile.classpath" conf="compile" />
+        <ivy:cachepath pathid="compile.classpath" conf="compile, optional" />
 
         <property name="generatedsrc.dir" location="${src.dir}" />
-        <mkdir dir="${src.dir}" />
-        <mkdir dir="${generatedsrc.dir}" />
         <mkdir dir="target/classes" />
         <javac
             destdir="target/classes"
             fork="true"
-            source="1.5"
-            target="1.5"
+            source="${source.level}"
+            target="${target.level}"
             debug="on">
             <src>
                 <pathelement location="${src.dir}" />
@@ -235,12 +233,49 @@
         <touch file="target/tests.uptodate" />
     </target>
 
+    <path id="all-sources">
+        <fileset dir="${src.dir}" />
+    </path>
+
     <target name="source-jar" depends="-deploy-properties" description="Builds the source jar for the application">
         <jar
             jarfile="${source.jar.name}"
             compress="true"
+            index="false">
+            <resources refid="all-sources" />
+        </jar>
+    </target>
+
+    <target name="javadoc" depends="-deploy-properties, -ivy-init">
+        <ivy:cachepath pathid="runtime.classpath" conf="runtime" />
+
+        <javadoc
+            destdir="target/javadoc"
+            author="true"
+            version="true"
+            use="true"
+            useexternalfile="true"
+            windowtitle="${javadoc.title} - ${build.version.full}">
+
+            <sourcefiles>
+                <resources refid="all-sources" />
+            </sourcefiles>
+
+            <classpath refid="runtime.classpath" />
+
+            <doctitle>${javadoc.title} - ${build.version.full}</doctitle>
+            <link href="http://java.sun.com/j2se/1.5.0/docs/api/" />
+        </javadoc>
+    </target>
+
+    <target name="javadoc-jar"
+        depends="-deploy-properties, javadoc"
+        description="Builds the javadoc jar for the application">
+        <jar
+            jarfile="${javadoc.jar.name}"
+            compress="true"
             index="false"
-            basedir="${src.dir}" />
+            basedir="target/javadoc" />
     </target>
 
     <target
@@ -258,6 +293,7 @@
         <zip destfile="${zip.name}">
             <fileset file="${jar.name}" />
             <fileset file="${source.jar.name}" />
+            <fileset file="${javadoc.jar.name}" />
             <zipfileset dir="managed-lib/compile" prefix="lib" />
         </zip>
     </target>
@@ -277,13 +313,13 @@
 
     <target name="ivy-make-pom" depends="-ivy-init, -deploy-properties" description="Generate Maven pom file">
         <property name="ivy.pom.version" value="${build.version.full}" />
-        <ivy:makepom ivyfile="ivy.xml" pomfile="${pom.name}" conf="compile">
+        <ivy:makepom ivyfile="ivy.xml" templatefile="../pom-template" pomfile="${pom.name}" conf="compile, optional">
             <mapping conf="compile" scope="compile" />
         </ivy:makepom>
     </target>
 
     <target name="ivy-deploy"
-        depends="ivy-make-pom, test, jar, source-jar"
+        depends="ivy-make-pom, test, jar, source-jar, javadoc-jar"
         description="Deploy to the Maven Repository">
 
         <ivy:resolve />
@@ -297,7 +333,7 @@
 
     </target>
 
-    <target name="install" depends="-ivy-init, jar, source-jar, ivy-make-pom"
+    <target name="install" depends="-ivy-init, jar, source-jar, javadoc-jar, ivy-make-pom"
         description="installs the module to the local ivy cache">
         <ivy:resolve />
         <ivy:publish resolver="local" overwrite="true" pubrevision="${build.version.full}">

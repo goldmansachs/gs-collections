@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2012 Goldman Sachs.
+  ~ Copyright 2013 Goldman Sachs.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -30,7 +30,8 @@
         <conf name="sources" />
 
         <conf name="compile" transitive="false" />
-        <conf name="runtime" extends="compile" />
+        <conf name="optional" transitive="false" />
+        <conf name="runtime" extends="compile, optional" />
         <conf name="compile-test" transitive="false" extends="compile" />
         <conf name="test" extends="runtime, compile-test" />
     </configurations>
