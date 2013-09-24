@@ -115,6 +115,7 @@
         <ivy:cachepath pathid="compile.classpath" conf="compile, optional" />
 
         <property name="generatedsrc.dir" location="${src.dir}" />
+        <mkdir dir="${src.dir}" />
         <mkdir dir="target/classes" />
         <javac
             destdir="target/classes"
