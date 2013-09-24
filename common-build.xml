@@ -116,6 +116,7 @@
 
         <property name="generatedsrc.dir" location="${src.dir}" />
         <mkdir dir="${src.dir}" />
+        <mkdir dir="${generatedsrc.dir}" />
         <mkdir dir="target/classes" />
         <javac
             destdir="target/classes"
