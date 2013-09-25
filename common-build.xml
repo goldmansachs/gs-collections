@@ -291,6 +291,10 @@
             pattern="managed-lib/[conf]/[artifact]-[revision].[ext]"
             sync="true"
             conf="compile" />
+        <ivy:retrieve
+            type="jar,bundle"
+            pattern="managed-lib/compile/[artifact]-[revision].[ext]"
+            conf="optional" />
 
         <zip destfile="${zip.name}">
             <fileset file="${jar.name}" />
