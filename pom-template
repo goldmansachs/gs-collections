@@ -29,9 +29,9 @@
     </licenses>
 
     <scm>
-        <url>scm:git:git@github.com:goldmansachs/gs-collections.git</url>
-        <connection>scm:git:git@github.com:goldmansachs/gs-collections.git</connection>
-        <developerConnection>scm:git:git@github.com:goldmansachs/gs-collections.git</developerConnection>
+        <url>https://github.com/goldmansachs/gs-collections</url>
+        <connection>scm:git:https://github.com/goldmansachs/gs-collections.git</connection>
+        <developerConnection>scm:git:https://github.com/goldmansachs/gs-collections.git</developerConnection>
     </scm>
 
     <developers>
