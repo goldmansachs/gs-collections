@@ -112,6 +112,8 @@ public class <name1><name2>HashMapValuesTest extends AbstractMutable<name2>Colle
         this.classUnderTest().add(<(literal.(type2))("0")>);
     }
 
+    <if(primitive2.floatingPoint)><NaNTests()><endif>
+
     @Override
     @Test(expected = UnsupportedOperationException.class)
     public void addAllArray()
@@ -477,4 +479,13 @@ public class <name1><name2>HashMapValuesTest extends AbstractMutable<name2>Colle
 
 keyValue(value) ::= <<
 <(literal.(type1))(value)>, <(literal.(type2))(value)>
+>>
+
+NaNTests() ::= <<
+@Override
+@Test
+public void testEquals_NaN()
+{
+    //Testing equals() is not applicable for Mutable<name2>Collection.
+}
 >>

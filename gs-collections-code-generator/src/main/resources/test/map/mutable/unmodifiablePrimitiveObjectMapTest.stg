@@ -11,10 +11,10 @@ fileName(primitive) ::= "Unmodifiable<primitive.name>ObjectMapTest"
 skipBoolean() ::= "true"
 
 class(primitive) ::= <<
-<body(primitive.type, primitive.name)>
+<body(primitive.type, primitive.name, primitive.wrapperName)>
 >>
 
-body(type, name) ::= <<
+body(type, name, wrapperName) ::= <<
 <copyright()>
 
 package com.gs.collections.impl.map.mutable.primitive;
@@ -26,6 +26,7 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.map.primitive.Mutable<name>ObjectMap;
 import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
@@ -128,6 +129,14 @@ public class Unmodifiable<name>ObjectMapTest extends AbstractMutable<name>Object
         <type> collision1 = AbstractMutable<name>ObjectMapTestCase.generateCollisions().getFirst();
         this.getEmptyMap().put(collision1, "one");
     }
+
+    <if(primitive.floatingPoint)><NaNTests("NaN")><endif>
+
+    <if(primitive.floatingPoint)><NaNTests("POSITIVE_INFINITY")><endif>
+
+    <if(primitive.floatingPoint)><NaNTests("NEGATIVE_INFINITY")><endif>
+
+    <if(primitive.floatingPoint)><ZeroTests()><endif>
 
     @Override
     @Test
@@ -386,4 +395,23 @@ public class Unmodifiable<name>ObjectMapTest extends AbstractMutable<name>Object
     }
 }
 
+>>
+
+NaNTests(key) ::= <<
+@Override
+@Test(expected = UnsupportedOperationException.class)
+public void put_<key>()
+{
+    Mutable<name>ObjectMap\<String> map = this.getEmptyMap();
+    map.put(<wrapperName>.<key>, "one");
+}
+>>
+
+ZeroTests() ::= <<
+@Test(expected = UnsupportedOperationException.class)
+public void put_zero()
+{
+    Mutable<name>ObjectMap\<String> map = this.getEmptyMap();
+    map.put(<(literal.(type))("0")>, "one");
+}
 >>

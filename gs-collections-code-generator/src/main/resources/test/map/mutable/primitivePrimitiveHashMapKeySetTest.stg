@@ -14,10 +14,10 @@ targetPath() ::= "com/gs/collections/impl/map/mutable/primitive"
 fileName(primitive1, primitive2, sameTwoPrimitives) ::= "<primitive1.name><primitive2.name>HashMapKeySetTest"
 
 class(primitive1, primitive2, sameTwoPrimitives) ::= <<
-<body(primitive1.type, primitive2.type, primitive1.name, primitive2.name)>
+<body(primitive1.type, primitive2.type, primitive1.name, primitive2.name, primitive1.wrapperName)>
 >>
 
-body(type1, type2, name1, name2) ::= <<
+body(type1, type2, name1, name2, wrapperName1) ::= <<
 <copyright()>
 
 package com.gs.collections.impl.map.mutable.primitive;
@@ -67,6 +67,8 @@ public class <name1><name2>HashMapKeySetTest extends Abstract<name1>SetTestCase
     {
         this.classUnderTest().add(<(literal.(type1))("0")>);
     }
+
+    <if(primitive1.floatingPoint)><NaNTests()><endif>
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
@@ -155,4 +157,27 @@ public class <name1><name2>HashMapKeySetTest extends Abstract<name1>SetTestCase
 
 keyValue(value) ::= <<
 <(literal.(type1))(value)>, <(literal.(type2))(value)>
+>>
+
+NaNTests() ::= <<
+@Override
+@Test(expected = UnsupportedOperationException.class)
+public void add_NaN()
+{
+    this.newWith(<wrapperName1>.NaN).add(<wrapperName1>.NaN);
+}
+
+@Override
+@Test(expected = UnsupportedOperationException.class)
+public void add_POSITIVE_INFINITY()
+{
+    this.newWith(<wrapperName1>.POSITIVE_INFINITY).add(<wrapperName1>.POSITIVE_INFINITY);
+}
+
+@Override
+@Test(expected = UnsupportedOperationException.class)
+public void add_NEGATIVE_INFINITY()
+{
+    this.newWith(<wrapperName1>.NEGATIVE_INFINITY).add(<wrapperName1>.NEGATIVE_INFINITY);
+}
 >>

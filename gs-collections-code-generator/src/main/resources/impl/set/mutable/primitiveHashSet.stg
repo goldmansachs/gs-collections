@@ -8,10 +8,10 @@ targetPath() ::= "com/gs/collections/impl/set/mutable/primitive"
 fileName(primitive) ::= "<primitive.name>HashSet"
 
 class(primitive) ::= <<
-<body(primitive.type, primitive.name)>
+<body(primitive.type, primitive.name, primitive.wrapperName)>
 >>
 
-body(type, name) ::= <<
+body(type, name, wrapperName) ::= <<
 <copyright()>
 
 package com.gs.collections.impl.set.mutable.primitive;
@@ -1880,5 +1880,5 @@ value >= <zero.(type)> && value \<= <(literal.(type))("31")>
 >>
 
 floatBetweenZeroAndThirtyOne(value) ::= <<
-value >= <zero.(type)> && value \<= <(literal.(type))("31")> && Double.compare(value, Math.floor(value)) == 0
+<(greaterThanOrEquals.(type))("value", {<zero.(type)>})> && <(lessThanOrEquals.(type))("value", {<(literal.(type))("31")>})> && Double.compare(value, Math.floor(value)) == 0
 >>

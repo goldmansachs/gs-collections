@@ -16,7 +16,9 @@ body(type, wrapperName, name) ::= <<
 
 package com.gs.collections.impl.set.mutable.primitive;
 
+import java.util.HashSet;
 import java.util.NoSuchElementException;
+import java.util.Set;
 
 import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
@@ -144,6 +146,12 @@ public abstract class Abstract<name>SetTestCase extends AbstractMutable<name>Col
         Assert.assertTrue(set.add(<(literal.(type))("1")>));
         Assert.assertFalse(set.add(<(literal.(type))("1")>));
     }
+
+    <if(primitive.floatingPoint)><NaNTests("NaN")><endif>
+
+    <if(primitive.floatingPoint)><NaNTests("POSITIVE_INFINITY")><endif>
+
+    <if(primitive.floatingPoint)><NaNTests("NEGATIVE_INFINITY")><endif>
 
     @Override
     @Test
@@ -418,4 +426,18 @@ public abstract class Abstract<name>SetTestCase extends AbstractMutable<name>Col
     }
 }
 
+>>
+
+NaNTests(key) ::= <<
+@Test
+public void add_<key>()
+{
+    Mutable<name>Set set = this.newWith(<wrapperName>.<key>);
+    Set\<<wrapperName>\> hashSet = new HashSet\<<wrapperName>\>();
+    Assert.assertTrue(hashSet.add(<wrapperName>.<key>));
+
+    Assert.assertFalse(hashSet.add(<wrapperName>.<key>));
+    Assert.assertFalse(set.add(<wrapperName>.<key>));
+    Verify.assertSize(hashSet.size(), set);
+}
 >>
