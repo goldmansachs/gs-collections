@@ -22,10 +22,13 @@ package com.gs.collections.impl.map.mutable.primitive;
 import java.lang.reflect.Field;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.map.primitive.Mutable<name>ObjectMap;
+import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Functions0;
+import com.gs.collections.impl.block.factory.Functions2;
 import com.gs.collections.impl.block.function.AddFunction;
 import org.junit.Assert;
 import org.junit.Test;
@@ -140,6 +143,287 @@ public class <name>ObjectHashMapTest extends AbstractMutable<name>ObjectMapTestC
         Assert.assertNull(hashMap.put(<(literal.(type))("10")>, "10"));
         Assert.assertEquals(32L, ((<type>[]) keys.get(hashMap)).length);
         Assert.assertEquals(32L, ((Object[]) values.get(hashMap)).length);
+    }
+
+    @Test
+    public void occupiedWithDataAndSentinelsOnClear() throws Exception
+    {
+        Field occupiedWithData = <name>ObjectHashMap.class.getDeclaredField("occupiedWithData");
+        Field occupiedWithSentinels = <name>ObjectHashMap.class.getDeclaredField("occupiedWithSentinels");
+        occupiedWithData.setAccessible(true);
+        occupiedWithSentinels.setAccessible(true);
+        <name>ObjectHashMap\<Float> hashMap = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("2")>, 2.0f, <(literal.(type))("3")>, 3.0f);
+
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
+        Assert.assertEquals(2, occupiedWithData.get(hashMap));
+
+        hashMap.remove(<(literal.(type))("2")>);
+        Assert.assertEquals(1, occupiedWithSentinels.get(hashMap));
+        Assert.assertEquals(1, occupiedWithData.get(hashMap));
+
+        hashMap.clear();
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
+        Assert.assertEquals(0, occupiedWithData.get(hashMap));
+    }
+
+    @Test
+    public void occupiedWithDataAndSentinelsOnRemove() throws Exception
+    {
+        Field occupiedWithData = <name>ObjectHashMap.class.getDeclaredField("occupiedWithData");
+        Field occupiedWithSentinels = <name>ObjectHashMap.class.getDeclaredField("occupiedWithSentinels");
+        occupiedWithData.setAccessible(true);
+        occupiedWithSentinels.setAccessible(true);
+        <name>ObjectHashMap\<Float> hashMap = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("2")>, 2.0f, <(literal.(type))("3")>, 3.0f, <(literal.(type))("4")>, 4.0f);
+
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
+        Assert.assertEquals(3, occupiedWithData.get(hashMap));
+
+        hashMap.remove(<(literal.(type))("2")>);
+        Assert.assertEquals(1, occupiedWithSentinels.get(hashMap));
+        Assert.assertEquals(2, occupiedWithData.get(hashMap));
+
+        hashMap.remove(<(literal.(type))("2")>);
+        Assert.assertEquals(1, occupiedWithSentinels.get(hashMap));
+        Assert.assertEquals(2, occupiedWithData.get(hashMap));
+
+        hashMap.remove(<(literal.(type))("5")>);
+        Assert.assertEquals(1, occupiedWithSentinels.get(hashMap));
+        Assert.assertEquals(2, occupiedWithData.get(hashMap));
+    }
+
+    @Test
+    public void occupiedWithDataAndSentinelsOnUpdateValue() throws Exception
+    {
+        Field occupiedWithData = <name>ObjectHashMap.class.getDeclaredField("occupiedWithData");
+        Field occupiedWithSentinels = <name>ObjectHashMap.class.getDeclaredField("occupiedWithSentinels");
+        occupiedWithData.setAccessible(true);
+        occupiedWithSentinels.setAccessible(true);
+        <name>ObjectHashMap\<Float> hashMap = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("2")>, 2.0f, <(literal.(type))("3")>, 3.0f, <(literal.(type))("4")>, 4.0f);
+
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
+        Assert.assertEquals(3, occupiedWithData.get(hashMap));
+
+        Function\<Float, Float> function = Functions.getPassThru();
+
+        Function0\<Float> function0 = Functions0.value(0.0f);
+
+        hashMap.updateValue(<(literal.(type))("2")>, function0, function);
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
+        Assert.assertEquals(3, occupiedWithData.get(hashMap));
+
+        hashMap.updateValue(<(literal.(type))("5")>, function0, function);
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
+        Assert.assertEquals(4, occupiedWithData.get(hashMap));
+
+        hashMap.remove(<(literal.(type))("2")>);
+        Assert.assertEquals(1, occupiedWithSentinels.get(hashMap));
+        Assert.assertEquals(3, occupiedWithData.get(hashMap));
+
+        hashMap.updateValue(<(literal.(type))("2")>, function0, function); // putting in a slot marked REMOVED
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
+        Assert.assertEquals(4, occupiedWithData.get(hashMap));
+    }
+
+    @Test
+    public void occupiedWithDataAndSentinelsOnUpdateValueWith() throws Exception
+    {
+        Field occupiedWithData = <name>ObjectHashMap.class.getDeclaredField("occupiedWithData");
+        Field occupiedWithSentinels = <name>ObjectHashMap.class.getDeclaredField("occupiedWithSentinels");
+        occupiedWithData.setAccessible(true);
+        occupiedWithSentinels.setAccessible(true);
+        <name>ObjectHashMap\<Float> hashMap = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("2")>, 2.0f, <(literal.(type))("3")>, 3.0f, <(literal.(type))("4")>, 4.0f);
+
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
+        Assert.assertEquals(3, occupiedWithData.get(hashMap));
+
+        Function2\<Float, Float, Float> function = Functions2.fromFunction(Functions.\<Float>getPassThru());
+
+        Function0\<Float> function0 = Functions0.value(0.0f);
+
+        hashMap.updateValueWith(<(literal.(type))("2")>, function0, function, 0.0f);
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
+        Assert.assertEquals(3, occupiedWithData.get(hashMap));
+
+        hashMap.updateValueWith(<(literal.(type))("5")>, function0, function, 0.0f);
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
+        Assert.assertEquals(4, occupiedWithData.get(hashMap));
+
+        hashMap.remove(<(literal.(type))("2")>);
+        Assert.assertEquals(1, occupiedWithSentinels.get(hashMap));
+        Assert.assertEquals(3, occupiedWithData.get(hashMap));
+
+        hashMap.updateValueWith(<(literal.(type))("2")>, function0, function, 0.0f); // putting in a slot marked REMOVED
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
+        Assert.assertEquals(4, occupiedWithData.get(hashMap));
+    }
+
+    @Test
+    public void occupiedWithDataAndSentinelsOnPut() throws Exception
+    {
+        Field occupiedWithData = <name>ObjectHashMap.class.getDeclaredField("occupiedWithData");
+        Field occupiedWithSentinels = <name>ObjectHashMap.class.getDeclaredField("occupiedWithSentinels");
+        occupiedWithData.setAccessible(true);
+        occupiedWithSentinels.setAccessible(true);
+        <name>ObjectHashMap\<Float> hashMap = new <name>ObjectHashMap\<Float>();
+        Assert.assertEquals(0, occupiedWithData.get(hashMap));
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
+
+        for (<type> i = 2; i \< 10; i++)
+        {
+            hashMap.put(<(castFromInt.(type))("i")>, (float) i);
+        }
+
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
+
+        hashMap.remove(<(literal.(type))("2")>);
+        Assert.assertEquals(7, occupiedWithData.get(hashMap));
+        Assert.assertEquals(1, occupiedWithSentinels.get(hashMap));
+
+        hashMap.put(<(literal.(type))("2")>, 9.0f); // putting in a slot marked REMOVED
+        Assert.assertEquals(8, occupiedWithData.get(hashMap));
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
+    }
+
+    @Test
+    public void occupiedWithDataAndSentinelsOnGetIfAbsentPut() throws Exception
+    {
+        Field occupiedWithData = <name>ObjectHashMap.class.getDeclaredField("occupiedWithData");
+        Field occupiedWithSentinels = <name>ObjectHashMap.class.getDeclaredField("occupiedWithSentinels");
+        occupiedWithData.setAccessible(true);
+        occupiedWithSentinels.setAccessible(true);
+        <name>ObjectHashMap\<Float> hashMap = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("2")>, 2.0f, <(literal.(type))("3")>, 3.0f, <(literal.(type))("4")>, 4.0f);
+
+        hashMap.getIfAbsentPut(<(literal.(type))("2")>, 5.0f);
+        Assert.assertEquals(3, occupiedWithData.get(hashMap));
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
+
+        hashMap.getIfAbsentPut(<(literal.(type))("5")>, 5.0f);
+        Assert.assertEquals(4, occupiedWithData.get(hashMap));
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
+
+        hashMap.remove(<(literal.(type))("2")>);
+        Assert.assertEquals(3, occupiedWithData.get(hashMap));
+        Assert.assertEquals(1, occupiedWithSentinels.get(hashMap));
+
+        hashMap.getIfAbsentPut(<(literal.(type))("2")>, 5.0f); //putting in a slot marked REMOVED
+        Assert.assertEquals(4, occupiedWithData.get(hashMap));
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
+    }
+
+    @Test
+    public void occupiedWithDataAndSentinelsOnGetIfAbsentPutFunction() throws Exception
+    {
+        Field occupiedWithData = <name>ObjectHashMap.class.getDeclaredField("occupiedWithData");
+        Field occupiedWithSentinels = <name>ObjectHashMap.class.getDeclaredField("occupiedWithSentinels");
+        occupiedWithData.setAccessible(true);
+        occupiedWithSentinels.setAccessible(true);
+        <name>ObjectHashMap\<Float> hashMap = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("2")>, 2.0f, <(literal.(type))("3")>, 3.0f, <(literal.(type))("4")>, 4.0f);
+
+        Function0\<Float> function = Functions0.value(5.0f);
+
+        hashMap.getIfAbsentPut(<(literal.(type))("2")>, function);
+        Assert.assertEquals(3, occupiedWithData.get(hashMap));
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
+
+        hashMap.getIfAbsentPut(<(literal.(type))("5")>, function);
+        Assert.assertEquals(4, occupiedWithData.get(hashMap));
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
+
+        hashMap.remove(<(literal.(type))("2")>);
+        Assert.assertEquals(3, occupiedWithData.get(hashMap));
+        Assert.assertEquals(1, occupiedWithSentinels.get(hashMap));
+
+        hashMap.getIfAbsentPut(<(literal.(type))("2")>, function); //putting in a slot marked REMOVED
+        Assert.assertEquals(4, occupiedWithData.get(hashMap));
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
+    }
+
+    @Test
+    public void occupiedWithDataAndSentinelsOnGetIfAbsentPutWith() throws Exception
+    {
+        Field occupiedWithData = <name>ObjectHashMap.class.getDeclaredField("occupiedWithData");
+        Field occupiedWithSentinels = <name>ObjectHashMap.class.getDeclaredField("occupiedWithSentinels");
+        occupiedWithData.setAccessible(true);
+        occupiedWithSentinels.setAccessible(true);
+        <name>ObjectHashMap\<Float> hashMap = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("2")>, 2.0f, <(literal.(type))("3")>, 3.0f, <(literal.(type))("4")>, 4.0f);
+
+        Function\<Float, Float> function = Functions.getPassThru();
+
+        hashMap.getIfAbsentPutWith(<(literal.(type))("2")>, function, Float.valueOf(5.0f));
+        Assert.assertEquals(3, occupiedWithData.get(hashMap));
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
+
+        hashMap.getIfAbsentPutWith(<(literal.(type))("5")>, function, Float.valueOf(5.0f));
+        Assert.assertEquals(4, occupiedWithData.get(hashMap));
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
+
+        hashMap.remove(<(literal.(type))("2")>);
+        Assert.assertEquals(3, occupiedWithData.get(hashMap));
+        Assert.assertEquals(1, occupiedWithSentinels.get(hashMap));
+
+        hashMap.getIfAbsentPutWith(<(literal.(type))("2")>, function, Float.valueOf(5.0f)); //putting in a slot marked REMOVED
+        Assert.assertEquals(4, occupiedWithData.get(hashMap));
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
+    }
+
+    @Test
+    public void occupiedWithDataAndSentinelsOnGetIfAbsentPutWithKey() throws Exception
+    {
+        Field occupiedWithData = <name>ObjectHashMap.class.getDeclaredField("occupiedWithData");
+        Field occupiedWithSentinels = <name>ObjectHashMap.class.getDeclaredField("occupiedWithSentinels");
+        occupiedWithData.setAccessible(true);
+        occupiedWithSentinels.setAccessible(true);
+        <name>ObjectHashMap\<Float> hashMap = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("2")>, 2.0f, <(literal.(type))("3")>, 3.0f, <(literal.(type))("4")>, 4.0f);
+
+        <name>ToObjectFunction\<Float> function = new <name>ToObjectFunction\<Float>()
+        {
+            public Float valueOf(<type> <type>Parameter)
+            {
+                return (float) <type>Parameter;
+            }
+        };
+
+        hashMap.getIfAbsentPutWithKey(<(literal.(type))("2")>, function);
+        Assert.assertEquals(3, occupiedWithData.get(hashMap));
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
+
+        hashMap.getIfAbsentPutWithKey(<(literal.(type))("5")>, function);
+        Assert.assertEquals(4, occupiedWithData.get(hashMap));
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
+
+        hashMap.remove(<(literal.(type))("2")>);
+        Assert.assertEquals(3, occupiedWithData.get(hashMap));
+        Assert.assertEquals(1, occupiedWithSentinels.get(hashMap));
+
+        hashMap.getIfAbsentPutWithKey(<(literal.(type))("2")>, function); //putting in a slot marked REMOVED
+        Assert.assertEquals(4, occupiedWithData.get(hashMap));
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
+    }
+
+    @Test
+    public void occupiedWithSentinelsOnPutRemovedSlot() throws Exception
+    {
+        Field occupiedWithData = <name>ObjectHashMap.class.getDeclaredField("occupiedWithData");
+        Field occupiedWithSentinels = <name>ObjectHashMap.class.getDeclaredField("occupiedWithSentinels");
+        occupiedWithData.setAccessible(true);
+        occupiedWithSentinels.setAccessible(true);
+        <name>ObjectHashMap\<Float> hashMap = new <name>ObjectHashMap\<Float>();
+        Assert.assertEquals(0, occupiedWithData.get(hashMap));
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
+
+        for (<type> i = 2; i \< 10; i++)
+        {
+            hashMap.put(<(castFromInt.(type))("i")>, (float) i);
+        }
+
+        hashMap.remove(<(literal.(type))("2")>);
+        Assert.assertEquals(1, occupiedWithSentinels.get(hashMap));
+        Assert.assertEquals(7, occupiedWithData.get(hashMap));
+
+        hashMap.put(<(literal.(type))("2")>, 3.0f); //putting in a slot marked as REMOVED
+
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashMap));
+        Assert.assertEquals(8, occupiedWithData.get(hashMap));
     }
 
     @Test

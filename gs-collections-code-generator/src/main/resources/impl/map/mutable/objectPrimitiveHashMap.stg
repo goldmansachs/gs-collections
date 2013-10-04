@@ -359,6 +359,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
     public void clear()
     {
         this.occupiedWithData = 0;
+        this.occupiedWithSentinels = 0;
         Arrays.fill(this.keys, null);
         Arrays.fill(this.values, EMPTY_VALUE);
     }
@@ -446,6 +447,10 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         {
             return this.values[index];
         }
+        if (this.keys[index] == REMOVED_KEY)
+        {
+            --this.occupiedWithSentinels;
+        }
         this.keys[index] = toSentinelIfNull(key);
         this.values[index] = value;
         ++this.occupiedWithData;
@@ -462,6 +467,10 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
         {
             return this.values[index];
+        }
+        if (this.keys[index] == REMOVED_KEY)
+        {
+            --this.occupiedWithSentinels;
         }
         this.keys[index] = toSentinelIfNull(key);
         <type> value = function.value();
@@ -481,6 +490,10 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         {
             return this.values[index];
         }
+        if (this.keys[index] == REMOVED_KEY)
+        {
+            --this.occupiedWithSentinels;
+        }
         this.keys[index] = toSentinelIfNull(key);
         <type> value = function.<type>ValueOf(parameter);
         this.values[index] = value;
@@ -498,6 +511,10 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
         {
             return this.values[index];
+        }
+        if (this.keys[index] == REMOVED_KEY)
+        {
+            --this.occupiedWithSentinels;
         }
         this.keys[index] = toSentinelIfNull(key);
         <type> value = function.<type>ValueOf(key);

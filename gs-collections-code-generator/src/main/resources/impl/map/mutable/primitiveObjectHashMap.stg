@@ -1846,6 +1846,10 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         {
             return this.values[index];
         }
+        if (<(equals.(type))("this.keys[index]", "REMOVED_KEY")>)
+        {
+            this.occupiedWithSentinels--;
+        }
         this.keys[index] = key;
         this.values[index] = value;
         ++this.occupiedWithData;
@@ -1900,6 +1904,10 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         if (<(equals.(type))("this.keys[index]", "key")>)
         {
             return this.values[index];
+        }
+        if (<(equals.(type))("this.keys[index]", "REMOVED_KEY")>)
+        {
+            this.occupiedWithSentinels--;
         }
         this.keys[index] = key;
         V value = function.value();
@@ -1957,6 +1965,10 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         {
             return this.values[index];
         }
+        if (<(equals.(type))("this.keys[index]", "REMOVED_KEY")>)
+        {
+            this.occupiedWithSentinels--;
+        }
         this.keys[index] = key;
         V value = function.valueOf(parameter);
         this.values[index] = value;
@@ -2012,6 +2024,10 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         if (<(equals.(type))("this.keys[index]", "key")>)
         {
             return this.values[index];
+        }
+        if (<(equals.(type))("this.keys[index]", "REMOVED_KEY")>)
+        {
+            this.occupiedWithSentinels--;
         }
         this.keys[index] = key;
         V value = function.valueOf(key);
@@ -2070,6 +2086,10 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
             this.values[index] = function.valueOf(this.values[index]);
             return this.values[index];
         }
+        if (<(equals.(type))("this.keys[index]", "REMOVED_KEY")>)
+        {
+            this.occupiedWithSentinels--;
+        }
         this.keys[index] = key;
         V value = function.valueOf(factory.value());
         this.values[index] = value;
@@ -2126,6 +2146,10 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         {
             this.values[index] = function.value(this.values[index], parameter);
             return this.values[index];
+        }
+        if (<(equals.(type))("this.keys[index]", "REMOVED_KEY")>)
+        {
+            this.occupiedWithSentinels--;
         }
         this.keys[index] = key;
         V value =  function.value(factory.value(), parameter);

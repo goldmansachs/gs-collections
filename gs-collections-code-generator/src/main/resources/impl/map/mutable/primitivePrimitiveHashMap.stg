@@ -2855,6 +2855,10 @@ if (<(equals.(type1))("this.keys[index]", "key")>)
 {
     return this.values[index];
 }
+if (<(equals.(type1))("this.keys[index]", "REMOVED_KEY")>)
+{
+    this.occupiedWithSentinels--;
+}
 this.keys[index] = key;
 <function>
 this.values[index] = value;
