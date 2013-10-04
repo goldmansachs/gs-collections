@@ -127,9 +127,67 @@ public class <name>HashSetTest extends Abstract<name>SetTestCase
         Field table = <name>HashSet.class.getDeclaredField("table");
         table.setAccessible(true);
         Assert.assertEquals(16L, ((<type>[]) table.get(hashSet)).length);
+
+        Field occupiedWithData = <name>HashSet.class.getDeclaredField("occupiedWithData");
+        Field occupiedWithSentinels = <name>HashSet.class.getDeclaredField("occupiedWithSentinels");
+        occupiedWithData.setAccessible(true);
+        occupiedWithSentinels.setAccessible(true);
+        Assert.assertEquals(8, occupiedWithData.get(hashSet));
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashSet));
+
         Assert.assertEquals(<name>HashSet.newSetWith(<["32", "33", "34", "35", "36", "37", "38", "39"]:(literal.(type))(); separator=", ">), hashSet);
+
+        hashSet.remove(<(literal.(type))("32")>);
+        Assert.assertEquals(7, occupiedWithData.get(hashSet));
+        Assert.assertEquals(1, occupiedWithSentinels.get(hashSet));
+
+        hashSet.add(<(literal.(type))("32")>); //adding to a REMOVED slot
+        Assert.assertEquals(8, occupiedWithData.get(hashSet));
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashSet));
+
         Assert.assertTrue(hashSet.add(<(literal.(type))("43")>));
         Assert.assertEquals(32L, ((<type>[]) table.get(hashSet)).length);
+        Assert.assertEquals(9, occupiedWithData.get(hashSet));
+    }
+
+    @Test
+    public void removeWithRehash() throws NoSuchFieldException, IllegalAccessException
+    {
+        <name>HashSet hashSet = new <name>HashSet();
+        Assert.assertTrue(hashSet.addAll(<["32", "33", "34", "35", "36", "37", "38", "39"]:(literal.(type))(); separator=", ">));
+
+        Field table = <name>HashSet.class.getDeclaredField("table");
+        table.setAccessible(true);
+        Assert.assertEquals(16L, ((<type>[]) table.get(hashSet)).length);
+
+        Field occupiedWithData = <name>HashSet.class.getDeclaredField("occupiedWithData");
+        occupiedWithData.setAccessible(true);
+        Assert.assertEquals(8, occupiedWithData.get(hashSet));
+
+        Field occupiedWithSentinels = <name>HashSet.class.getDeclaredField("occupiedWithSentinels");
+        occupiedWithSentinels.setAccessible(true);
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashSet));
+
+        for (int i = 0; i \< 4; i++)
+        {
+            hashSet.remove(<(castIntToNarrowTypeWithParens.(type))("i + 32")>);
+            Assert.assertEquals(7 - i, occupiedWithData.get(hashSet));
+            Assert.assertEquals(i + 1, occupiedWithSentinels.get(hashSet));
+        }
+
+        Assert.assertEquals(<name>HashSet.newSetWith(<["36", "37", "38", "39"]:(literal.(type))(); separator=", ">), hashSet);
+        Assert.assertTrue(hashSet.remove(<(literal.(type))("36")>));
+        Assert.assertEquals(16L, ((<type>[]) table.get(hashSet)).length);
+        Assert.assertEquals(3, occupiedWithData.get(hashSet));
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashSet));
+
+        Assert.assertFalse(hashSet.remove(<(literal.(type))("36")>));
+        Assert.assertEquals(3, occupiedWithData.get(hashSet));
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashSet));
+
+        Assert.assertFalse(hashSet.remove(<(literal.(type))("1")>));
+        Assert.assertEquals(3, occupiedWithData.get(hashSet));
+        Assert.assertEquals(0, occupiedWithSentinels.get(hashSet));
     }
 
     @Test
