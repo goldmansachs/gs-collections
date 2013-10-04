@@ -308,7 +308,7 @@ final class Immutable<name1><name2>SingletonMap implements Immutable<name1><name
     @Override
     public String toString()
     {
-        return this.makeString("[", ", ", "]");
+        return this.makeString("{", ", ", "}");
     }
 
     public String makeString()

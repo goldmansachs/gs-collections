@@ -320,7 +320,7 @@ final class ImmutableObject<name>SingletonMap\<K> extends AbstractImmutableObjec
     @Override
     public String toString()
     {
-        return this.makeString("[", ", ", "]");
+        return this.makeString("{", ", ", "}");
     }
 
     public String makeString()

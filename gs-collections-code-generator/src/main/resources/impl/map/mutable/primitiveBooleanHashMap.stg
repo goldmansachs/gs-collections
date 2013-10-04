@@ -962,7 +962,7 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
     @Override
     public String toString()
     {
-        return this.makeString("[", ", ", "]");
+        return this.makeString("{", ", ", "}");
     }
 
     public BooleanIterator booleanIterator()

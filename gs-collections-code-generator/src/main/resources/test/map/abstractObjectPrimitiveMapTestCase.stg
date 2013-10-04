@@ -196,20 +196,20 @@ public abstract class AbstractObject<name>MapTestCase
     @Test
     public void testToString()
     {
-        Assert.assertEquals("[]", this.\<Integer>getEmptyMap().toString());
-        Assert.assertEquals("[0=<(toStringLiteral.(type))("0")>]", this.newWithKeysValues(0, <(literal.(type))("0")>).toString());
+        Assert.assertEquals("{}", this.\<Integer>getEmptyMap().toString());
+        Assert.assertEquals("{0=<(toStringLiteral.(type))("0")>}", this.newWithKeysValues(0, <(literal.(type))("0")>).toString());
 
         Object<name>Map\<Integer> map1 = this.newWithKeysValues(0, <(literal.(type))("0")>, 1, <(literal.(type))("1")>);
         Assert.assertTrue(
                 map1.toString(),
-                "[0=<(toStringLiteral.(type))("0")>, 1=<(toStringLiteral.(type))("1")>]".equals(map1.toString())
-                        || "[1=<(toStringLiteral.(type))("1")>, 0=<(toStringLiteral.(type))("0")>]".equals(map1.toString()));
+                "{0=<(toStringLiteral.(type))("0")>, 1=<(toStringLiteral.(type))("1")>}".equals(map1.toString())
+                        || "{1=<(toStringLiteral.(type))("1")>, 0=<(toStringLiteral.(type))("0")>}".equals(map1.toString()));
 
         Object<name>Map\<Integer> map2 = this.newWithKeysValues(1, <(literal.(type))("1")>, null, <(literal.(type))("0")>);
         Assert.assertTrue(
                 map2.toString(),
-                "[1=<(toStringLiteral.(type))("1")>, null=<(toStringLiteral.(type))("0")>]".equals(map2.toString())
-                        || "[null=<(toStringLiteral.(type))("0")>, 1=<(toStringLiteral.(type))("1")>]".equals(map2.toString()));
+                "{1=<(toStringLiteral.(type))("1")>, null=<(toStringLiteral.(type))("0")>}".equals(map2.toString())
+                        || "{null=<(toStringLiteral.(type))("0")>, 1=<(toStringLiteral.(type))("1")>}".equals(map2.toString()));
     }
 
 

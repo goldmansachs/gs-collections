@@ -185,28 +185,28 @@ public abstract class AbstractObjectBooleanMapTestCase
     @Test
     public void testToString()
     {
-        Assert.assertEquals("[]", this.getEmptyMap().toString());
-        Assert.assertEquals("[0=false]", this.newWithKeysValues(0, false).toString());
-        Assert.assertEquals("[1=true]", this.newWithKeysValues(1, true).toString());
-        Assert.assertEquals("[5=true]", this.newWithKeysValues(5, true).toString());
+        Assert.assertEquals("{}", this.getEmptyMap().toString());
+        Assert.assertEquals("{0=false}", this.newWithKeysValues(0, false).toString());
+        Assert.assertEquals("{1=true}", this.newWithKeysValues(1, true).toString());
+        Assert.assertEquals("{5=true}", this.newWithKeysValues(5, true).toString());
 
         ObjectBooleanMap<Integer> map1 = this.newWithKeysValues(0, true, 1, false);
         Assert.assertTrue(
                 map1.toString(),
-                "[0=true, 1=false]".equals(map1.toString())
-                        || "[1=false, 0=true]".equals(map1.toString()));
+                "{0=true, 1=false}".equals(map1.toString())
+                        || "{1=false, 0=true}".equals(map1.toString()));
 
         ObjectBooleanMap<Integer> map2 = this.newWithKeysValues(1, false, null, true);
         Assert.assertTrue(
                 map2.toString(),
-                "[1=false, null=true]".equals(map2.toString())
-                        || "[null=true, 1=false]".equals(map2.toString()));
+                "{1=false, null=true}".equals(map2.toString())
+                        || "{null=true, 1=false}".equals(map2.toString()));
 
         ObjectBooleanMap<Integer> map3 = this.newWithKeysValues(1, true, null, true);
         Assert.assertTrue(
                 map3.toString(),
-                "[1=true, null=true]".equals(map3.toString())
-                        || "[null=true, 1=true]".equals(map3.toString()));
+                "{1=true, null=true}".equals(map3.toString())
+                        || "{null=true, 1=true}".equals(map3.toString()));
     }
 
     @Test

@@ -474,7 +474,7 @@ final class Immutable<name>ObjectEmptyMap\<V> implements Immutable<name>ObjectMa
     @Override
     public String toString()
     {
-        return "[]";
+        return "{}";
     }
 
     public String makeString()

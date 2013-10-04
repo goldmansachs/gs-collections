@@ -236,7 +236,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
     @Override
     public String toString()
     {
-        return this.makeString("[", ", ", "]");
+        return this.makeString("{", ", ", "}");
     }
 
     public int size()

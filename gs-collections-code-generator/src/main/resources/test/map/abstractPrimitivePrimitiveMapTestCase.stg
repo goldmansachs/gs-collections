@@ -232,34 +232,34 @@ public abstract class Abstract<name1><name2>MapTestCase
     @Test
     public void testToString()
     {
-        Assert.assertEquals("[]", this.getEmptyMap().toString());
-        Assert.assertEquals("[<(toStringLiteral.(type1))("0")>=<(toStringLiteral.(type2))("0")>]", this.newWithKeysValues(<["0"]:keyValue(); separator=", ">).toString());
-        Assert.assertEquals("[<(toStringLiteral.(type1))("1")>=<(toStringLiteral.(type2))("1")>]", this.newWithKeysValues(<["1"]:keyValue(); separator=", ">).toString());
-        Assert.assertEquals("[<(toStringLiteral.(type1))("5")>=<(toStringLiteral.(type2))("5")>]", this.newWithKeysValues(<["5"]:keyValue(); separator=", ">).toString());
+        Assert.assertEquals("{}", this.getEmptyMap().toString());
+        Assert.assertEquals("{<(toStringLiteral.(type1))("0")>=<(toStringLiteral.(type2))("0")>}", this.newWithKeysValues(<["0"]:keyValue(); separator=", ">).toString());
+        Assert.assertEquals("{<(toStringLiteral.(type1))("1")>=<(toStringLiteral.(type2))("1")>}", this.newWithKeysValues(<["1"]:keyValue(); separator=", ">).toString());
+        Assert.assertEquals("{<(toStringLiteral.(type1))("5")>=<(toStringLiteral.(type2))("5")>}", this.newWithKeysValues(<["5"]:keyValue(); separator=", ">).toString());
 
         <name1><name2>Map map1 = this.newWithKeysValues(<["0", "1"]:keyValue(); separator=", ">);
         Assert.assertTrue(
                 map1.toString(),
-                "[<(toStringLiteral.(type1))("0")>=<(toStringLiteral.(type2))("0")>, <(toStringLiteral.(type1))("1")>=<(toStringLiteral.(type2))("1")>]".equals(map1.toString())
-                        || "[<(toStringLiteral.(type1))("1")>=<(toStringLiteral.(type2))("1")>, <(toStringLiteral.(type1))("0")>=<(toStringLiteral.(type2))("0")>]".equals(map1.toString()));
+                "{<(toStringLiteral.(type1))("0")>=<(toStringLiteral.(type2))("0")>, <(toStringLiteral.(type1))("1")>=<(toStringLiteral.(type2))("1")>}".equals(map1.toString())
+                        || "{<(toStringLiteral.(type1))("1")>=<(toStringLiteral.(type2))("1")>, <(toStringLiteral.(type1))("0")>=<(toStringLiteral.(type2))("0")>}".equals(map1.toString()));
 
         <name1><name2>Map map2 = this.newWithKeysValues(<["1", "32"]:keyValue(); separator=", ">);
         Assert.assertTrue(
                 map2.toString(),
-                "[<(toStringLiteral.(type1))("1")>=<(toStringLiteral.(type2))("1")>, <(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>]".equals(map2.toString())
-                        || "[<(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>, <(toStringLiteral.(type1))("1")>=<(toStringLiteral.(type2))("1")>]".equals(map2.toString()));
+                "{<(toStringLiteral.(type1))("1")>=<(toStringLiteral.(type2))("1")>, <(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>}".equals(map2.toString())
+                        || "{<(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>, <(toStringLiteral.(type1))("1")>=<(toStringLiteral.(type2))("1")>}".equals(map2.toString()));
 
         <name1><name2>Map map3 = this.newWithKeysValues(<["0", "32"]:keyValue(); separator=", ">);
         Assert.assertTrue(
                 map3.toString(),
-                "[<(toStringLiteral.(type1))("0")>=<(toStringLiteral.(type2))("0")>, <(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>]".equals(map3.toString())
-                        || "[<(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>, <(toStringLiteral.(type1))("0")>=<(toStringLiteral.(type2))("0")>]".equals(map3.toString()));
+                "{<(toStringLiteral.(type1))("0")>=<(toStringLiteral.(type2))("0")>, <(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>}".equals(map3.toString())
+                        || "{<(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>, <(toStringLiteral.(type1))("0")>=<(toStringLiteral.(type2))("0")>}".equals(map3.toString()));
 
         <name1><name2>Map map4 = this.newWithKeysValues(<["32", "33"]:keyValue(); separator=", ">);
         Assert.assertTrue(
                 map4.toString(),
-                "[<(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>, <(toStringLiteral.(type1))("33")>=<(toStringLiteral.(type2))("33")>]".equals(map4.toString())
-                        || "[<(toStringLiteral.(type1))("33")>=<(toStringLiteral.(type2))("33")>, <(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>]".equals(map4.toString()));
+                "{<(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>, <(toStringLiteral.(type1))("33")>=<(toStringLiteral.(type2))("33")>}".equals(map4.toString())
+                        || "{<(toStringLiteral.(type1))("33")>=<(toStringLiteral.(type2))("33")>, <(toStringLiteral.(type1))("32")>=<(toStringLiteral.(type2))("32")>}".equals(map4.toString()));
     }
 
     @Test

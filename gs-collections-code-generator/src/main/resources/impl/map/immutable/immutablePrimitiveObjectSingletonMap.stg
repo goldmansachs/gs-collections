@@ -238,7 +238,7 @@ final class Immutable<name>ObjectSingletonMap\<V> extends AbstractImmutable<name
     @Override
     public String toString()
     {
-        return this.makeString("[", ", ", "]");
+        return this.makeString("{", ", ", "}");
     }
 
     public boolean isEmpty()

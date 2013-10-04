@@ -293,7 +293,7 @@ final class Immutable<name1><name2>EmptyMap implements Immutable<name1><name2>Ma
     @Override
     public String toString()
     {
-        return "[]";
+        return "{}";
     }
 
     public String makeString()

@@ -613,7 +613,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
     @Override
     public String toString()
     {
-        return this.makeString("[", ", ", "]");
+        return this.makeString("{", ", ", "}");
     }
 
     public ObjectBooleanHashMap<K> select(ObjectBooleanPredicate<? super K> predicate)

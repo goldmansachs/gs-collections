@@ -1568,34 +1568,34 @@ public abstract class Abstract<name>ObjectMapTestCase
     @Test
     public void testToString()
     {
-        Assert.assertEquals("[]", this.getEmptyMap().toString());
-        Assert.assertEquals("[<(toStringLiteral.(type))("0")>=zero]", this.newWithKeysValues(<(literal.(type))("0")>, "zero").toString());
-        Assert.assertEquals("[<(toStringLiteral.(type))("1")>=one]", this.newWithKeysValues(<(literal.(type))("1")>, "one").toString());
-        Assert.assertEquals("[<(toStringLiteral.(type))("5")>=five]", this.newWithKeysValues(<(literal.(type))("5")>, "five").toString());
+        Assert.assertEquals("{}", this.getEmptyMap().toString());
+        Assert.assertEquals("{<(toStringLiteral.(type))("0")>=zero}", this.newWithKeysValues(<(literal.(type))("0")>, "zero").toString());
+        Assert.assertEquals("{<(toStringLiteral.(type))("1")>=one}", this.newWithKeysValues(<(literal.(type))("1")>, "one").toString());
+        Assert.assertEquals("{<(toStringLiteral.(type))("5")>=five}", this.newWithKeysValues(<(literal.(type))("5")>, "five").toString());
 
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one");
         Assert.assertTrue(
                 map1.toString(),
-                "[<(toStringLiteral.(type))("0")>=zero, <(toStringLiteral.(type))("1")>=one]".equals(map1.toString())
-                        || "[<(toStringLiteral.(type))("1")>=one, <(toStringLiteral.(type))("0")>=zero]".equals(map1.toString()));
+                "{<(toStringLiteral.(type))("0")>=zero, <(toStringLiteral.(type))("1")>=one}".equals(map1.toString())
+                        || "{<(toStringLiteral.(type))("1")>=one, <(toStringLiteral.(type))("0")>=zero}".equals(map1.toString()));
 
         <name>ObjectMap\<String> map2 = this.newWithKeysValues(<(literal.(type))("1")>, "one", <(literal.(type))("32")>, "thirtyTwo");
         Assert.assertTrue(
                 map2.toString(),
-                "[<(toStringLiteral.(type))("1")>=one, <(toStringLiteral.(type))("32")>=thirtyTwo]".equals(map2.toString())
-                        || "[<(toStringLiteral.(type))("32")>=thirtyTwo, <(toStringLiteral.(type))("1")>=one]".equals(map2.toString()));
+                "{<(toStringLiteral.(type))("1")>=one, <(toStringLiteral.(type))("32")>=thirtyTwo}".equals(map2.toString())
+                        || "{<(toStringLiteral.(type))("32")>=thirtyTwo, <(toStringLiteral.(type))("1")>=one}".equals(map2.toString()));
 
         <name>ObjectMap\<String> map3 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("32")>, "thirtyTwo");
         Assert.assertTrue(
                 map3.toString(),
-                "[<(toStringLiteral.(type))("0")>=zero, <(toStringLiteral.(type))("32")>=thirtyTwo]".equals(map3.toString())
-                        || "[<(toStringLiteral.(type))("32")>=thirtyTwo, <(toStringLiteral.(type))("0")>=zero]".equals(map3.toString()));
+                "{<(toStringLiteral.(type))("0")>=zero, <(toStringLiteral.(type))("32")>=thirtyTwo}".equals(map3.toString())
+                        || "{<(toStringLiteral.(type))("32")>=thirtyTwo, <(toStringLiteral.(type))("0")>=zero}".equals(map3.toString()));
 
         <name>ObjectMap\<String> map4 = this.newWithKeysValues(<(literal.(type))("32")>, "thirtyTwo", <(literal.(type))("33")>, "thirtyThree");
         Assert.assertTrue(
                 map4.toString(),
-                "[<(toStringLiteral.(type))("32")>=thirtyTwo, <(toStringLiteral.(type))("33")>=thirtyThree]".equals(map4.toString())
-                        || "[<(toStringLiteral.(type))("33")>=thirtyThree, <(toStringLiteral.(type))("32")>=thirtyTwo]".equals(map4.toString()));
+                "{<(toStringLiteral.(type))("32")>=thirtyTwo, <(toStringLiteral.(type))("33")>=thirtyThree}".equals(map4.toString())
+                        || "{<(toStringLiteral.(type))("33")>=thirtyThree, <(toStringLiteral.(type))("32")>=thirtyTwo}".equals(map4.toString()));
     }
 
     @Test
