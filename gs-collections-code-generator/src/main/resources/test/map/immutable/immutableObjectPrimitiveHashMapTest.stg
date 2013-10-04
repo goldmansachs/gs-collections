@@ -20,9 +20,11 @@ body(type, name, wrapperName) ::= <<
 
 package com.gs.collections.impl.map.immutable.primitive;
 
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.map.primitive.ImmutableObject<name>Map;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.primitive.Object<name>HashMap;
+import com.gs.collections.impl.math.Mutable<wrapperName>;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -66,6 +68,20 @@ public class ImmutableObject<name>HashMapTest extends AbstractImmutableObject<na
         Assert.assertEquals(expected, map1.newWithoutAllKeys(FastList.newListWith("0", "2")));
         Assert.assertNotSame(map1, map1.newWithoutAllKeys(FastList.newListWith("0", "2")));
         Assert.assertEquals(this.classUnderTest(), map1);
+    }
+
+    @Test
+    public void injectInto()
+    {
+        ImmutableObject<name>HashMap\<String> iterable = new ImmutableObject<name>HashMap\<String>(Object<name>HashMap.newWithKeysValues("3", <(literal.(type))("3")>, "1", <(literal.(type))("1")>, "2", <(literal.(type))("2")>));
+        Mutable<wrapperName> result = iterable.injectInto(new Mutable<wrapperName>(<(literal.(type))("0")>), new Object<name>ToObjectFunction\<Mutable<wrapperName>, Mutable<wrapperName>\>()
+        {
+            public Mutable<wrapperName> valueOf(Mutable<wrapperName> object, <type> value)
+            {
+                return object.add(value);
+            }
+        });
+        Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("6")>), result);
     }
 }
 

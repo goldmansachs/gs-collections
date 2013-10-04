@@ -17,6 +17,7 @@
 package com.gs.collections.impl.bag.immutable.primitive;
 
 import com.gs.collections.api.bag.primitive.ImmutableBooleanBag;
+import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.BooleanIntProcedure;
 import com.gs.collections.impl.factory.primitive.BooleanBags;
 import com.gs.collections.impl.test.Verify;
@@ -55,5 +56,24 @@ public class ImmutableBooleanSingletonBagTest extends AbstractImmutableBooleanBa
     public void size()
     {
         Verify.assertSize(1, this.classUnderTest());
+    }
+
+    @Test
+    public void injectInto()
+    {
+        ImmutableBooleanSingletonBag hashBag = new ImmutableBooleanSingletonBag(true);
+        Integer total = hashBag.injectInto(Integer.valueOf(0), new ObjectBooleanToObjectFunction<Integer, Integer>()
+        {
+            public Integer valueOf(Integer result, boolean value)
+            {
+                if (value)
+                {
+                    return result += 2;
+                }
+
+                return result;
+            }
+        });
+        Assert.assertEquals(Integer.valueOf(2), total);
     }
 }

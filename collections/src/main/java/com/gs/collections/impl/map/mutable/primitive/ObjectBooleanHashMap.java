@@ -1214,6 +1214,11 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
             return ObjectBooleanHashMap.this.detectIfNone(predicate, ifNone);
         }
 
+        public <T> T injectInto(T injectedValue, ObjectBooleanToObjectFunction<? super T, ? extends T> function)
+        {
+            return ObjectBooleanHashMap.this.injectInto(injectedValue, function);
+        }
+
         public <V> MutableCollection<V> collect(BooleanToObjectFunction<? extends V> function)
         {
             return ObjectBooleanHashMap.this.collect(function);

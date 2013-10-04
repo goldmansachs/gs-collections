@@ -19,8 +19,10 @@ body(type, wrapperName, name) ::= <<
 
 package com.gs.collections.impl.stack.immutable.primitive;
 
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.stack.primitive.Immutable<name>Stack;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
+import com.gs.collections.impl.math.Mutable<wrapperName>;
 import com.gs.collections.impl.stack.mutable.primitive.<name>ArrayStack;
 import org.junit.Assert;
 import org.junit.Test;
@@ -48,6 +50,20 @@ public class Immutable<name>ArrayStackTest extends AbstractImmutable<name>StackT
     public void newWithTopToBottom()
     {
         Assert.assertEquals(<name>ArrayStack.newStackFromTopToBottom(<["1", "2", "3"]:(literal.(type))(); separator=", ">), this.newWithTopToBottom(<["1", "2", "3"]:(literal.(type))(); separator=", ">));
+    }
+
+    @Test
+    public void injectInto()
+    {
+        Immutable<name>ArrayStack iterable = Immutable<name>ArrayStack.newStackWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
+        Mutable<wrapperName> result = iterable.injectInto(new Mutable<wrapperName>(<(literal.(type))("0")>), new Object<name>ToObjectFunction\<Mutable<wrapperName>, Mutable<wrapperName>\>()
+        {
+            public Mutable<wrapperName> valueOf(Mutable<wrapperName> object, <type> value)
+            {
+                return object.add(value);
+            }
+        });
+        Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("6")>), result);
     }
 }
 

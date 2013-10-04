@@ -17,10 +17,12 @@
 package com.gs.collections.impl.lazy.primitive;
 
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
+import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.math.MutableInteger;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -52,6 +54,19 @@ public class SelectBooleanIterableTest
             }
         });
         Assert.assertEquals("truetrue", concat[0]);
+    }
+
+    @Test
+    public void injectInto()
+    {
+        MutableInteger result = this.iterable.injectInto(new MutableInteger(0), new ObjectBooleanToObjectFunction<MutableInteger, MutableInteger>()
+        {
+            public MutableInteger valueOf(MutableInteger object, boolean value)
+            {
+                return object.add(value ? 1 : 0);
+            }
+        });
+        Assert.assertEquals(new MutableInteger(2), result);
     }
 
     @Test

@@ -23,6 +23,7 @@ import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
@@ -212,6 +213,11 @@ final class Immutable<name>EmptyStack implements Immutable<name>Stack, Serializa
     public boolean notEmpty()
     {
         return false;
+    }
+
+    public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
+    {
+        return injectedValue;
     }
 
     @Override

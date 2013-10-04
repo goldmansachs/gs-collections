@@ -32,6 +32,7 @@ import com.gs.collections.api.Lazy<name2>Iterable;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.Lazy<name1>Iterable;<endif>
 import com.gs.collections.api.bag.primitive.Mutable<name2>Bag;
 import com.gs.collections.api.block.function.primitive.<name2>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.Object<name2>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name2>Predicate;
 import com.gs.collections.api.block.predicate.primitive.<name1><name2>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name2>Procedure;
@@ -119,6 +120,11 @@ final class Immutable<name1><name2>HashMap implements Immutable<name1><name2>Map
     public Immutable<name1><name2>Map reject(<name1><name2>Predicate predicate)
     {
         return this.delegate.reject(predicate).toImmutable();
+    }
+
+    public \<T> T injectInto(T injectedValue, Object<name2>ToObjectFunction\<? super T, ? extends T> function)
+    {
+        return ((<name1><name2>HashMap) this.delegate).injectInto(injectedValue, function);
     }
 
     public Immutable<name1><name2>Map toImmutable()

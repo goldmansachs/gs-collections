@@ -25,6 +25,7 @@ import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.bag.primitive.MutableBooleanBag;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
+import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
 import com.gs.collections.api.block.procedure.Procedure2;
@@ -165,6 +166,16 @@ public class CollectBooleanIterable<T>
     public <V> LazyIterable<V> collect(BooleanToObjectFunction<? extends V> function)
     {
         return new CollectBooleanToObjectIterable<V>(this, function);
+    }
+
+    public <T> T injectInto(T injectedValue, ObjectBooleanToObjectFunction<? super T, ? extends T> function)
+    {
+        T result = injectedValue;
+        for (BooleanIterator iterator = this.booleanIterator(); iterator.hasNext(); )
+        {
+            result = function.valueOf(result, iterator.next());
+        }
+        return result;
     }
 
     public boolean[] toArray()

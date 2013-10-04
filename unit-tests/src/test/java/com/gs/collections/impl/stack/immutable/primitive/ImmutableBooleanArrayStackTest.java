@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.stack.immutable.primitive;
 
+import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
 import com.gs.collections.api.stack.primitive.ImmutableBooleanStack;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.stack.mutable.primitive.BooleanArrayStack;
@@ -43,5 +44,24 @@ public class ImmutableBooleanArrayStackTest extends AbstractImmutableBooleanStac
     public void newWithTopToBottom()
     {
         Assert.assertEquals(BooleanArrayStack.newStackFromTopToBottom(true, true, false), this.newWithTopToBottom(true, true, false));
+    }
+
+    @Test
+    public void injectInto()
+    {
+        ImmutableBooleanArrayStack stack = ImmutableBooleanArrayStack.newStack(BooleanArrayStack.newStackFromTopToBottom(true, true, false, true, false));
+        Integer total = stack.injectInto(Integer.valueOf(0), new ObjectBooleanToObjectFunction<Integer, Integer>()
+        {
+            public Integer valueOf(Integer result, boolean value)
+            {
+                if (value)
+                {
+                    return result += 2;
+                }
+
+                return result;
+            }
+        });
+        Assert.assertEquals(Integer.valueOf(6), total);
     }
 }

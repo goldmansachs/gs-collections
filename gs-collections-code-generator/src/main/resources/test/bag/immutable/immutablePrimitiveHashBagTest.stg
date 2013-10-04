@@ -19,7 +19,11 @@ body(type, name, wrapperName) ::= <<
 package com.gs.collections.impl.bag.immutable.primitive;
 
 import com.gs.collections.api.bag.primitive.Immutable<name>Bag;
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.impl.factory.primitive.<name>Bags;
+import com.gs.collections.impl.math.Mutable<wrapperName>;
+import org.junit.Assert;
+import org.junit.Test;
 
 /**
  * JUnit test for {@link Immutable<name>HashBag}.
@@ -31,6 +35,20 @@ public class Immutable<name>HashBagTest extends AbstractImmutable<name>BagTestCa
     protected final Immutable<name>Bag classUnderTest()
     {
         return <name>Bags.immutable.of(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
+    }
+
+    @Test
+    public void injectInto()
+    {
+        Immutable<name>HashBag iterable = Immutable<name>HashBag.newBagWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
+        Mutable<wrapperName> result = iterable.injectInto(new Mutable<wrapperName>(<(literal.(type))("0")>), new Object<name>ToObjectFunction\<Mutable<wrapperName>, Mutable<wrapperName>\>()
+        {
+            public Mutable<wrapperName> valueOf(Mutable<wrapperName> object, <type> value)
+            {
+                return object.add(value);
+            }
+        });
+        Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("6")>), result);
     }
 }
 >>

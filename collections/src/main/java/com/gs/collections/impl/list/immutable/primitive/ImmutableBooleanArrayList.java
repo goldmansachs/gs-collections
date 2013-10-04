@@ -28,6 +28,7 @@ import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.LazyBooleanIterable;
 import com.gs.collections.api.bag.primitive.MutableBooleanBag;
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
+import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
@@ -424,6 +425,16 @@ final class ImmutableBooleanArrayList
             hashCode = 31 * hashCode + (item ? 1231 : 1237);
         }
         return hashCode;
+    }
+
+    public <T> T injectInto(T injectedValue, ObjectBooleanToObjectFunction<? super T, ? extends T> function)
+    {
+        T result = injectedValue;
+        for (int i = 0; i < this.size; i++)
+        {
+            result = function.valueOf(result, this.items.get(i));
+        }
+        return result;
     }
 
     @Override

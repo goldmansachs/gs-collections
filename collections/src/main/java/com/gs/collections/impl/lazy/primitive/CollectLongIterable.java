@@ -28,6 +28,7 @@ import com.gs.collections.api.bag.primitive.MutableLongBag;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.function.primitive.LongToObjectFunction;
+import com.gs.collections.api.block.function.primitive.ObjectLongToObjectFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.primitive.LongPredicate;
 import com.gs.collections.api.block.procedure.Procedure2;
@@ -271,6 +272,16 @@ public class CollectLongIterable<T>
         long[] array = this.toArray();
         Arrays.sort(array);
         return array;
+    }
+
+    public <T> T injectInto(T injectedValue, ObjectLongToObjectFunction<? super T, ? extends T> function)
+    {
+        T result = injectedValue;
+        for (LongIterator iterator = this.longIterator(); iterator.hasNext(); )
+        {
+            result = function.valueOf(result, iterator.next());
+        }
+        return result;
     }
 
     @Override

@@ -18,7 +18,7 @@ import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 
 /**
- * This file was automatically generated from template file primitiveLazyIterable.stg.
+ * This file was automatically generated from template file lazyPrimitiveIterable.stg.
  */
 public interface Lazy<name>Iterable extends <name>Iterable
 {

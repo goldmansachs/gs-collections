@@ -17,6 +17,9 @@
 package com.gs.collections.impl.bag.immutable.primitive;
 
 import com.gs.collections.api.bag.primitive.ImmutableBooleanBag;
+import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
+import org.junit.Assert;
+import org.junit.Test;
 
 public class ImmutableBooleanHashBagTest extends AbstractImmutableBooleanBagTestCase
 {
@@ -24,5 +27,24 @@ public class ImmutableBooleanHashBagTest extends AbstractImmutableBooleanBagTest
     protected ImmutableBooleanBag classUnderTest()
     {
         return ImmutableBooleanHashBag.newBagWith(true, false, true);
+    }
+
+    @Test
+    public void injectInto()
+    {
+        ImmutableBooleanHashBag hashBag = ImmutableBooleanHashBag.newBagWith(true, true, true, false, false, true);
+        Integer total = hashBag.injectInto(Integer.valueOf(2), new ObjectBooleanToObjectFunction<Integer, Integer>()
+        {
+            public Integer valueOf(Integer result, boolean value)
+            {
+                if (value)
+                {
+                    return result += 2;
+                }
+
+                return result;
+            }
+        });
+        Assert.assertEquals(Integer.valueOf(10), total);
     }
 }

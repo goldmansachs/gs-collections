@@ -22,9 +22,11 @@ package com.gs.collections.impl.stack.immutable.primitive;
 import java.util.EmptyStackException;
 import java.util.NoSuchElementException;
 
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.stack.primitive.Immutable<name>Stack;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
+import com.gs.collections.impl.math.Mutable<wrapperName>;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -147,6 +149,20 @@ public class Immutable<name>EmptyStackTest extends AbstractImmutable<name>StackT
     {
         super.testEquals();
         Verify.assertPostSerializedIdentity(this.classUnderTest());
+    }
+
+    @Test
+    public void injectInto()
+    {
+        Immutable<name>EmptyStack iterable = new Immutable<name>EmptyStack();
+        Mutable<wrapperName> result = iterable.injectInto(new Mutable<wrapperName>(<(literal.(type))("0")>), new Object<name>ToObjectFunction\<Mutable<wrapperName>, Mutable<wrapperName>\>()
+        {
+            public Mutable<wrapperName> valueOf(Mutable<wrapperName> object, <type> value)
+            {
+                return object.add(value);
+            }
+        });
+        Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("0")>), result);
     }
 }
 

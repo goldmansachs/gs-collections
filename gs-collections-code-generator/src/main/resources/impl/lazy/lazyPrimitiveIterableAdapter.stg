@@ -29,7 +29,7 @@ import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
 
 /**
- * This file was automatically generated from template file primitiveLazyIterableAdapter.stg.
+ * This file was automatically generated from template file lazyPrimitiveIterableAdapter.stg.
  *
  * @since 3.0
  */

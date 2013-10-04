@@ -1655,6 +1655,11 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
             return Object<name>HashMap.this.collect(function);
         }
 
+        public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
+        {
+            return Object<name>HashMap.this.injectInto(injectedValue, function);
+        }
+
         public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
         {
             return Object<name>HashMap.this.detectIfNone(predicate, ifNone);

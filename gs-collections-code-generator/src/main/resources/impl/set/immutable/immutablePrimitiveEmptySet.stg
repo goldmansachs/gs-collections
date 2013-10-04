@@ -28,6 +28,7 @@ import com.gs.collections.api.set.primitive.Immutable<name>Set;
 import com.gs.collections.api.set.primitive.<name>Set;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
@@ -156,6 +157,11 @@ final class Immutable<name>EmptySet implements Immutable<name>Set, Serializable
     public boolean allSatisfy(<name>Predicate predicate)
     {
         return true;
+    }
+
+    public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
+    {
+        return injectedValue;
     }
 
     @Override

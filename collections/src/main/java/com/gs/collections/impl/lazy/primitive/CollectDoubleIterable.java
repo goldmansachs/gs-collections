@@ -28,6 +28,7 @@ import com.gs.collections.api.bag.primitive.MutableDoubleBag;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.DoubleToObjectFunction;
+import com.gs.collections.api.block.function.primitive.ObjectDoubleToObjectFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.primitive.DoublePredicate;
 import com.gs.collections.api.block.procedure.Procedure2;
@@ -271,6 +272,16 @@ public class CollectDoubleIterable<T>
         double[] array = this.toArray();
         Arrays.sort(array);
         return array;
+    }
+
+    public <T> T injectInto(T injectedValue, ObjectDoubleToObjectFunction<? super T, ? extends T> function)
+    {
+        T result = injectedValue;
+        for (DoubleIterator iterator = this.doubleIterator(); iterator.hasNext(); )
+        {
+            result = function.valueOf(result, iterator.next());
+        }
+        return result;
     }
 
     @Override

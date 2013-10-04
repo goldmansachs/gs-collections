@@ -22,6 +22,7 @@ package com.gs.collections.impl.map.immutable.primitive;
 
 import java.util.NoSuchElementException;
 
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.predicate.primitive.Object<name>Predicate;
 import com.gs.collections.api.iterator.<name>Iterator;
@@ -31,6 +32,7 @@ import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.map.mutable.primitive.Object<name>HashMap;
+import com.gs.collections.impl.math.Mutable<wrapperName>;
 import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -446,6 +448,20 @@ public class ImmutableObject<name>SingletonMapTest extends AbstractImmutableObje
                 return false;
             }
         }));
+    }
+
+    @Test
+    public void injectInto()
+    {
+        ImmutableObject<name>SingletonMap\<String> iterable = new ImmutableObject<name>SingletonMap\<String>("1", <(literal.(type))("1")>);
+        Mutable<wrapperName> result = iterable.injectInto(new Mutable<wrapperName>(<(literal.(type))("1")>), new Object<name>ToObjectFunction\<Mutable<wrapperName>, Mutable<wrapperName>\>()
+        {
+            public Mutable<wrapperName> valueOf(Mutable<wrapperName> object, <type> value)
+            {
+                return object.add(value);
+            }
+        });
+        Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("2")>), result);
     }
 }
 

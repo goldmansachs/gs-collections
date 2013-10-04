@@ -25,6 +25,7 @@ package com.gs.collections.impl.map.immutable.primitive;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
 
+import com.gs.collections.api.block.function.primitive.Object<name2>ToObjectFunction;
 import com.gs.collections.api.<name2>Iterable;
 import com.gs.collections.api.block.predicate.primitive.<name1><name2>Predicate;
 import com.gs.collections.api.iterator.<name2>Iterator;
@@ -35,6 +36,7 @@ import com.gs.collections.impl.factory.primitive.<name1><name2>Maps;
 import com.gs.collections.impl.list.mutable.primitive.<name1>ArrayList;
 <if(!sameTwoPrimitives)>import com.gs.collections.impl.list.mutable.primitive.<name2>ArrayList;<endif>
 import com.gs.collections.impl.map.mutable.primitive.<name1><name2>HashMap;
+import com.gs.collections.impl.math.Mutable<primitive2.wrapperName>;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -285,6 +287,20 @@ public class Immutable<name1><name2>SingletonMapTest extends AbstractImmutable<n
     {
         Assert.assertEquals(0, this.classUnderTest().count(<name2>Predicates.equal(<(literal.(type2))("1")>)));
         Assert.assertEquals(1, this.classUnderTest().count(<name2>Predicates.equal(<(literal.(type2))("0")>)));
+    }
+
+    @Test
+    public void injectInto()
+    {
+        Immutable<name1><name2>SingletonMap iterable = new Immutable<name1><name2>SingletonMap(<["1"]:keyValue(); separator=", ">);
+        Mutable<primitive2.wrapperName> result = iterable.injectInto(new Mutable<primitive2.wrapperName>(<(literal.(type2))("0")>), new Object<name2>ToObjectFunction\<Mutable<primitive2.wrapperName>, Mutable<primitive2.wrapperName>\>()
+        {
+            public Mutable<primitive2.wrapperName> valueOf(Mutable<primitive2.wrapperName> object, <type2> value)
+            {
+                return object.add(value);
+            }
+        });
+        Assert.assertEquals(new Mutable<primitive2.wrapperName>(<(literal.(type2))("1")>), result);
     }
 }
 

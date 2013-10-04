@@ -41,6 +41,7 @@ import com.gs.collections.api.block.function.primitive.<name2>Function0;
 import com.gs.collections.api.block.function.primitive.<name2>To<name2>Function;
 import com.gs.collections.api.block.function.primitive.<name2>ToObjectFunction;
 import com.gs.collections.api.block.function.primitive.Object<name2>ToObjectFunction;
+<if(!sameTwoPrimitives)>import com.gs.collections.api.block.function.primitive.Object<name1>ToObjectFunction;<endif>
 import com.gs.collections.api.block.predicate.primitive.<name1><name2>Predicate;
 import com.gs.collections.api.block.predicate.primitive.<name1>Predicate;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.block.predicate.primitive.<name2>Predicate;<endif>
@@ -1596,6 +1597,30 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             return result;
         }
 
+        public \<T> T injectInto(T injectedValue, Object<name1>ToObjectFunction\<? super T, ? extends T> function)
+        {
+            T result = injectedValue;
+            if (<name1><name2>HashMap.this.sentinelValues != null)
+            {
+                if (<name1><name2>HashMap.this.sentinelValues.containsZeroKey)
+                {
+                    result = function.valueOf(result, EMPTY_KEY);
+                }
+                if (<name1><name2>HashMap.this.sentinelValues.containsOneKey)
+                {
+                    result = function.valueOf(result, REMOVED_KEY);
+                }
+            }
+            for (int i = 0; i \< <name1><name2>HashMap.this.keys.length; i++)
+            {
+                if (isNonSentinel(<name1><name2>HashMap.this.keys[i]))
+                {
+                    result = function.valueOf(result, <name1><name2>HashMap.this.keys[i]);
+                }
+            }
+            return result;
+        }
+
         public Mutable<name1>List toList()
         {
             return <name1>ArrayList.newList(this);
@@ -2153,6 +2178,30 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             return new Lazy<name1>IterableAdapter(this);
         }
 
+        public \<T> T injectInto(T injectedValue, Object<name1>ToObjectFunction\<? super T, ? extends T> function)
+        {
+            T result = injectedValue;
+            if (<name1><name2>HashMap.this.sentinelValues != null)
+            {
+                if (<name1><name2>HashMap.this.sentinelValues.containsZeroKey)
+                {
+                    result = function.valueOf(result, EMPTY_KEY);
+                }
+                if (<name1><name2>HashMap.this.sentinelValues.containsOneKey)
+                {
+                    result = function.valueOf(result, REMOVED_KEY);
+                }
+            }
+            for (int i = 0; i \< <name1><name2>HashMap.this.keys.length; i++)
+            {
+                if (isNonSentinel(<name1><name2>HashMap.this.keys[i]))
+                {
+                    result = function.valueOf(result, <name1><name2>HashMap.this.keys[i]);
+                }
+            }
+            return result;
+        }
+
         public <name1>Set freeze()
         {
             throw new UnsupportedOperationException();
@@ -2329,6 +2378,11 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         public \<V> MutableCollection\<V> collect(<name2>ToObjectFunction\<? extends V> function)
         {
             return <name1><name2>HashMap.this.collect(function);
+        }
+
+        public \<T> T injectInto(T injectedValue, Object<name2>ToObjectFunction\<? super T, ? extends T> function)
+        {
+            return <name1><name2>HashMap.this.injectInto(injectedValue, function);
         }
 
         public <wideType.(type2)> sum()

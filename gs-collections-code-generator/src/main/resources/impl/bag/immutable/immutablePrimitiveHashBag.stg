@@ -27,6 +27,7 @@ import com.gs.collections.api.bag.primitive.<name>Bag;
 import com.gs.collections.api.bag.primitive.Immutable<name>Bag;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
@@ -187,6 +188,11 @@ final class Immutable<name>HashBag implements Immutable<name>Bag, Serializable
     public boolean allSatisfy(<name>Predicate predicate)
     {
         return this.delegate.allSatisfy(predicate);
+    }
+
+    public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
+    {
+        return ((<name>HashBag) this.delegate).injectInto(injectedValue, function);
     }
 
     @Override

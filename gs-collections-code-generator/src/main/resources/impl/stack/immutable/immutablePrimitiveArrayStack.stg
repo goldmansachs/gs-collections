@@ -26,6 +26,7 @@ import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
@@ -260,6 +261,11 @@ class Immutable<name>ArrayStack
     public Mutable<name>Bag toBag()
     {
         return <name>HashBag.newBag(this);
+    }
+
+    public \<V> V injectInto(V injectedValue, Object<name>ToObjectFunction\<? super V, ? extends V> function)
+    {
+        return this.delegate.toReversed().injectInto(injectedValue, function);
     }
 
     public Lazy<name>Iterable asLazy()

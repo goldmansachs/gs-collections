@@ -28,6 +28,7 @@ import com.gs.collections.api.bag.primitive.MutableFloatBag;
 import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
 import com.gs.collections.api.block.function.primitive.FloatToObjectFunction;
+import com.gs.collections.api.block.function.primitive.ObjectFloatToObjectFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.primitive.FloatPredicate;
 import com.gs.collections.api.block.procedure.Procedure2;
@@ -271,6 +272,16 @@ public class CollectFloatIterable<T>
         float[] array = this.toArray();
         Arrays.sort(array);
         return array;
+    }
+
+    public <T> T injectInto(T injectedValue, ObjectFloatToObjectFunction<? super T, ? extends T> function)
+    {
+        T result = injectedValue;
+        for (FloatIterator iterator = this.floatIterator(); iterator.hasNext(); )
+        {
+            result = function.valueOf(result, iterator.next());
+        }
+        return result;
     }
 
     @Override

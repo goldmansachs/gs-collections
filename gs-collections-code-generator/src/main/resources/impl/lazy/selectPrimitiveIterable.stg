@@ -24,6 +24,7 @@ import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
@@ -36,7 +37,7 @@ import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
 
 /**
- * This file was automatically generated from template file primitiveSelectIterable.stg.
+ * This file was automatically generated from template file selectPrimitiveIterable.stg.
  */
 public class Select<name>Iterable
     implements Lazy<name>Iterable
@@ -139,6 +140,16 @@ public class Select<name>Iterable
             }
         });
         return array;
+    }
+
+    public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
+    {
+        T result = injectedValue;
+        for (<name>Iterator iterator = this.<type>Iterator(); iterator.hasNext(); )
+        {
+            result = function.valueOf(result, iterator.next());
+        }
+        return result;
     }
 
     @Override

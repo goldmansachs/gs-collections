@@ -986,6 +986,16 @@ public final class BooleanArrayList
             return BooleanArrayList.this.notEmpty();
         }
 
+        public <T> T injectInto(T injectedValue, ObjectBooleanToObjectFunction<? super T, ? extends T> function)
+        {
+            T result = injectedValue;
+            for (BooleanIterator iterator = this.booleanIterator(); iterator.hasNext(); )
+            {
+                result = function.valueOf(injectedValue, iterator.next());
+            }
+            return result;
+        }
+
         @Override
         public String toString()
         {

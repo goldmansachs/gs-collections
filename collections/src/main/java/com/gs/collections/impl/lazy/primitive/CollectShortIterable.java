@@ -26,6 +26,7 @@ import com.gs.collections.api.LazyShortIterable;
 import com.gs.collections.api.ShortIterable;
 import com.gs.collections.api.bag.primitive.MutableShortBag;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
+import com.gs.collections.api.block.function.primitive.ObjectShortToObjectFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.function.primitive.ShortToObjectFunction;
 import com.gs.collections.api.block.predicate.Predicate;
@@ -273,6 +274,16 @@ public class CollectShortIterable<T>
         short[] array = this.toArray();
         Arrays.sort(array);
         return array;
+    }
+
+    public <T> T injectInto(T injectedValue, ObjectShortToObjectFunction<? super T, ? extends T> function)
+    {
+        T result = injectedValue;
+        for (ShortIterator iterator = this.shortIterator(); iterator.hasNext(); )
+        {
+            result = function.valueOf(result, iterator.next());
+        }
+        return result;
     }
 
     @Override

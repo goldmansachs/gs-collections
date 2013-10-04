@@ -28,6 +28,7 @@ import com.gs.collections.api.bag.primitive.MutableCharBag;
 import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.block.function.primitive.CharToObjectFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
+import com.gs.collections.api.block.function.primitive.ObjectCharToObjectFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.primitive.CharPredicate;
 import com.gs.collections.api.block.procedure.Procedure2;
@@ -273,6 +274,16 @@ public class CollectCharIterable<T>
         char[] array = this.toArray();
         Arrays.sort(array);
         return array;
+    }
+
+    public <T> T injectInto(T injectedValue, ObjectCharToObjectFunction<? super T, ? extends T> function)
+    {
+        T result = injectedValue;
+        for (CharIterator iterator = this.charIterator(); iterator.hasNext(); )
+        {
+            result = function.valueOf(result, iterator.next());
+        }
+        return result;
     }
 
     @Override

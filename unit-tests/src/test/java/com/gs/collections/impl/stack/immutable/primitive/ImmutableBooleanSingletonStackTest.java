@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.stack.immutable.primitive;
 
+import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
 import com.gs.collections.api.stack.primitive.ImmutableBooleanStack;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.stack.mutable.primitive.BooleanArrayStack;
@@ -90,5 +91,24 @@ public class ImmutableBooleanSingletonStackTest extends AbstractImmutableBoolean
         Assert.assertNotEquals(stack, BooleanArrayList.newListWith(true));
         Assert.assertEquals(stack, this.newWith(true));
         Assert.assertNotEquals(stack, this.newWith());
+    }
+
+    @Test
+    public void injectInto()
+    {
+        ImmutableBooleanSingletonStack stack = new ImmutableBooleanSingletonStack(true);
+        Integer total = stack.injectInto(Integer.valueOf(0), new ObjectBooleanToObjectFunction<Integer, Integer>()
+        {
+            public Integer valueOf(Integer result, boolean value)
+            {
+                if (value)
+                {
+                    return result += 2;
+                }
+
+                return result;
+            }
+        });
+        Assert.assertEquals(Integer.valueOf(2), total);
     }
 }

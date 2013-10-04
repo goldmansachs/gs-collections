@@ -28,6 +28,7 @@ import com.gs.collections.api.bag.primitive.MutableIntBag;
 import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntToObjectFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
+import com.gs.collections.api.block.function.primitive.ObjectIntToObjectFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.Procedure2;
@@ -271,6 +272,16 @@ public class CollectIntIterable<T>
         int[] array = this.toArray();
         Arrays.sort(array);
         return array;
+    }
+
+    public <T> T injectInto(T injectedValue, ObjectIntToObjectFunction<? super T, ? extends T> function)
+    {
+        T result = injectedValue;
+        for (IntIterator iterator = this.intIterator(); iterator.hasNext(); )
+        {
+            result = function.valueOf(result, iterator.next());
+        }
+        return result;
     }
 
     @Override

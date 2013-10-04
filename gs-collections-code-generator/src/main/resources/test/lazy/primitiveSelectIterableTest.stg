@@ -10,10 +10,10 @@ targetPath() ::= "com/gs/collections/impl/lazy/primitive"
 fileName(primitive) ::= "Select<primitive.name>IterableTest"
 
 class(primitive) ::= <<
-<body(primitive.type, primitive.name)>
+<body(primitive.type, primitive.name, primitive.wrapperName)>
 >>
 
-body(type, name) ::= <<
+body(type, name, wrapperName) ::= <<
 <copyright()>
 
 package com.gs.collections.impl.lazy.primitive;
@@ -22,11 +22,13 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
+import com.gs.collections.impl.math.Mutable<wrapperName>;
 import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -286,6 +288,19 @@ public class Select<name>IterableTest
         Assert.assertEquals(this.iterable.toSet(), this.iterable.asLazy().toSet());
         Verify.assertInstanceOf(Lazy<name>Iterable.class, this.iterable.asLazy());
         Assert.assertSame(this.iterable, this.iterable.asLazy());
+    }
+
+    @Test
+    public void injectInto()
+    {
+        Mutable<wrapperName> result = this.iterable.injectInto(new Mutable<wrapperName>(<(literal.(type))("0")>), new Object<name>ToObjectFunction\<Mutable<wrapperName>, Mutable<wrapperName>\>()
+        {
+            public Mutable<wrapperName> valueOf(Mutable<wrapperName> object, <type> value)
+            {
+                return object.add(value);
+            }
+        });
+        Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("3")>), result);
     }
 }
 >>
