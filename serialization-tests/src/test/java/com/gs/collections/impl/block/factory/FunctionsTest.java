@@ -277,6 +277,106 @@ public class FunctionsTest
     }
 
     @Test
+    public void chainBoolean()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAERjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9ucyRC\n"
+                        + "b29sZWFuRnVuY3Rpb25DaGFpbgAAAAAAAAABAgACTAAJZnVuY3Rpb24xdAAwTGNvbS9ncy9jb2xs\n"
+                        + "ZWN0aW9ucy9hcGkvYmxvY2svZnVuY3Rpb24vRnVuY3Rpb247TAAJZnVuY3Rpb24ydABBTGNvbS9n\n"
+                        + "cy9jb2xsZWN0aW9ucy9hcGkvYmxvY2svZnVuY3Rpb24vcHJpbWl0aXZlL0Jvb2xlYW5GdW5jdGlv\n"
+                        + "bjt4cHBw",
+                Functions.chainBoolean(null, null));
+    }
+
+    @Test
+    public void chainByte()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAEFjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9ucyRC\n"
+                        + "eXRlRnVuY3Rpb25DaGFpbgAAAAAAAAABAgACTAAJZnVuY3Rpb24xdAAwTGNvbS9ncy9jb2xsZWN0\n"
+                        + "aW9ucy9hcGkvYmxvY2svZnVuY3Rpb24vRnVuY3Rpb247TAAJZnVuY3Rpb24ydAA+TGNvbS9ncy9j\n"
+                        + "b2xsZWN0aW9ucy9hcGkvYmxvY2svZnVuY3Rpb24vcHJpbWl0aXZlL0J5dGVGdW5jdGlvbjt4cHBw\n",
+                Functions.chainByte(null, null));
+    }
+
+    @Test
+    public void chainChar()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAEFjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9ucyRD\n"
+                        + "aGFyRnVuY3Rpb25DaGFpbgAAAAAAAAABAgACTAAJZnVuY3Rpb24xdAAwTGNvbS9ncy9jb2xsZWN0\n"
+                        + "aW9ucy9hcGkvYmxvY2svZnVuY3Rpb24vRnVuY3Rpb247TAAJZnVuY3Rpb24ydAA+TGNvbS9ncy9j\n"
+                        + "b2xsZWN0aW9ucy9hcGkvYmxvY2svZnVuY3Rpb24vcHJpbWl0aXZlL0NoYXJGdW5jdGlvbjt4cHBw\n",
+                Functions.chainChar(null, null));
+    }
+
+    @Test
+    public void chainDouble()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAENjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9ucyRE\n"
+                        + "b3VibGVGdW5jdGlvbkNoYWluAAAAAAAAAAECAAJMAAlmdW5jdGlvbjF0ADBMY29tL2dzL2NvbGxl\n"
+                        + "Y3Rpb25zL2FwaS9ibG9jay9mdW5jdGlvbi9GdW5jdGlvbjtMAAlmdW5jdGlvbjJ0AEBMY29tL2dz\n"
+                        + "L2NvbGxlY3Rpb25zL2FwaS9ibG9jay9mdW5jdGlvbi9wcmltaXRpdmUvRG91YmxlRnVuY3Rpb247\n"
+                        + "eHBwcA==",
+                Functions.chainDouble(null, null));
+    }
+
+    @Test
+    public void chainFloat()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAEJjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9ucyRG\n"
+                        + "bG9hdEZ1bmN0aW9uQ2hhaW4AAAAAAAAAAQIAAkwACWZ1bmN0aW9uMXQAMExjb20vZ3MvY29sbGVj\n"
+                        + "dGlvbnMvYXBpL2Jsb2NrL2Z1bmN0aW9uL0Z1bmN0aW9uO0wACWZ1bmN0aW9uMnQAP0xjb20vZ3Mv\n"
+                        + "Y29sbGVjdGlvbnMvYXBpL2Jsb2NrL2Z1bmN0aW9uL3ByaW1pdGl2ZS9GbG9hdEZ1bmN0aW9uO3hw\n"
+                        + "cHA=",
+                Functions.chainFloat(null, null));
+    }
+
+    @Test
+    public void chainInt()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAEBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9ucyRJ\n"
+                        + "bnRGdW5jdGlvbkNoYWluAAAAAAAAAAECAAJMAAlmdW5jdGlvbjF0ADBMY29tL2dzL2NvbGxlY3Rp\n"
+                        + "b25zL2FwaS9ibG9jay9mdW5jdGlvbi9GdW5jdGlvbjtMAAlmdW5jdGlvbjJ0AD1MY29tL2dzL2Nv\n"
+                        + "bGxlY3Rpb25zL2FwaS9ibG9jay9mdW5jdGlvbi9wcmltaXRpdmUvSW50RnVuY3Rpb247eHBwcA==\n",
+                Functions.chainInt(null, null));
+    }
+
+    @Test
+    public void chainLong()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAEFjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9ucyRM\n"
+                        + "b25nRnVuY3Rpb25DaGFpbgAAAAAAAAABAgACTAAJZnVuY3Rpb24xdAAwTGNvbS9ncy9jb2xsZWN0\n"
+                        + "aW9ucy9hcGkvYmxvY2svZnVuY3Rpb24vRnVuY3Rpb247TAAJZnVuY3Rpb24ydAA+TGNvbS9ncy9j\n"
+                        + "b2xsZWN0aW9ucy9hcGkvYmxvY2svZnVuY3Rpb24vcHJpbWl0aXZlL0xvbmdGdW5jdGlvbjt4cHBw\n",
+                Functions.chainLong(null, null));
+    }
+
+    @Test
+    public void chainShort()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAEJjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9ucyRT\n"
+                        + "aG9ydEZ1bmN0aW9uQ2hhaW4AAAAAAAAAAQIAAkwACWZ1bmN0aW9uMXQAMExjb20vZ3MvY29sbGVj\n"
+                        + "dGlvbnMvYXBpL2Jsb2NrL2Z1bmN0aW9uL0Z1bmN0aW9uO0wACWZ1bmN0aW9uMnQAP0xjb20vZ3Mv\n"
+                        + "Y29sbGVjdGlvbnMvYXBpL2Jsb2NrL2Z1bmN0aW9uL3ByaW1pdGl2ZS9TaG9ydEZ1bmN0aW9uO3hw\n"
+                        + "cHA=",
+                Functions.chainShort(null, null));
+    }
+
+    @Test
     public void getOneFunction()
     {
         Verify.assertSerializedForm(

@@ -20,6 +20,14 @@ import java.util.Collections;
 import java.util.Map;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
@@ -231,6 +239,281 @@ public class FunctionsTest
     {
         Function<Integer, Boolean> chain = Functions.chain(IS_ODD, BOOLEAN_STRING).chain(STRING_LENGTH).chain(IS_ODD);
         Assert.assertEquals(Boolean.TRUE, chain.valueOf(Integer.valueOf(4)));
+    }
+
+    @Test
+    public void chainBoolean()
+    {
+        Function<String, Integer> toInteger = Functions.getStringToInteger();
+        BooleanFunction<Integer> integerToBool = new BooleanFunction<Integer>()
+        {
+            public boolean booleanValueOf(Integer integerObject)
+            {
+                return integerObject.intValue() >= 0;
+            }
+        };
+        Functions.BooleanFunctionChain<String, Integer> booleanFunctionChain = Functions.chainBoolean(toInteger, integerToBool);
+        Assert.assertTrue(booleanFunctionChain.booleanValueOf("45"));
+        Assert.assertFalse(booleanFunctionChain.booleanValueOf("-45"));
+    }
+
+    @Test
+    public void chainByte()
+    {
+        Function<String, Integer> toInteger = Functions.getStringToInteger();
+        ByteFunction<Integer> integerToByte = new ByteFunction<Integer>()
+        {
+            public byte byteValueOf(Integer integerObject)
+            {
+                return integerObject.byteValue();
+            }
+        };
+        Functions.ByteFunctionChain<String, Integer> byteFunctionChain = Functions.chainByte(toInteger, integerToByte);
+        Assert.assertEquals((byte) 45, byteFunctionChain.byteValueOf("45"));
+        Assert.assertEquals((byte) -45, byteFunctionChain.byteValueOf("-45"));
+    }
+
+    @Test
+    public void chainChar()
+    {
+        Function<Object, String> toString = Functions.getToString();
+        CharFunction<String> stringToChar = new CharFunction<String>()
+        {
+            public char charValueOf(String stringObject)
+            {
+                return stringObject.charAt(0);
+            }
+        };
+        Functions.CharFunctionChain<Object, String> charFunctionChain = Functions.chainChar(toString, stringToChar);
+        Assert.assertEquals('g', charFunctionChain.charValueOf("gscollections"));
+        Assert.assertEquals('-', charFunctionChain.charValueOf("-4"));
+    }
+
+    @Test
+    public void chainDouble()
+    {
+        Function<String, Integer> toInteger = Functions.getStringToInteger();
+        DoubleFunction<Integer> integerToDouble = new DoubleFunction<Integer>()
+        {
+            public double doubleValueOf(Integer integerObject)
+            {
+                return integerObject.doubleValue();
+            }
+        };
+        Functions.DoubleFunctionChain<String, Integer> doubleFunctionChain = Functions.chainDouble(toInteger, integerToDouble);
+        Assert.assertEquals(146.0, doubleFunctionChain.doubleValueOf("146"), 0.0);
+        Assert.assertEquals(-456.0, doubleFunctionChain.doubleValueOf("-456"), 0.0);
+    }
+
+    @Test
+    public void chainFloat()
+    {
+        Function<Integer, String> toString = new Function<Integer, String>()
+        {
+            public String valueOf(Integer object)
+            {
+                return String.valueOf(object);
+            }
+        };
+        FloatFunction<String> stringToFloat = new FloatFunction<String>()
+        {
+            public float floatValueOf(String stringObject)
+            {
+                return Float.valueOf(stringObject).floatValue();
+            }
+        };
+        Functions.FloatFunctionChain<Integer, String> floatFunctionChain = Functions.chainFloat(toString, stringToFloat);
+        Assert.assertEquals(146.0, floatFunctionChain.floatValueOf(146), 0.0);
+        Assert.assertEquals(-456.0, floatFunctionChain.floatValueOf(-456), 0.0);
+    }
+
+    @Test
+    public void chainInt()
+    {
+        Function<Float, String> toString = new Function<Float, String>()
+        {
+            public String valueOf(Float object)
+            {
+                return String.valueOf(object);
+            }
+        };
+        IntFunction<String> stringToLength = new IntegerFunctionImpl<String>()
+        {
+            public int intValueOf(String stringObject)
+            {
+                return stringObject.length();
+            }
+        };
+        Functions.IntFunctionChain<Float, String> intFunctionChain = Functions.chainInt(toString, stringToLength);
+        Assert.assertEquals(5, intFunctionChain.intValueOf(Float.valueOf(145)));
+        Assert.assertEquals(6, intFunctionChain.intValueOf(Float.valueOf(-145)));
+    }
+
+    @Test
+    public void chainLong()
+    {
+        Function<Float, String> toString = new Function<Float, String>()
+        {
+            public String valueOf(Float object)
+            {
+                return String.valueOf(object);
+            }
+        };
+        LongFunction<String> stringToLengthLong = new LongFunction<String>()
+        {
+            public long longValueOf(String stringObject)
+            {
+                return Long.valueOf(stringObject.length()).longValue();
+            }
+        };
+        Functions.LongFunctionChain<Float, String> longFunctionChain = Functions.chainLong(toString, stringToLengthLong);
+        Assert.assertEquals(5L, longFunctionChain.longValueOf(Float.valueOf(145)));
+        Assert.assertEquals(6L, longFunctionChain.longValueOf(Float.valueOf(-145)));
+    }
+
+    @Test
+    public void chainShort()
+    {
+        Function<Integer, String> toString = new Function<Integer, String>()
+        {
+            public String valueOf(Integer object)
+            {
+                return String.valueOf(object);
+            }
+        };
+        ShortFunction<String> stringToShort = new ShortFunction<String>()
+        {
+            public short shortValueOf(String stringObject)
+            {
+                return Short.valueOf(stringObject).shortValue();
+            }
+        };
+        Functions.ShortFunctionChain<Integer, String> shortFunctionChain = Functions.chainShort(toString, stringToShort);
+        Assert.assertEquals((short) 145, shortFunctionChain.shortValueOf(145));
+        Assert.assertEquals((short) -145, shortFunctionChain.shortValueOf(-145));
+    }
+
+    @Test
+    public void chain_two_chainBoolean()
+    {
+        Functions.FunctionChain<Boolean, String, Integer> chain = Functions.chain(BOOLEAN_STRING, STRING_LENGTH);
+        BooleanFunction<Integer> integerToBool = new BooleanFunction<Integer>()
+        {
+            public boolean booleanValueOf(Integer integerObject)
+            {
+                return integerObject.intValue() >= 0;
+            }
+        };
+        Functions.BooleanFunctionChain<Boolean, Integer> booleanChain = chain.chainBoolean(integerToBool);
+        Assert.assertTrue(booleanChain.booleanValueOf(Boolean.TRUE));
+    }
+
+    @Test
+    public void chain_two_chainByte()
+    {
+        Functions.FunctionChain<Boolean, String, Integer> chain = Functions.chain(BOOLEAN_STRING, STRING_LENGTH);
+        ByteFunction<Integer> integerToByte = new ByteFunction<Integer>()
+        {
+            public byte byteValueOf(Integer integerObject)
+            {
+                return integerObject.byteValue();
+            }
+        };
+        Functions.ByteFunctionChain<Boolean, Integer> byteChain = chain.chainByte(integerToByte);
+        Assert.assertEquals((byte) 5, byteChain.byteValueOf(Boolean.FALSE));
+    }
+
+    @Test
+    public void chain_three_chainChar()
+    {
+        Functions.FunctionChain<String, Boolean, String> chain = Functions.chain(STRING_LENGTH, IS_ODD).chain(BOOLEAN_STRING);
+        CharFunction<String> stringToChar = new CharFunction<String>()
+        {
+            public char charValueOf(String stringObject)
+            {
+                return stringObject.charAt(0);
+            }
+        };
+        Functions.CharFunctionChain<String, String> charChain = chain.chainChar(stringToChar);
+        Assert.assertEquals('t', charChain.charValueOf("foo"));
+    }
+
+    @Test
+    public void chain_three_chainDouble()
+    {
+        Functions.FunctionChain<Boolean, String, Integer> chain = Functions.chain(BOOLEAN_STRING, STRING_LENGTH);
+        DoubleFunction<Integer> integerToDouble = new DoubleFunction<Integer>()
+        {
+            public double doubleValueOf(Integer integerObject)
+            {
+                return integerObject.doubleValue();
+            }
+        };
+        Functions.DoubleFunctionChain<Boolean, Integer> doubleChain = chain.chainDouble(integerToDouble);
+        Assert.assertEquals(4.0, doubleChain.doubleValueOf(Boolean.TRUE), 0.0);
+    }
+
+    @Test
+    public void chain_three_chainFloat()
+    {
+        Functions.FunctionChain<String, Boolean, String> chain = Functions.chain(STRING_LENGTH, IS_ODD).chain(BOOLEAN_STRING);
+        FloatFunction<String> stringToFloat = new FloatFunction<String>()
+        {
+            public float floatValueOf(String stringObject)
+            {
+                return Integer.valueOf(stringObject.length()).floatValue();
+            }
+        };
+        Functions.FloatFunctionChain<String, String> floatChain = chain.chainFloat(stringToFloat);
+        Assert.assertEquals(5.0, floatChain.floatValueOf("12.2"), 0);
+    }
+
+    @Test
+    public void chain_three_chainInt()
+    {
+        Functions.FunctionChain<String, Boolean, String> chain = Functions.chain(STRING_LENGTH, IS_ODD).chain(BOOLEAN_STRING);
+        IntFunction<String> stringToLength = new IntegerFunctionImpl<String>()
+        {
+            public int intValueOf(String stringObject)
+            {
+                return stringObject.length();
+            }
+        };
+        Functions.IntFunctionChain<String, String> intChain = chain.chainInt(stringToLength);
+        Assert.assertEquals(4, intChain.intValueOf("gsc"));
+        Assert.assertNotEquals(4, intChain.intValueOf("kata"));
+    }
+
+    @Test
+    public void chain_three_chainLong()
+    {
+        Functions.FunctionChain<String, Boolean, String> chain = Functions.chain(STRING_LENGTH, IS_ODD).chain(BOOLEAN_STRING);
+        LongFunction<String> stringToLengthLong = new LongFunction<String>()
+        {
+            public long longValueOf(String stringObject)
+            {
+                return Long.valueOf(stringObject.length()).longValue();
+            }
+        };
+        Functions.LongFunctionChain<String, String> longChain = chain.chainLong(stringToLengthLong);
+        Assert.assertEquals(4L, longChain.longValueOf("gsc"));
+        Assert.assertNotEquals(4L, longChain.longValueOf("kata"));
+    }
+
+    @Test
+    public void chain_three_chainShort()
+    {
+        Functions.FunctionChain<String, Boolean, String> chain = Functions.chain(STRING_LENGTH, IS_ODD).chain(BOOLEAN_STRING);
+        ShortFunction<String> stringToShort = new ShortFunction<String>()
+        {
+            public short shortValueOf(String stringObject)
+            {
+                return Integer.valueOf(stringObject.length()).shortValue();
+            }
+        };
+        Functions.ShortFunctionChain<String, String> shortChain = chain.chainShort(stringToShort);
+        Assert.assertEquals((short) 4, shortChain.shortValueOf("gsc"));
+        Assert.assertNotEquals((short) 4, shortChain.shortValueOf("kata"));
     }
 
     @Test

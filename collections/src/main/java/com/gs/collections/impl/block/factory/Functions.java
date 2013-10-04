@@ -501,6 +501,46 @@ public final class Functions
         return new FunctionChain<T1, T2, T3>(function1, function2);
     }
 
+    public static <T1, T2> BooleanFunctionChain<T1, T2> chainBoolean(Function<T1, T2> function1, BooleanFunction<? super T2> function2)
+    {
+        return new BooleanFunctionChain<T1, T2>(function1, function2);
+    }
+
+    public static <T1, T2> ByteFunctionChain<T1, T2> chainByte(Function<T1, T2> function1, ByteFunction<? super T2> function2)
+    {
+        return new ByteFunctionChain<T1, T2>(function1, function2);
+    }
+
+    public static <T1, T2> CharFunctionChain<T1, T2> chainChar(Function<T1, T2> function1, CharFunction<? super T2> function2)
+    {
+        return new CharFunctionChain<T1, T2>(function1, function2);
+    }
+
+    public static <T1, T2> DoubleFunctionChain<T1, T2> chainDouble(Function<T1, T2> function1, DoubleFunction<? super T2> function2)
+    {
+        return new DoubleFunctionChain<T1, T2>(function1, function2);
+    }
+
+    public static <T1, T2> FloatFunctionChain<T1, T2> chainFloat(Function<T1, T2> function1, FloatFunction<? super T2> function2)
+    {
+        return new FloatFunctionChain<T1, T2>(function1, function2);
+    }
+
+    public static <T1, T2> IntFunctionChain<T1, T2> chainInt(Function<T1, T2> function1, IntFunction<? super T2> function2)
+    {
+        return new IntFunctionChain<T1, T2>(function1, function2);
+    }
+
+    public static <T1, T2> LongFunctionChain<T1, T2> chainLong(Function<T1, T2> function1, LongFunction<? super T2> function2)
+    {
+        return new LongFunctionChain<T1, T2>(function1, function2);
+    }
+
+    public static <T1, T2> ShortFunctionChain<T1, T2> chainShort(Function<T1, T2> function1, ShortFunction<? super T2> function2)
+    {
+        return new ShortFunctionChain<T1, T2>(function1, function2);
+    }
+
     private static class DoublePassThruFunction implements Function<Double, Double>, DoubleFunction<Double>
     {
         private static final long serialVersionUID = 1L;
@@ -674,6 +714,190 @@ public final class Functions
         public <T4> FunctionChain<T1, T3, T4> chain(Function<? super T3, T4> function)
         {
             return new FunctionChain<T1, T3, T4>(this, function);
+        }
+
+        public BooleanFunctionChain<T1, T3> chainBoolean(BooleanFunction<? super T3> function)
+        {
+            return new BooleanFunctionChain<T1, T3>(this, function);
+        }
+
+        public ByteFunctionChain<T1, T3> chainByte(ByteFunction<? super T3> function)
+        {
+            return new ByteFunctionChain<T1, T3>(this, function);
+        }
+
+        public CharFunctionChain<T1, T3> chainChar(CharFunction<? super T3> function)
+        {
+            return new CharFunctionChain<T1, T3>(this, function);
+        }
+
+        public DoubleFunctionChain<T1, T3> chainDouble(DoubleFunction<? super T3> function)
+        {
+            return new DoubleFunctionChain<T1, T3>(this, function);
+        }
+
+        public FloatFunctionChain<T1, T3> chainFloat(FloatFunction<? super T3> function)
+        {
+            return new FloatFunctionChain<T1, T3>(this, function);
+        }
+
+        public IntFunctionChain<T1, T3> chainInt(IntFunction<? super T3> function)
+        {
+            return new IntFunctionChain<T1, T3>(this, function);
+        }
+
+        public LongFunctionChain<T1, T3> chainLong(LongFunction<? super T3> function)
+        {
+            return new LongFunctionChain<T1, T3>(this, function);
+        }
+
+        public ShortFunctionChain<T1, T3> chainShort(ShortFunction<? super T3> function)
+        {
+            return new ShortFunctionChain<T1, T3>(this, function);
+        }
+    }
+
+    public static final class BooleanFunctionChain<T1, T2> implements BooleanFunction<T1>
+    {
+        private static final long serialVersionUID = 1L;
+        private final Function<T1, T2> function1;
+        private final BooleanFunction<? super T2> function2;
+
+        private BooleanFunctionChain(Function<T1, T2> function1, BooleanFunction<? super T2> function2)
+        {
+            this.function1 = function1;
+            this.function2 = function2;
+        }
+
+        public boolean booleanValueOf(T1 object)
+        {
+            return this.function2.booleanValueOf(this.function1.valueOf(object));
+        }
+    }
+
+    public static final class ByteFunctionChain<T1, T2> implements ByteFunction<T1>
+    {
+        private static final long serialVersionUID = 1L;
+        private final Function<T1, T2> function1;
+        private final ByteFunction<? super T2> function2;
+
+        private ByteFunctionChain(Function<T1, T2> function1, ByteFunction<? super T2> function2)
+        {
+            this.function1 = function1;
+            this.function2 = function2;
+        }
+
+        public byte byteValueOf(T1 object)
+        {
+            return this.function2.byteValueOf(this.function1.valueOf(object));
+        }
+    }
+
+    public static final class CharFunctionChain<T1, T2> implements CharFunction<T1>
+    {
+        private static final long serialVersionUID = 1L;
+        private final Function<T1, T2> function1;
+        private final CharFunction<? super T2> function2;
+
+        private CharFunctionChain(Function<T1, T2> function1, CharFunction<? super T2> function2)
+        {
+            this.function1 = function1;
+            this.function2 = function2;
+        }
+
+        public char charValueOf(T1 object)
+        {
+            return this.function2.charValueOf(this.function1.valueOf(object));
+        }
+    }
+
+    public static final class DoubleFunctionChain<T1, T2> implements DoubleFunction<T1>
+    {
+        private static final long serialVersionUID = 1L;
+        private final Function<T1, T2> function1;
+        private final DoubleFunction<? super T2> function2;
+
+        private DoubleFunctionChain(Function<T1, T2> function1, DoubleFunction<? super T2> function2)
+        {
+            this.function1 = function1;
+            this.function2 = function2;
+        }
+
+        public double doubleValueOf(T1 object)
+        {
+            return this.function2.doubleValueOf(this.function1.valueOf(object));
+        }
+    }
+
+    public static final class FloatFunctionChain<T1, T2> implements FloatFunction<T1>
+    {
+        private static final long serialVersionUID = 1L;
+        private final Function<T1, T2> function1;
+        private final FloatFunction<? super T2> function2;
+
+        private FloatFunctionChain(Function<T1, T2> function1, FloatFunction<? super T2> function2)
+        {
+            this.function1 = function1;
+            this.function2 = function2;
+        }
+
+        public float floatValueOf(T1 object)
+        {
+            return this.function2.floatValueOf(this.function1.valueOf(object));
+        }
+    }
+
+    public static final class IntFunctionChain<T1, T2> implements IntFunction<T1>
+    {
+        private static final long serialVersionUID = 1L;
+        private final Function<T1, T2> function1;
+        private final IntFunction<? super T2> function2;
+
+        private IntFunctionChain(Function<T1, T2> function1, IntFunction<? super T2> function2)
+        {
+            this.function1 = function1;
+            this.function2 = function2;
+        }
+
+        public int intValueOf(T1 object)
+        {
+            return this.function2.intValueOf(this.function1.valueOf(object));
+        }
+    }
+
+    public static final class LongFunctionChain<T1, T2> implements LongFunction<T1>
+    {
+        private static final long serialVersionUID = 1L;
+        private final Function<T1, T2> function1;
+        private final LongFunction<? super T2> function2;
+
+        private LongFunctionChain(Function<T1, T2> function1, LongFunction<? super T2> function2)
+        {
+            this.function1 = function1;
+            this.function2 = function2;
+        }
+
+        public long longValueOf(T1 object)
+        {
+            return this.function2.longValueOf(this.function1.valueOf(object));
+        }
+    }
+
+    public static final class ShortFunctionChain<T1, T2> implements ShortFunction<T1>
+    {
+        private static final long serialVersionUID = 1L;
+        private final Function<T1, T2> function1;
+        private final ShortFunction<? super T2> function2;
+
+        private ShortFunctionChain(Function<T1, T2> function1, ShortFunction<? super T2> function2)
+        {
+            this.function1 = function1;
+            this.function2 = function2;
+        }
+
+        public short shortValueOf(T1 object)
+        {
+            return this.function2.shortValueOf(this.function1.valueOf(object));
         }
     }
 
