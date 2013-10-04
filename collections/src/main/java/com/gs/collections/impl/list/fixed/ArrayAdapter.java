@@ -33,7 +33,7 @@ import com.gs.collections.impl.utility.Iterate;
 
 /**
  * This class provides a MutableList wrapper around an array.  All of the internal iteration methods of the MutableList
- * interface as well as the JDK Collections List iterface are provided.  However, the pre-determined fixed-sized
+ * interface as well as the JDK Collections List interface are provided.  However, the pre-determined fixed-sized
  * semantics of an array are maintained and thus mutating List interface methods such as {@link #add(Object)}, {@link
  * #addAll(Collection)}, {@link #remove(Object)}, {@link #removeAll(Collection)}, etc. are not supported and will throw
  * an {@link UnsupportedOperationException}.  In addition, the mutating iteration methods {@link

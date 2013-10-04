@@ -50,7 +50,7 @@ trait SynchronizedSetIterableTestTrait extends SynchronizedRichIterableTestTrait
     }
 
     @Test
-    def differnce_sychronized
+    def difference_sychronized
     {
         this.assertSynchronized(this.classUnderTest.difference(TreeSortedSet.newSet[String]))
     }
