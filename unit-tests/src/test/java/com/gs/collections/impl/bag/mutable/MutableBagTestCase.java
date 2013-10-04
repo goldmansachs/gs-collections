@@ -16,6 +16,9 @@
 
 package com.gs.collections.impl.bag.mutable;
 
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
 import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
@@ -108,13 +111,52 @@ public abstract class MutableBagTestCase extends AbstractCollectionTestCase
     @Test
     public void iterator()
     {
-        Bag<Integer> bag = this.newWith(1, 1, 2);
+        MutableBag<Integer> bag = this.newWith(1, 1, 2);
         MutableList<Integer> validate = Lists.mutable.of();
         for (Integer each : bag)
         {
             validate.add(each);
         }
         Assert.assertEquals(HashBag.newBagWith(1, 1, 2), HashBag.newBag(validate));
+
+        final Iterator<Integer> iterator = bag.iterator();
+        MutableBag<Integer> expected = this.newWith(1, 1, 2);
+        Verify.assertThrows(IllegalStateException.class, new Runnable()
+        {
+            public void run()
+            {
+                iterator.remove();
+            }
+        });
+
+        this.assertIteratorRemove(bag, iterator, expected);
+        this.assertIteratorRemove(bag, iterator, expected);
+        this.assertIteratorRemove(bag, iterator, expected);
+        Verify.assertEmpty(bag);
+        Assert.assertFalse(iterator.hasNext());
+        Verify.assertThrows(NoSuchElementException.class, new Runnable()
+        {
+            public void run()
+            {
+                iterator.next();
+            }
+        });
+    }
+
+    private void assertIteratorRemove(MutableBag<Integer> bag, final Iterator<Integer> iterator, MutableBag<Integer> expected)
+    {
+        Assert.assertTrue(iterator.hasNext());
+        Integer first = iterator.next();
+        iterator.remove();
+        expected.remove(first);
+        Assert.assertEquals(expected, bag);
+        Verify.assertThrows(IllegalStateException.class, new Runnable()
+        {
+            public void run()
+            {
+                iterator.remove();
+            }
+        });
     }
 
     @Override

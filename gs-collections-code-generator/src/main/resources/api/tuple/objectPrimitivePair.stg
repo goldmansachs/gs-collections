@@ -1,0 +1,25 @@
+import "copyright.stg"
+
+targetPath() ::= "com/gs/collections/api/tuple/primitive"
+
+fileName(primitive) ::= "Object<primitive.name>Pair"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.api.tuple.primitive;
+
+import java.io.Serializable;
+
+public interface Object<name>Pair\<T> extends Serializable
+{
+    T getOne();
+
+    <type> getTwo();
+}
+
+>>

@@ -22,12 +22,9 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.NoSuchElementException;
 
 import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.bag.ImmutableBag;
@@ -54,15 +51,18 @@ import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
+import com.gs.collections.api.block.predicate.primitive.ObjectIntPredicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.primitive.MutableObjectIntMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.bag.PartitionMutableBag;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.api.tuple.primitive.ObjectIntPair;
 import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.ByteHashBag;
@@ -73,14 +73,15 @@ import com.gs.collections.impl.bag.mutable.primitive.IntHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.LongHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.ShortHashBag;
 import com.gs.collections.impl.block.factory.Predicates2;
+import com.gs.collections.impl.block.factory.primitive.IntToIntFunctions;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
-import com.gs.collections.impl.block.procedure.checked.CheckedProcedure2;
 import com.gs.collections.impl.collection.mutable.AbstractMutableCollection;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.gs.collections.impl.map.mutable.primitive.ObjectIntHashMap;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.partition.bag.PartitionHashBag;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -96,33 +97,25 @@ public class HashBag<T>
         extends AbstractMutableCollection<T>
         implements Externalizable, MutableBag<T>
 {
-    private static final Function0<Counter> NEW_COUNTER_BLOCK = new Function0<Counter>()
-    {
-        public Counter value()
-        {
-            return new Counter();
-        }
-    };
-
     private static final long serialVersionUID = 1L;
 
-    private MutableMap<T, Counter> items;
+    private MutableObjectIntMap<T> items;
     private int size;
 
     public HashBag()
     {
-        this.items = UnifiedMap.newMap();
+        this.items = ObjectIntHashMap.newMap();
     }
 
     public HashBag(int size)
     {
-        this.items = UnifiedMap.newMap(size);
+        this.items = new ObjectIntHashMap<T>(size);
     }
 
-    private HashBag(MutableMap<T, Counter> map)
+    private HashBag(MutableObjectIntMap<T> map)
     {
         this.items = map;
-        this.size = (int) map.valuesView().sumOfInt(Counter.TO_COUNT);
+        this.size = (int) map.sum();
     }
 
     public static <E> HashBag<E> newBag()
@@ -237,11 +230,11 @@ public class HashBag<T>
     @Override
     public void forEach(final Procedure<? super T> procedure)
     {
-        this.items.forEachKeyValue(new Procedure2<T, Counter>()
+        this.items.forEachKeyValue(new ObjectIntProcedure<T>()
         {
-            public void value(T key, Counter value)
+            public void value(T key, int count)
             {
-                for (int i = 0; i < value.getCount(); i++)
+                for (int i = 0; i < count; i++)
                 {
                     procedure.value(key);
                 }
@@ -253,11 +246,11 @@ public class HashBag<T>
     public void forEachWithIndex(final ObjectIntProcedure<? super T> objectIntProcedure)
     {
         final Counter index = new Counter();
-        this.items.forEachKeyValue(new Procedure2<T, Counter>()
+        this.items.forEachKeyValue(new ObjectIntProcedure<T>()
         {
-            public void value(T key, Counter value)
+            public void value(T key, int count)
             {
-                for (int i = 0; i < value.getCount(); i++)
+                for (int i = 0; i < count; i++)
                 {
                     objectIntProcedure.value(key, index.getCount());
                     index.increment();
@@ -269,11 +262,11 @@ public class HashBag<T>
     @Override
     public <P> void forEachWith(final Procedure2<? super T, ? super P> procedure, final P parameter)
     {
-        this.items.forEachKeyValue(new Procedure2<T, Counter>()
+        this.items.forEachKeyValue(new ObjectIntProcedure<T>()
         {
-            public void value(T key, Counter value)
+            public void value(T key, int count)
             {
-                for (int i = 0; i < value.getCount(); i++)
+                for (int i = 0; i < count; i++)
                 {
                     procedure.value(key, parameter);
                 }
@@ -433,11 +426,11 @@ public class HashBag<T>
 
     public MutableBag<T> selectByOccurrences(final IntPredicate predicate)
     {
-        MutableMap<T, Counter> map = this.items.select(new Predicate2<T, Counter>()
+        MutableObjectIntMap<T> map = this.items.select(new ObjectIntPredicate<T>()
         {
-            public boolean accept(T each, Counter occurrences)
+            public boolean accept(T each, int occurrences)
             {
-                return predicate.accept(occurrences.getCount());
+                return predicate.accept(occurrences);
             }
         });
         return new HashBag<T>(map);
@@ -721,19 +714,19 @@ public class HashBag<T>
     @Override
     public T detect(Predicate<? super T> predicate)
     {
-        return this.items.keysView().detect(predicate);
+        return ((ObjectIntHashMap<T>) this.items).keysView().detect(predicate);
     }
 
     @Override
     public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
     {
-        return this.items.keysView().detectIfNone(predicate, function);
+        return ((ObjectIntHashMap<T>) this.items).keysView().detectIfNone(predicate, function);
     }
 
     @Override
     public <P> T detectWith(final Predicate2<? super T, ? super P> predicate, final P parameter)
     {
-        return this.items.keysView().detect(new Predicate<T>()
+        return ((ObjectIntHashMap<T>) this.items).keysView().detect(new Predicate<T>()
         {
             public boolean accept(T each)
             {
@@ -748,7 +741,7 @@ public class HashBag<T>
             final P parameter,
             Function0<? extends T> function)
     {
-        return this.items.keysView().detectIfNone(new Predicate<T>()
+        return ((ObjectIntHashMap<T>) this.items).keysView().detectIfNone(new Predicate<T>()
         {
             public boolean accept(T each)
             {
@@ -760,13 +753,13 @@ public class HashBag<T>
     @Override
     public boolean anySatisfy(Predicate<? super T> predicate)
     {
-        return this.items.keysView().anySatisfy(predicate);
+        return ((ObjectIntHashMap<T>) this.items).keysView().anySatisfy(predicate);
     }
 
     @Override
     public <P> boolean anySatisfyWith(final Predicate2<? super T, ? super P> predicate, final P parameter)
     {
-        return this.items.keysView().anySatisfy(new Predicate<T>()
+        return ((ObjectIntHashMap<T>) this.items).keysView().anySatisfy(new Predicate<T>()
         {
             public boolean accept(T each)
             {
@@ -778,13 +771,13 @@ public class HashBag<T>
     @Override
     public boolean allSatisfy(Predicate<? super T> predicate)
     {
-        return this.items.keysView().allSatisfy(predicate);
+        return ((ObjectIntHashMap<T>) this.items).keysView().allSatisfy(predicate);
     }
 
     @Override
     public <P> boolean allSatisfyWith(final Predicate2<? super T, ? super P> predicate, final P parameter)
     {
-        return this.items.keysView().allSatisfy(new Predicate<T>()
+        return ((ObjectIntHashMap<T>) this.items).keysView().allSatisfy(new Predicate<T>()
         {
             public boolean accept(T each)
             {
@@ -823,11 +816,11 @@ public class HashBag<T>
             return false;
         }
 
-        return this.items.keyValuesView().allSatisfy(new Predicate<Pair<T, Counter>>()
+        return ((ObjectIntHashMap<T>) this.items).keyValuesView().allSatisfy(new Predicate<ObjectIntPair<T>>()
         {
-            public boolean accept(Pair<T, Counter> each)
+            public boolean accept(ObjectIntPair<T> each)
             {
-                return bag.occurrencesOf(each.getOne()) == each.getTwo().getCount();
+                return bag.occurrencesOf(each.getOne()) == each.getTwo();
             }
         });
     }
@@ -836,11 +829,11 @@ public class HashBag<T>
     public int hashCode()
     {
         final Counter counter = new Counter();
-        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        this.items.forEachKeyValue(new ObjectIntProcedure<T>()
         {
-            public void value(T each, int count)
+            public void value(T item, int count)
             {
-                counter.add((each == null ? 0 : each.hashCode()) ^ count);
+                counter.add((item == null ? 0 : item.hashCode()) ^ count);
             }
         });
         return counter.getCount();
@@ -849,14 +842,13 @@ public class HashBag<T>
     @Override
     public void removeIf(Predicate<? super T> predicate)
     {
-        Set<Map.Entry<T, Counter>> entries = this.items.entrySet();
-        for (Iterator<Map.Entry<T, Counter>> iterator = entries.iterator(); iterator.hasNext(); )
+        for (Iterator<T> iterator = this.items.keySet().iterator(); iterator.hasNext(); )
         {
-            Map.Entry<T, Counter> entry = iterator.next();
-            if (predicate.accept(entry.getKey()))
+            T key = iterator.next();
+            if (predicate.accept(key))
             {
+                this.size -= this.items.get(key);
                 iterator.remove();
-                this.size -= entry.getValue().getCount();
             }
         }
     }
@@ -864,14 +856,13 @@ public class HashBag<T>
     @Override
     public <P> void removeIfWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        Set<Map.Entry<T, Counter>> entries = this.items.entrySet();
-        for (Iterator<Map.Entry<T, Counter>> iterator = entries.iterator(); iterator.hasNext(); )
+        for (Iterator<T> iterator = this.items.keySet().iterator(); iterator.hasNext(); )
         {
-            Map.Entry<T, Counter> entry = iterator.next();
-            if (predicate.accept(entry.getKey(), parameter))
+            T key = iterator.next();
+            if (predicate.accept(key, parameter))
             {
+                this.size -= this.items.get(key);
                 iterator.remove();
-                this.size -= entry.getValue().getCount();
             }
         }
     }
@@ -888,11 +879,8 @@ public class HashBag<T>
         int oldSize = this.size;
         for (Object each : iterable)
         {
-            Counter removed = this.items.remove(each);
-            if (removed != null)
-            {
-                this.size -= removed.getCount();
-            }
+            int removed = this.items.removeKeyIfAbsent((T) each, 0);
+            this.size -= removed;
         }
         return this.size != oldSize;
     }
@@ -946,8 +934,7 @@ public class HashBag<T>
 
     public int occurrencesOf(Object item)
     {
-        Counter counter = this.items.get(item);
-        return counter == null ? 0 : counter.getCount();
+        return this.items.get(item);
     }
 
     public void addOccurrences(T item, int occurrences)
@@ -958,7 +945,7 @@ public class HashBag<T>
         }
         if (occurrences > 0)
         {
-            this.items.getIfAbsentPut(item, NEW_COUNTER_BLOCK).add(occurrences);
+            this.items.updateValue(item, 0, IntToIntFunctions.add(occurrences));
             this.size += occurrences;
         }
     }
@@ -966,21 +953,17 @@ public class HashBag<T>
     @Override
     public boolean remove(Object item)
     {
-        Counter counter = this.items.get(item);
-        if (counter != null)
+        int newValue = this.items.updateValue((T) item, 0, IntToIntFunctions.decrement());
+        if (newValue <= 0)
         {
-            if (counter.getCount() > 1)
+            this.items.removeKey((T) item);
+            if (newValue == -1)
             {
-                counter.decrement();
+                return false;
             }
-            else
-            {
-                this.items.remove(item);
-            }
-            this.size--;
-            return true;
         }
-        return false;
+        this.size--;
+        return true;
     }
 
     public boolean removeOccurrences(Object item, int occurrences)
@@ -995,32 +978,26 @@ public class HashBag<T>
             return false;
         }
 
-        Counter counter = this.items.get(item);
-        if (counter == null)
-        {
-            return false;
-        }
-        int start = counter.getCount();
+        int newValue = this.items.updateValue((T) item, 0, IntToIntFunctions.subtract(occurrences));
 
-        if (occurrences >= start)
+        if (newValue <= 0)
         {
-            this.items.remove(item);
-            this.size -= start;
-            return true;
+            this.size -= occurrences + newValue;
+            this.items.remove((T) item);
+            return newValue + occurrences != 0;
         }
 
-        counter.add(occurrences * -1);
         this.size -= occurrences;
         return true;
     }
 
     public void forEachWithOccurrences(final ObjectIntProcedure<? super T> objectIntProcedure)
     {
-        this.items.forEachKeyValue(new Procedure2<T, Counter>()
+        this.items.forEachKeyValue(new ObjectIntProcedure<T>()
         {
-            public void value(T item, Counter count)
+            public void value(T item, int count)
             {
-                objectIntProcedure.value(item, count.getCount());
+                objectIntProcedure.value(item, count);
             }
         });
     }
@@ -1028,7 +1005,7 @@ public class HashBag<T>
     @Override
     public Iterator<T> iterator()
     {
-        return this.items.keyValuesView().flatCollect(new NCopiesFunction<T>()).iterator();
+        return new InternalIterator();
     }
 
     public ImmutableBag<T> toImmutable()
@@ -1039,21 +1016,9 @@ public class HashBag<T>
     @Override
     public boolean add(T item)
     {
-        Counter counter = this.items.getIfAbsentPut(item, NEW_COUNTER_BLOCK);
-        counter.increment();
+        this.items.updateValue(item, 0, IntToIntFunctions.increment());
         this.size++;
         return true;
-    }
-
-    private class NCopiesFunction<T>
-            implements Function<Pair<T, Counter>, List<T>>
-    {
-        private static final long serialVersionUID = 1L;
-
-        public List<T> valueOf(Pair<T, Counter> each)
-        {
-            return Collections.nCopies(each.getTwo().getCount(), each.getOne());
-        }
     }
 
     public <V> HashBagMultimap<V, T> groupBy(
@@ -1111,49 +1076,49 @@ public class HashBag<T>
     @Override
     public T min(Comparator<? super T> comparator)
     {
-        return this.items.keysView().min(comparator);
+        return ((ObjectIntHashMap<T>) this.items).keysView().min(comparator);
     }
 
     @Override
     public T max(Comparator<? super T> comparator)
     {
-        return this.items.keysView().max(comparator);
+        return ((ObjectIntHashMap<T>) this.items).keysView().max(comparator);
     }
 
     @Override
     public T min()
     {
-        return this.items.keysView().min();
+        return ((ObjectIntHashMap<T>) this.items).keysView().min();
     }
 
     @Override
     public T max()
     {
-        return this.items.keysView().max();
+        return ((ObjectIntHashMap<T>) this.items).keysView().max();
     }
 
     @Override
     public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
     {
-        return this.items.keysView().minBy(function);
+        return ((ObjectIntHashMap<T>) this.items).keysView().minBy(function);
     }
 
     @Override
     public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
     {
-        return this.items.keysView().maxBy(function);
+        return ((ObjectIntHashMap<T>) this.items).keysView().maxBy(function);
     }
 
     @Override
     public T getFirst()
     {
-        return this.items.keysView().getFirst();
+        return ((ObjectIntHashMap<T>) this.items).keysView().getFirst();
     }
 
     @Override
     public T getLast()
     {
-        return this.items.keysView().getLast();
+        return ((ObjectIntHashMap<T>) this.items).keysView().getLast();
     }
 
     @Override
@@ -1250,38 +1215,65 @@ public class HashBag<T>
         return sum[0];
     }
 
-    public void writeExternal(final ObjectOutput out) throws IOException
+    public void writeExternal(ObjectOutput out) throws IOException
     {
-        out.writeInt(this.items.size());
-        try
-        {
-            this.items.forEachKeyValue(new CheckedProcedure2<T, Counter>()
-            {
-                @Override
-                public void safeValue(T object, Counter parameter) throws Exception
-                {
-                    out.writeObject(object);
-                    out.writeInt(parameter.getCount());
-                }
-            });
-        }
-        catch (RuntimeException e)
-        {
-            if (e.getCause() instanceof IOException)
-            {
-                throw (IOException) e.getCause();
-            }
-            throw e;
-        }
+        ((ObjectIntHashMap<T>) this.items).writeExternal(out);
     }
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
     {
-        int size = in.readInt();
-        this.items = UnifiedMap.newMap(size);
-        for (int i = 0; i < size; i++)
+        this.items = new ObjectIntHashMap<T>();
+        ((ObjectIntHashMap<T>) this.items).readExternal(in);
+        this.size = (int) this.items.sum();
+    }
+
+    private class InternalIterator implements Iterator<T>
+    {
+        private int position;
+        private boolean isCurrentKeySet;
+        private int currentKeyPosition;
+        private int currentKeyOccurrences;
+        private Iterator<ObjectIntPair<T>> keyValueIterator = ((ObjectIntHashMap<T>) HashBag.this.items).keyValuesView().iterator();
+        private ObjectIntPair<T> currentKeyValue;
+
+        public boolean hasNext()
         {
-            this.addOccurrences((T) in.readObject(), in.readInt());
+            return this.position != HashBag.this.size;
+        }
+
+        public T next()
+        {
+            if (!this.hasNext())
+            {
+                throw new NoSuchElementException();
+            }
+            this.isCurrentKeySet = true;
+            if (this.currentKeyPosition < this.currentKeyOccurrences)
+            {
+                this.currentKeyPosition++;
+                this.position++;
+                return this.currentKeyValue.getOne();
+            }
+            this.currentKeyValue = this.keyValueIterator.next();
+            this.currentKeyPosition = 1;
+            this.currentKeyOccurrences = this.currentKeyValue.getTwo();
+            this.position++;
+            return this.currentKeyValue.getOne();
+        }
+
+        public void remove()
+        {
+            if (!this.isCurrentKeySet)
+            {
+                throw new IllegalStateException();
+            }
+            this.isCurrentKeySet = false;
+            this.position--;
+
+            HashBag.this.remove(this.currentKeyValue.getOne());
+            this.keyValueIterator = ((ObjectIntHashMap<T>) HashBag.this.items).keyValuesView().iterator();
+            this.currentKeyOccurrences--;
+            this.currentKeyPosition--;
         }
     }
 }

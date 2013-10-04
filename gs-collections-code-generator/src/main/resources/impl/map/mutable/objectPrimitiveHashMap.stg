@@ -32,6 +32,7 @@ import java.util.Set;
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.block.function.primitive.<name>Function;
 import com.gs.collections.api.block.function.primitive.<name>Function0;
@@ -54,6 +55,7 @@ import com.gs.collections.api.map.primitive.ImmutableObject<name>Map;
 import com.gs.collections.api.map.primitive.MutableObject<name>Map;
 import com.gs.collections.api.map.primitive.Object<name>Map;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
+import com.gs.collections.api.tuple.primitive.Object<name>Pair;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.collection.mutable.primitive.Synchronized<name>Collection;
 import com.gs.collections.impl.collection.mutable.primitive.Unmodifiable<name>Collection;
@@ -65,6 +67,7 @@ import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 <(procedureImport.(type))()>
+import com.gs.collections.impl.tuple.primitive.PrimitiveTuples;
 /**
  * This file was automatically generated from template file objectPrimitiveHashMap.stg.
  *
@@ -1012,6 +1015,9 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
     {
         int size = in.readInt();
+        int capacity = this.smallestPowerOfTwoGreaterThan(this.fastCeil(size * OCCUPIED_DATA_RATIO));
+        this.allocateTable(capacity);
+
         for (int i = 0; i \< size; i++)
         {
             this.put((K) in.readObject(), in.read<name>());
@@ -1021,6 +1027,11 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
     public LazyIterable\<K> keysView()
     {
         return new KeysView();
+    }
+
+    public RichIterable\<Object<name>Pair\<K>\> keyValuesView()
+    {
+        return new KeyValuesView();
     }
 
     /**
@@ -1778,6 +1789,83 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
                     this.position++;
                 }
                 K result = (K) Object<name>HashMap.this.keys[this.position];
+                this.count++;
+                this.position++;
+                return result;
+            }
+
+            public void remove()
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            public boolean hasNext()
+            {
+                return this.count != Object<name>HashMap.this.size();
+            }
+        }
+    }
+
+    private class KeyValuesView extends AbstractLazyIterable\<Object<name>Pair\<K>\>
+    {
+        public void forEach(Procedure\<? super Object<name>Pair\<K>\> procedure)
+        {
+            for (int i = 0; i \< Object<name>HashMap.this.keys.length; i++)
+            {
+                if (Object<name>HashMap.isNonSentinel(Object<name>HashMap.this.keys[i]))
+                {
+                    procedure.value(PrimitiveTuples.pair(Object<name>HashMap.this.toNonSentinel(Object<name>HashMap.this.keys[i]), Object<name>HashMap.this.values[i]));
+                }
+            }
+        }
+
+        public void forEachWithIndex(ObjectIntProcedure\<? super Object<name>Pair\<K>\> objectIntProcedure)
+        {
+            int index = 0;
+            for (int i = 0; i \< Object<name>HashMap.this.keys.length; i++)
+            {
+                if (Object<name>HashMap.isNonSentinel(Object<name>HashMap.this.keys[i]))
+                {
+                    objectIntProcedure.value(PrimitiveTuples.pair(Object<name>HashMap.this.toNonSentinel(Object<name>HashMap.this.keys[i]), Object<name>HashMap.this.values[i]), index);
+                    index++;
+                }
+            }
+        }
+
+        public \<P> void forEachWith(Procedure2\<? super Object<name>Pair\<K>, ? super P> procedure, P parameter)
+        {
+            for (int i = 0; i \< Object<name>HashMap.this.keys.length; i++)
+            {
+                if (Object<name>HashMap.isNonSentinel(Object<name>HashMap.this.keys[i]))
+                {
+                    procedure.value(PrimitiveTuples.pair(Object<name>HashMap.this.toNonSentinel(Object<name>HashMap.this.keys[i]), Object<name>HashMap.this.values[i]), parameter);
+                }
+            }
+        }
+
+        public Iterator\<Object<name>Pair\<K>\> iterator()
+        {
+            return new InternalKeyValuesIterator();
+        }
+
+        public class InternalKeyValuesIterator implements Iterator\<Object<name>Pair\<K>\>
+        {
+            private int count;
+            private int position;
+
+            public Object<name>Pair\<K> next()
+            {
+                if (!this.hasNext())
+                {
+                    throw new NoSuchElementException();
+                }
+
+                Object[] keys = Object<name>HashMap.this.keys;
+                while (!isNonSentinel(keys[this.position]))
+                {
+                    this.position++;
+                }
+                Object<name>Pair\<K> result = PrimitiveTuples.pair(Object<name>HashMap.this.toNonSentinel(Object<name>HashMap.this.keys[this.position]), Object<name>HashMap.this.values[this.position]);
                 this.count++;
                 this.position++;
                 return result;

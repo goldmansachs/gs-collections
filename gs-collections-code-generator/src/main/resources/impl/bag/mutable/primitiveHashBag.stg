@@ -40,6 +40,7 @@ import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.impl.block.factory.primitive.IntToIntFunctions;
 import com.gs.collections.impl.factory.primitive.<name>Bags;
 import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
@@ -56,22 +57,6 @@ import net.jcip.annotations.NotThreadSafe;
 @NotThreadSafe
 public final class <name>HashBag implements Mutable<name>Bag, Externalizable
 {
-    private static final IntToIntFunction INCREMENT = new IntToIntFunction()
-    {
-        public int valueOf(int intParameter)
-        {
-            return intParameter + 1;
-        }
-    };
-
-    private static final IntToIntFunction DECREMENT = new IntToIntFunction()
-    {
-        public int valueOf(int intParameter)
-        {
-            return intParameter - 1;
-        }
-    };
-
     private static final long serialVersionUID = 1L;
 
     private <name>IntHashMap items;
@@ -245,14 +230,14 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
 
     public boolean add(<type> item)
     {
-        this.items.updateValue(item, 0, INCREMENT);
+        this.items.updateValue(item, 0, IntToIntFunctions.increment());
         this.size++;
         return true;
     }
 
     public boolean remove(<type> item)
     {
-        int newValue = this.items.updateValue(item, 0, DECREMENT);
+        int newValue = this.items.updateValue(item, 0, IntToIntFunctions.decrement());
         if (newValue \<= 0)
         {
             this.items.removeKey(item);
