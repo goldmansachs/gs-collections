@@ -41,7 +41,7 @@ trait SynchronizedUnsortedSetIterableTestTrait extends SynchronizedSetIterableTe
     val classUnderTest: UnsortedSetIterable[String]
 
     @Test
-    def powerSet_sychronized
+    def powerSet_synchronized
     {
         this.assertSynchronized(this.classUnderTest.powerSet())
     }

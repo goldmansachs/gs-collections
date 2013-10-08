@@ -26,67 +26,67 @@ trait SynchronizedSetIterableTestTrait extends SynchronizedRichIterableTestTrait
     val classUnderTest: SetIterable[String]
 
     @Test
-    def union_sychronized
+    def union_synchronized
     {
         this.assertSynchronized(this.classUnderTest.union(TreeSortedSet.newSet[String]))
     }
 
     @Test
-    def unionInto_sychronized
+    def unionInto_synchronized
     {
         this.assertSynchronized(this.classUnderTest.unionInto(TreeSortedSet.newSet[String], TreeSortedSet.newSet[String]))
     }
 
     @Test
-    def intersect_sychronized
+    def intersect_synchronized
     {
         this.assertSynchronized(this.classUnderTest.intersect(TreeSortedSet.newSet[String]))
     }
 
     @Test
-    def intersectInto_sychronized
+    def intersectInto_synchronized
     {
         this.assertSynchronized(this.classUnderTest.intersectInto(TreeSortedSet.newSet[String], TreeSortedSet.newSet[String]))
     }
 
     @Test
-    def difference_sychronized
+    def difference_synchronized
     {
         this.assertSynchronized(this.classUnderTest.difference(TreeSortedSet.newSet[String]))
     }
 
     @Test
-    def differenceInto_sychronized
+    def differenceInto_synchronized
     {
         this.assertSynchronized(this.classUnderTest.differenceInto(TreeSortedSet.newSet[String], TreeSortedSet.newSet[String]))
     }
 
     @Test
-    def symmetricDifferece_sychronized
+    def symmetricDifference_synchronized
     {
         this.assertSynchronized(this.classUnderTest.symmetricDifference(TreeSortedSet.newSet[String]))
     }
 
     @Test
-    def symmetricDiffereceInto_sychronized
+    def symmetricDifferenceInto_synchronized
     {
         this.assertSynchronized(this.classUnderTest.symmetricDifferenceInto(TreeSortedSet.newSet[String], TreeSortedSet.newSet[String]))
     }
 
     @Test
-    def isSubsetOf_sychronized
+    def isSubsetOf_synchronized
     {
         this.assertSynchronized(this.classUnderTest.isSubsetOf(TreeSortedSet.newSet[String]))
     }
 
     @Test
-    def isProperSubsetOf_sychronized
+    def isProperSubsetOf_synchronized
     {
         this.assertSynchronized(this.classUnderTest.isProperSubsetOf(TreeSortedSet.newSet[String]))
     }
 
     @Test
-    def cartesianProduct_sychronized
+    def cartesianProduct_synchronized
     {
         this.assertSynchronized(this.classUnderTest.cartesianProduct(TreeSortedSet.newSet[String]))
     }
