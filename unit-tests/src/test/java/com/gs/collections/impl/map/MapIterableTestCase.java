@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.SortedMap;
 import java.util.concurrent.ConcurrentMap;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.ByteIterable;
@@ -78,6 +79,7 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.math.IntegerSum;
 import com.gs.collections.impl.math.Sum;
 import com.gs.collections.impl.math.SumProcedure;
@@ -224,6 +226,21 @@ public abstract class MapIterableTestCase
         MapIterable<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
         map.forEachValue(CollectionAddProcedure.<String>on(result));
         Verify.assertSetsEqual(UnifiedSet.newSetWith("1", "2", "3"), result);
+    }
+
+    @Test
+    public void forEachKeyValue()
+    {
+        final UnifiedMap<Integer, String> result = UnifiedMap.newMap();
+        MapIterable<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
+        map.forEachKeyValue(new Procedure2<Integer, String>()
+        {
+            public void value(Integer key, String value)
+            {
+                result.put(key, value);
+            }
+        });
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(1, "1", 2, "2", 3, "3"), result);
     }
 
     @Test
@@ -520,6 +537,35 @@ public abstract class MapIterableTestCase
 
         MutableSortedSet<Integer> sorted = map.toSortedSetBy(Functions.getToString());
         Verify.assertSortedSetsEqual(TreeSortedSet.newSetWith(1, 2, 3, 4), sorted);
+    }
+
+    @Test
+    public void toSortedMap()
+    {
+        MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "3", "Three", "4", "Four");
+
+        MapIterable<Integer, String> actual = map.toSortedMap(new Function<String, Integer>()
+        {
+            public Integer valueOf(String object)
+            {
+                return object.length();
+            }
+        }, Functions.getToString());
+
+        MapIterable<Integer, String> actualWithComparator = map.toSortedMap(Comparators.reverseNaturalOrder(), new Function<String, Integer>()
+        {
+            public Integer valueOf(String object)
+            {
+                return object.length();
+            }
+        }, Functions.getToString());
+
+        Verify.assertIterablesEqual(TreeSortedMap.newMapWith(3, "One", 5, "Three", 4, "Four"), actual);
+        TreeSortedMap<Object, Object> expectedIterable = TreeSortedMap.newMap(Comparators.reverseNaturalOrder());
+        expectedIterable.put(3, "One");
+        expectedIterable.put(5, "Three");
+        expectedIterable.put(4, "Four");
+        Verify.assertIterablesEqual(expectedIterable, actualWithComparator);
     }
 
     @Test
@@ -1068,6 +1114,54 @@ public abstract class MapIterableTestCase
         Assert.assertEquals(
                 map.zipWithIndex().toSet(),
                 map.zipWithIndex(UnifiedSet.<Pair<String, Integer>>newSet()));
+    }
+
+    @Test
+    public void aggregateByMutating()
+    {
+        Function0<AtomicInteger> valueCreator = new Function0<AtomicInteger>()
+        {
+            public AtomicInteger value()
+            {
+                return new AtomicInteger(0);
+            }
+        };
+        Procedure2<AtomicInteger, Integer> sumAggregator = new Procedure2<AtomicInteger, Integer>()
+        {
+            public void value(AtomicInteger aggregate, Integer value)
+            {
+                aggregate.addAndGet(value);
+            }
+        };
+        RichIterable<Integer> collection = this.newMapWithKeysValues(1, 1, 2, 2, 3, 3);
+        MapIterable<String, AtomicInteger> aggregation = collection.aggregateInPlaceBy(Functions.getToString(), valueCreator, sumAggregator);
+        Assert.assertEquals(1, aggregation.get("1").intValue());
+        Assert.assertEquals(2, aggregation.get("2").intValue());
+        Assert.assertEquals(3, aggregation.get("3").intValue());
+    }
+
+    @Test
+    public void aggregateByNonMutating()
+    {
+        Function0<Integer> valueCreator = new Function0<Integer>()
+        {
+            public Integer value()
+            {
+                return Integer.valueOf(0);
+            }
+        };
+        Function2<Integer, Integer, Integer> sumAggregator = new Function2<Integer, Integer, Integer>()
+        {
+            public Integer value(Integer aggregate, Integer value)
+            {
+                return aggregate + value;
+            }
+        };
+        RichIterable<Integer> collection = this.newMapWithKeysValues(1, 1, 2, 2, 3, 3);
+        MapIterable<String, Integer> aggregation = collection.aggregateBy(Functions.getToString(), valueCreator, sumAggregator);
+        Assert.assertEquals(1, aggregation.get("1").intValue());
+        Assert.assertEquals(2, aggregation.get("2").intValue());
+        Assert.assertEquals(3, aggregation.get("3").intValue());
     }
 
     @Test

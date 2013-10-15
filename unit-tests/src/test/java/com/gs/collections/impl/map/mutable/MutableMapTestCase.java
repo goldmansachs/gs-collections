@@ -22,15 +22,14 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentMap;
-import java.util.concurrent.atomic.AtomicInteger;
 
-import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MapIterable;
@@ -45,6 +44,7 @@ import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.factory.Bags;
+import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.MapIterableTestCase;
@@ -390,6 +390,15 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
         MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "One", 2, "Two");
         Assert.assertNull(map.put(3, "Three"));
         Assert.assertEquals(UnifiedMap.newWithKeysValues(1, "One", 2, "Two", 3, "Three"), map);
+
+        ImmutableList<Integer> key1 = Lists.immutable.with(null);
+        ImmutableList<Integer> key2 = Lists.immutable.with(null);
+        Object value1 = new Object();
+        Object value2 = new Object();
+        MutableMap<ImmutableList<Integer>, Object> map2 = this.newMapWithKeyValue(key1, value1);
+        Object previousValue = map2.put(key2, value2);
+        Assert.assertSame(value1, previousValue);
+        Assert.assertSame(key1, map2.keysView().getFirst());
     }
 
     @Test
@@ -755,56 +764,8 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
 
         for (int i = 0; i < 256; i++)
         {
-            mutableMap.put(new IntegerWithCast(i), null);
+            mutableMap.put(new IntegerWithCast(i), String.valueOf(i));
         }
-    }
-
-    @Test
-    public void aggregateByMutating()
-    {
-        Function0<AtomicInteger> valueCreator = new Function0<AtomicInteger>()
-        {
-            public AtomicInteger value()
-            {
-                return new AtomicInteger(0);
-            }
-        };
-        Procedure2<AtomicInteger, Integer> sumAggregator = new Procedure2<AtomicInteger, Integer>()
-        {
-            public void value(AtomicInteger aggregate, Integer value)
-            {
-                aggregate.addAndGet(value);
-            }
-        };
-        RichIterable<Integer> collection = this.newMapWithKeysValues(1, 1, 2, 2, 3, 3);
-        MapIterable<String, AtomicInteger> aggregation = collection.aggregateInPlaceBy(Functions.getToString(), valueCreator, sumAggregator);
-        Assert.assertEquals(1, aggregation.get("1").intValue());
-        Assert.assertEquals(2, aggregation.get("2").intValue());
-        Assert.assertEquals(3, aggregation.get("3").intValue());
-    }
-
-    @Test
-    public void aggregateByNonMutating()
-    {
-        Function0<Integer> valueCreator = new Function0<Integer>()
-        {
-            public Integer value()
-            {
-                return Integer.valueOf(0);
-            }
-        };
-        Function2<Integer, Integer, Integer> sumAggregator = new Function2<Integer, Integer, Integer>()
-        {
-            public Integer value(Integer aggregate, Integer value)
-            {
-                return aggregate + value;
-            }
-        };
-        RichIterable<Integer> collection = this.newMapWithKeysValues(1, 1, 2, 2, 3, 3);
-        MapIterable<String, Integer> aggregation = collection.aggregateBy(Functions.getToString(), valueCreator, sumAggregator);
-        Assert.assertEquals(1, aggregation.get("1").intValue());
-        Assert.assertEquals(2, aggregation.get("2").intValue());
-        Assert.assertEquals(3, aggregation.get("3").intValue());
     }
 
     @Test
