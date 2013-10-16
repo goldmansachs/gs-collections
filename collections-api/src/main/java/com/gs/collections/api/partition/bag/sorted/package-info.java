@@ -15,23 +15,20 @@
  */
 
 /**
- * This package contains interfaces for {@link com.gs.collections.api.multimap.Multimap}.
+ * This package contains interfaces for {@link com.gs.collections.api.partition.bag.sorted.PartitionSortedBag}.
  * <p>
- *     A Multimap is a type of {@link java.util.Map} that can associate multiple values for keys.
+ *     A PartitionSortedBag is the result of splitting a sorted bag into two sorted bags based on a Predicate.
  * </p>
  * <p>
- *      This package contains 3 interfaces:
+ *      This package contains the following interfaces:
  * <ul>
  *     <li>
- *         {@link com.gs.collections.api.multimap.Multimap} - a Read-only Multimap API.
+ *         {@link com.gs.collections.api.partition.bag.sorted.PartitionSortedBag} - a Read-only PartitionSortedSet API.
  *     </li>
  *     <li>
- *         {@link com.gs.collections.api.multimap.MutableMultimap} - a modifiable Multimap.
- *     </li>
- *     <li>
- *         {@link com.gs.collections.api.multimap.ImmutableMultimap} - the non-modifiable equivalent interface to {@link com.gs.collections.api.multimap.MutableMultimap}.
+ *         {@link com.gs.collections.api.partition.bag.sorted.PartitionMutableSortedBag} - a modifiable PartitionSortedSet.
  *     </li>
  * </ul>
  * </p>
  */
-package com.gs.collections.api.multimap;
+package com.gs.collections.api.partition.bag.sorted;

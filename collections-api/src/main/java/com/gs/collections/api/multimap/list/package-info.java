@@ -17,7 +17,7 @@
 /**
  * This package contains interfaces for {@link com.gs.collections.api.multimap.list.ListMultimap}.
  * <p>
- *     A ListMultiMap is a type of {@link com.gs.collections.api.multimap.Multimap} that stores the values for keys in a {@link com.gs.collections.api.list.MutableList}.
+ *     A ListMultimap is a type of {@link com.gs.collections.api.multimap.Multimap} that stores the values for keys in a {@link com.gs.collections.api.list.MutableList}.
  * </p>
  * <p>
  * This package contains 3 interfaces:

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -554,9 +554,9 @@ public abstract class AbstractSortedSetTestCase extends AbstractCollectionTestCa
 
     @Override
     @Test
-    public void toSortedSet()
+    public void toSortedSet_natural_ordering()
     {
-        super.toSortedSet();
+        super.toSortedSet_natural_ordering();
         MutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder(), 1, 2, 3, 4, 5);
         Verify.assertSortedSetsEqual(TreeSortedSet.newSetWith(1, 2, 3, 4, 5), integers.toSortedSet());
     }

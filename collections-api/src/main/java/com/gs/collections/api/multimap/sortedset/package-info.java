@@ -17,7 +17,7 @@
 /**
  * This package contains interfaces for {@link com.gs.collections.api.multimap.sortedset.SortedSetMultimap}.
  * <p>
- *     A SortedSetMultiMap is a type of {@link com.gs.collections.api.multimap.Multimap} that stores the values for keys in a {@link com.gs.collections.api.set.sorted.MutableSortedSet}.
+ *     A SortedSetMultimap is a type of {@link com.gs.collections.api.multimap.Multimap} that stores the values for keys in a {@link com.gs.collections.api.set.sorted.MutableSortedSet}.
  * </p>
  * <p>
  * This package contains 3 interfaces:

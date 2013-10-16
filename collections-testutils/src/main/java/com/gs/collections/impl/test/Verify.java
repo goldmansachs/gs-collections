@@ -34,12 +34,14 @@ import java.util.SortedSet;
 import java.util.concurrent.Callable;
 
 import com.gs.collections.api.PrimitiveIterable;
+import com.gs.collections.api.bag.sorted.SortedBag;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.sorted.SortedMapIterable;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
@@ -1834,6 +1836,54 @@ public final class Verify extends Assert
         try
         {
             Verify.assertIterablesEqual(setName, expectedSet, actualSet);
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    public static void assertSortedBagsEqual(SortedBag<?> expectedBag, SortedBag<?> actualBag)
+    {
+        try
+        {
+            Verify.assertSortedBagsEqual("sortedBags", expectedBag, actualBag);
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    public static void assertSortedBagsEqual(String bagName, SortedBag<?> expectedBag, SortedBag<?> actualBag)
+    {
+        try
+        {
+            Verify.assertIterablesEqual(bagName, expectedBag, actualBag);
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    public static void assertSortedMapsEqual(SortedMapIterable<?, ?> expectedMap, SortedMapIterable<?, ?> actualMap)
+    {
+        try
+        {
+            Verify.assertSortedMapsEqual("sortedMaps", expectedMap, actualMap);
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    public static void assertSortedMapsEqual(String mapName, SortedMapIterable<?, ?> expectedMap, SortedMapIterable<?, ?> actualMap)
+    {
+        try
+        {
+            Verify.assertIterablesEqual(mapName, expectedMap, actualMap);
         }
         catch (AssertionError e)
         {

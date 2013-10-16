@@ -17,7 +17,7 @@
 /**
  * This package contains interfaces for {@link com.gs.collections.api.multimap.set.SetMultimap}.
  * <p>
- *     A SetMultiMap is a type of {@link com.gs.collections.api.multimap.Multimap} that stores the values for keys in a {@link com.gs.collections.api.set.MutableSet}.
+ *     A SetMultimap is a type of {@link com.gs.collections.api.multimap.Multimap} that stores the values for keys in a {@link com.gs.collections.api.set.MutableSet}.
  * </p>
  * <p>
  * This package contains 3 interfaces:

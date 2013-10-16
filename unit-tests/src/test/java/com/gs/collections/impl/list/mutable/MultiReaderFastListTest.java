@@ -1172,4 +1172,11 @@ public class MultiReaderFastListTest extends AbstractListTestCase
         this.<Object>newWith(1, 2, 3).appendString(builder);
         Assert.assertEquals("1, 2, 3", builder.toString());
     }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void iterator_throws()
+    {
+        this.newWith(1, 2, 3).iterator();
+    }
 }

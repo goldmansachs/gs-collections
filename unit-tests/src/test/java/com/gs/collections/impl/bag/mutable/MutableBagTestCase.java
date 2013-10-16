@@ -26,6 +26,7 @@ import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
+import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.primitive.IntPredicates;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.collection.mutable.AbstractCollectionTestCase;
@@ -157,6 +158,16 @@ public abstract class MutableBagTestCase extends AbstractCollectionTestCase
                 iterator.remove();
             }
         });
+    }
+
+    @Test
+    public void removeIf()
+    {
+        MutableBag<Integer> objects = this.newWith(4, 1, 3, 3, 2);
+        objects.removeIf(Predicates.equal(2));
+        Assert.assertEquals(HashBag.newBagWith(1, 3, 3, 4), objects);
+        objects.removeIf(Predicates.equal(3));
+        Assert.assertEquals(HashBag.newBagWith(1, 4), objects);
     }
 
     @Override

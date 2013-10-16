@@ -15,23 +15,23 @@
  */
 
 /**
- * This package contains interfaces for {@link com.gs.collections.api.multimap.bag.BagMultimap}.
+ * This package contains interfaces for {@link com.gs.collections.api.multimap.sortedbag.SortedBagMultimap}.
  * <p>
- *     A BagMultimap is a type of {@link com.gs.collections.api.multimap.Multimap} that stores the values for keys in a {@link com.gs.collections.api.bag.Bag}.
+ *     A SortedBagMultimap is a type of {@link com.gs.collections.api.multimap.Multimap} that stores the values for keys in a {@link com.gs.collections.api.bag.sorted.MutableSortedBag}.
  * </p>
  * <p>
  * This package contains 3 interfaces:
  * <ul>
  *     <li>
- *         {@link com.gs.collections.api.multimap.bag.BagMultimap} - A Read-only Bag Multimap API.
+ *         {@link com.gs.collections.api.multimap.sortedbag.SortedBagMultimap} - A Read-only Sorted Bag Multimap API.
  *     </li>
  *     <li>
- *         {@link com.gs.collections.api.multimap.bag.MutableBagMultimap} - Modifiable Bag multimap.
+ *         {@link com.gs.collections.api.multimap.sortedbag.MutableSortedBagMultimap} - Modifiable Sorted Bag multimap.
  *     </li>
  *     <li>
- *         {@link com.gs.collections.api.multimap.bag.ImmutableBagMultimap} - Non-modifiable equivalent interface to {@link com.gs.collections.api.multimap.bag.MutableBagMultimap}.
+ *         {@link com.gs.collections.api.multimap.sortedbag.ImmutableSortedBagMultimap} - Non-modifiable equivalent interface to {@link com.gs.collections.api.multimap.sortedbag.MutableSortedBagMultimap}.
  *     </li>
  * </ul>
  * </p>
  */
-package com.gs.collections.api.multimap.bag;
+package com.gs.collections.api.multimap.sortedbag;

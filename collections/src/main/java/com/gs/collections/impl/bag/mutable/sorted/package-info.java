@@ -15,23 +15,20 @@
  */
 
 /**
- * This package contains interfaces for {@link com.gs.collections.api.multimap.Multimap}.
+ * This package contains implementations of {@link com.gs.collections.api.bag.sorted.MutableSortedBag}.
  * <p>
- *     A Multimap is a type of {@link java.util.Map} that can associate multiple values for keys.
+ *
  * </p>
  * <p>
- *      This package contains 3 interfaces:
+ *     This package contains 2 sorted mutable bag implementation:
  * <ul>
  *     <li>
- *         {@link com.gs.collections.api.multimap.Multimap} - a Read-only Multimap API.
+ *          {@link com.gs.collections.impl.bag.mutable.sorted.TreeBag} - a sorted bag backed by Tree data structure..
  *     </li>
  *     <li>
- *         {@link com.gs.collections.api.multimap.MutableMultimap} - a modifiable Multimap.
- *     </li>
- *     <li>
- *         {@link com.gs.collections.api.multimap.ImmutableMultimap} - the non-modifiable equivalent interface to {@link com.gs.collections.api.multimap.MutableMultimap}.
+ *          {@link com.gs.collections.impl.bag.mutable.sorted.UnmodifiableSortedBag} -  an unmodifiable view of a SortedBag.
  *     </li>
  * </ul>
  * </p>
  */
-package com.gs.collections.api.multimap;
+package com.gs.collections.impl.bag.mutable.sorted;

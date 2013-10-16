@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,14 +32,13 @@ import com.gs.collections.api.set.UnsortedSetIterable;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
-import com.gs.collections.impl.collection.mutable.AbstractCollectionTestCase;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class MultiReaderUnifiedSetTest extends AbstractCollectionTestCase
+public class MultiReaderUnifiedSetTest extends MultiReaderMutableCollectionTestCase
 {
     @Override
     protected <T> MutableSet<T> classUnderTest()

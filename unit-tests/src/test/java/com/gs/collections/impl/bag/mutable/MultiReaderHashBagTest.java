@@ -33,13 +33,13 @@ import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.primitive.IntPredicates;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
-import com.gs.collections.impl.collection.mutable.AbstractCollectionTestCase;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.parallel.ParallelIterate;
+import com.gs.collections.impl.set.mutable.MultiReaderMutableCollectionTestCase;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
@@ -49,7 +49,7 @@ import org.junit.Test;
 /**
  * JUnit test for {@link MultiReaderHashBag}.
  */
-public class MultiReaderHashBagTest extends AbstractCollectionTestCase
+public class MultiReaderHashBagTest extends MultiReaderMutableCollectionTestCase
 {
     @Override
     protected <T> MultiReaderHashBag<T> classUnderTest()

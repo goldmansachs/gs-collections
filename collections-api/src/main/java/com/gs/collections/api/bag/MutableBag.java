@@ -52,6 +52,10 @@ import com.gs.collections.api.tuple.Pair;
 public interface MutableBag<T>
         extends Bag<T>, MutableCollection<T>
 {
+    MutableBag<T> selectByOccurrences(IntPredicate predicate);
+
+    ImmutableBag<T> toImmutable();
+
     MutableBag<T> with(T element);
 
     MutableBag<T> without(T element);
@@ -62,45 +66,29 @@ public interface MutableBag<T>
 
     MutableBag<T> newEmpty();
 
-    void addOccurrences(T item, int occurrences);
-
-    boolean removeOccurrences(Object item, int occurrences);
-
-    MutableBag<T> selectByOccurrences(IntPredicate predicate);
-
-    MutableBag<T> select(Predicate<? super T> predicate);
-
     <P> MutableBag<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
-
-    MutableBag<T> reject(Predicate<? super T> predicate);
 
     <P> MutableBag<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
-    PartitionMutableBag<T> partition(Predicate<? super T> predicate);
+    <P, V> MutableBag<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
 
-    <S> MutableBag<S> selectInstancesOf(Class<S> clazz);
+    MutableBag<T> asUnmodifiable();
+
+    MutableBag<T> asSynchronized();
+
+    PartitionMutableBag<T> partition(Predicate<? super T> predicate);
 
     <V> MutableBag<V> collect(Function<? super T, ? extends V> function);
 
     MutableBooleanBag collectBoolean(BooleanFunction<? super T> booleanFunction);
 
-    MutableByteBag collectByte(ByteFunction<? super T> byteFunction);
-
-    MutableCharBag collectChar(CharFunction<? super T> charFunction);
-
     MutableDoubleBag collectDouble(DoubleFunction<? super T> doubleFunction);
 
     MutableFloatBag collectFloat(FloatFunction<? super T> floatFunction);
 
-    MutableIntBag collectInt(IntFunction<? super T> intFunction);
-
     MutableLongBag collectLong(LongFunction<? super T> longFunction);
 
     MutableShortBag collectShort(ShortFunction<? super T> shortFunction);
-
-    <P, V> MutableBag<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
-
-    <V> MutableBag<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 
     <V> MutableBag<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
 
@@ -112,9 +100,21 @@ public interface MutableBag<T>
 
     MutableBag<Pair<T, Integer>> zipWithIndex();
 
-    ImmutableBag<T> toImmutable();
+    MutableBag<T> select(Predicate<? super T> predicate);
 
-    MutableBag<T> asUnmodifiable();
+    MutableBag<T> reject(Predicate<? super T> predicate);
 
-    MutableBag<T> asSynchronized();
+    <S> MutableBag<S> selectInstancesOf(Class<S> clazz);
+
+    MutableByteBag collectByte(ByteFunction<? super T> byteFunction);
+
+    MutableCharBag collectChar(CharFunction<? super T> charFunction);
+
+    MutableIntBag collectInt(IntFunction<? super T> intFunction);
+
+    <V> MutableBag<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
+
+    void addOccurrences(T item, int occurrences);
+
+    boolean removeOccurrences(Object item, int occurrences);
 }

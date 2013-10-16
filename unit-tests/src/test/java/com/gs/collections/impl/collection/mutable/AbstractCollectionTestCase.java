@@ -729,6 +729,20 @@ public abstract class AbstractCollectionTestCase
         Assert.assertFalse(iterator.hasNext());
     }
 
+    @Test(expected = NoSuchElementException.class)
+    public void iterator_throws()
+    {
+        MutableCollection<Integer> objects = this.newWith(1, 2, 3);
+        Iterator<Integer> iterator = objects.iterator();
+        for (int i = objects.size(); i-- > 0; )
+        {
+            Assert.assertTrue(iterator.hasNext());
+            iterator.next();
+        }
+        Assert.assertFalse(iterator.hasNext());
+        iterator.next();
+    }
+
     @Test
     public void injectInto()
     {
@@ -923,19 +937,11 @@ public abstract class AbstractCollectionTestCase
     }
 
     @Test
-    public void toSortedListNaturalOrdering()
+    public void toSortedList_natural_ordering()
     {
         MutableCollection<Integer> integers = this.newWith(2, 1, 5, 3, 4);
         MutableList<Integer> list = integers.toSortedList();
         Verify.assertStartsWith(list, 1, 2, 3, 4, 5);
-    }
-
-    @Test
-    public void toSortedList()
-    {
-        MutableCollection<Integer> integers = this.newWith(2, 4, 1, 3);
-        MutableList<Integer> list = integers.toSortedList();
-        Assert.assertEquals(FastList.newListWith(1, 2, 3, 4), list);
     }
 
     @Test
@@ -961,7 +967,7 @@ public abstract class AbstractCollectionTestCase
     }
 
     @Test
-    public void toSortedSet()
+    public void toSortedSet_natural_ordering()
     {
         MutableCollection<Integer> integers = this.newWith(2, 4, 1, 3, 2, 1, 3, 4);
         MutableSortedSet<Integer> set = integers.toSortedSet();
@@ -1029,20 +1035,14 @@ public abstract class AbstractCollectionTestCase
     @Test
     public void testToString()
     {
-        MutableCollection<Object> collection = this.<Object>newWith(1);
-        collection.add(collection);
-        String simpleName = collection.getClass().getSimpleName();
-        String string = collection.toString();
-        Assert.assertTrue(
-                ("[1, (this " + simpleName + ")]").equals(string)
-                        || ("[(this " + simpleName + "), 1]").equals(string));
+        MutableCollection<Object> collection = this.<Object>newWith(1, 2, 3);
+        Assert.assertEquals("[1, 2, 3]", collection.toString());
     }
 
     @Test
     public void makeString()
     {
         MutableCollection<Object> collection = this.<Object>newWith(1, 2, 3);
-        collection.add(collection);
         Assert.assertEquals(collection.toString(), '[' + collection.makeString() + ']');
     }
 
@@ -1064,7 +1064,6 @@ public abstract class AbstractCollectionTestCase
     public void appendString()
     {
         MutableCollection<Object> collection = this.<Object>newWith(1, 2, 3);
-        collection.add(collection);
         Appendable builder = new StringBuilder();
         collection.appendString(builder);
         Assert.assertEquals(collection.toString(), '[' + builder.toString() + ']');

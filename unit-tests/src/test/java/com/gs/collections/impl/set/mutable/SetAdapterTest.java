@@ -49,6 +49,19 @@ public class SetAdapterTest extends AbstractMutableSetTestCase
 
     @Override
     @Test
+    public void testToString()
+    {
+        MutableCollection<Object> collection = this.<Object>newWith(1);
+        collection.add(collection);
+        String simpleName = collection.getClass().getSimpleName();
+        String string = collection.toString();
+        Assert.assertTrue(
+                ("[1, (this " + simpleName + ")]").equals(string)
+                        || ("[(this " + simpleName + "), 1]").equals(string));
+    }
+
+    @Override
+    @Test
     public void asSynchronized()
     {
         Verify.assertInstanceOf(SynchronizedMutableSet.class, SetAdapter.adapt(new HashSet<Integer>()).asSynchronized());
