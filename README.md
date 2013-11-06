@@ -3,6 +3,7 @@
 GS Collections is a collections framework for Java. It has JDK-compatible List, Set and Map implementations with a rich API and set of utility classes that work with any JDK compatible Collections, Arrays, Maps or Strings. The iteration protocol was inspired by the Smalltalk collection framework.
 
 ## Download
+* [Version 4.2.0](http://www.goldmansachs.com/gs-collections/binaries/gs-collections-4.2.0.zip)
 * [Version 4.1.0](http://www.goldmansachs.com/gs-collections/binaries/gs-collections-4.1.0.zip)
 * [Version 4.0.0](http://www.goldmansachs.com/gs-collections/binaries/gs-collections-4.0.0.zip)
 * [Version 3.2.0](http://www.goldmansachs.com/gs-collections/binaries/gs-collections-3.2.0.zip)
