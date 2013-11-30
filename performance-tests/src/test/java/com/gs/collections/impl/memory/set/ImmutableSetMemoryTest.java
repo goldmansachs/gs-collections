@@ -49,6 +49,8 @@ public class ImmutableSetMemoryTest
 
     public void memoryForScaledSets(int size)
     {
+        MemoryTestBench.on(scala.collection.immutable.Set.class)
+                .printContainerMemoryUsage("ImmutableSet", size, new SizedImmutableScalaSetFactory(size));
         MemoryTestBench.on(Set.class)
                 .printContainerMemoryUsage("ImmutableSet", size, new SizedUnmodifiableHashSetFactory(size));
         MemoryTestBench.on(com.gs.collections.api.set.ImmutableSet.class)
@@ -57,11 +59,11 @@ public class ImmutableSetMemoryTest
                 .printContainerMemoryUsage("ImmutableSet", size, new SizedImmutableGuavaSetFactory(size));
     }
 
-    public static class SizedImmutableGscSetFactory implements Function0<com.gs.collections.api.set.ImmutableSet<Integer>>
+    private static final class SizedImmutableGscSetFactory implements Function0<com.gs.collections.api.set.ImmutableSet<Integer>>
     {
         private final int size;
 
-        protected SizedImmutableGscSetFactory(int size)
+        private SizedImmutableGscSetFactory(int size)
         {
             this.size = size;
         }
@@ -78,11 +80,11 @@ public class ImmutableSetMemoryTest
         }
     }
 
-    public static class SizedImmutableGuavaSetFactory implements Function0<ImmutableSet<Integer>>
+    private static final class SizedImmutableGuavaSetFactory implements Function0<ImmutableSet<Integer>>
     {
         private final int size;
 
-        protected SizedImmutableGuavaSetFactory(int size)
+        private SizedImmutableGuavaSetFactory(int size)
         {
             this.size = size;
         }
@@ -99,11 +101,11 @@ public class ImmutableSetMemoryTest
         }
     }
 
-    public static class SizedUnmodifiableHashSetFactory implements Function0<Set<Integer>>
+    private static final class SizedUnmodifiableHashSetFactory implements Function0<Set<Integer>>
     {
         private final int size;
 
-        protected SizedUnmodifiableHashSetFactory(int size)
+        private SizedUnmodifiableHashSetFactory(int size)
         {
             this.size = size;
         }
@@ -125,6 +127,27 @@ public class ImmutableSetMemoryTest
                 set.add(Integer.valueOf(i));
             }
             return Collections.unmodifiableSet(set);
+        }
+    }
+
+    private static final class SizedImmutableScalaSetFactory implements Function0<scala.collection.immutable.Set<Integer>>
+    {
+        private final int size;
+
+        private SizedImmutableScalaSetFactory(int size)
+        {
+            this.size = size;
+        }
+
+        @Override
+        public scala.collection.immutable.Set<Integer> value()
+        {
+            scala.collection.mutable.HashSet<Integer> mutableSet = new scala.collection.mutable.HashSet<Integer>();
+            for (int i = 0; i < this.size; i++)
+            {
+                mutableSet.$plus$eq(Integer.valueOf(i));
+            }
+            return mutableSet.toSet();
         }
     }
 }

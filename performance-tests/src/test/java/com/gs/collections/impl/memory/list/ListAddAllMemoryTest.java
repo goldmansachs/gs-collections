@@ -27,6 +27,8 @@ import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import scala.collection.mutable.ArrayBuffer;
+import scala.collection.mutable.ListBuffer;
 
 public class ListAddAllMemoryTest
 {
@@ -42,17 +44,21 @@ public class ListAddAllMemoryTest
 
     public void memoryForScaledLists(int size)
     {
+        MemoryTestBench.on(ArrayBuffer.class)
+                .printContainerMemoryUsage("ListAddAll", size, new ArrayBufferFactory(size));
         MemoryTestBench.on(ArrayList.class)
                 .printContainerMemoryUsage("ListAddAll", size, new ArrayListFactory(size));
         MemoryTestBench.on(FastList.class)
                 .printContainerMemoryUsage("ListAddAll", size, new FastListFactory(size));
+        MemoryTestBench.on(ListBuffer.class)
+                .printContainerMemoryUsage("ListAddAll", size, new ListBufferFactory(size));
         MemoryTestBench.on(LinkedList.class)
                 .printContainerMemoryUsage("ListAddAll", size, new LinkedListFactory(size));
     }
 
     public abstract static class SizedListFactory
     {
-        private final int size;
+        protected final int size;
 
         protected SizedListFactory(int size)
         {
@@ -69,11 +75,11 @@ public class ListAddAllMemoryTest
         }
     }
 
-    public static class ArrayListFactory
+    private static final class ArrayListFactory
             extends SizedListFactory
             implements Function0<ArrayList<String>>
     {
-        protected ArrayListFactory(int size)
+        private ArrayListFactory(int size)
         {
             super(size);
         }
@@ -85,11 +91,11 @@ public class ListAddAllMemoryTest
         }
     }
 
-    public static class LinkedListFactory
+    private static final class LinkedListFactory
             extends SizedListFactory
             implements Function0<LinkedList<String>>
     {
-        protected LinkedListFactory(int size)
+        private LinkedListFactory(int size)
         {
             super(size);
         }
@@ -97,15 +103,15 @@ public class ListAddAllMemoryTest
         @Override
         public LinkedList<String> value()
         {
-            return this.fill(new LinkedList());
+            return this.fill(new LinkedList<String>());
         }
     }
 
-    public static class FastListFactory
+    private static final class FastListFactory
             extends SizedListFactory
             implements Function0<FastList<String>>
     {
-        protected FastListFactory(int size)
+        private FastListFactory(int size)
         {
             super(size);
         }
@@ -114,6 +120,58 @@ public class ListAddAllMemoryTest
         public FastList<String> value()
         {
             return this.fill(FastList.<String>newList(0));
+        }
+    }
+
+    private static final class ListBufferFactory
+            extends SizedListFactory
+            implements Function0<ListBuffer<String>>
+    {
+        private ListBufferFactory(int size)
+        {
+            super(size);
+        }
+
+        @Override
+        public ListBuffer<String> value()
+        {
+            ListBuffer<String> nonPresized = new ListBuffer<String>();
+            for (int i = 0; i < this.size; i++)
+            {
+                nonPresized.$plus$eq("dummy");
+            }
+            ListBuffer<String> list = new ListBuffer<String>();
+            if (this.size > 0)
+            {
+                list.$plus$plus$eq(nonPresized);
+            }
+            return list;
+        }
+    }
+
+    private static final class ArrayBufferFactory
+            extends SizedListFactory
+            implements Function0<ArrayBuffer<String>>
+    {
+        private ArrayBufferFactory(int size)
+        {
+            super(size);
+        }
+
+        @Override
+        public ArrayBuffer<String> value()
+        {
+            ArrayBuffer<String> nonPresized = new ArrayBuffer<String>();
+            for (int i = 0; i < this.size; i++)
+            {
+                nonPresized.$plus$eq("dummy");
+            }
+            ArrayBuffer<String> list = new ArrayBuffer<String>();
+            if (this.size > 0)
+            {
+                list.$plus$plus$eq(nonPresized.seq());
+            }
+            return list;
         }
     }
 }

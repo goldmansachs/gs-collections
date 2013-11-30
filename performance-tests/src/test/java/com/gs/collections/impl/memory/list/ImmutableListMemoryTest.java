@@ -29,6 +29,7 @@ import com.gs.collections.impl.list.primitive.IntInterval;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import scala.collection.mutable.ListBuffer;
 
 public class ImmutableListMemoryTest
 {
@@ -49,6 +50,8 @@ public class ImmutableListMemoryTest
 
     public void memoryForScaledLists(int size)
     {
+        MemoryTestBench.on(scala.collection.immutable.List.class)
+                .printContainerMemoryUsage("ImmutableList", size, new SizedImmutableScalaListFactory(size));
         MemoryTestBench.on(List.class)
                 .printContainerMemoryUsage("ImmutableList", size, new SizedUnmodifiableArrayListFactory(size));
         MemoryTestBench.on(com.gs.collections.api.list.ImmutableList.class)
@@ -57,11 +60,11 @@ public class ImmutableListMemoryTest
                 .printContainerMemoryUsage("ImmutableList", size, new SizedImmutableGuavaListFactory(size));
     }
 
-    public static class SizedImmutableGscListFactory implements Function0<com.gs.collections.api.list.ImmutableList<String>>
+    private static final class SizedImmutableGscListFactory implements Function0<com.gs.collections.api.list.ImmutableList<String>>
     {
         private final int size;
 
-        protected SizedImmutableGscListFactory(int size)
+        private SizedImmutableGscListFactory(int size)
         {
             this.size = size;
         }
@@ -73,11 +76,11 @@ public class ImmutableListMemoryTest
         }
     }
 
-    public static class SizedImmutableGuavaListFactory implements Function0<ImmutableList<String>>
+    private static final class SizedImmutableGuavaListFactory implements Function0<ImmutableList<String>>
     {
         private final int size;
 
-        protected SizedImmutableGuavaListFactory(int size)
+        private SizedImmutableGuavaListFactory(int size)
         {
             this.size = size;
         }
@@ -89,11 +92,11 @@ public class ImmutableListMemoryTest
         }
     }
 
-    public static class SizedUnmodifiableArrayListFactory implements Function0<List<String>>
+    private static final class SizedUnmodifiableArrayListFactory implements Function0<List<String>>
     {
         private final int size;
 
-        protected SizedUnmodifiableArrayListFactory(int size)
+        private SizedUnmodifiableArrayListFactory(int size)
         {
             this.size = size;
         }
@@ -110,6 +113,28 @@ public class ImmutableListMemoryTest
                 return Collections.singletonList("dummy");
             }
             return Collections.unmodifiableList(new ArrayList<String>(Collections.nCopies(this.size, "dummy")));
+        }
+    }
+
+    private static final class SizedImmutableScalaListFactory implements Function0<scala.collection.immutable.List<String>>
+    {
+        private final int size;
+
+        private SizedImmutableScalaListFactory(int size)
+        {
+            this.size = size;
+        }
+
+        @Override
+        public scala.collection.immutable.List<String> value()
+        {
+            ListBuffer<String> listBuffer = new ListBuffer<String>();
+            for (int i = 0; i < this.size; i++)
+            {
+                listBuffer.$plus$eq("dummy");
+            }
+
+            return listBuffer.toList();
         }
     }
 }

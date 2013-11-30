@@ -45,6 +45,8 @@ public class MapMemoryTest
 
     public void memoryForScaledMaps(int size)
     {
+        MemoryTestBench.on(scala.collection.mutable.HashMap.class)
+                .printContainerMemoryUsage("Map", size, new ScalaHashMapFactory(size));
         MemoryTestBench.on(HashMap.class)
                 .printContainerMemoryUsage("Map", size, new HashMapFactory(size));
         MemoryTestBench.on(THashMap.class)
@@ -57,7 +59,7 @@ public class MapMemoryTest
 
     public abstract static class SizedMapFactory
     {
-        private final ImmutableList<Integer> data;
+        protected final ImmutableList<Integer> data;
 
         protected SizedMapFactory(int size)
         {
@@ -77,11 +79,11 @@ public class MapMemoryTest
         }
     }
 
-    public static class HashMapFactory
+    private static final class HashMapFactory
             extends SizedMapFactory
             implements Function0<HashMap<Integer, String>>
     {
-        protected HashMapFactory(int size)
+        private HashMapFactory(int size)
         {
             super(size);
         }
@@ -93,11 +95,11 @@ public class MapMemoryTest
         }
     }
 
-    public static class THashMapFactory
+    private static final class THashMapFactory
             extends SizedMapFactory
             implements Function0<THashMap<Integer, String>>
     {
-        protected THashMapFactory(int size)
+        private THashMapFactory(int size)
         {
             super(size);
         }
@@ -105,15 +107,15 @@ public class MapMemoryTest
         @Override
         public THashMap<Integer, String> value()
         {
-            return this.fill(new THashMap());
+            return this.fill(new THashMap<Integer, String>());
         }
     }
 
-    public static class HashtableFactory
+    private static final class HashtableFactory
             extends SizedMapFactory
             implements Function0<Hashtable<Integer, String>>
     {
-        protected HashtableFactory(int size)
+        private HashtableFactory(int size)
         {
             super(size);
         }
@@ -126,11 +128,11 @@ public class MapMemoryTest
         }
     }
 
-    public static class UnifiedMapFactory
+    private static final class UnifiedMapFactory
             extends SizedMapFactory
             implements Function0<UnifiedMap<Integer, String>>
     {
-        protected UnifiedMapFactory(int size)
+        private UnifiedMapFactory(int size)
         {
             super(size);
         }
@@ -139,6 +141,30 @@ public class MapMemoryTest
         public UnifiedMap<Integer, String> value()
         {
             return this.fill(new UnifiedMap<Integer, String>());
+        }
+    }
+
+    private static final class ScalaHashMapFactory
+            extends SizedMapFactory
+            implements Function0<scala.collection.mutable.HashMap<Integer, String>>
+    {
+        private ScalaHashMapFactory(int size)
+        {
+            super(size);
+        }
+
+        @Override
+        public scala.collection.mutable.HashMap<Integer, String> value()
+        {
+            final scala.collection.mutable.HashMap<Integer, String> map = new scala.collection.mutable.HashMap<Integer, String>();
+            this.data.forEach(new Procedure<Integer>()
+            {
+                public void value(Integer each)
+                {
+                    map.put(each, "dummy");
+                }
+            });
+            return map;
         }
     }
 }

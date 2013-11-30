@@ -26,6 +26,8 @@ import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import scala.collection.mutable.ArrayBuffer;
+import scala.collection.mutable.ListBuffer;
 
 public class ListAddMemoryTest
 {
@@ -41,10 +43,14 @@ public class ListAddMemoryTest
 
     public void memoryForScaledLists(int size)
     {
+        MemoryTestBench.on(ArrayBuffer.class)
+                .printContainerMemoryUsage("ListAdd", size, new ArrayBufferFactory(size));
         MemoryTestBench.on(ArrayList.class)
                 .printContainerMemoryUsage("ListAdd", size, new ArrayListFactory(size));
         MemoryTestBench.on(FastList.class)
                 .printContainerMemoryUsage("ListAdd", size, new FastListFactory(size));
+        MemoryTestBench.on(ListBuffer.class)
+                .printContainerMemoryUsage("ListAdd", size, new ListBufferFactory(size));
         MemoryTestBench.on(LinkedList.class)
                 .printContainerMemoryUsage("ListAdd", size, new LinkedListFactory(size));
     }
@@ -68,11 +74,11 @@ public class ListAddMemoryTest
         }
     }
 
-    public static class ArrayListFactory
+    private static final class ArrayListFactory
             extends SizedListFactory
             implements Function0<ArrayList<String>>
     {
-        protected ArrayListFactory(int size)
+        private ArrayListFactory(int size)
         {
             super(size);
         }
@@ -84,11 +90,11 @@ public class ListAddMemoryTest
         }
     }
 
-    public static class LinkedListFactory
+    private static final class LinkedListFactory
             extends SizedListFactory
             implements Function0<LinkedList<String>>
     {
-        protected LinkedListFactory(int size)
+        private LinkedListFactory(int size)
         {
             super(size);
         }
@@ -100,11 +106,11 @@ public class ListAddMemoryTest
         }
     }
 
-    public static class FastListFactory
+    private static final class FastListFactory
             extends SizedListFactory
             implements Function0<FastList<String>>
     {
-        protected FastListFactory(int size)
+        private FastListFactory(int size)
         {
             super(size);
         }
@@ -113,6 +119,48 @@ public class ListAddMemoryTest
         public FastList<String> value()
         {
             return this.fill(FastList.<String>newList());
+        }
+    }
+
+    private static final class ListBufferFactory
+            extends SizedListFactory
+            implements Function0<ListBuffer<String>>
+    {
+        private ListBufferFactory(int size)
+        {
+            super(size);
+        }
+
+        @Override
+        public ListBuffer<String> value()
+        {
+            ListBuffer<String> list = new ListBuffer<String>();
+            for (int i = 0; i < this.size; i++)
+            {
+                list.$plus$eq("dummy");
+            }
+            return list;
+        }
+    }
+
+    private static final class ArrayBufferFactory
+            extends SizedListFactory
+            implements Function0<ArrayBuffer<String>>
+    {
+        private ArrayBufferFactory(int size)
+        {
+            super(size);
+        }
+
+        @Override
+        public ArrayBuffer<String> value()
+        {
+            ArrayBuffer<String> list = new ArrayBuffer<String>();
+            for (int i = 0; i < this.size; i++)
+            {
+                list.$plus$eq("dummy");
+            }
+            return list;
         }
     }
 }

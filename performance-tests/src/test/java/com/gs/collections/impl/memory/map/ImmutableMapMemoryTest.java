@@ -29,6 +29,7 @@ import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import scala.collection.immutable.HashMap$;
 
 public class ImmutableMapMemoryTest
 {
@@ -49,6 +50,8 @@ public class ImmutableMapMemoryTest
 
     public void memoryForScaledMaps(int size)
     {
+        MemoryTestBench.on(scala.collection.immutable.Map.class)
+                .printContainerMemoryUsage("ImmutableMap", size, new SizedImmutableScalaMapFactory(size));
         MemoryTestBench.on(Map.class)
                 .printContainerMemoryUsage("ImmutableMap", size, new SizedUnmodifiableHashMapFactory(size));
         MemoryTestBench.on(com.gs.collections.api.map.ImmutableMap.class)
@@ -57,11 +60,11 @@ public class ImmutableMapMemoryTest
                 .printContainerMemoryUsage("ImmutableMap", size, new SizedImmutableGuavaMapFactory(size));
     }
 
-    public static class SizedImmutableGscMapFactory implements Function0<com.gs.collections.api.map.ImmutableMap<Integer, String>>
+    private static final class SizedImmutableGscMapFactory implements Function0<com.gs.collections.api.map.ImmutableMap<Integer, String>>
     {
         private final int size;
 
-        protected SizedImmutableGscMapFactory(int size)
+        private SizedImmutableGscMapFactory(int size)
         {
             this.size = size;
         }
@@ -78,11 +81,11 @@ public class ImmutableMapMemoryTest
         }
     }
 
-    public static class SizedImmutableGuavaMapFactory implements Function0<ImmutableMap<Integer, String>>
+    private static final class SizedImmutableGuavaMapFactory implements Function0<ImmutableMap<Integer, String>>
     {
         private final int size;
 
-        protected SizedImmutableGuavaMapFactory(int size)
+        private SizedImmutableGuavaMapFactory(int size)
         {
             this.size = size;
         }
@@ -99,11 +102,11 @@ public class ImmutableMapMemoryTest
         }
     }
 
-    public static class SizedUnmodifiableHashMapFactory implements Function0<Map<Integer, String>>
+    private static final class SizedUnmodifiableHashMapFactory implements Function0<Map<Integer, String>>
     {
         private final int size;
 
-        protected SizedUnmodifiableHashMapFactory(int size)
+        private SizedUnmodifiableHashMapFactory(int size)
         {
             this.size = size;
         }
@@ -125,6 +128,27 @@ public class ImmutableMapMemoryTest
                 map.put(Integer.valueOf(i), "dummy");
             }
             return Collections.unmodifiableMap(map);
+        }
+    }
+
+    private static final class SizedImmutableScalaMapFactory implements Function0<scala.collection.immutable.Map<Integer, String>>
+    {
+        private final int size;
+
+        private SizedImmutableScalaMapFactory(int size)
+        {
+            this.size = size;
+        }
+
+        @Override
+        public scala.collection.immutable.Map<Integer, String> value()
+        {
+            scala.collection.immutable.HashMap<Integer, String> hashMap = HashMap$.MODULE$.empty();
+            for (int i = 0; i < this.size; i++)
+            {
+                hashMap = hashMap.updated(Integer.valueOf(i), "dummy");
+            }
+            return hashMap;
         }
     }
 }

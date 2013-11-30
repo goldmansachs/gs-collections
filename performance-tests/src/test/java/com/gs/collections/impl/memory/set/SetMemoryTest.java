@@ -44,6 +44,7 @@ public class SetMemoryTest
 
     private void memoryForScaledSets(int size)
     {
+        MemoryTestBench.on(scala.collection.mutable.HashSet.class).printContainerMemoryUsage("Set", size, new ScalaMutableSetFactory(size));
         MemoryTestBench.on(THashSet.class).printContainerMemoryUsage("Set", size, new THashSetFactory(size));
         MemoryTestBench.on(UnifiedSet.class).printContainerMemoryUsage("Set", size, new UnifiedSetFactory(size));
         MemoryTestBench.on(HashSet.class).printContainerMemoryUsage("Set", size, new HashSetFactory(size));
@@ -51,7 +52,7 @@ public class SetMemoryTest
 
     public abstract static class SizedSetFactory
     {
-        private final ImmutableList<Integer> data;
+        protected final ImmutableList<Integer> data;
 
         protected SizedSetFactory(int size)
         {
@@ -71,11 +72,11 @@ public class SetMemoryTest
         }
     }
 
-    public static class HashSetFactory
+    private static final class HashSetFactory
             extends SizedSetFactory
             implements Function0<HashSet<Integer>>
     {
-        protected HashSetFactory(int size)
+        private HashSetFactory(int size)
         {
             super(size);
         }
@@ -87,11 +88,11 @@ public class SetMemoryTest
         }
     }
 
-    public static class THashSetFactory
+    private static final class THashSetFactory
             extends SizedSetFactory
             implements Function0<THashSet<Integer>>
     {
-        protected THashSetFactory(int size)
+        private THashSetFactory(int size)
         {
             super(size);
         }
@@ -99,15 +100,15 @@ public class SetMemoryTest
         @Override
         public THashSet<Integer> value()
         {
-            return this.fill(new THashSet());
+            return this.fill(new THashSet<Integer>());
         }
     }
 
-    public static class UnifiedSetFactory
+    private static final class UnifiedSetFactory
             extends SizedSetFactory
             implements Function0<UnifiedSet<Integer>>
     {
-        protected UnifiedSetFactory(int size)
+        private UnifiedSetFactory(int size)
         {
             super(size);
         }
@@ -116,6 +117,30 @@ public class SetMemoryTest
         public UnifiedSet<Integer> value()
         {
             return this.fill(new UnifiedSet<Integer>());
+        }
+    }
+
+    private static final class ScalaMutableSetFactory
+            extends SizedSetFactory
+            implements Function0<scala.collection.mutable.HashSet<Integer>>
+    {
+        private ScalaMutableSetFactory(int size)
+        {
+            super(size);
+        }
+
+        @Override
+        public scala.collection.mutable.HashSet<Integer> value()
+        {
+            final scala.collection.mutable.HashSet<Integer> set = new scala.collection.mutable.HashSet<Integer>();
+            this.data.forEach(new Procedure<Integer>()
+            {
+                public void value(Integer each)
+                {
+                    set.add(each);
+                }
+            });
+            return set;
         }
     }
 }
