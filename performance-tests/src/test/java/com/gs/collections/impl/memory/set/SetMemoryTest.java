@@ -29,17 +29,27 @@ import com.gs.collections.impl.set.mutable.UnifiedSet;
 import gnu.trove.set.hash.THashSet;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class SetMemoryTest
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(SetMemoryTest.class);
+
     @Test
     @Category(MemoryTests.class)
     public void memoryForScaledSets()
     {
+        LOGGER.info("Comparing Items: Scala {}, Trove {}, GSC {}, JDK {}",
+                scala.collection.mutable.HashSet.class.getSimpleName(),
+                THashSet.class.getSimpleName(),
+                UnifiedSet.class.getSimpleName(),
+                HashSet.class.getSimpleName());
         for (int size = 0; size < 1000001; size += 25000)
         {
             this.memoryForScaledSets(size);
         }
+        LOGGER.info("Ending test: {}", this.getClass().getName());
     }
 
     private void memoryForScaledSets(int size)

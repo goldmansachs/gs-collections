@@ -27,17 +27,25 @@ import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.memory.TestDataFactory;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ConcurrentMapMemoryTest
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ConcurrentMapMemoryTest.class);
+
     @Test
     @Category(MemoryTests.class)
     public void memoryForScaledConcurrentMaps()
     {
+        LOGGER.info("Comparing Items: JDK {}, GSC {}",
+                ConcurrentHashMap.class.getSimpleName(),
+                com.gs.collections.impl.map.mutable.ConcurrentHashMap.class.getSimpleName());
         for (int size = 0; size < 1000001; size += 25000)
         {
             this.memoryForScaledConcurrentMaps(size);
         }
+        LOGGER.info("Ending test: {}", this.getClass().getName());
     }
 
     public void memoryForScaledConcurrentMaps(int size)

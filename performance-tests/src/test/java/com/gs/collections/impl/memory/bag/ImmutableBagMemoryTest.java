@@ -26,13 +26,18 @@ import com.gs.collections.impl.list.primitive.IntInterval;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ImmutableBagMemoryTest
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImmutableBagMemoryTest.class);
+
     @Test
     @Category(MemoryTests.class)
     public void memoryForScaledImmutableBags()
     {
+        LOGGER.info("Comparing Items: GSC {}, Guava {}", ImmutableBag.class.getSimpleName(), ImmutableMultiset.class.getSimpleName());
         IntProcedure procedure = new IntProcedure()
         {
             public void value(int size)
@@ -42,6 +47,7 @@ public class ImmutableBagMemoryTest
         };
         IntInterval.zeroTo(9).forEach(procedure);
         IntInterval.fromToBy(10, 100, 10).forEach(procedure);
+        LOGGER.info("Ending test: {}", this.getClass().getName());
     }
 
     public void memoryForScaledBags(int size)

@@ -29,13 +29,23 @@ import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class ImmutableSetMemoryTest
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImmutableSetMemoryTest.class);
+
     @Test
     @Category(MemoryTests.class)
     public void memoryForScaledImmutableSets()
     {
+        LOGGER.info("Comparing Items: Scala {}, JDK {}, GSC {}, Guava {}",
+                scala.collection.immutable.Set.class.getSimpleName(),
+                Set.class.getSimpleName(),
+                com.gs.collections.api.set.ImmutableSet.class.getSimpleName(),
+                ImmutableSet.class.getSimpleName());
+
         IntProcedure procedure = new IntProcedure()
         {
             public void value(int size)
@@ -45,6 +55,7 @@ public class ImmutableSetMemoryTest
         };
         IntInterval.zeroTo(9).forEach(procedure);
         IntInterval.fromToBy(10, 100, 10).forEach(procedure);
+        LOGGER.info("Ending test: {}", this.getClass().getName());
     }
 
     public void memoryForScaledSets(int size)

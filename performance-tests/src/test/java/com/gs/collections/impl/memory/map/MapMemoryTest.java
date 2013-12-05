@@ -30,17 +30,29 @@ import com.gs.collections.impl.memory.TestDataFactory;
 import gnu.trove.map.hash.THashMap;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MapMemoryTest
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(MapMemoryTest.class);
+
     @Test
     @Category(MemoryTests.class)
     public void memoryForScaledMaps()
     {
+        LOGGER.info("Comparing Items: Scala {}, JDK {}, Trove {}, GSC {}, JDK {}",
+                scala.collection.mutable.HashMap.class.getSimpleName(),
+                HashMap.class.getSimpleName(),
+                THashMap.class.getSimpleName(),
+                UnifiedMap.class.getSimpleName(),
+                Hashtable.class.getSimpleName());
+
         for (int size = 0; size < 1000001; size += 25000)
         {
             this.memoryForScaledMaps(size);
         }
+        LOGGER.info("Ending test: {}", this.getClass().getName());
     }
 
     public void memoryForScaledMaps(int size)

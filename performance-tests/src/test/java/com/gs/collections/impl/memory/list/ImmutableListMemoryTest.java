@@ -29,14 +29,24 @@ import com.gs.collections.impl.list.primitive.IntInterval;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scala.collection.mutable.ListBuffer;
 
 public class ImmutableListMemoryTest
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImmutableListMemoryTest.class);
+
     @Test
     @Category(MemoryTests.class)
     public void memoryForScaledImmutableLists()
     {
+        LOGGER.info("Comparing Items: Scala {}, JDK {}, GSC {}, Guava {}",
+                scala.collection.immutable.List.class.getSimpleName(),
+                List.class.getSimpleName(),
+                com.gs.collections.api.list.ImmutableList.class.getSimpleName(),
+                ImmutableList.class.getSimpleName());
+
         IntProcedure procedure = new IntProcedure()
         {
             public void value(int size)
@@ -46,6 +56,7 @@ public class ImmutableListMemoryTest
         };
         IntInterval.zeroTo(9).forEach(procedure);
         IntInterval.fromToBy(10, 100, 10).forEach(procedure);
+        LOGGER.info("Ending test: {}", this.getClass().getName());
     }
 
     public void memoryForScaledLists(int size)

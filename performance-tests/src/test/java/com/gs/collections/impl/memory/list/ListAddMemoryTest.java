@@ -26,19 +26,30 @@ import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scala.collection.mutable.ArrayBuffer;
 import scala.collection.mutable.ListBuffer;
 
 public class ListAddMemoryTest
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ListAddMemoryTest.class);
+
     @Test
     @Category(MemoryTests.class)
     public void memoryForScaledLists()
     {
+        LOGGER.info("Comparing Items: Scala {}, JDK {}, GSC {}, Scala {}, JDK {}",
+                ArrayBuffer.class.getSimpleName(),
+                ArrayList.class.getSimpleName(),
+                FastList.class.getSimpleName(),
+                ListBuffer.class.getSimpleName(),
+                LinkedList.class.getSimpleName());
         for (int size = 0; size < 1000001; size += 25000)
         {
             this.memoryForScaledLists(size);
         }
+        LOGGER.info("Ending test: {}", this.getClass().getName());
     }
 
     public void memoryForScaledLists(int size)

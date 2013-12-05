@@ -29,14 +29,23 @@ import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.memory.MemoryTestBench;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scala.collection.immutable.HashMap$;
 
 public class ImmutableMapMemoryTest
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImmutableMapMemoryTest.class);
+
     @Test
     @Category(MemoryTests.class)
     public void memoryForScaledImmutableMaps()
     {
+        LOGGER.info("Comparing Items: Scala {}, JDK {}, GSC {}, Guava {}",
+                scala.collection.immutable.Map.class.getSimpleName(),
+                Map.class.getSimpleName(),
+                com.gs.collections.api.map.ImmutableMap.class.getSimpleName(),
+                ImmutableMap.class.getSimpleName());
         IntProcedure procedure = new IntProcedure()
         {
             public void value(int size)
@@ -46,6 +55,7 @@ public class ImmutableMapMemoryTest
         };
         IntInterval.zeroTo(9).forEach(procedure);
         IntInterval.fromToBy(10, 100, 10).forEach(procedure);
+        LOGGER.info("Ending test: {}", this.getClass().getName());
     }
 
     public void memoryForScaledMaps(int size)

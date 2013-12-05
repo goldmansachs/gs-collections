@@ -28,17 +28,27 @@ import com.gs.collections.impl.memory.TestDataFactory;
 import gnu.trove.list.array.TIntArrayList;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class IntListMemoryTest
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(IntListMemoryTest.class);
+
     @Test
     @Category(MemoryTests.class)
     public void memoryForScaledLists()
     {
+        LOGGER.info("Comparing Items: Trove {}, GSC {}, JDK {}",
+                TIntArrayList.class.getSimpleName(),
+                IntArrayList.class.getSimpleName(),
+                ArrayList.class.getSimpleName());
+
         for (int size = 0; size < 1000001; size += 25000)
         {
             this.memoryForScaledLists(size);
         }
+        LOGGER.info("Ending test: {}", this.getClass().getName());
     }
 
     public void memoryForScaledLists(int size)

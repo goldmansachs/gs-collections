@@ -28,17 +28,27 @@ import com.gs.collections.impl.set.mutable.primitive.IntHashSet;
 import gnu.trove.set.hash.TIntHashSet;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class IntSetMemoryTest
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(IntSetMemoryTest.class);
+
     @Test
     @Category(MemoryTests.class)
     public void memoryForScaledSets()
     {
+        LOGGER.info("Comparing Items: Trove {}, GSC {}, JDK {}",
+                TIntHashSet.class.getSimpleName(),
+                IntHashSet.class.getSimpleName(),
+                HashSet.class.getSimpleName());
+
         for (int i = 0; i < 1000001; i += 25000)
         {
             this.memoryForScaledSets(i);
         }
+        LOGGER.info("Ending test: {}", this.getClass().getName());
     }
 
     public void memoryForScaledSets(int size)

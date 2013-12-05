@@ -26,17 +26,24 @@ import com.gs.collections.impl.memory.MemoryTestBench;
 import com.gs.collections.impl.memory.TestDataFactory;
 import org.junit.Test;
 import org.junit.experimental.categories.Category;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class BagMemoryTest
 {
+    private static final Logger LOGGER = LoggerFactory.getLogger(BagMemoryTest.class);
+
     @Test
     @Category(MemoryTests.class)
     public void memoryForScaledBags()
     {
+        LOGGER.info("Comparing Items: Guava {}, GSC {}", HashMultiset.class.getSimpleName(), HashBag.class.getSimpleName());
+
         for (int size = 0; size < 1000001; size += 25000)
         {
             this.memoryForScaledBags(size);
         }
+        LOGGER.info("Ending test: {}", this.getClass().getName());
     }
 
     public void memoryForScaledBags(int size)
