@@ -1927,9 +1927,12 @@ public final class ConcurrentHashMap<K, V>
         IterableIterate.forEach(this.entrySet(), new MapEntryToProcedure2<K, V>(procedure));
     }
 
-    public <E> MutableMap<K, V> collectKeysAndValues(Collection<E> collection, Function<? super E, ? extends K> keyFunction, Function<? super E, ? extends V> valueFunction)
+    public <E> MutableMap<K, V> collectKeysAndValues(
+            Iterable<E> iterable,
+            Function<? super E, ? extends K> keyFunction,
+            Function<? super E, ? extends V> valueFunction)
     {
-        Iterate.addToMap(collection, keyFunction, valueFunction, this);
+        Iterate.addToMap(iterable, keyFunction, valueFunction, this);
         return this;
     }
 

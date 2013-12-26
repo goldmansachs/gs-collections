@@ -16,7 +16,6 @@
 
 package com.gs.collections.impl.map.fixed;
 
-import java.util.Collection;
 import java.util.Map;
 
 import com.gs.collections.api.block.function.Function;
@@ -63,7 +62,7 @@ abstract class AbstractMemoryEfficientMutableMap<K, V>
     }
 
     public <E> MutableMap<K, V> collectKeysAndValues(
-            Collection<E> collection,
+            Iterable<E> iterable,
             Function<? super E, ? extends K> keyFunction,
             Function<? super E, ? extends V> valueFunction)
     {

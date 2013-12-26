@@ -299,11 +299,14 @@ public class SynchronizedMutableMap<K, V>
         }
     }
 
-    public <E> MutableMap<K, V> collectKeysAndValues(Collection<E> collection, Function<? super E, ? extends K> keyFunction, Function<? super E, ? extends V> function)
+    public <E> MutableMap<K, V> collectKeysAndValues(
+            Iterable<E> iterable,
+            Function<? super E, ? extends K> keyFunction,
+            Function<? super E, ? extends V> function)
     {
         synchronized (this.lock)
         {
-            return this.getMutableMap().collectKeysAndValues(collection, keyFunction, function);
+            return this.getMutableMap().collectKeysAndValues(iterable, keyFunction, function);
         }
     }
 

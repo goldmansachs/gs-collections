@@ -1153,7 +1153,8 @@ public class UnifiedSet<K>
         return TreeSortedMap.<NK, NV>newMap().collectKeysAndValues(this, keyFunction, valueFunction);
     }
 
-    public <NK, NV> MutableSortedMap<NK, NV> toSortedMap(Comparator<? super NK> comparator,
+    public <NK, NV> MutableSortedMap<NK, NV> toSortedMap(
+            Comparator<? super NK> comparator,
             Function<? super K, ? extends NK> keyFunction,
             Function<? super K, ? extends NV> valueFunction)
     {

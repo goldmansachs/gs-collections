@@ -132,7 +132,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
 
     /**
      * @deprecated No argument default constructor used for serialization. Instantiating an UnifiedMapWithHashingStrategyMultimap with
-     *             this constructor will have a null hashingStrategy and throw NullPointerException when used.
+     * this constructor will have a null hashingStrategy and throw NullPointerException when used.
      */
     @Deprecated
     public UnifiedMapWithHashingStrategy()
@@ -946,11 +946,11 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
     }
 
     public <E> MutableMap<K, V> collectKeysAndValues(
-            Collection<E> collection,
+            Iterable<E> iterable,
             Function<? super E, ? extends K> keyFunction,
             Function<? super E, ? extends V> valueFunction)
     {
-        Iterate.forEach(collection, new MapCollectProcedure<E, K, V>(this, keyFunction, valueFunction));
+        Iterate.forEach(iterable, new MapCollectProcedure<E, K, V>(this, keyFunction, valueFunction));
         return this;
     }
 

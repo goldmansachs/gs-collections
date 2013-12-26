@@ -114,7 +114,7 @@ public class UnmodifiableTreeMap<K, V>
     }
 
     public <E> MutableSortedMap<K, V> collectKeysAndValues(
-            Collection<E> collection,
+            Iterable<E> iterable,
             Function<? super E, ? extends K> keyFunction,
             Function<? super E, ? extends V> valueFunction)
     {

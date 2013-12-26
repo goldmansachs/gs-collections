@@ -183,7 +183,8 @@ public abstract class AbstractMutableCollection<T>
         return TreeSortedMap.<K, V>newMap().collectKeysAndValues(this, keyFunction, valueFunction);
     }
 
-    public <K, V> MutableSortedMap<K, V> toSortedMap(Comparator<? super K> comparator,
+    public <K, V> MutableSortedMap<K, V> toSortedMap(
+            Comparator<? super K> comparator,
             Function<? super T, ? extends K> keyFunction,
             Function<? super T, ? extends V> valueFunction)
     {

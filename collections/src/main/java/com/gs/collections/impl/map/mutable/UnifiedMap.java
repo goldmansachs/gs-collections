@@ -902,11 +902,11 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
     }
 
     public <E> MutableMap<K, V> collectKeysAndValues(
-            Collection<E> collection,
+            Iterable<E> iterable,
             Function<? super E, ? extends K> keyFunction,
             Function<? super E, ? extends V> valueFunction)
     {
-        Iterate.forEach(collection, new MapCollectProcedure<E, K, V>(this, keyFunction, valueFunction));
+        Iterate.forEach(iterable, new MapCollectProcedure<E, K, V>(this, keyFunction, valueFunction));
         return this;
     }
 

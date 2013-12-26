@@ -16,7 +16,6 @@
 
 package com.gs.collections.impl.map.sorted.mutable;
 
-import java.util.Collection;
 import java.util.Comparator;
 import java.util.Map;
 import java.util.SortedMap;
@@ -111,11 +110,14 @@ public class SynchronizedSortedMap<K, V>
         }
     }
 
-    public <E> MutableSortedMap<K, V> collectKeysAndValues(Collection<E> collection, Function<? super E, ? extends K> keyFunction, Function<? super E, ? extends V> function)
+    public <E> MutableSortedMap<K, V> collectKeysAndValues(
+            Iterable<E> iterable,
+            Function<? super E, ? extends K> keyFunction,
+            Function<? super E, ? extends V> function)
     {
         synchronized (this.lock)
         {
-            return this.getSortedMap().collectKeysAndValues(collection, keyFunction, function);
+            return this.getSortedMap().collectKeysAndValues(iterable, keyFunction, function);
         }
     }
 

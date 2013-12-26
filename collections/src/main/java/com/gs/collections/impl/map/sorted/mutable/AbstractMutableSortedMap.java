@@ -16,7 +16,6 @@
 
 package com.gs.collections.impl.map.sorted.mutable;
 
-import java.util.Collection;
 import java.util.Iterator;
 
 import com.gs.collections.api.RichIterable;
@@ -215,9 +214,12 @@ public abstract class AbstractMutableSortedMap<K, V> extends AbstractMapIterable
         return result;
     }
 
-    public <E> MutableSortedMap<K, V> collectKeysAndValues(Collection<E> collection, Function<? super E, ? extends K> keyFunction, Function<? super E, ? extends V> valueFunction)
+    public <E> MutableSortedMap<K, V> collectKeysAndValues(
+            Iterable<E> iterable,
+            Function<? super E, ? extends K> keyFunction,
+            Function<? super E, ? extends V> valueFunction)
     {
-        Iterate.forEach(collection, new MapCollectProcedure<E, K, V>(this, keyFunction, valueFunction));
+        Iterate.forEach(iterable, new MapCollectProcedure<E, K, V>(this, keyFunction, valueFunction));
         return this;
     }
 

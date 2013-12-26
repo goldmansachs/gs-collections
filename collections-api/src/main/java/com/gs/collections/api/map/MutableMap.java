@@ -16,7 +16,6 @@
 
 package com.gs.collections.api.map;
 
-import java.util.Collection;
 import java.util.Map;
 
 import com.gs.collections.api.block.function.Function;
@@ -65,7 +64,7 @@ public interface MutableMap<K, V>
      * will have it's value replaced by that in {@code map}.
      */
     <E> MutableMap<K, V> collectKeysAndValues(
-            Collection<E> collection,
+            Iterable<E> iterable,
             Function<? super E, ? extends K> keyFunction,
             Function<? super E, ? extends V> valueFunction);
 

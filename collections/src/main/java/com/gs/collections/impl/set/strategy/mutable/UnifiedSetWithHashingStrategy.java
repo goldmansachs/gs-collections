@@ -171,7 +171,7 @@ public class UnifiedSetWithHashingStrategy<K>
 
     /**
      * @deprecated No argument default constructor used for serialization. Instantiating an UnifiedSetWithHashingStrategyMultimap with
-     *             this constructor will have a null hashingStrategy and throw NullPointerException when used.
+     * this constructor will have a null hashingStrategy and throw NullPointerException when used.
      */
     @Deprecated
     public UnifiedSetWithHashingStrategy()
@@ -1205,7 +1205,8 @@ public class UnifiedSetWithHashingStrategy<K>
         return TreeSortedMap.<NK, NV>newMap().collectKeysAndValues(this, keyFunction, valueFunction);
     }
 
-    public <NK, NV> MutableSortedMap<NK, NV> toSortedMap(Comparator<? super NK> comparator,
+    public <NK, NV> MutableSortedMap<NK, NV> toSortedMap(
+            Comparator<? super NK> comparator,
             Function<? super K, ? extends NK> keyFunction,
             Function<? super K, ? extends NV> valueFunction)
     {

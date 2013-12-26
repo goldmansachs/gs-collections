@@ -823,9 +823,9 @@ abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
         throw new UnsupportedOperationException("asUnmodifiable not implemented yet!");
     }
 
-    public <E> MutableMap<K, V> collectKeysAndValues(Collection<E> collection, Function<? super E, ? extends K> keyFunction, Function<? super E, ? extends V> valueFunction)
+    public <E> MutableMap<K, V> collectKeysAndValues(Iterable<E> iterable, Function<? super E, ? extends K> keyFunction, Function<? super E, ? extends V> valueFunction)
     {
-        Iterate.forEach(collection, new MapCollectProcedure<E, K, V>(this, keyFunction, valueFunction));
+        Iterate.forEach(iterable, new MapCollectProcedure<E, K, V>(this, keyFunction, valueFunction));
         return this;
     }
 

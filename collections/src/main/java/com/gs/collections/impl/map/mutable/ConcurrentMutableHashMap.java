@@ -237,9 +237,12 @@ public final class ConcurrentMutableHashMap<K, V>
         this.delegate.putAll(map);
     }
 
-    public <E> MutableMap<K, V> collectKeysAndValues(Collection<E> collection, Function<? super E, ? extends K> keyFunction, Function<? super E, ? extends V> valueFunction)
+    public <E> MutableMap<K, V> collectKeysAndValues(
+            Iterable<E> iterable,
+            Function<? super E, ? extends K> keyFunction,
+            Function<? super E, ? extends V> valueFunction)
     {
-        Iterate.addToMap(collection, keyFunction, valueFunction, this.delegate);
+        Iterate.addToMap(iterable, keyFunction, valueFunction, this.delegate);
         return this;
     }
 

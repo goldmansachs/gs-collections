@@ -16,7 +16,6 @@
 
 package com.gs.collections.api.map.sorted;
 
-import java.util.Collection;
 import java.util.SortedMap;
 
 import com.gs.collections.api.block.function.Function;
@@ -62,12 +61,12 @@ public interface MutableSortedMap<K, V>
     MutableSortedMap<K, V> newEmpty();
 
     /**
-     * Adds all the entries derived from {@code collection} to {@code this}.
+     * Adds all the entries derived from {@code iterable} to {@code this}.
      * The key and value for each entry is determined by applying the {@code keyFunction} and {@code valueFunction} to each item in {@code collection}.
      * Any entry in {@code map} that has the same key as an entry in {@code this} will have it's value replaced by that in {@code map}.
      */
     <E> MutableSortedMap<K, V> collectKeysAndValues(
-            Collection<E> collection,
+            Iterable<E> iterable,
             Function<? super E, ? extends K> keyFunction,
             Function<? super E, ? extends V> valueFunction);
 
