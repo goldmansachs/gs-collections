@@ -24,7 +24,8 @@ public class ArrayListAdapterTest
     @Test
     public void serializedForm()
     {
-        if (System.getProperty("java.version").startsWith("1.8."))
+        String javaVersion = System.getProperty("java.version");
+        if (javaVersion.startsWith("1.8.") || "1.7.0_45".equals(javaVersion))
         {
             Verify.assertSerializedForm(
                     1L,
