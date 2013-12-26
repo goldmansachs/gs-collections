@@ -813,7 +813,7 @@ public final class IterableIterate
     /**
      * @see Iterate#zip(Iterable, Iterable)
      */
-    public static <X, Y> Collection<Pair<X, Y>> zip(
+    public static <X, Y> MutableList<Pair<X, Y>> zip(
             Iterable<X> xs,
             Iterable<Y> ys)
     {
@@ -834,7 +834,7 @@ public final class IterableIterate
     /**
      * @see Iterate#zipWithIndex(Iterable)
      */
-    public static <T> Collection<Pair<T, Integer>> zipWithIndex(Iterable<T> iterable)
+    public static <T> MutableList<Pair<T, Integer>> zipWithIndex(Iterable<T> iterable)
     {
         return IterableIterate.zipWithIndex(iterable, FastList.<Pair<T, Integer>>newList());
     }
