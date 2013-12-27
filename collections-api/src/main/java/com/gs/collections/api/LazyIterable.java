@@ -28,6 +28,7 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.tuple.Pair;
 
 /**
@@ -43,6 +44,8 @@ public interface LazyIterable<T>
      * Creates a deferred iterable for selecting elements from the current iterable.
      */
     LazyIterable<T> select(Predicate<? super T> predicate);
+
+    <P> LazyIterable<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     <S> LazyIterable<S> selectInstancesOf(Class<S> clazz);
 

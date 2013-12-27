@@ -72,6 +72,7 @@ import com.gs.collections.api.stack.primitive.ImmutableLongStack;
 import com.gs.collections.api.stack.primitive.ImmutableShortStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.checked.CheckedProcedure;
@@ -263,6 +264,11 @@ final class ImmutableArrayStack<T> implements ImmutableStack<T>, Serializable
     public ImmutableStack<T> select(Predicate<? super T> predicate)
     {
         return ImmutableArrayStack.newStackFromTopToBottom(this.delegate.asReversed().select(predicate).toList());
+    }
+
+    public <P> ImmutableStack<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.select(Predicates.bind(predicate, parameter));
     }
 
     public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)

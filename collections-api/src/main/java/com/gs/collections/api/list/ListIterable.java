@@ -30,6 +30,7 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.primitive.BooleanList;
@@ -165,6 +166,8 @@ public interface ListIterable<T>
     MutableStack<T> toStack();
 
     ListIterable<T> select(Predicate<? super T> predicate);
+
+    <P> ListIterable<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     ListIterable<T> reject(Predicate<? super T> predicate);
 

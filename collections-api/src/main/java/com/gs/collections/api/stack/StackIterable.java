@@ -30,6 +30,7 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.multimap.list.ListMultimap;
@@ -113,6 +114,8 @@ public interface StackIterable<T> extends RichIterable<T>
     MutableStack<T> toStack();
 
     StackIterable<T> select(Predicate<? super T> predicate);
+
+    <P> StackIterable<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     StackIterable<T> reject(Predicate<? super T> predicate);
 

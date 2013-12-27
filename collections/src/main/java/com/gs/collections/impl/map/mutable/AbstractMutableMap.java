@@ -48,6 +48,7 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.PartitionProcedure;
@@ -287,6 +288,12 @@ public abstract class AbstractMutableMap<K, V> extends AbstractMapIterable<K, V>
     public MutableList<V> select(Predicate<? super V> predicate)
     {
         return this.select(predicate, FastList.<V>newList(this.size()));
+    }
+
+    @Override
+    public <P> RichIterable<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.select(Predicates.bind(predicate, parameter));
     }
 
     public PartitionMutableList<V> partition(Predicate<? super V> predicate)

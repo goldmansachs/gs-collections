@@ -23,7 +23,9 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.SortedMap;
 
+import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
@@ -33,6 +35,7 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.ImmutableSortedMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.function.PassThruFunction0;
@@ -441,6 +444,48 @@ public abstract class ImmutableSortedMapTestCase
     public void select()
     {
         ImmutableSortedMap<Integer, String> map = this.classUnderTest();
+        RichIterable<String> select = map.select(new Predicate<String>()
+        {
+            public boolean accept(String each)
+            {
+                return Integer.valueOf(each) > 0;
+            }
+        });
+        Assert.assertEquals(HashBag.newBag(map), select.toBag());
+    }
+
+    @Test
+    public void selectWith()
+    {
+        ImmutableSortedMap<Integer, String> map = this.classUnderTest();
+        RichIterable<String> select = map.selectWith(new Predicate2<String, Integer>()
+        {
+            public boolean accept(String each, Integer parameter)
+            {
+                return Integer.valueOf(each + parameter) > 0;
+            }
+        }, 0);
+        Assert.assertEquals(HashBag.newBag(map), select.toBag());
+    }
+
+    @Test
+    public void reject()
+    {
+        ImmutableSortedMap<Integer, String> map = this.classUnderTest();
+        RichIterable<String> select = map.reject(new Predicate<String>()
+        {
+            public boolean accept(String each)
+            {
+                return Integer.valueOf(each) < 0;
+            }
+        });
+        Assert.assertEquals(HashBag.newBag(map), select.toBag());
+    }
+
+    @Test
+    public void selectMap()
+    {
+        ImmutableSortedMap<Integer, String> map = this.classUnderTest();
         ImmutableSortedMap<Integer, String> select = map.select(new Predicate2<Integer, String>()
         {
             public boolean accept(Integer argument1, String argument2)
@@ -466,7 +511,7 @@ public abstract class ImmutableSortedMapTestCase
     }
 
     @Test
-    public void reject()
+    public void rejectMap()
     {
         ImmutableSortedMap<Integer, String> map = this.classUnderTest();
         ImmutableSortedMap<Integer, String> reject = map.reject(new Predicate2<Integer, String>()
@@ -494,7 +539,7 @@ public abstract class ImmutableSortedMapTestCase
     }
 
     @Test
-    public void collect()
+    public void collectMap()
     {
         ImmutableSortedMap<Integer, String> map = this.classUnderTest();
         ImmutableMap<String, Integer> collect = map.collect(new Function2<Integer, String, Pair<String, Integer>>()

@@ -188,7 +188,7 @@ public class ImmutableEmptySortedMapTest extends ImmutableSortedMapTestCase
 
     @Override
     @Test
-    public void select()
+    public void selectMap()
     {
         ImmutableSortedMap<Integer, String> map = this.classUnderTest();
         ImmutableSortedMap<Integer, String> actual = map.select(Predicates2.alwaysTrue());
@@ -203,7 +203,7 @@ public class ImmutableEmptySortedMapTest extends ImmutableSortedMapTestCase
 
     @Override
     @Test
-    public void reject()
+    public void rejectMap()
     {
         ImmutableSortedMap<Integer, String> map = this.classUnderTest();
         ImmutableSortedMap<Integer, String> actual = map.reject(Predicates2.alwaysFalse());
@@ -218,7 +218,7 @@ public class ImmutableEmptySortedMapTest extends ImmutableSortedMapTestCase
 
     @Override
     @Test
-    public void collect()
+    public void collectMap()
     {
         ImmutableSortedMap<Integer, String> map = this.classUnderTest();
         ImmutableSortedMap<Integer, String> revMap = this.classUnderTest(Comparators.<Integer>reverseNaturalOrder());

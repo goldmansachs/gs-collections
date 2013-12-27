@@ -37,6 +37,7 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.map.MutableMap;
@@ -71,6 +72,8 @@ public interface Bag<T>
     int hashCode();
 
     Bag<T> select(Predicate<? super T> predicate);
+
+    <P> Bag<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     Bag<T> reject(Predicate<? super T> predicate);
 

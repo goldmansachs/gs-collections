@@ -192,6 +192,16 @@ public abstract class AbstractSortedSetTestCase extends AbstractCollectionTestCa
 
     @Override
     @Test
+    public void selectWithTarget()
+    {
+        super.selectWithTarget();
+        Verify.assertSortedSetsEqual(
+                TreeSortedSet.newSetWith(1, 2, 3),
+                this.newWith(3, 1, 2, 5, 3).selectWith(Predicates2.<Integer>lessThan(), 4, TreeSortedSet.<Integer>newSet()));
+    }
+
+    @Override
+    @Test
     public void reject()
     {
         super.reject();
@@ -208,6 +218,16 @@ public abstract class AbstractSortedSetTestCase extends AbstractCollectionTestCa
     {
         super.rejectWith();
         Verify.assertSortedSetsEqual(TreeSortedSet.newSetWith(1, 2, 3), this.newWith(3, 1, 2, 5, 4).rejectWith(Predicates2.<Integer>greaterThan(), 3));
+    }
+
+    @Override
+    @Test
+    public void rejectWithTarget()
+    {
+        super.rejectWith();
+        Verify.assertSortedSetsEqual(
+                TreeSortedSet.newSetWith(1, 2, 3),
+                this.newWith(3, 1, 2, 5, 4).rejectWith(Predicates2.<Integer>greaterThan(), 3, TreeSortedSet.<Integer>newSet()));
     }
 
     @Override

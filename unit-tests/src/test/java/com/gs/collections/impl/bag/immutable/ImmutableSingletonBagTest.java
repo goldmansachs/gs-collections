@@ -208,34 +208,34 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
 
     @Override
     @Test
-    public void testNewWith()
+    public void newWith()
     {
-        super.testNewWith();
+        super.newWith();
         Assert.assertEquals(Bags.immutable.of(VAL, NOT_VAL), this.newBag().newWith(NOT_VAL));
     }
 
     @Override
     @Test
-    public void testNewWithout()
+    public void newWithout()
     {
-        super.testNewWithout();
+        super.newWithout();
         Assert.assertEquals(Bags.immutable.of(VAL), this.newBag().newWithout(NOT_VAL));
         Assert.assertEquals(Bags.immutable.of(), this.newBag().newWithout(VAL));
     }
 
     @Override
     @Test
-    public void testNewWithAll()
+    public void newWithAll()
     {
-        super.testNewWithAll();
+        super.newWithAll();
         Assert.assertEquals(Bags.immutable.of(VAL, NOT_VAL, "c"), this.newBag().newWithAll(FastList.newListWith(NOT_VAL, "c")));
     }
 
     @Override
     @Test
-    public void testNewWithoutAll()
+    public void newWithoutAll()
     {
-        super.testNewWithoutAll();
+        super.newWithoutAll();
         Assert.assertEquals(Bags.immutable.of(VAL), this.newBag().newWithoutAll(FastList.newListWith(NOT_VAL)));
         Assert.assertEquals(Bags.immutable.of(), this.newBag().newWithoutAll(FastList.newListWith(VAL, NOT_VAL)));
         Assert.assertEquals(Bags.immutable.of(), this.newBag().newWithoutAll(FastList.newListWith(VAL)));
@@ -250,9 +250,9 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
 
     @Override
     @Test
-    public void testIsEmpty()
+    public void isEmpty()
     {
-        super.testIsEmpty();
+        super.isEmpty();
         Assert.assertFalse(this.newBag().isEmpty());
     }
 
@@ -264,34 +264,34 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
 
     @Override
     @Test
-    public void testGetFirst()
+    public void getFirst()
     {
-        super.testGetFirst();
+        super.getFirst();
         Assert.assertEquals(VAL, this.newBag().getFirst());
     }
 
     @Override
     @Test
-    public void testGetLast()
+    public void getLast()
     {
-        super.testGetLast();
+        super.getLast();
         Assert.assertEquals(VAL, this.newBag().getLast());
     }
 
     @Override
     @Test
-    public void testContains()
+    public void contains()
     {
-        super.testContains();
+        super.contains();
         Assert.assertTrue(this.newBag().contains(VAL));
         Assert.assertFalse(this.newBag().contains(NOT_VAL));
     }
 
     @Override
     @Test
-    public void testContainsAllIterable()
+    public void containsAllIterable()
     {
-        super.testContainsAllIterable();
+        super.containsAllIterable();
         Assert.assertTrue(this.newBag().containsAllIterable(FastList.newListWith()));
         Assert.assertTrue(this.newBag().containsAllIterable(FastList.newListWith(VAL)));
         Assert.assertFalse(this.newBag().containsAllIterable(FastList.newListWith(NOT_VAL)));
@@ -311,9 +311,9 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
 
     @Override
     @Test
-    public void testSelectWithTarget()
+    public void selectToTarget()
     {
-        super.testSelectWithTarget();
+        super.selectToTarget();
         MutableList<String> target = Lists.mutable.of();
         this.newBag().select(Predicates.alwaysFalse(), target);
         Verify.assertEmpty(target);
@@ -323,9 +323,9 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
 
     @Override
     @Test
-    public void testRejectWithTarget()
+    public void rejectToTarget()
     {
-        super.testRejectWithTarget();
+        super.rejectToTarget();
         MutableList<String> target = Lists.mutable.of();
         this.newBag().reject(Predicates.alwaysTrue(), target);
         Verify.assertEmpty(target);
@@ -335,17 +335,17 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
 
     @Override
     @Test
-    public void testCollect()
+    public void collect()
     {
-        super.testCollect();
+        super.collect();
         Assert.assertEquals(Bags.immutable.of(VAL), this.newBag().collect(Functions.getToString()));
     }
 
     @Override
     @Test
-    public void testCollectWithTarget()
+    public void collectWithTarget()
     {
-        super.testCollectWithTarget();
+        super.collectWithTarget();
         MutableList<Class<?>> target = Lists.mutable.of();
         this.newBag().collect(Functions.getToClass(), target);
         Verify.assertContains(String.class, target);
@@ -353,18 +353,18 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
 
     @Override
     @Test
-    public void testCollectIf()
+    public void collectIf()
     {
-        super.testCollectIf();
+        super.collectIf();
         Assert.assertEquals(Bags.immutable.of(String.class), this.newBag().collectIf(Predicates.alwaysTrue(), Functions.getToClass()));
         Assert.assertEquals(Bags.immutable.of(), this.newBag().collectIf(Predicates.alwaysFalse(), Functions.getToClass()));
     }
 
     @Override
     @Test
-    public void testCollectIfWithTarget()
+    public void collectIfWithTarget()
     {
-        super.testCollectIfWithTarget();
+        super.collectIfWithTarget();
         MutableList<Class<?>> target = Lists.mutable.of();
         this.newBag().collectIf(Predicates.alwaysFalse(), Functions.getToClass(), target);
         Verify.assertEmpty(target);
@@ -405,9 +405,9 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
 
     @Override
     @Test
-    public void testDetect()
+    public void detect()
     {
-        super.testDetect();
+        super.detect();
         Assert.assertEquals(VAL, this.newBag().detect(Predicates.alwaysTrue()));
         Assert.assertNull(this.newBag().detect(Predicates.alwaysFalse()));
     }
@@ -422,18 +422,18 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
 
     @Override
     @Test
-    public void testCount()
+    public void count()
     {
-        super.testCount();
+        super.count();
         Assert.assertEquals(1, this.newBag().count(Predicates.alwaysTrue()));
         Assert.assertEquals(0, this.newBag().count(Predicates.alwaysFalse()));
     }
 
     @Override
     @Test
-    public void testAnySatisfy()
+    public void anySatisfy()
     {
-        super.testAnySatisfy();
+        super.anySatisfy();
         Assert.assertTrue(this.newBag().anySatisfy(Predicates.alwaysTrue()));
         Assert.assertFalse(this.newBag().anySatisfy(Predicates.alwaysFalse()));
     }
@@ -497,9 +497,9 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
 
     @Override
     @Test
-    public void testForEach()
+    public void forEach()
     {
-        super.testForEach();
+        super.forEach();
         final Object[] results = new Object[1];
         this.newBag().forEach(new Procedure<String>()
         {
@@ -513,9 +513,9 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
 
     @Override
     @Test
-    public void testForEachWithIndex()
+    public void forEachWithIndex()
     {
-        super.testForEachWithIndex();
+        super.forEachWithIndex();
         final Object[] results = new Object[2];
         this.newBag().forEachWithIndex(new ObjectIntProcedure<String>()
         {
@@ -531,9 +531,9 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
 
     @Override
     @Test
-    public void testForEachWith()
+    public void forEachWith()
     {
-        super.testForEachWith();
+        super.forEachWith();
         final Object[] results = new Object[2];
         this.newBag().forEachWith(new Procedure2<String, Object>()
         {
@@ -549,9 +549,9 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
 
     @Override
     @Test
-    public void testIterator()
+    public void iterator()
     {
-        super.testIterator();
+        super.iterator();
         Iterator<String> iterator = this.newBag().iterator();
         Assert.assertTrue(iterator.hasNext());
         Assert.assertEquals(VAL, iterator.next());

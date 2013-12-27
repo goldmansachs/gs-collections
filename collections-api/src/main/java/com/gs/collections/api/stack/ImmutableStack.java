@@ -26,6 +26,7 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.multimap.list.ImmutableListMultimap;
 import com.gs.collections.api.partition.stack.PartitionImmutableStack;
 import com.gs.collections.api.stack.primitive.ImmutableBooleanStack;
@@ -47,6 +48,8 @@ public interface ImmutableStack<T> extends StackIterable<T>
     ImmutableStack<T> pop(int count);
 
     ImmutableStack<T> select(Predicate<? super T> predicate);
+
+    <P> ImmutableStack<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     ImmutableStack<T> reject(Predicate<? super T> predicate);
 

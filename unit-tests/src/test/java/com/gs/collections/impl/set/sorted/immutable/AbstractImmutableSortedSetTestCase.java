@@ -40,6 +40,7 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.block.function.PassThruFunction0;
@@ -64,7 +65,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     protected abstract ImmutableSortedSet<Integer> classUnderTest(Comparator<? super Integer> comparator);
 
     @Test
-    public void testEqualsAndHashCode()
+    public void equalsAndHashCode()
     {
         ImmutableSortedSet<Integer> immutable = this.classUnderTest();
         MutableSortedSet<Integer> mutable = TreeSortedSet.newSet(immutable);
@@ -74,7 +75,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
-    public void testNewWith()
+    public void newWith()
     {
         ImmutableSortedSet<Integer> immutable = this.classUnderTest();
         Verify.assertSortedSetsEqual(TreeSortedSet.newSet(Interval.fromTo(0, immutable.size())), immutable.newWith(0).castToSortedSet());
@@ -86,7 +87,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
-    public void testNewWithout()
+    public void newWithout()
     {
         ImmutableSortedSet<Integer> immutable = this.classUnderTest();
         Verify.assertSortedSetsEqual(TreeSortedSet.newSet(Interval.oneTo(immutable.size() - 1)), immutable.newWithout(immutable.size()).castToSortedSet());
@@ -98,7 +99,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
-    public void testNewWithAll()
+    public void newWithAll()
     {
         ImmutableSortedSet<Integer> set = this.classUnderTest(Collections.<Integer>reverseOrder());
         ImmutableSortedSet<Integer> withAll = set.newWithAll(UnifiedSet.newSet(Interval.fromTo(1, set.size() + 1)));
@@ -108,7 +109,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
-    public void testNewWithoutAll()
+    public void newWithoutAll()
     {
         ImmutableSortedSet<Integer> set = this.classUnderTest();
         ImmutableSortedSet<Integer> withoutAll = set.newWithoutAll(set);
@@ -124,7 +125,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
-    public void testContains()
+    public void contains()
     {
         ImmutableSortedSet<Integer> set = this.classUnderTest();
         for (int i = 1; i <= set.size(); i++)
@@ -135,19 +136,19 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
-    public void testContainsAllArray()
+    public void containsAllArray()
     {
         Assert.assertTrue(this.classUnderTest().containsAllArguments(this.classUnderTest().toArray()));
     }
 
     @Test
-    public void testContainsAllIterable()
+    public void containsAllIterable()
     {
         Assert.assertTrue(this.classUnderTest().containsAllIterable(Interval.oneTo(this.classUnderTest().size())));
     }
 
     @Test
-    public void testForEach()
+    public void forEach()
     {
         MutableSet<Integer> result = UnifiedSet.newSet();
         ImmutableSortedSet<Integer> collection = this.classUnderTest();
@@ -156,7 +157,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
-    public void testForEachWith()
+    public void forEachWith()
     {
         final MutableList<Integer> result = Lists.mutable.of();
         ImmutableSortedSet<Integer> set = this.classUnderTest();
@@ -171,7 +172,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
-    public void testForEachWithIndex()
+    public void forEachWithIndex()
     {
         final MutableList<Integer> result = Lists.mutable.of();
         ImmutableSortedSet<Integer> set = this.classUnderTest();
@@ -186,7 +187,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
-    public void testSelect()
+    public void select()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());
         Verify.assertIterableEmpty(integers.select(Predicates.greaterThan(integers.size())));
@@ -195,7 +196,16 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
-    public void testSelectWithTarget()
+    public void selectWith()
+    {
+        ImmutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());
+        Verify.assertIterableEmpty(integers.selectWith(Predicates2.<Integer>greaterThan(), integers.size()));
+        Verify.assertSortedSetsEqual(TreeSortedSet.newSet(Comparators.<Integer>reverseNaturalOrder(), Interval.oneTo(integers.size() - 1)),
+                integers.selectWith(Predicates2.<Integer>lessThan(), integers.size()).castToSortedSet());
+    }
+
+    @Test
+    public void selectToTarget()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest();
         Verify.assertListsEqual(integers.toList(),
@@ -205,7 +215,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
-    public void testReject()
+    public void reject()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());
         Verify.assertEmpty(
@@ -215,7 +225,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
-    public void testRejectWithTarget()
+    public void rejectToTarget()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest();
         Verify.assertEmpty(
@@ -236,14 +246,14 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
-    public void testCollect()
+    public void collect()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());
         Verify.assertListsEqual(integers.toList(), integers.collect(Functions.getIntegerPassThru()).castToList());
     }
 
     @Test
-    public void testCollectWithTarget()
+    public void collectToTarget()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest();
         Assert.assertEquals(integers, integers.collect(Functions.getIntegerPassThru(), UnifiedSet.<Integer>newSet()));
@@ -384,7 +394,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
-    public void testDetect()
+    public void detect()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest();
         Assert.assertEquals(Integer.valueOf(1), integers.detect(Predicates.equal(1)));
@@ -392,7 +402,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
-    public void testDetectIfNoneWithBlock()
+    public void detectIfNoneWithBlock()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest();
         Function0<Integer> function = new PassThruFunction0<Integer>(integers.size() + 1);
@@ -401,7 +411,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
-    public void testAllSatisfy()
+    public void allSatisfy()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest();
         Assert.assertTrue(integers.allSatisfy(Predicates.instanceOf(Integer.class)));
@@ -409,7 +419,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
-    public void testAnySatisfy()
+    public void anySatisfy()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest();
         Assert.assertFalse(integers.anySatisfy(Predicates.instanceOf(String.class)));
@@ -417,7 +427,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
-    public void testCount()
+    public void count()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest();
         Assert.assertEquals(integers.size(), integers.count(Predicates.instanceOf(Integer.class)));
@@ -425,7 +435,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
-    public void testCollectIf()
+    public void collectIf()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());
         Verify.assertListsEqual(integers.toList(), integers.collectIf(Predicates.instanceOf(Integer.class),
@@ -433,7 +443,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
-    public void testCollectIfWithTarget()
+    public void collectIfToTarget()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest();
         Verify.assertSetsEqual(integers.toSet(), integers.collectIf(Predicates.instanceOf(Integer.class),
@@ -441,7 +451,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
-    public void testGetFirst()
+    public void getFirst()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest();
         Assert.assertEquals(Integer.valueOf(1), integers.getFirst());
@@ -450,7 +460,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
-    public void testGetLast()
+    public void getLast()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest();
         Assert.assertEquals(Integer.valueOf(integers.size()), integers.getLast());
@@ -459,7 +469,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
-    public void testIsEmpty()
+    public void isEmpty()
     {
         ImmutableSortedSet<Integer> set = this.classUnderTest();
         Assert.assertFalse(set.isEmpty());
@@ -467,7 +477,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
-    public void testIterator()
+    public void iterator()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest();
         final Iterator<Integer> iterator = integers.iterator();
@@ -495,7 +505,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
-    public void testInjectInto()
+    public void injectInto()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest();
         Integer result = integers.injectInto(0, AddFunction.INTEGER);
@@ -503,7 +513,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
-    public void testToArray()
+    public void toArray()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());
         MutableList<Integer> copy = FastList.newList(integers);
@@ -518,13 +528,13 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
-    public void testMakeString()
+    public void makeString()
     {
         Assert.assertEquals(FastList.newList(this.classUnderTest()).makeString(), this.classUnderTest().makeString());
     }
 
     @Test
-    public void testAppendString()
+    public void appendString()
     {
         Appendable builder = new StringBuilder();
         this.classUnderTest().appendString(builder);
@@ -603,7 +613,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
-    public void testForLoop()
+    public void forLoop()
     {
         ImmutableSortedSet<Integer> set = this.classUnderTest();
         for (Integer each : set)
@@ -613,43 +623,43 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test(expected = UnsupportedOperationException.class)
-    public void testIteratorRemove()
+    public void iteratorRemove()
     {
         this.classUnderTest().iterator().remove();
     }
 
     @Test(expected = UnsupportedOperationException.class)
-    public void testAdd()
+    public void add()
     {
         this.classUnderTest().castToSortedSet().add(1);
     }
 
     @Test(expected = UnsupportedOperationException.class)
-    public void testRemove()
+    public void remove()
     {
         this.classUnderTest().castToSortedSet().remove(Integer.valueOf(1));
     }
 
     @Test(expected = UnsupportedOperationException.class)
-    public void testClear()
+    public void clear()
     {
         this.classUnderTest().castToSortedSet().clear();
     }
 
     @Test(expected = UnsupportedOperationException.class)
-    public void testRemoveAll()
+    public void removeAll()
     {
         this.classUnderTest().castToSortedSet().removeAll(Lists.fixedSize.of());
     }
 
     @Test(expected = UnsupportedOperationException.class)
-    public void testRetainAll()
+    public void retainAll()
     {
         this.classUnderTest().castToSortedSet().retainAll(Lists.fixedSize.of());
     }
 
     @Test(expected = UnsupportedOperationException.class)
-    public void testAddAll()
+    public void addAll()
     {
         this.classUnderTest().castToSortedSet().addAll(Lists.fixedSize.<Integer>of());
     }

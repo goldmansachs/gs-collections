@@ -29,6 +29,7 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.primitive.ImmutableBooleanList;
@@ -64,6 +65,8 @@ public interface ImmutableSortedSet<T>
     ImmutableSortedSet<T> newWithoutAll(Iterable<? extends T> elements);
 
     ImmutableSortedSet<T> select(Predicate<? super T> predicate);
+
+    <P> ImmutableSortedSet<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     ImmutableSortedSet<T> reject(Predicate<? super T> predicate);
 

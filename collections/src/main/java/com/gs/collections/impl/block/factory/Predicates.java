@@ -20,6 +20,7 @@ import java.util.Arrays;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.impl.utility.Iterate;
 
 /**
@@ -40,6 +41,11 @@ public abstract class Predicates<T>
     public static <T> Predicates<T> adapt(Predicate<T> predicate)
     {
         return new PredicateAdapter<T>(predicate);
+    }
+
+    public static <P, T> Predicate<T> bind(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return new BindPredicate2<T, P>(predicate, parameter);
     }
 
     public static <T> Predicate<T> synchronizedEach(Predicate<T> predicate)
@@ -1301,6 +1307,25 @@ public abstract class Predicates<T>
         public boolean accept(Class<?> each)
         {
             return each.isAssignableFrom(this.aClass);
+        }
+    }
+
+    private static final class BindPredicate2<T, P> implements Predicate<T>
+    {
+        private static final long serialVersionUID = 1L;
+
+        private final Predicate2<? super T, ? super P> predicate;
+        private final P parameter;
+
+        private BindPredicate2(Predicate2<? super T, ? super P> predicate, P parameter)
+        {
+            this.predicate = predicate;
+            this.parameter = parameter;
+        }
+
+        public boolean accept(T each)
+        {
+            return this.predicate.accept(each, this.parameter);
         }
     }
 }

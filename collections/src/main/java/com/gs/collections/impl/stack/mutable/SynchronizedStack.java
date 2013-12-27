@@ -185,6 +185,14 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
         }
     }
 
+    public <P> MutableStack<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.selectWith(predicate, parameter);
+        }
+    }
+
     public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)
     {
         synchronized (this.lock)

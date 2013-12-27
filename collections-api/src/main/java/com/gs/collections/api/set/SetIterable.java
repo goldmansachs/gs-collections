@@ -21,6 +21,7 @@ import java.util.Set;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.partition.set.PartitionSet;
 import com.gs.collections.api.tuple.Pair;
 
@@ -94,6 +95,8 @@ public interface SetIterable<T> extends RichIterable<T>
     <B> LazyIterable<Pair<T, B>> cartesianProduct(SetIterable<B> set);
 
     SetIterable<T> select(Predicate<? super T> predicate);
+
+    <P> SetIterable<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     SetIterable<T> reject(Predicate<? super T> predicate);
 

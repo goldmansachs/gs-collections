@@ -646,6 +646,11 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().selectWith(predicate, parameter, targetCollection);
     }
 
+    public <P> RichIterable<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.getMutableMap().selectWith(predicate, parameter);
+    }
+
     public Object[] toArray()
     {
         return this.getMutableMap().toArray();

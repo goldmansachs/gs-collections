@@ -29,6 +29,7 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.list.primitive.BooleanList;
 import com.gs.collections.api.list.primitive.ByteList;
@@ -94,6 +95,8 @@ public interface SortedSetIterable<T>
     <B> LazyIterable<Pair<T, B>> cartesianProduct(SetIterable<B> set);
 
     SortedSetIterable<T> select(Predicate<? super T> predicate);
+
+    <P> SortedSetIterable<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     SortedSetIterable<T> reject(Predicate<? super T> predicate);
 

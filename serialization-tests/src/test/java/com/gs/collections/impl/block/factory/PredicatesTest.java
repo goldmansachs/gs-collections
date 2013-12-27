@@ -506,5 +506,20 @@ public class PredicatesTest
                 Predicates.superClass(Object.class)
         );
     }
+
+    @Test
+    public void bind()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAD9jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlByZWRpY2F0ZXMk\n"
+                        + "QmluZFByZWRpY2F0ZTIAAAAAAAAAAQIAAkwACXBhcmFtZXRlcnQAEkxqYXZhL2xhbmcvT2JqZWN0\n"
+                        + "O0wACXByZWRpY2F0ZXQAM0xjb20vZ3MvY29sbGVjdGlvbnMvYXBpL2Jsb2NrL3ByZWRpY2F0ZS9Q\n"
+                        + "cmVkaWNhdGUyO3hwcHNyADdjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlBy\n"
+                        + "ZWRpY2F0ZXMyJEVxdWFsAAAAAAAAAAECAAB4cgAxY29tLmdzLmNvbGxlY3Rpb25zLmltcGwuYmxv\n"
+                        + "Y2suZmFjdG9yeS5QcmVkaWNhdGVzMgAAAAAAAAABAgAAeHA=",
+                Predicates.bind(Predicates2.equal(), null)
+        );
+    }
 }
 

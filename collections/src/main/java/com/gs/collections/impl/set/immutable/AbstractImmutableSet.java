@@ -30,6 +30,7 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
@@ -47,6 +48,7 @@ import com.gs.collections.api.set.primitive.ImmutableIntSet;
 import com.gs.collections.api.set.primitive.ImmutableLongSet;
 import com.gs.collections.api.set.primitive.ImmutableShortSet;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.CollectIfProcedure;
 import com.gs.collections.impl.block.procedure.CollectProcedure;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
@@ -144,6 +146,11 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
         FastList<T> intermediateResult = FastList.newList();
         this.forEach(new SelectProcedure<T>(predicate, intermediateResult));
         return Sets.immutable.ofAll(intermediateResult);
+    }
+
+    public <P> ImmutableSet<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.select(Predicates.bind(predicate, parameter));
     }
 
     public ImmutableSet<T> reject(Predicate<? super T> predicate)

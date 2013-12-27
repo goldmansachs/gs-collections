@@ -405,9 +405,9 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
 
     @Override
     @Test
-    public void collect()
+    public void collectMap()
     {
-        super.collect();
+        super.collectMap();
         MutableSortedMap<String, Integer> map = this.newMapWithKeysValues(Comparators.<String>reverseNaturalOrder(),
                 "1", 1, "2", 2, "3", 3);
         MutableMap<Integer, String> collect = map.collect(new Function2<String, Integer, Pair<Integer, String>>()
@@ -422,9 +422,9 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
 
     @Override
     @Test
-    public void select()
+    public void selectMap()
     {
-        super.select();
+        super.selectMap();
         MutableSortedMap<String, Integer> map = this.newMapWithKeysValues(Comparators.<String>reverseNaturalOrder(),
                 "1", 1, "2", 3, "3", 2, "4", 1);
         MutableSortedMap<String, Integer> select = map.select(new Predicate2<String, Integer>()
@@ -440,9 +440,9 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
 
     @Override
     @Test
-    public void reject()
+    public void rejectMap()
     {
-        super.reject();
+        super.rejectMap();
         MutableSortedMap<String, Integer> map = this.newMapWithKeysValues(Comparators.<String>reverseNaturalOrder(),
                 "1", 1, "2", 3, "3", 2, "4", 1);
         MutableSortedMap<String, Integer> select = map.reject(new Predicate2<String, Integer>()

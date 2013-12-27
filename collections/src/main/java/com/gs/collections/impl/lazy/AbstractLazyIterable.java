@@ -204,6 +204,11 @@ public abstract class AbstractLazyIterable<T>
         return LazyIterate.select(this, predicate);
     }
 
+    public <P> LazyIterable<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return LazyIterate.select(this, Predicates.bind(predicate, parameter));
+    }
+
     public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)
     {
         return IterableIterate.select(this, predicate, target);

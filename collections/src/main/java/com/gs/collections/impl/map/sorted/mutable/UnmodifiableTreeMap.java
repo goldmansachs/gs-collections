@@ -612,6 +612,11 @@ public class UnmodifiableTreeMap<K, V>
         return this.getMutableSortedMap().select(predicate, target);
     }
 
+    public <P> RichIterable<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.getMutableSortedMap().selectWith(predicate, parameter);
+    }
+
     public <P, R extends Collection<V>> R selectWith(Predicate2<? super V, ? super P> predicate, P parameter, R targetCollection)
     {
         return this.getMutableSortedMap().selectWith(predicate, parameter, targetCollection);

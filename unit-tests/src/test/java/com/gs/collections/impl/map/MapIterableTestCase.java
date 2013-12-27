@@ -244,7 +244,7 @@ public abstract class MapIterableTestCase
     }
 
     @Test
-    public void collect()
+    public void collectMap()
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
         MapIterable<Integer, String> actual = map.collect(new Function2<String, String, Pair<Integer, String>>()
@@ -339,6 +339,38 @@ public abstract class MapIterableTestCase
     public void select()
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
+        RichIterable<String> actual = map.select(Predicates.equal("Two"));
+        Assert.assertEquals(HashBag.newBagWith("Two"), actual.toBag());
+    }
+
+    @Test
+    public void selectWith()
+    {
+        MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
+        RichIterable<String> actual = map.selectWith(Predicates2.equal(), "Two");
+        Assert.assertEquals(HashBag.newBagWith("Two"), actual.toBag());
+    }
+
+    @Test
+    public void reject()
+    {
+        MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
+        RichIterable<String> actual = map.reject(Predicates.equal("Two"));
+        Assert.assertEquals(HashBag.newBagWith("One", "Three"), actual.toBag());
+    }
+
+    @Test
+    public void collect()
+    {
+        MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
+        RichIterable<String> actual = map.collect(StringFunctions.toLowerCase());
+        Assert.assertEquals(HashBag.newBagWith("one", "two", "three"), actual.toBag());
+    }
+
+    @Test
+    public void selectMap()
+    {
+        MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
         MapIterable<String, String> actual = map.select(new Predicate2<String, String>()
         {
             public boolean accept(String argument1, String argument2)
@@ -352,7 +384,7 @@ public abstract class MapIterableTestCase
     }
 
     @Test
-    public void reject()
+    public void rejectMap()
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
         MapIterable<String, String> actual = map.reject(new Predicate2<String, String>()

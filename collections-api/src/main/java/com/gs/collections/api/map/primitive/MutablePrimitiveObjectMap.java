@@ -28,6 +28,7 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
@@ -80,6 +81,8 @@ public interface MutablePrimitiveObjectMap<V>
     MutableCollection<V> reject(Predicate<? super V> predicate);
 
     MutableCollection<V> select(Predicate<? super V> predicate);
+
+    <P> MutableCollection<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter);
 
     PartitionMutableCollection<V> partition(Predicate<? super V> predicate);
 

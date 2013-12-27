@@ -22,6 +22,7 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.multimap.sortedbag.SortedBagMultimap;
 import com.gs.collections.api.partition.bag.sorted.PartitionSortedBag;
@@ -63,6 +64,8 @@ public interface SortedBag<T>
     T max();
 
     SortedBag<T> select(Predicate<? super T> predicate);
+
+    <P> SortedBag<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     SortedBag<T> reject(Predicate<? super T> predicate);
 

@@ -70,6 +70,7 @@ import com.gs.collections.api.stack.primitive.MutableLongStack;
 import com.gs.collections.api.stack.primitive.MutableShortStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.factory.Stacks;
@@ -445,6 +446,11 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
     public ArrayStack<T> select(Predicate<? super T> predicate)
     {
         return ArrayStack.newStackFromTopToBottom(this.delegate.asReversed().select(predicate).toList());
+    }
+
+    public <P> ArrayStack<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.select(Predicates.bind(predicate, parameter));
     }
 
     public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)

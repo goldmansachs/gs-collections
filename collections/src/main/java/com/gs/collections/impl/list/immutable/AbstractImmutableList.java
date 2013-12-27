@@ -59,6 +59,7 @@ import com.gs.collections.api.partition.list.PartitionImmutableList;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.CollectIfProcedure;
 import com.gs.collections.impl.block.procedure.CollectProcedure;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
@@ -214,6 +215,13 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
     {
         MutableList<T> result = Lists.mutable.of();
         this.forEach(new SelectProcedure<T>(predicate, result));
+        return result.toImmutable();
+    }
+
+    public <P> ImmutableList<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        MutableList<T> result = Lists.mutable.of();
+        this.forEach(new SelectProcedure<T>(Predicates.bind(predicate, parameter), result));
         return result.toImmutable();
     }
 

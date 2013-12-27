@@ -63,6 +63,7 @@ import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
+import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.stack.mutable.primitive.BooleanArrayStack;
 import com.gs.collections.impl.stack.mutable.primitive.ByteArrayStack;
 import com.gs.collections.impl.stack.mutable.primitive.CharArrayStack;
@@ -407,6 +408,14 @@ public abstract class StackIterableTestCase
     public void selectWith()
     {
         Assert.assertEquals(
+                ArrayStack.newStackFromTopToBottom(2, 1),
+                this.newStackFromTopToBottom(5, 4, 3, 2, 1).selectWith(Predicates2.<Integer>lessThan(), 3));
+    }
+
+    @Test
+    public void selectWithTarget()
+    {
+        Assert.assertEquals(
                 UnifiedSet.newSetWith(2, 1),
                 this.newStackFromTopToBottom(5, 4, 3, 2, 1).selectWith(Predicates2.<Integer>lessThan(), 3, UnifiedSet.<Integer>newSet()));
     }
@@ -426,7 +435,7 @@ public abstract class StackIterableTestCase
     }
 
     @Test
-    public void rejectWith()
+    public void rejectWithTarget()
     {
         Assert.assertEquals(
                 UnifiedSet.newSetWith(5, 4, 3),

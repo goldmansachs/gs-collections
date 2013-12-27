@@ -264,6 +264,14 @@ public abstract class SynchronizedMapIterable<K, V>
         }
     }
 
+    public <P> RichIterable<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.mapIterable.selectWith(predicate, parameter);
+        }
+    }
+
     public <P, R extends Collection<V>> R selectWith(Predicate2<? super V, ? super P> predicate, P parameter, R targetCollection)
     {
         synchronized (this.lock)

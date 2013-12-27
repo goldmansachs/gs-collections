@@ -28,6 +28,7 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
 import com.gs.collections.api.partition.set.PartitionImmutableSet;
@@ -61,6 +62,8 @@ public interface ImmutableSet<T>
     ImmutableSet<T> newWithoutAll(Iterable<? extends T> elements);
 
     ImmutableSet<T> select(Predicate<? super T> predicate);
+
+    <P> ImmutableSet<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     ImmutableSet<T> reject(Predicate<? super T> predicate);
 

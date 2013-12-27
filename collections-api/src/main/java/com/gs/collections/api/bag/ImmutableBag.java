@@ -34,6 +34,7 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
@@ -56,6 +57,8 @@ public interface ImmutableBag<T> extends Bag<T>, ImmutableCollection<T>
     ImmutableBag<T> selectByOccurrences(IntPredicate predicate);
 
     ImmutableBag<T> select(Predicate<? super T> predicate);
+
+    <P> ImmutableBag<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     ImmutableBag<T> reject(Predicate<? super T> predicate);
 

@@ -274,8 +274,17 @@ public abstract class AbstractCollectionTestCase
         Verify.assertContainsAll(
                 this.newWith(1, 2, 3, 4, 5).selectWith(
                         Predicates2.<Integer>lessThan(),
-                        3,
-                        UnifiedSet.<Integer>newSet()),
+                        3),
+                1, 2);
+    }
+
+    @Test
+    public void selectWithTarget()
+    {
+        Verify.assertContainsAll(this.newWith(1, 2, 3, 4, 5).selectWith(Predicates2.<Integer>lessThan(), 3, HashBag.<Integer>newBag()), 1, 2);
+        Verify.denyContainsAny(this.newWith(-1, 2, 3, 4, 5).selectWith(Predicates2.<Integer>lessThan(), 3, HashBag.<Integer>newBag()), 3, 4, 5);
+        Verify.assertContainsAll(
+                this.newWith(1, 2, 3, 4, 5).selectWith(Predicates2.<Integer>lessThan(), 3, HashBag.<Integer>newBag()),
                 1, 2);
     }
 
@@ -291,6 +300,15 @@ public abstract class AbstractCollectionTestCase
     public void rejectWith()
     {
         Verify.assertContainsAll(this.newWith(1, 2, 3, 4).rejectWith(Predicates2.<Integer>lessThan(), 3), 3, 4);
+        Verify.assertContainsAll(
+                this.newWith(1, 2, 3, 4).rejectWith(Predicates2.<Integer>lessThan(), 3, UnifiedSet.<Integer>newSet()),
+                3, 4);
+    }
+
+    @Test
+    public void rejectWithTarget()
+    {
+        Verify.assertContainsAll(this.newWith(1, 2, 3, 4).rejectWith(Predicates2.<Integer>lessThan(), 3, HashBag.<Integer>newBag()), 3, 4);
         Verify.assertContainsAll(
                 this.newWith(1, 2, 3, 4).rejectWith(Predicates2.<Integer>lessThan(), 3, UnifiedSet.<Integer>newSet()),
                 3, 4);

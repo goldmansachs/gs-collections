@@ -60,7 +60,7 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
 
     @Test
     @Override
-    public void testNewWith()
+    public void newWith()
     {
         ImmutableBag<String> bag = this.newBag();
         ImmutableBag<String> newBag = bag.newWith("1");
@@ -74,7 +74,7 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
 
     @Test
     @Override
-    public void testSelect()
+    public void select()
     {
         ImmutableBag<String> strings = this.newBag();
         Verify.assertIterableEmpty(strings.select(Predicates.lessThan("0")));
@@ -82,7 +82,7 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
 
     @Test
     @Override
-    public void testReject()
+    public void reject()
     {
         ImmutableBag<String> strings = this.newBag();
         Verify.assertIterableEmpty(strings.reject(Predicates.greaterThan("0")));
@@ -122,7 +122,7 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
 
     @Override
     @Test
-    public void testNewWithout()
+    public void newWithout()
     {
         Assert.assertSame(this.newBag(), this.newBag().newWithout("1"));
     }
@@ -135,7 +135,7 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
 
     @Override
     @Test
-    public void testDetect()
+    public void detect()
     {
         Assert.assertNull(this.newBag().detect(Predicates.equal("1")));
     }
@@ -150,7 +150,7 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
 
     @Override
     @Test
-    public void testAnySatisfy()
+    public void anySatisfy()
     {
         ImmutableBag<String> strings = this.newBag();
         Assert.assertFalse(strings.anySatisfy(Predicates.instanceOf(Integer.class)));
@@ -166,21 +166,21 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
 
     @Override
     @Test
-    public void testGetFirst()
+    public void getFirst()
     {
         Assert.assertNull(this.newBag().getFirst());
     }
 
     @Override
     @Test
-    public void testGetLast()
+    public void getLast()
     {
         Assert.assertNull(this.newBag().getLast());
     }
 
     @Override
     @Test
-    public void testIsEmpty()
+    public void isEmpty()
     {
         ImmutableBag<String> bag = this.newBag();
         Assert.assertTrue(bag.isEmpty());

@@ -138,9 +138,9 @@ public class UnifiedMapWithHashingStrategyTest extends UnifiedMapTestCase
 
     @Override
     @Test
-    public void select()
+    public void selectMap()
     {
-        super.select();
+        super.selectMap();
 
         UnifiedMapWithHashingStrategy<Person, Integer> map = UnifiedMapWithHashingStrategy.newWithKeysValues(
                 LAST_NAME_HASHING_STRATEGY, JOHNDOE, 1, JANEDOE, 2, JOHNSMITH, 3, JANESMITH, 4);
@@ -155,9 +155,9 @@ public class UnifiedMapWithHashingStrategyTest extends UnifiedMapTestCase
 
     @Override
     @Test
-    public void reject()
+    public void rejectMap()
     {
-        super.reject();
+        super.rejectMap();
 
         UnifiedMapWithHashingStrategy<Person, Integer> map = UnifiedMapWithHashingStrategy.newWithKeysValues(
                 LAST_NAME_HASHING_STRATEGY, JOHNDOE, 1, JANEDOE, 2, JOHNSMITH, 3, JANESMITH, 4);
@@ -172,9 +172,9 @@ public class UnifiedMapWithHashingStrategyTest extends UnifiedMapTestCase
 
     @Override
     @Test
-    public void collect()
+    public void collectMap()
     {
-        super.collect();
+        super.collectMap();
 
         UnifiedMapWithHashingStrategy<Person, Integer> map = UnifiedMapWithHashingStrategy.newWithKeysValues(
                 LAST_NAME_HASHING_STRATEGY, JOHNDOE, 1, JOHNSMITH, 2, JANEDOE, 3, JANESMITH, 4);

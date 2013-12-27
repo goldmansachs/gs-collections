@@ -19,6 +19,7 @@ package com.gs.collections.api.bag.sorted;
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.multimap.sortedbag.ImmutableSortedBagMultimap;
 import com.gs.collections.api.partition.bag.sorted.PartitionImmutableSortedBag;
@@ -44,6 +45,8 @@ public interface ImmutableSortedBag<T>
     ImmutableSortedBag<T> selectByOccurrences(IntPredicate predicate);
 
     ImmutableSortedBag<T> select(Predicate<? super T> predicate);
+
+    <P> ImmutableSortedBag<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     ImmutableSortedBag<T> reject(Predicate<? super T> predicate);
 

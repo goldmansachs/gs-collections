@@ -124,6 +124,8 @@ public interface
     boolean containsAllIterable(Iterable<?> source);
 
     /**
+     * Returns true if all elements in source are contained in this collection.
+     *
      * @see Collection#containsAll(Collection)
      * @since 1.0
      */
@@ -178,6 +180,17 @@ public interface
      * @since 1.0
      */
     <R extends Collection<T>> R select(Predicate<? super T> predicate, R target);
+
+    /**
+     * Similar to {@link #select(Predicate, Collection)}, except with an evaluation parameter for the second generic argument in {@link Predicate2}.
+     *
+     * @param predicate a {@link Predicate2} to use as the select criteria
+     * @param parameter a parameter to pass in for evaluation of the second argument {@code P} in {@code predicate}
+     * @see #select(Predicate)
+     * @see #select(Predicate, Collection)
+     * @since 5.0
+     */
+    <P> RichIterable<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     /**
      * Similar to {@link #select(Predicate, Collection)}, except with an evaluation parameter for the second generic argument in {@link Predicate2}.
@@ -783,16 +796,21 @@ public interface
     LazyIterable<T> asLazy();
 
     /**
+     * Converts this iterable to an array.
+     *
      * @see Collection#toArray()
      * @since 1.0
      */
     Object[] toArray();
 
     /**
+     * Converts this iterable to an array using the specified target array, assuming the target array is as long
+     * or longer than the iterable.
+     *
      * @see Collection#toArray(Object[])
      * @since 1.0
      */
-    <T> T[] toArray(T[] a);
+    <T> T[] toArray(T[] target);
 
     /**
      * Returns the minimum element out of this container based on the comparator.

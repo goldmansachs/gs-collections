@@ -26,6 +26,7 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.multimap.set.SetMultimap;
 import com.gs.collections.api.set.primitive.BooleanSet;
 import com.gs.collections.api.set.primitive.ByteSet;
@@ -84,6 +85,8 @@ public interface UnsortedSetIterable<T>
     UnsortedSetIterable<T> symmetricDifference(SetIterable<? extends T> setB);
 
     UnsortedSetIterable<T> select(Predicate<? super T> predicate);
+
+    <P> UnsortedSetIterable<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     UnsortedSetIterable<T> reject(Predicate<? super T> predicate);
 

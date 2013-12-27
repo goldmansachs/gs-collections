@@ -26,6 +26,7 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.<name>ObjectPredicate;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.collection.primitive.ImmutableBooleanCollection;
@@ -49,6 +50,8 @@ public interface Immutable<name>ObjectMap\<V> extends <name>ObjectMap\<V>
     Immutable<name>ObjectMap\<V> reject(<name>ObjectPredicate\<? super V> predicate);
 
     ImmutableCollection\<V> select(Predicate\<? super V> predicate);
+
+    \<P> ImmutableCollection\<V> selectWith(Predicate2\<? super V, ? super P> predicate, P parameter);
 
     ImmutableCollection\<V> reject(Predicate\<? super V> predicate);
 

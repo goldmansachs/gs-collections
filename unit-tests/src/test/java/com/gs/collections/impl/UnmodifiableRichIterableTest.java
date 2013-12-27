@@ -312,6 +312,14 @@ public class UnmodifiableRichIterableTest
     public void selectWith()
     {
         Assert.assertEquals(
+                this.mutableCollection.selectWith(Predicates2.alwaysTrue(), null),
+                this.unmodifiableCollection.selectWith(Predicates2.alwaysTrue(), null));
+    }
+
+    @Test
+    public void selectWithToTarget()
+    {
+        Assert.assertEquals(
                 this.mutableCollection.selectWith(Predicates2.alwaysTrue(), null, Lists.mutable.<String>of()),
                 this.unmodifiableCollection.selectWith(Predicates2.alwaysTrue(), null, Lists.mutable.<String>of()));
     }

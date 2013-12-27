@@ -248,6 +248,11 @@ final class ImmutableEmptyBag<T>
         return this;
     }
 
+    public <P> ImmutableBag<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this;
+    }
+
     public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)
     {
         return target;

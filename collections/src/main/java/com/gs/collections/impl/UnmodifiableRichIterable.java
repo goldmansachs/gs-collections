@@ -99,6 +99,11 @@ public class UnmodifiableRichIterable<T>
         return this.iterable.select(predicate, target);
     }
 
+    public <P> RichIterable<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.iterable.selectWith(predicate, parameter);
+    }
+
     public <P, R extends Collection<T>> R selectWith(Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
     {
         return this.iterable.selectWith(predicate, parameter, targetCollection);
