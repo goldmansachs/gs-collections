@@ -32,6 +32,7 @@ import com.gs.collections.api.bag.primitive.ImmutableFloatBag;
 import com.gs.collections.api.bag.primitive.ImmutableIntBag;
 import com.gs.collections.api.bag.primitive.ImmutableLongBag;
 import com.gs.collections.api.bag.primitive.ImmutableShortBag;
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.ByteFunction;
 import com.gs.collections.api.block.function.primitive.CharFunction;
@@ -40,9 +41,13 @@ import com.gs.collections.api.block.function.primitive.FloatFunction;
 import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
+import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
+import com.gs.collections.api.partition.bag.PartitionImmutableBag;
+import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.ByteHashBag;
@@ -74,6 +79,21 @@ public abstract class AbstractImmutableBag<T>
     {
         return this.select(Predicates.bind(predicate, parameter));
     }
+
+    @Override
+    public abstract <S> ImmutableBag<Pair<T, S>> zip(Iterable<S> that);
+
+    @Override
+    public abstract ImmutableBag<Pair<T, Integer>> zipWithIndex();
+
+    @Override
+    public abstract PartitionImmutableBag<T> partition(Predicate<? super T> predicate);
+
+    @Override
+    public abstract <V> ImmutableBagMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
+
+    @Override
+    public abstract <V> ImmutableBagMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
 
     @Override
     public ImmutableBooleanBag collectBoolean(final BooleanFunction<? super T> booleanFunction)
