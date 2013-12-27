@@ -26,6 +26,9 @@ import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.impl.block.factory.Procedures;
 import net.jcip.annotations.Immutable;
 
+/**
+ * A ReverseIterable is an iterable that wraps another iterable and iterates in reverse order.
+ */
 @Immutable
 public class ReverseIterable<T>
         extends AbstractLazyIterable<T>

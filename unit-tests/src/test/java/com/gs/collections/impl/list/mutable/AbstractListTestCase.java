@@ -817,4 +817,10 @@ public abstract class AbstractListTestCase
         Assert.assertEquals(iList(1, 2, 3, 4, 5), partition3.getSelected());
         Assert.assertEquals(iList(), partition3.getRejected());
     }
+
+    @Test
+    public void asReversed()
+    {
+        Verify.assertIterablesEqual(iList(4, 3, 2, 1), this.newWith(1, 2, 3, 4).asReversed());
+    }
 }

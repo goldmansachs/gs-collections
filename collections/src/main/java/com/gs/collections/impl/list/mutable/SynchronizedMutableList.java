@@ -22,6 +22,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
 
+import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
@@ -52,6 +53,7 @@ import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.collection.mutable.SynchronizedMutableCollection;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.lazy.ReverseIterable;
 import net.jcip.annotations.GuardedBy;
 
 /**
@@ -566,6 +568,14 @@ public class SynchronizedMutableList<T>
         synchronized (this.getLock())
         {
             return this.getMutableList().partitionWhile(predicate);
+        }
+    }
+
+    public LazyIterable<T> asReversed()
+    {
+        synchronized (this.getLock())
+        {
+            return ReverseIterable.adapt(this);
         }
     }
 

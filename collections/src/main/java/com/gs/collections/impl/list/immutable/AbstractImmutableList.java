@@ -68,6 +68,7 @@ import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.block.procedure.SelectProcedure;
 import com.gs.collections.impl.collection.immutable.AbstractImmutableCollection;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.lazy.ReverseIterable;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.stack.mutable.ArrayStack;
@@ -741,5 +742,10 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
     public MutableStack<T> toStack()
     {
         return ArrayStack.newStack(this);
+    }
+
+    public ReverseIterable<T> asReversed()
+    {
+        return ReverseIterable.adapt(this);
     }
 }

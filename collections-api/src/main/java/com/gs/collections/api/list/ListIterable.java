@@ -19,6 +19,7 @@ package com.gs.collections.api.list;
 import java.util.List;
 import java.util.ListIterator;
 
+import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
@@ -239,6 +240,13 @@ public interface ListIterable<T>
      * @since 3.0
      */
     PartitionList<T> partitionWhile(Predicate<? super T> predicate);
+
+    /**
+     * Returns a reversed view of this ListIterable.
+     *
+     * @since 3.0
+     */
+    LazyIterable<T> asReversed();
 
     /**
      * Follows the same general contract as {@link List#equals(Object)}.

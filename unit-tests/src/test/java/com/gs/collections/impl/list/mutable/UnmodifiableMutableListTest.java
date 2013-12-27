@@ -16,8 +16,10 @@
 
 package com.gs.collections.impl.list.mutable;
 
+import java.util.Iterator;
 import java.util.ListIterator;
 
+import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
@@ -252,7 +254,32 @@ public class UnmodifiableMutableListTest
     @Test
     public void asSynchronized()
     {
-        Verify.assertInstanceOf(SynchronizedMutableList.class, this.unmodifiableList.asSynchronized());
+        final MutableList<String> synchronizedList = this.unmodifiableList.asSynchronized();
+        Verify.assertInstanceOf(SynchronizedMutableList.class, synchronizedList);
+        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterator<String> iterator = synchronizedList.iterator();
+                iterator.next();
+                iterator.remove();
+            }
+        });
+    }
+
+    @Test
+    public void asReversed()
+    {
+        final LazyIterable<String> lazyIterable = this.unmodifiableList.asReversed();
+        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterator<String> iterator = lazyIterable.iterator();
+                iterator.next();
+                iterator.remove();
+            }
+        });
     }
 
     @Test

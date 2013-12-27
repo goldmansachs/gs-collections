@@ -51,6 +51,7 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.lazy.ReverseIterable;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
 import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
@@ -484,5 +485,11 @@ public final class ArrayListAdapter<T>
     public PartitionMutableList<T> partitionWhile(Predicate<? super T> predicate)
     {
         return ArrayListIterate.partitionWhile(this.delegate, predicate);
+    }
+
+    @Override
+    public ReverseIterable<T> asReversed()
+    {
+        return ReverseIterable.adapt(this);
     }
 }

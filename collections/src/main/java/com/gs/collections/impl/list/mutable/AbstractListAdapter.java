@@ -54,6 +54,7 @@ import com.gs.collections.impl.block.procedure.primitive.CollectIntProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectLongProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectShortProcedure;
 import com.gs.collections.impl.collection.mutable.AbstractCollectionAdapter;
+import com.gs.collections.impl.lazy.ReverseIterable;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
 import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
@@ -171,6 +172,11 @@ public abstract class AbstractListAdapter<T>
     public MutableStack<T> toStack()
     {
         return ArrayStack.newStack(this.getDelegate());
+    }
+
+    public ReverseIterable<T> asReversed()
+    {
+        return ReverseIterable.adapt(this);
     }
 
     @Override

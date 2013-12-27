@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.list.mutable
 
+import com.gs.collections.impl.Prelude._
 import com.gs.collections.impl.collection.mutable.SynchronizedMutableCollectionTestTrait
 
 class SynchronizedMutableListScalaTest extends SynchronizedMutableCollectionTestTrait
@@ -39,6 +40,20 @@ class SynchronizedMutableListScalaTest extends SynchronizedMutableCollectionTest
         this.assertSynchronized
         {
             this.classUnderTest.hashCode
+        }
+    }
+
+    @Test
+    def asReversed_synchronized
+    {
+        this.assertSynchronized
+        {
+            this.classUnderTest.asReversed()
+        }
+        val reverseIterable = this.classUnderTest.asReversed()
+        this.assertSynchronized
+        {
+            reverseIterable.forEach{_: String => ()}
         }
     }
 }

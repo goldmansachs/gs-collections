@@ -283,6 +283,28 @@ class MultiReaderFastListScalaTest extends MultiReaderFastListTestTrait
     }
 
     @Test
+    def asReversed_safe
+    {
+        this.assertWritersBlocked
+        {
+            this.classUnderTest.asReversed()
+        }
+        this.assertReadersNotBlocked
+        {
+            this.classUnderTest.asReversed()
+        }
+        val reverseIterable = this.classUnderTest.asReversed()
+        this.assertWritersBlocked
+        {
+            reverseIterable.forEach{_: Int => ()}
+        }
+        this.assertReadersNotBlocked
+        {
+            reverseIterable.forEach{_: Int => ()}
+        }
+    }
+
+    @Test
     def forEachWithIndex_safe
     {
         this.assertWritersBlocked
@@ -628,8 +650,7 @@ class MultiReaderFastListScalaTest extends MultiReaderFastListTestTrait
             },
             {
                 num: Int => "" + num
-            }
-            )
+            })
         }
         this.assertReadersNotBlocked
         {
@@ -639,8 +660,7 @@ class MultiReaderFastListScalaTest extends MultiReaderFastListTestTrait
             },
             {
                 num: Int => "" + num
-            }
-            )
+            })
         }
     }
 
@@ -719,15 +739,11 @@ class MultiReaderFastListScalaTest extends MultiReaderFastListTestTrait
     {
         this.assertWritersBlocked
         {
-            this.classUnderTest.selectInstancesOf(
-                Int.getClass
-            )
+            this.classUnderTest.selectInstancesOf(Int.getClass)
         }
         this.assertReadersNotBlocked
         {
-            this.classUnderTest.selectInstancesOf(
-                Int.getClass
-            )
+            this.classUnderTest.selectInstancesOf(Int.getClass)
         }
     }
 
@@ -917,16 +933,14 @@ class MultiReaderFastListScalaTest extends MultiReaderFastListTestTrait
             this.classUnderTest.selectAndRejectWith(
             {
                 (_: Int, _: Int) => true
-            }, 1
-            )
+            }, 1)
         }
         this.assertReadersNotBlocked
         {
             this.classUnderTest.selectAndRejectWith(
             {
                 (_: Int, _: Int) => true
-            }, 1
-            )
+            }, 1)
         }
     }
 
@@ -963,8 +977,7 @@ class MultiReaderFastListScalaTest extends MultiReaderFastListTestTrait
             {
                 num: Int => "" + num
             },
-            FastList.newList[String]
-            )
+            FastList.newList[String])
         }
         this.assertReadersNotBlocked
         {
@@ -975,8 +988,7 @@ class MultiReaderFastListScalaTest extends MultiReaderFastListTestTrait
             {
                 num: Int => "" + num
             },
-            FastList.newList[String]
-            )
+            FastList.newList[String])
         }
     }
 
@@ -1386,8 +1398,7 @@ class MultiReaderFastListScalaTest extends MultiReaderFastListTestTrait
             },
             {
                 _: Int => 0
-            }
-            )
+            })
         }
         this.assertReadersNotBlocked
         {
@@ -1397,8 +1408,7 @@ class MultiReaderFastListScalaTest extends MultiReaderFastListTestTrait
             },
             {
                 _: Int => 0
-            }
-            )
+            })
         }
     }
 

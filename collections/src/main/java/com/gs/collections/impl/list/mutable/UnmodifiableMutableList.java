@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.RandomAccess;
 
+import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
@@ -52,6 +53,7 @@ import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.collection.mutable.UnmodifiableMutableCollection;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.lazy.ReverseIterable;
 import com.gs.collections.impl.stack.mutable.ArrayStack;
 
 /**
@@ -291,7 +293,6 @@ public class UnmodifiableMutableList<T>
         return this.getMutableList().collectShort(shortFunction);
     }
 
-
     @Override
     public <V> MutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
@@ -384,6 +385,11 @@ public class UnmodifiableMutableList<T>
     public PartitionMutableList<T> partitionWhile(Predicate<? super T> predicate)
     {
         return this.getMutableList().partitionWhile(predicate);
+    }
+
+    public LazyIterable<T> asReversed()
+    {
+        return ReverseIterable.adapt(this);
     }
 
     @Override

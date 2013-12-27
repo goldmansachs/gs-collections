@@ -56,6 +56,8 @@ import com.gs.collections.impl.utility.ListIterate;
 import org.junit.Assert;
 import org.junit.Test;
 
+import static com.gs.collections.impl.factory.Iterables.*;
+
 /**
  * JUnit test for {@link MultiReaderFastList}.
  */
@@ -1178,5 +1180,19 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     public void iterator_throws()
     {
         this.newWith(1, 2, 3).iterator();
+    }
+
+    @Override
+    @Test
+    public void asReversed()
+    {
+        MultiReaderFastList<Integer> multiReaderFastList = this.newWith(1, 2, 3, 4);
+        multiReaderFastList.withReadLockAndDelegate(new Procedure<MutableList<Integer>>()
+        {
+            public void value(MutableList<Integer> delegate)
+            {
+                Verify.assertIterablesEqual(iList(4, 3, 2, 1), delegate.asReversed());
+            }
+        });
     }
 }

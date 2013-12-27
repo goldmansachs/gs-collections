@@ -60,6 +60,7 @@ import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.collection.mutable.AbstractMultiReaderMutableCollection;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.lazy.ReverseIterable;
 import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.utility.LazyIterate;
 
@@ -1112,6 +1113,11 @@ public final class MultiReaderFastList<T>
             return this.getDelegate().zipWithIndex();
         }
 
+        public LazyIterable<T> asReversed()
+        {
+            return ReverseIterable.adapt(this);
+        }
+
         public void becomeUseless()
         {
             this.delegate = null;
@@ -1335,6 +1341,19 @@ public final class MultiReaderFastList<T>
         try
         {
             return this.delegate.partitionWhile(predicate);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public LazyIterable<T> asReversed()
+    {
+        this.acquireReadLock();
+        try
+        {
+            return ReverseIterable.adapt(this);
         }
         finally
         {

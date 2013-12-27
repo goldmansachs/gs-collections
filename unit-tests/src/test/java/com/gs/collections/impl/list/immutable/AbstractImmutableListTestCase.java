@@ -511,4 +511,10 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
         ImmutableBooleanCollection immutableCollection = integers.collectBoolean(PrimitiveFunctions.integerIsPositive());
         Verify.assertSize(integers.size(), immutableCollection);
     }
+
+    @Test
+    public void asReversed()
+    {
+        Verify.assertIterablesEqual(this.classUnderTest().toList().toReversed(), this.classUnderTest().asReversed());
+    }
 }
