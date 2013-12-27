@@ -630,6 +630,16 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
     }
 
     @Test
+    public void keysAndValues_toString()
+    {
+        MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2");
+        Verify.assertContains(map.keySet().toString(), FastList.newListWith("[1, 2]", "[2, 1]"));
+        Verify.assertContains(map.values().toString(), FastList.newListWith("[1, 2]", "[2, 1]"));
+        Verify.assertContains(map.keysView().toString(), FastList.newListWith("[1, 2]", "[2, 1]"));
+        Verify.assertContains(map.valuesView().toString(), FastList.newListWith("[1, 2]", "[2, 1]"));
+    }
+
+    @Test
     public void testClone()
     {
         MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "One", 2, "Two");

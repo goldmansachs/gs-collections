@@ -1604,6 +1604,12 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
             return hashCode;
         }
 
+        @Override
+        public String toString()
+        {
+            return Iterate.makeString(this, "[", ", ", "]");
+        }
+
         public Object[] toArray()
         {
             int size = UnifiedMap.this.size();
@@ -2439,6 +2445,12 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
                 }
                 replace.add((V) chain[i + 1]);
             }
+        }
+
+        @Override
+        public String toString()
+        {
+            return Iterate.makeString(this, "[", ", ", "]");
         }
     }
 

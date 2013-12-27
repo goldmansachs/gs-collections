@@ -1651,6 +1651,12 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
             return hashCode;
         }
 
+        @Override
+        public String toString()
+        {
+            return Iterate.makeString(this, "[", ", ", "]");
+        }
+
         public Object[] toArray()
         {
             int size = UnifiedMapWithHashingStrategy.this.size();
@@ -2441,6 +2447,12 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
                     }
                 }
             }
+        }
+
+        @Override
+        public String toString()
+        {
+            return Iterate.makeString(this, "[", ", ", "]");
         }
 
         public Object[] toArray()

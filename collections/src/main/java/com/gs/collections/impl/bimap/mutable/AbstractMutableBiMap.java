@@ -1120,6 +1120,12 @@ abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
         {
             return AbstractMutableBiMap.this.inverse().iterator();
         }
+
+        @Override
+        public String toString()
+        {
+            return Iterate.makeString(this, "[", ", ", "]");
+        }
     }
 
     private class ValuesCollection implements Collection<V>
@@ -1211,6 +1217,12 @@ abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
         public Iterator<V> iterator()
         {
             return AbstractMutableBiMap.this.iterator();
+        }
+
+        @Override
+        public String toString()
+        {
+            return Iterate.makeString(this, "[", ", ", "]");
         }
     }
 
