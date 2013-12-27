@@ -789,7 +789,7 @@ public interface
             Function<? super T, ? extends NV> valueFunction);
 
     /**
-     * Returns a deferred iterable, most likely implemented by calling LazyIterate.defer(this).
+     * Returns a lazy (deferred) iterable, most likely implemented by calling LazyIterate.adapt(this).
      *
      * @since 1.0.
      */
