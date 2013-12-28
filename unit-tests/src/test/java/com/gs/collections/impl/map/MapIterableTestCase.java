@@ -360,6 +360,14 @@ public abstract class MapIterableTestCase
     }
 
     @Test
+    public void rejectWith()
+    {
+        MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
+        RichIterable<String> actual = map.rejectWith(Predicates2.equal(), "Two");
+        Assert.assertEquals(HashBag.newBagWith("One", "Three"), actual.toBag());
+    }
+
+    @Test
     public void collect()
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
