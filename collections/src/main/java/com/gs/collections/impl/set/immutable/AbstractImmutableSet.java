@@ -160,6 +160,11 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
         return Sets.immutable.ofAll(intermediateResult);
     }
 
+    public <P> ImmutableSet<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.reject(Predicates.bind(predicate, parameter));
+    }
+
     public PartitionImmutableSet<T> partition(Predicate<? super T> predicate)
     {
         PartitionMutableSet<T> partitionUnifiedSet = new PartitionUnifiedSet<T>();

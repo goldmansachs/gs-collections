@@ -139,6 +139,11 @@ public final class UnmodifiableStack<T> implements MutableStack<T>, Serializable
         return this.mutableStack.reject(predicate);
     }
 
+    public <P> MutableStack<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.mutableStack.rejectWith(predicate, parameter);
+    }
+
     public PartitionStack<T> partition(Predicate<? super T> predicate)
     {
         return this.mutableStack.partition(predicate);

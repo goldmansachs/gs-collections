@@ -119,6 +119,8 @@ public interface StackIterable<T> extends RichIterable<T>
 
     StackIterable<T> reject(Predicate<? super T> predicate);
 
+    <P> StackIterable<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     PartitionStack<T> partition(Predicate<? super T> predicate);
 
     <V> StackIterable<V> collect(Function<? super T, ? extends V> function);

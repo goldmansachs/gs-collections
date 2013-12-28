@@ -62,6 +62,8 @@ public interface ImmutableBag<T> extends Bag<T>, ImmutableCollection<T>
 
     ImmutableBag<T> reject(Predicate<? super T> predicate);
 
+    <P> ImmutableBag<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     PartitionImmutableBag<T> partition(Predicate<? super T> predicate);
 
     <S> ImmutableBag<S> selectInstancesOf(Class<S> clazz);

@@ -70,6 +70,8 @@ public interface ImmutableSortedSet<T>
 
     ImmutableSortedSet<T> reject(Predicate<? super T> predicate);
 
+    <P> ImmutableSortedSet<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     PartitionImmutableSortedSet<T> partition(Predicate<? super T> predicate);
 
     <S> ImmutableSortedSet<S> selectInstancesOf(Class<S> clazz);

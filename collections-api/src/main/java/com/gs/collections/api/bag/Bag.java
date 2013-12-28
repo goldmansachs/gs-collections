@@ -77,6 +77,8 @@ public interface Bag<T>
 
     Bag<T> reject(Predicate<? super T> predicate);
 
+    <P> Bag<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     PartitionBag<T> partition(Predicate<? super T> predicate);
 
     <S> Bag<S> selectInstancesOf(Class<S> clazz);

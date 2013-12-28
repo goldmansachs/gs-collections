@@ -90,6 +90,8 @@ public interface UnsortedSetIterable<T>
 
     UnsortedSetIterable<T> reject(Predicate<? super T> predicate);
 
+    <P> UnsortedSetIterable<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     <S> UnsortedSetIterable<S> selectInstancesOf(Class<S> clazz);
 
     <S> UnsortedSetIterable<Pair<T, S>> zip(Iterable<S> that);

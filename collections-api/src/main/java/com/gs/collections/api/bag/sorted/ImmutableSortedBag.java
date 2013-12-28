@@ -50,6 +50,8 @@ public interface ImmutableSortedBag<T>
 
     ImmutableSortedBag<T> reject(Predicate<? super T> predicate);
 
+    <P> ImmutableSortedBag<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     PartitionImmutableSortedBag<T> partition(Predicate<? super T> predicate);
 
     <S> ImmutableSortedBag<S> selectInstancesOf(Class<S> clazz);

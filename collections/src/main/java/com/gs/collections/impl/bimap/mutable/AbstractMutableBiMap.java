@@ -314,6 +314,11 @@ abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
         return this.delegate.selectWith(predicate, parameter);
     }
 
+    public <P> RichIterable<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.delegate.rejectWith(predicate, parameter);
+    }
+
     public <V1> MutableCollection<V1> collect(Function<? super V, ? extends V1> function)
     {
         return this.delegate.collect(function);

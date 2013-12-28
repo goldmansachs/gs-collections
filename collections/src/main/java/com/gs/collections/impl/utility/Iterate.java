@@ -824,34 +824,34 @@ public final class Iterate
     /**
      * Returns all elements of the iterable that evaluate to false for the specified predicate2 and parameter.
      */
-    public static <T, IV> Collection<T> rejectWith(
+    public static <T, P> Collection<T> rejectWith(
             Iterable<T> iterable,
-            Predicate2<? super T, ? super IV> predicate,
-            IV injectedValue)
+            Predicate2<? super T, ? super P> predicate,
+            P parameter)
     {
         if (iterable instanceof MutableCollection)
         {
-            return ((MutableCollection<T>) iterable).rejectWith(predicate, injectedValue);
+            return ((MutableCollection<T>) iterable).rejectWith(predicate, parameter);
         }
         if (iterable instanceof ArrayList)
         {
-            return ArrayListIterate.rejectWith((ArrayList<T>) iterable, predicate, injectedValue);
+            return ArrayListIterate.rejectWith((ArrayList<T>) iterable, predicate, parameter);
         }
         if (iterable instanceof RandomAccess)
         {
-            return RandomAccessListIterate.rejectWith((List<T>) iterable, predicate, injectedValue);
+            return RandomAccessListIterate.rejectWith((List<T>) iterable, predicate, parameter);
         }
         if (iterable instanceof Collection)
         {
-            return IterableIterate.<T, IV, Collection<T>>rejectWith(
+            return IterableIterate.<T, P, Collection<T>>rejectWith(
                     iterable,
                     predicate,
-                    injectedValue,
+                    parameter,
                     DefaultSpeciesNewStrategy.INSTANCE.<T>speciesNew((Collection<T>) iterable));
         }
         if (iterable != null)
         {
-            return IterableIterate.rejectWith(iterable, predicate, injectedValue, FastList.<T>newList());
+            return IterableIterate.rejectWith(iterable, predicate, parameter, FastList.<T>newList());
         }
         throw new IllegalArgumentException("Cannot perform a rejectWith on null");
     }

@@ -48,6 +48,7 @@ import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.MapCollectProcedure;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
@@ -265,6 +266,18 @@ public abstract class AbstractMutableSortedMap<K, V> extends AbstractMapIterable
     public MutableList<V> reject(Predicate<? super V> predicate)
     {
         return this.reject(predicate, FastList.<V>newList(this.size()));
+    }
+
+    @Override
+    public <P> MutableList<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.select(Predicates.bind(predicate, parameter));
+    }
+
+    @Override
+    public <P> MutableList<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.reject(Predicates.bind(predicate, parameter));
     }
 
     @Override

@@ -100,6 +100,8 @@ public interface SetIterable<T> extends RichIterable<T>
 
     SetIterable<T> reject(Predicate<? super T> predicate);
 
+    <P> SetIterable<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     PartitionSet<T> partition(Predicate<? super T> predicate);
 
     <S> SetIterable<S> selectInstancesOf(Class<S> clazz);

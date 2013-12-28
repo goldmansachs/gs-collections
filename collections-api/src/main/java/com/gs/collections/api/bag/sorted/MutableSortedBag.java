@@ -42,10 +42,6 @@ public interface MutableSortedBag<T>
 
     MutableSortedBag<T> newEmpty();
 
-    <P> MutableSortedBag<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
-
-    <P> MutableSortedBag<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
-
     /**
      * Returns an unmodifable view of the set. The returned set will be <tt>Serializable</tt> if this set is <tt>Serializable</tt>.
      *
@@ -55,11 +51,15 @@ public interface MutableSortedBag<T>
 
     MutableSortedBag<T> asSynchronized();
 
-    MutableSortedBag<T> reject(Predicate<? super T> predicate);
-
     <V> MutableSortedBagMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
 
     MutableSortedBag<T> select(Predicate<? super T> predicate);
+
+    <P> MutableSortedBag<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
+    MutableSortedBag<T> reject(Predicate<? super T> predicate);
+
+    <P> MutableSortedBag<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     PartitionMutableSortedBag<T> partition(Predicate<? super T> predicate);
 

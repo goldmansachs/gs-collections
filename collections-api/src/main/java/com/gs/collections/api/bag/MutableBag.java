@@ -66,10 +66,6 @@ public interface MutableBag<T>
 
     MutableBag<T> newEmpty();
 
-    <P> MutableBag<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
-
-    <P> MutableBag<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
-
     <P, V> MutableBag<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
 
     MutableBag<T> asUnmodifiable();
@@ -102,7 +98,11 @@ public interface MutableBag<T>
 
     MutableBag<T> select(Predicate<? super T> predicate);
 
+    <P> MutableBag<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     MutableBag<T> reject(Predicate<? super T> predicate);
+
+    <P> MutableBag<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     <S> MutableBag<S> selectInstancesOf(Class<S> clazz);
 

@@ -667,11 +667,6 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         return result;
     }
 
-    public \<P> MutableCollection\<V> selectWith(Predicate2\<? super V, ? super P> predicate, P parameter)
-    {
-        return this.select(Predicates.bind(predicate, parameter));
-    }
-
     public \<R extends Collection\<V>\> R select(Predicate\<? super V> predicate, R target)
     {
         if (this.sentinelValues != null)
@@ -693,6 +688,11 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
             }
         }
         return target;
+    }
+
+    public \<P> MutableCollection\<V> selectWith(Predicate2\<? super V, ? super P> predicate, P parameter)
+    {
+        return this.select(Predicates.bind(predicate, parameter));
     }
 
     public \<P, R extends Collection\<V>\> R selectWith(Predicate2\<? super V, ? super P> predicate, P parameter, R targetCollection)
@@ -763,6 +763,11 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
             }
         }
         return target;
+    }
+
+    public \<P> MutableCollection\<V> rejectWith(Predicate2\<? super V, ? super P> predicate, P parameter)
+    {
+        return this.reject(Predicates.bind(predicate, parameter));
     }
 
     public \<P, R extends Collection\<V>\> R rejectWith(Predicate2\<? super V, ? super P> predicate, P parameter, R targetCollection)

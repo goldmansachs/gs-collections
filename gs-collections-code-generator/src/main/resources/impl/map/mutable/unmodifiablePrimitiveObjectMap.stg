@@ -312,6 +312,11 @@ public final class Unmodifiable<name>ObjectMap\<V>
         return this.map.reject(predicate, target);
     }
 
+    public \<P> MutableCollection\<V> rejectWith(Predicate2\<? super V, ? super P> predicate, P parameter)
+    {
+        return this.map.rejectWith(predicate, parameter);
+    }
+
     public \<P, R extends Collection\<V>\> R rejectWith(Predicate2\<? super V, ? super P> predicate, P parameter, R targetCollection)
     {
         return this.map.rejectWith(predicate, parameter, targetCollection);

@@ -78,11 +78,13 @@ public interface MutablePrimitiveObjectMap<V>
 
     <S> MutableCollection<S> selectInstancesOf(Class<S> clazz);
 
-    MutableCollection<V> reject(Predicate<? super V> predicate);
-
     MutableCollection<V> select(Predicate<? super V> predicate);
 
     <P> MutableCollection<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter);
+
+    MutableCollection<V> reject(Predicate<? super V> predicate);
+
+    <P> MutableCollection<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter);
 
     PartitionMutableCollection<V> partition(Predicate<? super V> predicate);
 

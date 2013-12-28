@@ -224,6 +224,11 @@ public abstract class AbstractLazyIterable<T>
         return LazyIterate.reject(this, predicate);
     }
 
+    public <P> LazyIterable<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return LazyIterate.reject(this, Predicates.bind(predicate, parameter));
+    }
+
     public <R extends Collection<T>> R reject(Predicate<? super T> predicate, R target)
     {
         return IterableIterate.reject(this, predicate, target);

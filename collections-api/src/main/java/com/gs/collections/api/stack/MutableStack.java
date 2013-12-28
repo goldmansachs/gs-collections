@@ -85,6 +85,8 @@ public interface MutableStack<T> extends StackIterable<T>
 
     MutableStack<T> reject(Predicate<? super T> predicate);
 
+    <P> MutableStack<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     PartitionStack<T> partition(Predicate<? super T> predicate);
 
     <V> MutableStack<V> collect(Function<? super T, ? extends V> function);

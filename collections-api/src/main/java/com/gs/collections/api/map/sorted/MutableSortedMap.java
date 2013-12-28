@@ -195,9 +195,13 @@ public interface MutableSortedMap<K, V>
 
     <R> MutableList<R> flatCollect(Function<? super V, ? extends Iterable<R>> function);
 
+    MutableList<V> select(Predicate<? super V> predicate);
+
+    <P> MutableList<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter);
+
     MutableList<V> reject(Predicate<? super V> predicate);
 
-    MutableList<V> select(Predicate<? super V> predicate);
+    <P> MutableList<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter);
 
     PartitionMutableList<V> partition(Predicate<? super V> predicate);
 

@@ -182,12 +182,11 @@ public interface
     <R extends Collection<T>> R select(Predicate<? super T> predicate, R target);
 
     /**
-     * Similar to {@link #select(Predicate, Collection)}, except with an evaluation parameter for the second generic argument in {@link Predicate2}.
+     * Similar to {@link #select(Predicate)}, except with an evaluation parameter for the second generic argument in {@link Predicate2}.
      *
      * @param predicate a {@link Predicate2} to use as the select criteria
      * @param parameter a parameter to pass in for evaluation of the second argument {@code P} in {@code predicate}
      * @see #select(Predicate)
-     * @see #select(Predicate, Collection)
      * @since 5.0
      */
     <P> RichIterable<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
@@ -231,6 +230,16 @@ public interface
      * @since 1.0
      */
     RichIterable<T> reject(Predicate<? super T> predicate);
+
+    /**
+     * Similar to {@link #reject(Predicate)}, except with an evaluation parameter for the second generic argument in {@link Predicate2}.
+     *
+     * @param predicate a {@link Predicate2} to use as the select criteria
+     * @param parameter a parameter to pass in for evaluation of the second argument {@code P} in {@code predicate}
+     * @see #select(Predicate)
+     * @since 5.0
+     */
+    <P> RichIterable<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     /**
      * Same as the reject method with one parameter but uses the specified target collection for the results.

@@ -248,14 +248,14 @@ final class ImmutableEmptyBag<T>
         return this;
     }
 
-    public <P> ImmutableBag<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
-    {
-        return this;
-    }
-
     public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)
     {
         return target;
+    }
+
+    public <P> ImmutableBag<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this;
     }
 
     public <P, R extends Collection<T>> R selectWith(
@@ -272,6 +272,11 @@ final class ImmutableEmptyBag<T>
     public <R extends Collection<T>> R reject(Predicate<? super T> predicate, R target)
     {
         return target;
+    }
+
+    public <P> ImmutableBag<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this;
     }
 
     public <P, R extends Collection<T>> R rejectWith(

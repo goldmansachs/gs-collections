@@ -238,6 +238,11 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
         return result.toImmutable();
     }
 
+    public <P> ImmutableSortedSet<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.reject(Predicates.bind(predicate, parameter));
+    }
+
     public PartitionImmutableSortedSet<T> partition(Predicate<? super T> predicate)
     {
         PartitionMutableSortedSet<T> partitionTreeSortedSet = new PartitionTreeSortedSet<T>(this.comparator());

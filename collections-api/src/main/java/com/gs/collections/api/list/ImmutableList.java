@@ -67,6 +67,8 @@ public interface ImmutableList<T>
 
     ImmutableList<T> reject(Predicate<? super T> predicate);
 
+    <P> ImmutableList<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     PartitionImmutableList<T> partition(Predicate<? super T> predicate);
 
     <S> ImmutableList<S> selectInstancesOf(Class<S> clazz);

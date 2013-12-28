@@ -65,7 +65,11 @@ public interface ImmutableSortedMap<K, V>
 
     ImmutableList<V> select(Predicate<? super V> predicate);
 
+    <P> ImmutableList<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter);
+
     ImmutableList<V> reject(Predicate<? super V> predicate);
+
+    <P> ImmutableList<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter);
 
     <S> ImmutableList<S> selectInstancesOf(Class<S> clazz);
 

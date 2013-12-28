@@ -44,7 +44,11 @@ public interface SortedMapIterable<K, V>
 
     ListIterable<V> select(Predicate<? super V> predicate);
 
+    <P> ListIterable<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter);
+
     ListIterable<V> reject(Predicate<? super V> predicate);
+
+    <P> ListIterable<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter);
 
     PartitionList<V> partition(Predicate<? super V> predicate);
 

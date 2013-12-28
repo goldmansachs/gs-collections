@@ -53,6 +53,8 @@ public interface ImmutableStack<T> extends StackIterable<T>
 
     ImmutableStack<T> reject(Predicate<? super T> predicate);
 
+    <P> ImmutableStack<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     PartitionImmutableStack<T> partition(Predicate<? super T> predicate);
 
     <V> ImmutableStack<V> collect(Function<? super T, ? extends V> function);

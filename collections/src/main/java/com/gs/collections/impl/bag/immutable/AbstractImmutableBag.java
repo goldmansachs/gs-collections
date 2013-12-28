@@ -80,6 +80,11 @@ public abstract class AbstractImmutableBag<T>
         return this.select(Predicates.bind(predicate, parameter));
     }
 
+    public <P> ImmutableBag<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.reject(Predicates.bind(predicate, parameter));
+    }
+
     @Override
     public abstract <S> ImmutableBag<Pair<T, S>> zip(Iterable<S> that);
 

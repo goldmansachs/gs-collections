@@ -66,6 +66,8 @@ public interface ImmutableCollection<T>
 
     ImmutableCollection<T> reject(Predicate<? super T> predicate);
 
+    <P> ImmutableCollection<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     PartitionImmutableCollection<T> partition(Predicate<? super T> predicate);
 
     <S> ImmutableCollection<S> selectInstancesOf(Class<S> clazz);

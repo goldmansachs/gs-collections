@@ -53,6 +53,7 @@ import com.gs.collections.api.partition.list.PartitionImmutableList;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.PartitionProcedure;
@@ -187,6 +188,12 @@ public abstract class AbstractImmutableSortedMap<K, V>
         return this.select(predicate, FastList.<V>newList(this.size())).toImmutable();
     }
 
+    @Override
+    public <P> ImmutableList<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.select(Predicates.bind(predicate, parameter));
+    }
+
     public ImmutableSortedMap<K, V> select(Predicate2<? super K, ? super V> predicate)
     {
         return MapIterate.selectMapOnEntry(this, predicate, TreeSortedMap.<K, V>newMap(this.comparator())).toImmutable();
@@ -196,6 +203,12 @@ public abstract class AbstractImmutableSortedMap<K, V>
     public ImmutableList<V> reject(Predicate<? super V> predicate)
     {
         return this.reject(predicate, FastList.<V>newList(this.size())).toImmutable();
+    }
+
+    @Override
+    public <P> ImmutableList<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.reject(Predicates.bind(predicate, parameter));
     }
 
     public ImmutableSortedMap<K, V> reject(Predicate2<? super K, ? super V> predicate)

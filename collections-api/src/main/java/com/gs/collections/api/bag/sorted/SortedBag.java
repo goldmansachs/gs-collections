@@ -69,6 +69,8 @@ public interface SortedBag<T>
 
     SortedBag<T> reject(Predicate<? super T> predicate);
 
+    <P> SortedBag<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     PartitionSortedBag<T> partition(Predicate<? super T> predicate);
 
     <S> SortedBag<S> selectInstancesOf(Class<S> clazz);

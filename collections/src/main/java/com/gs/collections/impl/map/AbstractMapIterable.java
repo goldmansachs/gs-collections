@@ -489,6 +489,11 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
         return this.valuesView().reject(predicate);
     }
 
+    public <P> RichIterable<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.valuesView().rejectWith(predicate, parameter);
+    }
+
     public <R extends Collection<V>> R reject(Predicate<? super V> predicate, R target)
     {
         return this.valuesView().reject(predicate, target);

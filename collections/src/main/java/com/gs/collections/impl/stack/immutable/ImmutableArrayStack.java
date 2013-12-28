@@ -291,6 +291,11 @@ final class ImmutableArrayStack<T> implements ImmutableStack<T>, Serializable
         return this.delegate.asReversed().reject(predicate, target);
     }
 
+    public <P> ImmutableStack<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.reject(Predicates.bind(predicate, parameter));
+    }
+
     public <P, R extends Collection<T>> R rejectWith(Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
     {
         return this.delegate.asReversed().rejectWith(predicate, parameter, targetCollection);

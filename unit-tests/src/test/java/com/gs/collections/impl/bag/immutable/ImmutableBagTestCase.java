@@ -274,6 +274,16 @@ public abstract class ImmutableBagTestCase
     }
 
     @Test
+    public void rejectWith()
+    {
+        ImmutableBag<String> strings = this.newBag();
+
+        Assert.assertEquals(
+                strings,
+                strings.rejectWith(Predicates2.<String>lessThan(), "0"));
+    }
+
+    @Test
     public void rejectWithToTarget()
     {
         ImmutableBag<String> strings = this.newBag();

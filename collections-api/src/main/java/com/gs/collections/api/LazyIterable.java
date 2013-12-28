@@ -54,6 +54,8 @@ public interface LazyIterable<T>
      */
     LazyIterable<T> reject(Predicate<? super T> predicate);
 
+    <P> LazyIterable<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     /**
      * Creates a deferred iterable for collecting elements from the current iterable.
      */

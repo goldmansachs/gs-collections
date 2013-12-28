@@ -505,6 +505,23 @@ public class SynchronizedSortedMap<K, V>
         }
     }
 
+    public MutableList<V> select(Predicate<? super V> predicate)
+    {
+        synchronized (this.lock)
+        {
+            return this.getSortedMap().select(predicate);
+        }
+    }
+
+    @Override
+    public <P> MutableList<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.getSortedMap().selectWith(predicate, parameter);
+        }
+    }
+
     public MutableList<V> reject(Predicate<? super V> predicate)
     {
         synchronized (this.lock)
@@ -513,11 +530,12 @@ public class SynchronizedSortedMap<K, V>
         }
     }
 
-    public MutableList<V> select(Predicate<? super V> predicate)
+    @Override
+    public <P> MutableList<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter)
     {
         synchronized (this.lock)
         {
-            return this.getSortedMap().select(predicate);
+            return this.getSortedMap().rejectWith(predicate, parameter);
         }
     }
 

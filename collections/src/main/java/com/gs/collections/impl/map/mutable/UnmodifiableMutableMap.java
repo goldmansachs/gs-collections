@@ -731,6 +731,11 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().reject(predicate);
     }
 
+    public <P> RichIterable<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.getMutableMap().rejectWith(predicate, parameter);
+    }
+
     public MutableCollection<V> select(Predicate<? super V> predicate)
     {
         return this.getMutableMap().select(predicate);

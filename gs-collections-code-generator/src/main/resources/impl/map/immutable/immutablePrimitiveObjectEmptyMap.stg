@@ -239,6 +239,11 @@ final class Immutable<name>ObjectEmptyMap\<V> implements Immutable<name>ObjectMa
         return target;
     }
 
+    public \<P> ImmutableCollection\<V> rejectWith(Predicate2\<? super V, ? super P> predicate, P parameter)
+    {
+        return Lists.immutable.with();
+    }
+
     public \<P, R extends Collection\<V>\> R rejectWith(Predicate2\<? super V, ? super P> predicate, P parameter, R targetCollection)
     {
         return targetCollection;

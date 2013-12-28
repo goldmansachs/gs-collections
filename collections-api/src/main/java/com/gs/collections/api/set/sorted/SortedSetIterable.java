@@ -100,6 +100,8 @@ public interface SortedSetIterable<T>
 
     SortedSetIterable<T> reject(Predicate<? super T> predicate);
 
+    <P> SortedSetIterable<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     PartitionSortedSet<T> partition(Predicate<? super T> predicate);
 
     <S> SortedSetIterable<S> selectInstancesOf(Class<S> clazz);

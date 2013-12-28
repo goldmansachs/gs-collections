@@ -217,6 +217,14 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
         }
     }
 
+    public <P> MutableStack<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.rejectWith(predicate, parameter);
+        }
+    }
+
     public <R extends Collection<T>> R reject(Predicate<? super T> predicate, R target)
     {
         synchronized (this.lock)

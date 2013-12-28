@@ -288,6 +288,14 @@ public abstract class SynchronizedMapIterable<K, V>
         }
     }
 
+    public <P> RichIterable<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.mapIterable.rejectWith(predicate, parameter);
+        }
+    }
+
     public <P, R extends Collection<V>> R rejectWith(Predicate2<? super V, ? super P> predicate, P parameter, R targetCollection)
     {
         synchronized (this.lock)

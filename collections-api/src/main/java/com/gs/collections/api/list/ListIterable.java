@@ -172,6 +172,8 @@ public interface ListIterable<T>
 
     ListIterable<T> reject(Predicate<? super T> predicate);
 
+    <P> ListIterable<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     PartitionList<T> partition(Predicate<? super T> predicate);
 
     <S> ListIterable<S> selectInstancesOf(Class<S> clazz);

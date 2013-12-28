@@ -290,14 +290,6 @@ public class UnmodifiableRichIterableTest
     }
 
     @Test
-    public void rejectWith()
-    {
-        Assert.assertEquals(
-                this.mutableCollection.rejectWith(Predicates2.alwaysFalse(), null, Lists.mutable.<String>of()),
-                this.unmodifiableCollection.rejectWith(Predicates2.alwaysFalse(), null, Lists.mutable.<String>of()));
-    }
-
-    @Test
     public void reject()
     {
         Assert.assertEquals(
@@ -306,6 +298,33 @@ public class UnmodifiableRichIterableTest
         Assert.assertEquals(
                 this.mutableCollection.reject(Predicates.alwaysFalse(), Lists.mutable.<String>of()),
                 this.unmodifiableCollection.reject(Predicates.alwaysFalse(), Lists.mutable.<String>of()));
+    }
+
+    @Test
+    public void rejectWith()
+    {
+        Assert.assertEquals(
+                this.mutableCollection.rejectWith(Predicates2.alwaysFalse(), null),
+                this.unmodifiableCollection.rejectWith(Predicates2.alwaysFalse(), null));
+    }
+
+    @Test
+    public void rejectWithToTarget()
+    {
+        Assert.assertEquals(
+                this.mutableCollection.rejectWith(Predicates2.alwaysFalse(), null, Lists.mutable.<String>of()),
+                this.unmodifiableCollection.rejectWith(Predicates2.alwaysFalse(), null, Lists.mutable.<String>of()));
+    }
+
+    @Test
+    public void select()
+    {
+        Assert.assertEquals(
+                this.mutableCollection.select(Predicates.alwaysTrue()),
+                this.unmodifiableCollection.select(Predicates.alwaysTrue()));
+        Assert.assertEquals(
+                this.mutableCollection.select(Predicates.alwaysTrue(), Lists.mutable.<String>of()),
+                this.unmodifiableCollection.select(Predicates.alwaysTrue(), Lists.mutable.<String>of()));
     }
 
     @Test
@@ -322,17 +341,6 @@ public class UnmodifiableRichIterableTest
         Assert.assertEquals(
                 this.mutableCollection.selectWith(Predicates2.alwaysTrue(), null, Lists.mutable.<String>of()),
                 this.unmodifiableCollection.selectWith(Predicates2.alwaysTrue(), null, Lists.mutable.<String>of()));
-    }
-
-    @Test
-    public void select()
-    {
-        Assert.assertEquals(
-                this.mutableCollection.select(Predicates.alwaysTrue()),
-                this.unmodifiableCollection.select(Predicates.alwaysTrue()));
-        Assert.assertEquals(
-                this.mutableCollection.select(Predicates.alwaysTrue(), Lists.mutable.<String>of()),
-                this.unmodifiableCollection.select(Predicates.alwaysTrue(), Lists.mutable.<String>of()));
     }
 
     @Test
