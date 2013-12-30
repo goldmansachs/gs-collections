@@ -33,9 +33,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import scala.collection.immutable.HashMap$;
 
-public class ImmutableMapMemoryTest
+public class ImmutableMap0To100MemoryTest
 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ImmutableMapMemoryTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImmutableMap0To100MemoryTest.class);
 
     @Test
     @Category(MemoryTests.class)
@@ -50,24 +50,23 @@ public class ImmutableMapMemoryTest
         {
             public void value(int size)
             {
-                ImmutableMapMemoryTest.this.memoryForScaledMaps(size);
+                ImmutableMap0To100MemoryTest.this.memoryForScaledMaps(size);
             }
         };
-        IntInterval.zeroTo(9).forEach(procedure);
-        IntInterval.fromToBy(10, 100, 10).forEach(procedure);
+        IntInterval.fromToBy(0, 100, 10).forEach(procedure);
         LOGGER.info("Ending test: {}", this.getClass().getName());
     }
 
     public void memoryForScaledMaps(int size)
     {
         MemoryTestBench.on(scala.collection.immutable.Map.class)
-                .printContainerMemoryUsage("ImmutableMap", size, new SizedImmutableScalaMapFactory(size));
+                .printContainerMemoryUsage("ImmutableMap_0to100", size, new SizedImmutableScalaMapFactory(size));
         MemoryTestBench.on(Map.class)
-                .printContainerMemoryUsage("ImmutableMap", size, new SizedUnmodifiableHashMapFactory(size));
+                .printContainerMemoryUsage("ImmutableMap_0to100", size, new SizedUnmodifiableHashMapFactory(size));
         MemoryTestBench.on(com.gs.collections.api.map.ImmutableMap.class)
-                .printContainerMemoryUsage("ImmutableMap", size, new SizedImmutableGscMapFactory(size));
+                .printContainerMemoryUsage("ImmutableMap_0to100", size, new SizedImmutableGscMapFactory(size));
         MemoryTestBench.on(ImmutableMap.class)
-                .printContainerMemoryUsage("ImmutableMap", size, new SizedImmutableGuavaMapFactory(size));
+                .printContainerMemoryUsage("ImmutableMap_0to100", size, new SizedImmutableGuavaMapFactory(size));
     }
 
     private static final class SizedImmutableGscMapFactory implements Function0<com.gs.collections.api.map.ImmutableMap<Integer, String>>

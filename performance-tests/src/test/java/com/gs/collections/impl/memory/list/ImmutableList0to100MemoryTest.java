@@ -33,9 +33,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import scala.collection.mutable.ListBuffer;
 
-public class ImmutableListMemoryTest
+public class ImmutableList0to100MemoryTest
 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ImmutableListMemoryTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImmutableList0to100MemoryTest.class);
 
     @Test
     @Category(MemoryTests.class)
@@ -51,24 +51,23 @@ public class ImmutableListMemoryTest
         {
             public void value(int size)
             {
-                ImmutableListMemoryTest.this.memoryForScaledLists(size);
+                ImmutableList0to100MemoryTest.this.memoryForScaledLists(size);
             }
         };
-        IntInterval.zeroTo(9).forEach(procedure);
-        IntInterval.fromToBy(10, 100, 10).forEach(procedure);
+        IntInterval.fromToBy(0, 100, 10).forEach(procedure);
         LOGGER.info("Ending test: {}", this.getClass().getName());
     }
 
     public void memoryForScaledLists(int size)
     {
         MemoryTestBench.on(scala.collection.immutable.List.class)
-                .printContainerMemoryUsage("ImmutableList", size, new SizedImmutableScalaListFactory(size));
+                .printContainerMemoryUsage("ImmutableList_0to100", size, new SizedImmutableScalaListFactory(size));
         MemoryTestBench.on(List.class)
-                .printContainerMemoryUsage("ImmutableList", size, new SizedUnmodifiableArrayListFactory(size));
+                .printContainerMemoryUsage("ImmutableList_0to100", size, new SizedUnmodifiableArrayListFactory(size));
         MemoryTestBench.on(com.gs.collections.api.list.ImmutableList.class)
-                .printContainerMemoryUsage("ImmutableList", size, new SizedImmutableGscListFactory(size));
+                .printContainerMemoryUsage("ImmutableList_0to100", size, new SizedImmutableGscListFactory(size));
         MemoryTestBench.on(ImmutableList.class)
-                .printContainerMemoryUsage("ImmutableList", size, new SizedImmutableGuavaListFactory(size));
+                .printContainerMemoryUsage("ImmutableList_0to100", size, new SizedImmutableGuavaListFactory(size));
     }
 
     private static final class SizedImmutableGscListFactory implements Function0<com.gs.collections.api.list.ImmutableList<String>>

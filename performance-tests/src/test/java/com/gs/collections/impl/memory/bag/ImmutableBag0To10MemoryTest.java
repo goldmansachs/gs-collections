@@ -29,9 +29,9 @@ import org.junit.experimental.categories.Category;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class ImmutableBagMemoryTest
+public class ImmutableBag0To10MemoryTest
 {
-    private static final Logger LOGGER = LoggerFactory.getLogger(ImmutableBagMemoryTest.class);
+    private static final Logger LOGGER = LoggerFactory.getLogger(ImmutableBag0To10MemoryTest.class);
 
     @Test
     @Category(MemoryTests.class)
@@ -42,18 +42,17 @@ public class ImmutableBagMemoryTest
         {
             public void value(int size)
             {
-                ImmutableBagMemoryTest.this.memoryForScaledBags(size);
+                ImmutableBag0To10MemoryTest.this.memoryForScaledBags(size);
             }
         };
-        IntInterval.zeroTo(9).forEach(procedure);
-        IntInterval.fromToBy(10, 100, 10).forEach(procedure);
+        IntInterval.zeroTo(10).forEach(procedure);
         LOGGER.info("Ending test: {}", this.getClass().getName());
     }
 
     public void memoryForScaledBags(int size)
     {
-        MemoryTestBench.on(ImmutableBag.class).printContainerMemoryUsage("ImmutableBag", size, new SizedImmutableGscBagFactory(size));
-        MemoryTestBench.on(ImmutableMultiset.class).printContainerMemoryUsage("ImmutableBag", size, new SizedImmutableGuavaMultisetFactory(size));
+        MemoryTestBench.on(ImmutableBag.class).printContainerMemoryUsage("ImmutableBag_0to10", size, new SizedImmutableGscBagFactory(size));
+        MemoryTestBench.on(ImmutableMultiset.class).printContainerMemoryUsage("ImmutableBag_0to10", size, new SizedImmutableGuavaMultisetFactory(size));
     }
 
     public static class SizedImmutableGscBagFactory implements Function0<ImmutableBag<Integer>>
