@@ -1566,12 +1566,14 @@ public final class ArrayListIterate
             for (int i = 0; i < size; i++)
             {
                 T element = elements[i];
-                if (predicate.accept(element))
+                if (!predicate.accept(element))
                 {
                     result.add(element);
-                }
-                else
-                {
+                    for (int j = i + 1; j < size; j++)
+                    {
+                        T eachNotDropped = elements[j];
+                        result.add(eachNotDropped);
+                    }
                     return result;
                 }
             }

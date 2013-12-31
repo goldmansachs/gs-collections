@@ -119,7 +119,7 @@ public class ArrayListIterateTest
     }
 
     @Test
-    public void sortingWitoutAccessToInternalArray()
+    public void sortingWithoutAccessToInternalArray()
     {
         ThisIsNotAnArrayList<Integer> arrayListThatIsnt = new ThisIsNotAnArrayList<Integer>(FastList.newListWith(5, 3, 4, 1, 2));
         Verify.assertStartsWith(ArrayListIterate.sortThis(arrayListThatIsnt, Comparators.naturalOrder()), 1, 2, 3, 4, 5);
@@ -1199,6 +1199,114 @@ public class ArrayListIterateTest
     public void drop_throws()
     {
         ArrayListIterate.drop(this.getIntegerList(), -1);
+    }
+
+    @Test
+    public void takeWhile_small()
+    {
+        ArrayList<Integer> arrayList = new ArrayList<Integer>(Interval.oneTo(100));
+
+        Assert.assertEquals(
+                iList(1, 2, 3),
+                ArrayListIterate.takeWhile(arrayList, Predicates.lessThan(4)));
+
+        Assert.assertEquals(
+                Interval.fromTo(1, 100),
+                ArrayListIterate.takeWhile(arrayList, Predicates.lessThan(1000)));
+
+        Assert.assertEquals(
+                iList(),
+                ArrayListIterate.takeWhile(arrayList, Predicates.lessThan(0)));
+    }
+
+    @Test
+    public void dropWhile_small()
+    {
+        ArrayList<Integer> arrayList = new ArrayList<Integer>(Interval.oneTo(100));
+
+        Assert.assertEquals(
+                Interval.fromTo(4, 100),
+                ArrayListIterate.dropWhile(arrayList, Predicates.lessThan(4)));
+
+        Assert.assertEquals(
+                iList(),
+                ArrayListIterate.dropWhile(arrayList, Predicates.lessThan(1000)));
+
+        Assert.assertEquals(
+                Interval.fromTo(1, 100),
+                ArrayListIterate.dropWhile(arrayList, Predicates.lessThan(0)));
+    }
+
+    @Test
+    public void partitionWhile_small()
+    {
+        ArrayList<Integer> arrayList = new ArrayList<Integer>(Interval.oneTo(100));
+
+        PartitionMutableList<Integer> partition1 = ArrayListIterate.partitionWhile(arrayList, Predicates.lessThan(4));
+        Assert.assertEquals(iList(1, 2, 3), partition1.getSelected());
+        Assert.assertEquals(Interval.fromTo(4, 100), partition1.getRejected());
+
+        PartitionMutableList<Integer> partition2 = ArrayListIterate.partitionWhile(arrayList, Predicates.lessThan(0));
+        Assert.assertEquals(iList(), partition2.getSelected());
+        Assert.assertEquals(Interval.fromTo(1, 100), partition2.getRejected());
+
+        PartitionMutableList<Integer> partition3 = ArrayListIterate.partitionWhile(arrayList, Predicates.lessThan(1000));
+        Assert.assertEquals(Interval.fromTo(1, 100), partition3.getSelected());
+        Assert.assertEquals(iList(), partition3.getRejected());
+    }
+
+    @Test
+    public void takeWhile()
+    {
+        ArrayList<Integer> arrayList = new ArrayList<Integer>(Interval.oneTo(101));
+
+        Assert.assertEquals(
+                iList(1, 2, 3),
+                ArrayListIterate.takeWhile(arrayList, Predicates.lessThan(4)));
+
+        Assert.assertEquals(
+                Interval.fromTo(1, 101),
+                ArrayListIterate.takeWhile(arrayList, Predicates.lessThan(1000)));
+
+        Assert.assertEquals(
+                iList(),
+                ArrayListIterate.takeWhile(arrayList, Predicates.lessThan(0)));
+    }
+
+    @Test
+    public void dropWhile()
+    {
+        ArrayList<Integer> arrayList = new ArrayList<Integer>(Interval.oneTo(101));
+
+        Assert.assertEquals(
+                Interval.fromTo(4, 101),
+                ArrayListIterate.dropWhile(arrayList, Predicates.lessThan(4)));
+
+        Assert.assertEquals(
+                iList(),
+                ArrayListIterate.dropWhile(arrayList, Predicates.lessThan(1000)));
+
+        Assert.assertEquals(
+                Interval.fromTo(1, 101),
+                ArrayListIterate.dropWhile(arrayList, Predicates.lessThan(0)));
+    }
+
+    @Test
+    public void partitionWhile()
+    {
+        ArrayList<Integer> arrayList = new ArrayList<Integer>(Interval.oneTo(101));
+
+        PartitionMutableList<Integer> partition1 = ArrayListIterate.partitionWhile(arrayList, Predicates.lessThan(4));
+        Assert.assertEquals(iList(1, 2, 3), partition1.getSelected());
+        Assert.assertEquals(Interval.fromTo(4, 101), partition1.getRejected());
+
+        PartitionMutableList<Integer> partition2 = ArrayListIterate.partitionWhile(arrayList, Predicates.lessThan(0));
+        Assert.assertEquals(iList(), partition2.getSelected());
+        Assert.assertEquals(Interval.fromTo(1, 101), partition2.getRejected());
+
+        PartitionMutableList<Integer> partition3 = ArrayListIterate.partitionWhile(arrayList, Predicates.lessThan(1000));
+        Assert.assertEquals(Interval.fromTo(1, 101), partition3.getSelected());
+        Assert.assertEquals(iList(), partition3.getRejected());
     }
 
     private ArrayList<Integer> newArrayList(Integer... items)
