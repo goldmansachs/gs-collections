@@ -459,14 +459,29 @@ abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
         return this.delegate.anySatisfy(predicate);
     }
 
+    public <P> boolean anySatisfyWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.delegate.anySatisfyWith(predicate, parameter);
+    }
+
     public boolean allSatisfy(Predicate<? super V> predicate)
     {
         return this.delegate.allSatisfy(predicate);
     }
 
+    public <P> boolean allSatisfyWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.delegate.allSatisfyWith(predicate, parameter);
+    }
+
     public boolean noneSatisfy(Predicate<? super V> predicate)
     {
         return this.delegate.noneSatisfy(predicate);
+    }
+
+    public <P> boolean noneSatisfyWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.delegate.noneSatisfyWith(predicate, parameter);
     }
 
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super V, ? extends IV> function)

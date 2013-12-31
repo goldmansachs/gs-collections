@@ -31,7 +31,7 @@ public class ImmutableDoubletonSetTest
 
     @Override
     @Test
-    public void testNewWithout()
+    public void newWithout()
     {
         ImmutableSet<Integer> immutable = this.classUnderTest();
         Verify.assertSize(1, immutable.newWithout(2).castToSet());

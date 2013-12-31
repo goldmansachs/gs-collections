@@ -352,6 +352,30 @@ public abstract class SynchronizedMapIterable<K, V>
         }
     }
 
+    public <P> boolean anySatisfyWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.mapIterable.anySatisfyWith(predicate, parameter);
+        }
+    }
+
+    public <P> boolean allSatisfyWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.mapIterable.allSatisfyWith(predicate, parameter);
+        }
+    }
+
+    public <P> boolean noneSatisfyWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.mapIterable.noneSatisfyWith(predicate, parameter);
+        }
+    }
+
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super V, ? extends IV> function)
     {
         synchronized (this.lock)

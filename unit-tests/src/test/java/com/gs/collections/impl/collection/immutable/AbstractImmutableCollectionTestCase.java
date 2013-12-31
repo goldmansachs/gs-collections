@@ -140,7 +140,7 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void testInjectInto()
+    public void injectInto()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         Integer result = integers.injectInto(0, AddFunction.INTEGER);
@@ -240,7 +240,7 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void testMakeString()
+    public void makeString()
     {
         Assert.assertEquals(FastList.newList(this.classUnderTest()).toString(), '[' + this.classUnderTest().makeString() + ']');
         Assert.assertEquals(FastList.newList(this.classUnderTest()).toString(), '[' + this.classUnderTest().makeString(", ") + ']');
@@ -248,7 +248,7 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void testAppendString()
+    public void appendString()
     {
         Appendable builder1 = new StringBuilder();
         this.classUnderTest().appendString(builder1);
@@ -270,7 +270,7 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void testSelect()
+    public void select()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         Assert.assertEquals(integers, integers.select(Predicates.lessThan(integers.size() + 1)));
@@ -278,7 +278,7 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void testReject()
+    public void reject()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         Verify.assertIterableEmpty(integers.reject(Predicates.lessThan(integers.size() + 1)));
@@ -286,7 +286,7 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void testCollect()
+    public void collect()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         Assert.assertEquals(integers, integers.collect(Functions.getIntegerPassThru()));
@@ -435,7 +435,7 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void testDetect()
+    public void detect()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         Assert.assertEquals(Integer.valueOf(1), integers.detect(Predicates.equal(1)));
@@ -443,7 +443,7 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void testDetectIfNoneWithBlock()
+    public void detectIfNoneWithBlock()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         Function0<Integer> function = new PassThruFunction0<Integer>(integers.size() + 1);
@@ -452,7 +452,7 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void testAllSatisfy()
+    public void allSatisfy()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         Assert.assertTrue(integers.allSatisfy(Predicates.instanceOf(Integer.class)));
@@ -460,7 +460,31 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void testAnySatisfy()
+    public void allSatisfyWith()
+    {
+        ImmutableCollection<Integer> integers = this.classUnderTest();
+        Assert.assertTrue(integers.allSatisfyWith(Predicates2.instanceOf(), Integer.class));
+        Assert.assertFalse(integers.allSatisfyWith(Predicates2.equal(), 0));
+    }
+
+    @Test
+    public void noneSatisfy()
+    {
+        ImmutableCollection<Integer> integers = this.classUnderTest();
+        Assert.assertTrue(integers.noneSatisfy(Predicates.instanceOf(String.class)));
+        Assert.assertFalse(integers.noneSatisfy(Predicates.equal(1)));
+    }
+
+    @Test
+    public void noneSatisfyWith()
+    {
+        ImmutableCollection<Integer> integers = this.classUnderTest();
+        Assert.assertTrue(integers.noneSatisfyWith(Predicates2.instanceOf(), String.class));
+        Assert.assertFalse(integers.noneSatisfyWith(Predicates2.equal(), 1));
+    }
+
+    @Test
+    public void anySatisfy()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         Assert.assertFalse(integers.anySatisfy(Predicates.instanceOf(String.class)));
@@ -468,7 +492,15 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void testCount()
+    public void anySatisfyWith()
+    {
+        ImmutableCollection<Integer> integers = this.classUnderTest();
+        Assert.assertFalse(integers.anySatisfyWith(Predicates2.instanceOf(), String.class));
+        Assert.assertTrue(integers.anySatisfyWith(Predicates2.instanceOf(), Integer.class));
+    }
+
+    @Test
+    public void count()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         Assert.assertEquals(integers.size(), integers.count(Predicates.instanceOf(Integer.class)));
@@ -476,7 +508,7 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void testCollectIf()
+    public void collectIf()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         Assert.assertEquals(integers, integers.collectIf(Predicates.instanceOf(Integer.class),
@@ -484,21 +516,21 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void testGetFirst()
+    public void getFirst()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         Assert.assertEquals(Integer.valueOf(1), integers.getFirst());
     }
 
     @Test
-    public void testGetLast()
+    public void getLast()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         Assert.assertEquals(Integer.valueOf(integers.size()), integers.getLast());
     }
 
     @Test
-    public void testIsEmpty()
+    public void isEmpty()
     {
         ImmutableCollection<Integer> immutableCollection = this.classUnderTest();
         Assert.assertFalse(immutableCollection.isEmpty());
@@ -506,7 +538,7 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void testIterator()
+    public void iterator()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         final Iterator<Integer> iterator = integers.iterator();
@@ -525,7 +557,7 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void testToArray()
+    public void toArray()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         MutableList<Integer> copy = FastList.newList(integers);
@@ -570,7 +602,7 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void testForLoop()
+    public void forLoop()
     {
         ImmutableCollection<Integer> immutableCollection = this.classUnderTest();
         for (Integer each : immutableCollection)
@@ -645,7 +677,7 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void testIteratorRemove()
+    public void iteratorRemove()
     {
         Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
         {
@@ -657,7 +689,7 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void testAdd()
+    public void add()
     {
         Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
         {
@@ -669,7 +701,7 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void testRemove()
+    public void remove()
     {
         Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
         {
@@ -681,7 +713,7 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void testClear()
+    public void clear()
     {
         Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
         {
@@ -693,7 +725,7 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void testRemoveAll()
+    public void removeAll()
     {
         Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
         {
@@ -705,7 +737,7 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void testRetainAll()
+    public void retainAll()
     {
         Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
         {
@@ -717,7 +749,7 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void testAddAll()
+    public void addAll()
     {
         Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
         {

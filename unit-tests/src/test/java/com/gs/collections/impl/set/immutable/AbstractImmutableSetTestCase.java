@@ -58,7 +58,7 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     }
 
     @Test
-    public void testEqualsAndHashCode()
+    public void equalsAndHashCode()
     {
         ImmutableSet<Integer> immutable = this.classUnderTest();
         MutableSet<Integer> mutable = UnifiedSet.newSet(immutable);
@@ -68,7 +68,7 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     }
 
     @Test
-    public void testNewWith()
+    public void newWith()
     {
         ImmutableSet<Integer> immutable = this.classUnderTest();
         Assert.assertSame(immutable, immutable.newWith(immutable.size()));
@@ -76,7 +76,7 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     }
 
     @Test
-    public void testNewWithout()
+    public void newWithout()
     {
         ImmutableSet<Integer> immutable = this.classUnderTest();
         Verify.assertSize(Math.max(0, immutable.size() - 1), immutable.newWithout(immutable.size()).castToSet());
@@ -84,7 +84,7 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     }
 
     @Test
-    public void testNewWithAll()
+    public void newWithAll()
     {
         ImmutableSet<Integer> set = this.classUnderTest();
         ImmutableSet<Integer> withAll = set.newWithAll(UnifiedSet.newSetWith(0));
@@ -93,7 +93,7 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     }
 
     @Test
-    public void testNewWithoutAll()
+    public void newWithoutAll()
     {
         ImmutableSet<Integer> set = this.classUnderTest();
         ImmutableSet<Integer> withoutAll = set.newWithoutAll(UnifiedSet.newSet(this.classUnderTest()));
@@ -107,7 +107,7 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     }
 
     @Test
-    public void testContains()
+    public void contains()
     {
         ImmutableSet<Integer> set = this.classUnderTest();
         for (int i = 1; i <= set.size(); i++)
@@ -118,19 +118,19 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     }
 
     @Test
-    public void testContainsAllArray()
+    public void containsAllArray()
     {
         Assert.assertTrue(this.classUnderTest().containsAllArguments(this.classUnderTest().toArray()));
     }
 
     @Test
-    public void testContainsAllIterable()
+    public void containsAllIterable()
     {
         Assert.assertTrue(this.classUnderTest().containsAllIterable(this.classUnderTest()));
     }
 
     @Test
-    public void testForEach()
+    public void forEach()
     {
         MutableSet<Integer> result = UnifiedSet.newSet();
         ImmutableSet<Integer> collection = this.classUnderTest();
@@ -139,7 +139,7 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     }
 
     @Test
-    public void testForEachWith()
+    public void forEachWith()
     {
         final MutableCollection<Integer> result = UnifiedSet.newSet();
         this.classUnderTest().forEachWith(new Procedure2<Integer, Integer>()
@@ -153,7 +153,7 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     }
 
     @Test
-    public void testForEachWithIndex()
+    public void forEachWithIndex()
     {
         final MutableCollection<Integer> result = UnifiedSet.newSet();
         this.classUnderTest().forEachWithIndex(new ObjectIntProcedure<Integer>()
@@ -166,16 +166,18 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
         Assert.assertEquals(this.classUnderTest(), result);
     }
 
+    @Override
     @Test
-    public void testSelectWithTarget()
+    public void selectWithTarget()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         Assert.assertEquals(integers, integers.select(Predicates.lessThan(integers.size() + 1), UnifiedSet.<Integer>newSet()));
         Verify.assertEmpty(integers.select(Predicates.greaterThan(integers.size()), FastList.<Integer>newList()));
     }
 
+    @Override
     @Test
-    public void testRejectWithTarget()
+    public void rejectWithTarget()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         Verify.assertEmpty(integers.reject(Predicates.lessThan(integers.size() + 1), FastList.<Integer>newList()));
@@ -183,7 +185,7 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     }
 
     @Test
-    public void testCollectWithTarget()
+    public void collectWithTarget()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         Assert.assertEquals(integers, integers.collect(Functions.getIntegerPassThru(), UnifiedSet.<Integer>newSet()));
@@ -252,7 +254,7 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     }
 
     @Test
-    public void testCollectIfWithTarget()
+    public void collectIfWithTarget()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         Assert.assertEquals(integers, integers.collectIf(Predicates.instanceOf(Integer.class),

@@ -32,9 +32,9 @@ public class ImmutableQuadrupletonListTest extends AbstractImmutableListTestCase
 
     @Override
     @Test
-    public void testDistinct()
+    public void distinct()
     {
-        super.testDistinct();
+        super.distinct();
         ImmutableList<Integer> list = new ImmutableQuadrupletonList<Integer>(2, 1, 1, 2);
         ImmutableList<Integer> distinctList = list.distinct();
         Assert.assertFalse(distinctList.isEmpty());

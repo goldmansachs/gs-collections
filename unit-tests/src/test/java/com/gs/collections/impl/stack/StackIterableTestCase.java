@@ -30,6 +30,7 @@ import com.gs.collections.api.block.function.primitive.FloatFunction;
 import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
@@ -554,6 +555,36 @@ public abstract class StackIterableTestCase
     }
 
     @Test
+    public void anySatisfyWith()
+    {
+        StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
+        CountingPredicate2<Object, Object> predicate = new CountingPredicate2<Object, Object>(Predicates2.equal());
+        Assert.assertTrue(stack.anySatisfyWith(predicate, 1));
+        Assert.assertEquals(1, predicate.count);
+        Assert.assertFalse(stack.anySatisfyWith(Predicates2.equal(), 4));
+    }
+
+    @Test
+    public void allSatisfyWith()
+    {
+        StackIterable<Integer> stack = this.newStackWith(3, 3, 3);
+        CountingPredicate2<Object, Object> predicate = new CountingPredicate2<Object, Object>(Predicates2.equal());
+        Assert.assertTrue(stack.allSatisfyWith(predicate, 3));
+        Assert.assertEquals(3, predicate.count);
+        Assert.assertFalse(stack.allSatisfyWith(Predicates2.equal(), 2));
+    }
+
+    @Test
+    public void noneSatisfyWith()
+    {
+        StackIterable<Integer> stack = this.newStackWith(3, 3, 3);
+        CountingPredicate2<Object, Object> predicate = new CountingPredicate2<Object, Object>(Predicates2.equal());
+        Assert.assertTrue(stack.noneSatisfyWith(predicate, 4));
+        Assert.assertEquals(3, predicate.count);
+        Assert.assertTrue(stack.noneSatisfyWith(Predicates2.equal(), 2));
+    }
+
+    @Test
     public void injectInto()
     {
         Assert.assertEquals(
@@ -1009,6 +1040,30 @@ public abstract class StackIterableTestCase
         {
             this.count++;
             return this.predicate.accept(anObject);
+        }
+    }
+
+    private static final class CountingPredicate2<T1, T2>
+            implements Predicate2<T1, T2>
+    {
+        private static final long serialVersionUID = 1L;
+        private final Predicate2<T1, T2> predicate;
+        private int count;
+
+        private CountingPredicate2(Predicate2<T1, T2> predicate)
+        {
+            this.predicate = predicate;
+        }
+
+        private static <T1, T2> CountingPredicate2<T1, T2> of(Predicate2<T1, T2> predicate)
+        {
+            return new CountingPredicate2<T1, T2>(predicate);
+        }
+
+        public boolean accept(T1 each, T2 parameter)
+        {
+            this.count++;
+            return this.predicate.accept(each, parameter);
         }
     }
 

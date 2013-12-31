@@ -60,7 +60,11 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.StringFunctions;
+import com.gs.collections.impl.block.factory.StringPredicates;
+import com.gs.collections.impl.block.factory.StringPredicates2;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
@@ -229,21 +233,8 @@ public abstract class Abstract<name>ObjectMapTestCase
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
 
-        Assert.assertEquals(FastList.newListWith("ZERO", "ONE", "NINE"), map1.collect(new Function\<String, String>()
-        {
-            public String valueOf(String object)
-            {
-                return object.toUpperCase();
-            }
-        }));
-
-        Assert.assertEquals(FastList.newListWith("ZERO", "ONE", "NINE"), map1.collect(new Function\<String, String>()
-        {
-            public String valueOf(String object)
-            {
-                return object.toUpperCase();
-            }
-        }, FastList.\<String>newList()));
+        Assert.assertEquals(FastList.newListWith("ZERO", "ONE", "NINE"), map1.collect(StringFunctions.toUpperCase()));
+        Assert.assertEquals(FastList.newListWith("ZERO", "ONE", "NINE"), map1.collect(StringFunctions.toUpperCase(), FastList.\<String>newList()));
     }
 
     @Test
@@ -337,13 +328,7 @@ public abstract class Abstract<name>ObjectMapTestCase
             }
         };
 
-        Assert.assertEquals(FastList.newListWith("ONE", "NINE"), map1.collectIf(endsWithNe, new Function\<String, String>()
-        {
-            public String valueOf(String object)
-            {
-                return object.toUpperCase();
-            }
-        }));
+        Assert.assertEquals(FastList.newListWith("ONE", "NINE"), map1.collectIf(endsWithNe, StringFunctions.toUpperCase()));
 
         Predicate\<String> endsWithO = new Predicate\<String>()
         {
@@ -353,21 +338,8 @@ public abstract class Abstract<name>ObjectMapTestCase
             }
         };
 
-        Assert.assertEquals(FastList.newListWith("ZERO"), map1.collectIf(endsWithO, new Function\<String, String>()
-        {
-            public String valueOf(String object)
-            {
-                return object.toUpperCase();
-            }
-        }));
-
-        Assert.assertEquals(FastList.newListWith("ZERO"), map1.collectIf(endsWithO, new Function\<String, String>()
-        {
-            public String valueOf(String object)
-            {
-                return object.toUpperCase();
-            }
-        }, FastList.\<String>newList()));
+        Assert.assertEquals(FastList.newListWith("ZERO"), map1.collectIf(endsWithO, StringFunctions.toUpperCase()));
+        Assert.assertEquals(FastList.newListWith("ZERO"), map1.collectIf(endsWithO, StringFunctions.toUpperCase(), FastList.\<String>newList()));
     }
 
     @Test
@@ -401,51 +373,16 @@ public abstract class Abstract<name>ObjectMapTestCase
     public void detect()
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
-
-        Predicate\<String> endsWithNe = new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return each.endsWith("ne");
-            }
-        };
-
-        Assert.assertTrue("one".equals(map1.detect(endsWithNe)) || "nine".equals(map1.detect(endsWithNe)));
-        Assert.assertEquals("zero", map1.detect(new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return each.endsWith("o");
-            }
-        }));
-        Assert.assertEquals("nine", map1.detect(new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return "nine".equals(each);
-            }
-        }));
-        Assert.assertNull(map1.detect(new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return each.equals("ten");
-            }
-        }));
+        Assert.assertTrue("one".equals(map1.detect(StringPredicates.endsWith("ne"))) || "nine".equals(map1.detect(StringPredicates.endsWith("ne"))));
+        Assert.assertEquals("zero", map1.detect(StringPredicates.endsWith("o")));
+        Assert.assertEquals("nine", map1.detect(Predicates.equal("nine")));
+        Assert.assertNull(map1.detect(Predicates.equal("ten")));
     }
 
     @Test
     public void detectIfNone()
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
-
-        Predicate\<String> endsWithNe = new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return each.endsWith("ne");
-            }
-        };
 
         Function0\<String> ifNone = new Function0\<String>()
         {
@@ -454,28 +391,11 @@ public abstract class Abstract<name>ObjectMapTestCase
                 return "ifNone";
             }
         };
-        Assert.assertTrue("one".equals(map1.detectIfNone(endsWithNe, ifNone)) || "nine".equals(map1.detectIfNone(endsWithNe, ifNone)));
-        Assert.assertEquals("zero", map1.detectIfNone(new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return each.endsWith("o");
-            }
-        }, ifNone));
-        Assert.assertEquals("nine", map1.detectIfNone(new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return "nine".equals(each);
-            }
-        }, ifNone));
-        Assert.assertEquals("ifNone", map1.detectIfNone(new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return "ten".equals(each);
-            }
-        }, ifNone));
+        Assert.assertTrue("one".equals(map1.detectIfNone(StringPredicates.endsWith("ne"), ifNone))
+            || "nine".equals(map1.detectIfNone(StringPredicates.endsWith("ne"), ifNone)));
+        Assert.assertEquals("zero", map1.detectIfNone(StringPredicates.endsWith("o"), ifNone));
+        Assert.assertEquals("nine", map1.detectIfNone(Predicates.equal("nine"), ifNone));
+        Assert.assertEquals("ifNone", map1.detectIfNone(Predicates.equal("ten"), ifNone));
     }
 
     @Test
@@ -483,73 +403,30 @@ public abstract class Abstract<name>ObjectMapTestCase
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
 
-        Predicate\<String> endsWithNe = new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return each.endsWith("ne");
-            }
-        };
-
-        Verify.assertCount(2, map1, endsWithNe);
-        Verify.assertCount(1, map1, new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return each.endsWith("o");
-            }
-        });
-        Verify.assertCount(1, map1, new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return "nine".equals(each);
-            }
-        });
-        Verify.assertCount(0, map1, new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return "ten".equals(each);
-            }
-        });
+        Verify.assertCount(2, map1, StringPredicates.endsWith("ne"));
+        Verify.assertCount(1, map1, StringPredicates.endsWith("o"));
+        Verify.assertCount(1, map1, Predicates.equal("nine"));
+        Verify.assertCount(0, map1, Predicates.equal("ten"));
     }
 
     @Test
     public void anySatisfy()
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
+        Verify.assertAnySatisfy(map1, StringPredicates.endsWith("ne"));
+        Verify.assertAnySatisfy(map1, StringPredicates.endsWith("o"));
+        Verify.assertAnySatisfy(map1, Predicates.equal("nine"));
+        Assert.assertFalse(map1.anySatisfy(Predicates.equal("ten")));
+    }
 
-        Predicate\<String> endsWithNe = new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return each.endsWith("ne");
-            }
-        };
-
-        Verify.assertAnySatisfy(map1, endsWithNe);
-        Verify.assertAnySatisfy(map1, new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return each.endsWith("o");
-            }
-        });
-        Verify.assertAnySatisfy(map1, new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return "nine".equals(each);
-            }
-        });
-        Assert.assertFalse(map1.anySatisfy(new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return "ten".equals(each);
-            }
-        }));
+    @Test
+    public void anySatisfyWith()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
+        Assert.assertTrue(map1.anySatisfyWith(StringPredicates2.endsWith(), "ne"));
+        Assert.assertTrue(map1.anySatisfyWith(StringPredicates2.endsWith(), "o"));
+        Assert.assertTrue(map1.anySatisfyWith(Predicates2.equal(), "nine"));
+        Assert.assertFalse(map1.anySatisfyWith(Predicates2.equal(), "ten"));
     }
 
     @Test
@@ -557,43 +434,23 @@ public abstract class Abstract<name>ObjectMapTestCase
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
 
-        Predicate\<String> containsE = new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return each.contains("e");
-            }
-        };
+        Assert.assertTrue(map1.allSatisfy(StringPredicates.contains("e")));
+        Assert.assertFalse(map1.allSatisfy(StringPredicates.endsWith("o")));
+        Assert.assertFalse(map1.allSatisfy(StringPredicates.contains("o")));
+        Assert.assertFalse(map1.allSatisfy(Predicates.equal("nine")));
+        Assert.assertFalse(map1.allSatisfy(Predicates.equal("ten")));
+    }
 
-        Assert.assertTrue(map1.allSatisfy(containsE));
-        Assert.assertFalse(map1.allSatisfy(new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return each.endsWith("o");
-            }
-        }));
-        Assert.assertFalse(map1.allSatisfy(new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return each.contains("o");
-            }
-        }));
-        Assert.assertFalse(map1.allSatisfy(new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return "nine".equals(each);
-            }
-        }));
-        Assert.assertFalse(map1.allSatisfy(new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return "ten".equals(each);
-            }
-        }));
+    @Test
+    public void allSatisfyWith()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
+
+        Assert.assertTrue(map1.allSatisfyWith(StringPredicates2.contains(), "e"));
+        Assert.assertFalse(map1.allSatisfyWith(StringPredicates2.endsWith(), "o"));
+        Assert.assertFalse(map1.allSatisfyWith(StringPredicates2.contains(), "o"));
+        Assert.assertFalse(map1.allSatisfyWith(Predicates2.equal(), "nine"));
+        Assert.assertFalse(map1.allSatisfyWith(Predicates2.equal(), "ten"));
     }
 
     @Test
@@ -601,50 +458,25 @@ public abstract class Abstract<name>ObjectMapTestCase
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
 
-        Predicate\<String> notContainE = new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return !each.contains("e");
-            }
-        };
+        Assert.assertTrue(map1.noneSatisfy(StringPredicates.notContains("e")));
+        Assert.assertFalse(map1.noneSatisfy(StringPredicates.endsWith("o")));
+        Assert.assertFalse(map1.noneSatisfy(StringPredicates.startsWith("o")));
+        Assert.assertFalse(map1.noneSatisfy(StringPredicates.contains("o")));
+        Assert.assertFalse(map1.noneSatisfy(Predicates.equal("nine")));
+        Assert.assertTrue(map1.noneSatisfy(Predicates.equal("ten")));
+    }
 
-        Assert.assertTrue(map1.noneSatisfy(notContainE));
-        Assert.assertFalse(map1.noneSatisfy(new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return each.endsWith("o");
-            }
-        }));
-        Assert.assertFalse(map1.noneSatisfy(new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return each.startsWith("o");
-            }
-        }));
-        Assert.assertFalse(map1.noneSatisfy(new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return each.contains("o");
-            }
-        }));
-        Assert.assertFalse(map1.noneSatisfy(new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return "nine".equals(each);
-            }
-        }));
-        Assert.assertTrue(map1.noneSatisfy(new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return "ten".equals(each);
-            }
-        }));
+    @Test
+    public void noneSatisfyWith()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
+
+        Assert.assertTrue(map1.noneSatisfyWith(StringPredicates2.notContains(), "e"));
+        Assert.assertFalse(map1.noneSatisfyWith(StringPredicates2.endsWith(), "o"));
+        Assert.assertFalse(map1.noneSatisfyWith(StringPredicates2.startsWith(), "o"));
+        Assert.assertFalse(map1.noneSatisfyWith(StringPredicates2.contains(), "o"));
+        Assert.assertFalse(map1.noneSatisfyWith(Predicates2.equal(), "nine"));
+        Assert.assertTrue(map1.noneSatisfyWith(Predicates2.equal(), "ten"));
     }
 
     @Test

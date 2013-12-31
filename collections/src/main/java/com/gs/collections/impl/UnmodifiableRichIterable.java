@@ -339,14 +339,29 @@ public class UnmodifiableRichIterable<T>
         return this.iterable.anySatisfy(predicate);
     }
 
+    public <P> boolean anySatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.iterable.anySatisfyWith(predicate, parameter);
+    }
+
     public boolean allSatisfy(Predicate<? super T> predicate)
     {
         return this.iterable.allSatisfy(predicate);
     }
 
+    public <P> boolean allSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.iterable.allSatisfyWith(predicate, parameter);
+    }
+
     public boolean noneSatisfy(Predicate<? super T> predicate)
     {
         return this.iterable.noneSatisfy(predicate);
+    }
+
+    public <P> boolean noneSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.iterable.noneSatisfyWith(predicate, parameter);
     }
 
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)

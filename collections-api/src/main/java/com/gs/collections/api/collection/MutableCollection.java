@@ -338,23 +338,6 @@ public interface MutableCollection<T>
      */
     <P> int countWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
-    /**
-     * Returns true if the predicate evaluates to true for any element of the collection, or return false. Returns
-     * false if the collection is empty.
-     */
-    <P> boolean anySatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter);
-
-    /**
-     * Returns true if the predicate evaluates to false for every element of the collection, or return false. Returns
-     * true if the collection is empty.
-     */
-    <P> boolean noneSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter);
-
-    /**
-     * Returns true if the predicate evaluates to true for every element of the collection, or returns false.
-     */
-    <P> boolean allSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter);
-
     <IV, P> IV injectIntoWith(
             IV injectValue,
             Function3<? super IV, ? super T, ? super P, ? extends IV> function,

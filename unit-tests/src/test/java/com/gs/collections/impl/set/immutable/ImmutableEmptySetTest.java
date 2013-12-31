@@ -36,7 +36,7 @@ public class ImmutableEmptySetTest extends AbstractImmutableEmptySetTestCase
 
     @Override
     @Test
-    public void testNewWithout()
+    public void newWithout()
     {
         Assert.assertSame(Sets.immutable.of(), Sets.immutable.of().newWithout(1));
         Assert.assertSame(Sets.immutable.of(), Sets.immutable.of().newWithoutAll(Interval.oneTo(3)));
@@ -44,7 +44,7 @@ public class ImmutableEmptySetTest extends AbstractImmutableEmptySetTestCase
 
     @Override
     @Test
-    public void testEqualsAndHashCode()
+    public void equalsAndHashCode()
     {
         ImmutableSet<Integer> immutable = this.classUnderTest();
         MutableSet<Integer> mutable = UnifiedSet.newSet(immutable);

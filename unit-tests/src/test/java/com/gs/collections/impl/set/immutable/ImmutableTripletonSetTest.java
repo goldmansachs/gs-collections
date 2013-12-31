@@ -31,7 +31,7 @@ public class ImmutableTripletonSetTest
 
     @Override
     @Test
-    public void testNewWithout()
+    public void newWithout()
     {
         ImmutableSet<Integer> immutable = this.classUnderTest();
         Verify.assertSize(2, immutable.newWithout(3).castToSet());

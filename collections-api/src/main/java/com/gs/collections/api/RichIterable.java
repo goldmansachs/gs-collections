@@ -641,6 +641,14 @@ public interface
     boolean anySatisfy(Predicate<? super T> predicate);
 
     /**
+     * Returns true if the predicate evaluates to true for any element of the collection, or return false. Returns
+     * false if the collection is empty.
+     *
+     * @since 5.0
+     */
+    <P> boolean anySatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
+    /**
      * Returns true if the predicate evaluates to true for every element of the iterable or if the iterable is empty.
      * Otherwise, returns false.
      *
@@ -649,12 +657,27 @@ public interface
     boolean allSatisfy(Predicate<? super T> predicate);
 
     /**
+     * Returns true if the predicate evaluates to true for every element of the collection, or returns false.
+     *
+     * @since 5.0
+     */
+    <P> boolean allSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
+    /**
      * Returns true if the predicate evaluates to false for every element of the iterable or if the iterable is empty.
      * Otherwise, returns false.
      *
      * @since 3.0
      */
     boolean noneSatisfy(Predicate<? super T> predicate);
+
+    /**
+     * Returns true if the predicate evaluates to false for every element of the collection, or return false. Returns
+     * true if the collection is empty.
+     *
+     * @since 5.0
+     */
+    <P> boolean noneSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     /**
      * Returns the final result of evaluating function using each element of the iterable and the previous evaluation

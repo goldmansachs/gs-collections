@@ -28,6 +28,7 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -38,7 +39,7 @@ import org.junit.Test;
 public abstract class AbstractImmutableEmptySetTestCase extends AbstractImmutableSetTestCase
 {
     @Test
-    public void testContainsAll()
+    public void containsAll()
     {
         Assert.assertTrue(this.classUnderTest().castToSet().containsAll(new HashSet<Object>()));
         Assert.assertFalse(this.classUnderTest().castToSet().containsAll(UnifiedSet.newSetWith(1)));
@@ -46,7 +47,7 @@ public abstract class AbstractImmutableEmptySetTestCase extends AbstractImmutabl
 
     @Override
     @Test
-    public void testNewWith()
+    public void newWith()
     {
         ImmutableSet<Integer> immutable = this.classUnderTest();
         Verify.assertSize(1, immutable.newWith(1).castToSet());
@@ -54,7 +55,7 @@ public abstract class AbstractImmutableEmptySetTestCase extends AbstractImmutabl
 
     @Override
     @Test
-    public void testDetect()
+    public void detect()
     {
         ImmutableSet<Integer> integers = this.classUnderTest();
         Assert.assertNull(integers.detect(Predicates.equal(1)));
@@ -62,23 +63,51 @@ public abstract class AbstractImmutableEmptySetTestCase extends AbstractImmutabl
 
     @Override
     @Test
-    public void testAllSatisfy()
-    {
-        ImmutableSet<Integer> integers = this.classUnderTest();
-        Assert.assertTrue(integers.allSatisfy(Predicates.instanceOf(Integer.class)));
-    }
-
-    @Override
-    @Test
-    public void testAnySatisfy()
+    public void anySatisfy()
     {
         ImmutableSet<Integer> integers = this.classUnderTest();
         Assert.assertFalse(integers.anySatisfy(Predicates.instanceOf(Integer.class)));
     }
 
     @Override
+    public void anySatisfyWith()
+    {
+        ImmutableSet<Integer> integers = this.classUnderTest();
+        Assert.assertFalse(integers.anySatisfyWith(Predicates2.instanceOf(), Integer.class));
+    }
+
+    @Override
     @Test
-    public void testGetFirst()
+    public void allSatisfy()
+    {
+        ImmutableSet<Integer> integers = this.classUnderTest();
+        Assert.assertTrue(integers.allSatisfy(Predicates.instanceOf(Integer.class)));
+    }
+
+    @Override
+    public void allSatisfyWith()
+    {
+        ImmutableSet<Integer> integers = this.classUnderTest();
+        Assert.assertTrue(integers.allSatisfyWith(Predicates2.instanceOf(), Integer.class));
+    }
+
+    @Override
+    public void noneSatisfy()
+    {
+        ImmutableSet<Integer> integers = this.classUnderTest();
+        Assert.assertTrue(integers.noneSatisfy(Predicates.instanceOf(Integer.class)));
+    }
+
+    @Override
+    public void noneSatisfyWith()
+    {
+        ImmutableSet<Integer> integers = this.classUnderTest();
+        Assert.assertTrue(integers.noneSatisfyWith(Predicates2.instanceOf(), Integer.class));
+    }
+
+    @Override
+    @Test
+    public void getFirst()
     {
         ImmutableSet<Integer> integers = this.classUnderTest();
         Assert.assertNull(integers.getFirst());
@@ -86,7 +115,7 @@ public abstract class AbstractImmutableEmptySetTestCase extends AbstractImmutabl
 
     @Override
     @Test
-    public void testGetLast()
+    public void getLast()
     {
         ImmutableSet<Integer> integers = this.classUnderTest();
         Assert.assertNull(integers.getLast());
@@ -94,7 +123,7 @@ public abstract class AbstractImmutableEmptySetTestCase extends AbstractImmutabl
 
     @Override
     @Test
-    public void testIsEmpty()
+    public void isEmpty()
     {
         ImmutableSet<Integer> list = this.classUnderTest();
         Assert.assertTrue(list.isEmpty());

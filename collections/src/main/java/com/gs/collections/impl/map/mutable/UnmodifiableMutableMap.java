@@ -349,14 +349,29 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().allSatisfy(predicate);
     }
 
+    public <P> boolean allSatisfyWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.getMutableMap().allSatisfyWith(predicate, parameter);
+    }
+
     public boolean noneSatisfy(Predicate<? super V> predicate)
     {
         return this.getMutableMap().noneSatisfy(predicate);
     }
 
+    public <P> boolean noneSatisfyWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.getMutableMap().noneSatisfyWith(predicate, parameter);
+    }
+
     public boolean anySatisfy(Predicate<? super V> predicate)
     {
         return this.getMutableMap().anySatisfy(predicate);
+    }
+
+    public <P> boolean anySatisfyWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.getMutableMap().anySatisfyWith(predicate, parameter);
     }
 
     public void appendString(Appendable appendable)

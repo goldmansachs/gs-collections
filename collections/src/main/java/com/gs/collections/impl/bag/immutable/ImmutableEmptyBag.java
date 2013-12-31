@@ -432,6 +432,21 @@ final class ImmutableEmptyBag<T>
         return true;
     }
 
+    public <P> boolean anySatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return false;
+    }
+
+    public <P> boolean allSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return true;
+    }
+
+    public <P> boolean noneSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return true;
+    }
+
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
         return injectedValue;

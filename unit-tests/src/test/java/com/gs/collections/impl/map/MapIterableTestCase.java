@@ -435,15 +435,6 @@ public abstract class MapIterableTestCase
     }
 
     @Test
-    public void allSatisfy()
-    {
-        MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
-
-        Verify.assertAllSatisfy((Map<String, String>) map, Predicates.instanceOf(String.class));
-        Assert.assertFalse(map.allSatisfy(Predicates.equal("Monkey")));
-    }
-
-    @Test
     public void anySatisfy()
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
@@ -453,12 +444,50 @@ public abstract class MapIterableTestCase
     }
 
     @Test
+    public void anySatisfyWith()
+    {
+        MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
+
+        Assert.assertTrue(map.anySatisfyWith(Predicates2.instanceOf(), String.class));
+        Assert.assertFalse(map.anySatisfyWith(Predicates2.equal(), "Monkey"));
+    }
+
+    @Test
+    public void allSatisfy()
+    {
+        MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
+
+        Verify.assertAllSatisfy((Map<String, String>) map, Predicates.instanceOf(String.class));
+        Assert.assertFalse(map.allSatisfy(Predicates.equal("Monkey")));
+    }
+
+    @Test
+    public void allSatisfyWith()
+    {
+        MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
+
+        Assert.assertTrue(map.allSatisfyWith(Predicates2.instanceOf(), String.class));
+        Assert.assertFalse(map.allSatisfyWith(Predicates2.equal(), "Monkey"));
+    }
+
+    @Test
     public void noneSatisfy()
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
 
         Verify.assertNoneSatisfy((Map<String, String>) map, Predicates.instanceOf(Integer.class));
         Assert.assertTrue(map.noneSatisfy(Predicates.equal("Monkey")));
+        Assert.assertFalse(map.noneSatisfy(Predicates.equal("Two")));
+    }
+
+    @Test
+    public void noneSatisfyWith()
+    {
+        MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
+
+        Assert.assertTrue(map.noneSatisfyWith(Predicates2.instanceOf(), Integer.class));
+        Assert.assertTrue(map.noneSatisfyWith(Predicates2.equal(), "Monkey"));
+        Assert.assertFalse(map.noneSatisfyWith(Predicates2.equal(), "Two"));
     }
 
     @Test

@@ -387,13 +387,6 @@ public abstract class AbstractLazyIterableTestCase
     }
 
     @Test
-    public void allSatisfy()
-    {
-        Assert.assertTrue(this.lazyIterable.allSatisfy(Predicates.instanceOf(Integer.class)));
-        Assert.assertFalse(this.lazyIterable.allSatisfy(Predicates.equal(1)));
-    }
-
-    @Test
     public void anySatisfy()
     {
         Assert.assertFalse(this.lazyIterable.anySatisfy(Predicates.instanceOf(String.class)));
@@ -401,10 +394,38 @@ public abstract class AbstractLazyIterableTestCase
     }
 
     @Test
+    public void anySatisfyWith()
+    {
+        Assert.assertFalse(this.lazyIterable.anySatisfyWith(Predicates2.instanceOf(), String.class));
+        Assert.assertTrue(this.lazyIterable.anySatisfyWith(Predicates2.instanceOf(), Integer.class));
+    }
+
+    @Test
+    public void allSatisfy()
+    {
+        Assert.assertTrue(this.lazyIterable.allSatisfy(Predicates.instanceOf(Integer.class)));
+        Assert.assertFalse(this.lazyIterable.allSatisfy(Predicates.equal(1)));
+    }
+
+    @Test
+    public void allSatisfyWith()
+    {
+        Assert.assertTrue(this.lazyIterable.allSatisfyWith(Predicates2.instanceOf(), Integer.class));
+        Assert.assertFalse(this.lazyIterable.allSatisfyWith(Predicates2.equal(), 1));
+    }
+
+    @Test
     public void noneSatisfy()
     {
         Assert.assertFalse(this.lazyIterable.noneSatisfy(Predicates.instanceOf(Integer.class)));
         Assert.assertTrue(this.lazyIterable.noneSatisfy(Predicates.instanceOf(String.class)));
+    }
+
+    @Test
+    public void noneSatisfyWith()
+    {
+        Assert.assertFalse(this.lazyIterable.noneSatisfyWith(Predicates2.instanceOf(), Integer.class));
+        Assert.assertTrue(this.lazyIterable.noneSatisfyWith(Predicates2.instanceOf(), String.class));
     }
 
     @Test

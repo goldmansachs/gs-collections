@@ -276,6 +276,17 @@ trait SynchronizedRichIterableTestTrait extends SynchronizedMutableIterableTestT
     }
 
     @Test
+    def anySatisfyWith_synchronized
+    {
+        this.assertSynchronized
+        {
+            this.classUnderTest.anySatisfyWith({
+                (_: String, _: AnyRef) => true
+            }, null)
+        }
+    }
+
+    @Test
     def allSatisfy_synchronized
     {
         this.assertSynchronized
@@ -283,6 +294,39 @@ trait SynchronizedRichIterableTestTrait extends SynchronizedMutableIterableTestT
             this.classUnderTest.allSatisfy({
                 _: String => false
             })
+        }
+    }
+
+    @Test
+    def allSatisfyWith_synchronized
+    {
+        this.assertSynchronized
+        {
+            this.classUnderTest.allSatisfyWith({
+                (_: String, _: AnyRef) => false
+            }, null)
+        }
+    }
+
+    @Test
+    def noneSatisfy_synchronized
+    {
+        this.assertSynchronized
+        {
+            this.classUnderTest.noneSatisfy({
+                _: String => false
+            })
+        }
+    }
+
+    @Test
+    def noneSatisfyWith_synchronized
+    {
+        this.assertSynchronized
+        {
+            this.classUnderTest.noneSatisfyWith({
+                (_: String, _: AnyRef) => false
+            }, null)
         }
     }
 

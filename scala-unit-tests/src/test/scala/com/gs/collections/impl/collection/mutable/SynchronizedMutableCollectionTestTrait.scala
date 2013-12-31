@@ -219,28 +219,6 @@ trait SynchronizedMutableCollectionTestTrait
     }
 
     @Test
-    def anySatisfyWith_synchronized
-    {
-        this.assertSynchronized
-        {
-            this.classUnderTest.anySatisfyWith({
-                (_: String, _: String) => true
-            }, "")
-        }
-    }
-
-    @Test
-    def allSatisfyWith_synchronized
-    {
-        this.assertSynchronized
-        {
-            this.classUnderTest.allSatisfyWith({
-                (_: String, _: String) => true
-            }, "")
-        }
-    }
-
-    @Test
     def injectIntoWith_synchronized
     {
         this.assertSynchronized

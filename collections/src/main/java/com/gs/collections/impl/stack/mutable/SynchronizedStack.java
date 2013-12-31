@@ -510,6 +510,14 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
         }
     }
 
+    public <P> boolean anySatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.anySatisfyWith(predicate, parameter);
+        }
+    }
+
     public boolean allSatisfy(Predicate<? super T> predicate)
     {
         synchronized (this.lock)
@@ -518,11 +526,27 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
         }
     }
 
+    public <P> boolean allSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.allSatisfyWith(predicate, parameter);
+        }
+    }
+
     public boolean noneSatisfy(Predicate<? super T> predicate)
     {
         synchronized (this.lock)
         {
             return this.delegate.noneSatisfy(predicate);
+        }
+    }
+
+    public <P> boolean noneSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.noneSatisfyWith(predicate, parameter);
         }
     }
 

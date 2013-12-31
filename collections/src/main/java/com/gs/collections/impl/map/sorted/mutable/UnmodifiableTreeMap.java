@@ -315,9 +315,24 @@ public class UnmodifiableTreeMap<K, V>
         return this.getMutableSortedMap().detect(predicate);
     }
 
+    public boolean anySatisfy(Predicate<? super V> predicate)
+    {
+        return this.getMutableSortedMap().anySatisfy(predicate);
+    }
+
+    public <P> boolean anySatisfyWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.getMutableSortedMap().anySatisfyWith(predicate, parameter);
+    }
+
     public boolean allSatisfy(Predicate<? super V> predicate)
     {
         return this.getMutableSortedMap().allSatisfy(predicate);
+    }
+
+    public <P> boolean allSatisfyWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.getMutableSortedMap().allSatisfyWith(predicate, parameter);
     }
 
     public boolean noneSatisfy(Predicate<? super V> predicate)
@@ -325,9 +340,9 @@ public class UnmodifiableTreeMap<K, V>
         return this.getMutableSortedMap().noneSatisfy(predicate);
     }
 
-    public boolean anySatisfy(Predicate<? super V> predicate)
+    public <P> boolean noneSatisfyWith(Predicate2<? super V, ? super P> predicate, P parameter)
     {
-        return this.getMutableSortedMap().anySatisfy(predicate);
+        return this.getMutableSortedMap().noneSatisfyWith(predicate, parameter);
     }
 
     public void appendString(Appendable appendable)

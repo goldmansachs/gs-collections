@@ -39,6 +39,7 @@ import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.block.factory.StringPredicates;
+import com.gs.collections.impl.block.factory.StringPredicates2;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Sets;
@@ -95,15 +96,27 @@ public class UnmodifiableRichIterableTest
     }
 
     @Test
+    public void anySatisfy()
+    {
+        Assert.assertTrue(this.unmodifiableCollection.anySatisfy(StringPredicates.contains("allic")));
+    }
+
+    @Test
+    public void anySatisfyWith()
+    {
+        Assert.assertTrue(this.unmodifiableCollection.anySatisfyWith(StringPredicates2.contains(), "allic"));
+    }
+
+    @Test
     public void allSatisfy()
     {
         Assert.assertTrue(this.unmodifiableCollection.allSatisfy(Predicates.notNull()));
     }
 
     @Test
-    public void anySatisfy()
+    public void allSatisfyWith()
     {
-        Assert.assertTrue(this.unmodifiableCollection.anySatisfy(StringPredicates.contains("allic")));
+        Assert.assertTrue(this.unmodifiableCollection.allSatisfyWith(Predicates2.notNull(), null));
     }
 
     @Test
@@ -111,6 +124,13 @@ public class UnmodifiableRichIterableTest
     {
         Assert.assertTrue(this.unmodifiableCollection.noneSatisfy(StringPredicates.contains("eatles")));
         Assert.assertFalse(this.unmodifiableCollection.noneSatisfy(StringPredicates.contains("ovi")));
+    }
+
+    @Test
+    public void noneSatisfyWith()
+    {
+        Assert.assertTrue(this.unmodifiableCollection.noneSatisfyWith(StringPredicates2.contains(), "eatles"));
+        Assert.assertFalse(this.unmodifiableCollection.noneSatisfyWith(StringPredicates2.contains(), "ovi"));
     }
 
     @Test

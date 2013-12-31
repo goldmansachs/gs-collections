@@ -1024,6 +1024,29 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         return false;
     }
 
+    public \<P> boolean anySatisfyWith(Predicate2\<? super V, ? super P> predicate, P parameter)
+    {
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey && predicate.accept(this.sentinelValues.zeroValue, parameter))
+            {
+                return true;
+            }
+            if (this.sentinelValues.containsOneKey && predicate.accept(this.sentinelValues.oneValue, parameter))
+            {
+                return true;
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values[i], parameter))
+            {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public boolean allSatisfy(Predicate\<? super V> predicate)
     {
         if (this.sentinelValues != null)
@@ -1047,6 +1070,29 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         return true;
     }
 
+    public \<P> boolean allSatisfyWith(Predicate2\<? super V, ? super P> predicate, P parameter)
+    {
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey && !predicate.accept(this.sentinelValues.zeroValue, parameter))
+            {
+                return false;
+            }
+            if (this.sentinelValues.containsOneKey && !predicate.accept(this.sentinelValues.oneValue, parameter))
+            {
+                return false;
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && !predicate.accept(this.values[i], parameter))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public boolean noneSatisfy(Predicate\<? super V> predicate)
     {
         if (this.sentinelValues != null)
@@ -1063,6 +1109,29 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         for (int i = 0; i \< this.keys.length; i++)
         {
             if (isNonSentinel(this.keys[i]) && predicate.accept(this.values[i]))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    public \<P> boolean noneSatisfyWith(Predicate2\<? super V, ? super P> predicate, P parameter)
+    {
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey && predicate.accept(this.sentinelValues.zeroValue, parameter))
+            {
+                return false;
+            }
+            if (this.sentinelValues.containsOneKey && predicate.accept(this.sentinelValues.oneValue, parameter))
+            {
+                return false;
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values[i], parameter))
             {
                 return false;
             }

@@ -53,7 +53,7 @@ public class ImmutableEmptySetWithHashingStrategyTest extends AbstractImmutableE
 
     @Override
     @Test
-    public void testNewWithout()
+    public void newWithout()
     {
         Assert.assertEquals(
                 HashingStrategySets.immutable.of(HASHING_STRATEGY),
@@ -65,7 +65,7 @@ public class ImmutableEmptySetWithHashingStrategyTest extends AbstractImmutableE
 
     @Override
     @Test
-    public void testEqualsAndHashCode()
+    public void equalsAndHashCode()
     {
         ImmutableSet<Integer> immutable = this.classUnderTest();
         MutableSet<Integer> mutable = UnifiedSet.newSet(immutable);

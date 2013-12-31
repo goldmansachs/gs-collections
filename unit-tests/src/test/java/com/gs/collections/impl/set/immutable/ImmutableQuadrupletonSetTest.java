@@ -34,7 +34,7 @@ public class ImmutableQuadrupletonSetTest
 
     @Override
     @Test
-    public void testNewWithout()
+    public void newWithout()
     {
         ImmutableSet<Integer> immutable = this.classUnderTest();
         Verify.assertSize(3, immutable.newWithout(4).castToSet());

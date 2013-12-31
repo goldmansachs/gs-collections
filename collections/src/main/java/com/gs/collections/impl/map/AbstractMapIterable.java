@@ -132,9 +132,24 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
         return result;
     }
 
+    public boolean anySatisfy(Predicate<? super V> predicate)
+    {
+        return this.valuesView().anySatisfy(predicate);
+    }
+
+    public <P> boolean anySatisfyWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.valuesView().anySatisfyWith(predicate, parameter);
+    }
+
     public boolean allSatisfy(Predicate<? super V> predicate)
     {
         return this.valuesView().allSatisfy(predicate);
+    }
+
+    public <P> boolean allSatisfyWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.valuesView().allSatisfyWith(predicate, parameter);
     }
 
     public boolean noneSatisfy(Predicate<? super V> predicate)
@@ -142,9 +157,9 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
         return this.valuesView().noneSatisfy(predicate);
     }
 
-    public boolean anySatisfy(Predicate<? super V> predicate)
+    public <P> boolean noneSatisfyWith(Predicate2<? super V, ? super P> predicate, P parameter)
     {
-        return this.valuesView().anySatisfy(predicate);
+        return this.valuesView().noneSatisfyWith(predicate, parameter);
     }
 
     public void appendString(Appendable appendable)

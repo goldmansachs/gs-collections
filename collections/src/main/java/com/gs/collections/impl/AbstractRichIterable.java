@@ -342,6 +342,21 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
         return IterableIterate.noneSatisfy(this, predicate);
     }
 
+    public <P> boolean anySatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return IterableIterate.anySatisfyWith(this, predicate, parameter);
+    }
+
+    public <P> boolean allSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return IterableIterate.allSatisfyWith(this, predicate, parameter);
+    }
+
+    public <P> boolean noneSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return IterableIterate.noneSatisfyWith(this, predicate, parameter);
+    }
+
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
         return IterableIterate.injectInto(injectedValue, this, function);
