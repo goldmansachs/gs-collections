@@ -139,54 +139,18 @@ public abstract class Abstract<name>ObjectMapTestCase
             }
         }));
 
-        RichIterable\<String> actual1 = map1.select(new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return each.endsWith("ne");
-            }
-        });
+        RichIterable\<String> actual1 = map1.select(StringPredicates.endsWith("ne"));
         Assert.assertTrue(FastList.newListWith("one", "nine").equals(actual1) || FastList.newListWith("nine", "one").equals(actual1));
 
-        Assert.assertEquals(FastList.newListWith("nine"), map1.select(new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return "nine".equals(each);
-            }
-        }));
+        Assert.assertEquals(FastList.newListWith("nine"), map1.select(Predicates.equal("nine")));
 
-        Assert.assertEquals(FastList.newListWith("zero"), map1.select(new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return each.endsWith("o");
-            }
-        }));
+        Assert.assertEquals(FastList.newListWith("zero"), map1.select(StringPredicates.endsWith("o")));
 
-        Assert.assertEquals(FastList.newListWith("nine"), map1.select(new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return "nine".equals(each);
-            }
-        }, FastList.\<String>newList()));
+        Assert.assertEquals(FastList.newListWith("nine"), map1.select(Predicates.equal("nine"), FastList.\<String>newList()));
 
-        Assert.assertEquals(FastList.newListWith("one", "nine"), map1.select(new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return each.endsWith("ne");
-            }
-        }, FastList.\<String>newList()));
+        Assert.assertEquals(FastList.newListWith("one", "nine"), map1.select(StringPredicates.endsWith("ne"), FastList.\<String>newList()));
 
-        Assert.assertEquals(FastList.newListWith("zero"), map1.select(new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return each.endsWith("o");
-            }
-        }, FastList.\<String>newList()));
+        Assert.assertEquals(FastList.newListWith("zero"), map1.select(StringPredicates.endsWith("o"), FastList.\<String>newList()));
     }
 
     @Test
@@ -194,29 +158,11 @@ public abstract class Abstract<name>ObjectMapTestCase
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
 
-        Assert.assertEquals(FastList.newListWith("one", "nine"), map1.selectWith(new Predicate2\<String, String>()
-        {
-            public boolean accept(String argument1, String argument2)
-            {
-                return argument1.endsWith(argument2);
-            }
-        }, "ne", FastList.\<String>newList()));
+        Assert.assertEquals(FastList.newListWith("one", "nine"), map1.selectWith(StringPredicates2.endsWith(), "ne", FastList.\<String>newList()));
 
-        Assert.assertEquals(FastList.newListWith("nine"), map1.selectWith(new Predicate2\<String, String>()
-        {
-            public boolean accept(String argument1, String argument2)
-            {
-                return argument2.equals(argument1);
-            }
-        }, "nine", FastList.\<String>newList()));
+        Assert.assertEquals(FastList.newListWith("nine"), map1.selectWith(Predicates2.equal(), "nine", FastList.\<String>newList()));
 
-        Assert.assertEquals(FastList.newListWith("zero"), map1.selectWith(new Predicate2\<String, String>()
-        {
-            public boolean accept(String argument1, String argument2)
-            {
-                return argument1.endsWith(argument2);
-            }
-        }, "o", FastList.\<String>newList()));
+        Assert.assertEquals(FastList.newListWith("zero"), map1.selectWith(StringPredicates2.endsWith(), "o", FastList.\<String>newList()));
     }
 
     @Test
@@ -320,26 +266,9 @@ public abstract class Abstract<name>ObjectMapTestCase
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
 
-        Predicate\<String> endsWithNe = new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return each.endsWith("ne");
-            }
-        };
-
-        Assert.assertEquals(FastList.newListWith("ONE", "NINE"), map1.collectIf(endsWithNe, StringFunctions.toUpperCase()));
-
-        Predicate\<String> endsWithO = new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return each.endsWith("o");
-            }
-        };
-
-        Assert.assertEquals(FastList.newListWith("ZERO"), map1.collectIf(endsWithO, StringFunctions.toUpperCase()));
-        Assert.assertEquals(FastList.newListWith("ZERO"), map1.collectIf(endsWithO, StringFunctions.toUpperCase(), FastList.\<String>newList()));
+        Assert.assertEquals(FastList.newListWith("ONE", "NINE"), map1.collectIf(StringPredicates.endsWith("ne"), StringFunctions.toUpperCase()));
+        Assert.assertEquals(FastList.newListWith("ZERO"), map1.collectIf(StringPredicates.endsWith("o"), StringFunctions.toUpperCase()));
+        Assert.assertEquals(FastList.newListWith("ZERO"), map1.collectIf(StringPredicates.endsWith("o"), StringFunctions.toUpperCase(), FastList.\<String>newList()));
     }
 
     @Test
