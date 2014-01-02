@@ -15,7 +15,6 @@
  */
 
 /**
- * /**
  * This package contains interfaces for BiMap API.
  * <p>
  *      A BiMap is a map that allows users to look up key-value pairs from either direction. Uniqueness is enforced on both the keys and values.
