@@ -21,7 +21,6 @@ import java.util.Map;
 import com.gs.collections.api.factory.map.ImmutableMapFactory;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.impl.block.factory.Comparators;
-import com.gs.collections.impl.map.mutable.UnifiedMap;
 import net.jcip.annotations.Immutable;
 
 @Immutable
@@ -95,7 +94,31 @@ public final class ImmutableMapFactoryImpl implements ImmutableMapFactory
 
     public <K, V> ImmutableMap<K, V> with(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
     {
-        return UnifiedMap.newWithKeysValues(key1, value1, key2, value2, key3, value3, key4, value4).toImmutable();
+        if (Comparators.nullSafeEquals(key1, key2))
+        {
+            return this.of(key1, value2, key3, value3, key4, value4);
+        }
+        if (Comparators.nullSafeEquals(key1, key3))
+        {
+            return this.of(key2, value2, key1, value3, key4, value4);
+        }
+        if (Comparators.nullSafeEquals(key1, key4))
+        {
+            return this.of(key2, value2, key3, value3, key1, value4);
+        }
+        if (Comparators.nullSafeEquals(key2, key3))
+        {
+            return this.of(key1, value1, key2, value3, key4, value4);
+        }
+        if (Comparators.nullSafeEquals(key2, key4))
+        {
+            return this.of(key1, value1, key3, value3, key2, value4);
+        }
+        if (Comparators.nullSafeEquals(key3, key4))
+        {
+            return this.of(key1, value1, key2, value2, key3, value4);
+        }
+        return new ImmutableQuadrupletonMap<K, V>(key1, value1, key2, value2, key3, value3, key4, value4);
     }
 
     /**

@@ -316,4 +316,10 @@ public class ImmutableSingletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         return new ImmutableSingletonMap<K, V>(key1, value1);
     }
+
+    @Override
+    protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
+    {
+        return new ImmutableSingletonMap<K, V>(key1, value1);
+    }
 }

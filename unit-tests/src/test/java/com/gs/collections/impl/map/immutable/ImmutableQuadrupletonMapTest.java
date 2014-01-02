@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,20 +34,20 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * JUnit test for {@link ImmutableTripletonMap}.
+ * JUnit test for {@link com.gs.collections.impl.map.immutable.ImmutableQuadrupletonMap}.
  */
-public class ImmutableTripletonMapTest extends ImmutableMemoryEfficientMapTestCase
+public class ImmutableQuadrupletonMapTest extends ImmutableMemoryEfficientMapTestCase
 {
     @Override
     protected ImmutableMap<Integer, String> classUnderTest()
     {
-        return new ImmutableTripletonMap<Integer, String>(1, "1", 2, "2", 3, "3");
+        return new ImmutableQuadrupletonMap<Integer, String>(1, "1", 2, "2", 3, "3", 4, "4");
     }
 
     @Override
     protected int size()
     {
-        return 3;
+        return 4;
     }
 
     @Override
@@ -55,8 +55,8 @@ public class ImmutableTripletonMapTest extends ImmutableMemoryEfficientMapTestCa
     public void equalsAndHashCode()
     {
         super.equalsAndHashCode();
-        ImmutableMap<Integer, String> map1 = new ImmutableTripletonMap<Integer, String>(1, "One", 2, "Two", 3, "Three");
-        ImmutableMap<Integer, String> map2 = new ImmutableTripletonMap<Integer, String>(1, "One", 2, "Two", 3, "Three");
+        ImmutableMap<Integer, String> map1 = new ImmutableQuadrupletonMap<Integer, String>(1, "One", 2, "Two", 3, "Three", 4, "Four");
+        ImmutableMap<Integer, String> map2 = new ImmutableQuadrupletonMap<Integer, String>(1, "One", 2, "Two", 3, "Three", 4, "Four");
         Verify.assertEqualsAndHashCode(map1, map2);
     }
 
@@ -67,7 +67,7 @@ public class ImmutableTripletonMapTest extends ImmutableMemoryEfficientMapTestCa
         super.forEachValue();
         MutableList<String> collection = Lists.mutable.of();
         this.classUnderTest().forEachValue(CollectionAddProcedure.on(collection));
-        Assert.assertEquals(FastList.newListWith("1", "2", "3"), collection);
+        Assert.assertEquals(FastList.newListWith("1", "2", "3", "4"), collection);
     }
 
     @Override
@@ -77,7 +77,7 @@ public class ImmutableTripletonMapTest extends ImmutableMemoryEfficientMapTestCa
         super.forEachKey();
         MutableList<Integer> collection = Lists.mutable.of();
         this.classUnderTest().forEachKey(CollectionAddProcedure.on(collection));
-        Assert.assertEquals(FastList.newListWith(1, 2, 3), collection);
+        Assert.assertEquals(FastList.newListWith(1, 2, 3, 4), collection);
     }
 
     @Override
@@ -86,9 +86,9 @@ public class ImmutableTripletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         super.getIfAbsent_function();
         ImmutableMap<Integer, String> map = this.classUnderTest();
-        Assert.assertNull(map.get(4));
-        Assert.assertEquals("4", map.getIfAbsent(4, new PassThruFunction0<String>("4")));
-        Assert.assertNull(map.get(4));
+        Assert.assertNull(map.get(5));
+        Assert.assertEquals("5", map.getIfAbsent(5, new PassThruFunction0<String>("5")));
+        Assert.assertNull(map.get(5));
     }
 
     @Override
@@ -97,9 +97,9 @@ public class ImmutableTripletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         super.getIfAbsent();
         ImmutableMap<Integer, String> map = this.classUnderTest();
-        Assert.assertNull(map.get(4));
-        Assert.assertEquals("4", map.getIfAbsentValue(4, "4"));
-        Assert.assertNull(map.get(4));
+        Assert.assertNull(map.get(5));
+        Assert.assertEquals("5", map.getIfAbsentValue(5, "5"));
+        Assert.assertNull(map.get(5));
     }
 
     @Override
@@ -108,10 +108,11 @@ public class ImmutableTripletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         super.ifPresentApply();
         ImmutableMap<Integer, String> map = this.classUnderTest();
-        Assert.assertNull(map.ifPresentApply(4, Functions.<String>getPassThru()));
+        Assert.assertNull(map.ifPresentApply(5, Functions.<String>getPassThru()));
         Assert.assertEquals("1", map.ifPresentApply(1, Functions.<String>getPassThru()));
         Assert.assertEquals("2", map.ifPresentApply(2, Functions.<String>getPassThru()));
         Assert.assertEquals("3", map.ifPresentApply(3, Functions.<String>getPassThru()));
+        Assert.assertEquals("4", map.ifPresentApply(4, Functions.<String>getPassThru()));
     }
 
     @Override
@@ -128,7 +129,7 @@ public class ImmutableTripletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         super.forEachWith();
         final MutableList<Integer> result = Lists.mutable.of();
-        ImmutableMap<Integer, Integer> map = new ImmutableTripletonMap<Integer, Integer>(1, 1, 2, 2, 3, 3);
+        ImmutableMap<Integer, Integer> map = new ImmutableQuadrupletonMap<Integer, Integer>(1, 1, 2, 2, 3, 3, 4, 4);
         map.forEachWith(new Procedure2<Integer, Integer>()
         {
             public void value(Integer argument1, Integer argument2)
@@ -136,7 +137,7 @@ public class ImmutableTripletonMapTest extends ImmutableMemoryEfficientMapTestCa
                 result.add(argument1 + argument2);
             }
         }, 10);
-        Assert.assertEquals(FastList.newListWith(11, 12, 13), result);
+        Assert.assertEquals(FastList.newListWith(11, 12, 13, 14), result);
     }
 
     @Override
@@ -145,7 +146,7 @@ public class ImmutableTripletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         super.forEachWithIndex();
         final MutableList<String> result = Lists.mutable.of();
-        ImmutableMap<Integer, String> map = new ImmutableTripletonMap<Integer, String>(1, "One", 2, "Two", 3, "Three");
+        ImmutableMap<Integer, String> map = new ImmutableQuadrupletonMap<Integer, String>(1, "One", 2, "Two", 3, "Three", 4, "Four");
         map.forEachWithIndex(new ObjectIntProcedure<String>()
         {
             public void value(String value, int index)
@@ -154,7 +155,7 @@ public class ImmutableTripletonMapTest extends ImmutableMemoryEfficientMapTestCa
                 result.add(String.valueOf(index));
             }
         });
-        Assert.assertEquals(FastList.newListWith("One", "0", "Two", "1", "Three", "2"), result);
+        Assert.assertEquals(FastList.newListWith("One", "0", "Two", "1", "Three", "2", "Four", "3"), result);
     }
 
     @Override
@@ -163,12 +164,12 @@ public class ImmutableTripletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         super.keyValuesView();
         MutableList<String> result = Lists.mutable.of();
-        ImmutableMap<Integer, String> map = new ImmutableTripletonMap<Integer, String>(1, "One", 2, "Two", 3, "Three");
+        ImmutableMap<Integer, String> map = new ImmutableQuadrupletonMap<Integer, String>(1, "One", 2, "Two", 3, "Three", 4, "Four");
         for (Pair<Integer, String> keyValue : map.keyValuesView())
         {
             result.add(keyValue.getTwo());
         }
-        Assert.assertEquals(FastList.newListWith("One", "Two", "Three"), result);
+        Assert.assertEquals(FastList.newListWith("One", "Two", "Three", "Four"), result);
     }
 
     @Override
@@ -177,12 +178,12 @@ public class ImmutableTripletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         super.valuesView();
         MutableList<String> result = Lists.mutable.of();
-        ImmutableMap<Integer, String> map = new ImmutableTripletonMap<Integer, String>(1, "One", 2, "Two", 3, "Three");
+        ImmutableMap<Integer, String> map = new ImmutableQuadrupletonMap<Integer, String>(1, "One", 2, "Two", 3, "Three", 4, "Four");
         for (String value : map.valuesView())
         {
             result.add(value);
         }
-        Assert.assertEquals(FastList.newListWith("One", "Two", "Three"), result);
+        Assert.assertEquals(FastList.newListWith("One", "Two", "Three", "Four"), result);
     }
 
     @Override
@@ -191,20 +192,20 @@ public class ImmutableTripletonMapTest extends ImmutableMemoryEfficientMapTestCa
     {
         super.keysView();
         MutableList<Integer> result = Lists.mutable.of();
-        ImmutableMap<Integer, String> map = new ImmutableTripletonMap<Integer, String>(1, "One", 2, "Two", 3, "Three");
+        ImmutableMap<Integer, String> map = new ImmutableQuadrupletonMap<Integer, String>(1, "One", 2, "Two", 3, "Three", 4, "Four");
         for (Integer key : map.keysView())
         {
             result.add(key);
         }
-        Assert.assertEquals(FastList.newListWith(1, 2, 3), result);
+        Assert.assertEquals(FastList.newListWith(1, 2, 3, 4), result);
     }
 
     @Override
     @Test
     public void testToString()
     {
-        ImmutableMap<Integer, String> map = new ImmutableTripletonMap<Integer, String>(1, "One", 2, "Two", 3, "Three");
-        Assert.assertEquals("{1=One, 2=Two, 3=Three}", map.toString());
+        ImmutableMap<Integer, String> map = new ImmutableQuadrupletonMap<Integer, String>(1, "One", 2, "Two", 3, "Three", 4, "Four");
+        Assert.assertEquals("{1=One, 2=Two, 3=Three, 4=Four}", map.toString());
     }
 
     @Override
@@ -216,7 +217,7 @@ public class ImmutableTripletonMapTest extends ImmutableMemoryEfficientMapTestCa
         Verify.assertInstanceOf(ImmutableEmptyMap.class, empty);
 
         ImmutableMap<Integer, String> full = map.select(Predicates2.alwaysTrue());
-        Verify.assertInstanceOf(ImmutableTripletonMap.class, full);
+        Verify.assertInstanceOf(ImmutableQuadrupletonMap.class, full);
         Assert.assertEquals(map, full);
 
         ImmutableMap<Integer, String> one = map.select(new Predicate2<Integer, String>()
@@ -249,6 +250,26 @@ public class ImmutableTripletonMapTest extends ImmutableMemoryEfficientMapTestCa
         Verify.assertInstanceOf(ImmutableSingletonMap.class, three);
         Assert.assertEquals(new ImmutableSingletonMap<Integer, String>(3, "3"), three);
 
+        ImmutableMap<Integer, String> four = map.select(new Predicate2<Integer, String>()
+        {
+            public boolean accept(Integer argument1, String argument2)
+            {
+                return "4".equals(argument2);
+            }
+        });
+        Verify.assertInstanceOf(ImmutableSingletonMap.class, four);
+        Assert.assertEquals(new ImmutableSingletonMap<Integer, String>(4, "4"), four);
+
+        ImmutableMap<Integer, String> oneAndFour = map.select(new Predicate2<Integer, String>()
+        {
+            public boolean accept(Integer argument1, String argument2)
+            {
+                return "1".equals(argument2) || "4".equals(argument2);
+            }
+        });
+        Verify.assertInstanceOf(ImmutableDoubletonMap.class, oneAndFour);
+        Assert.assertEquals(new ImmutableDoubletonMap<Integer, String>(1, "1", 4, "4"), oneAndFour);
+
         ImmutableMap<Integer, String> oneAndThree = map.select(new Predicate2<Integer, String>()
         {
             public boolean accept(Integer argument1, String argument2)
@@ -269,6 +290,16 @@ public class ImmutableTripletonMapTest extends ImmutableMemoryEfficientMapTestCa
         Verify.assertInstanceOf(ImmutableDoubletonMap.class, oneAndTwo);
         Assert.assertEquals(new ImmutableDoubletonMap<Integer, String>(1, "1", 2, "2"), oneAndTwo);
 
+        ImmutableMap<Integer, String> twoAndFour = map.select(new Predicate2<Integer, String>()
+        {
+            public boolean accept(Integer argument1, String argument2)
+            {
+                return "2".equals(argument2) || "4".equals(argument2);
+            }
+        });
+        Verify.assertInstanceOf(ImmutableDoubletonMap.class, twoAndFour);
+        Assert.assertEquals(new ImmutableDoubletonMap<Integer, String>(2, "2", 4, "4"), twoAndFour);
+
         ImmutableMap<Integer, String> twoAndThree = map.select(new Predicate2<Integer, String>()
         {
             public boolean accept(Integer argument1, String argument2)
@@ -278,6 +309,56 @@ public class ImmutableTripletonMapTest extends ImmutableMemoryEfficientMapTestCa
         });
         Verify.assertInstanceOf(ImmutableDoubletonMap.class, twoAndThree);
         Assert.assertEquals(new ImmutableDoubletonMap<Integer, String>(2, "2", 3, "3"), twoAndThree);
+
+        ImmutableMap<Integer, String> threeAndFour = map.select(new Predicate2<Integer, String>()
+        {
+            public boolean accept(Integer argument1, String argument2)
+            {
+                return "3".equals(argument2) || "4".equals(argument2);
+            }
+        });
+        Verify.assertInstanceOf(ImmutableDoubletonMap.class, threeAndFour);
+        Assert.assertEquals(new ImmutableDoubletonMap<Integer, String>(3, "3", 4, "4"), threeAndFour);
+
+        ImmutableMap<Integer, String> twoThreeFour = map.select(new Predicate2<Integer, String>()
+        {
+            public boolean accept(Integer argument1, String argument2)
+            {
+                return "2".equals(argument2) || "3".equals(argument2) || "4".equals(argument2);
+            }
+        });
+        Verify.assertInstanceOf(ImmutableTripletonMap.class, twoThreeFour);
+        Assert.assertEquals(new ImmutableTripletonMap<Integer, String>(2, "2", 3, "3", 4, "4"), twoThreeFour);
+
+        ImmutableMap<Integer, String> oneThreeFour = map.select(new Predicate2<Integer, String>()
+        {
+            public boolean accept(Integer argument1, String argument2)
+            {
+                return "1".equals(argument2) || "3".equals(argument2) || "4".equals(argument2);
+            }
+        });
+        Verify.assertInstanceOf(ImmutableTripletonMap.class, oneThreeFour);
+        Assert.assertEquals(new ImmutableTripletonMap<Integer, String>(1, "1", 3, "3", 4, "4"), oneThreeFour);
+
+        ImmutableMap<Integer, String> oneTwoFour = map.select(new Predicate2<Integer, String>()
+        {
+            public boolean accept(Integer argument1, String argument2)
+            {
+                return "1".equals(argument2) || "2".equals(argument2) || "4".equals(argument2);
+            }
+        });
+        Verify.assertInstanceOf(ImmutableTripletonMap.class, oneTwoFour);
+        Assert.assertEquals(new ImmutableTripletonMap<Integer, String>(1, "1", 2, "2", 4, "4"), oneTwoFour);
+
+        ImmutableMap<Integer, String> oneTwoThree = map.select(new Predicate2<Integer, String>()
+        {
+            public boolean accept(Integer argument1, String argument2)
+            {
+                return "1".equals(argument2) || "2".equals(argument2) || "3".equals(argument2);
+            }
+        });
+        Verify.assertInstanceOf(ImmutableTripletonMap.class, oneTwoThree);
+        Assert.assertEquals(new ImmutableTripletonMap<Integer, String>(1, "1", 2, "2", 3, "3"), oneTwoThree);
     }
 
     @Override
@@ -289,14 +370,14 @@ public class ImmutableTripletonMapTest extends ImmutableMemoryEfficientMapTestCa
         Verify.assertInstanceOf(ImmutableEmptyMap.class, empty);
 
         ImmutableMap<Integer, String> full = map.reject(Predicates2.alwaysFalse());
-        Verify.assertInstanceOf(ImmutableTripletonMap.class, full);
+        Verify.assertInstanceOf(ImmutableQuadrupletonMap.class, full);
         Assert.assertEquals(map, full);
 
         ImmutableMap<Integer, String> one = map.reject(new Predicate2<Integer, String>()
         {
             public boolean accept(Integer argument1, String argument2)
             {
-                return "2".equals(argument2) || "3".equals(argument2);
+                return "2".equals(argument2) || "3".equals(argument2) || "4".equals(argument2);
             }
         });
         Verify.assertInstanceOf(ImmutableSingletonMap.class, one);
@@ -306,7 +387,7 @@ public class ImmutableTripletonMapTest extends ImmutableMemoryEfficientMapTestCa
         {
             public boolean accept(Integer argument1, String argument2)
             {
-                return "1".equals(argument2) || "3".equals(argument2);
+                return "1".equals(argument2) || "3".equals(argument2) || "4".equals(argument2);
             }
         });
         Verify.assertInstanceOf(ImmutableSingletonMap.class, two);
@@ -316,17 +397,37 @@ public class ImmutableTripletonMapTest extends ImmutableMemoryEfficientMapTestCa
         {
             public boolean accept(Integer argument1, String argument2)
             {
-                return "1".equals(argument2) || "2".equals(argument2);
+                return "1".equals(argument2) || "2".equals(argument2) || "4".equals(argument2);
             }
         });
         Verify.assertInstanceOf(ImmutableSingletonMap.class, three);
         Assert.assertEquals(new ImmutableSingletonMap<Integer, String>(3, "3"), three);
 
+        ImmutableMap<Integer, String> four = map.reject(new Predicate2<Integer, String>()
+        {
+            public boolean accept(Integer argument1, String argument2)
+            {
+                return "1".equals(argument2) || "2".equals(argument2) || "3".equals(argument2);
+            }
+        });
+        Verify.assertInstanceOf(ImmutableSingletonMap.class, four);
+        Assert.assertEquals(new ImmutableSingletonMap<Integer, String>(4, "4"), four);
+
+        ImmutableMap<Integer, String> oneAndFour = map.reject(new Predicate2<Integer, String>()
+        {
+            public boolean accept(Integer argument1, String argument2)
+            {
+                return "2".equals(argument2) || "3".equals(argument2);
+            }
+        });
+        Verify.assertInstanceOf(ImmutableDoubletonMap.class, oneAndFour);
+        Assert.assertEquals(new ImmutableDoubletonMap<Integer, String>(1, "1", 4, "4"), oneAndFour);
+
         ImmutableMap<Integer, String> oneAndThree = map.reject(new Predicate2<Integer, String>()
         {
             public boolean accept(Integer argument1, String argument2)
             {
-                return "2".equals(argument2);
+                return "2".equals(argument2) || "4".equals(argument2);
             }
         });
         Verify.assertInstanceOf(ImmutableDoubletonMap.class, oneAndThree);
@@ -336,21 +437,81 @@ public class ImmutableTripletonMapTest extends ImmutableMemoryEfficientMapTestCa
         {
             public boolean accept(Integer argument1, String argument2)
             {
-                return "3".equals(argument2);
+                return "3".equals(argument2) || "4".equals(argument2);
             }
         });
         Verify.assertInstanceOf(ImmutableDoubletonMap.class, oneAndTwo);
         Assert.assertEquals(new ImmutableDoubletonMap<Integer, String>(1, "1", 2, "2"), oneAndTwo);
 
+        ImmutableMap<Integer, String> twoAndFour = map.reject(new Predicate2<Integer, String>()
+        {
+            public boolean accept(Integer argument1, String argument2)
+            {
+                return "1".equals(argument2) || "3".equals(argument2);
+            }
+        });
+        Verify.assertInstanceOf(ImmutableDoubletonMap.class, twoAndFour);
+        Assert.assertEquals(new ImmutableDoubletonMap<Integer, String>(2, "2", 4, "4"), twoAndFour);
+
         ImmutableMap<Integer, String> twoAndThree = map.reject(new Predicate2<Integer, String>()
+        {
+            public boolean accept(Integer argument1, String argument2)
+            {
+                return "1".equals(argument2) || "4".equals(argument2);
+            }
+        });
+        Verify.assertInstanceOf(ImmutableDoubletonMap.class, twoAndThree);
+        Assert.assertEquals(new ImmutableDoubletonMap<Integer, String>(2, "2", 3, "3"), twoAndThree);
+
+        ImmutableMap<Integer, String> threeAndFour = map.reject(new Predicate2<Integer, String>()
+        {
+            public boolean accept(Integer argument1, String argument2)
+            {
+                return "1".equals(argument2) || "2".equals(argument2);
+            }
+        });
+        Verify.assertInstanceOf(ImmutableDoubletonMap.class, threeAndFour);
+        Assert.assertEquals(new ImmutableDoubletonMap<Integer, String>(3, "3", 4, "4"), threeAndFour);
+
+        ImmutableMap<Integer, String> twoThreeFour = map.reject(new Predicate2<Integer, String>()
         {
             public boolean accept(Integer argument1, String argument2)
             {
                 return "1".equals(argument2);
             }
         });
-        Verify.assertInstanceOf(ImmutableDoubletonMap.class, twoAndThree);
-        Assert.assertEquals(new ImmutableDoubletonMap<Integer, String>(2, "2", 3, "3"), twoAndThree);
+        Verify.assertInstanceOf(ImmutableTripletonMap.class, twoThreeFour);
+        Assert.assertEquals(new ImmutableTripletonMap<Integer, String>(2, "2", 3, "3", 4, "4"), twoThreeFour);
+
+        ImmutableMap<Integer, String> oneThreeFour = map.reject(new Predicate2<Integer, String>()
+        {
+            public boolean accept(Integer argument1, String argument2)
+            {
+                return "2".equals(argument2);
+            }
+        });
+        Verify.assertInstanceOf(ImmutableTripletonMap.class, oneThreeFour);
+        Assert.assertEquals(new ImmutableTripletonMap<Integer, String>(1, "1", 3, "3", 4, "4"), oneThreeFour);
+
+        ImmutableMap<Integer, String> oneTwoFour = map.reject(new Predicate2<Integer, String>()
+        {
+            public boolean accept(Integer argument1, String argument2)
+            {
+                return "3".equals(argument2);
+            }
+        });
+        Verify.assertInstanceOf(ImmutableTripletonMap.class, oneTwoFour);
+        Assert.assertEquals(new ImmutableTripletonMap<Integer, String>(1, "1", 2, "2", 4, "4"), oneTwoFour);
+
+        ImmutableMap<Integer, String> oneTwoThree = map.reject(new Predicate2<Integer, String>()
+        {
+            public boolean accept(Integer argument1, String argument2)
+            {
+                return "4".equals(argument2);
+            }
+        });
+        Verify.assertInstanceOf(ImmutableTripletonMap.class, oneTwoThree);
+        Assert.assertEquals(new ImmutableTripletonMap<Integer, String>(1, "1", 2, "2", 3, "3"), oneTwoThree);
     }
 
     @Override
@@ -379,24 +540,33 @@ public class ImmutableTripletonMapTest extends ImmutableMemoryEfficientMapTestCa
         });
         Assert.assertEquals(Tuples.pair(3, "3"), three);
 
+        Pair<Integer, String> four = map.detect(new Predicate2<Integer, String>()
+        {
+            public boolean accept(Integer argument1, String argument2)
+            {
+                return "4".equals(argument2);
+            }
+        });
+        Assert.assertEquals(Tuples.pair(4, "4"), four);
+
         Assert.assertNull(map.detect(Predicates2.alwaysFalse()));
     }
 
     @Override
     protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2)
     {
-        return new ImmutableTripletonMap<K, V>(key1, value1, key2, value2, null, null);
+        return new ImmutableQuadrupletonMap<K, V>(key1, value1, key2, value2, null, null, null, null);
     }
 
     @Override
     protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3)
     {
-        return new ImmutableTripletonMap<K, V>(key1, value1, key2, value2, key3, value3);
+        return new ImmutableQuadrupletonMap<K, V>(key1, value1, key2, value2, key3, value3, null, null);
     }
 
     @Override
     protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
     {
-        return new ImmutableTripletonMap<K, V>(key1, value1, key2, value2, key3, value3);
+        return new ImmutableQuadrupletonMap<K, V>(key1, value1, key2, value2, key3, value3, key4, value4);
     }
 }
