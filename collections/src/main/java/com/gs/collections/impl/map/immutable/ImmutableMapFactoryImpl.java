@@ -142,7 +142,7 @@ public final class ImmutableMapFactoryImpl implements ImmutableMapFactory
             return this.of();
         }
 
-        if (map.size() > 3)
+        if (map.size() > 4)
         {
             return new ImmutableUnifiedMap<K, V>(map);
         }
@@ -153,7 +153,6 @@ public final class ImmutableMapFactoryImpl implements ImmutableMapFactory
             case 1:
                 return this.of(entries[0].getKey(), entries[0].getValue());
             case 2:
-
                 return this.of(
                         entries[0].getKey(), entries[0].getValue(),
                         entries[1].getKey(), entries[1].getValue());
@@ -162,6 +161,12 @@ public final class ImmutableMapFactoryImpl implements ImmutableMapFactory
                         entries[0].getKey(), entries[0].getValue(),
                         entries[1].getKey(), entries[1].getValue(),
                         entries[2].getKey(), entries[2].getValue());
+            case 4:
+                return this.of(
+                        entries[0].getKey(), entries[0].getValue(),
+                        entries[1].getKey(), entries[1].getValue(),
+                        entries[2].getKey(), entries[2].getValue(),
+                        entries[3].getKey(), entries[3].getValue());
             default:
                 throw new AssertionError();
         }
