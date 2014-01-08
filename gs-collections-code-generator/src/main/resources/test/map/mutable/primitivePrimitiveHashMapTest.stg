@@ -28,7 +28,7 @@ import com.gs.collections.api.block.function.primitive.<name2>Function;
 import com.gs.collections.api.block.function.primitive.<name2>Function0;
 import com.gs.collections.api.block.function.primitive.Object<name2>ToObjectFunction;
 import com.gs.collections.api.block.function.primitive.<name2>To<name2>Function;
-<if(!sameTwoPrimitives)>import com.gs.collections.api.block.function.primitive.<name1>To<name2>Function<endif>;
+<if(!sameTwoPrimitives)>import com.gs.collections.api.block.function.primitive.<name1>To<name2>Function;<endif>
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.api.map.primitive.Mutable<name1><name2>Map;
 import org.junit.Assert;
