@@ -48,6 +48,7 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
@@ -264,6 +265,12 @@ public abstract class AbstractMutableMap<K, V> extends AbstractMapIterable<K, V>
         ShortArrayList result = new ShortArrayList(this.size());
         this.forEach(new CollectShortProcedure<V>(shortFunction, result));
         return result;
+    }
+
+    @Override
+    public <P, VV> MutableList<VV> collectWith(Function2<? super V, ? super P, ? extends VV> function, P parameter)
+    {
+        return this.collect(Functions.bind(function, parameter));
     }
 
     @Override

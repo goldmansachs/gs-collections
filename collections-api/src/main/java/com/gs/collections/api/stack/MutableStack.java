@@ -19,6 +19,7 @@ package com.gs.collections.api.stack;
 import java.util.Collection;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.ByteFunction;
 import com.gs.collections.api.block.function.primitive.CharFunction;
@@ -106,6 +107,8 @@ public interface MutableStack<T> extends StackIterable<T>
     MutableLongStack collectLong(LongFunction<? super T> longFunction);
 
     MutableShortStack collectShort(ShortFunction<? super T> shortFunction);
+
+    <P, V> MutableStack<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
 
     <V> MutableStack<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 

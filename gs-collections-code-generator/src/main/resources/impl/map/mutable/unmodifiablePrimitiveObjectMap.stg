@@ -292,14 +292,14 @@ public final class Unmodifiable<name>ObjectMap\<V>
         return this.map.chunk(size);
     }
 
-    public \<K, V1 extends Object> MutableMap\<K, V1> aggregateInPlaceBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends V1> zeroValueFactory, Procedure2\<? super V1, ? super V> mutatingAggregator)
+    public \<K, VV extends Object> MutableMap\<K, VV> aggregateInPlaceBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends VV> zeroValueFactory, Procedure2\<? super VV, ? super V> mutatingAggregator)
     {
-        return (MutableMap\<K, V1>) this.map.aggregateInPlaceBy(groupBy, zeroValueFactory, mutatingAggregator);
+        return (MutableMap\<K, VV>) this.map.aggregateInPlaceBy(groupBy, zeroValueFactory, mutatingAggregator);
     }
 
-    public \<K, V1 extends Object> MutableMap\<K, V1> aggregateBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends V1> zeroValueFactory, Function2\<? super V1, ? super V, ? extends V1> nonMutatingAggregator)
+    public \<K, VV extends Object> MutableMap\<K, VV> aggregateBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends VV> zeroValueFactory, Function2\<? super VV, ? super V, ? extends VV> nonMutatingAggregator)
     {
-        return (MutableMap\<K, V1>) this.map.aggregateBy(groupBy, zeroValueFactory, nonMutatingAggregator);
+        return (MutableMap\<K, VV>) this.map.aggregateBy(groupBy, zeroValueFactory, nonMutatingAggregator);
     }
 
     public MutableCollection\<V> reject(Predicate\<? super V> predicate)
@@ -327,7 +327,7 @@ public final class Unmodifiable<name>ObjectMap\<V>
         throw new UnsupportedOperationException("Cannot call clear() on " + this.getClass().getSimpleName());
     }
 
-    public \<V1> MutableCollection\<V1> collect(Function\<? super V, ? extends V1> function)
+    public \<VV> MutableCollection\<VV> collect(Function\<? super V, ? extends VV> function)
     {
         return this.map.collect(function);
     }
@@ -348,32 +348,37 @@ public final class Unmodifiable<name>ObjectMap\<V>
 
     <collectPrimitive("Short", "short")>
 
-    public \<P, V1 extends Object, R extends Collection\<V1>\> R collectWith(Function2\<? super V, ? super P, ? extends V1> function, P parameter, R targetCollection)
+    public \<P, VV> MutableCollection\<VV> collectWith(Function2\<? super V, ? super P, ? extends VV> function, P parameter)
+    {
+        return this.map.collectWith(function, parameter);
+    }
+
+    public \<P, VV extends Object, R extends Collection\<VV>\> R collectWith(Function2\<? super V, ? super P, ? extends VV> function, P parameter, R targetCollection)
     {
         return this.map.collectWith(function, parameter, targetCollection);
     }
 
-    public \<V1 extends Object, R extends Collection\<V1>\> R collect(Function\<? super V, ? extends V1> function, R target)
+    public \<VV extends Object, R extends Collection\<VV>\> R collect(Function\<? super V, ? extends VV> function, R target)
     {
         return this.map.collect(function, target);
     }
 
-    public \<V1 extends Object> MutableCollection\<V1> collectIf(Predicate\<? super V> predicate, Function\<? super V, ? extends V1> function)
+    public \<VV extends Object> MutableCollection\<VV> collectIf(Predicate\<? super V> predicate, Function\<? super V, ? extends VV> function)
     {
-        return (MutableCollection\<V1>) this.map.collectIf(predicate, function);
+        return (MutableCollection\<VV>) this.map.collectIf(predicate, function);
     }
 
-    public \<V1 extends Object, R extends Collection\<V1>\> R collectIf(Predicate\<? super V> predicate, Function\<? super V, ? extends V1> function, R target)
+    public \<VV extends Object, R extends Collection\<VV>\> R collectIf(Predicate\<? super V> predicate, Function\<? super V, ? extends VV> function, R target)
     {
         return this.map.collectIf(predicate, function, target);
     }
 
-    public \<V1 extends Object> RichIterable\<V1> flatCollect(Function\<? super V, ? extends Iterable\<V1>\> function)
+    public \<VV extends Object> RichIterable\<VV> flatCollect(Function\<? super V, ? extends Iterable\<VV>\> function)
     {
         return this.map.flatCollect(function);
     }
 
-    public \<V1 extends Object, R extends Collection\<V1>\> R flatCollect(Function\<? super V, ? extends Iterable\<V1>\> function, R target)
+    public \<VV extends Object, R extends Collection\<VV>\> R flatCollect(Function\<? super V, ? extends Iterable\<VV>\> function, R target)
     {
         return this.map.flatCollect(function, target);
     }
@@ -463,7 +468,7 @@ public final class Unmodifiable<name>ObjectMap\<V>
         return this.map.toSortedList(comparator);
     }
 
-    public \<V1 extends Comparable\<? super V1>\> MutableList\<V> toSortedListBy(Function\<? super V, ? extends V1> function)
+    public \<VV extends Comparable\<? super VV>\> MutableList\<V> toSortedListBy(Function\<? super V, ? extends VV> function)
     {
         return this.map.toSortedListBy(function);
     }
@@ -483,7 +488,7 @@ public final class Unmodifiable<name>ObjectMap\<V>
         return this.map.toSortedSet(comparator);
     }
 
-    public \<V1 extends Comparable\<? super V1>\> MutableSortedSet\<V> toSortedSetBy(Function\<? super V, ? extends V1> function)
+    public \<VV extends Comparable\<? super VV>\> MutableSortedSet\<V> toSortedSetBy(Function\<? super V, ? extends VV> function)
     {
         return this.map.toSortedSetBy(function);
     }
@@ -543,12 +548,12 @@ public final class Unmodifiable<name>ObjectMap\<V>
         return this.map.max();
     }
 
-    public \<V1 extends Comparable\<? super V1>\> V maxBy(Function\<? super V, ? extends V1> function)
+    public \<VV extends Comparable\<? super VV>\> V maxBy(Function\<? super V, ? extends VV> function)
     {
         return this.map.maxBy(function);
     }
 
-    public \<V1 extends Comparable\<? super V1>\> V minBy(Function\<? super V, ? extends V1> function)
+    public \<VV extends Comparable\<? super VV>\> V minBy(Function\<? super V, ? extends VV> function)
     {
         return this.map.minBy(function);
     }
@@ -631,22 +636,22 @@ public final class Unmodifiable<name>ObjectMap\<V>
         this.map.appendString(appendable, start, separator, end);
     }
 
-    public \<V1 extends Object> MutableMultimap\<V1, V> groupBy(Function\<? super V, ? extends V1> function)
+    public \<VV extends Object> MutableMultimap\<VV, V> groupBy(Function\<? super V, ? extends VV> function)
     {
-        return (MutableMultimap\<V1, V>) this.map.groupBy(function);
+        return (MutableMultimap\<VV, V>) this.map.groupBy(function);
     }
 
-    public \<V1 extends Object, R extends MutableMultimap\<V1, V>\> R groupBy(Function\<? super V, ? extends V1> function, R target)
+    public \<VV extends Object, R extends MutableMultimap\<VV, V>\> R groupBy(Function\<? super V, ? extends VV> function, R target)
     {
         return this.map.groupBy(function, target);
     }
 
-    public \<V1 extends Object> MutableMultimap\<V1, V> groupByEach(Function\<? super V, ? extends Iterable\<V1>\> function)
+    public \<VV extends Object> MutableMultimap\<VV, V> groupByEach(Function\<? super V, ? extends Iterable\<VV>\> function)
     {
-        return (MutableMultimap\<V1, V>) this.map.groupByEach(function);
+        return (MutableMultimap\<VV, V>) this.map.groupByEach(function);
     }
 
-    public \<V1 extends Object, R extends MutableMultimap\<V1, V>\> R groupByEach(Function\<? super V, ? extends Iterable\<V1>\> function, R target)
+    public \<VV extends Object, R extends MutableMultimap\<VV, V>\> R groupByEach(Function\<? super V, ? extends Iterable\<VV>\> function, R target)
     {
         return this.map.groupByEach(function, target);
     }

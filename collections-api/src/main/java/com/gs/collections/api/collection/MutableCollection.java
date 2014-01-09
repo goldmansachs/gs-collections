@@ -273,24 +273,7 @@ public interface MutableCollection<T>
 
     MutableShortCollection collectShort(ShortFunction<? super T> shortFunction);
 
-    /**
-     * Same as collect with a Function2 and specified parameter which is passed to the block
-     * <p/>
-     * <pre>e.g.
-     * Function2<Integer, Integer, Integer> addParameterFunction =
-     * new Function2<Integer, Integer, Integer>()
-     * {
-     *      public Integer value(final Integer each, final Integer parameter)
-     *      {
-     *          return each + parameter;
-     *      }
-     * };
-     * FastList.newListWith(1, 2, 3).collectWith(addParameterFunction, Integer.valueOf(1));
-     * </pre>
-     */
-    <P, V> MutableCollection<V> collectWith(
-            Function2<? super T, ? super P, ? extends V> function,
-            P parameter);
+    <P, V> MutableCollection<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
 
     /**
      * Returns a new MutableCollection with the results of applying the specified function to each element of the source

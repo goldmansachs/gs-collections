@@ -20,6 +20,7 @@ import java.util.Collections;
 import java.util.Map;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.ByteFunction;
 import com.gs.collections.api.block.function.primitive.CharFunction;
@@ -644,5 +645,18 @@ public class FunctionsTest
     {
         Class<?> objectClass = Functions.classForName().valueOf("java.lang.Object");
         Assert.assertSame(Object.class, objectClass);
+    }
+
+    @Test
+    public void bind_function2_parameter()
+    {
+        MutableCollection<Integer> multiplied = FastList.newListWith(1, 2, 3, 4, 5).collect(Functions.bind(new Function2<Integer, Integer, Integer>()
+        {
+            public Integer value(Integer value, Integer parameter)
+            {
+                return value * parameter;
+            }
+        }, 2));
+        Verify.assertContainsAll(multiplied, 2, 4, 6, 8, 10);
     }
 }

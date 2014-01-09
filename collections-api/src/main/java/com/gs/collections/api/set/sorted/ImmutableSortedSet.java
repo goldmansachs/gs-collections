@@ -20,6 +20,7 @@ import java.util.Set;
 import java.util.SortedSet;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.ByteFunction;
 import com.gs.collections.api.block.function.primitive.CharFunction;
@@ -93,6 +94,8 @@ public interface ImmutableSortedSet<T>
     ImmutableLongList collectLong(LongFunction<? super T> longFunction);
 
     ImmutableShortList collectShort(ShortFunction<? super T> shortFunction);
+
+    <P, V> ImmutableList<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
 
     <V> ImmutableList<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 

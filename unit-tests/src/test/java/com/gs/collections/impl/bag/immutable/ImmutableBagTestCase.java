@@ -409,20 +409,34 @@ public abstract class ImmutableBagTestCase
         }
     }
 
+    private Function2<String, String, String> generateAssertingPassThroughFunction2(final String valueToAssert)
+    {
+        return new Function2<String, String, String>()
+        {
+            public String value(String argument1, String argument2)
+            {
+                Assert.assertEquals(valueToAssert, argument2);
+                return argument1;
+            }
+        };
+    }
+
     @Test
     public void collectWith()
     {
         ImmutableBag<String> strings = this.newBag();
 
-        final String argument = "thing";
-        Assert.assertEquals(strings, strings.collectWith(new Function2<String, String, String>()
-        {
-            public String value(String argument1, String argument2)
-            {
-                Assert.assertEquals(argument, argument2);
-                return argument1;
-            }
-        }, argument, HashBag.<String>newBag()));
+        String argument = "thing";
+        Assert.assertEquals(strings, strings.collectWith(this.generateAssertingPassThroughFunction2(argument), argument));
+    }
+
+    @Test
+    public void collectWithToTarget()
+    {
+        ImmutableBag<String> strings = this.newBag();
+
+        String argument = "thing";
+        Assert.assertEquals(strings, strings.collectWith(this.generateAssertingPassThroughFunction2(argument), argument, HashBag.<String>newBag()));
     }
 
     @Test

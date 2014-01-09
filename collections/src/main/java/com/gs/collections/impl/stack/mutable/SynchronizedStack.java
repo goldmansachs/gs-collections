@@ -337,6 +337,14 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
         }
     }
 
+    public <P, V> MutableStack<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.collectWith(function, parameter);
+        }
+    }
+
     public <P, V, R extends Collection<V>> R collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter, R targetCollection)
     {
         synchronized (this.lock)

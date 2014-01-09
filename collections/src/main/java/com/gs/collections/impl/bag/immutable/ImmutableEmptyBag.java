@@ -345,6 +345,11 @@ final class ImmutableEmptyBag<T>
         return target;
     }
 
+    public <P, V> ImmutableBag<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
+    {
+        return (ImmutableBag<V>) INSTANCE;
+    }
+
     public <P, V, R extends Collection<V>> R collectWith(
             Function2<? super T, ? super P, ? extends V> function, P parameter, R targetCollection)
     {

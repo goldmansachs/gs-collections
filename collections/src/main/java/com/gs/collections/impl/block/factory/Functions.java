@@ -20,6 +20,7 @@ import java.util.Map;
 
 import com.gs.collections.api.block.SerializableComparator;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.ByteFunction;
 import com.gs.collections.api.block.function.primitive.CharFunction;
@@ -297,6 +298,18 @@ public final class Functions
     public static <V2> Function<Pair<?, V2>, V2> secondOfPair()
     {
         return (Function<Pair<?, V2>, V2>) SECOND_OF_PAIR_FUNCTION;
+    }
+
+    /**
+     * Bind the parameter passed to a Function2 into a new Function.
+     *
+     * @param function The Function2 to delegate the invocation to.
+     * @param parameter The parameter the use in the invocation of the delegate function.
+     * @return A new Function
+     */
+    public static <T, P, R> Function<T, R> bind(Function2<? super T, ? super P, ? extends R> function, P parameter)
+    {
+        return new BindFunction2<T, P, R>(function, parameter);
     }
 
     /**
@@ -983,6 +996,24 @@ public final class Functions
         public void value(T1 each, T3 constant)
         {
             this.delegate.value(this.function.valueOf(each), constant);
+        }
+    }
+
+    private static final class BindFunction2<T1, T2, T3> implements Function<T1, T3>
+    {
+        private static final long serialVersionUID = 1L;
+        private final Function2<? super T1, ? super T2, ? extends T3> delegate;
+        private final T2 parameter;
+
+        private BindFunction2(Function2<? super T1, ? super T2, ? extends T3> delegate, T2 parameter)
+        {
+            this.delegate = delegate;
+            this.parameter = parameter;
+        }
+
+        public T3 valueOf(T1 object)
+        {
+            return this.delegate.value(object, this.parameter);
         }
     }
 }

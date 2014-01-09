@@ -26,7 +26,6 @@ import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
@@ -307,15 +306,6 @@ public class ImmutableArrayBag<T>
             }
         });
         return ImmutableArrayBag.copyFrom(result);
-    }
-
-    @Override
-    public <P, V, R extends Collection<V>> R collectWith(
-            Function2<? super T, ? super P, ? extends V> function,
-            P parameter,
-            R targetCollection)
-    {
-        return IterableIterate.collectWith(this, function, parameter, targetCollection);
     }
 
     public <V> ImmutableBag<V> collectIf(

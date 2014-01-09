@@ -31,6 +31,7 @@ import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.Function3;
 import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
@@ -451,6 +452,16 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         MutableSortedBag<Integer> integers = TreeBag.newBagWith(Comparators.reverseNaturalOrder(), 4, 3, 1, 1);
         MutableBag<Holder> holders = integers.collectWith(Holder.FROM_INT_INT, 10);
         Assert.assertEquals(HashBag.<Holder>newBagWith(new Holder(14), new Holder(13), new Holder(11), new Holder(11)), holders);
+    }
+
+    @Override
+    @Test
+    public void collectWithTarget()
+    {
+        super.collectWith();
+        MutableSortedBag<Integer> integers = TreeBag.newBagWith(Comparators.reverseNaturalOrder(), 4, 3, 1, 1);
+        MutableBag<Holder> holders = integers.collectWith(Holder.FROM_INT_INT, 10, TreeBag.<Holder>newBag(Functions.toIntComparator(Holder.TO_NUMBER)));
+        Assert.assertEquals(TreeBag.<Holder>newBagWith(Functions.toIntComparator(Holder.TO_NUMBER), new Holder(14), new Holder(13), new Holder(11), new Holder(11)), holders);
     }
 
     @Override
@@ -1691,6 +1702,13 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
             public MutableList<Holder> valueOf(Integer object)
             {
                 return FastList.newListWith(new Holder(object), new Holder(object));
+            }
+        };
+        private static final IntFunction<Holder> TO_NUMBER = new IntFunction<Holder>()
+        {
+            public int intValueOf(Holder holder)
+            {
+                return holder.number;
             }
         };
         private final int number;

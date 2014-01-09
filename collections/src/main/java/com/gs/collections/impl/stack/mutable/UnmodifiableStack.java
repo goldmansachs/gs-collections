@@ -199,6 +199,11 @@ public final class UnmodifiableStack<T> implements MutableStack<T>, Serializable
         return this.mutableStack.collectShort(shortFunction);
     }
 
+    public <P, V> MutableStack<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
+    {
+        return this.mutableStack.collectWith(function, parameter);
+    }
+
     public <V> MutableStack<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
     {
         return this.mutableStack.collectIf(predicate, function);

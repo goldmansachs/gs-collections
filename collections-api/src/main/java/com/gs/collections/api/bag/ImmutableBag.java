@@ -25,6 +25,7 @@ import com.gs.collections.api.bag.primitive.ImmutableIntBag;
 import com.gs.collections.api.bag.primitive.ImmutableLongBag;
 import com.gs.collections.api.bag.primitive.ImmutableShortBag;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.ByteFunction;
 import com.gs.collections.api.block.function.primitive.CharFunction;
@@ -85,6 +86,8 @@ public interface ImmutableBag<T> extends Bag<T>, ImmutableCollection<T>
     ImmutableLongBag collectLong(LongFunction<? super T> longFunction);
 
     ImmutableShortBag collectShort(ShortFunction<? super T> shortFunction);
+
+    <P, V> ImmutableBag<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
 
     <V> ImmutableBag<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 

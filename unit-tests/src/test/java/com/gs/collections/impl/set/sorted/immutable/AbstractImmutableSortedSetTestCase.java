@@ -25,6 +25,7 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.ImmutableList;
@@ -41,6 +42,7 @@ import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
+import com.gs.collections.impl.block.factory.primitive.IntToIntFunctions;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.block.function.PassThruFunction0;
@@ -250,6 +252,19 @@ public abstract class AbstractImmutableSortedSetTestCase
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());
         Verify.assertListsEqual(integers.toList(), integers.collect(Functions.getIntegerPassThru()).castToList());
+    }
+
+    @Test
+    public void collectWith()
+    {
+        ImmutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());
+        Verify.assertListsEqual(integers.toList(), integers.collectWith(new Function2<Integer, Integer, Integer>()
+        {
+            public Integer value(Integer value, Integer parameter)
+            {
+                return value / parameter;
+            }
+        }, 1).castToList());
     }
 
     @Test

@@ -66,27 +66,11 @@ public interface MutableBag<T>
 
     MutableBag<T> newEmpty();
 
-    <P, V> MutableBag<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
-
     MutableBag<T> asUnmodifiable();
 
     MutableBag<T> asSynchronized();
 
     PartitionMutableBag<T> partition(Predicate<? super T> predicate);
-
-    <V> MutableBag<V> collect(Function<? super T, ? extends V> function);
-
-    MutableBooleanBag collectBoolean(BooleanFunction<? super T> booleanFunction);
-
-    MutableDoubleBag collectDouble(DoubleFunction<? super T> doubleFunction);
-
-    MutableFloatBag collectFloat(FloatFunction<? super T> floatFunction);
-
-    MutableLongBag collectLong(LongFunction<? super T> longFunction);
-
-    MutableShortBag collectShort(ShortFunction<? super T> shortFunction);
-
-    <V> MutableBag<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
 
     <V> MutableBagMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
 
@@ -106,13 +90,29 @@ public interface MutableBag<T>
 
     <S> MutableBag<S> selectInstancesOf(Class<S> clazz);
 
+    <V> MutableBag<V> collect(Function<? super T, ? extends V> function);
+
     MutableByteBag collectByte(ByteFunction<? super T> byteFunction);
 
     MutableCharBag collectChar(CharFunction<? super T> charFunction);
 
     MutableIntBag collectInt(IntFunction<? super T> intFunction);
 
+    MutableBooleanBag collectBoolean(BooleanFunction<? super T> booleanFunction);
+
+    MutableDoubleBag collectDouble(DoubleFunction<? super T> doubleFunction);
+
+    MutableFloatBag collectFloat(FloatFunction<? super T> floatFunction);
+
+    MutableLongBag collectLong(LongFunction<? super T> longFunction);
+
+    MutableShortBag collectShort(ShortFunction<? super T> shortFunction);
+
+    <P, V> MutableBag<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
+
     <V> MutableBag<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
+
+    <V> MutableBag<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
 
     void addOccurrences(T item, int occurrences);
 

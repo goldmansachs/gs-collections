@@ -183,4 +183,26 @@ public class StringFunctionsTest
                         + "aW9ucyRUb1ByaW1pdGl2ZVNob3J0RnVuY3Rpb24AAAAAAAAAAQIAAHhw",
                 StringFunctions.toPrimitiveShort());
     }
+
+    @Test
+    public void append()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAERjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlN0cmluZ0Z1bmN0\n"
+                        + "aW9ucyRBcHBlbmRGdW5jdGlvbgAAAAAAAAABAgABTAANdmFsdWVUb0FwcGVuZHQAEkxqYXZhL2xh\n"
+                        + "bmcvU3RyaW5nO3hwcA==",
+                StringFunctions.append(null));
+    }
+
+    @Test
+    public void prepend()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAEVjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlN0cmluZ0Z1bmN0\n"
+                        + "aW9ucyRQcmVwZW5kRnVuY3Rpb24AAAAAAAAAAQIAAUwADnZhbHVlVG9QcmVwZW5kdAASTGphdmEv\n"
+                        + "bGFuZy9TdHJpbmc7eHBw",
+                StringFunctions.prepend(null));
+    }
 }

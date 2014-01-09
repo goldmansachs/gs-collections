@@ -339,6 +339,11 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
         return this.valuesView().collectIf(predicate, function, target);
     }
 
+    public <P, VV> RichIterable<VV> collectWith(Function2<? super V, ? super P, ? extends VV> function, P parameter)
+    {
+        return this.valuesView().collectWith(function, parameter);
+    }
+
     public <P, R, C extends Collection<R>> C collectWith(Function2<? super V, ? super P, ? extends R> function, P parameter, C targetCollection)
     {
         return this.valuesView().collectWith(function, parameter, targetCollection);

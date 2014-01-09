@@ -20,6 +20,7 @@ import java.util.Comparator;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.ByteFunction;
 import com.gs.collections.api.block.function.primitive.CharFunction;
@@ -31,6 +32,7 @@ import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.list.ListIterable;
+import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.BooleanList;
 import com.gs.collections.api.list.primitive.ByteList;
 import com.gs.collections.api.list.primitive.CharList;
@@ -123,6 +125,8 @@ public interface SortedSetIterable<T>
     LongList collectLong(LongFunction<? super T> longFunction);
 
     ShortList collectShort(ShortFunction<? super T> shortFunction);
+
+    <P, V> ListIterable<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
 
     <V> ListIterable<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 

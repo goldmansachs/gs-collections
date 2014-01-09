@@ -348,6 +348,15 @@ public abstract class StackIterableTestCase
     {
         StackIterable<Integer> stack = this.newStackFromTopToBottom(3, 2, 1);
         Assert.assertEquals(
+                ArrayStack.newStackFromTopToBottom(4, 3, 2),
+                stack.collectWith(AddFunction.INTEGER, 1));
+    }
+
+    @Test
+    public void collectWithTarget()
+    {
+        StackIterable<Integer> stack = this.newStackFromTopToBottom(3, 2, 1);
+        Assert.assertEquals(
                 FastList.newListWith(4, 3, 2),
                 stack.collectWith(AddFunction.INTEGER, 1, FastList.<Integer>newList()));
     }

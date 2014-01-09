@@ -21,6 +21,7 @@ import java.util.Set;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.ByteFunction;
 import com.gs.collections.api.block.function.primitive.CharFunction;
@@ -48,6 +49,7 @@ import com.gs.collections.api.set.primitive.ImmutableIntSet;
 import com.gs.collections.api.set.primitive.ImmutableLongSet;
 import com.gs.collections.api.set.primitive.ImmutableShortSet;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.CollectIfProcedure;
 import com.gs.collections.impl.block.procedure.CollectProcedure;
@@ -248,6 +250,11 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
         ShortHashSet result = new ShortHashSet(this.size());
         this.forEach(new CollectShortProcedure<T>(shortFunction, result));
         return result.toImmutable();
+    }
+
+    public <P, V> ImmutableSet<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
+    {
+        return this.collect(Functions.bind(function, parameter));
     }
 
     public <V> ImmutableSet<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)

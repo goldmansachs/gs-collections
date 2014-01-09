@@ -367,7 +367,7 @@ final class Immutable<name>ObjectSingletonMap\<V> extends AbstractImmutable<name
         return Lists.immutable.with();
     }
 
-    public \<V1> ImmutableCollection\<V1> collect(Function\<? super V, ? extends V1> function)
+    public \<VV> ImmutableCollection\<VV> collect(Function\<? super V, ? extends VV> function)
     {
         return Lists.immutable.with(function.valueOf(this.value1));
     }
@@ -388,12 +388,12 @@ final class Immutable<name>ObjectSingletonMap\<V> extends AbstractImmutable<name
 
     <collectPrimitive("Short", "short")>
 
-    public \<V1> RichIterable\<V1> collectIf(Predicate\<? super V> predicate, Function\<? super V, ? extends V1> function)
+    public \<VV> RichIterable\<VV> collectIf(Predicate\<? super V> predicate, Function\<? super V, ? extends VV> function)
     {
-        return predicate.accept(this.value1) ? Lists.immutable.with(function.valueOf(this.value1)) : Lists.immutable.\<V1>with();
+        return predicate.accept(this.value1) ? Lists.immutable.with(function.valueOf(this.value1)) : Lists.immutable.\<VV>with();
     }
 
-    public \<V1> RichIterable\<V1> flatCollect(Function\<? super V, ? extends Iterable\<V1>\> function)
+    public \<VV> RichIterable\<VV> flatCollect(Function\<? super V, ? extends Iterable\<VV>\> function)
     {
         return Lists.immutable.withAll(function.valueOf(this.value1));
     }
@@ -616,14 +616,14 @@ final class Immutable<name>ObjectSingletonMap\<V> extends AbstractImmutable<name
         }
     }
 
-    public \<V1> Multimap\<V1, V> groupBy(Function\<? super V, ? extends V1> function)
+    public \<VV> Multimap\<VV, V> groupBy(Function\<? super V, ? extends VV> function)
     {
-        return new FastListMultimap\<V1, V>(Tuples.pair(function.valueOf(this.value1), this.value1));
+        return new FastListMultimap\<VV, V>(Tuples.pair(function.valueOf(this.value1), this.value1));
     }
 
-    public \<V1> Multimap\<V1, V> groupByEach(Function\<? super V, ? extends Iterable\<V1>\> function)
+    public \<VV> Multimap\<VV, V> groupByEach(Function\<? super V, ? extends Iterable\<VV>\> function)
     {
-        return this.groupByEach(function, FastListMultimap.\<V1, V>newMultimap());
+        return this.groupByEach(function, FastListMultimap.\<VV, V>newMultimap());
     }
 
     public \<S> RichIterable\<Pair\<V, S>\> zip(Iterable\<S> that)
@@ -657,58 +657,58 @@ final class Immutable<name>ObjectSingletonMap\<V> extends AbstractImmutable<name
         return result;
     }
 
-    public \<K, V1> MapIterable\<K, V1> aggregateInPlaceBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends V1> zeroValueFactory, Procedure2\<? super V1, ? super V> mutatingAggregator)
+    public \<K, VV> MapIterable\<K, VV> aggregateInPlaceBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends VV> zeroValueFactory, Procedure2\<? super VV, ? super V> mutatingAggregator)
     {
-        MutableMap\<K, V1> map = UnifiedMap.newMap();
-        this.forEach(new MutatingAggregationProcedure\<V, K, V1>(map, groupBy, zeroValueFactory, mutatingAggregator));
+        MutableMap\<K, VV> map = UnifiedMap.newMap();
+        this.forEach(new MutatingAggregationProcedure\<V, K, VV>(map, groupBy, zeroValueFactory, mutatingAggregator));
         return map;
     }
 
-    public \<K, V1> MapIterable\<K, V1> aggregateBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends V1> zeroValueFactory, Function2\<? super V1, ? super V, ? extends V1> nonMutatingAggregator)
+    public \<K, VV> MapIterable\<K, VV> aggregateBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends VV> zeroValueFactory, Function2\<? super VV, ? super V, ? extends VV> nonMutatingAggregator)
     {
-        MutableMap\<K, V1> map = UnifiedMap.newMap();
-        this.forEach(new NonMutatingAggregationProcedure\<V, K, V1>(map, groupBy, zeroValueFactory, nonMutatingAggregator));
+        MutableMap\<K, VV> map = UnifiedMap.newMap();
+        this.forEach(new NonMutatingAggregationProcedure\<V, K, VV>(map, groupBy, zeroValueFactory, nonMutatingAggregator));
         return map;
     }
 
-    public \<V1, R extends MutableMultimap\<V1, V>\> R groupByEach(Function\<? super V, ? extends Iterable\<V1>\> function, R target)
+    public \<VV, R extends MutableMultimap\<VV, V>\> R groupByEach(Function\<? super V, ? extends Iterable\<VV>\> function, R target)
     {
         return IterableIterate.groupByEach(this, function, target);
     }
 
-    public \<V1, R extends MutableMultimap\<V1, V>\> R groupBy(Function\<? super V, ? extends V1> function, R target)
+    public \<VV, R extends MutableMultimap\<VV, V>\> R groupBy(Function\<? super V, ? extends VV> function, R target)
     {
         target.put(function.valueOf(this.value1), this.value1);
         return target;
     }
 
-    public \<V1 extends Comparable\<? super V1>\> V maxBy(Function\<? super V, ? extends V1> function)
+    public \<VV extends Comparable\<? super VV>\> V maxBy(Function\<? super V, ? extends VV> function)
     {
         return this.value1;
     }
 
-    public \<V1 extends Comparable\<? super V1>\> V minBy(Function\<? super V, ? extends V1> function)
+    public \<VV extends Comparable\<? super VV>\> V minBy(Function\<? super V, ? extends VV> function)
     {
         return this.value1;
     }
 
-    public \<V1 extends Comparable\<? super V1>\> MutableSortedSet\<V> toSortedSetBy(Function\<? super V, ? extends V1> function)
+    public \<VV extends Comparable\<? super VV>\> MutableSortedSet\<V> toSortedSetBy(Function\<? super V, ? extends VV> function)
     {
         return SortedSets.mutable.with(this.value1);
     }
 
-    public \<V1 extends Comparable\<? super V1>\> MutableList\<V> toSortedListBy(Function\<? super V, ? extends V1> function)
+    public \<VV extends Comparable\<? super VV>\> MutableList\<V> toSortedListBy(Function\<? super V, ? extends VV> function)
     {
         return Lists.mutable.of(this.value1);
     }
 
-    public \<V1, R extends Collection\<V1>\> R flatCollect(Function\<? super V, ? extends Iterable\<V1>\> function, R target)
+    public \<VV, R extends Collection\<VV>\> R flatCollect(Function\<? super V, ? extends Iterable\<VV>\> function, R target)
     {
         Iterate.addAllTo(function.valueOf(this.value1), target);
         return target;
     }
 
-    public \<V1, R extends Collection\<V1>\> R collectIf(Predicate\<? super V> predicate, Function\<? super V, ? extends V1> function, R target)
+    public \<VV, R extends Collection\<VV>\> R collectIf(Predicate\<? super V> predicate, Function\<? super V, ? extends VV> function, R target)
     {
         if (predicate.accept(this.value1))
         {
@@ -717,13 +717,18 @@ final class Immutable<name>ObjectSingletonMap\<V> extends AbstractImmutable<name
         return target;
     }
 
-    public \<P, V1, R extends Collection\<V1>\> R collectWith(Function2\<? super V, ? super P, ? extends V1> function, P parameter, R targetCollection)
+    public \<P, VV> ImmutableCollection\<VV> collectWith(Function2\<? super V, ? super P, ? extends VV> function, P parameter)
+    {
+        return Lists.immutable.with(function.value(this.value1, parameter));
+    }
+
+    public \<P, VV, R extends Collection\<VV>\> R collectWith(Function2\<? super V, ? super P, ? extends VV> function, P parameter, R targetCollection)
     {
         targetCollection.add(function.value(this.value1, parameter));
         return targetCollection;
     }
 
-    public \<V1, R extends Collection\<V1>\> R collect(Function\<? super V, ? extends V1> function, R target)
+    public \<VV, R extends Collection\<VV>\> R collect(Function\<? super V, ? extends VV> function, R target)
     {
         target.add(function.valueOf(this.value1));
         return target;

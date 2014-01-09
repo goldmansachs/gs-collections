@@ -487,6 +487,15 @@ public class SynchronizedSortedMap<K, V>
         }
     }
 
+    @Override
+    public <P, VV> MutableList<VV> collectWith(Function2<? super V, ? super P, ? extends VV> function, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.getSortedMap().collectWith(function, parameter);
+        }
+    }
+
     public <R> MutableList<R> collectIf(
             Predicate<? super V> predicate,
             Function<? super V, ? extends R> function)

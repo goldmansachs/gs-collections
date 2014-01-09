@@ -418,6 +418,11 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
         return this.delegate.asReversed().collect(function, target);
     }
 
+    public <P, V> ArrayStack<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
+    {
+        return ArrayStack.newStackFromTopToBottom(this.delegate.asReversed().collectWith(function, parameter).toList());
+    }
+
     public <V> ArrayStack<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
     {
         return ArrayStack.newStackFromTopToBottom(this.delegate.asReversed().collectIf(predicate, function).toList());

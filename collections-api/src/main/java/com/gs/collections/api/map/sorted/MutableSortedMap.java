@@ -191,6 +191,8 @@ public interface MutableSortedMap<K, V>
 
     MutableShortList collectShort(ShortFunction<? super V> shortFunction);
 
+    <P, VV> MutableList<VV> collectWith(Function2<? super V, ? super P, ? extends VV> function, P parameter);
+
     <R> MutableList<R> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function);
 
     <R> MutableList<R> flatCollect(Function<? super V, ? extends Iterable<R>> function);

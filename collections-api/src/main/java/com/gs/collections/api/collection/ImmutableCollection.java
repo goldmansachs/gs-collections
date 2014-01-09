@@ -90,6 +90,8 @@ public interface ImmutableCollection<T>
 
     ImmutableShortCollection collectShort(ShortFunction<? super T> shortFunction);
 
+    <P, V> ImmutableCollection<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
+
     <V> ImmutableCollection<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 
     <V> ImmutableCollection<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);

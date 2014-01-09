@@ -21,6 +21,7 @@ import java.util.List;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.ByteFunction;
 import com.gs.collections.api.block.function.primitive.CharFunction;
@@ -140,6 +141,8 @@ public interface StackIterable<T> extends RichIterable<T>
     LongStack collectLong(LongFunction<? super T> longFunction);
 
     ShortStack collectShort(ShortFunction<? super T> shortFunction);
+
+    <P, V> StackIterable<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
 
     <V> StackIterable<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 

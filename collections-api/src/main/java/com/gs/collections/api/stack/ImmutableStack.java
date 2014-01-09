@@ -17,6 +17,7 @@
 package com.gs.collections.api.stack;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.ByteFunction;
 import com.gs.collections.api.block.function.primitive.CharFunction;
@@ -74,6 +75,8 @@ public interface ImmutableStack<T> extends StackIterable<T>
     ImmutableLongStack collectLong(LongFunction<? super T> longFunction);
 
     ImmutableShortStack collectShort(ShortFunction<? super T> shortFunction);
+
+    <P, V> ImmutableStack<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
 
     <V> ImmutableStack<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 

@@ -23,6 +23,7 @@ import java.util.SortedSet;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.ByteFunction;
 import com.gs.collections.api.block.function.primitive.CharFunction;
@@ -262,6 +263,11 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
         MutableList<V> result = Lists.mutable.of();
         this.forEach(new CollectProcedure<T, V>(function, result));
         return result.toImmutable();
+    }
+
+    public <P, V> ImmutableList<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
+    {
+        return this.collect(Functions.bind(function, parameter));
     }
 
     public <V> ImmutableList<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)

@@ -22,6 +22,7 @@ import java.util.ListIterator;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.ByteFunction;
 import com.gs.collections.api.block.function.primitive.CharFunction;
@@ -195,6 +196,8 @@ public interface ListIterable<T>
     LongList collectLong(LongFunction<? super T> longFunction);
 
     ShortList collectShort(ShortFunction<? super T> shortFunction);
+
+    <P, V> ListIterable<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
 
     <V> ListIterable<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 

@@ -97,6 +97,7 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions0;
+import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Procedures2;
 import com.gs.collections.impl.block.procedure.MapCollectProcedure;
@@ -808,9 +809,9 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         return result;
     }
 
-    public \<V1> MutableCollection\<V1> collect(Function\<? super V, ? extends V1> function)
+    public \<VV> MutableCollection\<VV> collect(Function\<? super V, ? extends VV> function)
     {
-        return this.collect(function, FastList.\<V1>newList(this.size()));
+        return this.collect(function, FastList.\<VV>newList(this.size()));
     }
 
     <collectPrimitive("Boolean", "boolean")>
@@ -829,7 +830,12 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
 
     <collectPrimitive("Short", "short")>
 
-    public \<P, V1, R extends Collection\<V1>\> R collectWith(Function2\<? super V, ? super P, ? extends V1> function, P parameter, R targetCollection)
+    public \<P, VV> MutableCollection\<VV> collectWith(Function2\<? super V, ? super P, ? extends VV> function, P parameter)
+    {
+        return this.collect(Functions.bind(function, parameter));
+    }
+
+    public \<P, VV, R extends Collection\<VV>\> R collectWith(Function2\<? super V, ? super P, ? extends VV> function, P parameter, R targetCollection)
     {
         if (this.sentinelValues != null)
         {
@@ -852,7 +858,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         return targetCollection;
     }
 
-    public \<V1, R extends Collection\<V1>\> R collect(Function\<? super V, ? extends V1> function, R target)
+    public \<VV, R extends Collection\<VV>\> R collect(Function\<? super V, ? extends VV> function, R target)
     {
         if (this.sentinelValues != null)
         {
@@ -875,12 +881,12 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         return target;
     }
 
-    public \<V1> MutableList\<V1> collectIf(Predicate\<? super V> predicate, Function\<? super V, ? extends V1> function)
+    public \<VV> MutableList\<VV> collectIf(Predicate\<? super V> predicate, Function\<? super V, ? extends VV> function)
     {
-        return this.collectIf(predicate, function, FastList.\<V1>newList());
+        return this.collectIf(predicate, function, FastList.\<VV>newList());
     }
 
-    public \<V1, R extends Collection\<V1>\> R collectIf(Predicate\<? super V> predicate, Function\<? super V, ? extends V1> function, R target)
+    public \<VV, R extends Collection\<VV>\> R collectIf(Predicate\<? super V> predicate, Function\<? super V, ? extends VV> function, R target)
     {
         if (this.sentinelValues != null)
         {
@@ -903,12 +909,12 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         return target;
     }
 
-    public \<V1> MutableList\<V1> flatCollect(Function\<? super V, ? extends Iterable\<V1>\> function)
+    public \<VV> MutableList\<VV> flatCollect(Function\<? super V, ? extends Iterable\<VV>\> function)
     {
-        return this.flatCollect(function, FastList.\<V1>newList());
+        return this.flatCollect(function, FastList.\<VV>newList());
     }
 
-    public \<V1, R extends Collection\<V1>\> R flatCollect(Function\<? super V, ? extends Iterable\<V1>\> function, R target)
+    public \<VV, R extends Collection\<VV>\> R flatCollect(Function\<? super V, ? extends Iterable\<VV>\> function, R target)
     {
         if (this.sentinelValues != null)
         {
@@ -1300,26 +1306,26 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         return result;
     }
 
-    public \<K, V1> MutableMap\<K, V1> aggregateInPlaceBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends V1> zeroValueFactory, Procedure2\<? super V1, ? super V> mutatingAggregator)
+    public \<K, VV> MutableMap\<K, VV> aggregateInPlaceBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends VV> zeroValueFactory, Procedure2\<? super VV, ? super V> mutatingAggregator)
     {
-        MutableMap\<K, V1> map = UnifiedMap.newMap();
-        this.forEach(new MutatingAggregationProcedure\<V, K, V1>(map, groupBy, zeroValueFactory, mutatingAggregator));
+        MutableMap\<K, VV> map = UnifiedMap.newMap();
+        this.forEach(new MutatingAggregationProcedure\<V, K, VV>(map, groupBy, zeroValueFactory, mutatingAggregator));
         return map;
     }
 
-    public \<K, V1> MutableMap\<K, V1> aggregateBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends V1> zeroValueFactory, Function2\<? super V1, ? super V, ? extends V1> nonMutatingAggregator)
+    public \<K, VV> MutableMap\<K, VV> aggregateBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends VV> zeroValueFactory, Function2\<? super VV, ? super V, ? extends VV> nonMutatingAggregator)
     {
-        MutableMap\<K, V1> map = UnifiedMap.newMap();
-        this.forEach(new NonMutatingAggregationProcedure\<V, K, V1>(map, groupBy, zeroValueFactory, nonMutatingAggregator));
+        MutableMap\<K, VV> map = UnifiedMap.newMap();
+        this.forEach(new NonMutatingAggregationProcedure\<V, K, VV>(map, groupBy, zeroValueFactory, nonMutatingAggregator));
         return map;
     }
 
-    public \<V1> MutableMultimap\<V1, V> groupBy(Function\<? super V, ? extends V1> function)
+    public \<VV> MutableMultimap\<VV, V> groupBy(Function\<? super V, ? extends VV> function)
     {
-        return this.groupBy(function, FastListMultimap.\<V1, V>newMultimap());
+        return this.groupBy(function, FastListMultimap.\<VV, V>newMultimap());
     }
 
-    public \<V1, R extends MutableMultimap\<V1, V>\> R groupBy(Function\<? super V, ? extends V1> function, R target)
+    public \<VV, R extends MutableMultimap\<VV, V>\> R groupBy(Function\<? super V, ? extends VV> function, R target)
     {
         if (this.sentinelValues != null)
         {
@@ -1342,13 +1348,13 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         return target;
     }
 
-    public \<V1> MutableMultimap\<V1, V> groupByEach(Function\<? super V, ? extends Iterable\<V1>\> function)
+    public \<VV> MutableMultimap\<VV, V> groupByEach(Function\<? super V, ? extends Iterable\<VV>\> function)
     {
-        return this.groupByEach(function, FastListMultimap.\<V1, V>newMultimap());
+        return this.groupByEach(function, FastListMultimap.\<VV, V>newMultimap());
     }
 
-    public \<V1, R extends MutableMultimap\<V1, V>\> R groupByEach(
-            Function\<? super V, ? extends Iterable\<V1>\> function,
+    public \<VV, R extends MutableMultimap\<VV, V>\> R groupByEach(
+            Function\<? super V, ? extends Iterable\<VV>\> function,
             R target)
     {
         return IterableIterate.groupByEach(this, function, target);
@@ -1418,7 +1424,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         return this.toList().sortThis(comparator);
     }
 
-    public \<V1 extends Comparable\<? super V1>\> MutableList\<V> toSortedListBy(Function\<? super V, ? extends V1> function)
+    public \<VV extends Comparable\<? super VV>\> MutableList\<V> toSortedListBy(Function\<? super V, ? extends VV> function)
     {
         return this.toList().sortThis(Comparators.byFunction(function));
     }
@@ -1444,7 +1450,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         return set;
     }
 
-    public \<V1 extends Comparable\<? super V1>\> MutableSortedSet\<V> toSortedSetBy(Function\<? super V, ? extends V1> function)
+    public \<VV extends Comparable\<? super VV>\> MutableSortedSet\<V> toSortedSetBy(Function\<? super V, ? extends VV> function)
     {
         MutableSortedSet\<V> set = TreeSortedSet.newSet(Comparators.byFunction(function));
         this.forEachWith(Procedures2.\<V>addToCollection(), set);
@@ -1560,7 +1566,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         return this.max(Comparators.naturalOrder());
     }
 
-    public \<V1 extends Comparable\<? super V1>\> V maxBy(Function\<? super V, ? extends V1> function)
+    public \<VV extends Comparable\<? super VV>\> V maxBy(Function\<? super V, ? extends VV> function)
     {
         if (this.isEmpty())
         {
@@ -1569,7 +1575,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
 
         V max = null;
         boolean isMaxSet = false;
-        V1 maxValue = null;
+        VV maxValue = null;
 
         if (this.sentinelValues != null)
         {
@@ -1581,7 +1587,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
             }
             if (this.sentinelValues.containsOneKey)
             {
-                V1 nextValue = function.valueOf(this.sentinelValues.oneValue);
+                VV nextValue = function.valueOf(this.sentinelValues.oneValue);
                 if (!isMaxSet || nextValue.compareTo(maxValue) > 0)
                 {
                     max = this.sentinelValues.oneValue;
@@ -1595,7 +1601,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
             if (isNonSentinel(this.keys[i]))
             {
                 V next = this.values[i];
-                V1 nextValue = function.valueOf(next);
+                VV nextValue = function.valueOf(next);
                 if (!isMaxSet || nextValue.compareTo(maxValue) > 0)
                 {
                     max = next;
@@ -1607,7 +1613,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         return max;
     }
 
-    public \<V1 extends Comparable\<? super V1>\> V minBy(Function\<? super V, ? extends V1> function)
+    public \<VV extends Comparable\<? super VV>\> V minBy(Function\<? super V, ? extends VV> function)
     {
         if (this.isEmpty())
         {
@@ -1616,7 +1622,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
 
         V min = null;
         boolean isMinSet = false;
-        V1 minValue = null;
+        VV minValue = null;
 
         if (this.sentinelValues != null)
         {
@@ -1628,7 +1634,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
             }
             if (this.sentinelValues.containsOneKey)
             {
-                V1 nextValue = function.valueOf(this.sentinelValues.oneValue);
+                VV nextValue = function.valueOf(this.sentinelValues.oneValue);
                 if (!isMinSet || nextValue.compareTo(minValue) \< 0)
                 {
                     min = this.sentinelValues.oneValue;
@@ -1642,7 +1648,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
             if (isNonSentinel(this.keys[i]))
             {
                 V next = this.values[i];
-                V1 nextValue = function.valueOf(next);
+                VV nextValue = function.valueOf(next);
                 if (!isMinSet || nextValue.compareTo(minValue) \< 0)
                 {
                     min = next;

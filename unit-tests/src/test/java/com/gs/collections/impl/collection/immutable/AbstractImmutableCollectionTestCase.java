@@ -58,6 +58,7 @@ import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
+import com.gs.collections.impl.block.factory.StringFunctions;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.factory.Lists;
@@ -119,15 +120,23 @@ public abstract class AbstractImmutableCollectionTestCase
     public void collectWith()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
-
-        MutableCollection<String> expected = this.<String>newMutable().with("?").withAll(integers.collect(new Function<Integer, String>()
+        ImmutableCollection<String> expected = integers.collect(Functions.chain(Functions.getToString(), StringFunctions.append("!")));
+        ImmutableCollection<String> actual = integers.collectWith(new Function2<Integer, String, String>()
         {
-            public String valueOf(Integer object)
+            public String value(Integer argument1, String argument2)
             {
-                return object + "!";
+                return argument1 + argument2;
             }
-        }));
+        }, "!");
 
+        Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void collectWithTarget()
+    {
+        ImmutableCollection<Integer> integers = this.classUnderTest();
+        MutableCollection<String> expected = this.<String>newMutable().with("?").withAll(integers.collect(Functions.chain(Functions.getToString(), StringFunctions.append("!"))));
         MutableCollection<String> actual = integers.collectWith(new Function2<Integer, String, String>()
         {
             public String value(Integer argument1, String argument2)

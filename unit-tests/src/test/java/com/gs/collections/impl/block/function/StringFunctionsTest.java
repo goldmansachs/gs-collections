@@ -18,6 +18,7 @@ package com.gs.collections.impl.block.function;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.impl.block.factory.StringFunctions;
+import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -156,5 +157,17 @@ public final class StringFunctionsTest
     public void toPrimitiveShort()
     {
         Assert.assertEquals(-32768, StringFunctions.toPrimitiveShort().shortValueOf("-32768"));
+    }
+
+    @Test
+    public void append()
+    {
+        Verify.assertContainsAll(FastList.newListWith("1", "2", "3", "4", "5").collect(StringFunctions.append("!")), "1!", "2!", "3!", "4!", "5!");
+    }
+
+    @Test
+    public void prepend()
+    {
+        Verify.assertContainsAll(FastList.newListWith("1", "2", "3", "4", "5").collect(StringFunctions.prepend("@")), "@1", "@2", "@3", "@4", "@5");
     }
 }

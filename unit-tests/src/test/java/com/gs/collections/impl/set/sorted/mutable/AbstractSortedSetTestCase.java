@@ -272,6 +272,23 @@ public abstract class AbstractSortedSetTestCase extends AbstractCollectionTestCa
 
     @Override
     @Test
+    public void collectWithTarget()
+    {
+        super.collectWithTarget();
+        MutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder(), 1, 2, 3, 4, 5);
+        Function2<Integer, Integer, String> addParamFunction =
+                new Function2<Integer, Integer, String>()
+                {
+                    public String value(Integer each, Integer parameter)
+                    {
+                        return ((Integer) (each + parameter)).toString();
+                    }
+                };
+        Verify.assertIterablesEqual(TreeSortedSet.newSetWith("4", "3", "2", "1", "0"), integers.collectWith(addParamFunction, -1, TreeSortedSet.<String>newSet()));
+    }
+
+    @Override
+    @Test
     public void flatCollect()
     {
         super.flatCollect();

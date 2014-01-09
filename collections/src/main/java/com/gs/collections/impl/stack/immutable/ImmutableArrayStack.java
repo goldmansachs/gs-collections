@@ -427,6 +427,11 @@ final class ImmutableArrayStack<T> implements ImmutableStack<T>, Serializable
         return this.delegate.asReversed().collect(function, target);
     }
 
+    public <P, V> ImmutableStack<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
+    {
+        return ImmutableArrayStack.newStackFromTopToBottom(this.delegate.asReversed().collectWith(function, parameter).toList());
+    }
+
     public <P, V, R extends Collection<V>> R collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter, R targetCollection)
     {
         return this.delegate.asReversed().collectWith(function, parameter, targetCollection);

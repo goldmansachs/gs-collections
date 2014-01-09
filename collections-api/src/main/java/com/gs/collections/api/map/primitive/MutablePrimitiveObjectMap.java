@@ -48,17 +48,17 @@ public interface MutablePrimitiveObjectMap<V>
 {
     void clear();
 
-    <K, V1> MutableMap<K, V1> aggregateInPlaceBy(Function<? super V, ? extends K> groupBy, Function0<? extends V1> zeroValueFactory, Procedure2<? super V1, ? super V> mutatingAggregator);
+    <K, VV> MutableMap<K, VV> aggregateInPlaceBy(Function<? super V, ? extends K> groupBy, Function0<? extends VV> zeroValueFactory, Procedure2<? super VV, ? super V> mutatingAggregator);
 
-    <K, V1> MutableMap<K, V1> aggregateBy(Function<? super V, ? extends K> groupBy, Function0<? extends V1> zeroValueFactory, Function2<? super V1, ? super V, ? extends V1> nonMutatingAggregator);
+    <K, VV> MutableMap<K, VV> aggregateBy(Function<? super V, ? extends K> groupBy, Function0<? extends VV> zeroValueFactory, Function2<? super VV, ? super V, ? extends VV> nonMutatingAggregator);
 
-    <V1> MutableMultimap<V1, V> groupByEach(Function<? super V, ? extends Iterable<V1>> function);
+    <VV> MutableMultimap<VV, V> groupByEach(Function<? super V, ? extends Iterable<VV>> function);
 
-    <V1> MutableMultimap<V1, V> groupBy(Function<? super V, ? extends V1> function);
+    <VV> MutableMultimap<VV, V> groupBy(Function<? super V, ? extends VV> function);
 
-    <V1> MutableCollection<V1> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends V1> function);
+    <VV> MutableCollection<VV> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends VV> function);
 
-    <V1> MutableCollection<V1> collect(Function<? super V, ? extends V1> function);
+    <VV> MutableCollection<VV> collect(Function<? super V, ? extends VV> function);
 
     MutableBooleanCollection collectBoolean(BooleanFunction<? super V> booleanFunction);
 
@@ -75,6 +75,8 @@ public interface MutablePrimitiveObjectMap<V>
     MutableLongCollection collectLong(LongFunction<? super V> longFunction);
 
     MutableShortCollection collectShort(ShortFunction<? super V> shortFunction);
+
+    <P, VV> MutableCollection<VV> collectWith(Function2<? super V, ? super P, ? extends VV> function, P parameter);
 
     <S> MutableCollection<S> selectInstancesOf(Class<S> clazz);
 

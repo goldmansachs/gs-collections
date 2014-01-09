@@ -158,6 +158,18 @@ public abstract class Abstract<name>ObjectMapTestCase
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
 
+        Assert.assertEquals(FastList.newListWith("one", "nine"), map1.selectWith(StringPredicates2.endsWith(), "ne"));
+
+        Assert.assertEquals(FastList.newListWith("nine"), map1.selectWith(Predicates2.equal(), "nine"));
+
+        Assert.assertEquals(FastList.newListWith("zero"), map1.selectWith(StringPredicates2.endsWith(), "o"));
+    }
+
+    @Test
+    public void selectWithTarget()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
+
         Assert.assertEquals(FastList.newListWith("one", "nine"), map1.selectWith(StringPredicates2.endsWith(), "ne", FastList.\<String>newList()));
 
         Assert.assertEquals(FastList.newListWith("nine"), map1.selectWith(Predicates2.equal(), "nine", FastList.\<String>newList()));
@@ -249,6 +261,20 @@ public abstract class Abstract<name>ObjectMapTestCase
 
     @Test
     public void collectWith()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
+
+        Assert.assertEquals(FastList.newListWith("ZERO!", "ONE!", "NINE!"), map1.collectWith(new Function2\<String, String, String>()
+        {
+            public String value(String argument1, String argument2)
+            {
+                return argument1.toUpperCase() + argument2;
+            }
+        }, "!"));
+    }
+
+    @Test
+    public void collectWithTarget()
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
 
@@ -944,6 +970,36 @@ public abstract class Abstract<name>ObjectMapTestCase
 
     @Test
     public void rejectWith()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
+
+        Assert.assertEquals(FastList.newListWith("one", "nine"), map1.rejectWith(new Predicate2\<String, String>()
+        {
+            public boolean accept(String argument1, String argument2)
+            {
+                return !argument1.endsWith(argument2);
+            }
+        }, "ne"));
+
+        Assert.assertEquals(FastList.newListWith("nine"), map1.rejectWith(new Predicate2\<String, String>()
+        {
+            public boolean accept(String argument1, String argument2)
+            {
+                return !argument2.equals(argument1);
+            }
+        }, "nine"));
+
+        Assert.assertEquals(FastList.newListWith("zero"), map1.rejectWith(new Predicate2\<String, String>()
+        {
+            public boolean accept(String argument1, String argument2)
+            {
+                return !argument1.endsWith(argument2);
+            }
+        }, "o"));
+    }
+
+    @Test
+    public void rejectWithTarget()
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
 

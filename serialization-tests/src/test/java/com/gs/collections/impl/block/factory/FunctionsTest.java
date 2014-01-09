@@ -18,6 +18,7 @@ package com.gs.collections.impl.block.factory;
 
 import java.util.Collection;
 
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
@@ -221,6 +222,17 @@ public class FunctionsTest
                         + "O0wACGZ1bmN0aW9udAAwTGNvbS9ncy9jb2xsZWN0aW9ucy9hcGkvYmxvY2svZnVuY3Rpb24vRnVu\n"
                         + "Y3Rpb247eHBwcA==",
                 Functions.bind((ObjectIntProcedure<Object>) null, null));
+    }
+
+    @Test
+    public void bind_function2_parameter()
+    {
+        Verify.assertSerializedForm(1L,
+                "rO0ABXNyAD1jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9ucyRC\n"
+                        + "aW5kRnVuY3Rpb24yAAAAAAAAAAECAAJMAAhkZWxlZ2F0ZXQAMUxjb20vZ3MvY29sbGVjdGlvbnMv\n"
+                        + "YXBpL2Jsb2NrL2Z1bmN0aW9uL0Z1bmN0aW9uMjtMAAlwYXJhbWV0ZXJ0ABJMamF2YS9sYW5nL09i\n"
+                        + "amVjdDt4cHBw",
+                Functions.bind((Function2<Object, Object, Object>) null, null));
     }
 
     @Test

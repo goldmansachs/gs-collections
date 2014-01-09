@@ -17,6 +17,7 @@
 package com.gs.collections.api.set;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.ByteFunction;
 import com.gs.collections.api.block.function.primitive.CharFunction;
@@ -67,6 +68,8 @@ public interface UnsortedSetIterable<T>
     LongSet collectLong(LongFunction<? super T> longFunction);
 
     ShortSet collectShort(ShortFunction<? super T> shortFunction);
+
+    <P, V> UnsortedSetIterable<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
 
     <V> UnsortedSetIterable<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 

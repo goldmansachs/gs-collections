@@ -134,6 +134,11 @@ public class UnmodifiableRichIterable<T>
         return this.iterable.collect(function, target);
     }
 
+    public <P, V> RichIterable<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
+    {
+        return this.iterable.collectWith(function, parameter);
+    }
+
     public <P, V, R extends Collection<V>> R collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter, R targetCollection)
     {
         return this.iterable.collectWith(function, parameter, targetCollection);

@@ -230,6 +230,21 @@ public class UnmodifiableRichIterableTest
             }
         };
         Assert.assertEquals(
+                this.mutableCollection.collectWith(function, null),
+                this.unmodifiableCollection.collectWith(function, null));
+    }
+
+    @Test
+    public void collectWithToTarget()
+    {
+        Function2<String, Object, String> function = new Function2<String, Object, String>()
+        {
+            public String value(String each, Object parm)
+            {
+                return each;
+            }
+        };
+        Assert.assertEquals(
                 this.mutableCollection.collectWith(function, null, Lists.mutable.<String>of()),
                 this.unmodifiableCollection.collectWith(function, null, Lists.mutable.<String>of()));
     }

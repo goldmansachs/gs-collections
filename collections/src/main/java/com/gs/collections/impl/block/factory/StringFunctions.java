@@ -140,6 +140,16 @@ public final class StringFunctions
         return TRIM;
     }
 
+    public static Function<String, String> append(String valueToAppend)
+    {
+        return new AppendFunction(valueToAppend);
+    }
+
+    public static Function<String, String> prepend(String valueToPrepend)
+    {
+        return new PrependFunction(valueToPrepend);
+    }
+
     private static final class ToUpperCaseFunction implements Function<String, String>
     {
         private static final long serialVersionUID = 1L;
@@ -337,6 +347,40 @@ public final class StringFunctions
         public String toString()
         {
             return "string.subString(" + this.beginIndex + ',' + this.endIndex + ')';
+        }
+    }
+
+    private static final class AppendFunction implements Function<String, String>
+    {
+        private static final long serialVersionUID = 1L;
+
+        private final String valueToAppend;
+
+        private AppendFunction(String valueToAppend)
+        {
+            this.valueToAppend = valueToAppend;
+        }
+
+        public String valueOf(String string)
+        {
+            return string + this.valueToAppend;
+        }
+    }
+
+    private static final class PrependFunction implements Function<String, String>
+    {
+        private static final long serialVersionUID = 1L;
+
+        private final String valueToPrepend;
+
+        private PrependFunction(String valueToPrepend)
+        {
+            this.valueToPrepend = valueToPrepend;
+        }
+
+        public String valueOf(String string)
+        {
+            return this.valueToPrepend + string;
         }
     }
 }

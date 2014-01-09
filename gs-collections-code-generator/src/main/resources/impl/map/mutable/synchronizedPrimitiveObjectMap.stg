@@ -403,19 +403,19 @@ public final class Synchronized<name>ObjectMap\<V>
         }
     }
 
-    public \<K, V1 extends Object> MutableMap\<K, V1> aggregateInPlaceBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends V1> zeroValueFactory, Procedure2\<? super V1, ? super V> mutatingAggregator)
+    public \<K, VV extends Object> MutableMap\<K, VV> aggregateInPlaceBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends VV> zeroValueFactory, Procedure2\<? super VV, ? super V> mutatingAggregator)
     {
         synchronized (this.lock)
         {
-            return (MutableMap\<K, V1>) this.map.aggregateInPlaceBy(groupBy, zeroValueFactory, mutatingAggregator);
+            return (MutableMap\<K, VV>) this.map.aggregateInPlaceBy(groupBy, zeroValueFactory, mutatingAggregator);
         }
     }
 
-    public \<K, V1 extends Object> MutableMap\<K, V1> aggregateBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends V1> zeroValueFactory, Function2\<? super V1, ? super V, ? extends V1> nonMutatingAggregator)
+    public \<K, VV extends Object> MutableMap\<K, VV> aggregateBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends VV> zeroValueFactory, Function2\<? super VV, ? super V, ? extends VV> nonMutatingAggregator)
     {
         synchronized (this.lock)
         {
-            return (MutableMap\<K, V1>) this.map.aggregateBy(groupBy, zeroValueFactory, nonMutatingAggregator);
+            return (MutableMap\<K, VV>) this.map.aggregateBy(groupBy, zeroValueFactory, nonMutatingAggregator);
         }
     }
 
@@ -459,7 +459,7 @@ public final class Synchronized<name>ObjectMap\<V>
         }
     }
 
-    public \<V1> MutableCollection\<V1> collect(Function\<? super V, ? extends V1> function)
+    public \<VV> MutableCollection\<VV> collect(Function\<? super V, ? extends VV> function)
     {
         synchronized (this.lock)
         {
@@ -483,7 +483,15 @@ public final class Synchronized<name>ObjectMap\<V>
 
     <collectPrimitive("Short", "short")>
 
-    public \<P, V1 extends Object, R extends Collection\<V1>\> R collectWith(Function2\<? super V, ? super P, ? extends V1> function, P parameter, R targetCollection)
+    public \<P, VV> MutableCollection\<VV> collectWith(Function2\<? super V, ? super P, ? extends VV> function, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.collectWith(function, parameter);
+        }
+    }
+
+    public \<P, VV extends Object, R extends Collection\<VV>\> R collectWith(Function2\<? super V, ? super P, ? extends VV> function, P parameter, R targetCollection)
     {
         synchronized (this.lock)
         {
@@ -491,7 +499,7 @@ public final class Synchronized<name>ObjectMap\<V>
         }
     }
 
-    public \<V1 extends Object, R extends Collection\<V1>\> R collect(Function\<? super V, ? extends V1> function, R target)
+    public \<VV extends Object, R extends Collection\<VV>\> R collect(Function\<? super V, ? extends VV> function, R target)
     {
         synchronized (this.lock)
         {
@@ -499,15 +507,15 @@ public final class Synchronized<name>ObjectMap\<V>
         }
     }
 
-    public \<V1 extends Object> MutableCollection\<V1> collectIf(Predicate\<? super V> predicate, Function\<? super V, ? extends V1> function)
+    public \<VV extends Object> MutableCollection\<VV> collectIf(Predicate\<? super V> predicate, Function\<? super V, ? extends VV> function)
     {
         synchronized (this.lock)
         {
-            return (MutableCollection\<V1>) this.map.collectIf(predicate, function);
+            return (MutableCollection\<VV>) this.map.collectIf(predicate, function);
         }
     }
 
-    public \<V1 extends Object, R extends Collection\<V1>\> R collectIf(Predicate\<? super V> predicate, Function\<? super V, ? extends V1> function, R target)
+    public \<VV extends Object, R extends Collection\<VV>\> R collectIf(Predicate\<? super V> predicate, Function\<? super V, ? extends VV> function, R target)
     {
         synchronized (this.lock)
         {
@@ -515,7 +523,7 @@ public final class Synchronized<name>ObjectMap\<V>
         }
     }
 
-    public \<V1 extends Object> RichIterable\<V1> flatCollect(Function\<? super V, ? extends Iterable\<V1>\> function)
+    public \<VV extends Object> RichIterable\<VV> flatCollect(Function\<? super V, ? extends Iterable\<VV>\> function)
     {
         synchronized (this.lock)
         {
@@ -523,7 +531,7 @@ public final class Synchronized<name>ObjectMap\<V>
         }
     }
 
-    public \<V1 extends Object, R extends Collection\<V1>\> R flatCollect(Function\<? super V, ? extends Iterable\<V1>\> function, R target)
+    public \<VV extends Object, R extends Collection\<VV>\> R flatCollect(Function\<? super V, ? extends Iterable\<VV>\> function, R target)
     {
         synchronized (this.lock)
         {
@@ -667,7 +675,7 @@ public final class Synchronized<name>ObjectMap\<V>
         }
     }
 
-    public \<V1 extends Comparable\<? super V1>\> MutableList\<V> toSortedListBy(Function\<? super V, ? extends V1> function)
+    public \<VV extends Comparable\<? super VV>\> MutableList\<V> toSortedListBy(Function\<? super V, ? extends VV> function)
     {
         synchronized (this.lock)
         {
@@ -699,7 +707,7 @@ public final class Synchronized<name>ObjectMap\<V>
         }
     }
 
-    public \<V1 extends Comparable\<? super V1>\> MutableSortedSet\<V> toSortedSetBy(Function\<? super V, ? extends V1> function)
+    public \<VV extends Comparable\<? super VV>\> MutableSortedSet\<V> toSortedSetBy(Function\<? super V, ? extends VV> function)
     {
         synchronized (this.lock)
         {
@@ -795,7 +803,7 @@ public final class Synchronized<name>ObjectMap\<V>
         }
     }
 
-    public \<V1 extends Comparable\<? super V1>\> V maxBy(Function\<? super V, ? extends V1> function)
+    public \<VV extends Comparable\<? super VV>\> V maxBy(Function\<? super V, ? extends VV> function)
     {
         synchronized (this.lock)
         {
@@ -803,7 +811,7 @@ public final class Synchronized<name>ObjectMap\<V>
         }
     }
 
-    public \<V1 extends Comparable\<? super V1>\> V minBy(Function\<? super V, ? extends V1> function)
+    public \<VV extends Comparable\<? super VV>\> V minBy(Function\<? super V, ? extends VV> function)
     {
         synchronized (this.lock)
         {
@@ -928,15 +936,15 @@ public final class Synchronized<name>ObjectMap\<V>
         }
     }
 
-    public \<V1 extends Object> MutableMultimap\<V1, V> groupBy(Function\<? super V, ? extends V1> function)
+    public \<VV extends Object> MutableMultimap\<VV, V> groupBy(Function\<? super V, ? extends VV> function)
     {
         synchronized (this.lock)
         {
-            return (MutableMultimap\<V1, V>) this.map.groupBy(function);
+            return (MutableMultimap\<VV, V>) this.map.groupBy(function);
         }
     }
 
-    public \<V1 extends Object, R extends MutableMultimap\<V1, V>\> R groupBy(Function\<? super V, ? extends V1> function, R target)
+    public \<VV extends Object, R extends MutableMultimap\<VV, V>\> R groupBy(Function\<? super V, ? extends VV> function, R target)
     {
         synchronized (this.lock)
         {
@@ -944,15 +952,15 @@ public final class Synchronized<name>ObjectMap\<V>
         }
     }
 
-    public \<V1 extends Object> MutableMultimap\<V1, V> groupByEach(Function\<? super V, ? extends Iterable\<V1>\> function)
+    public \<VV extends Object> MutableMultimap\<VV, V> groupByEach(Function\<? super V, ? extends Iterable\<VV>\> function)
     {
         synchronized (this.lock)
         {
-            return (MutableMultimap\<V1, V>) this.map.groupByEach(function);
+            return (MutableMultimap\<VV, V>) this.map.groupByEach(function);
         }
     }
 
-    public \<V1 extends Object, R extends MutableMultimap\<V1, V>\> R groupByEach(Function\<? super V, ? extends Iterable\<V1>\> function, R target)
+    public \<VV extends Object, R extends MutableMultimap\<VV, V>\> R groupByEach(Function\<? super V, ? extends Iterable\<VV>\> function, R target)
     {
         synchronized (this.lock)
         {

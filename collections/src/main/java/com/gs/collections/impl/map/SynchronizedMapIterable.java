@@ -719,6 +719,16 @@ public abstract class SynchronizedMapIterable<K, V>
         }
     }
 
+    public <P, A> RichIterable<A> collectWith(
+            Function2<? super V, ? super P, ? extends A> function,
+            P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.mapIterable.collectWith(function, parameter);
+        }
+    }
+
     public <A, R extends Collection<A>> R collectIf(
             Predicate<? super V> predicate,
             Function<? super V, ? extends A> function,

@@ -59,6 +59,7 @@ import com.gs.collections.api.partition.list.PartitionImmutableList;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.procedure.CollectIfProcedure;
 import com.gs.collections.impl.block.procedure.CollectProcedure;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
@@ -318,6 +319,11 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
     public ImmutableShortList collectShort(ShortFunction<? super T> shortFunction)
     {
         return (ImmutableShortList) super.collectShort(shortFunction);
+    }
+
+    public <P, V> ImmutableList<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
+    {
+        return this.collect(Functions.bind(function, parameter));
     }
 
     public <V> ImmutableList<V> collectIf(

@@ -245,7 +245,7 @@ final class Immutable<name>ObjectHashMap\<V> extends AbstractImmutable<name>Obje
         return this.delegate.selectInstancesOf(clazz);
     }
 
-    public \<V1> ImmutableCollection\<V1> collect(Function\<? super V, ? extends V1> function)
+    public \<VV> ImmutableCollection\<VV> collect(Function\<? super V, ? extends VV> function)
     {
         return this.delegate.collect(function).toImmutable();
     }
@@ -266,12 +266,17 @@ final class Immutable<name>ObjectHashMap\<V> extends AbstractImmutable<name>Obje
 
     <collectPrimitive("Short", "short")>
 
-    public \<V1> RichIterable\<V1> collectIf(Predicate\<? super V> predicate, Function\<? super V, ? extends V1> function)
+    public \<P, VV> ImmutableCollection\<VV> collectWith(Function2\<? super V, ? super P, ? extends VV> function, P parameter)
+    {
+        return this.delegate.collectWith(function, parameter).toImmutable();
+    }
+
+    public \<VV> RichIterable\<VV> collectIf(Predicate\<? super V> predicate, Function\<? super V, ? extends VV> function)
     {
         return this.delegate.collectIf(predicate, function);
     }
 
-    public \<V1> RichIterable\<V1> flatCollect(Function\<? super V, ? extends Iterable\<V1>\> function)
+    public \<VV> RichIterable\<VV> flatCollect(Function\<? super V, ? extends Iterable\<VV>\> function)
     {
         return this.delegate.flatCollect(function);
     }
@@ -481,12 +486,12 @@ final class Immutable<name>ObjectHashMap\<V> extends AbstractImmutable<name>Obje
         this.delegate.appendString(appendable, start, separator, end);
     }
 
-    public \<V1> Multimap\<V1, V> groupBy(Function\<? super V, ? extends V1> function)
+    public \<VV> Multimap\<VV, V> groupBy(Function\<? super V, ? extends VV> function)
     {
         return this.delegate.groupBy(function);
     }
 
-    public \<V1> Multimap\<V1, V> groupByEach(Function\<? super V, ? extends Iterable\<V1>\> function)
+    public \<VV> Multimap\<VV, V> groupByEach(Function\<? super V, ? extends Iterable\<VV>\> function)
     {
         return this.delegate.groupByEach(function);
     }
@@ -516,62 +521,62 @@ final class Immutable<name>ObjectHashMap\<V> extends AbstractImmutable<name>Obje
         return this.delegate.chunk(size);
     }
 
-    public \<K, V1> MapIterable\<K, V1> aggregateInPlaceBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends V1> zeroValueFactory, Procedure2\<? super V1, ? super V> mutatingAggregator)
+    public \<K, VV> MapIterable\<K, VV> aggregateInPlaceBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends VV> zeroValueFactory, Procedure2\<? super VV, ? super V> mutatingAggregator)
     {
         return this.delegate.aggregateInPlaceBy(groupBy, zeroValueFactory, mutatingAggregator);
     }
 
-    public \<K, V1> MapIterable\<K, V1> aggregateBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends V1> zeroValueFactory, Function2\<? super V1, ? super V, ? extends V1> nonMutatingAggregator)
+    public \<K, VV> MapIterable\<K, VV> aggregateBy(Function\<? super V, ? extends K> groupBy, Function0\<? extends VV> zeroValueFactory, Function2\<? super VV, ? super V, ? extends VV> nonMutatingAggregator)
     {
         return this.delegate.aggregateBy(groupBy, zeroValueFactory, nonMutatingAggregator);
     }
 
-    public \<V1, R extends MutableMultimap\<V1, V>\> R groupByEach(Function\<? super V, ? extends Iterable\<V1>\> function, R target)
+    public \<VV, R extends MutableMultimap\<VV, V>\> R groupByEach(Function\<? super V, ? extends Iterable\<VV>\> function, R target)
     {
         return this.delegate.groupByEach(function, target);
     }
 
-    public \<V1, R extends MutableMultimap\<V1, V>\> R groupBy(Function\<? super V, ? extends V1> function, R target)
+    public \<VV, R extends MutableMultimap\<VV, V>\> R groupBy(Function\<? super V, ? extends VV> function, R target)
     {
         return this.delegate.groupBy(function, target);
     }
 
-    public \<V1 extends Comparable\<? super V1>\> V maxBy(Function\<? super V, ? extends V1> function)
+    public \<VV extends Comparable\<? super VV>\> V maxBy(Function\<? super V, ? extends VV> function)
     {
         return this.delegate.maxBy(function);
     }
 
-    public \<V1 extends Comparable\<? super V1>\> V minBy(Function\<? super V, ? extends V1> function)
+    public \<VV extends Comparable\<? super VV>\> V minBy(Function\<? super V, ? extends VV> function)
     {
         return this.delegate.minBy(function);
     }
 
-    public \<V1 extends Comparable\<? super V1>\> MutableSortedSet\<V> toSortedSetBy(Function\<? super V, ? extends V1> function)
+    public \<VV extends Comparable\<? super VV>\> MutableSortedSet\<V> toSortedSetBy(Function\<? super V, ? extends VV> function)
     {
         return this.delegate.toSortedSetBy(function);
     }
 
-    public \<V1 extends Comparable\<? super V1>\> MutableList\<V> toSortedListBy(Function\<? super V, ? extends V1> function)
+    public \<VV extends Comparable\<? super VV>\> MutableList\<V> toSortedListBy(Function\<? super V, ? extends VV> function)
     {
         return this.delegate.toSortedListBy(function);
     }
 
-    public \<V1, R extends Collection\<V1>\> R flatCollect(Function\<? super V, ? extends Iterable\<V1>\> function, R target)
+    public \<VV, R extends Collection\<VV>\> R flatCollect(Function\<? super V, ? extends Iterable\<VV>\> function, R target)
     {
         return this.delegate.flatCollect(function, target);
     }
 
-    public \<V1, R extends Collection\<V1>\> R collectIf(Predicate\<? super V> predicate, Function\<? super V, ? extends V1> function, R target)
+    public \<VV, R extends Collection\<VV>\> R collectIf(Predicate\<? super V> predicate, Function\<? super V, ? extends VV> function, R target)
     {
         return this.delegate.collectIf(predicate, function, target);
     }
 
-    public \<P, V1, R extends Collection\<V1>\> R collectWith(Function2\<? super V, ? super P, ? extends V1> function, P parameter, R targetCollection)
+    public \<P, VV, R extends Collection\<VV>\> R collectWith(Function2\<? super V, ? super P, ? extends VV> function, P parameter, R targetCollection)
     {
         return this.delegate.collectWith(function, parameter, targetCollection);
     }
 
-    public \<V1, R extends Collection\<V1>\> R collect(Function\<? super V, ? extends V1> function, R target)
+    public \<VV, R extends Collection\<VV>\> R collect(Function\<? super V, ? extends VV> function, R target)
     {
         return this.delegate.collect(function, target);
     }

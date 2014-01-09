@@ -33,6 +33,7 @@ import com.gs.collections.api.bag.primitive.ImmutableIntBag;
 import com.gs.collections.api.bag.primitive.ImmutableLongBag;
 import com.gs.collections.api.bag.primitive.ImmutableShortBag;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.ByteFunction;
 import com.gs.collections.api.block.function.primitive.CharFunction;
@@ -57,6 +58,7 @@ import com.gs.collections.impl.bag.mutable.primitive.FloatHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.IntHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.LongHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.ShortHashBag;
+import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.checked.CheckedObjectIntProcedure;
 import com.gs.collections.impl.collection.immutable.AbstractImmutableCollection;
@@ -210,6 +212,11 @@ public abstract class AbstractImmutableBag<T>
             }
         });
         return result.toImmutable();
+    }
+
+    public <P, V> ImmutableBag<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
+    {
+        return this.collect(Functions.bind(function, parameter));
     }
 
     public String toStringOfItemToCount()

@@ -75,6 +75,8 @@ public interface ImmutableSortedMap<K, V>
 
     <R> ImmutableList<R> collect(Function<? super V, ? extends R> function);
 
+    <P, VV> ImmutableList<VV> collectWith(Function2<? super V, ? super P, ? extends VV> function, P parameter);
+
     <R> ImmutableList<R> collectIf(
             Predicate<? super V> predicate,
             Function<? super V, ? extends R> function);

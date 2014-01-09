@@ -17,6 +17,7 @@ package com.gs.collections.api.map.primitive;
 
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.ByteFunction;
 import com.gs.collections.api.block.function.primitive.CharFunction;
@@ -55,7 +56,7 @@ public interface Immutable<name>ObjectMap\<V> extends <name>ObjectMap\<V>
 
     ImmutableCollection\<V> reject(Predicate\<? super V> predicate);
 
-    \<V1> ImmutableCollection\<V1> collect(Function\<? super V, ? extends V1> function);
+    \<VV> ImmutableCollection\<VV> collect(Function\<? super V, ? extends VV> function);
 
     ImmutableBooleanCollection collectBoolean(BooleanFunction\<? super V> booleanFunction);
 
@@ -72,6 +73,8 @@ public interface Immutable<name>ObjectMap\<V> extends <name>ObjectMap\<V>
     ImmutableLongCollection collectLong(LongFunction\<? super V> longFunction);
 
     ImmutableShortCollection collectShort(ShortFunction\<? super V> ShortFunction);
+
+    \<P, VV> ImmutableCollection\<VV> collectWith(Function2\<? super V, ? super P, ? extends VV> function, P parameter);
 
     Immutable<name>ObjectMap\<V> newWithKeyValue(<type> key, V value);
 

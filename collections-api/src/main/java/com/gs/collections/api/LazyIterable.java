@@ -19,6 +19,7 @@ package com.gs.collections.api;
 import java.util.Collection;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.ByteFunction;
 import com.gs.collections.api.block.function.primitive.CharFunction;
@@ -60,6 +61,8 @@ public interface LazyIterable<T>
      * Creates a deferred iterable for collecting elements from the current iterable.
      */
     <V> LazyIterable<V> collect(Function<? super T, ? extends V> function);
+
+    <P, V> LazyIterable<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
 
     /**
      * Creates a deferred iterable for selecting and collecting elements from the current iterable.

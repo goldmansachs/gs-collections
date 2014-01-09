@@ -62,6 +62,7 @@ import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Procedures2;
 import com.gs.collections.impl.block.procedure.CountProcedure;
@@ -297,6 +298,11 @@ public abstract class AbstractLazyIterable<T>
     public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)
     {
         return IterableIterate.collect(this, function, target);
+    }
+
+    public <P, V> LazyIterable<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
+    {
+        return LazyIterate.collect(this, Functions.bind(function, parameter));
     }
 
     public <P, V, R extends Collection<V>> R collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter, R targetCollection)

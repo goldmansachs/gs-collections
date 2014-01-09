@@ -19,6 +19,7 @@ package com.gs.collections.api.set;
 import java.util.Set;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.ByteFunction;
 import com.gs.collections.api.block.function.primitive.CharFunction;
@@ -90,6 +91,8 @@ public interface ImmutableSet<T>
     ImmutableLongSet collectLong(LongFunction<? super T> longFunction);
 
     ImmutableShortSet collectShort(ShortFunction<? super T> shortFunction);
+
+    <P, V> ImmutableSet<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
 
     <V> ImmutableSet<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 

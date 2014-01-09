@@ -24,6 +24,7 @@ import java.util.Map;
 import java.util.SortedMap;
 
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
@@ -480,6 +481,29 @@ public abstract class ImmutableSortedMapTestCase
             }
         });
         Assert.assertEquals(HashBag.newBag(map), select.toBag());
+    }
+
+    @Test
+    public void collect()
+    {
+        ImmutableSortedMap<Integer, String> map = this.classUnderTest();
+        RichIterable<String> collect = map.collect(Functions.<String>getPassThru());
+        Assert.assertEquals(HashBag.newBag(map), collect.toBag());
+    }
+
+    @Test
+    public void collectWith()
+    {
+        ImmutableSortedMap<Integer, String> map = this.classUnderTest();
+        RichIterable<String> collect = map.collectWith(new Function2<String, String, String>()
+        {
+            public String value(String value, String parameter)
+            {
+                return value + parameter;
+            }
+        }, "");
+
+        Assert.assertEquals(HashBag.newBag(map), collect.toBag());
     }
 
     @Test

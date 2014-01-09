@@ -53,6 +53,7 @@ import com.gs.collections.api.partition.list.PartitionImmutableList;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
@@ -303,6 +304,12 @@ public abstract class AbstractImmutableSortedMap<K, V>
     public <K2, V2> ImmutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function)
     {
         return MapIterate.collect(this, function, UnifiedMap.<K2, V2>newMap()).toImmutable();
+    }
+
+    @Override
+    public <P, VV> ImmutableList<VV> collectWith(Function2<? super V, ? super P, ? extends VV> function, P parameter)
+    {
+        return this.collect(Functions.bind(function, parameter));
     }
 
     @Override

@@ -639,6 +639,11 @@ public abstract class AbstractCollectionTestCase
         Assert.assertEquals(
                 Bags.mutable.of(2, 3, 4),
                 this.newWith(1, 2, 3).collectWith(AddFunction.INTEGER, 1).toBag());
+    }
+
+    @Test
+    public void collectWithTarget()
+    {
         Assert.assertEquals(
                 Bags.mutable.of(2, 3, 4),
                 this.newWith(1, 2, 3).collectWith(AddFunction.INTEGER, 1, FastList.<Integer>newList()).toBag());

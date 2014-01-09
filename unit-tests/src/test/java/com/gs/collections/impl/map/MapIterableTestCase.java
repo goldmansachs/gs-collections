@@ -685,6 +685,15 @@ public abstract class MapIterableTestCase
     {
         MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
 
+        RichIterable<Integer> actual = map.collectWith(AddFunction.INTEGER, 1);
+        Verify.assertContainsAll(actual, 2, 3, 4, 5);
+    }
+
+    @Test
+    public void collectWithToTarget()
+    {
+        MapIterable<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
+
         FastList<Integer> actual = map.collectWith(AddFunction.INTEGER, 1, FastList.<Integer>newList());
         Verify.assertContainsAll(actual, 2, 3, 4, 5);
     }

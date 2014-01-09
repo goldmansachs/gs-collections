@@ -48,6 +48,7 @@ import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.MapCollectProcedure;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
@@ -248,6 +249,12 @@ public abstract class AbstractMutableSortedMap<K, V> extends AbstractMapIterable
     public <R> MutableList<R> collect(Function<? super V, ? extends R> function)
     {
         return this.collect(function, FastList.<R>newList(this.size()));
+    }
+
+    @Override
+    public <P, VV> MutableList<VV> collectWith(Function2<? super V, ? super P, ? extends VV> function, P parameter)
+    {
+        return this.collect(Functions.bind(function, parameter));
     }
 
     @Override

@@ -497,6 +497,31 @@ public interface
     <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target);
 
     /**
+     * Same as collect with a {@code Function2} and specified parameter which is passed to the block
+     * <p/>
+     * <pre>e.g.
+     * Function2<Integer, Integer, Integer> addParameterFunction =
+     * new Function2<Integer, Integer, Integer>()
+     * {
+     *      public Integer value(final Integer each, final Integer parameter)
+     *      {
+     *          return each + parameter;
+     *      }
+     * };
+     * FastList.newListWith(1, 2, 3).collectWith(addParameterFunction, Integer.valueOf(1));
+     * </pre>
+     *
+     * @param function A {@link Function2} to use as the collect transformation function
+     * @param parameter A parameter to pass in for evaluation of the second argument {@code P} in {@code function}
+     * @return A new {@code RichIterable} that contains the transformed elements returned by {@link Function2#value(Object, Object)}
+     * @see #collect(Function)
+     * @since 5.0
+     */
+    <P, V> RichIterable<V> collectWith(
+            Function2<? super T, ? super P, ? extends V> function,
+            P parameter);
+
+    /**
      * Same as collectWith but with a targetCollection parameter to gather the results.
      * <p/>
      * <pre>e.g.

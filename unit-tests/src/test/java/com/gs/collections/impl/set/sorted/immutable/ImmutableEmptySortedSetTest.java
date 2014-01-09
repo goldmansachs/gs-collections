@@ -22,6 +22,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.CharFunction;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.partition.set.sorted.PartitionImmutableSortedSet;
@@ -425,6 +426,38 @@ public class ImmutableEmptySortedSetTest extends AbstractImmutableSortedSetTestC
         Verify.assertIterableEmpty(partition.getRejected());
         Assert.assertEquals(Collections.<Integer>reverseOrder(), partition.getSelected().comparator());
         Assert.assertEquals(Collections.<Integer>reverseOrder(), partition.getRejected().comparator());
+    }
+
+    @Override
+    @Test
+    public void collect()
+    {
+        ImmutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());
+        Verify.assertIterableEmpty(integers.collect(Functions.getIntegerPassThru()));
+    }
+
+    @Override
+    @Test
+    public void collectWith()
+    {
+        ImmutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());
+        Verify.assertIterableEmpty(integers.collectWith(new Function2<Integer, Integer, Integer>()
+        {
+            public Integer value(Integer value, Integer parameter)
+            {
+                return value / parameter;
+            }
+        }, 1));
+    }
+
+    @Override
+    @Test
+    public void collectToTarget()
+    {
+        ImmutableSortedSet<Integer> integers = this.classUnderTest();
+        ImmutableSortedSet<Integer> collect = integers.collect(Functions.getIntegerPassThru(), TreeSortedSet.newSet(Collections.<Integer>reverseOrder())).toImmutable();
+        Verify.assertIterableEmpty(collect);
+        Assert.assertEquals(Collections.<Integer>reverseOrder(), collect.comparator());
     }
 
     @Test

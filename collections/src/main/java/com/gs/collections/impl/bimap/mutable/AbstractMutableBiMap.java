@@ -319,7 +319,7 @@ abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
         return this.delegate.rejectWith(predicate, parameter);
     }
 
-    public <V1> MutableCollection<V1> collect(Function<? super V, ? extends V1> function)
+    public <VV> MutableCollection<VV> collect(Function<? super V, ? extends VV> function)
     {
         return this.delegate.collect(function);
     }
@@ -369,7 +369,7 @@ abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
         return this.delegate.collectShort(shortFunction);
     }
 
-    public <V1> MutableCollection<V1> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends V1> function)
+    public <VV> MutableCollection<VV> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends VV> function)
     {
         return this.delegate.collectIf(predicate, function);
     }
@@ -414,27 +414,32 @@ abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
         return this.delegate.aggregateBy(groupBy, zeroValueFactory, nonMutatingAggregator);
     }
 
-    public <V1, R extends Collection<V1>> R collect(Function<? super V, ? extends V1> function, R target)
+    public <VV, R extends Collection<VV>> R collect(Function<? super V, ? extends VV> function, R target)
     {
         return this.delegate.collect(function, target);
     }
 
-    public <P, V1, R extends Collection<V1>> R collectWith(Function2<? super V, ? super P, ? extends V1> function, P parameter, R targetCollection)
+    public <P, VV> MutableList<VV> collectWith(Function2<? super V, ? super P, ? extends VV> function, P parameter)
+    {
+        return this.delegate.collectWith(function, parameter);
+    }
+
+    public <P, VV, R extends Collection<VV>> R collectWith(Function2<? super V, ? super P, ? extends VV> function, P parameter, R targetCollection)
     {
         return this.delegate.collectWith(function, parameter, targetCollection);
     }
 
-    public <V1, R extends Collection<V1>> R collectIf(Predicate<? super V> predicate, Function<? super V, ? extends V1> function, R target)
+    public <VV, R extends Collection<VV>> R collectIf(Predicate<? super V> predicate, Function<? super V, ? extends VV> function, R target)
     {
         return this.delegate.collectIf(predicate, function, target);
     }
 
-    public <V1> MutableCollection<V1> flatCollect(Function<? super V, ? extends Iterable<V1>> function)
+    public <VV> MutableCollection<VV> flatCollect(Function<? super V, ? extends Iterable<VV>> function)
     {
         return this.delegate.flatCollect(function);
     }
 
-    public <V1, R extends Collection<V1>> R flatCollect(Function<? super V, ? extends Iterable<V1>> function, R target)
+    public <VV, R extends Collection<VV>> R flatCollect(Function<? super V, ? extends Iterable<VV>> function, R target)
     {
         return this.delegate.flatCollect(function, target);
     }
@@ -524,7 +529,7 @@ abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
         return this.delegate.toSortedList(comparator);
     }
 
-    public <V1 extends Comparable<? super V1>> MutableList<V> toSortedListBy(Function<? super V, ? extends V1> function)
+    public <VV extends Comparable<? super VV>> MutableList<V> toSortedListBy(Function<? super V, ? extends VV> function)
     {
         return this.delegate.toSortedListBy(function);
     }
@@ -544,7 +549,7 @@ abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
         return this.delegate.toSortedSet(comparator);
     }
 
-    public <V1 extends Comparable<? super V1>> MutableSortedSet<V> toSortedSetBy(Function<? super V, ? extends V1> function)
+    public <VV extends Comparable<? super VV>> MutableSortedSet<V> toSortedSetBy(Function<? super V, ? extends VV> function)
     {
         return this.delegate.toSortedSetBy(function);
     }
@@ -604,12 +609,12 @@ abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
         return this.delegate.max();
     }
 
-    public <V1 extends Comparable<? super V1>> V minBy(Function<? super V, ? extends V1> function)
+    public <VV extends Comparable<? super VV>> V minBy(Function<? super V, ? extends VV> function)
     {
         return this.delegate.minBy(function);
     }
 
-    public <V1 extends Comparable<? super V1>> V maxBy(Function<? super V, ? extends V1> function)
+    public <VV extends Comparable<? super VV>> V maxBy(Function<? super V, ? extends VV> function)
     {
         return this.delegate.maxBy(function);
     }
@@ -664,22 +669,22 @@ abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
         this.delegate.appendString(appendable, start, separator, end);
     }
 
-    public <V1> MutableMultimap<V1, V> groupBy(Function<? super V, ? extends V1> function)
+    public <VV> MutableMultimap<VV, V> groupBy(Function<? super V, ? extends VV> function)
     {
         return this.delegate.groupBy(function);
     }
 
-    public <V1, R extends MutableMultimap<V1, V>> R groupBy(Function<? super V, ? extends V1> function, R target)
+    public <VV, R extends MutableMultimap<VV, V>> R groupBy(Function<? super V, ? extends VV> function, R target)
     {
         return this.delegate.groupBy(function, target);
     }
 
-    public <V1> MutableMultimap<V1, V> groupByEach(Function<? super V, ? extends Iterable<V1>> function)
+    public <VV> MutableMultimap<VV, V> groupByEach(Function<? super V, ? extends Iterable<VV>> function)
     {
         return this.delegate.groupByEach(function);
     }
 
-    public <V1, R extends MutableMultimap<V1, V>> R groupByEach(Function<? super V, ? extends Iterable<V1>> function, R target)
+    public <VV, R extends MutableMultimap<VV, V>> R groupByEach(Function<? super V, ? extends Iterable<VV>> function, R target)
     {
         return this.delegate.groupByEach(function, target);
     }
