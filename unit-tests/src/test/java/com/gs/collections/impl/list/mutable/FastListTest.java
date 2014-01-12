@@ -419,7 +419,7 @@ public class FastListTest extends AbstractListTestCase
 
     @Override
     @Test
-    public void detectIfNoneWithBlock()
+    public void detectIfNone()
     {
         Function0<Integer> defaultResultFunction = new PassThruFunction0<Integer>(6);
         Assert.assertEquals(

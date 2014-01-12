@@ -167,6 +167,7 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
         return this.reject(Predicates.bind(predicate, parameter));
     }
 
+    @Override
     public PartitionImmutableSet<T> partition(Predicate<? super T> predicate)
     {
         PartitionMutableSet<T> partitionUnifiedSet = new PartitionUnifiedSet<T>();
@@ -296,33 +297,39 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
         }
     }
 
+    @Override
     public <V> ImmutableSetMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
     {
         return this.groupBy(function, UnifiedSetMultimap.<V, T>newMultimap()).toImmutable();
     }
 
+    @Override
     public <V, R extends MutableMultimap<V, T>> R groupBy(Function<? super T, ? extends V> function, R target)
     {
         this.forEach(MultimapPutProcedure.on(target, function));
         return target;
     }
 
+    @Override
     public <V> ImmutableSetMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
     {
         return this.groupByEach(function, UnifiedSetMultimap.<V, T>newMultimap()).toImmutable();
     }
 
+    @Override
     public <V, R extends MutableMultimap<V, T>> R groupByEach(Function<? super T, ? extends Iterable<V>> function, R target)
     {
         this.forEach(MultimapEachPutProcedure.on(target, function));
         return target;
     }
 
+    @Override
     public <S> ImmutableSet<Pair<T, S>> zip(Iterable<S> that)
     {
         return this.zip(that, UnifiedSet.<Pair<T, S>>newSet()).toImmutable();
     }
 
+    @Override
     public ImmutableSet<Pair<T, Integer>> zipWithIndex()
     {
         return this.zipWithIndex(UnifiedSet.<Pair<T, Integer>>newSet()).toImmutable();

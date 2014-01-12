@@ -312,11 +312,27 @@ public abstract class SynchronizedMapIterable<K, V>
         }
     }
 
+    public <P> V detectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.mapIterable.detectWith(predicate, parameter);
+        }
+    }
+
     public V detectIfNone(Predicate<? super V> predicate, Function0<? extends V> function)
     {
         synchronized (this.lock)
         {
             return this.mapIterable.detectIfNone(predicate, function);
+        }
+    }
+
+    public <P> V detectWithIfNone(Predicate2<? super V, ? super P> predicate, P parameter, Function0<? extends V> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.mapIterable.detectWithIfNone(predicate, parameter, function);
         }
     }
 

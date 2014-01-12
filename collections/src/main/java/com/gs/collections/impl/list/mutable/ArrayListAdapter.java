@@ -163,11 +163,7 @@ public final class ArrayListAdapter<T>
     public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
     {
         T result = this.detect(predicate);
-        if (result == null)
-        {
-            return function.value();
-        }
-        return result;
+        return result == null ? function.value() : result;
     }
 
     @Override

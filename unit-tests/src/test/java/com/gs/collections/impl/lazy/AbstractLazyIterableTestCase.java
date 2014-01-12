@@ -294,6 +294,21 @@ public abstract class AbstractLazyIterableTestCase
         Assert.assertNull(this.lazyIterable.detect(Predicates.equal(8)));
     }
 
+    @Test
+    public void detectWith()
+    {
+        Assert.assertEquals(Integer.valueOf(3), this.lazyIterable.detectWith(Predicates2.equal(), Integer.valueOf(3)));
+        Assert.assertNull(this.lazyIterable.detectWith(Predicates2.equal(), Integer.valueOf(8)));
+    }
+
+    @Test
+    public void detectWithIfNone()
+    {
+        Function0<Integer> function = new PassThruFunction0<Integer>(Integer.valueOf(1000));
+        Assert.assertEquals(Integer.valueOf(3), this.lazyIterable.detectWithIfNone(Predicates2.equal(), Integer.valueOf(3), function));
+        Assert.assertEquals(Integer.valueOf(1000), this.lazyIterable.detectWithIfNone(Predicates2.equal(), Integer.valueOf(8), function));
+    }
+
     @Test(expected = NoSuchElementException.class)
     public void min_empty_throws()
     {
@@ -379,7 +394,7 @@ public abstract class AbstractLazyIterableTestCase
     }
 
     @Test
-    public void detectIfNoneWithBlock()
+    public void detectIfNone()
     {
         Function0<Integer> function = new PassThruFunction0<Integer>(9);
         Assert.assertEquals(Integer.valueOf(3), this.lazyIterable.detectIfNone(Predicates.equal(3), function));

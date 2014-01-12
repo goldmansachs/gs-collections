@@ -462,9 +462,19 @@ final class ImmutableArrayStack<T> implements ImmutableStack<T>, Serializable
         return this.delegate.asReversed().detect(predicate);
     }
 
+    public <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.delegate.asReversed().detectWith(predicate, parameter);
+    }
+
     public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
     {
         return this.delegate.asReversed().detectIfNone(predicate, function);
+    }
+
+    public <P> T detectWithIfNone(Predicate2<? super T, ? super P> predicate, P parameter, Function0<? extends T> function)
+    {
+        return this.delegate.asReversed().detectWithIfNone(predicate, parameter, function);
     }
 
     public int count(Predicate<? super T> predicate)

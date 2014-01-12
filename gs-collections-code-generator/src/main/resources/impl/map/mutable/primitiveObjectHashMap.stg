@@ -960,6 +960,29 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         return null;
     }
 
+    public \<P> V detectWith(Predicate2\<? super V, ? super P> predicate, P parameter)
+    {
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey && predicate.accept(this.sentinelValues.zeroValue, parameter))
+            {
+                return this.sentinelValues.zeroValue;
+            }
+            if (this.sentinelValues.containsOneKey && predicate.accept(this.sentinelValues.oneValue, parameter))
+            {
+                return this.sentinelValues.oneValue;
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values[i], parameter))
+            {
+                return this.values[i];
+            }
+        }
+        return null;
+    }
+
     public V detectIfNone(Predicate\<? super V> predicate, Function0\<? extends V> function)
     {
         if (this.sentinelValues != null)
@@ -976,6 +999,29 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         for (int i = 0; i \< this.keys.length; i++)
         {
             if (isNonSentinel(this.keys[i]) && predicate.accept(this.values[i]))
+            {
+                return this.values[i];
+            }
+        }
+        return function.value();
+    }
+
+    public \<P> V detectWithIfNone(Predicate2\<? super V, ? super P> predicate, P parameter, Function0\<? extends V> function)
+    {
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey && predicate.accept(this.sentinelValues.zeroValue, parameter))
+            {
+                return this.sentinelValues.zeroValue;
+            }
+            if (this.sentinelValues.containsOneKey && predicate.accept(this.sentinelValues.oneValue, parameter))
+            {
+                return this.sentinelValues.oneValue;
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values[i], parameter))
             {
                 return this.values[i];
             }

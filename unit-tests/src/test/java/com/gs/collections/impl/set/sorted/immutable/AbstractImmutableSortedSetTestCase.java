@@ -42,7 +42,6 @@ import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
-import com.gs.collections.impl.block.factory.primitive.IntToIntFunctions;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.block.function.PassThruFunction0;
@@ -417,7 +416,25 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
-    public void detectIfNoneWithBlock()
+    public void detectWith()
+    {
+        ImmutableSortedSet<Integer> integers = this.classUnderTest();
+        Assert.assertEquals(Integer.valueOf(1), integers.detectWith(Predicates2.equal(), Integer.valueOf(1)));
+        Assert.assertNull(integers.detectWith(Predicates2.equal(), Integer.valueOf(integers.size() + 1)));
+    }
+
+    @Test
+    public void detectWithIfNone()
+    {
+        ImmutableSortedSet<Integer> integers = this.classUnderTest();
+        Function0<Integer> function = new PassThruFunction0<Integer>(integers.size() + 1);
+        Integer sum = Integer.valueOf(integers.size() + 1);
+        Assert.assertEquals(Integer.valueOf(1), integers.detectWithIfNone(Predicates2.equal(), Integer.valueOf(1), function));
+        Assert.assertEquals(Integer.valueOf(integers.size() + 1), integers.detectWithIfNone(Predicates2.equal(), sum, function));
+    }
+
+    @Test
+    public void detectIfNone()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest();
         Function0<Integer> function = new PassThruFunction0<Integer>(integers.size() + 1);

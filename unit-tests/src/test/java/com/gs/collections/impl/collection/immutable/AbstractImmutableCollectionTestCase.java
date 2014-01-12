@@ -452,12 +452,30 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void detectIfNoneWithBlock()
+    public void detectWith()
+    {
+        ImmutableCollection<Integer> integers = this.classUnderTest();
+        Assert.assertEquals(Integer.valueOf(1), integers.detectWith(Predicates2.equal(), Integer.valueOf(1)));
+        Assert.assertNull(integers.detectWith(Predicates2.equal(), Integer.valueOf(integers.size() + 1)));
+    }
+
+    @Test
+    public void detectIfNone()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         Function0<Integer> function = new PassThruFunction0<Integer>(integers.size() + 1);
         Assert.assertEquals(Integer.valueOf(1), integers.detectIfNone(Predicates.equal(1), function));
         Assert.assertEquals(Integer.valueOf(integers.size() + 1), integers.detectIfNone(Predicates.equal(integers.size() + 1), function));
+    }
+
+    @Test
+    public void detectWithIfNone()
+    {
+        ImmutableCollection<Integer> integers = this.classUnderTest();
+        Integer sum = Integer.valueOf(integers.size() + 1);
+        Function0<Integer> function = new PassThruFunction0<Integer>(sum);
+        Assert.assertEquals(Integer.valueOf(1), integers.detectWithIfNone(Predicates2.equal(), Integer.valueOf(1), function));
+        Assert.assertEquals(sum, integers.detectWithIfNone(Predicates2.equal(), sum, function));
     }
 
     @Test

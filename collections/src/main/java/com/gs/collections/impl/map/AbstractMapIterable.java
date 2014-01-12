@@ -379,9 +379,19 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
         return this.valuesView().detect(predicate);
     }
 
+    public <P> V detectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.valuesView().detectWith(predicate, parameter);
+    }
+
     public V detectIfNone(Predicate<? super V> predicate, Function0<? extends V> function)
     {
         return this.valuesView().detectIfNone(predicate, function);
+    }
+
+    public <P> V detectWithIfNone(Predicate2<? super V, ? super P> predicate, P parameter, Function0<? extends V> function)
+    {
+        return this.valuesView().detectWithIfNone(predicate, parameter, function);
     }
 
     public <R> RichIterable<R> flatCollect(Function<? super V, ? extends Iterable<R>> function)

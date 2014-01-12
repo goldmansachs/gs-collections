@@ -185,7 +185,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     }
 
     @Test
-    public void detectIfNoneWithBlock()
+    public void detectIfNone()
     {
         Function0<Integer> function = new PassThruFunction0<Integer>(6);
         Assert.assertEquals(Integer.valueOf(3), this.newSetWith(1, 2, 3, 4, 5).detectIfNone(Predicates.equal(3), function));

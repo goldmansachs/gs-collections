@@ -129,11 +129,7 @@ public abstract class AbstractArrayAdapter<T>
     public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
     {
         T result = this.detect(predicate);
-        if (result == null)
-        {
-            result = function.value();
-        }
-        return result;
+        return result == null ? function.value() : result;
     }
 
     @Override
@@ -533,11 +529,7 @@ public abstract class AbstractArrayAdapter<T>
             Function0<? extends T> function)
     {
         T result = this.detectWith(predicate, parameter);
-        if (result == null)
-        {
-            result = function.value();
-        }
-        return result;
+        return result == null ? function.value() : result;
     }
 
     @Override

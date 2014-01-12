@@ -244,6 +244,7 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
         return this.reject(Predicates.bind(predicate, parameter));
     }
 
+    @Override
     public PartitionImmutableSortedSet<T> partition(Predicate<? super T> predicate)
     {
         PartitionMutableSortedSet<T> partitionTreeSortedSet = new PartitionTreeSortedSet<T>(this.comparator());
@@ -284,28 +285,33 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
         return result.toImmutable();
     }
 
+    @Override
     public <V> ImmutableSortedSetMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
     {
         return this.groupBy(function, TreeSortedSetMultimap.<V, T>newMultimap(this.comparator())).toImmutable();
     }
 
+    @Override
     public <V, R extends MutableMultimap<V, T>> R groupBy(Function<? super T, ? extends V> function, R target)
     {
         this.forEach(MultimapPutProcedure.on(target, function));
         return target;
     }
 
+    @Override
     public <V> ImmutableSortedSetMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
     {
         return this.groupByEach(function, TreeSortedSetMultimap.<V, T>newMultimap(this.comparator())).toImmutable();
     }
 
+    @Override
     public <V, R extends MutableMultimap<V, T>> R groupByEach(Function<? super T, ? extends Iterable<V>> function, R target)
     {
         this.forEach(MultimapEachPutProcedure.on(target, function));
         return target;
     }
 
+    @Override
     public <S> ImmutableSortedSet<Pair<T, S>> zip(Iterable<S> that)
     {
         Comparator<? super T> comparator = this.comparator();
@@ -317,6 +323,7 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
         return Iterate.zip(this, that, TreeSortedSet.<Pair<T, S>>newSet(Comparators.<T>byFirstOfPair(comparator))).toImmutable();
     }
 
+    @Override
     public ImmutableSortedSet<Pair<T, Integer>> zipWithIndex()
     {
         Comparator<? super T> comparator = this.comparator();

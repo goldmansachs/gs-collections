@@ -142,6 +142,13 @@ public class UnmodifiableRichIterableTest
     }
 
     @Test
+    public void detectWith()
+    {
+        Assert.assertEquals(METALLICA, this.unmodifiableCollection.detectWith(StringPredicates2.contains(), "allic"));
+        Assert.assertEquals("Not Found", this.unmodifiableCollection.detectWithIfNone(StringPredicates2.contains(), "Amy", new PassThruFunction0<String>("Not Found")));
+    }
+
+    @Test
     public void chunk()
     {
         Assert.assertEquals(

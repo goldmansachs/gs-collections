@@ -30,6 +30,8 @@ import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.Predicates2;
+import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.test.Verify;
@@ -138,6 +140,28 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
     public void detect()
     {
         Assert.assertNull(this.newBag().detect(Predicates.equal("1")));
+    }
+
+    @Override
+    @Test
+    public void detectWith()
+    {
+        Assert.assertNull(this.newBag().detectWith(Predicates2.<String>greaterThan(), "3"));
+    }
+
+    @Override
+    @Test
+    public void detectWithIfNone()
+    {
+        Assert.assertEquals("Not Found", this.newBag().detectWithIfNone(Predicates2.equal(), "1", new PassThruFunction0<String>("Not Found")));
+    }
+
+    @Override
+    public void detectIfNone()
+    {
+        super.detectIfNone();
+
+        Assert.assertEquals("Not Found", this.newBag().detectIfNone(Predicates.equal("2"), new PassThruFunction0<String>("Not Found")));
     }
 
     @Override

@@ -463,6 +463,16 @@ public abstract class StackIterableTestCase
     }
 
     @Test
+    public void detectWith()
+    {
+        StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
+        CountingPredicate2<Integer, Integer> predicate = new CountingPredicate2<Integer, Integer>(Predicates2.<Integer>lessThan());
+        Assert.assertEquals(Integer.valueOf(1), stack.detectWith(predicate, 3));
+        Assert.assertEquals(1, predicate.count);
+        Assert.assertNull(stack.detectWith(Predicates2.equal(), Integer.valueOf(4)));
+    }
+
+    @Test
     public void detectIfNone()
     {
         Function0<Integer> defaultResultFunction = new PassThruFunction0<Integer>(-1);
@@ -470,6 +480,20 @@ public abstract class StackIterableTestCase
         Assert.assertEquals(
                 Integer.valueOf(1),
                 this.newStackFromTopToBottom(1, 2, 3, 4, 5).detectIfNone(predicate, defaultResultFunction));
+        Assert.assertEquals(1, predicate.count);
+        Assert.assertEquals(
+                Integer.valueOf(-1),
+                this.newStackWith(1, 2, 3, 4, 5).detectIfNone(Predicates.lessThan(-1), defaultResultFunction));
+    }
+
+    @Test
+    public void detectWithIfNone()
+    {
+        Function0<Integer> defaultResultFunction = new PassThruFunction0<Integer>(-1);
+        CountingPredicate2<Integer, Integer> predicate = new CountingPredicate2<Integer, Integer>(Predicates2.<Integer>lessThan());
+        Assert.assertEquals(
+                Integer.valueOf(1),
+                this.newStackFromTopToBottom(1, 2, 3, 4, 5).detectWithIfNone(predicate, Integer.valueOf(3), defaultResultFunction));
         Assert.assertEquals(1, predicate.count);
         Assert.assertEquals(
                 Integer.valueOf(-1),
@@ -1045,6 +1069,7 @@ public abstract class StackIterableTestCase
             return new CountingPredicate<T>(predicate);
         }
 
+        @Override
         public boolean accept(T anObject)
         {
             this.count++;
@@ -1069,6 +1094,7 @@ public abstract class StackIterableTestCase
             return new CountingPredicate2<T1, T2>(predicate);
         }
 
+        @Override
         public boolean accept(T1 each, T2 parameter)
         {
             this.count++;
@@ -1093,6 +1119,7 @@ public abstract class StackIterableTestCase
             return new CountingFunction<T, V>(function);
         }
 
+        @Override
         public V valueOf(T object)
         {
             this.count++;

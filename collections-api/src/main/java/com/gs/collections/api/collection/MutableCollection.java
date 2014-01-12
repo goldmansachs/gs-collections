@@ -288,31 +288,6 @@ public interface MutableCollection<T>
     <V> MutableCollection<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
 
     /**
-     * Returns the first element that evaluates to true for the specified predicate2 and parameter, or null if none
-     * evaluate to true.
-     * <p/>
-     * <pre>e.g.
-     * people.detectWith(new Predicate2&lt;Person, String&gt;()
-     * {
-     *     public boolean value(Person person, String fullName)
-     *     {
-     *         return person.getFullName().equals(fullName);
-     *     }
-     * }, "John Smith");
-     * </pre>
-     */
-    <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter);
-
-    /**
-     * Returns the first element of the collection that evaluates to true for the specified predicate2 and parameter, or
-     * returns the value of evaluating the specified function.
-     */
-    <P> T detectWithIfNone(
-            Predicate2<? super T, ? super P> predicate,
-            P parameter,
-            Function0<? extends T> function);
-
-    /**
      * Returns the total number of elements that evaluate to true for the specified predicate.
      * <p/>
      * <pre>e.g.

@@ -32,6 +32,7 @@ import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.factory.Bags;
@@ -412,11 +413,32 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
         Assert.assertNull(this.newBag().detect(Predicates.alwaysFalse()));
     }
 
+    @Override
     @Test
-    public void testDetectIfNone()
+    public void detectWith()
     {
-        Assert.assertEquals(VAL, this.newBag().detectIfNone(Predicates.alwaysTrue(), new PassThruFunction0<String>(NOT_VAL)));
+        super.detectWith();
 
+        Assert.assertEquals(VAL, this.newBag().detectWith(Predicates2.equal(), "1"));
+    }
+
+    @Override
+    @Test
+    public void detectWithIfNone()
+    {
+        super.detectWithIfNone();
+
+        Assert.assertEquals(VAL, this.newBag().detectWithIfNone(Predicates2.equal(), "1", new PassThruFunction0<String>("Not Found")));
+        Assert.assertEquals("Not Found", this.newBag().detectWithIfNone(Predicates2.equal(), "10000", new PassThruFunction0<String>("Not Found")));
+    }
+
+    @Override
+    @Test
+    public void detectIfNone()
+    {
+        super.detectIfNone();
+
+        Assert.assertEquals(VAL, this.newBag().detectIfNone(Predicates.alwaysTrue(), new PassThruFunction0<String>(NOT_VAL)));
         Assert.assertEquals(NOT_VAL, this.newBag().detectIfNone(Predicates.alwaysFalse(), new PassThruFunction0<String>(NOT_VAL)));
     }
 

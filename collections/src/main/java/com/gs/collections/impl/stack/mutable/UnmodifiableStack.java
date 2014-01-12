@@ -314,9 +314,19 @@ public final class UnmodifiableStack<T> implements MutableStack<T>, Serializable
         return this.mutableStack.detect(predicate);
     }
 
+    public <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.mutableStack.detectWith(predicate, parameter);
+    }
+
     public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
     {
         return this.mutableStack.detectIfNone(predicate, function);
+    }
+
+    public <P> T detectWithIfNone(Predicate2<? super T, ? super P> predicate, P parameter, Function0<? extends T> function)
+    {
+        return this.mutableStack.detectWithIfNone(predicate, parameter, function);
     }
 
     public int count(Predicate<? super T> predicate)

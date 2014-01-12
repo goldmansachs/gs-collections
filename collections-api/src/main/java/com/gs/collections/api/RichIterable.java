@@ -511,7 +511,7 @@ public interface
      * FastList.newListWith(1, 2, 3).collectWith(addParameterFunction, Integer.valueOf(1));
      * </pre>
      *
-     * @param function A {@link Function2} to use as the collect transformation function
+     * @param function  A {@link Function2} to use as the collect transformation function
      * @param parameter A parameter to pass in for evaluation of the second argument {@code P} in {@code function}
      * @return A new {@code RichIterable} that contains the transformed elements returned by {@link Function2#value(Object, Object)}
      * @see #collect(Function)
@@ -633,12 +633,41 @@ public interface
     T detect(Predicate<? super T> predicate);
 
     /**
+     * Returns the first element that evaluates to true for the specified predicate2 and parameter, or null if none
+     * evaluate to true.
+     * <p/>
+     * <pre>e.g.
+     * people.detectWith(new Predicate2&lt;Person, String&gt;()
+     * {
+     *     public boolean value(Person person, String fullName)
+     *     {
+     *         return person.getFullName().equals(fullName);
+     *     }
+     * }, "John Smith");
+     * </pre>
+     *
+     * @since 5.0
+     */
+    <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
+    /**
      * Returns the first element of the iterable for which the predicate evaluates to true.  If no element matches
      * the predicate, then returns the value of applying the specified function.
      *
      * @since 1.0
      */
     T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function);
+
+    /**
+     * Returns the first element of the iterable that evaluates to true for the specified predicate2 and parameter, or
+     * returns the value of evaluating the specified function.
+     *
+     * @since 5.0
+     */
+    <P> T detectWithIfNone(
+            Predicate2<? super T, ? super P> predicate,
+            P parameter,
+            Function0<? extends T> function);
 
     /**
      * Return the total number of elements that answer true to the specified predicate.

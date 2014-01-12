@@ -412,7 +412,17 @@ final class ImmutableEmptyBag<T>
         return null;
     }
 
+    public <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return null;
+    }
+
     public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
+    {
+        return function.value();
+    }
+
+    public <P> T detectWithIfNone(Predicate2<? super T, ? super P> predicate, P parameter, Function0<? extends T> function)
     {
         return function.value();
     }

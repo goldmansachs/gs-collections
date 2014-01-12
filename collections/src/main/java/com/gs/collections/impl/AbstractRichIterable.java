@@ -276,6 +276,12 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
         return result == null ? function.value() : result;
     }
 
+    public <P> T detectWithIfNone(Predicate2<? super T, ? super P> predicate, P parameter, Function0<? extends T> function)
+    {
+        T result = this.detectWith(predicate, parameter);
+        return result == null ? function.value() : result;
+    }
+
     public T min(Comparator<? super T> comparator)
     {
         return Iterate.min(this, comparator);
@@ -320,6 +326,11 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
     public T detect(Predicate<? super T> predicate)
     {
         return IterableIterate.detect(this, predicate);
+    }
+
+    public <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return IterableIterate.detectWith(this, predicate, parameter);
     }
 
     public int count(Predicate<? super T> predicate)

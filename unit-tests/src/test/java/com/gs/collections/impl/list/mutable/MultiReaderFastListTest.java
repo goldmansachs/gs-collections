@@ -245,6 +245,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     {
         MutableList<Integer> list = this.getIntegerList();
         Assert.assertNull(list.detectWithIfNone(Predicates2.equal(), 6, new PassThruFunction0<Integer>(null)));
+        Assert.assertEquals(Integer.valueOf(1), list.detectWithIfNone(Predicates2.equal(), Integer.valueOf(1), new PassThruFunction0<Integer>(Integer.valueOf(10000))));
     }
 
     @Override
@@ -361,7 +362,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
 
     @Override
     @Test
-    public void detectIfNoneWithBlock()
+    public void detectIfNone()
     {
         Function0<Integer> defaultResultFunction = new PassThruFunction0<Integer>(6);
         Assert.assertEquals(

@@ -161,11 +161,7 @@ public abstract class AbstractCollectionAdapter<T>
     public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
     {
         T result = this.detect(predicate);
-        if (result == null)
-        {
-            result = function.value();
-        }
-        return result;
+        return result == null ? function.value() : result;
     }
 
     public int count(Predicate<? super T> predicate)
@@ -590,11 +586,7 @@ public abstract class AbstractCollectionAdapter<T>
             Function0<? extends T> function)
     {
         T result = this.detectWith(predicate, parameter);
-        if (result == null)
-        {
-            result = function.value();
-        }
-        return result;
+        return result == null ? function.value() : result;
     }
 
     public <P> int countWith(Predicate2<? super T, ? super P> predicate, P parameter)

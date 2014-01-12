@@ -24,6 +24,7 @@ import java.util.ListIterator;
 import java.util.RandomAccess;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.ByteFunction;
@@ -254,6 +255,7 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
         return ListIterate.rejectWith(this, predicate, parameter, targetCollection);
     }
 
+    @Override
     public PartitionImmutableList<T> partition(Predicate<? super T> predicate)
     {
         return ListIterate.partition(this, predicate).toImmutable();
@@ -369,6 +371,19 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
             }
         }
         return null;
+    }
+
+    @Override
+    public <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return ListIterate.detectWith(this, predicate, parameter);
+    }
+
+    @Override
+    public <P> T detectWithIfNone(Predicate2<? super T, ? super P> predicate, P parameter, Function0<? extends T> function)
+    {
+        T result = this.detectWith(predicate, parameter);
+        return result == null ? function.value() : result;
     }
 
     @Override
@@ -656,11 +671,13 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
         ListIterate.appendString(this, appendable, start, separator, end);
     }
 
+    @Override
     public <V> ImmutableListMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
     {
         return this.groupBy(function, FastListMultimap.<V, T>newMultimap()).toImmutable();
     }
 
+    @Override
     public <V, R extends MutableMultimap<V, T>> R groupBy(
             Function<? super T, ? extends V> function,
             R target)
@@ -668,11 +685,13 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
         return ListIterate.groupBy(this, function, target);
     }
 
+    @Override
     public <V> ImmutableListMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
     {
         return this.groupByEach(function, FastListMultimap.<V, T>newMultimap()).toImmutable();
     }
 
+    @Override
     public <V, R extends MutableMultimap<V, T>> R groupByEach(
             Function<? super T, ? extends Iterable<V>> function,
             R target)
@@ -716,11 +735,13 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
         return ListIterate.maxBy(this, function);
     }
 
+    @Override
     public <S> ImmutableList<Pair<T, S>> zip(Iterable<S> that)
     {
         return this.zip(that, FastList.<Pair<T, S>>newList()).toImmutable();
     }
 
+    @Override
     public ImmutableList<Pair<T, Integer>> zipWithIndex()
     {
         return this.zipWithIndex(FastList.<Pair<T, Integer>>newList()).toImmutable();

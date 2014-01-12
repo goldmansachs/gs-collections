@@ -298,11 +298,19 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     }
 
     @Test
-    public void detectIfNoneWithBlock()
+    public void detectIfNone()
     {
         Function0<Integer> function = new PassThruFunction0<Integer>(6);
         Assert.assertEquals(Integer.valueOf(1), this.intSet.detectIfNone(Predicates.equal(1), function));
         Assert.assertEquals(Integer.valueOf(6), this.intSet.detectIfNone(Predicates.equal(6), function));
+    }
+
+    @Test
+    public void detectWithIfNone()
+    {
+        Function0<Integer> function = new PassThruFunction0<Integer>(6);
+        Assert.assertEquals(Integer.valueOf(1), this.intSet.detectWithIfNone(Predicates2.equal(), Integer.valueOf(1), function));
+        Assert.assertEquals(Integer.valueOf(6), this.intSet.detectWithIfNone(Predicates2.equal(), Integer.valueOf(6), function));
     }
 
     @Test

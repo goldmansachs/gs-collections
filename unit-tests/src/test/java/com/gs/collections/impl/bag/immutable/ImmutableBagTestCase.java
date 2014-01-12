@@ -488,6 +488,21 @@ public abstract class ImmutableBagTestCase
     }
 
     @Test
+    public void detectWith()
+    {
+        ImmutableBag<String> immutableStrings = this.newBag();
+        Assert.assertEquals("1", immutableStrings.detectWith(Predicates2.equal(), "1"));
+    }
+
+    @Test
+    public void detectWithIfNone()
+    {
+        ImmutableBag<String> immutableStrings = this.newBag();
+        Assert.assertEquals("1", immutableStrings.detectWithIfNone(Predicates2.equal(), "1", new PassThruFunction0<String>("Not Found")));
+        Assert.assertEquals("Not Found", immutableStrings.detectWithIfNone(Predicates2.equal(), "10000", new PassThruFunction0<String>("Not Found")));
+    }
+
+    @Test
     public void zip()
     {
         ImmutableBag<String> immutableBag = this.newBag();
@@ -609,7 +624,7 @@ public abstract class ImmutableBagTestCase
     }
 
     @Test
-    public void detectIfNoneWithBlock()
+    public void detectIfNone()
     {
         ImmutableBag<String> strings = this.newBag();
         Function0<String> function = new PassThruFunction0<String>(String.valueOf(this.numKeys() + 1));

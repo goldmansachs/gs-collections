@@ -299,6 +299,11 @@ public class UnmodifiableRichIterable<T>
         return this.iterable.detect(predicate);
     }
 
+    public <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.iterable.detectWith(predicate, parameter);
+    }
+
     public T min(Comparator<? super T> comparator)
     {
         return this.iterable.min(comparator);
@@ -332,6 +337,11 @@ public class UnmodifiableRichIterable<T>
     public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
     {
         return this.iterable.detectIfNone(predicate, function);
+    }
+
+    public <P> T detectWithIfNone(Predicate2<? super T, ? super P> predicate, P parameter, Function0<? extends T> function)
+    {
+        return this.iterable.detectWithIfNone(predicate, parameter, function);
     }
 
     public int count(Predicate<? super T> predicate)

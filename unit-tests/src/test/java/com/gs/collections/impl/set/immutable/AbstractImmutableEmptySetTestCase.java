@@ -63,6 +63,14 @@ public abstract class AbstractImmutableEmptySetTestCase extends AbstractImmutabl
 
     @Override
     @Test
+    public void detectWith()
+    {
+        ImmutableSet<Integer> integers = this.classUnderTest();
+        Assert.assertNull(integers.detectWith(Predicates2.equal(), Integer.valueOf(1)));
+    }
+
+    @Override
+    @Test
     public void anySatisfy()
     {
         ImmutableSet<Integer> integers = this.classUnderTest();

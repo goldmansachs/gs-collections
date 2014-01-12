@@ -295,7 +295,17 @@ final class Immutable<name>ObjectEmptyMap\<V> implements Immutable<name>ObjectMa
         return null;
     }
 
+    public \<P> V detectWith(Predicate2\<? super V, ? super P> predicate, P parameter)
+    {
+        return null;
+    }
+
     public V detectIfNone(Predicate\<? super V> predicate, Function0\<? extends V> function)
+    {
+        return function.value();
+    }
+
+    public \<P> V detectWithIfNone(Predicate2\<? super V, ? super P> predicate, P parameter, Function0\<? extends V> function)
     {
         return function.value();
     }

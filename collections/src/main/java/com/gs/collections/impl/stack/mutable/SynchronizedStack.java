@@ -494,11 +494,27 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
         }
     }
 
+    public <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.detectWith(predicate, parameter);
+        }
+    }
+
     public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
     {
         synchronized (this.lock)
         {
             return this.delegate.detectIfNone(predicate, function);
+        }
+    }
+
+    public <P> T detectWithIfNone(Predicate2<? super T, ? super P> predicate, P parameter, Function0<? extends T> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.detectWithIfNone(predicate, parameter, function);
         }
     }
 

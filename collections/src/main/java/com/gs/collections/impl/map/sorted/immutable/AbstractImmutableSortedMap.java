@@ -329,6 +329,18 @@ public abstract class AbstractImmutableSortedMap<K, V>
     }
 
     @Override
+    public <P> V detectWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.detect(Predicates.bind(predicate, parameter));
+    }
+
+    @Override
+    public <P> V detectWithIfNone(Predicate2<? super V, ? super P> predicate, P parameter, Function0<? extends V> function)
+    {
+        return this.detectIfNone(Predicates.bind(predicate, parameter), function);
+    }
+
+    @Override
     public <R> ImmutableList<R> flatCollect(Function<? super V, ? extends Iterable<R>> function)
     {
         return this.flatCollect(function, FastList.<R>newList(this.size())).toImmutable();

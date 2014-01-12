@@ -777,6 +777,18 @@ public abstract class MapIterableTestCase
     }
 
     @Test
+    public void detectWith()
+    {
+        MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
+
+        String resultFound = map.detectWith(Predicates2.equal(), "One");
+        Assert.assertEquals("One", resultFound);
+
+        String resultNotFound = map.detectWith(Predicates2.equal(), "Four");
+        Assert.assertNull(resultNotFound);
+    }
+
+    @Test
     public void detectIfNone_value()
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
@@ -792,6 +804,25 @@ public abstract class MapIterableTestCase
         Assert.assertEquals("Zero", resultNotFound);
 
         String resultFound = map.detectIfNone(Predicates.equal("One"), function);
+        Assert.assertEquals("One", resultFound);
+    }
+
+    @Test
+    public void detectWithIfNone()
+    {
+        MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
+
+        Function0<String> function = new Function0<String>()
+        {
+            public String value()
+            {
+                return "Zero";
+            }
+        };
+        String resultNotFound = map.detectWithIfNone(Predicates2.equal(), "Four", function);
+        Assert.assertEquals("Zero", resultNotFound);
+
+        String resultFound = map.detectWithIfNone(Predicates2.equal(), "One", function);
         Assert.assertEquals("One", resultFound);
     }
 

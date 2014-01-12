@@ -120,6 +120,13 @@ public class ImmutableEmptySortedSetTest extends AbstractImmutableSortedSetTestC
 
     @Override
     @Test
+    public void detectWith()
+    {
+        Assert.assertNull(this.classUnderTest().detectWith(Predicates2.equal(), Integer.valueOf(1)));
+    }
+
+    @Override
+    @Test
     public void allSatisfy()
     {
         Assert.assertTrue(this.classUnderTest().allSatisfy(Predicates.instanceOf(Integer.class)));

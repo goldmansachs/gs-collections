@@ -293,9 +293,9 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         super.removeIfWith();
 
         MutableSortedBag<Integer> objects = this.newWith(Comparators.reverseNaturalOrder(), 4, 1, 3, 3, 2);
-        objects.removeIfWith(Predicates2.<Integer>equal(), 2);
+        objects.removeIfWith(Predicates2.equal(), 2);
         Verify.assertSortedBagsEqual(TreeBag.newBagWith(Comparators.reverseNaturalOrder(), 1, 3, 3, 4), objects);
-        objects.removeIfWith(Predicates2.<Integer>equal(), 3);
+        objects.removeIfWith(Predicates2.equal(), 3);
         Verify.assertSortedBagsEqual(TreeBag.newBagWith(Comparators.reverseNaturalOrder(), 1, 4), objects);
     }
 
@@ -1281,12 +1281,13 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
 
     @Override
     @Test
-    public void detectIfNoneWithBlock()
+    public void detectIfNone()
     {
-        super.detectIfNoneWithBlock();
+        super.detectIfNone();
 
         Function0<Integer> function = new PassThruFunction0<Integer>(6);
         Assert.assertEquals(Integer.valueOf(3), this.newWith(Comparators.reverseNaturalOrder(), 2, 3, 4, 5).detectIfNone(Predicates.equal(3), function));
+        Assert.assertEquals(Integer.valueOf(3), this.newWith(Comparators.reverseNaturalOrder(), 2, 3, 4, 5).detectIfNone(Predicates.equal(3), null));
         Assert.assertEquals(Integer.valueOf(6), this.newWith(Comparators.reverseNaturalOrder(), 1, 2, 3, 4, 5).detectIfNone(Predicates.equal(6), function));
     }
 
@@ -1357,7 +1358,7 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
         MutableSortedBag<Integer> bag = TreeBag.newBagWith(Comparators.reverseNaturalOrder(), 3, 3, 3, 2, 2, 1);
 
         Assert.assertFalse(bag.noneSatisfyWith(Predicates2.<Integer>lessThan(), 4));
-        Assert.assertFalse(bag.noneSatisfyWith(Predicates2.<Integer>equal(), 2));
+        Assert.assertFalse(bag.noneSatisfyWith(Predicates2.equal(), 2));
         Assert.assertTrue(bag.noneSatisfyWith(Predicates2.<Integer>greaterThan(), 4));
     }
 
@@ -1381,7 +1382,7 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
 
         MutableSortedBag<Integer> bag = TreeBag.newBagWith(Comparators.reverseNaturalOrder(), 3, 3, 3, 2, 2, 1);
         Assert.assertTrue(bag.anySatisfyWith(Predicates2.<Integer>lessThan(), 4));
-        Assert.assertTrue(bag.anySatisfyWith(Predicates2.<Integer>equal(), 2));
+        Assert.assertTrue(bag.anySatisfyWith(Predicates2.equal(), 2));
         Assert.assertFalse(bag.anySatisfyWith(Predicates2.<Integer>greaterThan(), 4));
     }
 

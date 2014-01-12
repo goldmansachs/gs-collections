@@ -283,7 +283,7 @@ public class SingletonListTest extends AbstractMemoryEfficientMutableListTestCas
     }
 
     @Test
-    public void detectIfNoneWithBlock()
+    public void detectIfNone()
     {
         Function0<Integer> function = new PassThruFunction0<Integer>(6);
         Assert.assertEquals(Integer.valueOf(1), newWith(1).detectIfNone(Predicates.equal(1), function));

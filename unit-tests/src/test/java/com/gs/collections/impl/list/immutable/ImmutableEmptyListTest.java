@@ -143,6 +143,14 @@ public class ImmutableEmptyListTest extends AbstractImmutableListTestCase
 
     @Override
     @Test
+    public void detectWith()
+    {
+        ImmutableList<Integer> integers = this.classUnderTest();
+        Assert.assertNull(integers.detectWith(Predicates2.equal(), Integer.valueOf(1)));
+    }
+
+    @Override
+    @Test
     public void distinct()
     {
         ImmutableList<Integer> integers = this.classUnderTest();

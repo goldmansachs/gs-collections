@@ -494,8 +494,9 @@ public class ArrayAdapterTest extends AbstractListTestCase
                 UnifiedSet.<Integer>newSet()), 3, 4);
     }
 
+    @Override
     @Test
-    public void testDetectWith()
+    public void detectWith()
     {
         Assert.assertEquals(Integer.valueOf(3),
                 ArrayAdapter.<Integer>newArrayWith(1, 2, 3, 4, 5).detectWith(Predicates2.equal(), 3));
@@ -503,10 +504,11 @@ public class ArrayAdapterTest extends AbstractListTestCase
     }
 
     @Test
-    public void testDetectWithIfNone()
+    public void detectWithIfNone()
     {
         MutableList<Integer> list = ArrayAdapter.newArrayWith(1, 2, 3, 4, 5);
         Assert.assertNull(list.detectWithIfNone(Predicates2.equal(), 6, new PassThruFunction0<Integer>(null)));
+        Assert.assertEquals(Integer.valueOf(10000), list.detectWithIfNone(Predicates2.equal(), 6, new PassThruFunction0<Integer>(Integer.valueOf(10000))));
     }
 
     @Test

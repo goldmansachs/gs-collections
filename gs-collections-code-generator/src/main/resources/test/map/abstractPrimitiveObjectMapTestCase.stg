@@ -335,6 +335,16 @@ public abstract class Abstract<name>ObjectMapTestCase
     }
 
     @Test
+    public void detectWith()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
+        Assert.assertTrue("one".equals(map1.detectWith(StringPredicates2.endsWith(), "ne")) || "nine".equals(map1.detectWith(StringPredicates2.endsWith(), "ne")));
+        Assert.assertEquals("zero", map1.detectWith(StringPredicates2.endsWith(), "o"));
+        Assert.assertEquals("nine", map1.detectWith(Predicates2.equal(), "nine"));
+        Assert.assertNull(map1.detectWith(Predicates2.equal(), "ten"));
+    }
+
+    @Test
     public void detectIfNone()
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
@@ -351,6 +361,25 @@ public abstract class Abstract<name>ObjectMapTestCase
         Assert.assertEquals("zero", map1.detectIfNone(StringPredicates.endsWith("o"), ifNone));
         Assert.assertEquals("nine", map1.detectIfNone(Predicates.equal("nine"), ifNone));
         Assert.assertEquals("ifNone", map1.detectIfNone(Predicates.equal("ten"), ifNone));
+    }
+
+    @Test
+    public void detectWithIfNone()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
+
+        Function0\<String> ifNone = new Function0\<String>()
+        {
+            public String value()
+            {
+                return "ifNone";
+            }
+        };
+        Assert.assertTrue("one".equals(map1.detectWithIfNone(StringPredicates2.endsWith(), "ne", ifNone))
+            || "nine".equals(map1.detectWithIfNone(StringPredicates2.endsWith(), "ne", ifNone)));
+        Assert.assertEquals("zero", map1.detectWithIfNone(StringPredicates2.endsWith(), "o", ifNone));
+        Assert.assertEquals("nine", map1.detectWithIfNone(Predicates2.equal(), "nine", ifNone));
+        Assert.assertEquals("ifNone", map1.detectWithIfNone(Predicates2.equal(), "ten", ifNone));
     }
 
     @Test
