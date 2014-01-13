@@ -394,6 +394,17 @@ public abstract class Abstract<name>ObjectMapTestCase
     }
 
     @Test
+    public void countWith()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
+
+        Verify.assertEquals(2, map1.countWith(StringPredicates2.endsWith(), "ne"));
+        Verify.assertEquals(1, map1.countWith(StringPredicates2.endsWith(), "o"));
+        Verify.assertEquals(1, map1.countWith(Predicates2.equal(), "nine"));
+        Verify.assertNotEquals(1, map1.countWith(Predicates2.equal(), "ten"));
+    }
+
+    @Test
     public void anySatisfy()
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");

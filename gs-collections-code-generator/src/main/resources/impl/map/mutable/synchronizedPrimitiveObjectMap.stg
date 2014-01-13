@@ -579,6 +579,14 @@ public final class Synchronized<name>ObjectMap\<V>
         }
     }
 
+    public \<P> int countWith(Predicate2\<? super V, ? super P> predicate, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.map.countWith(predicate, parameter);
+        }
+    }
+
     public boolean anySatisfy(Predicate\<? super V> predicate)
     {
         synchronized (this.lock)

@@ -404,6 +404,11 @@ public abstract class AbstractLazyIterable<T>
         return procedure.getCount();
     }
 
+    public <P> int countWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return IterableIterate.countWith(this, predicate, parameter);
+    }
+
     public boolean anySatisfy(Predicate<? super T> predicate)
     {
         return IterableIterate.anySatisfy(this, predicate);

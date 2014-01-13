@@ -665,6 +665,14 @@ public abstract class ImmutableBagTestCase
     }
 
     @Test
+    public void countWith()
+    {
+        ImmutableBag<String> strings = this.newBag();
+        Assert.assertEquals(strings.size(), strings.countWith(Predicates2.instanceOf(), String.class));
+        Assert.assertEquals(0, strings.countWith(Predicates2.instanceOf(), Integer.class));
+    }
+
+    @Test
     public void collectIf()
     {
         ImmutableBag<String> strings = this.newBag();

@@ -315,6 +315,11 @@ final class Immutable<name>ObjectEmptyMap\<V> implements Immutable<name>ObjectMa
         return 0;
     }
 
+    public \<P> int countWith(Predicate2\<? super V, ? super P> predicate, P parameter)
+    {
+        return 0;
+    }
+
     public boolean anySatisfy(Predicate\<? super V> predicate)
     {
         return false;

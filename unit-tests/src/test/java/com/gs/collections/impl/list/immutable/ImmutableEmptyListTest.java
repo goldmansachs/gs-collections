@@ -160,6 +160,14 @@ public class ImmutableEmptyListTest extends AbstractImmutableListTestCase
 
     @Override
     @Test
+    public void countWith()
+    {
+        ImmutableList<Integer> integers = this.classUnderTest();
+        Assert.assertEquals(0, integers.countWith(Predicates2.instanceOf(), Integer.class));
+    }
+
+    @Override
+    @Test
     public void allSatisfy()
     {
         ImmutableList<Integer> integers = this.classUnderTest();

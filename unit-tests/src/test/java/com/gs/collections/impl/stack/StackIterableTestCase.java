@@ -558,6 +558,16 @@ public abstract class StackIterableTestCase
     }
 
     @Test
+    public void countWith()
+    {
+        StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3, 4, 5);
+        CountingPredicate2<Object, Object> predicate = new CountingPredicate2<Object, Object>(Predicates2.equal());
+        Assert.assertEquals(1, stack.countWith(predicate, 1));
+        Assert.assertEquals(5, predicate.count);
+        Assert.assertNotEquals(2, stack.countWith(predicate, 4));
+    }
+
+    @Test
     public void anySatisfy()
     {
         StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);

@@ -526,6 +526,14 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
         }
     }
 
+    public <P> int countWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.countWith(predicate, parameter);
+        }
+    }
+
     public boolean anySatisfy(Predicate<? super T> predicate)
     {
         synchronized (this.lock)

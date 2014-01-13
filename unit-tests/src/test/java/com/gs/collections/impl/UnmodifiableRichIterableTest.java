@@ -406,6 +406,13 @@ public class UnmodifiableRichIterableTest
     }
 
     @Test
+    public void countWith()
+    {
+        Assert.assertEquals(this.mutableCollection.countWith(StringPredicates2.contains(), "eatles"),
+                this.unmodifiableCollection.countWith(StringPredicates2.contains(), "eatles"));
+    }
+
+    @Test
     public void testInjectInto()
     {
         Function2<String, String, String> function = new Function2<String, String, String>()

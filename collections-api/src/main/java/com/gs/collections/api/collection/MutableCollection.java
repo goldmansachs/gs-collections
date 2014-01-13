@@ -287,15 +287,6 @@ public interface MutableCollection<T>
 
     <V> MutableCollection<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
 
-    /**
-     * Returns the total number of elements that evaluate to true for the specified predicate.
-     * <p/>
-     * <pre>e.g.
-     * return lastNames.<b>countWith</b>(PredicatesLite.equal(), "Smith");
-     * </pre>
-     */
-    <P> int countWith(Predicate2<? super T, ? super P> predicate, P parameter);
-
     <IV, P> IV injectIntoWith(
             IV injectValue,
             Function3<? super IV, ? super T, ? super P, ? extends IV> function,

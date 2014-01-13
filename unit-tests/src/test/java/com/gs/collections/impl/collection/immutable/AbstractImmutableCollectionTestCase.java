@@ -535,6 +535,14 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
+    public void countWith()
+    {
+        ImmutableCollection<Integer> integers = this.classUnderTest();
+        Assert.assertEquals(integers.size(), integers.countWith(Predicates2.instanceOf(), Integer.class));
+        Assert.assertEquals(0, integers.countWith(Predicates2.instanceOf(), String.class));
+    }
+
+    @Test
     public void collectIf()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();

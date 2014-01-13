@@ -511,6 +511,11 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().count(predicate);
     }
 
+    public <P> int countWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.getMutableMap().countWith(predicate, parameter);
+    }
+
     public V detect(Predicate<? super V> predicate)
     {
         return this.getMutableMap().detect(predicate);

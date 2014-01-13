@@ -1053,6 +1053,30 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         return count;
     }
 
+    public \<P> int countWith(Predicate2\<? super V, ? super P> predicate, P parameter)
+    {
+        int count = 0;
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey && predicate.accept(this.sentinelValues.zeroValue, parameter))
+            {
+                count++;
+            }
+            if (this.sentinelValues.containsOneKey && predicate.accept(this.sentinelValues.oneValue, parameter))
+            {
+                count++;
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            if (isNonSentinel(this.keys[i]) && predicate.accept(this.values[i], parameter))
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
     public boolean anySatisfy(Predicate\<? super V> predicate)
     {
         if (this.sentinelValues != null)

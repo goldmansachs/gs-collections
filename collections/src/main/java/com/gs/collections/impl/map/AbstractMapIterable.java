@@ -374,6 +374,11 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
         return this.valuesView().count(predicate);
     }
 
+    public <P> int countWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.valuesView().countWith(predicate, parameter);
+    }
+
     public V detect(Predicate<? super V> predicate)
     {
         return this.valuesView().detect(predicate);

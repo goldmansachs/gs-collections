@@ -423,6 +423,11 @@ final class Immutable<name>ObjectSingletonMap\<V> extends AbstractImmutable<name
         return predicate.accept(this.value1) ? 1 : 0;
     }
 
+    public \<P> int countWith(Predicate2\<? super V, ? super P> predicate, P parameter)
+    {
+        return predicate.accept(this.value1, parameter) ? 1 : 0;
+    }
+
     public boolean anySatisfy(Predicate\<? super V> predicate)
     {
         return predicate.accept(this.value1);

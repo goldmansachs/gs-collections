@@ -482,6 +482,11 @@ public class UnmodifiableTreeMap<K, V>
         return this.getMutableSortedMap().count(predicate);
     }
 
+    public <P> int countWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.getMutableSortedMap().countWith(predicate, parameter);
+    }
+
     public V detect(Predicate<? super V> predicate)
     {
         return this.getMutableSortedMap().detect(predicate);

@@ -469,6 +469,11 @@ abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
         return this.delegate.count(predicate);
     }
 
+    public <P> int countWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.delegate.countWith(predicate, parameter);
+    }
+
     public boolean anySatisfy(Predicate<? super V> predicate)
     {
         return this.delegate.anySatisfy(predicate);

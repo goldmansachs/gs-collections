@@ -349,6 +349,11 @@ public class UnmodifiableRichIterable<T>
         return this.iterable.count(predicate);
     }
 
+    public <P> int countWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.iterable.countWith(predicate, parameter);
+    }
+
     public boolean anySatisfy(Predicate<? super T> predicate)
     {
         return this.iterable.anySatisfy(predicate);

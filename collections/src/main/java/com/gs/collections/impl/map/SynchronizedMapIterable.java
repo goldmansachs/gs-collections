@@ -344,6 +344,14 @@ public abstract class SynchronizedMapIterable<K, V>
         }
     }
 
+    public <P> int countWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.mapIterable.countWith(predicate, parameter);
+        }
+    }
+
     public boolean anySatisfy(Predicate<? super V> predicate)
     {
         synchronized (this.lock)

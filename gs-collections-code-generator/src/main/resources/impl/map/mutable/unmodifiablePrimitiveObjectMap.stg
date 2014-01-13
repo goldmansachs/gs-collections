@@ -408,6 +408,11 @@ public final class Unmodifiable<name>ObjectMap\<V>
         return this.map.count(predicate);
     }
 
+    public \<P> int countWith(Predicate2\<? super V, ? super P> predicate, P parameter)
+    {
+        return this.map.countWith(predicate, parameter);
+    }
+
     public boolean anySatisfy(Predicate\<? super V> predicate)
     {
         return this.map.anySatisfy(predicate);

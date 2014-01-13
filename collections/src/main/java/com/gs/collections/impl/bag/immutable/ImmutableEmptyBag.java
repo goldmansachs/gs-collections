@@ -432,6 +432,11 @@ final class ImmutableEmptyBag<T>
         return 0;
     }
 
+    public <P> int countWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return 0;
+    }
+
     public boolean anySatisfy(Predicate<? super T> predicate)
     {
         return false;

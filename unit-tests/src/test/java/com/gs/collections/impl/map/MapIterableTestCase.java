@@ -765,6 +765,16 @@ public abstract class MapIterableTestCase
     }
 
     @Test
+    public void countWith()
+    {
+        MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");
+
+        int actual = map.countWith(Predicates2.equal(), "One");
+
+        Assert.assertEquals(1, actual);
+    }
+
+    @Test
     public void detect_value()
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");

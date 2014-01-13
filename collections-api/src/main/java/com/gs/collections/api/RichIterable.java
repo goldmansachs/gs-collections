@@ -687,6 +687,15 @@ public interface
     int count(Predicate<? super T> predicate);
 
     /**
+     * Returns the total number of elements that evaluate to true for the specified predicate.
+     * <p/>
+     * <pre>e.g.
+     * return lastNames.<b>countWith</b>(PredicatesLite.equal(), "Smith");
+     * </pre>
+     */
+    <P> int countWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
+    /**
      * Returns true if the predicate evaluates to true for any element of the iterable. Returns
      * false if the iterable is empty, or if no element returned true when evaluating the predicate.
      *

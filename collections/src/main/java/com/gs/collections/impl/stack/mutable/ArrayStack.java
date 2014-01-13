@@ -548,6 +548,11 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
         return this.delegate.asReversed().count(predicate);
     }
 
+    public <P> int countWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.delegate.asReversed().countWith(predicate, parameter);
+    }
+
     public boolean anySatisfy(Predicate<? super T> predicate)
     {
         return this.delegate.asReversed().anySatisfy(predicate);

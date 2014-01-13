@@ -334,6 +334,11 @@ public final class UnmodifiableStack<T> implements MutableStack<T>, Serializable
         return this.mutableStack.count(predicate);
     }
 
+    public <P> int countWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.mutableStack.countWith(predicate, parameter);
+    }
+
     public boolean anySatisfy(Predicate<? super T> predicate)
     {
         return this.mutableStack.anySatisfy(predicate);
