@@ -1,0 +1,43 @@
+import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveHashCode.stg"
+import "primitiveAPI.stg"
+import "primitiveLiteral.stg"
+
+targetPath() ::= "com/gs/collections/api/ordered/primitive"
+
+fileName(primitive) ::= "Reversible<primitive.name>Iterable"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name)>
+>>
+
+body(type, name) ::= <<
+<copyright()>
+
+package com.gs.collections.api.ordered.primitive;
+
+import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.ordered.ReversibleIterable;
+
+/**
+ * This file was automatically generated from template file reversiblePrimitiveIterable.stg.
+ *
+ * @since 5.0.
+ */
+public interface Reversible<name>Iterable extends <name>Iterable
+{
+    <type> getFirst();
+
+    <type> getLast();
+
+    int indexOf(<type> value);
+
+    <sharedAPI(fileName(primitive), name)>
+
+    \<V> ReversibleIterable\<V> collect(<name>ToObjectFunction\<? extends V> function);
+}
+
+>>

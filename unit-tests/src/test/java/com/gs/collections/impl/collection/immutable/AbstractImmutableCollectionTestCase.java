@@ -86,7 +86,7 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void selectWithTarget()
+    public void selectWith_target()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         Assert.assertEquals(
@@ -95,7 +95,16 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void rejectWithTarget()
+    public void rejectWith()
+    {
+        ImmutableCollection<Integer> integers = this.classUnderTest();
+        Assert.assertEquals(
+                this.<Integer>newMutable().withAll(integers).reject(IntegerPredicates.isOdd()),
+                integers.rejectWith(Predicates2.in(), iList(1, 3, 5, 7, 9)));
+    }
+
+    @Test
+    public void rejectWith_target()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         Assert.assertEquals(

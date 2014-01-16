@@ -17,10 +17,10 @@
 package com.gs.collections.api.multimap.list;
 
 import com.gs.collections.api.list.ListIterable;
-import com.gs.collections.api.multimap.Multimap;
+import com.gs.collections.api.multimap.ordered.ReversibleIterableMultimap;
 
 public interface ListMultimap<K, V>
-        extends Multimap<K, V>
+        extends ReversibleIterableMultimap<K, V>
 {
     ListMultimap<K, V> newEmpty();
 

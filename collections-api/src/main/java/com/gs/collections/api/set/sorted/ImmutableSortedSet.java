@@ -75,6 +75,8 @@ public interface ImmutableSortedSet<T>
 
     PartitionImmutableSortedSet<T> partition(Predicate<? super T> predicate);
 
+    PartitionImmutableSortedSet<T> partitionWhile(Predicate<? super T> predicate);
+
     <S> ImmutableSortedSet<S> selectInstancesOf(Class<S> clazz);
 
     <V> ImmutableList<V> collect(Function<? super T, ? extends V> function);
@@ -100,6 +102,12 @@ public interface ImmutableSortedSet<T>
     <V> ImmutableList<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 
     <V> ImmutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
+
+    ImmutableSortedSet<T> distinct();
+
+    ImmutableSortedSet<T> takeWhile(Predicate<? super T> predicate);
+
+    ImmutableSortedSet<T> dropWhile(Predicate<? super T> predicate);
 
     <V> ImmutableSortedSetMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
 

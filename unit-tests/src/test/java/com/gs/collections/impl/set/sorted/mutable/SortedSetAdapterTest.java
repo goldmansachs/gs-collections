@@ -210,7 +210,7 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
         {
             public void run()
             {
-                new SortedSetAdapter<Object>(new TreeSet<Object>()).getFirst();
+                new SortedSetAdapter<Object>(new TreeSet<Object>()).getLast();
             }
         });
     }

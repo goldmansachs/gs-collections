@@ -1,0 +1,158 @@
+/*
+ * Copyright 2013 Goldman Sachs.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.gs.collections.api.ordered;
+
+import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
+import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.multimap.ordered.ReversibleIterableMultimap;
+import com.gs.collections.api.ordered.primitive.ReversibleBooleanIterable;
+import com.gs.collections.api.ordered.primitive.ReversibleByteIterable;
+import com.gs.collections.api.ordered.primitive.ReversibleCharIterable;
+import com.gs.collections.api.ordered.primitive.ReversibleDoubleIterable;
+import com.gs.collections.api.ordered.primitive.ReversibleFloatIterable;
+import com.gs.collections.api.ordered.primitive.ReversibleIntIterable;
+import com.gs.collections.api.ordered.primitive.ReversibleLongIterable;
+import com.gs.collections.api.ordered.primitive.ReversibleShortIterable;
+import com.gs.collections.api.partition.ordered.PartitionReversibleIterable;
+import com.gs.collections.api.stack.MutableStack;
+import com.gs.collections.api.tuple.Pair;
+
+/**
+ * A ReversibleIterable is an ordered iterable that you can iterate over forwards or backwards. Besides being ordered,
+ * it has methods that support efficient iteration from the end, including {@link #asReversed()} and
+ * {@link #reverseForEach(Procedure)}.
+ *
+ * @since 5.0
+ */
+public interface ReversibleIterable<T> extends RichIterable<T>
+{
+    /**
+     * Evaluates the procedure for each element of the list iterating in reverse order.
+     * <p/>
+     * <pre>e.g.
+     * people.reverseForEach(new Procedure<Person>()
+     * {
+     *     public void value(Person person)
+     *     {
+     *         LOGGER.info(person.getName());
+     *     }
+     * });
+     * </pre>
+     */
+    void reverseForEach(Procedure<? super T> procedure);
+
+    /**
+     * Returns a reversed view of this ReversibleIterable.
+     */
+    LazyIterable<T> asReversed();
+
+    /**
+     * Returns the index of the first occurrence of the specified item
+     * in this list, or -1 if this list does not contain the item.
+     */
+    int indexOf(Object o);
+
+    /**
+     * Returns the initial elements that satisfy the Predicate. Short circuits at the first element which does not
+     * satisfy the Predicate.
+     */
+    ReversibleIterable<T> takeWhile(Predicate<? super T> predicate);
+
+    /**
+     * Returns the final elements that do not satisfy the Predicate. Short circuits at the first element which does
+     * satisfy the Predicate.
+     */
+    ReversibleIterable<T> dropWhile(Predicate<? super T> predicate);
+
+    /**
+     * Returns a Partition of the initial elements that satisfy the Predicate and the remaining elements. Short circuits at the first element which does
+     * satisfy the Predicate.
+     */
+    PartitionReversibleIterable<T> partitionWhile(Predicate<? super T> predicate);
+
+    /**
+     * Returns a new {@code ReversibleIterable} containing the distinct elements in this iterable.
+     * <p/>
+     * Conceptually similar to {@link #toSet()}.{@link #toList()} but retains the original order. If an element appears
+     * multiple times in this iterable, the first one will be copied into the result.
+     *
+     * @return {@code ReversibleIterable} of distinct elements
+     */
+    ReversibleIterable<T> distinct();
+
+    /**
+     * Converts the ReversibleIterable to a mutable MutableStack implementation.
+     */
+    MutableStack<T> toStack();
+
+    ReversibleIterable<T> select(Predicate<? super T> predicate);
+
+    <P> ReversibleIterable<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
+    ReversibleIterable<T> reject(Predicate<? super T> predicate);
+
+    <P> ReversibleIterable<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
+    PartitionReversibleIterable<T> partition(Predicate<? super T> predicate);
+
+    <S> ReversibleIterable<S> selectInstancesOf(Class<S> clazz);
+
+    <V> ReversibleIterable<V> collect(Function<? super T, ? extends V> function);
+
+    <P, V> ReversibleIterable<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
+
+    <V> ReversibleIterable<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
+
+    <V> ReversibleIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
+
+    ReversibleBooleanIterable collectBoolean(BooleanFunction<? super T> booleanFunction);
+
+    ReversibleByteIterable collectByte(ByteFunction<? super T> byteFunction);
+
+    ReversibleCharIterable collectChar(CharFunction<? super T> charFunction);
+
+    ReversibleDoubleIterable collectDouble(DoubleFunction<? super T> doubleFunction);
+
+    ReversibleFloatIterable collectFloat(FloatFunction<? super T> floatFunction);
+
+    ReversibleIntIterable collectInt(IntFunction<? super T> intFunction);
+
+    ReversibleLongIterable collectLong(LongFunction<? super T> longFunction);
+
+    ReversibleShortIterable collectShort(ShortFunction<? super T> shortFunction);
+
+    <V> ReversibleIterableMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
+
+    <V> ReversibleIterableMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
+
+    <S> ReversibleIterable<Pair<T, S>> zip(Iterable<S> that);
+
+    ReversibleIterable<Pair<T, Integer>> zipWithIndex();
+}

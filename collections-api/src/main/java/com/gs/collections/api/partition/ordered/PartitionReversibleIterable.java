@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,19 +14,21 @@
  * limitations under the License.
  */
 
-package com.gs.collections.api.partition.list;
+package com.gs.collections.api.partition.ordered;
 
-import com.gs.collections.api.list.ListIterable;
-import com.gs.collections.api.partition.ordered.PartitionReversibleIterable;
+import com.gs.collections.api.ordered.ReversibleIterable;
+import com.gs.collections.api.partition.PartitionIterable;
 
 /**
- * A PartitionList is the result of splitting a ListIterable into two ListIterables based on a Predicate.
+ * A PartitionReversibleIterable is the result of splitting a ReversibleIterable into two ReversibleIterables based on a Predicate.
  * The results that answer true for the Predicate will be returned from the getSelected() method and the results
  * that answer false for the predicate will be returned from the getRejected() method.
+ *
+ * @since 5.0
  */
-public interface PartitionList<T> extends PartitionReversibleIterable<T>
+public interface PartitionReversibleIterable<T> extends PartitionIterable<T>
 {
-    ListIterable<T> getSelected();
+    ReversibleIterable<T> getSelected();
 
-    ListIterable<T> getRejected();
+    ReversibleIterable<T> getRejected();
 }

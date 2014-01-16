@@ -76,6 +76,8 @@ public interface MutableSortedSet<T>
 
     PartitionMutableSortedSet<T> partition(Predicate<? super T> predicate);
 
+    PartitionMutableSortedSet<T> partitionWhile(Predicate<? super T> predicate);
+
     <S> MutableSortedSet<S> selectInstancesOf(Class<S> clazz);
 
     <V> MutableList<V> collect(Function<? super T, ? extends V> function);
@@ -101,6 +103,12 @@ public interface MutableSortedSet<T>
     <V> MutableList<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 
     <V> MutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
+
+    MutableSortedSet<T> distinct();
+
+    MutableSortedSet<T> takeWhile(Predicate<? super T> predicate);
+
+    MutableSortedSet<T> dropWhile(Predicate<? super T> predicate);
 
     /**
      * Returns an unmodifable view of the set. The returned set will be <tt>Serializable</tt> if this set is <tt>Serializable</tt>.

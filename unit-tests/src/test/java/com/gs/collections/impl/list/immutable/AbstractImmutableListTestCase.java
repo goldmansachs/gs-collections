@@ -23,7 +23,9 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 
+import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.ImmutableCollection;
@@ -31,20 +33,29 @@ import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.collection.primitive.ImmutableBooleanCollection;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.multimap.Multimap;
+import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.api.multimap.list.ImmutableListMultimap;
 import com.gs.collections.api.partition.list.PartitionImmutableList;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Functions0;
+import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.ObjectIntProcedures;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
+import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.collection.immutable.AbstractImmutableCollectionTestCase;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
+import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.ListIterate;
 import org.junit.Assert;
 import org.junit.Test;
@@ -246,18 +257,16 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
         Assert.assertEquals(this.classUnderTest(), result);
     }
 
-    @Override
     @Test
-    public void selectWithTarget()
+    public void select_target()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         Assert.assertEquals(integers, integers.select(Predicates.lessThan(integers.size() + 1), FastList.<Integer>newList()));
         Verify.assertEmpty(integers.select(Predicates.greaterThan(integers.size()), FastList.<Integer>newList()));
     }
 
-    @Override
     @Test
-    public void rejectWithTarget()
+    public void reject_target()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         Verify.assertEmpty(integers.reject(Predicates.lessThan(integers.size() + 1), FastList.<Integer>newList()));
@@ -512,6 +521,49 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
         ImmutableCollection<Integer> integers = this.classUnderTest();
         ImmutableBooleanCollection immutableCollection = integers.collectBoolean(PrimitiveFunctions.integerIsPositive());
         Verify.assertSize(integers.size(), immutableCollection);
+    }
+
+    @Test
+    public void groupBy()
+    {
+        ImmutableList<Integer> list = this.classUnderTest();
+        ImmutableListMultimap<Boolean, Integer> multimap =
+                list.groupBy(new Function<Integer, Boolean>()
+                {
+                    public Boolean valueOf(Integer integer)
+                    {
+                        return IntegerPredicates.isOdd().accept(integer);
+                    }
+                });
+
+        MutableMap<Boolean, RichIterable<Integer>> actualMap = multimap.toMap();
+        int halfSize = this.classUnderTest().size() / 2;
+        boolean odd = this.classUnderTest().size() % 2 != 0;
+        Assert.assertEquals(halfSize, Iterate.sizeOf(actualMap.getIfAbsent(false, Functions0.<Integer>newFastList())));
+        Assert.assertEquals(halfSize + (odd ? 1 : 0), Iterate.sizeOf(actualMap.getIfAbsent(true, Functions0.<Integer>newFastList())));
+    }
+
+    @Test
+    public void groupByEach()
+    {
+        final ImmutableList<Integer> list = this.classUnderTest();
+
+        final MutableMultimap<Integer, Integer> expected = FastListMultimap.newMultimap();
+        list.forEach(new Procedure<Integer>()
+        {
+            public void value(Integer value)
+            {
+                expected.putAll(-value, Interval.fromTo(value, list.size()));
+            }
+        });
+
+        Multimap<Integer, Integer> actual =
+                list.groupByEach(new NegativeIntervalFunction());
+        Assert.assertEquals(expected, actual);
+
+        Multimap<Integer, Integer> actualWithTarget =
+                list.groupByEach(new NegativeIntervalFunction(), FastListMultimap.<Integer, Integer>newMultimap());
+        Assert.assertEquals(expected, actualWithTarget);
     }
 
     @Test

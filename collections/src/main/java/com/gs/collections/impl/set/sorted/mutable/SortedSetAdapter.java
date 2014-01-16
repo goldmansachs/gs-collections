@@ -50,6 +50,7 @@ import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.set.sorted.SortedSetIterable;
+import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
@@ -77,8 +78,10 @@ import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.multimap.set.sorted.TreeSortedSetMultimap;
 import com.gs.collections.impl.partition.set.sorted.PartitionTreeSortedSet;
+import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.Iterate;
+import com.gs.collections.impl.utility.internal.IterableIterate;
 import com.gs.collections.impl.utility.internal.SetIterables;
 import com.gs.collections.impl.utility.internal.SetIterate;
 import com.gs.collections.impl.utility.internal.SortedSetIterables;
@@ -124,6 +127,11 @@ public final class SortedSetAdapter<T>
     public ImmutableSortedSet<T> toImmutable()
     {
         return SortedSets.immutable.ofSortedSet(this.delegate);
+    }
+
+    public MutableStack<T> toStack()
+    {
+        return ArrayStack.newStack(this);
     }
 
     public static <T> MutableSortedSet<T> adapt(SortedSet<T> set)
@@ -243,6 +251,24 @@ public final class SortedSetAdapter<T>
         PartitionMutableSortedSet<T> partitionMutableSortedSet = new PartitionTreeSortedSet<T>(this.comparator());
         this.forEach(new PartitionProcedure<T>(predicate, partitionMutableSortedSet));
         return partitionMutableSortedSet;
+    }
+
+    public PartitionMutableSortedSet<T> partitionWhile(Predicate<? super T> predicate)
+    {
+        PartitionTreeSortedSet<T> result = new PartitionTreeSortedSet<T>(this.comparator());
+        return IterableIterate.partitionWhile(this, predicate, result);
+    }
+
+    public MutableSortedSet<T> takeWhile(Predicate<? super T> predicate)
+    {
+        MutableSortedSet<T> result = TreeSortedSet.newSet(this.comparator());
+        return IterableIterate.takeWhile(this, predicate, result);
+    }
+
+    public MutableSortedSet<T> dropWhile(Predicate<? super T> predicate)
+    {
+        MutableSortedSet<T> result = TreeSortedSet.newSet(this.comparator());
+        return IterableIterate.dropWhile(this, predicate, result);
     }
 
     @Override
@@ -389,6 +415,11 @@ public final class SortedSetAdapter<T>
             return Iterate.zipWithIndex(this.delegate, pairs);
         }
         return Iterate.zipWithIndex(this.delegate, TreeSortedSet.<Pair<T, Integer>>newSet(Comparators.<T>byFirstOfPair(comparator)));
+    }
+
+    public MutableSortedSet<T> distinct()
+    {
+        return TreeSortedSet.newSet(this);
     }
 
     public MutableSortedSet<T> union(SetIterable<? extends T> set)

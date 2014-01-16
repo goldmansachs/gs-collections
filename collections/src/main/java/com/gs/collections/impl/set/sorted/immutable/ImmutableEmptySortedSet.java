@@ -24,14 +24,18 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
 import com.gs.collections.api.set.sorted.SortedSetIterable;
+import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.EmptyIterator;
 import com.gs.collections.impl.factory.SortedSets;
+import com.gs.collections.impl.stack.mutable.ArrayStack;
 import net.jcip.annotations.Immutable;
 
 /**
@@ -132,6 +136,36 @@ final class ImmutableEmptySortedSet<T>
     }
 
     @Override
+    public ImmutableSortedSet<T> select(Predicate<? super T> predicate)
+    {
+        return this;
+    }
+
+    @Override
+    public <P> ImmutableSortedSet<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this;
+    }
+
+    @Override
+    public ImmutableSortedSet<T> reject(Predicate<? super T> predicate)
+    {
+        return this;
+    }
+
+    @Override
+    public <P> ImmutableSortedSet<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this;
+    }
+
+    @Override
+    public <S> ImmutableSortedSet<S> selectInstancesOf(Class<S> clazz)
+    {
+        return (ImmutableSortedSet<S>) this;
+    }
+
+    @Override
     public Iterator<T> iterator()
     {
         return EmptyIterator.getInstance();
@@ -183,6 +217,12 @@ final class ImmutableEmptySortedSet<T>
     public <R extends Collection<Pair<T, Integer>>> R zipWithIndex(R target)
     {
         return target;
+    }
+
+    @Override
+    public MutableStack<T> toStack()
+    {
+        return ArrayStack.newStack();
     }
 
     public T first()

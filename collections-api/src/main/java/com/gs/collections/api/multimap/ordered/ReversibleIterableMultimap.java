@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,22 +14,15 @@
  * limitations under the License.
  */
 
-package com.gs.collections.api.multimap.sortedset;
+package com.gs.collections.api.multimap.ordered;
 
-import com.gs.collections.api.multimap.ordered.SortedIterableMultimap;
-import com.gs.collections.api.set.sorted.SortedSetIterable;
+import com.gs.collections.api.multimap.Multimap;
+import com.gs.collections.api.ordered.ReversibleIterable;
 
-/**
- * @since 1.0
- */
-public interface SortedSetMultimap<K, V>
-        extends SortedIterableMultimap<K, V>
+public interface ReversibleIterableMultimap<K, V>
+        extends Multimap<K, V>
 {
-    SortedSetMultimap<K, V> newEmpty();
+    ReversibleIterableMultimap<K, V> newEmpty();
 
-    SortedSetIterable<V> get(K key);
-
-    MutableSortedSetMultimap<K, V> toMutable();
-
-    ImmutableSortedSetMultimap<K, V> toImmutable();
+    ReversibleIterable<V> get(K key);
 }

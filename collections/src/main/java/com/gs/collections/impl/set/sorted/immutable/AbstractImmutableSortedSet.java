@@ -51,7 +51,9 @@ import com.gs.collections.api.partition.set.sorted.PartitionImmutableSortedSet;
 import com.gs.collections.api.partition.set.sorted.PartitionMutableSortedSet;
 import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
+import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.set.sorted.SortedSetIterable;
+import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
@@ -86,14 +88,16 @@ import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.multimap.set.sorted.TreeSortedSetMultimap;
 import com.gs.collections.impl.partition.set.sorted.PartitionTreeSortedSet;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
+import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.utility.Iterate;
+import com.gs.collections.impl.utility.internal.IterableIterate;
 import com.gs.collections.impl.utility.internal.SetIterables;
 import com.gs.collections.impl.utility.internal.SortedSetIterables;
 import net.jcip.annotations.Immutable;
 
 /**
  * This class is the parent class for all ImmutableSortedSets.  All implementations of ImmutableSortedSet must implement the SortedSet
- * interface so an TreeSet.equals(anImmutablesortedSet) can return true when the contents are the same.
+ * interface so an TreeSet.equals(anImmutableSortedSet) can return true when the contents are the same.
  */
 @Immutable
 abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection<T>
@@ -252,6 +256,12 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
         return partitionTreeSortedSet.toImmutable();
     }
 
+    public PartitionImmutableSortedSet<T> partitionWhile(Predicate<? super T> predicate)
+    {
+        PartitionTreeSortedSet<T> result = new PartitionTreeSortedSet<T>(this.comparator());
+        return IterableIterate.partitionWhile(this, predicate, result).toImmutable();
+    }
+
     public <S> ImmutableSortedSet<S> selectInstancesOf(Class<S> clazz)
     {
         TreeSortedSet<S> result = TreeSortedSet.newSet((Comparator<? super S>) this.comparator());
@@ -333,6 +343,28 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
             return Iterate.zipWithIndex(this, pairs).toImmutable();
         }
         return Iterate.zipWithIndex(this, TreeSortedSet.<Pair<T, Integer>>newSet(Comparators.<T>byFirstOfPair(comparator))).toImmutable();
+    }
+
+    public ImmutableSortedSet<T> distinct()
+    {
+        return this;
+    }
+
+    public ImmutableSortedSet<T> takeWhile(Predicate<? super T> predicate)
+    {
+        MutableSortedSet<T> result = TreeSortedSet.newSet(this.comparator());
+        return IterableIterate.takeWhile(this, predicate, result).toImmutable();
+    }
+
+    public ImmutableSortedSet<T> dropWhile(Predicate<? super T> predicate)
+    {
+        MutableSortedSet<T> result = TreeSortedSet.newSet(this.comparator());
+        return IterableIterate.dropWhile(this, predicate, result).toImmutable();
+    }
+
+    public MutableStack<T> toStack()
+    {
+        return ArrayStack.newStack(this);
     }
 
     public ImmutableSortedSet<T> union(SetIterable<? extends T> set)

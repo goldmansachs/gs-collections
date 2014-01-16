@@ -279,7 +279,7 @@ public abstract class AbstractCollectionTestCase
     }
 
     @Test
-    public void selectWithTarget()
+    public void selectWith_target()
     {
         Verify.assertContainsAll(this.newWith(1, 2, 3, 4, 5).selectWith(Predicates2.<Integer>lessThan(), 3, HashBag.<Integer>newBag()), 1, 2);
         Verify.denyContainsAny(this.newWith(-1, 2, 3, 4, 5).selectWith(Predicates2.<Integer>lessThan(), 3, HashBag.<Integer>newBag()), 3, 4, 5);
@@ -306,7 +306,7 @@ public abstract class AbstractCollectionTestCase
     }
 
     @Test
-    public void rejectWithTarget()
+    public void rejectWith_target()
     {
         Verify.assertContainsAll(this.newWith(1, 2, 3, 4).rejectWith(Predicates2.<Integer>lessThan(), 3, HashBag.<Integer>newBag()), 3, 4);
         Verify.assertContainsAll(

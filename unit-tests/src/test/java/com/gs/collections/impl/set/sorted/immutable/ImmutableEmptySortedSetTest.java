@@ -35,6 +35,7 @@ import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.SortedSets;
+import com.gs.collections.impl.factory.Stacks;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
@@ -424,6 +425,15 @@ public class ImmutableEmptySortedSetTest extends AbstractImmutableSortedSetTestC
 
     @Override
     @Test
+    public void rejectWith()
+    {
+        ImmutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());
+        Verify.assertEmpty(integers.rejectWith(Predicates2.<Integer>greaterThanOrEqualTo(), 4).castToSortedSet());
+        Assert.assertEquals(Collections.<Integer>reverseOrder(), integers.rejectWith(Predicates2.<Integer>greaterThanOrEqualTo(), 4).comparator());
+    }
+
+    @Override
+    @Test
     public void partition()
     {
         ImmutableSortedSet<Integer> set = this.classUnderTest(Collections.<Integer>reverseOrder());
@@ -467,6 +477,42 @@ public class ImmutableEmptySortedSetTest extends AbstractImmutableSortedSetTestC
         Assert.assertEquals(Collections.<Integer>reverseOrder(), collect.comparator());
     }
 
+    @Override
+    @Test
+    public void partitionWhile()
+    {
+        ImmutableSortedSet<Integer> set = this.classUnderTest(Collections.<Integer>reverseOrder());
+        Verify.assertEmpty(set.castToSortedSet());
+        PartitionImmutableSortedSet<Integer> partition = set.partitionWhile(Predicates.lessThan(4));
+        Verify.assertIterableEmpty(partition.getSelected());
+        Verify.assertIterableEmpty(partition.getRejected());
+        Assert.assertEquals(Collections.<Integer>reverseOrder(), partition.getSelected().comparator());
+        Assert.assertEquals(Collections.<Integer>reverseOrder(), partition.getRejected().comparator());
+    }
+
+    @Override
+    @Test
+    public void takeWhile()
+    {
+        ImmutableSortedSet<Integer> set = this.classUnderTest(Collections.<Integer>reverseOrder());
+        Verify.assertEmpty(set.castToSortedSet());
+        ImmutableSortedSet<Integer> take = set.takeWhile(Predicates.lessThan(4));
+        Verify.assertIterableEmpty(take);
+        Assert.assertEquals(Collections.<Integer>reverseOrder(), take.comparator());
+    }
+
+    @Override
+    @Test
+    public void dropWhile()
+    {
+        ImmutableSortedSet<Integer> set = this.classUnderTest(Collections.<Integer>reverseOrder());
+        Verify.assertEmpty(set.castToSortedSet());
+        ImmutableSortedSet<Integer> drop = set.dropWhile(Predicates.lessThan(4));
+        Verify.assertIterableEmpty(drop);
+        Assert.assertEquals(Collections.<Integer>reverseOrder(), drop.comparator());
+    }
+
+    @Override
     @Test
     public void selectInstancesOf()
     {
@@ -523,6 +569,13 @@ public class ImmutableEmptySortedSetTest extends AbstractImmutableSortedSetTestC
 
         LazyIterable<Pair<Integer, Integer>> empty2 = this.classUnderTest().cartesianProduct(TreeSortedSet.<Integer>newSet());
         Verify.assertEmpty(empty2.toList());
+    }
+
+    @Override
+    public void toStack()
+    {
+        ImmutableSortedSet<Integer> set = this.classUnderTest(Comparators.reverseNaturalOrder());
+        Assert.assertEquals(Stacks.mutable.with(), set.toStack());
     }
 
     @Override

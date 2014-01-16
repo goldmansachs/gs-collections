@@ -340,9 +340,9 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
 
     @Override
     @Test
-    public void selectWithTarget()
+    public void selectWith_target()
     {
-        super.selectWithTarget();
+        super.selectWith_target();
         Verify.assertSortedBagsEqual(
                 TreeBag.newBagWith(Comparators.reverseNaturalOrder(), 1, 1, 2, 3, 3),
                 this.newWith(Comparators.reverseNaturalOrder(), 1, 3, 1, 2, 5, 3, 6, 6)
@@ -377,9 +377,9 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
 
     @Override
     @Test
-    public void rejectWithTarget()
+    public void rejectWith_target()
     {
-        super.rejectWithTarget();
+        super.rejectWith_target();
         Verify.assertSortedBagsEqual(
                 TreeBag.newBagWith(Comparators.reverseNaturalOrder(), 1, 1, 2, 3),
                 this.newWith(Comparators.reverseNaturalOrder(), 1, 1, 2, 3, 5, 4, 5)

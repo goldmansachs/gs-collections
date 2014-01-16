@@ -18,7 +18,6 @@ package com.gs.collections.api.set.sorted;
 
 import java.util.Comparator;
 
-import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
@@ -32,7 +31,6 @@ import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.list.ListIterable;
-import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.BooleanList;
 import com.gs.collections.api.list.primitive.ByteList;
 import com.gs.collections.api.list.primitive.CharList;
@@ -42,6 +40,7 @@ import com.gs.collections.api.list.primitive.IntList;
 import com.gs.collections.api.list.primitive.LongList;
 import com.gs.collections.api.list.primitive.ShortList;
 import com.gs.collections.api.multimap.sortedset.SortedSetMultimap;
+import com.gs.collections.api.ordered.SortedIterable;
 import com.gs.collections.api.partition.set.sorted.PartitionSortedSet;
 import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.tuple.Pair;
@@ -50,7 +49,7 @@ import com.gs.collections.api.tuple.Pair;
  * An iterable whose items are unique and sorted by some comparator or their natural ordering.
  */
 public interface SortedSetIterable<T>
-        extends SetIterable<T>, Comparable<SortedSetIterable<T>>
+        extends SetIterable<T>, Comparable<SortedSetIterable<T>>, SortedIterable<T>
 {
     /**
      * Returns the comparator used to order the elements in this set, or null if this set uses the natural ordering of
@@ -90,12 +89,6 @@ public interface SortedSetIterable<T>
      */
     SortedSetIterable<SortedSetIterable<T>> powerSet();
 
-    /**
-     * Returns the set whose members are all possible ordered pairs (a, b) where a is a member of {@code this} and b is a
-     * member of {@code set}.
-     */
-    <B> LazyIterable<Pair<T, B>> cartesianProduct(SetIterable<B> set);
-
     SortedSetIterable<T> select(Predicate<? super T> predicate);
 
     <P> SortedSetIterable<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
@@ -105,6 +98,8 @@ public interface SortedSetIterable<T>
     <P> SortedSetIterable<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     PartitionSortedSet<T> partition(Predicate<? super T> predicate);
+
+    PartitionSortedSet<T> partitionWhile(Predicate<? super T> predicate);
 
     <S> SortedSetIterable<S> selectInstancesOf(Class<S> clazz);
 
@@ -131,6 +126,12 @@ public interface SortedSetIterable<T>
     <V> ListIterable<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 
     <V> ListIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
+
+    SortedSetIterable<T> distinct();
+
+    SortedSetIterable<T> takeWhile(Predicate<? super T> predicate);
+
+    SortedSetIterable<T> dropWhile(Predicate<? super T> predicate);
 
     <V> SortedSetMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
 

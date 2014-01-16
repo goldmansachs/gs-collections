@@ -49,6 +49,7 @@ import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.set.sorted.SortedSetIterable;
+import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.collection.mutable.UnmodifiableMutableCollection;
 import com.gs.collections.impl.factory.SortedSets;
@@ -160,6 +161,11 @@ public class UnmodifiableSortedSet<T>
         return this.getSortedSet().partition(predicate);
     }
 
+    public PartitionMutableSortedSet<T> partitionWhile(Predicate<? super T> predicate)
+    {
+        return this.getSortedSet().partitionWhile(predicate);
+    }
+
     @Override
     public <S> MutableSortedSet<S> selectInstancesOf(Class<S> clazz)
     {
@@ -238,6 +244,21 @@ public class UnmodifiableSortedSet<T>
             Function<? super T, ? extends V> function)
     {
         return this.getSortedSet().collectIf(predicate, function);
+    }
+
+    public MutableSortedSet<T> distinct()
+    {
+        return this.getSortedSet().distinct();
+    }
+
+    public MutableSortedSet<T> takeWhile(Predicate<? super T> predicate)
+    {
+        return this.getSortedSet().takeWhile(predicate);
+    }
+
+    public MutableSortedSet<T> dropWhile(Predicate<? super T> predicate)
+    {
+        return this.getSortedSet().dropWhile(predicate);
     }
 
     @Override
@@ -369,6 +390,11 @@ public class UnmodifiableSortedSet<T>
     public int compareTo(SortedSetIterable<T> o)
     {
         return this.getSortedSet().compareTo(o);
+    }
+
+    public MutableStack<T> toStack()
+    {
+        return this.getSortedSet().toStack();
     }
 
     @Override

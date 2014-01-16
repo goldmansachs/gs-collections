@@ -43,6 +43,7 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
 import com.gs.collections.api.collection.primitive.MutableByteCollection;
 import com.gs.collections.api.collection.primitive.MutableCharCollection;
@@ -55,6 +56,7 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.ImmutableMultimap;
 import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
@@ -122,6 +124,68 @@ public final class IteratorIterate
             bucket.add(each);
         }
         return result;
+    }
+
+    public static <T, R extends PartitionMutableCollection<T>> R partitionWhile(Iterator<T> iterator, Predicate<? super T> predicate, R target)
+    {
+        MutableCollection<T> selected = target.getSelected();
+        MutableCollection<T> rejected = target.getRejected();
+
+        boolean partitionFound = false;
+        while (iterator.hasNext() && !partitionFound)
+        {
+            T next = iterator.next();
+            if (predicate.accept(next))
+            {
+                selected.add(next);
+            }
+            else
+            {
+                rejected.add(next);
+                partitionFound = true;
+            }
+        }
+        while (iterator.hasNext())
+        {
+            rejected.add(iterator.next());
+        }
+        return target;
+    }
+
+    public static <T, R extends MutableCollection<T>> R takeWhile(Iterator<T> iterator, Predicate<? super T> predicate, R target)
+    {
+        while (iterator.hasNext())
+        {
+            T next = iterator.next();
+            if (predicate.accept(next))
+            {
+                target.add(next);
+            }
+            else
+            {
+                return target;
+            }
+        }
+        return target;
+    }
+
+    public static <T, R extends MutableCollection<T>> R dropWhile(Iterator<T> iterator, Predicate<? super T> predicate, R target)
+    {
+        boolean partitionFound = false;
+        while (iterator.hasNext() && !partitionFound)
+        {
+            T next = iterator.next();
+            if (!predicate.accept(next))
+            {
+                target.add(next);
+                partitionFound = true;
+            }
+        }
+        while (iterator.hasNext())
+        {
+            target.add(iterator.next());
+        }
+        return target;
     }
 
     /**

@@ -19,25 +19,19 @@ package com.gs.collections.api.list.primitive;
 
 import java.util.List;
 
-import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.list.ListIterable;
+import com.gs.collections.api.ordered.primitive.Reversible<name>Iterable;
 
 /**
  * This file was automatically generated from template file primitiveList.stg.
  *
  * @since 3.0.
  */
-public interface <name>List extends <name>Iterable
+public interface <name>List extends Reversible<name>Iterable
 {
     <type> get(int index);
-
-    <type> getFirst();
-
-    <type> getLast();
-
-    int indexOf(<type> value);
 
     <(arithmeticMethods.(type))(name, type)>
     int lastIndexOf(<type> value);

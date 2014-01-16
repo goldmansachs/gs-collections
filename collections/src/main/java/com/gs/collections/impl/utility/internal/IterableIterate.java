@@ -44,6 +44,7 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
 import com.gs.collections.api.collection.primitive.MutableByteCollection;
 import com.gs.collections.api.collection.primitive.MutableCharCollection;
@@ -55,6 +56,7 @@ import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
@@ -100,6 +102,21 @@ public final class IterableIterate
     public static <T> PartitionMutableList<T> partition(Iterable<T> iterable, Predicate<? super T> predicate)
     {
         return IteratorIterate.partition(iterable.iterator(), predicate);
+    }
+
+    public static <T, R extends PartitionMutableCollection<T>> R partitionWhile(Iterable<T> iterable, Predicate<? super T> predicate, R target)
+    {
+        return IteratorIterate.partitionWhile(iterable.iterator(), predicate, target);
+    }
+
+    public static <T, R extends MutableCollection<T>> R takeWhile(Iterable<T> iterable, Predicate<? super T> predicate, R target)
+    {
+        return IteratorIterate.takeWhile(iterable.iterator(), predicate, target);
+    }
+
+    public static <T, R extends MutableCollection<T>> R dropWhile(Iterable<T> iterable, Predicate<? super T> predicate, R target)
+    {
+        return IteratorIterate.dropWhile(iterable.iterator(), predicate, target);
     }
 
     /**

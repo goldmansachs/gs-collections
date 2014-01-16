@@ -50,9 +50,11 @@ import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.set.sorted.SortedSetIterable;
+import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.collection.mutable.SynchronizedMutableCollection;
 import com.gs.collections.impl.factory.SortedSets;
+import com.gs.collections.impl.stack.mutable.ArrayStack;
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
 
@@ -121,6 +123,14 @@ public class SynchronizedSortedSet<T>
         synchronized (this.getLock())
         {
             return SortedSets.immutable.ofSortedSet(this.getSortedSet());
+        }
+    }
+
+    public MutableStack<T> toStack()
+    {
+        synchronized (this.getLock())
+        {
+            return ArrayStack.newStack(this);
         }
     }
 
@@ -321,6 +331,14 @@ public class SynchronizedSortedSet<T>
         }
     }
 
+    public PartitionMutableSortedSet<T> partitionWhile(Predicate<? super T> predicate)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getSortedSet().partitionWhile(predicate);
+        }
+    }
+
     @Override
     public <S> MutableSortedSet<S> selectInstancesOf(Class<S> clazz)
     {
@@ -381,6 +399,30 @@ public class SynchronizedSortedSet<T>
         synchronized (this.getLock())
         {
             return this.getSortedSet().zipWithIndex(target);
+        }
+    }
+
+    public MutableSortedSet<T> takeWhile(Predicate<? super T> predicate)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getSortedSet().takeWhile(predicate);
+        }
+    }
+
+    public MutableSortedSet<T> dropWhile(Predicate<? super T> predicate)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getSortedSet().dropWhile(predicate);
+        }
+    }
+
+    public MutableSortedSet<T> distinct()
+    {
+        synchronized (this.getLock())
+        {
+            return this.getSortedSet().distinct();
         }
     }
 

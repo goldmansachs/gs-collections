@@ -166,18 +166,16 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
         Assert.assertEquals(this.classUnderTest(), result);
     }
 
-    @Override
     @Test
-    public void selectWithTarget()
+    public void select_target()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         Assert.assertEquals(integers, integers.select(Predicates.lessThan(integers.size() + 1), UnifiedSet.<Integer>newSet()));
         Verify.assertEmpty(integers.select(Predicates.greaterThan(integers.size()), FastList.<Integer>newList()));
     }
 
-    @Override
     @Test
-    public void rejectWithTarget()
+    public void reject_target()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         Verify.assertEmpty(integers.reject(Predicates.lessThan(integers.size() + 1), FastList.<Integer>newList()));

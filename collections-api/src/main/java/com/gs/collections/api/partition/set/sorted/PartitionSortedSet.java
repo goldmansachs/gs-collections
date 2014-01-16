@@ -16,6 +16,7 @@
 
 package com.gs.collections.api.partition.set.sorted;
 
+import com.gs.collections.api.partition.ordered.PartitionSortedIterable;
 import com.gs.collections.api.partition.set.PartitionSet;
 import com.gs.collections.api.set.sorted.SortedSetIterable;
 
@@ -24,7 +25,7 @@ import com.gs.collections.api.set.sorted.SortedSetIterable;
  * The results that answer true for the Predicate will be returned from the getSelected() method and the results that answer
  * false for the predicate will be returned from the getRejected() method.
  */
-public interface PartitionSortedSet<T> extends PartitionSet<T>
+public interface PartitionSortedSet<T> extends PartitionSet<T>, PartitionSortedIterable<T>
 {
     SortedSetIterable<T> getSelected();
 
