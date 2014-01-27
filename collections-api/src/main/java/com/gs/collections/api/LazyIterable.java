@@ -80,6 +80,13 @@ public interface LazyIterable<T>
     LazyIterable<T> drop(int count);
 
     /**
+     * Creates a deferred distinct iterable to get distinct elements from the current iterable.
+     *
+     * @since 5.0
+     */
+    LazyIterable<T> distinct();
+
+    /**
      * Creates a deferred flattening iterable for the current iterable.
      */
     <V> LazyIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);

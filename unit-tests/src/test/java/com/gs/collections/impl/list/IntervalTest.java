@@ -26,6 +26,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
@@ -923,6 +924,27 @@ public class IntervalTest
                 Interval.fromTo(1, 3).drop(-1);
             }
         });
+    }
+
+    @Test
+    public void distinct()
+    {
+        LazyIterable<Integer> integers = Interval.oneTo(1000000000);
+
+        Assert.assertEquals(
+                FastList.newListWith(1, 2, 3, 4, 5),
+                integers.distinct().take(5).toList());
+
+        LazyIterable<Integer> lazyInterval = Interval.oneTo(1000000).flatCollect(new Function<Integer, Iterable<Integer>>()
+        {
+            public Iterable<Integer> valueOf(Integer each)
+            {
+                return Interval.oneTo(each);
+            }
+        });
+        LazyIterable<Integer> distinct = lazyInterval.distinct();
+        LazyIterable<Integer> take = distinct.take(5);
+        Assert.assertEquals(Lists.immutable.of(1, 2, 3, 4, 5), take.toList());
     }
 
     private static final class AddParametersProcedure implements ObjectIntProcedure<Integer>

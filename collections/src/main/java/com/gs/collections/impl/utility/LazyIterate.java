@@ -25,6 +25,7 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.lazy.ChunkIterable;
 import com.gs.collections.impl.lazy.CollectIterable;
 import com.gs.collections.impl.lazy.CompositeIterable;
+import com.gs.collections.impl.lazy.DistinctIterable;
 import com.gs.collections.impl.lazy.DropIterable;
 import com.gs.collections.impl.lazy.FlatCollectIterable;
 import com.gs.collections.impl.lazy.LazyIterableAdapter;
@@ -126,6 +127,16 @@ public final class LazyIterate
     public static <T> LazyIterable<T> drop(Iterable<T> iterable, int count)
     {
         return new DropIterable<T>(iterable, count);
+    }
+
+    /**
+     * Creates a deferred distinct iterable for the specified iterable
+     *
+     * @since 5.0
+     */
+    public static <T> LazyIterable<T> distinct(Iterable<T> iterable)
+    {
+        return new DistinctIterable<T>(iterable);
     }
 
     /**

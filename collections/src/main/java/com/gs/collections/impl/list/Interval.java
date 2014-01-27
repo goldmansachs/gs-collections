@@ -1080,4 +1080,10 @@ public final class Interval
 
         return Interval.fromToBy(this.locationAfterN(count), this.to, this.step);
     }
+
+    @Override
+    public LazyIterable<Integer> distinct()
+    {
+        return this;
+    }
 }

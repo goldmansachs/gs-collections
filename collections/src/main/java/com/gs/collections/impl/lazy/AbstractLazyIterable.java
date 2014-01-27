@@ -345,6 +345,11 @@ public abstract class AbstractLazyIterable<T>
         return LazyIterate.drop(this, count);
     }
 
+    public LazyIterable<T> distinct()
+    {
+        return LazyIterate.distinct(this);
+    }
+
     public T detect(Predicate<? super T> predicate)
     {
         return IterableIterate.detect(this, predicate);

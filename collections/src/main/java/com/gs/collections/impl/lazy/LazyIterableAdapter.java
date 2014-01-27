@@ -114,6 +114,12 @@ public class LazyIterableAdapter<T>
     }
 
     @Override
+    public LazyIterable<T> distinct()
+    {
+        return LazyIterate.distinct(this.adapted);
+    }
+
+    @Override
     public Object[] toArray()
     {
         return Iterate.toArray(this.adapted);

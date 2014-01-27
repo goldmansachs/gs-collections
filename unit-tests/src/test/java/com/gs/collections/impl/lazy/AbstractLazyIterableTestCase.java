@@ -34,6 +34,7 @@ import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
@@ -752,5 +753,21 @@ public abstract class AbstractLazyIterableTestCase
         Verify.assertSetsEqual(
                 UnifiedSet.newSetWith("1", "2", "3", "4"),
                 collection.flatCollect(function, UnifiedSet.<String>newSet()));
+    }
+
+    @Test
+    public void distinct()
+    {
+        LazyIterable<Integer> integers = this.newWith(3, 2, 2, 4, 1, 3, 1, 5);
+        Assert.assertEquals(
+                HashBag.newBagWith(1, 2, 3, 4, 5),
+                integers.distinct().toBag());
+
+        if (!integers.getClass().getSimpleName().endsWith("KeysView"))
+        {
+            Assert.assertEquals(
+                    FastList.newListWith(3, 2, 4, 1, 5),
+                    integers.distinct().toList());
+        }
     }
 }
