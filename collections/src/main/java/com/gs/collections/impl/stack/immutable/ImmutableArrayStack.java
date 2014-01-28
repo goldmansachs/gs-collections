@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -210,6 +210,14 @@ final class ImmutableArrayStack<T> implements ImmutableStack<T>, Serializable
         }
     }
 
+    private void checkSizeLessThanOrEqualToIndex(int index)
+    {
+        if (this.delegate.size() <= index)
+        {
+            throw new IllegalArgumentException("Count must be less than size: Count = " + index + " Size = " + this.delegate.size());
+        }
+    }
+
     private void checkNegativeCount(int count)
     {
         if (count < 0)
@@ -222,7 +230,7 @@ final class ImmutableArrayStack<T> implements ImmutableStack<T>, Serializable
     {
         this.checkNegativeCount(index);
         this.checkEmptyStack();
-        this.checkSizeLessThanCount(index);
+        this.checkSizeLessThanOrEqualToIndex(index);
         return this.delegate.get(this.delegate.size() - 1 - index);
     }
 

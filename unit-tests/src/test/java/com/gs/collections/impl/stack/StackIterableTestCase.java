@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -157,6 +157,19 @@ public abstract class StackIterableTestCase
         Assert.assertEquals("3", this.newStackWith("1", "2", "3").peekAt(0));
         Assert.assertEquals("2", this.newStackWith("1", "2", "3").peekAt(1));
         Assert.assertEquals("1", this.newStackWith("1", "2", "3").peekAt(2));
+    }
+
+    @Test
+    public void peekAt_illegal_arguments()
+    {
+        final StackIterable<String> stack = this.newStackWith("1", "2", "3");
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                stack.peekAt(stack.size());
+            }
+        });
     }
 
     @Test

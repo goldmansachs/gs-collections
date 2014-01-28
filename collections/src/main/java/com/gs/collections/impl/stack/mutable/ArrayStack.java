@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -255,7 +255,7 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
     {
         this.checkNegativeCount(index);
         this.checkEmptyStack();
-        this.checkSizeLessThanCount(index);
+        this.checkSizeLessThanOrEqualToIndex(index);
         return this.delegate.get(this.delegate.size() - 1 - index);
     }
 
@@ -900,6 +900,14 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
         if (this.delegate.size() < count)
         {
             throw new IllegalArgumentException("Count must be less than size: Count = " + count + " Size = " + this.delegate.size());
+        }
+    }
+
+    private void checkSizeLessThanOrEqualToIndex(int index)
+    {
+        if (this.delegate.size() <= index)
+        {
+            throw new IllegalArgumentException("Count must be less than size: Count = " + index + " Size = " + this.delegate.size());
         }
     }
 
