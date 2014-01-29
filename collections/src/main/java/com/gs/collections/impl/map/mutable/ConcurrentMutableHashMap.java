@@ -275,6 +275,18 @@ public final class ConcurrentMutableHashMap<K, V>
     }
 
     @Override
+    public V getIfAbsentPut(K key, V value)
+    {
+        V result = this.delegate.get(key);
+        if (result == null)
+        {
+            V putResult = this.delegate.putIfAbsent(key, value);
+            return putResult == null ? value : putResult;
+        }
+        return result;
+    }
+
+    @Override
     public <P> V getIfAbsentPutWith(K key, Function<? super P, ? extends V> function, P parameter)
     {
         V result = this.delegate.get(key);

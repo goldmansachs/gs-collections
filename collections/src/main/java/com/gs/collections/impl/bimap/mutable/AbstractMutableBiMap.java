@@ -893,6 +893,19 @@ abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
         return newValue;
     }
 
+    public V getIfAbsentPut(K key, V value)
+    {
+        V oldValue = this.delegate.get(key);
+
+        if (oldValue != null || this.delegate.containsKey(key))
+        {
+            return oldValue;
+        }
+
+        this.put(key, value);
+        return value;
+    }
+
     public V getIfAbsentPutWithKey(K key, Function<? super K, ? extends V> function)
     {
         V value = this.delegate.get(key);

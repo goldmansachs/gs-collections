@@ -160,6 +160,16 @@ public class UnmodifiableMutableMap<K, V>
         return result;
     }
 
+    public V getIfAbsentPut(K key, V value)
+    {
+        V result = this.get(key);
+        if (this.isAbsent(result, key))
+        {
+            throw new UnsupportedOperationException();
+        }
+        return result;
+    }
+
     public V getIfAbsentPutWithKey(K key, Function<? super K, ? extends V> function)
     {
         return this.getIfAbsentPutWith(key, function, key);

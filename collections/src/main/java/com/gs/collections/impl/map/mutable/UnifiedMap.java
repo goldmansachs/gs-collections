@@ -636,6 +636,84 @@ public class UnifiedMap<K, V> extends AbstractMutableMap<K, V>
     }
 
     @Override
+    public V getIfAbsentPut(K key, V value)
+    {
+        int index = this.index(key);
+        Object cur = this.table[index];
+
+        if (cur == null)
+        {
+            this.table[index] = toSentinelIfNull(key);
+            this.table[index + 1] = value;
+            if (++this.occupied > this.maxSize)
+            {
+                this.rehash(this.table.length);
+            }
+            return value;
+        }
+        if (cur != CHAINED_KEY && this.nonNullTableObjectEquals(cur, key))
+        {
+            return (V) this.table[index + 1];
+        }
+        return this.chainedGetIfAbsentPut(key, index, value);
+    }
+
+    private V chainedGetIfAbsentPut(K key, int index, V value)
+    {
+        V result = value;
+        if (this.table[index] == CHAINED_KEY)
+        {
+            Object[] chain = (Object[]) this.table[index + 1];
+            int i = 0;
+            for (; i < chain.length; i += 2)
+            {
+                if (chain[i] == null)
+                {
+                    chain[i] = toSentinelIfNull(key);
+                    chain[i + 1] = value;
+                    if (++this.occupied > this.maxSize)
+                    {
+                        this.rehash(this.table.length);
+                    }
+                    break;
+                }
+                if (this.nonNullTableObjectEquals(chain[i], key))
+                {
+                    result = (V) chain[i + 1];
+                    break;
+                }
+            }
+            if (i == chain.length)
+            {
+                Object[] newChain = new Object[chain.length + 4];
+                System.arraycopy(chain, 0, newChain, 0, chain.length);
+                newChain[i] = toSentinelIfNull(key);
+                newChain[i + 1] = value;
+                this.table[index + 1] = newChain;
+                if (++this.occupied > this.maxSize)
+                {
+                    this.rehash(this.table.length);
+                }
+            }
+        }
+        else
+        {
+            Object[] newChain = new Object[4];
+            newChain[0] = this.table[index];
+            newChain[1] = this.table[index + 1];
+            newChain[2] = toSentinelIfNull(key);
+            newChain[3] = value;
+            this.table[index] = CHAINED_KEY;
+            this.table[index + 1] = newChain;
+            if (++this.occupied > this.maxSize)
+            {
+                this.rehash(this.table.length);
+            }
+        }
+        return result;
+    }
+
+    @Override
     public <P> V getIfAbsentPutWith(K key, Function<? super P, ? extends V> function, P parameter)
     {
         int index = this.index(key);

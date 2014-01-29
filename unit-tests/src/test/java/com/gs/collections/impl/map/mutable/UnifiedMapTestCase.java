@@ -360,6 +360,18 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
         }
     }
 
+    @Test
+    public void getIfAbsentPutValueWithCollisions()
+    {
+        UnifiedMap<Integer, Integer> map = UnifiedMap.newWithKeysValues(COLLISION_1, null);
+        Assert.assertNull(map.getIfAbsentPut(COLLISION_1, 5));
+        Assert.assertNull(map.getIfAbsentPut(COLLISION_3, (Integer) null));
+        Assert.assertNull(map.getIfAbsentPut(COLLISION_3, 7));
+        Assert.assertEquals(Integer.valueOf(9), map.getIfAbsentPut(COLLISION_2, 9));
+        Assert.assertEquals(Integer.valueOf(10), map.getIfAbsentPut(COLLISION_4, 10));
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(COLLISION_1, null, COLLISION_2, 9, COLLISION_3, null, COLLISION_4, 10), map);
+    }
+
     @Override
     @Test
     public void removeFromEntrySet()

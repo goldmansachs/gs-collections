@@ -19,6 +19,7 @@ package com.gs.collections.impl.map.mutable;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.test.Verify;
@@ -280,7 +281,14 @@ public class UnmodifiableMutableMapTest extends MutableMapTestCase
     @Test(expected = UnsupportedOperationException.class)
     public void getIfAbsentPut()
     {
-        this.newMapWithKeysValues(1, "1", 2, "2", 3, "3").getIfAbsentPut(4, null);
+        this.newMapWithKeysValues(1, "1", 2, "2", 3, "3").getIfAbsentPut(4, Functions0.value(""));
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void getIfAbsentPutValue()
+    {
+        this.newMapWithKeysValues(1, "1", 2, "2", 3, "3").getIfAbsentPut(4, "");
     }
 
     @Override

@@ -577,6 +577,42 @@ public class ConcurrentHashMapUnsafe<K, V>
         }
     }
 
+    @Override
+    public V getIfAbsentPut(K key, V value)
+    {
+        int hash = this.hash(key);
+        Object[] currentArray = this.table;
+        while (true)
+        {
+            int length = currentArray.length;
+            int index = ConcurrentHashMapUnsafe.indexFor(hash, length);
+            Object o = ConcurrentHashMapUnsafe.arrayAt(currentArray, index);
+            if (o == RESIZED || o == RESIZING)
+            {
+                currentArray = this.helpWithResizeWhileCurrentIndex(currentArray, index);
+            }
+            else
+            {
+                Entry<K, V> e = (Entry<K, V>) o;
+                while (e != null)
+                {
+                    Object candidate = e.getKey();
+                    if (candidate.equals(key))
+                    {
+                        return e.getValue();
+                    }
+                    e = e.getNext();
+                }
+                Entry<K, V> newEntry = new Entry<K, V>(key, value, (Entry<K, V>) o);
+                if (ConcurrentHashMapUnsafe.casArrayAt(currentArray, index, o, newEntry))
+                {
+                    this.incrementSizeAndPossiblyResize(currentArray, length, o);
+                    return value;
+                }
+            }
+        }
+    }
+
     /**
      * It puts an object into the map based on the key. It uses a copy of the key converted by transformer.
      *

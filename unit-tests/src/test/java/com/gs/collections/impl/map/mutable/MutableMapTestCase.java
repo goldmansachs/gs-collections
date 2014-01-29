@@ -456,6 +456,19 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
     }
 
     @Test
+    public void getIfAbsentPutValue()
+    {
+        MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
+        Assert.assertNull(map.get(4));
+        Assert.assertEquals("4", map.getIfAbsentPut(4, "4"));
+        Assert.assertEquals("3", map.getIfAbsentPut(3, "5"));
+        Verify.assertContainsKeyValue(1, "1", map);
+        Verify.assertContainsKeyValue(2, "2", map);
+        Verify.assertContainsKeyValue(3, "3", map);
+        Verify.assertContainsKeyValue(4, "4", map);
+    }
+
+    @Test
     public void getIfAbsentPutWithKey()
     {
         MutableMap<Integer, Integer> map = this.newMapWithKeysValues(1, 1, 2, 2, 3, 3);

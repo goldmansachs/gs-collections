@@ -151,6 +151,17 @@ public abstract class AbstractMutableMap<K, V> extends AbstractMapIterable<K, V>
         return result;
     }
 
+    public V getIfAbsentPut(K key, V value)
+    {
+        V result = this.get(key);
+        if (this.isAbsent(result, key))
+        {
+            result = value;
+            this.put(key, result);
+        }
+        return result;
+    }
+
     public V getIfAbsentPutWithKey(K key, Function<? super K, ? extends V> function)
     {
         return this.getIfAbsentPutWith(key, function, key);

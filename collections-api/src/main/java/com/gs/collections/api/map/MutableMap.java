@@ -83,6 +83,14 @@ public interface MutableMap<K, V>
     V getIfAbsentPut(K key, Function0<? extends V> function);
 
     /**
+     * Get and return the value in the Map at the specified key.  Alternatively, if there is no value in the map at the key,
+     * return the specified value, and put that value in the map at the specified key.
+     *
+     * @since 5.0
+     */
+    V getIfAbsentPut(K key, V value);
+
+    /**
      * Get and return the value in the Map at the specified key.  Alternatively, if there is no value in the map for that key
      * return the result of evaluating the specified Function using the specified key, and put that value in the
      * map at the specified key.

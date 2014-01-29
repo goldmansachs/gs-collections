@@ -326,6 +326,14 @@ public class SynchronizedMutableMap<K, V>
         }
     }
 
+    public V getIfAbsentPut(K key, V value)
+    {
+        synchronized (this.lock)
+        {
+            return this.getMutableMap().getIfAbsentPut(key, value);
+        }
+    }
+
     public V getIfAbsentPutWithKey(K key, Function<? super K, ? extends V> function)
     {
         synchronized (this.lock)
