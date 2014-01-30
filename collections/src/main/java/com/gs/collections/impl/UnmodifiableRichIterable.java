@@ -62,10 +62,6 @@ import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
-import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
-import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
-import com.gs.collections.impl.map.mutable.UnifiedMap;
-import com.gs.collections.impl.utility.internal.IterableIterate;
 
 /**
  * An unmodifiable view of a RichIterable.
@@ -166,7 +162,7 @@ public class UnmodifiableRichIterable<T>
 
     public boolean containsAll(Collection<?> source)
     {
-        return this.containsAllIterable(source);
+        return this.iterable.containsAll(source);
     }
 
     public boolean containsAllArguments(Object... elements)
@@ -513,34 +509,32 @@ public class UnmodifiableRichIterable<T>
 
     public String makeString()
     {
-        return this.makeString(", ");
+        return this.iterable.makeString();
     }
 
     public String makeString(String separator)
     {
-        return this.makeString("", separator, "");
+        return this.iterable.makeString(separator);
     }
 
     public String makeString(String start, String separator, String end)
     {
-        Appendable stringBuilder = new StringBuilder();
-        this.appendString(stringBuilder, start, separator, end);
-        return stringBuilder.toString();
+        return this.iterable.makeString(start, separator, end);
     }
 
     public void appendString(Appendable appendable)
     {
-        this.appendString(appendable, ", ");
+        this.iterable.appendString(appendable);
     }
 
     public void appendString(Appendable appendable, String separator)
     {
-        this.appendString(appendable, "", separator, "");
+        this.iterable.appendString(appendable, separator);
     }
 
     public void appendString(Appendable appendable, String start, String separator, String end)
     {
-        IterableIterate.appendString(this, appendable, start, separator, end);
+        this.iterable.appendString(appendable, start, separator, end);
     }
 
     public <V> Multimap<V, T> groupBy(Function<? super T, ? extends V> function)
@@ -592,23 +586,13 @@ public class UnmodifiableRichIterable<T>
         return this.iterable.chunk(size);
     }
 
-    public <K, V> MapIterable<K, V> aggregateInPlaceBy(
-            Function<? super T, ? extends K> groupBy,
-            Function0<? extends V> zeroValueFactory,
-            Procedure2<? super V, ? super T> mutatingAggregator)
+    public <K, V> MapIterable<K, V> aggregateInPlaceBy(Function<? super T, ? extends K> groupBy, Function0<? extends V> zeroValueFactory, Procedure2<? super V, ? super T> mutatingAggregator)
     {
-        MutableMap<K, V> map = UnifiedMap.newMap();
-        this.forEach(new MutatingAggregationProcedure<T, K, V>(map, groupBy, zeroValueFactory, mutatingAggregator));
-        return map;
+        return this.iterable.aggregateInPlaceBy(groupBy, zeroValueFactory, mutatingAggregator);
     }
 
-    public <K, V> MapIterable<K, V> aggregateBy(
-            Function<? super T, ? extends K> groupBy,
-            Function0<? extends V> zeroValueFactory,
-            Function2<? super V, ? super T, ? extends V> nonMutatingAggregator)
+    public <K, V> MapIterable<K, V> aggregateBy(Function<? super T, ? extends K> groupBy, Function0<? extends V> zeroValueFactory, Function2<? super V, ? super T, ? extends V> nonMutatingAggregator)
     {
-        MutableMap<K, V> map = UnifiedMap.newMap();
-        this.forEach(new NonMutatingAggregationProcedure<T, K, V>(map, groupBy, zeroValueFactory, nonMutatingAggregator));
-        return map;
+        return this.iterable.aggregateBy(groupBy, zeroValueFactory, nonMutatingAggregator);
     }
 }
