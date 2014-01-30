@@ -363,7 +363,7 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
     @Test
     public void getIfAbsentPutValueWithCollisions()
     {
-        UnifiedMap<Integer, Integer> map = UnifiedMap.newWithKeysValues(COLLISION_1, null);
+        MutableMap<Integer, Object> map = this.newMapWithKeyValue(COLLISION_1, null);
         Assert.assertNull(map.getIfAbsentPut(COLLISION_1, 5));
         Assert.assertNull(map.getIfAbsentPut(COLLISION_3, (Integer) null));
         Assert.assertNull(map.getIfAbsentPut(COLLISION_3, 7));

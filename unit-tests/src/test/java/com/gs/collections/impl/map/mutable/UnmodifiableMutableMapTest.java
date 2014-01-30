@@ -278,17 +278,31 @@ public class UnmodifiableMutableMapTest extends MutableMapTestCase
     }
 
     @Override
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void getIfAbsentPut()
     {
-        this.newMapWithKeysValues(1, "1", 2, "2", 3, "3").getIfAbsentPut(4, Functions0.value(""));
+        Assert.assertEquals("3", this.newMapWithKeysValues(1, "1", 2, "2", 3, "3").getIfAbsentPut(3, Functions0.value("")));
+        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
+        {
+            public void run()
+            {
+                UnmodifiableMutableMapTest.this.newMapWithKeysValues(1, "1", 2, "2", 3, "3").getIfAbsentPut(4, Functions0.value(""));
+            }
+        });
     }
 
     @Override
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void getIfAbsentPutValue()
     {
-        this.newMapWithKeysValues(1, "1", 2, "2", 3, "3").getIfAbsentPut(4, "");
+        Assert.assertEquals("3", this.newMapWithKeysValues(1, "1", 2, "2", 3, "3").getIfAbsentPut(3, ""));
+        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
+        {
+            public void run()
+            {
+                UnmodifiableMutableMapTest.this.newMapWithKeysValues(1, "1", 2, "2", 3, "3").getIfAbsentPut(4, "");
+            }
+        });
     }
 
     @Override

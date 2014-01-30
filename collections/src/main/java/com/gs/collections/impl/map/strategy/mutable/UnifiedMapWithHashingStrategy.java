@@ -704,7 +704,7 @@ public class UnifiedMapWithHashingStrategy<K, V> extends AbstractMutableMap<K, V
 
     private V chainedGetIfAbsentPut(K key, int index, V value)
     {
-        V result = null;
+        V result = value;
         if (this.table[index] == CHAINED_KEY)
         {
             Object[] chain = (Object[]) this.table[index + 1];
