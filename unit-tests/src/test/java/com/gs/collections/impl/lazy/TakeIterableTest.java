@@ -199,4 +199,14 @@ public class TakeIterableTest extends AbstractLazyIterableTestCase
     {
         return LazyIterate.take(FastList.newListWith(elements), elements.length);
     }
+
+    @Override
+    @Test
+    public void distinct()
+    {
+        super.distinct();
+        Assert.assertEquals(
+                FastList.newListWith(3, 2, 4, 1),
+                new TakeIterable<Integer>(FastList.newListWith(3, 2, 2, 4, 1, 3, 1, 5), 7).distinct().toList());
+    }
 }

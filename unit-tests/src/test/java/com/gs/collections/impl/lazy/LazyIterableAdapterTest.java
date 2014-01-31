@@ -101,4 +101,15 @@ public class LazyIterableAdapterTest extends AbstractLazyIterableTestCase
         }, sum);
         Assert.assertEquals(15, sum.getValue().intValue());
     }
+
+    @Override
+    @Test
+    public void distinct()
+    {
+        super.distinct();
+        LazyIterable<Integer> iterable = new LazyIterableAdapter<Integer>(FastList.newListWith(3, 2, 2, 4, 1, 3, 1, 5));
+        Assert.assertEquals(
+                FastList.newListWith(3, 2, 4, 1, 5),
+                iterable.distinct().toList());
+    }
 }

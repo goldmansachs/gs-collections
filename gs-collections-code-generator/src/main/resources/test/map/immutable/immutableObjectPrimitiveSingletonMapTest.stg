@@ -255,6 +255,12 @@ public class ImmutableObject<name>SingletonMapTest extends AbstractImmutableObje
         }).toBag());
     }
 
+    @Test
+    public void keysView()
+    {
+        Assert.assertEquals(FastList.newListWith("1"), this.classUnderTest().keysView().toList());
+    }
+
     @Override
     @Test
     public void <type>Iterator()

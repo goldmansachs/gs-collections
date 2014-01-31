@@ -134,4 +134,17 @@ public class CompositeIterableTest extends AbstractLazyIterableTestCase
                 });
         Assert.assertEquals(expected, iterables.take(expected.size()).toList());
     }
+
+    @Override
+    @Test
+    public void distinct()
+    {
+        super.distinct();
+        CompositeIterable<Integer> composite = new CompositeIterable<Integer>();
+        MutableList<Integer> expected = FastList.newListWith(3, 2, 2, 4, 1, 3, 1, 5);
+        composite.add(expected);
+        Assert.assertEquals(
+                FastList.newListWith(3, 2, 4, 1, 5),
+                composite.distinct().toList());
+    }
 }

@@ -18,6 +18,7 @@ package com.gs.collections.impl.lazy;
 
 import java.util.Iterator;
 
+import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
@@ -39,6 +40,12 @@ public class DistinctIterable<T>
     public DistinctIterable(Iterable<T> newAdapted)
     {
         this.adapted = newAdapted;
+    }
+
+    @Override
+    public LazyIterable<T> distinct()
+    {
+        return this;
     }
 
     public void forEach(Procedure<? super T> procedure)

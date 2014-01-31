@@ -126,4 +126,15 @@ public class SelectInstancesOfIterableTest extends AbstractLazyIterableTestCase
         // Impossible for SelectInstancesOfIterable to contain null
         super.max_null_throws_without_comparator();
     }
+
+    @Override
+    @Test
+    public void distinct()
+    {
+        super.distinct();
+        SelectInstancesOfIterable<Double> iterable = new SelectInstancesOfIterable<Double>(FastList.newListWith(3.0, 2.0, 3, 2.0, 4.0, 5, 1.0, 3.0, 1.0, 5.0), Double.class);
+        Assert.assertEquals(
+                FastList.newListWith(3.0, 2.0, 4.0, 1.0, 5.0),
+                iterable.distinct().toList());
+    }
 }

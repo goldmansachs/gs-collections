@@ -107,4 +107,15 @@ public class FlatCollectIterableTest extends AbstractLazyIterableTestCase
         }, builder);
         Assert.assertEquals("112123123412345", builder.toString());
     }
+
+    @Override
+    @Test
+    public void distinct()
+    {
+        super.distinct();
+        FlatCollectIterable<Integer, Integer> iterable = new FlatCollectIterable<Integer, Integer>(FastList.newListWith(3, 2, 2, 4, 1, 3, 1, 5), INT_TO_INTERVAL);
+        Assert.assertEquals(
+                FastList.newListWith(1, 2, 3, 4, 5),
+                iterable.distinct().toList());
+    }
 }

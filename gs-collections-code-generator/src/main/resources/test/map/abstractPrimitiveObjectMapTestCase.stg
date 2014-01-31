@@ -56,6 +56,7 @@ import com.gs.collections.api.map.primitive.LongObjectMap;
 import com.gs.collections.api.map.primitive.ShortObjectMap;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.partition.PartitionIterable;
+import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Comparators;
@@ -1880,8 +1881,8 @@ public abstract class Abstract<name>ObjectMapTestCase
     @Test
     public void iterator()
     {
-        UnifiedSet\<String> expected = UnifiedSet.newSetWith("zero", "thirtyOne", "thirtyTwo");
-        UnifiedSet\<String> actual = UnifiedSet.newSet();
+        MutableSet\<String> expected = UnifiedSet.newSetWith("zero", "thirtyOne", "thirtyTwo");
+        MutableSet\<String> actual = UnifiedSet.newSet();
 
         final Iterator\<String> iterator = this.classUnderTest().iterator();
         Assert.assertTrue(iterator.hasNext());

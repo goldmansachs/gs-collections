@@ -104,4 +104,17 @@ public class DistinctIterableTest extends AbstractLazyIterableTestCase
     {
         new DistinctIterator<Integer>(Lists.mutable.<Integer>of()).remove();
     }
+
+    @Override
+    @Test
+    public void distinct()
+    {
+        super.distinct();
+        DistinctIterable<Integer> distinct = new DistinctIterable<Integer>(FastList.newListWith(3, 2, 2, 4, 1, 3, 1, 5));
+        LazyIterable<Integer> distinctDistinct = distinct.distinct();
+        Assert.assertSame(distinctDistinct, distinct);
+        Assert.assertEquals(
+                FastList.newListWith(3, 2, 4, 1, 5),
+                distinctDistinct.toList());
+    }
 }

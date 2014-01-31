@@ -762,12 +762,5 @@ public abstract class AbstractLazyIterableTestCase
         Assert.assertEquals(
                 HashBag.newBagWith(1, 2, 3, 4, 5),
                 integers.distinct().toBag());
-
-        if (!integers.getClass().getSimpleName().endsWith("KeysView"))
-        {
-            Assert.assertEquals(
-                    FastList.newListWith(3, 2, 4, 1, 5),
-                    integers.distinct().toList());
-        }
     }
 }

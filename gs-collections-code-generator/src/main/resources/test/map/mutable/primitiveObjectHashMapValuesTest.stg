@@ -25,6 +25,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.map.primitive.Mutable<name>ObjectMap;
+import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -142,8 +143,8 @@ public class <name>ObjectHashMapValuesTest
     @Test
     public void iterator()
     {
-        UnifiedSet\<String> expected = UnifiedSet.newSetWith("zero", "thirtyOne", null);
-        UnifiedSet\<String> actual = UnifiedSet.newSet();
+        MutableSet\<String> expected = UnifiedSet.newSetWith("zero", "thirtyOne", null);
+        MutableSet\<String> actual = UnifiedSet.newSet();
 
         final Iterator\<String> iterator = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("31")>, "thirtyOne", <(literal.(type))("32")>, null).iterator();
         Assert.assertTrue(iterator.hasNext());

@@ -1,0 +1,76 @@
+import "copyright.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+import "primitiveEquals.stg"
+
+skipBoolean() ::= "true"
+
+isTest() ::= "true"
+
+targetPath() ::= "com/gs/collections/impl/map/primitive"
+
+fileName(primitive) ::= "AbstractObject<primitive.name>MapKeysViewTestCase"
+
+class(primitive) ::= <<
+<body(primitive.type, primitive.name, primitive.wrapperName)>
+>>
+
+body(type, name, wrapperName) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.map.primitive;
+
+import java.util.Iterator;
+import java.util.NoSuchElementException;
+
+import com.gs.collections.api.map.primitive.Object<name>Map;
+import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.impl.lazy.AbstractLazyIterableTestCase;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.impl.test.Verify;
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * Abstract JUnit test for {@link Object<name>Map#keysView()}.
+ * This file was automatically generated from template file abstractObjectPrimitiveMapKeysViewTest.stg.
+ */
+public abstract class AbstractObject<name>MapKeysViewTestCase extends AbstractLazyIterableTestCase
+{
+    public abstract \<T> Object<name>Map\<T> newWithKeysValues(T key1, <type> value1, T key2, <type> value2, T key3, <type> value3);
+
+    @Override
+    @Test
+    public void iterator()
+    {
+        MutableSet\<String> expected = UnifiedSet.newSetWith("zero", "thirtyOne", "thirtyTwo");
+        MutableSet\<String> actual = UnifiedSet.newSet();
+
+        final Iterator\<String> iterator = this.newWithKeysValues("zero", <(literal.(type))("0")>, "thirtyOne", <(literal.(type))("31")>, "thirtyTwo", <(literal.(type))("32")>).keysView().iterator();
+        Assert.assertTrue(iterator.hasNext());
+        actual.add(iterator.next());
+        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
+        {
+            public void run()
+            {
+                iterator.remove();
+            }
+        });
+        Assert.assertTrue(iterator.hasNext());
+        actual.add(iterator.next());
+        Assert.assertTrue(iterator.hasNext());
+        actual.add(iterator.next());
+        Assert.assertFalse(iterator.hasNext());
+
+        Assert.assertEquals(expected, actual);
+        Verify.assertThrows(NoSuchElementException.class, new Runnable()
+        {
+            public void run()
+            {
+                iterator.next();
+            }
+        });
+    }
+}
+
+>>

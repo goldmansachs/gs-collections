@@ -96,4 +96,15 @@ public class SelectIterableTest extends AbstractLazyIterableTestCase
         }, sum);
         Assert.assertEquals(10, sum.getValue().intValue());
     }
+
+    @Override
+    @Test
+    public void distinct()
+    {
+        super.distinct();
+        SelectIterable<Integer> iterable = new SelectIterable<Integer>(FastList.newListWith(5, 3, 2, 2, 4, 1, 3, 1, 5), Predicates.lessThan(5));
+        Assert.assertEquals(
+                FastList.newListWith(3, 2, 4, 1),
+                iterable.distinct().toList());
+    }
 }

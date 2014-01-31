@@ -27,6 +27,7 @@ import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.map.primitive.Mutable<name>ObjectMap;
+import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
@@ -350,8 +351,8 @@ public class Unmodifiable<name>ObjectMapTest extends AbstractMutable<name>Object
     @Test
     public void iterator()
     {
-        UnifiedSet\<String> expected = UnifiedSet.newSetWith("zero", "one", "thirtyOne", "thirtyTwo");
-        UnifiedSet\<String> actual = UnifiedSet.newSet();
+        MutableSet\<String> expected = UnifiedSet.newSetWith("zero", "one", "thirtyOne", "thirtyTwo");
+        MutableSet\<String> actual = UnifiedSet.newSet();
 
         final Iterator\<String> iterator = <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero",
                 <(literal.(type))("31")>, "thirtyOne", <(literal.(type))("32")>, "thirtyTwo")

@@ -230,4 +230,14 @@ public class DropIterableTest extends AbstractLazyIterableTestCase
     {
         return LazyIterate.drop(FastList.newListWith(elements), 0);
     }
+
+    @Override
+    @Test
+    public void distinct()
+    {
+        super.distinct();
+        Assert.assertEquals(
+                FastList.newListWith(2, 3, 4, 5),
+                new DropIterable<Integer>(FastList.newListWith(1, 1, 2, 3, 3, 3, 4, 5), 2).distinct().toList());
+    }
 }

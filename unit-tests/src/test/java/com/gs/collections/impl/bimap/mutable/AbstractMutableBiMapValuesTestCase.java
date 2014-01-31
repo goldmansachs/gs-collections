@@ -21,6 +21,7 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.bimap.MutableBiMap;
+import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -125,8 +126,8 @@ public abstract class AbstractMutableBiMapValuesTestCase
     @Test
     public void iterator()
     {
-        UnifiedSet<String> expected = UnifiedSet.newSetWith("zero", "thirtyOne", null);
-        UnifiedSet<String> actual = UnifiedSet.newSet();
+        MutableSet<String> expected = UnifiedSet.newSetWith("zero", "thirtyOne", null);
+        MutableSet<String> actual = UnifiedSet.newSet();
 
         final Iterator<String> iterator = HashBiMap.newWithKeysValues(0.0f, "zero", 31.0f, "thirtyOne", 32.0f, null).iterator();
         Assert.assertTrue(iterator.hasNext());

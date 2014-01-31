@@ -90,4 +90,15 @@ public class CollectIterableTest extends AbstractLazyIterableTestCase
         }, builder);
         Assert.assertEquals("12345", builder.toString());
     }
+
+    @Override
+    @Test
+    public void distinct()
+    {
+        super.distinct();
+        CollectIterable<Integer, String> collect = new CollectIterable<Integer, String>(FastList.newListWith(3, 2, 2, 4, 1, 3, 1, 5), Functions.getToString());
+        Assert.assertEquals(
+                FastList.newListWith("3", "2", "4", "1", "5"),
+                collect.distinct().toList());
+    }
 }

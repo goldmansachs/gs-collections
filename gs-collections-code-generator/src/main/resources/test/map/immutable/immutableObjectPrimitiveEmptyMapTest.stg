@@ -113,6 +113,7 @@ public class ImmutableObject<name>EmptyMapTest extends AbstractImmutableObject<n
         }, <(literal.(type))("5")>);
         Assert.assertEquals(<(literal.(type))("5")>, detect<delta.(type)>);
     }
+
     @Override
     @Test
     public void getIfAbsent()
@@ -207,6 +208,12 @@ public class ImmutableObject<name>EmptyMapTest extends AbstractImmutableObject<n
                 return true;
             }
         }).toBag());
+    }
+
+    @Test
+    public void keysView()
+    {
+        Verify.assertIterableEmpty(this.classUnderTest().keysView());
     }
 
     @Override

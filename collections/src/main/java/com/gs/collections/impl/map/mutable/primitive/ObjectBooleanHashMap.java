@@ -30,6 +30,8 @@ import java.util.Set;
 
 import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.LazyBooleanIterable;
+import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.primitive.MutableBooleanBag;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.BooleanFunction0;
@@ -39,8 +41,10 @@ import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunc
 import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
 import com.gs.collections.api.block.predicate.primitive.ObjectBooleanPredicate;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectBooleanProcedure;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.collection.primitive.ImmutableBooleanCollection;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
@@ -51,15 +55,18 @@ import com.gs.collections.api.map.primitive.ImmutableObjectBooleanMap;
 import com.gs.collections.api.map.primitive.MutableObjectBooleanMap;
 import com.gs.collections.api.map.primitive.ObjectBooleanMap;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
+import com.gs.collections.api.tuple.primitive.ObjectBooleanPair;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.collection.mutable.primitive.SynchronizedBooleanCollection;
 import com.gs.collections.impl.collection.mutable.primitive.UnmodifiableBooleanCollection;
 import com.gs.collections.impl.factory.primitive.BooleanLists;
 import com.gs.collections.impl.factory.primitive.ObjectBooleanMaps;
+import com.gs.collections.impl.lazy.AbstractLazyIterable;
 import com.gs.collections.impl.lazy.primitive.LazyBooleanIterableAdapter;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
+import com.gs.collections.impl.tuple.primitive.PrimitiveTuples;
 
 /**
  * @since 3.0.
@@ -989,6 +996,16 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         return new ValuesCollection();
     }
 
+    public LazyIterable<K> keysView()
+    {
+        return new KeysView();
+    }
+
+    public RichIterable<ObjectBooleanPair<K>> keyValuesView()
+    {
+        return new KeyValuesView();
+    }
+
     private class KeySet implements Set<K>
     {
         public boolean add(K key)
@@ -1478,6 +1495,154 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
         public boolean hasNext()
         {
             return this.count != ObjectBooleanHashMap.this.size();
+        }
+    }
+
+    private class KeysView extends AbstractLazyIterable<K>
+    {
+        public void forEach(Procedure<? super K> procedure)
+        {
+            ObjectBooleanHashMap.this.forEachKey(procedure);
+        }
+
+        public void forEachWithIndex(ObjectIntProcedure<? super K> objectIntProcedure)
+        {
+            int index = 0;
+            for (int i = 0; i < ObjectBooleanHashMap.this.keys.length; i++)
+            {
+                if (ObjectBooleanHashMap.isNonSentinel(ObjectBooleanHashMap.this.keys[i]))
+                {
+                    objectIntProcedure.value(ObjectBooleanHashMap.this.toNonSentinel(ObjectBooleanHashMap.this.keys[i]), index);
+                    index++;
+                }
+            }
+        }
+
+        public <P> void forEachWith(Procedure2<? super K, ? super P> procedure, P parameter)
+        {
+            for (int i = 0; i < ObjectBooleanHashMap.this.keys.length; i++)
+            {
+                if (ObjectBooleanHashMap.isNonSentinel(ObjectBooleanHashMap.this.keys[i]))
+                {
+                    procedure.value(ObjectBooleanHashMap.this.toNonSentinel(ObjectBooleanHashMap.this.keys[i]), parameter);
+                }
+            }
+        }
+
+        public Iterator<K> iterator()
+        {
+            return new InternalKeysViewIterator<K>();
+        }
+
+        public class InternalKeysViewIterator<K> implements Iterator<K>
+        {
+            private int count;
+            private int position;
+
+            public K next()
+            {
+                if (!this.hasNext())
+                {
+                    throw new NoSuchElementException();
+                }
+
+                Object[] keys = ObjectBooleanHashMap.this.keys;
+                while (!isNonSentinel(keys[this.position]))
+                {
+                    this.position++;
+                }
+                K result = (K) ObjectBooleanHashMap.this.keys[this.position];
+                this.count++;
+                this.position++;
+                return result;
+            }
+
+            public void remove()
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            public boolean hasNext()
+            {
+                return this.count != ObjectBooleanHashMap.this.size();
+            }
+        }
+    }
+
+    private class KeyValuesView extends AbstractLazyIterable<ObjectBooleanPair<K>>
+    {
+        public void forEach(Procedure<? super ObjectBooleanPair<K>> procedure)
+        {
+            for (int i = 0; i < ObjectBooleanHashMap.this.keys.length; i++)
+            {
+                if (ObjectBooleanHashMap.isNonSentinel(ObjectBooleanHashMap.this.keys[i]))
+                {
+                    procedure.value(PrimitiveTuples.pair(ObjectBooleanHashMap.this.toNonSentinel(ObjectBooleanHashMap.this.keys[i]), ObjectBooleanHashMap.this.values.get(i)));
+                }
+            }
+        }
+
+        public void forEachWithIndex(ObjectIntProcedure<? super ObjectBooleanPair<K>> objectIntProcedure)
+        {
+            int index = 0;
+            for (int i = 0; i < ObjectBooleanHashMap.this.keys.length; i++)
+            {
+                if (ObjectBooleanHashMap.isNonSentinel(ObjectBooleanHashMap.this.keys[i]))
+                {
+                    objectIntProcedure.value(PrimitiveTuples.pair(ObjectBooleanHashMap.this.toNonSentinel(ObjectBooleanHashMap.this.keys[i]), ObjectBooleanHashMap.this.values.get(i)), index);
+                    index++;
+                }
+            }
+        }
+
+        public <P> void forEachWith(Procedure2<? super ObjectBooleanPair<K>, ? super P> procedure, P parameter)
+        {
+            for (int i = 0; i < ObjectBooleanHashMap.this.keys.length; i++)
+            {
+                if (ObjectBooleanHashMap.isNonSentinel(ObjectBooleanHashMap.this.keys[i]))
+                {
+                    procedure.value(PrimitiveTuples.pair(ObjectBooleanHashMap.this.toNonSentinel(ObjectBooleanHashMap.this.keys[i]), ObjectBooleanHashMap.this.values.get(i)), parameter);
+                }
+            }
+        }
+
+        public Iterator<ObjectBooleanPair<K>> iterator()
+        {
+            return new InternalKeyValuesIterator();
+        }
+
+        public class InternalKeyValuesIterator implements Iterator<ObjectBooleanPair<K>>
+        {
+            private int count;
+            private int position;
+
+            public ObjectBooleanPair<K> next()
+            {
+                if (!this.hasNext())
+                {
+                    throw new NoSuchElementException();
+                }
+
+                Object[] keys = ObjectBooleanHashMap.this.keys;
+                while (!isNonSentinel(keys[this.position]))
+                {
+                    this.position++;
+                }
+                ObjectBooleanPair<K> result = PrimitiveTuples.pair(ObjectBooleanHashMap.this.toNonSentinel(ObjectBooleanHashMap.this.keys[this.position]), ObjectBooleanHashMap.this.values.get(this.position));
+                this.count++;
+                this.position++;
+                return result;
+            }
+
+            public void remove()
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            public boolean hasNext()
+            {
+                return this.count != ObjectBooleanHashMap.this.size();
+            }
         }
     }
 }

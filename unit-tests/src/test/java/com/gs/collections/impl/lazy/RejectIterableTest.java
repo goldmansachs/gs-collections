@@ -90,4 +90,15 @@ public class RejectIterableTest extends AbstractLazyIterableTestCase
         }, sum);
         Assert.assertEquals(5, sum.getValue().intValue());
     }
+
+    @Override
+    @Test
+    public void distinct()
+    {
+        super.distinct();
+        RejectIterable<Integer> iterable = new RejectIterable<Integer>(FastList.newListWith(3, 2, 2, 4, 1, 3, 1, 5), Predicates.lessThan(2));
+        Assert.assertEquals(
+                FastList.newListWith(3, 2, 4, 5),
+                iterable.distinct().toList());
+    }
 }
