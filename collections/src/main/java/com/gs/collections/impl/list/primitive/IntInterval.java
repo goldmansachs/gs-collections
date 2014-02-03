@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,6 +39,7 @@ import com.gs.collections.impl.bag.mutable.primitive.IntHashBag;
 import com.gs.collections.impl.block.factory.primitive.IntPredicates;
 import com.gs.collections.impl.lazy.primitive.CollectIntToObjectIterable;
 import com.gs.collections.impl.lazy.primitive.LazyIntIterableAdapter;
+import com.gs.collections.impl.lazy.primitive.ReverseIntIterable;
 import com.gs.collections.impl.lazy.primitive.SelectIntIterable;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.set.mutable.primitive.IntHashSet;
@@ -662,6 +663,11 @@ public final class IntInterval
     public <V> ImmutableList<V> collect(IntToObjectFunction<? extends V> function)
     {
         return new CollectIntToObjectIterable<V>(this, function).toList().toImmutable();
+    }
+
+    public LazyIntIterable asReversed()
+    {
+        return ReverseIntIterable.adapt(this);
     }
 
     public long sum()

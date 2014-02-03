@@ -35,6 +35,7 @@ import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.primitive.<name>Lists;
 import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
+import com.gs.collections.impl.lazy.primitive.Reverse<name>Iterable;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 import net.jcip.annotations.Immutable;
@@ -147,6 +148,11 @@ final class Immutable<name>EmptyList implements Immutable<name>List, Serializabl
     public boolean containsAll(<name>Iterable source)
     {
         return source.isEmpty();
+    }
+
+    public Lazy<name>Iterable asReversed()
+    {
+        return Reverse<name>Iterable.adapt(this);
     }
 
     public Mutable<name>List toList()

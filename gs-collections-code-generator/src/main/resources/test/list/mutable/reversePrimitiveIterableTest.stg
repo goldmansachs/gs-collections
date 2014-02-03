@@ -33,7 +33,7 @@ import org.junit.Test;
 
 /**
  * JUnit test for {@link <name>ArrayList.Reverse<name>Iterable}.
- * This file was automatically generated from template file primitiveReverseIterableTest.stg.
+ * This file was automatically generated from template file reversePrimitiveIterableTest.stg.
  */
 public class Reverse<name>IterableTest
 {
@@ -185,7 +185,7 @@ public class Reverse<name>IterableTest
     public void collect()
     {
         <name>Iterable iterable = <name>ArrayList.newListWith(<["3", "2", "1"]:(literal.(type))(); separator=", ">).asReversed();
-        Assert.assertEquals(FastList.newListWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">), iterable.collect(new <name>ToObjectFunction\<<wrapperName>\>()
+        Verify.assertIterablesEqual(FastList.newListWith(<["0", "1", "2"]:(literal.(type))(); separator=", ">), iterable.collect(new <name>ToObjectFunction\<<wrapperName>\>()
         {
             public <wrapperName> valueOf(<type> parameter)
             {

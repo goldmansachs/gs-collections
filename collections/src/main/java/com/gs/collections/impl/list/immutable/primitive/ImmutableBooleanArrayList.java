@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,6 +40,7 @@ import com.gs.collections.api.set.primitive.MutableBooleanSet;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.factory.primitive.BooleanLists;
 import com.gs.collections.impl.lazy.primitive.LazyBooleanIterableAdapter;
+import com.gs.collections.impl.lazy.primitive.ReverseBooleanIterable;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
@@ -297,6 +298,11 @@ final class ImmutableBooleanArrayList
             }
         }
         return true;
+    }
+
+    public LazyBooleanIterable asReversed()
+    {
+        return ReverseBooleanIterable.adapt(this);
     }
 
     public MutableBooleanList toList()
