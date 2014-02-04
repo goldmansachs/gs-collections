@@ -441,15 +441,9 @@ public final class TreeSortedSet<T>
         return Iterate.collectWith(this.treeSet, function, parameter, FastList.<V>newList());
     }
 
-    public <S> TreeSortedSet<Pair<T, S>> zip(Iterable<S> that)
+    public <S> MutableList<Pair<T, S>> zip(Iterable<S> that)
     {
-        Comparator<? super T> comparator = this.comparator();
-        if (comparator == null)
-        {
-            TreeSortedSet<Pair<T, S>> pairs = TreeSortedSet.newSet(Comparators.<Pair<T, S>, T>byFunction(Functions.<T>firstOfPair(), Comparators.<T>naturalOrder()));
-            return Iterate.zip(this, that, pairs);
-        }
-        return Iterate.zip(this, that, TreeSortedSet.<Pair<T, S>>newSet(Comparators.<T>byFirstOfPair(comparator)));
+        return Iterate.zip(this, that, FastList.<Pair<T, S>>newList());
     }
 
     public TreeSortedSet<Pair<T, Integer>> zipWithIndex()

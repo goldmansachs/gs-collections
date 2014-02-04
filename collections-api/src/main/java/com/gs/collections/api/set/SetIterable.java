@@ -106,8 +106,6 @@ public interface SetIterable<T> extends RichIterable<T>
 
     <S> SetIterable<S> selectInstancesOf(Class<S> clazz);
 
-    <S> SetIterable<Pair<T, S>> zip(Iterable<S> that);
-
     SetIterable<Pair<T, Integer>> zipWithIndex();
 
     /**

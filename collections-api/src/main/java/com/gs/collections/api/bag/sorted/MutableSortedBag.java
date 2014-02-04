@@ -16,20 +16,47 @@
 
 package com.gs.collections.api.bag.sorted;
 
-import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
+import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.MutableBooleanList;
+import com.gs.collections.api.list.primitive.MutableByteList;
+import com.gs.collections.api.list.primitive.MutableCharList;
+import com.gs.collections.api.list.primitive.MutableDoubleList;
+import com.gs.collections.api.list.primitive.MutableFloatList;
+import com.gs.collections.api.list.primitive.MutableIntList;
+import com.gs.collections.api.list.primitive.MutableLongList;
+import com.gs.collections.api.list.primitive.MutableShortList;
+import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.sortedbag.MutableSortedBagMultimap;
 import com.gs.collections.api.partition.bag.sorted.PartitionMutableSortedBag;
+import com.gs.collections.api.set.sorted.MutableSortedSet;
+import com.gs.collections.api.tuple.Pair;
 
 /**
  * @since 4.2
  */
 public interface MutableSortedBag<T>
-        extends SortedBag<T>, MutableBag<T>, Cloneable
+        extends SortedBag<T>, MutableCollection<T>, Cloneable
 {
+    void addOccurrences(T item, int occurrences);
+
+    boolean removeOccurrences(Object item, int occurrences);
+
     MutableSortedBag<T> selectByOccurrences(IntPredicate predicate);
 
     MutableSortedBag<T> with(T element);
@@ -42,16 +69,16 @@ public interface MutableSortedBag<T>
 
     MutableSortedBag<T> newEmpty();
 
+    MutableSortedBag<T> clone();
+
     /**
-     * Returns an unmodifable view of the set. The returned set will be <tt>Serializable</tt> if this set is <tt>Serializable</tt>.
+     * Returns an unmodifiable view of the set. The returned set will be <tt>Serializable</tt> if this set is <tt>Serializable</tt>.
      *
      * @return an unmodifiable view of this set
      */
     MutableSortedBag<T> asUnmodifiable();
 
     MutableSortedBag<T> asSynchronized();
-
-    <V> MutableSortedBagMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
 
     MutableSortedBag<T> select(Predicate<? super T> predicate);
 
@@ -63,23 +90,61 @@ public interface MutableSortedBag<T>
 
     PartitionMutableSortedBag<T> partition(Predicate<? super T> predicate);
 
+    PartitionMutableSortedBag<T> partitionWhile(Predicate<? super T> predicate);
+
     <S> MutableSortedBag<S> selectInstancesOf(Class<S> clazz);
+
+    <V> MutableList<V> collect(Function<? super T, ? extends V> function);
+
+    MutableBooleanList collectBoolean(BooleanFunction<? super T> booleanFunction);
+
+    MutableByteList collectByte(ByteFunction<? super T> byteFunction);
+
+    MutableCharList collectChar(CharFunction<? super T> charFunction);
+
+    MutableDoubleList collectDouble(DoubleFunction<? super T> doubleFunction);
+
+    MutableFloatList collectFloat(FloatFunction<? super T> floatFunction);
+
+    MutableIntList collectInt(IntFunction<? super T> intFunction);
+
+    MutableLongList collectLong(LongFunction<? super T> longFunction);
+
+    MutableShortList collectShort(ShortFunction<? super T> shortFunction);
+
+    <P, V> MutableList<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
+
+    <V> MutableList<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
+
+    <V> MutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
+
+    MutableSortedSet<T> distinct();
+
+    MutableSortedBag<T> takeWhile(Predicate<? super T> predicate);
+
+    MutableSortedBag<T> dropWhile(Predicate<? super T> predicate);
+
+    <V> MutableSortedBagMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
 
     <V> MutableSortedBagMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
 
-    // Not yet supported
-    // <S> MutableBag<Pair<T, S>> zip(Iterable<S> that);
-    //
-    // MutableBag<Pair<T, Integer>> zipWithIndex();
-    //
-    // <K, V> SortedMapIterable<K, V> aggregateInPlaceBy(
-    //            Function<? super T, ? extends K> groupBy,
-    //            Function0<? extends V> zeroValueFactory,
-    //            Procedure2<? super V, ? super T> mutatingAggregator);
-    //
-    // <K, V> SortedMapIterable<K, V> aggregateBy(
-    //            Function<? super T, ? extends K> groupBy,
-    //            Function0<? extends V> zeroValueFactory,
-    //            Function2<? super V, ? super T, ? extends V> nonMutatingAggregator);
-    // MutableSortedMap<T, Integer> toMapOfItemToCount();
+    /**
+     * Can return an MutableMap that's backed by a LinkedHashMap.
+     */
+    <K, V> MutableMap<K, V> aggregateBy(
+            Function<? super T, ? extends K> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Function2<? super V, ? super T, ? extends V> nonMutatingAggregator);
+
+    /**
+     * Can return an MutableMap that's backed by a LinkedHashMap.
+     */
+    <K, V> MutableMap<K, V> aggregateInPlaceBy(
+            Function<? super T, ? extends K> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Procedure2<? super V, ? super T> mutatingAggregator);
+
+    <S> MutableList<Pair<T, S>> zip(Iterable<S> that);
+
+    MutableSortedSet<Pair<T, Integer>> zipWithIndex();
 }

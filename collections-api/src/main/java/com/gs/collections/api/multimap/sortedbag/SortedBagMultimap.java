@@ -16,22 +16,19 @@
 
 package com.gs.collections.api.multimap.sortedbag;
 
-import java.util.Comparator;
-
 import com.gs.collections.api.bag.sorted.SortedBag;
 import com.gs.collections.api.multimap.bag.BagMultimap;
+import com.gs.collections.api.multimap.ordered.SortedIterableMultimap;
 
 /**
  * @since 4.2
  */
 public interface SortedBagMultimap<K, V>
-        extends BagMultimap<K, V>
+        extends BagMultimap<K, V>, SortedIterableMultimap<K, V>
 {
     SortedBagMultimap<K, V> newEmpty();
 
     SortedBag<V> get(K key);
-
-    Comparator<? super V> comparator();
 
     MutableSortedBagMultimap<K, V> toMutable();
 

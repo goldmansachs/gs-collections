@@ -23,7 +23,7 @@ import com.gs.collections.api.multimap.MutableMultimap;
  * @since 1.0
  */
 public interface MutableBagMultimap<K, V>
-        extends MutableMultimap<K, V>, BagMultimap<K, V>
+        extends MutableMultimap<K, V>, UnsortedBagMultiMap<K, V>
 {
     MutableBag<V> replaceValues(K key, Iterable<? extends V> values);
 

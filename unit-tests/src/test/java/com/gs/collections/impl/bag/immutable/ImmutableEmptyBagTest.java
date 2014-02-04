@@ -25,6 +25,7 @@ import com.gs.collections.api.bag.primitive.ImmutableBooleanBag;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.partition.bag.PartitionImmutableBag;
+import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Comparators;
@@ -34,6 +35,7 @@ import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -315,12 +317,12 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
     public void zipWithIndex()
     {
         ImmutableBag<String> immutableBag = this.newBag();
-        ImmutableBag<Pair<String, Integer>> pairs = immutableBag.zipWithIndex();
+        ImmutableSet<Pair<String, Integer>> pairs = immutableBag.zipWithIndex();
 
-        Assert.assertEquals(immutableBag, pairs.collect(Functions.<String>firstOfPair()));
-        Assert.assertEquals(HashBag.<Integer>newBag(), pairs.collect(Functions.<Integer>secondOfPair()));
+        Assert.assertEquals(UnifiedSet.<String>newSet(), pairs.collect(Functions.<String>firstOfPair()));
+        Assert.assertEquals(UnifiedSet.<Integer>newSet(), pairs.collect(Functions.<Integer>secondOfPair()));
 
-        Assert.assertEquals(immutableBag.zipWithIndex(), immutableBag.zipWithIndex(HashBag.<Pair<String, Integer>>newBag()));
+        Assert.assertEquals(immutableBag.zipWithIndex(), immutableBag.zipWithIndex(UnifiedSet.<Pair<String, Integer>>newSet()));
     }
 
     @Test

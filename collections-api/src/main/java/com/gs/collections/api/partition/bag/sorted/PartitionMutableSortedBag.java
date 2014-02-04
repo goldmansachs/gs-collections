@@ -17,12 +17,12 @@
 package com.gs.collections.api.partition.bag.sorted;
 
 import com.gs.collections.api.bag.sorted.MutableSortedBag;
-import com.gs.collections.api.partition.bag.PartitionMutableBag;
+import com.gs.collections.api.partition.PartitionMutableCollection;
 
 /**
  * @since 4.2
  */
-public interface PartitionMutableSortedBag<T> extends PartitionMutableBag<T>, PartitionSortedBag<T>
+public interface PartitionMutableSortedBag<T> extends PartitionMutableCollection<T>, PartitionSortedBag<T>
 {
     MutableSortedBag<T> getSelected();
 

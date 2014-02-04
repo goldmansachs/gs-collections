@@ -36,10 +36,12 @@ import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.partition.bag.PartitionImmutableBag;
+import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.UnmodifiableIteratorAdapter;
@@ -419,7 +421,7 @@ public class ImmutableHashBag<T>
         return this.delegate.hashCode();
     }
 
-    public MutableMap<T, Integer> toMapOfItemToCount()
+    public MapIterable<T, Integer> toMapOfItemToCount()
     {
         return this.delegate.toMapOfItemToCount();
     }
@@ -512,7 +514,7 @@ public class ImmutableHashBag<T>
         return this.delegate.zip(that, target);
     }
 
-    public ImmutableBag<Pair<T, Integer>> zipWithIndex()
+    public ImmutableSet<Pair<T, Integer>> zipWithIndex()
     {
         return this.delegate.zipWithIndex().toImmutable();
     }

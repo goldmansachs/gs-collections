@@ -40,6 +40,7 @@ import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.partition.bag.PartitionMutableBag;
+import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 
 /**
@@ -50,11 +51,9 @@ import com.gs.collections.api.tuple.Pair;
  * @since 1.0
  */
 public interface MutableBag<T>
-        extends Bag<T>, MutableCollection<T>
+        extends UnsortedBag<T>, MutableCollection<T>
 {
     MutableBag<T> selectByOccurrences(IntPredicate predicate);
-
-    ImmutableBag<T> toImmutable();
 
     MutableBag<T> with(T element);
 
@@ -78,7 +77,7 @@ public interface MutableBag<T>
 
     <S> MutableBag<Pair<T, S>> zip(Iterable<S> that);
 
-    MutableBag<Pair<T, Integer>> zipWithIndex();
+    MutableSet<Pair<T, Integer>> zipWithIndex();
 
     MutableBag<T> select(Predicate<? super T> predicate);
 

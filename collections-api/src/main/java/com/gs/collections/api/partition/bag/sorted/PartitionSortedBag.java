@@ -18,11 +18,12 @@ package com.gs.collections.api.partition.bag.sorted;
 
 import com.gs.collections.api.bag.sorted.SortedBag;
 import com.gs.collections.api.partition.bag.PartitionBag;
+import com.gs.collections.api.partition.ordered.PartitionSortedIterable;
 
 /**
  * @since 4.2
  */
-public interface PartitionSortedBag<T> extends PartitionBag<T>
+public interface PartitionSortedBag<T> extends PartitionBag<T>, PartitionSortedIterable<T>
 {
     SortedBag<T> getSelected();
 

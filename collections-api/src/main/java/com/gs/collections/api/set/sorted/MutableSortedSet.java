@@ -130,7 +130,7 @@ public interface MutableSortedSet<T>
 
     <V> MutableSortedSetMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
 
-    <S> MutableSortedSet<Pair<T, S>> zip(Iterable<S> that);
+    <S> MutableList<Pair<T, S>> zip(Iterable<S> that);
 
     MutableSortedSet<Pair<T, Integer>> zipWithIndex();
 

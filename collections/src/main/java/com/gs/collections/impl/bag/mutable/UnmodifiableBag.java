@@ -40,9 +40,10 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
-import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.partition.bag.PartitionMutableBag;
+import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.collection.mutable.UnmodifiableMutableCollection;
 import com.gs.collections.impl.factory.Bags;
@@ -274,7 +275,7 @@ public class UnmodifiableBag<T>
         this.getMutableBag().forEachWithOccurrences(objectIntProcedure);
     }
 
-    public MutableMap<T, Integer> toMapOfItemToCount()
+    public MapIterable<T, Integer> toMapOfItemToCount()
     {
         return this.getMutableBag().toMapOfItemToCount();
     }
@@ -286,7 +287,7 @@ public class UnmodifiableBag<T>
     }
 
     @Override
-    public MutableBag<Pair<T, Integer>> zipWithIndex()
+    public MutableSet<Pair<T, Integer>> zipWithIndex()
     {
         return this.getMutableBag().zipWithIndex();
     }

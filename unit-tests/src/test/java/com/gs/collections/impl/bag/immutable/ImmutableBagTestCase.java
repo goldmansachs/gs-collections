@@ -42,10 +42,12 @@ import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.partition.bag.PartitionImmutableBag;
+import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
@@ -537,12 +539,12 @@ public abstract class ImmutableBagTestCase
     public void zipWithIndex()
     {
         ImmutableBag<String> immutableBag = this.newBag();
-        ImmutableBag<Pair<String, Integer>> pairs = immutableBag.zipWithIndex();
+        ImmutableSet<Pair<String, Integer>> pairs = immutableBag.zipWithIndex();
 
-        Assert.assertEquals(immutableBag, pairs.collect(Functions.<String>firstOfPair()));
-        Assert.assertEquals(Interval.zeroTo(immutableBag.size() - 1).toBag(), pairs.collect(Functions.<Integer>secondOfPair()));
+        Assert.assertEquals(immutableBag, pairs.collect(Functions.<String>firstOfPair(), HashBag.<String>newBag()));
+        Assert.assertEquals(Interval.zeroTo(immutableBag.size() - 1).toSet(), pairs.collect(Functions.<Integer>secondOfPair()));
 
-        Assert.assertEquals(immutableBag.zipWithIndex(), immutableBag.zipWithIndex(HashBag.<Pair<String, Integer>>newBag()));
+        Assert.assertEquals(immutableBag.zipWithIndex(), immutableBag.zipWithIndex(UnifiedSet.<Pair<String, Integer>>newSet()));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -925,7 +927,7 @@ public abstract class ImmutableBagTestCase
     @Test
     public void toMapOfItemToCount()
     {
-        MutableMap<String, Integer> mapOfItemToCount = this.newBag().toMapOfItemToCount();
+        MapIterable<String, Integer> mapOfItemToCount = this.newBag().toMapOfItemToCount();
 
         for (int i = 1; i <= this.numKeys(); i++)
         {

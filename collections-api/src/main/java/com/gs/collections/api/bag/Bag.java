@@ -19,31 +19,15 @@ package com.gs.collections.api.bag;
 import java.util.Map;
 
 import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.bag.primitive.BooleanBag;
-import com.gs.collections.api.bag.primitive.ByteBag;
-import com.gs.collections.api.bag.primitive.CharBag;
-import com.gs.collections.api.bag.primitive.DoubleBag;
-import com.gs.collections.api.bag.primitive.FloatBag;
-import com.gs.collections.api.bag.primitive.IntBag;
-import com.gs.collections.api.bag.primitive.LongBag;
-import com.gs.collections.api.bag.primitive.ShortBag;
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.Function2;
-import com.gs.collections.api.block.function.primitive.BooleanFunction;
-import com.gs.collections.api.block.function.primitive.ByteFunction;
-import com.gs.collections.api.block.function.primitive.CharFunction;
-import com.gs.collections.api.block.function.primitive.DoubleFunction;
-import com.gs.collections.api.block.function.primitive.FloatFunction;
-import com.gs.collections.api.block.function.primitive.IntFunction;
-import com.gs.collections.api.block.function.primitive.LongFunction;
-import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
-import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.multimap.bag.BagMultimap;
 import com.gs.collections.api.partition.bag.PartitionBag;
+import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.tuple.Pair;
 
 /**
@@ -84,37 +68,11 @@ public interface Bag<T>
 
     <S> Bag<S> selectInstancesOf(Class<S> clazz);
 
-    <V> Bag<V> collect(Function<? super T, ? extends V> function);
-
-    BooleanBag collectBoolean(BooleanFunction<? super T> booleanFunction);
-
-    ByteBag collectByte(ByteFunction<? super T> byteFunction);
-
-    CharBag collectChar(CharFunction<? super T> charFunction);
-
-    DoubleBag collectDouble(DoubleFunction<? super T> doubleFunction);
-
-    FloatBag collectFloat(FloatFunction<? super T> floatFunction);
-
-    IntBag collectInt(IntFunction<? super T> intFunction);
-
-    LongBag collectLong(LongFunction<? super T> longFunction);
-
-    ShortBag collectShort(ShortFunction<? super T> shortFunction);
-
-    <P, V> Bag<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
-
-    <V> Bag<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
-
-    <V> Bag<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
-
     <V> BagMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
 
     <V> BagMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
 
-    <S> Bag<Pair<T, S>> zip(Iterable<S> that);
-
-    Bag<Pair<T, Integer>> zipWithIndex();
+    SetIterable<Pair<T, Integer>> zipWithIndex();
 
     /**
      * For each distinct item, with the number of occurrences, execute the specified procedure.
@@ -139,14 +97,9 @@ public interface Bag<T>
     int sizeDistinct();
 
     /**
-     * Convert the Bag to an ImmutableBag.  If the bag is immutable, it returns itself.
-     */
-    ImmutableBag<T> toImmutable();
-
-    /**
      * Converts the Bag to a Map of the Item type to its count as an Integer.
      */
-    MutableMap<T, Integer> toMapOfItemToCount();
+    MapIterable<T, Integer> toMapOfItemToCount();
 
     /**
      * Returns a string representation of this bag. The string representation consists of a list of element-count mappings.

@@ -413,28 +413,28 @@ public abstract class AbstractImmutableSortedSetTestCase
         List<Object> nullsPlusOne = Collections.nCopies(immutableSet.size() + 1, null);
         List<Object> nullsMinusOne = Collections.nCopies(immutableSet.size() - 1, null);
 
-        ImmutableSortedSet<Pair<Integer, Object>> pairs = immutableSet.zip(nulls);
+        ImmutableList<Pair<Integer, Object>> pairs = immutableSet.zip(nulls);
         Assert.assertEquals(immutableSet.toList(), pairs.collect(Functions.<Integer>firstOfPair()));
         Verify.assertListsEqual(FastList.newList(Interval.fromTo(immutableSet.size(), 1)), pairs.collect(Functions.<Integer>firstOfPair()).toList());
         Assert.assertEquals(FastList.<Object>newList(nulls), pairs.collect(Functions.<Object>secondOfPair()));
 
-        ImmutableSortedSet<Pair<Integer, Object>> pairsPlusOne = immutableSet.zip(nullsPlusOne);
+        ImmutableList<Pair<Integer, Object>> pairsPlusOne = immutableSet.zip(nullsPlusOne);
         Assert.assertEquals(immutableSet.toList(), pairsPlusOne.collect(Functions.<Integer>firstOfPair()));
         Verify.assertListsEqual(FastList.newList(Interval.fromTo(immutableSet.size(), 1)),
                 pairsPlusOne.collect(Functions.<Integer>firstOfPair()).castToList());
         Assert.assertEquals(FastList.<Object>newList(nulls), pairsPlusOne.collect(Functions.<Object>secondOfPair()));
 
-        ImmutableSortedSet<Pair<Integer, Object>> pairsMinusOne = immutableSet.zip(nullsMinusOne);
+        ImmutableList<Pair<Integer, Object>> pairsMinusOne = immutableSet.zip(nullsMinusOne);
         Verify.assertListsEqual(FastList.<Integer>newList(Interval.fromTo(immutableSet.size(), 2)),
                 pairsMinusOne.collect(Functions.<Integer>firstOfPair()).castToList());
-        Assert.assertEquals(immutableSet.zip(nulls), immutableSet.zip(nulls, UnifiedSet.<Pair<Integer, Object>>newSet()));
+        Assert.assertEquals(immutableSet.zip(nulls), immutableSet.zip(nulls, FastList.<Pair<Integer, Object>>newList()));
 
         FastList<Holder> holders = FastList.newListWith(new Holder(1), new Holder(2), new Holder(3));
-        ImmutableSortedSet<Pair<Integer, Holder>> zipped = immutableSet.zip(holders);
-        Verify.assertSize(3, zipped.castToSortedSet());
+        ImmutableList<Pair<Integer, Holder>> zipped = immutableSet.zip(holders);
+        Verify.assertSize(3, zipped.castToList());
         AbstractImmutableSortedSetTestCase.Holder two = new Holder(-1);
         AbstractImmutableSortedSetTestCase.Holder two1 = new Holder(-1);
-        Assert.assertEquals(Tuples.pair(10, two1), zipped.newWith(Tuples.pair(10, two)).getFirst());
+        Assert.assertEquals(Tuples.pair(10, two1), zipped.newWith(Tuples.pair(10, two)).getLast());
         Assert.assertEquals(Tuples.pair(1, new Holder(3)), this.classUnderTest().zip(holders.reverseThis()).getFirst());
     }
 

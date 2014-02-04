@@ -17,7 +17,7 @@
 package com.gs.collections.api.partition.bag.sorted;
 
 import com.gs.collections.api.bag.sorted.ImmutableSortedBag;
-import com.gs.collections.api.partition.bag.PartitionImmutableBag;
+import com.gs.collections.api.partition.PartitionImmutableCollection;
 
 /**
  * A PartitionImmutableSortedBag is the result of splitting an immutable sorted bag into two immutable sorted bags based
@@ -26,7 +26,7 @@ import com.gs.collections.api.partition.bag.PartitionImmutableBag;
  *
  * @since 4.2
  */
-public interface PartitionImmutableSortedBag<T> extends PartitionImmutableBag<T>, PartitionSortedBag<T>
+public interface PartitionImmutableSortedBag<T> extends PartitionImmutableCollection<T>, PartitionSortedBag<T>
 {
     ImmutableSortedBag<T> getSelected();
 

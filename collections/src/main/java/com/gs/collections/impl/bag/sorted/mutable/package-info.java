@@ -23,12 +23,12 @@
  *     This package contains 2 sorted mutable bag implementation:
  * <ul>
  *     <li>
- *          {@link com.gs.collections.impl.bag.mutable.sorted.TreeBag} - a sorted bag backed by Tree data structure..
+ *          {@link com.gs.collections.impl.bag.sorted.mutable.TreeBag} - a sorted bag backed by Tree data structure..
  *     </li>
  *     <li>
- *          {@link com.gs.collections.impl.bag.mutable.sorted.UnmodifiableSortedBag} -  an unmodifiable view of a SortedBag.
+ *          {@link com.gs.collections.impl.bag.sorted.mutable.UnmodifiableSortedBag} -  an unmodifiable view of a SortedBag.
  *     </li>
  * </ul>
  * </p>
  */
-package com.gs.collections.impl.bag.mutable.sorted;
+package com.gs.collections.impl.bag.sorted.mutable;

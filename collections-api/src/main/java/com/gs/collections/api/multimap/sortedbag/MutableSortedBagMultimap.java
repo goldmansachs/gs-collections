@@ -17,13 +17,13 @@
 package com.gs.collections.api.multimap.sortedbag;
 
 import com.gs.collections.api.bag.sorted.MutableSortedBag;
-import com.gs.collections.api.multimap.bag.MutableBagMultimap;
+import com.gs.collections.api.multimap.MutableMultimap;
 
 /**
  * @since 4.2
  */
 public interface MutableSortedBagMultimap<K, V>
-        extends MutableBagMultimap<K, V>, SortedBagMultimap<K, V>
+        extends MutableMultimap<K, V>, SortedBagMultimap<K, V>
 {
     MutableSortedBag<V> replaceValues(K key, Iterable<? extends V> values);
 

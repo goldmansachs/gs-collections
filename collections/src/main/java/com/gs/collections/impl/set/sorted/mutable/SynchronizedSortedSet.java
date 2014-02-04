@@ -367,7 +367,7 @@ public class SynchronizedSortedSet<T>
     }
 
     @Override
-    public <S> MutableSortedSet<Pair<T, S>> zip(Iterable<S> that)
+    public <S> MutableList<Pair<T, S>> zip(Iterable<S> that)
     {
         synchronized (this.getLock())
         {

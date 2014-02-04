@@ -38,6 +38,7 @@ import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.partition.bag.PartitionImmutableBag;
 import com.gs.collections.api.partition.bag.PartitionMutableBag;
+import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Comparators;
@@ -46,6 +47,7 @@ import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.factory.Bags;
+import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.partition.bag.PartitionHashBag;
@@ -407,9 +409,9 @@ final class ImmutableSingletonBag<T>
         return Bags.immutable.of(Tuples.pair(this.value, iterator.next()));
     }
 
-    public ImmutableBag<Pair<T, Integer>> zipWithIndex()
+    public ImmutableSet<Pair<T, Integer>> zipWithIndex()
     {
-        return Bags.immutable.of(Tuples.pair(this.value, 0));
+        return Sets.immutable.of(Tuples.pair(this.value, 0));
     }
 
     public Iterator<T> iterator()

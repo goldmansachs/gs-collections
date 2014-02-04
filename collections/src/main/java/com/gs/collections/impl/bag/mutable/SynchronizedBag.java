@@ -43,9 +43,10 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
-import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.partition.bag.PartitionMutableBag;
+import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.collection.mutable.SynchronizedMutableCollection;
 import com.gs.collections.impl.factory.Bags;
@@ -366,7 +367,7 @@ public class SynchronizedBag<T>
         }
     }
 
-    public MutableMap<T, Integer> toMapOfItemToCount()
+    public MapIterable<T, Integer> toMapOfItemToCount()
     {
         synchronized (this.getLock())
         {
@@ -393,7 +394,7 @@ public class SynchronizedBag<T>
     }
 
     @Override
-    public MutableBag<Pair<T, Integer>> zipWithIndex()
+    public MutableSet<Pair<T, Integer>> zipWithIndex()
     {
         synchronized (this.getLock())
         {

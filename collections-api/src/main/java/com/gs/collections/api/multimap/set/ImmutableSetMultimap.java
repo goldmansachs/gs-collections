@@ -23,7 +23,7 @@ import com.gs.collections.api.set.ImmutableSet;
  * @since 1.0
  */
 public interface ImmutableSetMultimap<K, V>
-        extends SetMultimap<K, V>, ImmutableMultimap<K, V>
+        extends UnsortedSetMultiMap<K, V>, ImmutableMultimap<K, V>
 {
     ImmutableSet<V> get(K key);
 

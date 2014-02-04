@@ -137,7 +137,5 @@ public interface SortedSetIterable<T>
 
     <V> SortedSetMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
 
-    <S> SortedSetIterable<Pair<T, S>> zip(Iterable<S> that);
-
     SortedSetIterable<Pair<T, Integer>> zipWithIndex();
 }

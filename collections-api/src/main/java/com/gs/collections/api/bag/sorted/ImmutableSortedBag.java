@@ -16,13 +16,36 @@
 
 package com.gs.collections.api.bag.sorted;
 
-import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
+import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.collection.ImmutableCollection;
+import com.gs.collections.api.list.ImmutableList;
+import com.gs.collections.api.list.primitive.ImmutableBooleanList;
+import com.gs.collections.api.list.primitive.ImmutableByteList;
+import com.gs.collections.api.list.primitive.ImmutableCharList;
+import com.gs.collections.api.list.primitive.ImmutableDoubleList;
+import com.gs.collections.api.list.primitive.ImmutableFloatList;
+import com.gs.collections.api.list.primitive.ImmutableIntList;
+import com.gs.collections.api.list.primitive.ImmutableLongList;
+import com.gs.collections.api.list.primitive.ImmutableShortList;
+import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.multimap.sortedbag.ImmutableSortedBagMultimap;
 import com.gs.collections.api.partition.bag.sorted.PartitionImmutableSortedBag;
+import com.gs.collections.api.set.sorted.ImmutableSortedSet;
+import com.gs.collections.api.tuple.Pair;
 import net.jcip.annotations.Immutable;
 
 /**
@@ -32,7 +55,7 @@ import net.jcip.annotations.Immutable;
  */
 @Immutable
 public interface ImmutableSortedBag<T>
-        extends ImmutableBag<T>, SortedBag<T>
+        extends ImmutableCollection<T>, SortedBag<T>
 {
     ImmutableSortedBag<T> newWith(T element);
 
@@ -56,23 +79,57 @@ public interface ImmutableSortedBag<T>
 
     <S> ImmutableSortedBag<S> selectInstancesOf(Class<S> clazz);
 
+    <V> ImmutableList<V> collect(Function<? super T, ? extends V> function);
+
+    ImmutableBooleanList collectBoolean(BooleanFunction<? super T> booleanFunction);
+
+    ImmutableByteList collectByte(ByteFunction<? super T> byteFunction);
+
+    ImmutableCharList collectChar(CharFunction<? super T> charFunction);
+
+    ImmutableDoubleList collectDouble(DoubleFunction<? super T> doubleFunction);
+
+    ImmutableFloatList collectFloat(FloatFunction<? super T> floatFunction);
+
+    ImmutableIntList collectInt(IntFunction<? super T> intFunction);
+
+    ImmutableLongList collectLong(LongFunction<? super T> longFunction);
+
+    ImmutableShortList collectShort(ShortFunction<? super T> shortFunction);
+
+    <P, V> ImmutableList<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
+
+    <V> ImmutableList<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
+
+    <V> ImmutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
+
+    ImmutableSortedSet<T> distinct();
+
+    ImmutableSortedBag<T> takeWhile(Predicate<? super T> predicate);
+
+    ImmutableSortedBag<T> dropWhile(Predicate<? super T> predicate);
+
     <V> ImmutableSortedBagMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
 
     <V> ImmutableSortedBagMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
 
-    //Not yet supported
+    /**
+     * Can return an ImmutableMap that's backed by a LinkedHashMap.
+     */
+    <K, V> ImmutableMap<K, V> aggregateBy(
+            Function<? super T, ? extends K> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Function2<? super V, ? super T, ? extends V> nonMutatingAggregator);
 
-    //<S> ImmutableBag<Pair<T, S>> zip(Iterable<S> that);
+    /**
+     * Can return an ImmutableMap that's backed by a LinkedHashMap.
+     */
+    <K, V> ImmutableMap<K, V> aggregateInPlaceBy(
+            Function<? super T, ? extends K> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Procedure2<? super V, ? super T> mutatingAggregator);
 
-    //ImmutableBag<Pair<T, Integer>> zipWithIndex();
+    <S> ImmutableList<Pair<T, S>> zip(Iterable<S> that);
 
-    // <K, V> SortedMapIterable<K, V> aggregateInPlaceBy(
-    //            Function<? super T, ? extends K> groupBy,
-    //            Function0<? extends V> zeroValueFactory,
-    //            Procedure2<? super V, ? super T> mutatingAggregator);
-    //
-    // <K, V> SortedMapIterable<K, V> aggregateBy(
-    //            Function<? super T, ? extends K> groupBy,
-    //            Function0<? extends V> zeroValueFactory,
-    //            Function2<? super V, ? super T, ? extends V> nonMutatingAggregator);
+    ImmutableSortedSet<Pair<T, Integer>> zipWithIndex();
 }

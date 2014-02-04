@@ -21,9 +21,9 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
-import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.UnsortedBag;
 import com.gs.collections.api.bag.primitive.ImmutableBooleanBag;
 import com.gs.collections.api.bag.primitive.ImmutableByteBag;
 import com.gs.collections.api.bag.primitive.ImmutableCharBag;
@@ -48,6 +48,7 @@ import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.partition.bag.PartitionImmutableBag;
+import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
@@ -91,7 +92,7 @@ public abstract class AbstractImmutableBag<T>
     public abstract <S> ImmutableBag<Pair<T, S>> zip(Iterable<S> that);
 
     @Override
-    public abstract ImmutableBag<Pair<T, Integer>> zipWithIndex();
+    public abstract ImmutableSet<Pair<T, Integer>> zipWithIndex();
 
     @Override
     public abstract PartitionImmutableBag<T> partition(Predicate<? super T> predicate);
@@ -245,7 +246,7 @@ public abstract class AbstractImmutableBag<T>
     {
         private static final long serialVersionUID = 1L;
 
-        private Bag<T> bag;
+        private UnsortedBag<T> bag;
 
         @SuppressWarnings("UnusedDeclaration")
         public ImmutableBagSerializationProxy()
@@ -253,7 +254,7 @@ public abstract class AbstractImmutableBag<T>
             // Empty constructor for Externalizable class
         }
 
-        protected ImmutableBagSerializationProxy(Bag<T> bag)
+        protected ImmutableBagSerializationProxy(UnsortedBag<T> bag)
         {
             this.bag = bag;
         }

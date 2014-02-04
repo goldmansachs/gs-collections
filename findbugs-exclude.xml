@@ -41,6 +41,7 @@
             <Class name="com.gs.collections.impl.set.mutable.UnmodifiableMutableSet" />
             <Class name="com.gs.collections.impl.set.sorted.mutable.SynchronizedSortedSet" />
             <Class name="com.gs.collections.impl.set.sorted.mutable.UnmodifiableSortedSet" />
+            <Class name="com.gs.collections.impl.bag.sorted.mutable.UnmodifiableSortedBag" />
         </Or>
     </Match>
 

@@ -523,7 +523,7 @@ public abstract class AbstractRichIterableTestCase
     }
 
     @Test
-    public void collectWithTarget()
+    public void collectWith_target()
     {
         Assert.assertEquals(
                 Bags.mutable.of(2, 3, 4),

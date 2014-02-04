@@ -21,7 +21,7 @@ import java.util.Comparator;
 import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.partition.bag.sorted.PartitionImmutableSortedBag;
 import com.gs.collections.api.partition.bag.sorted.PartitionMutableSortedBag;
-import com.gs.collections.impl.bag.mutable.sorted.TreeBag;
+import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 
 /**
  * @since 4.2

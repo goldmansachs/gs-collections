@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,24 +16,15 @@
 
 package com.gs.collections.api.multimap.bag;
 
-import com.gs.collections.api.bag.ImmutableBag;
-import com.gs.collections.api.multimap.ImmutableMultimap;
+import com.gs.collections.api.bag.UnsortedBag;
 
-/**
- * @since 1.0
- */
-public interface ImmutableBagMultimap<K, V>
-        extends UnsortedBagMultiMap<K, V>, ImmutableMultimap<K, V>
+public interface UnsortedBagMultiMap<K, V> extends BagMultimap<K, V>
 {
-    ImmutableBagMultimap<K, V> newEmpty();
+    UnsortedBagMultiMap<K, V> newEmpty();
 
-    ImmutableBag<V> get(K key);
+    UnsortedBag<V> get(K key);
 
-    ImmutableBagMultimap<K, V> newWith(K key, V value);
+    MutableBagMultimap<K, V> toMutable();
 
-    ImmutableBagMultimap<K, V> newWithout(Object key, Object value);
-
-    ImmutableBagMultimap<K, V> newWithAll(K key, Iterable<? extends V> values);
-
-    ImmutableBagMultimap<K, V> newWithoutAll(Object key);
+    ImmutableBagMultimap<K, V> toImmutable();
 }

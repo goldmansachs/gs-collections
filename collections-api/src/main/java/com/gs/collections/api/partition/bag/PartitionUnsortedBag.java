@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2013 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
-package com.gs.collections.api.multimap.set;
+package com.gs.collections.api.partition.bag;
 
-import com.gs.collections.api.multimap.Multimap;
-import com.gs.collections.api.set.SetIterable;
+import com.gs.collections.api.bag.UnsortedBag;
 
-public interface SetMultimap<K, V>
-        extends Multimap<K, V>
+public interface PartitionUnsortedBag<T> extends PartitionBag<T>
 {
-    SetMultimap<K, V> newEmpty();
+    UnsortedBag<T> getSelected();
 
-    SetIterable<V> get(K key);
+    UnsortedBag<T> getRejected();
 }

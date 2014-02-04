@@ -394,15 +394,9 @@ public final class SortedSetAdapter<T>
     }
 
     @Override
-    public <S> MutableSortedSet<Pair<T, S>> zip(Iterable<S> that)
+    public <S> MutableList<Pair<T, S>> zip(Iterable<S> that)
     {
-        Comparator<? super T> comparator = this.comparator();
-        if (comparator == null)
-        {
-            TreeSortedSet<Pair<T, S>> pairs = TreeSortedSet.newSet(Comparators.<Pair<T, S>, T>byFunction(Functions.<T>firstOfPair(), Comparators.<T>naturalOrder()));
-            return Iterate.zip(this.delegate, that, pairs);
-        }
-        return Iterate.zip(this.delegate, that, TreeSortedSet.<Pair<T, S>>newSet(Comparators.<T>byFirstOfPair(comparator)));
+        return Iterate.zip(this.delegate, that, FastList.<Pair<T, S>>newList());
     }
 
     @Override

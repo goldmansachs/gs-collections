@@ -64,6 +64,7 @@ import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.partition.bag.PartitionImmutableBag;
+import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.stack.MutableStack;
@@ -74,6 +75,7 @@ import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
+import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.factory.Stacks;
 import com.gs.collections.impl.factory.primitive.BooleanBags;
 import com.gs.collections.impl.factory.primitive.ByteBags;
@@ -684,9 +686,9 @@ final class ImmutableEmptyBag<T>
         return target;
     }
 
-    public ImmutableBag<Pair<T, Integer>> zipWithIndex()
+    public ImmutableSet<Pair<T, Integer>> zipWithIndex()
     {
-        return Bags.immutable.of();
+        return Sets.immutable.of();
     }
 
     public <R extends Collection<Pair<T, Integer>>> R zipWithIndex(R target)

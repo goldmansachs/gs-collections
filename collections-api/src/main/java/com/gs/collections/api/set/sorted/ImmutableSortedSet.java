@@ -113,7 +113,7 @@ public interface ImmutableSortedSet<T>
 
     <V> ImmutableSortedSetMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
 
-    <S> ImmutableSortedSet<Pair<T, S>> zip(Iterable<S> that);
+    <S> ImmutableList<Pair<T, S>> zip(Iterable<S> that);
 
     ImmutableSortedSet<Pair<T, Integer>> zipWithIndex();
 

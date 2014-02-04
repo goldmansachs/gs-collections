@@ -24,7 +24,7 @@ import com.gs.collections.api.partition.PartitionImmutableCollection;
  * The results that answer true for the Predicate will be returned from the getSelected() method and the
  * results that answer false for the predicate will be returned from the getRejected() method.
  */
-public interface PartitionImmutableBag<T> extends PartitionImmutableCollection<T>, PartitionBag<T>
+public interface PartitionImmutableBag<T> extends PartitionImmutableCollection<T>, PartitionUnsortedBag<T>
 {
     ImmutableBag<T> getSelected();
 

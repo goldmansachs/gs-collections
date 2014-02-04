@@ -310,9 +310,9 @@ public abstract class AbstractSortedSetTestCase extends AbstractCollectionTestCa
 
     @Override
     @Test
-    public void collectWithTarget()
+    public void collectWith_target()
     {
-        super.collectWithTarget();
+        super.collectWith_target();
         MutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder(), 1, 2, 3, 4, 5);
         Function2<Integer, Integer, String> addParamFunction =
                 new Function2<Integer, Integer, String>()
@@ -436,8 +436,8 @@ public abstract class AbstractSortedSetTestCase extends AbstractCollectionTestCa
         super.zip();
         MutableSortedSet<Integer> revInt = this.classUnderTest(Collections.<Integer>reverseOrder(), 2, 3, 5, 1, 4);
         MutableSortedSet<Integer> integers = this.newWith(1, 3, 2, 4, 5);
-        MutableSortedSet<Pair<Integer, Integer>> zip = integers.zip(revInt);
-        MutableSortedSet<Pair<Integer, Integer>> revZip = revInt.zip(integers);
+        MutableList<Pair<Integer, Integer>> zip = integers.zip(revInt);
+        MutableList<Pair<Integer, Integer>> revZip = revInt.zip(integers);
         Verify.assertSize(5, zip);
         Verify.assertSize(5, revZip);
         Iterator<Pair<Integer, Integer>> zipItr = zip.iterator();
@@ -454,13 +454,12 @@ public abstract class AbstractSortedSetTestCase extends AbstractCollectionTestCa
         Person johnDoe = new Person("John", "Doe");
         MutableSortedSet<Person> people = this.newWith(john, johnDoe);
         MutableList<Holder> list = FastList.newListWith(new Holder(1), new Holder(2), new Holder(3));
-        MutableSortedSet<Pair<Person, Holder>> pairs = people.zip(list);
+        MutableList<Pair<Person, Holder>> pairs = people.zip(list);
         Assert.assertEquals(
                 FastList.newListWith(Tuples.pair(johnDoe, new Holder(1)), Tuples.pair(john, new Holder(2))),
                 pairs.toList());
-        Assert.assertFalse(pairs.add(Tuples.pair(jane, new Holder(3))));
         Assert.assertTrue(pairs.add(Tuples.pair(new Person("Jack", "Baker"), new Holder(3))));
-        Assert.assertEquals(Tuples.pair(new Person("Jack", "Baker"), new Holder(3)), pairs.first());
+        Assert.assertEquals(Tuples.pair(new Person("Jack", "Baker"), new Holder(3)), pairs.getLast());
     }
 
     @Override

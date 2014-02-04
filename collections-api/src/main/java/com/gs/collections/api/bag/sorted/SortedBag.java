@@ -21,11 +21,36 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
+import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.list.ListIterable;
+import com.gs.collections.api.list.primitive.BooleanList;
+import com.gs.collections.api.list.primitive.ByteList;
+import com.gs.collections.api.list.primitive.CharList;
+import com.gs.collections.api.list.primitive.DoubleList;
+import com.gs.collections.api.list.primitive.FloatList;
+import com.gs.collections.api.list.primitive.IntList;
+import com.gs.collections.api.list.primitive.LongList;
+import com.gs.collections.api.list.primitive.ShortList;
+import com.gs.collections.api.map.MapIterable;
+import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.sortedbag.SortedBagMultimap;
+import com.gs.collections.api.ordered.SortedIterable;
 import com.gs.collections.api.partition.bag.sorted.PartitionSortedBag;
+import com.gs.collections.api.set.sorted.SortedSetIterable;
+import com.gs.collections.api.tuple.Pair;
 
 /**
  * An Iterable whose elements are sorted by some comparator or their natural ordering and may contain duplicate entries.
@@ -33,9 +58,11 @@ import com.gs.collections.api.partition.bag.sorted.PartitionSortedBag;
  * @since 4.2
  */
 public interface SortedBag<T>
-        extends Bag<T>, Comparable<SortedBag<T>>
+        extends Bag<T>, Comparable<SortedBag<T>>, SortedIterable<T>
 {
     SortedBag<T> selectByOccurrences(IntPredicate predicate);
+
+    MutableSortedMap<T, Integer> toMapOfItemToCount();
 
     /**
      * Convert the SortedBag to an ImmutableSortedBag.  If the bag is immutable, it returns itself.
@@ -73,11 +100,59 @@ public interface SortedBag<T>
 
     PartitionSortedBag<T> partition(Predicate<? super T> predicate);
 
+    PartitionSortedBag<T> partitionWhile(Predicate<? super T> predicate);
+
     <S> SortedBag<S> selectInstancesOf(Class<S> clazz);
+
+    <V> ListIterable<V> collect(Function<? super T, ? extends V> function);
+
+    BooleanList collectBoolean(BooleanFunction<? super T> booleanFunction);
+
+    ByteList collectByte(ByteFunction<? super T> byteFunction);
+
+    CharList collectChar(CharFunction<? super T> charFunction);
+
+    DoubleList collectDouble(DoubleFunction<? super T> doubleFunction);
+
+    FloatList collectFloat(FloatFunction<? super T> floatFunction);
+
+    IntList collectInt(IntFunction<? super T> intFunction);
+
+    LongList collectLong(LongFunction<? super T> longFunction);
+
+    ShortList collectShort(ShortFunction<? super T> shortFunction);
+
+    <P, V> ListIterable<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
+
+    <V> ListIterable<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
+
+    <V> ListIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
+
+    SortedSetIterable<T> distinct();
+
+    SortedBag<T> takeWhile(Predicate<? super T> predicate);
+
+    SortedBag<T> dropWhile(Predicate<? super T> predicate);
 
     <V> SortedBagMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
 
     <V> SortedBagMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
+
+    /**
+     * Can return an MapIterable that's backed by a LinkedHashMap.
+     */
+    <K, V> MapIterable<K, V> aggregateBy(
+            Function<? super T, ? extends K> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Function2<? super V, ? super T, ? extends V> nonMutatingAggregator);
+
+    /**
+     * Can return an MapIterable that's backed by a LinkedHashMap.
+     */
+    <K, V> MapIterable<K, V> aggregateInPlaceBy(
+            Function<? super T, ? extends K> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Procedure2<? super V, ? super T> mutatingAggregator);
 
     /**
      * Returns the comparator used to order the elements in this bag, or null if this bag uses the natural ordering of
@@ -85,17 +160,5 @@ public interface SortedBag<T>
      */
     Comparator<? super T> comparator();
 
-//    Not yet supported
-//    <S> MutableBag<Pair<T, S>> zip(Iterable<S> that);
-//
-//    MutableBag<Pair<T, Integer>> zipWithIndex();
-//    <K, V> SortedMapIterable<K, V> aggregateInPlaceBy(
-//            Function<? super T, ? extends K> groupBy,
-//            Function0<? extends V> zeroValueFactory,
-//            Procedure2<? super V, ? super T> mutatingAggregator);
-//
-//    <K, V> SortedMapIterable<K, V> aggregateBy(
-//            Function<? super T, ? extends K> groupBy,
-//            Function0<? extends V> zeroValueFactory,
-//            Function2<? super V, ? super T, ? extends V> nonMutatingAggregator);
+    SortedSetIterable<Pair<T, Integer>> zipWithIndex();
 }

@@ -25,8 +25,4 @@ public interface BagMultimap<K, V>
     BagMultimap<K, V> newEmpty();
 
     Bag<V> get(K key);
-
-    MutableBagMultimap<K, V> toMutable();
-
-    ImmutableBagMultimap<K, V> toImmutable();
 }

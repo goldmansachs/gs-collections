@@ -274,7 +274,7 @@ public class UnmodifiableSortedSet<T>
     }
 
     @Override
-    public <S> MutableSortedSet<Pair<T, S>> zip(Iterable<S> that)
+    public <S> MutableList<Pair<T, S>> zip(Iterable<S> that)
     {
         return this.getSortedSet().zip(that);
     }

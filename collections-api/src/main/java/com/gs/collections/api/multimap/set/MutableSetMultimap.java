@@ -23,7 +23,7 @@ import com.gs.collections.api.set.MutableSet;
  * @since 1.0
  */
 public interface MutableSetMultimap<K, V>
-        extends SetMultimap<K, V>, MutableMultimap<K, V>
+        extends UnsortedSetMultiMap<K, V>, MutableMultimap<K, V>
 {
     MutableSet<V> replaceValues(K key, Iterable<? extends V> values);
 
@@ -32,8 +32,4 @@ public interface MutableSetMultimap<K, V>
     MutableSetMultimap<K, V> newEmpty();
 
     MutableSet<V> get(K key);
-
-    MutableSetMultimap<K, V> toMutable();
-
-    ImmutableSetMultimap<K, V> toImmutable();
 }

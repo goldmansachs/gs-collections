@@ -36,6 +36,7 @@ import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.partition.bag.PartitionImmutableBag;
 import com.gs.collections.api.partition.bag.PartitionMutableBag;
+import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Predicates;
@@ -48,6 +49,7 @@ import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.partition.bag.PartitionHashBag;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.internal.IterableIterate;
@@ -491,9 +493,9 @@ public class ImmutableArrayBag<T>
         return this.zip(that, HashBag.<Pair<T, S>>newBag()).toImmutable();
     }
 
-    public ImmutableBag<Pair<T, Integer>> zipWithIndex()
+    public ImmutableSet<Pair<T, Integer>> zipWithIndex()
     {
-        return this.zipWithIndex(HashBag.<Pair<T, Integer>>newBag()).toImmutable();
+        return this.zipWithIndex(UnifiedSet.<Pair<T, Integer>>newSet()).toImmutable();
     }
 
     protected Object writeReplace()

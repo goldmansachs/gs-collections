@@ -24,6 +24,7 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.partition.set.sorted.PartitionImmutableSortedSet;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
@@ -209,16 +210,15 @@ public class ImmutableEmptySortedSetTest extends AbstractImmutableSortedSetTestC
     public void zip()
     {
         ImmutableSortedSet<Integer> immutableSet = this.classUnderTest(Comparators.reverseNaturalOrder());
-        ImmutableSortedSet<Pair<Integer, Integer>> pairs = immutableSet.zip(Interval.oneTo(10));
-        Assert.assertEquals(UnifiedSet.<Pair<Integer, Integer>>newSet(), pairs);
+        ImmutableList<Pair<Integer, Integer>> pairs = immutableSet.zip(Interval.oneTo(10));
+        Assert.assertEquals(FastList.<Pair<Integer, Integer>>newList(), pairs);
 
         Assert.assertEquals(
                 UnifiedSet.<Pair<Integer, Integer>>newSet(),
                 immutableSet.zip(Interval.oneTo(10), UnifiedSet.<Pair<Integer, Integer>>newSet()));
 
-        Assert.assertNotNull(pairs.comparator());
-        ImmutableSortedSet<Pair<Integer, Integer>> pairsWithExtras = pairs.newWith(Tuples.pair(1, 5)).newWith(Tuples.pair(5, 1));
-        Assert.assertEquals(FastList.newListWith(Tuples.pair(5, 1), Tuples.pair(1, 5)), pairsWithExtras.toList());
+        ImmutableList<Pair<Integer, Integer>> pairsWithExtras = pairs.newWith(Tuples.pair(1, 5)).newWith(Tuples.pair(5, 1));
+        Assert.assertEquals(FastList.newListWith(Tuples.pair(1, 5), Tuples.pair(5, 1)), pairsWithExtras.toList());
     }
 
     @Override

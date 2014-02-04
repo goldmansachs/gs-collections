@@ -77,6 +77,7 @@ import com.gs.collections.impl.block.procedure.primitive.CollectLongProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectShortProcedure;
 import com.gs.collections.impl.collection.immutable.AbstractImmutableCollection;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
 import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
@@ -322,15 +323,9 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
     }
 
     @Override
-    public <S> ImmutableSortedSet<Pair<T, S>> zip(Iterable<S> that)
+    public <S> ImmutableList<Pair<T, S>> zip(Iterable<S> that)
     {
-        Comparator<? super T> comparator = this.comparator();
-        if (comparator == null)
-        {
-            TreeSortedSet<Pair<T, S>> pairs = TreeSortedSet.newSet(Comparators.<Pair<T, S>, T>byFunction(Functions.<T>firstOfPair(), Comparators.<T>naturalOrder()));
-            return Iterate.zip(this, that, pairs).toImmutable();
-        }
-        return Iterate.zip(this, that, TreeSortedSet.<Pair<T, S>>newSet(Comparators.<T>byFirstOfPair(comparator))).toImmutable();
+        return Iterate.zip(this, that, FastList.<Pair<T, S>>newList()).toImmutable();
     }
 
     @Override

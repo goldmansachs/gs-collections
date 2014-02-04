@@ -29,7 +29,7 @@ import com.gs.collections.api.multimap.sortedbag.ImmutableSortedBagMultimap;
 import com.gs.collections.api.multimap.sortedbag.MutableSortedBagMultimap;
 import com.gs.collections.api.multimap.sortedbag.SortedBagMultimap;
 import com.gs.collections.api.tuple.Pair;
-import com.gs.collections.impl.bag.mutable.sorted.TreeBag;
+import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.AbstractMutableMultimap;
 

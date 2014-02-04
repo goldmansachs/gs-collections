@@ -52,9 +52,10 @@ import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
-import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.partition.bag.PartitionMutableBag;
+import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.collection.mutable.AbstractMultiReaderMutableCollection;
 import com.gs.collections.impl.factory.Bags;
@@ -553,7 +554,7 @@ public final class MultiReaderHashBag<T>
         return this;
     }
 
-    public MutableMap<T, Integer> toMapOfItemToCount()
+    public MapIterable<T, Integer> toMapOfItemToCount()
     {
         this.acquireReadLock();
         try
@@ -618,7 +619,7 @@ public final class MultiReaderHashBag<T>
         }
     }
 
-    public MutableBag<Pair<T, Integer>> zipWithIndex()
+    public MutableSet<Pair<T, Integer>> zipWithIndex()
     {
         this.acquireReadLock();
         try
@@ -928,12 +929,12 @@ public final class MultiReaderHashBag<T>
             return this.getDelegate().zip(that);
         }
 
-        public MutableBag<Pair<T, Integer>> zipWithIndex()
+        public MutableSet<Pair<T, Integer>> zipWithIndex()
         {
             return this.getDelegate().zipWithIndex();
         }
 
-        public MutableMap<T, Integer> toMapOfItemToCount()
+        public MapIterable<T, Integer> toMapOfItemToCount()
         {
             return this.getDelegate().toMapOfItemToCount();
         }
