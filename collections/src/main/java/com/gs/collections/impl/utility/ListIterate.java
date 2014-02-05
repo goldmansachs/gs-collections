@@ -457,13 +457,25 @@ public final class ListIterate
     }
 
     /**
-     * Reverses over the List in reverse order executing the Procedure for each element
+     * Iterates over the List in reverse order executing the Procedure for each element
      */
     public static <T> void reverseForEach(List<T> list, Procedure<? super T> procedure)
     {
         if (!list.isEmpty())
         {
             ListIterate.forEach(list, list.size() - 1, 0, procedure);
+        }
+    }
+
+    /**
+     * Iterates over the List in reverse order executing the Procedure for each element. The index passed into the ObjectIntProcedure is the actual index of the
+     * range.
+     */
+    public static <T> void reverseForEachWithIndex(List<T> list, ObjectIntProcedure<? super T> objectIntProcedure)
+    {
+        if (!list.isEmpty())
+        {
+            ListIterate.forEachWithIndex(list, list.size() - 1, 0, objectIntProcedure);
         }
     }
 

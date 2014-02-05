@@ -31,6 +31,7 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
+import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.ObjectIntProcedures;
@@ -402,6 +403,28 @@ public class ListIterateTest
         MutableList<Integer> results = Lists.mutable.of();
         ListIterate.reverseForEach(integers, CollectionAddProcedure.on(results));
         Assert.assertEquals(integers, results);
+    }
+
+    @Test
+    public void reverseForEachWithIndex()
+    {
+        MutableList<Integer> list = this.getIntegerList();
+        this.assertReverseForEachWithIndex(list);
+        this.assertReverseForEachWithIndex(new LinkedList<Integer>(list));
+    }
+
+    private void assertReverseForEachWithIndex(List<Integer> list)
+    {
+        final Counter counter = new Counter();
+        ListIterate.reverseForEachWithIndex(list, new ObjectIntProcedure<Integer>()
+        {
+            public void value(Integer object, int index)
+            {
+                Assert.assertEquals(counter.getCount() + 1, object.longValue());
+                Assert.assertEquals(4 - counter.getCount(), index);
+                counter.increment();
+            }
+        });
     }
 
     @Test
