@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -100,4 +100,11 @@ public interface UnsortedSetIterable<T>
     <S> UnsortedSetIterable<Pair<T, S>> zip(Iterable<S> that);
 
     UnsortedSetIterable<Pair<T, Integer>> zipWithIndex();
+
+    /**
+     * Converts the UnsortedSetIterable to an immutable implementation. Returns this for immutable sets.
+     *
+     * @since 5.0
+     */
+    ImmutableSet<T> toImmutable();
 }

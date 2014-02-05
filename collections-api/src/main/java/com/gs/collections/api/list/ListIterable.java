@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -140,6 +140,13 @@ public interface ListIterable<T>
      * @since 2.0
      */
     MutableStack<T> toStack();
+
+    /**
+     * Converts the ListIterable to an immutable implementation. Returns this for immutable lists.
+     *
+     * @since 5.0
+     */
+    ImmutableList<T> toImmutable();
 
     ListIterable<T> select(Predicate<? super T> predicate);
 

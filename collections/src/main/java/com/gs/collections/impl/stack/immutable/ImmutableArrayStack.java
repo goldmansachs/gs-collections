@@ -748,6 +748,11 @@ final class ImmutableArrayStack<T> implements ImmutableStack<T>, Serializable
         return this.delegate.asReversed().zipWithIndex(target);
     }
 
+    public ImmutableStack<T> toImmutable()
+    {
+        return this;
+    }
+
     public RichIterable<RichIterable<T>> chunk(int size)
     {
         return this.delegate.asReversed().chunk(size);

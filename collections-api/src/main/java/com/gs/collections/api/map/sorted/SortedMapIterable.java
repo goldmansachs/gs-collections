@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -61,4 +61,11 @@ public interface SortedMapIterable<K, V>
     <VV> ListMultimap<VV, V> groupBy(Function<? super V, ? extends VV> function);
 
     <VV> ListMultimap<VV, V> groupByEach(Function<? super V, ? extends Iterable<VV>> function);
+
+    /**
+     * Converts the SortedMapIterable to an immutable implementation. Returns this for immutable maps.
+     *
+     * @since 5.0
+     */
+    ImmutableSortedMap<K, V> toImmutable();
 }

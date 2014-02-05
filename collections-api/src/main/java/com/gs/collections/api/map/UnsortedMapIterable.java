@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,4 +33,11 @@ public interface UnsortedMapIterable<K, V>
     <R> UnsortedMapIterable<K, R> collectValues(Function2<? super K, ? super V, ? extends R> function);
 
     <K2, V2> UnsortedMapIterable<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function);
+
+    /**
+     * Converts the UnsortedMapIterable to an immutable implementation. Returns this for immutable maps.
+     *
+     * @since 5.0
+     */
+    ImmutableMap<K, V> toImmutable();
 }

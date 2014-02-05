@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -138,4 +138,11 @@ public interface SortedSetIterable<T>
     <V> SortedSetMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
 
     SortedSetIterable<Pair<T, Integer>> zipWithIndex();
+
+    /**
+     * Converts the SortedSetIterable to an immutable implementation. Returns this for immutable sets.
+     *
+     * @since 5.0
+     */
+    ImmutableSortedSet<T> toImmutable();
 }
