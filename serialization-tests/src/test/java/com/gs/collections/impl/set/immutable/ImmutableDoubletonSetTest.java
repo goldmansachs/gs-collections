@@ -26,10 +26,10 @@ public class ImmutableDoubletonSetTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyADtjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQuaW1tdXRhYmxlLkltbXV0YWJsZURv\n"
-                        + "dWJsZXRvblNldAAAAAAAAAABAgACTAAIZWxlbWVudDF0ABJMamF2YS9sYW5nL09iamVjdDtMAAhl\n"
-                        + "bGVtZW50MnEAfgABeHBzcgARamF2YS5sYW5nLkludGVnZXIS4qCk94GHOAIAAUkABXZhbHVleHIA\n"
-                        + "EGphdmEubGFuZy5OdW1iZXKGrJUdC5TgiwIAAHhwAAAAAXNxAH4AAwAAAAI=",
+                "rO0ABXNyAERjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQuaW1tdXRhYmxlLkltbXV0YWJsZVNl\n"
+                        + "dFNlcmlhbGl6YXRpb25Qcm94eQAAAAAAAAABDAAAeHB3BAAAAAJzcgARamF2YS5sYW5nLkludGVn\n"
+                        + "ZXIS4qCk94GHOAIAAUkABXZhbHVleHIAEGphdmEubGFuZy5OdW1iZXKGrJUdC5TgiwIAAHhwAAAA\n"
+                        + "AXNxAH4AAgAAAAJ4",
                 new ImmutableDoubletonSet<Integer>(1, 2));
     }
 }

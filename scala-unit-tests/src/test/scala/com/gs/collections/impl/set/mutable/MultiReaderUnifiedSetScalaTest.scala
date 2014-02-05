@@ -443,8 +443,7 @@ class MultiReaderUnifiedSetScalaTest extends MultiReaderUnifiedSetTestTrait
             },
             {
                 num: Int => "" + num
-            }
-            )
+            })
         }
         this.assertReadersNotBlocked
         {
@@ -454,8 +453,7 @@ class MultiReaderUnifiedSetScalaTest extends MultiReaderUnifiedSetTestTrait
             },
             {
                 num: Int => "" + num
-            }
-            )
+            })
         }
     }
 
@@ -1201,8 +1199,7 @@ class MultiReaderUnifiedSetScalaTest extends MultiReaderUnifiedSetTestTrait
             },
             {
                 _: Int => 0
-            }
-            )
+            })
         }
         this.assertReadersNotBlocked
         {
@@ -1212,8 +1209,7 @@ class MultiReaderUnifiedSetScalaTest extends MultiReaderUnifiedSetTestTrait
             },
             {
                 _: Int => 0
-            }
-            )
+            })
         }
     }
 

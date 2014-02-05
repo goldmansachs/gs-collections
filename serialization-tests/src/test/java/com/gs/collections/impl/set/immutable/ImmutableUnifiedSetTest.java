@@ -26,13 +26,11 @@ public class ImmutableUnifiedSetTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyADljb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQuaW1tdXRhYmxlLkltbXV0YWJsZVVu\n"
-                        + "aWZpZWRTZXQAAAAAAAAAAQIAAUwACGRlbGVnYXRldAAwTGNvbS9ncy9jb2xsZWN0aW9ucy9pbXBs\n"
-                        + "L3NldC9tdXRhYmxlL1VuaWZpZWRTZXQ7eHBzcgAuY29tLmdzLmNvbGxlY3Rpb25zLmltcGwuc2V0\n"
-                        + "Lm11dGFibGUuVW5pZmllZFNldAAAAAAAAAABDAAAeHB3CAAAAAs/QAAAc3IAEWphdmEubGFuZy5J\n"
-                        + "bnRlZ2VyEuKgpPeBhzgCAAFJAAV2YWx1ZXhyABBqYXZhLmxhbmcuTnVtYmVyhqyVHQuU4IsCAAB4\n"
-                        + "cAAAAAFzcQB+AAUAAAACc3EAfgAFAAAAA3NxAH4ABQAAAARzcQB+AAUAAAAFc3EAfgAFAAAABnNx\n"
-                        + "AH4ABQAAAAdzcQB+AAUAAAAIc3EAfgAFAAAACXNxAH4ABQAAAApzcQB+AAUAAAALeA==",
+                "rO0ABXNyAERjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQuaW1tdXRhYmxlLkltbXV0YWJsZVNl\n"
+                        + "dFNlcmlhbGl6YXRpb25Qcm94eQAAAAAAAAABDAAAeHB3BAAAAAtzcgARamF2YS5sYW5nLkludGVn\n"
+                        + "ZXIS4qCk94GHOAIAAUkABXZhbHVleHIAEGphdmEubGFuZy5OdW1iZXKGrJUdC5TgiwIAAHhwAAAA\n"
+                        + "AXNxAH4AAgAAAAJzcQB+AAIAAAADc3EAfgACAAAABHNxAH4AAgAAAAVzcQB+AAIAAAAGc3EAfgAC\n"
+                        + "AAAAB3NxAH4AAgAAAAhzcQB+AAIAAAAJc3EAfgACAAAACnNxAH4AAgAAAAt4",
                 ImmutableUnifiedSet.newSetWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11));
     }
 }

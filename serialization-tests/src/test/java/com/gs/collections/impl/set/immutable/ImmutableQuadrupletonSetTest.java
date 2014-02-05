@@ -26,11 +26,10 @@ public class ImmutableQuadrupletonSetTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyAD5jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQuaW1tdXRhYmxlLkltbXV0YWJsZVF1\n"
-                        + "YWRydXBsZXRvblNldAAAAAAAAAABAgAETAAIZWxlbWVudDF0ABJMamF2YS9sYW5nL09iamVjdDtM\n"
-                        + "AAhlbGVtZW50MnEAfgABTAAIZWxlbWVudDNxAH4AAUwACGVsZW1lbnQ0cQB+AAF4cHNyABFqYXZh\n"
-                        + "LmxhbmcuSW50ZWdlchLioKT3gYc4AgABSQAFdmFsdWV4cgAQamF2YS5sYW5nLk51bWJlcoaslR0L\n"
-                        + "lOCLAgAAeHAAAAABc3EAfgADAAAAAnNxAH4AAwAAAANzcQB+AAMAAAAE",
+                "rO0ABXNyAERjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQuaW1tdXRhYmxlLkltbXV0YWJsZVNl\n"
+                        + "dFNlcmlhbGl6YXRpb25Qcm94eQAAAAAAAAABDAAAeHB3BAAAAARzcgARamF2YS5sYW5nLkludGVn\n"
+                        + "ZXIS4qCk94GHOAIAAUkABXZhbHVleHIAEGphdmEubGFuZy5OdW1iZXKGrJUdC5TgiwIAAHhwAAAA\n"
+                        + "AXNxAH4AAgAAAAJzcQB+AAIAAAADc3EAfgACAAAABHg=",
                 new ImmutableQuadrupletonSet<Integer>(1, 2, 3, 4));
     }
 }

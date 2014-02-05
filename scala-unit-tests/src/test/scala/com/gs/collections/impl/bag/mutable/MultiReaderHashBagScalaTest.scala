@@ -316,9 +316,9 @@ class MultiReaderHashBagScalaTest extends MultiReaderHashBagTestTrait
                 this.classUnderTest.iterator
             }
             catch
-            {
-                case e: Exception => ()
-            }
+                {
+                    case e: Exception => ()
+                }
         }
         this.assertReadersNotBlocked
         {
@@ -327,9 +327,9 @@ class MultiReaderHashBagScalaTest extends MultiReaderHashBagTestTrait
                 this.classUnderTest.iterator
             }
             catch
-            {
-                case e: Exception => ()
-            }
+                {
+                    case e: Exception => ()
+                }
         }
     }
 
@@ -387,8 +387,7 @@ class MultiReaderHashBagScalaTest extends MultiReaderHashBagTestTrait
             },
             {
                 num: Int => "" + num
-            }
-            )
+            })
         }
         this.assertReadersNotBlocked
         {
@@ -398,8 +397,7 @@ class MultiReaderHashBagScalaTest extends MultiReaderHashBagTestTrait
             },
             {
                 num: Int => "" + num
-            }
-            )
+            })
         }
     }
 
@@ -1145,8 +1143,7 @@ class MultiReaderHashBagScalaTest extends MultiReaderHashBagTestTrait
             },
             {
                 _: Int => 0
-            }
-            )
+            })
         }
         this.assertReadersNotBlocked
         {
@@ -1156,8 +1153,7 @@ class MultiReaderHashBagScalaTest extends MultiReaderHashBagTestTrait
             },
             {
                 _: Int => 0
-            }
-            )
+            })
         }
     }
 

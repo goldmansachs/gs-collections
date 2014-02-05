@@ -171,7 +171,7 @@ public class UnifiedSetWithHashingStrategy<K>
 
     /**
      * @deprecated No argument default constructor used for serialization. Instantiating an UnifiedSetWithHashingStrategyMultimap with
-     * this constructor will have a null hashingStrategy and throw NullPointerException when used.
+     *             this constructor will have a null hashingStrategy and throw NullPointerException when used.
      */
     @Deprecated
     public UnifiedSetWithHashingStrategy()
@@ -276,6 +276,11 @@ public class UnifiedSetWithHashingStrategy<K>
     public static <K> UnifiedSetWithHashingStrategy<K> newSetWith(HashingStrategy<? super K> hashingStrategy, K... elements)
     {
         return UnifiedSetWithHashingStrategy.<K>newSet(hashingStrategy, elements.length).with(elements);
+    }
+
+    public HashingStrategy<? super K> hashingStrategy()
+    {
+        return this.hashingStrategy;
     }
 
     private int fastCeil(float v)

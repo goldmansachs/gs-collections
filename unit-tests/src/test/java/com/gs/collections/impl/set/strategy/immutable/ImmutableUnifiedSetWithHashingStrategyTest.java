@@ -24,6 +24,8 @@ import com.gs.collections.impl.math.Sum;
 import com.gs.collections.impl.math.SumProcedure;
 import com.gs.collections.impl.parallel.BatchIterable;
 import com.gs.collections.impl.set.immutable.AbstractImmutableUnifiedSetTestCase;
+import com.gs.collections.impl.test.SerializeTestHelper;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -89,5 +91,14 @@ public class ImmutableUnifiedSetWithHashingStrategyTest extends AbstractImmutabl
         BatchIterable<Integer> integerBatchIterable = (BatchIterable<Integer>) this.newSet(1, 2, 3, 4, 5);
         integerBatchIterable.batchForEach(new SumProcedure<Integer>(sum), 0, 1);
         Assert.assertEquals(15, sum.getValue());
+    }
+
+    @Override
+    @Test
+    public void equalsAndHashCode()
+    {
+        super.equalsAndHashCode();
+        ImmutableSet<Integer> deserialized = SerializeTestHelper.serializeDeserialize(this.newSet(1, 2, 3, 4, 5));
+        Verify.assertInstanceOf(ImmutableUnifiedSetWithHashingStrategy.class, deserialized);
     }
 }

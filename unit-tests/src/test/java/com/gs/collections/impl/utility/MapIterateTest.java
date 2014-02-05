@@ -184,8 +184,7 @@ public class MapIterateTest
                     {
                         return Currency.getInstance(locale).equals(currency);
                     }
-                }
-        );
+                });
 
         Verify.assertContainsKeyValue("United Kingdom:GBP", "GBP", result);
         Verify.assertContainsKeyValue("Japan:JPY", "JPY", result);

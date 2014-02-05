@@ -405,8 +405,7 @@ public abstract class AbstractImmutableMap<K, V>
                         out.writeObject(key);
                         out.writeObject(value);
                     }
-                }
-                );
+                });
             }
             catch (RuntimeException e)
             {

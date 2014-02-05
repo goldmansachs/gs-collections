@@ -176,4 +176,9 @@ final class ImmutableTripletonSet<T>
             throw new NoSuchElementException("i=" + i);
         }
     }
+
+    private Object writeReplace()
+    {
+        return new ImmutableSetSerializationProxy<T>(this);
+    }
 }

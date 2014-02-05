@@ -26,10 +26,10 @@ public class ImmutableSingletonSetTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyADtjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQuaW1tdXRhYmxlLkltbXV0YWJsZVNp\n"
-                        + "bmdsZXRvblNldAAAAAAAAAABAgABTAAIZWxlbWVudDF0ABJMamF2YS9sYW5nL09iamVjdDt4cHNy\n"
-                        + "ABFqYXZhLmxhbmcuSW50ZWdlchLioKT3gYc4AgABSQAFdmFsdWV4cgAQamF2YS5sYW5nLk51bWJl\n"
-                        + "coaslR0LlOCLAgAAeHAAAAAB",
+                "rO0ABXNyAERjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQuaW1tdXRhYmxlLkltbXV0YWJsZVNl\n"
+                        + "dFNlcmlhbGl6YXRpb25Qcm94eQAAAAAAAAABDAAAeHB3BAAAAAFzcgARamF2YS5sYW5nLkludGVn\n"
+                        + "ZXIS4qCk94GHOAIAAUkABXZhbHVleHIAEGphdmEubGFuZy5OdW1iZXKGrJUdC5TgiwIAAHhwAAAA\n"
+                        + "AXg=",
                 new ImmutableSingletonSet<Integer>(1));
     }
 }

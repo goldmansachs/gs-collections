@@ -143,4 +143,9 @@ final class ImmutableSingletonSet<T>
     {
         procedure.value(this.element1, parameter);
     }
+
+    private Object writeReplace()
+    {
+        return new ImmutableSetSerializationProxy<T>(this);
+    }
 }

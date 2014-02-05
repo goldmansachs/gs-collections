@@ -107,4 +107,9 @@ final class ImmutableUnifiedSetWithHashingStrategy<T>
     {
         this.delegate.batchForEach(procedure, sectionIndex, sectionCount);
     }
+
+    private Object writeReplace()
+    {
+        return new ImmutableSetWithHashingStrategySerializationProxy<T>(this, this.delegate.hashingStrategy());
+    }
 }

@@ -444,4 +444,9 @@ final class ImmutableEmptySet<T>
             throw new RuntimeException(e);
         }
     }
+
+    private Object writeReplace()
+    {
+        return new ImmutableSetSerializationProxy<T>(this);
+    }
 }

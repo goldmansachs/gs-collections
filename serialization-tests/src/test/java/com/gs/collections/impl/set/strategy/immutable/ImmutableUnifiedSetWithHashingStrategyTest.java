@@ -27,16 +27,13 @@ public class ImmutableUnifiedSetWithHashingStrategyTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyAFVjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQuc3RyYXRlZ3kuaW1tdXRhYmxlLklt\n"
-                        + "bXV0YWJsZVVuaWZpZWRTZXRXaXRoSGFzaGluZ1N0cmF0ZWd5AAAAAAAAAAECAAFMAAhkZWxlZ2F0\n"
-                        + "ZXQATExjb20vZ3MvY29sbGVjdGlvbnMvaW1wbC9zZXQvc3RyYXRlZ3kvbXV0YWJsZS9VbmlmaWVk\n"
-                        + "U2V0V2l0aEhhc2hpbmdTdHJhdGVneTt4cHNyAEpjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQu\n"
-                        + "c3RyYXRlZ3kubXV0YWJsZS5VbmlmaWVkU2V0V2l0aEhhc2hpbmdTdHJhdGVneQAAAAAAAAABDAAA\n"
-                        + "eHBzcgBHY29tLmdzLmNvbGxlY3Rpb25zLmltcGwuYmxvY2suZmFjdG9yeS5IYXNoaW5nU3RyYXRl\n"
-                        + "Z2llcyREZWZhdWx0U3RyYXRlZ3kAAAAAAAAAAQIAAHhwdwgAAAALP0AAAHNyABFqYXZhLmxhbmcu\n"
-                        + "SW50ZWdlchLioKT3gYc4AgABSQAFdmFsdWV4cgAQamF2YS5sYW5nLk51bWJlcoaslR0LlOCLAgAA\n"
-                        + "eHAAAAABc3EAfgAHAAAAAnNxAH4ABwAAAANzcQB+AAcAAAAEc3EAfgAHAAAABXNxAH4ABwAAAAZz\n"
-                        + "cQB+AAcAAAAHc3EAfgAHAAAACHNxAH4ABwAAAAlzcQB+AAcAAAAKc3EAfgAHAAAAC3g=",
+                "rO0ABXNyAGBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQuc3RyYXRlZ3kuaW1tdXRhYmxlLklt\n"
+                        + "bXV0YWJsZVNldFdpdGhIYXNoaW5nU3RyYXRlZ3lTZXJpYWxpemF0aW9uUHJveHkAAAAAAAAAAQwA\n"
+                        + "AHhwc3IAR2NvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLmJsb2NrLmZhY3RvcnkuSGFzaGluZ1N0cmF0\n"
+                        + "ZWdpZXMkRGVmYXVsdFN0cmF0ZWd5AAAAAAAAAAECAAB4cHcEAAAAC3NyABFqYXZhLmxhbmcuSW50\n"
+                        + "ZWdlchLioKT3gYc4AgABSQAFdmFsdWV4cgAQamF2YS5sYW5nLk51bWJlcoaslR0LlOCLAgAAeHAA\n"
+                        + "AAABc3EAfgAEAAAAAnNxAH4ABAAAAANzcQB+AAQAAAAEc3EAfgAEAAAABXNxAH4ABAAAAAZzcQB+\n"
+                        + "AAQAAAAHc3EAfgAEAAAACHNxAH4ABAAAAAlzcQB+AAQAAAAKc3EAfgAEAAAAC3g=",
                 ImmutableUnifiedSetWithHashingStrategy.newSetWith(HashingStrategies.<Integer>defaultStrategy(), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11));
     }
 }

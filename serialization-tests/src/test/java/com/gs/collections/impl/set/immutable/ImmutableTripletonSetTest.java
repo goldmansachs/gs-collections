@@ -26,11 +26,10 @@ public class ImmutableTripletonSetTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyADtjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQuaW1tdXRhYmxlLkltbXV0YWJsZVRy\n"
-                        + "aXBsZXRvblNldAAAAAAAAAABAgADTAAIZWxlbWVudDF0ABJMamF2YS9sYW5nL09iamVjdDtMAAhl\n"
-                        + "bGVtZW50MnEAfgABTAAIZWxlbWVudDNxAH4AAXhwc3IAEWphdmEubGFuZy5JbnRlZ2VyEuKgpPeB\n"
-                        + "hzgCAAFJAAV2YWx1ZXhyABBqYXZhLmxhbmcuTnVtYmVyhqyVHQuU4IsCAAB4cAAAAAFzcQB+AAMA\n"
-                        + "AAACc3EAfgADAAAAAw==",
+                "rO0ABXNyAERjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQuaW1tdXRhYmxlLkltbXV0YWJsZVNl\n"
+                        + "dFNlcmlhbGl6YXRpb25Qcm94eQAAAAAAAAABDAAAeHB3BAAAAANzcgARamF2YS5sYW5nLkludGVn\n"
+                        + "ZXIS4qCk94GHOAIAAUkABXZhbHVleHIAEGphdmEubGFuZy5OdW1iZXKGrJUdC5TgiwIAAHhwAAAA\n"
+                        + "AXNxAH4AAgAAAAJzcQB+AAIAAAADeA==",
                 new ImmutableTripletonSet<Integer>(1, 2, 3));
     }
 }

@@ -105,4 +105,9 @@ final class ImmutableUnifiedSet<T>
     {
         this.delegate.batchForEach(procedure, sectionIndex, sectionCount);
     }
+
+    private Object writeReplace()
+    {
+        return new ImmutableSetSerializationProxy<T>(this);
+    }
 }

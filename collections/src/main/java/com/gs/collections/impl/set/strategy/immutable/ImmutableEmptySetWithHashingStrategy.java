@@ -181,4 +181,9 @@ final class ImmutableEmptySetWithHashingStrategy<T>
     {
         return null;
     }
+
+    private Object writeReplace()
+    {
+        return new ImmutableSetWithHashingStrategySerializationProxy<T>(this, this.hashingStrategy);
+    }
 }

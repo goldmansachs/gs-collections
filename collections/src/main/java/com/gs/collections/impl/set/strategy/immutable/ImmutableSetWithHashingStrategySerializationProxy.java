@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.map.strategy.immutable;
+package com.gs.collections.impl.set.strategy.immutable;
 
 import java.io.Externalizable;
 import java.io.IOException;
@@ -22,40 +22,39 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 
 import com.gs.collections.api.block.HashingStrategy;
-import com.gs.collections.api.map.ImmutableMap;
-import com.gs.collections.impl.block.procedure.checked.CheckedProcedure2;
-import com.gs.collections.impl.map.strategy.mutable.UnifiedMapWithHashingStrategy;
+import com.gs.collections.api.set.ImmutableSet;
+import com.gs.collections.impl.block.procedure.checked.CheckedProcedure;
+import com.gs.collections.impl.set.strategy.mutable.UnifiedSetWithHashingStrategy;
 
-class ImmutableMapWithHashingStrategySerializationProxy<K, V> implements Externalizable
+class ImmutableSetWithHashingStrategySerializationProxy<T> implements Externalizable
 {
     private static final long serialVersionUID = 1L;
-    private ImmutableMap<K, V> map;
-    private HashingStrategy<? super K> hashingStrategy;
+    private ImmutableSet<T> set;
+    private HashingStrategy<? super T> hashingStrategy;
 
     @SuppressWarnings("UnusedDeclaration")
-    public ImmutableMapWithHashingStrategySerializationProxy()
+    public ImmutableSetWithHashingStrategySerializationProxy()
     {
         // Empty constructor for Externalizable class
     }
 
-    ImmutableMapWithHashingStrategySerializationProxy(ImmutableMap<K, V> map, HashingStrategy<? super K> hashingStrategy)
+    ImmutableSetWithHashingStrategySerializationProxy(ImmutableSet<T> set, HashingStrategy<? super T> hashingStrategy)
     {
-        this.map = map;
+        this.set = set;
         this.hashingStrategy = hashingStrategy;
     }
 
     public void writeExternal(final ObjectOutput out) throws IOException
     {
         out.writeObject(this.hashingStrategy);
-        out.writeInt(this.map.size());
+        out.writeInt(this.set.size());
         try
         {
-            this.map.forEachKeyValue(new CheckedProcedure2<K, V>()
+            this.set.forEach(new CheckedProcedure<T>()
             {
                 @Override
-                public void safeValue(K key, V value) throws IOException
+                public void safeValue(T value) throws IOException
                 {
-                    out.writeObject(key);
                     out.writeObject(value);
                 }
             });
@@ -72,20 +71,20 @@ class ImmutableMapWithHashingStrategySerializationProxy<K, V> implements Externa
 
     public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
     {
-        HashingStrategy<? super K> strategy = (HashingStrategy<? super K>) in.readObject();
+        HashingStrategy<? super T> strategy = (HashingStrategy<? super T>) in.readObject();
         int size = in.readInt();
-        UnifiedMapWithHashingStrategy<K, V> deserializedMap = UnifiedMapWithHashingStrategy.newMap(strategy);
+        UnifiedSetWithHashingStrategy<T> deserializedSet = UnifiedSetWithHashingStrategy.newSet(strategy);
 
         for (int i = 0; i < size; i++)
         {
-            deserializedMap.put((K) in.readObject(), (V) in.readObject());
+            deserializedSet.put((T) in.readObject());
         }
 
-        this.map = deserializedMap.toImmutable();
+        this.set = deserializedSet.toImmutable();
     }
 
     protected Object readResolve()
     {
-        return this.map;
+        return this.set;
     }
 }
