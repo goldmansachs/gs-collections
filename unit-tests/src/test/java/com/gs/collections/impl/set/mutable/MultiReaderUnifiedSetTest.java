@@ -41,9 +41,9 @@ import org.junit.Test;
 public class MultiReaderUnifiedSetTest extends MultiReaderMutableCollectionTestCase
 {
     @Override
-    protected <T> MutableSet<T> classUnderTest()
+    protected <T> MutableSet<T> newWith(T... littleElements)
     {
-        return MultiReaderUnifiedSet.newSet();
+        return MultiReaderUnifiedSet.newSetWith(littleElements);
     }
 
     @Override
@@ -58,8 +58,8 @@ public class MultiReaderUnifiedSetTest extends MultiReaderMutableCollectionTestC
     public void select()
     {
         super.select();
-        Verify.assertContainsAll(MultiReaderUnifiedSet.<Integer>newSetWith(1, 2, 3, 4, 5).select(Predicates.lessThan(3)), 1, 2);
-        Verify.assertContainsAll(MultiReaderUnifiedSet.<Integer>newSetWith(-1, 2, 3, 4, 5).select(Predicates.lessThan(3),
+        Verify.assertContainsAll(MultiReaderUnifiedSet.newSetWith(1, 2, 3, 4, 5).select(Predicates.lessThan(3)), 1, 2);
+        Verify.assertContainsAll(MultiReaderUnifiedSet.newSetWith(-1, 2, 3, 4, 5).select(Predicates.lessThan(3),
                 FastList.<Integer>newList()), -1, 2);
     }
 
@@ -68,8 +68,8 @@ public class MultiReaderUnifiedSetTest extends MultiReaderMutableCollectionTestC
     public void reject()
     {
         super.reject();
-        Verify.assertContainsAll(MultiReaderUnifiedSet.<Integer>newSetWith(1, 2, 3, 4).reject(Predicates.lessThan(3)), 3, 4);
-        Verify.assertContainsAll(MultiReaderUnifiedSet.<Integer>newSetWith(1, 2, 3, 4).reject(Predicates.lessThan(3),
+        Verify.assertContainsAll(MultiReaderUnifiedSet.newSetWith(1, 2, 3, 4).reject(Predicates.lessThan(3)), 3, 4);
+        Verify.assertContainsAll(MultiReaderUnifiedSet.newSetWith(1, 2, 3, 4).reject(Predicates.lessThan(3),
                 FastList.<Integer>newList()), 3, 4);
     }
 
@@ -78,7 +78,7 @@ public class MultiReaderUnifiedSetTest extends MultiReaderMutableCollectionTestC
     public void getFirst()
     {
         Assert.assertNotNull(this.newWith(1, 2, 3).getFirst());
-        Assert.assertNull(this.classUnderTest().getFirst());
+        Assert.assertNull(this.newWith().getFirst());
     }
 
     @Override
@@ -86,7 +86,7 @@ public class MultiReaderUnifiedSetTest extends MultiReaderMutableCollectionTestC
     public void getLast()
     {
         Assert.assertNotNull(this.newWith(1, 2, 3).getLast());
-        Assert.assertNull(this.classUnderTest().getLast());
+        Assert.assertNull(this.newWith().getLast());
     }
 
     @Override
@@ -170,7 +170,7 @@ public class MultiReaderUnifiedSetTest extends MultiReaderMutableCollectionTestC
     @Test
     public void asUnmodifiable()
     {
-        Verify.assertInstanceOf(UnmodifiableMutableSet.class, this.classUnderTest().asUnmodifiable());
+        Verify.assertInstanceOf(UnmodifiableMutableSet.class, this.newWith().asUnmodifiable());
     }
 
     @Test

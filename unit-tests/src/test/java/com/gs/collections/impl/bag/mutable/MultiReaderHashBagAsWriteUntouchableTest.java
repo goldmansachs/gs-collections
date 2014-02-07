@@ -25,9 +25,9 @@ import org.junit.Test;
 public class MultiReaderHashBagAsWriteUntouchableTest extends AbstractCollectionTestCase
 {
     @Override
-    protected <T> MutableBag<T> classUnderTest()
+    protected <T> MutableBag<T> newWith(T... littleElements)
     {
-        return MultiReaderHashBag.<T>newBag().asWriteUntouchable();
+        return MultiReaderHashBag.newBagWith(littleElements).asWriteUntouchable();
     }
 
     @Override
@@ -37,7 +37,7 @@ public class MultiReaderHashBagAsWriteUntouchableTest extends AbstractCollection
         {
             public void run()
             {
-                MultiReaderHashBagAsWriteUntouchableTest.this.classUnderTest().asSynchronized();
+                MultiReaderHashBagAsWriteUntouchableTest.this.newWith().asSynchronized();
             }
         });
     }
@@ -49,7 +49,7 @@ public class MultiReaderHashBagAsWriteUntouchableTest extends AbstractCollection
         {
             public void run()
             {
-                MultiReaderHashBagAsWriteUntouchableTest.this.classUnderTest().asUnmodifiable();
+                MultiReaderHashBagAsWriteUntouchableTest.this.newWith().asUnmodifiable();
             }
         });
     }

@@ -36,9 +36,9 @@ import org.junit.Test;
 public class SynchronizedMutableSet2Test extends AbstractMutableSetTestCase
 {
     @Override
-    protected <T> MutableSet<T> classUnderTest()
+    protected <T> MutableSet<T> newWith(T... littleElements)
     {
-        return new SynchronizedMutableSet<T>(SetAdapter.adapt(new HashSet<T>()));
+        return new SynchronizedMutableSet<T>(SetAdapter.adapt(new HashSet<T>(UnifiedSet.newSetWith(littleElements))));
     }
 
     @Test(expected = NoSuchElementException.class)
@@ -108,7 +108,7 @@ public class SynchronizedMutableSet2Test extends AbstractMutableSetTestCase
     public void getFirst()
     {
         Assert.assertNotNull(this.newWith(1, 2, 3).getFirst());
-        Assert.assertNull(this.classUnderTest().getFirst());
+        Assert.assertNull(this.newWith().getFirst());
         Assert.assertEquals(Integer.valueOf(1), this.newWith(1).getFirst());
         int first = this.newWith(1, 2).getFirst().intValue();
         Assert.assertTrue(first == 1 || first == 2);
@@ -119,7 +119,7 @@ public class SynchronizedMutableSet2Test extends AbstractMutableSetTestCase
     public void getLast()
     {
         Assert.assertNotNull(this.newWith(1, 2, 3).getLast());
-        Assert.assertNull(this.classUnderTest().getLast());
+        Assert.assertNull(this.newWith().getLast());
         Assert.assertEquals(Integer.valueOf(1), this.newWith(1).getLast());
         int last = this.newWith(1, 2).getLast().intValue();
         Assert.assertTrue(last == 1 || last == 2);

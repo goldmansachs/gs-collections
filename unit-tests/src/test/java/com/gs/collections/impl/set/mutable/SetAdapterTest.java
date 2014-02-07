@@ -42,9 +42,9 @@ import org.junit.Test;
 public class SetAdapterTest extends AbstractMutableSetTestCase
 {
     @Override
-    protected <T> SetAdapter<T> classUnderTest()
+    protected <T> SetAdapter<T> newWith(T... littleElements)
     {
-        return new SetAdapter<T>(new HashSet<T>());
+        return new SetAdapter<T>(new HashSet<T>(UnifiedSet.newSetWith(littleElements)));
     }
 
     @Override
@@ -71,7 +71,7 @@ public class SetAdapterTest extends AbstractMutableSetTestCase
     @Test
     public void asUnmodifiable()
     {
-        Verify.assertInstanceOf(UnmodifiableMutableSet.class, this.classUnderTest().asUnmodifiable());
+        Verify.assertInstanceOf(UnmodifiableMutableSet.class, this.newWith().asUnmodifiable());
     }
 
     @Test
@@ -87,8 +87,8 @@ public class SetAdapterTest extends AbstractMutableSetTestCase
     public void select()
     {
         super.select();
-        Verify.assertContainsAll(this.<Integer>classUnderTest().with(1, 2, 3, 4, 5).select(Predicates.lessThan(3)), 1, 2);
-        Verify.assertContainsAll(this.<Integer>classUnderTest().with(-1, 2, 3, 4, 5).select(Predicates.lessThan(3),
+        Verify.assertContainsAll(this.newWith(1, 2, 3, 4, 5).select(Predicates.lessThan(3)), 1, 2);
+        Verify.assertContainsAll(this.newWith(-1, 2, 3, 4, 5).select(Predicates.lessThan(3),
                 FastList.<Integer>newList()), -1, 2);
     }
 
@@ -97,8 +97,8 @@ public class SetAdapterTest extends AbstractMutableSetTestCase
     public void reject()
     {
         super.reject();
-        Verify.assertContainsAll(this.<Integer>classUnderTest().with(1, 2, 3, 4).reject(Predicates.lessThan(3)), 3, 4);
-        Verify.assertContainsAll(this.<Integer>classUnderTest().with(1, 2, 3, 4).reject(Predicates.lessThan(3),
+        Verify.assertContainsAll(this.newWith(1, 2, 3, 4).reject(Predicates.lessThan(3)), 3, 4);
+        Verify.assertContainsAll(this.newWith(1, 2, 3, 4).reject(Predicates.lessThan(3),
                 FastList.<Integer>newList()), 3, 4);
     }
 
@@ -107,12 +107,12 @@ public class SetAdapterTest extends AbstractMutableSetTestCase
     public void collect()
     {
         super.collect();
-        Verify.assertContainsAll(this.<Integer>classUnderTest().with(1, 2, 3, 4).collect(Functions.getToString()),
+        Verify.assertContainsAll(this.newWith(1, 2, 3, 4).collect(Functions.getToString()),
                 "1",
                 "2",
                 "3",
                 "4");
-        Verify.assertContainsAll(this.<Integer>classUnderTest().with(1, 2, 3, 4).collect(Functions.getToString(),
+        Verify.assertContainsAll(this.newWith(1, 2, 3, 4).collect(Functions.getToString(),
                 FastList.<String>newList()), "1", "2", "3", "4");
     }
 
@@ -121,9 +121,9 @@ public class SetAdapterTest extends AbstractMutableSetTestCase
     public void equalsAndHashCode()
     {
         super.equalsAndHashCode();
-        MutableCollection<Integer> set1 = this.<Integer>classUnderTest().with(1, 2, 3);
-        MutableCollection<Integer> set2 = this.<Integer>classUnderTest().with(1, 2, 3);
-        MutableCollection<Integer> set3 = this.<Integer>classUnderTest().with(2, 3, 4);
+        MutableCollection<Integer> set1 = this.newWith(1, 2, 3);
+        MutableCollection<Integer> set2 = this.newWith(1, 2, 3);
+        MutableCollection<Integer> set3 = this.newWith(2, 3, 4);
         MutableSet<Integer> set4 = UnifiedSet.newSet();
         set4.add(2);
         set4.add(3);
@@ -138,14 +138,14 @@ public class SetAdapterTest extends AbstractMutableSetTestCase
     @Test
     public void newListWithSize()
     {
-        Collection<Integer> collection = this.<Integer>classUnderTest().with(1, 2, 3);
+        Collection<Integer> collection = this.newWith(1, 2, 3);
         Verify.assertContainsAll(collection, 1, 2, 3);
     }
 
     @Test
     public void serialization()
     {
-        MutableCollection<Integer> collection = this.<Integer>classUnderTest().with(1, 2, 3, 4, 5);
+        MutableCollection<Integer> collection = this.newWith(1, 2, 3, 4, 5);
         MutableCollection<Integer> deserializedCollection = SerializeTestHelper.serializeDeserialize(collection);
         Verify.assertSize(5, deserializedCollection);
         Verify.assertContainsAll(deserializedCollection, 1, 2, 3, 4, 5);
@@ -173,7 +173,7 @@ public class SetAdapterTest extends AbstractMutableSetTestCase
     public void getFirst()
     {
         Assert.assertNotNull(this.newWith(1, 2, 3).getFirst());
-        Assert.assertNull(this.classUnderTest().getFirst());
+        Assert.assertNull(this.newWith().getFirst());
     }
 
     @Override
@@ -181,7 +181,7 @@ public class SetAdapterTest extends AbstractMutableSetTestCase
     public void getLast()
     {
         Assert.assertNotNull(this.newWith(1, 2, 3).getLast());
-        Assert.assertNull(this.classUnderTest().getLast());
+        Assert.assertNull(this.newWith().getLast());
     }
 
     @Override
@@ -202,10 +202,10 @@ public class SetAdapterTest extends AbstractMutableSetTestCase
     @Test
     public void withMethods()
     {
-        Verify.assertContainsAll(this.classUnderTest().with(1), 1);
-        Verify.assertContainsAll(this.classUnderTest().with(1, 2), 1, 2);
-        Verify.assertContainsAll(this.classUnderTest().with(1, 2, 3), 1, 2, 3);
-        Verify.assertContainsAll(this.classUnderTest().with(1, 2, 3, 4), 1, 2, 3, 4);
+        Verify.assertContainsAll(this.newWith().with(1), 1);
+        Verify.assertContainsAll(this.newWith().with(1, 2), 1, 2);
+        Verify.assertContainsAll(this.newWith().with(1, 2, 3), 1, 2, 3);
+        Verify.assertContainsAll(this.newWith().with(1, 2, 3, 4), 1, 2, 3, 4);
     }
 
     @Test

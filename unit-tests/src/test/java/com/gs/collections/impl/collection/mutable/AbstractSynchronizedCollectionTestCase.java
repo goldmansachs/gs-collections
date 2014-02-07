@@ -53,7 +53,7 @@ public abstract class AbstractSynchronizedCollectionTestCase extends AbstractCol
     @Test
     public void asSynchronized()
     {
-        MutableCollection<Object> collection = this.classUnderTest();
+        MutableCollection<Object> collection = this.newWith();
         Assert.assertSame(collection, collection.asSynchronized());
     }
 }

@@ -25,16 +25,16 @@ import org.junit.Test;
 public class MultiReaderUnifiedSetAsWriteUntouchableTest extends AbstractCollectionTestCase
 {
     @Override
-    protected <T> MutableSet<T> classUnderTest()
+    protected <T> MutableSet<T> newWith(T... littleElements)
     {
-        return MultiReaderUnifiedSet.<T>newSet().asWriteUntouchable();
+        return MultiReaderUnifiedSet.newSetWith(littleElements).asWriteUntouchable();
     }
 
     @Override
     public void getLast()
     {
         Assert.assertNotNull(this.newWith(1, 2, 3).getLast());
-        Assert.assertNull(this.classUnderTest().getLast());
+        Assert.assertNull(this.newWith().getLast());
     }
 
     @Override
@@ -68,7 +68,7 @@ public class MultiReaderUnifiedSetAsWriteUntouchableTest extends AbstractCollect
         {
             public void run()
             {
-                MultiReaderUnifiedSetAsWriteUntouchableTest.this.classUnderTest().asSynchronized();
+                MultiReaderUnifiedSetAsWriteUntouchableTest.this.newWith().asSynchronized();
             }
         });
     }
@@ -81,7 +81,7 @@ public class MultiReaderUnifiedSetAsWriteUntouchableTest extends AbstractCollect
         {
             public void run()
             {
-                MultiReaderUnifiedSetAsWriteUntouchableTest.this.classUnderTest().asUnmodifiable();
+                MultiReaderUnifiedSetAsWriteUntouchableTest.this.newWith().asUnmodifiable();
             }
         });
     }

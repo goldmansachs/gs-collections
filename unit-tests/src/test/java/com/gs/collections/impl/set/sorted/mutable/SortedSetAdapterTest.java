@@ -30,13 +30,11 @@ import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
-import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
-import com.gs.collections.impl.utility.ArrayIterate;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -46,24 +44,16 @@ import org.junit.Test;
 public class SortedSetAdapterTest extends AbstractSortedSetTestCase
 {
     @Override
-    protected <T> SortedSetAdapter<T> classUnderTest()
+    protected <T> SortedSetAdapter<T> newWith(T... elements)
     {
-        return new SortedSetAdapter<T>(new TreeSet<T>());
+        return new SortedSetAdapter<T>(new TreeSet<T>(FastList.newListWith(elements)));
     }
 
     @Override
-    protected <T> SortedSetAdapter<T> classUnderTest(T... elements)
-    {
-        TreeSet<T> set = new TreeSet<T>();
-        ArrayIterate.forEach(elements, CollectionAddProcedure.on(set));
-        return new SortedSetAdapter<T>(set);
-    }
-
-    @Override
-    protected <T> SortedSetAdapter<T> classUnderTest(Comparator<? super T> comparator, T... elements)
+    protected <T> SortedSetAdapter<T> newWith(Comparator<? super T> comparator, T... elements)
     {
         TreeSet<T> set = new TreeSet<T>(comparator);
-        ArrayIterate.forEach(elements, CollectionAddProcedure.on(set));
+        set.addAll(FastList.newListWith(elements));
         return new SortedSetAdapter<T>(set);
     }
 
@@ -78,7 +68,7 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
     @Test
     public void asUnmodifiable()
     {
-        Verify.assertInstanceOf(UnmodifiableSortedSet.class, this.classUnderTest().asUnmodifiable());
+        Verify.assertInstanceOf(UnmodifiableSortedSet.class, this.newWith().asUnmodifiable());
     }
 
     @Override
@@ -86,7 +76,7 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
     public void testClone()
     {
         super.testClone();
-        MutableSortedSet<Integer> set = this.<Integer>classUnderTest(Collections.<Integer>reverseOrder()).with(1, 2, 3);
+        MutableSortedSet<Integer> set = this.newWith(Collections.<Integer>reverseOrder()).with(1, 2, 3);
         MutableSortedSet<Integer> list2 = set.clone();
         Verify.assertSortedSetsEqual(set, list2);
     }
@@ -106,10 +96,10 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
     public void select()
     {
         super.select();
-        SortedSetAdapter<Integer> integers = this.classUnderTest(1, 2, 3, 4, 5);
-        Verify.assertSortedSetsEqual(TreeSortedSet.<Integer>newSetWith(1, 2), integers.select(Predicates.lessThan(3)));
-        Verify.assertInstanceOf(MutableSortedSet.class, this.<Integer>classUnderTest().select(Predicates.alwaysTrue()));
-        Verify.assertSortedSetsEqual(TreeSortedSet.newSet(), this.<Object>classUnderTest().select(Predicates.alwaysTrue()));
+        SortedSetAdapter<Integer> integers = this.newWith(1, 2, 3, 4, 5);
+        Verify.assertSortedSetsEqual(TreeSortedSet.newSetWith(1, 2), integers.select(Predicates.lessThan(3)));
+        Verify.assertInstanceOf(MutableSortedSet.class, this.<Integer>newWith().select(Predicates.alwaysTrue()));
+        Verify.assertSortedSetsEqual(TreeSortedSet.newSet(), this.newWith().select(Predicates.alwaysTrue()));
     }
 
     @Override
@@ -117,10 +107,10 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
     public void reject()
     {
         super.reject();
-        SortedSetAdapter<Integer> integers = this.classUnderTest(Comparators.<Integer>reverseNaturalOrder(), 1, 2, 3, 4);
-        Verify.assertSortedSetsEqual(TreeSortedSet.newSetWith(Comparators.<Object>reverseNaturalOrder(), 1, 2), integers.reject(Predicates.greaterThan(2)));
-        Verify.assertInstanceOf(MutableSortedSet.class, this.<Integer>classUnderTest().select(Predicates.alwaysTrue()));
-        Verify.assertSortedSetsEqual(TreeSortedSet.newSet(), this.<Object>classUnderTest().reject(Predicates.alwaysTrue()));
+        SortedSetAdapter<Integer> integers = this.newWith(Comparators.<Integer>reverseNaturalOrder(), 1, 2, 3, 4);
+        Verify.assertSortedSetsEqual(TreeSortedSet.newSetWith(Comparators.reverseNaturalOrder(), 1, 2), integers.reject(Predicates.greaterThan(2)));
+        Verify.assertInstanceOf(MutableSortedSet.class, this.<Integer>newWith().select(Predicates.alwaysTrue()));
+        Verify.assertSortedSetsEqual(TreeSortedSet.newSet(), this.newWith().reject(Predicates.alwaysTrue()));
     }
 
     @Override
@@ -129,10 +119,10 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
     {
         super.collect();
         Verify.assertListsEqual(FastList.newListWith("1", "2", "3", "4"),
-                this.<Integer>classUnderTest(1, 2, 3, 4).collect(Functions.getToString()));
-        Verify.assertListsEqual(FastList.newListWith("1", "2", "3", "4"), this.<Integer>classUnderTest(1, 2, 3, 4).collect(Functions.getToString(),
+                this.newWith(1, 2, 3, 4).collect(Functions.getToString()));
+        Verify.assertListsEqual(FastList.newListWith("1", "2", "3", "4"), this.newWith(1, 2, 3, 4).collect(Functions.getToString(),
                 FastList.<String>newList()));
-        Verify.assertInstanceOf(FastList.class, this.<Object>classUnderTest().collect(Functions.getToString()));
+        Verify.assertInstanceOf(FastList.class, this.newWith().collect(Functions.getToString()));
     }
 
     @Override
@@ -140,9 +130,9 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
     public void equalsAndHashCode()
     {
         super.equalsAndHashCode();
-        MutableCollection<Integer> set1 = this.classUnderTest(1, 2, 3);
-        SortedSetAdapter<Integer> set2 = this.classUnderTest(Collections.<Integer>reverseOrder(), 1, 2, 3);
-        MutableCollection<Integer> set3 = this.classUnderTest(2, 3, 4);
+        MutableCollection<Integer> set1 = this.newWith(1, 2, 3);
+        SortedSetAdapter<Integer> set2 = this.newWith(Collections.<Integer>reverseOrder(), 1, 2, 3);
+        MutableCollection<Integer> set3 = this.newWith(2, 3, 4);
         MutableSortedSet<Integer> set4 = TreeSortedSet.newSetWith(2, 3, 4);
 
         Verify.assertEqualsAndHashCode(set1, set1);
@@ -158,11 +148,11 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
     @Test
     public void serialization()
     {
-        MutableSortedSet<Integer> collection = this.classUnderTest(Comparators.<Integer>reverseNaturalOrder(), 1, 2, 3);
+        MutableSortedSet<Integer> collection = this.newWith(Comparators.<Integer>reverseNaturalOrder(), 1, 2, 3);
         MutableSortedSet<Integer> deserialized = SerializeTestHelper.serializeDeserialize(collection);
         Verify.assertPostSerializedEqualsAndHashCode(collection);
         deserialized.add(4);
-        Verify.assertSortedSetsEqual(TreeSortedSet.newSetWith(Comparators.<Object>reverseNaturalOrder(), 1, 2, 3, 4), deserialized);
+        Verify.assertSortedSetsEqual(TreeSortedSet.newSetWith(Comparators.reverseNaturalOrder(), 1, 2, 3, 4), deserialized);
     }
 
     @Override
@@ -171,7 +161,7 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
     {
         super.forEachWithIndex();
         final MutableList<Integer> result = Lists.mutable.of();
-        MutableCollection<Integer> collection = this.classUnderTest(Comparators.<Integer>reverseNaturalOrder(), 1, 2, 3, 4);
+        MutableCollection<Integer> collection = this.newWith(Comparators.<Integer>reverseNaturalOrder(), 1, 2, 3, 4);
         collection.forEachWithIndex(new ObjectIntProcedure<Integer>()
         {
             public void value(Integer object, int index)
@@ -187,8 +177,8 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
     public void getFirst()
     {
         super.getFirst();
-        Assert.assertEquals(Integer.valueOf(1), this.<Integer>classUnderTest(1, 2, 3).getFirst());
-        Assert.assertEquals(Integer.valueOf(3), this.<Integer>classUnderTest(Collections.<Integer>reverseOrder(), 1, 2, 3).getFirst());
+        Assert.assertEquals(Integer.valueOf(1), this.newWith(1, 2, 3).getFirst());
+        Assert.assertEquals(Integer.valueOf(3), this.newWith(Collections.<Integer>reverseOrder(), 1, 2, 3).getFirst());
         Verify.assertThrows(NoSuchElementException.class, new Runnable()
         {
             public void run()
@@ -203,9 +193,9 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
     public void getLast()
     {
         super.getLast();
-        Assert.assertNotNull(this.<Object>classUnderTest(1, 2, 3).getLast());
-        Assert.assertEquals(Integer.valueOf(3), this.<Integer>classUnderTest(1, 2, 3).getLast());
-        Assert.assertEquals(Integer.valueOf(1), this.<Integer>classUnderTest(Collections.<Integer>reverseOrder(), 1, 2, 3).getLast());
+        Assert.assertNotNull(this.<Object>newWith(1, 2, 3).getLast());
+        Assert.assertEquals(Integer.valueOf(3), this.newWith(1, 2, 3).getLast());
+        Assert.assertEquals(Integer.valueOf(1), this.newWith(Collections.<Integer>reverseOrder(), 1, 2, 3).getLast());
         Verify.assertThrows(NoSuchElementException.class, new Runnable()
         {
             public void run()
@@ -220,7 +210,7 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
     public void iterator()
     {
         super.iterator();
-        MutableCollection<Integer> objects = this.classUnderTest(2, 3, 1, 4, 5);
+        MutableCollection<Integer> objects = this.newWith(2, 3, 1, 4, 5);
         MutableList<Integer> result = Lists.mutable.of();
         Iterator<Integer> iterator = objects.iterator();
         for (int i = objects.size(); i > 0; i--)
@@ -234,10 +224,10 @@ public class SortedSetAdapterTest extends AbstractSortedSetTestCase
     @Test
     public void withMethods()
     {
-        Verify.assertContainsAll(this.classUnderTest().with(1), 1);
-        Verify.assertContainsAll(this.classUnderTest().with(1, 2), 1, 2);
-        Verify.assertContainsAll(this.classUnderTest().with(1, 2, 3), 1, 2, 3);
-        Verify.assertContainsAll(this.classUnderTest().with(1, 2, 3, 4), 1, 2, 3, 4);
+        Verify.assertContainsAll(this.newWith().with(1), 1);
+        Verify.assertContainsAll(this.newWith().with(1, 2), 1, 2);
+        Verify.assertContainsAll(this.newWith().with(1, 2, 3), 1, 2, 3);
+        Verify.assertContainsAll(this.newWith().with(1, 2, 3, 4), 1, 2, 3, 4);
     }
 
     @Test

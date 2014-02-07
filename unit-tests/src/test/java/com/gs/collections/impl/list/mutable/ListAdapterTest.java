@@ -34,9 +34,9 @@ import org.junit.Test;
 public class ListAdapterTest extends AbstractListTestCase
 {
     @Override
-    protected <T> ListAdapter<T> classUnderTest()
+    protected <T> ListAdapter<T> newWith(T... littleElements)
     {
-        return new ListAdapter<T>(FastList.<T>newList());
+        return new ListAdapter<T>(FastList.newListWith(littleElements));
     }
 
     @Test
@@ -49,7 +49,7 @@ public class ListAdapterTest extends AbstractListTestCase
     @Test
     public void testClone()
     {
-        MutableList<Integer> list = this.<Integer>classUnderTest().with(1, 2, 3);
+        MutableList<Integer> list = this.newWith(1, 2, 3);
         MutableList<Integer> list2 = list.clone();
         Verify.assertListsEqual(list, list2);
     }
@@ -57,9 +57,9 @@ public class ListAdapterTest extends AbstractListTestCase
     @Test
     public void testEqualsAndHashCode()
     {
-        MutableList<Integer> list1 = this.<Integer>classUnderTest().with(1, 2, 3);
-        MutableList<Integer> list2 = this.<Integer>classUnderTest().with(1, 2, 3);
-        MutableList<Integer> list3 = this.<Integer>classUnderTest().with(2, 3, 4);
+        MutableList<Integer> list1 = this.newWith(1, 2, 3);
+        MutableList<Integer> list2 = this.newWith(1, 2, 3);
+        MutableList<Integer> list3 = this.newWith(2, 3, 4);
         Assert.assertNotEquals(list1, null);
         Verify.assertEqualsAndHashCode(list1, list1);
         Verify.assertEqualsAndHashCode(list1, list2);
@@ -97,14 +97,14 @@ public class ListAdapterTest extends AbstractListTestCase
     @Test
     public void testNewListWithSize()
     {
-        MutableList<Integer> collection = this.<Integer>classUnderTest().with(1, 2, 3);
+        MutableList<Integer> collection = this.newWith(1, 2, 3);
         Verify.assertContainsAll(collection, 1, 2, 3);
     }
 
     @Test
     public void testSerialization()
     {
-        MutableList<Integer> collection = this.<Integer>classUnderTest().with(1, 2, 3, 4, 5);
+        MutableList<Integer> collection = this.newWith(1, 2, 3, 4, 5);
         MutableList<Integer> deserializedCollection = SerializeTestHelper.serializeDeserialize(collection);
         Verify.assertSize(5, deserializedCollection);
         Verify.assertContainsAll(deserializedCollection, 1, 2, 3, 4, 5);
@@ -125,7 +125,7 @@ public class ListAdapterTest extends AbstractListTestCase
     @Test
     public void remove()
     {
-        MutableList<Integer> objects = this.<Integer>classUnderTest().with(1, 2, 3, null);
+        MutableList<Integer> objects = this.newWith(1, 2, 3, null);
         objects.removeIf(Predicates.isNull());
         Verify.assertSize(3, objects);
         Verify.assertContainsAll(objects, 1, 2, 3);
@@ -134,7 +134,7 @@ public class ListAdapterTest extends AbstractListTestCase
     @Test
     public void testRemoveIndex()
     {
-        MutableList<Integer> objects = this.<Integer>classUnderTest().with(1, 2, 3);
+        MutableList<Integer> objects = this.newWith(1, 2, 3);
         objects.remove(2);
         Verify.assertSize(2, objects);
         Verify.assertContainsAll(objects, 1, 2);
@@ -143,21 +143,21 @@ public class ListAdapterTest extends AbstractListTestCase
     @Test
     public void testIndexOf()
     {
-        MutableList<Integer> objects = this.<Integer>classUnderTest().with(1, 2, 3);
+        MutableList<Integer> objects = this.newWith(1, 2, 3);
         Assert.assertEquals(1, objects.indexOf(2));
     }
 
     @Test
     public void testLastIndexOf()
     {
-        MutableList<Integer> objects = this.<Integer>classUnderTest().with(1, 2, 3);
+        MutableList<Integer> objects = this.newWith(1, 2, 3);
         Assert.assertEquals(1, objects.lastIndexOf(2));
     }
 
     @Test
     public void testSet()
     {
-        MutableList<Integer> objects = this.<Integer>classUnderTest().with(1, 2, 3);
+        MutableList<Integer> objects = this.newWith(1, 2, 3);
         Assert.assertEquals(Integer.valueOf(2), objects.set(1, 4));
         Verify.assertItemAtIndex(4, 1, objects);
     }
@@ -165,7 +165,7 @@ public class ListAdapterTest extends AbstractListTestCase
     @Test
     public void testAddAtIndex()
     {
-        MutableList<Integer> objects = this.<Integer>classUnderTest().with(1, 2, 3);
+        MutableList<Integer> objects = this.newWith(1, 2, 3);
         objects.add(0, 0);
         Verify.assertSize(4, objects);
         Verify.assertItemAtIndex(0, 0, objects);
@@ -174,7 +174,7 @@ public class ListAdapterTest extends AbstractListTestCase
     @Test
     public void testAddAllAtIndex()
     {
-        MutableList<Integer> objects = this.<Integer>classUnderTest().with(1, 2, 3);
+        MutableList<Integer> objects = this.newWith(1, 2, 3);
         objects.addAll(0, Lists.fixedSize.of(0));
         Verify.assertSize(4, objects);
         Verify.assertItemAtIndex(0, 0, objects);
@@ -183,24 +183,24 @@ public class ListAdapterTest extends AbstractListTestCase
     @Test
     public void testWithMethods()
     {
-        Verify.assertContainsAll(this.classUnderTest().with(1), 1);
-        Verify.assertContainsAll(this.classUnderTest().with(1, 2), 1, 2);
-        Verify.assertContainsAll(this.classUnderTest().with(1, 2, 3), 1, 2, 3);
-        Verify.assertContainsAll(this.classUnderTest().with(1, 2, 3, 4), 1, 2, 3, 4);
+        Verify.assertContainsAll(this.newWith(1), 1);
+        Verify.assertContainsAll(this.newWith(1, 2), 1, 2);
+        Verify.assertContainsAll(this.newWith(1, 2, 3), 1, 2, 3);
+        Verify.assertContainsAll(this.newWith(1, 2, 3, 4), 1, 2, 3, 4);
     }
 
     @Override
     @Test
     public void newEmpty()
     {
-        Verify.assertInstanceOf(MutableList.class, this.classUnderTest().newEmpty());
+        Verify.assertInstanceOf(MutableList.class, this.newWith().newEmpty());
     }
 
     @Test
     public void testForEachWithIndexWithFromTo()
     {
         MutableList<Integer> result = Lists.mutable.of();
-        ListAdapter<Integer> integers = this.classUnderTest();
+        ListAdapter<Integer> integers = this.newWith();
         integers.with(1, 2, 3).forEachWithIndex(1, 2, new AddToList(result));
         Assert.assertEquals(FastList.newListWith(2, 3), result);
     }

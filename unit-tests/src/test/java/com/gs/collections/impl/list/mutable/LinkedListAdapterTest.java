@@ -24,9 +24,9 @@ import org.junit.Test;
 public class LinkedListAdapterTest extends ListAdapterTest
 {
     @Override
-    protected <T> ListAdapter<T> classUnderTest()
+    protected <T> ListAdapter<T> newWith(T... littleElements)
     {
-        return new ListAdapter<T>(new LinkedList<T>());
+        return new ListAdapter<T>(new LinkedList<T>(FastList.newListWith(littleElements)));
     }
 
     @Override

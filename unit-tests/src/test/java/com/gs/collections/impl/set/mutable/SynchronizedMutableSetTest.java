@@ -34,9 +34,9 @@ import org.junit.Test;
 public class SynchronizedMutableSetTest extends AbstractSynchronizedCollectionTestCase
 {
     @Override
-    protected <T> MutableSet<T> classUnderTest()
+    protected <T> SynchronizedMutableSet<T> newWith(T... littleElements)
     {
-        return new SynchronizedMutableSet<T>(SetAdapter.adapt(new TreeSet<T>()));
+        return new SynchronizedMutableSet<T>(SetAdapter.adapt(new TreeSet<T>(FastList.newListWith(littleElements))));
     }
 
     @Override
@@ -45,7 +45,7 @@ public class SynchronizedMutableSetTest extends AbstractSynchronizedCollectionTe
     {
         super.newEmpty();
 
-        Verify.assertInstanceOf(UnifiedSet.class, this.classUnderTest().newEmpty());
+        Verify.assertInstanceOf(UnifiedSet.class, this.newWith().newEmpty());
     }
 
     @Override
@@ -62,7 +62,7 @@ public class SynchronizedMutableSetTest extends AbstractSynchronizedCollectionTe
     @Test
     public void asUnmodifiable()
     {
-        Verify.assertInstanceOf(UnmodifiableMutableSet.class, this.classUnderTest().asUnmodifiable());
+        Verify.assertInstanceOf(UnmodifiableMutableSet.class, this.newWith().asUnmodifiable());
     }
 
     @Override

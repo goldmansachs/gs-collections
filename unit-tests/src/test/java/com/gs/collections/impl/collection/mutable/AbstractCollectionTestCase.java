@@ -37,13 +37,10 @@ import static com.gs.collections.impl.factory.Iterables.*;
  */
 public abstract class AbstractCollectionTestCase extends AbstractRichIterableTestCase
 {
-    @Override
-    protected abstract <T> MutableCollection<T> classUnderTest();
-
     @Test
     public void newEmpty()
     {
-        MutableCollection<Object> collection = this.classUnderTest().newEmpty();
+        MutableCollection<Object> collection = this.newWith().newEmpty();
         Verify.assertEmpty(collection);
         Verify.assertSize(0, collection);
         Assert.assertFalse(collection.notEmpty());
@@ -52,47 +49,12 @@ public abstract class AbstractCollectionTestCase extends AbstractRichIterableTes
     @Test
     public void toImmutable()
     {
-        Verify.assertInstanceOf(MutableCollection.class, this.<Object>classUnderTest());
-        Verify.assertInstanceOf(ImmutableCollection.class, this.classUnderTest().toImmutable());
+        Verify.assertInstanceOf(MutableCollection.class, this.newWith());
+        Verify.assertInstanceOf(ImmutableCollection.class, this.newWith().toImmutable());
     }
 
     @Override
-    protected <T> MutableCollection<T> newWith(T one)
-    {
-        MutableCollection<T> result = this.classUnderTest();
-        result.add(one);
-        return result;
-    }
-
-    @Override
-    protected <T> MutableCollection<T> newWith(T one, T two)
-    {
-        MutableCollection<T> result = this.classUnderTest();
-        result.add(one);
-        result.add(two);
-        return result;
-    }
-
-    @Override
-    protected <T> MutableCollection<T> newWith(T one, T two, T three)
-    {
-        MutableCollection<T> result = this.classUnderTest();
-        result.add(one);
-        result.add(two);
-        result.add(three);
-        return result;
-    }
-
-    @Override
-    protected <T> MutableCollection<T> newWith(T... littleElements)
-    {
-        MutableCollection<T> result = this.classUnderTest();
-        for (int i = 0; i < littleElements.length; i++)
-        {
-            result.add(littleElements[i]);
-        }
-        return result;
-    }
+    protected abstract <T> MutableCollection<T> newWith(T... littleElements);
 
     @Test
     public void testNewWith()
@@ -133,7 +95,7 @@ public abstract class AbstractCollectionTestCase extends AbstractRichIterableTes
     @Test
     public void addAll()
     {
-        MutableCollection<Integer> collection = this.classUnderTest();
+        MutableCollection<Integer> collection = this.newWith();
         Assert.assertTrue(collection.addAll(FastList.newListWith(1, 2, 3)));
         Verify.assertContainsAll(collection, 1, 2, 3);
 
@@ -152,7 +114,7 @@ public abstract class AbstractCollectionTestCase extends AbstractRichIterableTes
     @Test
     public void addAllIterable()
     {
-        MutableCollection<Integer> collection = this.classUnderTest();
+        MutableCollection<Integer> collection = this.newWith();
         Assert.assertTrue(collection.addAllIterable(FastList.newListWith(1, 2, 3)));
         Verify.assertContainsAll(collection, 1, 2, 3);
 

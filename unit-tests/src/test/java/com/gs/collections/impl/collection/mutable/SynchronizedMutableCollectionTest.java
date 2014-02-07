@@ -39,9 +39,9 @@ import static com.gs.collections.impl.factory.Iterables.*;
 public class SynchronizedMutableCollectionTest extends AbstractSynchronizedCollectionTestCase
 {
     @Override
-    protected <T> MutableCollection<T> classUnderTest()
+    protected <T> MutableCollection<T> newWith(T... littleElements)
     {
-        return new SynchronizedMutableCollection<T>(FastList.<T>newList());
+        return new SynchronizedMutableCollection<T>(FastList.newListWith(littleElements));
     }
 
     @Override
@@ -50,13 +50,13 @@ public class SynchronizedMutableCollectionTest extends AbstractSynchronizedColle
     {
         super.newEmpty();
 
-        Verify.assertInstanceOf(FastList.class, this.classUnderTest().newEmpty());
+        Verify.assertInstanceOf(FastList.class, this.newWith().newEmpty());
     }
 
     @Override
     public void equalsAndHashCode()
     {
-        Assert.assertNotEquals(this.<Object>classUnderTest(), this.<Object>classUnderTest());
+        Assert.assertNotEquals(this.newWith(), this.newWith());
     }
 
     @Override
@@ -101,14 +101,14 @@ public class SynchronizedMutableCollectionTest extends AbstractSynchronizedColle
     @Test
     public void asSynchronized()
     {
-        Verify.assertInstanceOf(SynchronizedMutableCollection.class, this.classUnderTest().asSynchronized());
+        Verify.assertInstanceOf(SynchronizedMutableCollection.class, this.newWith().asSynchronized());
     }
 
     @Override
     @Test
     public void asUnmodifiable()
     {
-        Verify.assertInstanceOf(UnmodifiableMutableCollection.class, this.classUnderTest().asUnmodifiable());
+        Verify.assertInstanceOf(UnmodifiableMutableCollection.class, this.newWith().asUnmodifiable());
     }
 
     @Override

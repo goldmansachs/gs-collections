@@ -64,33 +64,9 @@ import static com.gs.collections.impl.factory.Iterables.*;
 public class MultiReaderFastListTest extends AbstractListTestCase
 {
     @Override
-    protected <T> MultiReaderFastList<T> classUnderTest()
-    {
-        return MultiReaderFastList.newList();
-    }
-
-    @Override
-    protected <T> MultiReaderFastList<T> newWith(T one)
-    {
-        return (MultiReaderFastList<T>) super.newWith(one);
-    }
-
-    @Override
-    protected <T> MultiReaderFastList<T> newWith(T one, T two)
-    {
-        return (MultiReaderFastList<T>) super.newWith(one, two);
-    }
-
-    @Override
-    protected <T> MultiReaderFastList<T> newWith(T one, T two, T three)
-    {
-        return (MultiReaderFastList<T>) super.newWith(one, two, three);
-    }
-
-    @Override
     protected <T> MultiReaderFastList<T> newWith(T... littleElements)
     {
-        return (MultiReaderFastList<T>) super.newWith(littleElements);
+        return MultiReaderFastList.newListWith(littleElements);
     }
 
     @Override
@@ -115,7 +91,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     {
         MutableList<Integer> result = FastList.newList();
         MutableList<Integer> collection = MultiReaderFastList.newListWith(1, 2, 3, 4);
-        collection.forEach(CollectionAddProcedure.<Integer>on(result));
+        collection.forEach(CollectionAddProcedure.on(result));
         Assert.assertEquals(FastList.newListWith(1, 2, 3, 4), result);
     }
 
@@ -125,7 +101,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     {
         MutableList<Integer> result = FastList.newList();
         MutableList<Integer> collection = MultiReaderFastList.newListWith(1, 2, 3, 4);
-        collection.forEach(2, 3, CollectionAddProcedure.<Integer>on(result));
+        collection.forEach(2, 3, CollectionAddProcedure.on(result));
         Assert.assertEquals(FastList.newListWith(3, 4), result);
     }
 
@@ -320,7 +296,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     {
         MutableList<Integer> list = this.getIntegerList();
         Assert.assertTrue(Predicates.<Integer>allSatisfy(Predicates.instanceOf(Integer.class)).accept(list));
-        Assert.assertFalse(Predicates.<Integer>allSatisfy(Predicates.greaterThan(2)).accept(list));
+        Assert.assertFalse(Predicates.allSatisfy(Predicates.greaterThan(2)).accept(list));
     }
 
     @Override
@@ -329,7 +305,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
     {
         MutableList<Integer> list = this.getIntegerList();
         Assert.assertTrue(Predicates.<Integer>noneSatisfy(Predicates.instanceOf(String.class)).accept(list));
-        Assert.assertFalse(Predicates.<Integer>noneSatisfy(Predicates.greaterThan(0)).accept(list));
+        Assert.assertFalse(Predicates.noneSatisfy(Predicates.greaterThan(0)).accept(list));
     }
 
     @Override
@@ -919,7 +895,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
         Assert.assertNotEquals(integers, randomAccessList2);
         Assert.assertNotEquals(integers, Sets.fixedSize.of());
         Verify.assertEqualsAndHashCode(integers3, integers4);
-        Verify.assertEqualsAndHashCode(integers3, ArrayAdapter.<Integer>newArrayWith(1, null, 3, 4, 5));
+        Verify.assertEqualsAndHashCode(integers3, ArrayAdapter.newArrayWith(1, null, 3, 4, 5));
         Assert.assertEquals(integers, integers2);
         Assert.assertNotEquals(integers, integers3);
     }
@@ -961,7 +937,7 @@ public class MultiReaderFastListTest extends AbstractListTestCase
         MutableList<Integer> integers = this.newWith(1, 2, 3, 4);
         MutableMap<String, String> map =
                 integers.toMap(Functions.getToString(), Functions.getToString());
-        Assert.assertEquals(UnifiedMap.<String, String>newWithKeysValues("1", "1", "2", "2", "3", "3", "4", "4"), map);
+        Assert.assertEquals(UnifiedMap.newWithKeysValues("1", "1", "2", "2", "3", "3", "4", "4"), map);
     }
 
     @Test

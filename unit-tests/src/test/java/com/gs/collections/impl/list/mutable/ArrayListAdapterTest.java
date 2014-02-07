@@ -48,30 +48,6 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
     private static final Logger LOGGER = LoggerFactory.getLogger(ArrayListAdapterTest.class);
 
     @Override
-    public <T> AbstractListAdapter<T> classUnderTest()
-    {
-        return ArrayListAdapter.newList();
-    }
-
-    @Override
-    protected <T> AbstractListAdapter<T> newWith(T one)
-    {
-        return ArrayListAdapter.<T>newList().with(one);
-    }
-
-    @Override
-    protected <T> AbstractListAdapter<T> newWith(T one, T two)
-    {
-        return ArrayListAdapter.<T>newList().with(one, two);
-    }
-
-    @Override
-    protected <T> AbstractListAdapter<T> newWith(T one, T two, T three)
-    {
-        return ArrayListAdapter.<T>newList().with(one, two, three);
-    }
-
-    @Override
     protected <T> ArrayListAdapter<T> newWith(T... littleElements)
     {
         return ArrayListAdapter.<T>newList().with(littleElements);
@@ -96,7 +72,7 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
     {
         MutableList<Integer> result = Lists.mutable.of();
         MutableList<Integer> collection = ArrayListAdapter.<Integer>newList(4).with(1, 2, 3, 4);
-        collection.forEach(2, 3, CollectionAddProcedure.<Integer>on(result));
+        collection.forEach(2, 3, CollectionAddProcedure.on(result));
         Verify.assertSize(2, result);
         Verify.assertContainsAll(result, 3, 4);
     }
@@ -122,14 +98,14 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
     @Test
     public void asSynchronized()
     {
-        Verify.assertInstanceOf(SynchronizedMutableList.class, this.classUnderTest().asSynchronized());
+        Verify.assertInstanceOf(SynchronizedMutableList.class, this.newWith().asSynchronized());
     }
 
     @Override
     @Test
     public void asUnmodifiable()
     {
-        Verify.assertInstanceOf(UnmodifiableMutableList.class, this.classUnderTest().asUnmodifiable());
+        Verify.assertInstanceOf(UnmodifiableMutableList.class, this.newWith().asUnmodifiable());
     }
 
     @Test
@@ -193,8 +169,8 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
         Assert.assertNotEquals(list2, list3);
         Verify.assertEqualsAndHashCode(list1, new ArrayList<Integer>(list1));
         Verify.assertEqualsAndHashCode(list1, new LinkedList<Integer>(list1));
-        Verify.assertEqualsAndHashCode(list1, ArrayAdapter.<Integer>newArrayWith(1, 2, 3, 4));
-        Verify.assertEqualsAndHashCode(list1, FastList.<Integer>newListWith(1, 2, 3, 4));
+        Verify.assertEqualsAndHashCode(list1, ArrayAdapter.newArrayWith(1, 2, 3, 4));
+        Verify.assertEqualsAndHashCode(list1, FastList.newListWith(1, 2, 3, 4));
     }
 
     @Test
@@ -321,7 +297,7 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
     public void testForEachWithFromTo()
     {
         MutableList<Integer> result1 = Lists.mutable.of();
-        this.newWith(1, 2, 3).forEach(1, 2, CollectionAddProcedure.<Integer>on(result1));
+        this.newWith(1, 2, 3).forEach(1, 2, CollectionAddProcedure.on(result1));
         Assert.assertEquals(FastList.newListWith(2, 3), result1);
     }
 
@@ -338,7 +314,7 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
     {
         MutableList<Integer> result2 = Lists.mutable.of();
         // Requires list of 100+ elements to engage commando pattern optimization
-        ArrayListAdapter.<Integer>adapt(new ArrayList<Integer>(Interval.oneTo(200))).forEach(99, 199, CollectionAddProcedure.<Integer>on(result2));
+        ArrayListAdapter.adapt(new ArrayList<Integer>(Interval.oneTo(200))).forEach(99, 199, CollectionAddProcedure.on(result2));
         Verify.assertSize(101, result2);
     }
 
@@ -347,7 +323,7 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
     {
         MutableList<Integer> result2 = Lists.mutable.of();
         // Requires list of 100+ elements to engage commando pattern optimization
-        ArrayListAdapter.<Integer>adapt(new ArrayList<Integer>(Interval.oneTo(200))).forEachWithIndex(99, 199, new AddToList(result2)
+        ArrayListAdapter.adapt(new ArrayList<Integer>(Interval.oneTo(200))).forEachWithIndex(99, 199, new AddToList(result2)
         );
         Verify.assertSize(101, result2);
     }

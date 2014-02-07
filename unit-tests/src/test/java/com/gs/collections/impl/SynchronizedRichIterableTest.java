@@ -31,30 +31,6 @@ import static com.gs.collections.impl.factory.Iterables.*;
 public class SynchronizedRichIterableTest extends AbstractRichIterableTestCase
 {
     @Override
-    protected <T> RichIterable<T> classUnderTest()
-    {
-        return new SynchronizedRichIterable<T>(FastList.<T>newList());
-    }
-
-    @Override
-    protected <T> RichIterable<T> newWith(T one)
-    {
-        return SynchronizedRichIterable.of(Lists.mutable.of(one));
-    }
-
-    @Override
-    protected <T> RichIterable<T> newWith(T one, T two)
-    {
-        return SynchronizedRichIterable.of(Lists.mutable.of(one, two));
-    }
-
-    @Override
-    protected <T> RichIterable<T> newWith(T one, T two, T three)
-    {
-        return SynchronizedRichIterable.of(Lists.mutable.of(one, two, three));
-    }
-
-    @Override
     protected <T> RichIterable<T> newWith(T... littleElements)
     {
         return SynchronizedRichIterable.of(Lists.mutable.of(littleElements));
@@ -73,7 +49,7 @@ public class SynchronizedRichIterableTest extends AbstractRichIterableTestCase
     @Override
     public void equalsAndHashCode()
     {
-        Assert.assertNotEquals(this.<Object>classUnderTest(), this.<Object>classUnderTest());
+        Assert.assertNotEquals(this.newWith(), this.newWith());
     }
 
     @Override

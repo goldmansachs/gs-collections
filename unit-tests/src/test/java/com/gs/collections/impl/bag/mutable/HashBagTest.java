@@ -24,13 +24,12 @@ import com.gs.collections.impl.map.mutable.UnifiedMap;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class HashBagTest
-        extends MutableBagTestCase
+public class HashBagTest extends MutableBagTestCase
 {
     @Override
-    protected <T> MutableBag<T> classUnderTest()
+    protected <T> MutableBag<T> newWith(T... littleElements)
     {
-        return HashBag.newBag();
+        return HashBag.newBagWith(littleElements);
     }
 
     @Test
@@ -56,7 +55,7 @@ public class HashBagTest
     {
         assertBagsEqual(
                 HashBag.newBagWith(1, 2, 2, 3, 3, 3),
-                HashBag.newBag(FastList.<Integer>newListWith(1, 2, 2, 3, 3, 3)));
+                HashBag.newBag(FastList.newListWith(1, 2, 2, 3, 3, 3)));
     }
 
     @Test

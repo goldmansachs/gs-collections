@@ -59,9 +59,9 @@ import static com.gs.collections.impl.factory.Iterables.*;
 public class CollectionAdapterTest extends AbstractCollectionTestCase
 {
     @Override
-    protected <T> AbstractCollectionAdapter<T> classUnderTest()
+    protected <T> CollectionAdapter<T> newWith(T... littleElements)
     {
-        return new CollectionAdapter<T>(new ArrayList<T>());
+        return new CollectionAdapter<T>(new ArrayList<T>(FastList.newListWith(littleElements)));
     }
 
     private <T> CollectionAdapter<T> newSet()
@@ -87,7 +87,7 @@ public class CollectionAdapterTest extends AbstractCollectionTestCase
     @Test
     public void asUnmodifiable()
     {
-        Verify.assertInstanceOf(UnmodifiableMutableCollection.class, this.classUnderTest().asUnmodifiable());
+        Verify.assertInstanceOf(UnmodifiableMutableCollection.class, this.newWith().asUnmodifiable());
     }
 
     @Override
@@ -114,7 +114,7 @@ public class CollectionAdapterTest extends AbstractCollectionTestCase
     @Test
     public void newEmpty()
     {
-        Verify.assertInstanceOf(FastList.class, CollectionAdapter.<Object>adapt(new LinkedList<Object>()).newEmpty());
+        Verify.assertInstanceOf(FastList.class, CollectionAdapter.adapt(new LinkedList<Object>()).newEmpty());
     }
 
     @Override
@@ -247,7 +247,7 @@ public class CollectionAdapterTest extends AbstractCollectionTestCase
         RichIterable<Integer> underTest = this.newWith(1, 2, 3, 4, 5, 6, 7);
         Function<Integer, Iterable<Integer>> intervalFunction = new NegativeIntervalFunction();
 
-        MutableMultimap<Integer, Integer> expected = this.<Integer>classUnderTest().groupByEach(intervalFunction);
+        MutableMultimap<Integer, Integer> expected = this.<Integer>newWith().groupByEach(intervalFunction);
         for (int i = 1; i < 8; i++)
         {
             expected.putAll(-i, Interval.fromTo(i, 7));
@@ -258,7 +258,7 @@ public class CollectionAdapterTest extends AbstractCollectionTestCase
         Assert.assertEquals(expected, actual);
 
         Multimap<Integer, Integer> actualWithTarget =
-                underTest.groupByEach(intervalFunction, this.<Integer>classUnderTest().groupByEach(intervalFunction));
+                underTest.groupByEach(intervalFunction, this.<Integer>newWith().groupByEach(intervalFunction));
         Assert.assertEquals(expected, actualWithTarget);
     }
 

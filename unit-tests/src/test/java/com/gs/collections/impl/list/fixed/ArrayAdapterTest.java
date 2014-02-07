@@ -58,30 +58,6 @@ public class ArrayAdapterTest extends AbstractListTestCase
     private static final Logger LOGGER = LoggerFactory.getLogger(ArrayAdapterTest.class);
 
     @Override
-    protected <T> MutableList<T> classUnderTest()
-    {
-        return ArrayAdapter.newArray();
-    }
-
-    @Override
-    protected <T> MutableList<T> newWith(T one)
-    {
-        return ArrayAdapter.newArrayWith(one);
-    }
-
-    @Override
-    protected <T> MutableList<T> newWith(T one, T two)
-    {
-        return ArrayAdapter.newArrayWith(one, two);
-    }
-
-    @Override
-    protected <T> MutableList<T> newWith(T one, T two, T three)
-    {
-        return ArrayAdapter.newArrayWith(one, two, three);
-    }
-
-    @Override
     protected <T> MutableList<T> newWith(T... littleElements)
     {
         return ArrayAdapter.newArrayWith(littleElements);
@@ -474,11 +450,11 @@ public class ArrayAdapterTest extends AbstractListTestCase
     @Test
     public void testSelectWith()
     {
-        Verify.assertContainsAll(ArrayAdapter.<Integer>newArrayWith(1, 2, 3, 4, 5).selectWith(Predicates2.<Integer>lessThan(),
+        Verify.assertContainsAll(ArrayAdapter.newArrayWith(1, 2, 3, 4, 5).selectWith(Predicates2.<Integer>lessThan(),
                 3), 1, 2);
-        Verify.denyContainsAny(ArrayAdapter.<Integer>newArrayWith(-1, 2, 3, 4, 5).selectWith(Predicates2.<Integer>lessThan(),
+        Verify.denyContainsAny(ArrayAdapter.newArrayWith(-1, 2, 3, 4, 5).selectWith(Predicates2.<Integer>lessThan(),
                 3), 3, 4, 5);
-        Verify.assertContainsAll(ArrayAdapter.<Integer>newArrayWith(1, 2, 3, 4, 5).selectWith(Predicates2.<Integer>lessThan(),
+        Verify.assertContainsAll(ArrayAdapter.newArrayWith(1, 2, 3, 4, 5).selectWith(Predicates2.<Integer>lessThan(),
                 3,
                 UnifiedSet.<Integer>newSet()), 1, 2);
     }
@@ -486,10 +462,10 @@ public class ArrayAdapterTest extends AbstractListTestCase
     @Test
     public void testRejectWith()
     {
-        Verify.assertContainsAll(ArrayAdapter.<Integer>newArrayWith(1, 2, 3, 4).rejectWith(Predicates2.<Integer>lessThan(), 3),
+        Verify.assertContainsAll(ArrayAdapter.newArrayWith(1, 2, 3, 4).rejectWith(Predicates2.<Integer>lessThan(), 3),
                 3,
                 4);
-        Verify.assertContainsAll(ArrayAdapter.<Integer>newArrayWith(1, 2, 3, 4).rejectWith(Predicates2.<Integer>lessThan(),
+        Verify.assertContainsAll(ArrayAdapter.newArrayWith(1, 2, 3, 4).rejectWith(Predicates2.<Integer>lessThan(),
                 3,
                 UnifiedSet.<Integer>newSet()), 3, 4);
     }
@@ -499,8 +475,8 @@ public class ArrayAdapterTest extends AbstractListTestCase
     public void detectWith()
     {
         Assert.assertEquals(Integer.valueOf(3),
-                ArrayAdapter.<Integer>newArrayWith(1, 2, 3, 4, 5).detectWith(Predicates2.equal(), 3));
-        Assert.assertNull(ArrayAdapter.<Integer>newArrayWith(1, 2, 3, 4, 5).detectWith(Predicates2.equal(), 6));
+                ArrayAdapter.newArrayWith(1, 2, 3, 4, 5).detectWith(Predicates2.equal(), 3));
+        Assert.assertNull(ArrayAdapter.newArrayWith(1, 2, 3, 4, 5).detectWith(Predicates2.equal(), 6));
     }
 
     @Test
@@ -514,17 +490,17 @@ public class ArrayAdapterTest extends AbstractListTestCase
     @Test
     public void testAllSatisfyWith()
     {
-        Assert.assertTrue(ArrayAdapter.<Integer>newArrayWith(1, 2, 3).allSatisfyWith(Predicates2.instanceOf(),
+        Assert.assertTrue(ArrayAdapter.newArrayWith(1, 2, 3).allSatisfyWith(Predicates2.instanceOf(),
                 Integer.class));
-        Assert.assertFalse(ArrayAdapter.<Integer>newArrayWith(1, 2, 3).allSatisfyWith(Predicates2.equal(), 1));
+        Assert.assertFalse(ArrayAdapter.newArrayWith(1, 2, 3).allSatisfyWith(Predicates2.equal(), 1));
     }
 
     @Test
     public void testAnySatisfyWith()
     {
-        Assert.assertFalse(ArrayAdapter.<Integer>newArrayWith(1, 2, 3).anySatisfyWith(Predicates2.instanceOf(),
+        Assert.assertFalse(ArrayAdapter.newArrayWith(1, 2, 3).anySatisfyWith(Predicates2.instanceOf(),
                 String.class));
-        Assert.assertTrue(ArrayAdapter.<Integer>newArrayWith(1, 2, 3).anySatisfyWith(Predicates2.instanceOf(),
+        Assert.assertTrue(ArrayAdapter.newArrayWith(1, 2, 3).anySatisfyWith(Predicates2.instanceOf(),
                 Integer.class));
     }
 
@@ -532,7 +508,7 @@ public class ArrayAdapterTest extends AbstractListTestCase
     public void testCountWith()
     {
         Assert.assertEquals(3,
-                ArrayAdapter.<Integer>newArrayWith(1, 2, 3).countWith(Predicates2.instanceOf(), Integer.class));
+                ArrayAdapter.newArrayWith(1, 2, 3).countWith(Predicates2.instanceOf(), Integer.class));
     }
 
     @Test
@@ -627,14 +603,14 @@ public class ArrayAdapterTest extends AbstractListTestCase
     @Test
     public void asSynchronized()
     {
-        Verify.assertInstanceOf(SynchronizedMutableList.class, this.classUnderTest().asSynchronized());
+        Verify.assertInstanceOf(SynchronizedMutableList.class, this.newWith().asSynchronized());
     }
 
     @Override
     @Test
     public void asUnmodifiable()
     {
-        Verify.assertInstanceOf(UnmodifiableMutableList.class, this.classUnderTest().asUnmodifiable());
+        Verify.assertInstanceOf(UnmodifiableMutableList.class, this.newWith().asUnmodifiable());
     }
 
     @Test
@@ -712,28 +688,28 @@ public class ArrayAdapterTest extends AbstractListTestCase
     @Test(expected = UnsupportedOperationException.class)
     public void removeAll()
     {
-        this.newArray().removeAll(FastList.<Object>newList());
+        this.newArray().removeAll(FastList.newList());
     }
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
     public void removeAllIterable()
     {
-        this.newArray().removeAllIterable(FastList.<Object>newList());
+        this.newArray().removeAllIterable(FastList.newList());
     }
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
     public void retainAll()
     {
-        this.newArray().retainAll(FastList.<Object>newList());
+        this.newArray().retainAll(FastList.newList());
     }
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
     public void retainAllIterable()
     {
-        this.newArray().retainAllIterable(FastList.<Object>newList());
+        this.newArray().retainAllIterable(FastList.newList());
     }
 
     @Override

@@ -43,9 +43,9 @@ import org.junit.Test;
 public class UnifiedSetTest extends AbstractMutableSetTestCase
 {
     @Override
-    protected <T> MutableSet<T> classUnderTest()
+    protected <T> MutableSet<T> newWith(T... littleElements)
     {
-        return UnifiedSet.newSet();
+        return UnifiedSet.newSetWith(littleElements);
     }
 
     @Override
@@ -341,7 +341,7 @@ public class UnifiedSetTest extends AbstractMutableSetTestCase
     @Test
     public void constructor_from_UnifiedSet()
     {
-        Verify.assertEqualsAndHashCode(new HashSet<Integer>(MORE_COLLISIONS), UnifiedSet.<Integer>newSet(MORE_COLLISIONS));
+        Verify.assertEqualsAndHashCode(new HashSet<Integer>(MORE_COLLISIONS), UnifiedSet.newSet(MORE_COLLISIONS));
     }
 
     @Test

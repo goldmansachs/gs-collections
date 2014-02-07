@@ -31,13 +31,17 @@ import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class CompositeFastListTest
-        extends AbstractListTestCase
+public class CompositeFastListTest extends AbstractListTestCase
 {
     @Override
-    protected <T> MutableList<T> classUnderTest()
+    protected <T> MutableList<T> newWith(T... littleElements)
     {
-        return new CompositeFastList<T>();
+        CompositeFastList<T> result = new CompositeFastList<T>();
+        for (T element : littleElements)
+        {
+            result.add(element);
+        }
+        return result;
     }
 
     @Override
@@ -48,7 +52,7 @@ public class CompositeFastListTest
         {
             public void run()
             {
-                CompositeFastListTest.this.classUnderTest().clone();
+                CompositeFastListTest.this.newWith().clone();
             }
         });
     }
@@ -282,7 +286,7 @@ public class CompositeFastListTest
         CompositeFastList<Integer> iterables = new CompositeFastList<Integer>();
         iterables.addComposited(Interval.oneTo(5).toList());
         iterables.addComposited(Interval.fromTo(6, 10).toList());
-        iterables.forEach(CollectionAddProcedure.<Integer>on(list));
+        iterables.forEach(CollectionAddProcedure.on(list));
         Verify.assertSize(10, list);
         Verify.assertAllSatisfy(list, Predicates.greaterThan(0).and(Predicates.lessThan(11)));
     }
@@ -452,7 +456,7 @@ public class CompositeFastListTest
     @Test
     public void notRandomAccess()
     {
-        Assert.assertFalse(this.classUnderTest() instanceof RandomAccess);
+        Assert.assertFalse(this.newWith() instanceof RandomAccess);
     }
 
     @Test

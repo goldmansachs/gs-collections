@@ -27,9 +27,9 @@ import org.junit.Test;
 public class MultiReaderFastListAsWriteUntouchableTest extends AbstractListTestCase
 {
     @Override
-    protected <T> MutableList<T> classUnderTest()
+    protected <T> MutableList<T> newWith(T... littleElements)
     {
-        return MultiReaderFastList.<T>newList().asWriteUntouchable();
+        return MultiReaderFastList.newListWith(littleElements).asWriteUntouchable();
     }
 
     @Override
@@ -48,7 +48,7 @@ public class MultiReaderFastListAsWriteUntouchableTest extends AbstractListTestC
         {
             public void run()
             {
-                MultiReaderFastListAsWriteUntouchableTest.this.classUnderTest().asSynchronized();
+                MultiReaderFastListAsWriteUntouchableTest.this.newWith().asSynchronized();
             }
         });
     }
@@ -61,7 +61,7 @@ public class MultiReaderFastListAsWriteUntouchableTest extends AbstractListTestC
         {
             public void run()
             {
-                MultiReaderFastListAsWriteUntouchableTest.this.classUnderTest().asUnmodifiable();
+                MultiReaderFastListAsWriteUntouchableTest.this.newWith().asUnmodifiable();
             }
         });
     }

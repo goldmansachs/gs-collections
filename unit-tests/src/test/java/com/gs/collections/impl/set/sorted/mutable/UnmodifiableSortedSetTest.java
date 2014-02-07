@@ -48,66 +48,36 @@ public class UnmodifiableSortedSetTest extends AbstractSortedSetTestCase
     }
 
     @Override
-    protected <T> MutableSortedSet<T> classUnderTest()
+    protected <T> MutableSortedSet<T> newWith(T... elements)
     {
-        return TreeSortedSet.<T>newSet().asUnmodifiable();
+        return TreeSortedSet.newSetWith(elements).asUnmodifiable();
     }
 
     @Override
-    protected <T> MutableSortedSet<T> classUnderTest(T... elements)
+    protected <T> MutableSortedSet<T> newWith(Comparator<? super T> comparator, T... elements)
     {
-        return TreeSortedSet.<T>newSetWith(elements).asUnmodifiable();
-    }
-
-    @Override
-    protected <T> MutableSortedSet<T> classUnderTest(Comparator<? super T> comparator, T... elements)
-    {
-        return TreeSortedSet.<T>newSetWith(comparator, elements).asUnmodifiable();
+        return TreeSortedSet.newSetWith(comparator, elements).asUnmodifiable();
     }
 
     @Override
     @Test
     public void asSynchronized()
     {
-        Verify.assertInstanceOf(SynchronizedSortedSet.class, this.classUnderTest().asSynchronized());
+        Verify.assertInstanceOf(SynchronizedSortedSet.class, this.newWith().asSynchronized());
     }
 
     @Override
     @Test
     public void asUnmodifiable()
     {
-        Verify.assertInstanceOf(UnmodifiableSortedSet.class, this.classUnderTest());
-    }
-
-    @Override
-    protected <T> MutableSortedSet<T> newWith(T one)
-    {
-        return TreeSortedSet.newSetWith(one).asUnmodifiable();
-    }
-
-    @Override
-    protected <T> MutableSortedSet<T> newWith(T one, T two)
-    {
-        return TreeSortedSet.newSetWith(one, two).asUnmodifiable();
-    }
-
-    @Override
-    protected <T> MutableSortedSet<T> newWith(T one, T two, T three)
-    {
-        return TreeSortedSet.newSetWith(one, two, three).asUnmodifiable();
-    }
-
-    @Override
-    protected <T> MutableSortedSet<T> newWith(T... elements)
-    {
-        return TreeSortedSet.newSetWith(elements).asUnmodifiable();
+        Verify.assertInstanceOf(UnmodifiableSortedSet.class, this.newWith());
     }
 
     @Test
     public void testAsUnmodifiable()
     {
-        Verify.assertInstanceOf(UnmodifiableSortedSet.class, this.<Object>classUnderTest().asUnmodifiable());
-        MutableSortedSet<Object> set = this.classUnderTest();
+        Verify.assertInstanceOf(UnmodifiableSortedSet.class, this.newWith().asUnmodifiable());
+        MutableSortedSet<Object> set = this.newWith();
         Assert.assertSame(set, set.asUnmodifiable());
     }
 
@@ -130,7 +100,7 @@ public class UnmodifiableSortedSetTest extends AbstractSortedSetTestCase
     @Test
     public void testClone()
     {
-        MutableSortedSet<String> set = this.classUnderTest();
+        MutableSortedSet<String> set = this.newWith();
         MutableSortedSet<String> clone = set.clone();
         Assert.assertSame(clone, set);
     }
@@ -317,7 +287,7 @@ public class UnmodifiableSortedSetTest extends AbstractSortedSetTestCase
     {
         super.getFirst();
         Assert.assertNotNull(this.newWith(1, 2, 3).getFirst());
-        Assert.assertNull(this.classUnderTest().getFirst());
+        Assert.assertNull(this.newWith().getFirst());
     }
 
     @Override
@@ -326,7 +296,7 @@ public class UnmodifiableSortedSetTest extends AbstractSortedSetTestCase
     {
         super.getLast();
         Assert.assertNotNull(this.newWith(1, 2, 3).getLast());
-        Assert.assertNull(this.classUnderTest().getLast());
+        Assert.assertNull(this.newWith().getLast());
     }
 
     @Override
@@ -360,27 +330,27 @@ public class UnmodifiableSortedSetTest extends AbstractSortedSetTestCase
     @Test(expected = UnsupportedOperationException.class)
     public void with()
     {
-        this.classUnderTest().with(1);
+        this.newWith().with(1);
     }
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
     public void withAll()
     {
-        this.classUnderTest().withAll(FastList.newListWith(1, 2));
+        this.newWith().withAll(FastList.newListWith(1, 2));
     }
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
     public void without()
     {
-        this.classUnderTest().without(2);
+        this.newWith().without(2);
     }
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
     public void withoutAll()
     {
-        this.classUnderTest().withoutAll(FastList.newListWith(1, 2));
+        this.newWith().withoutAll(FastList.newListWith(1, 2));
     }
 }

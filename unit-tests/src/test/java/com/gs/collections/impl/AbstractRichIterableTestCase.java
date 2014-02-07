@@ -85,20 +85,12 @@ import org.junit.Test;
 
 public abstract class AbstractRichIterableTestCase
 {
-    protected abstract <T> RichIterable<T> classUnderTest();
-
-    protected abstract <T> RichIterable<T> newWith(T one);
-
-    protected abstract <T> RichIterable<T> newWith(T one, T two);
-
-    protected abstract <T> RichIterable<T> newWith(T one, T two, T three);
-
     protected abstract <T> RichIterable<T> newWith(T... littleElements);
 
     @Test
     public void testNewCollection()
     {
-        RichIterable<Object> collection = this.classUnderTest();
+        RichIterable<Object> collection = this.newWith();
         Verify.assertIterableEmpty(collection);
         Verify.assertIterableSize(0, collection);
     }
@@ -547,7 +539,7 @@ public abstract class AbstractRichIterableTestCase
     @Test
     public void isEmpty()
     {
-        Verify.assertIterableEmpty(this.classUnderTest());
+        Verify.assertIterableEmpty(this.newWith());
         Verify.assertIterableNotEmpty(this.newWith(1, 2));
         Assert.assertTrue(this.newWith(1, 2).notEmpty());
     }
@@ -903,7 +895,7 @@ public abstract class AbstractRichIterableTestCase
         };
         MutableMultimap<Boolean, Integer> multimap2 = collection.groupBy(
                 isOddFunction,
-                this.<Integer>classUnderTest().groupBy(booleanFunction).toMutable());
+                this.<Integer>newWith().groupBy(booleanFunction).toMutable());
         Assert.assertEquals(expected, multimap2.toMap());
     }
 
@@ -913,7 +905,7 @@ public abstract class AbstractRichIterableTestCase
         RichIterable<Integer> collection = this.newWith(1, 2, 3, 4, 5, 6, 7);
 
         NegativeIntervalFunction function = new NegativeIntervalFunction();
-        MutableMultimap<Integer, Integer> expected = this.<Integer>classUnderTest().groupByEach(function).toMutable();
+        MutableMultimap<Integer, Integer> expected = this.<Integer>newWith().groupByEach(function).toMutable();
         for (int i = 1; i < 8; i++)
         {
             expected.putAll(-i, Interval.fromTo(i, 7));
@@ -924,7 +916,7 @@ public abstract class AbstractRichIterableTestCase
         Assert.assertEquals(expected, actual);
 
         Multimap<Integer, Integer> actualWithTarget =
-                collection.groupByEach(function, this.<Integer>classUnderTest().groupByEach(function).toMutable());
+                collection.groupByEach(function, this.<Integer>newWith().groupByEach(function).toMutable());
         Assert.assertEquals(expected, actualWithTarget);
     }
 
@@ -942,13 +934,13 @@ public abstract class AbstractRichIterableTestCase
                 pairs.collect(Functions.<String>firstOfPair()).toSet());
         Assert.assertEquals(
                 nulls,
-                pairs.collect(Functions.<Object>secondOfPair(), Lists.mutable.of()));
+                pairs.collect(Functions.secondOfPair(), Lists.mutable.of()));
 
         RichIterable<Pair<String, Object>> pairsPlusOne = collection.zip(nullsPlusOne);
         Assert.assertEquals(
                 collection.toSet(),
                 pairsPlusOne.collect(Functions.<String>firstOfPair()).toSet());
-        Assert.assertEquals(nulls, pairsPlusOne.collect(Functions.<Object>secondOfPair(), Lists.mutable.of()));
+        Assert.assertEquals(nulls, pairsPlusOne.collect(Functions.secondOfPair(), Lists.mutable.of()));
 
         RichIterable<Pair<String, Object>> pairsMinusOne = collection.zip(nullsMinusOne);
         Assert.assertEquals(collection.size() - 1, pairsMinusOne.size());
@@ -1009,9 +1001,9 @@ public abstract class AbstractRichIterableTestCase
     @Test
     public void empty()
     {
-        Verify.assertIterableEmpty(this.classUnderTest());
-        Assert.assertTrue(this.classUnderTest().isEmpty());
-        Assert.assertFalse(this.classUnderTest().notEmpty());
+        Verify.assertIterableEmpty(this.newWith());
+        Assert.assertTrue(this.newWith().isEmpty());
+        Assert.assertFalse(this.newWith().notEmpty());
     }
 
     @Test

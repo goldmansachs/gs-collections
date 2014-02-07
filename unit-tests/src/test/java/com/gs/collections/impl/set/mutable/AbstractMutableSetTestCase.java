@@ -65,38 +65,13 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
             .with(COLLISION_6, COLLISION_7, COLLISION_8, COLLISION_9);
     protected static final int SIZE = 8;
 
-    @Override
-    protected abstract <T> MutableSet<T> classUnderTest();
-
-    @Override
-    protected <T> MutableSet<T> newWith(T one)
-    {
-        return (MutableSet<T>) super.newWith(one);
-    }
-
-    @Override
-    protected <T> MutableSet<T> newWith(T one, T two)
-    {
-        return (MutableSet<T>) super.newWith(one, two);
-    }
-
-    @Override
-    protected <T> MutableSet<T> newWith(T one, T two, T three)
-    {
-        return (MutableSet<T>) super.newWith(one, two, three);
-    }
-
-    @Override
-    protected <T> MutableSet<T> newWith(T... littleElements)
-    {
-        return (MutableSet<T>) super.newWith(littleElements);
-    }
+    protected abstract <T> MutableSet<T> newWith(T... littleElements);
 
     @Override
     @Test
     public void asSynchronized()
     {
-        Verify.assertInstanceOf(SynchronizedMutableSet.class, this.<Object>classUnderTest().asSynchronized());
+        Verify.assertInstanceOf(SynchronizedMutableSet.class, this.newWith().asSynchronized());
     }
 
     @Override
@@ -106,7 +81,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         super.addAll();
 
         UnifiedSet<Integer> expected = UnifiedSet.newSetWith(1, 2, 3);
-        MutableSet<Integer> collection = this.classUnderTest();
+        MutableSet<Integer> collection = this.newWith();
 
         Assert.assertTrue(collection.addAll(FastList.newListWith(1, 2, 3)));
         Assert.assertEquals(expected, collection);
@@ -122,7 +97,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         super.addAllIterable();
 
         UnifiedSet<Integer> expected = UnifiedSet.newSetWith(1, 2, 3);
-        MutableSet<Integer> collection = this.classUnderTest();
+        MutableSet<Integer> collection = this.newWith();
 
         Assert.assertTrue(collection.addAllIterable(FastList.newListWith(1, 2, 3)));
         Assert.assertEquals(expected, collection);
@@ -271,7 +246,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
     @Test
     public void asUnmodifiable()
     {
-        Verify.assertInstanceOf(UnmodifiableMutableSet.class, this.<Object>classUnderTest().asUnmodifiable());
+        Verify.assertInstanceOf(UnmodifiableMutableSet.class, this.newWith().asUnmodifiable());
     }
 
     @Override
@@ -303,7 +278,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         super.getFirst();
 
         Assert.assertNotNull(this.newWith(1, 2, 3).getFirst());
-        Assert.assertNull(this.classUnderTest().getFirst());
+        Assert.assertNull(this.newWith().getFirst());
     }
 
     @Override
@@ -311,7 +286,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
     public void getLast()
     {
         Assert.assertNotNull(this.newWith(1, 2, 3).getLast());
-        Assert.assertNull(this.classUnderTest().getLast());
+        Assert.assertNull(this.newWith().getLast());
     }
 
     @Test
@@ -337,7 +312,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
     @Test
     public void testClone()
     {
-        MutableSet<String> set = this.classUnderTest();
+        MutableSet<String> set = this.newWith();
         MutableSet<String> clone = set.clone();
         Assert.assertNotSame(clone, set);
         Verify.assertEqualsAndHashCode(clone, set);
@@ -349,7 +324,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
     {
         super.isEmpty();
 
-        MutableSet<String> set = this.classUnderTest();
+        MutableSet<String> set = this.newWith();
         this.assertIsEmpty(true, set);
 
         set.add("stuff");
@@ -376,7 +351,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
     @Test
     public void add()
     {
-        MutableSet<IntegerWithCast> set = this.classUnderTest();
+        MutableSet<IntegerWithCast> set = this.newWith();
         MutableList<IntegerWithCast> collisions = COLLISIONS.collect(IntegerWithCast.CONSTRUCT);
         set.addAll(collisions);
         set.removeAll(collisions);
@@ -394,7 +369,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
     {
         super.remove();
 
-        final MutableSet<IntegerWithCast> set = this.classUnderTest();
+        final MutableSet<IntegerWithCast> set = this.newWith();
         final MutableList<IntegerWithCast> collisions = COLLISIONS.collect(IntegerWithCast.CONSTRUCT);
         set.addAll(collisions);
         collisions.reverseForEach(new Procedure<IntegerWithCast>()
@@ -415,7 +390,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         {
             public void value(IntegerWithCast each)
             {
-                MutableSet<IntegerWithCast> set2 = AbstractMutableSetTestCase.this.classUnderTest();
+                MutableSet<IntegerWithCast> set2 = AbstractMutableSetTestCase.this.newWith();
                 set2.addAll(collisions);
 
                 Assert.assertFalse(set2.remove(null));
@@ -443,7 +418,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         Assert.assertFalse(deepChain.remove(COLLISION_8));
 
         // search for a non-existent element
-        MutableSet<Integer> empty = this.classUnderTest();
+        MutableSet<Integer> empty = this.newWith();
         Assert.assertFalse(empty.remove(COLLISION_1));
     }
 
@@ -460,14 +435,14 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         for (int i = 0; i < size; i++)
         {
             MutableList<Integer> list = MORE_COLLISIONS.subList(0, i);
-            MutableSet<Integer> set = this.<Integer>classUnderTest().withAll(list);
+            MutableSet<Integer> set = this.<Integer>newWith().withAll(list);
             Assert.assertFalse(set.retainAll(collisions));
             Assert.assertEquals(list.toSet(), set);
         }
 
         for (Integer item : MORE_COLLISIONS)
         {
-            MutableSet<Integer> integers = this.<Integer>classUnderTest().withAll(MORE_COLLISIONS);
+            MutableSet<Integer> integers = this.<Integer>newWith().withAll(MORE_COLLISIONS);
             @SuppressWarnings("BoxingBoxedValue")
             Integer keyCopy = new Integer(item);
             Assert.assertTrue(integers.retainAll(mList(keyCopy)));
@@ -505,7 +480,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         int size = MORE_COLLISIONS.size();
         for (int i = 1; i < size; i++)
         {
-            MutableSet<Integer> set = this.classUnderTest();
+            MutableSet<Integer> set = this.newWith();
             set.addAll(MORE_COLLISIONS.subList(0, i));
             MutableSet<Integer> result = UnifiedSet.newSet();
             set.forEach(CollectionAddProcedure.on(result));
@@ -536,7 +511,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         int size = MORE_COLLISIONS.size();
         for (int i = 1; i < size; i++)
         {
-            MutableSet<Integer> set = this.classUnderTest();
+            MutableSet<Integer> set = this.newWith();
             set.addAll(MORE_COLLISIONS.subList(0, i));
             final MutableSet<Integer> result = UnifiedSet.newSet();
 
@@ -574,7 +549,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         int size = MORE_COLLISIONS.size();
         for (int i = 1; i < size; i++)
         {
-            MutableSet<Integer> set = this.classUnderTest();
+            MutableSet<Integer> set = this.newWith();
             set.addAll(MORE_COLLISIONS.subList(0, i));
             final MutableSet<Integer> result = UnifiedSet.newSet();
             final MutableList<Integer> indexes = Lists.mutable.of();
@@ -607,7 +582,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
     @Test(expected = NoSuchElementException.class)
     public void iterator_increment_past_end()
     {
-        MutableSet<Integer> set = this.classUnderTest();
+        MutableSet<Integer> set = this.newWith();
         Iterator<Integer> iterator = set.iterator();
         iterator.next();
         iterator.next();
@@ -616,7 +591,7 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
     @Test(expected = IllegalStateException.class)
     public void iterator_remove_without_next()
     {
-        Iterator<Integer> iterator = this.<Integer>classUnderTest().iterator();
+        Iterator<Integer> iterator = this.<Integer>newWith().iterator();
         iterator.remove();
     }
 

@@ -16,7 +16,6 @@
 
 package com.gs.collections.impl.bag.sorted.mutable;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 
@@ -29,32 +28,22 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
+ * JUnit test for {@link TreeBag}.
+ *
  * @since 4.2
  */
 public class TreeBagTest extends AbstractSortedBagTestCase
 {
     @Override
-    protected <T> MutableSortedBag<T> classUnderTest()
+    protected <T> MutableSortedBag<T> newWith(T... littleElements)
     {
-        return TreeBag.newBag();
+        return TreeBag.newBagWith(littleElements);
     }
 
     @Override
-    protected <T> MutableSortedBag<T> classUnderTest(Comparator<? super T> comparator)
+    protected <T> MutableSortedBag<T> newWith(Comparator<? super T> comparator, T... elements)
     {
-        return TreeBag.newBag(comparator);
-    }
-
-    @Override
-    protected <T> MutableSortedBag<T> classUnderTest(T... elements)
-    {
-        return TreeBag.newBagWith(elements);
-    }
-
-    @Override
-    protected <T> MutableSortedBag<T> classUnderTest(Comparator<? super T> comparator, T... elements)
-    {
-        return TreeBag.newBag(comparator, Arrays.asList(elements));
+        return TreeBag.newBagWith(comparator, elements);
     }
 
     @Override
@@ -62,7 +51,7 @@ public class TreeBagTest extends AbstractSortedBagTestCase
     public void asSynchronized()
     {
         //not yet supported
-        this.classUnderTest().asSynchronized();
+        this.newWith().asSynchronized();
     }
 
     @Test
@@ -72,7 +61,7 @@ public class TreeBagTest extends AbstractSortedBagTestCase
         TreeBag<Integer> sortedBagB = TreeBag.newBag(sortedBagA.with(1).with(2, 3).with(4, 5, 6).with(1, 1, 1, 1));
         Verify.assertSortedBagsEqual(sortedBagA, sortedBagB);
         Assert.assertTrue(sortedBagA.getFirst().equals(sortedBagB.getFirst()) && sortedBagB.getFirst() == 6);
-        Verify.assertSortedBagsEqual(sortedBagB, TreeBag.<Integer>newBag(sortedBagB));
+        Verify.assertSortedBagsEqual(sortedBagB, TreeBag.newBag(sortedBagB));
     }
 
     @Test

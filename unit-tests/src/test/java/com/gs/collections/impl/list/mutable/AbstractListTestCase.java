@@ -74,31 +74,7 @@ public abstract class AbstractListTestCase
         extends AbstractCollectionTestCase
 {
     @Override
-    protected abstract <T> MutableList<T> classUnderTest();
-
-    @Override
-    protected <T> MutableList<T> newWith(T one)
-    {
-        return (MutableList<T>) super.newWith(one);
-    }
-
-    @Override
-    protected <T> MutableList<T> newWith(T one, T two)
-    {
-        return (MutableList<T>) super.newWith(one, two);
-    }
-
-    @Override
-    protected <T> MutableList<T> newWith(T one, T two, T three)
-    {
-        return (MutableList<T>) super.newWith(one, two, three);
-    }
-
-    @Override
-    protected <T> MutableList<T> newWith(T... littleElements)
-    {
-        return (MutableList<T>) super.newWith(littleElements);
-    }
+    protected abstract <T> MutableList<T> newWith(T... littleElements);
 
     @Override
     public void collectBoolean()
@@ -168,7 +144,7 @@ public abstract class AbstractListTestCase
     @Test
     public void asSynchronized()
     {
-        Verify.assertInstanceOf(SynchronizedMutableList.class, this.classUnderTest().asSynchronized());
+        Verify.assertInstanceOf(SynchronizedMutableList.class, this.newWith().asSynchronized());
     }
 
     @Override
@@ -176,14 +152,14 @@ public abstract class AbstractListTestCase
     public void toImmutable()
     {
         super.toImmutable();
-        Verify.assertInstanceOf(ImmutableList.class, this.classUnderTest().toImmutable());
+        Verify.assertInstanceOf(ImmutableList.class, this.newWith().toImmutable());
     }
 
     @Override
     @Test
     public void asUnmodifiable()
     {
-        Verify.assertInstanceOf(UnmodifiableMutableList.class, this.classUnderTest().asUnmodifiable());
+        Verify.assertInstanceOf(UnmodifiableMutableList.class, this.newWith().asUnmodifiable());
     }
 
     @Test
@@ -206,17 +182,17 @@ public abstract class AbstractListTestCase
         Assert.assertNotEquals(list1, null);
         Verify.assertEqualsAndHashCode(list1, list1);
         Verify.assertEqualsAndHashCode(list1, list2);
-        Verify.assertEqualsAndHashCode(new LinkedList<Integer>(Arrays.<Integer>asList(1, 2, 3)), list1);
-        Verify.assertEqualsAndHashCode(new ArrayList<Integer>(Arrays.<Integer>asList(1, 2, 3)), list1);
+        Verify.assertEqualsAndHashCode(new LinkedList<Integer>(Arrays.asList(1, 2, 3)), list1);
+        Verify.assertEqualsAndHashCode(new ArrayList<Integer>(Arrays.asList(1, 2, 3)), list1);
         Verify.assertEqualsAndHashCode(ArrayAdapter.newArrayWith(1, 2, 3), list1);
         Assert.assertNotEquals(list2, list3);
         Assert.assertNotEquals(list2, list4);
-        Assert.assertNotEquals(new LinkedList<Integer>(Arrays.<Integer>asList(1, 2, 3, 4)), list1);
-        Assert.assertNotEquals(new LinkedList<Integer>(Arrays.<Integer>asList(1, 2, null)), list1);
-        Assert.assertNotEquals(new LinkedList<Integer>(Arrays.<Integer>asList(1, 2)), list1);
-        Assert.assertNotEquals(new ArrayList<Integer>(Arrays.<Integer>asList(1, 2, 3, 4)), list1);
-        Assert.assertNotEquals(new ArrayList<Integer>(Arrays.<Integer>asList(1, 2, null)), list1);
-        Assert.assertNotEquals(new ArrayList<Integer>(Arrays.<Integer>asList(1, 2)), list1);
+        Assert.assertNotEquals(new LinkedList<Integer>(Arrays.asList(1, 2, 3, 4)), list1);
+        Assert.assertNotEquals(new LinkedList<Integer>(Arrays.asList(1, 2, null)), list1);
+        Assert.assertNotEquals(new LinkedList<Integer>(Arrays.asList(1, 2)), list1);
+        Assert.assertNotEquals(new ArrayList<Integer>(Arrays.asList(1, 2, 3, 4)), list1);
+        Assert.assertNotEquals(new ArrayList<Integer>(Arrays.asList(1, 2, null)), list1);
+        Assert.assertNotEquals(new ArrayList<Integer>(Arrays.asList(1, 2)), list1);
         Assert.assertNotEquals(ArrayAdapter.newArrayWith(1, 2, 3, 4), list1);
     }
 
@@ -360,10 +336,7 @@ public abstract class AbstractListTestCase
     @Test
     public void withMethods()
     {
-        Verify.assertContainsAll(this.newWith(1), 1);
-        Verify.assertContainsAll(this.newWith(1, 2), 1, 2);
-        Verify.assertContainsAll(this.newWith(1, 2, 3), 1, 2, 3);
-        Verify.assertContainsAll(this.newWith(1, 2, 3, 4), 1, 2, 3, 4);
+        Verify.assertContainsAll(this.newWith().with(1), 1);
     }
 
     @Test
@@ -447,7 +420,7 @@ public abstract class AbstractListTestCase
     @Test
     public void newEmpty()
     {
-        Verify.assertInstanceOf(MutableList.class, this.classUnderTest().newEmpty());
+        Verify.assertInstanceOf(MutableList.class, this.newWith().newEmpty());
     }
 
     @Override
@@ -565,7 +538,7 @@ public abstract class AbstractListTestCase
     @Test
     public void forEachOnRange()
     {
-        final MutableList<Integer> list = this.classUnderTest();
+        final MutableList<Integer> list = this.newWith();
 
         list.addAll(FastList.newListWith(0, 1, 2, 3));
         list.addAll(FastList.newListWith(4, 5, 6));
@@ -604,7 +577,7 @@ public abstract class AbstractListTestCase
     @Test
     public void forEachWithIndexOnRange()
     {
-        final MutableList<Integer> list = this.classUnderTest();
+        final MutableList<Integer> list = this.newWith();
 
         list.addAll(FastList.newListWith(0, 1, 2, 3));
         list.addAll(FastList.newListWith(4, 5, 6));

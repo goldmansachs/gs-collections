@@ -31,19 +31,13 @@ import org.junit.Test;
 public class TreeSortedSetTest extends AbstractSortedSetTestCase
 {
     @Override
-    protected <T> TreeSortedSet<T> classUnderTest()
-    {
-        return TreeSortedSet.newSet();
-    }
-
-    @Override
-    protected <T> TreeSortedSet<T> classUnderTest(T... elements)
+    protected <T> TreeSortedSet<T> newWith(T... elements)
     {
         return TreeSortedSet.newSetWith(elements);
     }
 
     @Override
-    protected <T> TreeSortedSet<T> classUnderTest(Comparator<? super T> comparator, T... elements)
+    protected <T> TreeSortedSet<T> newWith(Comparator<? super T> comparator, T... elements)
     {
         return TreeSortedSet.newSetWith(comparator, elements);
     }
@@ -52,14 +46,14 @@ public class TreeSortedSetTest extends AbstractSortedSetTestCase
     @Test
     public void asSynchronized()
     {
-        Verify.assertInstanceOf(SynchronizedSortedSet.class, this.classUnderTest().asSynchronized());
+        Verify.assertInstanceOf(SynchronizedSortedSet.class, this.newWith().asSynchronized());
     }
 
     @Override
     @Test
     public void asUnmodifiable()
     {
-        Verify.assertInstanceOf(UnmodifiableSortedSet.class, this.classUnderTest().asUnmodifiable());
+        Verify.assertInstanceOf(UnmodifiableSortedSet.class, this.newWith().asUnmodifiable());
     }
 
     @Test

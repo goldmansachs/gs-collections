@@ -37,33 +37,9 @@ import static com.gs.collections.impl.factory.Iterables.*;
 public class SynchronizedBagTest extends AbstractSynchronizedCollectionTestCase
 {
     @Override
-    protected <T> MutableBag<T> classUnderTest()
-    {
-        return new SynchronizedBag<T>(HashBag.<T>newBag());
-    }
-
-    @Override
     protected <T> MutableBag<T> newWith(T... littleElements)
     {
-        return (MutableBag<T>) super.newWith(littleElements);
-    }
-
-    @Override
-    protected <T> MutableBag<T> newWith(T one)
-    {
-        return (MutableBag<T>) super.newWith(one);
-    }
-
-    @Override
-    protected <T> MutableBag<T> newWith(T one, T two)
-    {
-        return (MutableBag<T>) super.newWith(one, two);
-    }
-
-    @Override
-    protected <T> MutableBag<T> newWith(T one, T two, T three)
-    {
-        return (MutableBag<T>) super.newWith(one, two, three);
+        return new SynchronizedBag<T>(HashBag.newBagWith(littleElements));
     }
 
     @Override
@@ -72,7 +48,7 @@ public class SynchronizedBagTest extends AbstractSynchronizedCollectionTestCase
     {
         super.newEmpty();
 
-        Verify.assertInstanceOf(HashBag.class, this.classUnderTest().newEmpty());
+        Verify.assertInstanceOf(HashBag.class, this.newWith().newEmpty());
     }
 
     @Override
@@ -80,7 +56,7 @@ public class SynchronizedBagTest extends AbstractSynchronizedCollectionTestCase
     public void getFirst()
     {
         Assert.assertNotNull(this.newWith(1, 2, 3).getFirst());
-        Assert.assertNull(this.classUnderTest().getFirst());
+        Assert.assertNull(this.newWith().getFirst());
     }
 
     @Override
@@ -88,7 +64,7 @@ public class SynchronizedBagTest extends AbstractSynchronizedCollectionTestCase
     public void getLast()
     {
         Assert.assertNotNull(this.newWith(1, 2, 3).getLast());
-        Assert.assertNull(this.classUnderTest().getLast());
+        Assert.assertNull(this.newWith().getLast());
     }
 
     @Override
@@ -113,14 +89,14 @@ public class SynchronizedBagTest extends AbstractSynchronizedCollectionTestCase
     @Test
     public void asSynchronized()
     {
-        Verify.assertInstanceOf(SynchronizedBag.class, this.classUnderTest().asSynchronized());
+        Verify.assertInstanceOf(SynchronizedBag.class, this.newWith().asSynchronized());
     }
 
     @Override
     @Test
     public void asUnmodifiable()
     {
-        Verify.assertInstanceOf(UnmodifiableBag.class, this.classUnderTest().asUnmodifiable());
+        Verify.assertInstanceOf(UnmodifiableBag.class, this.newWith().asUnmodifiable());
     }
 
     @Override

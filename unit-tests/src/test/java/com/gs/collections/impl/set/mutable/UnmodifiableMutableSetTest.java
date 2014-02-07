@@ -46,30 +46,6 @@ public class UnmodifiableMutableSetTest extends AbstractCollectionTestCase
     }
 
     @Override
-    protected <T> MutableSet<T> classUnderTest()
-    {
-        return UnifiedSet.<T>newSet().asUnmodifiable();
-    }
-
-    @Override
-    protected <T> MutableSet<T> newWith(T one)
-    {
-        return UnifiedSet.newSetWith(one).asUnmodifiable();
-    }
-
-    @Override
-    protected <T> MutableSet<T> newWith(T one, T two)
-    {
-        return UnifiedSet.newSetWith(one, two).asUnmodifiable();
-    }
-
-    @Override
-    protected <T> MutableSet<T> newWith(T one, T two, T three)
-    {
-        return UnifiedSet.newSetWith(one, two, three).asUnmodifiable();
-    }
-
-    @Override
     protected <T> MutableSet<T> newWith(T... elements)
     {
         return UnifiedSet.newSetWith(elements).asUnmodifiable();
@@ -177,7 +153,7 @@ public class UnmodifiableMutableSetTest extends AbstractCollectionTestCase
     public void getFirst()
     {
         Assert.assertNotNull(this.newWith(1, 2, 3).getFirst());
-        Assert.assertNull(this.classUnderTest().getFirst());
+        Assert.assertNull(this.newWith().getFirst());
     }
 
     @Override
@@ -185,21 +161,21 @@ public class UnmodifiableMutableSetTest extends AbstractCollectionTestCase
     public void getLast()
     {
         Assert.assertNotNull(this.newWith(1, 2, 3).getLast());
-        Assert.assertNull(this.classUnderTest().getLast());
+        Assert.assertNull(this.newWith().getLast());
     }
 
     @Override
     @Test
     public void asSynchronized()
     {
-        Verify.assertInstanceOf(SynchronizedMutableSet.class, this.classUnderTest().asSynchronized());
+        Verify.assertInstanceOf(SynchronizedMutableSet.class, this.newWith().asSynchronized());
     }
 
     @Override
     @Test
     public void asUnmodifiable()
     {
-        Verify.assertInstanceOf(UnmodifiableMutableSet.class, this.classUnderTest().asUnmodifiable());
+        Verify.assertInstanceOf(UnmodifiableMutableSet.class, this.newWith().asUnmodifiable());
     }
 
     @Test
@@ -220,7 +196,7 @@ public class UnmodifiableMutableSetTest extends AbstractCollectionTestCase
     @Test
     public void testClone()
     {
-        MutableSet<String> set = this.classUnderTest();
+        MutableSet<String> set = this.newWith();
         MutableSet<String> clone = set.clone();
         Assert.assertSame(clone, set);
     }

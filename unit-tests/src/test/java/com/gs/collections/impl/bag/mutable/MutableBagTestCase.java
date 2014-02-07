@@ -44,31 +44,7 @@ import org.junit.Test;
 public abstract class MutableBagTestCase extends AbstractCollectionTestCase
 {
     @Override
-    protected abstract <T> MutableBag<T> classUnderTest();
-
-    @Override
-    protected <T> MutableBag<T> newWith(T... littleElements)
-    {
-        return (MutableBag<T>) super.newWith(littleElements);
-    }
-
-    @Override
-    protected <T> MutableBag<T> newWith(T one)
-    {
-        return (MutableBag<T>) super.newWith(one);
-    }
-
-    @Override
-    protected <T> MutableBag<T> newWith(T one, T two)
-    {
-        return (MutableBag<T>) super.newWith(one, two);
-    }
-
-    @Override
-    protected <T> MutableBag<T> newWith(T one, T two, T three)
-    {
-        return (MutableBag<T>) super.newWith(one, two, three);
-    }
+    protected abstract <T> MutableBag<T> newWith(T... littleElements);
 
     @Test
     @Override
@@ -100,7 +76,7 @@ public abstract class MutableBagTestCase extends AbstractCollectionTestCase
     @Test
     public void add()
     {
-        MutableBag<Integer> bag = this.classUnderTest();
+        MutableBag<Integer> bag = this.newWith();
         bag.add(1);
         bag.add(1);
         Verify.assertSize(2, bag);
@@ -183,7 +159,7 @@ public abstract class MutableBagTestCase extends AbstractCollectionTestCase
     @Test
     public void forEachWithOccurrences()
     {
-        MutableBag<Integer> bag = this.classUnderTest();
+        MutableBag<Integer> bag = this.newWith();
         bag.addOccurrences(1, 3);
         bag.addOccurrences(2, 2);
         bag.addOccurrences(3, 1);
@@ -223,9 +199,9 @@ public abstract class MutableBagTestCase extends AbstractCollectionTestCase
     public void toImmutable()
     {
         super.toImmutable();
-        Verify.assertInstanceOf(MutableBag.class, this.classUnderTest());
-        Verify.assertInstanceOf(ImmutableBag.class, this.classUnderTest().toImmutable());
-        Assert.assertFalse(this.classUnderTest().toImmutable() instanceof MutableBag);
+        Verify.assertInstanceOf(MutableBag.class, this.newWith());
+        Verify.assertInstanceOf(ImmutableBag.class, this.newWith().toImmutable());
+        Assert.assertFalse(this.newWith().toImmutable() instanceof MutableBag);
     }
 
     @Test
@@ -247,15 +223,15 @@ public abstract class MutableBagTestCase extends AbstractCollectionTestCase
     @Test
     public void addOccurrences()
     {
-        MutableBag<Object> bag = this.classUnderTest();
+        MutableBag<Object> bag = this.newWith();
         bag.addOccurrences(new Object(), 0);
-        assertBagsEqual(HashBag.<Object>newBag(), bag);
+        assertBagsEqual(HashBag.newBag(), bag);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void addOccurrences_throws()
     {
-        this.classUnderTest().addOccurrences(new Object(), -1);
+        this.newWith().addOccurrences(new Object(), -1);
     }
 
     @Test
@@ -283,7 +259,7 @@ public abstract class MutableBagTestCase extends AbstractCollectionTestCase
     @Test(expected = IllegalArgumentException.class)
     public void removeOccurrences_throws()
     {
-        this.classUnderTest().removeOccurrences(new Object(), -1);
+        this.newWith().removeOccurrences(new Object(), -1);
     }
 
     protected static void assertBagsEqual(Bag<?> expected, Bag<?> actual)
@@ -298,7 +274,7 @@ public abstract class MutableBagTestCase extends AbstractCollectionTestCase
     public void toSortedListWith()
     {
         Assert.assertEquals(
-                FastList.<Integer>newListWith(1, 2, 2, 3, 3, 3),
+                FastList.newListWith(1, 2, 2, 3, 3, 3),
                 this.newWith(3, 3, 3, 2, 2, 1).toSortedList());
     }
 
@@ -337,14 +313,14 @@ public abstract class MutableBagTestCase extends AbstractCollectionTestCase
     @Test
     public void asSynchronized()
     {
-        Verify.assertInstanceOf(SynchronizedBag.class, this.classUnderTest().asSynchronized());
+        Verify.assertInstanceOf(SynchronizedBag.class, this.newWith().asSynchronized());
     }
 
     @Override
     @Test
     public void asUnmodifiable()
     {
-        Verify.assertInstanceOf(UnmodifiableBag.class, this.classUnderTest().asUnmodifiable());
+        Verify.assertInstanceOf(UnmodifiableBag.class, this.newWith().asUnmodifiable());
     }
 
     @Test

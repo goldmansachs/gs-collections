@@ -52,9 +52,9 @@ import org.junit.Test;
 public class MultiReaderHashBagTest extends MultiReaderMutableCollectionTestCase
 {
     @Override
-    protected <T> MultiReaderHashBag<T> classUnderTest()
+    protected <T> MultiReaderHashBag<T> newWith(T... littleElements)
     {
-        return MultiReaderHashBag.newBag();
+        return MultiReaderHashBag.newBagWith(littleElements);
     }
 
     @Override
@@ -84,14 +84,14 @@ public class MultiReaderHashBagTest extends MultiReaderMutableCollectionTestCase
     @Test
     public void asUnmodifiable()
     {
-        Verify.assertInstanceOf(UnmodifiableBag.class, this.classUnderTest().asUnmodifiable());
+        Verify.assertInstanceOf(UnmodifiableBag.class, this.newWith().asUnmodifiable());
     }
 
     @Override
     @Test
     public void toImmutable()
     {
-        Verify.assertInstanceOf(ImmutableBag.class, this.classUnderTest().toImmutable());
+        Verify.assertInstanceOf(ImmutableBag.class, this.newWith().toImmutable());
     }
 
     @Test
@@ -107,7 +107,7 @@ public class MultiReaderHashBagTest extends MultiReaderMutableCollectionTestCase
     @Test(expected = IllegalArgumentException.class)
     public void addOccurrences_throws()
     {
-        this.classUnderTest().addOccurrences(new Object(), -1);
+        this.newWith().addOccurrences(new Object(), -1);
     }
 
     @Test
@@ -390,7 +390,7 @@ public class MultiReaderHashBagTest extends MultiReaderMutableCollectionTestCase
     {
         MutableBag<Integer> result = HashBag.newBag();
         MutableBag<Integer> collection = MultiReaderHashBag.newBagWith(1, 2, 3, 4, 4);
-        collection.forEach(CollectionAddProcedure.<Integer>on(result));
+        collection.forEach(CollectionAddProcedure.on(result));
         Assert.assertEquals(HashBag.newBagWith(1, 2, 3, 4, 4), result);
     }
 
@@ -529,7 +529,7 @@ public class MultiReaderHashBagTest extends MultiReaderMutableCollectionTestCase
     @Test
     public void concurrentWrite()
     {
-        final MultiReaderHashBag<Integer> numbers = this.classUnderTest();
+        final MultiReaderHashBag<Integer> numbers = this.newWith();
         Interval interval = Interval.oneTo(100);
         ParallelIterate.forEach(interval, new Procedure<Integer>()
         {
@@ -568,7 +568,7 @@ public class MultiReaderHashBagTest extends MultiReaderMutableCollectionTestCase
     @Test
     public void parallelCollect()
     {
-        MultiReaderHashBag<String> numbers = this.classUnderTest();
+        MultiReaderHashBag<String> numbers = this.newWith();
         Interval interval = Interval.oneTo(50000);
         ParallelIterate.collect(interval, Functions.getToString(), numbers, true);
         Assert.assertEquals(numbers, interval.collect(Functions.getToString()).toBag());

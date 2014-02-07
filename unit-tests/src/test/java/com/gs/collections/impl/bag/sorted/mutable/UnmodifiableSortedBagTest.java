@@ -24,7 +24,6 @@ import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
-import org.junit.Before;
 import org.junit.Test;
 
 /**
@@ -34,46 +33,24 @@ import org.junit.Test;
  */
 public class UnmodifiableSortedBagTest extends AbstractSortedBagTestCase
 {
-    private static final String LED_ZEPPELIN = "Led Zeppelin";
-    private static final String METALLICA = "Metallica";
-
-    private MutableSortedBag<String> mutableSortedBag;
-    private MutableSortedBag<String> unmodifiableSortedBag;
-
-    @Before
-    public void setUp()
+    @Override
+    protected <T> MutableSortedBag<T> newWith(T... elements)
     {
-        this.mutableSortedBag = TreeBag.newBagWith(METALLICA, "Bon Jovi", "Europe", "Scorpions");
-        this.unmodifiableSortedBag = this.mutableSortedBag.asUnmodifiable();
+        return TreeBag.newBagWith(elements).asUnmodifiable();
     }
 
     @Override
-    protected <T> MutableSortedBag<T> classUnderTest()
+    protected <T> MutableSortedBag<T> newWith(Comparator<? super T> comparator, T... elements)
     {
-        return TreeBag.<T>newBag().asUnmodifiable();
+        return TreeBag.newBagWith(comparator, elements).asUnmodifiable();
     }
 
     @Override
-    protected <T> MutableSortedBag<T> classUnderTest(T... elements)
-    {
-        return TreeBag.<T>newBagWith(elements).asUnmodifiable();
-    }
-
-    @Override
-    protected <T> MutableSortedBag<T> classUnderTest(Comparator<? super T> comparator)
-    {
-        return TreeBag.<T>newBagWith(comparator).asUnmodifiable();
-    }
-
-    @Override
-    protected <T> MutableSortedBag<T> classUnderTest(Comparator<? super T> comparator, T... elements)
-    {
-        return TreeBag.<T>newBagWith(comparator, elements).asUnmodifiable();
-    }
-
     @Test(expected = UnsupportedOperationException.class)
     public void testToString_with_collection_containing_self()
     {
+        super.testToString_with_collection_containing_self();
+
         MutableCollection<Object> collection = this.<Object>newWith(1);
         collection.add(collection);
         String simpleName = collection.getClass().getSimpleName();
@@ -83,17 +60,23 @@ public class UnmodifiableSortedBagTest extends AbstractSortedBagTestCase
                         || ("[(this " + simpleName + "), 1]").equals(string));
     }
 
+    @Override
     @Test(expected = UnsupportedOperationException.class)
     public void makeString_with_collection_containing_self()
     {
+        super.makeString_with_collection_containing_self();
+
         MutableCollection<Object> collection = this.<Object>newWith(1, 2, 3);
         collection.add(collection);
         Assert.assertEquals(collection.toString(), '[' + collection.makeString() + ']');
     }
 
+    @Override
     @Test(expected = UnsupportedOperationException.class)
     public void appendString_with_collection_containing_self()
     {
+        super.appendString_with_collection_containing_self();
+
         MutableCollection<Object> collection = this.<Object>newWith(1, 2, 3);
         collection.add(collection);
         Appendable builder = new StringBuilder();
@@ -105,38 +88,14 @@ public class UnmodifiableSortedBagTest extends AbstractSortedBagTestCase
     @Test(expected = UnsupportedOperationException.class)
     public void asSynchronized()
     {
-        this.classUnderTest().asSynchronized();
+        this.newWith().asSynchronized();
     }
 
     @Override
     @Test
     public void asUnmodifiable()
     {
-        Verify.assertInstanceOf(UnmodifiableSortedBag.class, this.classUnderTest());
-    }
-
-    @Override
-    protected <T> MutableSortedBag<T> newWith(T one)
-    {
-        return TreeBag.newBagWith(one).asUnmodifiable();
-    }
-
-    @Override
-    protected <T> MutableSortedBag<T> newWith(T one, T two)
-    {
-        return TreeBag.newBagWith(one, two).asUnmodifiable();
-    }
-
-    @Override
-    protected <T> MutableSortedBag<T> newWith(T one, T two, T three)
-    {
-        return TreeBag.newBagWith(one, two, three).asUnmodifiable();
-    }
-
-    @Override
-    protected <T> MutableSortedBag<T> newWith(T... elements)
-    {
-        return TreeBag.newBagWith(elements).asUnmodifiable();
+        Verify.assertInstanceOf(UnmodifiableSortedBag.class, this.newWith());
     }
 
     @Override
@@ -192,8 +151,8 @@ public class UnmodifiableSortedBagTest extends AbstractSortedBagTestCase
     @Test
     public void testAsUnmodifiable()
     {
-        Verify.assertInstanceOf(UnmodifiableSortedBag.class, this.<Object>classUnderTest().asUnmodifiable());
-        MutableSortedBag<Object> bag = this.classUnderTest();
+        Verify.assertInstanceOf(UnmodifiableSortedBag.class, this.newWith().asUnmodifiable());
+        MutableSortedBag<Object> bag = this.newWith();
         Assert.assertSame(bag, bag.asUnmodifiable());
     }
 

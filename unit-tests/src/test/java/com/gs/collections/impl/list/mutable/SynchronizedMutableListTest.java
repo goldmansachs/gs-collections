@@ -27,9 +27,9 @@ import org.junit.Test;
 public class SynchronizedMutableListTest extends AbstractListTestCase
 {
     @Override
-    protected <T> MutableList<T> classUnderTest()
+    protected <T> MutableList<T> newWith(T... littleElements)
     {
-        return new SynchronizedMutableList<T>(FastList.<T>newList());
+        return new SynchronizedMutableList<T>(FastList.newListWith(littleElements));
     }
 
     @Override
@@ -38,7 +38,7 @@ public class SynchronizedMutableListTest extends AbstractListTestCase
     {
         super.newEmpty();
 
-        Verify.assertInstanceOf(FastList.class, this.classUnderTest().newEmpty());
+        Verify.assertInstanceOf(FastList.class, this.newWith().newEmpty());
     }
 
     @Override

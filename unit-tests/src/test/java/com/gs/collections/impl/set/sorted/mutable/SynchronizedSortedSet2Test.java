@@ -16,10 +16,8 @@
 
 package com.gs.collections.impl.set.sorted.mutable;
 
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.NoSuchElementException;
-import java.util.TreeSet;
 
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.impl.test.Verify;
@@ -32,39 +30,28 @@ import org.junit.Test;
 public class SynchronizedSortedSet2Test extends AbstractSortedSetTestCase
 {
     @Override
-    protected <T> MutableSortedSet<T> classUnderTest()
-    {
-        return new SynchronizedSortedSet<T>(SortedSetAdapter.<T>adapt(new TreeSet<T>()));
-    }
-
-    @Override
-    protected <T> MutableSortedSet<T> classUnderTest(T... elements)
+    protected <T> MutableSortedSet<T> newWith(T... elements)
     {
         return new SynchronizedSortedSet<T>(TreeSortedSet.newSetWith(elements));
     }
 
     @Override
-    protected <T> MutableSortedSet<T> classUnderTest(Comparator<? super T> comparator, T... elements)
+    protected <T> MutableSortedSet<T> newWith(Comparator<? super T> comparator, T... elements)
     {
         return new SynchronizedSortedSet<T>(TreeSortedSet.newSetWith(comparator, elements));
-    }
-
-    private MutableSortedSet<String> newWith(String... strings)
-    {
-        return new SynchronizedSortedSet<String>(SortedSetAdapter.adapt(new TreeSet<String>(Arrays.asList(strings))));
     }
 
     @Override
     public void asSynchronized()
     {
-        MutableSortedSet<Object> synchronizedSet = this.classUnderTest();
+        MutableSortedSet<Object> synchronizedSet = this.newWith();
         Assert.assertSame(synchronizedSet, synchronizedSet.asSynchronized());
     }
 
     @Override
     public void asUnmodifiable()
     {
-        Verify.assertInstanceOf(UnmodifiableSortedSet.class, this.<Object>classUnderTest().asUnmodifiable());
+        Verify.assertInstanceOf(UnmodifiableSortedSet.class, this.newWith().asUnmodifiable());
     }
 
     @Test(expected = NoSuchElementException.class)
