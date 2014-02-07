@@ -94,6 +94,7 @@ import com.gs.collections.api.set.primitive.<name>Set;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.api.tuple.primitive.<name>ObjectPair;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions0;
@@ -117,6 +118,7 @@ import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.factory.primitive.<name>Sets;
+import com.gs.collections.impl.lazy.AbstractLazyIterable;
 import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
@@ -136,6 +138,7 @@ import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 import com.gs.collections.impl.set.mutable.primitive.Synchronized<name>Set;
 import com.gs.collections.impl.set.mutable.primitive.Unmodifiable<name>Set;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
+import com.gs.collections.impl.tuple.primitive.PrimitiveTuples;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.LazyIterate;
 import com.gs.collections.impl.utility.internal.IterableIterate;
@@ -3401,6 +3404,11 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         return new ValuesCollection();
     }
 
+    public RichIterable\<<name>ObjectPair\<V>\> keyValuesView()
+    {
+        return new KeyValuesView();
+    }
+
     protected class ValuesCollection implements Collection\<V>
     {
         public boolean add(V v)
@@ -3511,6 +3519,137 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         public \<T> T[] toArray(T[] result)
         {
             return <name>ObjectHashMap.this.toArray(result);
+        }
+    }
+
+    private class KeyValuesView extends AbstractLazyIterable\<<name>ObjectPair\<V>\>
+    {
+        public void forEach(Procedure\<? super <name>ObjectPair\<V>\> procedure)
+        {
+            if (<name>ObjectHashMap.this.sentinelValues != null)
+            {
+                if (<name>ObjectHashMap.this.sentinelValues.containsZeroKey)
+                {
+                    procedure.value(PrimitiveTuples.pair(EMPTY_KEY, <name>ObjectHashMap.this.sentinelValues.zeroValue));
+                }
+                if (<name>ObjectHashMap.this.sentinelValues.containsOneKey)
+                {
+                    procedure.value(PrimitiveTuples.pair(REMOVED_KEY, <name>ObjectHashMap.this.sentinelValues.oneValue));
+                }
+            }
+            for (int i = 0; i \< <name>ObjectHashMap.this.keys.length; i++)
+            {
+                if (isNonSentinel(<name>ObjectHashMap.this.keys[i]))
+                {
+                    procedure.value(PrimitiveTuples.pair(<name>ObjectHashMap.this.keys[i], <name>ObjectHashMap.this.values[i]));
+                }
+            }
+        }
+
+        public void forEachWithIndex(ObjectIntProcedure\<? super <name>ObjectPair\<V>\> objectIntProcedure)
+        {
+            int index = 0;
+            if (<name>ObjectHashMap.this.sentinelValues != null)
+            {
+                if (<name>ObjectHashMap.this.sentinelValues.containsZeroKey)
+                {
+                    objectIntProcedure.value(PrimitiveTuples.pair(EMPTY_KEY, <name>ObjectHashMap.this.sentinelValues.zeroValue), index);
+                    index++;
+                }
+                if (<name>ObjectHashMap.this.sentinelValues.containsOneKey)
+                {
+                    objectIntProcedure.value(PrimitiveTuples.pair(REMOVED_KEY, <name>ObjectHashMap.this.sentinelValues.oneValue), index);
+                    index++;
+                }
+            }
+            for (int i = 0; i \< <name>ObjectHashMap.this.keys.length; i++)
+            {
+                if (isNonSentinel(<name>ObjectHashMap.this.keys[i]))
+                {
+                    objectIntProcedure.value(PrimitiveTuples.pair(<name>ObjectHashMap.this.keys[i], <name>ObjectHashMap.this.values[i]), index);
+                    index++;
+                }
+            }
+        }
+
+        public \<P> void forEachWith(Procedure2\<? super <name>ObjectPair\<V>, ? super P> procedure, P parameter)
+        {
+            if (<name>ObjectHashMap.this.sentinelValues != null)
+            {
+                if (<name>ObjectHashMap.this.sentinelValues.containsZeroKey)
+                {
+                    procedure.value(PrimitiveTuples.pair(EMPTY_KEY, <name>ObjectHashMap.this.sentinelValues.zeroValue), parameter);
+                }
+                if (<name>ObjectHashMap.this.sentinelValues.containsOneKey)
+                {
+                    procedure.value(PrimitiveTuples.pair(REMOVED_KEY, <name>ObjectHashMap.this.sentinelValues.oneValue), parameter);
+                }
+            }
+            for (int i = 0; i \< <name>ObjectHashMap.this.keys.length; i++)
+            {
+                if (isNonSentinel(<name>ObjectHashMap.this.keys[i]))
+                {
+                    procedure.value(PrimitiveTuples.pair(<name>ObjectHashMap.this.keys[i], <name>ObjectHashMap.this.values[i]), parameter);
+                }
+            }
+        }
+
+        public Iterator\<<name>ObjectPair\<V>\> iterator()
+        {
+            return new InternalKeyValuesIterator();
+        }
+
+        public class InternalKeyValuesIterator implements Iterator\<<name>ObjectPair\<V>\>
+        {
+            private int count;
+            private int position;
+            private boolean handledZero;
+            private boolean handledOne;
+
+            public <name>ObjectPair\<V> next()
+            {
+                if (!this.hasNext())
+                {
+                    throw new NoSuchElementException("next() called, but the iterator is exhausted");
+                }
+                this.count++;
+
+                if (!this.handledZero)
+                {
+                    this.handledZero = true;
+                    if (<name>ObjectHashMap.this.containsKey(EMPTY_KEY))
+                    {
+                        return PrimitiveTuples.pair(EMPTY_KEY, <name>ObjectHashMap.this.sentinelValues.zeroValue);
+                    }
+                }
+                if (!this.handledOne)
+                {
+                    this.handledOne = true;
+                    if (<name>ObjectHashMap.this.containsKey(REMOVED_KEY))
+                    {
+                        return PrimitiveTuples.pair(REMOVED_KEY, <name>ObjectHashMap.this.sentinelValues.oneValue);
+                    }
+                }
+
+                <type>[] keys = <name>ObjectHashMap.this.keys;
+                while (!isNonSentinel(keys[this.position]))
+                {
+                    this.position++;
+                }
+                <name>ObjectPair\<V> result = PrimitiveTuples.pair(keys[this.position], <name>ObjectHashMap.this.values[this.position]);
+                this.position++;
+                return result;
+            }
+
+            public void remove()
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            public boolean hasNext()
+            {
+                return this.count != <name>ObjectHashMap.this.size();
+            }
         }
     }
 }

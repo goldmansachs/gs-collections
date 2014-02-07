@@ -25,6 +25,7 @@ import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.<name>ObjectProcedure;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
+import com.gs.collections.api.tuple.primitive.<name>ObjectPair;
 
 /**
  * This file was automatically generated from template file primitiveObjectMap.stg.
@@ -79,6 +80,11 @@ public interface <name>ObjectMap\<V> extends RichIterable\<V>
     Mutable<name>Set keySet();
 
     Collection\<V> values();
+
+    /**
+     * @since 5.0
+     */
+    RichIterable\<<name>ObjectPair\<V>\> keyValuesView();
 }
 
 >>

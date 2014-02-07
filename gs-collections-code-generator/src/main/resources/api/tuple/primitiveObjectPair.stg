@@ -2,7 +2,7 @@ import "copyright.stg"
 
 targetPath() ::= "com/gs/collections/api/tuple/primitive"
 
-fileName(primitive) ::= "Object<primitive.name>Pair"
+fileName(primitive) ::= "<primitive.name>ObjectPair"
 
 class(primitive) ::= <<
 <body(primitive.type, primitive.name)>
@@ -19,13 +19,13 @@ import com.gs.collections.api.tuple.Pair;
 
 /**
  * @see Pair
- * This file was automatically generated from template file objectPrimitivePair.stg
+ * This file was automatically generated from template file primitiveObjectPair.stg
  */
-public interface Object<name>Pair\<T> extends Serializable, Comparable\<Object<name>Pair\<T>\>
+public interface <name>ObjectPair\<T> extends Serializable, Comparable\<<name>ObjectPair\<T>\>
 {
-    T getOne();
+    <type> getOne();
 
-    <type> getTwo();
+    T getTwo();
 }
 
 >>

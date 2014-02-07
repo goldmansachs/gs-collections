@@ -81,6 +81,7 @@ import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.api.tuple.primitive.<name>ObjectPair;
 import com.gs.collections.impl.UnmodifiableIteratorAdapter;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
@@ -106,6 +107,7 @@ import com.gs.collections.impl.map.mutable.primitive.<name>ObjectHashMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.partition.list.PartitionFastList;
 import com.gs.collections.impl.tuple.Tuples;
+import com.gs.collections.impl.tuple.primitive.PrimitiveTuples;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.internal.IterableIterate;
 
@@ -208,6 +210,11 @@ final class Immutable<name>ObjectSingletonMap\<V> extends AbstractImmutable<name
     public Collection\<V> values()
     {
         throw new UnsupportedOperationException("values is not implemented yet!");
+    }
+
+    public RichIterable\<<name>ObjectPair\<V>\> keyValuesView()
+    {
+        return Lists.immutable.\<<name>ObjectPair\<V>\>of(PrimitiveTuples.pair(this.key1, this.value1)).asLazy();
     }
 
     @Override

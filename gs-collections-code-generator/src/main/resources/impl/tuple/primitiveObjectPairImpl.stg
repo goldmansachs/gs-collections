@@ -5,7 +5,7 @@ import "primitiveCompare.stg"
 
 targetPath() ::= "com/gs/collections/impl/tuple/primitive"
 
-fileName(primitive) ::= "Object<primitive.name>PairImpl"
+fileName(primitive) ::= "<primitive.name>ObjectPairImpl"
 
 class(primitive) ::= <<
 <body(primitive.type, primitive.name, primitive.wrapperName)>
@@ -16,31 +16,31 @@ body(type, name, wrapperName) ::= <<
 
 package com.gs.collections.impl.tuple.primitive;
 
-import com.gs.collections.api.tuple.primitive.Object<name>Pair;
+import com.gs.collections.api.tuple.primitive.<name>ObjectPair;
 import com.gs.collections.impl.block.factory.Comparators;
 
 /**
- * This file was automatically generated from template file objectPrimitivePairImpl.stg
+ * This file was automatically generated from template file primitiveObjectPairImpl.stg
  */
-public class Object<name>PairImpl\<T> implements Object<name>Pair\<T>
+public class <name>ObjectPairImpl\<T> implements <name>ObjectPair\<T>
 {
     private static final long serialVersionUID = 1L;
 
-    private final T one;
-    private final <type> two;
+    private final <type> one;
+    private final T two;
 
-    Object<name>PairImpl(T newOne, <type> newTwo)
+    <name>ObjectPairImpl(<type> newOne, T newTwo)
     {
         this.one = newOne;
         this.two = newTwo;
     }
 
-    public T getOne()
+    public <type> getOne()
     {
         return this.one;
     }
 
-    public <type> getTwo()
+    public T getTwo()
     {
         return this.two;
     }
@@ -52,23 +52,21 @@ public class Object<name>PairImpl\<T> implements Object<name>Pair\<T>
         {
             return true;
         }
-        if (!(o instanceof Object<name>Pair))
+        if (!(o instanceof <name>ObjectPair))
         {
             return false;
         }
 
-        Object<name>Pair\<?> that = (Object<name>Pair\<?>) o;
+        <name>ObjectPair\<?> that = (<name>ObjectPair\<?>) o;
 
-        return Comparators.nullSafeEquals(this.one, that.getOne())
-                && <(equals.(type))("this.two", "that.getTwo()")>;
+        return <(equals.(type))("this.one", "that.getOne()")>
+                && Comparators.nullSafeEquals(this.two, that.getTwo());
     }
 
     @Override
     public int hashCode()
     {
-        int result = this.one == null ? 0 : this.one.hashCode();
-        result = 29 * result + <(hashCode.(type))("this.two")>;
-        return result;
+        return 29 * <(hashCode.(type))("this.one")> + (this.two == null ? 0 : this.two.hashCode());
     }
 
     @Override
@@ -77,14 +75,14 @@ public class Object<name>PairImpl\<T> implements Object<name>Pair\<T>
         return this.one + ":" + this.two;
     }
 
-    public int compareTo(Object<name>Pair\<T> that)
+    public int compareTo(<name>ObjectPair\<T> that)
     {
-        int i = ((Comparable\<T>) this.one).compareTo(that.getOne());
+        int i = <(compare.(type))("this.one", "that.getOne()")>;
         if (i != 0)
         {
             return i;
         }
-        return <(compare.(type))("this.two", "that.getTwo()")>;
+        return ((Comparable\<T>) this.two).compareTo(that.getTwo());
     }
 }
 

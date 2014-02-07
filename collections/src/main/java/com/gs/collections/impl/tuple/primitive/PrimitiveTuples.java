@@ -16,6 +16,13 @@
 
 package com.gs.collections.impl.tuple.primitive;
 
+import com.gs.collections.api.tuple.primitive.BooleanObjectPair;
+import com.gs.collections.api.tuple.primitive.ByteObjectPair;
+import com.gs.collections.api.tuple.primitive.CharObjectPair;
+import com.gs.collections.api.tuple.primitive.DoubleObjectPair;
+import com.gs.collections.api.tuple.primitive.FloatObjectPair;
+import com.gs.collections.api.tuple.primitive.IntObjectPair;
+import com.gs.collections.api.tuple.primitive.LongObjectPair;
 import com.gs.collections.api.tuple.primitive.ObjectBooleanPair;
 import com.gs.collections.api.tuple.primitive.ObjectBytePair;
 import com.gs.collections.api.tuple.primitive.ObjectCharPair;
@@ -24,11 +31,13 @@ import com.gs.collections.api.tuple.primitive.ObjectFloatPair;
 import com.gs.collections.api.tuple.primitive.ObjectIntPair;
 import com.gs.collections.api.tuple.primitive.ObjectLongPair;
 import com.gs.collections.api.tuple.primitive.ObjectShortPair;
+import com.gs.collections.api.tuple.primitive.ShortObjectPair;
 
 public final class PrimitiveTuples
 {
     private PrimitiveTuples()
     {
+        throw new AssertionError("Suppress default constructor for noninstantiability");
     }
 
     public static <T> ObjectBooleanPair<T> pair(T one, boolean two)
@@ -69,5 +78,45 @@ public final class PrimitiveTuples
     public static <T> ObjectDoublePair<T> pair(T one, double two)
     {
         return new ObjectDoublePairImpl<T>(one, two);
+    }
+
+    public static <T> BooleanObjectPair<T> pair(boolean one, T two)
+    {
+        return new BooleanObjectPairImpl<T>(one, two);
+    }
+
+    public static <T> ByteObjectPair<T> pair(byte one, T two)
+    {
+        return new ByteObjectPairImpl<T>(one, two);
+    }
+
+    public static <T> CharObjectPair<T> pair(char one, T two)
+    {
+        return new CharObjectPairImpl<T>(one, two);
+    }
+
+    public static <T> ShortObjectPair<T> pair(short one, T two)
+    {
+        return new ShortObjectPairImpl<T>(one, two);
+    }
+
+    public static <T> IntObjectPair<T> pair(int one, T two)
+    {
+        return new IntObjectPairImpl<T>(one, two);
+    }
+
+    public static <T> FloatObjectPair<T> pair(float one, T two)
+    {
+        return new FloatObjectPairImpl<T>(one, two);
+    }
+
+    public static <T> LongObjectPair<T> pair(long one, T two)
+    {
+        return new LongObjectPairImpl<T>(one, two);
+    }
+
+    public static <T> DoubleObjectPair<T> pair(double one, T two)
+    {
+        return new DoubleObjectPairImpl<T>(one, two);
     }
 }

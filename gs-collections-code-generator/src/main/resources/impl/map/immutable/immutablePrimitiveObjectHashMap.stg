@@ -81,6 +81,7 @@ import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.api.tuple.primitive.<name>ObjectPair;
 import com.gs.collections.impl.UnmodifiableIteratorAdapter;
 import com.gs.collections.impl.map.mutable.primitive.<name>ObjectHashMap;
 
@@ -649,6 +650,11 @@ final class Immutable<name>ObjectHashMap\<V> extends AbstractImmutable<name>Obje
     public Collection\<V> values()
     {
         throw new UnsupportedOperationException("values is not implemented yet!");
+    }
+
+    public RichIterable\<<name>ObjectPair\<V>\> keyValuesView()
+    {
+        return this.delegate.keyValuesView();
     }
 
     @Override
