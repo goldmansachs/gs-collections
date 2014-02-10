@@ -33,6 +33,11 @@ public interface Mutable<name>ObjectMap\<V> extends <name>ObjectMap\<V>, Mutable
 {
     V put(<type> key, V value);
 
+    /**
+     * @since 5.0.
+     */
+    void putAll(<name>ObjectMap\<? extends V> map);
+
     V removeKey(<type> key);
 
     V remove(<type> key);

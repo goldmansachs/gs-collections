@@ -263,6 +263,32 @@ public abstract class AbstractMutable<name>ObjectMapTestCase extends Abstract<na
     }
 
     @Test
+    public void putAll()
+    {
+        Mutable<name>ObjectMap\<String> hashMap = <name>ObjectHashMap.newMap();
+        Mutable<name>ObjectMap\<String> copyMap = <name>ObjectHashMap.newMap();
+
+        for (<type> i = <(literal.(type))("1")>; i \< <(literal.(type))("10")>; i++)
+        {
+            Assert.assertFalse(copyMap.containsKey(i));
+            copyMap.put(i, String.valueOf(i));
+        }
+
+        Assert.assertEquals(9, copyMap.size());
+        Assert.assertEquals(0, hashMap.size());
+
+        hashMap.putAll(copyMap);
+        Assert.assertEquals(9, hashMap.size());
+
+        for (<type> i = <(literal.(type))("1")>; i \< <(literal.(type))("10")>; i++)
+        {
+            Assert.assertTrue(hashMap.containsKey(i));
+        }
+
+        Assert.assertEquals(hashMap, copyMap);
+    }
+
+    @Test
     public void getIfAbsentPut_Value()
     {
         Assert.assertEquals("zero", this.map.getIfAbsentPut(<(literal.(type))("0")>, "zeroValue"));

@@ -104,6 +104,14 @@ public class Unmodifiable<name>ObjectMapTest extends AbstractMutable<name>Object
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
+    public void putAll()
+    {
+        <name>ObjectHashMap\<String> hashMap = <name>ObjectHashMap.newMap();
+        this.map.putAll(hashMap);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
     public void withKeysValues()
     {
         this.map.withKeyValue(<(literal.(type))("1")>, "one");

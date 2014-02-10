@@ -74,6 +74,7 @@ import com.gs.collections.api.map.primitive.Immutable<name>ObjectMap;
 import com.gs.collections.api.map.primitive.Mutable<name>ObjectMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.api.map.primitive.<name>ObjectMap;
 import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
@@ -118,6 +119,11 @@ public final class Unmodifiable<name>ObjectMap\<V>
     public V put(<type> key, V value)
     {
         throw new UnsupportedOperationException("Cannot call put() on " + this.getClass().getSimpleName());
+    }
+
+    public void putAll(<name>ObjectMap\<? extends V> map)
+    {
+        throw new UnsupportedOperationException("Cannot call putAll() on " + this.getClass().getSimpleName());
     }
 
     public V removeKey(<type> key)

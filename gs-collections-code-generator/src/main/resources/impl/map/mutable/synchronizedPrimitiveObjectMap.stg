@@ -129,6 +129,20 @@ public final class Synchronized<name>ObjectMap\<V>
         }
     }
 
+    public void putAll(<name>ObjectMap\<? extends V> map)
+    {
+        synchronized (this.lock)
+        {
+            map.forEachKeyValue(new <name>ObjectProcedure\<V>()
+            {
+                public void value(<type> key, V value)
+                {
+                    Synchronized<name>ObjectMap.this.map.put(key, value);
+                }
+            });
+        }
+    }
+
     public V removeKey(<type> key)
     {
         synchronized (this.lock)
