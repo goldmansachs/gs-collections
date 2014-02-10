@@ -47,6 +47,8 @@ import com.gs.collections.api.map.primitive.Mutable<name1><name2>Map;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.set.primitive.Mutable<name1>Set;<endif>
 import com.gs.collections.api.set.primitive.Mutable<name2>Set;
 import com.gs.collections.impl.factory.primitive.<name1><name2>Maps;
+import com.gs.collections.impl.set.mutable.primitive.Unmodifiable<name1>Set;
+import com.gs.collections.impl.collection.mutable.primitive.Unmodifiable<name2>Collection;
 
 /**
  * This file was automatically generated from template file unmodifiablePrimitivePrimitiveMap.stg.
@@ -331,12 +333,12 @@ public final class Unmodifiable<name1><name2>Map
 
     public Mutable<name1>Set keySet()
     {
-        throw new UnsupportedOperationException("keySet is not implemented yet!");
+        return Unmodifiable<name1>Set.of(this.map.keySet());
     }
 
     public Mutable<name2>Collection values()
     {
-        throw new UnsupportedOperationException("values is not implemented yet!");
+        return Unmodifiable<name2>Collection.of(this.map.values());
     }
 
     @Override

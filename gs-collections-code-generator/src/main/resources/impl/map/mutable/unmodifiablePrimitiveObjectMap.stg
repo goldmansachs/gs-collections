@@ -27,6 +27,7 @@ package com.gs.collections.impl.map.mutable.primitive;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
 
@@ -81,6 +82,7 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.primitive.<name>ObjectPair;
 import com.gs.collections.impl.UnmodifiableIteratorAdapter;
 import com.gs.collections.impl.factory.primitive.<name>ObjectMaps;
+import com.gs.collections.impl.set.mutable.primitive.Unmodifiable<name>Set;
 
 /**
  * This file was automatically generated from template file unmodifiablePrimitiveObjectMap.stg.
@@ -596,12 +598,12 @@ public final class Unmodifiable<name>ObjectMap\<V>
 
     public Mutable<name>Set keySet()
     {
-        throw new UnsupportedOperationException("keySet is not implemented yet!");
+        return Unmodifiable<name>Set.of(this.map.keySet());
     }
 
     public Collection\<V> values()
     {
-        throw new UnsupportedOperationException("values is not implemented yet!");
+        return Collections.unmodifiableCollection(this.map.values());
     }
 
     public RichIterable\<<name>ObjectPair\<V>\> keyValuesView()

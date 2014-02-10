@@ -73,6 +73,7 @@ import com.gs.collections.api.collection.primitive.MutableLongCollection;
 import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.map.primitive.<name>ObjectMap;
 import com.gs.collections.api.map.primitive.Immutable<name>ObjectMap;
 import com.gs.collections.api.map.primitive.Mutable<name>ObjectMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
@@ -84,7 +85,10 @@ import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.primitive.<name>ObjectPair;
 import com.gs.collections.impl.SynchronizedRichIterable;
+import com.gs.collections.impl.collection.mutable.CollectionAdapter;
+import com.gs.collections.impl.collection.mutable.SynchronizedMutableCollection;
 import com.gs.collections.impl.factory.primitive.<name>ObjectMaps;
+import com.gs.collections.impl.set.mutable.primitive.Synchronized<name>Set;
 import net.jcip.annotations.GuardedBy;
 
 /**
@@ -879,12 +883,18 @@ public final class Synchronized<name>ObjectMap\<V>
 
     public Mutable<name>Set keySet()
     {
-        throw new UnsupportedOperationException("keySet is not implemented yet!");
+        synchronized (this.lock)
+        {
+            return Synchronized<name>Set.of(this.map.keySet(), this.lock);
+        }
     }
 
     public Collection\<V> values()
     {
-        throw new UnsupportedOperationException("values is not implemented yet!");
+        synchronized (this.lock)
+        {
+            return SynchronizedMutableCollection.of(CollectionAdapter.adapt(this.map.values()), this.lock);
+        }
     }
 
     public RichIterable\<<name>ObjectPair\<V>\> keyValuesView()
