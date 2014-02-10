@@ -19,7 +19,6 @@ package com.gs.collections.impl.list.mutable;
 import java.util.ListIterator;
 
 import com.gs.collections.api.list.MutableList;
-import org.junit.Assert;
 import org.junit.Test;
 
 public class MultiReaderFastListAsUnmodifiableTest extends UnmodifiableMutableListTestCase
@@ -27,7 +26,7 @@ public class MultiReaderFastListAsUnmodifiableTest extends UnmodifiableMutableLi
     @Override
     protected MutableList<Integer> getCollection()
     {
-        return MultiReaderFastList.<Integer>newListWith(1).asUnmodifiable();
+        return MultiReaderFastList.newListWith(1).asUnmodifiable();
     }
 
     @Override

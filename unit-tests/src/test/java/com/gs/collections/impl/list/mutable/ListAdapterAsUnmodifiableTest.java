@@ -25,6 +25,6 @@ public class ListAdapterAsUnmodifiableTest extends UnmodifiableMutableListTestCa
     @Override
     protected MutableList<Integer> getCollection()
     {
-        return ListAdapter.adapt(Collections.<Integer>singletonList(1)).asUnmodifiable();
+        return ListAdapter.adapt(Collections.singletonList(1)).asUnmodifiable();
     }
 }

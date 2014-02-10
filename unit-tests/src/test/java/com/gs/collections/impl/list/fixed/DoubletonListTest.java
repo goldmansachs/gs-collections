@@ -161,7 +161,7 @@ public class DoubletonListTest extends AbstractMemoryEfficientMutableListTestCas
     {
         MutableList<String> result = Lists.mutable.of();
         MutableList<String> source = this.classUnderTest();
-        source.forEach(CollectionAddProcedure.<String>on(result));
+        source.forEach(CollectionAddProcedure.on(result));
         Assert.assertEquals(FastList.newListWith("1", "2"), result);
     }
 
@@ -187,7 +187,7 @@ public class DoubletonListTest extends AbstractMemoryEfficientMutableListTestCas
     public void testForEachWith()
     {
         MutableList<String> result = Lists.mutable.of();
-        this.list.forEachWith(Procedures2.fromProcedure(CollectionAddProcedure.<String>on(result)), null);
+        this.list.forEachWith(Procedures2.fromProcedure(CollectionAddProcedure.on(result)), null);
         Assert.assertEquals(FastList.newListWith("1", "2"), result);
     }
 

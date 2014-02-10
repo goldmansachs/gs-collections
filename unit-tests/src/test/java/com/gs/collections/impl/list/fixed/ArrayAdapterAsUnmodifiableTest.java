@@ -24,6 +24,6 @@ public class ArrayAdapterAsUnmodifiableTest extends UnmodifiableMutableListTestC
     @Override
     protected MutableList<Integer> getCollection()
     {
-        return ArrayAdapter.<Integer>newArrayWith(1).asUnmodifiable();
+        return ArrayAdapter.newArrayWith(1).asUnmodifiable();
     }
 }

@@ -29,7 +29,7 @@ public class MapAdapterSerializationTest
                 "rO0ABXNyAC5jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5NYXBBZGFwdGVyAAAA\n"
                         + "AAAAAAECAAFMAAhkZWxlZ2F0ZXQAD0xqYXZhL3V0aWwvTWFwO3hwc3IALmNvbS5ncy5jb2xsZWN0\n"
                         + "aW9ucy5pbXBsLm1hcC5tdXRhYmxlLlVuaWZpZWRNYXAAAAAAAAAAAQwAAHhwdwgAAAAAP0AAAHg=\n",
-                new MapAdapter<Object, Object>(UnifiedMap.<Object, Object>newMap()));
+                new MapAdapter<Object, Object>(UnifiedMap.newMap()));
     }
 
     @Test
@@ -38,7 +38,7 @@ public class MapAdapterSerializationTest
         Verify.assertSerializedForm(
                 1L,
                 UnifiedMapTest.UNIFIED_MAP_KEY_SET,
-                new MapAdapter<Object, Object>(UnifiedMap.<Object, Object>newMap()).keySet());
+                new MapAdapter<Object, Object>(UnifiedMap.newMap()).keySet());
     }
 
     @Test
@@ -47,7 +47,7 @@ public class MapAdapterSerializationTest
         Verify.assertSerializedForm(
                 1L,
                 UnifiedMapTest.UNIFIED_MAP_ENTRY_SET,
-                new MapAdapter<Object, Object>(UnifiedMap.<Object, Object>newMap()).entrySet());
+                new MapAdapter<Object, Object>(UnifiedMap.newMap()).entrySet());
     }
 
     @Test
@@ -56,6 +56,6 @@ public class MapAdapterSerializationTest
         Verify.assertSerializedForm(
                 1L,
                 UnifiedMapTest.UNIFIED_MAP_VALUES,
-                new MapAdapter<Object, Object>(UnifiedMap.<Object, Object>newMap()).values());
+                new MapAdapter<Object, Object>(UnifiedMap.newMap()).values());
     }
 }

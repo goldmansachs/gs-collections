@@ -98,14 +98,14 @@ public class ImmutableEmptyListTest extends AbstractImmutableListTestCase
         {
             public void run()
             {
-                list.forEach(0, list.size() - 1, CollectionAddProcedure.<Integer>on(result));
+                list.forEach(0, list.size() - 1, CollectionAddProcedure.on(result));
             }
         });
         Verify.assertThrows(IllegalArgumentException.class, new Runnable()
         {
             public void run()
             {
-                list.forEach(list.size() - 1, 0, CollectionAddProcedure.<Integer>on(reverseResult));
+                list.forEach(list.size() - 1, 0, CollectionAddProcedure.on(reverseResult));
             }
         });
     }
@@ -121,14 +121,14 @@ public class ImmutableEmptyListTest extends AbstractImmutableListTestCase
         {
             public void run()
             {
-                list.forEachWithIndex(0, list.size() - 1, ObjectIntProcedures.fromProcedure(CollectionAddProcedure.<Integer>on(result)));
+                list.forEachWithIndex(0, list.size() - 1, ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(result)));
             }
         });
         Verify.assertThrows(IllegalArgumentException.class, new Runnable()
         {
             public void run()
             {
-                list.forEachWithIndex(list.size() - 1, 0, ObjectIntProcedures.fromProcedure(CollectionAddProcedure.<Integer>on(reverseResult)));
+                list.forEachWithIndex(list.size() - 1, 0, ObjectIntProcedures.fromProcedure(CollectionAddProcedure.on(reverseResult)));
             }
         });
     }
@@ -319,11 +319,11 @@ public class ImmutableEmptyListTest extends AbstractImmutableListTestCase
 
         ImmutableList<Pair<Integer, Object>> pairs = immutableList.zip(nulls);
         Assert.assertEquals(immutableList, pairs.collect(Functions.<Integer>firstOfPair()));
-        Assert.assertEquals(nulls, pairs.collect(Functions.<Object>secondOfPair()));
+        Assert.assertEquals(nulls, pairs.collect(Functions.secondOfPair()));
 
         ImmutableList<Pair<Integer, Object>> pairsPlusOne = immutableList.zip(nullsPlusOne);
         Assert.assertEquals(immutableList, pairsPlusOne.collect(Functions.<Integer>firstOfPair()));
-        Assert.assertEquals(nulls, pairsPlusOne.collect(Functions.<Object>secondOfPair()));
+        Assert.assertEquals(nulls, pairsPlusOne.collect(Functions.secondOfPair()));
 
         Assert.assertEquals(immutableList.zip(nulls), immutableList.zip(nulls, FastList.<Pair<Integer, Object>>newList()));
     }

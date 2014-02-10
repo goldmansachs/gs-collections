@@ -17,7 +17,6 @@
 package com.gs.collections.impl.map.mutable;
 
 import com.gs.collections.api.map.MutableMap;
-import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.factory.Lists;
@@ -49,13 +48,13 @@ public class UnmodifiableMutableMapTest extends MutableMapTestCase
     @Override
     public <K, V> MutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2)
     {
-        return new UnmodifiableMutableMap<K, V>(UnifiedMap.<K, V>newWithKeysValues(key1, value1, key2, value2));
+        return new UnmodifiableMutableMap<K, V>(UnifiedMap.newWithKeysValues(key1, value1, key2, value2));
     }
 
     @Override
     public <K, V> MutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3)
     {
-        return new UnmodifiableMutableMap<K, V>(UnifiedMap.<K, V>newWithKeysValues(
+        return new UnmodifiableMutableMap<K, V>(UnifiedMap.newWithKeysValues(
                 key1, value1, key2, value2, key3, value3));
     }
 
@@ -63,7 +62,7 @@ public class UnmodifiableMutableMapTest extends MutableMapTestCase
     public <K, V> MutableMap<K, V> newMapWithKeysValues(
             K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
     {
-        return new UnmodifiableMutableMap<K, V>(UnifiedMap.<K, V>newWithKeysValues(
+        return new UnmodifiableMutableMap<K, V>(UnifiedMap.newWithKeysValues(
                 key1, value1, key2, value2, key3, value3, key4, value4));
     }
 
@@ -387,7 +386,7 @@ public class UnmodifiableMutableMapTest extends MutableMapTestCase
     public void withAllKeyValues()
     {
         this.newMapWithKeysValues("A", 1, "B", 2).withAllKeyValues(
-                FastList.<Pair<String, Integer>>newListWith(Tuples.pair("B", 22), Tuples.pair("C", 3)));
+                FastList.newListWith(Tuples.pair("B", 22), Tuples.pair("C", 3)));
     }
 
     @Override

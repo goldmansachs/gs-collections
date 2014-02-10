@@ -248,7 +248,7 @@ public final class Interval
     public static MutableSet<Integer> toSet(int from, int to)
     {
         MutableSet<Integer> targetCollection = UnifiedSet.newSet();
-        Interval.fromTo(from, to).forEach(CollectionAddProcedure.<Integer>on(targetCollection));
+        Interval.fromTo(from, to).forEach(CollectionAddProcedure.on(targetCollection));
         return targetCollection;
     }
 
@@ -661,7 +661,7 @@ public final class Interval
 
     public <R extends Collection<Integer>> R addAllTo(R targetCollection)
     {
-        this.forEach(CollectionAddProcedure.<Integer>on(targetCollection));
+        this.forEach(CollectionAddProcedure.on(targetCollection));
         return targetCollection;
     }
 

@@ -1461,7 +1461,7 @@ public final class Verify extends Assert
     {
         try
         {
-            Assert.assertTrue(message, Predicates.<T>anySatisfy(predicate).accept(iterable));
+            Assert.assertTrue(message, Predicates.anySatisfy(predicate).accept(iterable));
         }
         catch (AssertionError e)
         {

@@ -118,7 +118,7 @@ public abstract class MapIterableTestCase
     public void isEmpty()
     {
         Assert.assertFalse(this.newMapWithKeysValues(1, "1", 2, "2").isEmpty());
-        Assert.assertTrue(this.<Object, Object>newMap().isEmpty());
+        Assert.assertTrue(this.newMap().isEmpty());
     }
 
     @Test
@@ -171,7 +171,7 @@ public abstract class MapIterableTestCase
     {
         MutableBag<String> result = Bags.mutable.of();
         MapIterable<Integer, String> map = this.newMapWithKeysValues(1, "One", 2, "Two", 3, "Three", 4, "Four");
-        map.forEach(CollectionAddProcedure.<String>on(result));
+        map.forEach(CollectionAddProcedure.on(result));
         Assert.assertEquals(Bags.mutable.of("One", "Two", "Three", "Four"), result);
     }
 
@@ -215,7 +215,7 @@ public abstract class MapIterableTestCase
     {
         UnifiedSet<Integer> result = UnifiedSet.newSet();
         MapIterable<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
-        map.forEachKey(CollectionAddProcedure.<Integer>on(result));
+        map.forEachKey(CollectionAddProcedure.on(result));
         Verify.assertSetsEqual(UnifiedSet.newSetWith(1, 2, 3), result);
     }
 
@@ -224,7 +224,7 @@ public abstract class MapIterableTestCase
     {
         UnifiedSet<String> result = UnifiedSet.newSet();
         MapIterable<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
-        map.forEachValue(CollectionAddProcedure.<String>on(result));
+        map.forEachValue(CollectionAddProcedure.on(result));
         Verify.assertSetsEqual(UnifiedSet.newSetWith("1", "2", "3"), result);
     }
 
@@ -1199,13 +1199,13 @@ public abstract class MapIterableTestCase
                 pairs.collect(Functions.<String>firstOfPair()).toSet());
         Assert.assertEquals(
                 nulls,
-                pairs.collect(Functions.<Object>secondOfPair(), Lists.mutable.of()));
+                pairs.collect(Functions.secondOfPair(), Lists.mutable.of()));
 
         RichIterable<Pair<String, Object>> pairsPlusOne = map.zip(nullsPlusOne);
         Assert.assertEquals(
                 map.toSet(),
                 pairsPlusOne.collect(Functions.<String>firstOfPair()).toSet());
-        Assert.assertEquals(nulls, pairsPlusOne.collect(Functions.<Object>secondOfPair(), Lists.mutable.of()));
+        Assert.assertEquals(nulls, pairsPlusOne.collect(Functions.secondOfPair(), Lists.mutable.of()));
 
         RichIterable<Pair<String, Object>> pairsMinusOne = map.zip(nullsMinusOne);
         Assert.assertEquals(map.size() - 1, pairsMinusOne.size());

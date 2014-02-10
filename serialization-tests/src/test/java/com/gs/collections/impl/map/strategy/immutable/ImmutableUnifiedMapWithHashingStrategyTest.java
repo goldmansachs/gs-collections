@@ -34,6 +34,6 @@ public class ImmutableUnifiedMapWithHashingStrategyTest
                         + "ZWdpZXMkRGVmYXVsdFN0cmF0ZWd5AAAAAAAAAAECAAB4cHcEAAAAAnNyABFqYXZhLmxhbmcuSW50\n"
                         + "ZWdlchLioKT3gYc4AgABSQAFdmFsdWV4cgAQamF2YS5sYW5nLk51bWJlcoaslR0LlOCLAgAAeHAA\n"
                         + "AAABcQB+AAZzcQB+AAQAAAACcQB+AAd4",
-                new ImmutableUnifiedMapWithHashingStrategy<Integer, Integer>(HashingStrategies.<Object>defaultStrategy(), Tuples.pair(1, 1), Tuples.pair(2, 2)));
+                new ImmutableUnifiedMapWithHashingStrategy<Integer, Integer>(HashingStrategies.defaultStrategy(), Tuples.pair(1, 1), Tuples.pair(2, 2)));
     }
 }

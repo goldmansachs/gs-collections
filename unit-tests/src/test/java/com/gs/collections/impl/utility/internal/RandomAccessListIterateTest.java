@@ -65,13 +65,13 @@ public class RandomAccessListIterateTest
     @Test(expected = IllegalArgumentException.class)
     public void forEachWithNegativeFroms()
     {
-        RandomAccessListIterate.forEach(FastList.<Object>newList(), -1, 1, DoNothingProcedure.DO_NOTHING);
+        RandomAccessListIterate.forEach(FastList.newList(), -1, 1, DoNothingProcedure.DO_NOTHING);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void forEachWithNegativeTos()
     {
-        RandomAccessListIterate.forEach(FastList.<Object>newList(), 1, -1, DoNothingProcedure.DO_NOTHING);
+        RandomAccessListIterate.forEach(FastList.newList(), 1, -1, DoNothingProcedure.DO_NOTHING);
     }
 
     @Test

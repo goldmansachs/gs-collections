@@ -101,7 +101,7 @@ public class CollectLongToObjectIterableTest
     public void selectInstancesOf()
     {
         Assert.assertEquals(
-                FastList.<Long>newListWith(1L, 2L, 3L, 4L, 5L),
+                FastList.newListWith(1L, 2L, 3L, 4L, 5L),
                 this.newPrimitiveWith(1L, 2L, 3L, 4L, 5L).selectInstancesOf(Long.class).toList());
     }
 

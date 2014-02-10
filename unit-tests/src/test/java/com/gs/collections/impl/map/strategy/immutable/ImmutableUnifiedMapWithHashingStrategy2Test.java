@@ -35,7 +35,7 @@ public class ImmutableUnifiedMapWithHashingStrategy2Test extends MapIterableTest
     protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2)
     {
         return new ImmutableUnifiedMapWithHashingStrategy<K, V>(
-                UnifiedMapWithHashingStrategy.<K, V>newWithKeysValues(HashingStrategies.nullSafeHashingStrategy(
+                UnifiedMapWithHashingStrategy.newWithKeysValues(HashingStrategies.nullSafeHashingStrategy(
                         HashingStrategies.<K>defaultStrategy()), key1, value1, key2, value2));
     }
 
@@ -43,7 +43,7 @@ public class ImmutableUnifiedMapWithHashingStrategy2Test extends MapIterableTest
     protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3)
     {
         return new ImmutableUnifiedMapWithHashingStrategy<K, V>(
-                UnifiedMapWithHashingStrategy.<K, V>newWithKeysValues(HashingStrategies.nullSafeHashingStrategy(
+                UnifiedMapWithHashingStrategy.newWithKeysValues(HashingStrategies.nullSafeHashingStrategy(
                         HashingStrategies.<K>defaultStrategy()), key1, value1, key2, value2, key3, value3));
     }
 
@@ -51,7 +51,7 @@ public class ImmutableUnifiedMapWithHashingStrategy2Test extends MapIterableTest
     protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
     {
         return new ImmutableUnifiedMapWithHashingStrategy<K, V>(
-                UnifiedMapWithHashingStrategy.<K, V>newMapWith(HashingStrategies.nullSafeHashingStrategy(
+                UnifiedMapWithHashingStrategy.newMapWith(HashingStrategies.nullSafeHashingStrategy(
                         HashingStrategies.<K>defaultStrategy()), Tuples.pair(key1, value1), Tuples.pair(key2, value2), Tuples.pair(key3, value3), Tuples.pair(key4, value4)));
     }
 }

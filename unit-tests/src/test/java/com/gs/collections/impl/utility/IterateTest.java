@@ -115,7 +115,7 @@ public class IterateTest
     public void addAllTo()
     {
         Verify.assertContainsAll(
-                Iterate.addAllTo(FastList.<Integer>newListWith(1, 2, 3), FastList.<Integer>newList()), 1, 2, 3);
+                Iterate.addAllTo(FastList.newListWith(1, 2, 3), FastList.<Integer>newList()), 1, 2, 3);
     }
 
     @Test
@@ -135,7 +135,7 @@ public class IterateTest
         Assert.assertArrayEquals(expected, Iterate.toArray(Interval.oneTo(5)));
         Assert.assertArrayEquals(expected, Iterate.toArray(Interval.oneTo(5).toList()));
         Assert.assertArrayEquals(expected, Iterate.toArray(Interval.oneTo(5).asLazy()));
-        Assert.assertArrayEquals(expected, Iterate.toArray(Interval.oneTo(5).toSortedMap(Functions.<Object>getPassThru(), Functions.<Object>getPassThru())));
+        Assert.assertArrayEquals(expected, Iterate.toArray(Interval.oneTo(5).toSortedMap(Functions.getPassThru(), Functions.getPassThru())));
         Assert.assertArrayEquals(expected, Iterate.toArray(new IterableAdapter<Integer>(Interval.oneTo(5))));
     }
 
@@ -152,7 +152,7 @@ public class IterateTest
         Assert.assertArrayEquals(expected, Iterate.toArray(Interval.oneTo(5), new Object[5]));
         Assert.assertArrayEquals(expected, Iterate.toArray(Interval.oneTo(5).toList(), new Object[5]));
         Assert.assertArrayEquals(expected, Iterate.toArray(Interval.oneTo(5).asLazy(), new Object[5]));
-        Assert.assertArrayEquals(expected, Iterate.toArray(Interval.oneTo(5).toSortedMap(Functions.<Object>getPassThru(), Functions.<Object>getPassThru()), new Object[5]));
+        Assert.assertArrayEquals(expected, Iterate.toArray(Interval.oneTo(5).toSortedMap(Functions.getPassThru(), Functions.getPassThru()), new Object[5]));
         Assert.assertArrayEquals(expected, Iterate.toArray(new IterableAdapter<Integer>(Interval.oneTo(5)), new Object[5]));
         Assert.assertArrayEquals(new Integer[]{1, 2, 3, 4, 5, 6, 7}, Iterate.toArray(new IterableAdapter<Integer>(Interval.oneTo(7)), new Object[5]));
     }
@@ -161,7 +161,7 @@ public class IterateTest
     public void fromToDoit()
     {
         MutableList<Integer> list = Lists.mutable.of();
-        Interval.fromTo(6, 10).forEach(CollectionAddProcedure.<Integer>on(list));
+        Interval.fromTo(6, 10).forEach(CollectionAddProcedure.on(list));
         Verify.assertContainsAll(list, 6, 10);
     }
 
@@ -1176,7 +1176,7 @@ public class IterateTest
         {
             public void run()
             {
-                Iterate.collect(null, Functions.<Object>getPassThru());
+                Iterate.collect(null, Functions.getPassThru());
             }
         });
     }
@@ -1458,7 +1458,7 @@ public class IterateTest
         {
             public void run()
             {
-                Iterate.collect(null, Functions.<Object>getPassThru(), null);
+                Iterate.collect(null, Functions.getPassThru(), null);
             }
         });
     }
@@ -2096,7 +2096,7 @@ public class IterateTest
     {
         this.zip(FastList.newListWith("1", "2", "3", "4", "5", "6", "7"));
         this.zip(Arrays.asList("1", "2", "3", "4", "5", "6", "7"));
-        this.zip(new HashSet<String>(FastList.<String>newListWith("1", "2", "3", "4", "5", "6", "7")));
+        this.zip(new HashSet<String>(FastList.newListWith("1", "2", "3", "4", "5", "6", "7")));
         this.zip(FastList.newListWith("1", "2", "3", "4", "5", "6", "7").asLazy());
         this.zip(new ArrayList<String>(Interval.oneTo(101).collect(Functions.getToString()).toList()));
         Verify.assertThrows(IllegalArgumentException.class, new Runnable()
@@ -2124,7 +2124,7 @@ public class IterateTest
                 Iterate.collect(pairs, Functions.<String>firstOfPair(), UnifiedSet.<String>newSet()));
         Assert.assertEquals(
                 nulls,
-                Iterate.collect(pairs, Functions.<Object>secondOfPair(), Lists.mutable.of()));
+                Iterate.collect(pairs, Functions.secondOfPair(), Lists.mutable.of()));
     }
 
     @Test
@@ -2132,7 +2132,7 @@ public class IterateTest
     {
         this.zipWithIndex(FastList.newListWith("1", "2", "3", "4", "5", "6", "7"));
         this.zipWithIndex(Arrays.asList("1", "2", "3", "4", "5", "6", "7"));
-        this.zipWithIndex(new HashSet<String>(FastList.<String>newListWith("1", "2", "3", "4", "5", "6", "7")));
+        this.zipWithIndex(new HashSet<String>(FastList.newListWith("1", "2", "3", "4", "5", "6", "7")));
         this.zipWithIndex(FastList.newListWith("1", "2", "3", "4", "5", "6", "7").asLazy());
         this.zipWithIndex(Lists.immutable.of("1", "2", "3", "4", "5", "6", "7"));
         this.zipWithIndex(new ArrayList<String>(Interval.oneTo(101).collect(Functions.getToString()).toList()));
@@ -2378,7 +2378,7 @@ public class IterateTest
     @Test
     public void sumOfLong()
     {
-        Assert.assertEquals(6L, Iterate.sumOfLong(FastList.<Long>newListWith(Long.valueOf(1), Long.valueOf(2), Long.valueOf(3)), new LongFunction<Long>()
+        Assert.assertEquals(6L, Iterate.sumOfLong(FastList.newListWith(Long.valueOf(1), Long.valueOf(2), Long.valueOf(3)), new LongFunction<Long>()
         {
             public long longValueOf(Long value)
             {
@@ -2397,7 +2397,7 @@ public class IterateTest
     @Test
     public void sumOfFloat()
     {
-        Assert.assertEquals(6.0d, Iterate.sumOfFloat(FastList.<Float>newListWith(Float.valueOf(1), Float.valueOf(2), Float.valueOf(3)), new FloatFunction<Float>()
+        Assert.assertEquals(6.0d, Iterate.sumOfFloat(FastList.newListWith(Float.valueOf(1), Float.valueOf(2), Float.valueOf(3)), new FloatFunction<Float>()
         {
             public float floatValueOf(Float value)
             {
@@ -2416,7 +2416,7 @@ public class IterateTest
     @Test
     public void sumOfDouble()
     {
-        Assert.assertEquals(6.0d, Iterate.sumOfDouble(FastList.<Double>newListWith(Double.valueOf(1), Double.valueOf(2), Double.valueOf(3)), new DoubleFunction<Double>()
+        Assert.assertEquals(6.0d, Iterate.sumOfDouble(FastList.newListWith(Double.valueOf(1), Double.valueOf(2), Double.valueOf(3)), new DoubleFunction<Double>()
         {
             public double doubleValueOf(Double value)
             {
@@ -2435,14 +2435,14 @@ public class IterateTest
     @Test
     public void minBy()
     {
-        Assert.assertEquals(Integer.valueOf(1), Iterate.minBy(FastList.<Integer>newListWith(1, 2, 3), Functions.getIntegerPassThru()));
-        Assert.assertEquals(Integer.valueOf(1), Iterate.minBy(FastList.<Integer>newListWith(3, 2, 1), Functions.getIntegerPassThru()));
-        Assert.assertEquals(Integer.valueOf(1), Iterate.minBy(FastList.<Integer>newListWith(1, 2, 3).asSynchronized(), Functions.getIntegerPassThru()));
-        Assert.assertEquals(Integer.valueOf(1), Iterate.minBy(FastList.<Integer>newListWith(3, 2, 1).asSynchronized(), Functions.getIntegerPassThru()));
-        Assert.assertEquals(Integer.valueOf(1), Iterate.minBy(Arrays.<Integer>asList(1, 2, 3), Functions.getIntegerPassThru()));
-        Assert.assertEquals(Integer.valueOf(1), Iterate.minBy(Arrays.<Integer>asList(3, 2, 1), Functions.getIntegerPassThru()));
-        Assert.assertEquals(Integer.valueOf(1), Iterate.minBy(new LinkedList<Integer>(Arrays.<Integer>asList(1, 2, 3)), Functions.getIntegerPassThru()));
-        Assert.assertEquals(Integer.valueOf(1), Iterate.minBy(new LinkedList<Integer>(Arrays.<Integer>asList(3, 2, 1)), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(1), Iterate.minBy(FastList.newListWith(1, 2, 3), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(1), Iterate.minBy(FastList.newListWith(3, 2, 1), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(1), Iterate.minBy(FastList.newListWith(1, 2, 3).asSynchronized(), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(1), Iterate.minBy(FastList.newListWith(3, 2, 1).asSynchronized(), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(1), Iterate.minBy(Arrays.asList(1, 2, 3), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(1), Iterate.minBy(Arrays.asList(3, 2, 1), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(1), Iterate.minBy(new LinkedList<Integer>(Arrays.asList(1, 2, 3)), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(1), Iterate.minBy(new LinkedList<Integer>(Arrays.asList(3, 2, 1)), Functions.getIntegerPassThru()));
     }
 
     @Test
@@ -2487,14 +2487,14 @@ public class IterateTest
     @Test
     public void maxBy()
     {
-        Assert.assertEquals(Integer.valueOf(3), Iterate.maxBy(FastList.<Integer>newListWith(1, 2, 3), Functions.getIntegerPassThru()));
-        Assert.assertEquals(Integer.valueOf(3), Iterate.maxBy(FastList.<Integer>newListWith(3, 2, 1), Functions.getIntegerPassThru()));
-        Assert.assertEquals(Integer.valueOf(3), Iterate.maxBy(FastList.<Integer>newListWith(1, 2, 3).asSynchronized(), Functions.getIntegerPassThru()));
-        Assert.assertEquals(Integer.valueOf(3), Iterate.maxBy(FastList.<Integer>newListWith(3, 2, 1).asSynchronized(), Functions.getIntegerPassThru()));
-        Assert.assertEquals(Integer.valueOf(3), Iterate.maxBy(Arrays.<Integer>asList(1, 2, 3), Functions.getIntegerPassThru()));
-        Assert.assertEquals(Integer.valueOf(3), Iterate.maxBy(Arrays.<Integer>asList(3, 2, 1), Functions.getIntegerPassThru()));
-        Assert.assertEquals(Integer.valueOf(3), Iterate.maxBy(new LinkedList<Integer>(Arrays.<Integer>asList(1, 2, 3)), Functions.getIntegerPassThru()));
-        Assert.assertEquals(Integer.valueOf(3), Iterate.maxBy(new LinkedList<Integer>(Arrays.<Integer>asList(3, 2, 1)), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(3), Iterate.maxBy(FastList.newListWith(1, 2, 3), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(3), Iterate.maxBy(FastList.newListWith(3, 2, 1), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(3), Iterate.maxBy(FastList.newListWith(1, 2, 3).asSynchronized(), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(3), Iterate.maxBy(FastList.newListWith(3, 2, 1).asSynchronized(), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(3), Iterate.maxBy(Arrays.asList(1, 2, 3), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(3), Iterate.maxBy(Arrays.asList(3, 2, 1), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(3), Iterate.maxBy(new LinkedList<Integer>(Arrays.asList(1, 2, 3)), Functions.getIntegerPassThru()));
+        Assert.assertEquals(Integer.valueOf(3), Iterate.maxBy(new LinkedList<Integer>(Arrays.asList(3, 2, 1)), Functions.getIntegerPassThru()));
     }
 
     @Test

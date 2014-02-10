@@ -236,13 +236,13 @@ public final class SortedSetAdapter<T>
     @Override
     public MutableSortedSet<T> select(Predicate<? super T> predicate)
     {
-        return Iterate.select(this.delegate, predicate, TreeSortedSet.<T>newSet(this.comparator()));
+        return Iterate.select(this.delegate, predicate, TreeSortedSet.newSet(this.comparator()));
     }
 
     @Override
     public MutableSortedSet<T> reject(Predicate<? super T> predicate)
     {
-        return Iterate.reject(this.delegate, predicate, TreeSortedSet.<T>newSet(this.comparator()));
+        return Iterate.reject(this.delegate, predicate, TreeSortedSet.newSet(this.comparator()));
     }
 
     @Override
@@ -378,13 +378,13 @@ public final class SortedSetAdapter<T>
     @Override
     public <P> MutableSortedSet<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return Iterate.selectWith(this.delegate, predicate, parameter, TreeSortedSet.<T>newSet(this.comparator()));
+        return Iterate.selectWith(this.delegate, predicate, parameter, TreeSortedSet.newSet(this.comparator()));
     }
 
     @Override
     public <P> MutableSortedSet<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        return Iterate.rejectWith(this.delegate, predicate, parameter, TreeSortedSet.<T>newSet(this.comparator()));
+        return Iterate.rejectWith(this.delegate, predicate, parameter, TreeSortedSet.newSet(this.comparator()));
     }
 
     @Override
@@ -408,7 +408,7 @@ public final class SortedSetAdapter<T>
             TreeSortedSet<Pair<T, Integer>> pairs = TreeSortedSet.newSet(Comparators.<Pair<T, Integer>, T>byFunction(Functions.<T>firstOfPair(), Comparators.<T>naturalOrder()));
             return Iterate.zipWithIndex(this.delegate, pairs);
         }
-        return Iterate.zipWithIndex(this.delegate, TreeSortedSet.<Pair<T, Integer>>newSet(Comparators.<T>byFirstOfPair(comparator)));
+        return Iterate.zipWithIndex(this.delegate, TreeSortedSet.<Pair<T, Integer>>newSet(Comparators.byFirstOfPair(comparator)));
     }
 
     public MutableSortedSet<T> distinct()
@@ -418,7 +418,7 @@ public final class SortedSetAdapter<T>
 
     public MutableSortedSet<T> union(SetIterable<? extends T> set)
     {
-        return this.unionInto(set, TreeSortedSet.<T>newSet(this.comparator()));
+        return this.unionInto(set, TreeSortedSet.newSet(this.comparator()));
     }
 
     public <R extends Set<T>> R unionInto(SetIterable<? extends T> set, R targetSet)
@@ -428,7 +428,7 @@ public final class SortedSetAdapter<T>
 
     public MutableSortedSet<T> intersect(SetIterable<? extends T> set)
     {
-        return this.intersectInto(set, TreeSortedSet.<T>newSet(this.comparator()));
+        return this.intersectInto(set, TreeSortedSet.newSet(this.comparator()));
     }
 
     public <R extends Set<T>> R intersectInto(SetIterable<? extends T> set, R targetSet)
@@ -438,7 +438,7 @@ public final class SortedSetAdapter<T>
 
     public MutableSortedSet<T> difference(SetIterable<? extends T> subtrahendSet)
     {
-        return this.differenceInto(subtrahendSet, TreeSortedSet.<T>newSet(this.comparator()));
+        return this.differenceInto(subtrahendSet, TreeSortedSet.newSet(this.comparator()));
     }
 
     public <R extends Set<T>> R differenceInto(SetIterable<? extends T> subtrahendSet, R targetSet)
@@ -448,7 +448,7 @@ public final class SortedSetAdapter<T>
 
     public MutableSortedSet<T> symmetricDifference(SetIterable<? extends T> setB)
     {
-        return this.symmetricDifferenceInto(setB, TreeSortedSet.<T>newSet(this.comparator()));
+        return this.symmetricDifferenceInto(setB, TreeSortedSet.newSet(this.comparator()));
     }
 
     public <R extends Set<T>> R symmetricDifferenceInto(SetIterable<? extends T> set, R targetSet)

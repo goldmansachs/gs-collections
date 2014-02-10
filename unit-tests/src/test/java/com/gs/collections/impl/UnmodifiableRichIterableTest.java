@@ -670,7 +670,7 @@ public class UnmodifiableRichIterableTest
                 aggregate.addAndGet(value);
             }
         };
-        RichIterable<Integer> numbers = UnmodifiableRichIterable.of(FastList.<Integer>newListWith(1, 1, 1, 2, 2, 3));
+        RichIterable<Integer> numbers = UnmodifiableRichIterable.of(FastList.newListWith(1, 1, 1, 2, 2, 3));
         MapIterable<String, AtomicInteger> aggregation = numbers.aggregateInPlaceBy(Functions.getToString(), valueCreator, sumAggregator);
         Assert.assertEquals(3, aggregation.get("1").intValue());
         Assert.assertEquals(4, aggregation.get("2").intValue());
@@ -694,7 +694,7 @@ public class UnmodifiableRichIterableTest
                 return aggregate + value;
             }
         };
-        RichIterable<Integer> numbers = UnmodifiableRichIterable.of(FastList.<Integer>newListWith(1, 1, 1, 2, 2, 3));
+        RichIterable<Integer> numbers = UnmodifiableRichIterable.of(FastList.newListWith(1, 1, 1, 2, 2, 3));
         MapIterable<String, Integer> aggregation = numbers.aggregateBy(Functions.getToString(), valueCreator, sumAggregator);
         Assert.assertEquals(3, aggregation.get("1").intValue());
         Assert.assertEquals(4, aggregation.get("2").intValue());

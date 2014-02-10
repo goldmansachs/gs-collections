@@ -595,7 +595,7 @@ public class UnifiedMapWithHashingStrategyTest extends UnifiedMapTestCase
     @Test
     public void getCollidingBuckets()
     {
-        UnifiedMapWithHashingStrategy<Object, Object> map = UnifiedMapWithHashingStrategy.newMap(HashingStrategies.<Object>defaultStrategy());
+        UnifiedMapWithHashingStrategy<Object, Object> map = UnifiedMapWithHashingStrategy.newMap(HashingStrategies.defaultStrategy());
         Assert.assertEquals(0, map.getCollidingBuckets());
 
         UnifiedMapWithHashingStrategy<Integer, Integer> map2 = this.mapWithCollisionsOfSize(2);

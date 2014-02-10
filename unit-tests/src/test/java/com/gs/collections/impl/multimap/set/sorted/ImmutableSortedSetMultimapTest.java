@@ -75,7 +75,7 @@ public class ImmutableSortedSetMultimapTest extends AbstractImmutableMultimapTes
         ImmutableSortedSetMultimap<Integer, Integer> deserialized = SerializeTestHelper.serializeDeserialize(immutableMap);
         Verify.assertSortedSetsEqual(TreeSortedSet.newSetWith(Comparators.<Integer>reverseNaturalOrder(), 1, 2, 3, 4),
                 deserialized.get(1).castToSortedSet());
-        Verify.assertListsEqual(FastList.<Integer>newListWith(10, 9, 8),
+        Verify.assertListsEqual(FastList.newListWith(10, 9, 8),
                 deserialized.newWithAll(3, FastList.newListWith(8, 9, 10)).get(3).toList());
     }
 

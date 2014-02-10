@@ -137,7 +137,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     {
         MutableList<Integer> result = Lists.mutable.of();
         ImmutableSet<Integer> set = this.newSetWith(1, 2, 3, 4);
-        set.forEach(CollectionAddProcedure.<Integer>on(result));
+        set.forEach(CollectionAddProcedure.on(result));
         Verify.assertSize(4, result);
         Verify.assertContainsAll(result, 1, 2, 3, 4);
     }
@@ -379,7 +379,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
         UnifiedSet<Integer> fastSet = UnifiedSet.newSet(set1);
         Verify.assertEqualsAndHashCode(set1, fastSet);
         Assert.assertEquals(set1, new HashSet<Integer>(fastSet));
-        Verify.assertEqualsAndHashCode(set1, UnifiedSet.<Integer>newSetWith(1, 2, 3, 4));
+        Verify.assertEqualsAndHashCode(set1, UnifiedSet.newSetWith(1, 2, 3, 4));
     }
 
     @Test
@@ -460,7 +460,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
         ImmutableSet<Integer> integers = this.newSetWith(1, 2, 3, 4);
         MutableMap<String, String> map =
                 integers.toMap(Functions.getToString(), Functions.getToString());
-        Assert.assertEquals(UnifiedMap.<String, String>newWithKeysValues("1", "1", "2", "2", "3", "3", "4", "4"), map);
+        Assert.assertEquals(UnifiedMap.newWithKeysValues("1", "1", "2", "2", "3", "3", "4", "4"), map);
     }
 
     @Test

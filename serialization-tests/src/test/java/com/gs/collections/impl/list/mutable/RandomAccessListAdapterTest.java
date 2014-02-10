@@ -30,6 +30,6 @@ public class RandomAccessListAdapterTest
                         + "TGlzdEFkYXB0ZXIAAAAAAAAAAQIAAUwACGRlbGVnYXRldAAQTGphdmEvdXRpbC9MaXN0O3hwc3IA\n"
                         + "LWNvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLmxpc3QubXV0YWJsZS5GYXN0TGlzdAAAAAAAAAABDAAA\n"
                         + "eHB3BAAAAAB4",
-                new RandomAccessListAdapter<Object>(FastList.<Object>newList()));
+                new RandomAccessListAdapter<Object>(FastList.newList()));
     }
 }

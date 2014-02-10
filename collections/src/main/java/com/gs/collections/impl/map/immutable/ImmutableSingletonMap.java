@@ -67,7 +67,7 @@ final class ImmutableSingletonMap<K, V>
 
     public RichIterable<Pair<K, V>> keyValuesView()
     {
-        return Lists.immutable.<Pair<K, V>>of(Tuples.pair(this.key1, this.value1)).asLazy();
+        return Lists.immutable.of(Tuples.pair(this.key1, this.value1)).asLazy();
     }
 
     public boolean containsKey(Object key)

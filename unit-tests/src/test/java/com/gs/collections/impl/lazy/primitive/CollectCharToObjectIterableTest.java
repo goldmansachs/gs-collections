@@ -101,7 +101,7 @@ public class CollectCharToObjectIterableTest
     public void selectInstancesOf()
     {
         Assert.assertEquals(
-                FastList.<Character>newListWith('1', '2', '3', '4', '5'),
+                FastList.newListWith('1', '2', '3', '4', '5'),
                 this.newPrimitiveWith('1', '2', '3', '4', '5').selectInstancesOf(Character.class).toList());
     }
 

@@ -23,6 +23,6 @@ public class FastListAsUnmodifiableTest extends UnmodifiableMutableListTestCase
     @Override
     protected MutableList<Integer> getCollection()
     {
-        return FastList.<Integer>newListWith(1).asUnmodifiable();
+        return FastList.newListWith(1).asUnmodifiable();
     }
 }

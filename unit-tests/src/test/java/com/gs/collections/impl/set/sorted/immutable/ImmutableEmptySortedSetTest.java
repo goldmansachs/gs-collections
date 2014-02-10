@@ -73,16 +73,16 @@ public class ImmutableEmptySortedSetTest extends AbstractImmutableSortedSetTestC
     public void testContainsAll()
     {
         Assert.assertTrue(this.classUnderTest().containsAllIterable(UnifiedSet.<Integer>newSet()));
-        Assert.assertFalse(this.classUnderTest().containsAllIterable(UnifiedSet.<Integer>newSetWith(1)));
+        Assert.assertFalse(this.classUnderTest().containsAllIterable(UnifiedSet.newSetWith(1)));
     }
 
     @Test
     public void testNewSortedSet()
     {
-        Assert.assertSame(SortedSets.immutable.<Object>of(), SortedSets.immutable.ofAll(FastList.<Object>newList()));
-        Assert.assertSame(SortedSets.immutable.<Object>of(), SortedSets.immutable.ofSortedSet(TreeSortedSet.<Object>newSet()));
-        Assert.assertNotSame(SortedSets.immutable.<Object>of(),
-                SortedSets.immutable.ofSortedSet(TreeSortedSet.<Object>newSet(Comparators.<Object>reverseNaturalOrder())));
+        Assert.assertSame(SortedSets.immutable.of(), SortedSets.immutable.ofAll(FastList.newList()));
+        Assert.assertSame(SortedSets.immutable.of(), SortedSets.immutable.ofSortedSet(TreeSortedSet.newSet()));
+        Assert.assertNotSame(SortedSets.immutable.of(),
+                SortedSets.immutable.ofSortedSet(TreeSortedSet.newSet(Comparators.reverseNaturalOrder())));
     }
 
     @Override
@@ -90,9 +90,9 @@ public class ImmutableEmptySortedSetTest extends AbstractImmutableSortedSetTestC
     public void newWith()
     {
         Assert.assertEquals(UnifiedSet.newSetWith(1), this.classUnderTest().newWith(1));
-        Assert.assertSame(SortedSets.immutable.<Object>of(), SortedSets.immutable.of(FastList.<Object>newList().toArray()));
-        Assert.assertEquals(SortedSets.immutable.<Object>of(),
-                SortedSets.immutable.of(Comparators.<Object>naturalOrder(), FastList.<Object>newList().toArray()));
+        Assert.assertSame(SortedSets.immutable.of(), SortedSets.immutable.of(FastList.newList().toArray()));
+        Assert.assertEquals(SortedSets.immutable.of(),
+                SortedSets.immutable.of(Comparators.naturalOrder(), FastList.newList().toArray()));
 
         Assert.assertEquals(Comparators.<Integer>reverseNaturalOrder(),
                 this.classUnderTest(Comparators.<Integer>reverseNaturalOrder()).newWith(1).comparator());
@@ -335,7 +335,7 @@ public class ImmutableEmptySortedSetTest extends AbstractImmutableSortedSetTestC
                 SortedSets.immutable.<String>of().symmetricDifference(UnifiedSet.newSetWith("not present")));
 
         Verify.assertSortedSetsEqual(TreeSortedSet.newSetWith(Comparators.<Integer>reverseNaturalOrder(), 1, 2, 3, 4),
-                SortedSets.immutable.<Integer>of(Comparators.<Integer>reverseNaturalOrder()).symmetricDifference(UnifiedSet.newSetWith(1, 3, 2, 4)).castToSortedSet());
+                SortedSets.immutable.of(Comparators.<Integer>reverseNaturalOrder()).symmetricDifference(UnifiedSet.newSetWith(1, 3, 2, 4)).castToSortedSet());
     }
 
     @Override
@@ -356,7 +356,7 @@ public class ImmutableEmptySortedSetTest extends AbstractImmutableSortedSetTestC
         Verify.assertPostSerializedIdentity(immutable);
         Assert.assertNotEquals(Lists.mutable.of(), immutable);
 
-        ImmutableSortedSet<Integer> setWithComparator = this.classUnderTest(Comparators.<Object>reverseNaturalOrder());
+        ImmutableSortedSet<Integer> setWithComparator = this.classUnderTest(Comparators.reverseNaturalOrder());
         Verify.assertEqualsAndHashCode(UnifiedSet.newSet(), setWithComparator);
         Verify.assertPostSerializedEqualsAndHashCode(setWithComparator);
     }
@@ -556,15 +556,15 @@ public class ImmutableEmptySortedSetTest extends AbstractImmutableSortedSetTestC
     public void compareTo()
     {
         Assert.assertEquals(0, (long) this.classUnderTest().compareTo(this.classUnderTest()));
-        Assert.assertEquals(-1, this.classUnderTest().compareTo(TreeSortedSet.<Integer>newSetWith(1)));
-        Assert.assertEquals(-4, this.classUnderTest().compareTo(TreeSortedSet.<Integer>newSetWith(1, 2, 3, 4)));
+        Assert.assertEquals(-1, this.classUnderTest().compareTo(TreeSortedSet.newSetWith(1)));
+        Assert.assertEquals(-4, this.classUnderTest().compareTo(TreeSortedSet.newSetWith(1, 2, 3, 4)));
     }
 
     @Override
     @Test
     public void cartesianProduct()
     {
-        LazyIterable<Pair<Integer, Integer>> emptyProduct = this.classUnderTest().cartesianProduct(SortedSets.immutable.<Integer>of(1, 2, 3));
+        LazyIterable<Pair<Integer, Integer>> emptyProduct = this.classUnderTest().cartesianProduct(SortedSets.immutable.of(1, 2, 3));
         Verify.assertEmpty(emptyProduct.toList());
 
         LazyIterable<Pair<Integer, Integer>> empty2 = this.classUnderTest().cartesianProduct(TreeSortedSet.<Integer>newSet());

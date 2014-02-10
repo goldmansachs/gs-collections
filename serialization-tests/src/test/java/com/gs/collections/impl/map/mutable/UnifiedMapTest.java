@@ -40,7 +40,7 @@ public class UnifiedMapTest
                 1L,
                 "rO0ABXNyAC5jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAubXV0YWJsZS5VbmlmaWVkTWFwAAAA\n"
                         + "AAAAAAEMAAB4cHcIAAAAAD9AAAB4",
-                UnifiedMap.<Object, Object>newMap());
+                UnifiedMap.newMap());
     }
 
     @Test
@@ -49,7 +49,7 @@ public class UnifiedMapTest
         Verify.assertSerializedForm(
                 1L,
                 UNIFIED_MAP_KEY_SET,
-                UnifiedMap.<Object, Object>newMap().keySet());
+                UnifiedMap.newMap().keySet());
     }
 
     @Test
@@ -58,7 +58,7 @@ public class UnifiedMapTest
         Verify.assertSerializedForm(
                 1L,
                 UNIFIED_MAP_ENTRY_SET,
-                UnifiedMap.<Object, Object>newMap().entrySet());
+                UnifiedMap.newMap().entrySet());
     }
 
     @Test
@@ -66,6 +66,6 @@ public class UnifiedMapTest
     {
         Verify.assertSerializedForm(
                 UNIFIED_MAP_VALUES,
-                UnifiedMap.<Object, Object>newMap().values());
+                UnifiedMap.newMap().values());
     }
 }

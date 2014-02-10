@@ -31,6 +31,6 @@ public class UnifiedSetWithHashingStrategyTest
                         + "aWVkU2V0V2l0aEhhc2hpbmdTdHJhdGVneQAAAAAAAAABDAAAeHBzcgBHY29tLmdzLmNvbGxlY3Rp\n"
                         + "b25zLmltcGwuYmxvY2suZmFjdG9yeS5IYXNoaW5nU3RyYXRlZ2llcyREZWZhdWx0U3RyYXRlZ3kA\n"
                         + "AAAAAAAAAQIAAHhwdwgAAAAAP0AAAHg=",
-                UnifiedSetWithHashingStrategy.<Object>newSet(HashingStrategies.<Object>defaultStrategy()));
+                UnifiedSetWithHashingStrategy.newSet(HashingStrategies.defaultStrategy()));
     }
 }

@@ -34,6 +34,6 @@ public class ImmutableEntryWithHashingStrategyTest
                         + "AAECAAJMAANrZXl0ABJMamF2YS9sYW5nL09iamVjdDtMAAV2YWx1ZXEAfgADeHBwcHNyAEdjb20u\n"
                         + "Z3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5Lkhhc2hpbmdTdHJhdGVnaWVzJERlZmF1\n"
                         + "bHRTdHJhdGVneQAAAAAAAAABAgAAeHA=",
-                new ImmutableEntryWithHashingStrategy<Object, Object>(null, null, HashingStrategies.<Object>defaultStrategy()));
+                new ImmutableEntryWithHashingStrategy<Object, Object>(null, null, HashingStrategies.defaultStrategy()));
     }
 }

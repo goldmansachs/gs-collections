@@ -92,7 +92,7 @@ public class ComparatorsTest
     @Test
     public void safeNullsLow()
     {
-        SerializableComparator<Integer> comparator = Comparators.safeNullsLow(Comparators.<Integer, Integer>byFunction(Functions.getIntegerPassThru()));
+        SerializableComparator<Integer> comparator = Comparators.safeNullsLow(Comparators.byFunction(Functions.getIntegerPassThru()));
         Assert.assertEquals(-1, comparator.compare(null, 1));
         Assert.assertEquals(1, comparator.compare(1, null));
         Assert.assertEquals(0, comparator.compare(null, null));
@@ -213,7 +213,7 @@ public class ComparatorsTest
     @Test
     public void safeNullsHigh()
     {
-        SerializableComparator<Integer> comparator = Comparators.safeNullsHigh(Comparators.<Integer, Integer>byFunction(Functions.getIntegerPassThru()));
+        SerializableComparator<Integer> comparator = Comparators.safeNullsHigh(Comparators.byFunction(Functions.getIntegerPassThru()));
         Assert.assertEquals(1, comparator.compare(null, 1));
         Assert.assertEquals(-1, comparator.compare(1, null));
         Assert.assertEquals(0, comparator.compare(null, null));

@@ -28,6 +28,6 @@ public class UnifiedSetTest
                 1L,
                 "rO0ABXNyAC5jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQubXV0YWJsZS5VbmlmaWVkU2V0AAAA\n"
                         + "AAAAAAEMAAB4cHcIAAAAAD9AAAB4",
-                UnifiedSet.<Object>newSet());
+                UnifiedSet.newSet());
     }
 }

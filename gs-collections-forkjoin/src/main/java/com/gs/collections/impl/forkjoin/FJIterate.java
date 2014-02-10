@@ -497,7 +497,7 @@ public final class FJIterate
      * Same effect as {@link Iterate#select(Iterable, Predicate)}, but executed in parallel batches.
      *
      * @return The selected elements. The Collection will be of the same type as the input (List or Set)
-     *         and will be in the same order as the input (if it is an ordered collection).
+     * and will be in the same order as the input (if it is an ordered collection).
      * @see FJIterate#select(Iterable, Predicate, boolean)
      */
     public static <T> Collection<T> select(
@@ -520,7 +520,7 @@ public final class FJIterate
             Predicate<? super T> predicate,
             boolean allowReorderedResult)
     {
-        return FJIterate.<T, Collection<T>>select(iterable, predicate, null, allowReorderedResult);
+        return FJIterate.select(iterable, predicate, null, allowReorderedResult);
     }
 
     /**
@@ -588,7 +588,7 @@ public final class FJIterate
      * Same effect as {@link Iterate#reject(Iterable, Predicate)}, but executed in parallel batches.
      *
      * @return The rejected elements. The Collection will be of the same type as the input (List or Set)
-     *         and will be in the same order as the input (if it is an ordered collection).
+     * and will be in the same order as the input (if it is an ordered collection).
      * @see FJIterate#reject(Iterable, Predicate, boolean)
      */
     public static <T> Collection<T> reject(
@@ -611,7 +611,7 @@ public final class FJIterate
             Predicate<? super T> predicate,
             boolean allowReorderedResult)
     {
-        return FJIterate.<T, Collection<T>>reject(iterable, predicate, null, allowReorderedResult);
+        return FJIterate.reject(iterable, predicate, null, allowReorderedResult);
     }
 
     /**
@@ -675,7 +675,7 @@ public final class FJIterate
      * but executed in parallel batches.
      *
      * @return The collected elements. The Collection will be of the same type as the input (List or Set)
-     *         and will be in the same order as the input (if it is an ordered collection).
+     * and will be in the same order as the input (if it is an ordered collection).
      * @see FJIterate#collect(Iterable, Function, boolean)
      */
     public static <T, V> Collection<V> collect(
@@ -692,7 +692,7 @@ public final class FJIterate
      * @param allowReorderedResult If the result can be in a different order.
      *                             Allowing reordering may yield faster execution.
      * @return The collected elements. The Collection will be of the same type
-     *         (List or Set) as the input.
+     * (List or Set) as the input.
      */
     public static <T, V> Collection<V> collect(
             Iterable<T> iterable,
@@ -760,7 +760,7 @@ public final class FJIterate
             Function<? super T, ? extends Iterable<V>> function,
             boolean allowReorderedResult)
     {
-        return FJIterate.<T, V, Collection<V>>flatCollect(iterable, function, null, allowReorderedResult);
+        return FJIterate.flatCollect(iterable, function, null, allowReorderedResult);
     }
 
     public static <T, V, R extends Collection<V>> R flatCollect(
@@ -801,7 +801,7 @@ public final class FJIterate
      * but executed in parallel batches.
      *
      * @return The collected elements. The Collection will be of the same type as the input (List or Set)
-     *         and will be in the same order as the input (if it is an ordered collection).
+     * and will be in the same order as the input (if it is an ordered collection).
      * @see FJIterate#collectIf(Iterable, Predicate, Function, boolean)
      */
     public static <T, V> Collection<V> collectIf(
@@ -819,7 +819,7 @@ public final class FJIterate
      * @param allowReorderedResult If the result can be in a different order.
      *                             Allowing reordering may yield faster execution.
      * @return The collected elements. The Collection will be of the same type
-     *         as the input (List or Set)
+     * as the input (List or Set)
      */
     public static <T, V> Collection<V> collectIf(
             Iterable<T> iterable,
@@ -827,7 +827,7 @@ public final class FJIterate
             Function<? super T, V> function,
             boolean allowReorderedResult)
     {
-        return FJIterate.<T, V, Collection<V>>collectIf(iterable, predicate, function, null, allowReorderedResult);
+        return FJIterate.collectIf(iterable, predicate, function, null, allowReorderedResult);
     }
 
     /**

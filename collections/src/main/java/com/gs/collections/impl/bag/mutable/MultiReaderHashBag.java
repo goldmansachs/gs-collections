@@ -110,12 +110,12 @@ public final class MultiReaderHashBag<T>
 
     public static <T> MultiReaderHashBag<T> newBag(Iterable<T> iterable)
     {
-        return new MultiReaderHashBag<T>(HashBag.<T>newBag(iterable));
+        return new MultiReaderHashBag<T>(HashBag.newBag(iterable));
     }
 
     public static <T> MultiReaderHashBag<T> newBagWith(T... elements)
     {
-        return new MultiReaderHashBag<T>(HashBag.<T>newBagWith(elements));
+        return new MultiReaderHashBag<T>(HashBag.newBagWith(elements));
     }
 
     @Override

@@ -914,13 +914,13 @@ public class ArrayIterateTest
                 pairs.collect(Functions.<String>firstOfPair()));
         Assert.assertEquals(
                 FastList.newListWith(nulls),
-                pairs.collect(Functions.<Object>secondOfPair(), Lists.mutable.of()));
+                pairs.collect(Functions.secondOfPair(), Lists.mutable.of()));
 
         MutableList<Pair<String, Object>> pairsPlusOne = ArrayIterate.zip(array, nullsPlusOne);
         Assert.assertEquals(
                 FastList.newListWith(array),
                 pairsPlusOne.collect(Functions.<String>firstOfPair()));
-        Assert.assertEquals(FastList.newListWith(nulls), pairsPlusOne.collect(Functions.<Object>secondOfPair(), Lists.mutable.of()));
+        Assert.assertEquals(FastList.newListWith(nulls), pairsPlusOne.collect(Functions.secondOfPair(), Lists.mutable.of()));
 
         MutableList<Pair<String, Object>> pairsMinusOne = ArrayIterate.zip(array, nullsMinusOne);
         Assert.assertEquals(array.length - 1, pairsMinusOne.size());

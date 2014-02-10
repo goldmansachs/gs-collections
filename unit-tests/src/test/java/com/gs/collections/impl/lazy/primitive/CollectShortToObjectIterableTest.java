@@ -101,7 +101,7 @@ public class CollectShortToObjectIterableTest
     public void selectInstancesOf()
     {
         Assert.assertEquals(
-                FastList.<Short>newListWith((short) 1, (short) 2, (short) 3, (short) 4, (short) 5),
+                FastList.newListWith((short) 1, (short) 2, (short) 3, (short) 4, (short) 5),
                 this.newPrimitiveWith((short) 1, (short) 2, (short) 3, (short) 4, (short) 5).selectInstancesOf(Short.class).toList());
     }
 

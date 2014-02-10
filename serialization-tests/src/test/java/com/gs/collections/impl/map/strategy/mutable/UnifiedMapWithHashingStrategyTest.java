@@ -31,7 +31,7 @@ public class UnifiedMapWithHashingStrategyTest
                         + "aWVkTWFwV2l0aEhhc2hpbmdTdHJhdGVneQAAAAAAAAABDAAAeHBzcgBHY29tLmdzLmNvbGxlY3Rp\n"
                         + "b25zLmltcGwuYmxvY2suZmFjdG9yeS5IYXNoaW5nU3RyYXRlZ2llcyREZWZhdWx0U3RyYXRlZ3kA\n"
                         + "AAAAAAAAAQIAAHhwdwgAAAAAP0AAAHg=",
-                UnifiedMapWithHashingStrategy.<Object, Object>newMap(HashingStrategies.<Object>defaultStrategy()));
+                UnifiedMapWithHashingStrategy.newMap(HashingStrategies.defaultStrategy()));
     }
 
     @Test
@@ -43,7 +43,7 @@ public class UnifiedMapWithHashingStrategyTest
                         + "aWVkU2V0V2l0aEhhc2hpbmdTdHJhdGVneQAAAAAAAAABDAAAeHBzcgBHY29tLmdzLmNvbGxlY3Rp\n"
                         + "b25zLmltcGwuYmxvY2suZmFjdG9yeS5IYXNoaW5nU3RyYXRlZ2llcyREZWZhdWx0U3RyYXRlZ3kA\n"
                         + "AAAAAAAAAQIAAHhwdwgAAAAAP0AAAHg=",
-                UnifiedMapWithHashingStrategy.<Object, Object>newMap(HashingStrategies.<Object>defaultStrategy()).keySet());
+                UnifiedMapWithHashingStrategy.newMap(HashingStrategies.defaultStrategy()).keySet());
     }
 
     @Test
@@ -58,7 +58,7 @@ public class UnifiedMapWithHashingStrategyTest
                         + "dGVneS5tdXRhYmxlLlVuaWZpZWRNYXBXaXRoSGFzaGluZ1N0cmF0ZWd5AAAAAAAAAAEMAAB4cHNy\n"
                         + "AEdjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5Lkhhc2hpbmdTdHJhdGVnaWVz\n"
                         + "JERlZmF1bHRTdHJhdGVneQAAAAAAAAABAgAAeHB3CAAAAAA/QAAAeA==",
-                UnifiedMapWithHashingStrategy.<Object, Object>newMap(HashingStrategies.<Object>defaultStrategy()).entrySet());
+                UnifiedMapWithHashingStrategy.newMap(HashingStrategies.defaultStrategy()).entrySet());
     }
 
     @Test
@@ -67,6 +67,6 @@ public class UnifiedMapWithHashingStrategyTest
         Verify.assertSerializedForm(
                 "rO0ABXNyAC1jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5saXN0Lm11dGFibGUuRmFzdExpc3QAAAAA\n"
                         + "AAAAAQwAAHhwdwQAAAAAeA==",
-                UnifiedMapWithHashingStrategy.<Object, Object>newMap(HashingStrategies.<Object>defaultStrategy()).values());
+                UnifiedMapWithHashingStrategy.newMap(HashingStrategies.defaultStrategy()).values());
     }
 }

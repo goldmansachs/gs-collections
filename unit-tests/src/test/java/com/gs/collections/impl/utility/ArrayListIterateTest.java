@@ -630,7 +630,7 @@ public class ArrayListIterateTest
         ArrayList<Integer> list = this.getIntegerList();
         Iterate.sortThis(list);
         MutableList<Integer> result = Lists.mutable.of();
-        ArrayListIterate.forEach(list, CollectionAddProcedure.<Integer>on(result));
+        ArrayListIterate.forEach(list, CollectionAddProcedure.on(result));
         Verify.assertListsEqual(list, result);
     }
 
@@ -640,7 +640,7 @@ public class ArrayListIterateTest
         ArrayList<Integer> list = new ArrayList<Integer>(Interval.oneTo(101));
         Iterate.sortThis(list);
         FastList<Integer> result = FastList.newList(101);
-        ArrayListIterate.forEach(list, CollectionAddProcedure.<Integer>on(result));
+        ArrayListIterate.forEach(list, CollectionAddProcedure.on(result));
         Verify.assertListsEqual(list, result);
     }
 
@@ -651,7 +651,7 @@ public class ArrayListIterateTest
         Iterate.sortThis(list);
         MutableList<Integer> result = Lists.mutable.of();
         ArrayListIterate.forEachWith(list,
-                Procedures2.fromProcedure(CollectionAddProcedure.<Integer>on(result)),
+                Procedures2.fromProcedure(CollectionAddProcedure.on(result)),
                 null);
         Verify.assertListsEqual(list, result);
     }
@@ -663,7 +663,7 @@ public class ArrayListIterateTest
         Iterate.sortThis(list);
         MutableList<Integer> result = FastList.newList(101);
         ArrayListIterate.forEachWith(list,
-                Procedures2.fromProcedure(CollectionAddProcedure.<Integer>on(result)),
+                Procedures2.fromProcedure(CollectionAddProcedure.on(result)),
                 null);
         Verify.assertListsEqual(list, result);
     }

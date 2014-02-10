@@ -863,25 +863,25 @@ public class IntervalTest
     @Test(expected = UnsupportedOperationException.class)
     public void addAll()
     {
-        Interval.fromTo(1, 3).addAll(FastList.<Integer>newListWith(4, 5, 6));
+        Interval.fromTo(1, 3).addAll(FastList.newListWith(4, 5, 6));
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void addAll_at_index()
     {
-        Interval.fromTo(1, 3).addAll(0, FastList.<Integer>newListWith(4, 5, 6));
+        Interval.fromTo(1, 3).addAll(0, FastList.newListWith(4, 5, 6));
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void removeAll()
     {
-        Interval.fromTo(1, 3).removeAll(FastList.<Integer>newListWith(4, 5, 6));
+        Interval.fromTo(1, 3).removeAll(FastList.newListWith(4, 5, 6));
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void retainAll()
     {
-        Interval.fromTo(1, 3).retainAll(FastList.<Integer>newListWith(4, 5, 6));
+        Interval.fromTo(1, 3).retainAll(FastList.newListWith(4, 5, 6));
     }
 
     @Test(expected = UnsupportedOperationException.class)

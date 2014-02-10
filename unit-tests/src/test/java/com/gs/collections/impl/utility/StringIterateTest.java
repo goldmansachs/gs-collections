@@ -529,14 +529,14 @@ public class StringIterateTest
     public void toLowercaseList()
     {
         MutableList<Character> set = StringIterate.toLowercaseList("America");
-        Assert.assertEquals(FastList.<Character>newListWith('a', 'm', 'e', 'r', 'i', 'c', 'a'), set);
+        Assert.assertEquals(FastList.newListWith('a', 'm', 'e', 'r', 'i', 'c', 'a'), set);
     }
 
     @Test
     public void toUppercaseList()
     {
         MutableList<Character> set = StringIterate.toUppercaseList("America");
-        Assert.assertEquals(FastList.<Character>newListWith('A', 'M', 'E', 'R', 'I', 'C', 'A'), set);
+        Assert.assertEquals(FastList.newListWith('A', 'M', 'E', 'R', 'I', 'C', 'A'), set);
     }
 
     @Test
@@ -549,7 +549,7 @@ public class StringIterateTest
     public void toLowercaseSet()
     {
         MutableSet<Character> set = StringIterate.toLowercaseSet("America");
-        Assert.assertEquals(UnifiedSet.<Character>newSetWith('a', 'm', 'e', 'r', 'i', 'c'), set);
+        Assert.assertEquals(UnifiedSet.newSetWith('a', 'm', 'e', 'r', 'i', 'c'), set);
         Assert.assertEquals(StringIterate.asLowercaseSet("America"), set);
     }
 
@@ -557,7 +557,7 @@ public class StringIterateTest
     public void toUppercaseSet()
     {
         MutableSet<Character> set = StringIterate.toUppercaseSet("America");
-        Assert.assertEquals(UnifiedSet.<Character>newSetWith('A', 'M', 'E', 'R', 'I', 'C'), set);
+        Assert.assertEquals(UnifiedSet.newSetWith('A', 'M', 'E', 'R', 'I', 'C'), set);
         Assert.assertEquals(StringIterate.asUppercaseSet("America"), set);
     }
 

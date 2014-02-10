@@ -36,6 +36,6 @@ public class TreeBagTest
                         + "YXZhL3V0aWwvQ29tcGFyYXRvcjt4cHNyAEhjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5m\n"
                         + "YWN0b3J5LkNvbXBhcmF0b3JzJE5hdHVyYWxPcmRlckNvbXBhcmF0b3IAAAAAAAAAAQIAAHhwdwQA\n"
                         + "AAAAeA==",
-                TreeBag.<Object>newBag(Comparators.reverseNaturalOrder()));
+                TreeBag.newBag(Comparators.reverseNaturalOrder()));
     }
 }

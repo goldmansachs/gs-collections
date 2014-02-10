@@ -77,7 +77,7 @@ public final class Multimaps
 
             public <K, V> ImmutableListMultimap<K, V> with(K key, V value)
             {
-                return new ImmutableListMultimapImpl<K, V>(Maps.immutable.with(key, Lists.immutable.<V>with(value)));
+                return new ImmutableListMultimapImpl<K, V>(Maps.immutable.with(key, Lists.immutable.with(value)));
             }
 
             public <K, V> ImmutableListMultimap<K, V> with(K key1, V value1, K key2, V value2)
@@ -113,7 +113,7 @@ public final class Multimaps
 
             public <K, V> ImmutableSetMultimap<K, V> with(K key, V value)
             {
-                return new ImmutableSetMultimapImpl<K, V>(Maps.immutable.with(key, Sets.immutable.<V>with(value)));
+                return new ImmutableSetMultimapImpl<K, V>(Maps.immutable.with(key, Sets.immutable.with(value)));
             }
 
             public <K, V> ImmutableSetMultimap<K, V> with(K key1, V value1, K key2, V value2)
@@ -147,7 +147,7 @@ public final class Multimaps
 
             public <K, V> ImmutableSortedSetMultimap<K, V> with(Comparator<V> comparator, K key, V value)
             {
-                return new ImmutableSortedSetMultimapImpl<K, V>(Maps.immutable.with(key, SortedSets.immutable.<V>with(comparator, value)), comparator);
+                return new ImmutableSortedSetMultimapImpl<K, V>(Maps.immutable.with(key, SortedSets.immutable.with(comparator, value)), comparator);
             }
 
             public <K, V> ImmutableSortedSetMultimap<K, V> with(Comparator<V> comparator, K key1, V value1, K key2, V value2)
@@ -183,7 +183,7 @@ public final class Multimaps
 
             public <K, V> ImmutableBagMultimap<K, V> with(K key, V value)
             {
-                return new ImmutableBagMultimapImpl<K, V>(Maps.immutable.with(key, Bags.immutable.<V>with(value)));
+                return new ImmutableBagMultimapImpl<K, V>(Maps.immutable.with(key, Bags.immutable.with(value)));
             }
 
             public <K, V> ImmutableBagMultimap<K, V> with(K key1, V value1, K key2, V value2)

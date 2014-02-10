@@ -28,7 +28,7 @@ public class MultiReaderFastListAsReadUntouchableTest extends UnmodifiableMutabl
     @Override
     protected MutableList<Integer> getCollection()
     {
-        return MultiReaderFastList.<Integer>newListWith(1).asReadUntouchable();
+        return MultiReaderFastList.newListWith(1).asReadUntouchable();
     }
 
     @Override

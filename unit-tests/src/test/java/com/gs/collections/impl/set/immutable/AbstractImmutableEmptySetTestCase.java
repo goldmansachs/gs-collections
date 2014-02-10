@@ -222,11 +222,11 @@ public abstract class AbstractImmutableEmptySetTestCase extends AbstractImmutabl
 
         ImmutableSet<Pair<Integer, Object>> pairs = immutableSet.zip(nulls);
         Assert.assertEquals(immutableSet, pairs.collect(Functions.<Integer>firstOfPair()));
-        Assert.assertEquals(UnifiedSet.<Object>newSet(nulls), pairs.collect(Functions.<Object>secondOfPair()));
+        Assert.assertEquals(UnifiedSet.newSet(nulls), pairs.collect(Functions.secondOfPair()));
 
         ImmutableSet<Pair<Integer, Object>> pairsPlusOne = immutableSet.zip(nullsPlusOne);
         Assert.assertEquals(immutableSet, pairsPlusOne.collect(Functions.<Integer>firstOfPair()));
-        Assert.assertEquals(UnifiedSet.<Object>newSet(nulls), pairsPlusOne.collect(Functions.<Object>secondOfPair()));
+        Assert.assertEquals(UnifiedSet.newSet(nulls), pairsPlusOne.collect(Functions.secondOfPair()));
 
         Assert.assertEquals(immutableSet.zip(nulls), immutableSet.zip(nulls, UnifiedSet.<Pair<Integer, Object>>newSet()));
     }

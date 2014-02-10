@@ -31,6 +31,6 @@ public class ImmutableEmptySetWithHashingStrategyTest
                         + "bXV0YWJsZVNldFdpdGhIYXNoaW5nU3RyYXRlZ3lTZXJpYWxpemF0aW9uUHJveHkAAAAAAAAAAQwA\n"
                         + "AHhwc3IAR2NvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLmJsb2NrLmZhY3RvcnkuSGFzaGluZ1N0cmF0\n"
                         + "ZWdpZXMkRGVmYXVsdFN0cmF0ZWd5AAAAAAAAAAECAAB4cHcEAAAAAHg=",
-                new ImmutableEmptySetWithHashingStrategy<Object>(HashingStrategies.<Object>defaultStrategy()));
+                new ImmutableEmptySetWithHashingStrategy<Object>(HashingStrategies.defaultStrategy()));
     }
 }

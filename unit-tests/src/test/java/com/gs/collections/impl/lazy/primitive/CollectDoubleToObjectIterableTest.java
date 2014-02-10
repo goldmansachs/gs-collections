@@ -101,7 +101,7 @@ public class CollectDoubleToObjectIterableTest
     public void selectInstancesOf()
     {
         Assert.assertEquals(
-                FastList.<Double>newListWith(1.0, 2.0, 3.0, 4.0, 5.0),
+                FastList.newListWith(1.0, 2.0, 3.0, 4.0, 5.0),
                 this.newPrimitiveWith(1.0, 2.0, 3.0, 4.0, 5.0).selectInstancesOf(Double.class).toList());
     }
 

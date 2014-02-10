@@ -169,7 +169,7 @@ public class TreeSortedSetMultimapTest extends AbstractMutableMultimapTestCase
         Verify.assertSortedSetsEqual(TreeSortedSet.newSetWith(Collections.<Integer>reverseOrder(), 5, 4, 3, 2, 1), collection);
         setMultimap.put(1, 0);
         Assert.assertEquals(Integer.valueOf(0), setMultimap.get(1).getLast());
-        setMultimap.putAll(2, FastList.<Integer>newListWith(0, 1, 2, 4, 2, 1, 4, 5, 3, 4, 5));
+        setMultimap.putAll(2, FastList.newListWith(0, 1, 2, 4, 2, 1, 4, 5, 3, 4, 5));
         Verify.assertSortedSetsEqual(setMultimap.get(1), setMultimap.get(2));
     }
 
@@ -201,7 +201,7 @@ public class TreeSortedSetMultimapTest extends AbstractMutableMultimapTestCase
                 deserialized.get(1));
 
         deserialized.putAll(3, FastList.newListWith(8, 9, 10));
-        Verify.assertListsEqual(FastList.<Integer>newListWith(10, 9, 8), deserialized.get(3).toList());
+        Verify.assertListsEqual(FastList.newListWith(10, 9, 8), deserialized.get(3).toList());
     }
 
     @Override

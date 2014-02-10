@@ -239,21 +239,21 @@ public class ImmutableEmptyMapWithHashingStrategyTest extends ImmutableMemoryEff
     @Override
     protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2)
     {
-        return new ImmutableEmptyMapWithHashingStrategy<K, V>(HashingStrategies.<K>nullSafeHashingStrategy(
+        return new ImmutableEmptyMapWithHashingStrategy<K, V>(HashingStrategies.nullSafeHashingStrategy(
                 HashingStrategies.<K>defaultStrategy()));
     }
 
     @Override
     protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3)
     {
-        return new ImmutableEmptyMapWithHashingStrategy<K, V>(HashingStrategies.<K>nullSafeHashingStrategy(
+        return new ImmutableEmptyMapWithHashingStrategy<K, V>(HashingStrategies.nullSafeHashingStrategy(
                 HashingStrategies.<K>defaultStrategy()));
     }
 
     @Override
     protected <K, V> ImmutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
     {
-        return new ImmutableEmptyMapWithHashingStrategy<K, V>(HashingStrategies.<K>nullSafeHashingStrategy(
+        return new ImmutableEmptyMapWithHashingStrategy<K, V>(HashingStrategies.nullSafeHashingStrategy(
                 HashingStrategies.<K>defaultStrategy()));
     }
 }

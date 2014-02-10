@@ -288,7 +288,7 @@ public class ConcurrentHashMapUnsafeTest extends ConcurrentHashMapTestCase
                 }).add(each);
             }
         };
-        source.parallelForEachValue(FastList.<Procedure<Integer>>newList(Collections.nCopies(5, procedure)), this.executor);
+        source.parallelForEachValue(FastList.newList(Collections.nCopies(5, procedure)), this.executor);
         Verify.assertEqualsAndHashCode(SMALL_BAG_MUTABLE_MAP, actual);
     }
 
@@ -311,7 +311,7 @@ public class ConcurrentHashMapUnsafeTest extends ConcurrentHashMapTestCase
                 }).add(value);
             }
         };
-        source.parallelForEachKeyValue(FastList.<Procedure2<Integer, Integer>>newList(Collections.nCopies(5, procedure2)), this.executor);
+        source.parallelForEachKeyValue(FastList.newList(Collections.nCopies(5, procedure2)), this.executor);
         Verify.assertEqualsAndHashCode(SMALL_BAG_MUTABLE_MAP, actual);
     }
 

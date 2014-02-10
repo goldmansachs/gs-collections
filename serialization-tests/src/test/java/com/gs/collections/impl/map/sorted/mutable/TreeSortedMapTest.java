@@ -28,6 +28,6 @@ public class TreeSortedMapTest
                 1L,
                 "rO0ABXNyADhjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAuc29ydGVkLm11dGFibGUuVHJlZVNv\n"
                         + "cnRlZE1hcAAAAAAAAAABDAAAeHBwdwQAAAAAeA==",
-                TreeSortedMap.<Object, Object>newMap());
+                TreeSortedMap.newMap());
     }
 }

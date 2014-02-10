@@ -334,14 +334,14 @@ public abstract class Predicates<T>
             Function<? super T, ? extends Iterable<V>> function,
             Predicate<? super V> predicate)
     {
-        return Predicates.attributePredicate(function, Predicates.<V>anySatisfy(predicate));
+        return Predicates.attributePredicate(function, Predicates.anySatisfy(predicate));
     }
 
     public static <T, V> Predicates<T> attributeAllSatisfy(
             Function<? super T, ? extends Iterable<V>> function,
             Predicate<? super V> predicate)
     {
-        return Predicates.attributePredicate(function, Predicates.<V>allSatisfy(predicate));
+        return Predicates.attributePredicate(function, Predicates.allSatisfy(predicate));
     }
 
     public static Predicates<Object> notEqual(Object object)

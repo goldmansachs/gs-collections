@@ -232,7 +232,7 @@ public final class Iterate
         }
         if (iterable instanceof Collection)
         {
-            return IterableIterate.<T, Collection<T>>select(
+            return IterableIterate.select(
                     iterable,
                     predicate,
                     DefaultSpeciesNewStrategy.INSTANCE.<T>speciesNew((Collection<T>) iterable));
@@ -270,7 +270,7 @@ public final class Iterate
         }
         if (iterable instanceof Collection)
         {
-            return IterableIterate.<T, IV, Collection<T>>selectWith(
+            return IterableIterate.selectWith(
                     iterable,
                     predicate,
                     parameter,
@@ -367,7 +367,7 @@ public final class Iterate
         }
         if (iterable instanceof Collection)
         {
-            return IterableIterate.<T, Collection<T>>selectInstancesOf(
+            return IterableIterate.selectInstancesOf(
                     iterable,
                     clazz,
                     DefaultSpeciesNewStrategy.INSTANCE.<T>speciesNew((Collection<?>) iterable));
@@ -466,7 +466,7 @@ public final class Iterate
         }
         if (iterable instanceof Collection)
         {
-            return IterableIterate.<T, V, Collection<V>>collectIf(
+            return IterableIterate.collectIf(
                     iterable,
                     predicate,
                     function,
@@ -596,7 +596,7 @@ public final class Iterate
         }
         if (iterable instanceof Collection)
         {
-            return IterableIterate.<T, Collection<T>>take(
+            return IterableIterate.take(
                     iterable,
                     count,
                     DefaultSpeciesNewStrategy.INSTANCE.<T>speciesNew((Collection<T>) iterable, count));
@@ -662,7 +662,7 @@ public final class Iterate
         }
         if (iterable instanceof Collection)
         {
-            return IterableIterate.<T, Collection<T>>reject(
+            return IterableIterate.reject(
                     iterable,
                     predicate,
                     DefaultSpeciesNewStrategy.INSTANCE.<T>speciesNew((Collection<T>) iterable));
@@ -843,7 +843,7 @@ public final class Iterate
         }
         if (iterable instanceof Collection)
         {
-            return IterableIterate.<T, P, Collection<T>>rejectWith(
+            return IterableIterate.rejectWith(
                     iterable,
                     predicate,
                     parameter,
@@ -980,7 +980,7 @@ public final class Iterate
         }
         if (iterable instanceof Collection)
         {
-            return IterableIterate.<T, V, Collection<V>>collect(
+            return IterableIterate.collect(
                     iterable,
                     function,
                     DefaultSpeciesNewStrategy.INSTANCE.<V>speciesNew(
@@ -1303,7 +1303,7 @@ public final class Iterate
         }
         if (iterable instanceof Collection)
         {
-            return IterableIterate.<T, V, Collection<V>>flatCollect(
+            return IterableIterate.flatCollect(
                     iterable,
                     function,
                     DefaultSpeciesNewStrategy.INSTANCE.<V>speciesNew(
@@ -1404,7 +1404,7 @@ public final class Iterate
         }
         if (iterable instanceof Collection)
         {
-            return IterableIterate.<T, P, A, Collection<A>>collectWith(
+            return IterableIterate.collectWith(
                     iterable,
                     function,
                     parameter,
@@ -2167,7 +2167,7 @@ public final class Iterate
      */
     public static <T> MutableList<T> toSortedList(Iterable<T> iterable, Comparator<? super T> comparator)
     {
-        return FastList.<T>newList(iterable).sortThis(comparator);
+        return FastList.newList(iterable).sortThis(comparator);
     }
 
     /**
@@ -2529,7 +2529,7 @@ public final class Iterate
         }
         if (iterable instanceof Collection)
         {
-            return IterableIterate.<T, Collection<Pair<T, Integer>>>zipWithIndex(
+            return IterableIterate.zipWithIndex(
                     iterable,
                     DefaultSpeciesNewStrategy.INSTANCE.<Pair<T, Integer>>speciesNew(
                             (Collection<T>) iterable,

@@ -38,18 +38,18 @@ public class SynchronizedMutableMapTest extends MutableMapTestCase
     @Override
     public <K, V> MutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2)
     {
-        return new SynchronizedMutableMap<K, V>(UnifiedMap.<K, V>newWithKeysValues(key1, value1, key2, value2));
+        return new SynchronizedMutableMap<K, V>(UnifiedMap.newWithKeysValues(key1, value1, key2, value2));
     }
 
     @Override
     public <K, V> MutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3)
     {
-        return new SynchronizedMutableMap<K, V>(UnifiedMap.<K, V>newWithKeysValues(key1, value1, key2, value2, key3, value3));
+        return new SynchronizedMutableMap<K, V>(UnifiedMap.newWithKeysValues(key1, value1, key2, value2, key3, value3));
     }
 
     @Override
     public <K, V> MutableMap<K, V> newMapWithKeysValues(K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
     {
-        return new SynchronizedMutableMap<K, V>(UnifiedMap.<K, V>newWithKeysValues(key1, value1, key2, value2, key3, value3, key4, value4));
+        return new SynchronizedMutableMap<K, V>(UnifiedMap.newWithKeysValues(key1, value1, key2, value2, key3, value3, key4, value4));
     }
 }

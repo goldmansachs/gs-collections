@@ -101,7 +101,7 @@ public class CollectByteToObjectIterableTest
     public void selectInstancesOf()
     {
         Assert.assertEquals(
-                FastList.<Byte>newListWith((byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5),
+                FastList.newListWith((byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5),
                 this.newPrimitiveWith((byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5).selectInstancesOf(Byte.class).toList());
     }
 

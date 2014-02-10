@@ -569,7 +569,7 @@ public abstract class AbstractLazyIterableTestCase
         RichIterable<Integer> integers = this.newWith(1, 2, 3, 4);
         MutableMap<String, String> map =
                 integers.toMap(Functions.getToString(), Functions.getToString());
-        Assert.assertEquals(UnifiedMap.<String, String>newWithKeysValues("1", "1", "2", "2", "3", "3", "4", "4"), map);
+        Assert.assertEquals(UnifiedMap.newWithKeysValues("1", "1", "2", "2", "3", "3", "4", "4"), map);
     }
 
     @Test
@@ -667,13 +667,13 @@ public abstract class AbstractLazyIterableTestCase
                 pairs.collect(Functions.<Integer>firstOfPair()).toSet());
         Assert.assertEquals(
                 nulls,
-                pairs.collect(Functions.<Object>secondOfPair(), Lists.mutable.of()));
+                pairs.collect(Functions.secondOfPair(), Lists.mutable.of()));
 
         LazyIterable<Pair<Integer, Object>> pairsPlusOne = this.lazyIterable.zip(nullsPlusOne);
         Assert.assertEquals(
                 this.lazyIterable.toSet(),
                 pairsPlusOne.collect(Functions.<Integer>firstOfPair()).toSet());
-        Assert.assertEquals(nulls, pairsPlusOne.collect(Functions.<Object>secondOfPair(), Lists.mutable.of()));
+        Assert.assertEquals(nulls, pairsPlusOne.collect(Functions.secondOfPair(), Lists.mutable.of()));
 
         LazyIterable<Pair<Integer, Object>> pairsMinusOne = this.lazyIterable.zip(nullsMinusOne);
         Assert.assertEquals(this.lazyIterable.size() - 1, pairsMinusOne.size());

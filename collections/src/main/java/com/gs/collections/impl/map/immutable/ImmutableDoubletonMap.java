@@ -72,7 +72,7 @@ final class ImmutableDoubletonMap<K, V>
 
     public RichIterable<Pair<K, V>> keyValuesView()
     {
-        return Lists.immutable.<Pair<K, V>>of(
+        return Lists.immutable.of(
                 Tuples.pair(this.key1, this.value1),
                 Tuples.pair(this.key2, this.value2)).asLazy();
     }

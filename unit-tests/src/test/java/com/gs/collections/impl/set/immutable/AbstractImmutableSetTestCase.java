@@ -134,7 +134,7 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     {
         MutableSet<Integer> result = UnifiedSet.newSet();
         ImmutableSet<Integer> collection = this.classUnderTest();
-        collection.forEach(CollectionAddProcedure.<Integer>on(result));
+        collection.forEach(CollectionAddProcedure.on(result));
         Assert.assertEquals(collection, result);
     }
 
@@ -215,11 +215,11 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
 
         ImmutableCollection<Pair<Integer, Object>> pairs = immutableCollection.zip(nulls);
         Assert.assertEquals(immutableCollection, pairs.collect(Functions.<Integer>firstOfPair()));
-        Assert.assertEquals(UnifiedSet.<Object>newSet(nulls), pairs.collect(Functions.<Object>secondOfPair()));
+        Assert.assertEquals(UnifiedSet.newSet(nulls), pairs.collect(Functions.secondOfPair()));
 
         ImmutableCollection<Pair<Integer, Object>> pairsPlusOne = immutableCollection.zip(nullsPlusOne);
         Assert.assertEquals(immutableCollection, pairsPlusOne.collect(Functions.<Integer>firstOfPair()));
-        Assert.assertEquals(UnifiedSet.<Object>newSet(nulls), pairsPlusOne.collect(Functions.<Object>secondOfPair()));
+        Assert.assertEquals(UnifiedSet.newSet(nulls), pairsPlusOne.collect(Functions.secondOfPair()));
 
         ImmutableCollection<Pair<Integer, Object>> pairsMinusOne = immutableCollection.zip(nullsMinusOne);
         Assert.assertEquals(immutableCollection.size() - 1, pairsMinusOne.size());

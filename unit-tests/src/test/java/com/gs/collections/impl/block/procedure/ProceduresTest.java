@@ -118,10 +118,10 @@ public class ProceduresTest
             }
         };
 
-        Procedures.<Integer>ifElse(Predicates.alwaysTrue(), ifBlock, elseBlock).value(1);
+        Procedures.ifElse(Predicates.alwaysTrue(), ifBlock, elseBlock).value(1);
         Verify.assertContainsKeyValue("result", 1, pathCalled);
 
-        Procedures.<Integer>ifElse(Predicates.alwaysFalse(), ifBlock, elseBlock).value(1);
+        Procedures.ifElse(Predicates.alwaysFalse(), ifBlock, elseBlock).value(1);
         Verify.assertContainsKeyValue("result", -1, pathCalled);
     }
 

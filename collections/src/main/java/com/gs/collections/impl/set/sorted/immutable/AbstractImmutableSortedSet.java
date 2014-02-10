@@ -337,7 +337,7 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
             TreeSortedSet<Pair<T, Integer>> pairs = TreeSortedSet.newSet(Comparators.<Pair<T, Integer>, T>byFunction(Functions.<T>firstOfPair(), Comparators.<T>naturalOrder()));
             return Iterate.zipWithIndex(this, pairs).toImmutable();
         }
-        return Iterate.zipWithIndex(this, TreeSortedSet.<Pair<T, Integer>>newSet(Comparators.<T>byFirstOfPair(comparator))).toImmutable();
+        return Iterate.zipWithIndex(this, TreeSortedSet.<Pair<T, Integer>>newSet(Comparators.byFirstOfPair(comparator))).toImmutable();
     }
 
     public ImmutableSortedSet<T> distinct()
@@ -364,7 +364,7 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
 
     public ImmutableSortedSet<T> union(SetIterable<? extends T> set)
     {
-        return SetIterables.unionInto(this, set, TreeSortedSet.<T>newSet(this.comparator())).toImmutable();
+        return SetIterables.unionInto(this, set, TreeSortedSet.newSet(this.comparator())).toImmutable();
     }
 
     public <R extends Set<T>> R unionInto(SetIterable<? extends T> set, R targetSet)
@@ -374,7 +374,7 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
 
     public ImmutableSortedSet<T> intersect(SetIterable<? extends T> set)
     {
-        return SetIterables.intersectInto(this, set, TreeSortedSet.<T>newSet(this.comparator())).toImmutable();
+        return SetIterables.intersectInto(this, set, TreeSortedSet.newSet(this.comparator())).toImmutable();
     }
 
     public <R extends Set<T>> R intersectInto(SetIterable<? extends T> set, R targetSet)
@@ -384,7 +384,7 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
 
     public ImmutableSortedSet<T> difference(SetIterable<? extends T> subtrahendSet)
     {
-        return SetIterables.differenceInto(this, subtrahendSet, TreeSortedSet.<T>newSet(this.comparator())).toImmutable();
+        return SetIterables.differenceInto(this, subtrahendSet, TreeSortedSet.newSet(this.comparator())).toImmutable();
     }
 
     public <R extends Set<T>> R differenceInto(SetIterable<? extends T> subtrahendSet, R targetSet)
@@ -394,7 +394,7 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
 
     public ImmutableSortedSet<T> symmetricDifference(SetIterable<? extends T> setB)
     {
-        return SetIterables.symmetricDifferenceInto(this, setB, TreeSortedSet.<T>newSet(this.comparator())).toImmutable();
+        return SetIterables.symmetricDifferenceInto(this, setB, TreeSortedSet.newSet(this.comparator())).toImmutable();
     }
 
     public <R extends Set<T>> R symmetricDifferenceInto(SetIterable<? extends T> set, R targetSet)

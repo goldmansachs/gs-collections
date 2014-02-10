@@ -454,7 +454,7 @@ public final class TreeSortedSet<T>
             TreeSortedSet<Pair<T, Integer>> pairs = TreeSortedSet.newSet(Comparators.<Pair<T, Integer>, T>byFunction(Functions.<T>firstOfPair(), Comparators.<T>naturalOrder()));
             return Iterate.zipWithIndex(this, pairs);
         }
-        return Iterate.zipWithIndex(this, TreeSortedSet.<Pair<T, Integer>>newSet(Comparators.<T>byFirstOfPair(comparator)));
+        return Iterate.zipWithIndex(this, TreeSortedSet.<Pair<T, Integer>>newSet(Comparators.byFirstOfPair(comparator)));
     }
 
     public MutableSortedSet<T> takeWhile(Predicate<? super T> predicate)

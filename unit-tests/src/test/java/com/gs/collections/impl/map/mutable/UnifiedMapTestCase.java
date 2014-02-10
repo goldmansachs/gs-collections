@@ -464,16 +464,16 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
 
         // a map with a chain containing empty slots
         MutableMap<Integer, Integer> map2 = this.mapWithCollisionsOfSize(5);
-        Assert.assertFalse(map2.keySet().retainAll(FastList.<Integer>newListWith(0, 17, 34, 51, 68)));
+        Assert.assertFalse(map2.keySet().retainAll(FastList.newListWith(0, 17, 34, 51, 68)));
         Verify.assertContainsAll(map2.keySet(), 0, 17, 34, 51, 68);
 
         // a map with no chaining, nothing retained
         MutableMap<Integer, String> map3 = this.newMapWithKeyValue(1, "One");
-        Assert.assertTrue(map3.keySet().retainAll(FastList.<Integer>newListWith(9)));
+        Assert.assertTrue(map3.keySet().retainAll(FastList.newListWith(9)));
         Verify.assertEmpty(map3);
 
         Set<Integer> keys = this.newMapWithKeysValues(1, "One", 2, "Two", 3, "Three", 4, "Four").keySet();
-        Assert.assertTrue(keys.retainAll(FastList.<Integer>newListWith(1, 2, 3)));
+        Assert.assertTrue(keys.retainAll(FastList.newListWith(1, 2, 3)));
         Verify.assertContainsAll(keys, 1, 2, 3);
     }
 
@@ -481,8 +481,8 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
     public void keySet_containsAll()
     {
         MutableMap<Integer, String> map = this.newMapWithKeysValues(1, "One", 2, "Two", 3, "Three", 4, "Four");
-        Assert.assertFalse(map.keySet().containsAll(FastList.<Integer>newListWith(5)));
-        Assert.assertTrue(map.keySet().containsAll(FastList.<Integer>newListWith(1, 2, 4)));
+        Assert.assertFalse(map.keySet().containsAll(FastList.newListWith(5)));
+        Assert.assertTrue(map.keySet().containsAll(FastList.newListWith(1, 2, 4)));
     }
 
     @Test

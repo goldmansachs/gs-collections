@@ -303,11 +303,11 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
 
         MutableSet<Pair<String, Object>> pairs = set.zip(nulls);
         Assert.assertEquals(set, pairs.collect(Functions.<String>firstOfPair()));
-        Assert.assertEquals(nulls, pairs.collect(Functions.<Object>secondOfPair(), Lists.mutable.of()));
+        Assert.assertEquals(nulls, pairs.collect(Functions.secondOfPair(), Lists.mutable.of()));
 
         MutableSet<Pair<String, Object>> pairsPlusOne = set.zip(nullsPlusOne);
         Assert.assertEquals(set, pairsPlusOne.collect(Functions.<String>firstOfPair()));
-        Assert.assertEquals(nulls, pairsPlusOne.collect(Functions.<Object>secondOfPair(), Lists.mutable.of()));
+        Assert.assertEquals(nulls, pairsPlusOne.collect(Functions.secondOfPair(), Lists.mutable.of()));
 
         MutableSet<Pair<String, Object>> pairsMinusOne = set.zip(nullsMinusOne);
         Assert.assertEquals(set.size() - 1, pairsMinusOne.size());

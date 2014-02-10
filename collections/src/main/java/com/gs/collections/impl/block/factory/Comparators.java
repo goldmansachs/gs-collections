@@ -106,8 +106,8 @@ public final class Comparators
             Function<? super T, ? extends V2> two)
     {
         return Comparators.chain(
-                Comparators.<T, V1>byFunction(one),
-                Comparators.<T, V2>byFunction(two));
+                Comparators.byFunction(one),
+                Comparators.byFunction(two));
     }
 
     public static <T, V1 extends Comparable<? super V1>, V2 extends Comparable<? super V2>, V3 extends Comparable<? super V3>> SerializableComparator<T> fromFunctions(
@@ -116,9 +116,9 @@ public final class Comparators
             Function<? super T, ? extends V3> three)
     {
         return Comparators.chain(
-                Comparators.<T, V1>byFunction(one),
-                Comparators.<T, V2>byFunction(two),
-                Comparators.<T, V3>byFunction(three));
+                Comparators.byFunction(one),
+                Comparators.byFunction(two),
+                Comparators.byFunction(three));
     }
 
     public static <T> SerializableComparator<SortedSetIterable<T>> powerSet()

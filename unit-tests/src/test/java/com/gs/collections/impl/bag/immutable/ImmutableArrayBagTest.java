@@ -99,7 +99,7 @@ public class ImmutableArrayBagTest extends ImmutableBagTestCase
         ImmutableBag<String> integers = this.newBag();
         MutableMap<String, String> map =
                 integers.toMap(Functions.getToString(), Functions.getToString());
-        Assert.assertEquals(UnifiedMap.<String, String>newWithKeysValues("1", "1", "2", "2", "3", "3", "4", "4"), map);
+        Assert.assertEquals(UnifiedMap.newWithKeysValues("1", "1", "2", "2", "3", "3", "4", "4"), map);
     }
 
     @Test

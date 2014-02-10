@@ -180,7 +180,7 @@ public abstract class UnmodifiableMutableCollectionTestCase<T>
     @Test
     public void collect()
     {
-        Assert.assertEquals(this.getCollection(), this.getCollection().collect(Functions.<Object>getPassThru()));
+        Assert.assertEquals(this.getCollection(), this.getCollection().collect(Functions.getPassThru()));
         Assert.assertNotEquals(this.getCollection(), this.getCollection().collect(Functions.getToClass()));
     }
 
@@ -298,7 +298,7 @@ public abstract class UnmodifiableMutableCollectionTestCase<T>
     @Test
     public void collectIf()
     {
-        Assert.assertEquals(this.getCollection(), this.getCollection().collectIf(Predicates.alwaysTrue(), Functions.<Object>getPassThru()));
+        Assert.assertEquals(this.getCollection(), this.getCollection().collectIf(Predicates.alwaysTrue(), Functions.getPassThru()));
         Assert.assertNotEquals(this.getCollection(), this.getCollection().collectIf(Predicates.alwaysFalse(), Functions.getToClass()));
     }
 

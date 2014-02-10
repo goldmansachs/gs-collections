@@ -84,7 +84,7 @@ public class CollectFloatIterableTest
         Assert.assertEquals(1L, this.floatIterable.count(FloatPredicates.equal(1.0f)));
         Assert.assertEquals(3L, this.floatIterable.count(FloatPredicates.lessThan(4.0f)));
         Assert.assertEquals(2L, this.floatIterable.count(FloatPredicates.greaterThan(1.0f)));
-        Assert.assertEquals(3L, FastList.<Float>newListWith(1.0001f, 1.0002f, 1.0003f, 1.01f, 1.02f)
+        Assert.assertEquals(3L, FastList.newListWith(1.0001f, 1.0002f, 1.0003f, 1.01f, 1.02f)
                 .asLazy()
                 .collectFloat(PrimitiveFunctions.unboxFloatToFloat())
                 .count(FloatPredicates.equal(1.0f, 0.001f)));

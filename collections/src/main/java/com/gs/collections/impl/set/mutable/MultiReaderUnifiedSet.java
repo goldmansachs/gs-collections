@@ -111,12 +111,12 @@ public final class MultiReaderUnifiedSet<T>
 
     public static <T> MultiReaderUnifiedSet<T> newSet(Iterable<T> iterable)
     {
-        return new MultiReaderUnifiedSet<T>(UnifiedSet.<T>newSet(iterable));
+        return new MultiReaderUnifiedSet<T>(UnifiedSet.newSet(iterable));
     }
 
     public static <T> MultiReaderUnifiedSet<T> newSetWith(T... elements)
     {
-        return new MultiReaderUnifiedSet<T>(UnifiedSet.<T>newSetWith(elements));
+        return new MultiReaderUnifiedSet<T>(UnifiedSet.newSetWith(elements));
     }
 
     @Override
@@ -159,6 +159,7 @@ public final class MultiReaderUnifiedSet<T>
             this.unlockReadLock();
         }
     }
+
     public void withWriteLockAndDelegate(Procedure<MutableSet<T>> procedure)
     {
         this.acquireWriteLock();

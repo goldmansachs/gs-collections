@@ -423,7 +423,7 @@ public abstract class StackIterableTestCase
     public void selectInstancesOf()
     {
         StackIterable<Number> numbers = this.<Number>newStackFromTopToBottom(1, 2.0, 3, 4.0, 5);
-        Assert.assertEquals(this.<Integer>newStackFromTopToBottom(1, 3, 5), numbers.selectInstancesOf(Integer.class));
+        Assert.assertEquals(this.newStackFromTopToBottom(1, 3, 5), numbers.selectInstancesOf(Integer.class));
         Assert.assertEquals(this.<Number>newStackFromTopToBottom(1, 2.0, 3, 4.0, 5), numbers.selectInstancesOf(Number.class));
     }
 
@@ -950,7 +950,7 @@ public abstract class StackIterableTestCase
     @Test
     public void toMap()
     {
-        Assert.assertEquals(UnifiedMap.<String, String>newWithKeysValues("4", "4", "3", "3", "2", "2", "1", "1"),
+        Assert.assertEquals(UnifiedMap.newWithKeysValues("4", "4", "3", "3", "2", "2", "1", "1"),
                 this.newStackFromTopToBottom(4, 3, 2, 1).toMap(Functions.getToString(), Functions.getToString()));
     }
 

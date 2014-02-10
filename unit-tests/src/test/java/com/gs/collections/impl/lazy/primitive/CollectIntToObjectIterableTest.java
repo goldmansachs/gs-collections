@@ -100,7 +100,7 @@ public class CollectIntToObjectIterableTest
     public void selectInstancesOf()
     {
         Assert.assertEquals(
-                FastList.<Integer>newListWith(1, 2, 3, 4, 5),
+                FastList.newListWith(1, 2, 3, 4, 5),
                 this.newPrimitiveWith(1, 2, 3, 4, 5).selectInstancesOf(Integer.class).toList());
     }
 

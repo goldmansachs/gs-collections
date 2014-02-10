@@ -415,7 +415,7 @@ public final class MapIterate
      */
     public static <K, V> Collection<K> addAllKeysTo(Map<K, V> map, Collection<K> targetCollection)
     {
-        MapIterate.forEachKey(map, CollectionAddProcedure.<K>on(targetCollection));
+        MapIterate.forEachKey(map, CollectionAddProcedure.on(targetCollection));
         return targetCollection;
     }
 
@@ -424,7 +424,7 @@ public final class MapIterate
      */
     public static <K, V> Collection<V> addAllValuesTo(Map<K, V> map, Collection<V> targetCollection)
     {
-        MapIterate.forEachValue(map, CollectionAddProcedure.<V>on(targetCollection));
+        MapIterate.forEachValue(map, CollectionAddProcedure.on(targetCollection));
         return targetCollection;
     }
 

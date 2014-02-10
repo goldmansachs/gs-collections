@@ -175,7 +175,7 @@ public class UnmodifiableMutableListTest
         {
             public void run()
             {
-                UnmodifiableMutableListTest.this.unmodifiableList.addAll(0, Lists.mutable.<String>of("Madonna"));
+                UnmodifiableMutableListTest.this.unmodifiableList.addAll(0, Lists.mutable.of("Madonna"));
             }
         });
     }
@@ -299,7 +299,7 @@ public class UnmodifiableMutableListTest
     @Test
     public void testDistinct()
     {
-        MutableList<Integer> list = UnmodifiableMutableList.of(FastList.<Integer>newListWith(3, 1, 2, 2, 1, 3));
+        MutableList<Integer> list = UnmodifiableMutableList.of(FastList.newListWith(3, 1, 2, 2, 1, 3));
         Verify.assertListsEqual(FastList.newListWith(3, 1, 2), list.distinct());
     }
 

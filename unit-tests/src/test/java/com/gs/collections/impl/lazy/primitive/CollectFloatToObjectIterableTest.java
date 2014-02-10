@@ -101,7 +101,7 @@ public class CollectFloatToObjectIterableTest
     public void selectInstancesOf()
     {
         Assert.assertEquals(
-                FastList.<Float>newListWith(1.0f, 2.0f, 3.0f, 4.0f, 5.0f),
+                FastList.newListWith(1.0f, 2.0f, 3.0f, 4.0f, 5.0f),
                 this.newPrimitiveWith(1.0f, 2.0f, 3.0f, 4.0f, 5.0f).selectInstancesOf(Float.class).toList());
     }
 

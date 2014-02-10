@@ -29,6 +29,6 @@ public class SetAdapterSerializationTest
                 "rO0ABXNyAC5jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQubXV0YWJsZS5TZXRBZGFwdGVyAAAA\n"
                         + "AAAAAAECAAFMAAhkZWxlZ2F0ZXQAD0xqYXZhL3V0aWwvU2V0O3hwc3IALmNvbS5ncy5jb2xsZWN0\n"
                         + "aW9ucy5pbXBsLnNldC5tdXRhYmxlLlVuaWZpZWRTZXQAAAAAAAAAAQwAAHhwdwgAAAAAP0AAAHg=\n",
-                new SetAdapter<Object>(UnifiedSet.<Object>newSet()));
+                new SetAdapter<Object>(UnifiedSet.newSet()));
     }
 }

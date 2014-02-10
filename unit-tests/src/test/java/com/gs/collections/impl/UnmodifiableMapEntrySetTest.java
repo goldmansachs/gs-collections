@@ -58,7 +58,7 @@ public class UnmodifiableMapEntrySetTest extends UnmodifiableMutableCollectionTe
     @Override
     protected MutableSet<Map.Entry<String, String>> getCollection()
     {
-        return SetAdapter.adapt(new UnmodifiableMap<String, String>(Maps.mutable.<String, String>of("1", "1", "2", "2")).entrySet());
+        return SetAdapter.adapt(new UnmodifiableMap<String, String>(Maps.mutable.of("1", "1", "2", "2")).entrySet());
     }
 
     private MutableSet<Map.Entry<String, String>> newCollection()

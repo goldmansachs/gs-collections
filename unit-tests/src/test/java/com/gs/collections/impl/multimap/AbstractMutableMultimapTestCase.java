@@ -208,8 +208,8 @@ public abstract class AbstractMutableMultimapTestCase extends AbstractMultimapTe
         MutableMultimap<String, Integer> multimap =
                 this.newMultimapWithKeysValues("One", 1, "Two", 2, "Two", 2);
         UnifiedMap<String, RichIterable<Integer>> expected = UnifiedMap.newMap();
-        expected.put("One", this.<Integer>createCollection(1));
-        expected.put("Two", this.<Integer>createCollection(2, 2));
+        expected.put("One", this.createCollection(1));
+        expected.put("Two", this.createCollection(2, 2));
         Assert.assertEquals(expected, multimap.toMap());
     }
 

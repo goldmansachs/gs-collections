@@ -79,7 +79,7 @@ public class CompositeIterableTest extends AbstractLazyIterableTestCase
     {
         MutableList<Integer> list = Lists.mutable.of();
         LazyIterable<Integer> iterables = CompositeIterable.with(Interval.oneTo(5), Interval.fromTo(6, 10));
-        iterables.forEach(CollectionAddProcedure.<Integer>on(list));
+        iterables.forEach(CollectionAddProcedure.on(list));
         Verify.assertSize(10, list);
         Verify.assertAllSatisfy(list, Predicates.greaterThan(0).and(Predicates.lessThan(11)));
     }

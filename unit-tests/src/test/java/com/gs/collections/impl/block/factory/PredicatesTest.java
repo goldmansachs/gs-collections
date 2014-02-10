@@ -358,13 +358,13 @@ public class PredicatesTest
     @Test
     public void ifTrue()
     {
-        assertIf(Predicates.<List<Object>>ifTrue(IS_EMPTY), true);
+        assertIf(Predicates.ifTrue(IS_EMPTY), true);
     }
 
     @Test
     public void ifFalse()
     {
-        assertIf(Predicates.<List<Object>>ifFalse(IS_EMPTY), false);
+        assertIf(Predicates.ifFalse(IS_EMPTY), false);
     }
 
     private static void assertIf(Predicate<List<Object>> predicate, boolean bool)
@@ -675,7 +675,7 @@ public class PredicatesTest
     public void betweenInclusiveNumber()
     {
         assertBetweenInclusive(Predicates.betweenInclusive(1, 3));
-        assertBetweenInclusive(Predicates.<Integer, Integer>attributeBetweenInclusive(Functions.getIntegerPassThru(), 1, 3));
+        assertBetweenInclusive(Predicates.attributeBetweenInclusive(Functions.getIntegerPassThru(), 1, 3));
     }
 
     private static void assertBetweenInclusive(Predicate<Integer> oneToThree)
@@ -703,7 +703,7 @@ public class PredicatesTest
     public void betweenInclusiveFromNumber()
     {
         assertBetweenInclusiveFrom(Predicates.betweenInclusiveFrom(1, 3));
-        assertBetweenInclusiveFrom(Predicates.<Integer, Integer>attributeBetweenInclusiveFrom(Functions.getIntegerPassThru(), 1, 3));
+        assertBetweenInclusiveFrom(Predicates.attributeBetweenInclusiveFrom(Functions.getIntegerPassThru(), 1, 3));
     }
 
     private static void assertBetweenInclusiveFrom(Predicate<Integer> oneToThree)
@@ -731,7 +731,7 @@ public class PredicatesTest
     public void betweenInclusiveToNumber()
     {
         assertBetweenInclusiveTo(Predicates.betweenInclusiveTo(1, 3));
-        assertBetweenInclusiveTo(Predicates.<Integer, Integer>attributeBetweenInclusiveTo(Functions.getIntegerPassThru(), 1, 3));
+        assertBetweenInclusiveTo(Predicates.attributeBetweenInclusiveTo(Functions.getIntegerPassThru(), 1, 3));
     }
 
     private static void assertBetweenInclusiveTo(Predicate<Integer> oneToThree)
@@ -759,7 +759,7 @@ public class PredicatesTest
     public void betweenExclusiveNumber()
     {
         assertBetweenExclusive(Predicates.betweenExclusive(1, 3));
-        assertBetweenExclusive(Predicates.<Integer, Integer>attributeBetweenExclusive(Functions.getIntegerPassThru(), 1, 3));
+        assertBetweenExclusive(Predicates.attributeBetweenExclusive(Functions.getIntegerPassThru(), 1, 3));
     }
 
     private static void assertBetweenExclusive(Predicate<Integer> oneToThree)

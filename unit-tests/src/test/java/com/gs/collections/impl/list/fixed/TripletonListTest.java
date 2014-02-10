@@ -340,7 +340,7 @@ public class TripletonListTest extends AbstractMemoryEfficientMutableListTestCas
         MutableList<String> list = Lists.fixedSize.of("1", "2", "3");
         MutableList<String> source = list.subList(1, 3);
         MutableList<String> result = Lists.mutable.of();
-        source.forEach(CollectionAddProcedure.<String>on(result));
+        source.forEach(CollectionAddProcedure.on(result));
         Assert.assertEquals(FastList.newListWith("2", "3"), result);
     }
 
@@ -369,7 +369,7 @@ public class TripletonListTest extends AbstractMemoryEfficientMutableListTestCas
         MutableList<String> list = Lists.fixedSize.of("1", "2", "3");
         MutableList<String> source = list.subList(1, 3);
         MutableList<String> result = Lists.mutable.of();
-        source.forEachWith(Procedures2.fromProcedure(CollectionAddProcedure.<String>on(result)), null);
+        source.forEachWith(Procedures2.fromProcedure(CollectionAddProcedure.on(result)), null);
         Assert.assertEquals(FastList.newListWith("2", "3"), result);
     }
 

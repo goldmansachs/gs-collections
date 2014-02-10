@@ -292,7 +292,7 @@ final class ImmutableSingletonBag<T>
 
     public <V> ImmutableBag<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
-        return this.<V, HashBag<V>>flatCollect(function, HashBag.<V>newBag()).toImmutable();
+        return this.flatCollect(function, HashBag.<V>newBag()).toImmutable();
     }
 
     @Override

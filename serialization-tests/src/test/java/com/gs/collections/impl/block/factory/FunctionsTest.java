@@ -242,7 +242,7 @@ public class FunctionsTest
                 1L,
                 "rO0ABXNyAD5jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9ucyRN\n"
                         + "YXBLZXlGdW5jdGlvbgAAAAAAAAABAgAAeHA=",
-                Functions.<Object>getKeyFunction());
+                Functions.getKeyFunction());
     }
 
     @Test
@@ -252,7 +252,7 @@ public class FunctionsTest
                 1L,
                 "rO0ABXNyAEBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9ucyRN\n"
                         + "YXBWYWx1ZUZ1bmN0aW9uAAAAAAAAAAECAAB4cA==",
-                Functions.<Object>getValueFunction());
+                Functions.getValueFunction());
     }
 
     @Test
@@ -395,7 +395,7 @@ public class FunctionsTest
                 1L,
                 "rO0ABXNyAENjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9ucyRG\n"
                         + "aXJzdE9mUGFpckZ1bmN0aW9uAAAAAAAAAAECAAB4cA==",
-                Functions.<Object>firstOfPair());
+                Functions.firstOfPair());
     }
 
     @Test
@@ -405,7 +405,7 @@ public class FunctionsTest
                 1L,
                 "rO0ABXNyAERjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9ucyRT\n"
                         + "ZWNvbmRPZlBhaXJGdW5jdGlvbgAAAAAAAAABAgAAeHA=",
-                Functions.<Object>secondOfPair());
+                Functions.secondOfPair());
     }
 
     @Test

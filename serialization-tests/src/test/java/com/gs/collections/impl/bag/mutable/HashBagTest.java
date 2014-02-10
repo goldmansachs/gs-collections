@@ -28,6 +28,6 @@ public class HashBagTest
                 1L,
                 "rO0ABXNyACtjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5iYWcubXV0YWJsZS5IYXNoQmFnAAAAAAAA\n"
                         + "AAEMAAB4cHcEAAAAAHg=",
-                HashBag.<Object>newBag());
+                HashBag.newBag());
     }
 }

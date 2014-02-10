@@ -36,7 +36,7 @@ public class UnmodifiableMutableListTest
                         + "Y3Rpb250ADVMY29tL2dzL2NvbGxlY3Rpb25zL2FwaS9jb2xsZWN0aW9uL011dGFibGVDb2xsZWN0\n"
                         + "aW9uO3hwc3IALWNvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLmxpc3QubXV0YWJsZS5GYXN0TGlzdAAA\n"
                         + "AAAAAAABDAAAeHB3BAAAAAB4",
-                UnmodifiableMutableList.of(FastList.<Object>newList()));
+                UnmodifiableMutableList.of(FastList.newList()));
     }
 
     @Test

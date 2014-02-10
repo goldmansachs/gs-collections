@@ -24,6 +24,6 @@ public class SingletonListSubListTest extends UnmodifiableMemoryEfficientListTes
     @Override
     protected MutableList<String> getCollection()
     {
-        return Lists.fixedSize.<String>of("1").subList(0, 1);
+        return Lists.fixedSize.of("1").subList(0, 1);
     }
 }

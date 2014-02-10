@@ -78,14 +78,14 @@ public abstract class MutableStackTestCase extends StackIterableTestCase
         Assert.assertEquals(this.newStackFromTopToBottom(1, 2, 3), stack5);
 
         MutableStack<Integer> stack6 = this.newStackFromTopToBottom(1, 2, 3, 4);
-        Assert.assertEquals(FastList.<Integer>newListWith(1, 2), stack6.pop(2, FastList.<Integer>newList()));
+        Assert.assertEquals(FastList.newListWith(1, 2), stack6.pop(2, FastList.<Integer>newList()));
 
         MutableStack<Integer> stack7 = this.newStackFromTopToBottom(1, 2, 3, 4);
-        Assert.assertEquals(ArrayStack.<Integer>newStackFromTopToBottom(2, 1), stack7.pop(2, ArrayStack.<Integer>newStack()));
+        Assert.assertEquals(ArrayStack.newStackFromTopToBottom(2, 1), stack7.pop(2, ArrayStack.<Integer>newStack()));
 
         MutableStack<Integer> stack8 = this.newStackFromTopToBottom(1, 2, 3, 4);
         Verify.assertIterableEmpty(stack8.pop(0));
-        Assert.assertEquals(ArrayStack.<Integer>newStackFromTopToBottom(1, 2, 3, 4), stack8);
+        Assert.assertEquals(ArrayStack.newStackFromTopToBottom(1, 2, 3, 4), stack8);
         Assert.assertEquals(FastList.newList(), stack8.peek(0));
 
         MutableStack<Integer> stack9 = ArrayStack.newStack();

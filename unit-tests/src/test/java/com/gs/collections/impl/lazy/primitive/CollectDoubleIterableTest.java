@@ -84,7 +84,7 @@ public class CollectDoubleIterableTest
         Assert.assertEquals(1, this.doubleIterable.count(DoublePredicates.equal(1.0d)));
         Assert.assertEquals(3, this.doubleIterable.count(DoublePredicates.lessThan(4.0d)));
         Assert.assertEquals(2, this.doubleIterable.count(DoublePredicates.greaterThan(1.0d)));
-        Assert.assertEquals(3, FastList.<Double>newListWith(1.0001d, 1.0002d, 1.0003d, 1.01d, 1.02d)
+        Assert.assertEquals(3, FastList.newListWith(1.0001d, 1.0002d, 1.0003d, 1.01d, 1.02d)
                 .asLazy()
                 .collectDouble(PrimitiveFunctions.unboxDoubleToDouble())
                 .count(DoublePredicates.equal(1.0d, 0.001d)));

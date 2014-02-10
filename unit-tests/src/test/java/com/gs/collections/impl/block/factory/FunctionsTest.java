@@ -178,9 +178,9 @@ public class FunctionsTest
     public void firstNotEmptyCollectionValue()
     {
         Function<Object, ImmutableList<String>> function = Functions.firstNotEmptyCollectionValue(
-                Functions.<Object, ImmutableList<String>>getFixedValue(Lists.immutable.<String>of()),
-                Functions.<Object, ImmutableList<String>>getFixedValue(Lists.immutable.of("hello")),
-                Functions.<Object, ImmutableList<String>>getFixedValue(Lists.immutable.<String>of()));
+                Functions.getFixedValue(Lists.immutable.<String>of()),
+                Functions.getFixedValue(Lists.immutable.of("hello")),
+                Functions.getFixedValue(Lists.immutable.<String>of()));
         Assert.assertEquals(iList("hello"), function.valueOf(null));
     }
 

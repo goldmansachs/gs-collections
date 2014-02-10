@@ -154,7 +154,7 @@ public abstract class AbstractImmutableSortedSetTestCase
     {
         MutableSet<Integer> result = UnifiedSet.newSet();
         ImmutableSortedSet<Integer> collection = this.classUnderTest();
-        collection.forEach(CollectionAddProcedure.<Integer>on(result));
+        collection.forEach(CollectionAddProcedure.on(result));
         Assert.assertEquals(collection, result);
     }
 
@@ -416,16 +416,16 @@ public abstract class AbstractImmutableSortedSetTestCase
         ImmutableList<Pair<Integer, Object>> pairs = immutableSet.zip(nulls);
         Assert.assertEquals(immutableSet.toList(), pairs.collect(Functions.<Integer>firstOfPair()));
         Verify.assertListsEqual(FastList.newList(Interval.fromTo(immutableSet.size(), 1)), pairs.collect(Functions.<Integer>firstOfPair()).toList());
-        Assert.assertEquals(FastList.<Object>newList(nulls), pairs.collect(Functions.<Object>secondOfPair()));
+        Assert.assertEquals(FastList.newList(nulls), pairs.collect(Functions.secondOfPair()));
 
         ImmutableList<Pair<Integer, Object>> pairsPlusOne = immutableSet.zip(nullsPlusOne);
         Assert.assertEquals(immutableSet.toList(), pairsPlusOne.collect(Functions.<Integer>firstOfPair()));
         Verify.assertListsEqual(FastList.newList(Interval.fromTo(immutableSet.size(), 1)),
                 pairsPlusOne.collect(Functions.<Integer>firstOfPair()).castToList());
-        Assert.assertEquals(FastList.<Object>newList(nulls), pairsPlusOne.collect(Functions.<Object>secondOfPair()));
+        Assert.assertEquals(FastList.newList(nulls), pairsPlusOne.collect(Functions.secondOfPair()));
 
         ImmutableList<Pair<Integer, Object>> pairsMinusOne = immutableSet.zip(nullsMinusOne);
-        Verify.assertListsEqual(FastList.<Integer>newList(Interval.fromTo(immutableSet.size(), 2)),
+        Verify.assertListsEqual(FastList.newList(Interval.fromTo(immutableSet.size(), 2)),
                 pairsMinusOne.collect(Functions.<Integer>firstOfPair()).castToList());
         Assert.assertEquals(immutableSet.zip(nulls), immutableSet.zip(nulls, FastList.<Pair<Integer, Object>>newList()));
 

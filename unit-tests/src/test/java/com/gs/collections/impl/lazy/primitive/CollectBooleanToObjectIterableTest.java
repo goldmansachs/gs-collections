@@ -101,7 +101,7 @@ public class CollectBooleanToObjectIterableTest
     public void selectInstancesOf()
     {
         Assert.assertEquals(
-                FastList.<Boolean>newListWith(true, false, true, false, true),
+                FastList.newListWith(true, false, true, false, true),
                 this.newPrimitiveWith(true, false, true, false, true).selectInstancesOf(Boolean.class).toList());
     }
 

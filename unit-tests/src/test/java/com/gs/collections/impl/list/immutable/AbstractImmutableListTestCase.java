@@ -313,11 +313,11 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
 
         ImmutableCollection<Pair<Integer, Object>> pairs = immutableCollection.zip(nulls);
         Assert.assertEquals(immutableCollection, pairs.collect(Functions.<Integer>firstOfPair()));
-        Assert.assertEquals(nulls, pairs.collect(Functions.<Object>secondOfPair()));
+        Assert.assertEquals(nulls, pairs.collect(Functions.secondOfPair()));
 
         ImmutableCollection<Pair<Integer, Object>> pairsPlusOne = immutableCollection.zip(nullsPlusOne);
         Assert.assertEquals(immutableCollection, pairsPlusOne.collect(Functions.<Integer>firstOfPair()));
-        Assert.assertEquals(nulls, pairsPlusOne.collect(Functions.<Object>secondOfPair()));
+        Assert.assertEquals(nulls, pairsPlusOne.collect(Functions.secondOfPair()));
 
         ImmutableCollection<Pair<Integer, Object>> pairsMinusOne = immutableCollection.zip(nullsMinusOne);
         Assert.assertEquals(immutableCollection.size() - 1, pairsMinusOne.size());

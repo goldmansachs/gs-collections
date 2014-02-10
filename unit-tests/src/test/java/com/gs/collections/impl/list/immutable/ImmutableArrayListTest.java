@@ -158,7 +158,7 @@ public class ImmutableArrayListTest
     {
         MutableList<Integer> result = Lists.mutable.of();
         ImmutableList<Integer> collection = this.newListWith(1, 2, 3, 4);
-        collection.forEach(CollectionAddProcedure.<Integer>on(result));
+        collection.forEach(CollectionAddProcedure.on(result));
         Verify.assertSize(4, result);
         Verify.assertContainsAll(result, 1, 2, 3, 4);
     }
@@ -168,7 +168,7 @@ public class ImmutableArrayListTest
     {
         Collection<Integer> result = Lists.mutable.of();
         ImmutableList<Integer> collection = this.newListWith(1, 2, 3, 4);
-        collection.forEach(2, 3, CollectionAddProcedure.<Integer>on(result));
+        collection.forEach(2, 3, CollectionAddProcedure.on(result));
         Verify.assertSize(2, result);
         Verify.assertContainsAll(result, 3, 4);
     }
@@ -441,7 +441,7 @@ public class ImmutableArrayListTest
         ImmutableArrayList<Integer> integers = ImmutableArrayList.newListWith(1, 2, 3, 4);
         MutableMap<String, String> map =
                 integers.toMap(Functions.getToString(), Functions.getToString());
-        Assert.assertEquals(UnifiedMap.<String, String>newWithKeysValues("1", "1", "2", "2", "3", "3", "4", "4"), map);
+        Assert.assertEquals(UnifiedMap.newWithKeysValues("1", "1", "2", "2", "3", "3", "4", "4"), map);
     }
 
     @Test

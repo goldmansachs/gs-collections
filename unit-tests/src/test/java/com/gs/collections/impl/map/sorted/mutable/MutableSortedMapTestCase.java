@@ -127,7 +127,7 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
 
         MutableSortedMap<Integer, String> revMap = this.newMapWithKeyValue(REV_INT_ORDER, 4, "Four");
         Verify.assertNotEmpty(revMap);
-        Verify.assertListsEqual(FastList.<String>newListWith("Four"), revMap.valuesView().toList());
+        Verify.assertListsEqual(FastList.newListWith("Four"), revMap.valuesView().toList());
     }
 
     @Test
@@ -138,7 +138,7 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
 
         MutableSortedMap<Integer, String> revMap = this.newMapWithKeysValues(REV_INT_ORDER, 3, "Three", 4, "Four");
         Verify.assertNotEmpty(revMap);
-        Verify.assertListsEqual(FastList.<String>newListWith("Four", "Three"), revMap.valuesView().toList());
+        Verify.assertListsEqual(FastList.newListWith("Four", "Three"), revMap.valuesView().toList());
     }
 
     @Test
@@ -149,7 +149,7 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
 
         MutableSortedMap<Integer, String> revMap = this.newMapWithKeysValues(REV_INT_ORDER, 3, "Three", 2, "Two", 4, "Four");
         Verify.assertNotEmpty(revMap);
-        Verify.assertListsEqual(FastList.<String>newListWith("Four", "Three", "Two"), revMap.valuesView().toList());
+        Verify.assertListsEqual(FastList.newListWith("Four", "Three", "Two"), revMap.valuesView().toList());
     }
 
     @Test
@@ -160,7 +160,7 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
 
         MutableSortedMap<Integer, String> revMap = this.newMapWithKeysValues(REV_INT_ORDER, 1, "One", 3, "Three", 2, "Two", 4, "Four");
         Verify.assertNotEmpty(revMap);
-        Verify.assertListsEqual(FastList.<String>newListWith("Four", "Three", "Two", "One"), revMap.valuesView().toList());
+        Verify.assertListsEqual(FastList.newListWith("Four", "Three", "Two", "One"), revMap.valuesView().toList());
     }
 
     @Test
@@ -183,13 +183,13 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
 
         MutableList<String> list = Lists.mutable.of();
         MutableSortedMap<Integer, String> map = this.newMapWithKeysValues(1, "One", 3, "Three", 2, "Two", 4, "Four");
-        map.forEach(CollectionAddProcedure.<String>on(list));
-        Verify.assertListsEqual(FastList.<String>newListWith("One", "Two", "Three", "Four"), list);
+        map.forEach(CollectionAddProcedure.on(list));
+        Verify.assertListsEqual(FastList.newListWith("One", "Two", "Three", "Four"), list);
 
         MutableList<String> list2 = Lists.mutable.of();
         MutableSortedMap<Integer, String> revMap = this.newMapWithKeysValues(REV_INT_ORDER, 1, "One", 3, "Three", 2, "Two", 4, "Four");
-        revMap.forEach(CollectionAddProcedure.<String>on(list2));
-        Verify.assertListsEqual(FastList.<String>newListWith("Four", "Three", "Two", "One"), list2);
+        revMap.forEach(CollectionAddProcedure.on(list2));
+        Verify.assertListsEqual(FastList.newListWith("Four", "Three", "Two", "One"), list2);
     }
 
     @Override
@@ -206,7 +206,7 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
                 list.add(argument1 + argument2);
             }
         }, 10);
-        Verify.assertListsEqual(FastList.<Integer>newListWith(14, 13, 12, 11), list);
+        Verify.assertListsEqual(FastList.newListWith(14, 13, 12, 11), list);
     }
 
     @Test
@@ -221,7 +221,7 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
                 list2.add(argument1 + argument2);
             }
         }, 10);
-        Verify.assertListsEqual(FastList.<Integer>newListWith(11, 12, 13, 14), list2);
+        Verify.assertListsEqual(FastList.newListWith(11, 12, 13, 14), list2);
     }
 
     @Override
@@ -240,7 +240,7 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
                 list.add(String.valueOf(index));
             }
         });
-        Verify.assertListsEqual(FastList.<String>newListWith("One", "0", "Two", "1", "Three", "2", "Four", "3"), list);
+        Verify.assertListsEqual(FastList.newListWith("One", "0", "Two", "1", "Three", "2", "Four", "3"), list);
     }
 
     @Test
@@ -256,7 +256,7 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
                 list2.add(String.valueOf(index));
             }
         });
-        Verify.assertListsEqual(FastList.<String>newListWith("Four", "0", "Three", "1", "Two", "2", "One", "3"), list2);
+        Verify.assertListsEqual(FastList.newListWith("Four", "0", "Three", "1", "Two", "2", "One", "3"), list2);
     }
 
     @Test
@@ -271,7 +271,7 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
                 result.add(key + value);
             }
         });
-        Verify.assertListsEqual(FastList.<String>newListWith("3Three", "2Two", "1One"), result);
+        Verify.assertListsEqual(FastList.newListWith("3Three", "2Two", "1One"), result);
     }
 
     @Override
@@ -281,8 +281,8 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
         super.forEachKey();
         MutableList<Integer> result = Lists.mutable.of();
         MutableSortedMap<Integer, String> map = this.newMapWithKeysValues(REV_INT_ORDER, 1, "1", 2, "2", 3, "3");
-        map.forEachKey(CollectionAddProcedure.<Integer>on(result));
-        Verify.assertListsEqual(FastList.<Integer>newListWith(3, 2, 1), result);
+        map.forEachKey(CollectionAddProcedure.on(result));
+        Verify.assertListsEqual(FastList.newListWith(3, 2, 1), result);
     }
 
     @Override
@@ -377,7 +377,7 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
         MutableSortedMap<String, Integer> map = this.newMapWithKeysValues(Comparators.<String>reverseNaturalOrder(),
                 "A", 1, "B", 2, "C", 3);
         MutableList<String> collect = map.collect(Functions.getToString());
-        Verify.assertListsEqual(FastList.<String>newListWith("3", "2", "1"), collect);
+        Verify.assertListsEqual(FastList.newListWith("3", "2", "1"), collect);
     }
 
     @Override

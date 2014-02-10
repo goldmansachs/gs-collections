@@ -518,7 +518,7 @@ public abstract class ImmutableBagTestCase
                 pairs.collect(Functions.<String>firstOfPair()));
         Assert.assertEquals(
                 HashBag.newBag(nulls),
-                pairs.collect(Functions.<Object>secondOfPair()));
+                pairs.collect(Functions.secondOfPair()));
 
         ImmutableBag<Pair<String, Object>> pairsPlusOne = immutableBag.zip(nullsPlusOne);
         Assert.assertEquals(
@@ -526,7 +526,7 @@ public abstract class ImmutableBagTestCase
                 pairsPlusOne.collect(Functions.<String>firstOfPair()));
         Assert.assertEquals(
                 HashBag.newBag(nulls),
-                pairsPlusOne.collect(Functions.<Object>secondOfPair()));
+                pairsPlusOne.collect(Functions.secondOfPair()));
 
         ImmutableBag<Pair<String, Object>> pairsMinusOne = immutableBag.zip(nullsMinusOne);
         Assert.assertEquals(immutableBag.size() - 1, pairsMinusOne.size());

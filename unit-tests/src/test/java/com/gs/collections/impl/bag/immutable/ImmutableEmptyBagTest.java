@@ -299,7 +299,7 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
                 pairs.collect(Functions.<String>firstOfPair()));
         Assert.assertEquals(
                 HashBag.newBag(nulls),
-                pairs.collect(Functions.<Object>secondOfPair()));
+                pairs.collect(Functions.secondOfPair()));
 
         ImmutableBag<Pair<String, Object>> pairsPlusOne = immutableBag.zip(nullsPlusOne);
         Assert.assertEquals(
@@ -307,7 +307,7 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
                 pairsPlusOne.collect(Functions.<String>firstOfPair()));
         Assert.assertEquals(
                 HashBag.newBag(nulls),
-                pairsPlusOne.collect(Functions.<Object>secondOfPair()));
+                pairsPlusOne.collect(Functions.secondOfPair()));
 
         Assert.assertEquals(immutableBag.zip(nulls), immutableBag.zip(nulls, HashBag.<Pair<String, Object>>newBag()));
     }

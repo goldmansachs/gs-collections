@@ -35,7 +35,6 @@ import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.partition.PartitionIterable;
-import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.IntegerWithCast;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Functions;
@@ -728,7 +727,7 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
     {
         MutableMap<String, Integer> map = this.newMapWithKeysValues("A", 1, "B", 2);
         MutableMap<String, Integer> mapWith = map.withAllKeyValues(
-                FastList.<Pair<String, Integer>>newListWith(Tuples.pair("B", 22), Tuples.pair("C", 3)));
+                FastList.newListWith(Tuples.pair("B", 22), Tuples.pair("C", 3)));
         Assert.assertSame(map, mapWith);
         Verify.assertMapsEqual(UnifiedMap.newWithKeysValues("A", 1, "B", 22, "C", 3), mapWith);
     }
