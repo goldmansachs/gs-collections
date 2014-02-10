@@ -611,13 +611,21 @@ public abstract class AbstractObject<name>MapKeyValuesViewTestCase
     {
         RichIterable\<Object<name>Pair\<Integer>\> objects = this.newWith(1, <(literal.(type))("2")>, 2, <(literal.(type))("3")>, 3, <(literal.(type))("4")>);
         MutableBag\<Object<name>Pair\<Integer>\> actual = Bags.mutable.of();
-        Iterator\<Object<name>Pair\<Integer>\> iterator = objects.iterator();
+        final Iterator\<Object<name>Pair\<Integer>\> iterator = objects.iterator();
         for (int i = objects.size(); i-- > 0; )
         {
             Assert.assertTrue(iterator.hasNext());
             actual.add(iterator.next());
         }
+
         Assert.assertFalse(iterator.hasNext());
+        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
+        {
+            public void run()
+            {
+                iterator.remove();
+            }
+        });
         Assert.assertEquals(objects.toBag(), actual);
     }
 
