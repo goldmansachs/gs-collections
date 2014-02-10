@@ -182,7 +182,7 @@ public class HashBag<T>
             return false;
         }
 
-        return ((ObjectIntHashMap<T>) this.items).keyValuesView().allSatisfy(new Predicate<ObjectIntPair<T>>()
+        return this.items.keyValuesView().allSatisfy(new Predicate<ObjectIntPair<T>>()
         {
             public boolean accept(ObjectIntPair<T> each)
             {
@@ -504,7 +504,7 @@ public class HashBag<T>
     @Override
     public <P> T detectWith(final Predicate2<? super T, ? super P> predicate, final P parameter)
     {
-        return ((ObjectIntHashMap<T>) this.items).keysView().detect(new Predicate<T>()
+        return this.items.keysView().detect(new Predicate<T>()
         {
             public boolean accept(T each)
             {
@@ -519,7 +519,7 @@ public class HashBag<T>
             final P parameter,
             Function0<? extends T> function)
     {
-        return ((ObjectIntHashMap<T>) this.items).keysView().detectIfNone(new Predicate<T>()
+        return this.items.keysView().detectIfNone(new Predicate<T>()
         {
             public boolean accept(T each)
             {
@@ -548,7 +548,7 @@ public class HashBag<T>
     @Override
     public <P> boolean anySatisfyWith(final Predicate2<? super T, ? super P> predicate, final P parameter)
     {
-        return ((ObjectIntHashMap<T>) this.items).keysView().anySatisfy(new Predicate<T>()
+        return this.items.keysView().anySatisfy(new Predicate<T>()
         {
             public boolean accept(T each)
             {
@@ -560,7 +560,7 @@ public class HashBag<T>
     @Override
     public <P> boolean allSatisfyWith(final Predicate2<? super T, ? super P> predicate, final P parameter)
     {
-        return ((ObjectIntHashMap<T>) this.items).keysView().allSatisfy(new Predicate<T>()
+        return this.items.keysView().allSatisfy(new Predicate<T>()
         {
             public boolean accept(T each)
             {
@@ -718,7 +718,7 @@ public class HashBag<T>
     @Override
     public T getFirst()
     {
-        return ((ObjectIntHashMap<T>) this.items).keysView().getFirst();
+        return this.items.keysView().getFirst();
     }
 
     public <V> HashBagMultimap<V, T> groupBy(
@@ -735,7 +735,7 @@ public class HashBag<T>
     @Override
     public T getLast()
     {
-        return ((ObjectIntHashMap<T>) this.items).keysView().getLast();
+        return this.items.keysView().getLast();
     }
 
     @Override
@@ -1024,13 +1024,13 @@ public class HashBag<T>
     @Override
     public T detect(Predicate<? super T> predicate)
     {
-        return ((ObjectIntHashMap<T>) this.items).keysView().detect(predicate);
+        return this.items.keysView().detect(predicate);
     }
 
     @Override
     public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
     {
-        return ((ObjectIntHashMap<T>) this.items).keysView().detectIfNone(predicate, function);
+        return this.items.keysView().detectIfNone(predicate, function);
     }
 
     @Override
@@ -1053,13 +1053,13 @@ public class HashBag<T>
     @Override
     public boolean anySatisfy(Predicate<? super T> predicate)
     {
-        return ((ObjectIntHashMap<T>) this.items).keysView().anySatisfy(predicate);
+        return this.items.keysView().anySatisfy(predicate);
     }
 
     @Override
     public boolean allSatisfy(Predicate<? super T> predicate)
     {
-        return ((ObjectIntHashMap<T>) this.items).keysView().allSatisfy(predicate);
+        return this.items.keysView().allSatisfy(predicate);
     }
 
     @Override
@@ -1085,37 +1085,37 @@ public class HashBag<T>
     @Override
     public T min(Comparator<? super T> comparator)
     {
-        return ((ObjectIntHashMap<T>) this.items).keysView().min(comparator);
+        return this.items.keysView().min(comparator);
     }
 
     @Override
     public T max(Comparator<? super T> comparator)
     {
-        return ((ObjectIntHashMap<T>) this.items).keysView().max(comparator);
+        return this.items.keysView().max(comparator);
     }
 
     @Override
     public T min()
     {
-        return ((ObjectIntHashMap<T>) this.items).keysView().min();
+        return this.items.keysView().min();
     }
 
     @Override
     public T max()
     {
-        return ((ObjectIntHashMap<T>) this.items).keysView().max();
+        return this.items.keysView().max();
     }
 
     @Override
     public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
     {
-        return ((ObjectIntHashMap<T>) this.items).keysView().minBy(function);
+        return this.items.keysView().minBy(function);
     }
 
     @Override
     public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
     {
-        return ((ObjectIntHashMap<T>) this.items).keysView().maxBy(function);
+        return this.items.keysView().maxBy(function);
     }
 
     @Override
@@ -1231,7 +1231,7 @@ public class HashBag<T>
         private boolean isCurrentKeySet;
         private int currentKeyPosition;
         private int currentKeyOccurrences;
-        private Iterator<ObjectIntPair<T>> keyValueIterator = ((ObjectIntHashMap<T>) HashBag.this.items).keyValuesView().iterator();
+        private Iterator<ObjectIntPair<T>> keyValueIterator = HashBag.this.items.keyValuesView().iterator();
         private ObjectIntPair<T> currentKeyValue;
 
         public boolean hasNext()
@@ -1269,7 +1269,7 @@ public class HashBag<T>
             this.position--;
 
             HashBag.this.remove(this.currentKeyValue.getOne());
-            this.keyValueIterator = ((ObjectIntHashMap<T>) HashBag.this.items).keyValuesView().iterator();
+            this.keyValueIterator = HashBag.this.items.keyValuesView().iterator();
             this.currentKeyOccurrences--;
             this.currentKeyPosition--;
         }
