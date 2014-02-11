@@ -26,9 +26,9 @@ public class ImmutableArrayBagTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyAFljb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5iYWcuaW1tdXRhYmxlLkFic3RyYWN0SW1t\n"
-                        + "dXRhYmxlQmFnJEltbXV0YWJsZUJhZ1NlcmlhbGl6YXRpb25Qcm94eQAAAAAAAAABDAAAeHB3BAAA\n"
-                        + "AAJ0AANPbmV3BAAAAAF0AANUd293BAAAAAF4",
+                "rO0ABXNyAERjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5iYWcuaW1tdXRhYmxlLkltbXV0YWJsZUJh\n"
+                        + "Z1NlcmlhbGl6YXRpb25Qcm94eQAAAAAAAAABDAAAeHB3BAAAAAJ0AANPbmV3BAAAAAF0AANUd293\n"
+                        + "BAAAAAF4",
                 ImmutableArrayBag.newBagWith("One", "Two"));
     }
 }

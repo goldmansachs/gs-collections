@@ -49,11 +49,6 @@ final class ImmutableEmptyMap<K, V>
 
     private static final long serialVersionUID = 1L;
 
-    private Object readResolve()
-    {
-        return INSTANCE;
-    }
-
     public int size()
     {
         return 0;

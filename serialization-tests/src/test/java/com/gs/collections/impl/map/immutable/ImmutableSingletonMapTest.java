@@ -26,9 +26,8 @@ public class ImmutableSingletonMapTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyAFljb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAuaW1tdXRhYmxlLkFic3RyYWN0SW1t\n"
-                        + "dXRhYmxlTWFwJEltbXV0YWJsZU1hcFNlcmlhbGl6YXRpb25Qcm94eQAAAAAAAAABDAAAeHB3BAAA\n"
-                        + "AAFwcHg=",
+                "rO0ABXNyAERjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAuaW1tdXRhYmxlLkltbXV0YWJsZU1h\n"
+                        + "cFNlcmlhbGl6YXRpb25Qcm94eQAAAAAAAAABDAAAeHB3BAAAAAFwcHg=",
                 new ImmutableSingletonMap<Object, Object>(null, null));
     }
 }

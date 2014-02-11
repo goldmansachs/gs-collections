@@ -26,9 +26,8 @@ public class ImmutableTripletonMapTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyAFljb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAuaW1tdXRhYmxlLkFic3RyYWN0SW1t\n"
-                        + "dXRhYmxlTWFwJEltbXV0YWJsZU1hcFNlcmlhbGl6YXRpb25Qcm94eQAAAAAAAAABDAAAeHB3BAAA\n"
-                        + "AAN0AAFhcHQAAWJwdAABY3B4",
+                "rO0ABXNyAERjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5tYXAuaW1tdXRhYmxlLkltbXV0YWJsZU1h\n"
+                        + "cFNlcmlhbGl6YXRpb25Qcm94eQAAAAAAAAABDAAAeHB3BAAAAAN0AAFhcHQAAWJwdAABY3B4",
                 new ImmutableTripletonMap<String, Object>("a", null, "b", null, "c", null));
     }
 }

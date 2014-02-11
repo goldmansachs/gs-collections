@@ -73,11 +73,6 @@ final class ImmutableEmptySet<T>
         return 0;
     }
 
-    private Object readResolve()
-    {
-        return INSTANCE;
-    }
-
     @Override
     public ImmutableSet<T> newWith(T element)
     {

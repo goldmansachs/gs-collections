@@ -707,7 +707,7 @@ final class ImmutableEmptyBag<T>
 
     private Object writeReplace()
     {
-        return new AbstractImmutableBag.ImmutableBagSerializationProxy<T>(this);
+        return new ImmutableBagSerializationProxy<T>(this);
     }
 
     public <K, V> ImmutableMap<K, V> aggregateInPlaceBy(

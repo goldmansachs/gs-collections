@@ -26,9 +26,8 @@ public class ImmutableSingletonBagTest
     {
         Verify.assertSerializedForm(
                 1L,
-                "rO0ABXNyAFljb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5iYWcuaW1tdXRhYmxlLkFic3RyYWN0SW1t\n"
-                        + "dXRhYmxlQmFnJEltbXV0YWJsZUJhZ1NlcmlhbGl6YXRpb25Qcm94eQAAAAAAAAABDAAAeHB3BAAA\n"
-                        + "AAFwdwQAAAABeA==",
+                "rO0ABXNyAERjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5iYWcuaW1tdXRhYmxlLkltbXV0YWJsZUJh\n"
+                        + "Z1NlcmlhbGl6YXRpb25Qcm94eQAAAAAAAAABDAAAeHB3BAAAAAFwdwQAAAABeA==",
                 new ImmutableSingletonBag<Object>(null));
     }
 }

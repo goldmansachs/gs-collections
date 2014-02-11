@@ -16,14 +16,7 @@
 
 package com.gs.collections.impl.bag.immutable;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectOutput;
-
 import com.gs.collections.api.bag.ImmutableBag;
-import com.gs.collections.api.bag.MutableBag;
-import com.gs.collections.api.bag.UnsortedBag;
 import com.gs.collections.api.bag.primitive.ImmutableBooleanBag;
 import com.gs.collections.api.bag.primitive.ImmutableByteBag;
 import com.gs.collections.api.bag.primitive.ImmutableCharBag;
@@ -50,7 +43,6 @@ import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.partition.bag.PartitionImmutableBag;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.tuple.Pair;
-import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.ByteHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.CharHashBag;
@@ -61,7 +53,6 @@ import com.gs.collections.impl.bag.mutable.primitive.LongHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.ShortHashBag;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
-import com.gs.collections.impl.block.procedure.checked.CheckedObjectIntProcedure;
 import com.gs.collections.impl.collection.immutable.AbstractImmutableCollection;
 import com.gs.collections.impl.factory.Bags;
 
@@ -240,66 +231,5 @@ public abstract class AbstractImmutableBag<T>
         builder.deleteCharAt(builder.length() - 1);
         builder.deleteCharAt(builder.length() - 1);
         return builder.append('}').toString();
-    }
-
-    protected static class ImmutableBagSerializationProxy<T> implements Externalizable
-    {
-        private static final long serialVersionUID = 1L;
-
-        private UnsortedBag<T> bag;
-
-        @SuppressWarnings("UnusedDeclaration")
-        public ImmutableBagSerializationProxy()
-        {
-            // Empty constructor for Externalizable class
-        }
-
-        protected ImmutableBagSerializationProxy(UnsortedBag<T> bag)
-        {
-            this.bag = bag;
-        }
-
-        public void writeExternal(final ObjectOutput out) throws IOException
-        {
-            out.writeInt(this.bag.sizeDistinct());
-            try
-            {
-                this.bag.forEachWithOccurrences(new CheckedObjectIntProcedure<T>()
-                {
-                    @Override
-                    public void safeValue(T object, int index) throws IOException
-                    {
-                        out.writeObject(object);
-                        out.writeInt(index);
-                    }
-                });
-            }
-            catch (RuntimeException e)
-            {
-                if (e.getCause() instanceof IOException)
-                {
-                    throw (IOException) e.getCause();
-                }
-                throw e;
-            }
-        }
-
-        public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
-        {
-            int size = in.readInt();
-            MutableBag<T> deserializedBag = new HashBag<T>(size);
-
-            for (int i = 0; i < size; i++)
-            {
-                deserializedBag.addOccurrences((T) in.readObject(), in.readInt());
-            }
-
-            this.bag = deserializedBag;
-        }
-
-        protected Object readResolve()
-        {
-            return this.bag.toImmutable();
-        }
     }
 }
