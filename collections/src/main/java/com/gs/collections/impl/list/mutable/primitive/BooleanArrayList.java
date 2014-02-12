@@ -37,6 +37,7 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.BooleanList;
 import com.gs.collections.api.list.primitive.ImmutableBooleanList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
+import com.gs.collections.api.set.primitive.BooleanSet;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.factory.primitive.BooleanLists;
@@ -364,6 +365,28 @@ public final class BooleanArrayList
             this.items.set(0, this.size, true);
         }
         return oldSize != this.size;
+    }
+
+    public boolean retainAll(BooleanIterable source)
+    {
+        int oldSize = this.size();
+        final BooleanSet sourceSet = source instanceof BooleanSet ? (BooleanSet) source : source.toSet();
+        BooleanArrayList retained = this.select(new BooleanPredicate()
+        {
+            public boolean accept(boolean value)
+            {
+                return sourceSet.contains(value);
+            }
+        });
+
+        this.size = retained.size;
+        this.items = retained.items;
+        return oldSize != this.size();
+    }
+
+    public boolean retainAll(boolean... source)
+    {
+        return this.retainAll(BooleanHashSet.newSetWith(source));
     }
 
     private int getTrueCount()

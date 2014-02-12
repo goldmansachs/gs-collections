@@ -54,6 +54,7 @@ import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.map.primitive.ImmutableObject<name>Map;
 import com.gs.collections.api.map.primitive.MutableObject<name>Map;
 import com.gs.collections.api.map.primitive.Object<name>Map;
+import com.gs.collections.api.set.primitive.<name>Set;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.api.tuple.primitive.Object<name>Pair;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
@@ -1568,6 +1569,33 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
                 this.remove(item);
             }
             return oldSize != Object<name>HashMap.this.size();
+        }
+
+        public boolean retainAll(<name>Iterable source)
+        {
+            int oldSize = Object<name>HashMap.this.size();
+            final <name>Set sourceSet = source instanceof <name>Set ? (<name>Set) source : source.toSet();
+            Object<name>HashMap\<K> retained = Object<name>HashMap.this.select(new Object<name>Predicate\<K>()
+            {
+                public boolean accept(K object, <type> value)
+                {
+                    return sourceSet.contains(value);
+                }
+            });
+            if (retained.size() != oldSize)
+            {
+                Object<name>HashMap.this.keys = retained.keys;
+                Object<name>HashMap.this.values = retained.values;
+                Object<name>HashMap.this.occupiedWithData = retained.occupiedWithData;
+                Object<name>HashMap.this.occupiedWithSentinels = retained.occupiedWithSentinels;
+                return true;
+            }
+            return false;
+        }
+
+        public boolean retainAll(<type>... source)
+        {
+            return this.retainAll(<name>HashSet.newSetWith(source));
         }
 
         public void clear()

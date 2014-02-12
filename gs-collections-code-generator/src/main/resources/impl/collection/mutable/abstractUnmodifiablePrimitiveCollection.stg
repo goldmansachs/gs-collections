@@ -121,6 +121,16 @@ public abstract class AbstractUnmodifiable<name>Collection
         throw new UnsupportedOperationException("Cannot call removeAll on an unmodifiable collection");
     }
 
+    public boolean retainAll(<name>Iterable source)
+    {
+        throw new UnsupportedOperationException("Cannot call retainAll on an unmodifiable collection");
+    }
+
+    public boolean retainAll(<type>... source)
+    {
+        throw new UnsupportedOperationException("Cannot call retainAll on an unmodifiable collection");
+    }
+
     public <name>Iterator <type>Iterator()
     {
         return this.collection.<type>Iterator();

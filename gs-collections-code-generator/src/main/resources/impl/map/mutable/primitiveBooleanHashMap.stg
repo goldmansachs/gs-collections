@@ -58,6 +58,7 @@ import com.gs.collections.api.map.primitive.<name>BooleanMap;
 import com.gs.collections.api.map.primitive.Immutable<name>BooleanMap;
 import com.gs.collections.api.map.primitive.Mutable<name>BooleanMap;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.set.primitive.BooleanSet;
 import com.gs.collections.api.set.primitive.<name>Set;
 import com.gs.collections.api.set.primitive.Immutable<name>Set;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
@@ -2106,6 +2107,34 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
             return oldSize != <name>BooleanHashMap.this.size();
         }
 
+        public boolean retainAll(<name>Iterable source)
+        {
+            int oldSize = <name>BooleanHashMap.this.size();
+            final <name>Set sourceSet = source instanceof <name>Set ? (<name>Set) source : source.toSet();
+            <name>BooleanHashMap retained = <name>BooleanHashMap.this.select(new <name>BooleanPredicate()
+            {
+                public boolean accept(<type> key, boolean value)
+                {
+                    return sourceSet.contains(key);
+                }
+            });
+            if (retained.size() != oldSize)
+            {
+                <name>BooleanHashMap.this.keys = retained.keys;
+                <name>BooleanHashMap.this.values = retained.values;
+                <name>BooleanHashMap.this.maxSize = retained.maxSize;
+                <name>BooleanHashMap.this.occupied = retained.occupied;
+                <name>BooleanHashMap.this.sentinelValues = retained.sentinelValues;
+                return true;
+            }
+            return false;
+        }
+
+        public boolean retainAll(<type>... source)
+        {
+            return this.retainAll(<name>HashSet.newSetWith(source));
+        }
+
         public void clear()
         {
             <name>BooleanHashMap.this.clear();
@@ -2904,6 +2933,34 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
                 this.remove(item);
             }
             return oldSize != <name>BooleanHashMap.this.size();
+        }
+
+        public boolean retainAll(BooleanIterable source)
+        {
+            int oldSize = <name>BooleanHashMap.this.size();
+            final BooleanSet sourceSet = source instanceof BooleanSet ? (BooleanSet) source : source.toSet();
+            <name>BooleanHashMap retained = <name>BooleanHashMap.this.select(new <name>BooleanPredicate()
+            {
+                public boolean accept(<type> key, boolean value)
+                {
+                    return sourceSet.contains(value);
+                }
+            });
+            if (retained.size() != oldSize)
+            {
+                <name>BooleanHashMap.this.keys = retained.keys;
+                <name>BooleanHashMap.this.values = retained.values;
+                <name>BooleanHashMap.this.maxSize = retained.maxSize;
+                <name>BooleanHashMap.this.occupied = retained.occupied;
+                <name>BooleanHashMap.this.sentinelValues = retained.sentinelValues;
+                return true;
+            }
+            return false;
+        }
+
+        public boolean retainAll(boolean... source)
+        {
+            return this.retainAll(BooleanHashSet.newSetWith(source));
         }
 
         public int size()

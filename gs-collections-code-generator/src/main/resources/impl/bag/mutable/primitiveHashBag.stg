@@ -37,6 +37,7 @@ import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
+import com.gs.collections.api.set.primitive.<name>Set;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.bag.mutable.HashBag;
@@ -341,6 +342,31 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
         return this.size() != oldSize;
     }
 
+    public boolean retainAll(<name>Iterable source)
+    {
+        int oldSize = this.size();
+        final <name>Set sourceSet = source instanceof <name>Set ? (<name>Set) source : source.toSet();
+        <name>HashBag retained = this.select(new <name>Predicate()
+        {
+            public boolean accept(<type> key)
+            {
+                return sourceSet.contains(key);
+            }
+        });
+        if (retained.size() != oldSize)
+        {
+            this.items = retained.items;
+            this.size = retained.size;
+            return true;
+        }
+        return false;
+    }
+
+    public boolean retainAll(<type>... source)
+    {
+        return this.retainAll(<name>HashSet.newSetWith(source));
+    }
+
     public void addOccurrences(<type> item, final int occurrences)
     {
         if (occurrences \< 0)
@@ -405,9 +431,9 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
         });
     }
 
-    public Mutable<name>Bag select(final <name>Predicate predicate)
+    public <name>HashBag select(final <name>Predicate predicate)
     {
-        final Mutable<name>Bag result = new <name>HashBag();
+        final <name>HashBag result = new <name>HashBag();
         this.forEachWithOccurrences(new <name>IntProcedure()
         {
             public void value(<type> each, int occurrences)
@@ -421,9 +447,9 @@ public final class <name>HashBag implements Mutable<name>Bag, Externalizable
         return result;
     }
 
-    public Mutable<name>Bag reject(final <name>Predicate predicate)
+    public <name>HashBag reject(final <name>Predicate predicate)
     {
-        final Mutable<name>Bag result = new <name>HashBag();
+        final <name>HashBag result = new <name>HashBag();
         this.forEachWithOccurrences(new <name>IntProcedure()
         {
             public void value(<type> each, int occurrences)

@@ -257,6 +257,22 @@ public abstract class AbstractSynchronized<name>Collection
         }
     }
 
+    public boolean retainAll(<name>Iterable source)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.retainAll(source);
+        }
+    }
+
+    public boolean retainAll(<type>... source)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.retainAll(source);
+        }
+    }
+
     /**
      * Must be called in a synchronized block.
      */

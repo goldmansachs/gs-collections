@@ -214,7 +214,7 @@ public class <name1><name2>HashMapValuesTest extends AbstractMutable<name2>Colle
 
     @Override
     @Test
-    public void removeAllIterable()
+    public void removeAll_iterable()
     {
         Assert.assertFalse(this.newWith().removeAll(new <name2>ArrayList()));
         Assert.assertFalse(this.newWith().removeAll(<name2>ArrayList.newListWith(<(literal.(type2))("1")>)));
@@ -239,6 +239,130 @@ public class <name1><name2>HashMapValuesTest extends AbstractMutable<name2>Colle
         Assert.assertFalse(map.contains(<(literal.(type2))("1")>));
         Assert.assertFalse(map.contains(<(literal.(type2))("2")>));
         Assert.assertFalse(map.contains(<(literal.(type2))("3")>));
+        Assert.assertTrue(map.isEmpty());
+    }
+
+    @Override
+    @Test
+    public void retainAll()
+    {
+        Assert.assertFalse(this.newWith().retainAll());
+        Assert.assertFalse(this.newWith().retainAll(<(literal.(type2))("1")>));
+
+        <name1><name2>HashMap map = <name1><name2>HashMap.newWithKeysValues(<["0", "1", "2", "3"]:keyValue(); separator=", ">);
+        Mutable<name2>Collection collection = map.values();
+        Assert.assertFalse(collection.retainAll(<(literal.(type2))("0")>, <(literal.(type2))("1")>, <(literal.(type2))("2")>, <(literal.(type2))("3")>));
+
+        Assert.assertTrue(collection.retainAll(<(literal.(type2))("0")>, <(literal.(type2))("2")>, <(literal.(type2))("3")>, <(literal.(type2))("5")>));
+        Assert.assertTrue(collection.contains(<(literal.(type2))("0")>));
+        Assert.assertFalse(collection.contains(<(literal.(type2))("1")>));
+        Assert.assertTrue(collection.contains(<(literal.(type2))("2")>));
+        Assert.assertTrue(collection.contains(<(literal.(type2))("3")>));
+        Assert.assertFalse(collection.contains(<(literal.(type2))("5")>));
+        Assert.assertTrue(map.contains(<(literal.(type2))("0")>));
+        Assert.assertFalse(map.contains(<(literal.(type2))("1")>));
+        Assert.assertTrue(map.contains(<(literal.(type2))("2")>));
+        Assert.assertTrue(map.contains(<(literal.(type2))("3")>));
+        Assert.assertFalse(map.contains(<(literal.(type2))("5")>));
+
+        Assert.assertTrue(collection.retainAll(<(literal.(type2))("2")>, <(literal.(type2))("3")>, <(literal.(type2))("5")>));
+        Assert.assertFalse(collection.contains(<(literal.(type2))("0")>));
+        Assert.assertFalse(collection.contains(<(literal.(type2))("1")>));
+        Assert.assertTrue(collection.contains(<(literal.(type2))("2")>));
+        Assert.assertTrue(collection.contains(<(literal.(type2))("3")>));
+        Assert.assertFalse(collection.contains(<(literal.(type2))("5")>));
+        Assert.assertFalse(map.contains(<(literal.(type2))("0")>));
+        Assert.assertFalse(map.contains(<(literal.(type2))("1")>));
+        Assert.assertTrue(map.contains(<(literal.(type2))("2")>));
+        Assert.assertTrue(map.contains(<(literal.(type2))("3")>));
+        Assert.assertFalse(map.contains(<(literal.(type2))("5")>));
+
+        Assert.assertTrue(collection.retainAll(<(literal.(type2))("3")>, <(literal.(type2))("5")>));
+        Assert.assertFalse(collection.contains(<(literal.(type2))("0")>));
+        Assert.assertFalse(collection.contains(<(literal.(type2))("1")>));
+        Assert.assertFalse(collection.contains(<(literal.(type2))("2")>));
+        Assert.assertTrue(collection.contains(<(literal.(type2))("3")>));
+        Assert.assertFalse(collection.contains(<(literal.(type2))("5")>));
+        Assert.assertFalse(map.contains(<(literal.(type2))("0")>));
+        Assert.assertFalse(map.contains(<(literal.(type2))("1")>));
+        Assert.assertFalse(map.contains(<(literal.(type2))("2")>));
+        Assert.assertTrue(map.contains(<(literal.(type2))("3")>));
+        Assert.assertFalse(map.contains(<(literal.(type2))("5")>));
+
+        Assert.assertTrue(collection.retainAll(<(literal.(type2))("0")>, <(literal.(type2))("0")>, <(literal.(type2))("1")>));
+        Assert.assertTrue(collection.isEmpty());
+        Assert.assertFalse(collection.contains(<(literal.(type2))("0")>));
+        Assert.assertFalse(collection.contains(<(literal.(type2))("1")>));
+        Assert.assertFalse(collection.contains(<(literal.(type2))("2")>));
+        Assert.assertFalse(collection.contains(<(literal.(type2))("3")>));
+        Assert.assertFalse(collection.contains(<(literal.(type2))("5")>));
+        Assert.assertFalse(map.contains(<(literal.(type2))("0")>));
+        Assert.assertFalse(map.contains(<(literal.(type2))("1")>));
+        Assert.assertFalse(map.contains(<(literal.(type2))("2")>));
+        Assert.assertFalse(map.contains(<(literal.(type2))("3")>));
+        Assert.assertFalse(map.contains(<(literal.(type2))("5")>));
+        Assert.assertTrue(map.isEmpty());
+    }
+
+    @Override
+    @Test
+    public void retainAll_iterable()
+    {
+        Assert.assertFalse(this.newWith().retainAll(new <name2>ArrayList()));
+        Assert.assertFalse(this.newWith().retainAll(<name2>ArrayList.newListWith(<(literal.(type2))("1")>)));
+
+        <name1><name2>HashMap map = <name1><name2>HashMap.newWithKeysValues(<["0", "1", "2", "3"]:keyValue(); separator=", ">);
+        Mutable<name2>Collection collection = map.values();
+        Assert.assertFalse(collection.retainAll(<name2>ArrayList.newListWith(<(literal.(type2))("0")>, <(literal.(type2))("1")>, <(literal.(type2))("2")>, <(literal.(type2))("3")>)));
+
+        Assert.assertTrue(collection.retainAll(<name2>ArrayList.newListWith(<(literal.(type2))("0")>, <(literal.(type2))("2")>, <(literal.(type2))("3")>, <(literal.(type2))("5")>)));
+        Assert.assertTrue(collection.contains(<(literal.(type2))("0")>));
+        Assert.assertFalse(collection.contains(<(literal.(type2))("1")>));
+        Assert.assertTrue(collection.contains(<(literal.(type2))("2")>));
+        Assert.assertTrue(collection.contains(<(literal.(type2))("3")>));
+        Assert.assertFalse(collection.contains(<(literal.(type2))("5")>));
+        Assert.assertTrue(map.contains(<(literal.(type2))("0")>));
+        Assert.assertFalse(map.contains(<(literal.(type2))("1")>));
+        Assert.assertTrue(map.contains(<(literal.(type2))("2")>));
+        Assert.assertTrue(map.contains(<(literal.(type2))("3")>));
+        Assert.assertFalse(map.contains(<(literal.(type2))("5")>));
+
+        Assert.assertTrue(collection.retainAll(<name2>ArrayList.newListWith(<(literal.(type2))("2")>, <(literal.(type2))("3")>, <(literal.(type2))("5")>)));
+        Assert.assertFalse(collection.contains(<(literal.(type2))("0")>));
+        Assert.assertFalse(collection.contains(<(literal.(type2))("1")>));
+        Assert.assertTrue(collection.contains(<(literal.(type2))("2")>));
+        Assert.assertTrue(collection.contains(<(literal.(type2))("3")>));
+        Assert.assertFalse(collection.contains(<(literal.(type2))("5")>));
+        Assert.assertFalse(map.contains(<(literal.(type2))("0")>));
+        Assert.assertFalse(map.contains(<(literal.(type2))("1")>));
+        Assert.assertTrue(map.contains(<(literal.(type2))("2")>));
+        Assert.assertTrue(map.contains(<(literal.(type2))("3")>));
+        Assert.assertFalse(map.contains(<(literal.(type2))("5")>));
+
+        Assert.assertTrue(collection.retainAll(<name2>ArrayList.newListWith(<(literal.(type2))("3")>, <(literal.(type2))("5")>)));
+        Assert.assertFalse(collection.contains(<(literal.(type2))("0")>));
+        Assert.assertFalse(collection.contains(<(literal.(type2))("1")>));
+        Assert.assertFalse(collection.contains(<(literal.(type2))("2")>));
+        Assert.assertTrue(collection.contains(<(literal.(type2))("3")>));
+        Assert.assertFalse(collection.contains(<(literal.(type2))("5")>));
+        Assert.assertFalse(map.contains(<(literal.(type2))("0")>));
+        Assert.assertFalse(map.contains(<(literal.(type2))("1")>));
+        Assert.assertFalse(map.contains(<(literal.(type2))("2")>));
+        Assert.assertTrue(map.contains(<(literal.(type2))("3")>));
+        Assert.assertFalse(map.contains(<(literal.(type2))("5")>));
+
+        Assert.assertTrue(collection.retainAll(<name2>ArrayList.newListWith(<(literal.(type2))("0")>, <(literal.(type2))("0")>, <(literal.(type2))("1")>)));
+        Assert.assertTrue(collection.isEmpty());
+        Assert.assertFalse(collection.contains(<(literal.(type2))("0")>));
+        Assert.assertFalse(collection.contains(<(literal.(type2))("1")>));
+        Assert.assertFalse(collection.contains(<(literal.(type2))("2")>));
+        Assert.assertFalse(collection.contains(<(literal.(type2))("3")>));
+        Assert.assertFalse(collection.contains(<(literal.(type2))("5")>));
+        Assert.assertFalse(map.contains(<(literal.(type2))("0")>));
+        Assert.assertFalse(map.contains(<(literal.(type2))("1")>));
+        Assert.assertFalse(map.contains(<(literal.(type2))("2")>));
+        Assert.assertFalse(map.contains(<(literal.(type2))("3")>));
+        Assert.assertFalse(map.contains(<(literal.(type2))("5")>));
         Assert.assertTrue(map.isEmpty());
     }
 

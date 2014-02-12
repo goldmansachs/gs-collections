@@ -240,6 +240,35 @@ public class BooleanHashSet implements MutableBooleanSet, Externalizable
         return modified;
     }
 
+    public boolean retainAll(BooleanIterable source)
+    {
+        if (this.state == 0
+                || (source.contains(true) && source.contains(false))
+                || (this.state == 2 && source.contains(true))
+                || (this.state == 1 && source.contains(false)))
+        {
+            return false;
+        }
+        if (source.contains(true))
+        {
+            this.state -= 1;
+        }
+        else if (source.contains(false))
+        {
+            this.state -= 2;
+        }
+        else
+        {
+            this.state = 0;
+        }
+        return true;
+    }
+
+    public boolean retainAll(boolean... source)
+    {
+        return this.retainAll(BooleanHashSet.newSetWith(source));
+    }
+
     public void clear()
     {
         this.state = 0;

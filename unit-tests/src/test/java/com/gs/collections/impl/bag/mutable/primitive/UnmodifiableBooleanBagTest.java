@@ -115,9 +115,23 @@ public class UnmodifiableBooleanBagTest extends AbstractMutableBooleanBagTestCas
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
-    public void removeAllIterable()
+    public void removeAll_iterable()
     {
         this.classUnderTest().removeAll(this.newMutableCollectionWith());
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void retainAll()
+    {
+        this.classUnderTest().retainAll(true, false);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void retainAll_iterable()
+    {
+        this.classUnderTest().retainAll(this.newMutableCollectionWith());
     }
 
     @Override

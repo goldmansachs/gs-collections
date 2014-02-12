@@ -194,7 +194,7 @@ public class Object<name>HashMapValuesTest extends AbstractMutable<name>Collecti
 
     @Override
     @Test
-    public void removeAllIterable()
+    public void removeAll_iterable()
     {
         Assert.assertFalse(this.newWith().removeAll(new <name>ArrayList()));
         Assert.assertFalse(this.newWith().removeAll(<name>ArrayList.newListWith(<(literal.(type))("1")>)));
@@ -212,6 +212,66 @@ public class Object<name>HashMapValuesTest extends AbstractMutable<name>Collecti
         Assert.assertTrue(map.contains(<(literal.(type))("3")>));
 
         Assert.assertTrue(collection.removeAll(<name>ArrayList.newListWith(<(literal.(type))("3")>, <(literal.(type))("2")>)));
+        Assert.assertTrue(collection.isEmpty());
+        Assert.assertFalse(collection.contains(<(literal.(type))("1")>));
+        Assert.assertFalse(collection.contains(<(literal.(type))("2")>));
+        Assert.assertFalse(collection.contains(<(literal.(type))("3")>));
+        Assert.assertFalse(map.contains(<(literal.(type))("1")>));
+        Assert.assertFalse(map.contains(<(literal.(type))("2")>));
+        Assert.assertFalse(map.contains(<(literal.(type))("3")>));
+        Assert.assertTrue(map.isEmpty());
+    }
+
+    @Override
+    @Test
+    public void retainAll()
+    {
+        Assert.assertFalse(this.newWith().retainAll());
+        Assert.assertFalse(this.newWith().retainAll(<(literal.(type))("1")>));
+
+        Object<name>HashMap\<Integer> map = Object<name>HashMap.newWithKeysValues(<["1", "2", "3"]:keyValue(); separator=", ">);
+        Mutable<name>Collection collection = map.values();
+        Assert.assertFalse(collection.retainAll(<(literal.(type))("1")>, <(literal.(type))("2")>, <(literal.(type))("3")>));
+
+        Assert.assertTrue(collection.retainAll(<(literal.(type))("2")>, <(literal.(type))("3")>, <(literal.(type))("5")>));
+        Assert.assertFalse(collection.contains(<(literal.(type))("1")>));
+        Assert.assertTrue(collection.contains(<(literal.(type))("2")>));
+        Assert.assertTrue(collection.contains(<(literal.(type))("3")>));
+        Assert.assertFalse(map.contains(<(literal.(type))("1")>));
+        Assert.assertTrue(map.contains(<(literal.(type))("2")>));
+        Assert.assertTrue(map.contains(<(literal.(type))("3")>));
+
+        Assert.assertTrue(collection.retainAll(<(literal.(type))("1")>, <(literal.(type))("0")>, <(literal.(type))("4")>));
+        Assert.assertTrue(collection.isEmpty());
+        Assert.assertFalse(collection.contains(<(literal.(type))("1")>));
+        Assert.assertFalse(collection.contains(<(literal.(type))("2")>));
+        Assert.assertFalse(collection.contains(<(literal.(type))("3")>));
+        Assert.assertFalse(map.contains(<(literal.(type))("1")>));
+        Assert.assertFalse(map.contains(<(literal.(type))("2")>));
+        Assert.assertFalse(map.contains(<(literal.(type))("3")>));
+        Assert.assertTrue(map.isEmpty());
+    }
+
+    @Override
+    @Test
+    public void retainAll_iterable()
+    {
+        Assert.assertFalse(this.newWith().retainAll(new <name>ArrayList()));
+        Assert.assertFalse(this.newWith().retainAll(<name>ArrayList.newListWith(<(literal.(type))("1")>)));
+
+        Object<name>HashMap\<Integer> map = Object<name>HashMap.newWithKeysValues(<["1", "2", "3"]:keyValue(); separator=", ">);
+        Mutable<name>Collection collection = map.values();
+        Assert.assertFalse(collection.retainAll(<name>ArrayList.newListWith(<(literal.(type))("1")>, <(literal.(type))("2")>, <(literal.(type))("3")>)));
+
+        Assert.assertTrue(collection.retainAll(<name>ArrayList.newListWith(<(literal.(type))("2")>, <(literal.(type))("3")>, <(literal.(type))("5")>)));
+        Assert.assertFalse(collection.contains(<(literal.(type))("1")>));
+        Assert.assertTrue(collection.contains(<(literal.(type))("2")>));
+        Assert.assertTrue(collection.contains(<(literal.(type))("3")>));
+        Assert.assertFalse(map.contains(<(literal.(type))("1")>));
+        Assert.assertTrue(map.contains(<(literal.(type))("2")>));
+        Assert.assertTrue(map.contains(<(literal.(type))("3")>));
+
+        Assert.assertTrue(collection.retainAll(<name>ArrayList.newListWith(<(literal.(type))("1")>, <(literal.(type))("0")>, <(literal.(type))("4")>)));
         Assert.assertTrue(collection.isEmpty());
         Assert.assertFalse(collection.contains(<(literal.(type))("1")>));
         Assert.assertFalse(collection.contains(<(literal.(type))("2")>));

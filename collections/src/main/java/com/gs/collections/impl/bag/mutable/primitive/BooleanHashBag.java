@@ -35,6 +35,7 @@ import com.gs.collections.api.block.procedure.primitive.BooleanIntProcedure;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
+import com.gs.collections.api.set.primitive.BooleanSet;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.factory.primitive.BooleanBags;
@@ -364,6 +365,26 @@ public final class BooleanHashBag implements MutableBooleanBag, Externalizable
             }
         }
         return this.size() != oldSize;
+    }
+
+    public boolean retainAll(BooleanIterable elements)
+    {
+        int oldSize = this.size();
+        BooleanSet set = elements instanceof BooleanSet ? (BooleanSet) elements : elements.toSet();
+        if (!set.contains(true) && this.containsTrue())
+        {
+            this.trueCount = 0;
+        }
+        if (!set.contains(false) && this.containsFalse())
+        {
+            this.falseCount = 0;
+        }
+        return this.size() != oldSize;
+    }
+
+    public boolean retainAll(boolean... source)
+    {
+        return this.retainAll(BooleanHashSet.newSetWith(source));
     }
 
     public void addOccurrences(boolean item, int occurrences)

@@ -14,6 +14,8 @@ body(type, name, primitive) ::= <<
 
 package com.gs.collections.api.collection.primitive;
 
+import java.util.Collection;
+
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.collection.MutableCollection;
@@ -37,6 +39,18 @@ public interface Mutable<name>Collection extends <name>Iterable
     boolean removeAll(<name>Iterable source);
 
     boolean removeAll(<type>... source);
+
+    /**
+     * @see Collection#retainAll(Collection)
+     * @since 5.0
+     */
+    boolean retainAll(<name>Iterable elements);
+
+    /**
+     * @see Collection#retainAll(Collection)
+     * @since 5.0
+     */
+    boolean retainAll(<type>... source);
 
     void clear();
 

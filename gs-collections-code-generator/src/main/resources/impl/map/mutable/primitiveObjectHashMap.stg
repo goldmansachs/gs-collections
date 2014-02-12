@@ -2860,6 +2860,34 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
             return oldSize != <name>ObjectHashMap.this.size();
         }
 
+        public boolean retainAll(<name>Iterable source)
+        {
+            int oldSize = this.size();
+            final <name>Set sourceSet = source instanceof <name>Set ? (<name>Set) source : source.toSet();
+            <name>ObjectHashMap\<V> retained = <name>ObjectHashMap.this.select(new <name>ObjectPredicate\<V>()
+            {
+                public boolean accept(<type> key, V value)
+                {
+                    return sourceSet.contains(key);
+                }
+            });
+            if (retained.size() != oldSize)
+            {
+                <name>ObjectHashMap.this.keys = retained.keys;
+                <name>ObjectHashMap.this.values = retained.values;
+                <name>ObjectHashMap.this.sentinelValues = retained.sentinelValues;
+                <name>ObjectHashMap.this.occupiedWithData = retained.occupiedWithData;
+                <name>ObjectHashMap.this.occupiedWithSentinels = retained.occupiedWithSentinels;
+                return true;
+            }
+            return false;
+        }
+
+        public boolean retainAll(<type>... source)
+        {
+            return this.retainAll(<name>HashSet.newSetWith(source));
+        }
+
         public void clear()
         {
             <name>ObjectHashMap.this.clear();

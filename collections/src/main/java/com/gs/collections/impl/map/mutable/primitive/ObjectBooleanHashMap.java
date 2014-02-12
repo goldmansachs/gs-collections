@@ -54,6 +54,7 @@ import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.map.primitive.ImmutableObjectBooleanMap;
 import com.gs.collections.api.map.primitive.MutableObjectBooleanMap;
 import com.gs.collections.api.map.primitive.ObjectBooleanMap;
+import com.gs.collections.api.set.primitive.BooleanSet;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
 import com.gs.collections.api.tuple.primitive.ObjectBooleanPair;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
@@ -1456,6 +1457,34 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
                 this.remove(item);
             }
             return oldSize != ObjectBooleanHashMap.this.size();
+        }
+
+        public boolean retainAll(BooleanIterable elements)
+        {
+            int oldSize = ObjectBooleanHashMap.this.size();
+            final BooleanSet set = elements instanceof BooleanSet ? (BooleanSet) elements : elements.toSet();
+            ObjectBooleanHashMap<K> retained = ObjectBooleanHashMap.this.select(new ObjectBooleanPredicate<K>()
+            {
+                public boolean accept(K key, boolean value)
+                {
+                    return set.contains(value);
+                }
+            });
+
+            if (oldSize != retained.size())
+            {
+                ObjectBooleanHashMap.this.maxSize = retained.maxSize;
+                ObjectBooleanHashMap.this.occupied = retained.occupied;
+                ObjectBooleanHashMap.this.keys = retained.keys;
+                ObjectBooleanHashMap.this.values = retained.values;
+                return true;
+            }
+            return false;
+        }
+
+        public boolean retainAll(boolean... source)
+        {
+            return this.retainAll(BooleanHashSet.newSetWith(source));
         }
 
         public int size()

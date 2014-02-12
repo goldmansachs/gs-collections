@@ -248,7 +248,7 @@ public class Synchronized<name>BooleanMapValuesTest extends AbstractMutableBoole
 
     @Override
     @Test
-    public void removeAllIterable()
+    public void removeAll_iterable()
     {
         Assert.assertFalse(this.newWith().removeAll(new BooleanArrayList()));
         Assert.assertFalse(this.newWith().removeAll(BooleanArrayList.newListWith(true)));
@@ -270,6 +270,66 @@ public class Synchronized<name>BooleanMapValuesTest extends AbstractMutableBoole
         <name>BooleanHashMap map1 = <name>BooleanHashMap.newWithKeysValues(<(literal.(type))("1")>, true, <(literal.(type))("2")>, false);
         MutableBooleanCollection collection1 = map1.values();
         Assert.assertTrue(collection1.removeAll(BooleanArrayList.newListWith(false, true)));
+        Assert.assertFalse(collection1.contains(false));
+        Assert.assertFalse(collection1.contains(true));
+        Assert.assertFalse(map1.contains(false));
+        Assert.assertFalse(map1.contains(true));
+    }
+
+    @Override
+    @Test
+    public void retainAll()
+    {
+        Assert.assertFalse(this.newWith().retainAll());
+        Assert.assertFalse(this.newWith().retainAll(true));
+
+        <name>BooleanHashMap map = <name>BooleanHashMap.newWithKeysValues(<(literal.(type))("1")>, true, <(literal.(type))("2")>, false);
+        MutableBooleanCollection collection = map.values();
+        Assert.assertTrue(collection.retainAll(false));
+        Assert.assertTrue(collection.contains(false));
+        Assert.assertFalse(collection.contains(true));
+        Assert.assertTrue(map.contains(false));
+        Assert.assertFalse(map.contains(true));
+
+        Assert.assertTrue(collection.retainAll(true));
+        Assert.assertFalse(collection.contains(true));
+        Assert.assertFalse(collection.contains(true));
+        Assert.assertFalse(map.contains(false));
+        Assert.assertFalse(map.contains(true));
+
+        <name>BooleanHashMap map1 = <name>BooleanHashMap.newWithKeysValues(<(literal.(type))("1")>, true, <(literal.(type))("2")>, false);
+        MutableBooleanCollection collection1 = map1.values();
+        Assert.assertTrue(collection1.retainAll());
+        Assert.assertFalse(collection1.contains(false));
+        Assert.assertFalse(collection1.contains(true));
+        Assert.assertFalse(map1.contains(false));
+        Assert.assertFalse(map1.contains(true));
+    }
+
+    @Override
+    @Test
+    public void retainAll_iterable()
+    {
+        Assert.assertFalse(this.newWith().retainAll(new BooleanArrayList()));
+        Assert.assertFalse(this.newWith().retainAll(BooleanArrayList.newListWith(true)));
+
+        <name>BooleanHashMap map = <name>BooleanHashMap.newWithKeysValues(<(literal.(type))("1")>, true, <(literal.(type))("2")>, false);
+        MutableBooleanCollection collection = map.values();
+        Assert.assertTrue(collection.retainAll(BooleanArrayList.newListWith(false)));
+        Assert.assertTrue(collection.contains(false));
+        Assert.assertFalse(collection.contains(true));
+        Assert.assertTrue(map.contains(false));
+        Assert.assertFalse(map.contains(true));
+
+        Assert.assertTrue(collection.retainAll(BooleanArrayList.newListWith(true)));
+        Assert.assertFalse(collection.contains(true));
+        Assert.assertFalse(collection.contains(true));
+        Assert.assertFalse(map.contains(false));
+        Assert.assertFalse(map.contains(true));
+
+        <name>BooleanHashMap map1 = <name>BooleanHashMap.newWithKeysValues(<(literal.(type))("1")>, true, <(literal.(type))("2")>, false);
+        MutableBooleanCollection collection1 = map1.values();
+        Assert.assertTrue(collection1.retainAll(BooleanArrayList.newListWith()));
         Assert.assertFalse(collection1.contains(false));
         Assert.assertFalse(collection1.contains(true));
         Assert.assertFalse(map1.contains(false));

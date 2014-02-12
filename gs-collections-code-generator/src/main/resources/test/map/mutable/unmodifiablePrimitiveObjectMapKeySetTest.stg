@@ -132,7 +132,7 @@ public class Unmodifiable<name>ObjectMapKeySetTest extends Abstract<name>SetTest
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
-    public void removeAllIterable()
+    public void removeAll_iterable()
     {
         this.classUnderTest().removeAll(new <name>ArrayList());
     }
@@ -142,6 +142,20 @@ public class Unmodifiable<name>ObjectMapKeySetTest extends Abstract<name>SetTest
     public void removeAll()
     {
         this.classUnderTest().removeAll();
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void retainAll_iterable()
+    {
+        this.classUnderTest().retainAll(new <name>ArrayList());
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
+    public void retainAll()
+    {
+        this.classUnderTest().retainAll();
     }
 
     @Override

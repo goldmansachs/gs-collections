@@ -60,6 +60,7 @@ import com.gs.collections.api.map.primitive.Immutable<name1><name2>Map;
 import com.gs.collections.api.map.primitive.Mutable<name1><name2>Map;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.primitive.<name1>Set;
+<if(!sameTwoPrimitives)>import com.gs.collections.api.set.primitive.<name2>Set;<endif>
 import com.gs.collections.api.set.primitive.Immutable<name1>Set;
 import com.gs.collections.api.set.primitive.Mutable<name1>Set;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.set.primitive.Mutable<name2>Set;<endif>
@@ -1831,6 +1832,34 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             return oldSize != <name1><name2>HashMap.this.size();
         }
 
+        public boolean retainAll(<name1>Iterable source)
+        {
+            int oldSize = this.size();
+            final <name1>Set sourceSet = source instanceof <name1>Set ? (<name1>Set) source : source.toSet();
+            <name1><name2>HashMap retained = <name1><name2>HashMap.this.select(new <name1><name2>Predicate()
+            {
+                public boolean accept(<type1> key, <type2> value)
+                {
+                    return sourceSet.contains(key);
+                }
+            });
+            if (retained.size() != oldSize)
+            {
+                <name1><name2>HashMap.this.keys = retained.keys;
+                <name1><name2>HashMap.this.values = retained.values;
+                <name1><name2>HashMap.this.sentinelValues = retained.sentinelValues;
+                <name1><name2>HashMap.this.occupiedWithData = retained.occupiedWithData;
+                <name1><name2>HashMap.this.occupiedWithSentinels = retained.occupiedWithSentinels;
+                return true;
+            }
+            return false;
+        }
+
+        public boolean retainAll(<type1>... source)
+        {
+            return this.retainAll(<name1>HashSet.newSetWith(source));
+        }
+
         public void clear()
         {
             <name1><name2>HashMap.this.clear();
@@ -2674,6 +2703,34 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                 this.remove(item);
             }
             return oldSize != <name1><name2>HashMap.this.size();
+        }
+
+        public boolean retainAll(<name2>Iterable source)
+        {
+            int oldSize = this.size();
+            final <name2>Set sourceSet = source instanceof <name2>Set ? (<name2>Set) source : source.toSet();
+            <name1><name2>HashMap retained = <name1><name2>HashMap.this.select(new <name1><name2>Predicate()
+            {
+                public boolean accept(<type1> key, <type2> value)
+                {
+                    return sourceSet.contains(value);
+                }
+            });
+            if (retained.size() != oldSize)
+            {
+                <name1><name2>HashMap.this.keys = retained.keys;
+                <name1><name2>HashMap.this.values = retained.values;
+                <name1><name2>HashMap.this.sentinelValues = retained.sentinelValues;
+                <name1><name2>HashMap.this.occupiedWithData = retained.occupiedWithData;
+                <name1><name2>HashMap.this.occupiedWithSentinels = retained.occupiedWithSentinels;
+                return true;
+            }
+            return false;
+        }
+
+        public boolean retainAll(<type2>... source)
+        {
+            return this.retainAll(<name2>HashSet.newSetWith(source));
         }
 
         public int size()
