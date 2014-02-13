@@ -26,6 +26,7 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.LazyBooleanIterable;
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.bag.primitive.MutableBooleanBag;
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>BooleanPredicate;
@@ -36,15 +37,18 @@ import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
 import com.gs.collections.api.map.primitive.<name>BooleanMap;
 import com.gs.collections.api.map.primitive.Immutable<name>BooleanMap;
+import com.gs.collections.api.tuple.primitive.<name>BooleanPair;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
+import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.mutable.primitive.<name>BooleanHashMap;
 import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
 import com.gs.collections.impl.test.Verify;
+import com.gs.collections.impl.tuple.primitive.PrimitiveTuples;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -740,6 +744,20 @@ public abstract class Abstract<name>BooleanMapTestCase
     {
         Mutable<name>List keys = this.newWithKeysValues(<(literal.(type))("1")>, true, <(literal.(type))("2")>, false).keysView().toSortedList();
         Assert.assertEquals(<name>ArrayList.newListWith(<(literal.(type))("1")>, <(literal.(type))("2")>), keys);
+    }
+
+    @Test
+    public void keyValuesView()
+    {
+        final MutableBag\<<name>BooleanPair> expected = Bags.mutable.of();
+        this.classUnderTest().forEachKeyValue(new <name>BooleanProcedure()
+        {
+            public void value(<type> key, boolean value)
+            {
+                expected.add(PrimitiveTuples.pair(key, value));
+            }
+        });
+        Assert.assertEquals(expected, this.classUnderTest().keyValuesView().toBag());
     }
 
     @Test

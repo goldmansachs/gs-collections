@@ -26,6 +26,7 @@ import com.gs.collections.api.<name2>Iterable;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.<name1>Iterable;<endif>
 <if(!sameTwoPrimitives)>import com.gs.collections.api.Lazy<name2>Iterable;<endif>
 import com.gs.collections.api.Lazy<name1>Iterable;
+import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.primitive.Mutable<name2>Bag;
 import com.gs.collections.api.block.function.primitive.<name2>Function;
 import com.gs.collections.api.block.function.primitive.<name2>Function0;
@@ -46,6 +47,7 @@ import com.gs.collections.api.map.primitive.<name1><name2>Map;
 import com.gs.collections.api.map.primitive.Mutable<name1><name2>Map;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.set.primitive.Mutable<name1>Set;<endif>
 import com.gs.collections.api.set.primitive.Mutable<name2>Set;
+import com.gs.collections.api.tuple.primitive.<name1><name2>Pair;
 import com.gs.collections.impl.factory.primitive.<name1><name2>Maps;
 import com.gs.collections.impl.set.mutable.primitive.Unmodifiable<name1>Set;
 import com.gs.collections.impl.collection.mutable.primitive.Unmodifiable<name2>Collection;
@@ -183,6 +185,11 @@ public final class Unmodifiable<name1><name2>Map
     public Lazy<name1>Iterable keysView()
     {
         return this.map.keysView();
+    }
+
+    public RichIterable\<<name1><name2>Pair> keyValuesView()
+    {
+        return this.map.keyValuesView();
     }
 
     public Mutable<name1><name2>Map select(<name1><name2>Predicate predicate)

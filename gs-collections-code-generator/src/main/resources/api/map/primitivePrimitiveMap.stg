@@ -21,12 +21,14 @@ import java.util.Map;
 
 import com.gs.collections.api.<name2>Iterable;
 import com.gs.collections.api.Lazy<name1>Iterable;
+import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.predicate.primitive.<name1><name2>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name1><name2>Procedure;
 import com.gs.collections.api.block.procedure.primitive.<name1>Procedure;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.block.procedure.primitive.<name2>Procedure;<endif>
 import com.gs.collections.api.collection.primitive.Mutable<name2>Collection;
 import com.gs.collections.api.set.primitive.Mutable<name1>Set;
+import com.gs.collections.api.tuple.primitive.<name1><name2>Pair;
 
 /**
  * This file was automatically generated from template file primitivePrimitiveMap.stg.
@@ -52,6 +54,11 @@ public interface <name1><name2>Map extends <name2>Iterable
     void forEachKeyValue(<name1><name2>Procedure procedure);
 
     Lazy<name1>Iterable keysView();
+
+    /**
+     * @since 5.0
+     */
+    RichIterable\<<name1><name2>Pair> keyValuesView();
 
     <name1><name2>Map select(<name1><name2>Predicate predicate);
 

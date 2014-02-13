@@ -77,7 +77,7 @@ public class <name>ObjectPairImpl\<T> implements <name>ObjectPair\<T>
 
     public int compareTo(<name>ObjectPair\<T> that)
     {
-        int i = <(compare.(type))("this.one", "that.getOne()")>;
+        int i = <(compare.(type))("this.one", "that.getOne()", wrapperName)>;
         if (i != 0)
         {
             return i;

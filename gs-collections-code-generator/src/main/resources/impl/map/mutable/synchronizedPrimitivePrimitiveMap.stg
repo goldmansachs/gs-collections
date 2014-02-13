@@ -28,6 +28,7 @@ import com.gs.collections.api.<name2>Iterable;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.<name1>Iterable;<endif>
 <if(!sameTwoPrimitives)>import com.gs.collections.api.Lazy<name2>Iterable;<endif>
 import com.gs.collections.api.Lazy<name1>Iterable;
+import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.primitive.Mutable<name2>Bag;
 import com.gs.collections.api.block.function.primitive.<name2>Function;
 import com.gs.collections.api.block.function.primitive.<name2>Function0;
@@ -49,6 +50,8 @@ import com.gs.collections.api.map.primitive.<name1><name2>Map;
 import com.gs.collections.api.map.primitive.Mutable<name1><name2>Map;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.set.primitive.Mutable<name1>Set;<endif>
 import com.gs.collections.api.set.primitive.Mutable<name2>Set;
+import com.gs.collections.api.tuple.primitive.<name1><name2>Pair;
+import com.gs.collections.impl.SynchronizedRichIterable;
 import com.gs.collections.impl.factory.primitive.<name1><name2>Maps;
 import com.gs.collections.impl.set.mutable.primitive.Synchronized<name1>Set;
 import com.gs.collections.impl.collection.mutable.primitive.Synchronized<name2>Collection;
@@ -241,6 +244,14 @@ public final class Synchronized<name1><name2>Map
         synchronized (this.lock)
         {
             return this.map.keysView();
+        }
+    }
+
+    public RichIterable\<<name1><name2>Pair> keyValuesView()
+    {
+        synchronized (this.lock)
+        {
+            return SynchronizedRichIterable.of(this.map.keyValuesView(), this.lock);
         }
     }
 

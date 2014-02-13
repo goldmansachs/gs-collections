@@ -27,6 +27,7 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.<name2>Iterable;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.<name1>Iterable;<endif>
 import com.gs.collections.api.Lazy<name2>Iterable;
+import com.gs.collections.api.RichIterable;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.Lazy<name1>Iterable;<endif>
 import com.gs.collections.api.bag.primitive.Mutable<name2>Bag;
 import com.gs.collections.api.block.function.primitive.<name2>ToObjectFunction;
@@ -45,13 +46,18 @@ import com.gs.collections.api.map.primitive.<name1><name2>Map;
 import com.gs.collections.api.map.primitive.Immutable<name1><name2>Map;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.set.primitive.Mutable<name1>Set;<endif>
 import com.gs.collections.api.set.primitive.Mutable<name2>Set;
+import com.gs.collections.api.tuple.primitive.<name1><name2>Pair;
 import com.gs.collections.impl.bag.mutable.primitive.<name2>HashBag;
 import com.gs.collections.impl.factory.Lists;
-import com.gs.collections.impl.factory.primitive.<name2>Lists;
+import com.gs.collections.impl.factory.primitive.<name1>Lists;
+<if(!sameTwoPrimitives)>import com.gs.collections.impl.factory.primitive.<name2>Lists;<endif>
 import com.gs.collections.impl.lazy.primitive.Lazy<name2>IterableAdapter;
 import com.gs.collections.impl.list.mutable.primitive.<name2>ArrayList;
 import com.gs.collections.impl.map.mutable.primitive.<name1><name2>HashMap;
 import com.gs.collections.impl.set.mutable.primitive.<name2>HashSet;
+import com.gs.collections.impl.tuple.primitive.PrimitiveTuples;
+import com.gs.collections.impl.utility.LazyIterate;
+import com.gs.collections.impl.utility.primitive.Lazy<name1>Iterate;
 
 /**
  * Immutable<name1><name2>EmptyMap is an optimization for {@link Immutable<name1><name2>Map} of size 0.
@@ -109,7 +115,12 @@ final class Immutable<name1><name2>EmptyMap implements Immutable<name1><name2>Ma
 
     public Lazy<name1>Iterable keysView()
     {
-        return new <name1><name2>HashMap(0).keysView();
+        return Lazy<name1>Iterate.empty();
+    }
+
+    public RichIterable\<<name1><name2>Pair> keyValuesView()
+    {
+        return LazyIterate.empty();
     }
 
     public Immutable<name1><name2>Map select(<name1><name2>Predicate predicate)

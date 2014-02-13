@@ -28,6 +28,7 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.<name2>Iterable;
 import com.gs.collections.api.Lazy<name2>Iterable;
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.primitive.<name2>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name1><name2>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name1><name2>Procedure;
@@ -37,9 +38,11 @@ import com.gs.collections.api.iterator.<name2>Iterator;
 import com.gs.collections.api.map.primitive.<name1><name2>Map;
 import com.gs.collections.api.map.primitive.Immutable<name1><name2>Map;
 import com.gs.collections.api.set.primitive.Mutable<name2>Set;
+import com.gs.collections.api.tuple.primitive.<name1><name2>Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.bag.mutable.primitive.<name2>HashBag;
 import com.gs.collections.impl.block.factory.primitive.<name2>Predicates;
+import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.primitive.<name1>ArrayList;
 <if(!sameTwoPrimitives)>import com.gs.collections.impl.list.mutable.primitive.<name2>ArrayList;<endif>
@@ -47,6 +50,7 @@ import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.mutable.primitive.<name1><name2>HashMap;
 import com.gs.collections.impl.set.mutable.primitive.<name2>HashSet;
 import com.gs.collections.impl.test.Verify;
+import com.gs.collections.impl.tuple.primitive.PrimitiveTuples;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -989,6 +993,20 @@ public abstract class Abstract<name1><name2>MapTestCase
     public void keysView()
     {
         Assert.assertEquals(<name1>ArrayList.newListWith(<(literal.(type1))("0")>, <(literal.(type1))("31")>, <(literal.(type1))("32")>), this.map.keysView().toSortedList());
+    }
+
+    @Test
+    public void keyValuesView()
+    {
+        final MutableBag\<<name1><name2>Pair> expected = Bags.mutable.of();
+        this.map.forEachKeyValue(new <name1><name2>Procedure()
+        {
+            public void value(<type1> key, <type2> value)
+            {
+                expected.add(PrimitiveTuples.pair(key, value));
+            }
+        });
+        Assert.assertEquals(expected, this.map.keyValuesView().toBag());
     }
 
     @Test

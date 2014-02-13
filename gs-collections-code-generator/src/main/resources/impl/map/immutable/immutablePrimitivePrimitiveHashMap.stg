@@ -30,6 +30,7 @@ import com.gs.collections.api.<name2>Iterable;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.<name1>Iterable;<endif>
 import com.gs.collections.api.Lazy<name2>Iterable;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.Lazy<name1>Iterable;<endif>
+import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.primitive.Mutable<name2>Bag;
 import com.gs.collections.api.block.function.primitive.<name2>ToObjectFunction;
 import com.gs.collections.api.block.function.primitive.Object<name2>ToObjectFunction;
@@ -48,6 +49,7 @@ import com.gs.collections.api.map.primitive.<name1><name2>Map;
 import com.gs.collections.api.map.primitive.Immutable<name1><name2>Map;
 import com.gs.collections.api.map.primitive.Mutable<name1><name2>Map;
 import com.gs.collections.api.set.primitive.Mutable<name2>Set;
+import com.gs.collections.api.tuple.primitive.<name1><name2>Pair;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.set.primitive.Mutable<name1>Set;<endif>
 import com.gs.collections.impl.block.procedure.checked.primitive.Checked<name1><name2>Procedure;
 import com.gs.collections.impl.map.mutable.primitive.<name1><name2>HashMap;
@@ -110,6 +112,11 @@ final class Immutable<name1><name2>HashMap implements Immutable<name1><name2>Map
     public Lazy<name1>Iterable keysView()
     {
         return this.delegate.keysView();
+    }
+
+    public RichIterable\<<name1><name2>Pair> keyValuesView()
+    {
+        return this.delegate.keyValuesView();
     }
 
     public Immutable<name1><name2>Map select(<name1><name2>Predicate predicate)

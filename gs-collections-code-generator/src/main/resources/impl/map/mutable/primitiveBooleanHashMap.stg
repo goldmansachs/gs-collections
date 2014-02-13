@@ -24,6 +24,7 @@ import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Arrays;
 import java.util.BitSet;
+import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 import com.gs.collections.api.BooleanIterable;
@@ -31,6 +32,7 @@ import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.LazyBooleanIterable;
 import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.primitive.MutableBooleanBag;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
@@ -44,9 +46,12 @@ import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunc
 import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
 import com.gs.collections.api.block.predicate.primitive.<name>BooleanPredicate;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.block.procedure.primitive.<name>BooleanProcedure;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.collection.primitive.ImmutableBooleanCollection;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
@@ -63,6 +68,7 @@ import com.gs.collections.api.set.primitive.<name>Set;
 import com.gs.collections.api.set.primitive.Immutable<name>Set;
 import com.gs.collections.api.set.primitive.MutableBooleanSet;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
+import com.gs.collections.api.tuple.primitive.<name>BooleanPair;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
@@ -72,6 +78,7 @@ import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.factory.primitive.BooleanLists;
 import com.gs.collections.impl.factory.primitive.<name>BooleanMaps;
 import com.gs.collections.impl.factory.primitive.<name>Sets;
+import com.gs.collections.impl.lazy.AbstractLazyIterable;
 import com.gs.collections.impl.lazy.primitive.Collect<name>ToObjectIterable;
 import com.gs.collections.impl.lazy.primitive.LazyBooleanIterableAdapter;
 import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
@@ -83,6 +90,7 @@ import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
 import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 import com.gs.collections.impl.set.mutable.primitive.Synchronized<name>Set;
 import com.gs.collections.impl.set.mutable.primitive.Unmodifiable<name>Set;
+import com.gs.collections.impl.tuple.primitive.PrimitiveTuples;
 
 /**
  * This file was automatically generated from template file primitiveBooleanHashMap.stg.
@@ -1419,6 +1427,11 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
     public Lazy<name>Iterable keysView()
     {
         return new KeysView();
+    }
+
+    public RichIterable\<<name>BooleanPair> keyValuesView()
+    {
+        return new KeyValuesView();
     }
 
     public void writeExternal(ObjectOutput out) throws IOException
@@ -3019,6 +3032,137 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
             <type> result = keys[this.position];
             this.position++;
             return result;
+        }
+    }
+
+    private class KeyValuesView extends AbstractLazyIterable\<<name>BooleanPair>
+    {
+        public void forEach(Procedure\<? super <name>BooleanPair> procedure)
+        {
+            if (<name>BooleanHashMap.this.sentinelValues != null)
+            {
+                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey)
+                {
+                    procedure.value(PrimitiveTuples.pair(EMPTY_KEY, <name>BooleanHashMap.this.sentinelValues.zeroValue));
+                }
+                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey)
+                {
+                    procedure.value(PrimitiveTuples.pair(REMOVED_KEY, <name>BooleanHashMap.this.sentinelValues.oneValue));
+                }
+            }
+            for (int i = 0; i \< <name>BooleanHashMap.this.keys.length; i++)
+            {
+                if (isNonSentinel(<name>BooleanHashMap.this.keys[i]))
+                {
+                    procedure.value(PrimitiveTuples.pair(<name>BooleanHashMap.this.keys[i], <name>BooleanHashMap.this.values.get(i)));
+                }
+            }
+        }
+
+        public void forEachWithIndex(ObjectIntProcedure\<? super <name>BooleanPair> objectIntProcedure)
+        {
+            int index = 0;
+            if (<name>BooleanHashMap.this.sentinelValues != null)
+            {
+                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey)
+                {
+                    objectIntProcedure.value(PrimitiveTuples.pair(EMPTY_KEY, <name>BooleanHashMap.this.sentinelValues.zeroValue), index);
+                    index++;
+                }
+                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey)
+                {
+                    objectIntProcedure.value(PrimitiveTuples.pair(REMOVED_KEY, <name>BooleanHashMap.this.sentinelValues.oneValue), index);
+                    index++;
+                }
+            }
+            for (int i = 0; i \< <name>BooleanHashMap.this.keys.length; i++)
+            {
+                if (isNonSentinel(<name>BooleanHashMap.this.keys[i]))
+                {
+                    objectIntProcedure.value(PrimitiveTuples.pair(<name>BooleanHashMap.this.keys[i], <name>BooleanHashMap.this.values.get(i)), index);
+                    index++;
+                }
+            }
+        }
+
+        public \<P> void forEachWith(Procedure2\<? super <name>BooleanPair, ? super P> procedure, P parameter)
+        {
+            if (<name>BooleanHashMap.this.sentinelValues != null)
+            {
+                if (<name>BooleanHashMap.this.sentinelValues.containsZeroKey)
+                {
+                    procedure.value(PrimitiveTuples.pair(EMPTY_KEY, <name>BooleanHashMap.this.sentinelValues.zeroValue), parameter);
+                }
+                if (<name>BooleanHashMap.this.sentinelValues.containsOneKey)
+                {
+                    procedure.value(PrimitiveTuples.pair(REMOVED_KEY, <name>BooleanHashMap.this.sentinelValues.oneValue), parameter);
+                }
+            }
+            for (int i = 0; i \< <name>BooleanHashMap.this.keys.length; i++)
+            {
+                if (isNonSentinel(<name>BooleanHashMap.this.keys[i]))
+                {
+                    procedure.value(PrimitiveTuples.pair(<name>BooleanHashMap.this.keys[i], <name>BooleanHashMap.this.values.get(i)), parameter);
+                }
+            }
+        }
+
+        public Iterator\<<name>BooleanPair> iterator()
+        {
+            return new InternalKeyValuesIterator();
+        }
+
+        public class InternalKeyValuesIterator implements Iterator\<<name>BooleanPair>
+        {
+            private int count;
+            private int position;
+            private boolean handledZero;
+            private boolean handledOne;
+
+            public <name>BooleanPair next()
+            {
+                if (!this.hasNext())
+                {
+                    throw new NoSuchElementException("next() called, but the iterator is exhausted");
+                }
+                this.count++;
+
+                if (!this.handledZero)
+                {
+                    this.handledZero = true;
+                    if (<name>BooleanHashMap.this.containsKey(EMPTY_KEY))
+                    {
+                        return PrimitiveTuples.pair(EMPTY_KEY, <name>BooleanHashMap.this.sentinelValues.zeroValue);
+                    }
+                }
+                if (!this.handledOne)
+                {
+                    this.handledOne = true;
+                    if (<name>BooleanHashMap.this.containsKey(REMOVED_KEY))
+                    {
+                        return PrimitiveTuples.pair(REMOVED_KEY, <name>BooleanHashMap.this.sentinelValues.oneValue);
+                    }
+                }
+
+                <type>[] keys = <name>BooleanHashMap.this.keys;
+                while (!isNonSentinel(keys[this.position]))
+                {
+                    this.position++;
+                }
+                <name>BooleanPair result = PrimitiveTuples.pair(keys[this.position], <name>BooleanHashMap.this.values.get(this.position));
+                this.position++;
+                return result;
+            }
+
+            public void remove()
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            public boolean hasNext()
+            {
+                return this.count != <name>BooleanHashMap.this.size();
+            }
         }
     }
 }

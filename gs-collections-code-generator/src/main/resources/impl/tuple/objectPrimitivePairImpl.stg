@@ -84,7 +84,7 @@ public class Object<name>PairImpl\<T> implements Object<name>Pair\<T>
         {
             return i;
         }
-        return <(compare.(type))("this.two", "that.getTwo()")>;
+        return <(compare.(type))("this.two", "that.getTwo()", wrapperName)>;
     }
 }
 

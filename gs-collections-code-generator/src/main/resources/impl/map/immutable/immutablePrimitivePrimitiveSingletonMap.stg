@@ -27,6 +27,7 @@ import com.gs.collections.api.<name2>Iterable;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.<name1>Iterable;<endif>
 import com.gs.collections.api.Lazy<name2>Iterable;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.Lazy<name1>Iterable;<endif>
+import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.primitive.Mutable<name2>Bag;
 import com.gs.collections.api.block.function.primitive.<name2>ToObjectFunction;
 import com.gs.collections.api.block.function.primitive.Object<name2>ToObjectFunction;
@@ -44,13 +45,16 @@ import com.gs.collections.api.map.primitive.<name1><name2>Map;
 import com.gs.collections.api.map.primitive.Immutable<name1><name2>Map;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.set.primitive.Mutable<name1>Set;<endif>
 import com.gs.collections.api.set.primitive.Mutable<name2>Set;
+import com.gs.collections.api.tuple.primitive.<name1><name2>Pair;
 import com.gs.collections.impl.bag.mutable.primitive.<name2>HashBag;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.primitive.<name1><name2>Maps;
+import com.gs.collections.impl.factory.primitive.<name1>Lists;
 import com.gs.collections.impl.lazy.primitive.Lazy<name2>IterableAdapter;
 import com.gs.collections.impl.list.mutable.primitive.<name2>ArrayList;
 import com.gs.collections.impl.map.mutable.primitive.<name1><name2>HashMap;
 import com.gs.collections.impl.set.mutable.primitive.<name2>HashSet;
+import com.gs.collections.impl.tuple.primitive.PrimitiveTuples;
 
 /**
  * Immutable<name1><name2>SingletonMap is an optimization for {@link Immutable<name1><name2>Map} of size 1.
@@ -116,7 +120,12 @@ final class Immutable<name1><name2>SingletonMap implements Immutable<name1><name
 
     public Lazy<name1>Iterable keysView()
     {
-        return <name1><name2>HashMap.newWithKeysValues(this.key1, this.value1).keysView();
+        return <name1>Lists.immutable.of(this.key1).asLazy();
+    }
+
+    public RichIterable\<<name1><name2>Pair> keyValuesView()
+    {
+        return Lists.immutable.\<<name1><name2>Pair>of(PrimitiveTuples.pair(this.key1, this.value1)).asLazy();
     }
 
     public Immutable<name1><name2>Map select(<name1><name2>Predicate predicate)

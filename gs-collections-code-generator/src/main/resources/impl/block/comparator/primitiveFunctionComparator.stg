@@ -18,7 +18,8 @@ import com.gs.collections.api.block.SerializableComparator;
 import com.gs.collections.api.block.function.primitive.<name>Function;
 
 /**
- * A Comparator which takes a <name>Function to compare a iterator <type> value retrieved from an object.
+ * A Comparator which takes a <name>Function to compare a primitive <type> value retrieved from an object.
+ * This file was automatically generated from template file primitiveFunctionComparator.stg.
  */
 public class <name>FunctionComparator\<T>
         implements SerializableComparator\<T>
@@ -27,7 +28,7 @@ public class <name>FunctionComparator\<T>
 
     private final <name>Function\<T> function;
 
-    public <name>FunctionComparator( <name>Function\<T> function)
+    public <name>FunctionComparator(<name>Function\<T> function)
     {
         this.function = function;
     }
@@ -36,7 +37,7 @@ public class <name>FunctionComparator\<T>
     {
         <type> one = this.function.<type>ValueOf(o1);
         <type> two = this.function.<type>ValueOf(o2);
-        return <(compare.(type))("one", "two")>;
+        return <(compare.(type))("one", "two", wrapperName)>;
     }
 }
 
