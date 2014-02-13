@@ -29,13 +29,10 @@ public class UnmodifiableBagTest
     public void serializedForm()
     {
         Verify.assertSerializedForm(
-                1L,
-                "rO0ABXNyADNjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5iYWcubXV0YWJsZS5Vbm1vZGlmaWFibGVC\n"
-                        + "YWcAAAAAAAAAAQIAAHhyAEhjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5jb2xsZWN0aW9uLm11dGFi\n"
-                        + "bGUuVW5tb2RpZmlhYmxlTXV0YWJsZUNvbGxlY3Rpb24AAAAAAAAAAQIAAUwACmNvbGxlY3Rpb250\n"
-                        + "ADVMY29tL2dzL2NvbGxlY3Rpb25zL2FwaS9jb2xsZWN0aW9uL011dGFibGVDb2xsZWN0aW9uO3hw\n"
-                        + "c3IAK2NvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLmJhZy5tdXRhYmxlLkhhc2hCYWcAAAAAAAAAAQwA\n"
-                        + "AHhwdwQAAAAAeA==",
+                "rO0ABXNyAFVjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5iYWcubXV0YWJsZS5Vbm1vZGlmaWFibGVC\n"
+                        + "YWckVW5tb2RpZmlhYmxlQmFnU2VyaWFsaXphdGlvblByb3h5AAAAAAAAAAEMAAB4cHNyACtjb20u\n"
+                        + "Z3MuY29sbGVjdGlvbnMuaW1wbC5iYWcubXV0YWJsZS5IYXNoQmFnAAAAAAAAAAEMAAB4cHcEAAAA\n"
+                        + "AHh4",
                 UnmodifiableBag.of(Bags.mutable.of()));
     }
 }

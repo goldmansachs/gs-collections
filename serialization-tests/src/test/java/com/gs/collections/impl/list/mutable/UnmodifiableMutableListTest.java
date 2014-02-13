@@ -27,15 +27,10 @@ public class UnmodifiableMutableListTest
     public void serializedForm_random_access()
     {
         Verify.assertSerializedForm(
-                1L,
-                "rO0ABXNyAGBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5saXN0Lm11dGFibGUuVW5tb2RpZmlhYmxl\n"
-                        + "TXV0YWJsZUxpc3QkUmFuZG9tQWNjZXNzVW5tb2RpZmlhYmxlTXV0YWJsZUxpc3QAAAAAAAAAAQIA\n"
-                        + "AHhyADxjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5saXN0Lm11dGFibGUuVW5tb2RpZmlhYmxlTXV0\n"
-                        + "YWJsZUxpc3QAAAAAAAAAAQIAAHhyAEhjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5jb2xsZWN0aW9u\n"
-                        + "Lm11dGFibGUuVW5tb2RpZmlhYmxlTXV0YWJsZUNvbGxlY3Rpb24AAAAAAAAAAQIAAUwACmNvbGxl\n"
-                        + "Y3Rpb250ADVMY29tL2dzL2NvbGxlY3Rpb25zL2FwaS9jb2xsZWN0aW9uL011dGFibGVDb2xsZWN0\n"
-                        + "aW9uO3hwc3IALWNvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLmxpc3QubXV0YWJsZS5GYXN0TGlzdAAA\n"
-                        + "AAAAAAABDAAAeHB3BAAAAAB4",
+                "rO0ABXNyAFNjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5jb2xsZWN0aW9uLm11dGFibGUuVW5tb2Rp\n"
+                        + "ZmlhYmxlQ29sbGVjdGlvblNlcmlhbGl6YXRpb25Qcm94eQAAAAAAAAABDAAAeHBzcgAtY29tLmdz\n"
+                        + "LmNvbGxlY3Rpb25zLmltcGwubGlzdC5tdXRhYmxlLkZhc3RMaXN0AAAAAAAAAAEMAAB4cHcEAAAA\n"
+                        + "AHh4",
                 UnmodifiableMutableList.of(FastList.newList()));
     }
 
@@ -43,14 +38,11 @@ public class UnmodifiableMutableListTest
     public void serializedForm_not_random_access()
     {
         Verify.assertSerializedForm(
-                1L,
-                "rO0ABXNyADxjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5saXN0Lm11dGFibGUuVW5tb2RpZmlhYmxl\n"
-                        + "TXV0YWJsZUxpc3QAAAAAAAAAAQIAAHhyAEhjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5jb2xsZWN0\n"
-                        + "aW9uLm11dGFibGUuVW5tb2RpZmlhYmxlTXV0YWJsZUNvbGxlY3Rpb24AAAAAAAAAAQIAAUwACmNv\n"
-                        + "bGxlY3Rpb250ADVMY29tL2dzL2NvbGxlY3Rpb25zL2FwaS9jb2xsZWN0aW9uL011dGFibGVDb2xs\n"
-                        + "ZWN0aW9uO3hwc3IAMGNvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLmxpc3QubXV0YWJsZS5MaXN0QWRh\n"
-                        + "cHRlcgAAAAAAAAABAgABTAAIZGVsZWdhdGV0ABBMamF2YS91dGlsL0xpc3Q7eHBzcgAUamF2YS51\n"
-                        + "dGlsLkxpbmtlZExpc3QMKVNdSmCIIgMAAHhwdwQAAAAAeA==",
+                "rO0ABXNyAFNjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5jb2xsZWN0aW9uLm11dGFibGUuVW5tb2Rp\n"
+                        + "ZmlhYmxlQ29sbGVjdGlvblNlcmlhbGl6YXRpb25Qcm94eQAAAAAAAAABDAAAeHBzcgAwY29tLmdz\n"
+                        + "LmNvbGxlY3Rpb25zLmltcGwubGlzdC5tdXRhYmxlLkxpc3RBZGFwdGVyAAAAAAAAAAECAAFMAAhk\n"
+                        + "ZWxlZ2F0ZXQAEExqYXZhL3V0aWwvTGlzdDt4cHNyABRqYXZhLnV0aWwuTGlua2VkTGlzdAwpU11K\n"
+                        + "YIgiAwAAeHB3BAAAAAB4eA==",
                 UnmodifiableMutableList.of(new LinkedList<Object>()));
     }
 }

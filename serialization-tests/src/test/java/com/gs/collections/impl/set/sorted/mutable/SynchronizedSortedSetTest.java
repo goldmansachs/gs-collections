@@ -26,14 +26,10 @@ public class SynchronizedSortedSetTest
     public void serializedForm()
     {
         Verify.assertSerializedForm(
-                1L,
-                "rO0ABXNyAEBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5zZXQuc29ydGVkLm11dGFibGUuU3luY2hy\n"
-                        + "b25pemVkU29ydGVkU2V0AAAAAAAAAAECAAB4cgBIY29tLmdzLmNvbGxlY3Rpb25zLmltcGwuY29s\n"
-                        + "bGVjdGlvbi5tdXRhYmxlLlN5bmNocm9uaXplZE11dGFibGVDb2xsZWN0aW9uAAAAAAAAAAECAAJM\n"
-                        + "AApjb2xsZWN0aW9udAA1TGNvbS9ncy9jb2xsZWN0aW9ucy9hcGkvY29sbGVjdGlvbi9NdXRhYmxl\n"
-                        + "Q29sbGVjdGlvbjtMAARsb2NrdAASTGphdmEvbGFuZy9PYmplY3Q7eHBzcgA4Y29tLmdzLmNvbGxl\n"
-                        + "Y3Rpb25zLmltcGwuc2V0LnNvcnRlZC5tdXRhYmxlLlRyZWVTb3J0ZWRTZXQAAAAAAAAAAQwAAHhw\n"
-                        + "cHcEAAAAAHhxAH4ABA==",
+                "rO0ABXNyAFNjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5jb2xsZWN0aW9uLm11dGFibGUuU3luY2hy\n"
+                        + "b25pemVkQ29sbGVjdGlvblNlcmlhbGl6YXRpb25Qcm94eQAAAAAAAAABDAAAeHBzcgA4Y29tLmdz\n"
+                        + "LmNvbGxlY3Rpb25zLmltcGwuc2V0LnNvcnRlZC5tdXRhYmxlLlRyZWVTb3J0ZWRTZXQAAAAAAAAA\n"
+                        + "AQwAAHhwcHcEAAAAAHh4",
                 SynchronizedSortedSet.of(SortedSets.mutable.of()));
     }
 }

@@ -43,6 +43,15 @@ public class SynchronizedMutableListTest extends AbstractListTestCase
 
     @Override
     @Test
+    public void equalsAndHashCode()
+    {
+        super.equalsAndHashCode();
+        Verify.assertPostSerializedEqualsAndHashCode(this.newWith(1, 2, 3));
+        Verify.assertInstanceOf(SynchronizedMutableList.class, this.newWith(1, 2, 3));
+    }
+
+    @Override
+    @Test
     public void testToString()
     {
         MutableList<Object> list = this.<Object>newWith(1, 2, 3);

@@ -29,13 +29,10 @@ public class SynchronizedBagTest
     public void serializedForm()
     {
         Verify.assertSerializedForm(
-                1L,
-                "rO0ABXNyADNjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5iYWcubXV0YWJsZS5TeW5jaHJvbml6ZWRC\n"
-                        + "YWcAAAAAAAAAAQIAAHhyAEhjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5jb2xsZWN0aW9uLm11dGFi\n"
-                        + "bGUuU3luY2hyb25pemVkTXV0YWJsZUNvbGxlY3Rpb24AAAAAAAAAAQIAAkwACmNvbGxlY3Rpb250\n"
-                        + "ADVMY29tL2dzL2NvbGxlY3Rpb25zL2FwaS9jb2xsZWN0aW9uL011dGFibGVDb2xsZWN0aW9uO0wA\n"
-                        + "BGxvY2t0ABJMamF2YS9sYW5nL09iamVjdDt4cHNyACtjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5i\n"
-                        + "YWcubXV0YWJsZS5IYXNoQmFnAAAAAAAAAAEMAAB4cHcEAAAAAHhxAH4ABA==",
+                "rO0ABXNyAFNjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5jb2xsZWN0aW9uLm11dGFibGUuU3luY2hy\n"
+                        + "b25pemVkQ29sbGVjdGlvblNlcmlhbGl6YXRpb25Qcm94eQAAAAAAAAABDAAAeHBzcgArY29tLmdz\n"
+                        + "LmNvbGxlY3Rpb25zLmltcGwuYmFnLm11dGFibGUuSGFzaEJhZwAAAAAAAAABDAAAeHB3BAAAAAB4\n"
+                        + "eA==",
                 SynchronizedBag.of(Bags.mutable.of()));
     }
 }

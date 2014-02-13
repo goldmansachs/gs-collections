@@ -29,6 +29,7 @@ import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Before;
@@ -59,6 +60,7 @@ public class UnmodifiableMutableListTest
     {
         Verify.assertEqualsAndHashCode(this.mutableList, this.unmodifiableList);
         Verify.assertPostSerializedEqualsAndHashCode(this.unmodifiableList);
+        Verify.assertInstanceOf(UnmodifiableMutableList.class, SerializeTestHelper.serializeDeserialize(this.unmodifiableList));
     }
 
     @Test

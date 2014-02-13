@@ -22,6 +22,7 @@ import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.collection.mutable.AbstractCollectionTestCase;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Before;
@@ -183,6 +184,7 @@ public class UnmodifiableMutableSetTest extends AbstractCollectionTestCase
     {
         Verify.assertEqualsAndHashCode(this.mutableSet, this.unmodifiableSet);
         Verify.assertPostSerializedEqualsAndHashCode(this.unmodifiableSet);
+        Verify.assertInstanceOf(UnmodifiableMutableSet.class, SerializeTestHelper.serializeDeserialize(this.unmodifiableSet));
     }
 
     @Test

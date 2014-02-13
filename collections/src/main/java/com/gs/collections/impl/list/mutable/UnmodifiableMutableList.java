@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.list.mutable;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
@@ -51,7 +52,8 @@ import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
-import com.gs.collections.impl.collection.mutable.UnmodifiableMutableCollection;
+import com.gs.collections.impl.collection.mutable.AbstractUnmodifiableMutableCollection;
+import com.gs.collections.impl.collection.mutable.UnmodifiableCollectionSerializationProxy;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.lazy.ReverseIterable;
 import com.gs.collections.impl.stack.mutable.ArrayStack;
@@ -62,11 +64,9 @@ import com.gs.collections.impl.stack.mutable.ArrayStack;
  * @see MutableList#asUnmodifiable()
  */
 public class UnmodifiableMutableList<T>
-        extends UnmodifiableMutableCollection<T>
-        implements MutableList<T>
+        extends AbstractUnmodifiableMutableCollection<T>
+        implements MutableList<T>, Serializable
 {
-    private static final long serialVersionUID = 1L;
-
     UnmodifiableMutableList(MutableList<? extends T> mutableList)
     {
         super(mutableList);
@@ -430,5 +430,10 @@ public class UnmodifiableMutableList<T>
         {
             return this;
         }
+    }
+
+    protected Object writeReplace()
+    {
+        return new UnmodifiableCollectionSerializationProxy<T>(this.getMutableList());
     }
 }

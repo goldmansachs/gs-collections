@@ -29,17 +29,13 @@ public class UnmodifiableSortedBagTest
     public void serializedForm()
     {
         Verify.assertSerializedForm(
-                1L,
-                "rO0ABXNyAEBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5iYWcuc29ydGVkLm11dGFibGUuVW5tb2Rp\n"
-                        + "ZmlhYmxlU29ydGVkQmFnAAAAAAAAAAECAAB4cgBIY29tLmdzLmNvbGxlY3Rpb25zLmltcGwuY29s\n"
-                        + "bGVjdGlvbi5tdXRhYmxlLlVubW9kaWZpYWJsZU11dGFibGVDb2xsZWN0aW9uAAAAAAAAAAECAAFM\n"
-                        + "AApjb2xsZWN0aW9udAA1TGNvbS9ncy9jb2xsZWN0aW9ucy9hcGkvY29sbGVjdGlvbi9NdXRhYmxl\n"
-                        + "Q29sbGVjdGlvbjt4cHNyADJjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5iYWcuc29ydGVkLm11dGFi\n"
-                        + "bGUuVHJlZUJhZwAAAAAAAAABDAAAeHBzcgBDY29tLmdzLmNvbGxlY3Rpb25zLmltcGwuYmxvY2su\n"
-                        + "ZmFjdG9yeS5Db21wYXJhdG9ycyRSZXZlcnNlQ29tcGFyYXRvcgAAAAAAAAABAgABTAAKY29tcGFy\n"
-                        + "YXRvcnQAFkxqYXZhL3V0aWwvQ29tcGFyYXRvcjt4cHNyAEhjb20uZ3MuY29sbGVjdGlvbnMuaW1w\n"
-                        + "bC5ibG9jay5mYWN0b3J5LkNvbXBhcmF0b3JzJE5hdHVyYWxPcmRlckNvbXBhcmF0b3IAAAAAAAAA\n"
-                        + "AQIAAHhwdwQAAAAAeA==",
+                "rO0ABXNyAFNjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5jb2xsZWN0aW9uLm11dGFibGUuVW5tb2Rp\n"
+                        + "ZmlhYmxlQ29sbGVjdGlvblNlcmlhbGl6YXRpb25Qcm94eQAAAAAAAAABDAAAeHBzcgAyY29tLmdz\n"
+                        + "LmNvbGxlY3Rpb25zLmltcGwuYmFnLnNvcnRlZC5tdXRhYmxlLlRyZWVCYWcAAAAAAAAAAQwAAHhw\n"
+                        + "c3IAQ2NvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLmJsb2NrLmZhY3RvcnkuQ29tcGFyYXRvcnMkUmV2\n"
+                        + "ZXJzZUNvbXBhcmF0b3IAAAAAAAAAAQIAAUwACmNvbXBhcmF0b3J0ABZMamF2YS91dGlsL0NvbXBh\n"
+                        + "cmF0b3I7eHBzcgBIY29tLmdzLmNvbGxlY3Rpb25zLmltcGwuYmxvY2suZmFjdG9yeS5Db21wYXJh\n"
+                        + "dG9ycyROYXR1cmFsT3JkZXJDb21wYXJhdG9yAAAAAAAAAAECAAB4cHcEAAAAAHh4",
                 UnmodifiableSortedBag.of(TreeBag.newBag(Comparators.reverseNaturalOrder())));
     }
 }

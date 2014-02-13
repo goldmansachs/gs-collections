@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.bag.mutable;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 
@@ -48,7 +49,8 @@ import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.partition.bag.PartitionMutableBag;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
-import com.gs.collections.impl.collection.mutable.SynchronizedMutableCollection;
+import com.gs.collections.impl.collection.mutable.AbstractSynchronizedMutableCollection;
+import com.gs.collections.impl.collection.mutable.SynchronizedCollectionSerializationProxy;
 import com.gs.collections.impl.factory.Bags;
 import net.jcip.annotations.GuardedBy;
 
@@ -60,12 +62,10 @@ import net.jcip.annotations.GuardedBy;
  * @since 1.0
  */
 public class SynchronizedBag<T>
-        extends SynchronizedMutableCollection<T>
-        implements MutableBag<T>
+        extends AbstractSynchronizedMutableCollection<T>
+        implements MutableBag<T>, Serializable
 {
-    private static final long serialVersionUID = 1L;
-
-    public SynchronizedBag(MutableBag<T> bag)
+    SynchronizedBag(MutableBag<T> bag)
     {
         super(bag);
     }
@@ -445,5 +445,10 @@ public class SynchronizedBag<T>
     {
         this.removeAllIterable(elements);
         return this;
+    }
+
+    protected Object writeReplace()
+    {
+        return new SynchronizedCollectionSerializationProxy<T>(this.getMutableBag());
     }
 }

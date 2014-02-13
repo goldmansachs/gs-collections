@@ -78,7 +78,7 @@ public class CollectionAdapterTest extends AbstractCollectionTestCase
     @Test
     public void asSynchronized()
     {
-        Verify.assertInstanceOf(SynchronizedMutableCollection.class, CollectionAdapter.adapt(Lists.fixedSize.of("1")).asSynchronized());
+        Verify.assertInstanceOf(AbstractSynchronizedMutableCollection.class, CollectionAdapter.adapt(Lists.fixedSize.of("1")).asSynchronized());
 
         Verify.assertInstanceOf(SynchronizedMutableCollection.class, new CollectionAdapter<Object>(null).asSynchronized());
     }

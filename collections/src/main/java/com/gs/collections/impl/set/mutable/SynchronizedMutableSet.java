@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.set.mutable;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Set;
@@ -48,7 +49,8 @@ import com.gs.collections.api.set.primitive.MutableIntSet;
 import com.gs.collections.api.set.primitive.MutableLongSet;
 import com.gs.collections.api.set.primitive.MutableShortSet;
 import com.gs.collections.api.tuple.Pair;
-import com.gs.collections.impl.collection.mutable.SynchronizedMutableCollection;
+import com.gs.collections.impl.collection.mutable.AbstractSynchronizedMutableCollection;
+import com.gs.collections.impl.collection.mutable.SynchronizedCollectionSerializationProxy;
 import com.gs.collections.impl.factory.Sets;
 import net.jcip.annotations.GuardedBy;
 import net.jcip.annotations.ThreadSafe;
@@ -61,17 +63,15 @@ import net.jcip.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class SynchronizedMutableSet<T>
-        extends SynchronizedMutableCollection<T>
-        implements MutableSet<T>
+        extends AbstractSynchronizedMutableCollection<T>
+        implements MutableSet<T>, Serializable
 {
-    private static final long serialVersionUID = 1L;
-
-    public SynchronizedMutableSet(MutableSet<T> set)
+    SynchronizedMutableSet(MutableSet<T> set)
     {
         super(set);
     }
 
-    public SynchronizedMutableSet(MutableSet<T> set, Object newLock)
+    SynchronizedMutableSet(MutableSet<T> set, Object newLock)
     {
         super(set, newLock);
     }
@@ -503,5 +503,10 @@ public class SynchronizedMutableSet<T>
     {
         this.removeAllIterable(elements);
         return this;
+    }
+
+    protected Object writeReplace()
+    {
+        return new SynchronizedCollectionSerializationProxy<T>(this.getMutableSet());
     }
 }

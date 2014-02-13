@@ -66,6 +66,7 @@ public class SynchronizedMutableSetTest extends AbstractSynchronizedCollectionTe
     }
 
     @Override
+    @Test
     public void selectInstancesOf()
     {
         MutableSet<Number> numbers = new SynchronizedMutableSet<Number>(SetAdapter.adapt(new TreeSet<Number>(new Comparator<Number>()
@@ -78,5 +79,14 @@ public class SynchronizedMutableSetTest extends AbstractSynchronizedCollectionTe
         MutableSet<Integer> integers = numbers.selectInstancesOf(Integer.class);
         Assert.assertEquals(UnifiedSet.newSetWith(1, 3, 5), integers);
         Assert.assertEquals(FastList.newListWith(1, 3, 5), integers.toList());
+    }
+
+    @Override
+    @Test
+    public void equalsAndHashCode()
+    {
+        super.equalsAndHashCode();
+        Verify.assertPostSerializedEqualsAndHashCode(this.newWith(1, 2, 3));
+        Verify.assertInstanceOf(SynchronizedMutableSet.class, this.newWith(1, 2, 3));
     }
 }

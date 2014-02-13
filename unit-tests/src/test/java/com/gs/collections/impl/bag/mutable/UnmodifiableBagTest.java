@@ -37,6 +37,7 @@ import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
 import org.junit.Assert;
@@ -93,6 +94,9 @@ public class UnmodifiableBagTest
     public void equalsAndHashCode()
     {
         Verify.assertEqualsAndHashCode(this.getCollection(), Bags.mutable.of(""));
+        MutableBag<Number> numbers = UnmodifiableBag.of(HashBag.<Number>newBagWith(1, 1, 2, 2, 2, 3));
+        Verify.assertPostSerializedEqualsAndHashCode(numbers);
+        Verify.assertInstanceOf(UnmodifiableBag.class, SerializeTestHelper.serializeDeserialize(numbers));
     }
 
     @Test

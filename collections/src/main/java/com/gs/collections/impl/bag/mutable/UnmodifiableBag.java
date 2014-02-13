@@ -16,6 +16,12 @@
 
 package com.gs.collections.impl.bag.mutable;
 
+import java.io.Externalizable;
+import java.io.IOException;
+import java.io.ObjectInput;
+import java.io.ObjectOutput;
+import java.io.Serializable;
+
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.bag.primitive.MutableBooleanBag;
@@ -45,7 +51,7 @@ import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.partition.bag.PartitionMutableBag;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
-import com.gs.collections.impl.collection.mutable.UnmodifiableMutableCollection;
+import com.gs.collections.impl.collection.mutable.AbstractUnmodifiableMutableCollection;
 import com.gs.collections.impl.factory.Bags;
 
 /**
@@ -55,12 +61,10 @@ import com.gs.collections.impl.factory.Bags;
  * @since 1.0
  */
 public class UnmodifiableBag<T>
-        extends UnmodifiableMutableCollection<T>
-        implements MutableBag<T>
+        extends AbstractUnmodifiableMutableCollection<T>
+        implements MutableBag<T>, Serializable
 {
-    private static final long serialVersionUID = 1L;
-
-    protected UnmodifiableBag(MutableBag<? extends T> mutableBag)
+    UnmodifiableBag(MutableBag<? extends T> mutableBag)
     {
         super(mutableBag);
     }
@@ -314,5 +318,54 @@ public class UnmodifiableBag<T>
     public MutableBag<T> withoutAll(Iterable<? extends T> elements)
     {
         throw new UnsupportedOperationException("Cannot call withoutAll() on " + this.getClass().getSimpleName());
+    }
+
+    protected Object writeReplace()
+    {
+        return new UnmodifiableBagSerializationProxy<T>(this.getMutableBag());
+    }
+
+    private static class UnmodifiableBagSerializationProxy<T> implements Externalizable
+    {
+        private static final long serialVersionUID = 1L;
+
+        private MutableBag<T> mutableBag;
+
+        @SuppressWarnings("UnusedDeclaration")
+        public UnmodifiableBagSerializationProxy()
+        {
+            // Empty constructor for Externalizable class
+        }
+
+        private UnmodifiableBagSerializationProxy(MutableBag<T> bag)
+        {
+            this.mutableBag = bag;
+        }
+
+        public void writeExternal(ObjectOutput out) throws IOException
+        {
+            try
+            {
+                out.writeObject(this.mutableBag);
+            }
+            catch (RuntimeException e)
+            {
+                if (e.getCause() instanceof IOException)
+                {
+                    throw (IOException) e.getCause();
+                }
+                throw e;
+            }
+        }
+
+        public void readExternal(ObjectInput in) throws IOException, ClassNotFoundException
+        {
+            this.mutableBag = (MutableBag<T>) in.readObject();
+        }
+
+        protected Object readResolve()
+        {
+            return this.mutableBag.asUnmodifiable();
+        }
     }
 }

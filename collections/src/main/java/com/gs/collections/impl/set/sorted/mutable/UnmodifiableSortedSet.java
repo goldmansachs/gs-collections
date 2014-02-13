@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.set.sorted.mutable;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Set;
@@ -51,7 +52,8 @@ import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.set.sorted.SortedSetIterable;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
-import com.gs.collections.impl.collection.mutable.UnmodifiableMutableCollection;
+import com.gs.collections.impl.collection.mutable.AbstractUnmodifiableMutableCollection;
+import com.gs.collections.impl.collection.mutable.UnmodifiableCollectionSerializationProxy;
 import com.gs.collections.impl.factory.SortedSets;
 
 /**
@@ -60,12 +62,10 @@ import com.gs.collections.impl.factory.SortedSets;
  * @see MutableSortedSet#asUnmodifiable()
  */
 public class UnmodifiableSortedSet<T>
-        extends UnmodifiableMutableCollection<T>
-        implements MutableSortedSet<T>
+        extends AbstractUnmodifiableMutableCollection<T>
+        implements MutableSortedSet<T>, Serializable
 {
-    private static final long serialVersionUID = 1L;
-
-    protected UnmodifiableSortedSet(MutableSortedSet<? extends T> sortedSet)
+    UnmodifiableSortedSet(MutableSortedSet<? extends T> sortedSet)
     {
         super(sortedSet);
     }
@@ -419,5 +419,10 @@ public class UnmodifiableSortedSet<T>
     public MutableSortedSet<T> withoutAll(Iterable<? extends T> elements)
     {
         throw new UnsupportedOperationException("Cannot call withoutAll() on " + this.getClass().getSimpleName());
+    }
+
+    protected Object writeReplace()
+    {
+        return new UnmodifiableCollectionSerializationProxy<T>(this.getSortedSet());
     }
 }

@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.list.mutable;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -51,7 +52,8 @@ import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
-import com.gs.collections.impl.collection.mutable.SynchronizedMutableCollection;
+import com.gs.collections.impl.collection.mutable.AbstractSynchronizedMutableCollection;
+import com.gs.collections.impl.collection.mutable.SynchronizedCollectionSerializationProxy;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.lazy.ReverseIterable;
 import net.jcip.annotations.GuardedBy;
@@ -63,17 +65,15 @@ import net.jcip.annotations.GuardedBy;
  * @see MutableList#asSynchronized()
  */
 public class SynchronizedMutableList<T>
-        extends SynchronizedMutableCollection<T>
-        implements MutableList<T>
+        extends AbstractSynchronizedMutableCollection<T>
+        implements MutableList<T>, Serializable
 {
-    private static final long serialVersionUID = 1L;
-
-    protected SynchronizedMutableList(MutableList<T> newCollection)
+    SynchronizedMutableList(MutableList<T> newCollection)
     {
         super(newCollection);
     }
 
-    protected SynchronizedMutableList(MutableList<T> newCollection, Object newLock)
+    SynchronizedMutableList(MutableList<T> newCollection, Object newLock)
     {
         super(newCollection, newLock);
     }
@@ -605,5 +605,10 @@ public class SynchronizedMutableList<T>
     {
         this.removeAllIterable(elements);
         return this;
+    }
+
+    protected Object writeReplace()
+    {
+        return new SynchronizedCollectionSerializationProxy<T>(this.getMutableList());
     }
 }

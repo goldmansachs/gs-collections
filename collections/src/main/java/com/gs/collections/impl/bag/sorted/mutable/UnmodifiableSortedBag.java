@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.bag.sorted.mutable;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Comparator;
 
@@ -51,7 +52,8 @@ import com.gs.collections.api.partition.bag.sorted.PartitionMutableSortedBag;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
-import com.gs.collections.impl.collection.mutable.UnmodifiableMutableCollection;
+import com.gs.collections.impl.collection.mutable.AbstractUnmodifiableMutableCollection;
+import com.gs.collections.impl.collection.mutable.UnmodifiableCollectionSerializationProxy;
 
 /**
  * An unmodifiable view of a SortedBag.
@@ -60,12 +62,10 @@ import com.gs.collections.impl.collection.mutable.UnmodifiableMutableCollection;
  * @since 4.2
  */
 public class UnmodifiableSortedBag<T>
-        extends UnmodifiableMutableCollection<T>
-        implements MutableSortedBag<T>
+        extends AbstractUnmodifiableMutableCollection<T>
+        implements MutableSortedBag<T>, Serializable
 {
-    private static final long serialVersionUID = 1L;
-
-    protected UnmodifiableSortedBag(MutableSortedBag<? extends T> sortedBag)
+    UnmodifiableSortedBag(MutableSortedBag<? extends T> sortedBag)
     {
         super(sortedBag);
     }
@@ -372,5 +372,10 @@ public class UnmodifiableSortedBag<T>
     public int compareTo(SortedBag<T> o)
     {
         return this.getSortedBag().compareTo(o);
+    }
+
+    protected Object writeReplace()
+    {
+        return new UnmodifiableCollectionSerializationProxy<T>(this.getSortedBag());
     }
 }

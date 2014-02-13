@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.set.mutable;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Set;
 
@@ -47,7 +48,8 @@ import com.gs.collections.api.set.primitive.MutableIntSet;
 import com.gs.collections.api.set.primitive.MutableLongSet;
 import com.gs.collections.api.set.primitive.MutableShortSet;
 import com.gs.collections.api.tuple.Pair;
-import com.gs.collections.impl.collection.mutable.UnmodifiableMutableCollection;
+import com.gs.collections.impl.collection.mutable.AbstractUnmodifiableMutableCollection;
+import com.gs.collections.impl.collection.mutable.UnmodifiableCollectionSerializationProxy;
 import com.gs.collections.impl.factory.Sets;
 
 /**
@@ -56,12 +58,10 @@ import com.gs.collections.impl.factory.Sets;
  * @see MutableSet#asUnmodifiable()
  */
 public class UnmodifiableMutableSet<T>
-        extends UnmodifiableMutableCollection<T>
-        implements MutableSet<T>
+        extends AbstractUnmodifiableMutableCollection<T>
+        implements MutableSet<T>, Serializable
 {
-    private static final long serialVersionUID = 1L;
-
-    protected UnmodifiableMutableSet(MutableSet<? extends T> mutableSet)
+    UnmodifiableMutableSet(MutableSet<? extends T> mutableSet)
     {
         super(mutableSet);
     }
@@ -355,5 +355,10 @@ public class UnmodifiableMutableSet<T>
     public MutableSet<T> withoutAll(Iterable<? extends T> elements)
     {
         throw new UnsupportedOperationException("Cannot call withoutAll() on " + this.getClass().getSimpleName());
+    }
+
+    protected Object writeReplace()
+    {
+        return new UnmodifiableCollectionSerializationProxy<T>(this.getMutableSet());
     }
 }

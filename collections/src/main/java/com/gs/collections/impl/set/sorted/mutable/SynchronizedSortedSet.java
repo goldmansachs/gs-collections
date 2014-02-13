@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.set.sorted.mutable;
 
+import java.io.Serializable;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
@@ -52,7 +53,8 @@ import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.set.sorted.SortedSetIterable;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
-import com.gs.collections.impl.collection.mutable.SynchronizedMutableCollection;
+import com.gs.collections.impl.collection.mutable.AbstractSynchronizedMutableCollection;
+import com.gs.collections.impl.collection.mutable.SynchronizedCollectionSerializationProxy;
 import com.gs.collections.impl.factory.SortedSets;
 import com.gs.collections.impl.stack.mutable.ArrayStack;
 import net.jcip.annotations.GuardedBy;
@@ -66,17 +68,15 @@ import net.jcip.annotations.ThreadSafe;
  */
 @ThreadSafe
 public class SynchronizedSortedSet<T>
-        extends SynchronizedMutableCollection<T>
-        implements MutableSortedSet<T>
+        extends AbstractSynchronizedMutableCollection<T>
+        implements MutableSortedSet<T>, Serializable
 {
-    private static final long serialVersionUID = 1L;
-
-    public SynchronizedSortedSet(MutableSortedSet<T> set)
+    SynchronizedSortedSet(MutableSortedSet<T> set)
     {
         super(set);
     }
 
-    public SynchronizedSortedSet(MutableSortedSet<T> set, Object newLock)
+    SynchronizedSortedSet(MutableSortedSet<T> set, Object newLock)
     {
         super(set, newLock);
     }
@@ -604,5 +604,10 @@ public class SynchronizedSortedSet<T>
     {
         this.removeAllIterable(elements);
         return this;
+    }
+
+    protected Object writeReplace()
+    {
+        return new SynchronizedCollectionSerializationProxy<T>(this.getSortedSet());
     }
 }

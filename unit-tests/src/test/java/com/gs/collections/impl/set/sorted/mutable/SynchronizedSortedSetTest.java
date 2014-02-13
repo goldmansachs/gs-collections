@@ -21,10 +21,12 @@ import java.util.TreeSet;
 
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
+import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.collection.mutable.AbstractSynchronizedCollectionTestCase;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -67,6 +69,7 @@ public class SynchronizedSortedSetTest extends AbstractSynchronizedCollectionTes
     }
 
     @Override
+    @Test
     public void selectInstancesOf()
     {
         MutableSortedSet<Number> numbers = new SynchronizedSortedSet<Number>(SortedSetAdapter.adapt(new TreeSet<Number>(new Comparator<Number>()
@@ -79,5 +82,17 @@ public class SynchronizedSortedSetTest extends AbstractSynchronizedCollectionTes
         MutableSortedSet<Integer> integers = numbers.selectInstancesOf(Integer.class);
         Assert.assertEquals(UnifiedSet.newSetWith(1, 3, 5), integers);
         Assert.assertEquals(FastList.newListWith(1, 3, 5), integers.toList());
+    }
+
+    @Override
+    @Test
+    public void equalsAndHashCode()
+    {
+        super.equalsAndHashCode();
+        MutableSortedSet<Integer> integers = TreeSortedSet.newSetWith(Comparators.reverseNaturalOrder(), 1, 2, 3).asSynchronized();
+        Verify.assertPostSerializedEqualsAndHashCode(this.newWith(1, 2, 3));
+        Verify.assertPostSerializedEqualsAndHashCode(integers);
+        Verify.assertInstanceOf(SynchronizedSortedSet.class, SerializeTestHelper.serializeDeserialize(integers));
+        Verify.assertInstanceOf(SynchronizedSortedSet.class, SerializeTestHelper.serializeDeserialize(this.newWith(1, 2, 3)));
     }
 }

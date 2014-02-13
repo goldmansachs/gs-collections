@@ -22,12 +22,13 @@ import java.util.Iterator;
 import com.gs.collections.api.bag.sorted.MutableSortedBag;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * JUnit test for {@link com.gs.collections.impl.bag.sorted.mutable.UnmodifiableSortedBag}.
+ * JUnit test for {@link UnmodifiableSortedBag}.
  *
  * @since 4.2
  */
@@ -43,6 +44,14 @@ public class UnmodifiableSortedBagTest extends AbstractSortedBagTestCase
     protected <T> MutableSortedBag<T> newWith(Comparator<? super T> comparator, T... elements)
     {
         return TreeBag.newBagWith(comparator, elements).asUnmodifiable();
+    }
+
+    @Override
+    public void equalsAndHashCode()
+    {
+        super.equalsAndHashCode();
+        Verify.assertInstanceOf(UnmodifiableSortedBag.class, SerializeTestHelper.serializeDeserialize(this.newWith(Comparators.reverseNaturalOrder(), 1, 2, 3)));
+        Verify.assertInstanceOf(UnmodifiableSortedBag.class, SerializeTestHelper.serializeDeserialize(this.newWith(1, 2, 3)));
     }
 
     @Override

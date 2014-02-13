@@ -219,6 +219,17 @@
             <Class name="com.gs.collections.impl.multimap.set.ImmutableSetMultimapImpl" />
             <Class name="com.gs.collections.impl.multimap.bag.ImmutableBagMultimapImpl" />
             <Class name="com.gs.collections.impl.multimap.set.sorted.ImmutableSortedSetMultimapImpl" />
+            <Class name="com.gs.collections.impl.bag.mutable.SynchronizedBag" />
+            <Class name="com.gs.collections.impl.bag.mutable.UnmodifiableBag" />
+            <Class name="com.gs.collections.impl.bag.sorted.mutable.UnmodifiableSortedBag" />
+            <Class name="com.gs.collections.impl.collection.mutable.SynchronizedMutableCollection" />
+            <Class name="com.gs.collections.impl.collection.mutable.UnmodifiableMutableCollection" />
+            <Class name="com.gs.collections.impl.list.mutable.SynchronizedMutableList" />
+            <Class name="com.gs.collections.impl.list.mutable.UnmodifiableMutableList" />
+            <Class name="com.gs.collections.impl.set.mutable.SynchronizedMutableSet" />
+            <Class name="com.gs.collections.impl.set.mutable.UnmodifiableMutableSet" />
+            <Class name="com.gs.collections.impl.set.sorted.mutable.SynchronizedSortedSet" />
+            <Class name="com.gs.collections.impl.set.sorted.mutable.UnmodifiableSortedSet" />
         </Or>
     </Match>
 
