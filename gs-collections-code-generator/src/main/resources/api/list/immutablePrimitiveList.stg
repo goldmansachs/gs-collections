@@ -32,6 +32,11 @@ public interface Immutable<name>List extends Immutable<name>Collection, <name>Li
     \<V> ImmutableList\<V> collect(<name>ToObjectFunction\<? extends V> function);
 
     <immutableAPI(fileName(primitive), type, name)>
+
+    /*
+     *@since 5.0.
+     */
+    Immutable<name>List toReversed();
 }
 
 >>

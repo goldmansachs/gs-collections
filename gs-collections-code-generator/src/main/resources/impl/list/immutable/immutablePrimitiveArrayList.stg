@@ -392,6 +392,11 @@ final class Immutable<name>ArrayList
         return this;
     }
 
+    public Immutable<name>ArrayList toReversed()
+    {
+        return Immutable<name>ArrayList.newList(this.asReversed());
+    }
+
     public Immutable<name>List newWith(<type> element)
     {
         <type>[] newItems = new <type>[this.items.length + 1];

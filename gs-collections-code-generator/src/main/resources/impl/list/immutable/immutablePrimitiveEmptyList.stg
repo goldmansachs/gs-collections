@@ -180,6 +180,11 @@ final class Immutable<name>EmptyList implements Immutable<name>List, Serializabl
         return this;
     }
 
+    public Immutable<name>EmptyList toReversed()
+    {
+        return this;
+    }
+
     public Immutable<name>List newWith(<type> element)
     {
         return <name>Lists.immutable.with(element);

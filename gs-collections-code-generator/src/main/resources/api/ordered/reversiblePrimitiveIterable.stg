@@ -41,6 +41,8 @@ public interface Reversible<name>Iterable extends <name>Iterable
     <sharedAPI(fileName(primitive), name)>
 
     \<V> ReversibleIterable\<V> collect(<name>ToObjectFunction\<? extends V> function);
+
+    Reversible<name>Iterable toReversed();
 }
 
 >>

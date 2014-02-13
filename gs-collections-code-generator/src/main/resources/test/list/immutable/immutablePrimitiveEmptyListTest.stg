@@ -172,6 +172,13 @@ public class Immutable<name>EmptyListTest extends AbstractImmutable<name>ListTes
         });
         Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("0")>), result);
     }
+
+    @Override
+    @Test
+    public void toReversed()
+    {
+        Assert.assertEquals(<name>Lists.immutable.of(), this.classUnderTest().toReversed());
+    }
 }
 
 >>

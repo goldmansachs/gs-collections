@@ -330,6 +330,11 @@ final class ImmutableBooleanArrayList
         return this;
     }
 
+    public ImmutableBooleanArrayList toReversed()
+    {
+        return ImmutableBooleanArrayList.newList(this.asReversed());
+    }
+
     public ImmutableBooleanList newWith(boolean element)
     {
         BitSet newItems = (BitSet) this.items.clone();

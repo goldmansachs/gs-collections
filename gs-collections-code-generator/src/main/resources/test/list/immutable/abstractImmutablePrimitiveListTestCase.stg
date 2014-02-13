@@ -148,6 +148,17 @@ public abstract class AbstractImmutable<name>ListTestCase extends AbstractImmuta
         }
     }
 
+    @Test
+    public void toReversed()
+    {
+        Assert.assertEquals(Immutable<name>ArrayList.newListWith(<(literal.(type))("3")>, <(literal.(type))("1")>, <(literal.(type))("9")>, <(literal.(type))("7")>), this.newWith(<(literal.(type))("7")>, <(literal.(type))("9")>, <(literal.(type))("1")>, <(literal.(type))("3")>).toReversed());
+        Immutable<name>List list1 = this.newWith(<(literal.(type))("3")>, <(literal.(type))("1")>, <(literal.(type))("9")>, <(literal.(type))("7")>);
+        Assert.assertNotSame(list1, list1.toReversed());
+        Assert.assertEquals(<name>ArrayList.newListWith(<(literal.(type))("3")>, <(literal.(type))("1")>, <(literal.(type))("9")>, <(literal.(type))("7")>, <(literal.(type))("8")>), this.newWith(<(literal.(type))("8")>, <(literal.(type))("7")>, <(literal.(type))("9")>, <(literal.(type))("1")>, <(literal.(type))("3")>).toReversed());
+        Immutable<name>List list2 = this.newWith(<(literal.(type))("3")>, <(literal.(type))("1")>, <(literal.(type))("9")>, <(literal.(type))("7")>, <(literal.(type))("8")>);
+        Assert.assertNotSame(list2, list2.toReversed());
+    }
+
     @Override
     @Test
     public void testEquals()

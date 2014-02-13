@@ -71,6 +71,13 @@ public class Immutable<name>SingletonListTest extends AbstractImmutable<name>Lis
         });
         Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("2")>), result);
     }
+
+    @Override
+    @Test
+    public void toReversed()
+    {
+        Assert.assertEquals(<name>Lists.immutable.of(<(literal.(type))("1")>), this.classUnderTest().toReversed());
+    }
 }
 
 >>
