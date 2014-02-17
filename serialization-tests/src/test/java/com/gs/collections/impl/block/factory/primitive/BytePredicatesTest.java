@@ -22,6 +22,26 @@ import org.junit.Test;
 public class BytePredicatesTest
 {
     @Test
+    public void alwaysFalse()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAFdjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5C\n"
+                        + "eXRlUHJlZGljYXRlcyRBbHdheXNGYWxzZUJ5dGVQcmVkaWNhdGUAAAAAAAAAAQIAAHhw",
+                BytePredicates.alwaysFalse());
+    }
+
+    @Test
+    public void alwaysTrue()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAFZjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5C\n"
+                        + "eXRlUHJlZGljYXRlcyRBbHdheXNUcnVlQnl0ZVByZWRpY2F0ZQAAAAAAAAABAgAAeHA=",
+                BytePredicates.alwaysTrue());
+    }
+
+    @Test
     public void equal()
     {
         Verify.assertSerializedForm(

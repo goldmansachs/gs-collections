@@ -22,6 +22,26 @@ import org.junit.Test;
 public class LongPredicatesTest
 {
     @Test
+    public void alwaysFalse()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAFdjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5M\n"
+                        + "b25nUHJlZGljYXRlcyRBbHdheXNGYWxzZUxvbmdQcmVkaWNhdGUAAAAAAAAAAQIAAHhw",
+                LongPredicates.alwaysFalse());
+    }
+
+    @Test
+    public void alwaysTrue()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAFZjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5M\n"
+                        + "b25nUHJlZGljYXRlcyRBbHdheXNUcnVlTG9uZ1ByZWRpY2F0ZQAAAAAAAAABAgAAeHA=",
+                LongPredicates.alwaysTrue());
+    }
+
+    @Test
     public void equal()
     {
         Verify.assertSerializedForm(

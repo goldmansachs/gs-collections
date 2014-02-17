@@ -18,6 +18,7 @@ package com.gs.collections.api.map.primitive;
 import java.util.Collection;
 import java.util.Map;
 
+import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.predicate.primitive.<name>ObjectPredicate;
@@ -80,6 +81,11 @@ public interface <name>ObjectMap\<V> extends RichIterable\<V>
     Mutable<name>Set keySet();
 
     Collection\<V> values();
+
+    /**
+     * @since 5.0
+     */
+    Lazy<name>Iterable keysView();
 
     /**
      * @since 5.0

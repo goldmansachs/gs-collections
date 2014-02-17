@@ -26,6 +26,8 @@ public final class <name>Predicates
 {
     <(intPredicateConstants.(type))()>
     <(charPredicateConstants.(type))()>
+    private static final <name>Predicate ALWAYS_TRUE = new AlwaysTrue<name>Predicate();
+    private static final <name>Predicate ALWAYS_FALSE = new AlwaysFalse<name>Predicate();
 
     private <name>Predicates()
     {
@@ -51,6 +53,17 @@ public final class <name>Predicates
 
     <(intPredicateMethods.(type))()>
     <(charPredicateMethods.(type))()>
+
+    public static <name>Predicate alwaysTrue()
+    {
+        return ALWAYS_TRUE;
+    }
+
+    public static <name>Predicate alwaysFalse()
+    {
+        return ALWAYS_FALSE;
+    }
+
     public static <name>Predicate and(<name>Predicate one, <name>Predicate two)
     {
         return new And<name>Predicate(one, two);
@@ -174,6 +187,26 @@ public final class <name>Predicates
 
     <(intPredicateClasses.(type))()>
     <(charPredicateClasses.(type))()>
+
+    private static final class AlwaysTrue<name>Predicate implements <name>Predicate
+    {
+        private static final long serialVersionUID = 1L;
+
+        public boolean accept(<type> value)
+        {
+            return true;
+        }
+    }
+
+    private static final class AlwaysFalse<name>Predicate implements <name>Predicate
+    {
+        private static final long serialVersionUID = 1L;
+
+        public boolean accept(<type> value)
+        {
+            return false;
+        }
+    }
 }
 
 >>

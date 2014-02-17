@@ -119,6 +119,7 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.factory.primitive.<name>Sets;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
+import com.gs.collections.impl.lazy.primitive.AbstractLazy<name>Iterable;
 import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
@@ -3432,6 +3433,11 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         return new ValuesCollection();
     }
 
+    public Lazy<name>Iterable keysView()
+    {
+        return new KeysView();
+    }
+
     public RichIterable\<<name>ObjectPair\<V>\> keyValuesView()
     {
         return new KeyValuesView();
@@ -3547,6 +3553,19 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         public \<T> T[] toArray(T[] result)
         {
             return <name>ObjectHashMap.this.toArray(result);
+        }
+    }
+
+    private class KeysView extends AbstractLazy<name>Iterable
+    {
+        public <name>Iterator <type>Iterator()
+        {
+            return new KeysSetIterator();
+        }
+
+        public void forEach(<name>Procedure procedure)
+        {
+            <name>ObjectHashMap.this.forEachKey(procedure);
         }
     }
 

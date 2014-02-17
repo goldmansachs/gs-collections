@@ -22,6 +22,26 @@ import org.junit.Test;
 public class DoublePredicatesTest
 {
     @Test
+    public void alwaysFalse()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAFtjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5E\n"
+                        + "b3VibGVQcmVkaWNhdGVzJEFsd2F5c0ZhbHNlRG91YmxlUHJlZGljYXRlAAAAAAAAAAECAAB4cA==\n",
+                DoublePredicates.alwaysFalse());
+    }
+
+    @Test
+    public void alwaysTrue()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAFpjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5E\n"
+                        + "b3VibGVQcmVkaWNhdGVzJEFsd2F5c1RydWVEb3VibGVQcmVkaWNhdGUAAAAAAAAAAQIAAHhw",
+                DoublePredicates.alwaysTrue());
+    }
+
+    @Test
     public void equal()
     {
         Verify.assertSerializedForm(

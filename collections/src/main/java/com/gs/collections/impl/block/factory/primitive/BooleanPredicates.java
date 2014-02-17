@@ -27,6 +27,8 @@ public final class BooleanPredicates
     private static final BooleanPredicate IS_FALSE_BOOLEAN_PREDICATE = new IsFalseBooleanPredicate();
     private static final BooleanPredicate FALSE_PREDICATE = new FalsePredicate();
     private static final BooleanPredicate TRUE_PREDICATE = new TruePredicate();
+    private static final BooleanPredicate ALWAYS_TRUE = new AlwaysTrueBooleanPredicate();
+    private static final BooleanPredicate ALWAYS_FALSE = new AlwaysFalseBooleanPredicate();
 
     private BooleanPredicates()
     {
@@ -52,6 +54,16 @@ public final class BooleanPredicates
     public static BooleanPredicate isFalse()
     {
         return IS_FALSE_BOOLEAN_PREDICATE;
+    }
+
+    public static BooleanPredicate alwaysTrue()
+    {
+        return ALWAYS_TRUE;
+    }
+
+    public static BooleanPredicate alwaysFalse()
+    {
+        return ALWAYS_FALSE;
     }
 
     public static BooleanPredicate and(BooleanPredicate one, BooleanPredicate two)
@@ -193,6 +205,26 @@ public final class BooleanPredicates
         public boolean accept(boolean value)
         {
             return true;
+        }
+    }
+
+    private static final class AlwaysTrueBooleanPredicate implements BooleanPredicate
+    {
+        private static final long serialVersionUID = 1L;
+
+        public boolean accept(boolean value)
+        {
+            return true;
+        }
+    }
+
+    private static final class AlwaysFalseBooleanPredicate implements BooleanPredicate
+    {
+        private static final long serialVersionUID = 1L;
+
+        public boolean accept(boolean value)
+        {
+            return false;
         }
     }
 }

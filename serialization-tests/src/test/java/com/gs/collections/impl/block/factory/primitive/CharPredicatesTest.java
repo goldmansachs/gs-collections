@@ -22,6 +22,26 @@ import org.junit.Test;
 public class CharPredicatesTest
 {
     @Test
+    public void alwaysFalse()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAFdjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5D\n"
+                        + "aGFyUHJlZGljYXRlcyRBbHdheXNGYWxzZUNoYXJQcmVkaWNhdGUAAAAAAAAAAQIAAHhw",
+                CharPredicates.alwaysFalse());
+    }
+
+    @Test
+    public void alwaysTrue()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAFZjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5D\n"
+                        + "aGFyUHJlZGljYXRlcyRBbHdheXNUcnVlQ2hhclByZWRpY2F0ZQAAAAAAAAABAgAAeHA=",
+                CharPredicates.alwaysTrue());
+    }
+
+    @Test
     public void equal()
     {
         Verify.assertSerializedForm(

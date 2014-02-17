@@ -22,6 +22,26 @@ import org.junit.Test;
 public class ShortPredicatesTest
 {
     @Test
+    public void alwaysFalse()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAFljb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5T\n"
+                        + "aG9ydFByZWRpY2F0ZXMkQWx3YXlzRmFsc2VTaG9ydFByZWRpY2F0ZQAAAAAAAAABAgAAeHA=",
+                ShortPredicates.alwaysFalse());
+    }
+
+    @Test
+    public void alwaysTrue()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAFhjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5T\n"
+                        + "aG9ydFByZWRpY2F0ZXMkQWx3YXlzVHJ1ZVNob3J0UHJlZGljYXRlAAAAAAAAAAECAAB4cA==",
+                ShortPredicates.alwaysTrue());
+    }
+
+    @Test
     public void equal()
     {
         Verify.assertSerializedForm(

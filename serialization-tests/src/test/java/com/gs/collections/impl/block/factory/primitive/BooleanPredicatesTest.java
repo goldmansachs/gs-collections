@@ -33,6 +33,26 @@ public class BooleanPredicatesTest
     };
 
     @Test
+    public void alwaysFalse()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAF1jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5C\n"
+                        + "b29sZWFuUHJlZGljYXRlcyRBbHdheXNGYWxzZUJvb2xlYW5QcmVkaWNhdGUAAAAAAAAAAQIAAHhw\n",
+                BooleanPredicates.alwaysFalse());
+    }
+
+    @Test
+    public void alwaysTrue()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAFxjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LnByaW1pdGl2ZS5C\n"
+                        + "b29sZWFuUHJlZGljYXRlcyRBbHdheXNUcnVlQm9vbGVhblByZWRpY2F0ZQAAAAAAAAABAgAAeHA=\n",
+                BooleanPredicates.alwaysTrue());
+    }
+
+    @Test
     public void isTrue()
     {
         Verify.assertSerializedForm(

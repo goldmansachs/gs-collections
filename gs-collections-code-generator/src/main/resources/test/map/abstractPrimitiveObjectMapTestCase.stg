@@ -921,6 +921,13 @@ public abstract class Abstract<name>ObjectMapTestCase
     }
 
     @Test
+    public void keysView()
+    {
+        Assert.assertEquals(<name>ArrayList.newListWith(), this.getEmptyMap().keysView().toList());
+        Assert.assertEquals(<name>ArrayList.newListWith(<(literal.(type))("1")>), this.newWithKeysValues(<(literal.(type))("1")>, "one").keysView().toList());
+    }
+
+    @Test
     public void reject()
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");

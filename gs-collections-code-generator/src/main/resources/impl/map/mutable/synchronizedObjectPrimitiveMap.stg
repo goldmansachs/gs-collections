@@ -486,7 +486,7 @@ public final class SynchronizedObject<name>Map\<K>
     {
         synchronized (this.lock)
         {
-            return SynchronizedRichIterable.of(this.map.keyValuesView(), this.lock);
+            return SynchronizedRichIterable.of(this.map.keyValuesView(), this.lock).asLazy();
         }
     }
 
