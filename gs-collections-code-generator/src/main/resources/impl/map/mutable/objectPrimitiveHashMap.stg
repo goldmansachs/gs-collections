@@ -416,9 +416,9 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         }
     }
 
-    public void remove(K key)
+    public void remove(Object key)
     {
-        this.removeKey(key);
+        this.removeKey((K) key);
     }
 
     public <type> removeKeyIfAbsent(K key, <type> value)

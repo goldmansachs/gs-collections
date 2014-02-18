@@ -37,7 +37,7 @@ public interface MutableObject<name>Map\<K> extends Object<name>Map\<K>
 
     void removeKey(K key);
 
-    void remove(K key);
+    void remove(Object key);
 
     <type> removeKeyIfAbsent(K key, <type> value);
 

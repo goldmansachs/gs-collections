@@ -114,11 +114,11 @@ public final class SynchronizedObject<name>Map\<K>
         }
     }
 
-    public void remove(K key)
+    public void remove(Object key)
     {
         synchronized (this.lock)
         {
-            this.map.removeKey(key);
+            this.map.removeKey((K) key);
         }
     }
 
