@@ -576,10 +576,10 @@ public final class BooleanHashBag implements MutableBooleanBag, Externalizable
             String separator,
             String end)
     {
-        boolean firstItem = true;
         try
         {
             appendable.append(start);
+            boolean firstItem = true;
             for (int i = 0; i < this.falseCount; i++)
             {
                 if (!firstItem)

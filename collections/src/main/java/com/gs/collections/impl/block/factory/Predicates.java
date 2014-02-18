@@ -180,7 +180,7 @@ public abstract class Predicates<T>
         return new InPredicate(iterable);
     }
 
-    public static Predicates<Object> in(Object[] array)
+    public static Predicates<Object> in(Object... array)
     {
         return new InPredicate(Arrays.asList(array));
     }
@@ -237,7 +237,7 @@ public abstract class Predicates<T>
         return new NotInPredicate(iterable);
     }
 
-    public static Predicates<Object> notIn(Object[] array)
+    public static Predicates<Object> notIn(Object... array)
     {
         return new NotInPredicate(Arrays.asList(array));
     }

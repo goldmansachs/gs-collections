@@ -283,8 +283,8 @@ public class ImmutableBooleanHashSetTest extends AbstractImmutableBooleanCollect
         });
 
         final BooleanIterator booleanIterator3 = this.set3.booleanIterator();
-        BooleanHashSet actual = new BooleanHashSet();
         Assert.assertTrue(booleanIterator3.hasNext());
+        BooleanHashSet actual = new BooleanHashSet();
         actual.add(booleanIterator3.next());
         Assert.assertTrue(booleanIterator3.hasNext());
         actual.add(booleanIterator3.next());

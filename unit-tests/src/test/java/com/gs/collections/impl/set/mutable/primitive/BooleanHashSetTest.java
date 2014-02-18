@@ -39,10 +39,9 @@ public class BooleanHashSetTest extends AbstractBooleanSetTestCase
     @Test
     public void construction() throws Exception
     {
-        BooleanHashSet set = new BooleanHashSet();
         Field table = BooleanHashSet.class.getDeclaredField("state");
         table.setAccessible(true);
-        Assert.assertEquals(0, table.get(set));
+        Assert.assertEquals(0, table.get(new BooleanHashSet()));
     }
 
     @Override

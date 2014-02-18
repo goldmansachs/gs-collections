@@ -14,10 +14,10 @@
     <inspection_tool class="AbstractMethodWithMissingImplementations" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="AccessStaticViaInstance" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="AccessToNonThreadSafeStaticFieldFromInstance" enabled="true" level="WARNING" enabled_by_default="true">
-      <option name="nonThreadSafeTypes" value="java.text.DateFormat,java.util.Calendar" />
       <option name="nonThreadSafeClasses">
         <value />
       </option>
+      <option name="nonThreadSafeTypes" value="java.text.DateFormat,java.util.Calendar" />
     </inspection_tool>
     <inspection_tool class="AccessToStaticFieldLockedOnInstance" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="AccessorLikeMethodIsUnit" enabled="false" level="WARNING" enabled_by_default="false" />
@@ -42,7 +42,7 @@
     <inspection_tool class="AssignmentToForLoopParameter" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="m_checkForeachParameters" value="false" />
     </inspection_tool>
-    <inspection_tool class="AssignmentToMethodParameter" enabled="true" level="WARNING" enabled_by_default="true">
+    <inspection_tool class="AssignmentToMethodParameter" enabled="true" level="INSPECTION" enabled_by_default="true">
       <option name="ignoreTransformationOfOriginalParameter" value="false" />
     </inspection_tool>
     <inspection_tool class="AssignmentToNull" enabled="true" level="WARNING" enabled_by_default="true" />
@@ -511,6 +511,8 @@
     <inspection_tool class="LocalCanBeFinal" enabled="false" level="WARNING" enabled_by_default="false">
       <option name="REPORT_VARIABLES" value="false" />
       <option name="REPORT_PARAMETERS" value="true" />
+      <option name="REPORT_CATCH_PARAMETERS" value="true" />
+      <option name="REPORT_FOREACH_PARAMETERS" value="true" />
     </inspection_tool>
     <inspection_tool class="LocalVariableHidingMemberVariable" enabled="true" level="INFO" enabled_by_default="true">
       <option name="m_ignoreInvisibleFields" value="true" />
@@ -537,6 +539,10 @@
     <inspection_tool class="MapReplaceableByEnumMap" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="MarkerInterface" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="MavenModelInspection" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="MethodCanBeVariableArityMethod" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoreByteAndShortArrayParameters" value="true" />
+      <option name="ignoreOverridingMethods" value="true" />
+    </inspection_tool>
     <inspection_tool class="MethodMayBeStatic" enabled="true" level="INFO" enabled_by_default="true">
       <option name="m_onlyPrivateOrFinal" value="false" />
       <option name="m_ignoreEmptyMethods" value="true" />
@@ -718,7 +724,8 @@
     <inspection_tool class="ReadObjectAndWriteObjectPrivate" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="ReadObjectInitialization" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="ReadResolveAndWriteReplaceProtected" enabled="true" level="INSPECTION" enabled_by_default="true" />
-    <inspection_tool class="RedundantArrayCreation" enabled="true" level="INSPECTION" enabled_by_default="false" />
+    <inspection_tool class="RedundantArrayCreation" enabled="true" level="INSPECTION" enabled_by_default="true" />
+    <inspection_tool class="RedundantCast" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="RedundantFieldInitialization" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="RedundantImplements" enabled="true" level="INSPECTION" enabled_by_default="true">
       <option name="ignoreSerializable" value="false" />
@@ -729,7 +736,7 @@
     <inspection_tool class="RedundantStringFormatCall" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="RedundantSuppression" enabled="true" level="WARNING" enabled_by_default="true" />
     <inspection_tool class="RedundantThrowsDeclaration" enabled="true" level="WARNING" enabled_by_default="true" />
-    <inspection_tool class="RedundantTypeArguments" enabled="false" level="WARNING" enabled_by_default="false" />
+    <inspection_tool class="RedundantTypeArguments" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="ReferencesToClassesFromDefaultPackagesInJSPFile" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="ReflectionForUnavailableAnnotation" enabled="false" level="WARNING" enabled_by_default="false" />
     <inspection_tool class="ReplaceAllDot" enabled="true" level="INSPECTION" enabled_by_default="true" />
@@ -1276,6 +1283,7 @@
       </replaceConfiguration>
     </inspection_tool>
     <inspection_tool class="SafeLock" enabled="true" level="INSPECTION" enabled_by_default="true" />
+    <inspection_tool class="SafeVarargsDetector" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="SamePackageImport" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="SameParameterValue" enabled="false" level="INFO" enabled_by_default="false" />
     <inspection_tool class="SameReturnValue" enabled="true" level="INFO" enabled_by_default="true" />
@@ -1596,10 +1604,10 @@
     <inspection_tool class="UtilSchemaInspection" enabled="false" level="INSPECTION" enabled_by_default="false" />
     <inspection_tool class="UtilityClassWithPublicConstructor" enabled="true" level="INSPECTION" enabled_by_default="true" />
     <inspection_tool class="UtilityClassWithoutPrivateConstructor" enabled="true" level="INSPECTION" enabled_by_default="true">
-      <option name="ignoreClassesWithOnlyMain" value="false" />
       <option name="ignorableAnnotations">
         <value />
       </option>
+      <option name="ignoreClassesWithOnlyMain" value="false" />
     </inspection_tool>
     <inspection_tool class="ValidExternallyBoundObject" enabled="false" level="INSPECTION" enabled_by_default="false" />
     <inspection_tool class="VolatileArrayField" enabled="true" level="INSPECTION" enabled_by_default="true" />

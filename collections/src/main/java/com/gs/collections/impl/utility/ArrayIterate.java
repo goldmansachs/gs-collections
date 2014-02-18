@@ -249,7 +249,7 @@ public final class ArrayIterate
     /**
      * @see Iterate#min(Iterable)
      */
-    public static <T> T min(T[] array)
+    public static <T> T min(T... array)
     {
         return ArrayIterate.min(array, Comparators.naturalOrder());
     }
@@ -257,7 +257,7 @@ public final class ArrayIterate
     /**
      * @see Iterate#max(Iterable)
      */
-    public static <T> T max(T[] array)
+    public static <T> T max(T... array)
     {
         return ArrayIterate.max(array, Comparators.naturalOrder());
     }
@@ -714,7 +714,6 @@ public final class ArrayIterate
         return target;
     }
 
-
     /**
      * @see Iterate#collectDouble(Iterable, DoubleFunction)
      */
@@ -867,7 +866,6 @@ public final class ArrayIterate
         return target;
     }
 
-
     /**
      * @see Iterate#collectShort(Iterable, ShortFunction)
      */
@@ -905,7 +903,6 @@ public final class ArrayIterate
         }
         return target;
     }
-
 
     /**
      * @see Iterate#flatCollect(Iterable, Function)
@@ -1749,7 +1746,7 @@ public final class ArrayIterate
     /**
      * @see Iterate#zipWithIndex(Iterable)
      */
-    public static <T> MutableList<Pair<T, Integer>> zipWithIndex(T[] array)
+    public static <T> MutableList<Pair<T, Integer>> zipWithIndex(T... array)
     {
         return ArrayIterate.zipWithIndex(array, FastList.<Pair<T, Integer>>newList());
     }
@@ -1769,7 +1766,7 @@ public final class ArrayIterate
     /**
      * @see Iterate#makeString(Iterable)
      */
-    public static <T> String makeString(T[] array)
+    public static <T> String makeString(T... array)
     {
         return ArrayIterate.makeString(array, ", ");
     }

@@ -60,7 +60,7 @@ public final class ArrayAdapter<T>
         super(newElements);
     }
 
-    public static <E> ArrayAdapter<E> adapt(E[] array)
+    public static <E> ArrayAdapter<E> adapt(E... array)
     {
         return new ArrayAdapter<E>(array);
     }
