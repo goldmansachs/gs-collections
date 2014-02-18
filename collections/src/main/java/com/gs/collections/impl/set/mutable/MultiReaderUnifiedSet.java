@@ -41,6 +41,14 @@ import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.partition.set.PartitionMutableSet;
@@ -635,10 +643,20 @@ public final class MultiReaderUnifiedSet<T>
             return this.getDelegate().collectBoolean(booleanFunction);
         }
 
+        public <R extends MutableBooleanCollection> R collectBoolean(BooleanFunction<? super T> booleanFunction, R target)
+        {
+            return this.getDelegate().collectBoolean(booleanFunction, target);
+        }
+
         @Override
         public MutableByteSet collectByte(ByteFunction<? super T> byteFunction)
         {
             return this.getDelegate().collectByte(byteFunction);
+        }
+
+        public <R extends MutableByteCollection> R collectByte(ByteFunction<? super T> byteFunction, R target)
+        {
+            return this.getDelegate().collectByte(byteFunction, target);
         }
 
         @Override
@@ -647,10 +665,20 @@ public final class MultiReaderUnifiedSet<T>
             return this.getDelegate().collectChar(charFunction);
         }
 
+        public <R extends MutableCharCollection> R collectChar(CharFunction<? super T> charFunction, R target)
+        {
+            return this.getDelegate().collectChar(charFunction, target);
+        }
+
         @Override
         public MutableDoubleSet collectDouble(DoubleFunction<? super T> doubleFunction)
         {
             return this.getDelegate().collectDouble(doubleFunction);
+        }
+
+        public <R extends MutableDoubleCollection> R collectDouble(DoubleFunction<? super T> doubleFunction, R target)
+        {
+            return this.getDelegate().collectDouble(doubleFunction, target);
         }
 
         @Override
@@ -659,10 +687,20 @@ public final class MultiReaderUnifiedSet<T>
             return this.getDelegate().collectFloat(floatFunction);
         }
 
+        public <R extends MutableFloatCollection> R collectFloat(FloatFunction<? super T> floatFunction, R target)
+        {
+            return this.getDelegate().collectFloat(floatFunction, target);
+        }
+
         @Override
         public MutableIntSet collectInt(IntFunction<? super T> intFunction)
         {
             return this.getDelegate().collectInt(intFunction);
+        }
+
+        public <R extends MutableIntCollection> R collectInt(IntFunction<? super T> intFunction, R target)
+        {
+            return this.getDelegate().collectInt(intFunction, target);
         }
 
         @Override
@@ -671,10 +709,20 @@ public final class MultiReaderUnifiedSet<T>
             return this.getDelegate().collectLong(longFunction);
         }
 
+        public <R extends MutableLongCollection> R collectLong(LongFunction<? super T> longFunction, R target)
+        {
+            return this.getDelegate().collectLong(longFunction, target);
+        }
+
         @Override
         public MutableShortSet collectShort(ShortFunction<? super T> shortFunction)
         {
             return this.getDelegate().collectShort(shortFunction);
+        }
+
+        public <R extends MutableShortCollection> R collectShort(ShortFunction<? super T> shortFunction, R target)
+        {
+            return this.getDelegate().collectShort(shortFunction, target);
         }
 
         public <V> MutableSet<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)

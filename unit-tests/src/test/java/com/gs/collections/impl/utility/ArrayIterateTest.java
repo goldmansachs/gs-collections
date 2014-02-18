@@ -30,6 +30,7 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
@@ -382,72 +383,184 @@ public class ArrayIterateTest
     public void collectBoolean()
     {
         Integer[] objectArray = {-1, 0, 42};
-        Assert.assertEquals(
-                BooleanArrayList.newListWith(false, false, true),
+        Assert.assertEquals(this.getExpectedBooleanResults(),
                 ArrayIterate.collectBoolean(objectArray, PrimitiveFunctions.integerIsPositive()));
+    }
+
+    @Test
+    public void collectBooleanWithTarget()
+    {
+        Integer[] objectArray = {-1, 0, 42};
+        BooleanArrayList target = new BooleanArrayList();
+        MutableBooleanList result = ArrayIterate.collectBoolean(objectArray, PrimitiveFunctions.integerIsPositive(), target);
+        Assert.assertEquals(this.getExpectedBooleanResults(), result);
+        Assert.assertSame("Target List not returned as result", target, result);
+    }
+
+    private BooleanArrayList getExpectedBooleanResults()
+    {
+        return BooleanArrayList.newListWith(false, false, true);
     }
 
     @Test
     public void collectByte()
     {
         Integer[] objectArray = {-1, 0, 42};
-        Assert.assertEquals(
-                ByteArrayList.newListWith((byte) -1, (byte) 0, (byte) 42),
+        Assert.assertEquals(this.getExpectedByteResults(),
                 ArrayIterate.collectByte(objectArray, PrimitiveFunctions.unboxIntegerToByte()));
+    }
+
+    @Test
+    public void collectByteWithTarget()
+    {
+        Integer[] objectArray = {-1, 0, 42};
+        ByteArrayList target = new ByteArrayList();
+        ByteArrayList result = ArrayIterate.collectByte(objectArray, PrimitiveFunctions.unboxIntegerToByte(), target);
+        Assert.assertEquals(this.getExpectedByteResults(), result);
+        Assert.assertSame("Target List not returned as result", target, result);
+    }
+
+    private ByteArrayList getExpectedByteResults()
+    {
+        return ByteArrayList.newListWith((byte) -1, (byte) 0, (byte) 42);
     }
 
     @Test
     public void collectChar()
     {
         Integer[] objectArray = {-1, 0, 42};
-        Assert.assertEquals(
-                CharArrayList.newListWith((char) -1, (char) 0, (char) 42),
+        Assert.assertEquals(this.getExpectedCharResults(),
                 ArrayIterate.collectChar(objectArray, PrimitiveFunctions.unboxIntegerToChar()));
+    }
+
+    @Test
+    public void collectCharWithTarget()
+    {
+        Integer[] objectArray = {-1, 0, 42};
+        CharArrayList target = new CharArrayList();
+        CharArrayList result = ArrayIterate.collectChar(objectArray, PrimitiveFunctions.unboxIntegerToChar(), target);
+        Assert.assertEquals(this.getExpectedCharResults(), result);
+        Assert.assertSame("Target List not returned as result", target, result);
+    }
+
+    private CharArrayList getExpectedCharResults()
+    {
+        return CharArrayList.newListWith((char) -1, (char) 0, (char) 42);
     }
 
     @Test
     public void collectDouble()
     {
         Integer[] objectArray = {-1, 0, 42};
-        Assert.assertEquals(
-                DoubleArrayList.newListWith(-1.0d, 0.0d, 42.0d),
+        Assert.assertEquals(this.getExpectedDoubleResults(),
                 ArrayIterate.collectDouble(objectArray, PrimitiveFunctions.unboxIntegerToDouble()));
+    }
+
+    @Test
+    public void collectDoubleWithTarget()
+    {
+        Integer[] objectArray = {-1, 0, 42};
+        DoubleArrayList target = new DoubleArrayList();
+        DoubleArrayList result = ArrayIterate.collectDouble(objectArray, PrimitiveFunctions.unboxIntegerToDouble(), target);
+        Assert.assertEquals(this.getExpectedDoubleResults(), result);
+        Assert.assertSame("Target List not returned as result", target, result);
+    }
+
+    private DoubleArrayList getExpectedDoubleResults()
+    {
+        return DoubleArrayList.newListWith(-1.0d, 0.0d, 42.0d);
     }
 
     @Test
     public void collectFloat()
     {
         Integer[] objectArray = {-1, 0, 42};
-        Assert.assertEquals(
-                FloatArrayList.newListWith(-1.0f, 0.0f, 42.0f),
+        Assert.assertEquals(this.getExpectedFloatResults(),
                 ArrayIterate.collectFloat(objectArray, PrimitiveFunctions.unboxIntegerToFloat()));
+    }
+
+    @Test
+    public void collectFloatWithTarget()
+    {
+        Integer[] objectArray = {-1, 0, 42};
+        FloatArrayList target = new FloatArrayList();
+        FloatArrayList result = ArrayIterate.collectFloat(objectArray, PrimitiveFunctions.unboxIntegerToFloat(), target);
+        Assert.assertEquals(this.getExpectedFloatResults(), result);
+        Assert.assertSame("Target List not returned as result", target, result);
+    }
+
+    private FloatArrayList getExpectedFloatResults()
+    {
+        return FloatArrayList.newListWith(-1.0f, 0.0f, 42.0f);
     }
 
     @Test
     public void collectInt()
     {
         Integer[] objectArray = {-1, 0, 42};
-        Assert.assertEquals(
-                IntArrayList.newListWith(-1, 0, 42),
+        Assert.assertEquals(this.getExpectedIntResults(),
                 ArrayIterate.collectInt(objectArray, PrimitiveFunctions.unboxIntegerToInt()));
+    }
+
+    @Test
+    public void collectIntWithTarget()
+    {
+        Integer[] objectArray = {-1, 0, 42};
+        IntArrayList target = new IntArrayList();
+        IntArrayList result = ArrayIterate.collectInt(objectArray, PrimitiveFunctions.unboxIntegerToInt(), target);
+        Assert.assertEquals(this.getExpectedIntResults(), result);
+        Assert.assertSame("Target List not returned as result", target, result);
+    }
+
+    private IntArrayList getExpectedIntResults()
+    {
+        return IntArrayList.newListWith(-1, 0, 42);
     }
 
     @Test
     public void collectLong()
     {
         Integer[] objectArray = {-1, 0, 42};
-        Assert.assertEquals(
-                LongArrayList.newListWith(-1L, 0L, 42L),
+        Assert.assertEquals(this.getExpectedLongResults(),
                 ArrayIterate.collectLong(objectArray, PrimitiveFunctions.unboxIntegerToLong()));
+    }
+
+    @Test
+    public void collectLongWithTarget()
+    {
+        Integer[] objectArray = {-1, 0, 42};
+        LongArrayList target = new LongArrayList();
+        LongArrayList result = ArrayIterate.collectLong(objectArray, PrimitiveFunctions.unboxIntegerToLong(), target);
+        Assert.assertEquals(this.getExpectedLongResults(), result);
+        Assert.assertSame("Target List not returned as result", target, result);
+    }
+
+    private LongArrayList getExpectedLongResults()
+    {
+        return LongArrayList.newListWith(-1L, 0L, 42L);
     }
 
     @Test
     public void collectShort()
     {
         Integer[] objectArray = {-1, 0, 42};
-        Assert.assertEquals(
-                ShortArrayList.newListWith((short) -1, (short) 0, (short) 42),
+        Assert.assertEquals(this.getExpectedShortResults(),
                 ArrayIterate.collectShort(objectArray, PrimitiveFunctions.unboxIntegerToShort()));
+    }
+
+    @Test
+    public void collectShortWithTarget()
+    {
+        Integer[] objectArray = {-1, 0, 42};
+        ShortArrayList target = new ShortArrayList();
+        ShortArrayList result = ArrayIterate.collectShort(objectArray, PrimitiveFunctions.unboxIntegerToShort(), target);
+        Assert.assertEquals(this.getExpectedShortResults(), result);
+        Assert.assertSame("Target List not returned as result", target, result);
+    }
+
+    private ShortArrayList getExpectedShortResults()
+    {
+        return ShortArrayList.newListWith((short) -1, (short) 0, (short) 42);
     }
 
     @Test

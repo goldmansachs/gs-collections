@@ -51,6 +51,14 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
@@ -289,9 +297,19 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
         return this.valuesView().collectBoolean(booleanFunction);
     }
 
+    public <R extends MutableBooleanCollection> R collectBoolean(BooleanFunction<? super V> booleanFunction, R target)
+    {
+        return this.valuesView().collectBoolean(booleanFunction, target);
+    }
+
     public ByteIterable collectByte(ByteFunction<? super V> byteFunction)
     {
         return this.valuesView().collectByte(byteFunction);
+    }
+
+    public <R extends MutableByteCollection> R collectByte(ByteFunction<? super V> byteFunction, R target)
+    {
+        return this.valuesView().collectByte(byteFunction, target);
     }
 
     public CharIterable collectChar(CharFunction<? super V> charFunction)
@@ -299,9 +317,19 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
         return this.valuesView().collectChar(charFunction);
     }
 
+    public <R extends MutableCharCollection> R collectChar(CharFunction<? super V> charFunction, R target)
+    {
+        return this.valuesView().collectChar(charFunction, target);
+    }
+
     public DoubleIterable collectDouble(DoubleFunction<? super V> doubleFunction)
     {
         return this.valuesView().collectDouble(doubleFunction);
+    }
+
+    public <R extends MutableDoubleCollection> R collectDouble(DoubleFunction<? super V> doubleFunction, R target)
+    {
+        return this.valuesView().collectDouble(doubleFunction, target);
     }
 
     public FloatIterable collectFloat(FloatFunction<? super V> floatFunction)
@@ -309,9 +337,19 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
         return this.valuesView().collectFloat(floatFunction);
     }
 
+    public <R extends MutableFloatCollection> R collectFloat(FloatFunction<? super V> floatFunction, R target)
+    {
+        return this.valuesView().collectFloat(floatFunction, target);
+    }
+
     public IntIterable collectInt(IntFunction<? super V> intFunction)
     {
         return this.valuesView().collectInt(intFunction);
+    }
+
+    public <R extends MutableIntCollection> R collectInt(IntFunction<? super V> intFunction, R target)
+    {
+        return this.valuesView().collectInt(intFunction, target);
     }
 
     public LongIterable collectLong(LongFunction<? super V> longFunction)
@@ -319,10 +357,21 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
         return this.valuesView().collectLong(longFunction);
     }
 
+    public <R extends MutableLongCollection> R collectLong(LongFunction<? super V> longFunction, R target)
+    {
+        return this.valuesView().collectLong(longFunction, target);
+    }
+
     public ShortIterable collectShort(ShortFunction<? super V> shortFunction)
     {
         return this.valuesView().collectShort(shortFunction);
     }
+
+    public <R extends MutableShortCollection> R collectShort(ShortFunction<? super V> shortFunction, R target)
+    {
+        return this.valuesView().collectShort(shortFunction, target);
+    }
+
 
     public <R, C extends Collection<R>> C collect(Function<? super V, ? extends R> function, C target)
     {

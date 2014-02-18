@@ -18,6 +18,12 @@ public Immutable<name>Collection collect<name>(<name>Function\<? super V> <type>
 {
     return this.delegate.collect<name>(<type>Function).toImmutable();
 }
+
+public \<R extends Mutable<name>Collection> R collect<name>(<name>Function\<? super V> <type>Function, R target)
+{
+    return this.delegate.collect<name>(<type>Function, target);
+}
+
 >>
 
 body(type, name) ::= <<
@@ -85,6 +91,14 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.primitive.<name>ObjectPair;
 import com.gs.collections.impl.UnmodifiableIteratorAdapter;
 import com.gs.collections.impl.map.mutable.primitive.<name>ObjectHashMap;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 
 /**
  * Immutable<name>ObjectHashMap is the non-modifiable equivalent of {@link <name>ObjectHashMap}.

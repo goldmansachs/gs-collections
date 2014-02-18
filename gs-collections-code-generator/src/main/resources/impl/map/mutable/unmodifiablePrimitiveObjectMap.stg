@@ -18,6 +18,12 @@ public Mutable<name>Collection collect<name>(<name>Function\<? super V> <type>Fu
 {
     return this.map.collect<name>(<type>Function);
 }
+
+public \<R extends Mutable<name>Collection> R collect<name>(<name>Function\<? super V> <type>Function, R target)
+{
+    return this.map.collect<name>(<type>Function, target);
+}
+
 >>
 
 body(type, name) ::= <<

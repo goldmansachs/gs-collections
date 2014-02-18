@@ -104,8 +104,7 @@ public class MapIterateTest
     public void injectInto()
     {
         MutableMap<String, Integer> map = this.getIntegerMap();
-        Assert.assertEquals(Integer.valueOf(1 + 2 + 3 + 4 + 5),
-                MapIterate.injectInto(0, map, AddFunction.INTEGER));
+        Assert.assertEquals(Integer.valueOf(1 + 2 + 3 + 4 + 5), MapIterate.injectInto(0, map, AddFunction.INTEGER));
     }
 
     @Test
@@ -166,11 +165,7 @@ public class MapIterateTest
     @Test
     public void conditionalMapTransformation()
     {
-        MutableMap<Locale, Currency> input = UnifiedMap.newWithKeysValues(
-                Locale.UK, Currency.getInstance(Locale.UK),
-                Locale.JAPAN, Currency.getInstance(Locale.JAPAN),
-                Locale.CHINA, Currency.getInstance(Locale.GERMANY),
-                Locale.GERMANY, Currency.getInstance(Locale.CHINA));
+        MutableMap<Locale, Currency> input = UnifiedMap.newWithKeysValues(Locale.UK, Currency.getInstance(Locale.UK), Locale.JAPAN, Currency.getInstance(Locale.JAPAN), Locale.CHINA, Currency.getInstance(Locale.GERMANY), Locale.GERMANY, Currency.getInstance(Locale.CHINA));
 
         MutableMap<String, String> result = MapIterate.collectIf(input, new Function2<Locale, Currency, Pair<String, String>>()
                 {
@@ -681,10 +676,27 @@ public class MapIterateTest
     }
 
     @Test
+    public void collectBooleanWithTarget()
+    {
+        BooleanHashBag target = new BooleanHashBag();
+        BooleanHashBag result = MapIterate.collectBoolean(MapIterateTest.newLittleMap(), PrimitiveFunctions.integerIsPositive(), target);
+        Assert.assertEquals(BooleanHashBag.newBagWith(true, true), result.toBag());
+        Assert.assertSame("Target sent as parameter was not returned as result", target, result);
+    }
+
+    @Test
     public void collectByte()
     {
         MutableByteCollection result = MapIterate.collectByte(MapIterateTest.newLittleMap(), PrimitiveFunctions.unboxIntegerToByte());
         Assert.assertEquals(ByteHashBag.newBagWith((byte) 1, (byte) 2), result.toBag());
+    }
+
+    @Test
+    public void collectByteWithTarget()
+    {   ByteHashBag target = new ByteHashBag();
+        ByteHashBag result = MapIterate.collectByte(MapIterateTest.newLittleMap(), PrimitiveFunctions.unboxIntegerToByte(), target);
+        Assert.assertEquals(ByteHashBag.newBagWith((byte) 1, (byte) 2), result.toBag());
+        Assert.assertSame("Target sent as parameter was not returned as result", target, result);
     }
 
     @Test
@@ -695,10 +707,28 @@ public class MapIterateTest
     }
 
     @Test
+    public void collectCharWithTarget()
+    {
+        CharHashBag target = new CharHashBag();
+        CharHashBag result = MapIterate.collectChar(MapIterateTest.newLittleMap(), PrimitiveFunctions.unboxIntegerToChar(), target);
+        Assert.assertEquals(CharHashBag.newBagWith((char) 1, (char) 2), result.toBag());
+        Assert.assertSame("Target sent as parameter was not returned as result", target, result);
+    }
+
+    @Test
     public void collectDouble()
     {
         MutableDoubleCollection result = MapIterate.collectDouble(MapIterateTest.newLittleMap(), PrimitiveFunctions.unboxIntegerToDouble());
         Assert.assertEquals(DoubleHashBag.newBagWith(1, 2), result.toBag());
+    }
+
+    @Test
+    public void collectDoubleWithTarget()
+    {
+        DoubleHashBag target = new DoubleHashBag();
+        DoubleHashBag result = MapIterate.collectDouble(MapIterateTest.newLittleMap(), PrimitiveFunctions.unboxIntegerToDouble(), target);
+        Assert.assertEquals(DoubleHashBag.newBagWith(1, 2), result.toBag());
+        Assert.assertSame("Target sent as parameter was not returned as result", target, result);
     }
 
     @Test
@@ -709,10 +739,28 @@ public class MapIterateTest
     }
 
     @Test
+    public void collectFloatWithTarget()
+    {
+        FloatHashBag target = new FloatHashBag();
+        FloatHashBag result = MapIterate.collectFloat(MapIterateTest.newLittleMap(), PrimitiveFunctions.unboxIntegerToFloat(), target);
+        Assert.assertEquals(FloatHashBag.newBagWith(1, 2), result.toBag());
+        Assert.assertSame("Target sent as parameter was not returned as result", target, result);
+    }
+
+    @Test
     public void collectInt()
     {
         MutableIntCollection result = MapIterate.collectInt(MapIterateTest.newLittleMap(), PrimitiveFunctions.unboxIntegerToInt());
         Assert.assertEquals(IntHashBag.newBagWith(1, 2), result.toBag());
+    }
+
+    @Test
+    public void collectIntWithTarget()
+    {
+        IntHashBag target = new IntHashBag();
+        IntHashBag result = MapIterate.collectInt(MapIterateTest.newLittleMap(), PrimitiveFunctions.unboxIntegerToInt(), target);
+        Assert.assertEquals(IntHashBag.newBagWith(1, 2), result.toBag());
+        Assert.assertSame("Target sent as parameter was not returned as result", target, result);
     }
 
     @Test
@@ -723,10 +771,28 @@ public class MapIterateTest
     }
 
     @Test
+    public void collectLongWithTarget()
+    {
+        LongHashBag target = new LongHashBag();
+        LongHashBag result = MapIterate.collectLong(MapIterateTest.newLittleMap(), PrimitiveFunctions.unboxIntegerToLong(), target);
+        Assert.assertEquals(LongHashBag.newBagWith(1L, 2L), result.toBag());
+        Assert.assertSame("Target sent as parameter was not returned as result", target, result);
+    }
+
+    @Test
     public void collectShort()
     {
         MutableShortCollection result = MapIterate.collectShort(MapIterateTest.newLittleMap(), PrimitiveFunctions.unboxIntegerToShort());
         Assert.assertEquals(ShortHashBag.newBagWith((short) 1, (short) 2), result.toBag());
+    }
+
+    @Test
+    public void collectShortWithTarget()
+    {
+        ShortHashBag target = new ShortHashBag();
+        MutableShortCollection result = MapIterate.collectShort(MapIterateTest.newLittleMap(), PrimitiveFunctions.unboxIntegerToShort(), target);
+        Assert.assertEquals(ShortHashBag.newBagWith((short) 1, (short) 2), result.toBag());
+        Assert.assertSame("Target sent as parameter was not returned as result", target, result);
     }
 
     @Test

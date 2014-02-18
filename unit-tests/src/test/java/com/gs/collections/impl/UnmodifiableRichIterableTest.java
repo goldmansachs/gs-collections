@@ -22,6 +22,8 @@ import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
+import com.gs.collections.api.CharIterable;
+import com.gs.collections.api.IntIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
@@ -137,8 +139,7 @@ public class UnmodifiableRichIterableTest
     public void detect()
     {
         Assert.assertEquals(METALLICA, this.unmodifiableCollection.detect(StringPredicates.contains("allic")));
-        Assert.assertEquals("Not found", this.unmodifiableCollection.detectIfNone(StringPredicates.contains("donna"),
-                new PassThruFunction0<String>("Not found")));
+        Assert.assertEquals("Not found", this.unmodifiableCollection.detectIfNone(StringPredicates.contains("donna"), new PassThruFunction0<String>("Not found")));
     }
 
     @Test
@@ -151,9 +152,7 @@ public class UnmodifiableRichIterableTest
     @Test
     public void chunk()
     {
-        Assert.assertEquals(
-                this.mutableCollection.chunk(1).toList(),
-                this.unmodifiableCollection.chunk(1).toList());
+        Assert.assertEquals(this.mutableCollection.chunk(1).toList(), this.unmodifiableCollection.chunk(1).toList());
     }
 
     @Test
@@ -196,34 +195,22 @@ public class UnmodifiableRichIterableTest
             }
         };
 
-        Assert.assertEquals(
-                this.mutableCollection.groupByEach(lowerCaseSetFunction),
-                this.unmodifiableCollection.groupByEach(lowerCaseSetFunction));
-        Assert.assertEquals(
-                this.mutableCollection.groupByEach(lowerCaseSetFunction, FastListMultimap.<Character, String>newMultimap()),
-                this.unmodifiableCollection.groupByEach(lowerCaseSetFunction, FastListMultimap.<Character, String>newMultimap()));
+        Assert.assertEquals(this.mutableCollection.groupByEach(lowerCaseSetFunction), this.unmodifiableCollection.groupByEach(lowerCaseSetFunction));
+        Assert.assertEquals(this.mutableCollection.groupByEach(lowerCaseSetFunction, FastListMultimap.<Character, String>newMultimap()), this.unmodifiableCollection.groupByEach(lowerCaseSetFunction, FastListMultimap.<Character, String>newMultimap()));
     }
 
     @Test
     public void groupBy()
     {
-        Assert.assertEquals(
-                this.mutableCollection.groupBy(Functions.getStringPassThru()),
-                this.unmodifiableCollection.groupBy(Functions.getStringPassThru()));
-        Assert.assertEquals(
-                this.mutableCollection.groupBy(Functions.getStringPassThru(), FastListMultimap.<String, String>newMultimap()),
-                this.unmodifiableCollection.groupBy(Functions.getStringPassThru(), FastListMultimap.<String, String>newMultimap()));
+        Assert.assertEquals(this.mutableCollection.groupBy(Functions.getStringPassThru()), this.unmodifiableCollection.groupBy(Functions.getStringPassThru()));
+        Assert.assertEquals(this.mutableCollection.groupBy(Functions.getStringPassThru(), FastListMultimap.<String, String>newMultimap()), this.unmodifiableCollection.groupBy(Functions.getStringPassThru(), FastListMultimap.<String, String>newMultimap()));
     }
 
     @Test
     public void collectIf()
     {
-        Assert.assertEquals(
-                this.mutableCollection.collectIf(Predicates.alwaysTrue(), Functions.getStringPassThru()),
-                this.unmodifiableCollection.collectIf(Predicates.alwaysTrue(), Functions.getStringPassThru()));
-        Assert.assertEquals(
-                this.mutableCollection.collectIf(Predicates.alwaysTrue(), Functions.getStringPassThru(), Lists.mutable.<String>of()),
-                this.unmodifiableCollection.collectIf(Predicates.alwaysTrue(), Functions.getStringPassThru(), Lists.mutable.<String>of()));
+        Assert.assertEquals(this.mutableCollection.collectIf(Predicates.alwaysTrue(), Functions.getStringPassThru()), this.unmodifiableCollection.collectIf(Predicates.alwaysTrue(), Functions.getStringPassThru()));
+        Assert.assertEquals(this.mutableCollection.collectIf(Predicates.alwaysTrue(), Functions.getStringPassThru(), Lists.mutable.<String>of()), this.unmodifiableCollection.collectIf(Predicates.alwaysTrue(), Functions.getStringPassThru(), Lists.mutable.<String>of()));
     }
 
     @Test
@@ -236,9 +223,7 @@ public class UnmodifiableRichIterableTest
                 return each;
             }
         };
-        Assert.assertEquals(
-                this.mutableCollection.collectWith(function, null),
-                this.unmodifiableCollection.collectWith(function, null));
+        Assert.assertEquals(this.mutableCollection.collectWith(function, null), this.unmodifiableCollection.collectWith(function, null));
     }
 
     @Test
@@ -251,9 +236,7 @@ public class UnmodifiableRichIterableTest
                 return each;
             }
         };
-        Assert.assertEquals(
-                this.mutableCollection.collectWith(function, null, Lists.mutable.<String>of()),
-                this.unmodifiableCollection.collectWith(function, null, Lists.mutable.<String>of()));
+        Assert.assertEquals(this.mutableCollection.collectWith(function, null, Lists.mutable.<String>of()), this.unmodifiableCollection.collectWith(function, null, Lists.mutable.<String>of()));
     }
 
     @Test
@@ -262,9 +245,7 @@ public class UnmodifiableRichIterableTest
         Assert.assertEquals(
                 this.mutableCollection.collect(Functions.getStringPassThru()),
                 this.unmodifiableCollection.collect(Functions.getStringPassThru()));
-        Assert.assertEquals(
-                this.mutableCollection.collect(Functions.getStringPassThru(), Lists.mutable.<String>of()),
-                this.unmodifiableCollection.collect(Functions.getStringPassThru(), Lists.mutable.<String>of()));
+        Assert.assertEquals(this.mutableCollection.collect(Functions.getStringPassThru(), Lists.mutable.<String>of()), this.unmodifiableCollection.collect(Functions.getStringPassThru(), Lists.mutable.<String>of()));
     }
 
     @Test
@@ -276,6 +257,15 @@ public class UnmodifiableRichIterableTest
     }
 
     @Test
+    public void collectBooleanWithTarget()
+    {
+        BooleanArrayList target = new BooleanArrayList();
+        BooleanArrayList result = this.newWith(-1, 0, 1).collectBoolean(PrimitiveFunctions.integerIsPositive(), target);
+        Assert.assertEquals(BooleanArrayList.newListWith(false, false, true), result);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
+    }
+
+    @Test
     public void collectByte()
     {
         Assert.assertEquals(
@@ -284,19 +274,42 @@ public class UnmodifiableRichIterableTest
     }
 
     @Test
+    public void collectByteWithTarget()
+    {
+        ByteArrayList target = new ByteArrayList();
+        ByteArrayList result = this.newWith(1, 2, 3).collectByte(PrimitiveFunctions.unboxIntegerToByte(), target);
+        Assert.assertEquals(ByteArrayList.newListWith((byte) 1, (byte) 2, (byte) 3), result);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
+    }
+
+    @Test
     public void collectChar()
     {
-        Assert.assertEquals(
-                CharArrayList.newListWith((char) 1, (char) 2, (char) 3),
-                this.newWith(1, 2, 3).collectChar(PrimitiveFunctions.unboxIntegerToChar()));
+        Assert.assertEquals(CharArrayList.newListWith((char) 1, (char) 2, (char) 3), this.newWith(1, 2, 3).collectChar(PrimitiveFunctions.unboxIntegerToChar()));
+    }
+
+    @Test
+    public void collectCharWithTarget()
+    {
+        CharArrayList target = new CharArrayList();
+        CharIterable result = this.newWith(1, 2, 3).collectChar(PrimitiveFunctions.unboxIntegerToChar(), target);
+        Assert.assertEquals(CharArrayList.newListWith((char) 1, (char) 2, (char) 3), result);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
     }
 
     @Test
     public void collectDouble()
     {
-        Assert.assertEquals(
-                DoubleArrayList.newListWith(1.0d, 2.0d, 3.0d),
-                this.newWith(1, 2, 3).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()));
+        Assert.assertEquals(DoubleArrayList.newListWith(1.0d, 2.0d, 3.0d), this.newWith(1, 2, 3).collectDouble(PrimitiveFunctions.unboxIntegerToDouble()));
+    }
+
+    @Test
+    public void collectDoubleWithTarget()
+    {
+        DoubleArrayList target = new DoubleArrayList();
+        DoubleArrayList result = this.newWith(1, 2, 3).collectDouble(PrimitiveFunctions.unboxIntegerToDouble(), target);
+        Assert.assertEquals(DoubleArrayList.newListWith(1.0d, 2.0d, 3.0d), result);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
     }
 
     @Test
@@ -308,19 +321,43 @@ public class UnmodifiableRichIterableTest
     }
 
     @Test
+    public void collectFloatWithTarget()
+    {
+        FloatArrayList target = new FloatArrayList();
+        FloatArrayList result = this.newWith(1, 2, 3).collectFloat(PrimitiveFunctions.unboxIntegerToFloat(), target);
+        Assert.assertEquals(FloatArrayList.newListWith(1.0f, 2.0f, 3.0f), result);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
+    }
+
+    @Test
     public void collectInt()
     {
-        Assert.assertEquals(
-                IntArrayList.newListWith(1, 2, 3),
-                this.newWith(1, 2, 3).collectInt(PrimitiveFunctions.unboxIntegerToInt()));
+        Assert.assertEquals(IntArrayList.newListWith(1, 2, 3), this.newWith(1, 2, 3).collectInt(PrimitiveFunctions.unboxIntegerToInt()));
+    }
+
+    @Test
+    public void collectIntWithTarget()
+    {
+        IntArrayList target = new IntArrayList();
+        IntIterable result = this.newWith(1, 2, 3).collectInt(PrimitiveFunctions.unboxIntegerToInt(), target);
+        Assert.assertEquals(IntArrayList.newListWith(1, 2, 3), result);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
     }
 
     @Test
     public void collectLong()
     {
+        Assert.assertEquals(LongArrayList.newListWith(1L, 2L, 3L), this.newWith(1, 2, 3).collectLong(PrimitiveFunctions.unboxIntegerToLong()));
+    }
+
+    @Test
+    public void collectLongWithTarget()
+    {
+        LongArrayList target = new LongArrayList();
+        LongArrayList result = this.newWith(1, 2, 3).collectLong(PrimitiveFunctions.unboxIntegerToLong(), target);
         Assert.assertEquals(
-                LongArrayList.newListWith(1L, 2L, 3L),
-                this.newWith(1, 2, 3).collectLong(PrimitiveFunctions.unboxIntegerToLong()));
+                LongArrayList.newListWith(1L, 2L, 3L), result);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
     }
 
     @Test
@@ -329,6 +366,16 @@ public class UnmodifiableRichIterableTest
         Assert.assertEquals(
                 ShortArrayList.newListWith((short) 1, (short) 2, (short) 3),
                 this.newWith(1, 2, 3).collectShort(PrimitiveFunctions.unboxIntegerToShort()));
+    }
+
+    @Test
+    public void collectShortWithTarget()
+    {
+        ShortArrayList target = new ShortArrayList();
+        ShortArrayList result = this.newWith(1, 2, 3).collectShort(PrimitiveFunctions.unboxIntegerToShort(), target);
+        Assert.assertEquals(
+                ShortArrayList.newListWith((short) 1, (short) 2, (short) 3), result);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
     }
 
     @Test

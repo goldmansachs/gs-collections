@@ -445,9 +445,19 @@ public final class MapIterate
             Map<K, V> map,
             BooleanFunction<? super V> booleanFunction)
     {
-        BooleanArrayList result = new BooleanArrayList(map.size());
-        MapIterate.forEachValue(map, new CollectBooleanProcedure<V>(booleanFunction, result));
-        return result;
+        return collectBoolean(map, booleanFunction,  new BooleanArrayList(map.size()));
+    }
+
+    /**
+     * @see RichIterable#collectBoolean(BooleanFunction, MutableBooleanCollection)
+     */
+    public static <K, V, R extends MutableBooleanCollection> R collectBoolean(
+            Map<K, V> map,
+            BooleanFunction<? super V> booleanFunction,
+            R target)
+    {
+        MapIterate.forEachValue(map, new CollectBooleanProcedure<V>(booleanFunction, target));
+        return target;
     }
 
     /**
@@ -457,11 +467,20 @@ public final class MapIterate
             Map<K, V> map,
             ByteFunction<? super V> byteFunction)
     {
-        ByteArrayList result = new ByteArrayList(map.size());
-        MapIterate.forEachValue(map, new CollectByteProcedure<V>(byteFunction, result));
-        return result;
+        return collectByte(map, byteFunction,  new ByteArrayList(map.size()));
     }
 
+    /**
+     * @see RichIterable#collectByte(ByteFunction, MutableByteCollection)
+     */
+    public static <K, V, R extends MutableByteCollection> R collectByte(
+            Map<K, V> map,
+            ByteFunction<? super V> byteFunction,
+            R target)
+    {
+        MapIterate.forEachValue(map, new CollectByteProcedure<V>(byteFunction, target));
+        return target;
+    }
     /**
      * @see RichIterable#collectChar(CharFunction)
      */
@@ -469,11 +488,20 @@ public final class MapIterate
             Map<K, V> map,
             CharFunction<? super V> charFunction)
     {
-        CharArrayList result = new CharArrayList(map.size());
-        MapIterate.forEachValue(map, new CollectCharProcedure<V>(charFunction, result));
-        return result;
+        return collectChar(map, charFunction,  new CharArrayList(map.size()));
     }
 
+    /**
+     * @see RichIterable#collectChar(CharFunction, MutableCharCollection)
+     */
+    public static <K, V, R extends MutableCharCollection> R collectChar(
+            Map<K, V> map,
+            CharFunction<? super V> charFunction,
+            R target)
+    {
+        MapIterate.forEachValue(map, new CollectCharProcedure<V>(charFunction, target));
+        return target;
+    }
     /**
      * @see RichIterable#collectDouble(DoubleFunction)
      */
@@ -481,11 +509,20 @@ public final class MapIterate
             Map<K, V> map,
             DoubleFunction<? super V> doubleFunction)
     {
-        DoubleArrayList result = new DoubleArrayList(map.size());
-        MapIterate.forEachValue(map, new CollectDoubleProcedure<V>(doubleFunction, result));
-        return result;
+        return collectDouble(map, doubleFunction,  new DoubleArrayList(map.size()));
     }
 
+    /**
+     * @see RichIterable#collectDouble(DoubleFunction, MutableDoubleCollection)
+     */
+    public static <K, V, R extends MutableDoubleCollection> R collectDouble(
+            Map<K, V> map,
+            DoubleFunction<? super V> doubleFunction,
+            R target)
+    {
+        MapIterate.forEachValue(map, new CollectDoubleProcedure<V>(doubleFunction, target));
+        return target;
+    }
     /**
      * @see RichIterable#collectFloat(FloatFunction)
      */
@@ -493,11 +530,20 @@ public final class MapIterate
             Map<K, V> map,
             FloatFunction<? super V> floatFunction)
     {
-        FloatArrayList result = new FloatArrayList(map.size());
-        MapIterate.forEachValue(map, new CollectFloatProcedure<V>(floatFunction, result));
-        return result;
+        return collectFloat(map, floatFunction,  new FloatArrayList(map.size()));
     }
 
+    /**
+     * @see RichIterable#collectFloat(FloatFunction, MutableFloatCollection)
+     */
+    public static <K, V, R extends MutableFloatCollection> R collectFloat(
+            Map<K, V> map,
+            FloatFunction<? super V> floatFunction,
+            R target)
+    {
+        MapIterate.forEachValue(map, new CollectFloatProcedure<V>(floatFunction, target));
+        return target;
+    }
     /**
      * @see RichIterable#collectInt(IntFunction)
      */
@@ -505,9 +551,19 @@ public final class MapIterate
             Map<K, V> map,
             IntFunction<? super V> intFunction)
     {
-        IntArrayList result = new IntArrayList(map.size());
-        MapIterate.forEachValue(map, new CollectIntProcedure<V>(intFunction, result));
-        return result;
+        return collectInt(map, intFunction,  new IntArrayList(map.size()));
+    }
+
+    /**
+     * @see RichIterable#collectInt(IntFunction, MutableIntCollection)
+     */
+    public static <K, V, R extends MutableIntCollection> R collectInt(
+            Map<K, V> map,
+            IntFunction<? super V> intFunction,
+            R target)
+    {
+        MapIterate.forEachValue(map, new CollectIntProcedure<V>(intFunction, target));
+        return target;
     }
 
     /**
@@ -517,11 +573,20 @@ public final class MapIterate
             Map<K, V> map,
             LongFunction<? super V> longFunction)
     {
-        LongArrayList result = new LongArrayList(map.size());
-        MapIterate.forEachValue(map, new CollectLongProcedure<V>(longFunction, result));
-        return result;
+        return collectLong(map, longFunction,  new LongArrayList(map.size()));
     }
 
+    /**
+     * @see RichIterable#collectLong(LongFunction, MutableLongCollection)
+     */
+    public static <K, V, R extends MutableLongCollection> R collectLong(
+            Map<K, V> map,
+            LongFunction<? super V> longFunction,
+            R target)
+    {
+        MapIterate.forEachValue(map, new CollectLongProcedure<V>(longFunction, target));
+        return target;
+    }
     /**
      * @see RichIterable#collectShort(ShortFunction)
      */
@@ -529,10 +594,21 @@ public final class MapIterate
             Map<K, V> map,
             ShortFunction<? super V> shortFunction)
     {
-        ShortArrayList result = new ShortArrayList(map.size());
-        MapIterate.forEachValue(map, new CollectShortProcedure<V>(shortFunction, result));
-        return result;
+        return collectShort(map, shortFunction,  new ShortArrayList(map.size()));
     }
+
+    /**
+     * @see RichIterable#collectShort(ShortFunction, MutableShortCollection)
+     */
+    public static <K, V, R extends MutableShortCollection> R collectShort(
+            Map<K, V> map,
+            ShortFunction<? super V> shortFunction,
+            R target)
+    {
+        MapIterate.forEachValue(map, new CollectShortProcedure<V>(shortFunction, target));
+        return target;
+    }
+
 
     /**
      * For each value of the map, the function is evaluated with the key and value as the parameter.

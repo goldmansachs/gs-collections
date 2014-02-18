@@ -77,7 +77,7 @@ import com.gs.collections.impl.block.factory.primitive.IntToIntFunctions;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
-import com.gs.collections.impl.collection.mutable.AbstractMutableCollection;
+import com.gs.collections.impl.collection.AbstractMutableBag;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
@@ -94,7 +94,7 @@ import com.gs.collections.impl.utility.Iterate;
  * @since 1.0
  */
 public class HashBag<T>
-        extends AbstractMutableCollection<T>
+        extends AbstractMutableBag<T>
         implements Externalizable, MutableBag<T>
 {
     private static final long serialVersionUID = 1L;
@@ -660,59 +660,27 @@ public class HashBag<T>
     }
 
     @Override
-    public MutableBooleanBag collectBoolean(final BooleanFunction<? super T> booleanFunction)
+    public MutableBooleanBag collectBoolean(BooleanFunction<? super T> booleanFunction)
     {
-        final BooleanHashBag result = new BooleanHashBag();
-        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
-        {
-            public void value(T each, int occurrences)
-            {
-                result.addOccurrences(booleanFunction.booleanValueOf(each), occurrences);
-            }
-        });
-        return result;
+        return this.collectBoolean(booleanFunction, new BooleanHashBag());
     }
 
     @Override
-    public MutableByteBag collectByte(final ByteFunction<? super T> byteFunction)
+    public MutableByteBag collectByte(ByteFunction<? super T> byteFunction)
     {
-        final ByteHashBag result = new ByteHashBag();
-        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
-        {
-            public void value(T each, int occurrences)
-            {
-                result.addOccurrences(byteFunction.byteValueOf(each), occurrences);
-            }
-        });
-        return result;
+        return this.collectByte(byteFunction, new ByteHashBag());
     }
 
     @Override
-    public MutableCharBag collectChar(final CharFunction<? super T> charFunction)
+    public MutableCharBag collectChar(CharFunction<? super T> charFunction)
     {
-        final CharHashBag result = new CharHashBag();
-        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
-        {
-            public void value(T each, int occurrences)
-            {
-                result.addOccurrences(charFunction.charValueOf(each), occurrences);
-            }
-        });
-        return result;
+        return this.collectChar(charFunction, new CharHashBag());
     }
 
     @Override
-    public MutableDoubleBag collectDouble(final DoubleFunction<? super T> doubleFunction)
+    public MutableDoubleBag collectDouble(DoubleFunction<? super T> doubleFunction)
     {
-        final DoubleHashBag result = new DoubleHashBag();
-        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
-        {
-            public void value(T each, int occurrences)
-            {
-                result.addOccurrences(doubleFunction.doubleValueOf(each), occurrences);
-            }
-        });
-        return result;
+        return this.collectDouble(doubleFunction, new DoubleHashBag());
     }
 
     @Override
@@ -852,59 +820,27 @@ public class HashBag<T>
     }
 
     @Override
-    public MutableFloatBag collectFloat(final FloatFunction<? super T> floatFunction)
+    public MutableFloatBag collectFloat(FloatFunction<? super T> floatFunction)
     {
-        final FloatHashBag result = new FloatHashBag();
-        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
-        {
-            public void value(T each, int occurrences)
-            {
-                result.addOccurrences(floatFunction.floatValueOf(each), occurrences);
-            }
-        });
-        return result;
+        return this.collectFloat(floatFunction, new FloatHashBag());
     }
 
     @Override
-    public MutableIntBag collectInt(final IntFunction<? super T> intFunction)
+    public MutableIntBag collectInt(IntFunction<? super T> intFunction)
     {
-        final IntHashBag result = new IntHashBag();
-        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
-        {
-            public void value(T each, int occurrences)
-            {
-                result.addOccurrences(intFunction.intValueOf(each), occurrences);
-            }
-        });
-        return result;
+        return this.collectInt(intFunction, new IntHashBag());
     }
 
     @Override
-    public MutableLongBag collectLong(final LongFunction<? super T> longFunction)
+    public MutableLongBag collectLong(LongFunction<? super T> longFunction)
     {
-        final LongHashBag result = new LongHashBag();
-        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
-        {
-            public void value(T each, int occurrences)
-            {
-                result.addOccurrences(longFunction.longValueOf(each), occurrences);
-            }
-        });
-        return result;
+        return this.collectLong(longFunction, new LongHashBag());
     }
 
     @Override
-    public MutableShortBag collectShort(final ShortFunction<? super T> shortFunction)
+    public MutableShortBag collectShort(ShortFunction<? super T> shortFunction)
     {
-        final ShortHashBag result = new ShortHashBag();
-        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
-        {
-            public void value(T each, int occurrences)
-            {
-                result.addOccurrences(shortFunction.shortValueOf(each), occurrences);
-            }
-        });
-        return result;
+        return this.collectShort(shortFunction, new ShortHashBag());
     }
 
     @Override

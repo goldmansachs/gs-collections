@@ -146,9 +146,7 @@ public class ArrayListIterateTest
         Verify.assertStartsWith(ArrayListIterate.sortThis(integers), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
 
         ArrayList<Integer> integers2 = this.newArrayList(1, 2, 3, 4, 5, 6, 7, 8);
-        Verify.assertStartsWith(
-                ArrayListIterate.sortThis(integers2, Collections.<Integer>reverseOrder()),
-                8, 7, 6, 5, 4, 3, 2, 1);
+        Verify.assertStartsWith(ArrayListIterate.sortThis(integers2, Collections.<Integer>reverseOrder()), 8, 7, 6, 5, 4, 3, 2, 1);
 
         ArrayList<Integer> integers3 = this.newArrayList(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
         Verify.assertStartsWith(ArrayListIterate.sortThis(integers3), 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
@@ -387,11 +385,18 @@ public class ArrayListIterateTest
     @Test
     public void collectBoolean()
     {
-        ArrayList<Integer> list = new ArrayList<Integer>();
-        list.add(-1);
-        list.add(0);
-        list.add(4);
+        ArrayList<Integer> list = this.createIntegerList();
         MutableBooleanList actual = ArrayListIterate.collectBoolean(list, PrimitiveFunctions.integerIsPositive());
+        Assert.assertEquals(BooleanArrayList.newListWith(false, false, true), actual);
+    }
+
+    @Test
+    public void collectBooleanWithTarget()
+    {
+        ArrayList<Integer> list = this.createIntegerList();
+        MutableBooleanList target = new BooleanArrayList();
+        MutableBooleanList actual = ArrayListIterate.collectBoolean(list, PrimitiveFunctions.integerIsPositive(), target);
+        Assert.assertSame("Target list sent as parameter not returned", target, actual);
         Assert.assertEquals(BooleanArrayList.newListWith(false, false, true), actual);
     }
 
@@ -410,13 +415,36 @@ public class ArrayListIterateTest
     }
 
     @Test
+    public void collectBooleanWithTargetOverOptimizeLimit()
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>(Interval.zeroTo(OVER_OPTIMIZED_LIMIT));
+        MutableBooleanList target = new BooleanArrayList();
+        MutableBooleanList actual = ArrayListIterate.collectBoolean(list, PrimitiveFunctions.integerIsPositive(), target);
+        BooleanArrayList expected = new BooleanArrayList(list.size());
+        expected.add(false);
+        for (int i = 1; i <= OVER_OPTIMIZED_LIMIT; i++)
+        {
+            expected.add(true);
+        }
+        Assert.assertEquals(expected, actual);
+        Assert.assertSame("Target sent as parameter was not returned as result", target, actual);
+    }
+
+    @Test
     public void collectByte()
     {
-        ArrayList<Integer> list = new ArrayList<Integer>();
-        list.add(-1);
-        list.add(0);
-        list.add(4);
+        ArrayList<Integer> list = this.createIntegerList();
         MutableByteList actual = ArrayListIterate.collectByte(list, PrimitiveFunctions.unboxIntegerToByte());
+        Assert.assertEquals(ByteArrayList.newListWith((byte) -1, (byte) 0, (byte) 4), actual);
+    }
+
+    @Test
+    public void collectByteWithTarget()
+    {
+        ArrayList<Integer> list = this.createIntegerList();
+        MutableByteList target = new ByteArrayList();
+        MutableByteList actual = ArrayListIterate.collectByte(list, PrimitiveFunctions.unboxIntegerToByte(), target);
+        Assert.assertSame("Target list sent as parameter not returned", target, actual);
         Assert.assertEquals(ByteArrayList.newListWith((byte) -1, (byte) 0, (byte) 4), actual);
     }
 
@@ -434,13 +462,35 @@ public class ArrayListIterateTest
     }
 
     @Test
+    public void collectByteWithTargetOverOptimizeLimit()
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>(Interval.zeroTo(OVER_OPTIMIZED_LIMIT));
+        MutableByteList target = new ByteArrayList();
+        MutableByteList actual = ArrayListIterate.collectByte(list, PrimitiveFunctions.unboxIntegerToByte(), target);
+        ByteArrayList expected = new ByteArrayList(list.size());
+        for (int i = 0; i <= OVER_OPTIMIZED_LIMIT; i++)
+        {
+            expected.add((byte) i);
+        }
+        Assert.assertEquals(expected, actual);
+        Assert.assertSame("Target sent as parameter was not returned as result", target, actual);
+    }
+
+    @Test
     public void collectChar()
     {
-        ArrayList<Integer> list = new ArrayList<Integer>();
-        list.add(-1);
-        list.add(0);
-        list.add(4);
+        ArrayList<Integer> list = this.createIntegerList();
         MutableCharList actual = ArrayListIterate.collectChar(list, PrimitiveFunctions.unboxIntegerToChar());
+        Assert.assertEquals(CharArrayList.newListWith((char) -1, (char) 0, (char) 4), actual);
+    }
+
+    @Test
+    public void collectCharWithTarget()
+    {
+        ArrayList<Integer> list = this.createIntegerList();
+        MutableCharList target = new CharArrayList();
+        MutableCharList actual = ArrayListIterate.collectChar(list, PrimitiveFunctions.unboxIntegerToChar(), target);
+        Assert.assertSame("Target list sent as parameter not returned", target, actual);
         Assert.assertEquals(CharArrayList.newListWith((char) -1, (char) 0, (char) 4), actual);
     }
 
@@ -458,13 +508,36 @@ public class ArrayListIterateTest
     }
 
     @Test
+    public void collectCharWithTargetOverOptimizeLimit()
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>(Interval.zeroTo(OVER_OPTIMIZED_LIMIT));
+        MutableCharList target = new CharArrayList();
+        MutableCharList actual = ArrayListIterate.collectChar(list, PrimitiveFunctions.unboxIntegerToChar(), target);
+        CharArrayList expected = new CharArrayList(list.size());
+        for (int i = 0; i <= OVER_OPTIMIZED_LIMIT; i++)
+        {
+            expected.add((char) i);
+        }
+        Assert.assertEquals(expected, actual);
+        Assert.assertSame("Target sent as parameter was not returned as result", target, actual);
+    }
+
+
+    @Test
     public void collectDouble()
     {
-        ArrayList<Integer> list = new ArrayList<Integer>();
-        list.add(-1);
-        list.add(0);
-        list.add(4);
+        ArrayList<Integer> list = this.createIntegerList();
         MutableDoubleList actual = ArrayListIterate.collectDouble(list, PrimitiveFunctions.unboxIntegerToDouble());
+        Assert.assertEquals(DoubleArrayList.newListWith(-1.0d, 0.0d, 4.0d), actual);
+    }
+
+    @Test
+    public void collectDoubleWithTarget()
+    {
+        ArrayList<Integer> list = this.createIntegerList();
+        MutableDoubleList target = new DoubleArrayList();
+        MutableDoubleList actual = ArrayListIterate.collectDouble(list, PrimitiveFunctions.unboxIntegerToDouble(), target);
+        Assert.assertSame("Target list sent as parameter not returned", target, actual);
         Assert.assertEquals(DoubleArrayList.newListWith(-1.0d, 0.0d, 4.0d), actual);
     }
 
@@ -482,13 +555,36 @@ public class ArrayListIterateTest
     }
 
     @Test
+    public void collectDoubleWithTargetOverOptimizeLimit()
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>(Interval.zeroTo(OVER_OPTIMIZED_LIMIT));
+        MutableDoubleList target = new DoubleArrayList();
+        MutableDoubleList actual = ArrayListIterate.collectDouble(list, PrimitiveFunctions.unboxIntegerToDouble(), target);
+        DoubleArrayList expected = new DoubleArrayList(list.size());
+        for (int i = 0; i <= OVER_OPTIMIZED_LIMIT; i++)
+        {
+            expected.add((double) i);
+        }
+        Assert.assertEquals(expected, actual);
+        Assert.assertSame("Target sent as parameter was not returned as result", target, actual);
+    }
+
+
+    @Test
     public void collectFloat()
     {
-        ArrayList<Integer> list = new ArrayList<Integer>();
-        list.add(-1);
-        list.add(0);
-        list.add(4);
+        ArrayList<Integer> list = this.createIntegerList();
         MutableFloatList actual = ArrayListIterate.collectFloat(list, PrimitiveFunctions.unboxIntegerToFloat());
+        Assert.assertEquals(FloatArrayList.newListWith(-1.0f, 0.0f, 4.0f), actual);
+    }
+
+    @Test
+    public void collectFloatWithTarget()
+    {
+        ArrayList<Integer> list = this.createIntegerList();
+        MutableFloatList target = new FloatArrayList();
+        MutableFloatList actual = ArrayListIterate.collectFloat(list, PrimitiveFunctions.unboxIntegerToFloat(), target);
+        Assert.assertSame("Target list sent as parameter not returned", target, actual);
         Assert.assertEquals(FloatArrayList.newListWith(-1.0f, 0.0f, 4.0f), actual);
     }
 
@@ -506,13 +602,35 @@ public class ArrayListIterateTest
     }
 
     @Test
+    public void collectFloatWithTargetOverOptimizeLimit()
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>(Interval.zeroTo(OVER_OPTIMIZED_LIMIT));
+        MutableFloatList target = new FloatArrayList();
+        MutableFloatList actual = ArrayListIterate.collectFloat(list, PrimitiveFunctions.unboxIntegerToFloat(), target);
+        FloatArrayList expected = new FloatArrayList(list.size());
+        for (int i = 0; i <= OVER_OPTIMIZED_LIMIT; i++)
+        {
+            expected.add((float) i);
+        }
+        Assert.assertEquals(expected, actual);
+        Assert.assertSame("Target sent as parameter was not returned as result", target, actual);
+    }
+
+    @Test
     public void collectInt()
     {
-        ArrayList<Integer> list = new ArrayList<Integer>();
-        list.add(-1);
-        list.add(0);
-        list.add(4);
+        ArrayList<Integer> list = this.createIntegerList();
         MutableIntList actual = ArrayListIterate.collectInt(list, PrimitiveFunctions.unboxIntegerToInt());
+        Assert.assertEquals(IntArrayList.newListWith(-1, 0, 4), actual);
+    }
+
+    @Test
+    public void collectIntWithTarget()
+    {
+        ArrayList<Integer> list = this.createIntegerList();
+        MutableIntList target = new IntArrayList();
+        MutableIntList actual = ArrayListIterate.collectInt(list, PrimitiveFunctions.unboxIntegerToInt(), target);
+        Assert.assertSame("Target list sent as parameter not returned", target, actual);
         Assert.assertEquals(IntArrayList.newListWith(-1, 0, 4), actual);
     }
 
@@ -530,13 +648,34 @@ public class ArrayListIterateTest
     }
 
     @Test
+    public void collectIntWithTargetOverOptimizeLimit()
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>(Interval.zeroTo(OVER_OPTIMIZED_LIMIT));
+        MutableIntList target = new IntArrayList();
+        MutableIntList actual = ArrayListIterate.collectInt(list, PrimitiveFunctions.unboxIntegerToInt(), target);
+        IntArrayList expected = new IntArrayList(list.size());
+        for (int i = 0; i <= OVER_OPTIMIZED_LIMIT; i++)
+        {
+            expected.add(i);
+        }
+        Assert.assertEquals(expected, actual);
+        Assert.assertSame("Target sent as parameter was not returned as result", target, actual);
+    }
+
+    @Test
     public void collectLong()
     {
-        ArrayList<Integer> list = new ArrayList<Integer>();
-        list.add(-1);
-        list.add(0);
-        list.add(4);
+        ArrayList<Integer> list = this.createIntegerList();
         MutableLongList actual = ArrayListIterate.collectLong(list, PrimitiveFunctions.unboxIntegerToLong());
+        Assert.assertEquals(LongArrayList.newListWith(-1L, 0L, 4L), actual);
+    }
+    @Test
+    public void collectLongWithTarget()
+    {
+        ArrayList<Integer> list = this.createIntegerList();
+        MutableLongList target = new LongArrayList();
+        MutableLongList actual = ArrayListIterate.collectLong(list, PrimitiveFunctions.unboxIntegerToLong(), target);
+        Assert.assertSame("Target list sent as parameter not returned", target, actual);
         Assert.assertEquals(LongArrayList.newListWith(-1L, 0L, 4L), actual);
     }
 
@@ -554,13 +693,35 @@ public class ArrayListIterateTest
     }
 
     @Test
+    public void collectLongWithTargetOverOptimizeLimit()
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>(Interval.zeroTo(OVER_OPTIMIZED_LIMIT));
+        MutableLongList target = new LongArrayList();
+        MutableLongList actual = ArrayListIterate.collectLong(list, PrimitiveFunctions.unboxIntegerToLong(), target);
+        LongArrayList expected = new LongArrayList(list.size());
+        for (int i = 0; i <= OVER_OPTIMIZED_LIMIT; i++)
+        {
+            expected.add((long) i);
+        }
+        Assert.assertEquals(expected, actual);
+        Assert.assertSame("Target sent as parameter was not returned as result", target, actual);
+    }
+
+    @Test
     public void collectShort()
     {
-        ArrayList<Integer> list = new ArrayList<Integer>();
-        list.add(-1);
-        list.add(0);
-        list.add(4);
+        ArrayList<Integer> list = this.createIntegerList();
         MutableShortList actual = ArrayListIterate.collectShort(list, PrimitiveFunctions.unboxIntegerToShort());
+        Assert.assertEquals(ShortArrayList.newListWith((short) -1, (short) 0, (short) 4), actual);
+    }
+
+    @Test
+    public void collectShortWithTarget()
+    {
+        ArrayList<Integer> list = this.createIntegerList();
+        MutableShortList target = new ShortArrayList();
+        MutableShortList actual = ArrayListIterate.collectShort(list, PrimitiveFunctions.unboxIntegerToShort(), target);
+        Assert.assertSame("Target list sent as parameter not returned", target, actual);
         Assert.assertEquals(ShortArrayList.newListWith((short) -1, (short) 0, (short) 4), actual);
     }
 
@@ -575,6 +736,30 @@ public class ArrayListIterateTest
             expected.add((short) i);
         }
         Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void collectShortWithTargetOverOptimizeLimit()
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>(Interval.zeroTo(OVER_OPTIMIZED_LIMIT));
+        MutableShortList target = new ShortArrayList();
+        MutableShortList actual = ArrayListIterate.collectShort(list, PrimitiveFunctions.unboxIntegerToShort(), target);
+        ShortArrayList expected = new ShortArrayList(list.size());
+        for (int i = 0; i <= OVER_OPTIMIZED_LIMIT; i++)
+        {
+            expected.add((short) i);
+        }
+        Assert.assertEquals(expected, actual);
+        Assert.assertSame("Target sent as parameter was not returned as result", target, actual);
+    }
+
+    private ArrayList<Integer> createIntegerList()
+    {
+        ArrayList<Integer> list = new ArrayList<Integer>();
+        list.add(-1);
+        list.add(0);
+        list.add(4);
+        return list;
     }
 
     @Test

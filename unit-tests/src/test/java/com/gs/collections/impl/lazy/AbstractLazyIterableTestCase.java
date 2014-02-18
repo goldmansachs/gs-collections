@@ -25,6 +25,14 @@ import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
@@ -187,11 +195,29 @@ public abstract class AbstractLazyIterableTestCase
     }
 
     @Test
+    public void collectBooleanWithTarget()
+    {
+        MutableBooleanCollection target = new BooleanArrayList();
+        MutableBooleanCollection result = this.lazyIterable.collectBoolean(PrimitiveFunctions.integerIsPositive(), target);
+        Assert.assertEquals(
+                BooleanArrayList.newListWith(true, true, true, true, true, true, true),
+                result.toList());
+        Assert.assertSame("Target list sent as parameter not returned", target, result);
+    }
+
+    @Test
     public void collectByte()
     {
-        Assert.assertEquals(
-                ByteArrayList.newListWith((byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5, (byte) 6, (byte) 7),
-                this.lazyIterable.collectByte(PrimitiveFunctions.unboxIntegerToByte()).toList());
+        Assert.assertEquals(ByteArrayList.newListWith((byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5, (byte) 6, (byte) 7), this.lazyIterable.collectByte(PrimitiveFunctions.unboxIntegerToByte()).toList());
+    }
+
+    @Test
+    public void collectByteWithTarget()
+    {
+        MutableByteCollection target = new ByteArrayList();
+        MutableByteCollection result = this.lazyIterable.collectByte(PrimitiveFunctions.unboxIntegerToByte(), target);
+        Assert.assertEquals(ByteArrayList.newListWith((byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5, (byte) 6, (byte) 7), result.toList());
+        Assert.assertSame("Target list sent as parameter not returned", target, result);
     }
 
     @Test
@@ -203,11 +229,28 @@ public abstract class AbstractLazyIterableTestCase
     }
 
     @Test
+    public void collectCharWithTarget()
+    {
+        MutableCharCollection target = new CharArrayList();
+        MutableCharCollection result = this.lazyIterable.collectChar(PrimitiveFunctions.unboxIntegerToChar(), target);
+        Assert.assertEquals(CharArrayList.newListWith((char) 1, (char) 2, (char) 3, (char) 4, (char) 5, (char) 6, (char) 7), result.toList());
+        Assert.assertSame("Target list sent as parameter not returned", target, result);
+    }
+
+    @Test
     public void collectDouble()
     {
+        Assert.assertEquals(DoubleArrayList.newListWith(1.0d, 2.0d, 3.0d, 4.0d, 5.0d, 6.0d, 7.0d), this.lazyIterable.collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).toList());
+    }
+
+    @Test
+    public void collectDoubleWithTarget()
+    {
+        MutableDoubleCollection target = new DoubleArrayList();
+        MutableDoubleCollection result = this.lazyIterable.collectDouble(PrimitiveFunctions.unboxIntegerToDouble(), target);
         Assert.assertEquals(
-                DoubleArrayList.newListWith(1.0d, 2.0d, 3.0d, 4.0d, 5.0d, 6.0d, 7.0d),
-                this.lazyIterable.collectDouble(PrimitiveFunctions.unboxIntegerToDouble()).toList());
+                DoubleArrayList.newListWith(1.0d, 2.0d, 3.0d, 4.0d, 5.0d, 6.0d, 7.0d), result.toList());
+        Assert.assertSame("Target list sent as parameter not returned", target, result);
     }
 
     @Test
@@ -219,11 +262,28 @@ public abstract class AbstractLazyIterableTestCase
     }
 
     @Test
+    public void collectFloatWithTarget()
+    {
+        MutableFloatCollection target = new FloatArrayList();
+        MutableFloatCollection result = this.lazyIterable.collectFloat(PrimitiveFunctions.unboxIntegerToFloat(), target);
+        Assert.assertEquals(
+                FloatArrayList.newListWith(1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f), result.toList());
+        Assert.assertSame("Target list sent as parameter not returned", target, result);
+    }
+
+    @Test
     public void collectInt()
     {
-        Assert.assertEquals(
-                IntArrayList.newListWith(1, 2, 3, 4, 5, 6, 7),
-                this.lazyIterable.collectInt(PrimitiveFunctions.unboxIntegerToInt()).toList());
+        Assert.assertEquals(IntArrayList.newListWith(1, 2, 3, 4, 5, 6, 7), this.lazyIterable.collectInt(PrimitiveFunctions.unboxIntegerToInt()).toList());
+    }
+
+    @Test
+    public void collectIntWithTarget()
+    {
+        MutableIntCollection target = new IntArrayList();
+        MutableIntCollection result = this.lazyIterable.collectInt(PrimitiveFunctions.unboxIntegerToInt(), target);
+        Assert.assertEquals(IntArrayList.newListWith(1, 2, 3, 4, 5, 6, 7), result.toList());
+        Assert.assertSame("Target list sent as parameter not returned", target, result);
     }
 
     @Test
@@ -235,11 +295,29 @@ public abstract class AbstractLazyIterableTestCase
     }
 
     @Test
+    public void collectLongWithTarget()
+    {
+        MutableLongCollection target = new LongArrayList();
+        MutableLongCollection result = this.lazyIterable.collectLong(PrimitiveFunctions.unboxIntegerToLong(), target);
+        Assert.assertEquals(LongArrayList.newListWith(1L, 2L, 3L, 4L, 5L, 6L, 7L), result.toList());
+        Assert.assertSame("Target list sent as parameter not returned", target, result);
+    }
+
+    @Test
     public void collectShort()
     {
         Assert.assertEquals(
                 ShortArrayList.newListWith((short) 1, (short) 2, (short) 3, (short) 4, (short) 5, (short) 6, (short) 7),
                 this.lazyIterable.collectShort(PrimitiveFunctions.unboxIntegerToShort()).toList());
+    }
+
+    @Test
+    public void collectShortWithTarget()
+    {
+        MutableShortCollection target = new ShortArrayList();
+        MutableShortCollection result = this.lazyIterable.collectShort(PrimitiveFunctions.unboxIntegerToShort(), target);
+        Assert.assertEquals(ShortArrayList.newListWith((short) 1, (short) 2, (short) 3, (short) 4, (short) 5, (short) 6, (short) 7), result.toList());
+        Assert.assertSame("Target list sent as parameter not returned", target, result);
     }
 
     @Test

@@ -73,7 +73,7 @@ import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.block.procedure.checked.CheckedProcedure2;
-import com.gs.collections.impl.collection.mutable.AbstractMutableCollection;
+import com.gs.collections.impl.collection.AbstractMutableBag;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
@@ -99,7 +99,7 @@ import com.gs.collections.impl.utility.internal.IterableIterate;
  * @since 4.2
  */
 public class TreeBag<T>
-        extends AbstractMutableCollection<T>
+        extends AbstractMutableBag<T>
         implements Externalizable, MutableSortedBag<T>
 {
     private static final Function0<Counter> NEW_COUNTER_BLOCK = new Function0<Counter>()
@@ -808,24 +808,6 @@ public class TreeBag<T>
     }
 
     @Override
-    public MutableByteList collectByte(final ByteFunction<? super T> byteFunction)
-    {
-        final MutableByteList result = new ByteArrayList();
-        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
-        {
-            public void value(T each, int occurrences)
-            {
-                byte element = byteFunction.byteValueOf(each);
-                for (int i = 0; i < occurrences; i++)
-                {
-                    result.add(element);
-                }
-            }
-        });
-        return result;
-    }
-
-    @Override
     public T getFirst()
     {
         return this.items.keysView().getFirst();
@@ -1001,129 +983,51 @@ public class TreeBag<T>
     }
 
     @Override
-    public MutableBooleanList collectBoolean(final BooleanFunction<? super T> booleanFunction)
+    public MutableBooleanList collectBoolean(BooleanFunction<? super T> booleanFunction)
     {
-        final MutableBooleanList result = new BooleanArrayList();
-        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
-        {
-            public void value(T each, int occurrences)
-            {
-                boolean element = booleanFunction.booleanValueOf(each);
-                for (int i = 0; i < occurrences; i++)
-                {
-                    result.add(element);
-                }
-            }
-        });
-        return result;
+        return this.collectBoolean(booleanFunction, new BooleanArrayList());
     }
 
     @Override
-    public MutableCharList collectChar(final CharFunction<? super T> charFunction)
+    public MutableByteList collectByte(ByteFunction<? super T> byteFunction)
     {
-        final MutableCharList result = new CharArrayList();
-        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
-        {
-            public void value(T each, int occurrences)
-            {
-                char element = charFunction.charValueOf(each);
-                for (int i = 0; i < occurrences; i++)
-                {
-                    result.add(element);
-                }
-            }
-        });
-        return result;
+        return this.collectByte(byteFunction, new ByteArrayList());
     }
 
     @Override
-    public MutableDoubleList collectDouble(final DoubleFunction<? super T> doubleFunction)
+    public MutableCharList collectChar(CharFunction<? super T> charFunction)
     {
-        final MutableDoubleList result = new DoubleArrayList();
-        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
-        {
-            public void value(T each, int occurrences)
-            {
-                double element = doubleFunction.doubleValueOf(each);
-                for (int i = 0; i < occurrences; i++)
-                {
-                    result.add(element);
-                }
-            }
-        });
-        return result;
+        return this.collectChar(charFunction, new CharArrayList());
     }
 
     @Override
-    public MutableFloatList collectFloat(final FloatFunction<? super T> floatFunction)
+    public MutableDoubleList collectDouble(DoubleFunction<? super T> doubleFunction)
     {
-        final MutableFloatList result = new FloatArrayList();
-        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
-        {
-            public void value(T each, int occurrences)
-            {
-                float element = floatFunction.floatValueOf(each);
-                for (int i = 0; i < occurrences; i++)
-                {
-                    result.add(element);
-                }
-            }
-        });
-        return result;
+        return this.collectDouble(doubleFunction, new DoubleArrayList());
     }
 
     @Override
-    public MutableIntList collectInt(final IntFunction<? super T> intFunction)
+    public MutableFloatList collectFloat(FloatFunction<? super T> floatFunction)
     {
-        final MutableIntList result = new IntArrayList();
-        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
-        {
-            public void value(T each, int occurrences)
-            {
-                int element = intFunction.intValueOf(each);
-                for (int i = 0; i < occurrences; i++)
-                {
-                    result.add(element);
-                }
-            }
-        });
-        return result;
+        return this.collectFloat(floatFunction, new FloatArrayList());
     }
 
     @Override
-    public MutableLongList collectLong(final LongFunction<? super T> longFunction)
+    public MutableIntList collectInt(IntFunction<? super T> intFunction)
     {
-        final MutableLongList result = new LongArrayList();
-        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
-        {
-            public void value(T each, int occurrences)
-            {
-                long element = longFunction.longValueOf(each);
-                for (int i = 0; i < occurrences; i++)
-                {
-                    result.add(element);
-                }
-            }
-        });
-        return result;
+        return this.collectInt(intFunction, new IntArrayList());
     }
 
     @Override
-    public MutableShortList collectShort(final ShortFunction<? super T> shortFunction)
+    public MutableLongList collectLong(LongFunction<? super T> longFunction)
     {
-        final MutableShortList result = new ShortArrayList();
-        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
-        {
-            public void value(T each, int occurrences)
-            {
-                short element = shortFunction.shortValueOf(each);
-                for (int i = 0; i < occurrences; i++)
-                {
-                    result.add(element);
-                }
-            }
-        });
-        return result;
+        return this.collectLong(longFunction, new LongArrayList());
+    }
+
+    @Override
+    public MutableShortList collectShort(ShortFunction<? super T> shortFunction)
+    {
+        return this.collectShort(shortFunction, new ShortArrayList());
     }
 
     @Override

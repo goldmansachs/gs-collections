@@ -726,9 +726,19 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().collectBoolean(booleanFunction);
     }
 
+    public <R extends MutableBooleanCollection> R collectBoolean(BooleanFunction<? super V> booleanFunction, R target)
+    {
+        return this.getMutableMap().collectBoolean(booleanFunction, target);
+    }
+
     public MutableByteCollection collectByte(ByteFunction<? super V> byteFunction)
     {
         return this.getMutableMap().collectByte(byteFunction);
+    }
+
+    public <R extends MutableByteCollection> R collectByte(ByteFunction<? super V> byteFunction, R target)
+    {
+        return this.getMutableMap().collectByte(byteFunction, target);
     }
 
     public MutableCharCollection collectChar(CharFunction<? super V> charFunction)
@@ -736,9 +746,19 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().collectChar(charFunction);
     }
 
+    public <R extends MutableCharCollection> R collectChar(CharFunction<? super V> charFunction, R target)
+    {
+        return this.getMutableMap().collectChar(charFunction, target);
+    }
+
     public MutableDoubleCollection collectDouble(DoubleFunction<? super V> doubleFunction)
     {
         return this.getMutableMap().collectDouble(doubleFunction);
+    }
+
+    public <R extends MutableDoubleCollection> R collectDouble(DoubleFunction<? super V> doubleFunction, R target)
+    {
+        return this.getMutableMap().collectDouble(doubleFunction, target);
     }
 
     public MutableFloatCollection collectFloat(FloatFunction<? super V> floatFunction)
@@ -746,9 +766,19 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().collectFloat(floatFunction);
     }
 
+    public <R extends MutableFloatCollection> R collectFloat(FloatFunction<? super V> floatFunction, R target)
+    {
+        return this.getMutableMap().collectFloat(floatFunction, target);
+    }
+
     public MutableIntCollection collectInt(IntFunction<? super V> intFunction)
     {
         return this.getMutableMap().collectInt(intFunction);
+    }
+
+    public <R extends MutableIntCollection> R collectInt(IntFunction<? super V> intFunction, R target)
+    {
+        return this.getMutableMap().collectInt(intFunction, target);
     }
 
     public MutableLongCollection collectLong(LongFunction<? super V> longFunction)
@@ -756,9 +786,19 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().collectLong(longFunction);
     }
 
+    public <R extends MutableLongCollection> R collectLong(LongFunction<? super V> longFunction, R target)
+    {
+        return this.getMutableMap().collectLong(longFunction, target);
+    }
+
     public MutableShortCollection collectShort(ShortFunction<? super V> shortFunction)
     {
         return this.getMutableMap().collectShort(shortFunction);
+    }
+
+    public <R extends MutableShortCollection> R collectShort(ShortFunction<? super V> shortFunction, R target)
+    {
+        return this.getMutableMap().collectShort(shortFunction, target);
     }
 
     public <R> MutableCollection<R> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function)

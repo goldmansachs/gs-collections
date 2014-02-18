@@ -48,6 +48,14 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
@@ -322,6 +330,11 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
         return result;
     }
 
+    public <R extends MutableBooleanCollection> R collectBoolean(BooleanFunction<? super T> booleanFunction, R target)
+    {
+        return this.delegate.collectBoolean(booleanFunction, target);
+    }
+
     public MutableByteStack collectByte(final ByteFunction<? super T> byteFunction)
     {
         final ByteArrayStack result = new ByteArrayStack();
@@ -333,6 +346,11 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
             }
         });
         return result;
+    }
+
+    public <R extends MutableByteCollection> R collectByte(ByteFunction<? super T> byteFunction, R target)
+    {
+        return this.delegate.collectByte(byteFunction, target);
     }
 
     public MutableCharStack collectChar(final CharFunction<? super T> charFunction)
@@ -348,6 +366,11 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
         return result;
     }
 
+    public <R extends MutableCharCollection> R collectChar(CharFunction<? super T> charFunction, R target)
+    {
+        return this.delegate.collectChar(charFunction, target);
+    }
+
     public MutableDoubleStack collectDouble(final DoubleFunction<? super T> doubleFunction)
     {
         final DoubleArrayStack result = new DoubleArrayStack();
@@ -359,6 +382,11 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
             }
         });
         return result;
+    }
+
+    public <R extends MutableDoubleCollection> R collectDouble(DoubleFunction<? super T> doubleFunction, R target)
+    {
+        return this.delegate.collectDouble(doubleFunction, target);
     }
 
     public MutableFloatStack collectFloat(final FloatFunction<? super T> floatFunction)
@@ -374,6 +402,11 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
         return result;
     }
 
+    public <R extends MutableFloatCollection> R collectFloat(FloatFunction<? super T> floatFunction, R target)
+    {
+        return this.delegate.collectFloat(floatFunction, target);
+    }
+
     public MutableIntStack collectInt(final IntFunction<? super T> intFunction)
     {
         final IntArrayStack result = new IntArrayStack();
@@ -385,6 +418,11 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
             }
         });
         return result;
+    }
+
+    public <R extends MutableIntCollection> R collectInt(IntFunction<? super T> intFunction, R target)
+    {
+        return this.delegate.collectInt(intFunction, target);
     }
 
     public MutableLongStack collectLong(final LongFunction<? super T> longFunction)
@@ -400,6 +438,11 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
         return result;
     }
 
+    public <R extends MutableLongCollection> R collectLong(LongFunction<? super T> longFunction, R target)
+    {
+        return this.delegate.collectLong(longFunction, target);
+    }
+
     public MutableShortStack collectShort(final ShortFunction<? super T> shortFunction)
     {
         final ShortArrayStack result = new ShortArrayStack();
@@ -411,6 +454,11 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
             }
         });
         return result;
+    }
+
+    public <R extends MutableShortCollection> R collectShort(ShortFunction<? super T> shortFunction, R target)
+    {
+        return this.delegate.collectShort(shortFunction, target);
     }
 
     public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)
@@ -919,20 +967,14 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
         }
     }
 
-    public <K, V> MutableMap<K, V> aggregateInPlaceBy(
-            Function<? super T, ? extends K> groupBy,
-            Function0<? extends V> zeroValueFactory,
-            Procedure2<? super V, ? super T> mutatingAggregator)
+    public <K, V> MutableMap<K, V> aggregateInPlaceBy(Function<? super T, ? extends K> groupBy, Function0<? extends V> zeroValueFactory, Procedure2<? super V, ? super T> mutatingAggregator)
     {
         MutableMap<K, V> map = UnifiedMap.newMap();
         this.forEach(new MutatingAggregationProcedure<T, K, V>(map, groupBy, zeroValueFactory, mutatingAggregator));
         return map;
     }
 
-    public <K, V> MutableMap<K, V> aggregateBy(
-            Function<? super T, ? extends K> groupBy,
-            Function0<? extends V> zeroValueFactory,
-            Function2<? super V, ? super T, ? extends V> nonMutatingAggregator)
+    public <K, V> MutableMap<K, V> aggregateBy(Function<? super T, ? extends K> groupBy, Function0<? extends V> zeroValueFactory, Function2<? super V, ? super T, ? extends V> nonMutatingAggregator)
     {
         MutableMap<K, V> map = UnifiedMap.newMap();
         this.forEach(new NonMutatingAggregationProcedure<T, K, V>(map, groupBy, zeroValueFactory, nonMutatingAggregator));

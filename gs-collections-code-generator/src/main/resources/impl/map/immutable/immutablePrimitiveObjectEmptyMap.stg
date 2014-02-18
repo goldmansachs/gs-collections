@@ -18,6 +18,11 @@ public Immutable<name>Collection collect<name>(<name>Function\<? super V> <type>
 {
     return <name>Lists.immutable.with();
 }
+
+public \<R extends Mutable<name>Collection> R collect<name>(<name>Function\<? super V> <type>Function, R target)
+{
+    return target;
+}
 >>
 
 body(type, name) ::= <<
@@ -104,6 +109,14 @@ import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.partition.list.PartitionFastList;
 import com.gs.collections.impl.utility.LazyIterate;
 import com.gs.collections.impl.utility.primitive.Lazy<name>Iterate;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 
 /**
  * Immutable<name>ObjectEmptyMap is an optimization for {@link Immutable<name>ObjectMap} of size 0.

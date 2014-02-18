@@ -264,9 +264,19 @@ public abstract class AbstractCollectionAdapter<T>
         return Iterate.collectBoolean(this.getDelegate(), booleanFunction);
     }
 
+    public <R extends MutableBooleanCollection> R collectBoolean(BooleanFunction<? super T> booleanFunction, R target)
+    {
+        return Iterate.collectBoolean(this.getDelegate(), booleanFunction, target);
+    }
+
     public MutableByteCollection collectByte(ByteFunction<? super T> byteFunction)
     {
         return Iterate.collectByte(this.getDelegate(), byteFunction);
+    }
+
+    public <R extends MutableByteCollection> R collectByte(ByteFunction<? super T> byteFunction, R target)
+    {
+        return Iterate.collectByte(this.getDelegate(), byteFunction, target);
     }
 
     public MutableCharCollection collectChar(CharFunction<? super T> charFunction)
@@ -274,9 +284,19 @@ public abstract class AbstractCollectionAdapter<T>
         return Iterate.collectChar(this.getDelegate(), charFunction);
     }
 
+    public <R extends MutableCharCollection> R collectChar(CharFunction<? super T> charFunction, R target)
+    {
+        return Iterate.collectChar(this.getDelegate(), charFunction, target);
+    }
+
     public MutableDoubleCollection collectDouble(DoubleFunction<? super T> doubleFunction)
     {
         return Iterate.collectDouble(this.getDelegate(), doubleFunction);
+    }
+
+    public <R extends MutableDoubleCollection> R collectDouble(DoubleFunction<? super T> doubleFunction, R target)
+    {
+        return Iterate.collectDouble(this.getDelegate(), doubleFunction, target);
     }
 
     public MutableFloatCollection collectFloat(FloatFunction<? super T> floatFunction)
@@ -284,9 +304,19 @@ public abstract class AbstractCollectionAdapter<T>
         return Iterate.collectFloat(this.getDelegate(), floatFunction);
     }
 
+    public <R extends MutableFloatCollection> R collectFloat(FloatFunction<? super T> floatFunction, R target)
+    {
+        return Iterate.collectFloat(this.getDelegate(), floatFunction, target);
+    }
+
     public MutableIntCollection collectInt(IntFunction<? super T> intFunction)
     {
         return Iterate.collectInt(this.getDelegate(), intFunction);
+    }
+
+    public <R extends MutableIntCollection> R collectInt(IntFunction<? super T> intFunction, R target)
+    {
+        return Iterate.collectInt(this.getDelegate(), intFunction, target);
     }
 
     public MutableLongCollection collectLong(LongFunction<? super T> longFunction)
@@ -294,9 +324,19 @@ public abstract class AbstractCollectionAdapter<T>
         return Iterate.collectLong(this.getDelegate(), longFunction);
     }
 
+    public <R extends MutableLongCollection> R collectLong(LongFunction<? super T> longFunction, R target)
+    {
+        return Iterate.collectLong(this.getDelegate(), longFunction, target);
+    }
+
     public MutableShortCollection collectShort(ShortFunction<? super T> shortFunction)
     {
         return Iterate.collectShort(this.getDelegate(), shortFunction);
+    }
+
+    public <R extends MutableShortCollection> R collectShort(ShortFunction<? super T> shortFunction, R target)
+    {
+        return Iterate.collectShort(this.getDelegate(), shortFunction, target);
     }
 
     public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)

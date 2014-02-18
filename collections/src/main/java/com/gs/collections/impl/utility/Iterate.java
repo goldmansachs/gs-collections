@@ -1031,6 +1031,45 @@ public final class Iterate
     }
 
     /**
+     * Same as {@link #collectBoolean(Iterable, BooleanFunction)}, except that the results are gathered into the specified {@code target}
+     * collection.
+     * <p/>
+     * <pre>e.g.
+     * return Iterate.collectBoolean(collection, new BooleanFunction&lt;Person&gt;()
+     * {
+     *     public boolean booleanValueOf(Person person)
+     *     {
+     *         return person.canVote();
+     *     }
+     * }, new BooleanArrayList());
+     * </pre>
+     */
+    public static <T, R extends MutableBooleanCollection> R collectBoolean(
+            Iterable<T> iterable,
+            BooleanFunction<? super T> booleanFunction,
+            R target)
+    {
+        if (iterable instanceof MutableCollection)
+        {
+            return ((MutableCollection<T>) iterable).collectBoolean(booleanFunction, target);
+        }
+        if (iterable instanceof ArrayList)
+        {
+            return ArrayListIterate.collectBoolean((ArrayList<T>) iterable, booleanFunction, target);
+        }
+        if (iterable instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.collectBoolean((List<T>) iterable, booleanFunction, target);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.collectBoolean(iterable, booleanFunction, target);
+        }
+        throw new IllegalArgumentException("Cannot perform a collectBoolean on null");
+    }
+
+
+    /**
      * Returns a new collection with the results of applying the specified byteFunction for each element of the iterable.
      * <p/>
      * <pre>e.g.
@@ -1038,7 +1077,7 @@ public final class Iterate
      * {
      *     public byte byteValueOf(Person person)
      *     {
-     *         return person.getAge();
+     *         return person.getCode();
      *     }
      * });
      * </pre>
@@ -1065,6 +1104,45 @@ public final class Iterate
         }
         throw new IllegalArgumentException("Cannot perform a collectByte on null");
     }
+
+    /**
+     * Same as {@link #collectByte(Iterable, ByteFunction)}, except that the results are gathered into the specified {@code target}
+     * collection.
+     * <p/>
+     * <pre>e.g.
+     * return Iterate.collectByte(collection, new ByteFunction&lt;Person&gt;()
+     * {
+     *     public byte byteValueOf(Person person)
+     *     {
+     *         return person.getCode();
+     *     }
+     * }, new ByteArrayList());
+     * </pre>
+     */
+    public static <T, R extends MutableByteCollection> R collectByte(
+            Iterable<T> iterable,
+            ByteFunction<? super T> byteFunction,
+            R target)
+    {
+        if (iterable instanceof MutableCollection)
+        {
+            return ((MutableCollection<T>) iterable).collectByte(byteFunction, target);
+        }
+        if (iterable instanceof ArrayList)
+        {
+            return ArrayListIterate.collectByte((ArrayList<T>) iterable, byteFunction, target);
+        }
+        if (iterable instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.collectByte((List<T>) iterable, byteFunction, target);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.collectByte(iterable, byteFunction, target);
+        }
+        throw new IllegalArgumentException("Cannot perform a collectByte on null");
+    }
+
 
     /**
      * Returns a new collection with the results of applying the specified charFunction for each element of the iterable.
@@ -1103,6 +1181,44 @@ public final class Iterate
     }
 
     /**
+     * Same as {@link #collectChar(Iterable,CharFunction)}, except that the results are gathered into the specified {@code target}
+     * collection.
+     * <p/>
+     * <pre>e.g.
+     * return Iterate.collectChar(collection, new CharFunction&lt;Person&gt;()
+     * {
+     *     public char charValueOf(Person person)
+     *     {
+     *         return person.getMiddleInitial();
+     *     }
+     * }, new CharArrayList());
+     * </pre>
+     */
+    public static <T, R extends MutableCharCollection> R collectChar(
+            Iterable<T> iterable,
+            CharFunction<? super T> charFunction,
+            R target)
+    {
+        if (iterable instanceof MutableCollection)
+        {
+            return ((MutableCollection<T>) iterable).collectChar(charFunction, target);
+        }
+        if (iterable instanceof ArrayList)
+        {
+            return ArrayListIterate.collectChar((ArrayList<T>) iterable, charFunction, target);
+        }
+        if (iterable instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.collectChar((List<T>) iterable, charFunction, target);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.collectChar(iterable, charFunction, target);
+        }
+        throw new IllegalArgumentException("Cannot perform a collectChar on null");
+    }
+
+    /**
      * Returns a new collection with the results of applying the specified doubleFunction for each element of the iterable.
      * <p/>
      * <pre>e.g.
@@ -1110,7 +1226,7 @@ public final class Iterate
      * {
      *     public double doubleValueOf(Person person)
      *     {
-     *         return person.getAge();
+     *         return person.getMilesFromNorthPole();
      *     }
      * });
      * </pre>
@@ -1139,6 +1255,45 @@ public final class Iterate
     }
 
     /**
+     * Same as {@link #collectDouble(Iterable, DoubleFunction)}, except that the results are gathered into the specified {@code target}
+     * collection.
+     * <p/>
+     * <pre>e.g.
+     * return Iterate.collectDouble(collection, new DoubleFunction&lt;Person&gt;()
+     * {
+     *     public double doubleValueOf(Person person)
+     *     {
+     *         return person.getMilesFromNorthPole();
+     *     }
+     * }, new DoubleArrayList());
+     * </pre>
+     */
+    public static <T, R extends MutableDoubleCollection> R collectDouble(
+            Iterable<T> iterable,
+            DoubleFunction<? super T> doubleFunction,
+            R target)
+    {
+        if (iterable instanceof MutableCollection)
+        {
+            return ((MutableCollection<T>) iterable).collectDouble(doubleFunction, target);
+        }
+        if (iterable instanceof ArrayList)
+        {
+            return ArrayListIterate.collectDouble((ArrayList<T>) iterable, doubleFunction, target);
+        }
+        if (iterable instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.collectDouble((List<T>) iterable, doubleFunction, target);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.collectDouble(iterable, doubleFunction, target);
+        }
+        throw new IllegalArgumentException("Cannot perform a collectDouble on null");
+    }
+
+
+    /**
      * Returns a new collection with the results of applying the specified floatFunction for each element of the iterable.
      * <p/>
      * <pre>e.g.
@@ -1146,7 +1301,7 @@ public final class Iterate
      * {
      *     public float floatValueOf(Person person)
      *     {
-     *         return person.getAge();
+     *         return person.getHeightInInches();
      *     }
      * });
      * </pre>
@@ -1173,6 +1328,45 @@ public final class Iterate
         }
         throw new IllegalArgumentException("Cannot perform a collectFloat on null");
     }
+
+    /**
+     * Same as {@link #collectFloat(Iterable, FloatFunction)}, except that the results are gathered into the specified {@code target}
+     * collection.
+     * <p/>
+     * <pre>e.g.
+     * return Iterate.collectFloat(collection, new FloatFunction&lt;Person&gt;()
+     * {
+     *     public float floatValueOf(Person person)
+     *     {
+     *         return person.getHeightInInches();
+     *     }
+     * }, new FloatArrayList());
+     * </pre>
+     */
+    public static <T, R extends MutableFloatCollection> R collectFloat(
+            Iterable<T> iterable,
+            FloatFunction<? super T> floatFunction,
+            R target)
+    {
+        if (iterable instanceof MutableCollection)
+        {
+            return ((MutableCollection<T>) iterable).collectFloat(floatFunction, target);
+        }
+        if (iterable instanceof ArrayList)
+        {
+            return ArrayListIterate.collectFloat((ArrayList<T>) iterable, floatFunction, target);
+        }
+        if (iterable instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.collectFloat((List<T>) iterable, floatFunction, target);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.collectFloat(iterable, floatFunction, target);
+        }
+        throw new IllegalArgumentException("Cannot perform a collectFloat on null");
+    }
+
 
     /**
      * Returns a new collection with the results of applying the specified intFunction for each element of the iterable.
@@ -1206,6 +1400,44 @@ public final class Iterate
         if (iterable != null)
         {
             return IterableIterate.collectInt(iterable, intFunction);
+        }
+        throw new IllegalArgumentException("Cannot perform a collectInt on null");
+    }
+
+    /**
+     * Same as {@link #collectInt(Iterable, IntFunction)}, except that the results are gathered into the specified {@code target}
+     * collection.
+     * <p/>
+     * <pre>e.g.
+     * return Iterate.collectInt(collection, new IntFunction&lt;Person&gt;()
+     * {
+     *     public int intValueOf(Person person)
+     *     {
+     *         return person.getAge();
+     *     }
+     * }, new IntArrayList());
+     * </pre>
+     */
+    public static <T, R extends MutableIntCollection> R collectInt(
+            Iterable<T> iterable,
+            IntFunction<? super T> intFunction,
+            R target)
+    {
+        if (iterable instanceof MutableCollection)
+        {
+            return ((MutableCollection<T>) iterable).collectInt(intFunction, target);
+        }
+        if (iterable instanceof ArrayList)
+        {
+            return ArrayListIterate.collectInt((ArrayList<T>) iterable, intFunction, target);
+        }
+        if (iterable instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.collectInt((List<T>) iterable, intFunction, target);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.collectInt(iterable, intFunction, target);
         }
         throw new IllegalArgumentException("Cannot perform a collectInt on null");
     }
@@ -1247,6 +1479,44 @@ public final class Iterate
     }
 
     /**
+     * Same as {@link #collectLong(Iterable, LongFunction)}, except that the results are gathered into the specified {@code target}
+     * collection.
+     * <p/>
+     * <pre>e.g.
+     * return Iterate.collectLong(collection, new LongFunction&lt;Person&gt;()
+     * {
+     *     public long longValueOf(Person person)
+     *     {
+     *         return person.getGuid();
+     *     }
+     * }, new LongArrayList());
+     * </pre>
+     */
+    public static <T, R extends MutableLongCollection> R collectLong(
+            Iterable<T> iterable,
+            LongFunction<? super T> longFunction,
+            R target)
+    {
+        if (iterable instanceof MutableCollection)
+        {
+            return ((MutableCollection<T>) iterable).collectLong(longFunction, target);
+        }
+        if (iterable instanceof ArrayList)
+        {
+            return ArrayListIterate.collectLong((ArrayList<T>) iterable, longFunction, target);
+        }
+        if (iterable instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.collectLong((List<T>) iterable, longFunction, target);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.collectLong(iterable, longFunction, target);
+        }
+        throw new IllegalArgumentException("Cannot perform a collectLong on null");
+    }
+
+    /**
      * Returns a new collection with the results of applying the specified shortFunction for each element of the iterable.
      * <p/>
      * <pre>e.g.
@@ -1254,7 +1524,7 @@ public final class Iterate
      * {
      *     public short shortValueOf(Person person)
      *     {
-     *         return person.getAge();
+     *         return person.getNumberOfJunkMailItemsReceivedPerMonth();
      *     }
      * });
      * </pre>
@@ -1281,6 +1551,45 @@ public final class Iterate
         }
         throw new IllegalArgumentException("Cannot perform a collectShort on null");
     }
+
+    /**
+     * Same as {@link #collectShort(Iterable, ShortFunction)}, except that the results are gathered into the specified {@code target}
+     * collection.
+     * <p/>
+     * <pre>e.g.
+     * return Iterate.collectShort(collection, new ShortFunction&lt;Person&gt;()
+     * {
+     *     public short shortValueOf(Person person)
+     *     {
+     *         return person.getNumberOfJunkMailItemsReceivedPerMonth();
+     *     }
+     * }, new ShortArrayList());
+     * </pre>
+     */
+    public static <T, R extends MutableShortCollection> R collectShort(
+            Iterable<T> iterable,
+            ShortFunction<? super T> shortFunction,
+            R target)
+    {
+        if (iterable instanceof MutableCollection)
+        {
+            return ((MutableCollection<T>) iterable).collectShort(shortFunction, target);
+        }
+        if (iterable instanceof ArrayList)
+        {
+            return ArrayListIterate.collectShort((ArrayList<T>) iterable, shortFunction, target);
+        }
+        if (iterable instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.collectShort((List<T>) iterable, shortFunction, target);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.collectShort(iterable, shortFunction, target);
+        }
+        throw new IllegalArgumentException("Cannot perform a collectShort on null");
+    }
+
 
     /**
      * @see RichIterable#flatCollect(Function)

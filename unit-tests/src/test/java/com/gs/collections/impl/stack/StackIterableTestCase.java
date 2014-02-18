@@ -63,6 +63,14 @@ import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
+import com.gs.collections.impl.set.mutable.primitive.ByteHashSet;
+import com.gs.collections.impl.set.mutable.primitive.CharHashSet;
+import com.gs.collections.impl.set.mutable.primitive.DoubleHashSet;
+import com.gs.collections.impl.set.mutable.primitive.FloatHashSet;
+import com.gs.collections.impl.set.mutable.primitive.IntHashSet;
+import com.gs.collections.impl.set.mutable.primitive.LongHashSet;
+import com.gs.collections.impl.set.mutable.primitive.ShortHashSet;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.stack.mutable.primitive.BooleanArrayStack;
@@ -265,9 +273,7 @@ public abstract class StackIterableTestCase
                 stack.collect(function));
         Assert.assertEquals(3, function.count);
 
-        Assert.assertEquals(
-                FastList.newListWith("true", "false", "null"),
-                stack.collect(Functions.getToString(), FastList.<String>newList()));
+        Assert.assertEquals(FastList.newListWith("true", "false", "null"), stack.collect(Functions.getToString(), FastList.<String>newList()));
     }
 
     @Test
@@ -279,59 +285,132 @@ public abstract class StackIterableTestCase
     }
 
     @Test
+    public void collectBooleanWithTarget()
+    {
+        BooleanHashSet target = new BooleanHashSet();
+        StackIterable<String> stack = this.newStackFromTopToBottom("true", "nah", "TrUe");
+        BooleanHashSet result = stack.collectBoolean(StringFunctions.toPrimitiveBoolean(), target);
+        Assert.assertEquals(BooleanHashSet.newSetWith(true, false, true), result);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
+    }
+
+    @Test
     public void collectByte()
     {
         StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
-        Assert.assertEquals(ByteArrayStack.newStackFromTopToBottom((byte) 1, (byte) 2, (byte) 3),
-                stack.collectByte(PrimitiveFunctions.unboxIntegerToByte()));
+        Assert.assertEquals(ByteArrayStack.newStackFromTopToBottom((byte) 1, (byte) 2, (byte) 3), stack.collectByte(PrimitiveFunctions.unboxIntegerToByte()));
+    }
+
+    @Test
+    public void collectByteWithTarget()
+    {
+        ByteHashSet target = new ByteHashSet();
+        StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
+        ByteHashSet result = stack.collectByte(PrimitiveFunctions.unboxIntegerToByte(), target);
+        Assert.assertEquals(ByteHashSet.newSetWith((byte) 1, (byte) 2, (byte) 3), result);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
     }
 
     @Test
     public void collectChar()
     {
         StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
-        Assert.assertEquals(CharArrayStack.newStackFromTopToBottom((char) 1, (char) 2, (char) 3),
-                stack.collectChar(PrimitiveFunctions.unboxIntegerToChar()));
+        Assert.assertEquals(CharArrayStack.newStackFromTopToBottom((char) 1, (char) 2, (char) 3), stack.collectChar(PrimitiveFunctions.unboxIntegerToChar()));
+    }
+
+    @Test
+    public void collectCharWithTarget()
+    {
+        CharHashSet target = new CharHashSet();
+        StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
+        CharHashSet result = stack.collectChar(PrimitiveFunctions.unboxIntegerToChar(), target);
+        Assert.assertEquals(CharHashSet.newSetWith((char) 1, (char) 2, (char) 3), result);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
     }
 
     @Test
     public void collectDouble()
     {
         StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
-        Assert.assertEquals(DoubleArrayStack.newStackFromTopToBottom(1, 2, 3),
-                stack.collectDouble(PrimitiveFunctions.unboxIntegerToDouble()));
+        Assert.assertEquals(DoubleArrayStack.newStackFromTopToBottom(1, 2, 3), stack.collectDouble(PrimitiveFunctions.unboxIntegerToDouble()));
+    }
+
+    @Test
+    public void collectDoubleWithTarget()
+    {
+        DoubleHashSet target = new DoubleHashSet();
+        StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
+        DoubleHashSet result = stack.collectDouble(PrimitiveFunctions.unboxIntegerToDouble(), target);
+        Assert.assertEquals(DoubleHashSet.newSetWith(1, 2, 3), result);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
     }
 
     @Test
     public void collectFloat()
     {
         StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
-        Assert.assertEquals(FloatArrayStack.newStackFromTopToBottom(1, 2, 3),
-                stack.collectFloat(PrimitiveFunctions.unboxIntegerToFloat()));
+        Assert.assertEquals(FloatArrayStack.newStackFromTopToBottom(1, 2, 3), stack.collectFloat(PrimitiveFunctions.unboxIntegerToFloat()));
+    }
+
+    @Test
+    public void collectFloatWithTarget()
+    {
+        FloatHashSet target = new FloatHashSet();
+        StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
+        FloatHashSet result = stack.collectFloat(PrimitiveFunctions.unboxIntegerToFloat(), target);
+        Assert.assertEquals(FloatHashSet.newSetWith(1, 2, 3), result);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
     }
 
     @Test
     public void collectInt()
     {
         StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
-        Assert.assertEquals(IntArrayStack.newStackFromTopToBottom(1, 2, 3),
-                stack.collectInt(PrimitiveFunctions.unboxIntegerToInt()));
+        Assert.assertEquals(IntArrayStack.newStackFromTopToBottom(1, 2, 3), stack.collectInt(PrimitiveFunctions.unboxIntegerToInt()));
+    }
+
+    @Test
+    public void collectIntWithTarget()
+    {
+        IntHashSet target = new IntHashSet();
+        StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
+        IntHashSet result = stack.collectInt(PrimitiveFunctions.unboxIntegerToInt(), target);
+        Assert.assertEquals(IntHashSet.newSetWith(1, 2, 3), result);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
     }
 
     @Test
     public void collectLong()
     {
         StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
-        Assert.assertEquals(LongArrayStack.newStackFromTopToBottom(1, 2, 3),
-                stack.collectLong(PrimitiveFunctions.unboxIntegerToLong()));
+        Assert.assertEquals(LongArrayStack.newStackFromTopToBottom(1, 2, 3), stack.collectLong(PrimitiveFunctions.unboxIntegerToLong()));
+    }
+
+    @Test
+    public void collectLongWithTarget()
+    {
+        LongHashSet target = new LongHashSet();
+        StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
+        LongHashSet result = stack.collectLong(PrimitiveFunctions.unboxIntegerToLong(), target);
+        Assert.assertEquals(LongHashSet.newSetWith(1, 2, 3), result);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
     }
 
     @Test
     public void collectShort()
     {
         StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
-        Assert.assertEquals(ShortArrayStack.newStackFromTopToBottom((short) 1, (short) 2, (short) 3),
-                stack.collectShort(PrimitiveFunctions.unboxIntegerToShort()));
+        Assert.assertEquals(ShortArrayStack.newStackFromTopToBottom((short) 1, (short) 2, (short) 3), stack.collectShort(PrimitiveFunctions.unboxIntegerToShort()));
+    }
+
+    @Test
+    public void collectShortWithTarget()
+    {
+        ShortHashSet target = new ShortHashSet();
+        StackIterable<Integer> stack = this.newStackFromTopToBottom(1, 2, 3);
+        ShortHashSet result = stack.collectShort(PrimitiveFunctions.unboxIntegerToShort(), target);
+        Assert.assertEquals(ShortHashSet.newSetWith((short) 1, (short) 2, (short) 3), result);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
     }
 
     @Test

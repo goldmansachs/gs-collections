@@ -51,6 +51,14 @@ import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.ByteHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.CharHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.DoubleHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.FloatHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.IntHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.LongHashBag;
+import com.gs.collections.impl.bag.mutable.primitive.ShortHashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
@@ -243,9 +251,7 @@ public abstract class ImmutableBagTestCase
     {
         ImmutableBag<String> strings = this.newBag();
 
-        Assert.assertEquals(
-                strings,
-                strings.selectWith(Predicates2.<String>greaterThan(), "0"));
+        Assert.assertEquals(strings, strings.selectWith(Predicates2.<String>greaterThan(), "0"));
     }
 
     @Test
@@ -280,9 +286,7 @@ public abstract class ImmutableBagTestCase
     {
         ImmutableBag<String> strings = this.newBag();
 
-        Assert.assertEquals(
-                strings,
-                strings.rejectWith(Predicates2.<String>lessThan(), "0"));
+        Assert.assertEquals(strings, strings.rejectWith(Predicates2.<String>lessThan(), "0"));
     }
 
     @Test
@@ -335,9 +339,39 @@ public abstract class ImmutableBagTestCase
     }
 
     @Test
+    public void collectBooleanWithTarget()
+    {
+        BooleanHashBag target = new BooleanHashBag();
+        BooleanHashBag result = this.newBag().collectBoolean(new BooleanFunction<String>()
+        {
+            public boolean booleanValueOf(String s)
+            {
+                return "4".equals(s);
+            }
+        }, target);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
+        Assert.assertEquals(2, result.sizeDistinct());
+        Assert.assertEquals(4, result.occurrencesOf(true));
+        Assert.assertEquals(6, result.occurrencesOf(false));
+    }
+
+    @Test
     public void collectByte()
     {
         ImmutableByteBag result = this.newBag().collectByte(StringFunctions.toPrimitiveByte());
+        Assert.assertEquals(this.numKeys(), result.sizeDistinct());
+        for (int i = 1; i <= this.numKeys(); i++)
+        {
+            Assert.assertEquals(i, result.occurrencesOf((byte) i));
+        }
+    }
+
+    @Test
+    public void collectByteWithTarget()
+    {
+        ByteHashBag target = new ByteHashBag();
+        ByteHashBag result = this.newBag().collectByte(StringFunctions.toPrimitiveByte(), target);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
         Assert.assertEquals(this.numKeys(), result.sizeDistinct());
         for (int i = 1; i <= this.numKeys(); i++)
         {
@@ -357,9 +391,35 @@ public abstract class ImmutableBagTestCase
     }
 
     @Test
+    public void collectCharWithTarget()
+    {
+        CharHashBag target = new CharHashBag();
+        CharHashBag result = this.newBag().collectChar(StringFunctions.toFirstChar(), target);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
+        Assert.assertEquals(this.numKeys(), result.sizeDistinct());
+        for (int i = 1; i <= this.numKeys(); i++)
+        {
+            Assert.assertEquals(i, result.occurrencesOf((char) ((int) '0' + i)));
+        }
+    }
+
+    @Test
     public void collectDouble()
     {
         ImmutableDoubleBag result = this.newBag().collectDouble(StringFunctions.toPrimitiveDouble());
+        Assert.assertEquals(this.numKeys(), result.sizeDistinct());
+        for (int i = 1; i <= this.numKeys(); i++)
+        {
+            Assert.assertEquals(i, result.occurrencesOf(i));
+        }
+    }
+
+    @Test
+    public void collectDoubleWithTarget()
+    {
+        DoubleHashBag target = new DoubleHashBag();
+        DoubleHashBag result = this.newBag().collectDouble(StringFunctions.toPrimitiveDouble(), target);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
         Assert.assertEquals(this.numKeys(), result.sizeDistinct());
         for (int i = 1; i <= this.numKeys(); i++)
         {
@@ -379,9 +439,35 @@ public abstract class ImmutableBagTestCase
     }
 
     @Test
+    public void collectFloatWithTarget()
+    {
+        FloatHashBag target = new FloatHashBag();
+        FloatHashBag result = this.newBag().collectFloat(StringFunctions.toPrimitiveFloat(), target);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
+        Assert.assertEquals(this.numKeys(), result.sizeDistinct());
+        for (int i = 1; i <= this.numKeys(); i++)
+        {
+            Assert.assertEquals(i, result.occurrencesOf(i));
+        }
+    }
+
+    @Test
     public void collectInt()
     {
         ImmutableIntBag result = this.newBag().collectInt(StringFunctions.toPrimitiveInt());
+        Assert.assertEquals(this.numKeys(), result.sizeDistinct());
+        for (int i = 1; i <= this.numKeys(); i++)
+        {
+            Assert.assertEquals(i, result.occurrencesOf(i));
+        }
+    }
+
+    @Test
+    public void collectIntWithTarget()
+    {
+        IntHashBag target = new IntHashBag();
+        IntHashBag result = this.newBag().collectInt(StringFunctions.toPrimitiveInt(), target);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
         Assert.assertEquals(this.numKeys(), result.sizeDistinct());
         for (int i = 1; i <= this.numKeys(); i++)
         {
@@ -401,9 +487,34 @@ public abstract class ImmutableBagTestCase
     }
 
     @Test
+    public void collectLongWithTarget()
+    {
+        LongHashBag target = new LongHashBag();
+        LongHashBag result = this.newBag().collectLong(StringFunctions.toPrimitiveLong(), target);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
+        Assert.assertEquals(this.numKeys(), result.sizeDistinct());
+        for (int i = 1; i <= this.numKeys(); i++)
+        {
+            Assert.assertEquals(i, result.occurrencesOf(i));
+        }
+    }
+
+    @Test
     public void collectShort()
     {
         ImmutableShortBag result = this.newBag().collectShort(StringFunctions.toPrimitiveShort());
+        Assert.assertEquals(this.numKeys(), result.sizeDistinct());
+        for (int i = 1; i <= this.numKeys(); i++)
+        {
+            Assert.assertEquals(i, result.occurrencesOf((short) i));
+        }
+    }
+
+    @Test
+    public void collectShortWithTarget()
+    {
+        ShortHashBag target = new ShortHashBag();
+        ShortHashBag result = this.newBag().collectShort(StringFunctions.toPrimitiveShort(), target);
         Assert.assertEquals(this.numKeys(), result.sizeDistinct());
         for (int i = 1; i <= this.numKeys(); i++)
         {

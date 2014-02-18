@@ -266,11 +266,31 @@ public abstract class MapIterableTestCase
     }
 
     @Test
+    public void collectBooleanWithTarget()
+    {
+        BooleanHashBag target = new BooleanHashBag();
+        MapIterable<String, String> map = this.newMapWithKeysValues("One", "true", "Two", "nah", "Three", "TrUe");
+        BooleanHashBag result = map.collectBoolean(StringFunctions.toPrimitiveBoolean(), target);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
+        Assert.assertEquals(BooleanHashBag.newBagWith(true, false, true), result.toBag());
+    }
+
+    @Test
     public void collectByte()
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("One", "1", "Two", "2", "Three", "3");
         ByteIterable actual = map.collectByte(StringFunctions.toPrimitiveByte());
         Assert.assertEquals(ByteHashBag.newBagWith((byte) 1, (byte) 2, (byte) 3), actual.toBag());
+    }
+
+    @Test
+    public void collectByteWithTarget()
+    {
+        ByteHashBag target = new ByteHashBag();
+        MapIterable<String, String> map = this.newMapWithKeysValues("One", "1", "Two", "2", "Three", "3");
+        ByteHashBag result = map.collectByte(StringFunctions.toPrimitiveByte(), target);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
+        Assert.assertEquals(ByteHashBag.newBagWith((byte) 1, (byte) 2, (byte) 3), result.toBag());
     }
 
     @Test
@@ -282,11 +302,31 @@ public abstract class MapIterableTestCase
     }
 
     @Test
+    public void collectCharWithTarget()
+    {
+        CharHashBag target = new CharHashBag();
+        MapIterable<String, String> map = this.newMapWithKeysValues("One", "A1", "Two", "B", "Three", "C#++");
+        CharHashBag result = map.collectChar(StringFunctions.toFirstChar(), target);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
+        Assert.assertEquals(CharHashBag.newBagWith('A', 'B', 'C'), result.toBag());
+    }
+
+    @Test
     public void collectDouble()
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("One", "1", "Two", "2", "Three", "3");
         DoubleIterable actual = map.collectDouble(StringFunctions.toPrimitiveDouble());
         Assert.assertEquals(DoubleHashBag.newBagWith(1.0d, 2.0d, 3.0d), actual.toBag());
+    }
+
+    @Test
+    public void collectDoubleWithTarget()
+    {
+        DoubleHashBag target = new DoubleHashBag();
+        MapIterable<String, String> map = this.newMapWithKeysValues("One", "1", "Two", "2", "Three", "3");
+        DoubleHashBag result = map.collectDouble(StringFunctions.toPrimitiveDouble(), target);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
+        Assert.assertEquals(DoubleHashBag.newBagWith(1.0d, 2.0d, 3.0d), result.toBag());
     }
 
     @Test
@@ -298,11 +338,31 @@ public abstract class MapIterableTestCase
     }
 
     @Test
+    public void collectFloatWithTarget()
+    {
+        FloatHashBag target = new FloatHashBag();
+        MapIterable<String, String> map = this.newMapWithKeysValues("One", "1", "Two", "2", "Three", "3");
+        FloatHashBag result = map.collectFloat(StringFunctions.toPrimitiveFloat(), target);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
+        Assert.assertEquals(FloatHashBag.newBagWith(1.0f, 2.0f, 3.0f), result.toBag());
+    }
+
+    @Test
     public void collectInt()
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("One", "1", "Two", "2", "Three", "3");
         IntIterable actual = map.collectInt(StringFunctions.toPrimitiveInt());
         Assert.assertEquals(IntHashBag.newBagWith(1, 2, 3), actual.toBag());
+    }
+
+    @Test
+    public void collectIntWithTarget()
+    {
+        IntHashBag target = new IntHashBag();
+        MapIterable<String, String> map = this.newMapWithKeysValues("One", "1", "Two", "2", "Three", "3");
+        IntHashBag result = map.collectInt(StringFunctions.toPrimitiveInt(), target);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
+        Assert.assertEquals(IntHashBag.newBagWith(1, 2, 3), result.toBag());
     }
 
     @Test
@@ -314,11 +374,31 @@ public abstract class MapIterableTestCase
     }
 
     @Test
+    public void collectLongWithTarget()
+    {
+        LongHashBag target = new LongHashBag();
+        MapIterable<String, String> map = this.newMapWithKeysValues("One", "1", "Two", "2", "Three", "3");
+        LongHashBag result = map.collectLong(StringFunctions.toPrimitiveLong(), target);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
+        Assert.assertEquals(LongHashBag.newBagWith(1L, 2L, 3L), result.toBag());
+    }
+
+    @Test
     public void collectShort()
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("One", "1", "Two", "2", "Three", "3");
         ShortIterable actual = map.collectShort(StringFunctions.toPrimitiveShort());
         Assert.assertEquals(ShortHashBag.newBagWith((short) 1, (short) 2, (short) 3), actual.toBag());
+    }
+
+    @Test
+    public void collectShortWithTarget()
+    {
+        ShortHashBag target = new ShortHashBag();
+        MapIterable<String, String> map = this.newMapWithKeysValues("One", "1", "Two", "2", "Three", "3");
+        ShortHashBag result = map.collectShort(StringFunctions.toPrimitiveShort(), target);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
+        Assert.assertEquals(ShortHashBag.newBagWith((short) 1, (short) 2, (short) 3), result.toBag());
     }
 
     @Test

@@ -37,6 +37,14 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
@@ -296,11 +304,22 @@ public final class ListAdapter<T>
     }
 
     @Override
+    public <R extends MutableBooleanCollection> R collectBoolean(BooleanFunction<? super T> booleanFunction, R target)
+    {
+        return ListIterate.collectBoolean(this.delegate, booleanFunction, target);
+    }
+
+    @Override
     public MutableByteList collectByte(ByteFunction<? super T> byteFunction)
     {
         return ListIterate.collectByte(this.delegate, byteFunction);
     }
 
+    @Override
+    public <R extends MutableByteCollection> R collectByte(ByteFunction<? super T> byteFunction, R target)
+    {
+        return ListIterate.collectByte(this.delegate, byteFunction, target);
+    }
     @Override
     public MutableCharList collectChar(CharFunction<? super T> charFunction)
     {
@@ -308,11 +327,21 @@ public final class ListAdapter<T>
     }
 
     @Override
+    public <R extends MutableCharCollection> R collectChar(CharFunction<? super T> charFunction, R target)
+    {
+        return ListIterate.collectChar(this.delegate, charFunction, target);
+    }
+    @Override
     public MutableDoubleList collectDouble(DoubleFunction<? super T> doubleFunction)
     {
         return ListIterate.collectDouble(this.delegate, doubleFunction);
     }
 
+    @Override
+    public <R extends MutableDoubleCollection> R collectDouble(DoubleFunction<? super T> doubleFunction, R target)
+    {
+        return ListIterate.collectDouble(this.delegate, doubleFunction, target);
+    }
     @Override
     public MutableFloatList collectFloat(FloatFunction<? super T> floatFunction)
     {
@@ -320,11 +349,21 @@ public final class ListAdapter<T>
     }
 
     @Override
+    public <R extends MutableFloatCollection> R collectFloat(FloatFunction<? super T> floatFunction, R target)
+    {
+        return ListIterate.collectFloat(this.delegate, floatFunction, target);
+    }
+    @Override
     public MutableIntList collectInt(IntFunction<? super T> intFunction)
     {
         return ListIterate.collectInt(this.delegate, intFunction);
     }
 
+    @Override
+    public <R extends MutableIntCollection> R collectInt(IntFunction<? super T> intFunction, R target)
+    {
+        return ListIterate.collectInt(this.delegate, intFunction, target);
+    }
     @Override
     public MutableLongList collectLong(LongFunction<? super T> longFunction)
     {
@@ -332,10 +371,22 @@ public final class ListAdapter<T>
     }
 
     @Override
+    public <R extends MutableLongCollection> R collectLong(LongFunction<? super T> longFunction, R target)
+    {
+        return ListIterate.collectLong(this.delegate, longFunction, target);
+    }
+    @Override
     public MutableShortList collectShort(ShortFunction<? super T> shortFunction)
     {
         return ListIterate.collectShort(this.delegate, shortFunction);
     }
+
+    @Override
+    public <R extends MutableShortCollection> R collectShort(ShortFunction<? super T> shortFunction, R target)
+    {
+        return ListIterate.collectShort(this.delegate, shortFunction, target);
+    }
+
 
     @Override
     public <V> MutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)

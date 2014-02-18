@@ -45,6 +45,14 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.list.primitive.MutableByteList;
@@ -387,14 +395,32 @@ public final class ArrayListIterate
         if (ArrayListIterate.isOptimizableArrayList(list, size))
         {
             MutableBooleanList result = new BooleanArrayList(size);
-            T[] elements = ArrayListIterate.getInternalArray(list);
-            for (int i = 0; i < size; i++)
-            {
-                result.add(booleanFunction.booleanValueOf(elements[i]));
-            }
-            return result;
+            return ArrayListIterate.collectBooleanFromInternalArray(list, booleanFunction, size, result);
         }
         return RandomAccessListIterate.collectBoolean(list, booleanFunction);
+    }
+
+    /**
+     * @see Iterate#collectBoolean(Iterable, BooleanFunction, MutableBooleanCollection)
+     */
+    public static <T, R extends MutableBooleanCollection> R collectBoolean(ArrayList<T> list, BooleanFunction<? super T> booleanFunction, R target)
+    {
+        int size = list.size();
+        if (ArrayListIterate.isOptimizableArrayList(list, size))
+        {
+            return ArrayListIterate.collectBooleanFromInternalArray(list, booleanFunction, size, target);
+        }
+        return RandomAccessListIterate.collectBoolean(list, booleanFunction, target);
+    }
+
+    private static <T, R extends MutableBooleanCollection> R collectBooleanFromInternalArray(ArrayList<T> source, BooleanFunction<? super T> booleanFunction, int elementsToCollect, R target)
+    {
+        T[] elements = ArrayListIterate.getInternalArray(source);
+        for (int i = 0; i < elementsToCollect; i++)
+        {
+            target.add(booleanFunction.booleanValueOf(elements[i]));
+        }
+        return target;
     }
 
     /**
@@ -408,14 +434,33 @@ public final class ArrayListIterate
         if (ArrayListIterate.isOptimizableArrayList(list, size))
         {
             MutableByteList result = new ByteArrayList(size);
-            T[] elements = ArrayListIterate.getInternalArray(list);
-            for (int i = 0; i < size; i++)
-            {
-                result.add(byteFunction.byteValueOf(elements[i]));
-            }
-            return result;
+            return ArrayListIterate.collectByteFromInternalArray(list, byteFunction, size, result);
         }
         return RandomAccessListIterate.collectByte(list, byteFunction);
+    }
+
+    /**
+     * @see Iterate#collectByte(Iterable, ByteFunction, MutableByteCollection)
+     */
+    public static <T, R extends MutableByteCollection> R collectByte(ArrayList<T> list, ByteFunction<? super T> byteFunction, R target)
+    {
+        int size = list.size();
+        if (ArrayListIterate.isOptimizableArrayList(list, size))
+        {
+            return ArrayListIterate.collectByteFromInternalArray(list, byteFunction, size, target);
+        }
+        return RandomAccessListIterate.collectByte(list, byteFunction, target);
+    }
+
+    private static <T, R extends MutableByteCollection> R collectByteFromInternalArray(ArrayList<T> source, ByteFunction<?
+            super T> byteFunction, int elementsToCollect, R target)
+    {
+        T[] elements = ArrayListIterate.getInternalArray(source);
+        for (int i = 0; i < elementsToCollect; i++)
+        {
+            target.add(byteFunction.byteValueOf(elements[i]));
+        }
+        return target;
     }
 
     /**
@@ -429,14 +474,33 @@ public final class ArrayListIterate
         if (ArrayListIterate.isOptimizableArrayList(list, size))
         {
             MutableCharList result = new CharArrayList(size);
-            T[] elements = ArrayListIterate.getInternalArray(list);
-            for (int i = 0; i < size; i++)
-            {
-                result.add(charFunction.charValueOf(elements[i]));
-            }
-            return result;
+            return ArrayListIterate.collectCharFromInternalArray(list, charFunction, size, result);
         }
         return RandomAccessListIterate.collectChar(list, charFunction);
+    }
+
+    /**
+     * @see Iterate#collectChar(Iterable, CharFunction,MutableCharCollection)
+     */
+    public static <T, R extends MutableCharCollection> R collectChar(ArrayList<T> list, CharFunction<? super T> charFunction, R target)
+    {
+        int size = list.size();
+        if (ArrayListIterate.isOptimizableArrayList(list, size))
+        {
+            return ArrayListIterate.collectCharFromInternalArray(list, charFunction, size, target);
+        }
+        return RandomAccessListIterate.collectChar(list, charFunction, target);
+    }
+
+    private static <T, R extends MutableCharCollection> R collectCharFromInternalArray(ArrayList<T> source, CharFunction<?
+            super T> charFunction, int elementsToCollect, R target)
+    {
+        T[] elements = ArrayListIterate.getInternalArray(source);
+        for (int i = 0; i < elementsToCollect; i++)
+        {
+            target.add(charFunction.charValueOf(elements[i]));
+        }
+        return target;
     }
 
     /**
@@ -450,17 +514,37 @@ public final class ArrayListIterate
         if (ArrayListIterate.isOptimizableArrayList(list, size))
         {
             MutableDoubleList result = new DoubleArrayList(size);
-            T[] elements = ArrayListIterate.getInternalArray(list);
-            for (int i = 0; i < size; i++)
-            {
-                result.add(doubleFunction.doubleValueOf(elements[i]));
-            }
-            return result;
+            return ArrayListIterate.collectDoubleFromInternalArray(list, doubleFunction, size, result);
         }
         return RandomAccessListIterate.collectDouble(list, doubleFunction);
     }
 
     /**
+     * @see Iterate#collectDouble(Iterable, DoubleFunction,MutableDoubleCollection)
+     */
+    public static <T, R extends MutableDoubleCollection> R collectDouble(ArrayList<T> list, DoubleFunction<? super T> doubleFunction, R target)
+    {
+        int size = list.size();
+        if (ArrayListIterate.isOptimizableArrayList(list, size))
+        {
+            return ArrayListIterate.collectDoubleFromInternalArray(list, doubleFunction, size, target);
+        }
+        return RandomAccessListIterate.collectDouble(list, doubleFunction, target);
+    }
+
+    private static <T, R extends MutableDoubleCollection> R collectDoubleFromInternalArray(ArrayList<T> source, DoubleFunction<?
+            super T> doubleFunction, int elementsToCollect, R target)
+    {
+        T[] elements = ArrayListIterate.getInternalArray(source);
+        for (int i = 0; i < elementsToCollect; i++)
+        {
+            target.add(doubleFunction.doubleValueOf(elements[i]));
+        }
+        return target;
+    }
+
+    /**
+     *
      * @see Iterate#collectFloat(Iterable, FloatFunction)
      */
     public static <T> MutableFloatList collectFloat(
@@ -471,14 +555,33 @@ public final class ArrayListIterate
         if (ArrayListIterate.isOptimizableArrayList(list, size))
         {
             MutableFloatList result = new FloatArrayList(size);
-            T[] elements = ArrayListIterate.getInternalArray(list);
-            for (int i = 0; i < size; i++)
-            {
-                result.add(floatFunction.floatValueOf(elements[i]));
-            }
-            return result;
+            return ArrayListIterate.collectFloatFromInternalArray(list, floatFunction, size, result);
         }
         return RandomAccessListIterate.collectFloat(list, floatFunction);
+    }
+
+    /**
+     * @see Iterate#collectFloat(Iterable, FloatFunction, MutableFloatCollection)
+     */
+    public static <T, R extends MutableFloatCollection> R collectFloat(ArrayList<T> list, FloatFunction<? super T> floatFunction, R target)
+    {
+        int size = list.size();
+        if (ArrayListIterate.isOptimizableArrayList(list, size))
+        {
+            return ArrayListIterate.collectFloatFromInternalArray(list, floatFunction, size, target);
+        }
+        return RandomAccessListIterate.collectFloat(list, floatFunction, target);
+    }
+
+    private static <T, R extends MutableFloatCollection> R collectFloatFromInternalArray(ArrayList<T> source, FloatFunction<?
+            super T> floatFunction, int elementsToCollect, R target)
+    {
+        T[] elements = ArrayListIterate.getInternalArray(source);
+        for (int i = 0; i < elementsToCollect; i++)
+        {
+            target.add(floatFunction.floatValueOf(elements[i]));
+        }
+        return target;
     }
 
     /**
@@ -492,14 +595,32 @@ public final class ArrayListIterate
         if (ArrayListIterate.isOptimizableArrayList(list, size))
         {
             MutableIntList result = new IntArrayList(size);
-            T[] elements = ArrayListIterate.getInternalArray(list);
-            for (int i = 0; i < size; i++)
-            {
-                result.add(intFunction.intValueOf(elements[i]));
-            }
-            return result;
+            return ArrayListIterate.collectIntFromInternalArray(list, intFunction, size, result);
         }
         return RandomAccessListIterate.collectInt(list, intFunction);
+    }
+
+    /**
+     * @see Iterate#collectInt(Iterable, IntFunction, MutableIntCollection)
+     */
+    public static <T, R extends MutableIntCollection> R collectInt(ArrayList<T> list, IntFunction<? super T> intFunction, R target)
+    {
+        int size = list.size();
+        if (ArrayListIterate.isOptimizableArrayList(list, size))
+        {
+            return ArrayListIterate.collectIntFromInternalArray(list, intFunction, size, target);
+        }
+        return RandomAccessListIterate.collectInt(list, intFunction, target);
+    }
+
+    private static <T, R extends MutableIntCollection> R collectIntFromInternalArray(ArrayList<T> source, IntFunction<? super T> intFunction, int elementsToCollect, R target)
+    {
+        T[] elements = ArrayListIterate.getInternalArray(source);
+        for (int i = 0; i < elementsToCollect; i++)
+        {
+            target.add(intFunction.intValueOf(elements[i]));
+        }
+        return target;
     }
 
     /**
@@ -513,14 +634,33 @@ public final class ArrayListIterate
         if (ArrayListIterate.isOptimizableArrayList(list, size))
         {
             MutableLongList result = new LongArrayList(size);
-            T[] elements = ArrayListIterate.getInternalArray(list);
-            for (int i = 0; i < size; i++)
-            {
-                result.add(longFunction.longValueOf(elements[i]));
-            }
-            return result;
+            return ArrayListIterate.collectLongFromInternalArray(list, longFunction, size, result);
         }
         return RandomAccessListIterate.collectLong(list, longFunction);
+    }
+
+    /**
+     * @see Iterate#collectLong(Iterable, LongFunction, MutableLongCollection)
+     */
+    public static <T, R extends MutableLongCollection> R collectLong(ArrayList<T> list, LongFunction<? super T> longFunction, R target)
+    {
+        int size = list.size();
+        if (ArrayListIterate.isOptimizableArrayList(list, size))
+        {
+            return ArrayListIterate.collectLongFromInternalArray(list, longFunction, size, target);
+        }
+        return RandomAccessListIterate.collectLong(list, longFunction, target);
+    }
+
+    private static <T, R extends MutableLongCollection> R collectLongFromInternalArray(ArrayList<T> source, LongFunction<?
+            super T> longFunction, int elementsToCollect, R target)
+    {
+        T[] elements = ArrayListIterate.getInternalArray(source);
+        for (int i = 0; i < elementsToCollect; i++)
+        {
+            target.add(longFunction.longValueOf(elements[i]));
+        }
+        return target;
     }
 
     /**
@@ -534,14 +674,33 @@ public final class ArrayListIterate
         if (ArrayListIterate.isOptimizableArrayList(list, size))
         {
             MutableShortList result = new ShortArrayList(size);
-            T[] elements = ArrayListIterate.getInternalArray(list);
-            for (int i = 0; i < size; i++)
-            {
-                result.add(shortFunction.shortValueOf(elements[i]));
-            }
-            return result;
+            return ArrayListIterate.collectShortFromInternalArray(list, shortFunction, size, result);
         }
         return RandomAccessListIterate.collectShort(list, shortFunction);
+    }
+
+    /**
+     * @see Iterate#collectShort(Iterable, ShortFunction, MutableShortCollection)
+     */
+    public static <T, R extends MutableShortCollection> R collectShort(ArrayList<T> list, ShortFunction<? super T> shortFunction, R target)
+    {
+        int size = list.size();
+        if (ArrayListIterate.isOptimizableArrayList(list, size))
+        {
+            return ArrayListIterate.collectShortFromInternalArray(list, shortFunction, size, target);
+        }
+        return RandomAccessListIterate.collectShort(list, shortFunction, target);
+    }
+
+    private static <T, R extends MutableShortCollection> R collectShortFromInternalArray(ArrayList<T> source, ShortFunction<?
+            super T> shortFunction, int elementsToCollect, R target)
+    {
+        T[] elements = ArrayListIterate.getInternalArray(source);
+        for (int i = 0; i < elementsToCollect; i++)
+        {
+            target.add(shortFunction.shortValueOf(elements[i]));
+        }
+        return target;
     }
 
     /**

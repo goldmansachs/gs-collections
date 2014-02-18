@@ -57,6 +57,14 @@ import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
@@ -307,9 +315,19 @@ final class ImmutableEmptyBag<T>
         return BooleanBags.immutable.of();
     }
 
+    public <R extends MutableBooleanCollection> R collectBoolean(BooleanFunction<? super T> booleanFunction, R target)
+    {
+        return target;
+    }
+
     public ImmutableByteBag collectByte(ByteFunction<? super T> byteFunction)
     {
         return ByteBags.immutable.of();
+    }
+
+    public <R extends MutableByteCollection> R collectByte(ByteFunction<? super T> byteFunction, R target)
+    {
+        return target;
     }
 
     public ImmutableCharBag collectChar(CharFunction<? super T> charFunction)
@@ -317,9 +335,19 @@ final class ImmutableEmptyBag<T>
         return CharBags.immutable.of();
     }
 
+    public <R extends MutableCharCollection> R collectChar(CharFunction<? super T> charFunction, R target)
+    {
+        return target;
+    }
+
     public ImmutableDoubleBag collectDouble(DoubleFunction<? super T> doubleFunction)
     {
         return DoubleBags.immutable.of();
+    }
+
+    public <R extends MutableDoubleCollection> R collectDouble(DoubleFunction<? super T> doubleFunction, R target)
+    {
+        return target;
     }
 
     public ImmutableFloatBag collectFloat(FloatFunction<? super T> floatFunction)
@@ -327,9 +355,19 @@ final class ImmutableEmptyBag<T>
         return FloatBags.immutable.of();
     }
 
-    public ImmutableIntBag collectInt(IntFunction<? super T> function)
+    public <R extends MutableFloatCollection> R collectFloat(FloatFunction<? super T> floatFunction, R target)
+    {
+        return target;
+    }
+
+    public ImmutableIntBag collectInt(IntFunction<? super T> intFunction)
     {
         return IntBags.immutable.of();
+    }
+
+    public <R extends MutableIntCollection> R collectInt(IntFunction<? super T> intFunction, R target)
+    {
+        return target;
     }
 
     public ImmutableLongBag collectLong(LongFunction<? super T> longFunction)
@@ -337,10 +375,21 @@ final class ImmutableEmptyBag<T>
         return LongBags.immutable.of();
     }
 
+    public <R extends MutableLongCollection> R collectLong(LongFunction<? super T> longFunction, R target)
+    {
+        return target;
+    }
+
     public ImmutableShortBag collectShort(ShortFunction<? super T> shortFunction)
     {
         return ShortBags.immutable.of();
     }
+
+    public <R extends MutableShortCollection> R collectShort(ShortFunction<? super T> shortFunction, R target)
+    {
+        return target;
+    }
+
 
     public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)
     {

@@ -39,6 +39,14 @@ import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
@@ -349,6 +357,27 @@ public interface
     BooleanIterable collectBoolean(BooleanFunction<? super T> booleanFunction);
 
     /**
+     * Same as {@link #collectBoolean(BooleanFunction)}, except that the results are gathered into the specified {@code target}
+     * collection.
+     * <p/>
+     * <pre>e.g.
+     * return people.collectBoolean(new BooleanFunction&lt;Person&gt;()
+     * {
+     *     public boolean booleanValueOf(Person person)
+     *     {
+     *         return person.hasDrivingLicense();
+     *     }
+     * }, new BooleanArrayList());
+     * </pre>
+     * @param booleanFunction a {@link BooleanFunction} to use as the collect transformation function
+     * @param target the MutableBooleanCollection to append to for all elements in this {@code RichIterable}
+     * @return {@code target}, which contains appended elements as a result of the collect transformation
+     * @since 5.0
+     */
+    <R extends MutableBooleanCollection> R collectBoolean(BooleanFunction<? super T> booleanFunction, R target);
+
+
+    /**
      * Returns a new primitive {@code byte} iterable with the results of applying the specified function on each element
      * of the source collection.  This method is also commonly called transform or map.
      * <p/>
@@ -365,6 +394,26 @@ public interface
      * @since 4.0
      */
     ByteIterable collectByte(ByteFunction<? super T> byteFunction);
+
+    /**
+     * Same as {@link #collectByte(ByteFunction)}, except that the results are gathered into the specified {@code target}
+     * collection.
+     * <p/>
+     * <pre>e.g.
+     * return people.collectByte(new ByteFunction&lt;Person&gt;()
+     * {
+     *     public byte byteValueOf(Person person)
+     *     {
+     *         return person.getCode();
+     *     }
+     * }, new ByteArrayList());
+     * </pre>
+     * @param byteFunction a {@link ByteFunction} to use as the collect transformation function
+     * @param target the MutableByteCollection to append to for all elements in this {@code RichIterable}
+     * @return {@code target}, which contains appended elements as a result of the collect transformation
+     * @since 5.0
+     */
+    <R extends MutableByteCollection> R collectByte(ByteFunction<? super T> byteFunction, R target);
 
     /**
      * Returns a new primitive {@code char} iterable with the results of applying the specified function on each element
@@ -385,6 +434,27 @@ public interface
     CharIterable collectChar(CharFunction<? super T> charFunction);
 
     /**
+     * Same as {@link #collectChar(CharFunction)}, except that the results are gathered into the specified {@code target}
+     * collection.
+     * <p/>
+     * <pre>e.g.
+     * return people.collectChar(new CharFunction&lt;Person&gt;()
+     * {
+     *     public char charValueOf(Person person)
+     *     {
+     *         return person.getMiddleInitial();
+     *     }
+     * }, new CharArrayList());
+     * </pre>
+     * @param charFunction a {@link CharFunction} to use as the collect transformation function
+     * @param target the MutableCharCollection to append to for all elements in this {@code RichIterable}
+     * @return {@code target}, which contains appended elements as a result of the collect transformation
+     * @since 5.0
+     */
+    <R extends MutableCharCollection> R collectChar(CharFunction<? super T> charFunction, R target);
+
+
+    /**
      * Returns a new primitive {@code double} iterable with the results of applying the specified function on each element
      * of the source collection.  This method is also commonly called transform or map.
      * <p/>
@@ -401,6 +471,27 @@ public interface
      * @since 4.0
      */
     DoubleIterable collectDouble(DoubleFunction<? super T> doubleFunction);
+
+    /**
+     * Same as {@link #collectDouble(DoubleFunction)}, except that the results are gathered into the specified {@code target}
+     * collection.
+     * <p/>
+     * <pre>e.g.
+     * return people.collectDouble(new DoubleFunction&lt;Person&gt;()
+     * {
+     *     public double doubleValueOf(Person person)
+     *     {
+     *         return person.getMilesFromNorthPole();
+     *     }
+     * }, new DoubleArrayList());
+     * </pre>
+     * @param doubleFunction a {@link DoubleFunction} to use as the collect transformation function
+     * @param target the MutableDoubleCollection to append to for all elements in this {@code RichIterable}
+     * @return {@code target}, which contains appended elements as a result of the collect transformation
+     * @since 5.0
+     */
+    <R extends MutableDoubleCollection> R collectDouble(DoubleFunction<? super T> doubleFunction, R target);
+
 
     /**
      * Returns a new primitive {@code float} iterable with the results of applying the specified function on each element
@@ -421,6 +512,27 @@ public interface
     FloatIterable collectFloat(FloatFunction<? super T> floatFunction);
 
     /**
+    * Same as {@link #collectFloat(FloatFunction)}, except that the results are gathered into the specified {@code target}
+    * collection.
+    * <p/>
+    * <pre>e.g.
+    * return people.collectFloat(new FloatFunction&lt;Person&gt;()
+    * {
+    *     public float floatValueOf(Person person)
+    *     {
+    *         return person.getHeightInInches();
+    *     }
+    * }, new FloatArrayList());
+    * </pre>
+    * @param floatFunction a {@link FloatFunction} to use as the collect transformation function
+    * @param target the MutableFloatCollection to append to for all elements in this {@code RichIterable}
+    * @return {@code target}, which contains appended elements as a result of the collect transformation
+    * @since 5.0
+    */
+    <R extends MutableFloatCollection> R collectFloat(FloatFunction<? super T> floatFunction, R target);
+
+
+    /**
      * Returns a new primitive {@code int} iterable with the results of applying the specified function on each element
      * of the source collection.  This method is also commonly called transform or map.
      * <p/>
@@ -437,6 +549,26 @@ public interface
      * @since 4.0
      */
     IntIterable collectInt(IntFunction<? super T> intFunction);
+
+    /**
+     * Same as {@link #collectInt(IntFunction)}, except that the results are gathered into the specified {@code target}
+     * collection.
+     * <p/>
+     * <pre>e.g.
+     * return people.collectInt(new IntFunction&lt;Person&gt;()
+     * {
+     *     public int intValueOf(Person person)
+     *     {
+     *         return person.getAge();
+     *     }
+     * }, new IntArrayList());
+     * </pre>
+     * @param intFunction a {@link IntFunction} to use as the collect transformation function
+     * @param target the MutableIntCollection to append to for all elements in this {@code RichIterable}
+     * @return {@code target}, which contains appended elements as a result of the collect transformation
+     * @since 5.0
+     */
+    <R extends MutableIntCollection> R collectInt(IntFunction<? super T> intFunction, R target);
 
     /**
      * Returns a new primitive {@code long} iterable with the results of applying the specified function on each element
@@ -457,6 +589,26 @@ public interface
     LongIterable collectLong(LongFunction<? super T> longFunction);
 
     /**
+     * Same as {@link #collectLong(LongFunction)}, except that the results are gathered into the specified {@code target}
+     * collection.
+     * <p/>
+     * <pre>e.g.
+     * return people.collectLong(new LongFunction&lt;Person&gt;()
+     * {
+     *     public long longValueOf(Person person)
+     *     {
+     *         return person.getGuid();
+     *     }
+     * }, new LongArrayList());
+     * </pre>
+     * @param longFunction a {@link LongFunction} to use as the collect transformation function
+     * @param target the MutableLongCollection to append to for all elements in this {@code RichIterable}
+     * @return {@code target}, which contains appended elements as a result of the collect transformation
+     * @since 5.0
+     */
+    <R extends MutableLongCollection> R collectLong(LongFunction<? super T> longFunction, R target);
+
+    /**
      * Returns a new primitive {@code short} iterable with the results of applying the specified function on each element
      * of the source collection.  This method is also commonly called transform or map.
      * <p/>
@@ -473,6 +625,27 @@ public interface
      * @since 4.0
      */
     ShortIterable collectShort(ShortFunction<? super T> shortFunction);
+
+    /**
+     * Same as {@link #collectShort(ShortFunction)}, except that the results are gathered into the specified {@code target}
+     * collection.
+     * <p/>
+     * <pre>e.g.
+     * return people.collectShort(new ShortFunction&lt;Person&gt;()
+     * {
+     *     public short shortValueOf(Person person)
+     *     {
+     *         return person.getNumberOfJunkMailItemsReceivedPerMonth;
+     *     }
+     * }, new ShortArrayList());
+     * </pre>
+     * @param shortFunction a {@link ShortFunction} to use as the collect transformation function
+     * @param target the MutableShortCollection to append to for all elements in this {@code RichIterable}
+     * @return {@code target}, which contains appended elements as a result of the collect transformation
+     * @since 5.0
+     */
+    <R extends MutableShortCollection> R collectShort(ShortFunction<? super T> shortFunction, R target);
+
 
     /**
      * Same as {@link #collect(Function)}, except that the results are gathered into the specified {@code target}

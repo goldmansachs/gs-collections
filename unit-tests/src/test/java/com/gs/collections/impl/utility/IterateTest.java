@@ -78,6 +78,14 @@ import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
+import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
+import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
+import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
+import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
+import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.math.IntegerSum;
 import com.gs.collections.impl.math.Sum;
@@ -90,6 +98,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import static com.gs.collections.impl.factory.Iterables.*;
+import static org.junit.Assert.*;
 
 public class IterateTest
 {
@@ -1202,6 +1211,28 @@ public class IterateTest
     }
 
     @Test
+    public void collectBooleanWithTarget()
+    {
+        this.iterables.forEach(new Procedure<Iterable<Integer>>()
+        {
+            public void value(Iterable<Integer> each)
+            {
+                MutableBooleanCollection expected = new BooleanArrayList();
+                MutableBooleanCollection actual = Iterate.collectBoolean(each, PrimitiveFunctions.integerIsPositive(), expected);
+                Assert.assertTrue(expected.containsAll(true, true, true, true, true));
+                Assert.assertSame("Target list sent as parameter not returned", expected, actual);
+            }
+        });
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.collectBoolean(null, PrimitiveFunctions.integerIsPositive(), new BooleanArrayList());
+            }
+        });
+    }
+
+    @Test
     public void collectByte()
     {
         this.iterables.forEach(new Procedure<Iterable<Integer>>()
@@ -1217,6 +1248,28 @@ public class IterateTest
             public void run()
             {
                 Iterate.collectByte(null, PrimitiveFunctions.unboxIntegerToByte());
+            }
+        });
+    }
+
+    @Test
+    public void collectByteWithTarget()
+    {
+        this.iterables.forEach(new Procedure<Iterable<Integer>>()
+        {
+            public void value(Iterable<Integer> each)
+            {
+                MutableByteCollection expected = new ByteArrayList();
+                MutableByteCollection actual = Iterate.collectByte(each, PrimitiveFunctions.unboxIntegerToByte(), expected);
+                Assert.assertTrue(actual.containsAll((byte) 1, (byte) 2, (byte) 3, (byte) 4, (byte) 5));
+                Assert.assertSame("Target list sent as parameter not returned", expected, actual);
+            }
+        });
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.collectByte(null, PrimitiveFunctions.unboxIntegerToByte(), new ByteArrayList());
             }
         });
     }
@@ -1242,6 +1295,28 @@ public class IterateTest
     }
 
     @Test
+    public void collectCharWithTarget()
+    {
+        this.iterables.forEach(new Procedure<Iterable<Integer>>()
+        {
+            public void value(Iterable<Integer> each)
+            {
+                MutableCharCollection expected = new CharArrayList();
+                MutableCharCollection actual = Iterate.collectChar(each, PrimitiveFunctions.unboxIntegerToChar(), expected);
+                Assert.assertTrue(actual.containsAll((char) 1, (char) 2, (char) 3, (char) 4, (char) 5));
+                Assert.assertSame("Target list sent as parameter not returned", expected, actual);
+            }
+        });
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.collectChar(null, PrimitiveFunctions.unboxIntegerToChar(), new CharArrayList());
+            }
+        });
+    }
+
+    @Test
     public void collectDouble()
     {
         this.iterables.forEach(new Procedure<Iterable<Integer>>()
@@ -1257,6 +1332,28 @@ public class IterateTest
             public void run()
             {
                 Iterate.collectDouble(null, PrimitiveFunctions.unboxIntegerToDouble());
+            }
+        });
+    }
+
+    @Test
+    public void collectDoubleWithTarget()
+    {
+        this.iterables.forEach(new Procedure<Iterable<Integer>>()
+        {
+            public void value(Iterable<Integer> each)
+            {
+                MutableDoubleCollection expected = new DoubleArrayList();
+                MutableDoubleCollection actual = Iterate.collectDouble(each, PrimitiveFunctions.unboxIntegerToDouble(), expected);
+                Assert.assertTrue(actual.containsAll(1.0d, 2.0d, 3.0d, 4.0d, 5.0d));
+                Assert.assertSame("Target list sent as parameter not returned", expected, actual);
+            }
+        });
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.collectDouble(null, PrimitiveFunctions.unboxIntegerToDouble(), new DoubleArrayList());
             }
         });
     }
@@ -1282,6 +1379,28 @@ public class IterateTest
     }
 
     @Test
+    public void collectFloatWithTarget()
+    {
+        this.iterables.forEach(new Procedure<Iterable<Integer>>()
+        {
+            public void value(Iterable<Integer> each)
+            {
+                MutableFloatCollection expected = new FloatArrayList();
+                MutableFloatCollection actual = Iterate.collectFloat(each, PrimitiveFunctions.unboxIntegerToFloat(), expected);
+                Assert.assertTrue(actual.containsAll(1.0f, 2.0f, 3.0f, 4.0f, 5.0f));
+                Assert.assertSame("Target list sent as parameter not returned", expected, actual);
+            }
+        });
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.collectFloat(null, PrimitiveFunctions.unboxIntegerToFloat(), new FloatArrayList());
+            }
+        });
+    }
+
+    @Test
     public void collectInt()
     {
         this.iterables.forEach(new Procedure<Iterable<Integer>>()
@@ -1297,6 +1416,28 @@ public class IterateTest
             public void run()
             {
                 Iterate.collectInt(null, PrimitiveFunctions.unboxIntegerToInt());
+            }
+        });
+    }
+
+    @Test
+    public void collectIntWithTarget()
+    {
+        this.iterables.forEach(new Procedure<Iterable<Integer>>()
+        {
+            public void value(Iterable<Integer> each)
+            {
+                MutableIntCollection expected = new IntArrayList();
+                MutableIntCollection actual = Iterate.collectInt(each, PrimitiveFunctions.unboxIntegerToInt(), expected);
+                Assert.assertTrue(actual.containsAll(1, 2, 3, 4, 5));
+                assertSame("Target list sent as parameter not returned", expected, actual);
+            }
+        });
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.collectInt(null, PrimitiveFunctions.unboxIntegerToInt(), new IntArrayList());
             }
         });
     }
@@ -1322,6 +1463,28 @@ public class IterateTest
     }
 
     @Test
+    public void collectLongWithTarget()
+    {
+        this.iterables.forEach(new Procedure<Iterable<Integer>>()
+        {
+            public void value(Iterable<Integer> each)
+            {
+                MutableLongCollection expected = new LongArrayList();
+                MutableLongCollection actual = Iterate.collectLong(each, PrimitiveFunctions.unboxIntegerToLong(), expected);
+                Assert.assertTrue(actual.containsAll(1L, 2L, 3L, 4L, 5L));
+                Assert.assertSame("Target list sent as parameter not returned", expected, actual);
+            }
+        });
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.collectLong(null, PrimitiveFunctions.unboxIntegerToLong(), new LongArrayList());
+            }
+        });
+    }
+
+    @Test
     public void collectShort()
     {
         this.iterables.forEach(new Procedure<Iterable<Integer>>()
@@ -1337,6 +1500,28 @@ public class IterateTest
             public void run()
             {
                 Iterate.collectShort(null, PrimitiveFunctions.unboxIntegerToShort());
+            }
+        });
+    }
+
+    @Test
+    public void collectShortWithTarget()
+    {
+        this.iterables.forEach(new Procedure<Iterable<Integer>>()
+        {
+            public void value(Iterable<Integer> each)
+            {
+                MutableShortCollection expected = new ShortArrayList();
+                MutableShortCollection actual = Iterate.collectShort(each, PrimitiveFunctions.unboxIntegerToShort(), expected);
+                Assert.assertTrue(actual.containsAll((short) 1, (short) 2, (short) 3, (short) 4, (short) 5));
+                Assert.assertSame("Target list sent as parameter not returned", expected, actual);
+            }
+        });
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                Iterate.collectShort(null, PrimitiveFunctions.unboxIntegerToShort(), new ShortArrayList());
             }
         });
     }

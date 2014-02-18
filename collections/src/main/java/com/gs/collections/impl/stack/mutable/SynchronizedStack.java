@@ -45,6 +45,14 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
@@ -273,6 +281,14 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
         }
     }
 
+    public <R extends MutableBooleanCollection> R collectBoolean(BooleanFunction<? super T> booleanFunction, R target)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.collectBoolean(booleanFunction, target);
+        }
+    }
+
     public MutableByteStack collectByte(ByteFunction<? super T> byteFunction)
     {
         synchronized (this.lock)
@@ -281,6 +297,13 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
         }
     }
 
+    public <R extends MutableByteCollection> R collectByte(ByteFunction<? super T> byteFunction, R target)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.collectByte(byteFunction, target);
+        }
+    }
     public MutableCharStack collectChar(CharFunction<? super T> charFunction)
     {
         synchronized (this.lock)
@@ -289,6 +312,13 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
         }
     }
 
+    public <R extends MutableCharCollection> R collectChar(CharFunction<? super T> charFunction, R target)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.collectChar(charFunction, target);
+        }
+    }
     public MutableDoubleStack collectDouble(DoubleFunction<? super T> doubleFunction)
     {
         synchronized (this.lock)
@@ -297,6 +327,13 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
         }
     }
 
+    public <R extends MutableDoubleCollection> R collectDouble(DoubleFunction<? super T> doubleFunction, R target)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.collectDouble(doubleFunction, target);
+        }
+    }
     public MutableFloatStack collectFloat(FloatFunction<? super T> floatFunction)
     {
         synchronized (this.lock)
@@ -305,6 +342,13 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
         }
     }
 
+    public <R extends MutableFloatCollection> R collectFloat(FloatFunction<? super T> floatFunction, R target)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.collectFloat(floatFunction, target);
+        }
+    }
     public MutableIntStack collectInt(IntFunction<? super T> intFunction)
     {
         synchronized (this.lock)
@@ -313,6 +357,13 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
         }
     }
 
+    public <R extends MutableIntCollection> R collectInt(IntFunction<? super T> intFunction, R target)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.collectInt(intFunction, target);
+        }
+    }
     public MutableLongStack collectLong(LongFunction<? super T> longFunction)
     {
         synchronized (this.lock)
@@ -321,11 +372,26 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
         }
     }
 
+    public <R extends MutableLongCollection> R collectLong(LongFunction<? super T> longFunction, R target)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.collectLong(longFunction, target);
+        }
+    }
     public MutableShortStack collectShort(ShortFunction<? super T> shortFunction)
     {
         synchronized (this.lock)
         {
             return this.delegate.collectShort(shortFunction);
+        }
+    }
+
+    public <R extends MutableShortCollection> R collectShort(ShortFunction<? super T> shortFunction, R target)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.collectShort(shortFunction, target);
         }
     }
 

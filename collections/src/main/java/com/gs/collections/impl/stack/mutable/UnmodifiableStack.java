@@ -44,6 +44,14 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
@@ -164,9 +172,19 @@ public final class UnmodifiableStack<T> implements MutableStack<T>, Serializable
         return this.mutableStack.collectBoolean(booleanFunction);
     }
 
+    public <R extends MutableBooleanCollection> R collectBoolean(BooleanFunction<? super T> booleanFunction, R target)
+    {
+        return this.mutableStack.collectBoolean(booleanFunction, target);
+    }
+
     public MutableByteStack collectByte(ByteFunction<? super T> byteFunction)
     {
         return this.mutableStack.collectByte(byteFunction);
+    }
+
+    public <R extends MutableByteCollection> R collectByte(ByteFunction<? super T> byteFunction, R target)
+    {
+        return this.mutableStack.collectByte(byteFunction, target);
     }
 
     public MutableCharStack collectChar(CharFunction<? super T> charFunction)
@@ -174,9 +192,19 @@ public final class UnmodifiableStack<T> implements MutableStack<T>, Serializable
         return this.mutableStack.collectChar(charFunction);
     }
 
+    public <R extends MutableCharCollection> R collectChar(CharFunction<? super T> charFunction, R target)
+    {
+        return this.mutableStack.collectChar(charFunction, target);
+    }
+
     public MutableDoubleStack collectDouble(DoubleFunction<? super T> doubleFunction)
     {
         return this.mutableStack.collectDouble(doubleFunction);
+    }
+
+    public <R extends MutableDoubleCollection> R collectDouble(DoubleFunction<? super T> doubleFunction, R target)
+    {
+        return this.mutableStack.collectDouble(doubleFunction, target);
     }
 
     public MutableFloatStack collectFloat(FloatFunction<? super T> floatFunction)
@@ -184,9 +212,19 @@ public final class UnmodifiableStack<T> implements MutableStack<T>, Serializable
         return this.mutableStack.collectFloat(floatFunction);
     }
 
-    public MutableIntStack collectInt(IntFunction<? super T> function)
+    public <R extends MutableFloatCollection> R collectFloat(FloatFunction<? super T> floatFunction, R target)
     {
-        return this.mutableStack.collectInt(function);
+        return this.mutableStack.collectFloat(floatFunction, target);
+    }
+
+    public MutableIntStack collectInt(IntFunction<? super T> intFunction)
+    {
+        return this.mutableStack.collectInt(intFunction);
+    }
+
+    public <R extends MutableIntCollection> R collectInt(IntFunction<? super T> intFunction, R target)
+    {
+        return this.mutableStack.collectInt(intFunction, target);
     }
 
     public MutableLongStack collectLong(LongFunction<? super T> longFunction)
@@ -194,10 +232,21 @@ public final class UnmodifiableStack<T> implements MutableStack<T>, Serializable
         return this.mutableStack.collectLong(longFunction);
     }
 
+    public <R extends MutableLongCollection> R collectLong(LongFunction<? super T> longFunction, R target)
+    {
+        return this.mutableStack.collectLong(longFunction, target);
+    }
+
     public MutableShortStack collectShort(ShortFunction<? super T> shortFunction)
     {
         return this.mutableStack.collectShort(shortFunction);
     }
+
+    public <R extends MutableShortCollection> R collectShort(ShortFunction<? super T> shortFunction, R target)
+    {
+        return this.mutableStack.collectShort(shortFunction, target);
+    }
+
 
     public <P, V> MutableStack<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
     {

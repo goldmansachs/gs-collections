@@ -52,6 +52,14 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
@@ -278,11 +286,27 @@ public class SynchronizedRichIterable<T>
         }
     }
 
+    public <R extends MutableBooleanCollection> R collectBoolean(BooleanFunction<? super T> booleanFunction, R target)
+    {
+        synchronized (this.lock)
+        {
+            return this.iterable.collectBoolean(booleanFunction, target);
+        }
+    }
+
     public ByteIterable collectByte(ByteFunction<? super T> byteFunction)
     {
         synchronized (this.lock)
         {
             return this.iterable.collectByte(byteFunction);
+        }
+    }
+
+    public <R extends MutableByteCollection> R collectByte(ByteFunction<? super T> byteFunction, R target)
+    {
+        synchronized (this.lock)
+        {
+            return this.iterable.collectByte(byteFunction, target);
         }
     }
 
@@ -294,11 +318,27 @@ public class SynchronizedRichIterable<T>
         }
     }
 
+    public <R extends MutableCharCollection> R collectChar(CharFunction<? super T> charFunction, R target)
+    {
+        synchronized (this.lock)
+        {
+            return this.iterable.collectChar(charFunction, target);
+        }
+    }
+
     public DoubleIterable collectDouble(DoubleFunction<? super T> doubleFunction)
     {
         synchronized (this.lock)
         {
             return this.iterable.collectDouble(doubleFunction);
+        }
+    }
+
+    public <R extends MutableDoubleCollection> R collectDouble(DoubleFunction<? super T> doubleFunction, R target)
+    {
+        synchronized (this.lock)
+        {
+            return this.iterable.collectDouble(doubleFunction, target);
         }
     }
 
@@ -310,11 +350,27 @@ public class SynchronizedRichIterable<T>
         }
     }
 
+    public <R extends MutableFloatCollection> R collectFloat(FloatFunction<? super T> floatFunction, R target)
+    {
+        synchronized (this.lock)
+        {
+            return this.iterable.collectFloat(floatFunction, target);
+        }
+    }
+
     public IntIterable collectInt(IntFunction<? super T> intFunction)
     {
         synchronized (this.lock)
         {
             return this.iterable.collectInt(intFunction);
+        }
+    }
+
+    public <R extends MutableIntCollection> R collectInt(IntFunction<? super T> intFunction, R target)
+    {
+        synchronized (this.lock)
+        {
+            return this.iterable.collectInt(intFunction, target);
         }
     }
 
@@ -326,11 +382,27 @@ public class SynchronizedRichIterable<T>
         }
     }
 
+    public <R extends MutableLongCollection> R collectLong(LongFunction<? super T> longFunction, R target)
+    {
+        synchronized (this.lock)
+        {
+            return this.iterable.collectLong(longFunction, target);
+        }
+    }
+
     public ShortIterable collectShort(ShortFunction<? super T> shortFunction)
     {
         synchronized (this.lock)
         {
             return this.iterable.collectShort(shortFunction);
+        }
+    }
+
+    public <R extends MutableShortCollection> R collectShort(ShortFunction<? super T> shortFunction, R target)
+    {
+        synchronized (this.lock)
+        {
+            return this.iterable.collectShort(shortFunction, target);
         }
     }
 

@@ -43,6 +43,14 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.list.primitive.MutableByteList;
@@ -612,6 +620,25 @@ public final class ArrayIterate
     }
 
     /**
+     * @see Iterate#collectBoolean(Iterable, BooleanFunction, MutableBooleanCollection)
+     */
+    public static <T, R extends MutableBooleanCollection> R collectBoolean(
+            T[] objectArray,
+            BooleanFunction<? super T> booleanFunction,
+            R target)
+    {
+        if (objectArray == null)
+        {
+            throw new IllegalArgumentException("Cannot perform a collectBoolean on null");
+        }
+        for (T each : objectArray)
+        {
+            target.add(booleanFunction.booleanValueOf(each));
+        }
+        return target;
+    }
+
+    /**
      * @see Iterate#collectByte(Iterable, ByteFunction)
      */
     public static <T> MutableByteList collectByte(
@@ -628,6 +655,25 @@ public final class ArrayIterate
             result.add(byteFunction.byteValueOf(each));
         }
         return result;
+    }
+
+    /**
+     * @see Iterate#collectByte(Iterable, ByteFunction, MutableByteCollection)
+     */
+    public static <T, R extends MutableByteCollection> R collectByte(
+            T[] objectArray,
+            ByteFunction<? super T> byteFunction,
+            R target)
+    {
+        if (objectArray == null)
+        {
+            throw new IllegalArgumentException("Cannot perform a collectByte on null");
+        }
+        for (T each : objectArray)
+        {
+            target.add(byteFunction.byteValueOf(each));
+        }
+        return target;
     }
 
     /**
@@ -650,6 +696,26 @@ public final class ArrayIterate
     }
 
     /**
+     * @see Iterate#collectChar(Iterable, CharFunction, MutableCharCollection)
+     */
+    public static <T, R extends MutableCharCollection> R collectChar(
+            T[] objectArray,
+            CharFunction<? super T> charFunction,
+            R target)
+    {
+        if (objectArray == null)
+        {
+            throw new IllegalArgumentException("Cannot perform a collectChar on null");
+        }
+        for (T each : objectArray)
+        {
+            target.add(charFunction.charValueOf(each));
+        }
+        return target;
+    }
+
+
+    /**
      * @see Iterate#collectDouble(Iterable, DoubleFunction)
      */
     public static <T> MutableDoubleList collectDouble(
@@ -666,6 +732,25 @@ public final class ArrayIterate
             result.add(doubleFunction.doubleValueOf(each));
         }
         return result;
+    }
+
+    /**
+     * @see Iterate#collectDouble(Iterable, DoubleFunction, MutableDoubleCollection)
+     */
+    public static <T, R extends MutableDoubleCollection> R collectDouble(
+            T[] objectArray,
+            DoubleFunction<? super T> doubleFunction,
+            R target)
+    {
+        if (objectArray == null)
+        {
+            throw new IllegalArgumentException("Cannot perform a collectDouble on null");
+        }
+        for (T each : objectArray)
+        {
+            target.add(doubleFunction.doubleValueOf(each));
+        }
+        return target;
     }
 
     /**
@@ -688,6 +773,25 @@ public final class ArrayIterate
     }
 
     /**
+     * @see Iterate#collectFloat(Iterable, FloatFunction, MutableFloatCollection)
+     */
+    public static <T, R extends MutableFloatCollection> R collectFloat(
+            T[] objectArray,
+            FloatFunction<? super T> floatFunction,
+            R target)
+    {
+        if (objectArray == null)
+        {
+            throw new IllegalArgumentException("Cannot perform a collectFloat on null");
+        }
+        for (T each : objectArray)
+        {
+            target.add(floatFunction.floatValueOf(each));
+        }
+        return target;
+    }
+
+    /**
      * @see Iterate#collectInt(Iterable, IntFunction)
      */
     public static <T> MutableIntList collectInt(
@@ -704,6 +808,25 @@ public final class ArrayIterate
             result.add(intFunction.intValueOf(each));
         }
         return result;
+    }
+
+    /**
+     * @see Iterate#collectInt(Iterable, IntFunction, MutableIntCollection)
+     */
+    public static <T, R extends MutableIntCollection> R collectInt(
+            T[] objectArray,
+            IntFunction<? super T> intFunction,
+            R target)
+    {
+        if (objectArray == null)
+        {
+            throw new IllegalArgumentException("Cannot perform a collectInt on null");
+        }
+        for (T each : objectArray)
+        {
+            target.add(intFunction.intValueOf(each));
+        }
+        return target;
     }
 
     /**
@@ -726,6 +849,26 @@ public final class ArrayIterate
     }
 
     /**
+     * @see Iterate#collectLong(Iterable, LongFunction, MutableLongCollection)
+     */
+    public static <T, R extends MutableLongCollection> R collectLong(
+            T[] objectArray,
+            LongFunction<? super T> longFunction,
+            R target)
+    {
+        if (objectArray == null)
+        {
+            throw new IllegalArgumentException("Cannot perform a collectLong on null");
+        }
+        for (T each : objectArray)
+        {
+            target.add(longFunction.longValueOf(each));
+        }
+        return target;
+    }
+
+
+    /**
      * @see Iterate#collectShort(Iterable, ShortFunction)
      */
     public static <T> MutableShortList collectShort(
@@ -743,6 +886,26 @@ public final class ArrayIterate
         }
         return result;
     }
+
+    /**
+     * @see Iterate#collectShort(Iterable, ShortFunction, MutableShortCollection)
+     */
+    public static <T, R extends MutableShortCollection> R collectShort(
+            T[] objectArray,
+            ShortFunction<? super T> shortFunction,
+            R target)
+    {
+        if (objectArray == null)
+        {
+            throw new IllegalArgumentException("Cannot perform a collectShort on null");
+        }
+        for (T each : objectArray)
+        {
+            target.add(shortFunction.shortValueOf(each));
+        }
+        return target;
+    }
+
 
     /**
      * @see Iterate#flatCollect(Iterable, Function)

@@ -18,6 +18,13 @@ public Immutable<name>Collection collect<name>(<name>Function\<? super V> <type>
 {
     return <name>Lists.immutable.with(<type>Function.<type>ValueOf(this.value1));
 }
+
+public \<R extends Mutable<name>Collection> R collect<name>(<name>Function\<? super V> <type>Function, R target)
+{
+    target.add(<type>Function.<type>ValueOf(this.value1));
+    return target;
+}
+
 >>
 
 body(type, name) ::= <<
@@ -111,6 +118,14 @@ import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.tuple.primitive.PrimitiveTuples;
 import com.gs.collections.impl.utility.Iterate;
 import com.gs.collections.impl.utility.internal.IterableIterate;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 
 /**
  * Immutable<name>ObjectSingletonMap is an optimization for {@link Immutable<name>ObjectMap} of size 1.

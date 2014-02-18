@@ -329,14 +329,29 @@ abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
         return this.delegate.collectBoolean(booleanFunction);
     }
 
+    public <R extends MutableBooleanCollection> R collectBoolean(BooleanFunction<? super V> booleanFunction, R target)
+    {
+        return this.delegate.collectBoolean(booleanFunction, target);
+    }
+
     public MutableByteCollection collectByte(ByteFunction<? super V> byteFunction)
     {
         return this.delegate.collectByte(byteFunction);
     }
 
+    public <R extends MutableByteCollection> R collectByte(ByteFunction<? super V> byteFunction, R target)
+    {
+        return this.delegate.collectByte(byteFunction, target);
+    }
+
     public MutableCharCollection collectChar(CharFunction<? super V> charFunction)
     {
         return this.delegate.collectChar(charFunction);
+    }
+
+    public <R extends MutableCharCollection> R collectChar(CharFunction<? super V> charFunction, R target)
+    {
+        return this.delegate.collectChar(charFunction, target);
     }
 
     public <P, R extends Collection<V>> R selectWith(Predicate2<? super V, ? super P> predicate, P parameter, R targetCollection)
@@ -349,9 +364,19 @@ abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
         return this.delegate.collectDouble(doubleFunction);
     }
 
+    public <R extends MutableDoubleCollection> R collectDouble(DoubleFunction<? super V> doubleFunction, R target)
+    {
+        return this.delegate.collectDouble(doubleFunction, target);
+    }
+
     public MutableFloatCollection collectFloat(FloatFunction<? super V> floatFunction)
     {
         return this.delegate.collectFloat(floatFunction);
+    }
+
+    public <R extends MutableFloatCollection> R collectFloat(FloatFunction<? super V> floatFunction, R target)
+    {
+        return this.delegate.collectFloat(floatFunction, target);
     }
 
     public MutableIntCollection collectInt(IntFunction<? super V> intFunction)
@@ -359,14 +384,29 @@ abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
         return this.delegate.collectInt(intFunction);
     }
 
+    public <R extends MutableIntCollection> R collectInt(IntFunction<? super V> intFunction, R target)
+    {
+        return this.delegate.collectInt(intFunction, target);
+    }
+
     public MutableLongCollection collectLong(LongFunction<? super V> longFunction)
     {
         return this.delegate.collectLong(longFunction);
     }
 
+    public <R extends MutableLongCollection> R collectLong(LongFunction<? super V> longFunction, R target)
+    {
+        return this.delegate.collectLong(longFunction, target);
+    }
+
     public MutableShortCollection collectShort(ShortFunction<? super V> shortFunction)
     {
         return this.delegate.collectShort(shortFunction);
+    }
+
+    public <R extends MutableShortCollection> R collectShort(ShortFunction<? super V> shortFunction, R target)
+    {
+        return this.delegate.collectShort(shortFunction, target);
     }
 
     public <VV> MutableCollection<VV> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends VV> function)

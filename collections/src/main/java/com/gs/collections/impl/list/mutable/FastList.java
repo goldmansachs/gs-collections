@@ -50,6 +50,14 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.list.primitive.MutableByteList;
@@ -789,89 +797,129 @@ public class FastList<T>
     @Override
     public MutableBooleanList collectBoolean(BooleanFunction<? super T> booleanFunction)
     {
-        BooleanArrayList result = new BooleanArrayList(this.size);
+        return this.collectBoolean(booleanFunction, new BooleanArrayList(this.size));
+    }
+
+    @Override
+    public <R extends MutableBooleanCollection> R collectBoolean(BooleanFunction<? super T> booleanFunction, R target)
+    {
         for (int i = 0; i < this.size; i++)
         {
-            result.add(booleanFunction.booleanValueOf(this.items[i]));
+            target.add(booleanFunction.booleanValueOf(this.items[i]));
         }
-        return result;
+        return target;
     }
 
     @Override
     public MutableByteList collectByte(ByteFunction<? super T> byteFunction)
     {
-        ByteArrayList result = new ByteArrayList(this.size);
+        return this.collectByte(byteFunction, new ByteArrayList(this.size));
+    }
+
+    @Override
+    public <R extends MutableByteCollection> R collectByte(ByteFunction<? super T> byteFunction, R target)
+    {
         for (int i = 0; i < this.size; i++)
         {
-            result.add(byteFunction.byteValueOf(this.items[i]));
+            target.add(byteFunction.byteValueOf(this.items[i]));
         }
-        return result;
+        return target;
     }
 
     @Override
     public MutableCharList collectChar(CharFunction<? super T> charFunction)
     {
-        CharArrayList result = new CharArrayList(this.size);
+        return this.collectChar(charFunction, new CharArrayList(this.size));
+    }
+
+    @Override
+    public <R extends MutableCharCollection> R collectChar(CharFunction<? super T> charFunction, R target)
+    {
         for (int i = 0; i < this.size; i++)
         {
-            result.add(charFunction.charValueOf(this.items[i]));
+            target.add(charFunction.charValueOf(this.items[i]));
         }
-        return result;
+        return target;
     }
 
     @Override
     public MutableDoubleList collectDouble(DoubleFunction<? super T> doubleFunction)
     {
-        DoubleArrayList result = new DoubleArrayList(this.size);
+        return this.collectDouble(doubleFunction, new DoubleArrayList(this.size));
+    }
+
+    @Override
+    public <R extends MutableDoubleCollection> R collectDouble(DoubleFunction<? super T> doubleFunction, R target)
+    {
         for (int i = 0; i < this.size; i++)
         {
-            result.add(doubleFunction.doubleValueOf(this.items[i]));
+            target.add(doubleFunction.doubleValueOf(this.items[i]));
         }
-        return result;
+        return target;
     }
 
     @Override
     public MutableFloatList collectFloat(FloatFunction<? super T> floatFunction)
     {
-        FloatArrayList result = new FloatArrayList(this.size);
+        return this.collectFloat(floatFunction, new FloatArrayList(this.size));
+    }
+
+    @Override
+    public <R extends MutableFloatCollection> R collectFloat(FloatFunction<? super T> floatFunction, R target)
+    {
         for (int i = 0; i < this.size; i++)
         {
-            result.add(floatFunction.floatValueOf(this.items[i]));
+            target.add(floatFunction.floatValueOf(this.items[i]));
         }
-        return result;
+        return target;
     }
 
     @Override
     public MutableIntList collectInt(IntFunction<? super T> intFunction)
     {
-        IntArrayList result = new IntArrayList(this.size);
+        return this.collectInt(intFunction, new IntArrayList(this.size));
+    }
+
+    @Override
+    public <R extends MutableIntCollection> R collectInt(IntFunction<? super T> intFunction, R target)
+    {
         for (int i = 0; i < this.size; i++)
         {
-            result.add(intFunction.intValueOf(this.items[i]));
+            target.add(intFunction.intValueOf(this.items[i]));
         }
-        return result;
+        return target;
     }
 
     @Override
     public MutableLongList collectLong(LongFunction<? super T> longFunction)
     {
-        LongArrayList result = new LongArrayList(this.size);
+        return this.collectLong(longFunction, new LongArrayList(this.size));
+    }
+
+    @Override
+    public <R extends MutableLongCollection> R collectLong(LongFunction<? super T> longFunction, R target)
+    {
         for (int i = 0; i < this.size; i++)
         {
-            result.add(longFunction.longValueOf(this.items[i]));
+            target.add(longFunction.longValueOf(this.items[i]));
         }
-        return result;
+        return target;
     }
 
     @Override
     public MutableShortList collectShort(ShortFunction<? super T> shortFunction)
     {
-        ShortArrayList result = new ShortArrayList(this.size);
+        return this.collectShort(shortFunction, new ShortArrayList(this.size));
+    }
+
+    @Override
+    public <R extends MutableShortCollection> R collectShort(ShortFunction<? super T> shortFunction, R target)
+    {
         for (int i = 0; i < this.size; i++)
         {
-            result.add(shortFunction.shortValueOf(this.items[i]));
+            target.add(shortFunction.shortValueOf(this.items[i]));
         }
-        return result;
+        return target;
     }
 
     @Override

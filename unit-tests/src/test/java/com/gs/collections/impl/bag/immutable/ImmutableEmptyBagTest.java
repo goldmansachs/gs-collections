@@ -28,6 +28,7 @@ import com.gs.collections.api.partition.bag.PartitionImmutableBag;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
@@ -385,6 +386,24 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
                 return "4".equals(s);
             }
         });
+        Assert.assertEquals(0, result.sizeDistinct());
+        Assert.assertEquals(0, result.occurrencesOf(true));
+        Assert.assertEquals(0, result.occurrencesOf(false));
+    }
+
+    @Override
+    @Test
+    public void collectBooleanWithTarget()
+    {
+        BooleanHashBag target = new BooleanHashBag();
+        BooleanHashBag result = this.newBag().collectBoolean(new BooleanFunction<String>()
+        {
+            public boolean booleanValueOf(String s)
+            {
+                return "4".equals(s);
+            }
+        }, target);
+        Assert.assertSame("Target sent as parameter not returned", target, result);
         Assert.assertEquals(0, result.sizeDistinct());
         Assert.assertEquals(0, result.occurrencesOf(true));
         Assert.assertEquals(0, result.occurrencesOf(false));

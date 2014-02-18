@@ -52,6 +52,14 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
@@ -823,58 +831,90 @@ public class UnifiedSet<K>
 
     public MutableBooleanSet collectBoolean(BooleanFunction<? super K> booleanFunction)
     {
-        BooleanHashSet result = new BooleanHashSet();
-        this.forEach(new CollectBooleanProcedure<K>(booleanFunction, result));
-        return result;
+        return this.collectBoolean(booleanFunction, new BooleanHashSet());
+    }
+
+    public <R extends MutableBooleanCollection> R collectBoolean(BooleanFunction<? super K> booleanFunction, R target)
+    {
+        this.forEach(new CollectBooleanProcedure<K>(booleanFunction, target));
+        return target;
     }
 
     public MutableByteSet collectByte(ByteFunction<? super K> byteFunction)
     {
-        ByteHashSet result = new ByteHashSet(this.size());
-        this.forEach(new CollectByteProcedure<K>(byteFunction, result));
-        return result;
+        return this.collectByte(byteFunction, new ByteHashSet());
+    }
+
+    public <R extends MutableByteCollection> R collectByte(ByteFunction<? super K> byteFunction, R target)
+    {
+        this.forEach(new CollectByteProcedure<K>(byteFunction, target));
+        return target;
     }
 
     public MutableCharSet collectChar(CharFunction<? super K> charFunction)
     {
-        CharHashSet result = new CharHashSet(this.size());
-        this.forEach(new CollectCharProcedure<K>(charFunction, result));
-        return result;
+        return this.collectChar(charFunction, new CharHashSet());
+    }
+
+    public <R extends MutableCharCollection> R collectChar(CharFunction<? super K> charFunction, R target)
+    {
+        this.forEach(new CollectCharProcedure<K>(charFunction, target));
+        return target;
     }
 
     public MutableDoubleSet collectDouble(DoubleFunction<? super K> doubleFunction)
     {
-        DoubleHashSet result = new DoubleHashSet(this.size());
-        this.forEach(new CollectDoubleProcedure<K>(doubleFunction, result));
-        return result;
+        return this.collectDouble(doubleFunction, new DoubleHashSet());
+    }
+
+    public <R extends MutableDoubleCollection> R collectDouble(DoubleFunction<? super K> doubleFunction, R target)
+    {
+        this.forEach(new CollectDoubleProcedure<K>(doubleFunction, target));
+        return target;
     }
 
     public MutableFloatSet collectFloat(FloatFunction<? super K> floatFunction)
     {
-        FloatHashSet result = new FloatHashSet(this.size());
-        this.forEach(new CollectFloatProcedure<K>(floatFunction, result));
-        return result;
+        return this.collectFloat(floatFunction, new FloatHashSet());
+    }
+
+    public <R extends MutableFloatCollection> R collectFloat(FloatFunction<? super K> floatFunction, R target)
+    {
+        this.forEach(new CollectFloatProcedure<K>(floatFunction, target));
+        return target;
     }
 
     public MutableIntSet collectInt(IntFunction<? super K> intFunction)
     {
-        IntHashSet result = new IntHashSet(this.size());
-        this.forEach(new CollectIntProcedure<K>(intFunction, result));
-        return result;
+        return this.collectInt(intFunction, new IntHashSet());
+    }
+
+    public <R extends MutableIntCollection> R collectInt(IntFunction<? super K> intFunction, R target)
+    {
+        this.forEach(new CollectIntProcedure<K>(intFunction, target));
+        return target;
     }
 
     public MutableLongSet collectLong(LongFunction<? super K> longFunction)
     {
-        LongHashSet result = new LongHashSet(this.size());
-        this.forEach(new CollectLongProcedure<K>(longFunction, result));
-        return result;
+        return this.collectLong(longFunction, new LongHashSet());
+    }
+
+    public <R extends MutableLongCollection> R collectLong(LongFunction<? super K> longFunction, R target)
+    {
+        this.forEach(new CollectLongProcedure<K>(longFunction, target));
+        return target;
     }
 
     public MutableShortSet collectShort(ShortFunction<? super K> shortFunction)
     {
-        ShortHashSet result = new ShortHashSet(this.size());
-        this.forEach(new CollectShortProcedure<K>(shortFunction, result));
-        return result;
+        return this.collectShort(shortFunction, new ShortHashSet());
+    }
+
+    public <R extends MutableShortCollection> R collectShort(ShortFunction<? super K> shortFunction, R target)
+    {
+        this.forEach(new CollectShortProcedure<K>(shortFunction, target));
+        return target;
     }
 
     public <V, R extends Collection<V>> R collect(Function<? super K, ? extends V> function, R target)

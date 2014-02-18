@@ -45,6 +45,14 @@ import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.list.primitive.MutableByteList;
@@ -702,9 +710,19 @@ public class UnmodifiableTreeMap<K, V>
         return this.getMutableSortedMap().collectBoolean(booleanFunction);
     }
 
+    public <R extends MutableBooleanCollection> R collectBoolean(BooleanFunction<? super V> booleanFunction, R target)
+    {
+        return this.getMutableSortedMap().collectBoolean(booleanFunction, target);
+    }
+
     public MutableByteList collectByte(ByteFunction<? super V> byteFunction)
     {
         return this.getMutableSortedMap().collectByte(byteFunction);
+    }
+
+    public <R extends MutableByteCollection> R collectByte(ByteFunction<? super V> byteFunction, R target)
+    {
+        return this.getMutableSortedMap().collectByte(byteFunction, target);
     }
 
     public MutableCharList collectChar(CharFunction<? super V> charFunction)
@@ -712,9 +730,19 @@ public class UnmodifiableTreeMap<K, V>
         return this.getMutableSortedMap().collectChar(charFunction);
     }
 
+    public <R extends MutableCharCollection> R collectChar(CharFunction<? super V> charFunction, R target)
+    {
+        return this.getMutableSortedMap().collectChar(charFunction, target);
+    }
+
     public MutableDoubleList collectDouble(DoubleFunction<? super V> doubleFunction)
     {
         return this.getMutableSortedMap().collectDouble(doubleFunction);
+    }
+
+    public <R extends MutableDoubleCollection> R collectDouble(DoubleFunction<? super V> doubleFunction, R target)
+    {
+        return this.getMutableSortedMap().collectDouble(doubleFunction, target);
     }
 
     public MutableFloatList collectFloat(FloatFunction<? super V> floatFunction)
@@ -722,9 +750,19 @@ public class UnmodifiableTreeMap<K, V>
         return this.getMutableSortedMap().collectFloat(floatFunction);
     }
 
+    public <R extends MutableFloatCollection> R collectFloat(FloatFunction<? super V> floatFunction, R target)
+    {
+        return this.getMutableSortedMap().collectFloat(floatFunction, target);
+    }
+
     public MutableIntList collectInt(IntFunction<? super V> intFunction)
     {
         return this.getMutableSortedMap().collectInt(intFunction);
+    }
+
+    public <R extends MutableIntCollection> R collectInt(IntFunction<? super V> intFunction, R target)
+    {
+        return this.getMutableSortedMap().collectInt(intFunction, target);
     }
 
     public MutableLongList collectLong(LongFunction<? super V> longFunction)
@@ -732,9 +770,19 @@ public class UnmodifiableTreeMap<K, V>
         return this.getMutableSortedMap().collectLong(longFunction);
     }
 
+    public <R extends MutableLongCollection> R collectLong(LongFunction<? super V> longFunction, R target)
+    {
+        return this.getMutableSortedMap().collectLong(longFunction, target);
+    }
+
     public MutableShortList collectShort(ShortFunction<? super V> shortFunction)
     {
         return this.getMutableSortedMap().collectShort(shortFunction);
+    }
+
+    public <R extends MutableShortCollection> R collectShort(ShortFunction<? super V> shortFunction, R target)
+    {
+        return this.getMutableSortedMap().collectShort(shortFunction, target);
     }
 
     public <R> MutableList<R> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function)

@@ -669,12 +669,38 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
+    public <R extends MutableBooleanCollection> R collectBoolean(BooleanFunction<? super T> booleanFunction, R target)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.getDelegate().collectBoolean(booleanFunction, target);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
     public MutableByteCollection collectByte(ByteFunction<? super T> byteFunction)
     {
         this.acquireReadLock();
         try
         {
             return this.getDelegate().collectByte(byteFunction);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public <R extends MutableByteCollection> R collectByte(ByteFunction<? super T> byteFunction, R target)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.getDelegate().collectByte(byteFunction, target);
         }
         finally
         {
@@ -695,12 +721,38 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
+    public <R extends MutableCharCollection> R collectChar(CharFunction<? super T> charFunction, R target)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.getDelegate().collectChar(charFunction, target);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
     public MutableDoubleCollection collectDouble(DoubleFunction<? super T> doubleFunction)
     {
         this.acquireReadLock();
         try
         {
             return this.getDelegate().collectDouble(doubleFunction);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public <R extends MutableDoubleCollection> R collectDouble(DoubleFunction<? super T> doubleFunction, R target)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.getDelegate().collectDouble(doubleFunction, target);
         }
         finally
         {
@@ -721,12 +773,38 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
+    public <R extends MutableFloatCollection> R collectFloat(FloatFunction<? super T> floatFunction, R target)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.getDelegate().collectFloat(floatFunction, target);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
     public MutableIntCollection collectInt(IntFunction<? super T> intFunction)
     {
         this.acquireReadLock();
         try
         {
             return this.getDelegate().collectInt(intFunction);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public <R extends MutableIntCollection> R collectInt(IntFunction<? super T> intFunction, R target)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.getDelegate().collectInt(intFunction, target);
         }
         finally
         {
@@ -747,12 +825,38 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
+    public <R extends MutableLongCollection> R collectLong(LongFunction<? super T> longFunction, R target)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.getDelegate().collectLong(longFunction, target);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
     public MutableShortCollection collectShort(ShortFunction<? super T> shortFunction)
     {
         this.acquireReadLock();
         try
         {
             return this.getDelegate().collectShort(shortFunction);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public <R extends MutableShortCollection> R collectShort(ShortFunction<? super T> shortFunction, R target)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.getDelegate().collectShort(shortFunction, target);
         }
         finally
         {

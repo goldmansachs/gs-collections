@@ -45,6 +45,14 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
+import com.gs.collections.api.collection.primitive.MutableByteCollection;
+import com.gs.collections.api.collection.primitive.MutableCharCollection;
+import com.gs.collections.api.collection.primitive.MutableDoubleCollection;
+import com.gs.collections.api.collection.primitive.MutableFloatCollection;
+import com.gs.collections.api.collection.primitive.MutableIntCollection;
+import com.gs.collections.api.collection.primitive.MutableLongCollection;
+import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.list.primitive.MutableByteList;
@@ -341,13 +349,23 @@ public final class RandomAccessListIterate
             List<T> list,
             BooleanFunction<? super T> booleanFunction)
     {
+        return RandomAccessListIterate.collectBoolean(list, booleanFunction, new BooleanArrayList(list.size()));
+    }
+
+    /**
+     * @see Iterate#collectBoolean(Iterable, BooleanFunction)
+     */
+    public static <T, R extends MutableBooleanCollection> R collectBoolean(
+            List<T> list,
+            BooleanFunction<? super T> booleanFunction,
+            R target)
+    {
         int size = list.size();
-        MutableBooleanList result = new BooleanArrayList(size);
         for (int i = 0; i < size; i++)
         {
-            result.add(booleanFunction.booleanValueOf(list.get(i)));
+            target.add(booleanFunction.booleanValueOf(list.get(i)));
         }
-        return result;
+        return target;
     }
 
     /**
@@ -357,13 +375,23 @@ public final class RandomAccessListIterate
             List<T> list,
             ByteFunction<? super T> byteFunction)
     {
+        return RandomAccessListIterate.collectByte(list, byteFunction, new ByteArrayList(list.size()));
+    }
+
+    /**
+     * @see Iterate#collectByte(Iterable, ByteFunction)
+     */
+    public static <T, R extends MutableByteCollection> R collectByte(
+            List<T> list,
+            ByteFunction<? super T> byteFunction,
+            R target)
+    {
         int size = list.size();
-        MutableByteList result = new ByteArrayList(size);
         for (int i = 0; i < size; i++)
         {
-            result.add(byteFunction.byteValueOf(list.get(i)));
+            target.add(byteFunction.byteValueOf(list.get(i)));
         }
-        return result;
+        return target;
     }
 
     /**
@@ -373,13 +401,23 @@ public final class RandomAccessListIterate
             List<T> list,
             CharFunction<? super T> charFunction)
     {
+        return RandomAccessListIterate.collectChar(list, charFunction, new CharArrayList(list.size()));
+    }
+
+    /**
+     * @see Iterate#collectChar(Iterable, CharFunction)
+     */
+    public static <T, R extends MutableCharCollection> R collectChar(
+            List<T> list,
+            CharFunction<? super T> charFunction,
+            R target)
+    {
         int size = list.size();
-        MutableCharList result = new CharArrayList(size);
         for (int i = 0; i < size; i++)
         {
-            result.add(charFunction.charValueOf(list.get(i)));
+            target.add(charFunction.charValueOf(list.get(i)));
         }
-        return result;
+        return target;
     }
 
     /**
@@ -389,13 +427,23 @@ public final class RandomAccessListIterate
             List<T> list,
             DoubleFunction<? super T> doubleFunction)
     {
+        return RandomAccessListIterate.collectDouble(list, doubleFunction, new DoubleArrayList(list.size()));
+    }
+
+    /**
+     * @see Iterate#collectDouble(Iterable, DoubleFunction)
+     */
+    public static <T, R extends MutableDoubleCollection> R collectDouble(
+            List<T> list,
+            DoubleFunction<? super T> doubleFunction,
+            R target)
+    {
         int size = list.size();
-        MutableDoubleList result = new DoubleArrayList(size);
         for (int i = 0; i < size; i++)
         {
-            result.add(doubleFunction.doubleValueOf(list.get(i)));
+            target.add(doubleFunction.doubleValueOf(list.get(i)));
         }
-        return result;
+        return target;
     }
 
     /**
@@ -405,14 +453,25 @@ public final class RandomAccessListIterate
             List<T> list,
             FloatFunction<? super T> floatFunction)
     {
+        return RandomAccessListIterate.collectFloat(list, floatFunction, new FloatArrayList(list.size()));
+    }
+
+    /**
+     * @see Iterate#collectFloat(Iterable, FloatFunction)
+     */
+    public static <T, R extends MutableFloatCollection> R collectFloat(
+            List<T> list,
+            FloatFunction<? super T> floatFunction,
+            R target)
+    {
         int size = list.size();
-        MutableFloatList result = new FloatArrayList(size);
         for (int i = 0; i < size; i++)
         {
-            result.add(floatFunction.floatValueOf(list.get(i)));
+            target.add(floatFunction.floatValueOf(list.get(i)));
         }
-        return result;
+        return target;
     }
+
 
     /**
      * @see Iterate#collectInt(Iterable, IntFunction)
@@ -421,14 +480,25 @@ public final class RandomAccessListIterate
             List<T> list,
             IntFunction<? super T> intFunction)
     {
+        return RandomAccessListIterate.collectInt(list, intFunction, new IntArrayList(list.size()));
+    }
+
+    /**
+     * @see Iterate#collectInt(Iterable, IntFunction)
+     */
+    public static <T, R extends MutableIntCollection> R collectInt(
+            List<T> list,
+            IntFunction<? super T> intFunction,
+            R target)
+    {
         int size = list.size();
-        MutableIntList result = new IntArrayList(size);
         for (int i = 0; i < size; i++)
         {
-            result.add(intFunction.intValueOf(list.get(i)));
+            target.add(intFunction.intValueOf(list.get(i)));
         }
-        return result;
+        return target;
     }
+
 
     /**
      * @see Iterate#collectLong(Iterable, LongFunction)
@@ -437,14 +507,25 @@ public final class RandomAccessListIterate
             List<T> list,
             LongFunction<? super T> longFunction)
     {
+        return RandomAccessListIterate.collectLong(list, longFunction, new LongArrayList(list.size()));
+    }
+
+    /**
+     * @see Iterate#collectLong(Iterable, LongFunction)
+     */
+    public static <T, R extends MutableLongCollection> R collectLong(
+            List<T> list,
+            LongFunction<? super T> longFunction,
+            R target)
+    {
         int size = list.size();
-        MutableLongList result = new LongArrayList(size);
         for (int i = 0; i < size; i++)
         {
-            result.add(longFunction.longValueOf(list.get(i)));
+            target.add(longFunction.longValueOf(list.get(i)));
         }
-        return result;
+        return target;
     }
+
 
     /**
      * @see Iterate#collectShort(Iterable, ShortFunction)
@@ -453,14 +534,25 @@ public final class RandomAccessListIterate
             List<T> list,
             ShortFunction<? super T> shortFunction)
     {
+        return RandomAccessListIterate.collectShort(list, shortFunction, new ShortArrayList(list.size()));
+    }
+
+    /**
+     * @see Iterate#collectShort(Iterable, ShortFunction)
+     */
+    public static <T, R extends MutableShortCollection> R collectShort(
+            List<T> list,
+            ShortFunction<? super T> shortFunction,
+            R target)
+    {
         int size = list.size();
-        MutableShortList result = new ShortArrayList(size);
         for (int i = 0; i < size; i++)
         {
-            result.add(shortFunction.shortValueOf(list.get(i)));
+            target.add(shortFunction.shortValueOf(list.get(i)));
         }
-        return result;
+        return target;
     }
+
 
     /**
      * @see Iterate#flatCollect(Iterable, Function)

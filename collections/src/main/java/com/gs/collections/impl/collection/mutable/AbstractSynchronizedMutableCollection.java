@@ -451,11 +451,27 @@ public class AbstractSynchronizedMutableCollection<T>
         }
     }
 
+    public <R extends MutableBooleanCollection> R collectBoolean(BooleanFunction<? super T> booleanFunction, R target)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.collectBoolean(booleanFunction, target);
+        }
+    }
+
     public MutableByteCollection collectByte(ByteFunction<? super T> byteFunction)
     {
         synchronized (this.lock)
         {
             return this.collection.collectByte(byteFunction);
+        }
+    }
+
+    public <R extends MutableByteCollection> R collectByte(ByteFunction<? super T> byteFunction, R target)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.collectByte(byteFunction, target);
         }
     }
 
@@ -467,11 +483,27 @@ public class AbstractSynchronizedMutableCollection<T>
         }
     }
 
+    public <R extends MutableCharCollection> R collectChar(CharFunction<? super T> charFunction, R target)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.collectChar(charFunction, target);
+        }
+    }
+
     public MutableDoubleCollection collectDouble(DoubleFunction<? super T> doubleFunction)
     {
         synchronized (this.lock)
         {
             return this.collection.collectDouble(doubleFunction);
+        }
+    }
+
+    public <R extends MutableDoubleCollection> R collectDouble(DoubleFunction<? super T> doubleFunction, R target)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.collectDouble(doubleFunction, target);
         }
     }
 
@@ -483,11 +515,27 @@ public class AbstractSynchronizedMutableCollection<T>
         }
     }
 
+    public <R extends MutableFloatCollection> R collectFloat(FloatFunction<? super T> floatFunction, R target)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.collectFloat(floatFunction, target);
+        }
+    }
+
     public MutableIntCollection collectInt(IntFunction<? super T> intFunction)
     {
         synchronized (this.lock)
         {
             return this.collection.collectInt(intFunction);
+        }
+    }
+
+    public <R extends MutableIntCollection> R collectInt(IntFunction<? super T> intFunction, R target)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.collectInt(intFunction, target);
         }
     }
 
@@ -499,11 +547,27 @@ public class AbstractSynchronizedMutableCollection<T>
         }
     }
 
+    public <R extends MutableLongCollection> R collectLong(LongFunction<? super T> longFunction, R target)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.collectLong(longFunction, target);
+        }
+    }
+
     public MutableShortCollection collectShort(ShortFunction<? super T> shortFunction)
     {
         synchronized (this.lock)
         {
             return this.collection.collectShort(shortFunction);
+        }
+    }
+
+    public <R extends MutableShortCollection> R collectShort(ShortFunction<? super T> shortFunction, R target)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.collectShort(shortFunction, target);
         }
     }
 

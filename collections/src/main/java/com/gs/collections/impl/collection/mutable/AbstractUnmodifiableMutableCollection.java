@@ -316,9 +316,19 @@ public class AbstractUnmodifiableMutableCollection<T> implements MutableCollecti
         return this.getMutableCollection().collectBoolean(booleanFunction);
     }
 
+    public <R extends MutableBooleanCollection> R collectBoolean(BooleanFunction<? super T> booleanFunction, R target)
+    {
+        return this.getMutableCollection().collectBoolean(booleanFunction, target);
+    }
+
     public MutableByteCollection collectByte(ByteFunction<? super T> byteFunction)
     {
         return this.getMutableCollection().collectByte(byteFunction);
+    }
+
+    public <R extends MutableByteCollection> R collectByte(ByteFunction<? super T> byteFunction, R target)
+    {
+        return this.getMutableCollection().collectByte(byteFunction, target);
     }
 
     public MutableCharCollection collectChar(CharFunction<? super T> charFunction)
@@ -326,9 +336,19 @@ public class AbstractUnmodifiableMutableCollection<T> implements MutableCollecti
         return this.getMutableCollection().collectChar(charFunction);
     }
 
+    public <R extends MutableCharCollection> R collectChar(CharFunction<? super T> charFunction, R target)
+    {
+        return this.getMutableCollection().collectChar(charFunction, target);
+    }
+
     public MutableDoubleCollection collectDouble(DoubleFunction<? super T> doubleFunction)
     {
         return this.getMutableCollection().collectDouble(doubleFunction);
+    }
+
+    public <R extends MutableDoubleCollection> R collectDouble(DoubleFunction<? super T> doubleFunction, R target)
+    {
+        return this.getMutableCollection().collectDouble(doubleFunction, target);
     }
 
     public MutableFloatCollection collectFloat(FloatFunction<? super T> floatFunction)
@@ -336,9 +356,19 @@ public class AbstractUnmodifiableMutableCollection<T> implements MutableCollecti
         return this.getMutableCollection().collectFloat(floatFunction);
     }
 
+    public <R extends MutableFloatCollection> R collectFloat(FloatFunction<? super T> floatFunction, R target)
+    {
+        return this.getMutableCollection().collectFloat(floatFunction, target);
+    }
+
     public MutableIntCollection collectInt(IntFunction<? super T> intFunction)
     {
         return this.getMutableCollection().collectInt(intFunction);
+    }
+
+    public <R extends MutableIntCollection> R collectInt(IntFunction<? super T> intFunction, R target)
+    {
+        return this.getMutableCollection().collectInt(intFunction, target);
     }
 
     public MutableLongCollection collectLong(LongFunction<? super T> longFunction)
@@ -346,9 +376,19 @@ public class AbstractUnmodifiableMutableCollection<T> implements MutableCollecti
         return this.getMutableCollection().collectLong(longFunction);
     }
 
+    public <R extends MutableLongCollection> R collectLong(LongFunction<? super T> longFunction, R target)
+    {
+        return this.getMutableCollection().collectLong(longFunction, target);
+    }
+
     public MutableShortCollection collectShort(ShortFunction<? super T> shortFunction)
     {
         return this.getMutableCollection().collectShort(shortFunction);
+    }
+
+    public <R extends MutableShortCollection> R collectShort(ShortFunction<? super T> shortFunction, R target)
+    {
+        return this.getMutableCollection().collectShort(shortFunction, target);
     }
 
     public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)

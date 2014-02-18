@@ -115,58 +115,95 @@ public abstract class AbstractMutableCollection<T>
 
     public MutableBooleanCollection collectBoolean(BooleanFunction<? super T> booleanFunction)
     {
-        BooleanArrayList result = new BooleanArrayList(this.size());
-        this.forEach(new CollectBooleanProcedure<T>(booleanFunction, result));
-        return result;
+        return this.collectBoolean(booleanFunction, new BooleanArrayList(this.size()));
     }
+
+    public <R extends MutableBooleanCollection> R collectBoolean(BooleanFunction<? super T> booleanFunction, R target)
+    {
+        this.forEach(new CollectBooleanProcedure<T>(booleanFunction, target));
+        return target;
+    }
+
 
     public MutableByteCollection collectByte(ByteFunction<? super T> byteFunction)
     {
-        ByteArrayList result = new ByteArrayList(this.size());
-        this.forEach(new CollectByteProcedure<T>(byteFunction, result));
-        return result;
+        return this.collectByte(byteFunction, new ByteArrayList(this.size()));
     }
+
+    public <R extends MutableByteCollection> R collectByte(ByteFunction<? super T> byteFunction, R target)
+    {
+        this.forEach(new CollectByteProcedure<T>(byteFunction, target));
+        return target;
+    }
+
 
     public MutableCharCollection collectChar(CharFunction<? super T> charFunction)
     {
-        CharArrayList result = new CharArrayList(this.size());
-        this.forEach(new CollectCharProcedure<T>(charFunction, result));
-        return result;
+        return this.collectChar(charFunction, new CharArrayList(this.size()));
     }
+
+    public <R extends MutableCharCollection> R collectChar(CharFunction<? super T> charFunction, R target)
+    {
+        this.forEach(new CollectCharProcedure<T>(charFunction, target));
+        return target;
+    }
+
 
     public MutableDoubleCollection collectDouble(DoubleFunction<? super T> doubleFunction)
     {
-        DoubleArrayList result = new DoubleArrayList(this.size());
-        this.forEach(new CollectDoubleProcedure<T>(doubleFunction, result));
-        return result;
+        return this.collectDouble(doubleFunction, new DoubleArrayList(this.size()));
     }
+
+    public <R extends MutableDoubleCollection> R collectDouble(DoubleFunction<? super T> doubleFunction, R target)
+    {
+        this.forEach(new CollectDoubleProcedure<T>(doubleFunction, target));
+        return target;
+    }
+
 
     public MutableFloatCollection collectFloat(FloatFunction<? super T> floatFunction)
     {
-        FloatArrayList result = new FloatArrayList(this.size());
-        this.forEach(new CollectFloatProcedure<T>(floatFunction, result));
-        return result;
+        return this.collectFloat(floatFunction, new FloatArrayList(this.size()));
     }
+
+    public <R extends MutableFloatCollection> R collectFloat(FloatFunction<? super T> floatFunction, R target)
+    {
+        this.forEach(new CollectFloatProcedure<T>(floatFunction, target));
+        return target;
+    }
+
 
     public MutableIntCollection collectInt(IntFunction<? super T> intFunction)
     {
-        IntArrayList result = new IntArrayList(this.size());
-        this.forEach(new CollectIntProcedure<T>(intFunction, result));
-        return result;
+        return this.collectInt(intFunction, new IntArrayList(this.size()));
+    }
+
+    public <R extends MutableIntCollection> R collectInt(IntFunction<? super T> intFunction, R target)
+    {
+        this.forEach(new CollectIntProcedure<T>(intFunction, target));
+        return target;
     }
 
     public MutableLongCollection collectLong(LongFunction<? super T> longFunction)
     {
-        LongArrayList result = new LongArrayList(this.size());
-        this.forEach(new CollectLongProcedure<T>(longFunction, result));
-        return result;
+        return this.collectLong(longFunction, new LongArrayList(this.size()));
+    }
+
+    public <R extends MutableLongCollection> R collectLong(LongFunction<? super T> longFunction, R target)
+    {
+        this.forEach(new CollectLongProcedure<T>(longFunction, target));
+        return target;
     }
 
     public MutableShortCollection collectShort(ShortFunction<? super T> shortFunction)
     {
-        ShortArrayList result = new ShortArrayList(this.size());
-        this.forEach(new CollectShortProcedure<T>(shortFunction, result));
-        return result;
+        return this.collectShort(shortFunction, new ShortArrayList(this.size()));
+    }
+
+    public <R extends MutableShortCollection> R collectShort(ShortFunction<? super T> shortFunction, R target)
+    {
+        this.forEach(new CollectShortProcedure<T>(shortFunction, target));
+        return target;
     }
 
     public <K, V> MutableMap<K, V> toMap(

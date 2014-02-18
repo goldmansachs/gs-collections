@@ -371,6 +371,21 @@ public final class IteratorIterate
     }
 
     /**
+     * @see Iterate#collectBoolean(Iterable, BooleanFunction, MutableBooleanCollection)
+     */
+    public static <T, R extends MutableBooleanCollection> R collectBoolean(
+            Iterator<T> iterator,
+            BooleanFunction<? super T> booleanFunction,
+            R target)
+    {
+        while (iterator.hasNext())
+        {
+            target.add(booleanFunction.booleanValueOf(iterator.next()));
+        }
+        return target;
+    }
+
+    /**
      * @see Iterate#collectByte(Iterable, ByteFunction)
      */
     public static <T> MutableByteCollection collectByte(
@@ -384,6 +399,23 @@ public final class IteratorIterate
         }
         return result;
     }
+
+    /**
+     * @see Iterate#collectByte(Iterable, ByteFunction,
+     * MutableByteCollection)
+     */
+    public static <T, R extends MutableByteCollection> R collectByte(
+            Iterator<T> iterator,
+            ByteFunction<? super T> byteFunction,
+            R target)
+    {
+        while (iterator.hasNext())
+        {
+            target.add(byteFunction.byteValueOf(iterator.next()));
+        }
+        return target;
+    }
+
 
     /**
      * @see Iterate#collectChar(Iterable, CharFunction)
@@ -401,6 +433,21 @@ public final class IteratorIterate
     }
 
     /**
+     * @see Iterate#collectChar(Iterable, CharFunction,
+     * MutableCharCollection)
+     */
+    public static <T, R extends MutableCharCollection> R collectChar(
+            Iterator<T> iterator,
+            CharFunction<? super T> charFunction,
+            R target)
+    {
+        while (iterator.hasNext())
+        {
+            target.add(charFunction.charValueOf(iterator.next()));
+        }
+        return target;
+    }
+    /**
      * @see Iterate#collectDouble(Iterable, DoubleFunction)
      */
     public static <T> MutableDoubleCollection collectDouble(
@@ -414,6 +461,23 @@ public final class IteratorIterate
         }
         return result;
     }
+
+    /**
+     * @see Iterate#collectDouble(Iterable, DoubleFunction,
+     * MutableDoubleCollection)
+     */
+    public static <T, R extends MutableDoubleCollection> R collectDouble(
+            Iterator<T> iterator,
+            DoubleFunction<? super T> doubleFunction,
+            R target)
+    {
+        while (iterator.hasNext())
+        {
+            target.add(doubleFunction.doubleValueOf(iterator.next()));
+        }
+        return target;
+    }
+
 
     /**
      * @see Iterate#collectFloat(Iterable, FloatFunction)
@@ -431,6 +495,21 @@ public final class IteratorIterate
     }
 
     /**
+     * @see Iterate#collectFloat(Iterable, FloatFunction,
+     * MutableFloatCollection)
+     */
+    public static <T, R extends MutableFloatCollection> R collectFloat(
+            Iterator<T> iterator,
+            FloatFunction<? super T> floatFunction,
+            R target)
+    {
+        while (iterator.hasNext())
+        {
+            target.add(floatFunction.floatValueOf(iterator.next()));
+        }
+        return target;
+    }
+    /**
      * @see Iterate#collectInt(Iterable, IntFunction)
      */
     public static <T> MutableIntCollection collectInt(
@@ -445,6 +524,21 @@ public final class IteratorIterate
         return result;
     }
 
+    /**
+     * @see Iterate#collectInt(Iterable, IntFunction,
+     * MutableIntCollection)
+     */
+    public static <T, R extends MutableIntCollection> R collectInt(
+            Iterator<T> iterator,
+            IntFunction<? super T> intFunction,
+            R target)
+    {
+        while (iterator.hasNext())
+        {
+            target.add(intFunction.intValueOf(iterator.next()));
+        }
+        return target;
+    }
     /**
      * @see Iterate#collectLong(Iterable, LongFunction)
      */
@@ -461,6 +555,22 @@ public final class IteratorIterate
     }
 
     /**
+     * @see Iterate#collectLong(Iterable, LongFunction,
+     * MutableLongCollection)
+     */
+    public static <T, R extends MutableLongCollection> R collectLong(
+            Iterator<T> iterator,
+            LongFunction<? super T> longFunction,
+            R target)
+    {
+        while (iterator.hasNext())
+        {
+            target.add(longFunction.longValueOf(iterator.next()));
+        }
+        return target;
+    }
+
+    /**
      * @see Iterate#collectShort(Iterable, ShortFunction)
      */
     public static <T> MutableShortCollection collectShort(
@@ -474,6 +584,23 @@ public final class IteratorIterate
         }
         return result;
     }
+
+    /**
+     * @see Iterate#collectShort(Iterable, ShortFunction,
+     * MutableShortCollection)
+     */
+    public static <T, R extends MutableShortCollection> R collectShort(
+            Iterator<T> iterator,
+            ShortFunction<? super T> shortFunction,
+            R target)
+    {
+        while (iterator.hasNext())
+        {
+            target.add(shortFunction.shortValueOf(iterator.next()));
+        }
+        return target;
+    }
+
 
     /**
      * @see Iterate#flatCollect(Iterable, Function, Collection)

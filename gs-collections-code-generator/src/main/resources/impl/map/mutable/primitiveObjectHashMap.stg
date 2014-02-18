@@ -16,9 +16,13 @@ class(primitive) ::= <<
 collectPrimitive(name, type) ::= <<
 public Mutable<name>Collection collect<name>(<name>Function\<? super V> <type>Function)
 {
-    <name>ArrayList result = new <name>ArrayList(this.size());
-    this.forEach(new Collect<name>Procedure\<V>(<type>Function, result));
-    return result;
+    return this.collect<name>(<type>Function,  new <name>ArrayList(this.size()));
+}
+
+public \<R extends Mutable<name>Collection> R collect<name>(<name>Function\<? super V> <type>Function, R target)
+{
+    this.forEach(new Collect<name>Procedure\<V>(<type>Function, target));
+    return target;
 }
 >>
 
