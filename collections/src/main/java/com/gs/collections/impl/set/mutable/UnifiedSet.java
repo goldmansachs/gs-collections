@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -27,9 +27,13 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
@@ -67,6 +71,7 @@ import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.set.PartitionMutableSet;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.api.set.Pool;
 import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.UnsortedSetIterable;
@@ -109,6 +114,10 @@ import com.gs.collections.impl.block.procedure.primitive.CollectLongProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectShortProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Sets;
+import com.gs.collections.impl.lazy.AbstractLazyIterable;
+import com.gs.collections.impl.lazy.parallel.set.AbstractParallelUnsortedSetIterable;
+import com.gs.collections.impl.lazy.parallel.set.AbstractUnsortedSetBatch;
+import com.gs.collections.impl.lazy.parallel.set.UnsortedSetBatch;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
@@ -2628,5 +2637,150 @@ public class UnifiedSet<K>
         MutableMap<K2, V> map = UnifiedMap.newMap();
         this.forEach(new NonMutatingAggregationProcedure<K, K2, V>(map, groupBy, zeroValueFactory, nonMutatingAggregator));
         return map;
+    }
+
+    @Beta
+    public ParallelUnsortedSetIterable<K> asParallel(ExecutorService executorService, int batchSize)
+    {
+        return new UnifiedSetParallelUnsortedIterable(executorService, batchSize);
+    }
+
+    private final class UnifiedUnsortedSetBatch extends AbstractUnsortedSetBatch<K>
+    {
+        private final int chunkStartIndex;
+        private final int chunkEndIndex;
+
+        private UnifiedUnsortedSetBatch(int chunkStartIndex, int chunkEndIndex)
+        {
+            this.chunkStartIndex = chunkStartIndex;
+            this.chunkEndIndex = chunkEndIndex;
+        }
+
+        public void forEach(Procedure<? super K> procedure)
+        {
+            for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
+            {
+                Object cur = UnifiedSet.this.table[i];
+                if (cur instanceof ChainedBucket)
+                {
+                    UnifiedSet.this.chainedForEach((ChainedBucket) cur, procedure);
+                }
+                else if (cur != null)
+                {
+                    procedure.value(UnifiedSet.this.nonSentinel(cur));
+                }
+            }
+        }
+    }
+
+    private final class UnifiedSetParallelUnsortedIterable extends AbstractParallelUnsortedSetIterable<K>
+    {
+        private final ExecutorService executorService;
+        private final int batchSize;
+
+        private UnifiedSetParallelUnsortedIterable(ExecutorService executorService, int batchSize)
+        {
+            this.executorService = executorService;
+            this.batchSize = batchSize;
+        }
+
+        public ExecutorService getExecutorService()
+        {
+            return this.executorService;
+        }
+
+        public LazyIterable<UnsortedSetBatch<K>> split()
+        {
+            return new UnifiedSetParallelSplitLazyIterable();
+        }
+
+        public void forEach(final Procedure<? super K> procedure)
+        {
+            LazyIterable<UnsortedSetBatch<K>> chunks = this.split();
+            LazyIterable<Future<?>> futures = chunks.collect(new Function<UnsortedSetBatch<K>, Future<?>>()
+            {
+                public Future<?> valueOf(final UnsortedSetBatch<K> chunk)
+                {
+                    return UnifiedSetParallelUnsortedIterable.this.executorService.submit(new Runnable()
+                    {
+                        public void run()
+                        {
+                            chunk.forEach(procedure);
+                        }
+                    });
+                }
+            });
+            // The call to to toList() is important to stop the lazy evaluation and force all the Runnables to start executing.
+            MutableList<Future<?>> futuresList = futures.toList();
+            for (Future<?> future : futuresList)
+            {
+                try
+                {
+                    future.get();
+                }
+                catch (InterruptedException e)
+                {
+                    Thread.currentThread().interrupt();
+                    throw new RuntimeException(e);
+                }
+                catch (ExecutionException e)
+                {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        private class UnifiedSetParallelSplitLazyIterable
+                extends AbstractLazyIterable<UnsortedSetBatch<K>>
+                implements Iterator<UnsortedSetBatch<K>>
+        {
+            protected int chunkIndex;
+
+            public void forEach(Procedure<? super UnsortedSetBatch<K>> procedure)
+            {
+                for (UnsortedSetBatch<K> chunk : this)
+                {
+                    procedure.value(chunk);
+                    this.chunkIndex++;
+                }
+            }
+
+            public <P> void forEachWith(Procedure2<? super UnsortedSetBatch<K>, ? super P> procedure, P parameter)
+            {
+                for (UnsortedSetBatch<K> chunk : this)
+                {
+                    procedure.value(chunk, parameter);
+                    this.chunkIndex++;
+                }
+            }
+
+            public void forEachWithIndex(ObjectIntProcedure<? super UnsortedSetBatch<K>> objectIntProcedure)
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            public Iterator<UnsortedSetBatch<K>> iterator()
+            {
+                return this;
+            }
+
+            public void remove()
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            public boolean hasNext()
+            {
+                return this.chunkIndex * UnifiedSetParallelUnsortedIterable.this.batchSize < UnifiedSet.this.table.length;
+            }
+
+            public UnsortedSetBatch<K> next()
+            {
+                int chunkStartIndex = this.chunkIndex * UnifiedSetParallelUnsortedIterable.this.batchSize;
+                int chunkEndIndex = (this.chunkIndex + 1) * UnifiedSetParallelUnsortedIterable.this.batchSize;
+                int truncatedChunkEndIndex = Math.min(chunkEndIndex, UnifiedSet.this.table.length);
+                return new UnifiedUnsortedSetBatch(chunkStartIndex, truncatedChunkEndIndex);
+            }
+        }
     }
 }

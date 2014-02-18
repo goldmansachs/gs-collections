@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,12 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.RandomAccess;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
+import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
@@ -59,6 +64,7 @@ import com.gs.collections.api.collection.primitive.MutableIntCollection;
 import com.gs.collections.api.collection.primitive.MutableLongCollection;
 import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.list.primitive.MutableByteList;
 import com.gs.collections.api.list.primitive.MutableCharList;
@@ -79,6 +85,10 @@ import com.gs.collections.impl.block.procedure.FastListCollectProcedure;
 import com.gs.collections.impl.block.procedure.FastListRejectProcedure;
 import com.gs.collections.impl.block.procedure.FastListSelectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
+import com.gs.collections.impl.lazy.AbstractLazyIterable;
+import com.gs.collections.impl.lazy.parallel.list.AbstractListBatch;
+import com.gs.collections.impl.lazy.parallel.list.AbstractParallelListIterable;
+import com.gs.collections.impl.lazy.parallel.list.ListBatch;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
 import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
@@ -271,7 +281,7 @@ public class FastList<T>
     }
 
     /**
-     * Implemented to avoid megamorphic call on castProcedure
+     * Implemented to avoid megamorphic call on castProcedure.
      */
     private void batchGroupBy(int start, int end, MultimapPutProcedure<?, T> castProcedure)
     {
@@ -282,7 +292,7 @@ public class FastList<T>
     }
 
     /**
-     * Implemented to avoid megamorphic call on castProcedure
+     * Implemented to avoid megamorphic call on castProcedure.
      */
     private void batchReject(int start, int end, FastListRejectProcedure<T> castProcedure)
     {
@@ -293,7 +303,7 @@ public class FastList<T>
     }
 
     /**
-     * Implemented to avoid megamorphic call on castProcedure
+     * Implemented to avoid megamorphic call on castProcedure.
      */
     private void batchCount(int start, int end, CountProcedure<T> castProcedure)
     {
@@ -304,7 +314,7 @@ public class FastList<T>
     }
 
     /**
-     * Implemented to avoid megamorphic call on castProcedure
+     * Implemented to avoid megamorphic call on castProcedure.
      */
     private void batchFastListCollectIf(int start, int end, FastListCollectIfProcedure<T, ?> castProcedure)
     {
@@ -315,7 +325,7 @@ public class FastList<T>
     }
 
     /**
-     * Implemented to avoid megamorphic call on castProcedure
+     * Implemented to avoid megamorphic call on castProcedure.
      */
     private void batchFastListCollect(int start, int end, FastListCollectProcedure<T, ?> castProcedure)
     {
@@ -326,7 +336,7 @@ public class FastList<T>
     }
 
     /**
-     * Implemented to avoid megamorphic call on castProcedure
+     * Implemented to avoid megamorphic call on castProcedure.
      */
     private void batchFastListSelect(int start, int end, FastListSelectProcedure<T> castProcedure)
     {
@@ -1624,6 +1634,143 @@ public class FastList<T>
         for (int i = 0; i < this.size; i++)
         {
             this.items[i] = (T) in.readObject();
+        }
+    }
+
+    @Beta
+    public ParallelListIterable<T> asParallel(ExecutorService executorService, int batchSize)
+    {
+        return new FastListParallelIterable(executorService, batchSize);
+    }
+
+    private final class FastListBatch extends AbstractListBatch<T>
+    {
+        private final int chunkStartIndex;
+        private final int chunkEndIndex;
+
+        private FastListBatch(int chunkStartIndex, int chunkEndIndex)
+        {
+            this.chunkStartIndex = chunkStartIndex;
+            this.chunkEndIndex = chunkEndIndex;
+        }
+
+        public void forEach(Procedure<? super T> procedure)
+        {
+            for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
+            {
+                procedure.value(FastList.this.items[i]);
+            }
+        }
+    }
+
+    private final class FastListParallelIterable extends AbstractParallelListIterable<T>
+    {
+        private final ExecutorService executorService;
+        private final int batchSize;
+
+        private FastListParallelIterable(ExecutorService executorService, int batchSize)
+        {
+            this.executorService = executorService;
+            this.batchSize = batchSize;
+        }
+
+        public ExecutorService getExecutorService()
+        {
+            return this.executorService;
+        }
+
+        public LazyIterable<ListBatch<T>> split()
+        {
+            return new FastListParallelSplitLazyIterable();
+        }
+
+        public void forEach(final Procedure<? super T> procedure)
+        {
+            LazyIterable<ListBatch<T>> chunks = this.split();
+            LazyIterable<Future<?>> futures = chunks.collect(new Function<ListBatch<T>, Future<?>>()
+            {
+                public Future<?> valueOf(final ListBatch<T> chunk)
+                {
+                    return FastListParallelIterable.this.executorService.submit(new Runnable()
+                    {
+                        public void run()
+                        {
+                            chunk.forEach(procedure);
+                        }
+                    });
+                }
+            });
+            // The call to to toList() is important to stop the lazy evaluation and force all the Runnables to start executing.
+            MutableList<Future<?>> futuresList = futures.toList();
+            for (Future<?> future : futuresList)
+            {
+                try
+                {
+                    future.get();
+                }
+                catch (InterruptedException e)
+                {
+                    Thread.currentThread().interrupt();
+                    throw new RuntimeException(e);
+                }
+                catch (ExecutionException e)
+                {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        private class FastListParallelSplitLazyIterable
+                extends AbstractLazyIterable<ListBatch<T>>
+                implements Iterator<ListBatch<T>>
+        {
+            protected int chunkIndex;
+
+            public void forEach(Procedure<? super ListBatch<T>> procedure)
+            {
+                for (ListBatch<T> chunk : this)
+                {
+                    procedure.value(chunk);
+                    this.chunkIndex++;
+                }
+            }
+
+            public <P> void forEachWith(Procedure2<? super ListBatch<T>, ? super P> procedure, P parameter)
+            {
+                for (ListBatch<T> chunk : this)
+                {
+                    procedure.value(chunk, parameter);
+                    this.chunkIndex++;
+                }
+            }
+
+            public void forEachWithIndex(ObjectIntProcedure<? super ListBatch<T>> objectIntProcedure)
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            public Iterator<ListBatch<T>> iterator()
+            {
+                return this;
+            }
+
+            public void remove()
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            public boolean hasNext()
+            {
+                return this.chunkIndex * FastListParallelIterable.this.batchSize < FastList.this.size;
+            }
+
+            public ListBatch<T> next()
+            {
+                int chunkStartIndex = this.chunkIndex * FastListParallelIterable.this.batchSize;
+                int chunkEndIndex = (this.chunkIndex + 1) * FastListParallelIterable.this.batchSize;
+                int truncatedChunkEndIndex = Math.min(chunkEndIndex, FastList.this.size);
+                return new FastListBatch(chunkStartIndex, truncatedChunkEndIndex);
+            }
         }
     }
 }

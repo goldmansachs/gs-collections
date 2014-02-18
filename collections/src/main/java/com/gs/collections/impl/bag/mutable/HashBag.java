@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,10 +25,16 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
+import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.ParallelUnsortedBag;
 import com.gs.collections.api.bag.primitive.MutableBooleanBag;
 import com.gs.collections.api.bag.primitive.MutableByteBag;
 import com.gs.collections.api.bag.primitive.MutableCharBag;
@@ -79,12 +85,17 @@ import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.collection.AbstractMutableBag;
 import com.gs.collections.impl.factory.Bags;
+import com.gs.collections.impl.lazy.AbstractLazyIterable;
+import com.gs.collections.impl.lazy.parallel.bag.AbstractParallelUnsortedBag;
+import com.gs.collections.impl.lazy.parallel.bag.AbstractUnsortedBagBatch;
+import com.gs.collections.impl.lazy.parallel.bag.UnsortedBagBatch;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.mutable.primitive.ObjectIntHashMap;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.partition.bag.PartitionHashBag;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.Iterate;
 
 /**
@@ -143,13 +154,14 @@ public class HashBag<T>
 
     public static <E> HashBag<E> newBag(Iterable<? extends E> source)
     {
-        return Iterate.addAllTo(source, HashBag.<E>newBag());
+        return HashBag.newBagWith((E[]) Iterate.toArray(source));
     }
 
     public static <E> HashBag<E> newBagWith(E... elements)
     {
-        //noinspection SSBasedInspection
-        return HashBag.newBag(Arrays.asList(elements));
+        HashBag<E> result = HashBag.newBag();
+        ArrayIterate.addAllTo(elements, result);
+        return result;
     }
 
     public void addOccurrences(T item, int occurrences)
@@ -1208,6 +1220,173 @@ public class HashBag<T>
             this.keyValueIterator = HashBag.this.items.keyValuesView().iterator();
             this.currentKeyOccurrences--;
             this.currentKeyPosition--;
+        }
+    }
+
+    @Beta
+    public ParallelUnsortedBag<T> asParallel(ExecutorService executorService, int batchSize)
+    {
+        return new HashBagParallelIterable(executorService, batchSize);
+    }
+
+    private final class HashUnsortedBagBatch extends AbstractUnsortedBagBatch<T>
+    {
+        private final int chunkStartIndex;
+        private final int chunkEndIndex;
+
+        private HashUnsortedBagBatch(int chunkStartIndex, int chunkEndIndex)
+        {
+            this.chunkStartIndex = chunkStartIndex;
+            this.chunkEndIndex = chunkEndIndex;
+        }
+
+        public void forEach(Procedure<? super T> procedure)
+        {
+            throw new UnsupportedOperationException();
+            /*
+            for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
+            {
+                if (ObjectIntHashMap.isNonSentinel(HashBag.this.items.keys[i]))
+                {
+                    T each = HashBag.this.items.toNonSentinel(HashBag.this.items.keys[i]);
+                    int occurrences = HashBag.this.items.values[i];
+                    for (int j = 0; j < occurrences; j++)
+                    {
+                        procedure.value(each);
+                    }
+                }
+            }
+            */
+        }
+
+        public void forEachWithOccurrences(ObjectIntProcedure<? super T> procedure)
+        {
+            throw new UnsupportedOperationException();
+/*
+            for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
+            {
+                if (ObjectIntHashMap.isNonSentinel(HashBag.this.items.keys[i]))
+                {
+                    T each = HashBag.this.items.toNonSentinel(HashBag.this.items.keys[i]);
+                    int occurrences = HashBag.this.items.values[i];
+                    procedure.value(each, occurrences);
+                }
+            }
+*/
+        }
+    }
+
+    private final class HashBagParallelIterable extends AbstractParallelUnsortedBag<T>
+    {
+        private final ExecutorService executorService;
+        private final int batchSize;
+
+        private HashBagParallelIterable(ExecutorService executorService, int batchSize)
+        {
+            this.executorService = executorService;
+            this.batchSize = batchSize;
+        }
+
+        public ExecutorService getExecutorService()
+        {
+            return this.executorService;
+        }
+
+        public LazyIterable<UnsortedBagBatch<T>> split()
+        {
+            return new HashBagParallelBatchLazyIterable();
+        }
+
+        public void forEach(final Procedure<? super T> procedure)
+        {
+            LazyIterable<UnsortedBagBatch<T>> chunks = this.split();
+            LazyIterable<Future<?>> futures = chunks.collect(new Function<UnsortedBagBatch<T>, Future<?>>()
+            {
+                public Future<?> valueOf(final UnsortedBagBatch<T> chunk)
+                {
+                    return HashBagParallelIterable.this.executorService.submit(new Runnable()
+                    {
+                        public void run()
+                        {
+                            chunk.forEach(procedure);
+                        }
+                    });
+                }
+            });
+            // The call to to toList() is important to stop the lazy evaluation and force all the Runnables to start executing.
+            MutableList<Future<?>> futuresList = futures.toList();
+            for (Future<?> future : futuresList)
+            {
+                try
+                {
+                    future.get();
+                }
+                catch (InterruptedException e)
+                {
+                    Thread.currentThread().interrupt();
+                    throw new RuntimeException(e);
+                }
+                catch (ExecutionException e)
+                {
+                    throw new RuntimeException(e);
+                }
+            }
+        }
+
+        private class HashBagParallelBatchLazyIterable
+                extends AbstractLazyIterable<UnsortedBagBatch<T>>
+                implements Iterator<UnsortedBagBatch<T>>
+        {
+            protected int chunkIndex;
+
+            public void forEach(Procedure<? super UnsortedBagBatch<T>> procedure)
+            {
+                for (UnsortedBagBatch<T> chunk : this)
+                {
+                    procedure.value(chunk);
+                    this.chunkIndex++;
+                }
+            }
+
+            public <P> void forEachWith(Procedure2<? super UnsortedBagBatch<T>, ? super P> procedure, P parameter)
+            {
+                for (UnsortedBagBatch<T> chunk : this)
+                {
+                    procedure.value(chunk, parameter);
+                    this.chunkIndex++;
+                }
+            }
+
+            public void forEachWithIndex(ObjectIntProcedure<? super UnsortedBagBatch<T>> objectIntProcedure)
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            public Iterator<UnsortedBagBatch<T>> iterator()
+            {
+                return this;
+            }
+
+            public void remove()
+            {
+                throw new UnsupportedOperationException();
+            }
+
+            public boolean hasNext()
+            {
+                return this.chunkIndex * HashBagParallelIterable.this.batchSize < HashBag.this.items.size();
+            }
+
+            public UnsortedBagBatch<T> next()
+            {
+                throw new UnsupportedOperationException();
+                /*
+                int chunkStartIndex = this.chunkIndex * HashBagParallelIterable.this.batchSize;
+                int chunkEndIndex = (this.chunkIndex + 1) * HashBagParallelIterable.this.batchSize;
+                int truncatedChunkEndIndex = Math.min(chunkEndIndex, HashBag.this.items.keys.length);
+                return new HashBagBatch(chunkStartIndex, truncatedChunkEndIndex);
+                */
+            }
         }
     }
 }

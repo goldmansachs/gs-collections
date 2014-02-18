@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,6 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
+import java.util.concurrent.Executors;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.Function;
@@ -39,6 +40,7 @@ import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Functions0;
+import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.Procedures;
@@ -1299,5 +1301,19 @@ public class FastListTest extends AbstractListTestCase
     public void max_empty_throws_without_comparator()
     {
         this.newWith().max();
+    }
+
+    @Test
+    public void asParallel()
+    {
+        MutableSet<String> result = UnifiedSet.<String>newSet().asSynchronized();
+        this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+                .asParallel(Executors.newFixedThreadPool(10), 1)
+                .select(IntegerPredicates.isOdd())
+                .collect(Functions.getToString())
+                .forEach(CollectionAddProcedure.on(result));
+        Assert.assertEquals(
+                UnifiedSet.newSetWith("1", "3", "5", "7", "9"),
+                result);
     }
 }

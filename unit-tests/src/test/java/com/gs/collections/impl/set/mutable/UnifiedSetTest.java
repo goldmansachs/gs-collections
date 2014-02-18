@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,16 @@ package com.gs.collections.impl.set.mutable;
 
 import java.util.HashSet;
 import java.util.Iterator;
+import java.util.concurrent.Executors;
 
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.Pool;
 import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.list.Interval;
@@ -43,7 +47,7 @@ import org.junit.Test;
 public class UnifiedSetTest extends AbstractMutableSetTestCase
 {
     @Override
-    protected <T> MutableSet<T> newWith(T... littleElements)
+    protected <T> UnifiedSet<T> newWith(T... littleElements)
     {
         return UnifiedSet.newSetWith(littleElements);
     }
@@ -522,5 +526,20 @@ public class UnifiedSetTest extends AbstractMutableSetTestCase
         MutableSet<Object> setWithNull = this.newWith((Object) null);
         Assert.assertFalse(setWithNull.retainAll(FastList.newListWith((Object) null)));
         Assert.assertEquals(UnifiedSet.newSetWith((Object) null), setWithNull);
+    }
+
+    @Test
+    public void asParallel()
+    {
+        MutableSet<String> result = UnifiedSet.<String>newSet().asSynchronized();
+
+        this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+                .asParallel(Executors.newFixedThreadPool(10), 1)
+                .select(IntegerPredicates.isOdd())
+                .collect(Functions.getToString())
+                .forEach(CollectionAddProcedure.on(result));
+        Assert.assertEquals(
+                UnifiedSet.newSetWith("1", "3", "5", "7", "9"),
+                result);
     }
 }

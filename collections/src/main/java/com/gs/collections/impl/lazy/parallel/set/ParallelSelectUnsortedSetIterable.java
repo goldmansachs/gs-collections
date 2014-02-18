@@ -1,0 +1,60 @@
+/*
+ * Copyright 2014 Goldman Sachs.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+package com.gs.collections.impl.lazy.parallel.set;
+
+import java.util.concurrent.ExecutorService;
+
+import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.annotation.Beta;
+import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.impl.block.procedure.IfProcedure;
+
+@Beta
+class ParallelSelectUnsortedSetIterable<T> extends AbstractParallelUnsortedSetIterable<T>
+{
+    private final AbstractParallelUnsortedSetIterable<T> parallelSetIterable;
+    private final Predicate<? super T> predicate;
+
+    ParallelSelectUnsortedSetIterable(AbstractParallelUnsortedSetIterable<T> parallelSetIterable, Predicate<? super T> predicate)
+    {
+        this.parallelSetIterable = parallelSetIterable;
+        this.predicate = predicate;
+    }
+
+    public LazyIterable<UnsortedSetBatch<T>> split()
+    {
+        return this.parallelSetIterable.split().collect(new Function<UnsortedSetBatch<T>, UnsortedSetBatch<T>>()
+        {
+            public UnsortedSetBatch<T> valueOf(UnsortedSetBatch<T> eachBatch)
+            {
+                return eachBatch.select(ParallelSelectUnsortedSetIterable.this.predicate);
+            }
+        });
+    }
+
+    public void forEach(Procedure<? super T> procedure)
+    {
+        this.parallelSetIterable.forEach(new IfProcedure<T>(this.predicate, procedure));
+    }
+
+    public ExecutorService getExecutorService()
+    {
+        return this.parallelSetIterable.getExecutorService();
+    }
+}
