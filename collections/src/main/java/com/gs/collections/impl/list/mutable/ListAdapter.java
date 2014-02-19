@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -85,6 +85,10 @@ public final class ListAdapter<T>
         if (newDelegate == null)
         {
             throw new NullPointerException("ListAdapter may not wrap null");
+        }
+        if (newDelegate instanceof RandomAccess)
+        {
+            throw new IllegalArgumentException("Use RandomAccessListAdapter instead");
         }
         this.delegate = newDelegate;
     }
@@ -320,6 +324,7 @@ public final class ListAdapter<T>
     {
         return ListIterate.collectByte(this.delegate, byteFunction, target);
     }
+
     @Override
     public MutableCharList collectChar(CharFunction<? super T> charFunction)
     {
@@ -331,6 +336,7 @@ public final class ListAdapter<T>
     {
         return ListIterate.collectChar(this.delegate, charFunction, target);
     }
+
     @Override
     public MutableDoubleList collectDouble(DoubleFunction<? super T> doubleFunction)
     {
@@ -342,6 +348,7 @@ public final class ListAdapter<T>
     {
         return ListIterate.collectDouble(this.delegate, doubleFunction, target);
     }
+
     @Override
     public MutableFloatList collectFloat(FloatFunction<? super T> floatFunction)
     {
@@ -353,6 +360,7 @@ public final class ListAdapter<T>
     {
         return ListIterate.collectFloat(this.delegate, floatFunction, target);
     }
+
     @Override
     public MutableIntList collectInt(IntFunction<? super T> intFunction)
     {
@@ -364,6 +372,7 @@ public final class ListAdapter<T>
     {
         return ListIterate.collectInt(this.delegate, intFunction, target);
     }
+
     @Override
     public MutableLongList collectLong(LongFunction<? super T> longFunction)
     {
@@ -375,6 +384,7 @@ public final class ListAdapter<T>
     {
         return ListIterate.collectLong(this.delegate, longFunction, target);
     }
+
     @Override
     public MutableShortList collectShort(ShortFunction<? super T> shortFunction)
     {
@@ -386,7 +396,6 @@ public final class ListAdapter<T>
     {
         return ListIterate.collectShort(this.delegate, shortFunction, target);
     }
-
 
     @Override
     public <V> MutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)

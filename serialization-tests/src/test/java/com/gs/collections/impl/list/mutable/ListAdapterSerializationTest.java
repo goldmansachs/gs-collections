@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,7 +16,8 @@
 
 package com.gs.collections.impl.list.mutable;
 
-import com.gs.collections.impl.factory.Lists;
+import java.util.LinkedList;
+
 import com.gs.collections.impl.test.Verify;
 import org.junit.Test;
 
@@ -28,17 +29,8 @@ public class ListAdapterSerializationTest
         Verify.assertSerializedForm(
                 1L,
                 "rO0ABXNyADBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5saXN0Lm11dGFibGUuTGlzdEFkYXB0ZXIA\n"
-                        + "AAAAAAAAAQIAAUwACGRlbGVnYXRldAAQTGphdmEvdXRpbC9MaXN0O3hwc3IALWNvbS5ncy5jb2xs\n"
-                        + "ZWN0aW9ucy5pbXBsLmxpc3QubXV0YWJsZS5GYXN0TGlzdAAAAAAAAAABDAAAeHB3BAAAAAB4",
-                new ListAdapter<Object>(Lists.mutable.of()));
-    }
-
-    @Test
-    public void subList()
-    {
-        Verify.assertSerializedForm(
-                "rO0ABXNyAC1jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5saXN0Lm11dGFibGUuRmFzdExpc3QAAAAA\n"
-                        + "AAAAAQwAAHhwdwQAAAAAeA==",
-                new ListAdapter<Object>(Lists.mutable.of()).subList(0, 0));
+                        + "AAAAAAAAAQIAAUwACGRlbGVnYXRldAAQTGphdmEvdXRpbC9MaXN0O3hwc3IAFGphdmEudXRpbC5M\n"
+                        + "aW5rZWRMaXN0DClTXUpgiCIDAAB4cHcEAAAAAHg=",
+                new ListAdapter<Object>(new LinkedList<Object>()));
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.gs.collections.impl.list.mutable;
 
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.block.factory.Predicates;
@@ -36,7 +37,7 @@ public class ListAdapterTest extends AbstractListTestCase
     @Override
     protected <T> ListAdapter<T> newWith(T... littleElements)
     {
-        return new ListAdapter<T>(FastList.newListWith(littleElements));
+        return new ListAdapter<T>(new LinkedList<T>(FastList.newListWith(littleElements)));
     }
 
     @Test
@@ -115,7 +116,7 @@ public class ListAdapterTest extends AbstractListTestCase
     public void testForEachFromTo()
     {
         MutableList<Integer> result = FastList.newList();
-        MutableList<Integer> collection = new ListAdapter<Integer>(FastList.<Integer>newList(4)).with(1, 2, 3, 4);
+        MutableList<Integer> collection = new ListAdapter<Integer>(this.newWith(1, 2, 3, 4));
         collection.forEach(2, 3, CollectionAddProcedure.on(result));
         Verify.assertSize(2, result);
         Verify.assertContainsAll(result, 3, 4);
@@ -203,6 +204,21 @@ public class ListAdapterTest extends AbstractListTestCase
         ListAdapter<Integer> integers = this.newWith();
         integers.with(1, 2, 3).forEachWithIndex(1, 2, new AddToList(result));
         Assert.assertEquals(FastList.newListWith(2, 3), result);
+    }
+
+    @Override
+    @Test
+    public void testGetWithArrayIndexOutOfBoundsException()
+    {
+        final Object item = new Object();
+
+        Verify.assertThrows(IndexOutOfBoundsException.class, new Runnable()
+        {
+            public void run()
+            {
+                ListAdapterTest.this.newWith(item).get(-1);
+            }
+        });
     }
 
     @Test
