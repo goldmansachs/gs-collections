@@ -19,7 +19,9 @@ package com.gs.collections.api.list;
 import com.gs.collections.api.ParallelIterable;
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 
 /**
  * A ParallelIterable is RichIterable which will defer evaluation for certain methods like select, reject, collect, etc.
@@ -37,17 +39,23 @@ public interface ParallelListIterable<T>
      */
     ParallelListIterable<T> select(Predicate<? super T> predicate);
 
-    <S> ParallelListIterable<S> selectInstancesOf(Class<S> clazz);
+    <P> ParallelListIterable<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     /**
      * Creates a parallel iterable for rejecting elements from the current iterable.
      */
     ParallelListIterable<T> reject(Predicate<? super T> predicate);
 
+    <P> ParallelListIterable<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
+    <S> ParallelListIterable<S> selectInstancesOf(Class<S> clazz);
+
     /**
      * Creates a parallel iterable for collecting elements from the current iterable.
      */
     <V> ParallelListIterable<V> collect(Function<? super T, ? extends V> function);
+
+    <P, V> ParallelListIterable<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
 
     /**
      * Creates a parallel iterable for selecting and collecting elements from the current iterable.

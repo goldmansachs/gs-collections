@@ -19,7 +19,10 @@ package com.gs.collections.api.bag;
 import com.gs.collections.api.ParallelIterable;
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 
 /**
  * A ParallelIterable is RichIterable which will defer evaluation for certain methods like select, reject, collect, etc.
@@ -32,22 +35,30 @@ import com.gs.collections.api.block.predicate.Predicate;
 public interface ParallelUnsortedBag<T>
         extends ParallelIterable<T>
 {
+    void forEachWithOccurrences(ObjectIntProcedure<? super T> procedure);
+
     /**
      * Creates a parallel iterable for selecting elements from the current iterable.
      */
     ParallelUnsortedBag<T> select(Predicate<? super T> predicate);
 
-    <S> ParallelUnsortedBag<S> selectInstancesOf(Class<S> clazz);
+    <P> ParallelUnsortedBag<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     /**
      * Creates a parallel iterable for rejecting elements from the current iterable.
      */
     ParallelUnsortedBag<T> reject(Predicate<? super T> predicate);
 
+    <P> ParallelUnsortedBag<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
+    <S> ParallelUnsortedBag<S> selectInstancesOf(Class<S> clazz);
+
     /**
      * Creates a parallel iterable for collecting elements from the current iterable.
      */
     <V> ParallelUnsortedBag<V> collect(Function<? super T, ? extends V> function);
+
+    <P, V> ParallelUnsortedBag<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
 
     /**
      * Creates a parallel iterable for selecting and collecting elements from the current iterable.

@@ -25,9 +25,11 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
+import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.annotation.Beta;
@@ -1330,6 +1332,34 @@ public class HashBag<T>
                 {
                     throw new RuntimeException(e);
                 }
+            }
+        }
+
+        public void forEachWithOccurrences(final ObjectIntProcedure<? super T> procedure)
+        {
+            LazyIterable<UnsortedBagBatch<T>> chunks = this.split();
+            LazyIterable<Callable<Void>> callables = chunks.collect(new Function<UnsortedBagBatch<T>, Callable<Void>>()
+            {
+                public Callable<Void> valueOf(final UnsortedBagBatch<T> chunk)
+                {
+                    return new Callable<Void>()
+                    {
+                        public Void call()
+                        {
+                            chunk.forEachWithOccurrences(procedure);
+                            return null;
+                        }
+                    };
+                }
+            });
+            try
+            {
+                this.executorService.invokeAll(callables.toList(), Integer.MAX_VALUE, TimeUnit.DAYS);
+            }
+            catch (InterruptedException e)
+            {
+                Thread.currentThread().interrupt();
+                throw new RuntimeException(e);
             }
         }
 

@@ -16,9 +16,7 @@
 
 package com.gs.collections.impl.lazy.parallel.bag;
 
-import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.annotation.Beta;
@@ -28,9 +26,8 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
-import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.impl.block.procedure.BagAddOccurrencesProcedure;
 import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
 
 @Beta
@@ -95,46 +92,8 @@ public abstract class AbstractParallelUnsortedBag<T> extends AbstractParallelIte
     @Override
     public MutableBag<T> toBag()
     {
-        // To replace with ConcurrentBag
-        final MutableBag<T> result = HashBag.<T>newBag().asSynchronized();
-        LazyIterable<UnsortedBagBatch<T>> chunks = this.split();
-        LazyIterable<Future<?>> futures = chunks.collect(new Function<UnsortedBagBatch<T>, Future<?>>()
-        {
-            public Future<?> valueOf(final UnsortedBagBatch<T> chunk)
-            {
-                return AbstractParallelUnsortedBag.this.getExecutorService().submit(new Runnable()
-                {
-                    public void run()
-                    {
-                        chunk.forEachWithOccurrences(new ObjectIntProcedure<T>()
-                        {
-                            public void value(T each, int occurrences)
-                            {
-                                result.addOccurrences(each, occurrences);
-                            }
-                        });
-                    }
-                });
-            }
-        });
-        // The call to to toList() is important to stop the lazy evaluation and force all the Runnables to start executing.
-        MutableList<Future<?>> futuresList = futures.toList();
-        for (Future<?> future : futuresList)
-        {
-            try
-            {
-                future.get();
-            }
-            catch (InterruptedException e)
-            {
-                Thread.currentThread().interrupt();
-                throw new RuntimeException(e);
-            }
-            catch (ExecutionException e)
-            {
-                throw new RuntimeException(e);
-            }
-        }
+        MutableBag<T> result = HashBag.<T>newBag().asSynchronized();
+        this.forEachWithOccurrences(BagAddOccurrencesProcedure.on(result));
         return result;
     }
 }

@@ -22,6 +22,7 @@ import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.impl.block.factory.Functions;
 
 @Beta
@@ -50,6 +51,17 @@ class ParallelCollectUnsortedBag<T, V> extends AbstractParallelUnsortedBag<V>
     public void forEach(Procedure<? super V> procedure)
     {
         this.parallelUnsortedBag.forEach(Functions.bind(procedure, this.function));
+    }
+
+    public void forEachWithOccurrences(final ObjectIntProcedure<? super V> procedure)
+    {
+        this.parallelUnsortedBag.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int parameter)
+            {
+                procedure.value(ParallelCollectUnsortedBag.this.function.valueOf(each), parameter);
+            }
+        });
     }
 
     public ExecutorService getExecutorService()

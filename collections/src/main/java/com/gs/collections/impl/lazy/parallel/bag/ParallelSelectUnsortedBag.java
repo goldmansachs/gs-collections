@@ -23,6 +23,7 @@ import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.impl.block.procedure.IfProcedure;
 
 @Beta
@@ -51,6 +52,20 @@ class ParallelSelectUnsortedBag<T> extends AbstractParallelUnsortedBag<T>
     public void forEach(Procedure<? super T> procedure)
     {
         this.parallelUnsortedBag.forEach(new IfProcedure<T>(this.predicate, procedure));
+    }
+
+    public void forEachWithOccurrences(final ObjectIntProcedure<? super T> procedure)
+    {
+        this.parallelUnsortedBag.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int parameter)
+            {
+                if (ParallelSelectUnsortedBag.this.predicate.accept(each))
+                {
+                    procedure.value(each, parameter);
+                }
+            }
+        });
     }
 
     public ExecutorService getExecutorService()
