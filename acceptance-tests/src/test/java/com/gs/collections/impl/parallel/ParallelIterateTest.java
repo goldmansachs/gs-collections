@@ -42,6 +42,7 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.factory.Lists;
@@ -87,13 +88,7 @@ public class ParallelIterateTest
         }
     };
 
-    private static final Function0<AtomicInteger> ATOMIC_INTEGER_NEW = new Function0<AtomicInteger>()
-    {
-        public AtomicInteger value()
-        {
-            return new AtomicInteger(0);
-        }
-    };
+    private static final Function0<AtomicInteger> ATOMIC_INTEGER_NEW = Functions0.zeroAtomicInteger();
 
     private static final Function<Integer, String> EVEN_OR_ODD = new Function<Integer, String>()
     {

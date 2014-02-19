@@ -62,6 +62,26 @@ public class Functions0Test
     }
 
     @Test
+    public void zeroAtomicInteger()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAEpjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9uczAk\n"
+                        + "QXRvbWljSW50ZWdlclplcm9GdW5jdGlvbgAAAAAAAAABAgAAeHA=",
+                Functions0.zeroAtomicInteger());
+    }
+
+    @Test
+    public void zeroAtomicLong()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAEdjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9uczAk\n"
+                        + "QXRvbWljTG9uZ1plcm9GdW5jdGlvbgAAAAAAAAABAgAAeHA=",
+                Functions0.zeroAtomicLong());
+    }
+
+    @Test
     public void value()
     {
         Verify.assertSerializedForm(

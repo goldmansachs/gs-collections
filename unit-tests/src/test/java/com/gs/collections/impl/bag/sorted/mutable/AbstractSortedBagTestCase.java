@@ -46,6 +46,7 @@ import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
@@ -1652,13 +1653,7 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
     {
         super.aggregateByMutating();
 
-        Function0<AtomicInteger> zeroValueFactory = new Function0<AtomicInteger>()
-        {
-            public AtomicInteger value()
-            {
-                return new AtomicInteger(0);
-            }
-        };
+        Function0<AtomicInteger> zeroValueFactory = Functions0.zeroAtomicInteger();
         Procedure2<AtomicInteger, Integer> sumAggregator = new
 
                 Procedure2<AtomicInteger, Integer>()

@@ -71,6 +71,7 @@ import com.gs.collections.impl.bag.mutable.primitive.LongHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.ShortHashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
@@ -320,7 +321,6 @@ public abstract class AbstractRichIterableTestCase
         Assert.assertSame("Target list sent as parameter not returned", target, result);
         Assert.assertEquals(CharHashBag.newBagWith((char) 1, (char) 2, (char) 3, (char) 4), result.toBag());
     }
-
 
     @Test
     public void collectCharWithBagTarget()
@@ -1171,13 +1171,7 @@ public abstract class AbstractRichIterableTestCase
     @Test
     public void aggregateByMutating()
     {
-        Function0<AtomicInteger> valueCreator = new Function0<AtomicInteger>()
-        {
-            public AtomicInteger value()
-            {
-                return new AtomicInteger(0);
-            }
-        };
+        Function0<AtomicInteger> valueCreator = Functions0.zeroAtomicInteger();
         Procedure2<AtomicInteger, Integer> sumAggregator = new Procedure2<AtomicInteger, Integer>()
         {
             public void value(AtomicInteger aggregate, Integer value)

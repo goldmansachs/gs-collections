@@ -31,6 +31,7 @@ import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.UnsortedSetIterable;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -313,13 +314,7 @@ public class MultiReaderUnifiedSetTest extends MultiReaderMutableCollectionTestC
     @Test
     public void aggregateByMutating()
     {
-        Function0<AtomicInteger> valueCreator = new Function0<AtomicInteger>()
-        {
-            public AtomicInteger value()
-            {
-                return new AtomicInteger(0);
-            }
-        };
+        Function0<AtomicInteger> valueCreator = Functions0.zeroAtomicInteger();
         Procedure2<AtomicInteger, Integer> sumAggregator = new Procedure2<AtomicInteger, Integer>()
         {
             public void value(AtomicInteger aggregate, Integer value)

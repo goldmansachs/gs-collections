@@ -1679,9 +1679,10 @@ public class FastList<T>
             return this.executorService;
         }
 
+        @Override
         public LazyIterable<ListBatch<T>> split()
         {
-            return new FastListParallelSplitLazyIterable();
+            return new FastListParallelBatchLazyIterable();
         }
 
         public void forEach(final Procedure<? super T> procedure)
@@ -1720,7 +1721,7 @@ public class FastList<T>
             }
         }
 
-        private class FastListParallelSplitLazyIterable
+        private class FastListParallelBatchLazyIterable
                 extends AbstractLazyIterable<ListBatch<T>>
                 implements Iterator<ListBatch<T>>
         {

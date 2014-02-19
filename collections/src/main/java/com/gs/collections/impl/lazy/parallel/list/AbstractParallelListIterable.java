@@ -17,12 +17,10 @@
 package com.gs.collections.impl.lazy.parallel.list;
 
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.atomic.AtomicInteger;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
@@ -32,14 +30,6 @@ import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
 @Beta
 public abstract class AbstractParallelListIterable<T> extends AbstractParallelIterable<T> implements ParallelListIterable<T>
 {
-    private static final Function0<AtomicInteger> ATOMIC_INTEGER_FUNCTION_0 = new Function0<AtomicInteger>()
-    {
-        public AtomicInteger value()
-        {
-            return new AtomicInteger(0);
-        }
-    };
-
     protected abstract ExecutorService getExecutorService();
 
     protected abstract LazyIterable<ListBatch<T>> split();

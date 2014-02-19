@@ -16,6 +16,9 @@
 
 package com.gs.collections.impl.block.factory;
 
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.list.MutableList;
@@ -34,6 +37,8 @@ public final class Functions0
     private static final NewHashBagFunction<?> NEW_HASH_BAG_FUNCTION = new NewHashBagFunction<Object>();
     private static final NewUnifiedMapFunction<?, ?> NEW_UNIFIED_MAP_FUNCTION = new NewUnifiedMapFunction<Object, Object>();
     private static final NullFunction<?> NULL_FUNCTION = new NullFunction<Object>();
+    private static final AtomicIntegerZeroFunction ATOMIC_INTEGER_ZERO = new AtomicIntegerZeroFunction();
+    private static final AtomicLongZeroFunction ATOMIC_LONG_ZERO = new AtomicLongZeroFunction();
 
     private Functions0()
     {
@@ -68,6 +73,16 @@ public final class Functions0
     public static <T> Function0<T> value(T t)
     {
         return new PassThruFunction0<T>(t);
+    }
+
+    public static Function0<AtomicInteger> zeroAtomicInteger()
+    {
+        return ATOMIC_INTEGER_ZERO;
+    }
+
+    public static Function0<AtomicLong> zeroAtomicLong()
+    {
+        return ATOMIC_LONG_ZERO;
     }
 
     private static final class NewFastListFunction<T> implements Function0<MutableList<T>>
@@ -117,6 +132,26 @@ public final class Functions0
         public T value()
         {
             return null;
+        }
+    }
+
+    private static class AtomicIntegerZeroFunction implements Function0<AtomicInteger>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public AtomicInteger value()
+        {
+            return new AtomicInteger(0);
+        }
+    }
+
+    private static class AtomicLongZeroFunction implements Function0<AtomicLong>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public AtomicLong value()
+        {
+            return new AtomicLong(0);
         }
     }
 }

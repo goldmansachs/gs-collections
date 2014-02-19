@@ -27,7 +27,6 @@ import java.util.concurrent.atomic.AtomicInteger;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -40,6 +39,7 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.factory.Lists;
@@ -88,14 +88,6 @@ public class FJIterateTest
         public Collection<String> valueOf(Integer integer)
         {
             return Lists.fixedSize.of(integer.toString(), integer.toString());
-        }
-    };
-
-    private static final Function0<AtomicInteger> ATOMIC_INTEGER_NEW = new Function0<AtomicInteger>()
-    {
-        public AtomicInteger value()
-        {
-            return new AtomicInteger(0);
         }
     };
 
@@ -594,10 +586,10 @@ public class FJIterateTest
         };
         List<Integer> list = Interval.oneTo(20000);
         MutableMap<String, AtomicInteger> aggregation =
-                FJIterate.aggregateInPlaceBy(list, EVEN_OR_ODD, ATOMIC_INTEGER_NEW, countAggregator);
+                FJIterate.aggregateInPlaceBy(list, EVEN_OR_ODD, Functions0.zeroAtomicInteger(), countAggregator);
         Assert.assertEquals(10000, aggregation.get("Even").intValue());
         Assert.assertEquals(10000, aggregation.get("Odd").intValue());
-        FJIterate.aggregateInPlaceBy(list, EVEN_OR_ODD, ATOMIC_INTEGER_NEW, countAggregator, aggregation);
+        FJIterate.aggregateInPlaceBy(list, EVEN_OR_ODD, Functions0.zeroAtomicInteger(), countAggregator, aggregation);
         Assert.assertEquals(20000, aggregation.get("Even").intValue());
         Assert.assertEquals(20000, aggregation.get("Odd").intValue());
     }
@@ -618,7 +610,7 @@ public class FJIterateTest
                 .toList();
         Collections.shuffle(list);
         MapIterable<String, AtomicInteger> aggregation =
-                FJIterate.aggregateInPlaceBy(list, Functions.getToString(), ATOMIC_INTEGER_NEW, sumAggregator, 100);
+                FJIterate.aggregateInPlaceBy(list, Functions.getToString(), Functions0.zeroAtomicInteger(), sumAggregator, 100);
         Assert.assertEquals(1000, aggregation.get("1").intValue());
         Assert.assertEquals(4000, aggregation.get("2").intValue());
         Assert.assertEquals(9000, aggregation.get("3").intValue());

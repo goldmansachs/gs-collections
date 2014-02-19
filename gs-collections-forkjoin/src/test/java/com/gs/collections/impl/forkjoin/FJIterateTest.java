@@ -44,6 +44,7 @@ import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.StringFunctions;
@@ -98,13 +99,7 @@ public class FJIterateTest
         }
     };
 
-    private static final Function0<AtomicInteger> ATOMIC_INTEGER_NEW = new Function0<AtomicInteger>()
-    {
-        public AtomicInteger value()
-        {
-            return new AtomicInteger(0);
-        }
-    };
+    private static final Function0<AtomicInteger> ATOMIC_INTEGER_NEW = Functions0.zeroAtomicInteger();
 
     private static final Function0<Integer> INTEGER_NEW = new Function0<Integer>()
     {

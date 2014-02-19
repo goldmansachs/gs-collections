@@ -1050,13 +1050,7 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
     @Test
     public void aggregateByMutating()
     {
-        Function0\<AtomicInteger> valueCreator = new Function0\<AtomicInteger>()
-        {
-            public AtomicInteger value()
-            {
-                return new AtomicInteger(0);
-            }
-        };
+        Function0\<AtomicInteger> valueCreator = Functions0.zeroAtomicInteger();
         Procedure2\<AtomicInteger, <name>BooleanPair> sumAggregator = new Procedure2\<AtomicInteger, <name>BooleanPair>()
         {
             public void value(AtomicInteger aggregate, <name>BooleanPair value)
