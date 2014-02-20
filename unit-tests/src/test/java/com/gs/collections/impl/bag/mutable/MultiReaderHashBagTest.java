@@ -266,6 +266,16 @@ public class MultiReaderHashBagTest extends MultiReaderMutableCollectionTestCase
 
     @Override
     @Test
+    public void partitionWith()
+    {
+        MutableBag<Integer> integers = MultiReaderHashBag.newBagWith(-3, -2, -1, 0, 1, 2, 2, 2, 3, 3, 4, 5);
+        PartitionMutableCollection<Integer> result = integers.partitionWith(Predicates2.in(), integers.select(IntegerPredicates.isEven()));
+        Assert.assertEquals(MultiReaderHashBag.newBagWith(-2, 0, 2, 2, 2, 4), result.getSelected());
+        Assert.assertEquals(MultiReaderHashBag.newBagWith(-3, -1, 1, 3, 3, 5), result.getRejected());
+    }
+
+    @Override
+    @Test
     public void with()
     {
         MutableBag<Integer> bag = MultiReaderHashBag.newBagWith(1, 2, 3, 3);

@@ -319,8 +319,15 @@ final class ImmutableArrayStack<T> implements ImmutableStack<T>, Serializable
 
     public PartitionImmutableStack<T> partition(Predicate<? super T> predicate)
     {
-        PartitionArrayStack<T> partitionMutableStack = new PartitionArrayStack<T>(predicate);
+        PartitionArrayStack<T> partitionMutableStack = new PartitionArrayStack<T>();
         this.delegate.asReversed().forEach(new PartitionArrayStack.PartitionProcedure<T>(predicate, partitionMutableStack));
+        return partitionMutableStack.toImmutable();
+    }
+
+    public <P> PartitionImmutableStack<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        PartitionArrayStack<T> partitionMutableStack = new PartitionArrayStack<T>();
+        this.delegate.asReversed().forEach(new PartitionArrayStack.PartitionPredicate2Procedure<T, P>(predicate, parameter, partitionMutableStack));
         return partitionMutableStack.toImmutable();
     }
 
@@ -477,7 +484,6 @@ final class ImmutableArrayStack<T> implements ImmutableStack<T>, Serializable
     {
         return this.delegate.collectShort(shortFunction, target);
     }
-
 
     public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)
     {

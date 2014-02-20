@@ -153,6 +153,17 @@ trait SynchronizedRichIterableTestTrait extends SynchronizedMutableIterableTestT
     }
 
     @Test
+    def partitionWith_synchronized
+    {
+        this.assertSynchronized
+        {
+            this.classUnderTest.partitionWith({
+                (_: String, _: AnyRef) => true
+            }, null)
+        }
+    }
+
+    @Test
     def collect_synchronized
     {
         this.assertSynchronized

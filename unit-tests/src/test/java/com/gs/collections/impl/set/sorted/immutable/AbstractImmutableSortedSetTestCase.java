@@ -267,6 +267,17 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
+    public void partitionWith()
+    {
+        ImmutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());
+        PartitionImmutableSortedSet<Integer> partition = integers.partitionWith(Predicates2.<Integer>greaterThan(), integers.size());
+        Verify.assertIterableEmpty(partition.getSelected());
+        Assert.assertEquals(integers, partition.getRejected());
+        Assert.assertEquals(Collections.<Integer>reverseOrder(), partition.getSelected().comparator());
+        Assert.assertEquals(Collections.<Integer>reverseOrder(), partition.getRejected().comparator());
+    }
+
+    @Test
     public void partitionWhile()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());

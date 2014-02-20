@@ -478,6 +478,19 @@ public final class MultiReaderUnifiedSet<T>
         }
     }
 
+    public <P> PartitionMutableSet<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.partitionWith(predicate, parameter);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
     public <S> MutableSet<S> selectInstancesOf(Class<S> clazz)
     {
         this.acquireReadLock();
@@ -788,6 +801,11 @@ public final class MultiReaderUnifiedSet<T>
         public PartitionMutableSet<T> partition(Predicate<? super T> predicate)
         {
             return this.getDelegate().partition(predicate);
+        }
+
+        public <P> PartitionMutableSet<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+        {
+            return this.getDelegate().partitionWith(predicate, parameter);
         }
 
         public <S> MutableSet<S> selectInstancesOf(Class<S> clazz)

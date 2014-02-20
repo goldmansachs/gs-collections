@@ -967,54 +967,18 @@ public abstract class Abstract<name>ObjectMapTestCase
             }
         }));
 
-        RichIterable\<String> actual1 = map1.reject(new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return !each.endsWith("ne");
-            }
-        });
+        RichIterable\<String> actual1 = map1.reject(StringPredicates.endsWith("ne").not());
         Assert.assertTrue(FastList.newListWith("one", "nine").equals(actual1) || FastList.newListWith("nine", "one").equals(actual1));
 
-        Assert.assertEquals(FastList.newListWith("nine"), map1.reject(new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return !"nine".equals(each);
-            }
-        }));
+        Assert.assertEquals(FastList.newListWith("nine"), map1.reject(Predicates.equal("nine").not()));
 
-        Assert.assertEquals(FastList.newListWith("zero"), map1.reject(new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return !each.endsWith("o");
-            }
-        }));
+        Assert.assertEquals(FastList.newListWith("zero"), map1.reject(StringPredicates.endsWith("o").not()));
 
-        Assert.assertEquals(FastList.newListWith("nine"), map1.reject(new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return !"nine".equals(each);
-            }
-        }, FastList.\<String>newList()));
+        Assert.assertEquals(FastList.newListWith("nine"), map1.reject(Predicates.equal("nine").not(), FastList.\<String>newList()));
 
-        Assert.assertEquals(FastList.newListWith("one", "nine"), map1.reject(new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return !each.endsWith("ne");
-            }
-        }, FastList.\<String>newList()));
+        Assert.assertEquals(FastList.newListWith("one", "nine"), map1.reject(StringPredicates.endsWith("ne").not(), FastList.\<String>newList()));
 
-        Assert.assertEquals(FastList.newListWith("zero"), map1.reject(new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return !each.endsWith("o");
-            }
-        }, FastList.\<String>newList()));
+        Assert.assertEquals(FastList.newListWith("zero"), map1.reject(StringPredicates.endsWith("o").not(), FastList.\<String>newList()));
     }
 
     @Test
@@ -1022,29 +986,11 @@ public abstract class Abstract<name>ObjectMapTestCase
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
 
-        Assert.assertEquals(FastList.newListWith("one", "nine"), map1.rejectWith(new Predicate2\<String, String>()
-        {
-            public boolean accept(String argument1, String argument2)
-            {
-                return !argument1.endsWith(argument2);
-            }
-        }, "ne"));
+        Assert.assertEquals(FastList.newListWith("one", "nine"), map1.rejectWith(StringPredicates2.notEndsWith(), "ne"));
 
-        Assert.assertEquals(FastList.newListWith("nine"), map1.rejectWith(new Predicate2\<String, String>()
-        {
-            public boolean accept(String argument1, String argument2)
-            {
-                return !argument2.equals(argument1);
-            }
-        }, "nine"));
+        Assert.assertEquals(FastList.newListWith("nine"), map1.rejectWith(Predicates2.notEqual(), "nine"));
 
-        Assert.assertEquals(FastList.newListWith("zero"), map1.rejectWith(new Predicate2\<String, String>()
-        {
-            public boolean accept(String argument1, String argument2)
-            {
-                return !argument1.endsWith(argument2);
-            }
-        }, "o"));
+        Assert.assertEquals(FastList.newListWith("zero"), map1.rejectWith(StringPredicates2.notEndsWith(), "o"));
     }
 
     @Test
@@ -1052,29 +998,11 @@ public abstract class Abstract<name>ObjectMapTestCase
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
 
-        Assert.assertEquals(FastList.newListWith("one", "nine"), map1.rejectWith(new Predicate2\<String, String>()
-        {
-            public boolean accept(String argument1, String argument2)
-            {
-                return !argument1.endsWith(argument2);
-            }
-        }, "ne", FastList.\<String>newList()));
+        Assert.assertEquals(FastList.newListWith("one", "nine"), map1.rejectWith(StringPredicates2.notEndsWith(), "ne", FastList.\<String>newList()));
 
-        Assert.assertEquals(FastList.newListWith("nine"), map1.rejectWith(new Predicate2\<String, String>()
-        {
-            public boolean accept(String argument1, String argument2)
-            {
-                return !argument2.equals(argument1);
-            }
-        }, "nine", FastList.\<String>newList()));
+        Assert.assertEquals(FastList.newListWith("nine"), map1.rejectWith(Predicates2.notEqual(), "nine", FastList.\<String>newList()));
 
-        Assert.assertEquals(FastList.newListWith("zero"), map1.rejectWith(new Predicate2\<String, String>()
-        {
-            public boolean accept(String argument1, String argument2)
-            {
-                return !argument1.endsWith(argument2);
-            }
-        }, "o", FastList.\<String>newList()));
+        Assert.assertEquals(FastList.newListWith("zero"), map1.rejectWith(StringPredicates2.notEndsWith(), "o", FastList.\<String>newList()));
     }
 
     @Test
@@ -1082,15 +1010,19 @@ public abstract class Abstract<name>ObjectMapTestCase
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
 
-        Predicate\<String> endsWithNe = new Predicate\<String>()
-        {
-            public boolean accept(String each)
-            {
-                return each.endsWith("ne");
-            }
-        };
-
+        Predicate\<String> endsWithNe = StringPredicates.endsWith("ne");
         PartitionIterable\<String> partition = map1.partition(endsWithNe);
+        Assert.assertTrue(FastList.newListWith("one", "nine").equals(partition.getSelected()) || FastList.newListWith("nine", "one").equals(partition.getSelected()));
+        Assert.assertEquals(FastList.newListWith("zero"), partition.getRejected());
+    }
+
+    @Test
+    public void partitionWith()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
+
+        Predicate2\<String, String> endsWith = StringPredicates2.endsWith();
+        PartitionIterable\<String> partition = map1.partitionWith(endsWith, "ne");
         Assert.assertTrue(FastList.newListWith("one", "nine").equals(partition.getSelected()) || FastList.newListWith("nine", "one").equals(partition.getSelected()));
         Assert.assertEquals(FastList.newListWith("zero"), partition.getRejected());
     }
@@ -1546,13 +1478,7 @@ public abstract class Abstract<name>ObjectMapTestCase
     @Test
     public void aggregateBy()
     {
-        Function0\<Integer> valueCreator = new Function0\<Integer>()
-        {
-            public Integer value()
-            {
-                return Integer.valueOf(0);
-            }
-        };
+        Function0\<Integer> valueCreator = Functions0.zeroInteger();
         Function2\<Integer, Integer, Integer> sumAggregator = new Function2\<Integer, Integer, Integer>()
         {
             public Integer value(Integer aggregate, Integer value)

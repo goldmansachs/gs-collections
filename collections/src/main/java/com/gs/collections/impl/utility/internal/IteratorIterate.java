@@ -109,9 +109,7 @@ public final class IteratorIterate
     /**
      * @see Iterate#partition(Iterable, Predicate)
      */
-    public static <T> PartitionMutableList<T> partition(
-            Iterator<T> iterator,
-            Predicate<? super T> predicate)
+    public static <T> PartitionMutableList<T> partition(Iterator<T> iterator, Predicate<? super T> predicate)
     {
         PartitionMutableList<T> result = new PartitionFastList<T>();
         MutableList<T> selected = result.getSelected();
@@ -121,6 +119,29 @@ public final class IteratorIterate
         {
             T each = iterator.next();
             MutableList<T> bucket = predicate.accept(each) ? selected : rejected;
+            bucket.add(each);
+        }
+        return result;
+    }
+
+    /**
+     * @see Iterate#partitionWith(Iterable, Predicate2, Object)
+     *
+     * @since 5.0
+     */
+    public static <T, P> PartitionMutableList<T> partitionWith(
+            Iterator<T> iterator,
+            Predicate2<? super T, ? super P> predicate,
+            P parameter)
+    {
+        PartitionMutableList<T> result = new PartitionFastList<T>();
+        MutableList<T> selected = result.getSelected();
+        MutableList<T> rejected = result.getRejected();
+
+        while (iterator.hasNext())
+        {
+            T each = iterator.next();
+            MutableList<T> bucket = predicate.accept(each, parameter) ? selected : rejected;
             bucket.add(each);
         }
         return result;
@@ -402,7 +423,7 @@ public final class IteratorIterate
 
     /**
      * @see Iterate#collectByte(Iterable, ByteFunction,
-     * MutableByteCollection)
+     *      MutableByteCollection)
      */
     public static <T, R extends MutableByteCollection> R collectByte(
             Iterator<T> iterator,
@@ -415,7 +436,6 @@ public final class IteratorIterate
         }
         return target;
     }
-
 
     /**
      * @see Iterate#collectChar(Iterable, CharFunction)
@@ -434,7 +454,7 @@ public final class IteratorIterate
 
     /**
      * @see Iterate#collectChar(Iterable, CharFunction,
-     * MutableCharCollection)
+     *      MutableCharCollection)
      */
     public static <T, R extends MutableCharCollection> R collectChar(
             Iterator<T> iterator,
@@ -447,6 +467,7 @@ public final class IteratorIterate
         }
         return target;
     }
+
     /**
      * @see Iterate#collectDouble(Iterable, DoubleFunction)
      */
@@ -464,7 +485,7 @@ public final class IteratorIterate
 
     /**
      * @see Iterate#collectDouble(Iterable, DoubleFunction,
-     * MutableDoubleCollection)
+     *      MutableDoubleCollection)
      */
     public static <T, R extends MutableDoubleCollection> R collectDouble(
             Iterator<T> iterator,
@@ -477,7 +498,6 @@ public final class IteratorIterate
         }
         return target;
     }
-
 
     /**
      * @see Iterate#collectFloat(Iterable, FloatFunction)
@@ -496,7 +516,7 @@ public final class IteratorIterate
 
     /**
      * @see Iterate#collectFloat(Iterable, FloatFunction,
-     * MutableFloatCollection)
+     *      MutableFloatCollection)
      */
     public static <T, R extends MutableFloatCollection> R collectFloat(
             Iterator<T> iterator,
@@ -509,6 +529,7 @@ public final class IteratorIterate
         }
         return target;
     }
+
     /**
      * @see Iterate#collectInt(Iterable, IntFunction)
      */
@@ -526,7 +547,7 @@ public final class IteratorIterate
 
     /**
      * @see Iterate#collectInt(Iterable, IntFunction,
-     * MutableIntCollection)
+     *      MutableIntCollection)
      */
     public static <T, R extends MutableIntCollection> R collectInt(
             Iterator<T> iterator,
@@ -539,6 +560,7 @@ public final class IteratorIterate
         }
         return target;
     }
+
     /**
      * @see Iterate#collectLong(Iterable, LongFunction)
      */
@@ -556,7 +578,7 @@ public final class IteratorIterate
 
     /**
      * @see Iterate#collectLong(Iterable, LongFunction,
-     * MutableLongCollection)
+     *      MutableLongCollection)
      */
     public static <T, R extends MutableLongCollection> R collectLong(
             Iterator<T> iterator,
@@ -587,7 +609,7 @@ public final class IteratorIterate
 
     /**
      * @see Iterate#collectShort(Iterable, ShortFunction,
-     * MutableShortCollection)
+     *      MutableShortCollection)
      */
     public static <T, R extends MutableShortCollection> R collectShort(
             Iterator<T> iterator,
@@ -600,7 +622,6 @@ public final class IteratorIterate
         }
         return target;
     }
-
 
     /**
      * @see Iterate#flatCollect(Iterable, Function, Collection)

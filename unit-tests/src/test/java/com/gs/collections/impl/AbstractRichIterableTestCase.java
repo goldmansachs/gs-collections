@@ -857,6 +857,15 @@ public abstract class AbstractRichIterableTestCase
     }
 
     @Test
+    public void partitionWith()
+    {
+        RichIterable<Integer> integers = this.newWith(-3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+        PartitionIterable<Integer> result = integers.partitionWith(Predicates2.in(), FastList.newListWith(-2, 0, 2, 4, 6, 8));
+        Assert.assertEquals(this.newWith(-2, 0, 2, 4, 6, 8), result.getSelected());
+        Assert.assertEquals(this.newWith(-3, -1, 1, 3, 5, 7, 9), result.getRejected());
+    }
+
+    @Test
     public void toList()
     {
         MutableList<Integer> list = this.newWith(1, 2, 3, 4).toList();

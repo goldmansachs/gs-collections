@@ -216,6 +216,18 @@ public abstract class AbstractSortedSetTestCase extends AbstractCollectionTestCa
         Assert.assertEquals(Comparators.<Integer>reverseNaturalOrder(), partition.getRejected().comparator());
     }
 
+    @Override
+    @Test
+    public void partitionWith()
+    {
+        MutableSortedSet<Integer> integers = this.newWith(Comparators.<Integer>reverseNaturalOrder(), 4, 2, 1, 3, 5, 6);
+        PartitionMutableSortedSet<Integer> partition = integers.partitionWith(Predicates2.in(), integers.select(IntegerPredicates.isEven()));
+        Verify.assertSortedSetsEqual(this.newWith(Comparators.reverseNaturalOrder(), 6, 4, 2), partition.getSelected());
+        Verify.assertSortedSetsEqual(this.newWith(Comparators.reverseNaturalOrder(), 5, 3, 1), partition.getRejected());
+        Assert.assertEquals(Comparators.<Integer>reverseNaturalOrder(), partition.getSelected().comparator());
+        Assert.assertEquals(Comparators.<Integer>reverseNaturalOrder(), partition.getRejected().comparator());
+    }
+
     @Test
     public void partitionWhile()
     {

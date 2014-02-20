@@ -58,6 +58,8 @@ public interface ImmutableStack<T> extends StackIterable<T>
 
     PartitionImmutableStack<T> partition(Predicate<? super T> predicate);
 
+    <P> PartitionImmutableStack<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     <V> ImmutableStack<V> collect(Function<? super T, ? extends V> function);
 
     ImmutableBooleanStack collectBoolean(BooleanFunction<? super T> booleanFunction);

@@ -301,6 +301,15 @@ public class SynchronizedBag<T>
     }
 
     @Override
+    public <P> PartitionMutableBag<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableBag().partitionWith(predicate, parameter);
+        }
+    }
+
+    @Override
     public <S> MutableBag<S> selectInstancesOf(Class<S> clazz)
     {
         synchronized (this.getLock())

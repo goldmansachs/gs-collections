@@ -399,6 +399,14 @@ public class SynchronizedSortedMap<K, V>
         }
     }
 
+    public <P> PartitionMutableList<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.getSortedMap().partitionWith(predicate, parameter);
+        }
+    }
+
     public <K2, V2> MutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function)
     {
         synchronized (this.lock)

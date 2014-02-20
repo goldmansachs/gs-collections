@@ -349,6 +349,42 @@ public final class Iterate
     }
 
     /**
+     * Filters a collection into a PartitionIterable based on a predicate.
+     * <p/>
+     * <pre>e.g.
+     * return Iterate.<b>partitionWith</b>(collection, new Predicate&lt;Person, String&gt;()
+     * {
+     *     public boolean value(Person person, String state)
+     *     {
+     *         return person.getAddress().getState().getName().equals(state);
+     *     }
+     * }, "New York");
+     * </pre>
+     *
+     * @since 5.0.
+     */
+    public static <T, P> PartitionIterable<T> partitionWith(Iterable<T> iterable, Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        if (iterable instanceof RichIterable<?>)
+        {
+            return ((RichIterable<T>) iterable).partitionWith(predicate, parameter);
+        }
+        if (iterable instanceof ArrayList)
+        {
+            return ArrayListIterate.partitionWith((ArrayList<T>) iterable, predicate, parameter);
+        }
+        if (iterable instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.partitionWith((List<T>) iterable, predicate, parameter);
+        }
+        if (iterable != null)
+        {
+            return IterableIterate.partitionWith(iterable, predicate, parameter);
+        }
+        throw new IllegalArgumentException("Cannot perform a partition on null");
+    }
+
+    /**
      * Returns a new collection with only the elements that are instances of the Class {@code clazz}.
      */
     public static <T> Collection<T> selectInstancesOf(Iterable<?> iterable, Class<T> clazz)
@@ -1068,7 +1104,6 @@ public final class Iterate
         throw new IllegalArgumentException("Cannot perform a collectBoolean on null");
     }
 
-
     /**
      * Returns a new collection with the results of applying the specified byteFunction for each element of the iterable.
      * <p/>
@@ -1143,7 +1178,6 @@ public final class Iterate
         throw new IllegalArgumentException("Cannot perform a collectByte on null");
     }
 
-
     /**
      * Returns a new collection with the results of applying the specified charFunction for each element of the iterable.
      * <p/>
@@ -1181,7 +1215,7 @@ public final class Iterate
     }
 
     /**
-     * Same as {@link #collectChar(Iterable,CharFunction)}, except that the results are gathered into the specified {@code target}
+     * Same as {@link #collectChar(Iterable, CharFunction)}, except that the results are gathered into the specified {@code target}
      * collection.
      * <p/>
      * <pre>e.g.
@@ -1292,7 +1326,6 @@ public final class Iterate
         throw new IllegalArgumentException("Cannot perform a collectDouble on null");
     }
 
-
     /**
      * Returns a new collection with the results of applying the specified floatFunction for each element of the iterable.
      * <p/>
@@ -1366,7 +1399,6 @@ public final class Iterate
         }
         throw new IllegalArgumentException("Cannot perform a collectFloat on null");
     }
-
 
     /**
      * Returns a new collection with the results of applying the specified intFunction for each element of the iterable.
@@ -1589,7 +1621,6 @@ public final class Iterate
         }
         throw new IllegalArgumentException("Cannot perform a collectShort on null");
     }
-
 
     /**
      * @see RichIterable#flatCollect(Function)

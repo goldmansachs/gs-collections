@@ -478,6 +478,19 @@ public final class MultiReaderFastList<T>
         }
     }
 
+    public <P> PartitionMutableList<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.partitionWith(predicate, parameter);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
     public <S> MutableList<S> selectInstancesOf(Class<S> clazz)
     {
         this.acquireReadLock();
@@ -1031,6 +1044,11 @@ public final class MultiReaderFastList<T>
         public PartitionMutableList<T> partition(Predicate<? super T> predicate)
         {
             return this.getDelegate().partition(predicate);
+        }
+
+        public <P> PartitionMutableList<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+        {
+            return this.getDelegate().partitionWith(predicate, parameter);
         }
 
         public <S> MutableList<S> selectInstancesOf(Class<S> clazz)

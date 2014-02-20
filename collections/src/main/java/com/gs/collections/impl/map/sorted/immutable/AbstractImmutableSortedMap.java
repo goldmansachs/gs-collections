@@ -49,6 +49,7 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.ImmutableSortedMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.list.ImmutableListMultimap;
+import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.api.partition.list.PartitionImmutableList;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.set.MutableSet;
@@ -57,6 +58,7 @@ import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
+import com.gs.collections.impl.block.procedure.PartitionPredicate2Procedure;
 import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectBooleanProcedure;
@@ -226,6 +228,13 @@ public abstract class AbstractImmutableSortedMap<K, V>
     {
         PartitionMutableList<V> partitionFastList = new PartitionFastList<V>();
         this.forEach(new PartitionProcedure<V>(predicate, partitionFastList));
+        return partitionFastList.toImmutable();
+    }
+
+    public <P> PartitionIterable<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        PartitionMutableList<V> partitionFastList = new PartitionFastList<V>();
+        this.forEach(new PartitionPredicate2Procedure<V, P>(predicate, parameter, partitionFastList));
         return partitionFastList.toImmutable();
     }
 

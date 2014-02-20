@@ -104,6 +104,16 @@ public final class IterableIterate
         return IteratorIterate.partition(iterable.iterator(), predicate);
     }
 
+    /**
+     * @see Iterate#partitionWith(Iterable, Predicate2, Object)
+     *
+     * @since 5.0
+     */
+    public static <T, P> PartitionMutableList<T> partitionWith(Iterable<T> iterable, Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return IteratorIterate.partitionWith(iterable.iterator(), predicate, parameter);
+    }
+
     public static <T, R extends PartitionMutableCollection<T>> R partitionWhile(Iterable<T> iterable, Predicate<? super T> predicate, R target)
     {
         return IteratorIterate.partitionWhile(iterable.iterator(), predicate, target);

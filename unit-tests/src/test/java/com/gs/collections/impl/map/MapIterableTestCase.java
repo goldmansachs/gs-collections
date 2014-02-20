@@ -1244,6 +1244,19 @@ public abstract class MapIterableTestCase
     }
 
     @Test
+    public void partitionWith_value()
+    {
+        MapIterable<String, Integer> map = this.newMapWithKeysValues(
+                "A", 1,
+                "B", 2,
+                "C", 3,
+                "D", 4);
+        PartitionIterable<Integer> partition = map.partitionWith(Predicates2.in(), map.select(IntegerPredicates.isEven()));
+        Assert.assertEquals(iSet(4, 2), partition.getSelected().toSet());
+        Assert.assertEquals(iSet(3, 1), partition.getRejected().toSet());
+    }
+
+    @Test
     public void selectInstancesOf_value()
     {
         MapIterable<String, Number> map = this.<String, Number>newMapWithKeysValues("1", 1, "2", 2.0, "3", 3, "4", 4.0);

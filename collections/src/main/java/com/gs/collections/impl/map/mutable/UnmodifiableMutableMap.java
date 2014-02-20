@@ -831,6 +831,11 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().partition(predicate);
     }
 
+    public <P> PartitionMutableCollection<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.getMutableMap().partitionWith(predicate, parameter);
+    }
+
     public <S> MutableCollection<S> selectInstancesOf(Class<S> clazz)
     {
         return this.getMutableMap().selectInstancesOf(clazz);

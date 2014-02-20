@@ -72,6 +72,8 @@ public interface ImmutableSet<T>
 
     PartitionImmutableSet<T> partition(Predicate<? super T> predicate);
 
+    <P> PartitionImmutableSet<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     <S> ImmutableSet<S> selectInstancesOf(Class<S> clazz);
 
     <V> ImmutableSet<V> collect(Function<? super T, ? extends V> function);

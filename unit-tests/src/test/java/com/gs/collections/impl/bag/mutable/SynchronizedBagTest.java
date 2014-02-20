@@ -22,6 +22,7 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
+import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.primitive.IntPredicates;
 import com.gs.collections.impl.collection.mutable.AbstractSynchronizedCollectionTestCase;
 import com.gs.collections.impl.factory.Bags;
@@ -117,6 +118,18 @@ public class SynchronizedBagTest extends AbstractSynchronizedCollectionTestCase
 
         MutableBag<Integer> integers = this.newWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4);
         PartitionMutableCollection<Integer> result = integers.partition(IntegerPredicates.isEven());
+        Assert.assertEquals(iBag(2, 2, 4, 4, 4, 4), result.getSelected());
+        Assert.assertEquals(iBag(1, 3, 3, 3), result.getRejected());
+    }
+
+    @Override
+    @Test
+    public void partitionWith()
+    {
+        super.partitionWith();
+
+        MutableBag<Integer> integers = this.newWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4);
+        PartitionMutableCollection<Integer> result = integers.partitionWith(Predicates2.in(), integers.select(IntegerPredicates.isEven()));
         Assert.assertEquals(iBag(2, 2, 4, 4, 4, 4), result.getSelected());
         Assert.assertEquals(iBag(1, 3, 3, 3), result.getRejected());
     }

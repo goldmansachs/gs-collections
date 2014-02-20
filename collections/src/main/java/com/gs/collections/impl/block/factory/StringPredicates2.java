@@ -26,8 +26,11 @@ public final class StringPredicates2
     private static final ContainsString CONTAINS_STRING = new ContainsString();
     private static final NotContainsString NOT_CONTAINS_STRING = new NotContainsString();
     private static final StartsWith STARTS_WITH = new StartsWith();
+    private static final NotStartsWith NOT_STARTS_WITH = new NotStartsWith();
     private static final EndsWith ENDS_WITH = new EndsWith();
+    private static final NotEndsWith NOT_ENDS_WITH = new NotEndsWith();
     private static final EqualsIgnoreCase EQUALS_IGNORE_CASE = new EqualsIgnoreCase();
+    private static final NotEqualsIgnoreCase NOT_EQUALS_IGNORE_CASE = new NotEqualsIgnoreCase();
     private static final MatchesRegex MATCHES_REGEX = new MatchesRegex();
 
     private StringPredicates2()
@@ -64,6 +67,15 @@ public final class StringPredicates2
     }
 
     /**
+     * Returns false if a String passed to the the accept method starts with the string specified on the predicate.
+     * @since 5.0
+     */
+    public static Predicates2<String, String> notStartsWith()
+    {
+        return NOT_STARTS_WITH;
+    }
+
+    /**
      * Returns true if a String passed to the the accept method ends with the string specified on the predicate.
      */
     public static Predicates2<String, String> endsWith()
@@ -71,9 +83,26 @@ public final class StringPredicates2
         return ENDS_WITH;
     }
 
+    /**
+     * Returns false if a String passed to the the accept method ends with the string specified on the predicate.
+     * @since 5.0
+     */
+    public static Predicates2<String, String> notEndsWith()
+    {
+        return NOT_ENDS_WITH;
+    }
+
     public static Predicates2<String, String> equalsIgnoreCase()
     {
         return EQUALS_IGNORE_CASE;
+    }
+
+    /**
+     * @since 5.0
+     */
+    public static Predicates2<String, String> notEqualsIgnoreCase()
+    {
+        return NOT_EQUALS_IGNORE_CASE;
     }
 
     public static Predicates2<String, String> matches()
@@ -129,6 +158,22 @@ public final class StringPredicates2
         }
     }
 
+    private static final class NotStartsWith extends Predicates2<String, String>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public boolean accept(String each, String parameter)
+        {
+            return each == null || !each.startsWith(parameter);
+        }
+
+        @Override
+        public String toString()
+        {
+            return "StringPredicates2.notStartsWith()";
+        }
+    }
+
     private static final class EndsWith extends Predicates2<String, String>
     {
         private static final long serialVersionUID = 1L;
@@ -145,6 +190,22 @@ public final class StringPredicates2
         }
     }
 
+    private static final class NotEndsWith extends Predicates2<String, String>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public boolean accept(String each, String parameter)
+        {
+            return each == null || !each.endsWith(parameter);
+        }
+
+        @Override
+        public String toString()
+        {
+            return "StringPredicates2.notEndsWith()";
+        }
+    }
+
     private static final class EqualsIgnoreCase extends Predicates2<String, String>
     {
         private static final long serialVersionUID = 1L;
@@ -158,6 +219,22 @@ public final class StringPredicates2
         public String toString()
         {
             return "StringPredicates2.equalsIgnoreCase()";
+        }
+    }
+
+    private static final class NotEqualsIgnoreCase extends Predicates2<String, String>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public boolean accept(String each, String parameter)
+        {
+            return each == null || !each.equalsIgnoreCase(parameter);
+        }
+
+        @Override
+        public String toString()
+        {
+            return "StringPredicates2.notEqualsIgnoreCase()";
         }
     }
 

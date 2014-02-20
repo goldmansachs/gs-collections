@@ -45,6 +45,7 @@ import com.gs.collections.api.set.primitive.MutableIntSet;
 import com.gs.collections.api.set.primitive.MutableLongSet;
 import com.gs.collections.api.set.primitive.MutableShortSet;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.block.procedure.PartitionPredicate2Procedure;
 import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectBooleanProcedure;
@@ -126,6 +127,13 @@ public abstract class AbstractMutableSet<T>
     {
         PartitionMutableSet<T> partitionMutableSet = new PartitionUnifiedSet<T>();
         this.forEach(new PartitionProcedure<T>(predicate, partitionMutableSet));
+        return partitionMutableSet;
+    }
+
+    public <P> PartitionMutableSet<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        PartitionMutableSet<T> partitionMutableSet = new PartitionUnifiedSet<T>();
+        this.forEach(new PartitionPredicate2Procedure<T, P>(predicate, parameter, partitionMutableSet));
         return partitionMutableSet;
     }
 

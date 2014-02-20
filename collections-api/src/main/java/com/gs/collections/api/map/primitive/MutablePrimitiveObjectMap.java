@@ -90,6 +90,8 @@ public interface MutablePrimitiveObjectMap<V>
 
     PartitionMutableCollection<V> partition(Predicate<? super V> predicate);
 
+    <P> PartitionMutableCollection<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter);
+
     <S> MutableCollection<Pair<V, S>> zip(Iterable<S> that);
 
     MutableCollection<Pair<V, Integer>> zipWithIndex();

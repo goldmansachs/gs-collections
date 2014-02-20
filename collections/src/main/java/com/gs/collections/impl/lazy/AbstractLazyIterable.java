@@ -253,6 +253,11 @@ public abstract class AbstractLazyIterable<T>
         return IterableIterate.partition(this, predicate);
     }
 
+    public <P> PartitionMutableList<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return IterableIterate.partitionWith(this, predicate, parameter);
+    }
+
     public <S> LazyIterable<S> selectInstancesOf(Class<S> clazz)
     {
         return LazyIterate.selectInstancesOf(this, clazz);

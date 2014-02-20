@@ -102,6 +102,7 @@ import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
+import com.gs.collections.impl.block.procedure.PartitionPredicate2Procedure;
 import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.block.procedure.RejectProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
@@ -817,6 +818,13 @@ public class UnifiedSet<K>
     {
         PartitionMutableSet<K> partitionUnifiedSet = new PartitionUnifiedSet<K>();
         this.forEach(new PartitionProcedure<K>(predicate, partitionUnifiedSet));
+        return partitionUnifiedSet;
+    }
+
+    public <P> PartitionMutableSet<K> partitionWith(Predicate2<? super K, ? super P> predicate, P parameter)
+    {
+        PartitionMutableSet<K> partitionUnifiedSet = new PartitionUnifiedSet<K>();
+        this.forEach(new PartitionPredicate2Procedure<K, P>(predicate, parameter, partitionUnifiedSet));
         return partitionUnifiedSet;
     }
 

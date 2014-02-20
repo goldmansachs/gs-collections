@@ -936,6 +936,14 @@ public class AbstractSynchronizedMutableCollection<T>
         }
     }
 
+    public <P> PartitionMutableCollection<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.partitionWith(predicate, parameter);
+        }
+    }
+
     public <P> MutableCollection<T> selectWith(
             Predicate2<? super T, ? super P> predicate,
             P parameter)

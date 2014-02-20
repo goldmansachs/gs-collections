@@ -17,6 +17,7 @@
 package com.gs.collections.impl.partition.stack;
 
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.partition.stack.PartitionImmutableStack;
@@ -29,12 +30,6 @@ public class PartitionArrayStack<T> implements PartitionMutableStack<T>
 {
     private final MutableList<T> selected = FastList.newList();
     private final MutableList<T> rejected = FastList.newList();
-    private final Predicate<? super T> predicate;
-
-    public PartitionArrayStack(Predicate<? super T> predicate)
-    {
-        this.predicate = predicate;
-    }
 
     public MutableStack<T> getSelected()
     {
@@ -53,7 +48,7 @@ public class PartitionArrayStack<T> implements PartitionMutableStack<T>
 
     public void add(T t)
     {
-        (this.predicate.accept(t) ? this.selected : this.rejected).add(t);
+        throw new UnsupportedOperationException("add is no longer supported for PartitionArrayStack");
     }
 
     public static final class PartitionProcedure<T> implements Procedure<T>
@@ -72,6 +67,30 @@ public class PartitionArrayStack<T> implements PartitionMutableStack<T>
         public void value(T each)
         {
             MutableList<T> bucket = this.predicate.accept(each)
+                    ? this.partitionMutableStack.selected
+                    : this.partitionMutableStack.rejected;
+            bucket.add(each);
+        }
+    }
+
+    public static final class PartitionPredicate2Procedure<T, P> implements Procedure<T>
+    {
+        private static final long serialVersionUID = 1L;
+
+        private final Predicate2<? super T, ? super P> predicate;
+        private final P parameter;
+        private final PartitionArrayStack<T> partitionMutableStack;
+
+        public PartitionPredicate2Procedure(Predicate2<? super T, ? super P> predicate, P parameter, PartitionArrayStack<T> partitionMutableStack)
+        {
+            this.predicate = predicate;
+            this.parameter = parameter;
+            this.partitionMutableStack = partitionMutableStack;
+        }
+
+        public void value(T each)
+        {
+            MutableList<T> bucket = this.predicate.accept(each, this.parameter)
                     ? this.partitionMutableStack.selected
                     : this.partitionMutableStack.rejected;
             bucket.add(each);

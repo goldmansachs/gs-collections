@@ -124,6 +124,8 @@ public interface StackIterable<T> extends RichIterable<T>
 
     PartitionStack<T> partition(Predicate<? super T> predicate);
 
+    <P> PartitionStack<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     <V> StackIterable<V> collect(Function<? super T, ? extends V> function);
 
     BooleanStack collectBoolean(BooleanFunction<? super T> booleanFunction);

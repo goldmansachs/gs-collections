@@ -48,6 +48,7 @@ import com.gs.collections.api.set.primitive.MutableLongSet;
 import com.gs.collections.api.set.primitive.MutableShortSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
+import com.gs.collections.impl.block.procedure.PartitionPredicate2Procedure;
 import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectBooleanProcedure;
@@ -228,6 +229,14 @@ public final class SetAdapter<T>
     {
         PartitionMutableSet<T> partitionUnifiedSet = new PartitionUnifiedSet<T>();
         this.forEach(new PartitionProcedure<T>(predicate, partitionUnifiedSet));
+        return partitionUnifiedSet;
+    }
+
+    @Override
+    public <P> PartitionMutableSet<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        PartitionMutableSet<T> partitionUnifiedSet = new PartitionUnifiedSet<T>();
+        this.forEach(new PartitionPredicate2Procedure<T, P>(predicate, parameter, partitionUnifiedSet));
         return partitionUnifiedSet;
     }
 

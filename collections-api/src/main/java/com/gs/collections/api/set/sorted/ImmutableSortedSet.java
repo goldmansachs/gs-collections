@@ -75,6 +75,8 @@ public interface ImmutableSortedSet<T>
 
     PartitionImmutableSortedSet<T> partition(Predicate<? super T> predicate);
 
+    <P> PartitionImmutableSortedSet<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     PartitionImmutableSortedSet<T> partitionWhile(Predicate<? super T> predicate);
 
     <S> ImmutableSortedSet<S> selectInstancesOf(Class<S> clazz);

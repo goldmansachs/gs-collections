@@ -158,6 +158,8 @@ public interface ListIterable<T>
 
     PartitionList<T> partition(Predicate<? super T> predicate);
 
+    <P> PartitionList<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     <S> ListIterable<S> selectInstancesOf(Class<S> clazz);
 
     <V> ListIterable<V> collect(Function<? super T, ? extends V> function);

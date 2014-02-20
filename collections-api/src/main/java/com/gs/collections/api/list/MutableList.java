@@ -72,6 +72,8 @@ public interface MutableList<T>
 
     PartitionMutableList<T> partition(Predicate<? super T> predicate);
 
+    <P> PartitionMutableList<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     <S> MutableList<S> selectInstancesOf(Class<S> clazz);
 
     <V> MutableList<V> collect(Function<? super T, ? extends V> function);

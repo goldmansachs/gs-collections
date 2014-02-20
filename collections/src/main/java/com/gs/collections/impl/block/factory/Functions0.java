@@ -39,6 +39,7 @@ public final class Functions0
     private static final NullFunction<?> NULL_FUNCTION = new NullFunction<Object>();
     private static final AtomicIntegerZeroFunction ATOMIC_INTEGER_ZERO = new AtomicIntegerZeroFunction();
     private static final AtomicLongZeroFunction ATOMIC_LONG_ZERO = new AtomicLongZeroFunction();
+    private static final IntegerZeroFunction INTEGER_ZERO = new IntegerZeroFunction();
 
     private Functions0()
     {
@@ -73,6 +74,11 @@ public final class Functions0
     public static <T> Function0<T> value(T t)
     {
         return new PassThruFunction0<T>(t);
+    }
+
+    public static Function0<Integer> zeroInteger()
+    {
+        return INTEGER_ZERO;
     }
 
     public static Function0<AtomicInteger> zeroAtomicInteger()
@@ -132,6 +138,16 @@ public final class Functions0
         public T value()
         {
             return null;
+        }
+    }
+
+    private static class IntegerZeroFunction implements Function0<Integer>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public Integer value()
+        {
+            return Integer.valueOf(0);
         }
     }
 

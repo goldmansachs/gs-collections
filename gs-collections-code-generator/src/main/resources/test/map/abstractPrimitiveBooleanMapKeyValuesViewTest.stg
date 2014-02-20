@@ -93,7 +93,7 @@ import org.junit.Test;
 
 /**
  * Abstract JUnit test for {@link <name>BooleanMap#keyValuesView()}.
- * This file was automatically generated from template file abstractPrimitiveBooleanMapKeyValuesViewTestCase.stg.
+ * This file was automatically generated from template file abstractPrimitiveBooleanMapKeyValuesViewTest.stg.
  */
 public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
 {
@@ -787,6 +787,17 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
     public void partition()
     {
         PartitionIterable\<<name>BooleanPair> result = this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).partition(Predicates.equal(PrimitiveTuples.pair(<(literal.(type))("2")>, true)));
+        Verify.assertContains(PrimitiveTuples.pair(<(literal.(type))("2")>, true), result.getSelected().toList());
+        Verify.assertIterableSize(1, result.getSelected());
+        Verify.assertContains(PrimitiveTuples.pair(<(literal.(type))("1")>, false), result.getRejected().toList());
+        Verify.assertContains(PrimitiveTuples.pair(<(literal.(type))("3")>, false), result.getRejected().toList());
+        Verify.assertIterableSize(2, result.getRejected());
+    }
+
+    @Test
+    public void partitionWith()
+    {
+        PartitionIterable\<<name>BooleanPair> result = this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false).partitionWith(Predicates2.equal(), PrimitiveTuples.pair(<(literal.(type))("2")>, true));
         Verify.assertContains(PrimitiveTuples.pair(<(literal.(type))("2")>, true), result.getSelected().toList());
         Verify.assertIterableSize(1, result.getSelected());
         Verify.assertContains(PrimitiveTuples.pair(<(literal.(type))("1")>, false), result.getRejected().toList());

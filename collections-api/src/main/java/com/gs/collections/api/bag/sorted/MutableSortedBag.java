@@ -90,6 +90,8 @@ public interface MutableSortedBag<T>
 
     PartitionMutableSortedBag<T> partition(Predicate<? super T> predicate);
 
+    <P> PartitionMutableSortedBag<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     PartitionMutableSortedBag<T> partitionWhile(Predicate<? super T> predicate);
 
     <S> MutableSortedBag<S> selectInstancesOf(Class<S> clazz);

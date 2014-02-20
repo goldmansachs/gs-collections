@@ -447,6 +447,19 @@ public class ImmutableEmptySortedSetTest extends AbstractImmutableSortedSetTestC
 
     @Override
     @Test
+    public void partitionWith()
+    {
+        ImmutableSortedSet<Integer> set = this.classUnderTest(Collections.<Integer>reverseOrder());
+        Verify.assertEmpty(set.castToSortedSet());
+        PartitionImmutableSortedSet<Integer> partition = set.partitionWith(Predicates2.<Integer>lessThan(), 4);
+        Verify.assertIterableEmpty(partition.getSelected());
+        Verify.assertIterableEmpty(partition.getRejected());
+        Assert.assertEquals(Collections.<Integer>reverseOrder(), partition.getSelected().comparator());
+        Assert.assertEquals(Collections.<Integer>reverseOrder(), partition.getRejected().comparator());
+    }
+
+    @Override
+    @Test
     public void collect()
     {
         ImmutableSortedSet<Integer> integers = this.classUnderTest(Collections.<Integer>reverseOrder());

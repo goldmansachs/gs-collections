@@ -350,6 +350,12 @@ public class UnmodifiableMutableList<T>
     }
 
     @Override
+    public <P> PartitionMutableList<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.getMutableList().partitionWith(predicate, parameter);
+    }
+
+    @Override
     public <S> MutableList<S> selectInstancesOf(Class<S> clazz)
     {
         return this.getMutableList().selectInstancesOf(clazz);

@@ -66,6 +66,8 @@ public interface Bag<T>
 
     PartitionBag<T> partition(Predicate<? super T> predicate);
 
+    <P> PartitionBag<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     <S> Bag<S> selectInstancesOf(Class<S> clazz);
 
     <V> BagMultimap<V, T> groupBy(Function<? super T, ? extends V> function);

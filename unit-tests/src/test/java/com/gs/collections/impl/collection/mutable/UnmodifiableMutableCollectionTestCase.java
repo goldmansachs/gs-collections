@@ -178,6 +178,14 @@ public abstract class UnmodifiableMutableCollectionTestCase<T>
     }
 
     @Test
+    public void partitionWith()
+    {
+        PartitionMutableCollection<?> partition = this.getCollection().partitionWith(Predicates2.alwaysTrue(), null);
+        Assert.assertEquals(this.getCollection(), partition.getSelected());
+        Assert.assertNotEquals(this.getCollection(), partition.getRejected());
+    }
+
+    @Test
     public void collect()
     {
         Assert.assertEquals(this.getCollection(), this.getCollection().collect(Functions.getPassThru()));

@@ -59,6 +59,7 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
+import com.gs.collections.api.partition.stack.PartitionMutableStack;
 import com.gs.collections.api.partition.stack.PartitionStack;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
@@ -249,11 +250,19 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
         }
     }
 
-    public PartitionStack<T> partition(Predicate<? super T> predicate)
+    public PartitionMutableStack<T> partition(Predicate<? super T> predicate)
     {
         synchronized (this.lock)
         {
             return this.delegate.partition(predicate);
+        }
+    }
+
+    public <P> PartitionMutableStack<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.partitionWith(predicate, parameter);
         }
     }
 
@@ -304,6 +313,7 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
             return this.delegate.collectByte(byteFunction, target);
         }
     }
+
     public MutableCharStack collectChar(CharFunction<? super T> charFunction)
     {
         synchronized (this.lock)
@@ -319,6 +329,7 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
             return this.delegate.collectChar(charFunction, target);
         }
     }
+
     public MutableDoubleStack collectDouble(DoubleFunction<? super T> doubleFunction)
     {
         synchronized (this.lock)
@@ -334,6 +345,7 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
             return this.delegate.collectDouble(doubleFunction, target);
         }
     }
+
     public MutableFloatStack collectFloat(FloatFunction<? super T> floatFunction)
     {
         synchronized (this.lock)
@@ -349,6 +361,7 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
             return this.delegate.collectFloat(floatFunction, target);
         }
     }
+
     public MutableIntStack collectInt(IntFunction<? super T> intFunction)
     {
         synchronized (this.lock)
@@ -364,6 +377,7 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
             return this.delegate.collectInt(intFunction, target);
         }
     }
+
     public MutableLongStack collectLong(LongFunction<? super T> longFunction)
     {
         synchronized (this.lock)
@@ -379,6 +393,7 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
             return this.delegate.collectLong(longFunction, target);
         }
     }
+
     public MutableShortStack collectShort(ShortFunction<? super T> shortFunction)
     {
         synchronized (this.lock)

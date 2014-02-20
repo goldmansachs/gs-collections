@@ -429,6 +429,11 @@ abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
         return this.delegate.partition(predicate);
     }
 
+    public <P> PartitionMutableCollection<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.delegate.partitionWith(predicate, parameter);
+    }
+
     public <S> MutableCollection<S> selectInstancesOf(Class<S> clazz)
     {
         return this.delegate.selectInstancesOf(clazz);

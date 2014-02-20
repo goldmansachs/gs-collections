@@ -286,6 +286,12 @@ public final class ArrayListAdapter<T>
     }
 
     @Override
+    public <P> PartitionMutableList<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return ArrayListIterate.partitionWith(this.getDelegate(), predicate, parameter);
+    }
+
+    @Override
     public <S> MutableList<S> selectInstancesOf(Class<S> clazz)
     {
         return ArrayListIterate.selectInstancesOf(this.delegate, clazz);

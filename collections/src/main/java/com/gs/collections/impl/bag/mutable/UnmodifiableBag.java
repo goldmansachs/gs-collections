@@ -163,6 +163,12 @@ public class UnmodifiableBag<T>
     }
 
     @Override
+    public <P> PartitionMutableBag<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.getMutableBag().partitionWith(predicate, parameter);
+    }
+
+    @Override
     public <S> MutableBag<S> selectInstancesOf(Class<S> clazz)
     {
         return this.getMutableBag().selectInstancesOf(clazz);

@@ -31,5 +31,9 @@ public interface PartitionMutableStack<T> extends PartitionStack<T>
 
     PartitionImmutableStack<T> toImmutable();
 
+    /**
+     * @deprecated in 5.0
+     */
+    @Deprecated
     void add(T t);
 }

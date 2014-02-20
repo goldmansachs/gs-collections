@@ -1182,6 +1182,16 @@ public abstract class AbstractMemoryEfficientMutableMapTest
     }
 
     @Test
+    public void partitionWith_value()
+    {
+        MutableMap<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3);
+        PartitionMutableCollection<Integer> partition = map.partitionWith(Predicates2.in(), map.select(IntegerPredicates.isEven()));
+
+        Assert.assertEquals(this.expectSelect(map.size()), partition.getSelected().toSet());
+        Assert.assertEquals(this.expectReject(map.size()), partition.getRejected().toSet());
+    }
+
+    @Test
     public void toArray()
     {
         MutableMap<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3);

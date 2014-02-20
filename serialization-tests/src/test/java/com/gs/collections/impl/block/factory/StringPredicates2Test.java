@@ -44,6 +44,17 @@ public class StringPredicates2Test
     }
 
     @Test
+    public void notStartsWith()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAEVjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlN0cmluZ1ByZWRp\n"
+                        + "Y2F0ZXMyJE5vdFN0YXJ0c1dpdGgAAAAAAAAAAQIAAHhyADFjb20uZ3MuY29sbGVjdGlvbnMuaW1w\n"
+                        + "bC5ibG9jay5mYWN0b3J5LlByZWRpY2F0ZXMyAAAAAAAAAAECAAB4cA==",
+                StringPredicates2.notStartsWith());
+    }
+
+    @Test
     public void endsWith()
     {
         Verify.assertSerializedForm(
@@ -55,6 +66,17 @@ public class StringPredicates2Test
     }
 
     @Test
+    public void notEndsWith()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAENjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlN0cmluZ1ByZWRp\n"
+                        + "Y2F0ZXMyJE5vdEVuZHNXaXRoAAAAAAAAAAECAAB4cgAxY29tLmdzLmNvbGxlY3Rpb25zLmltcGwu\n"
+                        + "YmxvY2suZmFjdG9yeS5QcmVkaWNhdGVzMgAAAAAAAAABAgAAeHA=",
+                StringPredicates2.notEndsWith());
+    }
+
+    @Test
     public void equalsIgnoreCase()
     {
         Verify.assertSerializedForm(
@@ -63,6 +85,17 @@ public class StringPredicates2Test
                         + "Y2F0ZXMyJEVxdWFsc0lnbm9yZUNhc2UAAAAAAAAAAQIAAHhyADFjb20uZ3MuY29sbGVjdGlvbnMu\n"
                         + "aW1wbC5ibG9jay5mYWN0b3J5LlByZWRpY2F0ZXMyAAAAAAAAAAECAAB4cA==",
                 StringPredicates2.equalsIgnoreCase());
+    }
+
+    @Test
+    public void notEqualsIgnoreCase()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAEtjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LlN0cmluZ1ByZWRp\n"
+                        + "Y2F0ZXMyJE5vdEVxdWFsc0lnbm9yZUNhc2UAAAAAAAAAAQIAAHhyADFjb20uZ3MuY29sbGVjdGlv\n"
+                        + "bnMuaW1wbC5ibG9jay5mYWN0b3J5LlByZWRpY2F0ZXMyAAAAAAAAAAECAAB4cA==",
+                StringPredicates2.notEqualsIgnoreCase());
     }
 
     @Test

@@ -62,7 +62,7 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
-import com.gs.collections.api.partition.stack.PartitionStack;
+import com.gs.collections.api.partition.stack.PartitionMutableStack;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.stack.ImmutableStack;
@@ -561,10 +561,17 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
         return this.delegate.asReversed().detectWithIfNone(predicate, parameter, function);
     }
 
-    public PartitionStack<T> partition(Predicate<? super T> predicate)
+    public PartitionMutableStack<T> partition(Predicate<? super T> predicate)
     {
-        PartitionArrayStack<T> partitionMutableStack = new PartitionArrayStack<T>(predicate);
+        PartitionArrayStack<T> partitionMutableStack = new PartitionArrayStack<T>();
         this.delegate.asReversed().forEach(new PartitionArrayStack.PartitionProcedure<T>(predicate, partitionMutableStack));
+        return partitionMutableStack;
+    }
+
+    public <P> PartitionMutableStack<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        PartitionArrayStack<T> partitionMutableStack = new PartitionArrayStack<T>();
+        this.delegate.asReversed().forEach(new PartitionArrayStack.PartitionPredicate2Procedure<T, P>(predicate, parameter, partitionMutableStack));
         return partitionMutableStack;
     }
 

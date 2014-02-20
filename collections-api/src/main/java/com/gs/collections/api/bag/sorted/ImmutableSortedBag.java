@@ -77,6 +77,8 @@ public interface ImmutableSortedBag<T>
 
     PartitionImmutableSortedBag<T> partition(Predicate<? super T> predicate);
 
+    <P> PartitionImmutableSortedBag<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     <S> ImmutableSortedBag<S> selectInstancesOf(Class<S> clazz);
 
     <V> ImmutableList<V> collect(Function<? super T, ? extends V> function);

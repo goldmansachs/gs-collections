@@ -251,6 +251,14 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     }
 
     @Test
+    public void partitionWith()
+    {
+        PartitionMutableSet<Integer> partition = this.intSet.partitionWith(Predicates2.<Integer>lessThan(), 3);
+        Assert.assertEquals(mSet(1), partition.getSelected());
+        Assert.assertEquals(mSet(), partition.getRejected());
+    }
+
+    @Test
     public void selectInstancesOf()
     {
         MutableSet<Number> numbers = Sets.fixedSize.<Number>of(1);

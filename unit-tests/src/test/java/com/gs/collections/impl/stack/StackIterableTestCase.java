@@ -604,6 +604,14 @@ public abstract class StackIterableTestCase
     }
 
     @Test
+    public void partitionWith()
+    {
+        PartitionStack<Integer> partition = this.newStackFromTopToBottom(1, 2, 3, 4, 5).partitionWith(Predicates2.<Integer>lessThan(), 3);
+        Assert.assertEquals(this.newStackFromTopToBottom(1, 2), partition.getSelected());
+        Assert.assertEquals(this.newStackFromTopToBottom(3, 4, 5), partition.getRejected());
+    }
+
+    @Test
     public void zip()
     {
         StackIterable<String> stack = this.newStackFromTopToBottom("7", "6", "5", "4", "3", "2", "1");

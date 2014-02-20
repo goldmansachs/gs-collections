@@ -256,6 +256,11 @@ final class Immutable<name>ObjectHashMap\<V> extends AbstractImmutable<name>Obje
         return this.delegate.partition(predicate);
     }
 
+    public \<P> PartitionIterable\<V> partitionWith(Predicate2\<? super V, ? super P> predicate, P parameter)
+    {
+        return this.delegate.partitionWith(predicate, parameter);
+    }
+
     public \<S> RichIterable\<S> selectInstancesOf(Class\<S> clazz)
     {
         return this.delegate.selectInstancesOf(clazz);

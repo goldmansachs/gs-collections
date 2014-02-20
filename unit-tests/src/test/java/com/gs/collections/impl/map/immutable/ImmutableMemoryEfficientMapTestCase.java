@@ -1159,6 +1159,16 @@ public abstract class ImmutableMemoryEfficientMapTestCase extends ImmutableMapTe
     }
 
     @Test
+    public void partitionWith_value()
+    {
+        ImmutableMap<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
+        PartitionImmutableCollection<Integer> partition = map.partitionWith(Predicates2.in(), map.select(IntegerPredicates.isEven()));
+
+        Assert.assertEquals(this.expectSelect(map.size()), partition.getSelected().toSet());
+        Assert.assertEquals(this.expectReject(map.size()), partition.getRejected().toSet());
+    }
+
+    @Test
     public void toArray()
     {
         ImmutableMap<String, Integer> map = this.newMapWithKeysValues("1", 1, "2", 2, "3", 3, "4", 4);

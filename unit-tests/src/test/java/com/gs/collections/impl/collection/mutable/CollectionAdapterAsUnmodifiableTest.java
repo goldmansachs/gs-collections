@@ -81,6 +81,15 @@ public class CollectionAdapterAsUnmodifiableTest extends UnmodifiableMutableColl
 
     @Override
     @Test
+    public void partitionWith()
+    {
+        PartitionMutableCollection<?> partition = this.getCollection().partitionWith(Predicates2.alwaysTrue(), null);
+        Assert.assertEquals(this.getCollection().toList(), partition.getSelected());
+        Assert.assertNotEquals(this.getCollection().toList(), partition.getRejected());
+    }
+
+    @Override
+    @Test
     public void collect()
     {
         Assert.assertEquals(this.getCollection().toList(), this.getCollection().collect(Functions.getPassThru()));

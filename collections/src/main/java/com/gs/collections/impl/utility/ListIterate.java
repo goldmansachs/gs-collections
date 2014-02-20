@@ -278,7 +278,7 @@ public final class ListIterate
             List<T> list,
             Function<? super T, ? extends A> function)
     {
-        return collect(list, function, FastList.<A>newList(list.size()));
+        return ListIterate.collect(list, function, FastList.<A>newList(list.size()));
     }
 
     /**
@@ -313,7 +313,7 @@ public final class ListIterate
     /**
      * @see Iterate#collectBoolean(Iterable, BooleanFunction, MutableBooleanCollection)
      */
-    public static <T, R extends MutableBooleanCollection>  R collectBoolean(
+    public static <T, R extends MutableBooleanCollection> R collectBoolean(
             List<T> list,
             BooleanFunction<? super T> booleanFunction,
             R target)
@@ -342,7 +342,7 @@ public final class ListIterate
     /**
      * @see Iterate#collectByte(Iterable, ByteFunction, MutableByteCollection)
      */
-    public static <T, R extends MutableByteCollection>  R collectByte(
+    public static <T, R extends MutableByteCollection> R collectByte(
             List<T> list,
             ByteFunction<? super T> byteFunction,
             R target)
@@ -371,7 +371,7 @@ public final class ListIterate
     /**
      * @see Iterate#collectChar(Iterable, CharFunction, MutableCharCollection)
      */
-    public static <T, R extends MutableCharCollection>  R collectChar(
+    public static <T, R extends MutableCharCollection> R collectChar(
             List<T> list,
             CharFunction<? super T> charFunction,
             R target)
@@ -400,7 +400,7 @@ public final class ListIterate
     /**
      * @see Iterate#collectDouble(Iterable, DoubleFunction, MutableDoubleCollection)
      */
-    public static <T, R extends MutableDoubleCollection>  R collectDouble(
+    public static <T, R extends MutableDoubleCollection> R collectDouble(
             List<T> list,
             DoubleFunction<? super T> doubleFunction,
             R target)
@@ -411,7 +411,6 @@ public final class ListIterate
         }
         return IterableIterate.collectDouble(list, doubleFunction, target);
     }
-
 
     /**
      * @see Iterate#collectFloat(Iterable, FloatFunction)
@@ -430,7 +429,7 @@ public final class ListIterate
     /**
      * @see Iterate#collectFloat(Iterable, FloatFunction, MutableFloatCollection)
      */
-    public static <T, R extends MutableFloatCollection>  R collectFloat(
+    public static <T, R extends MutableFloatCollection> R collectFloat(
             List<T> list,
             FloatFunction<? super T> floatFunction,
             R target)
@@ -459,7 +458,7 @@ public final class ListIterate
     /**
      * @see Iterate#collectInt(Iterable, IntFunction, MutableIntCollection)
      */
-    public static <T, R extends MutableIntCollection>  R collectInt(
+    public static <T, R extends MutableIntCollection> R collectInt(
             List<T> list,
             IntFunction<? super T> intFunction,
             R target)
@@ -488,7 +487,7 @@ public final class ListIterate
     /**
      * @see Iterate#collectLong(Iterable, LongFunction, MutableLongCollection)
      */
-    public static <T, R extends MutableLongCollection>  R collectLong(
+    public static <T, R extends MutableLongCollection> R collectLong(
             List<T> list,
             LongFunction<? super T> longFunction,
             R target)
@@ -499,7 +498,6 @@ public final class ListIterate
         }
         return IterableIterate.collectLong(list, longFunction, target);
     }
-
 
     /**
      * @see Iterate#collectShort(Iterable, ShortFunction)
@@ -518,7 +516,7 @@ public final class ListIterate
     /**
      * @see Iterate#collectShort(Iterable, ShortFunction, MutableShortCollection)
      */
-    public static <T, R extends MutableShortCollection>  R collectShort(
+    public static <T, R extends MutableShortCollection> R collectShort(
             List<T> list,
             ShortFunction<? super T> shortFunction,
             R target)
@@ -529,7 +527,6 @@ public final class ListIterate
         }
         return IterableIterate.collectShort(list, shortFunction, target);
     }
-
 
     /**
      * @see Iterate#flatCollect(Iterable, Function)
@@ -1007,15 +1004,22 @@ public final class ListIterate
     /**
      * @see Iterate#partition(Iterable, Predicate)
      */
-    public static <T> PartitionMutableList<T> partition(
-            List<T> list,
-            Predicate<? super T> predicate)
+    public static <T> PartitionMutableList<T> partition(List<T> list, Predicate<? super T> predicate)
     {
         if (list instanceof RandomAccess)
         {
             return RandomAccessListIterate.partition(list, predicate);
         }
         return IterableIterate.partition(list, predicate);
+    }
+
+    public static <T, P> PartitionMutableList<T> partitionWith(List<T> list, Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        if (list instanceof RandomAccess)
+        {
+            return RandomAccessListIterate.partitionWith(list, predicate, parameter);
+        }
+        return IterableIterate.partitionWith(list, predicate, parameter);
     }
 
     /**
@@ -1394,7 +1398,7 @@ public final class ListIterate
      */
     public static <T> MutableList<Pair<T, Integer>> zipWithIndex(List<T> list)
     {
-        return ListIterate.zipWithIndex(list, FastList.<Pair<T, Integer>>newList());
+        return ListIterate.zipWithIndex(list, FastList.<Pair<T, Integer>>newList(list.size()));
     }
 
     /**

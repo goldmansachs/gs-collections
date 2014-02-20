@@ -300,6 +300,11 @@ final class ImmutableEmptyBag<T>
         return (PartitionImmutableBag<T>) IMMUTABLE_EMPTY_PARTITION;
     }
 
+    public <P> PartitionImmutableBag<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return (PartitionImmutableBag<T>) IMMUTABLE_EMPTY_PARTITION;
+    }
+
     public <S> ImmutableBag<S> selectInstancesOf(Class<S> clazz)
     {
         return (ImmutableBag<S>) INSTANCE;
@@ -389,7 +394,6 @@ final class ImmutableEmptyBag<T>
     {
         return target;
     }
-
 
     public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)
     {

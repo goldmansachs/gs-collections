@@ -56,6 +56,7 @@ import com.gs.collections.impl.block.procedure.CollectProcedure;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
+import com.gs.collections.impl.block.procedure.PartitionPredicate2Procedure;
 import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.block.procedure.RejectProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
@@ -172,6 +173,14 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
     {
         PartitionMutableSet<T> partitionUnifiedSet = new PartitionUnifiedSet<T>();
         this.forEach(new PartitionProcedure<T>(predicate, partitionUnifiedSet));
+        return partitionUnifiedSet.toImmutable();
+    }
+
+    @Override
+    public <P> PartitionImmutableSet<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        PartitionMutableSet<T> partitionUnifiedSet = new PartitionUnifiedSet<T>();
+        this.forEach(new PartitionPredicate2Procedure<T, P>(predicate, parameter, partitionUnifiedSet));
         return partitionUnifiedSet.toImmutable();
     }
 

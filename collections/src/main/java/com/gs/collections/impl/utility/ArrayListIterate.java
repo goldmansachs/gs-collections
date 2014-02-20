@@ -480,7 +480,7 @@ public final class ArrayListIterate
     }
 
     /**
-     * @see Iterate#collectChar(Iterable, CharFunction,MutableCharCollection)
+     * @see Iterate#collectChar(Iterable, CharFunction, MutableCharCollection)
      */
     public static <T, R extends MutableCharCollection> R collectChar(ArrayList<T> list, CharFunction<? super T> charFunction, R target)
     {
@@ -520,7 +520,7 @@ public final class ArrayListIterate
     }
 
     /**
-     * @see Iterate#collectDouble(Iterable, DoubleFunction,MutableDoubleCollection)
+     * @see Iterate#collectDouble(Iterable, DoubleFunction, MutableDoubleCollection)
      */
     public static <T, R extends MutableDoubleCollection> R collectDouble(ArrayList<T> list, DoubleFunction<? super T> doubleFunction, R target)
     {
@@ -544,7 +544,6 @@ public final class ArrayListIterate
     }
 
     /**
-     *
      * @see Iterate#collectFloat(Iterable, FloatFunction)
      */
     public static <T> MutableFloatList collectFloat(
@@ -1230,9 +1229,7 @@ public final class ArrayListIterate
     /**
      * @see Iterate#partition(Iterable, Predicate)
      */
-    public static <T> PartitionMutableList<T> partition(
-            ArrayList<T> list,
-            Predicate<? super T> predicate)
+    public static <T> PartitionMutableList<T> partition(ArrayList<T> list, Predicate<? super T> predicate)
     {
         int size = list.size();
         if (ArrayListIterate.isOptimizableArrayList(list, size))
@@ -1251,6 +1248,27 @@ public final class ArrayListIterate
             return partitionFastList;
         }
         return RandomAccessListIterate.partition(list, predicate);
+    }
+
+    public static <T, P> PartitionMutableList<T> partitionWith(ArrayList<T> list, Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        int size = list.size();
+        if (ArrayListIterate.isOptimizableArrayList(list, size))
+        {
+            PartitionFastList<T> partitionFastList = new PartitionFastList<T>();
+            MutableList<T> selected = partitionFastList.getSelected();
+            MutableList<T> rejected = partitionFastList.getRejected();
+
+            T[] elements = ArrayListIterate.getInternalArray(list);
+            for (int i = 0; i < size; i++)
+            {
+                T each = elements[i];
+                MutableList<T> bucket = predicate.accept(each, parameter) ? selected : rejected;
+                bucket.add(each);
+            }
+            return partitionFastList;
+        }
+        return RandomAccessListIterate.partitionWith(list, predicate, parameter);
     }
 
     /**

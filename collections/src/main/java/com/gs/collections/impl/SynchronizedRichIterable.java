@@ -262,6 +262,14 @@ public class SynchronizedRichIterable<T>
         }
     }
 
+    public <P> PartitionIterable<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.iterable.partitionWith(predicate, parameter);
+        }
+    }
+
     public <S> RichIterable<S> selectInstancesOf(Class<S> clazz)
     {
         synchronized (this.lock)

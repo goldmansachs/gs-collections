@@ -104,6 +104,8 @@ public interface SetIterable<T> extends RichIterable<T>
 
     PartitionSet<T> partition(Predicate<? super T> predicate);
 
+    <P> PartitionSet<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     <S> SetIterable<S> selectInstancesOf(Class<S> clazz);
 
     SetIterable<Pair<T, Integer>> zipWithIndex();

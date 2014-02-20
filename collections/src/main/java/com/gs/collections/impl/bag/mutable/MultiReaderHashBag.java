@@ -538,6 +538,19 @@ public final class MultiReaderHashBag<T>
         }
     }
 
+    public <P> PartitionMutableBag<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.partitionWith(predicate, parameter);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
     public MutableBag<T> with(T element)
     {
         this.add(element);
@@ -827,6 +840,7 @@ public final class MultiReaderHashBag<T>
         {
             return this.getDelegate().collectByte(byteFunction, target);
         }
+
         @Override
         public MutableCharBag collectChar(CharFunction<? super T> charFunction)
         {
@@ -837,6 +851,7 @@ public final class MultiReaderHashBag<T>
         {
             return this.getDelegate().collectChar(charFunction, target);
         }
+
         @Override
         public MutableDoubleBag collectDouble(DoubleFunction<? super T> doubleFunction)
         {
@@ -847,6 +862,7 @@ public final class MultiReaderHashBag<T>
         {
             return this.getDelegate().collectDouble(doubleFunction, target);
         }
+
         @Override
         public MutableFloatBag collectFloat(FloatFunction<? super T> floatFunction)
         {
@@ -857,6 +873,7 @@ public final class MultiReaderHashBag<T>
         {
             return this.getDelegate().collectFloat(floatFunction, target);
         }
+
         @Override
         public MutableIntBag collectInt(IntFunction<? super T> intFunction)
         {
@@ -867,6 +884,7 @@ public final class MultiReaderHashBag<T>
         {
             return this.getDelegate().collectInt(intFunction, target);
         }
+
         @Override
         public MutableLongBag collectLong(LongFunction<? super T> longFunction)
         {
@@ -877,6 +895,7 @@ public final class MultiReaderHashBag<T>
         {
             return this.getDelegate().collectLong(longFunction, target);
         }
+
         @Override
         public MutableShortBag collectShort(ShortFunction<? super T> shortFunction)
         {
@@ -964,6 +983,11 @@ public final class MultiReaderHashBag<T>
         public PartitionMutableBag<T> partition(Predicate<? super T> predicate)
         {
             return this.getDelegate().partition(predicate);
+        }
+
+        public <P> PartitionMutableBag<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+        {
+            return this.getDelegate().partitionWith(predicate, parameter);
         }
 
         public <S> MutableBag<Pair<T, S>> zip(Iterable<S> that)

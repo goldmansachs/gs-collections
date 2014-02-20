@@ -291,6 +291,11 @@ public class AbstractUnmodifiableMutableCollection<T> implements MutableCollecti
         return this.getMutableCollection().partition(predicate);
     }
 
+    public <P> PartitionMutableCollection<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.getMutableCollection().partitionWith(predicate, parameter);
+    }
+
     public <S> MutableCollection<S> selectInstancesOf(Class<S> clazz)
     {
         return this.getMutableCollection().selectInstancesOf(clazz);

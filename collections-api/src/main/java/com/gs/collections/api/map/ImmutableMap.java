@@ -104,6 +104,8 @@ public interface ImmutableMap<K, V>
 
     PartitionImmutableCollection<V> partition(Predicate<? super V> predicate);
 
+    <P> PartitionImmutableCollection<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter);
+
     <S> ImmutableCollection<S> selectInstancesOf(Class<S> clazz);
 
     <S> ImmutableCollection<Pair<V, S>> zip(Iterable<S> that);

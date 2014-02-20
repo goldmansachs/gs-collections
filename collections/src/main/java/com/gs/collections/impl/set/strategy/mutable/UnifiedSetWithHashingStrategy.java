@@ -93,6 +93,7 @@ import com.gs.collections.impl.block.procedure.CountProcedure;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
+import com.gs.collections.impl.block.procedure.PartitionPredicate2Procedure;
 import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.block.procedure.RejectProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
@@ -179,7 +180,7 @@ public class UnifiedSetWithHashingStrategy<K>
 
     /**
      * @deprecated No argument default constructor used for serialization. Instantiating an UnifiedSetWithHashingStrategyMultimap with
-     * this constructor will have a null hashingStrategy and throw NullPointerException when used.
+     *             this constructor will have a null hashingStrategy and throw NullPointerException when used.
      */
     @Deprecated
     public UnifiedSetWithHashingStrategy()
@@ -837,6 +838,13 @@ public class UnifiedSetWithHashingStrategy<K>
         return partitionMutableSet;
     }
 
+    public <P> PartitionMutableSet<K> partitionWith(Predicate2<? super K, ? super P> predicate, P parameter)
+    {
+        PartitionMutableSet<K> partitionMutableSet = new PartitionUnifiedSetWithHashingStrategy<K>(this.hashingStrategy);
+        this.forEach(new PartitionPredicate2Procedure<K, P>(predicate, parameter, partitionMutableSet));
+        return partitionMutableSet;
+    }
+
     public <S> UnifiedSetWithHashingStrategy<S> selectInstancesOf(Class<S> clazz)
     {
         UnifiedSetWithHashingStrategy<S> result = (UnifiedSetWithHashingStrategy<S>) this.newEmpty();
@@ -880,6 +888,7 @@ public class UnifiedSetWithHashingStrategy<K>
         this.forEach(new CollectByteProcedure<K>(byteFunction, target));
         return target;
     }
+
     public MutableCharSet collectChar(CharFunction<? super K> charFunction)
     {
         return this.collectChar(charFunction, new CharHashSet());
@@ -890,6 +899,7 @@ public class UnifiedSetWithHashingStrategy<K>
         this.forEach(new CollectCharProcedure<K>(charFunction, target));
         return target;
     }
+
     public MutableDoubleSet collectDouble(DoubleFunction<? super K> doubleFunction)
     {
         return this.collectDouble(doubleFunction, new DoubleHashSet());
@@ -900,6 +910,7 @@ public class UnifiedSetWithHashingStrategy<K>
         this.forEach(new CollectDoubleProcedure<K>(doubleFunction, target));
         return target;
     }
+
     public MutableFloatSet collectFloat(FloatFunction<? super K> floatFunction)
     {
         return this.collectFloat(floatFunction, new FloatHashSet());
@@ -910,6 +921,7 @@ public class UnifiedSetWithHashingStrategy<K>
         this.forEach(new CollectFloatProcedure<K>(floatFunction, target));
         return target;
     }
+
     public MutableIntSet collectInt(IntFunction<? super K> intFunction)
     {
         return this.collectInt(intFunction, new IntHashSet());
@@ -920,6 +932,7 @@ public class UnifiedSetWithHashingStrategy<K>
         this.forEach(new CollectIntProcedure<K>(intFunction, target));
         return target;
     }
+
     public MutableLongSet collectLong(LongFunction<? super K> longFunction)
     {
         return this.collectLong(longFunction, new LongHashSet());
@@ -930,6 +943,7 @@ public class UnifiedSetWithHashingStrategy<K>
         this.forEach(new CollectLongProcedure<K>(longFunction, target));
         return target;
     }
+
     public MutableShortSet collectShort(ShortFunction<? super K> shortFunction)
     {
         return this.collectShort(shortFunction, new ShortHashSet());
@@ -940,7 +954,6 @@ public class UnifiedSetWithHashingStrategy<K>
         this.forEach(new CollectShortProcedure<K>(shortFunction, target));
         return target;
     }
-
 
     public <V, R extends Collection<V>> R collect(Function<? super K, ? extends V> function, R target)
     {

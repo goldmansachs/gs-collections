@@ -161,6 +161,12 @@ public class UnmodifiableSortedSet<T>
         return this.getSortedSet().partition(predicate);
     }
 
+    @Override
+    public <P> PartitionMutableSortedSet<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.getSortedSet().partitionWith(predicate, parameter);
+    }
+
     public PartitionMutableSortedSet<T> partitionWhile(Predicate<? super T> predicate)
     {
         return this.getSortedSet().partitionWhile(predicate);

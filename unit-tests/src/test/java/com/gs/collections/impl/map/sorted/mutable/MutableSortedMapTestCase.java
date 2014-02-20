@@ -38,6 +38,7 @@ import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Lists;
@@ -365,6 +366,21 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
                 "C", 3,
                 "D", 4);
         PartitionMutableList<Integer> partition = map.partition(IntegerPredicates.isEven());
+        Assert.assertEquals(iList(4, 2), partition.getSelected());
+        Assert.assertEquals(iList(3, 1), partition.getRejected());
+    }
+
+    @Override
+    @Test
+    public void partitionWith_value()
+    {
+        MutableSortedMap<String, Integer> map = this.newMapWithKeysValues(
+                Comparators.<String>reverseNaturalOrder(),
+                "A", 1,
+                "B", 2,
+                "C", 3,
+                "D", 4);
+        PartitionMutableList<Integer> partition = map.partitionWith(Predicates2.in(), map.select(IntegerPredicates.isEven()));
         Assert.assertEquals(iList(4, 2), partition.getSelected());
         Assert.assertEquals(iList(3, 1), partition.getRejected());
     }

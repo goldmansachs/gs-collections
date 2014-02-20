@@ -542,6 +542,25 @@ class MultiReaderHashBagScalaTest extends MultiReaderHashBagTestTrait
     }
 
     @Test
+    def partitionWith_safe
+    {
+        this.assertWritersBlocked
+        {
+            this.classUnderTest.partitionWith(
+            {
+                (_: Int, _: Int) => true
+            }, 1)
+        }
+        this.assertReadersNotBlocked
+        {
+            this.classUnderTest.partitionWith(
+            {
+                (_: Int, _: Int) => true
+            }, 1)
+        }
+    }
+
+    @Test
     def groupBy_safe
     {
         this.assertWritersBlocked

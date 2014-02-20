@@ -32,7 +32,7 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
-import com.gs.collections.api.partition.stack.PartitionStack;
+import com.gs.collections.api.partition.stack.PartitionMutableStack;
 import com.gs.collections.api.stack.primitive.MutableBooleanStack;
 import com.gs.collections.api.stack.primitive.MutableByteStack;
 import com.gs.collections.api.stack.primitive.MutableCharStack;
@@ -88,7 +88,9 @@ public interface MutableStack<T> extends StackIterable<T>
 
     <P> MutableStack<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
-    PartitionStack<T> partition(Predicate<? super T> predicate);
+    PartitionMutableStack<T> partition(Predicate<? super T> predicate);
+
+    <P> PartitionMutableStack<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     <V> MutableStack<V> collect(Function<? super T, ? extends V> function);
 

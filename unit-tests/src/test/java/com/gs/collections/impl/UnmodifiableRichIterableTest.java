@@ -438,12 +438,17 @@ public class UnmodifiableRichIterableTest
     {
         PartitionIterable<String> partition = this.mutableCollection.partition(Predicates.alwaysTrue());
         PartitionIterable<String> unmodifiablePartition = this.unmodifiableCollection.partition(Predicates.alwaysTrue());
-        Assert.assertEquals(
-                partition.getSelected(),
-                unmodifiablePartition.getSelected());
-        Assert.assertEquals(
-                partition.getRejected(),
-                unmodifiablePartition.getRejected());
+        Assert.assertEquals(partition.getSelected(), unmodifiablePartition.getSelected());
+        Assert.assertEquals(partition.getRejected(), unmodifiablePartition.getRejected());
+    }
+
+    @Test
+    public void partitionWith()
+    {
+        PartitionIterable<String> partition = this.mutableCollection.partitionWith(Predicates2.alwaysTrue(), null);
+        PartitionIterable<String> unmodifiablePartition = this.unmodifiableCollection.partitionWith(Predicates2.alwaysTrue(), null);
+        Assert.assertEquals(partition.getSelected(), unmodifiablePartition.getSelected());
+        Assert.assertEquals(partition.getRejected(), unmodifiablePartition.getRejected());
     }
 
     @Test

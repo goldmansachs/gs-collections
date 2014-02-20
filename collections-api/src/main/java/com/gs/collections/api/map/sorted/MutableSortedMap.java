@@ -207,6 +207,8 @@ public interface MutableSortedMap<K, V>
 
     PartitionMutableList<V> partition(Predicate<? super V> predicate);
 
+    <P> PartitionMutableList<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter);
+
     <S> MutableList<S> selectInstancesOf(Class<S> clazz);
 
     <S> MutableList<Pair<V, S>> zip(Iterable<S> that);

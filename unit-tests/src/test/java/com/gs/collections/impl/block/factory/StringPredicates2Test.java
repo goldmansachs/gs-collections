@@ -31,12 +31,30 @@ public class StringPredicates2Test
     }
 
     @Test
+    public void notStartsWith()
+    {
+        Assert.assertTrue(StringPredicates2.notStartsWith().accept(null, "Hello"));
+        Assert.assertFalse(StringPredicates2.notStartsWith().accept("HelloWorld", "Hello"));
+        Assert.assertTrue(StringPredicates2.notStartsWith().accept("HelloWorld", "World"));
+        Assert.assertEquals("StringPredicates2.notStartsWith()", StringPredicates2.notStartsWith().toString());
+    }
+
+    @Test
     public void endsWith()
     {
         Assert.assertFalse(StringPredicates2.endsWith().accept(null, "Hello"));
         Assert.assertFalse(StringPredicates2.endsWith().accept("HelloWorld", "Hello"));
         Assert.assertTrue(StringPredicates2.endsWith().accept("HelloWorld", "World"));
         Assert.assertEquals("StringPredicates2.endsWith()", StringPredicates2.endsWith().toString());
+    }
+
+    @Test
+    public void notEndsWith()
+    {
+        Assert.assertTrue(StringPredicates2.notEndsWith().accept(null, "Hello"));
+        Assert.assertTrue(StringPredicates2.notEndsWith().accept("HelloWorld", "Hello"));
+        Assert.assertFalse(StringPredicates2.notEndsWith().accept("HelloWorld", "World"));
+        Assert.assertEquals("StringPredicates2.notEndsWith()", StringPredicates2.notEndsWith().toString());
     }
 
     @Test
@@ -47,6 +65,16 @@ public class StringPredicates2Test
         Assert.assertTrue(StringPredicates2.equalsIgnoreCase().accept("WORLD", "world"));
         Assert.assertFalse(StringPredicates2.equalsIgnoreCase().accept("World", "Hello"));
         Assert.assertEquals("StringPredicates2.equalsIgnoreCase()", StringPredicates2.equalsIgnoreCase().toString());
+    }
+
+    @Test
+    public void notEqualsIgnoreCase()
+    {
+        Assert.assertTrue(StringPredicates2.notEqualsIgnoreCase().accept(null, "HELLO"));
+        Assert.assertFalse(StringPredicates2.notEqualsIgnoreCase().accept("hello", "HELLO"));
+        Assert.assertFalse(StringPredicates2.notEqualsIgnoreCase().accept("WORLD", "world"));
+        Assert.assertTrue(StringPredicates2.notEqualsIgnoreCase().accept("World", "Hello"));
+        Assert.assertEquals("StringPredicates2.notEqualsIgnoreCase()", StringPredicates2.notEqualsIgnoreCase().toString());
     }
 
     @Test

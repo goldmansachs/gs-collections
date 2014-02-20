@@ -133,6 +133,11 @@ public class UnmodifiableRichIterable<T>
         return this.iterable.partition(predicate);
     }
 
+    public <P> PartitionIterable<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.iterable.partitionWith(predicate, parameter);
+    }
+
     public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)
     {
         return this.iterable.collect(function, target);
@@ -327,7 +332,6 @@ public class UnmodifiableRichIterable<T>
     {
         return this.iterable.collectShort(shortFunction, target);
     }
-
 
     public <V> RichIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {

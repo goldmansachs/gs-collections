@@ -41,6 +41,7 @@ import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.partition.bag.PartitionImmutableBag;
+import com.gs.collections.api.partition.bag.PartitionMutableBag;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
@@ -53,8 +54,11 @@ import com.gs.collections.impl.bag.mutable.primitive.LongHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.ShortHashBag;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.procedure.PartitionPredicate2Procedure;
+import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.collection.immutable.AbstractImmutableCollection;
 import com.gs.collections.impl.factory.Bags;
+import com.gs.collections.impl.partition.bag.PartitionHashBag;
 
 /**
  * @since 1.0
@@ -86,7 +90,20 @@ public abstract class AbstractImmutableBag<T>
     public abstract ImmutableSet<Pair<T, Integer>> zipWithIndex();
 
     @Override
-    public abstract PartitionImmutableBag<T> partition(Predicate<? super T> predicate);
+    public PartitionImmutableBag<T> partition(Predicate<? super T> predicate)
+    {
+        PartitionMutableBag<T> partitionMutableBag = new PartitionHashBag<T>();
+        this.forEach(new PartitionProcedure<T>(predicate, partitionMutableBag));
+        return partitionMutableBag.toImmutable();
+    }
+
+    @Override
+    public <P> PartitionImmutableBag<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        PartitionMutableBag<T> partitionMutableBag = new PartitionHashBag<T>();
+        this.forEach(new PartitionPredicate2Procedure<T, P>(predicate, parameter, partitionMutableBag));
+        return partitionMutableBag.toImmutable();
+    }
 
     @Override
     public abstract <V> ImmutableBagMultimap<V, T> groupBy(Function<? super T, ? extends V> function);

@@ -774,6 +774,20 @@ public class TreeBag<T>
         return result;
     }
 
+    public <P> PartitionMutableSortedBag<T> partitionWith(final Predicate2<? super T, ? super P> predicate, final P parameter)
+    {
+        final PartitionMutableSortedBag<T> result = new PartitionTreeBag<T>(this.comparator());
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int index)
+            {
+                MutableSortedBag<T> bucket = predicate.accept(each, parameter) ? result.getSelected() : result.getRejected();
+                bucket.addOccurrences(each, index);
+            }
+        });
+        return result;
+    }
+
     public PartitionMutableSortedBag<T> partitionWhile(Predicate<? super T> predicate)
     {
         PartitionTreeBag<T> result = new PartitionTreeBag<T>(this.comparator());

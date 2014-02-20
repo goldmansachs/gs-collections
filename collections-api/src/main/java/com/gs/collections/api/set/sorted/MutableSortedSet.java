@@ -76,6 +76,8 @@ public interface MutableSortedSet<T>
 
     PartitionMutableSortedSet<T> partition(Predicate<? super T> predicate);
 
+    <P> PartitionMutableSortedSet<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     PartitionMutableSortedSet<T> partitionWhile(Predicate<? super T> predicate);
 
     <S> MutableSortedSet<S> selectInstancesOf(Class<S> clazz);

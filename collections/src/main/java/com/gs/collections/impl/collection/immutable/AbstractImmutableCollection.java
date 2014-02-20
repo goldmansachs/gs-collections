@@ -23,13 +23,18 @@ import java.util.Set;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.partition.PartitionImmutableCollection;
+import com.gs.collections.api.partition.bag.PartitionMutableBag;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.AbstractRichIterable;
+import com.gs.collections.impl.block.procedure.PartitionPredicate2Procedure;
+import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.partition.bag.PartitionHashBag;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 
 public abstract class AbstractImmutableCollection<T> extends AbstractRichIterable<T> implements ImmutableCollection<T>, Collection<T>
@@ -43,7 +48,20 @@ public abstract class AbstractImmutableCollection<T> extends AbstractRichIterabl
     public abstract ImmutableCollection<Pair<T, Integer>> zipWithIndex();
 
     @Override
-    public abstract PartitionImmutableCollection<T> partition(Predicate<? super T> predicate);
+    public PartitionImmutableCollection<T> partition(Predicate<? super T> predicate)
+    {
+        PartitionMutableBag<T> partitionHashBag = new PartitionHashBag<T>();
+        this.forEach(new PartitionProcedure<T>(predicate, partitionHashBag));
+        return partitionHashBag.toImmutable();
+    }
+
+    @Override
+    public <P> PartitionImmutableCollection<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        PartitionMutableBag<T> partitionHashBag = new PartitionHashBag<T>();
+        this.forEach(new PartitionPredicate2Procedure<T, P>(predicate, parameter, partitionHashBag));
+        return partitionHashBag.toImmutable();
+    }
 
     protected void removeAllFrom(Iterable<? extends T> elements, MutableCollection<T> result)
     {

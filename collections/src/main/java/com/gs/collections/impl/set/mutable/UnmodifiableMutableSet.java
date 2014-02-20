@@ -158,6 +158,12 @@ public class UnmodifiableMutableSet<T>
     }
 
     @Override
+    public <P> PartitionMutableSet<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.getMutableSet().partitionWith(predicate, parameter);
+    }
+
+    @Override
     public <S> MutableSet<S> selectInstancesOf(Class<S> clazz)
     {
         return this.getMutableSet().selectInstancesOf(clazz);

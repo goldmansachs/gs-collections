@@ -266,6 +266,11 @@ public abstract class AbstractMutableList<T>
         return ListIterate.partition(this, predicate);
     }
 
+    public <P> PartitionMutableList<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return ListIterate.partitionWith(this, predicate, parameter);
+    }
+
     public <S> MutableList<S> selectInstancesOf(Class<S> clazz)
     {
         return ListIterate.selectInstancesOf(this, clazz);

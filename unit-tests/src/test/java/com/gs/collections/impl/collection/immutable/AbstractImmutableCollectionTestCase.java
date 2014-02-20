@@ -117,12 +117,17 @@ public abstract class AbstractImmutableCollectionTestCase
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         PartitionImmutableCollection<Integer> partition = integers.partition(IntegerPredicates.isOdd());
-        Assert.assertEquals(
-                integers.select(IntegerPredicates.isOdd()),
-                partition.getSelected());
-        Assert.assertEquals(
-                integers.select(IntegerPredicates.isEven()),
-                partition.getRejected());
+        Assert.assertEquals(integers.select(IntegerPredicates.isOdd()), partition.getSelected());
+        Assert.assertEquals(integers.select(IntegerPredicates.isEven()), partition.getRejected());
+    }
+
+    @Test
+    public void partitionWith()
+    {
+        ImmutableCollection<Integer> integers = this.classUnderTest();
+        PartitionImmutableCollection<Integer> partition = integers.partitionWith(Predicates2.in(), integers.select(IntegerPredicates.isOdd()));
+        Assert.assertEquals(integers.select(IntegerPredicates.isOdd()), partition.getSelected());
+        Assert.assertEquals(integers.select(IntegerPredicates.isEven()), partition.getRejected());
     }
 
     @Test

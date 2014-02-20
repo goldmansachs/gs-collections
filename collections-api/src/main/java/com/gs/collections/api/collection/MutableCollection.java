@@ -221,6 +221,8 @@ public interface MutableCollection<T>
 
     PartitionMutableCollection<T> partition(Predicate<? super T> predicate);
 
+    <P> PartitionMutableCollection<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     <S> MutableCollection<S> selectInstancesOf(Class<S> clazz);
 
     /**

@@ -55,6 +55,7 @@ import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
+import com.gs.collections.impl.block.procedure.PartitionPredicate2Procedure;
 import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectBooleanProcedure;
@@ -250,6 +251,14 @@ public final class SortedSetAdapter<T>
     {
         PartitionMutableSortedSet<T> partitionMutableSortedSet = new PartitionTreeSortedSet<T>(this.comparator());
         this.forEach(new PartitionProcedure<T>(predicate, partitionMutableSortedSet));
+        return partitionMutableSortedSet;
+    }
+
+    @Override
+    public <P> PartitionMutableSortedSet<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        PartitionMutableSortedSet<T> partitionMutableSortedSet = new PartitionTreeSortedSet<T>(this.comparator());
+        this.forEach(new PartitionPredicate2Procedure<T, P>(predicate, parameter, partitionMutableSortedSet));
         return partitionMutableSortedSet;
     }
 

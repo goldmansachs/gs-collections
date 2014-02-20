@@ -171,6 +171,14 @@ public abstract class AbstractLazyIterableTestCase
     }
 
     @Test
+    public void partitionWith()
+    {
+        PartitionIterable<Integer> partition = this.lazyIterable.partitionWith(Predicates2.in(), this.lazyIterable.select(IntegerPredicates.isEven()));
+        Assert.assertEquals(iList(2, 4, 6), partition.getSelected());
+        Assert.assertEquals(iList(1, 3, 5, 7), partition.getRejected());
+    }
+
+    @Test
     public void selectInstancesOf()
     {
         Assert.assertEquals(

@@ -800,6 +800,11 @@ public class UnmodifiableTreeMap<K, V>
         return this.getMutableSortedMap().partition(predicate);
     }
 
+    public <P> PartitionMutableList<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        return this.getMutableSortedMap().partitionWith(predicate, parameter);
+    }
+
     public <S> MutableList<S> selectInstancesOf(Class<S> clazz)
     {
         return this.getMutableSortedMap().selectInstancesOf(clazz);

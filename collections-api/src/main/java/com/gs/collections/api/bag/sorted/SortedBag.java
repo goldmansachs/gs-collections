@@ -100,6 +100,8 @@ public interface SortedBag<T>
 
     PartitionSortedBag<T> partition(Predicate<? super T> predicate);
 
+    <P> PartitionSortedBag<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     PartitionSortedBag<T> partitionWhile(Predicate<? super T> predicate);
 
     <S> SortedBag<S> selectInstancesOf(Class<S> clazz);

@@ -34,8 +34,6 @@ import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
-import com.gs.collections.api.partition.bag.PartitionImmutableBag;
-import com.gs.collections.api.partition.bag.PartitionMutableBag;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
@@ -44,11 +42,9 @@ import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
-import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
-import com.gs.collections.impl.partition.bag.PartitionHashBag;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.utility.ArrayIterate;
 import com.gs.collections.impl.utility.Iterate;
@@ -272,13 +268,6 @@ public class ImmutableArrayBag<T>
             R targetCollection)
     {
         return IterableIterate.rejectWith(this, predicate, parameter, targetCollection);
-    }
-
-    public PartitionImmutableBag<T> partition(Predicate<? super T> predicate)
-    {
-        PartitionMutableBag<T> partitionMutableBag = new PartitionHashBag<T>();
-        this.forEach(new PartitionProcedure<T>(predicate, partitionMutableBag));
-        return partitionMutableBag.toImmutable();
     }
 
     public <S> ImmutableBag<S> selectInstancesOf(final Class<S> clazz)

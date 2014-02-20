@@ -318,6 +318,17 @@ public abstract class ImmutableBagTestCase
     }
 
     @Test
+    public void partitionWith()
+    {
+        ImmutableBag<String> strings = this.newBag();
+        PartitionImmutableBag<String> partition = strings.partitionWith(Predicates2.<String>greaterThan(), "0");
+        Assert.assertEquals(strings, partition.getSelected());
+        Verify.assertIterableEmpty(partition.getRejected());
+
+        Verify.assertIterableSize(strings.size() - 1, strings.partitionWith(Predicates2.<String>greaterThan(), "1").getSelected());
+    }
+
+    @Test
     public void collect()
     {
         Assert.assertEquals(this.newBag(), this.newBag().collect(Functions.getStringPassThru()));

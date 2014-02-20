@@ -20,6 +20,7 @@ import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
+import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.map.MapIterableTestCase;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import org.junit.Assert;
@@ -63,6 +64,20 @@ public class ImmutableUnifiedMap2Test extends MapIterableTestCase
                 "C", 3,
                 "D", 4);
         PartitionIterable<Integer> partition = map.partition(IntegerPredicates.isEven());
+        Assert.assertEquals(iSet(2, 4), partition.getSelected().toSet());
+        Assert.assertEquals(iSet(1, 3), partition.getRejected().toSet());
+    }
+
+    @Override
+    @Test
+    public void partitionWith_value()
+    {
+        MapIterable<String, Integer> map = UnifiedMap.newWithKeysValues(
+                "A", 1,
+                "B", 2,
+                "C", 3,
+                "D", 4);
+        PartitionIterable<Integer> partition = map.partitionWith(Predicates2.in(), map.select(IntegerPredicates.isEven()));
         Assert.assertEquals(iSet(2, 4), partition.getSelected().toSet());
         Assert.assertEquals(iSet(1, 3), partition.getRejected().toSet());
     }

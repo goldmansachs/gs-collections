@@ -261,9 +261,16 @@ public class ImmutableHashBag<T>
         return this.delegate.reject(predicate).toImmutable();
     }
 
+    @Override
     public PartitionImmutableBag<T> partition(Predicate<? super T> predicate)
     {
         return this.delegate.partition(predicate).toImmutable();
+    }
+
+    @Override
+    public <P> PartitionImmutableBag<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.delegate.partitionWith(predicate, parameter).toImmutable();
     }
 
     public <S> ImmutableBag<S> selectInstancesOf(Class<S> clazz)

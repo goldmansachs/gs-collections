@@ -288,6 +288,11 @@ public final class Unmodifiable<name>ObjectMap\<V>
         return this.map.partition(predicate);
     }
 
+    public \<P> PartitionMutableCollection\<V> partitionWith(Predicate2\<? super V, ? super P> predicate, P parameter)
+    {
+        return this.map.partitionWith(predicate, parameter);
+    }
+
     public \<S> MutableCollection\<S> selectInstancesOf(Class\<S> clazz)
     {
         return (MutableCollection\<S>) this.map.selectInstancesOf(clazz);

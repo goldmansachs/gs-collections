@@ -472,7 +472,6 @@ public final class RandomAccessListIterate
         return target;
     }
 
-
     /**
      * @see Iterate#collectInt(Iterable, IntFunction)
      */
@@ -498,7 +497,6 @@ public final class RandomAccessListIterate
         }
         return target;
     }
-
 
     /**
      * @see Iterate#collectLong(Iterable, LongFunction)
@@ -526,7 +524,6 @@ public final class RandomAccessListIterate
         return target;
     }
 
-
     /**
      * @see Iterate#collectShort(Iterable, ShortFunction)
      */
@@ -552,7 +549,6 @@ public final class RandomAccessListIterate
         }
         return target;
     }
-
 
     /**
      * @see Iterate#flatCollect(Iterable, Function)
@@ -939,9 +935,7 @@ public final class RandomAccessListIterate
         return Tuples.twin(positiveResult, negativeResult);
     }
 
-    public static <T> PartitionMutableList<T> partition(
-            List<T> list,
-            Predicate<? super T> predicate)
+    public static <T> PartitionMutableList<T> partition(List<T> list, Predicate<? super T> predicate)
     {
         PartitionFastList<T> partitionFastList = new PartitionFastList<T>();
 
@@ -952,7 +946,20 @@ public final class RandomAccessListIterate
             MutableList<T> bucket = predicate.accept(each) ? partitionFastList.getSelected() : partitionFastList.getRejected();
             bucket.add(each);
         }
+        return partitionFastList;
+    }
 
+    public static <T, P> PartitionMutableList<T> partitionWith(List<T> list, Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        PartitionFastList<T> partitionFastList = new PartitionFastList<T>();
+
+        int size = list.size();
+        for (int i = 0; i < size; i++)
+        {
+            T each = list.get(i);
+            MutableList<T> bucket = predicate.accept(each, parameter) ? partitionFastList.getSelected() : partitionFastList.getRejected();
+            bucket.add(each);
+        }
         return partitionFastList;
     }
 

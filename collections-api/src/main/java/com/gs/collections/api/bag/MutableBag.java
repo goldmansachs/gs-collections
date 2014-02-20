@@ -71,6 +71,8 @@ public interface MutableBag<T>
 
     PartitionMutableBag<T> partition(Predicate<? super T> predicate);
 
+    <P> PartitionMutableBag<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter);
+
     <V> MutableBagMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
 
     <V> MutableBagMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);

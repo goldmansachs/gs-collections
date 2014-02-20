@@ -293,6 +293,12 @@ public final class RandomAccessListAdapter<T>
     }
 
     @Override
+    public <P> PartitionMutableList<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return RandomAccessListIterate.partitionWith(this.delegate, predicate, parameter);
+    }
+
+    @Override
     public <S> MutableList<S> selectInstancesOf(Class<S> clazz)
     {
         return RandomAccessListIterate.selectInstancesOf(this.delegate, clazz);

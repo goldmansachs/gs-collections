@@ -35,6 +35,7 @@ import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
@@ -308,6 +309,16 @@ public class CollectionAdapterTest extends AbstractCollectionTestCase
     {
         MutableCollection<Integer> integers = this.newWith(-3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
         PartitionMutableCollection<Integer> result = integers.partition(IntegerPredicates.isEven());
+        Assert.assertEquals(iList(-2, 0, 2, 4, 6, 8), result.getSelected());
+        Assert.assertEquals(iList(-3, -1, 1, 3, 5, 7, 9), result.getRejected());
+    }
+
+    @Override
+    @Test
+    public void partitionWith()
+    {
+        MutableCollection<Integer> integers = this.newWith(-3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9);
+        PartitionMutableCollection<Integer> result = integers.partitionWith(Predicates2.in(), integers.select(IntegerPredicates.isEven()));
         Assert.assertEquals(iList(-2, 0, 2, 4, 6, 8), result.getSelected());
         Assert.assertEquals(iList(-3, -1, 1, 3, 5, 7, 9), result.getRejected());
     }

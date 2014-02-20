@@ -259,6 +259,11 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
         return IterableIterate.partition(this, predicate);
     }
 
+    public <P> PartitionIterable<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return IterableIterate.partitionWith(this, predicate, parameter);
+    }
+
     public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)
     {
         this.forEach(new CollectProcedure<T, V>(function, target));
@@ -537,6 +542,7 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
         this.forEach(new CollectByteProcedure<T>(byteFunction, target));
         return target;
     }
+
     public ImmutableCharCollection collectChar(CharFunction<? super T> charFunction)
     {
         return this.collectChar(charFunction, new CharArrayList(this.size())).toImmutable();
@@ -547,6 +553,7 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
         this.forEach(new CollectCharProcedure<T>(charFunction, target));
         return target;
     }
+
     public ImmutableDoubleCollection collectDouble(DoubleFunction<? super T> doubleFunction)
     {
         return this.collectDouble(doubleFunction, new DoubleArrayList(this.size())).toImmutable();
@@ -557,6 +564,7 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
         this.forEach(new CollectDoubleProcedure<T>(doubleFunction, target));
         return target;
     }
+
     public ImmutableFloatCollection collectFloat(FloatFunction<? super T> floatFunction)
     {
         return this.collectFloat(floatFunction, new FloatArrayList(this.size())).toImmutable();
@@ -567,6 +575,7 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
         this.forEach(new CollectFloatProcedure<T>(floatFunction, target));
         return target;
     }
+
     public ImmutableIntCollection collectInt(IntFunction<? super T> intFunction)
     {
         return this.collectInt(intFunction, new IntArrayList(this.size())).toImmutable();
@@ -588,6 +597,7 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
         this.forEach(new CollectLongProcedure<T>(longFunction, target));
         return target;
     }
+
     public ImmutableShortCollection collectShort(ShortFunction<? super T> shortFunction)
     {
         return this.collectShort(shortFunction, new ShortArrayList(this.size())).toImmutable();

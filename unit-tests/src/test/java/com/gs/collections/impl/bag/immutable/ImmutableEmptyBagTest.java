@@ -101,6 +101,14 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
         Verify.assertIterableEmpty(partition.getRejected());
     }
 
+    @Override
+    public void partitionWith()
+    {
+        PartitionImmutableBag<String> partition = this.newBag().partitionWith(Predicates2.<String>lessThan(), "0");
+        Verify.assertIterableEmpty(partition.getSelected());
+        Verify.assertIterableEmpty(partition.getRejected());
+    }
+
     @Test
     public void selectInstancesOf()
     {

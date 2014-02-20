@@ -33,6 +33,7 @@ import com.gs.collections.api.partition.list.PartitionImmutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.function.AddFunction;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
@@ -213,6 +214,14 @@ public class ImmutableArrayListTest
     public void partition()
     {
         PartitionImmutableList<Integer> partition = this.newListWith(1, 2, 3, 4, 5).partition(Predicates.lessThan(3));
+        Assert.assertEquals(iList(1, 2), partition.getSelected());
+        Assert.assertEquals(iList(3, 4, 5), partition.getRejected());
+    }
+
+    @Test
+    public void partitionWith()
+    {
+        PartitionImmutableList<Integer> partition = this.newListWith(1, 2, 3, 4, 5).partitionWith(Predicates2.<Integer>lessThan(), 3);
         Assert.assertEquals(iList(1, 2), partition.getSelected());
         Assert.assertEquals(iList(3, 4, 5), partition.getRejected());
     }

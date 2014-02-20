@@ -58,7 +58,7 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
-import com.gs.collections.api.partition.stack.PartitionStack;
+import com.gs.collections.api.partition.stack.PartitionMutableStack;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.stack.ImmutableStack;
@@ -152,9 +152,14 @@ public final class UnmodifiableStack<T> implements MutableStack<T>, Serializable
         return this.mutableStack.rejectWith(predicate, parameter);
     }
 
-    public PartitionStack<T> partition(Predicate<? super T> predicate)
+    public PartitionMutableStack<T> partition(Predicate<? super T> predicate)
     {
         return this.mutableStack.partition(predicate);
+    }
+
+    public <P> PartitionMutableStack<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.mutableStack.partitionWith(predicate, parameter);
     }
 
     public <S> RichIterable<S> selectInstancesOf(Class<S> clazz)
@@ -246,7 +251,6 @@ public final class UnmodifiableStack<T> implements MutableStack<T>, Serializable
     {
         return this.mutableStack.collectShort(shortFunction, target);
     }
-
 
     public <P, V> MutableStack<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
     {

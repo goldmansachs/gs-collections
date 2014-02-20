@@ -45,25 +45,10 @@ import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
-import com.gs.collections.impl.block.procedure.primitive.CollectBooleanProcedure;
-import com.gs.collections.impl.block.procedure.primitive.CollectByteProcedure;
-import com.gs.collections.impl.block.procedure.primitive.CollectCharProcedure;
-import com.gs.collections.impl.block.procedure.primitive.CollectDoubleProcedure;
-import com.gs.collections.impl.block.procedure.primitive.CollectFloatProcedure;
-import com.gs.collections.impl.block.procedure.primitive.CollectIntProcedure;
-import com.gs.collections.impl.block.procedure.primitive.CollectLongProcedure;
-import com.gs.collections.impl.block.procedure.primitive.CollectShortProcedure;
 import com.gs.collections.impl.collection.mutable.AbstractCollectionAdapter;
 import com.gs.collections.impl.lazy.ReverseIterable;
-import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
-import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
-import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
-import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
-import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
-import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
-import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
-import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.stack.mutable.ArrayStack;
+import com.gs.collections.impl.utility.ListIterate;
 
 @SuppressWarnings("AbstractMethodOverridesConcreteMethod")
 public abstract class AbstractListAdapter<T>
@@ -180,108 +165,140 @@ public abstract class AbstractListAdapter<T>
     }
 
     @Override
-    public abstract <V> MutableListMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
+    public <V> MutableListMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
+    {
+        return ListIterate.groupBy(this.getDelegate(), function);
+    }
 
     @Override
-    public abstract <V> MutableListMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
+    public <V> MutableListMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
+    {
+        return ListIterate.groupByEach(this.getDelegate(), function);
+    }
 
     @Override
-    public abstract MutableList<T> select(Predicate<? super T> predicate);
+    public MutableList<T> select(Predicate<? super T> predicate)
+    {
+        return ListIterate.select(this.getDelegate(), predicate);
+    }
 
     @Override
-    public abstract MutableList<T> reject(Predicate<? super T> predicate);
+    public MutableList<T> reject(Predicate<? super T> predicate)
+    {
+        return ListIterate.reject(this.getDelegate(), predicate);
+    }
 
     @Override
-    public abstract <S> MutableList<S> selectInstancesOf(Class<S> clazz);
+    public <S> MutableList<S> selectInstancesOf(Class<S> clazz)
+    {
+        return ListIterate.selectInstancesOf(this.getDelegate(), clazz);
+    }
 
     @Override
-    public abstract <V> MutableList<V> collect(Function<? super T, ? extends V> function);
+    public <V> MutableList<V> collect(Function<? super T, ? extends V> function)
+    {
+        return ListIterate.collect(this.getDelegate(), function);
+    }
 
     @Override
     public MutableBooleanList collectBoolean(BooleanFunction<? super T> booleanFunction)
     {
-        BooleanArrayList result = new BooleanArrayList(this.size());
-        this.forEach(new CollectBooleanProcedure<T>(booleanFunction, result));
-        return result;
+        return ListIterate.collectBoolean(this.getDelegate(), booleanFunction);
     }
 
     @Override
     public MutableByteList collectByte(ByteFunction<? super T> byteFunction)
     {
-        ByteArrayList result = new ByteArrayList(this.size());
-        this.forEach(new CollectByteProcedure<T>(byteFunction, result));
-        return result;
+        return ListIterate.collectByte(this.getDelegate(), byteFunction);
     }
 
     @Override
     public MutableCharList collectChar(CharFunction<? super T> charFunction)
     {
-        CharArrayList result = new CharArrayList(this.size());
-        this.forEach(new CollectCharProcedure<T>(charFunction, result));
-        return result;
+        return ListIterate.collectChar(this.getDelegate(), charFunction);
     }
 
     @Override
     public MutableDoubleList collectDouble(DoubleFunction<? super T> doubleFunction)
     {
-        DoubleArrayList result = new DoubleArrayList(this.size());
-        this.forEach(new CollectDoubleProcedure<T>(doubleFunction, result));
-        return result;
+        return ListIterate.collectDouble(this.getDelegate(), doubleFunction);
     }
 
     @Override
     public MutableFloatList collectFloat(FloatFunction<? super T> floatFunction)
     {
-        FloatArrayList result = new FloatArrayList(this.size());
-        this.forEach(new CollectFloatProcedure<T>(floatFunction, result));
-        return result;
+        return ListIterate.collectFloat(this.getDelegate(), floatFunction);
     }
 
     @Override
     public MutableIntList collectInt(IntFunction<? super T> intFunction)
     {
-        IntArrayList result = new IntArrayList(this.size());
-        this.forEach(new CollectIntProcedure<T>(intFunction, result));
-        return result;
+        return ListIterate.collectInt(this.getDelegate(), intFunction);
     }
 
     @Override
     public MutableLongList collectLong(LongFunction<? super T> longFunction)
     {
-        LongArrayList result = new LongArrayList(this.size());
-        this.forEach(new CollectLongProcedure<T>(longFunction, result));
-        return result;
+        return ListIterate.collectLong(this.getDelegate(), longFunction);
     }
 
     @Override
     public MutableShortList collectShort(ShortFunction<? super T> shortFunction)
     {
-        ShortArrayList result = new ShortArrayList(this.size());
-        this.forEach(new CollectShortProcedure<T>(shortFunction, result));
-        return result;
+        return ListIterate.collectShort(this.getDelegate(), shortFunction);
     }
 
     @Override
-    public abstract <V> MutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
+    public <V> MutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    {
+        return ListIterate.flatCollect(this.getDelegate(), function);
+    }
 
     @Override
-    public abstract <V> MutableList<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
+    public <V> MutableList<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
+    {
+        return ListIterate.collectIf(this.getDelegate(), predicate, function);
+    }
 
     @Override
-    public abstract PartitionMutableList<T> partition(Predicate<? super T> predicate);
+    public PartitionMutableList<T> partition(Predicate<? super T> predicate)
+    {
+        return ListIterate.partition(this.getDelegate(), predicate);
+    }
 
     @Override
-    public abstract <P> MutableList<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+    public <P> PartitionMutableList<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return ListIterate.partitionWith(this.getDelegate(), predicate, parameter);
+    }
 
     @Override
-    public abstract <P> MutableList<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+    public <P> MutableList<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return ListIterate.selectWith(this.getDelegate(), predicate, parameter);
+    }
 
     @Override
-    public abstract <P, V> MutableList<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
+    public <P> MutableList<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return ListIterate.rejectWith(this.getDelegate(), predicate, parameter);
+    }
 
     @Override
-    public abstract <S> MutableList<Pair<T, S>> zip(Iterable<S> that);
+    public <P, V> MutableList<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
+    {
+        return ListIterate.collectWith(this.getDelegate(), function, parameter);
+    }
 
     @Override
-    public abstract MutableList<Pair<T, Integer>> zipWithIndex();
+    public <S> MutableList<Pair<T, S>> zip(Iterable<S> that)
+    {
+        return ListIterate.zip(this.getDelegate(), that);
+    }
+
+    @Override
+    public MutableList<Pair<T, Integer>> zipWithIndex()
+    {
+        return ListIterate.zipWithIndex(this.getDelegate());
+    }
 }

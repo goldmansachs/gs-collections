@@ -155,6 +155,14 @@ public class SynchronizedMutableMap<K, V>
         }
     }
 
+    public <P> PartitionMutableCollection<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        synchronized (this.lock)
+        {
+            return this.getMutableMap().partitionWith(predicate, parameter);
+        }
+    }
+
     public <S> MutableCollection<S> selectInstancesOf(Class<S> clazz)
     {
         synchronized (this.lock)

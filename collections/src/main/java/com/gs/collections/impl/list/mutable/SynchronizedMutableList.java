@@ -369,6 +369,15 @@ public class SynchronizedMutableList<T>
     }
 
     @Override
+    public <P> PartitionMutableList<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableList().partitionWith(predicate, parameter);
+        }
+    }
+
+    @Override
     public <S> MutableList<S> selectInstancesOf(Class<S> clazz)
     {
         synchronized (this.getLock())

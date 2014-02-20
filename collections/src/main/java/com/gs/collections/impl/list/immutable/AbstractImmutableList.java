@@ -261,6 +261,12 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
         return ListIterate.partition(this, predicate).toImmutable();
     }
 
+    @Override
+    public <P> PartitionImmutableList<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return ListIterate.partitionWith(this, predicate, parameter).toImmutable();
+    }
+
     public <S> ImmutableList<S> selectInstancesOf(Class<S> clazz)
     {
         FastList<S> result = FastList.newList(this.size());

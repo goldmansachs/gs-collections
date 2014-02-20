@@ -319,6 +319,15 @@ public class SynchronizedMutableSet<T>
     }
 
     @Override
+    public <P> PartitionMutableSet<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableSet().partitionWith(predicate, parameter);
+        }
+    }
+
+    @Override
     public <S> MutableSet<S> selectInstancesOf(Class<S> clazz)
     {
         synchronized (this.getLock())

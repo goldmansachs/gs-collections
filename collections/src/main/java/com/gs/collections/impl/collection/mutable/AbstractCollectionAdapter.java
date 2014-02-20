@@ -383,6 +383,11 @@ public abstract class AbstractCollectionAdapter<T>
         return (PartitionMutableCollection<T>) Iterate.partition(this.getDelegate(), predicate);
     }
 
+    public <P> PartitionMutableCollection<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return (PartitionMutableCollection<T>) Iterate.partitionWith(this.getDelegate(), predicate, parameter);
+    }
+
     public int size()
     {
         return this.getDelegate().size();

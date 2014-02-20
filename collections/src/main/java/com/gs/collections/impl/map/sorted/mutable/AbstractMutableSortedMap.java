@@ -53,6 +53,7 @@ import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.MapCollectProcedure;
 import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
 import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
+import com.gs.collections.impl.block.procedure.PartitionPredicate2Procedure;
 import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectBooleanProcedure;
@@ -297,6 +298,13 @@ public abstract class AbstractMutableSortedMap<K, V> extends AbstractMapIterable
     {
         PartitionMutableList<V> partitionMutableList = new PartitionFastList<V>();
         this.forEach(new PartitionProcedure<V>(predicate, partitionMutableList));
+        return partitionMutableList;
+    }
+
+    public <P> PartitionMutableList<V> partitionWith(Predicate2<? super V, ? super P> predicate, P parameter)
+    {
+        PartitionMutableList<V> partitionMutableList = new PartitionFastList<V>();
+        this.forEach(new PartitionPredicate2Procedure<V, P>(predicate, parameter, partitionMutableList));
         return partitionMutableList;
     }
 

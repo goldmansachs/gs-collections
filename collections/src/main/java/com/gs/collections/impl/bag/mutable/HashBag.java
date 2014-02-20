@@ -660,6 +660,20 @@ public class HashBag<T>
         return result;
     }
 
+    public <P> PartitionMutableBag<T> partitionWith(final Predicate2<? super T, ? super P> predicate, final P parameter)
+    {
+        final PartitionMutableBag<T> result = new PartitionHashBag<T>();
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int index)
+            {
+                MutableBag<T> bucket = predicate.accept(each, parameter) ? result.getSelected() : result.getRejected();
+                bucket.addOccurrences(each, index);
+            }
+        });
+        return result;
+    }
+
     public <S> MutableBag<S> selectInstancesOf(final Class<S> clazz)
     {
         final MutableBag<S> result = HashBag.newBag();

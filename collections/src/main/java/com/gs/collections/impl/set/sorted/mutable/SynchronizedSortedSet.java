@@ -331,6 +331,15 @@ public class SynchronizedSortedSet<T>
         }
     }
 
+    @Override
+    public <P> PartitionMutableSortedSet<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getSortedSet().partitionWith(predicate, parameter);
+        }
+    }
+
     public PartitionMutableSortedSet<T> partitionWhile(Predicate<? super T> predicate)
     {
         synchronized (this.getLock())

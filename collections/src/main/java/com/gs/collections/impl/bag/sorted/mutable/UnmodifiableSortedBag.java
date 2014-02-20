@@ -169,6 +169,12 @@ public class UnmodifiableSortedBag<T>
         return this.getSortedBag().partition(predicate);
     }
 
+    @Override
+    public <P> PartitionMutableSortedBag<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.getSortedBag().partitionWith(predicate, parameter);
+    }
+
     public PartitionMutableSortedBag<T> partitionWhile(Predicate<? super T> predicate)
     {
         return this.getSortedBag().partition(predicate);

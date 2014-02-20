@@ -271,6 +271,11 @@ final class Immutable<name>ObjectEmptyMap\<V> implements Immutable<name>ObjectMa
         return new PartitionFastList\<V>();
     }
 
+    public \<P> PartitionIterable\<V> partitionWith(Predicate2\<? super V, ? super P> predicate, P parameter)
+    {
+        return new PartitionFastList\<V>();
+    }
+
     public \<S> RichIterable\<S> selectInstancesOf(Class\<S> clazz)
     {
         return Lists.mutable.with();
