@@ -61,6 +61,7 @@ import com.gs.collections.api.block.function.primitive.FloatObjectToFloatFunctio
 import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.IntObjectToIntFunction;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
@@ -2774,6 +2775,20 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
                 }
             }
             return false;
+        }
+
+        public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
+        {
+            T result = injectedValue;
+
+            for (<type> key : <name>ObjectHashMap.this.keys)
+            {
+                if (isNonSentinel(key))
+                {
+                    result = function.valueOf(result, key);
+                }
+            }
+            return result;
         }
 
         public boolean allSatisfy(<name>Predicate predicate)

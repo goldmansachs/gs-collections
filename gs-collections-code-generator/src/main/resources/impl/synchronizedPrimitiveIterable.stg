@@ -21,6 +21,7 @@ import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
@@ -233,6 +234,14 @@ public class Synchronized<name>Iterable implements <name>Iterable, Serializable
         synchronized (this.lock)
         {
             return this.iterable.notEmpty();
+        }
+    }
+
+    public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.iterable.injectInto(injectedValue, function);
         }
     }
 

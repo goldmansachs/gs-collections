@@ -24,6 +24,7 @@ import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
@@ -299,6 +300,18 @@ public class Reverse<name>Iterable implements Lazy<name>Iterable
     public Lazy<name>Iterable asLazy()
     {
         return new Lazy<name>IterableAdapter(this);
+    }
+
+    public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
+    {
+        T result = injectedValue;
+
+        <name>Iterator iterator = this.<type>Iterator();
+        while (iterator.hasNext())
+        {
+            result = function.valueOf(result, iterator.next());
+        }
+        return result;
     }
 
     private class Reverse<name>Iterator implements <name>Iterator

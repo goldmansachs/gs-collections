@@ -112,20 +112,6 @@ public class <name>ArrayStackTest extends AbstractMutable<name>StackTestCase
         Assert.assertEquals(new <name>ArrayList(), stack9.pop(0));
         Assert.assertEquals(new <name>ArrayList(), stack9.peek(0));
     }
-
-    @Test
-    public void injectInto()
-    {
-        <name>ArrayStack stack = <name>ArrayStack.newStackFromTopToBottom(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
-        <wrapperName> sum = stack.injectInto(<wrapperName>.valueOf(<(literal.(type))("1")>), new Object<name>ToObjectFunction\<<wrapperName>, <wrapperName>\>()
-        {
-            public <wrapperName> valueOf(<wrapperName> result, <type> value)
-            {
-                return <wrapperName>.valueOf((<type>) (result + value));
-            }
-        });
-        Assert.assertEquals(<wrapperName>.valueOf(<(literal.(type))("16")>), sum);
-    }
 }
 
 >>

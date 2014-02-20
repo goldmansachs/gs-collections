@@ -19,6 +19,7 @@ import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.list.primitive.Mutable<name>List;
@@ -149,6 +150,11 @@ public abstract class AbstractLazy<name>Iterable implements Lazy<name>Iterable
     public boolean noneSatisfy(<name>Predicate predicate)
     {
         return <name>IterableIterate.noneSatisfy(this, predicate);
+    }
+
+    public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
+    {
+        return <name>IterableIterate.injectInto(this, injectedValue, function);
     }
 
     <(arithmeticMethods.(type))()>

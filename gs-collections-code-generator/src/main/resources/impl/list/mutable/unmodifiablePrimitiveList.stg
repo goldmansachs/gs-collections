@@ -19,6 +19,7 @@ package com.gs.collections.impl.list.mutable.primitive;
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.<name>List;
@@ -203,6 +204,11 @@ public final class Unmodifiable<name>List
     public Lazy<name>Iterable asReversed()
     {
         return Reverse<name>Iterable.adapt(this);
+    }
+
+    public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
+    {
+        return this.getMutable<name>List().injectInto(injectedValue, function);
     }
 }
 

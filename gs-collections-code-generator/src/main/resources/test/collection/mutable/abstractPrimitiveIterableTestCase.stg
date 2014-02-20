@@ -27,6 +27,7 @@ import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
@@ -790,6 +791,20 @@ public abstract class Abstract<name>IterableTestCase
         <name>Iterable iterable4 = this.newWith(<["1"]:(literal.(type))(); separator=", ">);
         Assert.assertEquals(iterable4.toBag(), iterable4.asLazy().toBag());
         Verify.assertInstanceOf(Lazy<name>Iterable.class, iterable4.asLazy());
+    }
+
+    @Test
+    public void injectInto()
+    {
+        <name>Iterable iterable = this.newWith(<["0", "2", "31"]:(literal.(type))(); separator=", ">);
+        <wrapperName> sum = iterable.injectInto(<wrapperName>.valueOf(<(literal.(type))("0")>), new Object<name>ToObjectFunction\<<wrapperName>, <wrapperName>\>()
+        {
+            public <wrapperName> valueOf(<wrapperName> result, <type> value)
+            {
+                return <wrapperName>.valueOf((<type>)(result + value));
+            }
+        });
+        Assert.assertEquals(<wrapperName>.valueOf(<(literal.(type))("33")>), sum);
     }
 }
 

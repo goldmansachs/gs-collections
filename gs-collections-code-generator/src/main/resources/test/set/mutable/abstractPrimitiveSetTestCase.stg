@@ -22,6 +22,7 @@ import java.util.Set;
 
 import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.set.MutableSet;
@@ -306,6 +307,20 @@ public abstract class Abstract<name>SetTestCase extends AbstractMutable<name>Col
         }
 
         iterator.next();
+    }
+
+    @Test
+    public void injectInto()
+    {
+        Mutable<name>Set set = this.newWith(<["0", "2", "31"]:(literal.(type))(); separator=", ">);
+        <wrapperName> sum = set.injectInto(<wrapperName>.valueOf(<(literal.(type))("0")>), new Object<name>ToObjectFunction\<<wrapperName>, <wrapperName>\>()
+        {
+            public <wrapperName> valueOf(<wrapperName> result, <type> value)
+            {
+                return <wrapperName>.valueOf((<type>)(result + value));
+            }
+        });
+        Assert.assertEquals(<wrapperName>.valueOf(<(literal.(type))("33")>), sum);
     }
 
     @Override

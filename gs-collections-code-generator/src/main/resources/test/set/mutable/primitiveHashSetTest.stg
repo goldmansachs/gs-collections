@@ -81,20 +81,6 @@ public class <name>HashSetTest extends Abstract<name>SetTestCase
     }
 
     @Test
-    public void injectInto()
-    {
-        <name>HashSet set = <name>HashSet.newSetWith(<["0", "1", "31"]:(literal.(type))(); separator=", ">);
-        <wrapperName> sum = set.injectInto(<wrapperName>.valueOf(<(literal.(type))("0")>), new Object<name>ToObjectFunction\<<wrapperName>, <wrapperName>\>()
-        {
-            public <wrapperName> valueOf(<wrapperName> result, <type> value)
-            {
-                return <wrapperName>.valueOf((<type>)(result + value));
-            }
-        });
-        Assert.assertEquals(<wrapperName>.valueOf(<(literal.(type))("32")>), sum);
-    }
-
-    @Test
     public void addAndCheckField() throws NoSuchFieldException, IllegalAccessException
     {
         <name>HashSet hashSet = new <name>HashSet();

@@ -22,6 +22,7 @@ import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
 import com.gs.collections.api.collection.MutableCollection;
@@ -420,6 +421,14 @@ public abstract class AbstractSynchronized<name>Collection
         synchronized (this.lock)
         {
             return this.collection.toBag();
+        }
+    }
+
+    public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.injectInto(injectedValue, function);
         }
     }
 }

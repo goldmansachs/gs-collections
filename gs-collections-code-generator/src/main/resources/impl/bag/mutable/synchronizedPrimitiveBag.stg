@@ -25,6 +25,7 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.bag.primitive.Immutable<name>Bag;
 import com.gs.collections.api.bag.primitive.Mutable<name>Bag;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
 import com.gs.collections.api.iterator.<name>Iterator;
@@ -218,6 +219,14 @@ public final class Synchronized<name>Bag
     public Immutable<name>Bag toImmutable()
     {
         return <name>Bags.immutable.withAll(this);
+    }
+
+    public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>Bag().injectInto(injectedValue, function);
+        }
     }
 }
 

@@ -29,6 +29,7 @@ import com.gs.collections.api.block.function.primitive.<name>Function;
 import com.gs.collections.api.block.function.primitive.<name>Function0;
 import com.gs.collections.api.block.function.primitive.<name>To<name>Function;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.predicate.primitive.Object<name>Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -384,6 +385,11 @@ public final class UnmodifiableObject<name>Map\<K>
     public void appendString(Appendable appendable, String start, String separator, String end)
     {
         this.map.appendString(appendable, start, separator, end);
+    }
+
+    public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
+    {
+        return this.map.injectInto(injectedValue, function);
     }
 }
 

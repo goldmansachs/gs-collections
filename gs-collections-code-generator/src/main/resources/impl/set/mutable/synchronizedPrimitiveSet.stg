@@ -22,6 +22,7 @@ import java.util.Collections;
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.set.MutableSet;
@@ -204,6 +205,14 @@ public final class Synchronized<name>Set
         synchronized (this.getLock())
         {
             return this.getMutable<name>Set().toImmutable();
+        }
+    }
+
+    public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutable<name>Set().injectInto(injectedValue, function);
         }
     }
 }

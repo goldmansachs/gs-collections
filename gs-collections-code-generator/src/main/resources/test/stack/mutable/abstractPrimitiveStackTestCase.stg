@@ -20,6 +20,7 @@ body(type, wrapperName, name) ::= <<
 package com.gs.collections.impl.stack.primitive;
 
 import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.stack.primitive.<name>Stack;
 import com.gs.collections.api.stack.primitive.Immutable<name>Stack;
@@ -184,6 +185,20 @@ public abstract class Abstract<name>StackTestCase extends Abstract<name>Iterable
     {
         Assert.assertEquals(this.classUnderTest(), this.classUnderTest().toImmutable());
         Verify.assertInstanceOf(Immutable<name>Stack.class, this.classUnderTest().toImmutable());
+    }
+
+    @Test
+    public void injectInto()
+    {
+        <name>Iterable stack = this.newWithTopToBottom(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
+        <wrapperName> sum = stack.injectInto(<wrapperName>.valueOf(<(literal.(type))("1")>), new Object<name>ToObjectFunction\<<wrapperName>, <wrapperName>\>()
+        {
+            public <wrapperName> valueOf(<wrapperName> result, <type> value)
+            {
+                return <wrapperName>.valueOf((<type>) (result + value));
+            }
+        });
+        Assert.assertEquals(<wrapperName>.valueOf(<(literal.(type))("16")>), sum);
     }
 }
 

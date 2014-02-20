@@ -265,10 +265,8 @@ public abstract class AbstractMutable<name>ObjectMapTestCase extends Abstract<na
     @Test
     public void putAll()
     {
-        Mutable<name>ObjectMap\<String> hashMap = this.map;
+        Mutable<name>ObjectMap\<String> hashMap = this.getEmptyMap();
         Mutable<name>ObjectMap\<String> copyMap = <name>ObjectHashMap.newMap();
-
-        hashMap.clear();
 
         for (<type> i = <(literal.(type))("1")>; i \< <(literal.(type))("10")>; i++)
         {
