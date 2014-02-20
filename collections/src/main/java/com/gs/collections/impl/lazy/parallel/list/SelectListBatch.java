@@ -19,6 +19,7 @@ package com.gs.collections.impl.lazy.parallel.list;
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.IfProcedure;
 
 @Beta
@@ -44,4 +45,9 @@ class SelectListBatch<T> extends AbstractListBatch<T>
         return new SelectListBatch<T>(this.listBatch, Predicates.and(this.predicate, predicate));
     }
     */
+
+    public boolean anySatisfy(Predicate<? super T> predicate)
+    {
+        return this.listBatch.anySatisfy(Predicates.and(this.predicate, predicate));
+    }
 }

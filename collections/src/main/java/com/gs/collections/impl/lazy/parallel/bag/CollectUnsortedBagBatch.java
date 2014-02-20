@@ -18,9 +18,11 @@ package com.gs.collections.impl.lazy.parallel.bag;
 
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Predicates;
 
 @Beta
 class CollectUnsortedBagBatch<T, V> extends AbstractUnsortedBagBatch<V>
@@ -50,4 +52,9 @@ class CollectUnsortedBagBatch<T, V> extends AbstractUnsortedBagBatch<V>
         return new CollectBagBatch<T, VV>(this.bagBatch, Functions.chain(this.function, function));
     }
     */
+
+    public boolean anySatisfy(Predicate<? super V> predicate)
+    {
+        return this.unsortedBagBatch.anySatisfy(Predicates.attributePredicate(this.function, predicate));
+    }
 }

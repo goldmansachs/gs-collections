@@ -26,7 +26,9 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -88,6 +90,7 @@ import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.collection.AbstractMutableBag;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
+import com.gs.collections.impl.lazy.parallel.Batch;
 import com.gs.collections.impl.lazy.parallel.bag.AbstractParallelUnsortedBag;
 import com.gs.collections.impl.lazy.parallel.bag.AbstractUnsortedBagBatch;
 import com.gs.collections.impl.lazy.parallel.bag.UnsortedBagBatch;
@@ -1264,7 +1267,7 @@ public class HashBag<T>
         public void forEachWithOccurrences(ObjectIntProcedure<? super T> procedure)
         {
             throw new UnsupportedOperationException();
-/*
+            /*
             for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
             {
                 if (ObjectIntHashMap.isNonSentinel(HashBag.this.items.keys[i]))
@@ -1274,7 +1277,12 @@ public class HashBag<T>
                     procedure.value(each, occurrences);
                 }
             }
-*/
+            */
+        }
+
+        public boolean anySatisfy(Predicate<? super T> predicate)
+        {
+            throw new UnsupportedOperationException();
         }
     }
 
@@ -1289,11 +1297,6 @@ public class HashBag<T>
             this.batchSize = batchSize;
         }
 
-        public ExecutorService getExecutorService()
-        {
-            return this.executorService;
-        }
-
         public LazyIterable<UnsortedBagBatch<T>> split()
         {
             return new HashBagParallelBatchLazyIterable();
@@ -1301,10 +1304,10 @@ public class HashBag<T>
 
         public void forEach(final Procedure<? super T> procedure)
         {
-            LazyIterable<UnsortedBagBatch<T>> chunks = this.split();
-            LazyIterable<Future<?>> futures = chunks.collect(new Function<UnsortedBagBatch<T>, Future<?>>()
+            LazyIterable<? extends Batch<T>> chunks = this.split();
+            LazyIterable<Future<?>> futures = chunks.collect(new Function<Batch<T>, Future<?>>()
             {
-                public Future<?> valueOf(final UnsortedBagBatch<T> chunk)
+                public Future<?> valueOf(final Batch<T> chunk)
                 {
                     return HashBagParallelIterable.this.executorService.submit(new Runnable()
                     {
@@ -1363,6 +1366,62 @@ public class HashBag<T>
             }
         }
 
+        @Override
+        public boolean anySatisfy(final Predicate<? super T> predicate)
+        {
+            int numBatches = 0;
+            MutableSet<Future<Boolean>> futures = UnifiedSet.newSet();
+            CompletionService<Boolean> completionService = new ExecutorCompletionService<Boolean>(this.executorService);
+
+            LazyIterable<? extends Batch<T>> chunks = this.split();
+            LazyIterable<Callable<Boolean>> callables = chunks.collect(new Function<Batch<T>, Callable<Boolean>>()
+            {
+                public Callable<Boolean> valueOf(final Batch<T> batch)
+                {
+                    return new Callable<Boolean>()
+                    {
+                        public Boolean call()
+                        {
+                            return batch.anySatisfy(predicate);
+                        }
+                    };
+                }
+            });
+            for (Callable<Boolean> callable : callables)
+            {
+                futures.add(completionService.submit(callable));
+                numBatches++;
+            }
+
+            while (numBatches > 0)
+            {
+                try
+                {
+                    Future<Boolean> future = completionService.take();
+                    if (future.get())
+                    {
+                        for (Future<Boolean> eachFuture : futures)
+                        {
+                            eachFuture.cancel(true);
+                        }
+                        return true;
+                    }
+                    futures.remove(future);
+                    numBatches--;
+                }
+                catch (InterruptedException e)
+                {
+                    Thread.currentThread().interrupt();
+                    throw new RuntimeException(e);
+                }
+                catch (ExecutionException e)
+                {
+                    throw new RuntimeException(e);
+                }
+            }
+            return false;
+        }
+
         private class HashBagParallelBatchLazyIterable
                 extends AbstractLazyIterable<UnsortedBagBatch<T>>
                 implements Iterator<UnsortedBagBatch<T>>
@@ -1374,7 +1433,6 @@ public class HashBag<T>
                 for (UnsortedBagBatch<T> chunk : this)
                 {
                     procedure.value(chunk);
-                    this.chunkIndex++;
                 }
             }
 
@@ -1383,7 +1441,6 @@ public class HashBag<T>
                 for (UnsortedBagBatch<T> chunk : this)
                 {
                     procedure.value(chunk, parameter);
-                    this.chunkIndex++;
                 }
             }
 
@@ -1414,6 +1471,7 @@ public class HashBag<T>
                 int chunkStartIndex = this.chunkIndex * HashBagParallelIterable.this.batchSize;
                 int chunkEndIndex = (this.chunkIndex + 1) * HashBagParallelIterable.this.batchSize;
                 int truncatedChunkEndIndex = Math.min(chunkEndIndex, HashBag.this.items.keys.length);
+                this.chunkIndex++;
                 return new HashBagBatch(chunkStartIndex, truncatedChunkEndIndex);
                 */
             }

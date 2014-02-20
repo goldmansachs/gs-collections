@@ -16,13 +16,12 @@
 
 package com.gs.collections.impl.lazy.parallel.set;
 
-import java.util.concurrent.ExecutorService;
-
-import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Predicates;
 
 @Beta
 class ParallelCollectUnsortedSetIterable<T, V> extends AbstractParallelUnsortedSetIterable<V>
@@ -36,24 +35,14 @@ class ParallelCollectUnsortedSetIterable<T, V> extends AbstractParallelUnsortedS
         this.function = function;
     }
 
-    public LazyIterable<UnsortedSetBatch<V>> split()
-    {
-        return this.parallelSetIterable.split().collect(new Function<UnsortedSetBatch<T>, UnsortedSetBatch<V>>()
-        {
-            public UnsortedSetBatch<V> valueOf(UnsortedSetBatch<T> eachBatch)
-            {
-                return eachBatch.collect(ParallelCollectUnsortedSetIterable.this.function);
-            }
-        });
-    }
-
     public void forEach(Procedure<? super V> procedure)
     {
         this.parallelSetIterable.forEach(Functions.bind(procedure, this.function));
     }
 
-    public ExecutorService getExecutorService()
+    @Override
+    public boolean anySatisfy(Predicate<? super V> predicate)
     {
-        return this.parallelSetIterable.getExecutorService();
+        return this.parallelSetIterable.anySatisfy(Predicates.attributePredicate(this.function, predicate));
     }
 }

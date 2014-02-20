@@ -16,9 +16,6 @@
 
 package com.gs.collections.impl.lazy.parallel.bag;
 
-import java.util.concurrent.ExecutorService;
-
-import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.bag.ParallelUnsortedBag;
@@ -33,10 +30,6 @@ import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
 @Beta
 public abstract class AbstractParallelUnsortedBag<T> extends AbstractParallelIterable<T> implements ParallelUnsortedBag<T>
 {
-    protected abstract ExecutorService getExecutorService();
-
-    protected abstract LazyIterable<UnsortedBagBatch<T>> split();
-
     public ParallelUnsortedBag<T> select(Predicate<? super T> predicate)
     {
         return new ParallelSelectUnsortedBag<T>(this, predicate);

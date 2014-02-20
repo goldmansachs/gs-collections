@@ -20,6 +20,7 @@ import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.IfProcedure;
 
 @Beta
@@ -69,5 +70,10 @@ class SelectUnsortedBagBatch<T> extends AbstractUnsortedBagBatch<T>
                 this.procedure.value(each, parameter);
             }
         }
+    }
+
+    public boolean anySatisfy(Predicate<? super T> predicate)
+    {
+        return this.unsortedBagBatch.anySatisfy(Predicates.and(this.predicate, predicate));
     }
 }

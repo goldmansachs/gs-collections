@@ -16,13 +16,12 @@
 
 package com.gs.collections.impl.lazy.parallel.list;
 
-import java.util.concurrent.ExecutorService;
-
-import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Predicates;
 
 @Beta
 class ParallelCollectListIterable<T, V> extends AbstractParallelListIterable<V>
@@ -36,24 +35,14 @@ class ParallelCollectListIterable<T, V> extends AbstractParallelListIterable<V>
         this.function = function;
     }
 
-    public LazyIterable<ListBatch<V>> split()
-    {
-        return this.parallelListIterable.split().collect(new Function<ListBatch<T>, ListBatch<V>>()
-        {
-            public ListBatch<V> valueOf(ListBatch<T> eachBatch)
-            {
-                return eachBatch.collect(ParallelCollectListIterable.this.function);
-            }
-        });
-    }
-
     public void forEach(Procedure<? super V> procedure)
     {
         this.parallelListIterable.forEach(Functions.bind(procedure, this.function));
     }
 
-    public ExecutorService getExecutorService()
+    @Override
+    public boolean anySatisfy(Predicate<? super V> predicate)
     {
-        return this.parallelListIterable.getExecutorService();
+        return this.parallelListIterable.anySatisfy(Predicates.attributePredicate(this.function, predicate));
     }
 }

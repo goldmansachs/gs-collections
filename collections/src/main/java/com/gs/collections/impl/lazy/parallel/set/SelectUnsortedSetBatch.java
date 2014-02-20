@@ -19,6 +19,7 @@ package com.gs.collections.impl.lazy.parallel.set;
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.IfProcedure;
 
 @Beta
@@ -44,4 +45,9 @@ class SelectUnsortedSetBatch<T> extends AbstractUnsortedSetBatch<T>
         return new SelectSetBatch<T>(this.setBatch, Predicates.and(this.predicate, predicate));
     }
     */
+
+    public boolean anySatisfy(Predicate<? super T> predicate)
+    {
+        return this.unsortedSetBatch.anySatisfy(Predicates.and(this.predicate, predicate));
+    }
 }

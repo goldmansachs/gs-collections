@@ -18,8 +18,10 @@ package com.gs.collections.impl.lazy.parallel.list;
 
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Predicates;
 
 @Beta
 class CollectListBatch<T, V> extends AbstractListBatch<V>
@@ -44,4 +46,9 @@ class CollectListBatch<T, V> extends AbstractListBatch<V>
         return new CollectListBatch<T, VV>(this.listBatch, Functions.chain(this.function, function));
     }
     */
+
+    public boolean anySatisfy(Predicate<? super V> predicate)
+    {
+        return this.listBatch.anySatisfy(Predicates.attributePredicate(this.function, predicate));
+    }
 }

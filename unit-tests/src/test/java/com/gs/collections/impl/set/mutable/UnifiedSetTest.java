@@ -534,12 +534,32 @@ public class UnifiedSetTest extends AbstractMutableSetTestCase
         MutableSet<String> result = UnifiedSet.<String>newSet().asSynchronized();
 
         this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-                .asParallel(Executors.newFixedThreadPool(10), 1)
+                .asParallel(Executors.newFixedThreadPool(10), 2)
                 .select(IntegerPredicates.isOdd())
                 .collect(Functions.getToString())
                 .forEach(CollectionAddProcedure.on(result));
         Assert.assertEquals(
                 UnifiedSet.newSetWith("1", "3", "5", "7", "9"),
                 result);
+    }
+
+    @Test
+    public void asParallel_anySatisfy()
+    {
+        Assert.assertTrue(this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .select(IntegerPredicates.isOdd())
+                .collect(Functions.getToString())
+                .anySatisfy(Predicates.greaterThan("5")));
+
+        Assert.assertFalse(this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .select(IntegerPredicates.isOdd())
+                .anySatisfy(Predicates.greaterThan(10)));
+
+        Assert.assertFalse(this.<Integer>newWith()
+                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .select(IntegerPredicates.isOdd())
+                .anySatisfy(Predicates.greaterThan(10)));
     }
 }

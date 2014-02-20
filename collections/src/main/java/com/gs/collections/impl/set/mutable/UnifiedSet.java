@@ -27,7 +27,10 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
@@ -115,6 +118,7 @@ import com.gs.collections.impl.block.procedure.primitive.CollectShortProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
+import com.gs.collections.impl.lazy.parallel.Batch;
 import com.gs.collections.impl.lazy.parallel.set.AbstractParallelUnsortedSetIterable;
 import com.gs.collections.impl.lazy.parallel.set.AbstractUnsortedSetBatch;
 import com.gs.collections.impl.lazy.parallel.set.UnsortedSetBatch;
@@ -1055,7 +1059,63 @@ public class UnifiedSet<K>
 
     public boolean anySatisfy(Predicate<? super K> predicate)
     {
-        return IterableIterate.anySatisfy(this, predicate);
+        for (int i = 0; i < this.table.length; i++)
+        {
+            Object cur = this.table[i];
+            if (cur instanceof ChainedBucket)
+            {
+                if (this.chainedAnySatisfy((ChainedBucket) cur, predicate))
+                {
+                    return true;
+                }
+            }
+            else if (cur != null)
+            {
+                if (predicate.accept(this.nonSentinel(cur)))
+                {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean chainedAnySatisfy(ChainedBucket bucket, Predicate<? super K> predicate)
+    {
+        do
+        {
+            if (predicate.accept(this.nonSentinel(bucket.zero)))
+            {
+                return true;
+            }
+            if (bucket.one == null)
+            {
+                return false;
+            }
+            if (predicate.accept(this.nonSentinel(bucket.one)))
+            {
+                return true;
+            }
+            if (bucket.two == null)
+            {
+                return false;
+            }
+            if (predicate.accept(this.nonSentinel(bucket.two)))
+            {
+                return true;
+            }
+            if (bucket.three == null)
+            {
+                return false;
+            }
+            if (bucket.three instanceof ChainedBucket)
+            {
+                bucket = (ChainedBucket) bucket.three;
+                continue;
+            }
+            return predicate.accept(this.nonSentinel(bucket.three));
+        }
+        while (true);
     }
 
     public <P> boolean anySatisfyWith(
@@ -2671,6 +2731,26 @@ public class UnifiedSet<K>
                 }
             }
         }
+
+        public boolean anySatisfy(Predicate<? super K> predicate)
+        {
+            for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
+            {
+                Object cur = UnifiedSet.this.table[i];
+                if (cur instanceof ChainedBucket)
+                {
+                    UnifiedSet.this.chainedAnySatisfy((ChainedBucket) cur, predicate);
+                }
+                else if (cur != null)
+                {
+                    if (predicate.accept(UnifiedSet.this.nonSentinel(cur)))
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
+        }
     }
 
     private final class UnifiedSetParallelUnsortedIterable extends AbstractParallelUnsortedSetIterable<K>
@@ -2684,11 +2764,6 @@ public class UnifiedSet<K>
             this.batchSize = batchSize;
         }
 
-        public ExecutorService getExecutorService()
-        {
-            return this.executorService;
-        }
-
         public LazyIterable<UnsortedSetBatch<K>> split()
         {
             return new UnifiedSetParallelSplitLazyIterable();
@@ -2696,10 +2771,10 @@ public class UnifiedSet<K>
 
         public void forEach(final Procedure<? super K> procedure)
         {
-            LazyIterable<UnsortedSetBatch<K>> chunks = this.split();
-            LazyIterable<Future<?>> futures = chunks.collect(new Function<UnsortedSetBatch<K>, Future<?>>()
+            LazyIterable<? extends Batch<K>> chunks = this.split();
+            LazyIterable<Future<?>> futures = chunks.collect(new Function<Batch<K>, Future<?>>()
             {
-                public Future<?> valueOf(final UnsortedSetBatch<K> chunk)
+                public Future<?> valueOf(final Batch<K> chunk)
                 {
                     return UnifiedSetParallelUnsortedIterable.this.executorService.submit(new Runnable()
                     {
@@ -2730,6 +2805,62 @@ public class UnifiedSet<K>
             }
         }
 
+        @Override
+        public boolean anySatisfy(final Predicate<? super K> predicate)
+        {
+            int numBatches = 0;
+            MutableSet<Future<Boolean>> futures = UnifiedSet.newSet();
+            CompletionService<Boolean> completionService = new ExecutorCompletionService<Boolean>(this.executorService);
+
+            LazyIterable<? extends Batch<K>> chunks = this.split();
+            LazyIterable<Callable<Boolean>> callables = chunks.collect(new Function<Batch<K>, Callable<Boolean>>()
+            {
+                public Callable<Boolean> valueOf(final Batch<K> batch)
+                {
+                    return new Callable<Boolean>()
+                    {
+                        public Boolean call()
+                        {
+                            return batch.anySatisfy(predicate);
+                        }
+                    };
+                }
+            });
+            for (Callable<Boolean> callable : callables)
+            {
+                futures.add(completionService.submit(callable));
+                numBatches++;
+            }
+
+            while (numBatches > 0)
+            {
+                try
+                {
+                    Future<Boolean> future = completionService.take();
+                    if (future.get())
+                    {
+                        for (Future<Boolean> eachFuture : futures)
+                        {
+                            eachFuture.cancel(true);
+                        }
+                        return true;
+                    }
+                    futures.remove(future);
+                    numBatches--;
+                }
+                catch (InterruptedException e)
+                {
+                    Thread.currentThread().interrupt();
+                    throw new RuntimeException(e);
+                }
+                catch (ExecutionException e)
+                {
+                    throw new RuntimeException(e);
+                }
+            }
+            return false;
+        }
+
         private class UnifiedSetParallelSplitLazyIterable
                 extends AbstractLazyIterable<UnsortedSetBatch<K>>
                 implements Iterator<UnsortedSetBatch<K>>
@@ -2741,7 +2872,6 @@ public class UnifiedSet<K>
                 for (UnsortedSetBatch<K> chunk : this)
                 {
                     procedure.value(chunk);
-                    this.chunkIndex++;
                 }
             }
 
@@ -2750,7 +2880,6 @@ public class UnifiedSet<K>
                 for (UnsortedSetBatch<K> chunk : this)
                 {
                     procedure.value(chunk, parameter);
-                    this.chunkIndex++;
                 }
             }
 
@@ -2779,6 +2908,7 @@ public class UnifiedSet<K>
                 int chunkStartIndex = this.chunkIndex * UnifiedSetParallelUnsortedIterable.this.batchSize;
                 int chunkEndIndex = (this.chunkIndex + 1) * UnifiedSetParallelUnsortedIterable.this.batchSize;
                 int truncatedChunkEndIndex = Math.min(chunkEndIndex, UnifiedSet.this.table.length);
+                this.chunkIndex++;
                 return new UnifiedUnsortedSetBatch(chunkStartIndex, truncatedChunkEndIndex);
             }
         }

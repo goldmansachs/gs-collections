@@ -28,7 +28,10 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 import java.util.RandomAccess;
+import java.util.concurrent.Callable;
+import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 
@@ -86,6 +89,7 @@ import com.gs.collections.impl.block.procedure.FastListRejectProcedure;
 import com.gs.collections.impl.block.procedure.FastListSelectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
+import com.gs.collections.impl.lazy.parallel.Batch;
 import com.gs.collections.impl.lazy.parallel.list.AbstractListBatch;
 import com.gs.collections.impl.lazy.parallel.list.AbstractParallelListIterable;
 import com.gs.collections.impl.lazy.parallel.list.ListBatch;
@@ -1661,6 +1665,18 @@ public class FastList<T>
                 procedure.value(FastList.this.items[i]);
             }
         }
+
+        public boolean anySatisfy(Predicate<? super T> predicate)
+        {
+            for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
+            {
+                if (predicate.accept(FastList.this.items[i]))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 
     private final class FastListParallelIterable extends AbstractParallelListIterable<T>
@@ -1674,12 +1690,6 @@ public class FastList<T>
             this.batchSize = batchSize;
         }
 
-        public ExecutorService getExecutorService()
-        {
-            return this.executorService;
-        }
-
-        @Override
         public LazyIterable<ListBatch<T>> split()
         {
             return new FastListParallelBatchLazyIterable();
@@ -1687,10 +1697,10 @@ public class FastList<T>
 
         public void forEach(final Procedure<? super T> procedure)
         {
-            LazyIterable<ListBatch<T>> chunks = this.split();
-            LazyIterable<Future<?>> futures = chunks.collect(new Function<ListBatch<T>, Future<?>>()
+            LazyIterable<? extends Batch<T>> chunks = this.split();
+            LazyIterable<Future<?>> futures = chunks.collect(new Function<Batch<T>, Future<?>>()
             {
-                public Future<?> valueOf(final ListBatch<T> chunk)
+                public Future<?> valueOf(final Batch<T> chunk)
                 {
                     return FastListParallelIterable.this.executorService.submit(new Runnable()
                     {
@@ -1721,6 +1731,62 @@ public class FastList<T>
             }
         }
 
+        @Override
+        public boolean anySatisfy(final Predicate<? super T> predicate)
+        {
+            int numBatches = 0;
+            MutableSet<Future<Boolean>> futures = UnifiedSet.newSet();
+            CompletionService<Boolean> completionService = new ExecutorCompletionService<Boolean>(this.executorService);
+
+            LazyIterable<? extends Batch<T>> chunks = this.split();
+            LazyIterable<Callable<Boolean>> callables = chunks.collect(new Function<Batch<T>, Callable<Boolean>>()
+            {
+                public Callable<Boolean> valueOf(final Batch<T> batch)
+                {
+                    return new Callable<Boolean>()
+                    {
+                        public Boolean call()
+                        {
+                            return batch.anySatisfy(predicate);
+                        }
+                    };
+                }
+            });
+            for (Callable<Boolean> callable : callables)
+            {
+                futures.add(completionService.submit(callable));
+                numBatches++;
+            }
+
+            while (numBatches > 0)
+            {
+                try
+                {
+                    Future<Boolean> future = completionService.take();
+                    if (future.get())
+                    {
+                        for (Future<Boolean> eachFuture : futures)
+                        {
+                            eachFuture.cancel(true);
+                        }
+                        return true;
+                    }
+                    futures.remove(future);
+                    numBatches--;
+                }
+                catch (InterruptedException e)
+                {
+                    Thread.currentThread().interrupt();
+                    throw new RuntimeException(e);
+                }
+                catch (ExecutionException e)
+                {
+                    throw new RuntimeException(e);
+                }
+            }
+            return false;
+        }
+
         private class FastListParallelBatchLazyIterable
                 extends AbstractLazyIterable<ListBatch<T>>
                 implements Iterator<ListBatch<T>>
@@ -1732,7 +1798,6 @@ public class FastList<T>
                 for (ListBatch<T> chunk : this)
                 {
                     procedure.value(chunk);
-                    this.chunkIndex++;
                 }
             }
 
@@ -1741,7 +1806,6 @@ public class FastList<T>
                 for (ListBatch<T> chunk : this)
                 {
                     procedure.value(chunk, parameter);
-                    this.chunkIndex++;
                 }
             }
 
@@ -1770,6 +1834,7 @@ public class FastList<T>
                 int chunkStartIndex = this.chunkIndex * FastListParallelIterable.this.batchSize;
                 int chunkEndIndex = (this.chunkIndex + 1) * FastListParallelIterable.this.batchSize;
                 int truncatedChunkEndIndex = Math.min(chunkEndIndex, FastList.this.size);
+                this.chunkIndex++;
                 return new FastListBatch(chunkStartIndex, truncatedChunkEndIndex);
             }
         }

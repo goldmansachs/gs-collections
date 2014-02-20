@@ -16,14 +16,13 @@
 
 package com.gs.collections.impl.lazy.parallel.bag;
 
-import java.util.concurrent.ExecutorService;
-
-import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Predicates;
 
 @Beta
 class ParallelCollectUnsortedBag<T, V> extends AbstractParallelUnsortedBag<V>
@@ -35,17 +34,6 @@ class ParallelCollectUnsortedBag<T, V> extends AbstractParallelUnsortedBag<V>
     {
         this.parallelUnsortedBag = parallelUnsortedBag;
         this.function = function;
-    }
-
-    public LazyIterable<UnsortedBagBatch<V>> split()
-    {
-        return this.parallelUnsortedBag.split().collect(new Function<UnsortedBagBatch<T>, UnsortedBagBatch<V>>()
-        {
-            public UnsortedBagBatch<V> valueOf(UnsortedBagBatch<T> eachBatch)
-            {
-                return eachBatch.collect(ParallelCollectUnsortedBag.this.function);
-            }
-        });
     }
 
     public void forEach(Procedure<? super V> procedure)
@@ -64,8 +52,9 @@ class ParallelCollectUnsortedBag<T, V> extends AbstractParallelUnsortedBag<V>
         });
     }
 
-    public ExecutorService getExecutorService()
+    @Override
+    public boolean anySatisfy(Predicate<? super V> predicate)
     {
-        return this.parallelUnsortedBag.getExecutorService();
+        return this.parallelUnsortedBag.anySatisfy(Predicates.attributePredicate(this.function, predicate));
     }
 }

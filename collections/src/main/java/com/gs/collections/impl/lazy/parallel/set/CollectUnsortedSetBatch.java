@@ -18,8 +18,10 @@ package com.gs.collections.impl.lazy.parallel.set;
 
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Predicates;
 
 @Beta
 class CollectUnsortedSetBatch<T, V> extends AbstractUnsortedSetBatch<V>
@@ -44,4 +46,9 @@ class CollectUnsortedSetBatch<T, V> extends AbstractUnsortedSetBatch<V>
         return new CollectSetBatch<T, VV>(this.setBatch, Functions.chain(this.function, function));
     }
     */
+
+    public boolean anySatisfy(Predicate<? super V> predicate)
+    {
+        return this.unsortedSetBatch.anySatisfy(Predicates.attributePredicate(this.function, predicate));
+    }
 }
