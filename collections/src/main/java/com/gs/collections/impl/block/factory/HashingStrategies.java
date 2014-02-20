@@ -49,6 +49,16 @@ public final class HashingStrategies
         return IDENTITY_HASHING_STRATEGY;
     }
 
+    public static <T> HashingStrategy<T> chain(HashingStrategy<T>... hashingStrategies)
+    {
+        if (hashingStrategies.length == 0)
+        {
+            throw new IllegalArgumentException("Nothing to chain");
+        }
+
+        return new ChainedHashingStrategy<T>(hashingStrategies);
+    }
+
     private static class DefaultStrategy implements HashingStrategy<Object>
     {
         private static final long serialVersionUID = 1L;
@@ -120,6 +130,39 @@ public final class HashingStrategies
         public boolean equals(Object object1, Object object2)
         {
             return object1 == object2;
+        }
+    }
+
+    private static final class ChainedHashingStrategy<T> implements HashingStrategy<T>
+    {
+        private static final long serialVersionUID = 1L;
+        private final HashingStrategy<T>[] hashingStrategies;
+
+        private ChainedHashingStrategy(HashingStrategy<T>... hashingStrategies)
+        {
+            this.hashingStrategies = hashingStrategies;
+        }
+
+        public int computeHashCode(T object)
+        {
+            int hashCode = this.hashingStrategies[0].computeHashCode(object);
+            for (int i = 1; i < this.hashingStrategies.length; i++)
+            {
+                hashCode = hashCode * 31 + this.hashingStrategies[i].computeHashCode(object);
+            }
+            return hashCode;
+        }
+
+        public boolean equals(T object1, T object2)
+        {
+            for (HashingStrategy<T> hashingStrategy : this.hashingStrategies)
+            {
+                if (!hashingStrategy.equals(object1, object2))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }

@@ -83,6 +83,25 @@ public class HashingStrategiesTest
         Assert.assertTrue(identityHashingStrategy.equals(john1, john1));
         Assert.assertFalse(identityHashingStrategy.equals(john1, john2));
     }
+
+    @Test
+    public void chainedHashingStrategy()
+    {
+        Person john1 = new Person("John", "Smith");
+        Person john2 = new Person("John", "Smith");
+        Person john3 = new Person("John", "Doe");
+
+        HashingStrategy<Person> chainedHashingStrategy = HashingStrategies.chain(
+                HashingStrategies.fromFunction(Person.TO_FIRST),
+                HashingStrategies.fromFunction(Person.TO_LAST));
+        Assert.assertEquals(john1.hashCode(), chainedHashingStrategy.computeHashCode(john1));
+        Assert.assertTrue(chainedHashingStrategy.equals(john1, john2));
+
+        HashingStrategy<Person> chainedHashingStrategy2 = HashingStrategies.chain(
+                HashingStrategies.fromFunction(Person.TO_FIRST));
+        Assert.assertEquals("John".hashCode(), chainedHashingStrategy2.computeHashCode(john1));
+        Assert.assertTrue(chainedHashingStrategy2.equals(john1, john3));
+    }
 }
 
 

@@ -66,4 +66,18 @@ public class HashingStrategiesTest
                         + "dGVnaWVzJElkZW50aXR5SGFzaGluZ1N0cmF0ZWd5AAAAAAAAAAECAAB4cA==",
                 HashingStrategies.identityStrategy());
     }
+
+    @Test
+    public void chainedHashingStrategy()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAE5jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5Lkhhc2hpbmdTdHJh\n"
+                        + "dGVnaWVzJENoYWluZWRIYXNoaW5nU3RyYXRlZ3kAAAAAAAAAAQIAAVsAEWhhc2hpbmdTdHJhdGVn\n"
+                        + "aWVzdAAvW0xjb20vZ3MvY29sbGVjdGlvbnMvYXBpL2Jsb2NrL0hhc2hpbmdTdHJhdGVneTt4cHVy\n"
+                        + "AC9bTGNvbS5ncy5jb2xsZWN0aW9ucy5hcGkuYmxvY2suSGFzaGluZ1N0cmF0ZWd5O2dYZQViLT3o\n"
+                        + "AgAAeHAAAAABc3IAT2NvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLmJsb2NrLmZhY3RvcnkuSGFzaGlu\n"
+                        + "Z1N0cmF0ZWdpZXMkSWRlbnRpdHlIYXNoaW5nU3RyYXRlZ3kAAAAAAAAAAQIAAHhw",
+                HashingStrategies.chain(HashingStrategies.identityStrategy()));
+    }
 }
