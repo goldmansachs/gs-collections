@@ -56,4 +56,14 @@ public class HashingStrategiesTest
                         + "b24AAAAAAAAAAQIAAHhw",
                 HashingStrategies.fromFunction(Functions.getToString()));
     }
+
+    @Test
+    public void identityHashingStrategy()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAE9jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5Lkhhc2hpbmdTdHJh\n"
+                        + "dGVnaWVzJElkZW50aXR5SGFzaGluZ1N0cmF0ZWd5AAAAAAAAAAECAAB4cA==",
+                HashingStrategies.identityStrategy());
+    }
 }

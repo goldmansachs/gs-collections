@@ -18,6 +18,7 @@ package com.gs.collections.impl.block.factory;
 
 import com.gs.collections.api.block.HashingStrategy;
 import com.gs.collections.impl.merge.Person;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -68,6 +69,19 @@ public class HashingStrategiesTest
         Assert.assertNotEquals(lastHashingStrategy.computeHashCode(john), firstHashingStrategy.computeHashCode(john));
         Assert.assertNotEquals(lastHashingStrategy.computeHashCode(john), firstHashingStrategy.computeHashCode(jane));
         Assert.assertEquals(lastHashingStrategy.computeHashCode(john), lastHashingStrategy.computeHashCode(jane));
+    }
+
+    @Test
+    public void identityHashingStrategy()
+    {
+        Person john1 = new Person("John", "Smith");
+        Person john2 = new Person("John", "Smith");
+        Verify.assertEqualsAndHashCode(john1, john2);
+
+        HashingStrategy<Object> identityHashingStrategy = HashingStrategies.identityStrategy();
+        Assert.assertNotEquals(identityHashingStrategy.computeHashCode(john1), identityHashingStrategy.computeHashCode(john2));
+        Assert.assertTrue(identityHashingStrategy.equals(john1, john1));
+        Assert.assertFalse(identityHashingStrategy.equals(john1, john2));
     }
 }
 

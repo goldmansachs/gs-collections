@@ -21,7 +21,8 @@ import com.gs.collections.api.block.function.Function;
 
 public final class HashingStrategies
 {
-    private static final HashingStrategy<?> DEFAULT_HASHING_STRATEGY = new DefaultStrategy<Object>();
+    private static final HashingStrategy<Object> DEFAULT_HASHING_STRATEGY = new DefaultStrategy();
+    private static final HashingStrategy<Object> IDENTITY_HASHING_STRATEGY = new IdentityHashingStrategy();
 
     private HashingStrategies()
     {
@@ -43,16 +44,21 @@ public final class HashingStrategies
         return new FunctionHashingStrategy<T, V>(function);
     }
 
-    private static class DefaultStrategy<T> implements HashingStrategy<T>
+    public static HashingStrategy<Object> identityStrategy()
+    {
+        return IDENTITY_HASHING_STRATEGY;
+    }
+
+    private static class DefaultStrategy implements HashingStrategy<Object>
     {
         private static final long serialVersionUID = 1L;
 
-        public int computeHashCode(T object)
+        public int computeHashCode(Object object)
         {
             return object.hashCode();
         }
 
-        public boolean equals(T object1, T object2)
+        public boolean equals(Object object1, Object object2)
         {
             return object1.equals(object2);
         }
@@ -99,6 +105,21 @@ public final class HashingStrategies
         public boolean equals(T object1, T object2)
         {
             return this.function.valueOf(object1).equals(this.function.valueOf(object2));
+        }
+    }
+
+    private static final class IdentityHashingStrategy implements HashingStrategy<Object>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public int computeHashCode(Object object)
+        {
+            return System.identityHashCode(object);
+        }
+
+        public boolean equals(Object object1, Object object2)
+        {
+            return object1 == object2;
         }
     }
 }
