@@ -323,7 +323,7 @@ final class Immutable<name1><name2>SingletonMap implements Immutable<name1><name
     @Override
     public String toString()
     {
-        return this.makeString("{", ", ", "}");
+        return "{" + this.key1 + "=" + this.value1 + "}";
     }
 
     public String makeString()
@@ -358,8 +358,6 @@ final class Immutable<name1><name2>SingletonMap implements Immutable<name1><name
         try
         {
             appendable.append(start);
-            appendable.append(String.valueOf(this.key1));
-            appendable.append("=");
             appendable.append(String.valueOf(this.value1));
             appendable.append(end);
         }

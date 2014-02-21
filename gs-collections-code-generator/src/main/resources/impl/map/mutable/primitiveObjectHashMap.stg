@@ -310,7 +310,45 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
     @Override
     public String toString()
     {
-        return this.makeString("{", ", ", "}");
+        StringBuilder appendable = new StringBuilder();
+
+        appendable.append("{");
+
+        boolean first = true;
+
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey)
+            {
+                appendable.append(String.valueOf(EMPTY_KEY)).append("=").append(String.valueOf(this.sentinelValues.zeroValue));
+                first = false;
+            }
+            if (this.sentinelValues.containsOneKey)
+            {
+                if (!first)
+                {
+                    appendable.append(", ");
+                }
+                appendable.append(String.valueOf(REMOVED_KEY)).append("=").append(String.valueOf(this.sentinelValues.oneValue));
+                first = false;
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            <type> key = this.keys[i];
+            if (isNonSentinel(key))
+            {
+                if (!first)
+                {
+                    appendable.append(", ");
+                }
+                appendable.append(String.valueOf(key)).append("=").append(String.valueOf(this.values[i]));
+                first = false;
+            }
+        }
+        appendable.append("}");
+
+        return appendable.toString();
     }
 
     public int size()
@@ -367,7 +405,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
             {
                 if (this.sentinelValues.containsZeroKey)
                 {
-                    appendable.append(String.valueOf(EMPTY_KEY)).append("=").append(String.valueOf(this.sentinelValues.zeroValue));
+                    appendable.append(String.valueOf(this.sentinelValues.zeroValue));
                     first = false;
                 }
                 if (this.sentinelValues.containsOneKey)
@@ -376,7 +414,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
                     {
                         appendable.append(separator);
                     }
-                    appendable.append(String.valueOf(REMOVED_KEY)).append("=").append(String.valueOf(this.sentinelValues.oneValue));
+                    appendable.append(String.valueOf(this.sentinelValues.oneValue));
                     first = false;
                 }
             }
@@ -389,7 +427,7 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
                     {
                         appendable.append(separator);
                     }
-                    appendable.append(String.valueOf(key)).append("=").append(String.valueOf(this.values[i]));
+                    appendable.append(String.valueOf(this.values[i]));
                     first = false;
                 }
             }

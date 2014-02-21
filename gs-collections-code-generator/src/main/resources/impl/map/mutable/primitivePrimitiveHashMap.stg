@@ -227,7 +227,45 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
     @Override
     public String toString()
     {
-        return this.makeString("{", ", ", "}");
+        StringBuilder appendable = new StringBuilder();
+
+        appendable.append("{");
+
+        boolean first = true;
+
+        if (this.sentinelValues != null)
+        {
+            if (this.sentinelValues.containsZeroKey)
+            {
+                appendable.append(String.valueOf(EMPTY_KEY)).append("=").append(String.valueOf(this.sentinelValues.zeroValue));
+                first = false;
+            }
+            if (this.sentinelValues.containsOneKey)
+            {
+                if (!first)
+                {
+                    appendable.append(", ");
+                }
+                appendable.append(String.valueOf(REMOVED_KEY)).append("=").append(String.valueOf(this.sentinelValues.oneValue));
+                first = false;
+            }
+        }
+        for (int i = 0; i \< this.keys.length; i++)
+        {
+            <type1> key = this.keys[i];
+            if (isNonSentinel(key))
+            {
+                if (!first)
+                {
+                    appendable.append(", ");
+                }
+                appendable.append(String.valueOf(key)).append("=").append(String.valueOf(this.values[i]));
+                first = false;
+            }
+        }
+        appendable.append("}");
+
+        return appendable.toString();
     }
 
     public int size()
@@ -284,7 +322,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             {
                 if (this.sentinelValues.containsZeroKey)
                 {
-                    appendable.append(String.valueOf(EMPTY_KEY)).append("=").append(String.valueOf(this.sentinelValues.zeroValue));
+                    appendable.append(String.valueOf(this.sentinelValues.zeroValue));
                     first = false;
                 }
                 if (this.sentinelValues.containsOneKey)
@@ -293,7 +331,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                     {
                         appendable.append(separator);
                     }
-                    appendable.append(String.valueOf(REMOVED_KEY)).append("=").append(String.valueOf(this.sentinelValues.oneValue));
+                    appendable.append(String.valueOf(this.sentinelValues.oneValue));
                     first = false;
                 }
             }
@@ -306,7 +344,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                     {
                         appendable.append(separator);
                     }
-                    appendable.append(String.valueOf(key)).append("=").append(String.valueOf(this.values[i]));
+                    appendable.append(String.valueOf(this.values[i]));
                     first = false;
                 }
             }

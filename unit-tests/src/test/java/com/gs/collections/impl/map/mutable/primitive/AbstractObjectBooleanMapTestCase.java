@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -355,20 +355,20 @@ public abstract class AbstractObjectBooleanMapTestCase
     public void makeString()
     {
         Assert.assertEquals("", this.<String>getEmptyMap().makeString());
-        Assert.assertEquals("0=true", this.newWithKeysValues(0, true).makeString());
-        Assert.assertEquals("1=false", this.newWithKeysValues(1, false).makeString());
-        Assert.assertEquals("null=true", this.newWithKeysValues(null, true).makeString());
+        Assert.assertEquals("true", this.newWithKeysValues(0, true).makeString());
+        Assert.assertEquals("false", this.newWithKeysValues(1, false).makeString());
+        Assert.assertEquals("true", this.newWithKeysValues(null, true).makeString());
 
         ObjectBooleanMap<Integer> map2 = this.newWithKeysValues(1, true, 32, false);
         Assert.assertTrue(
                 map2.makeString("[", "/", "]"),
-                "[1=true/32=false]".equals(map2.makeString("[", "/", "]"))
-                        || "[32=false/1=true]".equals(map2.makeString("[", "/", "]")));
+                "[true/false]".equals(map2.makeString("[", "/", "]"))
+                        || "[false/true]".equals(map2.makeString("[", "/", "]")));
 
         Assert.assertTrue(
                 map2.makeString("/"),
-                "1=true/32=false".equals(map2.makeString("/"))
-                        || "32=false/1=true".equals(map2.makeString("/")));
+                "true/false".equals(map2.makeString("/"))
+                        || "false/true".equals(map2.makeString("/")));
     }
 
     @Test
@@ -380,37 +380,37 @@ public abstract class AbstractObjectBooleanMapTestCase
 
         Appendable appendable0 = new StringBuilder();
         this.newWithKeysValues(0, true).appendString(appendable0);
-        Assert.assertEquals("0=true", appendable0.toString());
+        Assert.assertEquals("true", appendable0.toString());
 
         Appendable appendable1 = new StringBuilder();
         this.newWithKeysValues(1, false).appendString(appendable1);
-        Assert.assertEquals("1=false", appendable1.toString());
+        Assert.assertEquals("false", appendable1.toString());
 
         Appendable appendable2 = new StringBuilder();
         this.newWithKeysValues(null, false).appendString(appendable2);
-        Assert.assertEquals("null=false", appendable2.toString());
+        Assert.assertEquals("false", appendable2.toString());
 
         Appendable appendable3 = new StringBuilder();
         ObjectBooleanMap<Integer> map1 = this.newWithKeysValues(0, true, 1, false);
         map1.appendString(appendable3);
         Assert.assertTrue(
                 appendable3.toString(),
-                "0=true, 1=false".equals(appendable3.toString())
-                        || "1=false, 0=true".equals(appendable3.toString()));
+                "true, false".equals(appendable3.toString())
+                        || "false, true".equals(appendable3.toString()));
 
         Appendable appendable4 = new StringBuilder();
         map1.appendString(appendable4, "/");
         Assert.assertTrue(
                 appendable4.toString(),
-                "0=true/1=false".equals(appendable4.toString())
-                        || "1=false/0=true".equals(appendable4.toString()));
+                "true/false".equals(appendable4.toString())
+                        || "false/true".equals(appendable4.toString()));
 
         Appendable appendable5 = new StringBuilder();
         map1.appendString(appendable5, "[", "/", "]");
         Assert.assertTrue(
                 appendable5.toString(),
-                "[0=true/1=false]".equals(appendable5.toString())
-                        || "[1=false/0=true]".equals(appendable5.toString()));
+                "[true/false]".equals(appendable5.toString())
+                        || "[false/true]".equals(appendable5.toString()));
     }
 
     @Test

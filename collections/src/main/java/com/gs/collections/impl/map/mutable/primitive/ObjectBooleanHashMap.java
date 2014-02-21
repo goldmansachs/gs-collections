@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -621,7 +621,27 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
     @Override
     public String toString()
     {
-        return this.makeString("{", ", ", "}");
+        StringBuilder appendable = new StringBuilder();
+        appendable.append("{");
+
+        boolean first = true;
+
+        for (int i = 0; i < this.keys.length; i++)
+        {
+            Object key = this.keys[i];
+            if (isNonSentinel(key))
+            {
+                if (!first)
+                {
+                    appendable.append(", ");
+                }
+                appendable.append(this.toNonSentinel(key)).append("=").append(this.values.get(i));
+                first = false;
+            }
+        }
+        appendable.append("}");
+
+        return appendable.toString();
     }
 
     public ObjectBooleanHashMap<K> select(ObjectBooleanPredicate<? super K> predicate)
@@ -933,7 +953,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
                     {
                         appendable.append(separator);
                     }
-                    appendable.append(String.valueOf(this.toNonSentinel(key))).append("=").append(String.valueOf(this.values.get(i)));
+                    appendable.append(String.valueOf(this.values.get(i)));
                     first = false;
                 }
             }

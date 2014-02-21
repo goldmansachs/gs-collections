@@ -340,7 +340,7 @@ final class ImmutableObject<name>SingletonMap\<K> extends AbstractImmutableObjec
     @Override
     public String toString()
     {
-        return this.makeString("{", ", ", "}");
+        return "{" + this.key1 + "=" + this.value1 + "}";
     }
 
     public String makeString()
@@ -375,8 +375,6 @@ final class ImmutableObject<name>SingletonMap\<K> extends AbstractImmutableObjec
         try
         {
             appendable.append(start);
-            appendable.append(String.valueOf(this.key1));
-            appendable.append("=");
             appendable.append(String.valueOf(this.value1));
             appendable.append(end);
         }

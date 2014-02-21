@@ -267,7 +267,7 @@ final class Immutable<name>ObjectSingletonMap\<V> extends AbstractImmutable<name
     @Override
     public String toString()
     {
-        return this.makeString("{", ", ", "}");
+        return "{" + this.key1 + "=" + this.value1 + "}";
     }
 
     public boolean isEmpty()
@@ -656,8 +656,6 @@ final class Immutable<name>ObjectSingletonMap\<V> extends AbstractImmutable<name
         try
         {
             appendable.append(start);
-            appendable.append(String.valueOf(this.key1));
-            appendable.append("=");
             appendable.append(String.valueOf(this.value1));
             appendable.append(end);
         }
