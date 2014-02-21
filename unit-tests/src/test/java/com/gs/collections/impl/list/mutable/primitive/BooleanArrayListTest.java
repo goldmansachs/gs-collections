@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@ package com.gs.collections.impl.list.mutable.primitive;
 import java.lang.reflect.Field;
 import java.util.BitSet;
 
-import com.gs.collections.api.block.function.primitive.ObjectBooleanIntToObjectFunction;
 import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.BooleanIntProcedure;
 import com.gs.collections.impl.math.MutableInteger;
@@ -103,20 +102,6 @@ public class BooleanArrayListTest extends AbstractBooleanListTestCase
         Assert.assertEquals(BooleanArrayList.newListWith(true, true, false), arrayList1);
         Assert.assertEquals(BooleanArrayList.newListWith(true, true, false, true), arrayList2);
         Assert.assertEquals(BooleanArrayList.newListWith(true, true, false, true, false), arrayList3);
-    }
-
-    @Test
-    public void injectIntoWithIndex()
-    {
-        BooleanArrayList list = BooleanArrayList.newListWith(true, false, true);
-        MutableInteger result = list.injectIntoWithIndex(new MutableInteger(0), new ObjectBooleanIntToObjectFunction<MutableInteger, MutableInteger>()
-        {
-            public MutableInteger valueOf(MutableInteger object, boolean value, int index)
-            {
-                return object.add((value ? 1 : 0) + index);
-            }
-        });
-        Assert.assertEquals(new MutableInteger(5), result);
     }
 
     @Test

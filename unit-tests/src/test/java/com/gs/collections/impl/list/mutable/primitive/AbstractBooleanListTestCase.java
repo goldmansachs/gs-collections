@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.list.mutable.primitive;
 
+import com.gs.collections.api.block.function.primitive.ObjectBooleanIntToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.list.MutableList;
@@ -23,6 +24,7 @@ import com.gs.collections.api.list.primitive.ImmutableBooleanList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.impl.collection.mutable.primitive.AbstractMutableBooleanCollectionTestCase;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.math.MutableInteger;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -322,6 +324,20 @@ public abstract class AbstractBooleanListTestCase extends AbstractMutableBoolean
         Assert.assertEquals(BooleanArrayList.newListWith(true, true, false, false), this.newWith(false, false, true, true).toReversed());
         MutableBooleanList originalList = this.newWith(true, true, false, false);
         Assert.assertNotSame(originalList, originalList.toReversed());
+    }
+
+    @Test
+    public void injectIntoWithIndex()
+    {
+        MutableBooleanList list = this.newWith(true, false, true);
+        MutableInteger result = list.injectIntoWithIndex(new MutableInteger(0), new ObjectBooleanIntToObjectFunction<MutableInteger, MutableInteger>()
+        {
+            public MutableInteger valueOf(MutableInteger object, boolean value, int index)
+            {
+                return object.add((value ? 1 : 0) + index);
+            }
+        });
+        Assert.assertEquals(new MutableInteger(5), result);
     }
 
     @Override

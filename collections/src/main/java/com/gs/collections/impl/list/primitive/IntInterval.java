@@ -25,6 +25,7 @@ import com.gs.collections.api.IntIterable;
 import com.gs.collections.api.LazyIntIterable;
 import com.gs.collections.api.bag.primitive.MutableIntBag;
 import com.gs.collections.api.block.function.primitive.IntToObjectFunction;
+import com.gs.collections.api.block.function.primitive.ObjectIntIntToObjectFunction;
 import com.gs.collections.api.block.function.primitive.ObjectIntToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.primitive.IntIntProcedure;
@@ -572,6 +573,30 @@ public final class IntInterval
             for (int i = this.from; i >= this.to; i += this.step)
             {
                 result = function.valueOf(result, i);
+            }
+        }
+        return result;
+    }
+
+    public <T> T injectIntoWithIndex(T injectedValue, ObjectIntIntToObjectFunction<? super T, ? extends T> function)
+    {
+        T result = injectedValue;
+        int index = 0;
+
+        if (this.from <= this.to)
+        {
+            for (int i = this.from; i <= this.to; i += this.step)
+            {
+                result = function.valueOf(result, i, index);
+                index++;
+            }
+        }
+        else
+        {
+            for (int i = this.from; i >= this.to; i += this.step)
+            {
+                result = function.valueOf(result, i, index);
+                index++;
             }
         }
         return result;

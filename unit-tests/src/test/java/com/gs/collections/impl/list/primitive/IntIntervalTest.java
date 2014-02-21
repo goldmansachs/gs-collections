@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,8 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.LazyIntIterable;
 import com.gs.collections.api.block.function.primitive.IntToObjectFunction;
+import com.gs.collections.api.block.function.primitive.ObjectIntIntToObjectFunction;
+import com.gs.collections.api.block.function.primitive.ObjectIntToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.IntIntProcedure;
 import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.iterator.IntIterator;
@@ -28,6 +30,7 @@ import com.gs.collections.impl.block.factory.primitive.IntPredicates;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.math.IntegerSum;
+import com.gs.collections.impl.math.MutableInteger;
 import com.gs.collections.impl.set.mutable.primitive.IntHashSet;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -139,6 +142,35 @@ public class IntIntervalTest
         });
 
         Assert.assertEquals(6L, sum[0]);
+    }
+
+    @Test
+    public void injectInto()
+    {
+        IntInterval intInterval = IntInterval.oneTo(3);
+        MutableInteger result = intInterval.injectInto(new MutableInteger(0), new ObjectIntToObjectFunction<MutableInteger, MutableInteger>()
+        {
+            public MutableInteger valueOf(MutableInteger object, int value)
+            {
+                return object.add(value);
+            }
+        });
+        Assert.assertEquals(new MutableInteger(6), result);
+    }
+
+    @Test
+    public void injectIntoWithIndex()
+    {
+        IntInterval list1 = this.intInterval;
+        final IntInterval list2 = IntInterval.oneTo(3);
+        MutableInteger result = list1.injectIntoWithIndex(new MutableInteger(0), new ObjectIntIntToObjectFunction<MutableInteger, MutableInteger>()
+        {
+            public MutableInteger valueOf(MutableInteger object, int value, int index)
+            {
+                return object.add(value * list2.get(index));
+            }
+        });
+        Assert.assertEquals(new MutableInteger(14), result);
     }
 
     @Test

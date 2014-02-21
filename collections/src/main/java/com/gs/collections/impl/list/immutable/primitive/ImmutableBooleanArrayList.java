@@ -28,6 +28,7 @@ import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.LazyBooleanIterable;
 import com.gs.collections.api.bag.primitive.MutableBooleanBag;
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
+import com.gs.collections.api.block.function.primitive.ObjectBooleanIntToObjectFunction;
 import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
@@ -444,6 +445,16 @@ final class ImmutableBooleanArrayList
         for (int i = 0; i < this.size; i++)
         {
             result = function.valueOf(result, this.items.get(i));
+        }
+        return result;
+    }
+
+    public <T> T injectIntoWithIndex(T injectedValue, ObjectBooleanIntToObjectFunction<? super T, ? extends T> function)
+    {
+        T result = injectedValue;
+        for (int i = 0; i < this.size; i++)
+        {
+            result = function.valueOf(result, this.items.get(i), i);
         }
         return result;
     }

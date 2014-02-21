@@ -20,6 +20,7 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.Object<name>IntToObjectFunction;
 import com.gs.collections.api.collection.primitive.Immutable<name>Collection;
 import com.gs.collections.api.list.primitive.Immutable<name>List;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
@@ -168,6 +169,22 @@ public class Immutable<name>EmptyListTest extends AbstractImmutable<name>ListTes
             public Mutable<wrapperName> valueOf(Mutable<wrapperName> object, <type> value)
             {
                 return object.add(value);
+            }
+        });
+        Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("0")>), result);
+    }
+
+    @Override
+    @Test
+    public void injectIntoWithIndex()
+    {
+        Immutable<name>List list1 = this.newWith();
+        final Immutable<name>List list2 = this.newWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
+        Mutable<wrapperName> result = list1.injectIntoWithIndex(new Mutable<wrapperName>(<(literal.(type))("0")>), new Object<name>IntToObjectFunction\<Mutable<wrapperName>, Mutable<wrapperName>\>()
+        {
+            public Mutable<wrapperName> valueOf(Mutable<wrapperName> object, <type> value, int index)
+            {
+                return object.add(<(castIntToNarrowTypeWithParens.(type))("value * list2.get(index)")>);
             }
         });
         Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("0")>), result);

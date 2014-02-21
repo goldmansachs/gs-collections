@@ -17,6 +17,7 @@ body(type, wrapperName, name) ::= <<
 package com.gs.collections.impl.list.immutable.primitive;
 
 import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
+import com.gs.collections.api.block.function.primitive.Object<name>IntToObjectFunction;
 import com.gs.collections.api.list.primitive.Immutable<name>List;
 import com.gs.collections.impl.factory.primitive.<name>Lists;
 import com.gs.collections.impl.math.Mutable<wrapperName>;
@@ -70,6 +71,22 @@ public class Immutable<name>SingletonListTest extends AbstractImmutable<name>Lis
             }
         });
         Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("2")>), result);
+    }
+
+    @Override
+    @Test
+    public void injectIntoWithIndex()
+    {
+        Immutable<name>List list1 = this.newWith(<["1"]:(literal.(type))(); separator=", ">);
+        final Immutable<name>List list2 = this.newWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">);
+        Mutable<wrapperName> result = list1.injectIntoWithIndex(new Mutable<wrapperName>(<(literal.(type))("0")>), new Object<name>IntToObjectFunction\<Mutable<wrapperName>, Mutable<wrapperName>\>()
+        {
+            public Mutable<wrapperName> valueOf(Mutable<wrapperName> object, <type> value, int index)
+            {
+                return object.add(<(castIntToNarrowTypeWithParens.(type))("value * list2.get(index)")>);
+            }
+        });
+        Assert.assertEquals(new Mutable<wrapperName>(<(literal.(type))("1")>), result);
     }
 
     @Override
