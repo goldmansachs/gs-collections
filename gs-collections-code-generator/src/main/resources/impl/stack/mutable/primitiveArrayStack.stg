@@ -257,8 +257,7 @@ public final class <name>ArrayStack
 
     public \<V> V injectInto(V injectedValue, Object<name>ToObjectFunction\<? super V, ? extends V> function)
     {
-        //TODO changed to asReversed() once added to IntIterable
-        return this.delegate.toReversed().injectInto(injectedValue, function);
+        return this.delegate.asReversed().injectInto(injectedValue, function);
     }
 
     <(arithmeticMethods.(type))(type)>
