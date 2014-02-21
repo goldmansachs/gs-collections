@@ -22,6 +22,7 @@ import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.list.ParallelListIterable;
+import com.gs.collections.api.multimap.list.ListMultimap;
 import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
 
 @Beta
@@ -75,6 +76,18 @@ public abstract class AbstractParallelListIterable<T> extends AbstractParallelIt
 
     @Override
     public <V> ParallelListIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <V> ListMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <V> ListMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
     {
         throw new UnsupportedOperationException();
     }

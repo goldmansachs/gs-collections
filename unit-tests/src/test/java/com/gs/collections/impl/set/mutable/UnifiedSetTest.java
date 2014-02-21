@@ -20,18 +20,25 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.concurrent.Executors;
 
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.api.multimap.set.SetMultimap;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.api.set.Pool;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.math.IntegerSum;
 import com.gs.collections.impl.math.Sum;
 import com.gs.collections.impl.math.SumProcedure;
@@ -561,5 +568,43 @@ public class UnifiedSetTest extends AbstractMutableSetTestCase
                 .asParallel(Executors.newFixedThreadPool(10), 2)
                 .select(IntegerPredicates.isOdd())
                 .anySatisfy(Predicates.greaterThan(10)));
+    }
+
+    @Test
+    public void asParallel_groupBy()
+    {
+        ParallelUnsortedSetIterable<Integer> parallelSet = this.newWith(1, 2, 3, 4, 5, 6, 7).asParallel(Executors.newFixedThreadPool(10), 2);
+        Function<Integer, Boolean> isOddFunction = new Function<Integer, Boolean>()
+        {
+            public Boolean valueOf(Integer object)
+            {
+                return IntegerPredicates.isOdd().accept(object);
+            }
+        };
+
+        MutableMap<Boolean, MutableSet<Integer>> expected =
+                UnifiedMap.<Boolean, MutableSet<Integer>>newWithKeysValues(
+                        Boolean.TRUE, this.newWith(1, 3, 5, 7),
+                        Boolean.FALSE, this.newWith(2, 4, 6));
+
+        SetMultimap<Boolean, Integer> multimap = parallelSet.groupBy(isOddFunction);
+        Assert.assertEquals(expected, multimap.toMap());
+    }
+
+    @Test
+    public void asParallel_groupByEach()
+    {
+        ParallelUnsortedSetIterable<Integer> parallelSet = this.newWith(1, 2, 3, 4, 5, 6, 7).asParallel(Executors.newFixedThreadPool(10), 2);
+
+        NegativeIntervalFunction function = new NegativeIntervalFunction();
+        MutableMultimap<Integer, Integer> expected = this.<Integer>newWith().groupByEach(function).toMutable();
+        for (int i = 1; i < 8; i++)
+        {
+            expected.putAll(-i, Interval.fromTo(i, 7));
+        }
+
+        SetMultimap<Integer, Integer> actual =
+                parallelSet.groupByEach(function);
+        Assert.assertEquals(expected, actual);
     }
 }

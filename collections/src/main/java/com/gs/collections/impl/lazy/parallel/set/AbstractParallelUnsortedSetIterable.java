@@ -21,8 +21,12 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.multimap.set.MutableSetMultimap;
+import com.gs.collections.api.multimap.set.SetMultimap;
 import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
+import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
 
 @Beta
 public abstract class AbstractParallelUnsortedSetIterable<T> extends AbstractParallelIterable<T> implements ParallelUnsortedSetIterable<T>
@@ -77,5 +81,44 @@ public abstract class AbstractParallelUnsortedSetIterable<T> extends AbstractPar
     public <V> ParallelUnsortedSetIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
         throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <V> SetMultimap<V, T> groupBy(final Function<? super T, ? extends V> function)
+    {
+        final MutableSetMultimap<V, T> result = UnifiedSetMultimap.newMultimap();
+        this.forEach(new Procedure<T>()
+        {
+            public void value(T each)
+            {
+                V key = function.valueOf(each);
+                synchronized (result)
+                {
+                    result.put(key, each);
+                }
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public <V> SetMultimap<V, T> groupByEach(final Function<? super T, ? extends Iterable<V>> function)
+    {
+        final MutableSetMultimap<V, T> result = UnifiedSetMultimap.newMultimap();
+        this.forEach(new Procedure<T>()
+        {
+            public void value(T each)
+            {
+                Iterable<V> keys = function.valueOf(each);
+                synchronized (result)
+                {
+                    for (V key : keys)
+                    {
+                        result.put(key, each);
+                    }
+                }
+            }
+        });
+        return result;
     }
 }

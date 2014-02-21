@@ -28,6 +28,7 @@ import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.impl.AbstractRichIterable;
@@ -140,5 +141,17 @@ public abstract class AbstractParallelIterable<T> extends AbstractRichIterable<T
         MutableSortedSet<T> result = TreeSortedSet.newSet(comparator).asSynchronized();
         this.forEach(CollectionAddProcedure.on(result));
         return result;
+    }
+
+    @Override
+    public <V, R extends MutableMultimap<V, T>> R groupBy(Function<? super T, ? extends V> function, R target)
+    {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public <V, R extends MutableMultimap<V, T>> R groupByEach(Function<? super T, ? extends Iterable<V>> function, R target)
+    {
+        throw new UnsupportedOperationException();
     }
 }

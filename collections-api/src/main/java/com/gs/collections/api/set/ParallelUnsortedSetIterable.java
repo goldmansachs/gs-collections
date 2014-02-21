@@ -22,6 +22,7 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.multimap.set.SetMultimap;
 
 /**
  * A ParallelIterable is RichIterable which will defer evaluation for certain methods like select, reject, collect, etc.
@@ -66,6 +67,10 @@ public interface ParallelUnsortedSetIterable<T>
      * Creates a parallel flattening iterable for the current iterable.
      */
     <V> ParallelUnsortedSetIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
+
+    <V> SetMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
+
+    <V> SetMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
 
 //    /**
 //     * Returns a parallel BooleanIterable which will transform the underlying iterable data to boolean values based on the booleanFunction.

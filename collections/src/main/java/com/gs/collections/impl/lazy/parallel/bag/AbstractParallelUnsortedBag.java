@@ -23,9 +23,13 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.api.multimap.bag.BagMultimap;
+import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.procedure.BagAddOccurrencesProcedure;
 import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
+import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 
 @Beta
 public abstract class AbstractParallelUnsortedBag<T> extends AbstractParallelIterable<T> implements ParallelUnsortedBag<T>
@@ -87,6 +91,51 @@ public abstract class AbstractParallelUnsortedBag<T> extends AbstractParallelIte
     {
         MutableBag<T> result = HashBag.<T>newBag().asSynchronized();
         this.forEachWithOccurrences(BagAddOccurrencesProcedure.on(result));
+        return result;
+    }
+
+    @Override
+    public <V> BagMultimap<V, T> groupBy(final Function<? super T, ? extends V> function)
+    {
+        final MutableBagMultimap<V, T> result = HashBagMultimap.newMultimap();
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                V key = function.valueOf(each);
+                synchronized (result)
+                {
+                    for (int i = 0; i < occurrences; i++)
+                    {
+                        result.put(key, each);
+                    }
+                }
+            }
+        });
+        return result;
+    }
+
+    @Override
+    public <V> BagMultimap<V, T> groupByEach(final Function<? super T, ? extends Iterable<V>> function)
+    {
+        final MutableBagMultimap<V, T> result = HashBagMultimap.newMultimap();
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                Iterable<V> keys = function.valueOf(each);
+                synchronized (result)
+                {
+                    for (V key : keys)
+                    {
+                        for (int i = 0; i < occurrences; i++)
+                        {
+                            result.put(key, each);
+                        }
+                    }
+                }
+            }
+        });
         return result;
     }
 }

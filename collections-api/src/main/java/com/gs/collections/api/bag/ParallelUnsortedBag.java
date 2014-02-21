@@ -23,6 +23,7 @@ import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.api.multimap.bag.BagMultimap;
 
 /**
  * A ParallelIterable is RichIterable which will defer evaluation for certain methods like select, reject, collect, etc.
@@ -69,6 +70,10 @@ public interface ParallelUnsortedBag<T>
      * Creates a parallel flattening iterable for the current iterable.
      */
     <V> ParallelUnsortedBag<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
+
+    <V> BagMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
+
+    <V> BagMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
 
 //    /**
 //     * Returns a parallel BooleanIterable which will transform the underlying iterable data to boolean values based on the booleanFunction.

@@ -22,11 +22,13 @@ import java.util.List;
 import java.util.Set;
 
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.multimap.ImmutableMultimap;
 import com.gs.collections.api.partition.PartitionImmutableCollection;
 import com.gs.collections.api.partition.bag.PartitionMutableBag;
 import com.gs.collections.api.tuple.Pair;
@@ -40,6 +42,12 @@ import com.gs.collections.impl.set.mutable.UnifiedSet;
 public abstract class AbstractImmutableCollection<T> extends AbstractRichIterable<T> implements ImmutableCollection<T>, Collection<T>
 {
     protected abstract MutableCollection<T> newMutable(int size);
+
+    @Override
+    public abstract <V> ImmutableMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
+
+    @Override
+    public abstract <V> ImmutableMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
 
     @Override
     public abstract <S> ImmutableCollection<Pair<T, S>> zip(Iterable<S> that);

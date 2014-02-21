@@ -57,7 +57,7 @@ public interface ParallelIterable<T> extends RichIterable<T>
      */
     <V> ParallelIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
 
-//    /**
+    //    /**
 //     * Returns a parallel BooleanIterable which will transform the underlying iterable data to boolean values based on the booleanFunction.
 //     */
 //    ParallelBooleanIterable collectBoolean(BooleanFunction<? super T> booleanFunction);

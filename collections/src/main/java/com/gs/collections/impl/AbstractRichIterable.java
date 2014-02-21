@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,7 +62,7 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
-import com.gs.collections.api.multimap.ImmutableMultimap;
+import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.api.set.MutableSet;
@@ -629,9 +629,9 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
         return map.toImmutable();
     }
 
-    public <V> ImmutableMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
+    public <V> Multimap<V, T> groupBy(Function<? super T, ? extends V> function)
     {
-        return IterableIterate.groupBy(this, function, FastListMultimap.<V, T>newMultimap()).toImmutable();
+        return IterableIterate.groupBy(this, function, FastListMultimap.<V, T>newMultimap());
     }
 
     public <V, R extends MutableMultimap<V, T>> R groupBy(
@@ -641,9 +641,9 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
         return IterableIterate.groupBy(this, function, target);
     }
 
-    public <V> ImmutableMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
+    public <V> Multimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
     {
-        return IterableIterate.groupByEach(this, function, FastListMultimap.<V, T>newMultimap()).toImmutable();
+        return IterableIterate.groupByEach(this, function, FastListMultimap.<V, T>newMultimap());
     }
 
     public <V, R extends MutableMultimap<V, T>> R groupByEach(
