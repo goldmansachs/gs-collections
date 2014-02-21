@@ -1079,13 +1079,7 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
     @Test
     public void aggregateByNonMutating()
     {
-        Function0\<Integer> valueCreator = new Function0\<Integer>()
-        {
-            public Integer value()
-            {
-                return Integer.valueOf(0);
-            }
-        };
+        Function0\<Integer> valueCreator = Functions0.value(0);
         Function2\<Integer, <name>BooleanPair, Integer> sumAggregator = new Function2\<Integer, <name>BooleanPair, Integer>()
         {
             public Integer value(Integer aggregate, <name>BooleanPair value)

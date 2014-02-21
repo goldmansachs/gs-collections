@@ -30,4 +30,11 @@ public class Functions2Test
         Function2<Integer, Object, String> block = Functions2.fromFunction(Functions.getToString());
         Assert.assertEquals("1", block.value(1, null));
     }
+
+    @Test
+    public void plusInteger()
+    {
+        Function2<Integer, Integer, Integer> plusInteger = Functions2.integerAddition();
+        Assert.assertEquals(Integer.valueOf(5), plusInteger.value(2, 3));
+    }
 }

@@ -1478,7 +1478,7 @@ public abstract class Abstract<name>ObjectMapTestCase
     @Test
     public void aggregateBy()
     {
-        Function0\<Integer> valueCreator = Functions0.zeroInteger();
+        Function0\<Integer> valueCreator = Functions0.value(0);
         Function2\<Integer, Integer, Integer> sumAggregator = new Function2\<Integer, Integer, Integer>()
         {
             public Integer value(Integer aggregate, Integer value)

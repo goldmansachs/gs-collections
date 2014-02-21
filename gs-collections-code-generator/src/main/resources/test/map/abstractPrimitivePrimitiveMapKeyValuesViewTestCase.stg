@@ -1070,13 +1070,7 @@ public abstract class Abstract<name1><name2>MapKeyValuesViewTestCase
     @Test
     public void aggregateByNonMutating()
     {
-        Function0\<Integer> valueCreator = new Function0\<Integer>()
-        {
-            public Integer value()
-            {
-                return Integer.valueOf(0);
-            }
-        };
+        Function0\<Integer> valueCreator = Functions0.value(0);
         Function2\<Integer, <name1><name2>Pair, Integer> sumAggregator = new Function2\<Integer, <name1><name2>Pair, Integer>()
         {
             public Integer value(Integer aggregate, <name1><name2>Pair value)

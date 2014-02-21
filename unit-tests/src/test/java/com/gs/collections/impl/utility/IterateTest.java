@@ -2507,13 +2507,7 @@ public class IterateTest
 
     private void aggregateByImmutableResult(Iterable<Integer> iterable)
     {
-        Function0<Integer> valueCreator = new Function0<Integer>()
-        {
-            public Integer value()
-            {
-                return Integer.valueOf(0);
-            }
-        };
+        Function0<Integer> valueCreator = Functions0.value(0);
         Function2<Integer, Integer, Integer> sumAggregator = new Function2<Integer, Integer, Integer>()
         {
             public Integer value(Integer aggregate, Integer value)

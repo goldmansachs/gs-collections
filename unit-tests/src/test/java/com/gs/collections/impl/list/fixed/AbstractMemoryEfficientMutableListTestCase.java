@@ -28,6 +28,7 @@ import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.impl.Counter;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -174,13 +175,7 @@ public abstract class AbstractMemoryEfficientMutableListTestCase
     public void aggregateByNonMutating()
     {
         Function<String, String> groupBy = Functions.getStringPassThru();
-        Function0<Integer> valueCreator = new Function0<Integer>()
-        {
-            public Integer value()
-            {
-                return Integer.valueOf(0);
-            }
-        };
+        Function0<Integer> valueCreator = Functions0.value(0);
         Function2<Integer, String, Integer> sumAggregator = new Function2<Integer, String, Integer>()
         {
             public Integer value(Integer aggregate, String value)

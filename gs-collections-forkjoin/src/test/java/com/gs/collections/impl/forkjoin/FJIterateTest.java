@@ -101,13 +101,7 @@ public class FJIterateTest
 
     private static final Function0<AtomicInteger> ATOMIC_INTEGER_NEW = Functions0.zeroAtomicInteger();
 
-    private static final Function0<Integer> INTEGER_NEW = new Function0<Integer>()
-    {
-        public Integer value()
-        {
-            return Integer.valueOf(0);
-        }
-    };
+    private static final Function0<Integer> INTEGER_NEW = Functions0.value(0);
 
     private static final Function<Integer, String> EVEN_OR_ODD = new Function<Integer, String>()
     {

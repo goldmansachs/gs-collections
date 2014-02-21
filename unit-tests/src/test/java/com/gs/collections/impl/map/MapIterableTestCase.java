@@ -67,6 +67,7 @@ import com.gs.collections.impl.bag.mutable.primitive.ShortHashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Functions0;
+import com.gs.collections.impl.block.factory.Functions2;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
@@ -1350,20 +1351,8 @@ public abstract class MapIterableTestCase
     @Test
     public void aggregateByNonMutating()
     {
-        Function0<Integer> valueCreator = new Function0<Integer>()
-        {
-            public Integer value()
-            {
-                return Integer.valueOf(0);
-            }
-        };
-        Function2<Integer, Integer, Integer> sumAggregator = new Function2<Integer, Integer, Integer>()
-        {
-            public Integer value(Integer aggregate, Integer value)
-            {
-                return aggregate + value;
-            }
-        };
+        Function0<Integer> valueCreator = Functions0.value(0);
+        Function2<Integer, Integer, Integer> sumAggregator = Functions2.integerAddition();
         RichIterable<Integer> collection = this.newMapWithKeysValues(1, 1, 2, 2, 3, 3);
         MapIterable<String, Integer> aggregation = collection.aggregateBy(Functions.getToString(), valueCreator, sumAggregator);
         Assert.assertEquals(1, aggregation.get("1").intValue());

@@ -24,15 +24,21 @@ import com.gs.collections.api.block.function.Function2;
  */
 public final class Functions2
 {
+    private static final Function2<Integer, Integer, Integer> INTEGER_ADDITION = new IntegerAddition();
+
     private Functions2()
     {
         throw new AssertionError("Suppress default constructor for noninstantiability");
     }
 
-    public static <T, V, P> Function2<T, P, V> fromFunction(
-            Function<? super T, ? extends V> function)
+    public static <T, V, P> Function2<T, P, V> fromFunction(Function<? super T, ? extends V> function)
     {
         return new FunctionAdapter<T, P, V>(function);
+    }
+
+    public static Function2<Integer, Integer, Integer> integerAddition()
+    {
+        return INTEGER_ADDITION;
     }
 
     private static final class FunctionAdapter<T, P, V> implements Function2<T, P, V>
@@ -48,6 +54,16 @@ public final class Functions2
         public V value(T each, P parameter)
         {
             return this.function.valueOf(each);
+        }
+    }
+
+    private static class IntegerAddition implements Function2<Integer, Integer, Integer>
+    {
+        private static final long serialVersionUID = 1L;
+
+        public Integer value(Integer aggregate, Integer value)
+        {
+            return aggregate + value;
         }
     }
 }

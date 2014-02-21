@@ -32,6 +32,7 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.ParallelTests;
+import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.forkjoin.FJIterate;
@@ -108,13 +109,7 @@ public class SerialParallelPerformanceTest
                 }
             };
 
-    private static final Function0<Integer> INTEGER_NEW = new Function0<Integer>()
-    {
-        public Integer value()
-        {
-            return Integer.valueOf(0);
-        }
-    };
+    private static final Function0<Integer> INTEGER_NEW = Functions0.value(0);
 
     private static final Function2<Integer, String, Integer> COUNT_AGGREGATOR = new Function2<Integer, String, Integer>()
     {

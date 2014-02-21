@@ -16,6 +16,9 @@
 
 package com.gs.collections.impl.block.function;
 
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
+
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.factory.Bags;
@@ -55,5 +58,25 @@ public class Functions0Test
     {
         Assert.assertEquals(UnifiedMap.newMap(), Functions0.newUnifiedMap().value());
         Verify.assertInstanceOf(UnifiedMap.class, Functions0.newUnifiedMap().value());
+    }
+
+    @Test
+    public void zeroInteger()
+    {
+        Assert.assertEquals(Integer.valueOf(0), Functions0.value(0).value());
+    }
+
+    @Test
+    public void zeroAtomicInteger()
+    {
+        Verify.assertInstanceOf(AtomicInteger.class, Functions0.zeroAtomicInteger().value());
+        Assert.assertEquals(0, Functions0.zeroAtomicInteger().value().get());
+    }
+
+    @Test
+    public void zeroAtomicLong()
+    {
+        Verify.assertInstanceOf(AtomicLong.class, Functions0.zeroAtomicLong().value());
+        Assert.assertEquals(0, Functions0.zeroAtomicLong().value().get());
     }
 }
