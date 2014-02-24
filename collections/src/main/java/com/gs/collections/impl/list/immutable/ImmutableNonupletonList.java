@@ -76,7 +76,6 @@ final class ImmutableNonupletonList<T>
         procedure.value(this.element9);
     }
 
-    @Override
     public T get(int index)
     {
         switch (index)

@@ -57,7 +57,6 @@ final class EmptySet<T>
         return this;
     }
 
-    @Override
     public int size()
     {
         return 0;
@@ -69,19 +68,16 @@ final class EmptySet<T>
         return false;
     }
 
-    @Override
     public T getFirst()
     {
         return null;
     }
 
-    @Override
     public T getLast()
     {
         return null;
     }
 
-    @Override
     public void forEach(Procedure<? super T> procedure)
     {
     }
@@ -96,7 +92,6 @@ final class EmptySet<T>
     {
     }
 
-    @Override
     public Iterator<T> iterator()
     {
         return EmptyIterator.getInstance();

@@ -67,10 +67,26 @@ import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
 import com.gs.collections.impl.block.procedure.RejectProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
 import com.gs.collections.impl.block.procedure.SelectProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectBooleanProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectByteProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectCharProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectDoubleProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectFloatProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectIntProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectLongProcedure;
+import com.gs.collections.impl.block.procedure.primitive.CollectShortProcedure;
 import com.gs.collections.impl.collection.immutable.AbstractImmutableCollection;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.lazy.ReverseIterable;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
+import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
+import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
+import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
+import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
+import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.utility.Iterate;
@@ -255,13 +271,11 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
         return ListIterate.rejectWith(this, predicate, parameter, targetCollection);
     }
 
-    @Override
     public PartitionImmutableList<T> partition(Predicate<? super T> predicate)
     {
         return ListIterate.partition(this, predicate).toImmutable();
     }
 
-    @Override
     public <P> PartitionImmutableList<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         return ListIterate.partitionWith(this, predicate, parameter).toImmutable();
@@ -281,52 +295,60 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableBooleanList collectBoolean(BooleanFunction<? super T> booleanFunction)
     {
-        return (ImmutableBooleanList) super.collectBoolean(booleanFunction);
+        BooleanArrayList result = new BooleanArrayList();
+        this.forEach(new CollectBooleanProcedure<T>(booleanFunction, result));
+        return result.toImmutable();
     }
 
-    @Override
-    public ImmutableByteList collectByte(ByteFunction<? super T> function)
+    public ImmutableByteList collectByte(ByteFunction<? super T> byteFunction)
     {
-        return (ImmutableByteList) super.collectByte(function);
+        ByteArrayList result = new ByteArrayList();
+        this.forEach(new CollectByteProcedure<T>(byteFunction, result));
+        return result.toImmutable();
     }
 
-    @Override
     public ImmutableCharList collectChar(CharFunction<? super T> charFunction)
     {
-        return (ImmutableCharList) super.collectChar(charFunction);
+        CharArrayList result = new CharArrayList();
+        this.forEach(new CollectCharProcedure<T>(charFunction, result));
+        return result.toImmutable();
     }
 
-    @Override
     public ImmutableDoubleList collectDouble(DoubleFunction<? super T> doubleFunction)
     {
-        return (ImmutableDoubleList) super.collectDouble(doubleFunction);
+        DoubleArrayList result = new DoubleArrayList();
+        this.forEach(new CollectDoubleProcedure<T>(doubleFunction, result));
+        return result.toImmutable();
     }
 
-    @Override
     public ImmutableFloatList collectFloat(FloatFunction<? super T> floatFunction)
     {
-        return (ImmutableFloatList) super.collectFloat(floatFunction);
+        FloatArrayList result = new FloatArrayList();
+        this.forEach(new CollectFloatProcedure<T>(floatFunction, result));
+        return result.toImmutable();
     }
 
-    @Override
     public ImmutableIntList collectInt(IntFunction<? super T> intFunction)
     {
-        return (ImmutableIntList) super.collectInt(intFunction);
+        IntArrayList result = new IntArrayList();
+        this.forEach(new CollectIntProcedure<T>(intFunction, result));
+        return result.toImmutable();
     }
 
-    @Override
     public ImmutableLongList collectLong(LongFunction<? super T> longFunction)
     {
-        return (ImmutableLongList) super.collectLong(longFunction);
+        LongArrayList result = new LongArrayList(this.size());
+        this.forEach(new CollectLongProcedure<T>(longFunction, result));
+        return result.toImmutable();
     }
 
-    @Override
     public ImmutableShortList collectShort(ShortFunction<? super T> shortFunction)
     {
-        return (ImmutableShortList) super.collectShort(shortFunction);
+        ShortArrayList result = new ShortArrayList();
+        this.forEach(new CollectShortProcedure<T>(shortFunction, result));
+        return result.toImmutable();
     }
 
     public <P, V> ImmutableList<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
@@ -565,8 +587,6 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
         }
     }
 
-    public abstract T get(int index);
-
     public int indexOf(Object object)
     {
         int n = this.size();
@@ -677,7 +697,6 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
         ListIterate.appendString(this, appendable, start, separator, end);
     }
 
-    @Override
     public <V> ImmutableListMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
     {
         return this.groupBy(function, FastListMultimap.<V, T>newMultimap()).toImmutable();
@@ -691,7 +710,6 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
         return ListIterate.groupBy(this, function, target);
     }
 
-    @Override
     public <V> ImmutableListMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
     {
         return this.groupByEach(function, FastListMultimap.<V, T>newMultimap()).toImmutable();
@@ -741,13 +759,11 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
         return ListIterate.maxBy(this, function);
     }
 
-    @Override
     public <S> ImmutableList<Pair<T, S>> zip(Iterable<S> that)
     {
         return this.zip(that, FastList.<Pair<T, S>>newList()).toImmutable();
     }
 
-    @Override
     public ImmutableList<Pair<T, Integer>> zipWithIndex()
     {
         return this.zipWithIndex(FastList.<Pair<T, Integer>>newList()).toImmutable();

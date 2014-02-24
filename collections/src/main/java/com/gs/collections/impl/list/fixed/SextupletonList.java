@@ -86,7 +86,6 @@ final class SextupletonList<T>
                 this.element6);
     }
 
-    @Override
     public int size()
     {
         return 6;

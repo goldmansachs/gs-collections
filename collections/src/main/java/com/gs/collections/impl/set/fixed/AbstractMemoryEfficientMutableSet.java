@@ -90,7 +90,6 @@ abstract class AbstractMemoryEfficientMutableSet<T>
         throw new UnsupportedOperationException("Cannot removeIfWith from a fixed size set: " + this.getClass());
     }
 
-    @Override
     public void clear()
     {
         throw new UnsupportedOperationException("Cannot clear a fixed size set: " + this.getClass());

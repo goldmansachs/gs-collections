@@ -123,7 +123,6 @@ final class ImmutableQuadrupletonSet<T>
                 || Comparators.nullSafeEquals(obj, this.element4);
     }
 
-    @Override
     public Iterator<T> iterator()
     {
         return new QuadrupletonSetIterator();

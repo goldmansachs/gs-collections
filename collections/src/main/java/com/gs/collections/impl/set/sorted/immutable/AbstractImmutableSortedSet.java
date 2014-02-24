@@ -17,7 +17,6 @@
 package com.gs.collections.impl.set.sorted.immutable;
 
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.Set;
 import java.util.SortedSet;
 
@@ -45,7 +44,6 @@ import com.gs.collections.api.list.primitive.ImmutableFloatList;
 import com.gs.collections.api.list.primitive.ImmutableIntList;
 import com.gs.collections.api.list.primitive.ImmutableLongList;
 import com.gs.collections.api.list.primitive.ImmutableShortList;
-import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.sortedset.ImmutableSortedSetMultimap;
 import com.gs.collections.api.partition.set.sorted.PartitionImmutableSortedSet;
 import com.gs.collections.api.partition.set.sorted.PartitionMutableSortedSet;
@@ -61,8 +59,6 @@ import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.CollectIfProcedure;
 import com.gs.collections.impl.block.procedure.CollectProcedure;
 import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
-import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
-import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.block.procedure.PartitionPredicate2Procedure;
 import com.gs.collections.impl.block.procedure.PartitionProcedure;
 import com.gs.collections.impl.block.procedure.RejectProcedure;
@@ -154,15 +150,12 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
         return this.last();
     }
 
-    public abstract Iterator<T> iterator();
-
     @Override
     protected MutableCollection<T> newMutable(int size)
     {
         return TreeSortedSet.newSet(this.comparator());
     }
 
-    @Override
     public ImmutableBooleanList collectBoolean(BooleanFunction<? super T> booleanFunction)
     {
         BooleanArrayList result = new BooleanArrayList(this.size());
@@ -170,7 +163,6 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableByteList collectByte(ByteFunction<? super T> byteFunction)
     {
         ByteArrayList result = new ByteArrayList(this.size());
@@ -178,7 +170,6 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableCharList collectChar(CharFunction<? super T> charFunction)
     {
         CharArrayList result = new CharArrayList(this.size());
@@ -186,7 +177,6 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableDoubleList collectDouble(DoubleFunction<? super T> doubleFunction)
     {
         DoubleArrayList result = new DoubleArrayList(this.size());
@@ -194,7 +184,6 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableFloatList collectFloat(FloatFunction<? super T> floatFunction)
     {
         FloatArrayList result = new FloatArrayList(this.size());
@@ -202,7 +191,6 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableIntList collectInt(IntFunction<? super T> intFunction)
     {
         IntArrayList result = new IntArrayList(this.size());
@@ -210,7 +198,6 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableLongList collectLong(LongFunction<? super T> longFunction)
     {
         LongArrayList result = new LongArrayList(this.size());
@@ -218,7 +205,6 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableShortList collectShort(ShortFunction<? super T> shortFunction)
     {
         ShortArrayList result = new ShortArrayList(this.size());
@@ -250,7 +236,6 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
         return this.reject(Predicates.bind(predicate, parameter));
     }
 
-    @Override
     public PartitionImmutableSortedSet<T> partition(Predicate<? super T> predicate)
     {
         PartitionMutableSortedSet<T> partitionTreeSortedSet = new PartitionTreeSortedSet<T>(this.comparator());
@@ -258,7 +243,6 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
         return partitionTreeSortedSet.toImmutable();
     }
 
-    @Override
     public <P> PartitionImmutableSortedSet<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         PartitionMutableSortedSet<T> partitionTreeSortedSet = new PartitionTreeSortedSet<T>(this.comparator());
@@ -305,39 +289,21 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
         return result.toImmutable();
     }
 
-    @Override
     public <V> ImmutableSortedSetMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
     {
         return this.groupBy(function, TreeSortedSetMultimap.<V, T>newMultimap(this.comparator())).toImmutable();
     }
 
-    @Override
-    public <V, R extends MutableMultimap<V, T>> R groupBy(Function<? super T, ? extends V> function, R target)
-    {
-        this.forEach(MultimapPutProcedure.on(target, function));
-        return target;
-    }
-
-    @Override
     public <V> ImmutableSortedSetMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
     {
         return this.groupByEach(function, TreeSortedSetMultimap.<V, T>newMultimap(this.comparator())).toImmutable();
     }
 
-    @Override
-    public <V, R extends MutableMultimap<V, T>> R groupByEach(Function<? super T, ? extends Iterable<V>> function, R target)
-    {
-        this.forEach(MultimapEachPutProcedure.on(target, function));
-        return target;
-    }
-
-    @Override
     public <S> ImmutableList<Pair<T, S>> zip(Iterable<S> that)
     {
         return Iterate.zip(this, that, FastList.<Pair<T, S>>newList()).toImmutable();
     }
 
-    @Override
     public ImmutableSortedSet<Pair<T, Integer>> zipWithIndex()
     {
         Comparator<? super T> comparator = this.comparator();

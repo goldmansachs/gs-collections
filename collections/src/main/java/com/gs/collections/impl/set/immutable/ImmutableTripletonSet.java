@@ -114,7 +114,6 @@ final class ImmutableTripletonSet<T>
                 || Comparators.nullSafeEquals(obj, this.element3);
     }
 
-    @Override
     public Iterator<T> iterator()
     {
         return new TripletonSetIterator();

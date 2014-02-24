@@ -116,7 +116,6 @@ final class ImmutableEmptySetWithHashingStrategy<T>
     {
     }
 
-    @Override
     public Iterator<T> iterator()
     {
         return EmptyIterator.getInstance();

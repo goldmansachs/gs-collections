@@ -61,7 +61,6 @@ final class ImmutableQuadrupletonList<T>
         procedure.value(this.element4);
     }
 
-    @Override
     public T get(int index)
     {
         switch (index)

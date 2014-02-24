@@ -68,7 +68,6 @@ final class TripletonList<T>
         return new TripletonList<T>(this.element1, this.element2, this.element3);
     }
 
-    @Override
     public int size()
     {
         return 3;

@@ -59,7 +59,6 @@ final class ImmutableTripletonList<T>
         procedure.value(this.element3);
     }
 
-    @Override
     public T get(int index)
     {
         switch (index)

@@ -70,7 +70,6 @@ final class QuadrupletonList<T>
         return new QuadrupletonList<T>(this.element1, this.element2, this.element3, this.element4);
     }
 
-    @Override
     public int size()
     {
         return 4;

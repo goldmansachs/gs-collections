@@ -67,7 +67,6 @@ final class ImmutableSextupletonList<T>
         procedure.value(this.element6);
     }
 
-    @Override
     public T get(int index)
     {
         switch (index)

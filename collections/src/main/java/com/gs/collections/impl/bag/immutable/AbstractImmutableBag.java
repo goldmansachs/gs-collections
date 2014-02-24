@@ -25,7 +25,6 @@ import com.gs.collections.api.bag.primitive.ImmutableFloatBag;
 import com.gs.collections.api.bag.primitive.ImmutableIntBag;
 import com.gs.collections.api.bag.primitive.ImmutableLongBag;
 import com.gs.collections.api.bag.primitive.ImmutableShortBag;
-import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
 import com.gs.collections.api.block.function.primitive.ByteFunction;
@@ -39,11 +38,8 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.collection.MutableCollection;
-import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.partition.bag.PartitionImmutableBag;
 import com.gs.collections.api.partition.bag.PartitionMutableBag;
-import com.gs.collections.api.set.ImmutableSet;
-import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.ByteHashBag;
 import com.gs.collections.impl.bag.mutable.primitive.CharHashBag;
@@ -83,13 +79,6 @@ public abstract class AbstractImmutableBag<T>
         return this.reject(Predicates.bind(predicate, parameter));
     }
 
-    @Override
-    public abstract <S> ImmutableBag<Pair<T, S>> zip(Iterable<S> that);
-
-    @Override
-    public abstract ImmutableSet<Pair<T, Integer>> zipWithIndex();
-
-    @Override
     public PartitionImmutableBag<T> partition(Predicate<? super T> predicate)
     {
         PartitionMutableBag<T> partitionMutableBag = new PartitionHashBag<T>();
@@ -97,7 +86,6 @@ public abstract class AbstractImmutableBag<T>
         return partitionMutableBag.toImmutable();
     }
 
-    @Override
     public <P> PartitionImmutableBag<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         PartitionMutableBag<T> partitionMutableBag = new PartitionHashBag<T>();
@@ -105,13 +93,6 @@ public abstract class AbstractImmutableBag<T>
         return partitionMutableBag.toImmutable();
     }
 
-    @Override
-    public abstract <V> ImmutableBagMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
-
-    @Override
-    public abstract <V> ImmutableBagMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
-
-    @Override
     public ImmutableBooleanBag collectBoolean(final BooleanFunction<? super T> booleanFunction)
     {
         final BooleanHashBag result = new BooleanHashBag();
@@ -125,7 +106,6 @@ public abstract class AbstractImmutableBag<T>
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableByteBag collectByte(final ByteFunction<? super T> byteFunction)
     {
         final ByteHashBag result = new ByteHashBag(this.size());
@@ -139,7 +119,6 @@ public abstract class AbstractImmutableBag<T>
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableCharBag collectChar(final CharFunction<? super T> charFunction)
     {
         final CharHashBag result = new CharHashBag(this.size());
@@ -153,7 +132,6 @@ public abstract class AbstractImmutableBag<T>
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableDoubleBag collectDouble(final DoubleFunction<? super T> doubleFunction)
     {
         final DoubleHashBag result = new DoubleHashBag(this.size());
@@ -167,7 +145,6 @@ public abstract class AbstractImmutableBag<T>
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableFloatBag collectFloat(final FloatFunction<? super T> floatFunction)
     {
         final FloatHashBag result = new FloatHashBag(this.size());
@@ -181,7 +158,6 @@ public abstract class AbstractImmutableBag<T>
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableIntBag collectInt(final IntFunction<? super T> intFunction)
     {
         final IntHashBag result = new IntHashBag(this.size());
@@ -195,7 +171,6 @@ public abstract class AbstractImmutableBag<T>
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableLongBag collectLong(final LongFunction<? super T> longFunction)
     {
         final LongHashBag result = new LongHashBag(this.size());
@@ -209,7 +184,6 @@ public abstract class AbstractImmutableBag<T>
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableShortBag collectShort(final ShortFunction<? super T> shortFunction)
     {
         final ShortHashBag result = new ShortHashBag(this.size());

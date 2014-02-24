@@ -64,7 +64,6 @@ final class ImmutableQuintupletonList<T>
         procedure.value(this.element5);
     }
 
-    @Override
     public T get(int index)
     {
         switch (index)

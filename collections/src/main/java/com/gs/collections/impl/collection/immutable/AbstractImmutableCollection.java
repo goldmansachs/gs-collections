@@ -23,76 +23,43 @@ import java.util.Set;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.predicate.Predicate;
-import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.list.MutableList;
-import com.gs.collections.api.multimap.ImmutableMultimap;
-import com.gs.collections.api.partition.PartitionImmutableCollection;
-import com.gs.collections.api.partition.bag.PartitionMutableBag;
-import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.api.map.ImmutableMap;
+import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.impl.AbstractRichIterable;
-import com.gs.collections.impl.block.procedure.PartitionPredicate2Procedure;
-import com.gs.collections.impl.block.procedure.PartitionProcedure;
+import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
+import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
 import com.gs.collections.impl.factory.Lists;
-import com.gs.collections.impl.partition.bag.PartitionHashBag;
+import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 
 public abstract class AbstractImmutableCollection<T> extends AbstractRichIterable<T> implements ImmutableCollection<T>, Collection<T>
 {
     protected abstract MutableCollection<T> newMutable(int size);
 
-    @Override
-    public abstract <V> ImmutableMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
-
-    @Override
-    public abstract <V> ImmutableMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
-
-    @Override
-    public abstract <S> ImmutableCollection<Pair<T, S>> zip(Iterable<S> that);
-
-    @Override
-    public abstract ImmutableCollection<Pair<T, Integer>> zipWithIndex();
-
-    @Override
-    public PartitionImmutableCollection<T> partition(Predicate<? super T> predicate)
+    public <K, V> ImmutableMap<K, V> aggregateInPlaceBy(
+            Function<? super T, ? extends K> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Procedure2<? super V, ? super T> mutatingAggregator)
     {
-        PartitionMutableBag<T> partitionHashBag = new PartitionHashBag<T>();
-        this.forEach(new PartitionProcedure<T>(predicate, partitionHashBag));
-        return partitionHashBag.toImmutable();
+        MutableMap<K, V> map = UnifiedMap.newMap();
+        this.forEach(new MutatingAggregationProcedure<T, K, V>(map, groupBy, zeroValueFactory, mutatingAggregator));
+        return map.toImmutable();
     }
 
-    @Override
-    public <P> PartitionImmutableCollection<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <K, V> ImmutableMap<K, V> aggregateBy(
+            Function<? super T, ? extends K> groupBy,
+            Function0<? extends V> zeroValueFactory,
+            Function2<? super V, ? super T, ? extends V> nonMutatingAggregator)
     {
-        PartitionMutableBag<T> partitionHashBag = new PartitionHashBag<T>();
-        this.forEach(new PartitionPredicate2Procedure<T, P>(predicate, parameter, partitionHashBag));
-        return partitionHashBag.toImmutable();
-    }
-
-    protected void removeAllFrom(Iterable<? extends T> elements, MutableCollection<T> result)
-    {
-        if (elements instanceof Set)
-        {
-            result.removeAll((Set<?>) elements);
-        }
-        else if (elements instanceof List)
-        {
-            List<T> toBeRemoved = (List<T>) elements;
-            if (this.size() * toBeRemoved.size() > 10000)
-            {
-                result.removeAll(UnifiedSet.newSet(elements));
-            }
-            else
-            {
-                result.removeAll(toBeRemoved);
-            }
-        }
-        else
-        {
-            result.removeAll(UnifiedSet.newSet(elements));
-        }
+        MutableMap<K, V> map = UnifiedMap.newMap();
+        this.forEach(new NonMutatingAggregationProcedure<T, K, V>(map, groupBy, zeroValueFactory, nonMutatingAggregator));
+        return map.toImmutable();
     }
 
     public boolean add(T t)
@@ -123,6 +90,30 @@ public abstract class AbstractImmutableCollection<T> extends AbstractRichIterabl
     public void clear()
     {
         throw new UnsupportedOperationException();
+    }
+
+    protected void removeAllFrom(Iterable<? extends T> elements, MutableCollection<T> result)
+    {
+        if (elements instanceof Set)
+        {
+            result.removeAll((Set<?>) elements);
+        }
+        else if (elements instanceof List)
+        {
+            List<T> toBeRemoved = (List<T>) elements;
+            if (this.size() * toBeRemoved.size() > 10000)
+            {
+                result.removeAll(UnifiedSet.newSet(elements));
+            }
+            else
+            {
+                result.removeAll(toBeRemoved);
+            }
+        }
+        else
+        {
+            result.removeAll(UnifiedSet.newSet(elements));
+        }
     }
 
     public RichIterable<RichIterable<T>> chunk(int size)

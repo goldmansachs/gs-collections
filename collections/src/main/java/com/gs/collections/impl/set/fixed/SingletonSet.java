@@ -52,7 +52,6 @@ class SingletonSet<T>
         // For Externalizable use only
     }
 
-    @Override
     public int size()
     {
         return 1;
@@ -93,7 +92,6 @@ class SingletonSet<T>
         return Comparators.nullSafeEquals(obj, this.element1);
     }
 
-    @Override
     public Iterator<T> iterator()
     {
         return new SingletonSetIterator();
@@ -113,19 +111,16 @@ class SingletonSet<T>
         }
     }
 
-    @Override
     public T getFirst()
     {
         return this.element1;
     }
 
-    @Override
     public T getLast()
     {
         return this.element1;
     }
 
-    @Override
     public void forEach(Procedure<? super T> procedure)
     {
         procedure.value(this.element1);

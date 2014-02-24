@@ -40,6 +40,7 @@ import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.MutableBooleanList;
 import com.gs.collections.api.list.primitive.MutableByteList;
@@ -58,10 +59,15 @@ import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.procedure.CollectIfProcedure;
+import com.gs.collections.impl.block.procedure.CollectProcedure;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
+import com.gs.collections.impl.block.procedure.FlatCollectProcedure;
 import com.gs.collections.impl.block.procedure.PartitionPredicate2Procedure;
 import com.gs.collections.impl.block.procedure.PartitionProcedure;
+import com.gs.collections.impl.block.procedure.RejectProcedure;
 import com.gs.collections.impl.block.procedure.SelectInstancesOfProcedure;
+import com.gs.collections.impl.block.procedure.SelectProcedure;
 import com.gs.collections.impl.block.procedure.checked.CheckedProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectBooleanProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectByteProcedure;
@@ -162,13 +168,11 @@ public final class TreeSortedSet<T>
         return new TreeSortedSet<T>(comparator).with(elements);
     }
 
-    @Override
     public MutableSortedSet<T> asUnmodifiable()
     {
         return UnmodifiableSortedSet.of(this);
     }
 
-    @Override
     public MutableSortedSet<T> asSynchronized()
     {
         return SynchronizedSortedSet.of(this);
@@ -214,7 +218,6 @@ public final class TreeSortedSet<T>
         return this.treeSet.containsAll(collection);
     }
 
-    @Override
     public void clear()
     {
         this.treeSet.clear();
@@ -292,22 +295,28 @@ public final class TreeSortedSet<T>
         return this;
     }
 
-    @Override
     public TreeSortedSet<T> newEmpty()
     {
         return TreeSortedSet.newSet(this.treeSet.comparator());
     }
 
-    @Override
-    public TreeSortedSet<T> select(Predicate<? super T> predicate)
+    public void forEach(Procedure<? super T> procedure)
     {
-        return IterableIterate.select(this.treeSet, predicate, this.newEmpty());
+        IterableIterate.forEach(this, procedure);
     }
 
-    @Override
+    public TreeSortedSet<T> select(Predicate<? super T> predicate)
+    {
+        TreeSortedSet<T> result = this.newEmpty();
+        this.forEach(new SelectProcedure<T>(predicate, result));
+        return result;
+    }
+
     public TreeSortedSet<T> reject(Predicate<? super T> predicate)
     {
-        return IterableIterate.reject(this.treeSet, predicate, this.newEmpty());
+        TreeSortedSet<T> result = this.newEmpty();
+        this.forEach(new RejectProcedure<T>(predicate, result));
+        return result;
     }
 
     public PartitionMutableSortedSet<T> partition(Predicate<? super T> predicate)
@@ -337,13 +346,13 @@ public final class TreeSortedSet<T>
         return result;
     }
 
-    @Override
     public <V> MutableList<V> collect(Function<? super T, ? extends V> function)
     {
-        return IterableIterate.collect(this.treeSet, function, FastList.<V>newList());
+        MutableList<V> result = FastList.newList();
+        this.forEach(new CollectProcedure<T, V>(function, result));
+        return result;
     }
 
-    @Override
     public MutableBooleanList collectBoolean(BooleanFunction<? super T> booleanFunction)
     {
         BooleanArrayList result = new BooleanArrayList(this.size());
@@ -351,7 +360,6 @@ public final class TreeSortedSet<T>
         return result;
     }
 
-    @Override
     public MutableByteList collectByte(ByteFunction<? super T> byteFunction)
     {
         ByteArrayList result = new ByteArrayList(this.size());
@@ -359,7 +367,6 @@ public final class TreeSortedSet<T>
         return result;
     }
 
-    @Override
     public MutableCharList collectChar(CharFunction<? super T> charFunction)
     {
         CharArrayList result = new CharArrayList(this.size());
@@ -367,7 +374,6 @@ public final class TreeSortedSet<T>
         return result;
     }
 
-    @Override
     public MutableDoubleList collectDouble(DoubleFunction<? super T> doubleFunction)
     {
         DoubleArrayList result = new DoubleArrayList(this.size());
@@ -375,7 +381,6 @@ public final class TreeSortedSet<T>
         return result;
     }
 
-    @Override
     public MutableFloatList collectFloat(FloatFunction<? super T> floatFunction)
     {
         FloatArrayList result = new FloatArrayList(this.size());
@@ -383,7 +388,6 @@ public final class TreeSortedSet<T>
         return result;
     }
 
-    @Override
     public MutableIntList collectInt(IntFunction<? super T> intFunction)
     {
         IntArrayList result = new IntArrayList(this.size());
@@ -391,7 +395,6 @@ public final class TreeSortedSet<T>
         return result;
     }
 
-    @Override
     public MutableLongList collectLong(LongFunction<? super T> longFunction)
     {
         LongArrayList result = new LongArrayList(this.size());
@@ -399,7 +402,6 @@ public final class TreeSortedSet<T>
         return result;
     }
 
-    @Override
     public MutableShortList collectShort(ShortFunction<? super T> shortFunction)
     {
         ShortArrayList result = new ShortArrayList(this.size());
@@ -407,18 +409,20 @@ public final class TreeSortedSet<T>
         return result;
     }
 
-    @Override
     public <V> MutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
-        return Iterate.flatCollect(this.treeSet, function, FastList.<V>newList());
+        MutableList<V> result = FastList.newList();
+        this.forEach(new FlatCollectProcedure<T, V>(function, result));
+        return result;
     }
 
-    @Override
     public <V> MutableList<V> collectIf(
             Predicate<? super T> predicate,
             Function<? super T, ? extends V> function)
     {
-        return Iterate.collectIf(this.treeSet, predicate, function, FastList.<V>newList());
+        MutableList<V> result = FastList.newList();
+        this.forEach(new CollectIfProcedure<T, V>(result, function, predicate));
+        return result;
     }
 
     public <V> TreeSortedSetMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
@@ -431,19 +435,16 @@ public final class TreeSortedSet<T>
         return Iterate.groupByEach(this.treeSet, function, TreeSortedSetMultimap.<V, T>newMultimap(this.comparator()));
     }
 
-    @Override
     public <P> TreeSortedSet<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         return Iterate.selectWith(this.treeSet, predicate, parameter, this.newEmpty());
     }
 
-    @Override
     public <P> TreeSortedSet<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         return Iterate.rejectWith(this.treeSet, predicate, parameter, this.newEmpty());
     }
 
-    @Override
     public <P, V> MutableList<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
     {
         return Iterate.collectWith(this.treeSet, function, parameter, FastList.<V>newList());
@@ -518,13 +519,11 @@ public final class TreeSortedSet<T>
         return this.treeSet.last();
     }
 
-    @Override
     public T getFirst()
     {
         return this.first();
     }
 
-    @Override
     public T getLast()
     {
         return this.last();
@@ -590,13 +589,11 @@ public final class TreeSortedSet<T>
         return SetIterables.isProperSubsetOf(this, candidateSuperset);
     }
 
-    @Override
     public Iterator<T> iterator()
     {
         return this.treeSet.iterator();
     }
 
-    @Override
     public int size()
     {
         return this.treeSet.size();

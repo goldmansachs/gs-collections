@@ -78,7 +78,6 @@ final class DoubletonList<T>
         return this.element2;
     }
 
-    @Override
     public int size()
     {
         return 2;

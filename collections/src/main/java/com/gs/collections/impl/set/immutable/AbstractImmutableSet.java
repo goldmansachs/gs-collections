@@ -168,7 +168,6 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
         return this.reject(Predicates.bind(predicate, parameter));
     }
 
-    @Override
     public PartitionImmutableSet<T> partition(Predicate<? super T> predicate)
     {
         PartitionMutableSet<T> partitionUnifiedSet = new PartitionUnifiedSet<T>();
@@ -176,7 +175,6 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
         return partitionUnifiedSet.toImmutable();
     }
 
-    @Override
     public <P> PartitionImmutableSet<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         PartitionMutableSet<T> partitionUnifiedSet = new PartitionUnifiedSet<T>();
@@ -198,7 +196,6 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableBooleanSet collectBoolean(BooleanFunction<? super T> booleanFunction)
     {
         BooleanHashSet result = new BooleanHashSet();
@@ -206,7 +203,6 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableByteSet collectByte(ByteFunction<? super T> byteFunction)
     {
         ByteHashSet result = new ByteHashSet(this.size());
@@ -214,7 +210,6 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableCharSet collectChar(CharFunction<? super T> charFunction)
     {
         CharHashSet result = new CharHashSet(this.size());
@@ -222,7 +217,6 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableDoubleSet collectDouble(DoubleFunction<? super T> doubleFunction)
     {
         DoubleHashSet result = new DoubleHashSet(this.size());
@@ -230,7 +224,6 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableFloatSet collectFloat(FloatFunction<? super T> floatFunction)
     {
         FloatHashSet result = new FloatHashSet(this.size());
@@ -238,7 +231,6 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableIntSet collectInt(IntFunction<? super T> intFunction)
     {
         IntHashSet result = new IntHashSet(this.size());
@@ -246,7 +238,6 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableLongSet collectLong(LongFunction<? super T> longFunction)
     {
         LongHashSet result = new LongHashSet(this.size());
@@ -254,7 +245,6 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableShortSet collectShort(ShortFunction<? super T> shortFunction)
     {
         ShortHashSet result = new ShortHashSet(this.size());
@@ -286,8 +276,6 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
         return this;
     }
 
-    public abstract Iterator<T> iterator();
-
     protected abstract class ImmutableSetIterator
             implements Iterator<T>
     {
@@ -311,7 +299,6 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
         }
     }
 
-    @Override
     public <V> ImmutableSetMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
     {
         return this.groupBy(function, UnifiedSetMultimap.<V, T>newMultimap()).toImmutable();
@@ -324,7 +311,6 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
         return target;
     }
 
-    @Override
     public <V> ImmutableSetMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
     {
         return this.groupByEach(function, UnifiedSetMultimap.<V, T>newMultimap()).toImmutable();
@@ -337,13 +323,11 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
         return target;
     }
 
-    @Override
     public <S> ImmutableSet<Pair<T, S>> zip(Iterable<S> that)
     {
         return this.zip(that, UnifiedSet.<Pair<T, S>>newSet()).toImmutable();
     }
 
-    @Override
     public ImmutableSet<Pair<T, Integer>> zipWithIndex()
     {
         return this.zipWithIndex(UnifiedSet.<Pair<T, Integer>>newSet()).toImmutable();

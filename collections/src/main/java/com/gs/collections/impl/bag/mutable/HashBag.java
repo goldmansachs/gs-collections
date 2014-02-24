@@ -301,7 +301,6 @@ public class HashBag<T>
         return this.retainAllIterable(collection);
     }
 
-    @Override
     public void clear()
     {
         this.items.clear();
@@ -373,7 +372,6 @@ public class HashBag<T>
         });
     }
 
-    @Override
     public Iterator<T> iterator()
     {
         return new InternalIterator();
@@ -410,13 +408,11 @@ public class HashBag<T>
         return this;
     }
 
-    @Override
     public MutableBag<T> newEmpty()
     {
         return HashBag.newBag();
     }
 
-    @Override
     public <P, V> MutableBag<V> collectWith(
             final Function2<? super T, ? super P, ? extends V> function,
             final P parameter)
@@ -438,7 +434,6 @@ public class HashBag<T>
         return this;
     }
 
-    @Override
     public SynchronizedBag<T> asSynchronized()
     {
         return new SynchronizedBag<T>(this);
@@ -456,7 +451,6 @@ public class HashBag<T>
         return this;
     }
 
-    @Override
     public <P> MutableBag<T> selectWith(final Predicate2<? super T, ? super P> predicate, final P parameter)
     {
         final MutableBag<T> result = HashBag.newBag();
@@ -473,7 +467,6 @@ public class HashBag<T>
         return result;
     }
 
-    @Override
     public <P> MutableBag<T> rejectWith(final Predicate2<? super T, ? super P> predicate, final P parameter)
     {
         final MutableBag<T> result = HashBag.newBag();
@@ -586,7 +579,6 @@ public class HashBag<T>
         });
     }
 
-    @Override
     public UnmodifiableBag<T> asUnmodifiable()
     {
         return UnmodifiableBag.of(this);
@@ -617,7 +609,6 @@ public class HashBag<T>
         return this.size != oldSize;
     }
 
-    @Override
     public int size()
     {
         return this.size;
@@ -629,7 +620,6 @@ public class HashBag<T>
         return this.items.containsKey(o);
     }
 
-    @Override
     public MutableBag<T> select(final Predicate<? super T> predicate)
     {
         final MutableBag<T> result = HashBag.newBag();
@@ -690,31 +680,26 @@ public class HashBag<T>
         return result;
     }
 
-    @Override
     public MutableBooleanBag collectBoolean(BooleanFunction<? super T> booleanFunction)
     {
         return this.collectBoolean(booleanFunction, new BooleanHashBag());
     }
 
-    @Override
     public MutableByteBag collectByte(ByteFunction<? super T> byteFunction)
     {
         return this.collectByte(byteFunction, new ByteHashBag());
     }
 
-    @Override
     public MutableCharBag collectChar(CharFunction<? super T> charFunction)
     {
         return this.collectChar(charFunction, new CharHashBag());
     }
 
-    @Override
     public MutableDoubleBag collectDouble(DoubleFunction<? super T> doubleFunction)
     {
         return this.collectDouble(doubleFunction, new DoubleHashBag());
     }
 
-    @Override
     public T getFirst()
     {
         return this.items.keysView().getFirst();
@@ -731,7 +716,6 @@ public class HashBag<T>
         return this.zipWithIndex(UnifiedSet.<Pair<T, Integer>>newSet());
     }
 
-    @Override
     public T getLast()
     {
         return this.items.keysView().getLast();
@@ -797,7 +781,6 @@ public class HashBag<T>
         return target;
     }
 
-    @Override
     public MutableBag<T> reject(final Predicate<? super T> predicate)
     {
         final MutableBag<T> result = HashBag.newBag();
@@ -836,7 +819,6 @@ public class HashBag<T>
         return target;
     }
 
-    @Override
     public <V> MutableBag<V> collect(final Function<? super T, ? extends V> function)
     {
         final HashBag<V> result = HashBag.newBag(this.items.size());
@@ -850,31 +832,26 @@ public class HashBag<T>
         return result;
     }
 
-    @Override
     public MutableFloatBag collectFloat(FloatFunction<? super T> floatFunction)
     {
         return this.collectFloat(floatFunction, new FloatHashBag());
     }
 
-    @Override
     public MutableIntBag collectInt(IntFunction<? super T> intFunction)
     {
         return this.collectInt(intFunction, new IntHashBag());
     }
 
-    @Override
     public MutableLongBag collectLong(LongFunction<? super T> longFunction)
     {
         return this.collectLong(longFunction, new LongHashBag());
     }
 
-    @Override
     public MutableShortBag collectShort(ShortFunction<? super T> shortFunction)
     {
         return this.collectShort(shortFunction, new ShortHashBag());
     }
 
-    @Override
     public <V> MutableBag<V> collectIf(
             final Predicate<? super T> predicate,
             final Function<? super T, ? extends V> function)
@@ -893,7 +870,6 @@ public class HashBag<T>
         return result;
     }
 
-    @Override
     public <V> MutableBag<V> flatCollect(final Function<? super T, ? extends Iterable<V>> function)
     {
         final MutableBag<V> result = HashBag.newBag();

@@ -64,7 +64,6 @@ final class ImmutableTreeSet<T>
         return this.delegate.contains(object);
     }
 
-    @Override
     public Iterator<T> iterator()
     {
         return new UnmodifiableIteratorAdapter<T>(this.delegate.iterator());

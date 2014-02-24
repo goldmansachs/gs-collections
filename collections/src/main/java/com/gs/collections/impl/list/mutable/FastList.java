@@ -225,7 +225,6 @@ public class FastList<T>
         return result;
     }
 
-    @Override
     public void clear()
     {
         Arrays.fill(this.items, null);
@@ -1234,7 +1233,6 @@ public class FastList<T>
         }
     }
 
-    @Override
     public int size()
     {
         return this.size;

@@ -95,7 +95,6 @@ final class ImmutableSingletonSet<T>
         return Comparators.nullSafeEquals(obj, this.element1);
     }
 
-    @Override
     public Iterator<T> iterator()
     {
         return new SingletonSetIterator();

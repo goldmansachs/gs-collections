@@ -78,7 +78,6 @@ public final class CompositeFastList<E>
         throw new UnsupportedOperationException();
     }
 
-    @Override
     public int size()
     {
         int size = 0;
@@ -321,7 +320,6 @@ public final class CompositeFastList<E>
         throw new UnsupportedOperationException();
     }
 
-    @Override
     public void clear()
     {
         this.lists.forEach(new Procedure<FastList<E>>()

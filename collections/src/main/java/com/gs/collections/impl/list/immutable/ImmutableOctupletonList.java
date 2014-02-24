@@ -73,7 +73,6 @@ final class ImmutableOctupletonList<T>
         procedure.value(this.element8);
     }
 
-    @Override
     public T get(int index)
     {
         switch (index)

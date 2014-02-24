@@ -102,7 +102,6 @@ final class ImmutableDoubletonSet<T>
         return Comparators.nullSafeEquals(obj, this.element1) || Comparators.nullSafeEquals(obj, this.element2);
     }
 
-    @Override
     public Iterator<T> iterator()
     {
         return new DoubletonSetIterator();

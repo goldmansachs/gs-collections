@@ -58,7 +58,6 @@ final class QuadrupletonSet<T>
         this.element4 = obj4;
     }
 
-    @Override
     public int size()
     {
         return 4;
@@ -109,13 +108,11 @@ final class QuadrupletonSet<T>
                 || Comparators.nullSafeEquals(obj, this.element4);
     }
 
-    @Override
     public Iterator<T> iterator()
     {
         return new QuadrupletonSetIterator();
     }
 
-    @Override
     public T getFirst()
     {
         return this.element1;
@@ -131,13 +128,11 @@ final class QuadrupletonSet<T>
         return this.element3;
     }
 
-    @Override
     public T getLast()
     {
         return this.element4;
     }
 
-    @Override
     public void forEach(Procedure<? super T> procedure)
     {
         procedure.value(this.element1);

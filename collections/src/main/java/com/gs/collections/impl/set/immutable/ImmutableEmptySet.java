@@ -134,7 +134,6 @@ final class ImmutableEmptySet<T>
         return null;
     }
 
-    @Override
     public Iterator<T> iterator()
     {
         return EmptyIterator.getInstance();

@@ -42,14 +42,6 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
-import com.gs.collections.api.collection.primitive.ImmutableBooleanCollection;
-import com.gs.collections.api.collection.primitive.ImmutableByteCollection;
-import com.gs.collections.api.collection.primitive.ImmutableCharCollection;
-import com.gs.collections.api.collection.primitive.ImmutableDoubleCollection;
-import com.gs.collections.api.collection.primitive.ImmutableFloatCollection;
-import com.gs.collections.api.collection.primitive.ImmutableIntCollection;
-import com.gs.collections.api.collection.primitive.ImmutableLongCollection;
-import com.gs.collections.api.collection.primitive.ImmutableShortCollection;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
 import com.gs.collections.api.collection.primitive.MutableByteCollection;
 import com.gs.collections.api.collection.primitive.MutableCharCollection;
@@ -59,12 +51,9 @@ import com.gs.collections.api.collection.primitive.MutableIntCollection;
 import com.gs.collections.api.collection.primitive.MutableLongCollection;
 import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
-import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
-import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
-import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
@@ -73,8 +62,8 @@ import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.CollectIfProcedure;
 import com.gs.collections.impl.block.procedure.CollectProcedure;
-import com.gs.collections.impl.block.procedure.MutatingAggregationProcedure;
-import com.gs.collections.impl.block.procedure.NonMutatingAggregationProcedure;
+import com.gs.collections.impl.block.procedure.MultimapEachPutProcedure;
+import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.block.procedure.RejectProcedure;
 import com.gs.collections.impl.block.procedure.SelectProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectBooleanProcedure;
@@ -86,17 +75,8 @@ import com.gs.collections.impl.block.procedure.primitive.CollectIntProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectLongProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectShortProcedure;
 import com.gs.collections.impl.factory.Lists;
-import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
-import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
-import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
-import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
-import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
-import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
-import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
-import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
-import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.utility.ArrayIterate;
@@ -252,16 +232,6 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
             Predicate2<? super T, ? super P> predicate, P parameter, R targetCollection)
     {
         return IterableIterate.rejectWith(this, predicate, parameter, targetCollection);
-    }
-
-    public PartitionIterable<T> partition(Predicate<? super T> predicate)
-    {
-        return IterableIterate.partition(this, predicate);
-    }
-
-    public <P> PartitionIterable<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
-    {
-        return IterableIterate.partitionWith(this, predicate, parameter);
     }
 
     public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)
@@ -441,19 +411,9 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
         IterableIterate.forEachWith(this, procedure, parameter);
     }
 
-    public <S> RichIterable<Pair<T, S>> zip(Iterable<S> that)
-    {
-        return IterableIterate.zip(this, that);
-    }
-
     public <S, R extends Collection<Pair<T, S>>> R zip(Iterable<S> that, R target)
     {
         return IterableIterate.zip(this, that, target);
-    }
-
-    public RichIterable<Pair<T, Integer>> zipWithIndex()
-    {
-        return IterableIterate.zipWithIndex(this);
     }
 
     public <R extends Collection<Pair<T, Integer>>> R zipWithIndex(R target)
@@ -521,20 +481,10 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
         return this.containsAllIterable(collection);
     }
 
-    public ImmutableBooleanCollection collectBoolean(BooleanFunction<? super T> booleanFunction)
-    {
-        return this.collectBoolean(booleanFunction, new BooleanArrayList(this.size())).toImmutable();
-    }
-
     public <R extends MutableBooleanCollection> R collectBoolean(BooleanFunction<? super T> booleanFunction, R target)
     {
         this.forEach(new CollectBooleanProcedure<T>(booleanFunction, target));
         return target;
-    }
-
-    public ImmutableByteCollection collectByte(ByteFunction<? super T> byteFunction)
-    {
-        return this.collectByte(byteFunction, new ByteArrayList(this.size())).toImmutable();
     }
 
     public <R extends MutableByteCollection> R collectByte(ByteFunction<? super T> byteFunction, R target)
@@ -543,20 +493,10 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
         return target;
     }
 
-    public ImmutableCharCollection collectChar(CharFunction<? super T> charFunction)
-    {
-        return this.collectChar(charFunction, new CharArrayList(this.size())).toImmutable();
-    }
-
     public <R extends MutableCharCollection> R collectChar(CharFunction<? super T> charFunction, R target)
     {
         this.forEach(new CollectCharProcedure<T>(charFunction, target));
         return target;
-    }
-
-    public ImmutableDoubleCollection collectDouble(DoubleFunction<? super T> doubleFunction)
-    {
-        return this.collectDouble(doubleFunction, new DoubleArrayList(this.size())).toImmutable();
     }
 
     public <R extends MutableDoubleCollection> R collectDouble(DoubleFunction<? super T> doubleFunction, R target)
@@ -565,20 +505,10 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
         return target;
     }
 
-    public ImmutableFloatCollection collectFloat(FloatFunction<? super T> floatFunction)
-    {
-        return this.collectFloat(floatFunction, new FloatArrayList(this.size())).toImmutable();
-    }
-
     public <R extends MutableFloatCollection> R collectFloat(FloatFunction<? super T> floatFunction, R target)
     {
         this.forEach(new CollectFloatProcedure<T>(floatFunction, target));
         return target;
-    }
-
-    public ImmutableIntCollection collectInt(IntFunction<? super T> intFunction)
-    {
-        return this.collectInt(intFunction, new IntArrayList(this.size())).toImmutable();
     }
 
     public <R extends MutableIntCollection> R collectInt(IntFunction<? super T> intFunction, R target)
@@ -587,20 +517,10 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
         return target;
     }
 
-    public ImmutableLongCollection collectLong(LongFunction<? super T> longFunction)
-    {
-        return this.collectLong(longFunction, new LongArrayList(this.size())).toImmutable();
-    }
-
     public <R extends MutableLongCollection> R collectLong(LongFunction<? super T> longFunction, R target)
     {
         this.forEach(new CollectLongProcedure<T>(longFunction, target));
         return target;
-    }
-
-    public ImmutableShortCollection collectShort(ShortFunction<? super T> shortFunction)
-    {
-        return this.collectShort(shortFunction, new ShortArrayList(this.size())).toImmutable();
     }
 
     public <R extends MutableShortCollection> R collectShort(ShortFunction<? super T> shortFunction, R target)
@@ -609,47 +529,19 @@ public abstract class AbstractRichIterable<T> implements RichIterable<T>
         return target;
     }
 
-    public <K, V> ImmutableMap<K, V> aggregateInPlaceBy(
-            Function<? super T, ? extends K> groupBy,
-            Function0<? extends V> zeroValueFactory,
-            Procedure2<? super V, ? super T> mutatingAggregator)
-    {
-        MutableMap<K, V> map = UnifiedMap.newMap();
-        this.forEach(new MutatingAggregationProcedure<T, K, V>(map, groupBy, zeroValueFactory, mutatingAggregator));
-        return map.toImmutable();
-    }
-
-    public <K, V> ImmutableMap<K, V> aggregateBy(
-            Function<? super T, ? extends K> groupBy,
-            Function0<? extends V> zeroValueFactory,
-            Function2<? super V, ? super T, ? extends V> nonMutatingAggregator)
-    {
-        MutableMap<K, V> map = UnifiedMap.newMap();
-        this.forEach(new NonMutatingAggregationProcedure<T, K, V>(map, groupBy, zeroValueFactory, nonMutatingAggregator));
-        return map.toImmutable();
-    }
-
-    public <V> Multimap<V, T> groupBy(Function<? super T, ? extends V> function)
-    {
-        return IterableIterate.groupBy(this, function, FastListMultimap.<V, T>newMultimap());
-    }
-
     public <V, R extends MutableMultimap<V, T>> R groupBy(
             Function<? super T, ? extends V> function,
             R target)
     {
-        return IterableIterate.groupBy(this, function, target);
-    }
-
-    public <V> Multimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
-    {
-        return IterableIterate.groupByEach(this, function, FastListMultimap.<V, T>newMultimap());
+        this.forEach(MultimapPutProcedure.on(target, function));
+        return target;
     }
 
     public <V, R extends MutableMultimap<V, T>> R groupByEach(
             Function<? super T, ? extends Iterable<V>> function,
             R target)
     {
-        return IterableIterate.groupByEach(this, function, target);
+        this.forEach(MultimapEachPutProcedure.on(target, function));
+        return target;
     }
 }

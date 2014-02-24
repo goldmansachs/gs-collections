@@ -364,7 +364,6 @@ public class TreeBag<T>
         return this.retainAllIterable(collection);
     }
 
-    @Override
     public void clear()
     {
         this.items.clear();
@@ -418,7 +417,6 @@ public class TreeBag<T>
         }
     }
 
-    @Override
     public void forEach(final Procedure<? super T> procedure)
     {
         this.items.forEachKeyValue(new Procedure2<T, Counter>()
@@ -465,7 +463,6 @@ public class TreeBag<T>
         });
     }
 
-    @Override
     public Iterator<T> iterator()
     {
         return new InternalIterator();
@@ -538,7 +535,6 @@ public class TreeBag<T>
         throw new UnsupportedOperationException("toImmutable not implemented yet!");
     }
 
-    @Override
     public <P, V> MutableList<V> collectWith(
             final Function2<? super T, ? super P, ? extends V> function,
             final P parameter)
@@ -564,13 +560,11 @@ public class TreeBag<T>
         return this;
     }
 
-    @Override
     public MutableSortedBag<T> newEmpty()
     {
         return TreeBag.newBag(this.items.comparator());
     }
 
-    @Override
     public <P> MutableSortedBag<T> selectWith(final Predicate2<? super T, ? super P> predicate, final P parameter)
     {
         final MutableSortedBag<T> result = TreeBag.newBag(this.comparator());
@@ -587,7 +581,6 @@ public class TreeBag<T>
         return result;
     }
 
-    @Override
     public <P> MutableSortedBag<T> rejectWith(final Predicate2<? super T, ? super P> predicate, final P parameter)
     {
         final MutableSortedBag<T> result = TreeBag.newBag(this.comparator());
@@ -702,13 +695,11 @@ public class TreeBag<T>
         });
     }
 
-    @Override
     public UnmodifiableSortedBag<T> asUnmodifiable()
     {
         return UnmodifiableSortedBag.of(this);
     }
 
-    @Override
     public MutableSortedBag<T> asSynchronized()
     {
         throw new UnsupportedOperationException("asSynchronized not implemented yet!");
@@ -737,13 +728,11 @@ public class TreeBag<T>
         return this.size != oldSize;
     }
 
-    @Override
     public int size()
     {
         return this.size;
     }
 
-    @Override
     public MutableSortedBag<T> reject(final Predicate<? super T> predicate)
     {
         final MutableSortedBag<T> result = TreeBag.newBag(this.comparator());
@@ -821,7 +810,23 @@ public class TreeBag<T>
         return this.groupByEach(function, TreeBagMultimap.<V, T>newMultimap(this.comparator()));
     }
 
-    @Override
+    public MutableByteList collectByte(final ByteFunction<? super T> byteFunction)
+    {
+        final MutableByteList result = new ByteArrayList();
+        this.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        {
+            public void value(T each, int occurrences)
+            {
+                byte element = byteFunction.byteValueOf(each);
+                for (int i = 0; i < occurrences; i++)
+                {
+                    result.add(element);
+                }
+            }
+        });
+        return result;
+    }
+
     public T getFirst()
     {
         return this.items.keysView().getFirst();
@@ -832,13 +837,11 @@ public class TreeBag<T>
         return this.zipWithIndex(TreeSortedSet.<Pair<T, Integer>>newSet());
     }
 
-    @Override
     public T getLast()
     {
         return this.items.keysView().getLast();
     }
 
-    @Override
     public <V> MutableList<V> collect(final Function<? super T, ? extends V> function)
     {
         final MutableList<V> result = FastList.newList();
@@ -856,7 +859,6 @@ public class TreeBag<T>
         return result;
     }
 
-    @Override
     public <V> MutableList<V> flatCollect(final Function<? super T, ? extends Iterable<V>> function)
     {
         final MutableList<V> result = FastList.newList();
@@ -938,7 +940,6 @@ public class TreeBag<T>
         return target;
     }
 
-    @Override
     public MutableSortedBag<T> select(final Predicate<? super T> predicate)
     {
         final MutableSortedBag<T> result = TreeBag.newBag(this.comparator());
@@ -996,55 +997,41 @@ public class TreeBag<T>
         return target;
     }
 
-    @Override
     public MutableBooleanList collectBoolean(BooleanFunction<? super T> booleanFunction)
     {
         return this.collectBoolean(booleanFunction, new BooleanArrayList());
     }
 
-    @Override
-    public MutableByteList collectByte(ByteFunction<? super T> byteFunction)
-    {
-        return this.collectByte(byteFunction, new ByteArrayList());
-    }
-
-    @Override
     public MutableCharList collectChar(CharFunction<? super T> charFunction)
     {
         return this.collectChar(charFunction, new CharArrayList());
     }
 
-    @Override
     public MutableDoubleList collectDouble(DoubleFunction<? super T> doubleFunction)
     {
         return this.collectDouble(doubleFunction, new DoubleArrayList());
     }
 
-    @Override
     public MutableFloatList collectFloat(FloatFunction<? super T> floatFunction)
     {
         return this.collectFloat(floatFunction, new FloatArrayList());
     }
 
-    @Override
     public MutableIntList collectInt(IntFunction<? super T> intFunction)
     {
         return this.collectInt(intFunction, new IntArrayList());
     }
 
-    @Override
     public MutableLongList collectLong(LongFunction<? super T> longFunction)
     {
         return this.collectLong(longFunction, new LongArrayList());
     }
 
-    @Override
     public MutableShortList collectShort(ShortFunction<? super T> shortFunction)
     {
         return this.collectShort(shortFunction, new ShortArrayList());
     }
 
-    @Override
     public <V> MutableList<V> collectIf(
             final Predicate<? super T> predicate,
             final Function<? super T, ? extends V> function)

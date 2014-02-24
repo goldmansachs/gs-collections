@@ -59,7 +59,6 @@ final class ImmutableSingletonList<T>
         procedure.value(this.element1);
     }
 
-    @Override
     public T get(int index)
     {
         if (index == 0)

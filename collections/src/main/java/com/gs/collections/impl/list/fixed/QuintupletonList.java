@@ -72,7 +72,6 @@ final class QuintupletonList<T>
         return new QuintupletonList<T>(this.element1, this.element2, this.element3, this.element4, this.element5);
     }
 
-    @Override
     public int size()
     {
         return 5;

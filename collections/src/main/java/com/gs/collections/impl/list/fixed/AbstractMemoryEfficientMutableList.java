@@ -113,7 +113,6 @@ public abstract class AbstractMemoryEfficientMutableList<T>
         throw new UnsupportedOperationException("Cannot remove from a fixed size list: " + this.getClass());
     }
 
-    @Override
     public void clear()
     {
         throw new UnsupportedOperationException("Cannot clear a fixed size list: " + this.getClass());

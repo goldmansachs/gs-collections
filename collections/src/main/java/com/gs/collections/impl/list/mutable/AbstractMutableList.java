@@ -168,7 +168,6 @@ public abstract class AbstractMutableList<T>
         return hashCode;
     }
 
-    @Override
     public void forEach(Procedure<? super T> procedure)
     {
         ListIterate.forEach(this, procedure);
@@ -199,7 +198,6 @@ public abstract class AbstractMutableList<T>
         ListIterate.forEachWithIndex(this, fromIndex, toIndex, objectIntProcedure);
     }
 
-    @Override
     public MutableList<T> select(Predicate<? super T> predicate)
     {
         return this.select(predicate, this.newEmpty());
@@ -211,7 +209,6 @@ public abstract class AbstractMutableList<T>
         return ListIterate.select(this, predicate, target);
     }
 
-    @Override
     public <P> MutableList<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         return this.selectWith(predicate, parameter, this.newEmpty());
@@ -226,7 +223,6 @@ public abstract class AbstractMutableList<T>
         return ListIterate.selectWith(this, predicate, parameter, targetCollection);
     }
 
-    @Override
     public MutableList<T> reject(Predicate<? super T> predicate)
     {
         return this.reject(predicate, this.newEmpty());
@@ -238,7 +234,6 @@ public abstract class AbstractMutableList<T>
         return ListIterate.reject(this, predicate, target);
     }
 
-    @Override
     public <P> MutableList<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         return this.rejectWith(predicate, parameter, this.newEmpty());
@@ -288,13 +283,11 @@ public abstract class AbstractMutableList<T>
         ListIterate.removeIfWith(this, predicate, parameter);
     }
 
-    @Override
     public <V> MutableList<V> collect(Function<? super T, ? extends V> function)
     {
         return this.collect(function, FastList.<V>newList());
     }
 
-    @Override
     public MutableBooleanList collectBoolean(BooleanFunction<? super T> booleanFunction)
     {
         BooleanArrayList result = new BooleanArrayList(this.size());
@@ -302,7 +295,6 @@ public abstract class AbstractMutableList<T>
         return result;
     }
 
-    @Override
     public MutableByteList collectByte(ByteFunction<? super T> byteFunction)
     {
         ByteArrayList result = new ByteArrayList(this.size());
@@ -310,7 +302,6 @@ public abstract class AbstractMutableList<T>
         return result;
     }
 
-    @Override
     public MutableCharList collectChar(CharFunction<? super T> charFunction)
     {
         CharArrayList result = new CharArrayList(this.size());
@@ -318,7 +309,6 @@ public abstract class AbstractMutableList<T>
         return result;
     }
 
-    @Override
     public MutableDoubleList collectDouble(DoubleFunction<? super T> doubleFunction)
     {
         DoubleArrayList result = new DoubleArrayList(this.size());
@@ -326,7 +316,6 @@ public abstract class AbstractMutableList<T>
         return result;
     }
 
-    @Override
     public MutableFloatList collectFloat(FloatFunction<? super T> floatFunction)
     {
         FloatArrayList result = new FloatArrayList(this.size());
@@ -334,7 +323,6 @@ public abstract class AbstractMutableList<T>
         return result;
     }
 
-    @Override
     public MutableIntList collectInt(IntFunction<? super T> intFunction)
     {
         IntArrayList result = new IntArrayList(this.size());
@@ -342,7 +330,6 @@ public abstract class AbstractMutableList<T>
         return result;
     }
 
-    @Override
     public MutableLongList collectLong(LongFunction<? super T> longFunction)
     {
         LongArrayList result = new LongArrayList(this.size());
@@ -350,7 +337,6 @@ public abstract class AbstractMutableList<T>
         return result;
     }
 
-    @Override
     public MutableShortList collectShort(ShortFunction<? super T> shortFunction)
     {
         ShortArrayList result = new ShortArrayList(this.size());
@@ -364,7 +350,6 @@ public abstract class AbstractMutableList<T>
         return ListIterate.collect(this, function, target);
     }
 
-    @Override
     public <V> MutableList<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
         return this.flatCollect(function, FastList.<V>newList());
@@ -377,7 +362,6 @@ public abstract class AbstractMutableList<T>
         return ListIterate.flatCollect(this, function, target);
     }
 
-    @Override
     public <P, V> MutableList<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
     {
         return this.collectWith(function, parameter, FastList.<V>newList());
@@ -390,7 +374,6 @@ public abstract class AbstractMutableList<T>
         return ListIterate.collectWith(this, function, parameter, targetCollection);
     }
 
-    @Override
     public <V> MutableList<V> collectIf(
             Predicate<? super T> predicate, Function<? super T, ? extends V> function)
     {
@@ -608,7 +591,6 @@ public abstract class AbstractMutableList<T>
         return Stacks.mutable.ofAll(this);
     }
 
-    @Override
     public MutableList<T> asUnmodifiable()
     {
         return UnmodifiableMutableList.of(this);
@@ -619,7 +601,6 @@ public abstract class AbstractMutableList<T>
         return Lists.immutable.ofAll(this);
     }
 
-    @Override
     public MutableList<T> asSynchronized()
     {
         return SynchronizedMutableList.of(this);
@@ -685,7 +666,6 @@ public abstract class AbstractMutableList<T>
         return this.sortThis(Comparators.byFunction(function));
     }
 
-    @Override
     public MutableList<T> newEmpty()
     {
         return Lists.mutable.of();
@@ -746,7 +726,6 @@ public abstract class AbstractMutableList<T>
         return -1;
     }
 
-    @Override
     public Iterator<T> iterator()
     {
         return new MutableIterator<T>(this);
@@ -844,7 +823,6 @@ public abstract class AbstractMutableList<T>
             return this.original.get(index + this.offset);
         }
 
-        @Override
         public int size()
         {
             return this.size;
@@ -865,7 +843,6 @@ public abstract class AbstractMutableList<T>
             return result;
         }
 
-        @Override
         public void clear()
         {
             for (Iterator<T> iterator = this.iterator(); iterator.hasNext(); )
@@ -1059,13 +1036,11 @@ public abstract class AbstractMutableList<T>
         return currentSize != this.size();
     }
 
-    @Override
     public T getFirst()
     {
         return ListIterate.getFirst(this);
     }
 
-    @Override
     public T getLast()
     {
         return ListIterate.getLast(this);

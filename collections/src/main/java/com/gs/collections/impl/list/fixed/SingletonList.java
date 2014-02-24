@@ -68,7 +68,6 @@ final class SingletonList<T>
         return new SingletonList<T>(this.element1);
     }
 
-    @Override
     public int size()
     {
         return 1;

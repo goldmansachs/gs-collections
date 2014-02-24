@@ -56,7 +56,6 @@ final class TripletonSet<T>
         this.element3 = obj3;
     }
 
-    @Override
     public int size()
     {
         return 3;
@@ -104,13 +103,11 @@ final class TripletonSet<T>
                 || Comparators.nullSafeEquals(obj, this.element3);
     }
 
-    @Override
     public Iterator<T> iterator()
     {
         return new TripletonSetIterator();
     }
 
-    @Override
     public T getFirst()
     {
         return this.element1;
@@ -121,13 +118,11 @@ final class TripletonSet<T>
         return this.element2;
     }
 
-    @Override
     public T getLast()
     {
         return this.element3;
     }
 
-    @Override
     public void forEach(Procedure<? super T> procedure)
     {
         procedure.value(this.element1);

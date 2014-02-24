@@ -85,7 +85,6 @@ final class ImmutableEmptyList<T>
         return false;
     }
 
-    @Override
     public T get(int index)
     {
         throw new IndexOutOfBoundsException("Index: " + index + ", Size: " + this.size());

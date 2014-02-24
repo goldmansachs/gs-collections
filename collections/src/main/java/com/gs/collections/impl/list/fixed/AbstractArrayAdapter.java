@@ -227,7 +227,6 @@ public abstract class AbstractArrayAdapter<T>
         return ArrayIterate.selectAndRejectWith(this.items, predicate, parameter);
     }
 
-    @Override
     public int size()
     {
         return this.items.length;
@@ -327,7 +326,6 @@ public abstract class AbstractArrayAdapter<T>
         throw new UnsupportedOperationException("Cannot remove from an ArrayAdapter");
     }
 
-    @Override
     public void clear()
     {
         throw new UnsupportedOperationException("Cannot clear an ArrayAdapter");

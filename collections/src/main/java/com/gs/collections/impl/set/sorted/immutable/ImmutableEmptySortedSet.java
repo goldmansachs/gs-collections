@@ -165,7 +165,6 @@ final class ImmutableEmptySortedSet<T>
         return (ImmutableSortedSet<S>) this;
     }
 
-    @Override
     public Iterator<T> iterator()
     {
         return EmptyIterator.getInstance();

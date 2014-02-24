@@ -88,7 +88,6 @@ public abstract class AbstractMutableSet<T>
         }
     }
 
-    @Override
     public MutableSet<T> newEmpty()
     {
         return UnifiedSet.newSet();
@@ -99,25 +98,21 @@ public abstract class AbstractMutableSet<T>
         return UnifiedSet.newSet(this.size());
     }
 
-    @Override
     public MutableSet<T> select(Predicate<? super T> predicate)
     {
         return this.select(predicate, this.newEmpty());
     }
 
-    @Override
     public <P> MutableSet<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         return this.selectWith(predicate, parameter, this.<T>newEmptySameSize());
     }
 
-    @Override
     public MutableSet<T> reject(Predicate<? super T> predicate)
     {
         return this.reject(predicate, this.<T>newEmptySameSize());
     }
 
-    @Override
     public <P> MutableSet<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         return this.rejectWith(predicate, parameter, this.<T>newEmptySameSize());
@@ -144,13 +139,11 @@ public abstract class AbstractMutableSet<T>
         return result;
     }
 
-    @Override
     public <V> MutableSet<V> collect(Function<? super T, ? extends V> function)
     {
         return this.collect(function, this.<V>newEmptySameSize());
     }
 
-    @Override
     public MutableBooleanSet collectBoolean(BooleanFunction<? super T> booleanFunction)
     {
         BooleanHashSet result = new BooleanHashSet();
@@ -158,7 +151,6 @@ public abstract class AbstractMutableSet<T>
         return result;
     }
 
-    @Override
     public MutableByteSet collectByte(ByteFunction<? super T> byteFunction)
     {
         ByteHashSet result = new ByteHashSet(this.size());
@@ -166,7 +158,6 @@ public abstract class AbstractMutableSet<T>
         return result;
     }
 
-    @Override
     public MutableCharSet collectChar(CharFunction<? super T> charFunction)
     {
         CharHashSet result = new CharHashSet(this.size());
@@ -174,7 +165,6 @@ public abstract class AbstractMutableSet<T>
         return result;
     }
 
-    @Override
     public MutableDoubleSet collectDouble(DoubleFunction<? super T> doubleFunction)
     {
         DoubleHashSet result = new DoubleHashSet(this.size());
@@ -182,7 +172,6 @@ public abstract class AbstractMutableSet<T>
         return result;
     }
 
-    @Override
     public MutableFloatSet collectFloat(FloatFunction<? super T> floatFunction)
     {
         FloatHashSet result = new FloatHashSet(this.size());
@@ -190,7 +179,6 @@ public abstract class AbstractMutableSet<T>
         return result;
     }
 
-    @Override
     public MutableIntSet collectInt(IntFunction<? super T> intFunction)
     {
         IntHashSet result = new IntHashSet(this.size());
@@ -198,7 +186,6 @@ public abstract class AbstractMutableSet<T>
         return result;
     }
 
-    @Override
     public MutableLongSet collectLong(LongFunction<? super T> longFunction)
     {
         LongHashSet result = new LongHashSet(this.size());
@@ -206,7 +193,6 @@ public abstract class AbstractMutableSet<T>
         return result;
     }
 
-    @Override
     public MutableShortSet collectShort(ShortFunction<? super T> shortFunction)
     {
         ShortHashSet result = new ShortHashSet(this.size());
@@ -214,19 +200,16 @@ public abstract class AbstractMutableSet<T>
         return result;
     }
 
-    @Override
     public <V> MutableSet<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
         return this.flatCollect(function, this.<V>newEmptySameSize());
     }
 
-    @Override
     public <P, V> MutableSet<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
     {
         return this.collectWith(function, parameter, this.<V>newEmptySameSize());
     }
 
-    @Override
     public <V> MutableSet<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
     {
         return this.collectIf(predicate, function, this.<V>newEmptySameSize());
@@ -242,13 +225,11 @@ public abstract class AbstractMutableSet<T>
         return this.groupByEach(function, UnifiedSetMultimap.<V, T>newMultimap());
     }
 
-    @Override
     public MutableSet<T> asUnmodifiable()
     {
         return UnmodifiableMutableSet.of(this);
     }
 
-    @Override
     public MutableSet<T> asSynchronized()
     {
         return SynchronizedMutableSet.of(this);

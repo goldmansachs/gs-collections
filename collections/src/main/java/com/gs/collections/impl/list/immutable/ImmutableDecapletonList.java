@@ -79,7 +79,6 @@ final class ImmutableDecapletonList<T>
         procedure.value(this.element10);
     }
 
-    @Override
     public T get(int index)
     {
         switch (index)

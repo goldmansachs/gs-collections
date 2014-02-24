@@ -652,6 +652,8 @@ public abstract class AbstractListTestCase
         Verify.assertContainsAll(list, "A", "B", "R", "W", "G", "D");
         sublist.clear();
         Verify.assertEmpty(sublist);
+        Assert.assertFalse(sublist.remove("X"));
+        Verify.assertEmpty(sublist);
         Verify.assertContainsAll(list, "A", "D");
     }
 
