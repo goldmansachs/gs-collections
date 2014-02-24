@@ -25,6 +25,8 @@ import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.multimap.set.SetMultimap;
 import com.gs.collections.api.set.ParallelUnsortedSetIterable;
+import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
 import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
 
@@ -39,7 +41,7 @@ public abstract class AbstractParallelUnsortedSetIterable<T> extends AbstractPar
     @Override
     public <P> ParallelUnsortedSetIterable<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        throw new UnsupportedOperationException();
+        return this.select(Predicates.bind(predicate, parameter));
     }
 
     @Override
@@ -51,13 +53,13 @@ public abstract class AbstractParallelUnsortedSetIterable<T> extends AbstractPar
     @Override
     public ParallelUnsortedSetIterable<T> reject(Predicate<? super T> predicate)
     {
-        throw new UnsupportedOperationException();
+        return this.select(Predicates.not(predicate));
     }
 
     @Override
     public <P> ParallelUnsortedSetIterable<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        throw new UnsupportedOperationException();
+        return this.reject(Predicates.bind(predicate, parameter));
     }
 
     public <V> ParallelUnsortedSetIterable<V> collect(Function<? super T, ? extends V> function)
@@ -68,13 +70,13 @@ public abstract class AbstractParallelUnsortedSetIterable<T> extends AbstractPar
     @Override
     public <P, V> ParallelUnsortedSetIterable<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
     {
-        throw new UnsupportedOperationException();
+        return this.collect(Functions.bind(function, parameter));
     }
 
     @Override
     public <V> ParallelUnsortedSetIterable<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
     {
-        throw new UnsupportedOperationException();
+        return this.select(predicate).collect(function);
     }
 
     @Override

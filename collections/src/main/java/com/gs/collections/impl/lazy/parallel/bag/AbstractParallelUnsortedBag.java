@@ -27,6 +27,8 @@ import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.multimap.bag.BagMultimap;
 import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.BagAddOccurrencesProcedure;
 import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
 import com.gs.collections.impl.multimap.bag.HashBagMultimap;
@@ -42,7 +44,7 @@ public abstract class AbstractParallelUnsortedBag<T> extends AbstractParallelIte
     @Override
     public <P> ParallelUnsortedBag<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        throw new UnsupportedOperationException();
+        return this.select(Predicates.bind(predicate, parameter));
     }
 
     @Override
@@ -54,13 +56,13 @@ public abstract class AbstractParallelUnsortedBag<T> extends AbstractParallelIte
     @Override
     public ParallelUnsortedBag<T> reject(Predicate<? super T> predicate)
     {
-        throw new UnsupportedOperationException();
+        return this.select(Predicates.not(predicate));
     }
 
     @Override
     public <P> ParallelUnsortedBag<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        throw new UnsupportedOperationException();
+        return this.reject(Predicates.bind(predicate, parameter));
     }
 
     public <V> ParallelUnsortedBag<V> collect(Function<? super T, ? extends V> function)
@@ -71,13 +73,13 @@ public abstract class AbstractParallelUnsortedBag<T> extends AbstractParallelIte
     @Override
     public <P, V> ParallelUnsortedBag<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
     {
-        throw new UnsupportedOperationException();
+        return this.collect(Functions.bind(function, parameter));
     }
 
     @Override
     public <V> ParallelUnsortedBag<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
     {
-        throw new UnsupportedOperationException();
+        return this.select(predicate).collect(function);
     }
 
     @Override

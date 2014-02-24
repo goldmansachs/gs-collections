@@ -23,6 +23,8 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.api.multimap.list.ListMultimap;
+import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
 
 @Beta
@@ -36,7 +38,7 @@ public abstract class AbstractParallelListIterable<T> extends AbstractParallelIt
     @Override
     public <P> ParallelListIterable<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        throw new UnsupportedOperationException();
+        return this.select(Predicates.bind(predicate, parameter));
     }
 
     @Override
@@ -48,13 +50,13 @@ public abstract class AbstractParallelListIterable<T> extends AbstractParallelIt
     @Override
     public ParallelListIterable<T> reject(Predicate<? super T> predicate)
     {
-        throw new UnsupportedOperationException();
+        return this.select(Predicates.not(predicate));
     }
 
     @Override
     public <P> ParallelListIterable<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        throw new UnsupportedOperationException();
+        return this.reject(Predicates.bind(predicate, parameter));
     }
 
     public <V> ParallelListIterable<V> collect(Function<? super T, ? extends V> function)
@@ -65,13 +67,13 @@ public abstract class AbstractParallelListIterable<T> extends AbstractParallelIt
     @Override
     public <P, V> ParallelListIterable<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
     {
-        throw new UnsupportedOperationException();
+        return this.collect(Functions.bind(function, parameter));
     }
 
     @Override
     public <V> ParallelListIterable<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
     {
-        throw new UnsupportedOperationException();
+        return this.select(predicate).collect(function);
     }
 
     @Override
