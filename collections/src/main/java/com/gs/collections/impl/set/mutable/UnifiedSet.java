@@ -2710,6 +2710,22 @@ public class UnifiedSet<K>
     @Beta
     public ParallelUnsortedSetIterable<K> asParallel(ExecutorService executorService, int batchSize)
     {
+        if (executorService == null)
+        {
+            throw new NullPointerException();
+        }
+        if (batchSize < 1)
+        {
+            throw new IllegalArgumentException();
+        }
+        if (executorService.isShutdown())
+        {
+            throw new IllegalArgumentException();
+        }
+        if (executorService.isTerminated())
+        {
+            throw new IllegalArgumentException();
+        }
         return new UnifiedSetParallelUnsortedIterable(executorService, batchSize);
     }
 

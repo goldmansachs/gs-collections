@@ -1642,6 +1642,22 @@ public class FastList<T>
     @Beta
     public ParallelListIterable<T> asParallel(ExecutorService executorService, int batchSize)
     {
+        if (executorService == null)
+        {
+            throw new NullPointerException();
+        }
+        if (batchSize < 1)
+        {
+            throw new IllegalArgumentException();
+        }
+        if (executorService.isShutdown())
+        {
+            throw new IllegalArgumentException();
+        }
+        if (executorService.isTerminated())
+        {
+            throw new IllegalArgumentException();
+        }
         return new FastListParallelIterable(executorService, batchSize);
     }
 

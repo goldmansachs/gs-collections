@@ -1221,6 +1221,22 @@ public class HashBag<T>
     @Beta
     public ParallelUnsortedBag<T> asParallel(ExecutorService executorService, int batchSize)
     {
+        if (executorService == null)
+        {
+            throw new NullPointerException();
+        }
+        if (batchSize < 1)
+        {
+            throw new IllegalArgumentException();
+        }
+        if (executorService.isShutdown())
+        {
+            throw new IllegalArgumentException();
+        }
+        if (executorService.isTerminated())
+        {
+            throw new IllegalArgumentException();
+        }
         return new HashBagParallelIterable(executorService, batchSize);
     }
 
