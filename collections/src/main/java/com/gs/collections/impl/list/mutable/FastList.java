@@ -1691,6 +1691,18 @@ public class FastList<T>
             }
             return false;
         }
+
+        public boolean allSatisfy(Predicate<? super T> predicate)
+        {
+            for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
+            {
+                if (!predicate.accept(FastList.this.items[i]))
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
     }
 
     private final class FastListParallelIterable extends AbstractParallelListIterable<T>
@@ -1799,6 +1811,52 @@ public class FastList<T>
                 }
             }
             return false;
+        }
+
+        @Override
+        public boolean allSatisfy(final Predicate<? super T> predicate)
+        {
+            final CompletionService<Boolean> completionService = new ExecutorCompletionService<Boolean>(this.executorService);
+            MutableSet<Future<Boolean>> futures = this.split().collect(new Function<Batch<T>, Future<Boolean>>()
+            {
+                public Future<Boolean> valueOf(final Batch<T> batch)
+                {
+                    return completionService.submit(new Callable<Boolean>()
+                    {
+                        public Boolean call()
+                        {
+                            return batch.allSatisfy(predicate);
+                        }
+                    });
+                }
+            }, UnifiedSet.<Future<Boolean>>newSet());
+
+            while (futures.notEmpty())
+            {
+                try
+                {
+                    Future<Boolean> future = completionService.take();
+                    if (!future.get())
+                    {
+                        for (Future<Boolean> eachFuture : futures)
+                        {
+                            eachFuture.cancel(true);
+                        }
+                        return false;
+                    }
+                    futures.remove(future);
+                }
+                catch (InterruptedException e)
+                {
+                    Thread.currentThread().interrupt();
+                    throw new RuntimeException(e);
+                }
+                catch (ExecutionException e)
+                {
+                    throw new RuntimeException(e);
+                }
+            }
+            return true;
         }
 
         private class FastListParallelBatchLazyIterable

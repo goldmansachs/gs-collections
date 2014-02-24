@@ -51,4 +51,9 @@ class CollectUnsortedSetBatch<T, V> extends AbstractUnsortedSetBatch<V>
     {
         return this.unsortedSetBatch.anySatisfy(Predicates.attributePredicate(this.function, predicate));
     }
+
+    public boolean allSatisfy(Predicate<? super V> predicate)
+    {
+        return this.unsortedSetBatch.allSatisfy(Predicates.attributePredicate(this.function, predicate));
+    }
 }

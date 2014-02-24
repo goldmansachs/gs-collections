@@ -22,7 +22,9 @@ import java.util.concurrent.Executors;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
+import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
+import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import org.junit.Assert;
@@ -84,6 +86,49 @@ public class HashBagTest extends MutableBagTestCase
         Assert.assertEquals(
                 HashBag.newBagWith("1", "1", "1", "3", "5", "7", "9"),
                 result);
+    }
+
+    @Ignore
+    @Test
+    public void asParallel_allSatisfy()
+    {
+        Assert.assertTrue(HashBag.newBagWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .select(IntegerPredicates.isOdd())
+                .collect(Functions.getToString())
+                .allSatisfy(Predicates.in(Lists.mutable.of("1", "3", "5", "7", "9"))));
+
+        Assert.assertFalse(HashBag.newBagWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .select(IntegerPredicates.isOdd())
+                .collect(Functions.getToString())
+                .allSatisfy(Predicates.in(Lists.mutable.of("1", "3", "7"))));
+
+        Assert.assertTrue(HashBag.newBagWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .select(IntegerPredicates.isOdd())
+                .collect(Functions.<Integer>getPassThru())
+                .allSatisfy(IntegerPredicates.isPositive()));
+
+        Assert.assertFalse(HashBag.newBagWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .select(IntegerPredicates.isOdd())
+                .allSatisfy(Predicates.lessThan(7)));
+
+        Assert.assertTrue(HashBag.<Integer>newBag()
+                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .select(IntegerPredicates.isOdd())
+                .allSatisfy(Predicates.greaterThan(10)));
+
+        Assert.assertFalse(HashBag.newBagWith(1)
+                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .select(IntegerPredicates.isOdd())
+                .allSatisfy(Predicates.greaterThan(10)));
+
+        Assert.assertTrue(HashBag.newBagWith(1)
+                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .select(IntegerPredicates.isEven())
+                .allSatisfy(Predicates.greaterThan(10)));
     }
 
     @Ignore

@@ -50,4 +50,27 @@ class SelectListBatch<T> extends AbstractListBatch<T>
     {
         return this.listBatch.anySatisfy(Predicates.and(this.predicate, predicate));
     }
+
+    public boolean allSatisfy(Predicate<? super T> predicate)
+    {
+        return this.listBatch.allSatisfy(new SelectListBatchAllSatisfyPredicate<T>(this.predicate, predicate));
+    }
+
+    private static final class SelectListBatchAllSatisfyPredicate<T> implements Predicate<T>
+    {
+        private final Predicate<? super T> left;
+        private final Predicate<? super T> right;
+
+        private SelectListBatchAllSatisfyPredicate(Predicate<? super T> left, Predicate<? super T> right)
+        {
+            this.left = left;
+            this.right = right;
+        }
+
+        public boolean accept(T each)
+        {
+            boolean leftResult = this.left.accept(each);
+            return !leftResult || this.right.accept(each);
+        }
+    }
 }

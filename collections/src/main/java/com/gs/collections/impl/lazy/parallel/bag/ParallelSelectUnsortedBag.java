@@ -59,4 +59,28 @@ class ParallelSelectUnsortedBag<T> extends AbstractParallelUnsortedBag<T>
     {
         return this.parallelUnsortedBag.anySatisfy(Predicates.and(this.predicate, predicate));
     }
+
+    @Override
+    public boolean allSatisfy(Predicate<? super T> predicate)
+    {
+        return this.parallelUnsortedBag.allSatisfy(new SelectUnsortedBagAllSatisfyPredicate<T>(this.predicate, predicate));
+    }
+
+    private static final class SelectUnsortedBagAllSatisfyPredicate<T> implements Predicate<T>
+    {
+        private final Predicate<? super T> left;
+        private final Predicate<? super T> right;
+
+        private SelectUnsortedBagAllSatisfyPredicate(Predicate<? super T> left, Predicate<? super T> right)
+        {
+            this.left = left;
+            this.right = right;
+        }
+
+        public boolean accept(T each)
+        {
+            boolean leftResult = this.left.accept(each);
+            return !leftResult || this.right.accept(each);
+        }
+    }
 }

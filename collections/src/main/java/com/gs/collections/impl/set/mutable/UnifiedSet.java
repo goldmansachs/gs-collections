@@ -1135,7 +1135,63 @@ public class UnifiedSet<K>
 
     public boolean allSatisfy(Predicate<? super K> predicate)
     {
-        return IterableIterate.allSatisfy(this, predicate);
+        for (int i = 0; i < this.table.length; i++)
+        {
+            Object cur = this.table[i];
+            if (cur instanceof ChainedBucket)
+            {
+                if (!this.chainedAllSatisfy((ChainedBucket) cur, predicate))
+                {
+                    return false;
+                }
+            }
+            else if (cur != null)
+            {
+                if (!predicate.accept(this.nonSentinel(cur)))
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean chainedAllSatisfy(ChainedBucket bucket, Predicate<? super K> predicate)
+    {
+        do
+        {
+            if (!predicate.accept(this.nonSentinel(bucket.zero)))
+            {
+                return false;
+            }
+            if (bucket.one == null)
+            {
+                return true;
+            }
+            if (!predicate.accept(this.nonSentinel(bucket.one)))
+            {
+                return false;
+            }
+            if (bucket.two == null)
+            {
+                return true;
+            }
+            if (!predicate.accept(this.nonSentinel(bucket.two)))
+            {
+                return false;
+            }
+            if (bucket.three == null)
+            {
+                return true;
+            }
+            if (bucket.three instanceof ChainedBucket)
+            {
+                bucket = (ChainedBucket) bucket.three;
+                continue;
+            }
+            return predicate.accept(this.nonSentinel(bucket.three));
+        }
+        while (true);
     }
 
     public <P> boolean allSatisfyWith(
@@ -2775,6 +2831,26 @@ public class UnifiedSet<K>
             }
             return false;
         }
+
+        public boolean allSatisfy(Predicate<? super K> predicate)
+        {
+            for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
+            {
+                Object cur = UnifiedSet.this.table[i];
+                if (cur instanceof ChainedBucket)
+                {
+                    UnifiedSet.this.chainedAllSatisfy((ChainedBucket) cur, predicate);
+                }
+                else if (cur != null)
+                {
+                    if (!predicate.accept(UnifiedSet.this.nonSentinel(cur)))
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
     }
 
     private final class UnifiedSetParallelUnsortedIterable extends AbstractParallelUnsortedSetIterable<K>
@@ -2883,6 +2959,52 @@ public class UnifiedSet<K>
                 }
             }
             return false;
+        }
+
+        @Override
+        public boolean allSatisfy(final Predicate<? super K> predicate)
+        {
+            final CompletionService<Boolean> completionService = new ExecutorCompletionService<Boolean>(this.executorService);
+            MutableSet<Future<Boolean>> futures = this.split().collect(new Function<Batch<K>, Future<Boolean>>()
+            {
+                public Future<Boolean> valueOf(final Batch<K> batch)
+                {
+                    return completionService.submit(new Callable<Boolean>()
+                    {
+                        public Boolean call()
+                        {
+                            return batch.allSatisfy(predicate);
+                        }
+                    });
+                }
+            }, UnifiedSet.<Future<Boolean>>newSet());
+
+            while (futures.notEmpty())
+            {
+                try
+                {
+                    Future<Boolean> future = completionService.take();
+                    if (!future.get())
+                    {
+                        for (Future<Boolean> eachFuture : futures)
+                        {
+                            eachFuture.cancel(true);
+                        }
+                        return false;
+                    }
+                    futures.remove(future);
+                }
+                catch (InterruptedException e)
+                {
+                    Thread.currentThread().interrupt();
+                    throw new RuntimeException(e);
+                }
+                catch (ExecutionException e)
+                {
+                    throw new RuntimeException(e);
+                }
+            }
+            return true;
         }
 
         private class UnifiedSetParallelSplitLazyIterable

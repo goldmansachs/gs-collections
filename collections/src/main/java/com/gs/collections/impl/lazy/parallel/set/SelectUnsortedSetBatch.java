@@ -50,4 +50,9 @@ class SelectUnsortedSetBatch<T> extends AbstractUnsortedSetBatch<T>
     {
         return this.unsortedSetBatch.anySatisfy(Predicates.and(this.predicate, predicate));
     }
+
+    public boolean allSatisfy(Predicate<? super T> predicate)
+    {
+        return this.unsortedSetBatch.allSatisfy(Predicates.and(this.predicate, predicate));
+    }
 }

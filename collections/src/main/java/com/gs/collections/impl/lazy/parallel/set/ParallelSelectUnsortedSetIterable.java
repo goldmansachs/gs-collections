@@ -44,4 +44,28 @@ class ParallelSelectUnsortedSetIterable<T> extends AbstractParallelUnsortedSetIt
     {
         return this.parallelSetIterable.anySatisfy(Predicates.and(this.predicate, predicate));
     }
+
+    @Override
+    public boolean allSatisfy(Predicate<? super T> predicate)
+    {
+        return this.parallelSetIterable.allSatisfy(new SelectUnsortedSetAllSatisfyPredicate<T>(this.predicate, predicate));
+    }
+
+    private static final class SelectUnsortedSetAllSatisfyPredicate<T> implements Predicate<T>
+    {
+        private final Predicate<? super T> left;
+        private final Predicate<? super T> right;
+
+        private SelectUnsortedSetAllSatisfyPredicate(Predicate<? super T> left, Predicate<? super T> right)
+        {
+            this.left = left;
+            this.right = right;
+        }
+
+        public boolean accept(T each)
+        {
+            boolean leftResult = this.left.accept(each);
+            return !leftResult || this.right.accept(each);
+        }
+    }
 }

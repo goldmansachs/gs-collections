@@ -76,4 +76,9 @@ class SelectUnsortedBagBatch<T> extends AbstractUnsortedBagBatch<T>
     {
         return this.unsortedBagBatch.anySatisfy(Predicates.and(this.predicate, predicate));
     }
+
+    public boolean allSatisfy(Predicate<? super T> predicate)
+    {
+        return this.unsortedBagBatch.allSatisfy(Predicates.and(this.predicate, predicate));
+    }
 }

@@ -57,4 +57,9 @@ class CollectUnsortedBagBatch<T, V> extends AbstractUnsortedBagBatch<V>
     {
         return this.unsortedBagBatch.anySatisfy(Predicates.attributePredicate(this.function, predicate));
     }
+
+    public boolean allSatisfy(Predicate<? super V> predicate)
+    {
+        return this.unsortedBagBatch.allSatisfy(Predicates.attributePredicate(this.function, predicate));
+    }
 }

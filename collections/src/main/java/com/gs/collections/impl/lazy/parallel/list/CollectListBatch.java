@@ -51,4 +51,9 @@ class CollectListBatch<T, V> extends AbstractListBatch<V>
     {
         return this.listBatch.anySatisfy(Predicates.attributePredicate(this.function, predicate));
     }
+
+    public boolean allSatisfy(Predicate<? super V> predicate)
+    {
+        return this.listBatch.allSatisfy(Predicates.attributePredicate(this.function, predicate));
+    }
 }

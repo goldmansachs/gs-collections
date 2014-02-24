@@ -31,4 +31,7 @@ public interface Batch<T>
     <V> Batch<V> collect(Function<? super T, ? extends V> function);
 
     boolean anySatisfy(Predicate<? super T> predicate);
+
+    boolean allSatisfy(Predicate<? super T> predicate);
 }
+

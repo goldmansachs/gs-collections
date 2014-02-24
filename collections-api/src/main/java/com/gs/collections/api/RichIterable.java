@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1362,7 +1362,7 @@ public interface
     /**
      * Applies an aggregate function over the iterable grouping results into a map based on the specific groupBy function.
      * Aggregate results are allowed to be immutable as they will be replaced in place in the map.  A second function
-     * specifies the initial "zero" aggregate value to work with (i.e. new Integer(0)).
+     * specifies the initial "zero" aggregate value to work with (i.e. Integer.valueOf(0)).
      *
      * @since 3.0
      */
