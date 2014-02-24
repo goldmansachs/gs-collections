@@ -25,6 +25,7 @@ import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.function.primitive.Object<name>IntToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.<name>List;
@@ -293,6 +294,14 @@ public final class Synchronized<name>List
     public Lazy<name>Iterable asReversed()
     {
         return Reverse<name>Iterable.adapt(this);
+    }
+
+    public void forEachWithIndex(<name>IntProcedure procedure)
+    {
+        synchronized (this.getLock())
+        {
+            this.getMutable<name>List().forEachWithIndex(procedure);
+        }
     }
 
     public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)

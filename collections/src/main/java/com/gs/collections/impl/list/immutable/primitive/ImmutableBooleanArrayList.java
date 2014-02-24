@@ -31,6 +31,7 @@ import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
 import com.gs.collections.api.block.function.primitive.ObjectBooleanIntToObjectFunction;
 import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
+import com.gs.collections.api.block.procedure.primitive.BooleanIntProcedure;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.list.ImmutableList;
@@ -152,6 +153,14 @@ final class ImmutableBooleanArrayList
         for (int i = 0; i < this.size; i++)
         {
             procedure.value(this.items.get(i));
+        }
+    }
+
+    public void forEachWithIndex(BooleanIntProcedure procedure)
+    {
+        for (int i = 0; i < this.size; i++)
+        {
+            procedure.value(this.items.get(i), i);
         }
     }
 

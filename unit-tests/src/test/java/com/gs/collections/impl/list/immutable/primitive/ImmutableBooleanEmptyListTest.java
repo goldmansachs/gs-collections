@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@ package com.gs.collections.impl.list.immutable.primitive;
 
 import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
+import com.gs.collections.api.block.procedure.primitive.BooleanIntProcedure;
 import com.gs.collections.api.list.primitive.ImmutableBooleanList;
 import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
 import com.gs.collections.impl.test.Verify;
@@ -78,6 +79,22 @@ public class ImmutableBooleanEmptyListTest extends AbstractImmutableBooleanListT
     {
         Assert.assertEquals(-1L, this.classUnderTest().lastIndexOf(true));
         Assert.assertEquals(-1L, this.classUnderTest().lastIndexOf(false));
+    }
+
+    @Override
+    @Test
+    public void forEachWithIndex()
+    {
+        final String[] sum = new String[2];
+        sum[0] = "";
+        this.classUnderTest().forEachWithIndex(new BooleanIntProcedure()
+        {
+            public void value(boolean each, int index)
+            {
+                sum[0] += index + ":" + each;
+            }
+        });
+        Assert.assertEquals("", sum[0]);
     }
 
     @Override

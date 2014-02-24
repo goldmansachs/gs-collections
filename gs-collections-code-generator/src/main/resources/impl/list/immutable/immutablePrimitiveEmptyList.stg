@@ -26,6 +26,7 @@ import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunct
 import com.gs.collections.api.block.function.primitive.Object<name>IntToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
 import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
+import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.primitive.Immutable<name>List;
@@ -87,6 +88,10 @@ final class Immutable<name>EmptyList implements Immutable<name>List, Serializabl
     }
 
     public void forEach(<name>Procedure procedure)
+    {
+    }
+
+    public void forEachWithIndex(<name>IntProcedure procedure)
     {
     }
 

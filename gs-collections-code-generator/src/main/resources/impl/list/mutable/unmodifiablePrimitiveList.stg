@@ -22,6 +22,7 @@ import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.function.primitive.Object<name>IntToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.<name>List;
 import com.gs.collections.api.list.primitive.Immutable<name>List;
@@ -200,6 +201,11 @@ public final class Unmodifiable<name>List
     public Mutable<name>List toReversed()
     {
         return this.getMutable<name>List().toReversed();
+    }
+
+    public void forEachWithIndex(<name>IntProcedure procedure)
+    {
+        this.getMutable<name>List().forEachWithIndex(procedure);
     }
 
     public Lazy<name>Iterable asReversed()

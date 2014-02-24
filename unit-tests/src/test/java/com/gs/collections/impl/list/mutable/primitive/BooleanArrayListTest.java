@@ -20,7 +20,6 @@ import java.lang.reflect.Field;
 import java.util.BitSet;
 
 import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
-import com.gs.collections.api.block.procedure.primitive.BooleanIntProcedure;
 import com.gs.collections.impl.math.MutableInteger;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -116,29 +115,5 @@ public class BooleanArrayListTest extends AbstractBooleanListTestCase
             }
         });
         Assert.assertEquals(new MutableInteger(2), result);
-    }
-
-    @Test
-    public void forEachWithIndex()
-    {
-        final String[] sum = new String[2];
-        sum[0] = "";
-        sum[1] = "";
-        this.list.forEachWithIndex(new BooleanIntProcedure()
-        {
-            public void value(boolean each, int index)
-            {
-                sum[0] += index + ":" + each;
-            }
-        });
-        this.newWith().forEachWithIndex(new BooleanIntProcedure()
-        {
-            public void value(boolean each, int index)
-            {
-                sum[1] += index + ":" + each;
-            }
-        });
-        Assert.assertEquals("0:true1:false2:true", sum[0]);
-        Assert.assertEquals("", sum[1]);
     }
 }

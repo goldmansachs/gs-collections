@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package com.gs.collections.impl.list.immutable.primitive;
 
 import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
+import com.gs.collections.api.block.procedure.primitive.BooleanIntProcedure;
 import com.gs.collections.api.list.primitive.ImmutableBooleanList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import org.junit.Assert;
@@ -55,5 +56,21 @@ public class ImmutableBooleanSingletonListTest extends AbstractImmutableBooleanL
             }
         });
         Assert.assertEquals(Integer.valueOf(2), total);
+    }
+
+    @Override
+    @Test
+    public void forEachWithIndex()
+    {
+        final String[] sum = new String[2];
+        sum[0] = "";
+        this.classUnderTest().forEachWithIndex(new BooleanIntProcedure()
+        {
+            public void value(boolean each, int index)
+            {
+                sum[0] += index + ":" + each;
+            }
+        });
+        Assert.assertEquals("0:true", sum[0]);
     }
 }

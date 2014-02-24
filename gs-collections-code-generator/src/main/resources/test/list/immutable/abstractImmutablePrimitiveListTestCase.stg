@@ -18,6 +18,7 @@ package com.gs.collections.impl.list.immutable.primitive;
 
 import com.gs.collections.api.block.function.primitive.Object<name>IntToObjectFunction;
 import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
+import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.Immutable<name>List;
@@ -189,6 +190,21 @@ public abstract class AbstractImmutable<name>ListTestCase extends AbstractImmuta
         Assert.assertEquals(<name>ArrayList.newListWith(<(literal.(type))("3")>, <(literal.(type))("1")>, <(literal.(type))("9")>, <(literal.(type))("7")>, <(literal.(type))("8")>), this.newWith(<(literal.(type))("8")>, <(literal.(type))("7")>, <(literal.(type))("9")>, <(literal.(type))("1")>, <(literal.(type))("3")>).toReversed());
         Immutable<name>List list2 = this.newWith(<(literal.(type))("3")>, <(literal.(type))("1")>, <(literal.(type))("9")>, <(literal.(type))("7")>, <(literal.(type))("8")>);
         Assert.assertNotSame(list2, list2.toReversed());
+    }
+
+    @Test
+    public void forEachWithIndex()
+    {
+        final <wideType.(type)>[] sum = new <wideType.(type)>[1];
+        this.classUnderTest().forEachWithIndex(new <name>IntProcedure()
+        {
+            public void value(<type> each, int index)
+            {
+                sum[0] += each + index;
+            }
+        });
+
+        Assert.assertEquals(<(wideLiteral.(type))("9")>, sum[0]<wideDelta.(type)>);
     }
 
     @Override

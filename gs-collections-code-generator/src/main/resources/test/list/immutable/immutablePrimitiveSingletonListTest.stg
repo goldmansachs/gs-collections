@@ -18,6 +18,7 @@ package com.gs.collections.impl.list.immutable.primitive;
 
 import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.function.primitive.Object<name>IntToObjectFunction;
+import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
 import com.gs.collections.api.list.primitive.Immutable<name>List;
 import com.gs.collections.impl.factory.primitive.<name>Lists;
 import com.gs.collections.impl.math.Mutable<wrapperName>;
@@ -94,6 +95,22 @@ public class Immutable<name>SingletonListTest extends AbstractImmutable<name>Lis
     public void toReversed()
     {
         Assert.assertEquals(<name>Lists.immutable.of(<(literal.(type))("1")>), this.classUnderTest().toReversed());
+    }
+
+    @Override
+    @Test
+    public void forEachWithIndex()
+    {
+        final <wideType.(type)>[] sum = new <wideType.(type)>[1];
+        this.classUnderTest().forEachWithIndex(new <name>IntProcedure()
+        {
+            public void value(<type> each, int index)
+            {
+                sum[0] += each + index;
+            }
+        });
+
+        Assert.assertEquals(1, sum[0], <(literal.(type))("0")>);
     }
 }
 

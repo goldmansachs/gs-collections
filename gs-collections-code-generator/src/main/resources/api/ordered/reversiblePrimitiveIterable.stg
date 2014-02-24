@@ -22,6 +22,7 @@ import com.gs.collections.api.Lazy<name>Iterable;
 import com.gs.collections.api.block.function.primitive.<name>ToObjectFunction;
 import com.gs.collections.api.block.function.primitive.Object<name>IntToObjectFunction;
 import com.gs.collections.api.block.predicate.primitive.<name>Predicate;
+import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
 import com.gs.collections.api.ordered.ReversibleIterable;
 
 /**
@@ -46,6 +47,8 @@ public interface Reversible<name>Iterable extends <name>Iterable
     Reversible<name>Iterable toReversed();
 
     \<T> T injectIntoWithIndex(T injectedValue, Object<name>IntToObjectFunction\<? super T, ? extends T> function);
+
+    void forEachWithIndex(<name>IntProcedure procedure);
 }
 
 >>

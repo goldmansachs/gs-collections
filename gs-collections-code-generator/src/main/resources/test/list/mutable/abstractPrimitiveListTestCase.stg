@@ -19,6 +19,7 @@ package com.gs.collections.impl.list.mutable.primitive;
 
 import com.gs.collections.api.block.function.primitive.Object<name>IntToObjectFunction;
 import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
+import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.primitive.Immutable<name>List;
@@ -301,6 +302,21 @@ public abstract class Abstract<name>ListTestCase extends AbstractMutable<name>Co
         Assert.assertEquals(<name>ArrayList.newListWith(<["3", "1", "9", "7", "8"]:(literal.(type))(); separator=", ">), this.newWith(<["8", "7", "9", "1", "3"]:(literal.(type))(); separator=", ">).toReversed());
         Mutable<name>List oddList = this.newWith(<["3", "1", "9", "7", "8"]:(literal.(type))(); separator=", ">);
         Assert.assertNotSame(oddList, oddList.toReversed());
+    }
+
+    @Test
+    public void forEachWithIndex()
+    {
+        final <wideType.(type)>[] sum = new <wideType.(type)>[1];
+        this.classUnderTest().forEachWithIndex(new <name>IntProcedure()
+        {
+            public void value(<type> each, int index)
+            {
+                sum[0] += each + index;
+            }
+        });
+
+        Assert.assertEquals(<(wideLiteral.(type))("9")>, sum[0]<wideDelta.(type)>);
     }
 
     @Override

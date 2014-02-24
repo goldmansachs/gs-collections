@@ -22,6 +22,7 @@ import com.gs.collections.api.<name>Iterable;
 import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.block.function.primitive.Object<name>IntToObjectFunction;
 import com.gs.collections.api.collection.primitive.Immutable<name>Collection;
+import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
 import com.gs.collections.api.list.primitive.Immutable<name>List;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
 import com.gs.collections.impl.math.Mutable<wrapperName>;
@@ -195,6 +196,22 @@ public class Immutable<name>EmptyListTest extends AbstractImmutable<name>ListTes
     public void toReversed()
     {
         Assert.assertEquals(<name>Lists.immutable.of(), this.classUnderTest().toReversed());
+    }
+
+    @Override
+    @Test
+    public void forEachWithIndex()
+    {
+        final <wideType.(type)>[] sum = new <wideType.(type)>[1];
+        this.classUnderTest().forEachWithIndex(new <name>IntProcedure()
+        {
+            public void value(<type> each, int index)
+            {
+                sum[0] += each + index;
+            }
+        });
+
+        Assert.assertEquals(0, sum[0], <(literal.(type))("0")>);
     }
 }
 

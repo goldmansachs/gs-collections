@@ -17,6 +17,7 @@
 package com.gs.collections.impl.list.mutable.primitive;
 
 import com.gs.collections.api.block.function.primitive.ObjectBooleanIntToObjectFunction;
+import com.gs.collections.api.block.procedure.primitive.BooleanIntProcedure;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.list.MutableList;
@@ -338,6 +339,30 @@ public abstract class AbstractBooleanListTestCase extends AbstractMutableBoolean
             }
         });
         Assert.assertEquals(new MutableInteger(5), result);
+    }
+
+    @Test
+    public void forEachWithIndex()
+    {
+        final String[] sum = new String[2];
+        sum[0] = "";
+        sum[1] = "";
+        this.classUnderTest().forEachWithIndex(new BooleanIntProcedure()
+        {
+            public void value(boolean each, int index)
+            {
+                sum[0] += index + ":" + each;
+            }
+        });
+        this.newWith().forEachWithIndex(new BooleanIntProcedure()
+        {
+            public void value(boolean each, int index)
+            {
+                sum[1] += index + ":" + each;
+            }
+        });
+        Assert.assertEquals("0:true1:false2:true", sum[0]);
+        Assert.assertEquals("", sum[1]);
     }
 
     @Override
