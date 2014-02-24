@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,9 +50,9 @@ public class SetMultimapMemoryTest
     public void memoryForScaledMultimaps(int size)
     {
         MemoryTestBench.on(HashMultimap.class)
-                .printContainerMemoryUsage("SetMultiMap", size, new SizedGuavaMultimapFactory(size));
+                .printContainerMemoryUsage("SetMultimap", size, new SizedGuavaMultimapFactory(size));
         MemoryTestBench.on(UnifiedSetMultimap.class)
-                .printContainerMemoryUsage("SetMultiMap", size, new SizedGscMultimapFactory(size));
+                .printContainerMemoryUsage("SetMultimap", size, new SizedGscMultimapFactory(size));
     }
 
     public static class SizedGuavaMultimapFactory implements Function0<HashMultimap<Integer, Integer>>

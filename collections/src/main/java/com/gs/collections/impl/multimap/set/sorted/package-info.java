@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,16 +17,16 @@
 /**
  * This package contains implementations of the {@link com.gs.collections.api.multimap.sortedset.SortedSetMultimap} interface.
  * <p>
- *     A {@link com.gs.collections.api.multimap.sortedset.SortedSetMultimap} is a type of {@code MultiMap} that uses a sorted set as its underlying store for the multiple values of a given key.
+ *     A {@link com.gs.collections.api.multimap.sortedset.SortedSetMultimap} is a type of {@code Multimap} that uses a sorted set as its underlying store for the multiple values of a given key.
  * </p>
  * <p>
  *     This package contains the following implementations:
  * <ul>
  *     <li>
- *          {@link com.gs.collections.impl.multimap.set.sorted.TreeSortedSetMultimap} - a {@code MutableSortedSetMultiMap} which uses a {@link com.gs.collections.impl.set.sorted.mutable.TreeSortedSet} as its underlying store for the multiple values of a given key.
+ *          {@link com.gs.collections.impl.multimap.set.sorted.TreeSortedSetMultimap} - a {@code MutableSortedSetMultimap} which uses a {@link com.gs.collections.impl.set.sorted.mutable.TreeSortedSet} as its underlying store for the multiple values of a given key.
  *     </li>
  *     <li>
- *          {@link com.gs.collections.impl.multimap.set.sorted.ImmutableSortedSetMultimapImpl} - the default {@code ImmutableSortedSetMultiMap} implementation.
+ *          {@link com.gs.collections.impl.multimap.set.sorted.ImmutableSortedSetMultimapImpl} - the default {@code ImmutableSortedSetMultimap} implementation.
  *     </li>
  * </p>
  */

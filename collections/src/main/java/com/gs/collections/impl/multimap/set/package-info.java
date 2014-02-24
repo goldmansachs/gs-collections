@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,19 @@
 /**
  * This package contains implementations of the {@link com.gs.collections.api.multimap.set.SetMultimap} interface.
  * <p>
- *     A {@link com.gs.collections.api.multimap.set.SetMultimap} is a type of {@code MultiMap} that uses a set as its underlying store for the multiple values of a given key.
+ *     A {@link com.gs.collections.api.multimap.set.SetMultimap} is a type of {@code Multimap} that uses a set as its underlying store for the multiple values of a given key.
  * </p>
  * <p>
  *     This package contains the following implementations:
  * <ul>
  *     <li>
- *          {@link com.gs.collections.impl.multimap.set.UnifiedSetMultimap} - a {@code MutableSetMultiMap} which uses a {@link com.gs.collections.impl.set.mutable.UnifiedSet} as its underlying store for the multiple values of a given key.
+ *          {@link com.gs.collections.impl.multimap.set.UnifiedSetMultimap} - a {@code MutableSetMultimap} which uses a {@link com.gs.collections.impl.set.mutable.UnifiedSet} as its underlying store for the multiple values of a given key.
  *     </li>
  *     <li>
- *          {@link com.gs.collections.impl.multimap.set.ImmutableSetMultimapImpl} - the default {@code ImmutableSetMultiMap} implementation.
+ *          {@link com.gs.collections.impl.multimap.set.ImmutableSetMultimapImpl} - the default {@code ImmutableSetMultimap} implementation.
  *     </li>
  *     <li>
- *          {@link com.gs.collections.impl.multimap.set.SynchronizedPutUnifiedSetMultimap} - a {@code MutableSetMultiMap} that is optimized for parallel writes, but is not protected for concurrent reads.
+ *          {@link com.gs.collections.impl.multimap.set.SynchronizedPutUnifiedSetMultimap} - a {@code MutableSetMultimap} that is optimized for parallel writes, but is not protected for concurrent reads.
  *     </li>
  * </p>
  */

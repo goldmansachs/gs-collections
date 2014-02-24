@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,19 +17,19 @@
 /**
  * This package contains implementations of the {@link com.gs.collections.api.multimap.list.ListMultimap} interface.
  * <p>
- *     A {@link com.gs.collections.api.multimap.list.ListMultimap} is a type of {@code MultiMap} that uses a list as its underlying store for the multiple values of a given key.
+ *     A {@link com.gs.collections.api.multimap.list.ListMultimap} is a type of {@code Multimap} that uses a list as its underlying store for the multiple values of a given key.
  * </p>
  * <p>
  *     This package contains the following implementations:
  * <ul>
  *     <li>
- *          {@link com.gs.collections.impl.multimap.list.FastListMultimap} - a {@code MutableListMultiMap} which uses a {@link com.gs.collections.impl.list.mutable.FastList} as its underlying store for the multiple values of a given key.
+ *          {@link com.gs.collections.impl.multimap.list.FastListMultimap} - a {@code MutableListMultimap} which uses a {@link com.gs.collections.impl.list.mutable.FastList} as its underlying store for the multiple values of a given key.
  *     </li>
  *     <li>
- *          {@link com.gs.collections.impl.multimap.list.ImmutableListMultimapImpl} - the default {@code ImmutableListMultiMap} implementation.
+ *          {@link com.gs.collections.impl.multimap.list.ImmutableListMultimapImpl} - the default {@code ImmutableListMultimap} implementation.
  *     </li>
  *     <li>
- *          {@link com.gs.collections.impl.multimap.list.SynchronizedPutFastListMultimap} - a {@code MutableListMultiMap} that is optimized for parallel writes, but is not protected for concurrent reads.
+ *          {@link com.gs.collections.impl.multimap.list.SynchronizedPutFastListMultimap} - a {@code MutableListMultimap} that is optimized for parallel writes, but is not protected for concurrent reads.
  *     </li>
  * </p>
  */

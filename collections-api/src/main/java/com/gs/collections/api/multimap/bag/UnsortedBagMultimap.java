@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-package com.gs.collections.api.multimap.set;
+package com.gs.collections.api.multimap.bag;
 
-import com.gs.collections.api.set.UnsortedSetIterable;
+import com.gs.collections.api.bag.UnsortedBag;
 
-public interface UnsortedSetMultiMap<K, V> extends SetMultimap<K, V>
+public interface UnsortedBagMultimap<K, V> extends BagMultimap<K, V>
 {
-    UnsortedSetMultiMap<K, V> newEmpty();
+    UnsortedBagMultimap<K, V> newEmpty();
 
-    UnsortedSetIterable<V> get(K key);
+    UnsortedBag<V> get(K key);
 
-    MutableSetMultimap<K, V> toMutable();
+    MutableBagMultimap<K, V> toMutable();
 
-    ImmutableSetMultimap<K, V> toImmutable();
+    ImmutableBagMultimap<K, V> toImmutable();
 }

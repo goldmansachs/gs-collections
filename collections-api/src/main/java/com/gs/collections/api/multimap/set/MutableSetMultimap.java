@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import com.gs.collections.api.set.MutableSet;
  * @since 1.0
  */
 public interface MutableSetMultimap<K, V>
-        extends UnsortedSetMultiMap<K, V>, MutableMultimap<K, V>
+        extends UnsortedSetMultimap<K, V>, MutableMultimap<K, V>
 {
     MutableSet<V> replaceValues(K key, Iterable<? extends V> values);
 

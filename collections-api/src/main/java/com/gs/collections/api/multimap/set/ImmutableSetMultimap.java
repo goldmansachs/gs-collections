@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ import com.gs.collections.api.set.ImmutableSet;
  * @since 1.0
  */
 public interface ImmutableSetMultimap<K, V>
-        extends UnsortedSetMultiMap<K, V>, ImmutableMultimap<K, V>
+        extends UnsortedSetMultimap<K, V>, ImmutableMultimap<K, V>
 {
     ImmutableSet<V> get(K key);
 

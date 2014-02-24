@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -115,7 +115,7 @@ public class AnagramTest
     }
 
     @Test
-    public void anagramsWithMultiMapGSCollections3()
+    public void anagramsWithMultimapGSCollections3()
     {
         MutableList<RichIterable<String>> results = this.getWords().groupBy(ALPHAGRAM_FUNCTION)
                 .multiValuesView()
@@ -136,7 +136,7 @@ public class AnagramTest
     }
 
     @Test
-    public void anagramsWithMultiMapLazyIterable1()
+    public void anagramsWithMultimapLazyIterable1()
     {
         MutableList<RichIterable<String>> results = this.getWords().groupBy(ALPHAGRAM_FUNCTION)
                 .multiValuesView()

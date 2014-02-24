@@ -37,7 +37,7 @@ import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
-import com.gs.collections.api.multimap.bag.UnsortedBagMultiMap;
+import com.gs.collections.api.multimap.bag.UnsortedBagMultimap;
 import com.gs.collections.api.partition.bag.PartitionUnsortedBag;
 import com.gs.collections.api.set.UnsortedSetIterable;
 import com.gs.collections.api.tuple.Pair;
@@ -86,9 +86,9 @@ public interface UnsortedBag<T> extends Bag<T>
 
     UnsortedSetIterable<Pair<T, Integer>> zipWithIndex();
 
-    <V> UnsortedBagMultiMap<V, T> groupBy(Function<? super T, ? extends V> function);
+    <V> UnsortedBagMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
 
-    <V> UnsortedBagMultiMap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
+    <V> UnsortedBagMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
 
     /**
      * Converts the UnsortedBag to an ImmutableBag. If the bag is immutable, it returns itself.
