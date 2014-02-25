@@ -296,27 +296,6 @@
             </plugin>
 
             <plugin>
-                <groupId>com.atlassian.maven.plugins</groupId>
-                <artifactId>maven-clover2-plugin</artifactId>
-                <version>${clover.version}</version>
-                <configuration>
-                    <licenseLocation>${clover.license}</licenseLocation>
-                    <contextFilters>@deprecated</contextFilters>
-                    <generateHistorical>true</generateHistorical>
-                    <includesAllSourceRoots>true</includesAllSourceRoots>
-                    <historyDir>${user.home}/clover/${project.artifactId}</historyDir>
-                    <excludes>
-                        <exclude>**/FileUtils.java</exclude>
-                        <exclude>**/GenerateMojo.java</exclude>
-                        <exclude>**/GsCollectionsCodeGenerator.java</exclude>
-                        <exclude>**/GsCollectionsCodeGeneratorTask.java</exclude>
-                        <exclude>**/Primitive.java</exclude>
-                        <exclude>**/IntegerOrStringRenderer.java</exclude>
-                    </excludes>
-                </configuration>
-            </plugin>
-
-            <plugin>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <version>${checkstyle.version}</version>
                 <configuration>
@@ -511,6 +490,32 @@
                 <module>serialization-tests</module>
                 <module>acceptance-tests</module>
             </modules>
+
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>com.atlassian.maven.plugins</groupId>
+                        <artifactId>maven-clover2-plugin</artifactId>
+                        <version>${clover.version}</version>
+                        <configuration>
+                            <licenseLocation>${clover.license}</licenseLocation>
+                            <contextFilters>@deprecated</contextFilters>
+                            <generateHistorical>true</generateHistorical>
+                            <includesAllSourceRoots>true</includesAllSourceRoots>
+                            <historyDir>${user.home}/clover/${project.artifactId}</historyDir>
+                            <excludes>
+                                <exclude>**/FileUtils.java</exclude>
+                                <exclude>**/GenerateMojo.java</exclude>
+                                <exclude>**/GsCollectionsCodeGenerator.java</exclude>
+                                <exclude>**/GsCollectionsCodeGeneratorTask.java</exclude>
+                                <exclude>**/Primitive.java</exclude>
+                                <exclude>**/IntegerOrStringRenderer.java</exclude>
+                            </excludes>
+                        </configuration>
+                    </plugin>
+                </plugins>
+            </build>
+
         </profile>
 
     </profiles>
