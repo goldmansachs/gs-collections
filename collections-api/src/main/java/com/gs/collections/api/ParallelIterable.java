@@ -30,6 +30,8 @@ import com.gs.collections.api.block.predicate.Predicate;
 @Beta
 public interface ParallelIterable<T> extends RichIterable<T>
 {
+    ParallelIterable<T> asUnique();
+
     /**
      * Creates a parallel iterable for selecting elements from the current iterable.
      */

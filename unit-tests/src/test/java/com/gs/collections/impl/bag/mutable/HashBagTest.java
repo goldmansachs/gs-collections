@@ -18,8 +18,12 @@ package com.gs.collections.impl.bag.mutable;
 
 import java.util.Collections;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.gs.collections.api.bag.MutableBag;
+import com.gs.collections.api.bag.ParallelUnsortedBag;
+import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
@@ -34,7 +38,7 @@ import org.junit.Test;
 public class HashBagTest extends MutableBagTestCase
 {
     @Override
-    protected <T> MutableBag<T> newWith(T... littleElements)
+    protected <T> HashBag<T> newWith(T... littleElements)
     {
         return HashBag.newBagWith(littleElements);
     }
@@ -143,5 +147,23 @@ public class HashBagTest extends MutableBagTestCase
         Assert.assertEquals(
                 HashBag.newBagWith("1", "1", "1", "3", "5", "7", "9"),
                 result);
+    }
+
+    @Ignore
+    @Test
+    public void asParallel_asUnique()
+    {
+        ParallelUnsortedBag<Integer> integers = this.newWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4).asParallel(Executors.newFixedThreadPool(10), 2);
+        ParallelUnsortedSetIterable<Integer> unique = integers.asUnique();
+        Assert.assertNotSame(integers, unique);
+        final AtomicInteger atomicInteger = new AtomicInteger();
+        unique.forEach(new Procedure<Integer>()
+        {
+            public void value(Integer each)
+            {
+                atomicInteger.incrementAndGet();
+            }
+        });
+        Assert.assertEquals(4, atomicInteger.get());
     }
 }

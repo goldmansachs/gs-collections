@@ -19,6 +19,7 @@ package com.gs.collections.impl.set.mutable;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.procedure.Procedure;
@@ -606,6 +607,23 @@ public class UnifiedSetTest extends AbstractMutableSetTestCase
         SetMultimap<Integer, Integer> actual =
                 parallelSet.groupByEach(function);
         Assert.assertEquals(expected, actual);
+    }
+
+    @Test
+    public void asParallel_asUnique()
+    {
+        ParallelUnsortedSetIterable<Integer> integers = this.newWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4).asParallel(Executors.newFixedThreadPool(10), 2);
+        ParallelUnsortedSetIterable<Integer> unique = integers.asUnique();
+        Assert.assertSame(integers, unique);
+        final AtomicInteger atomicInteger = new AtomicInteger();
+        unique.forEach(new Procedure<Integer>()
+        {
+            public void value(Integer each)
+            {
+                atomicInteger.incrementAndGet();
+            }
+        });
+        Assert.assertEquals(4, atomicInteger.get());
     }
 
     @Test

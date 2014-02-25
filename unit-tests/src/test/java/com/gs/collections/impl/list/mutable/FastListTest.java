@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.block.function.Function;
@@ -1335,6 +1336,23 @@ public class FastListTest extends AbstractListTestCase
                 .asParallel(Executors.newFixedThreadPool(10), 2)
                 .select(IntegerPredicates.isOdd())
                 .anySatisfy(Predicates.greaterThan(10)));
+    }
+
+    @Test
+    public void asParallel_asUnique()
+    {
+        final AtomicInteger atomicInteger = new AtomicInteger();
+        this.newWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4)
+                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .asUnique()
+                .forEach(new Procedure<Integer>()
+                {
+                    public void value(Integer each)
+                    {
+                        atomicInteger.incrementAndGet();
+                    }
+                });
+        Assert.assertEquals(4, atomicInteger.get());
     }
 
     @Test

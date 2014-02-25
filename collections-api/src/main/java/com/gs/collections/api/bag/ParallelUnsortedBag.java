@@ -24,6 +24,7 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.multimap.bag.BagMultimap;
+import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 
 /**
  * A ParallelIterable is RichIterable which will defer evaluation for certain methods like select, reject, collect, etc.
@@ -36,6 +37,8 @@ import com.gs.collections.api.multimap.bag.BagMultimap;
 public interface ParallelUnsortedBag<T>
         extends ParallelIterable<T>
 {
+    ParallelUnsortedSetIterable<T> asUnique();
+
     void forEachWithOccurrences(ObjectIntProcedure<? super T> procedure);
 
     /**

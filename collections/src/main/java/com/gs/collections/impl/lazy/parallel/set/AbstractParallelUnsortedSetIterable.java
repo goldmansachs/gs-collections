@@ -28,11 +28,16 @@ import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
-import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
+import com.gs.collections.impl.multimap.set.SynchronizedPutUnifiedSetMultimap;
 
 @Beta
 public abstract class AbstractParallelUnsortedSetIterable<T> extends AbstractParallelIterable<T> implements ParallelUnsortedSetIterable<T>
 {
+    public ParallelUnsortedSetIterable<T> asUnique()
+    {
+        return this;
+    }
+
     public ParallelUnsortedSetIterable<T> select(Predicate<? super T> predicate)
     {
         return new ParallelSelectUnsortedSetIterable<T>(this, predicate);
@@ -87,16 +92,13 @@ public abstract class AbstractParallelUnsortedSetIterable<T> extends AbstractPar
 
     public <V> SetMultimap<V, T> groupBy(final Function<? super T, ? extends V> function)
     {
-        final MutableSetMultimap<V, T> result = UnifiedSetMultimap.newMultimap();
+        final MutableSetMultimap<V, T> result = SynchronizedPutUnifiedSetMultimap.newMultimap();
         this.forEach(new Procedure<T>()
         {
             public void value(T each)
             {
                 V key = function.valueOf(each);
-                synchronized (result)
-                {
-                    result.put(key, each);
-                }
+                result.put(key, each);
             }
         });
         return result;
@@ -104,18 +106,15 @@ public abstract class AbstractParallelUnsortedSetIterable<T> extends AbstractPar
 
     public <V> SetMultimap<V, T> groupByEach(final Function<? super T, ? extends Iterable<V>> function)
     {
-        final MutableSetMultimap<V, T> result = UnifiedSetMultimap.newMultimap();
+        final MutableSetMultimap<V, T> result = SynchronizedPutUnifiedSetMultimap.newMultimap();
         this.forEach(new Procedure<T>()
         {
             public void value(T each)
             {
                 Iterable<V> keys = function.valueOf(each);
-                synchronized (result)
+                for (V key : keys)
                 {
-                    for (V key : keys)
-                    {
-                        result.put(key, each);
-                    }
+                    result.put(key, each);
                 }
             }
         });

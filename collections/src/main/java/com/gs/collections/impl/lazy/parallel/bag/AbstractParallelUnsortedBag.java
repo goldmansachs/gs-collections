@@ -26,16 +26,22 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.multimap.bag.BagMultimap;
 import com.gs.collections.api.multimap.bag.MutableBagMultimap;
+import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.BagAddOccurrencesProcedure;
 import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
-import com.gs.collections.impl.multimap.bag.HashBagMultimap;
+import com.gs.collections.impl.multimap.bag.SynchronizedPutHashBagMultimap;
 
 @Beta
 public abstract class AbstractParallelUnsortedBag<T> extends AbstractParallelIterable<T> implements ParallelUnsortedBag<T>
 {
+    public ParallelUnsortedSetIterable<T> asUnique()
+    {
+        throw new UnsupportedOperationException();
+    }
+
     public ParallelUnsortedBag<T> select(Predicate<? super T> predicate)
     {
         return new ParallelSelectUnsortedBag<T>(this, predicate);
@@ -98,18 +104,15 @@ public abstract class AbstractParallelUnsortedBag<T> extends AbstractParallelIte
 
     public <V> BagMultimap<V, T> groupBy(final Function<? super T, ? extends V> function)
     {
-        final MutableBagMultimap<V, T> result = HashBagMultimap.newMultimap();
+        final MutableBagMultimap<V, T> result = SynchronizedPutHashBagMultimap.newMultimap();
         this.forEachWithOccurrences(new ObjectIntProcedure<T>()
         {
             public void value(T each, int occurrences)
             {
                 V key = function.valueOf(each);
-                synchronized (result)
+                for (int i = 0; i < occurrences; i++)
                 {
-                    for (int i = 0; i < occurrences; i++)
-                    {
-                        result.put(key, each);
-                    }
+                    result.put(key, each);
                 }
             }
         });
@@ -118,20 +121,17 @@ public abstract class AbstractParallelUnsortedBag<T> extends AbstractParallelIte
 
     public <V> BagMultimap<V, T> groupByEach(final Function<? super T, ? extends Iterable<V>> function)
     {
-        final MutableBagMultimap<V, T> result = HashBagMultimap.newMultimap();
+        final MutableBagMultimap<V, T> result = SynchronizedPutHashBagMultimap.newMultimap();
         this.forEachWithOccurrences(new ObjectIntProcedure<T>()
         {
             public void value(T each, int occurrences)
             {
                 Iterable<V> keys = function.valueOf(each);
-                synchronized (result)
+                for (V key : keys)
                 {
-                    for (V key : keys)
+                    for (int i = 0; i < occurrences; i++)
                     {
-                        for (int i = 0; i < occurrences; i++)
-                        {
-                            result.put(key, each);
-                        }
+                        result.put(key, each);
                     }
                 }
             }

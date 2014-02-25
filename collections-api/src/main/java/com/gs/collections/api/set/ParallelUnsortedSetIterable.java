@@ -35,6 +35,8 @@ import com.gs.collections.api.multimap.set.SetMultimap;
 public interface ParallelUnsortedSetIterable<T>
         extends ParallelIterable<T>
 {
+    ParallelUnsortedSetIterable<T> asUnique();
+
     /**
      * Creates a parallel iterable for selecting elements from the current iterable.
      */

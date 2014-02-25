@@ -23,6 +23,7 @@ import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.multimap.list.ListMultimap;
+import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 
 /**
  * A ParallelIterable is RichIterable which will defer evaluation for certain methods like select, reject, collect, etc.
@@ -35,6 +36,8 @@ import com.gs.collections.api.multimap.list.ListMultimap;
 public interface ParallelListIterable<T>
         extends ParallelIterable<T>
 {
+    ParallelUnsortedSetIterable<T> asUnique();
+
     /**
      * Creates a parallel iterable for selecting elements from the current iterable.
      */
