@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -26,8 +26,10 @@ import java.util.Iterator;
 import java.util.Set;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import java.util.concurrent.ExecutorService;
 
 import com.gs.collections.api.LazyIterable;
+import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
@@ -54,6 +56,7 @@ import com.gs.collections.api.partition.set.sorted.PartitionMutableSortedSet;
 import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
+import com.gs.collections.api.set.sorted.ParallelSortedSetIterable;
 import com.gs.collections.api.set.sorted.SortedSetIterable;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
@@ -176,6 +179,28 @@ public final class TreeSortedSet<T>
     public MutableSortedSet<T> asSynchronized()
     {
         return SynchronizedSortedSet.of(this);
+    }
+
+    @Beta
+    public ParallelSortedSetIterable<T> asParallel(ExecutorService executorService, int batchSize)
+    {
+        if (executorService == null)
+        {
+            throw new NullPointerException();
+        }
+        if (batchSize < 1)
+        {
+            throw new IllegalArgumentException();
+        }
+        if (executorService.isShutdown())
+        {
+            throw new IllegalArgumentException();
+        }
+        if (executorService.isTerminated())
+        {
+            throw new IllegalArgumentException();
+        }
+        throw new UnsupportedOperationException();
     }
 
     public ImmutableSortedSet<T> toImmutable()

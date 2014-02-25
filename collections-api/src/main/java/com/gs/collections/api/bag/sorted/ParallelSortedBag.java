@@ -14,63 +14,59 @@
  * limitations under the License.
  */
 
-package com.gs.collections.api.set;
+package com.gs.collections.api.bag.sorted;
 
 import com.gs.collections.api.annotation.Beta;
+import com.gs.collections.api.bag.ParallelBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
-import com.gs.collections.api.multimap.set.UnsortedSetMultimap;
+import com.gs.collections.api.list.ParallelListIterable;
+import com.gs.collections.api.multimap.sortedbag.SortedBagMultimap;
 
 /**
- * A ParallelIterable is RichIterable which will defer evaluation for certain methods like select, reject, collect, etc.
- * Any methods that do not return a ParallelIterable when called will cause evaluation to be forced. Evaluation occurs
- * in parallel. All code blocks passed in must be stateless or thread-safe.
- *
  * @since 5.0
  */
 @Beta
-public interface ParallelUnsortedSetIterable<T> extends ParallelSetIterable<T>
+public interface ParallelSortedBag<T> extends ParallelBag<T>
 {
-    ParallelUnsortedSetIterable<T> asUnique();
-
     /**
      * Creates a parallel iterable for selecting elements from the current iterable.
      */
-    ParallelUnsortedSetIterable<T> select(Predicate<? super T> predicate);
+    ParallelSortedBag<T> select(Predicate<? super T> predicate);
 
-    <P> ParallelUnsortedSetIterable<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+    <P> ParallelSortedBag<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     /**
      * Creates a parallel iterable for rejecting elements from the current iterable.
      */
-    ParallelUnsortedSetIterable<T> reject(Predicate<? super T> predicate);
+    ParallelSortedBag<T> reject(Predicate<? super T> predicate);
 
-    <P> ParallelUnsortedSetIterable<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
+    <P> ParallelSortedBag<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
-    <S> ParallelUnsortedSetIterable<S> selectInstancesOf(Class<S> clazz);
+    <S> ParallelSortedBag<S> selectInstancesOf(Class<S> clazz);
 
     /**
      * Creates a parallel iterable for collecting elements from the current iterable.
      */
-    <V> ParallelUnsortedSetIterable<V> collect(Function<? super T, ? extends V> function);
+    <V> ParallelListIterable<V> collect(Function<? super T, ? extends V> function);
 
-    <P, V> ParallelUnsortedSetIterable<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
+    <P, V> ParallelListIterable<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
 
     /**
      * Creates a parallel iterable for selecting and collecting elements from the current iterable.
      */
-    <V> ParallelUnsortedSetIterable<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
+    <V> ParallelListIterable<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
 
     /**
      * Creates a parallel flattening iterable for the current iterable.
      */
-    <V> ParallelUnsortedSetIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
+    <V> ParallelListIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
 
-    <V> UnsortedSetMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
+    <V> SortedBagMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
 
-    <V> UnsortedSetMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
+    <V> SortedBagMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
 
 //    /**
 //     * Returns a parallel BooleanIterable which will transform the underlying iterable data to boolean values based on the booleanFunction.

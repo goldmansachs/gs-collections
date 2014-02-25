@@ -27,11 +27,14 @@ import java.util.Iterator;
 import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.Set;
+import java.util.concurrent.ExecutorService;
 
+import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.bag.Bag;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.bag.sorted.ImmutableSortedBag;
 import com.gs.collections.api.bag.sorted.MutableSortedBag;
+import com.gs.collections.api.bag.sorted.ParallelSortedBag;
 import com.gs.collections.api.bag.sorted.SortedBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
@@ -703,6 +706,28 @@ public class TreeBag<T>
     public MutableSortedBag<T> asSynchronized()
     {
         throw new UnsupportedOperationException("asSynchronized not implemented yet!");
+    }
+
+    @Beta
+    public ParallelSortedBag<T> asParallel(ExecutorService executorService, int batchSize)
+    {
+        if (executorService == null)
+        {
+            throw new NullPointerException();
+        }
+        if (batchSize < 1)
+        {
+            throw new IllegalArgumentException();
+        }
+        if (executorService.isShutdown())
+        {
+            throw new IllegalArgumentException();
+        }
+        if (executorService.isTerminated())
+        {
+            throw new IllegalArgumentException();
+        }
+        throw new UnsupportedOperationException();
     }
 
     @Override

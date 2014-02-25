@@ -23,7 +23,7 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
-import com.gs.collections.api.multimap.set.SetMultimap;
+import com.gs.collections.api.multimap.set.UnsortedSetMultimap;
 import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
@@ -90,7 +90,7 @@ public abstract class AbstractParallelUnsortedSetIterable<T> extends AbstractPar
         throw new UnsupportedOperationException();
     }
 
-    public <V> SetMultimap<V, T> groupBy(final Function<? super T, ? extends V> function)
+    public <V> UnsortedSetMultimap<V, T> groupBy(final Function<? super T, ? extends V> function)
     {
         final MutableSetMultimap<V, T> result = SynchronizedPutUnifiedSetMultimap.newMultimap();
         this.forEach(new Procedure<T>()
@@ -104,7 +104,7 @@ public abstract class AbstractParallelUnsortedSetIterable<T> extends AbstractPar
         return result;
     }
 
-    public <V> SetMultimap<V, T> groupByEach(final Function<? super T, ? extends Iterable<V>> function)
+    public <V> UnsortedSetMultimap<V, T> groupByEach(final Function<? super T, ? extends Iterable<V>> function)
     {
         final MutableSetMultimap<V, T> result = SynchronizedPutUnifiedSetMultimap.newMultimap();
         this.forEach(new Procedure<T>()

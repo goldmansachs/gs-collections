@@ -16,30 +16,21 @@
 
 package com.gs.collections.api.bag;
 
-import com.gs.collections.api.ParallelIterable;
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
-import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
-import com.gs.collections.api.multimap.bag.BagMultimap;
+import com.gs.collections.api.multimap.bag.UnsortedBagMultimap;
 import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 
 /**
- * A ParallelIterable is RichIterable which will defer evaluation for certain methods like select, reject, collect, etc.
- * Any methods that do not return a ParallelIterable when called will cause evaluation to be forced. Evaluation occurs
- * in parallel. All code blocks passed in must be stateless or thread-safe.
- *
  * @since 5.0
  */
 @Beta
-public interface ParallelUnsortedBag<T>
-        extends ParallelIterable<T>
+public interface ParallelUnsortedBag<T> extends ParallelBag<T>
 {
     ParallelUnsortedSetIterable<T> asUnique();
-
-    void forEachWithOccurrences(ObjectIntProcedure<? super T> procedure);
 
     /**
      * Creates a parallel iterable for selecting elements from the current iterable.
@@ -74,9 +65,9 @@ public interface ParallelUnsortedBag<T>
      */
     <V> ParallelUnsortedBag<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
 
-    <V> BagMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
+    <V> UnsortedBagMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
 
-    <V> BagMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
+    <V> UnsortedBagMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
 
 //    /**
 //     * Returns a parallel BooleanIterable which will transform the underlying iterable data to boolean values based on the booleanFunction.
