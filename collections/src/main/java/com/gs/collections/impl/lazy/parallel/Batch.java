@@ -17,7 +17,6 @@
 package com.gs.collections.impl.lazy.parallel;
 
 import com.gs.collections.api.annotation.Beta;
-import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 
@@ -25,10 +24,6 @@ import com.gs.collections.api.block.procedure.Procedure;
 public interface Batch<T>
 {
     void forEach(Procedure<? super T> procedure);
-
-    Batch<T> select(Predicate<? super T> predicate);
-
-    <V> Batch<V> collect(Function<? super T, ? extends V> function);
 
     boolean anySatisfy(Predicate<? super T> predicate);
 

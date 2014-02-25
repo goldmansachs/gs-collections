@@ -90,9 +90,7 @@ import com.gs.collections.impl.block.procedure.FastListSelectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
 import com.gs.collections.impl.lazy.parallel.Batch;
-import com.gs.collections.impl.lazy.parallel.list.AbstractListBatch;
 import com.gs.collections.impl.lazy.parallel.list.AbstractParallelListIterable;
-import com.gs.collections.impl.lazy.parallel.list.ListBatch;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
 import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
@@ -1661,7 +1659,7 @@ public class FastList<T>
         return new FastListParallelIterable(executorService, batchSize);
     }
 
-    private final class FastListBatch extends AbstractListBatch<T>
+    private final class FastListBatch implements Batch<T>
     {
         private final int chunkStartIndex;
         private final int chunkEndIndex;
@@ -1716,7 +1714,7 @@ public class FastList<T>
             this.batchSize = batchSize;
         }
 
-        public LazyIterable<ListBatch<T>> split()
+        public LazyIterable<Batch<T>> split()
         {
             return new FastListParallelBatchLazyIterable();
         }
@@ -1860,33 +1858,33 @@ public class FastList<T>
         }
 
         private class FastListParallelBatchLazyIterable
-                extends AbstractLazyIterable<ListBatch<T>>
-                implements Iterator<ListBatch<T>>
+                extends AbstractLazyIterable<Batch<T>>
+                implements Iterator<Batch<T>>
         {
             protected int chunkIndex;
 
-            public void forEach(Procedure<? super ListBatch<T>> procedure)
+            public void forEach(Procedure<? super Batch<T>> procedure)
             {
-                for (ListBatch<T> chunk : this)
+                for (Batch<T> chunk : this)
                 {
                     procedure.value(chunk);
                 }
             }
 
-            public <P> void forEachWith(Procedure2<? super ListBatch<T>, ? super P> procedure, P parameter)
+            public <P> void forEachWith(Procedure2<? super Batch<T>, ? super P> procedure, P parameter)
             {
-                for (ListBatch<T> chunk : this)
+                for (Batch<T> chunk : this)
                 {
                     procedure.value(chunk, parameter);
                 }
             }
 
-            public void forEachWithIndex(ObjectIntProcedure<? super ListBatch<T>> objectIntProcedure)
+            public void forEachWithIndex(ObjectIntProcedure<? super Batch<T>> objectIntProcedure)
             {
                 throw new UnsupportedOperationException();
             }
 
-            public Iterator<ListBatch<T>> iterator()
+            public Iterator<Batch<T>> iterator()
             {
                 return this;
             }
@@ -1901,7 +1899,7 @@ public class FastList<T>
                 return this.chunkIndex * FastListParallelIterable.this.batchSize < FastList.this.size;
             }
 
-            public ListBatch<T> next()
+            public Batch<T> next()
             {
                 int chunkStartIndex = this.chunkIndex * FastListParallelIterable.this.batchSize;
                 int chunkEndIndex = (this.chunkIndex + 1) * FastListParallelIterable.this.batchSize;

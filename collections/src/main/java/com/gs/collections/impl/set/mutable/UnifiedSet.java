@@ -121,8 +121,6 @@ import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
 import com.gs.collections.impl.lazy.parallel.Batch;
 import com.gs.collections.impl.lazy.parallel.set.AbstractParallelUnsortedSetIterable;
-import com.gs.collections.impl.lazy.parallel.set.AbstractUnsortedSetBatch;
-import com.gs.collections.impl.lazy.parallel.set.UnsortedSetBatch;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
@@ -2785,7 +2783,7 @@ public class UnifiedSet<K>
         return new UnifiedSetParallelUnsortedIterable(executorService, batchSize);
     }
 
-    private final class UnifiedUnsortedSetBatch extends AbstractUnsortedSetBatch<K>
+    private final class UnifiedUnsortedSetBatch implements Batch<K>
     {
         private final int chunkStartIndex;
         private final int chunkEndIndex;
@@ -2864,7 +2862,7 @@ public class UnifiedSet<K>
             this.batchSize = batchSize;
         }
 
-        public LazyIterable<UnsortedSetBatch<K>> split()
+        public LazyIterable<Batch<K>> split()
         {
             return new UnifiedSetParallelSplitLazyIterable();
         }
@@ -3008,33 +3006,33 @@ public class UnifiedSet<K>
         }
 
         private class UnifiedSetParallelSplitLazyIterable
-                extends AbstractLazyIterable<UnsortedSetBatch<K>>
-                implements Iterator<UnsortedSetBatch<K>>
+                extends AbstractLazyIterable<Batch<K>>
+                implements Iterator<Batch<K>>
         {
             protected int chunkIndex;
 
-            public void forEach(Procedure<? super UnsortedSetBatch<K>> procedure)
+            public void forEach(Procedure<? super Batch<K>> procedure)
             {
-                for (UnsortedSetBatch<K> chunk : this)
+                for (Batch<K> chunk : this)
                 {
                     procedure.value(chunk);
                 }
             }
 
-            public <P> void forEachWith(Procedure2<? super UnsortedSetBatch<K>, ? super P> procedure, P parameter)
+            public <P> void forEachWith(Procedure2<? super Batch<K>, ? super P> procedure, P parameter)
             {
-                for (UnsortedSetBatch<K> chunk : this)
+                for (Batch<K> chunk : this)
                 {
                     procedure.value(chunk, parameter);
                 }
             }
 
-            public void forEachWithIndex(ObjectIntProcedure<? super UnsortedSetBatch<K>> objectIntProcedure)
+            public void forEachWithIndex(ObjectIntProcedure<? super Batch<K>> objectIntProcedure)
             {
                 throw new UnsupportedOperationException();
             }
 
-            public Iterator<UnsortedSetBatch<K>> iterator()
+            public Iterator<Batch<K>> iterator()
             {
                 return this;
             }
@@ -3049,7 +3047,7 @@ public class UnifiedSet<K>
                 return this.chunkIndex * UnifiedSetParallelUnsortedIterable.this.batchSize < UnifiedSet.this.table.length;
             }
 
-            public UnsortedSetBatch<K> next()
+            public Batch<K> next()
             {
                 int chunkStartIndex = this.chunkIndex * UnifiedSetParallelUnsortedIterable.this.batchSize;
                 int chunkEndIndex = (this.chunkIndex + 1) * UnifiedSetParallelUnsortedIterable.this.batchSize;
