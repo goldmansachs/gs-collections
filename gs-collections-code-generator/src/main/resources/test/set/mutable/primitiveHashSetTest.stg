@@ -24,7 +24,7 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * JUnit test for {@link <name>HashSetTest}.
+ * JUnit test for {@link <name>HashSet}.
  * This file was automatically generated from template file primitiveHashSetTest.stg.
  */
 public class <name>HashSetTest extends Abstract<name>SetTestCase
