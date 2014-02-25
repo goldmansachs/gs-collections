@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-  ~ Copyright 2013 Goldman Sachs.
+  ~ Copyright 2014 Goldman Sachs.
   ~
   ~ Licensed under the Apache License, Version 2.0 (the "License");
   ~ you may not use this file except in compliance with the License.
@@ -303,6 +303,7 @@
                     <licenseLocation>${clover.license}</licenseLocation>
                     <contextFilters>@deprecated</contextFilters>
                     <generateHistorical>true</generateHistorical>
+                    <includesAllSourceRoots>true</includesAllSourceRoots>
                     <historyDir>${user.home}/clover/${project.artifactId}</historyDir>
                     <excludes>
                         <exclude>**/FileUtils.java</exclude>
@@ -456,10 +457,18 @@
                         <version>${clover.version}</version>
                         <executions>
                             <execution>
+                                <id>setup</id>
+                                <phase>process-sources</phase>
                                 <goals>
                                     <goal>setup</goal>
+                                </goals>
+                            </execution>
+                            <execution>
+                                <id>other</id>
+                                <goals>
                                     <goal>optimize</goal>
                                     <goal>snapshot</goal>
+                                    <goal>log</goal>
                                 </goals>
                             </execution>
                         </executions>
