@@ -1305,6 +1305,18 @@ public class FastListTest extends AbstractListTestCase
     }
 
     @Test
+    public void asParallel_select()
+    {
+        MutableList<Integer> result = this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .select(IntegerPredicates.isOdd())
+                .toList();
+        Assert.assertEquals(
+                FastList.newListWith(1, 3, 5, 7, 9),
+                result);
+    }
+
+    @Test
     public void asParallel_forEach()
     {
         MutableSet<String> result = UnifiedSet.<String>newSet().asSynchronized();
@@ -1353,6 +1365,12 @@ public class FastListTest extends AbstractListTestCase
                     }
                 });
         Assert.assertEquals(4, atomicInteger.get());
+        MutableList<Integer> list = this.newWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4)
+                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .asUnique()
+                .toList();
+        Verify.assertSize(4, list);
+        Verify.assertContainsAll(list, 1, 2, 3, 4);
     }
 
     @Test
@@ -1395,5 +1413,21 @@ public class FastListTest extends AbstractListTestCase
                 .asParallel(Executors.newFixedThreadPool(10), 2)
                 .select(IntegerPredicates.isEven())
                 .allSatisfy(Predicates.greaterThan(10)));
+    }
+
+    @Test
+    public void asParallel_toList()
+    {
+        FastList<Integer> integers = this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        Assert.assertEquals(
+                this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
+                integers.asParallel(Executors.newFixedThreadPool(10), 2)
+                        .toList());
+        Assert.assertEquals(
+                this.newWith("1", "3", "5", "7", "9"),
+                integers.asParallel(Executors.newFixedThreadPool(10), 2)
+                        .select(IntegerPredicates.isOdd())
+                        .collect(Functions.getToString())
+                        .toList());
     }
 }

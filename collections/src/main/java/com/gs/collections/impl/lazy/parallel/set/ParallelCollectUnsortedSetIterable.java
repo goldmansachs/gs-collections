@@ -16,6 +16,9 @@
 
 package com.gs.collections.impl.lazy.parallel.set;
 
+import java.util.concurrent.ExecutorService;
+
+import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
@@ -33,6 +36,24 @@ class ParallelCollectUnsortedSetIterable<T, V> extends AbstractParallelUnsortedS
     {
         this.parallelSetIterable = parallelSetIterable;
         this.function = function;
+    }
+
+    @Override
+    public ExecutorService getExecutorService()
+    {
+        return this.parallelSetIterable.getExecutorService();
+    }
+
+    @Override
+    public LazyIterable<UnsortedSetBatch<V>> split()
+    {
+        return this.parallelSetIterable.split().collect(new Function<UnsortedSetBatch<T>, UnsortedSetBatch<V>>()
+        {
+            public UnsortedSetBatch<V> valueOf(UnsortedSetBatch<T> eachBatch)
+            {
+                return eachBatch.collect(ParallelCollectUnsortedSetIterable.this.function);
+            }
+        });
     }
 
     public void forEach(Procedure<? super V> procedure)

@@ -16,6 +16,9 @@
 
 package com.gs.collections.impl.lazy.parallel.bag;
 
+import java.util.concurrent.ExecutorService;
+
+import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
@@ -34,6 +37,24 @@ class ParallelCollectUnsortedBag<T, V> extends AbstractParallelUnsortedBag<V>
     {
         this.parallelUnsortedBag = parallelUnsortedBag;
         this.function = function;
+    }
+
+    @Override
+    public ExecutorService getExecutorService()
+    {
+        return this.parallelUnsortedBag.getExecutorService();
+    }
+
+    @Override
+    public LazyIterable<UnsortedBagBatch<V>> split()
+    {
+        return this.parallelUnsortedBag.split().collect(new Function<UnsortedBagBatch<T>, UnsortedBagBatch<V>>()
+        {
+            public UnsortedBagBatch<V> valueOf(UnsortedBagBatch<T> eachBatch)
+            {
+                return eachBatch.collect(ParallelCollectUnsortedBag.this.function);
+            }
+        });
     }
 
     public void forEach(Procedure<? super V> procedure)

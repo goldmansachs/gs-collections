@@ -16,7 +16,11 @@
 
 package com.gs.collections.impl.lazy.parallel.bag;
 
+import java.util.concurrent.ExecutorService;
+
+import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.annotation.Beta;
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
@@ -64,6 +68,24 @@ class ParallelSelectUnsortedBag<T> extends AbstractParallelUnsortedBag<T>
     public boolean allSatisfy(Predicate<? super T> predicate)
     {
         return this.parallelUnsortedBag.allSatisfy(new SelectUnsortedBagAllSatisfyPredicate<T>(this.predicate, predicate));
+    }
+
+    @Override
+    public ExecutorService getExecutorService()
+    {
+        return this.parallelUnsortedBag.getExecutorService();
+    }
+
+    @Override
+    public LazyIterable<UnsortedBagBatch<T>> split()
+    {
+        return this.parallelUnsortedBag.split().collect(new Function<UnsortedBagBatch<T>, UnsortedBagBatch<T>>()
+        {
+            public UnsortedBagBatch<T> valueOf(UnsortedBagBatch<T> eachBatch)
+            {
+                return eachBatch.select(ParallelSelectUnsortedBag.this.predicate);
+            }
+        });
     }
 
     private static final class SelectUnsortedBagAllSatisfyPredicate<T> implements Predicate<T>

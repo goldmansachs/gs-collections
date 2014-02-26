@@ -17,6 +17,8 @@
 package com.gs.collections.impl.lazy.parallel.bag;
 
 import com.gs.collections.api.annotation.Beta;
+import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.impl.lazy.parallel.Batch;
 
@@ -24,4 +26,8 @@ import com.gs.collections.impl.lazy.parallel.Batch;
 public interface UnsortedBagBatch<T> extends Batch<T>
 {
     void forEachWithOccurrences(ObjectIntProcedure<? super T> procedure);
+
+    UnsortedBagBatch<T> select(Predicate<? super T> predicate);
+
+    <V> UnsortedBagBatch<V> collect(Function<? super T, ? extends V> function);
 }

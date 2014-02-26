@@ -14,24 +14,29 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.lazy.parallel;
+package com.gs.collections.impl.lazy.parallel.list;
 
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
-import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.impl.lazy.parallel.set.UnsortedSetBatch;
+import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 
 @Beta
-public interface Batch<T>
+public abstract class AbstractListBatch<T> implements ListBatch<T>
 {
-    void forEach(Procedure<? super T> procedure);
+    public ListBatch<T> select(Predicate<? super T> predicate)
+    {
+        return new SelectListBatch<T>(this, predicate);
+    }
 
-    Batch<T> select(Predicate<? super T> predicate);
+    public <V> ListBatch<V> collect(Function<? super T, ? extends V> function)
+    {
+        return new CollectListBatch<T, V>(this, function);
+    }
 
-    <V> Batch<V> collect(Function<? super T, ? extends V> function);
-
-    boolean anySatisfy(Predicate<? super T> predicate);
-
-    boolean allSatisfy(Predicate<? super T> predicate);
+    public UnsortedSetBatch<T> distinct(ConcurrentHashMap<T, Boolean> distinct)
+    {
+        return new DistinctBatch<T>(this, distinct);
+    }
 }
-

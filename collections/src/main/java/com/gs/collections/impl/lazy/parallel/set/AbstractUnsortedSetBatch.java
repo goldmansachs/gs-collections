@@ -14,24 +14,22 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.lazy.parallel;
+package com.gs.collections.impl.lazy.parallel.set;
 
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
-import com.gs.collections.api.block.procedure.Procedure;
 
 @Beta
-public interface Batch<T>
+public abstract class AbstractUnsortedSetBatch<T> implements UnsortedSetBatch<T>
 {
-    void forEach(Procedure<? super T> procedure);
+    public UnsortedSetBatch<T> select(Predicate<? super T> predicate)
+    {
+        return new SelectUnsortedSetBatch<T>(this, predicate);
+    }
 
-    Batch<T> select(Predicate<? super T> predicate);
-
-    <V> Batch<V> collect(Function<? super T, ? extends V> function);
-
-    boolean anySatisfy(Predicate<? super T> predicate);
-
-    boolean allSatisfy(Predicate<? super T> predicate);
+    public <V> UnsortedSetBatch<V> collect(Function<? super T, ? extends V> function)
+    {
+        return new CollectUnsortedSetBatch<T, V>(this, function);
+    }
 }
-

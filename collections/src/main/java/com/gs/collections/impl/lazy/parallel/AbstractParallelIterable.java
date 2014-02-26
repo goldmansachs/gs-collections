@@ -19,6 +19,11 @@ package com.gs.collections.impl.lazy.parallel;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorCompletionService;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.ByteIterable;
@@ -50,6 +55,7 @@ import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
@@ -62,13 +68,99 @@ import com.gs.collections.impl.AbstractRichIterable;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
-import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 
 @Beta
-public abstract class AbstractParallelIterable<T> extends AbstractRichIterable<T> implements ParallelIterable<T>
+public abstract class AbstractParallelIterable<T, B extends Batch<T>> extends AbstractRichIterable<T> implements ParallelIterable<T>
 {
+    public abstract ExecutorService getExecutorService();
+
+    public abstract LazyIterable<B> split();
+
+    protected <S, V> void collectCombine(final Function<Batch<T>, V> function, Procedure2<S, V> combineProcedure, S state)
+    {
+        LazyIterable<? extends Batch<T>> chunks = this.split();
+        LazyIterable<Future<V>> futures = chunks.collect(new Function<Batch<T>, Future<V>>()
+        {
+            public Future<V> valueOf(final Batch<T> chunk)
+            {
+                return AbstractParallelIterable.this.getExecutorService().submit(new Callable<V>()
+                {
+                    public V call()
+                    {
+                        return function.valueOf(chunk);
+                    }
+                });
+            }
+        });
+        // The call to to toList() is important to stop the lazy evaluation and force all the Runnables to start executing.
+        MutableList<Future<V>> futuresList = futures.toList();
+        for (Future<V> future : futuresList)
+        {
+            try
+            {
+                combineProcedure.value(state, future.get());
+            }
+            catch (InterruptedException e)
+            {
+                Thread.currentThread().interrupt();
+                throw new RuntimeException(e);
+            }
+            catch (ExecutionException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    protected <S, V> void collectCombineUnordered(final Function<Batch<T>, V> function, Procedure2<S, V> combineProcedure, S state)
+    {
+        LazyIterable<? extends Batch<T>> chunks = this.split();
+        MutableList<Callable<V>> callables = chunks.collect(new Function<Batch<T>, Callable<V>>()
+        {
+            public Callable<V> valueOf(final Batch<T> chunk)
+            {
+                return new Callable<V>()
+                {
+                    public V call()
+                    {
+                        return function.valueOf(chunk);
+                    }
+                };
+            }
+        }).toList();
+
+        final ExecutorCompletionService<V> completionService = new ExecutorCompletionService<V>(this.getExecutorService());
+        callables.forEach(new Procedure<Callable<V>>()
+        {
+            public void value(Callable<V> callable)
+            {
+                completionService.submit(callable);
+            }
+        });
+
+        int numTasks = callables.size();
+        while (numTasks > 0)
+        {
+            try
+            {
+                Future<V> future = completionService.take();
+                combineProcedure.value(state, future.get());
+                numTasks--;
+            }
+            catch (InterruptedException e)
+            {
+                Thread.currentThread().interrupt();
+                throw new RuntimeException(e);
+            }
+            catch (ExecutionException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
     public Iterator<T> iterator()
     {
         throw new UnsupportedOperationException();
@@ -281,12 +373,7 @@ public abstract class AbstractParallelIterable<T> extends AbstractRichIterable<T
     }
 
     @Override
-    public MutableList<T> toList()
-    {
-        MutableList<T> result = FastList.<T>newList().asSynchronized();
-        this.forEach(CollectionAddProcedure.on(result));
-        return result;
-    }
+    public abstract MutableList<T> toList();
 
     @Override
     public MutableSet<T> toSet()

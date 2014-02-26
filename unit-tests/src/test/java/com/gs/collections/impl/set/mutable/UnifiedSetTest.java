@@ -23,6 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.set.SetMultimap;
@@ -552,6 +553,17 @@ public class UnifiedSetTest extends AbstractMutableSetTestCase
     }
 
     @Test
+    public void asParallel_select()
+    {
+        MutableList<Integer> result = this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .select(IntegerPredicates.isOdd())
+                .toList();
+        Verify.assertContainsAll(result, 1, 3, 5, 7, 9);
+        Verify.assertSize(5, result);
+    }
+
+    @Test
     public void asParallel_anySatisfy()
     {
         Assert.assertTrue(this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
@@ -672,5 +684,15 @@ public class UnifiedSetTest extends AbstractMutableSetTestCase
                 .select(IntegerPredicates.isPositive())
                 .collect(Functions.getToString())
                 .allSatisfy(Predicates.notNull()));
+    }
+
+    @Test
+    public void asParallel_toList()
+    {
+        MutableList<Integer> actual = this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .toList();
+        Verify.assertContainsAll(actual, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
+        Verify.assertSize(10, actual);
     }
 }

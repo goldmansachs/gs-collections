@@ -16,11 +16,16 @@
 
 package com.gs.collections.impl.lazy.parallel.list;
 
+import java.util.concurrent.ExecutorService;
+
+import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.annotation.Beta;
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.impl.lazy.parallel.set.AbstractParallelUnsortedSetIterable;
+import com.gs.collections.impl.lazy.parallel.set.UnsortedSetBatch;
 import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 
 @Beta
@@ -31,6 +36,26 @@ class ParallelListDistinctIterable<T> extends AbstractParallelUnsortedSetIterabl
     ParallelListDistinctIterable(AbstractParallelListIterable<T> parallelListIterable)
     {
         this.parallelListIterable = parallelListIterable;
+    }
+
+    @Override
+    public ExecutorService getExecutorService()
+    {
+        return this.parallelListIterable.getExecutorService();
+    }
+
+    @Override
+    public LazyIterable<UnsortedSetBatch<T>> split()
+    {
+        // TODO: Replace the map with a concurrent set once it's implemented
+        final ConcurrentHashMap<T, Boolean> distinct = new ConcurrentHashMap<T, Boolean>();
+        return this.parallelListIterable.split().collect(new Function<ListBatch<T>, UnsortedSetBatch<T>>()
+        {
+            public UnsortedSetBatch<T> valueOf(ListBatch<T> listBatch)
+            {
+                return listBatch.distinct(distinct);
+            }
+        });
     }
 
     public ParallelUnsortedSetIterable<T> asUnique()

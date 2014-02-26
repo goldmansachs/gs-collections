@@ -16,69 +16,52 @@
 
 package com.gs.collections.impl.lazy.parallel.list;
 
-import java.util.concurrent.ExecutorService;
-
-import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.annotation.Beta;
-import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.IfProcedure;
 
 @Beta
-class ParallelSelectListIterable<T> extends AbstractParallelListIterable<T>
+class SelectListBatch<T> extends AbstractListBatch<T>
 {
-    private final AbstractParallelListIterable<T> parallelListIterable;
+    private final ListBatch<T> listBatch;
     private final Predicate<? super T> predicate;
 
-    ParallelSelectListIterable(AbstractParallelListIterable<T> parallelListIterable, Predicate<? super T> predicate)
+    SelectListBatch(ListBatch<T> listBatch, Predicate<? super T> predicate)
     {
-        this.parallelListIterable = parallelListIterable;
+        this.listBatch = listBatch;
         this.predicate = predicate;
-    }
-
-    @Override
-    public ExecutorService getExecutorService()
-    {
-        return this.parallelListIterable.getExecutorService();
-    }
-
-    @Override
-    public LazyIterable<ListBatch<T>> split()
-    {
-        return this.parallelListIterable.split().collect(new Function<ListBatch<T>, ListBatch<T>>()
-        {
-            public ListBatch<T> valueOf(ListBatch<T> eachBatch)
-            {
-                return eachBatch.select(ParallelSelectListIterable.this.predicate);
-            }
-        });
     }
 
     public void forEach(Procedure<? super T> procedure)
     {
-        this.parallelListIterable.forEach(new IfProcedure<T>(this.predicate, procedure));
+        this.listBatch.forEach(new IfProcedure<T>(this.predicate, procedure));
     }
 
-    @Override
+    /*
+    public ListBatch<T> select(Predicate<? super T> predicate)
+    {
+        return new SelectListBatch<T>(this.listBatch, Predicates.and(this.predicate, predicate));
+    }
+    */
+
     public boolean anySatisfy(Predicate<? super T> predicate)
     {
-        return this.parallelListIterable.anySatisfy(Predicates.and(this.predicate, predicate));
+        return this.listBatch.anySatisfy(Predicates.and(this.predicate, predicate));
     }
 
-    @Override
     public boolean allSatisfy(Predicate<? super T> predicate)
     {
-        return this.parallelListIterable.allSatisfy(new SelectListAllSatisfyPredicate<T>(this.predicate, predicate));
+        return this.listBatch.allSatisfy(new SelectListBatchAllSatisfyPredicate<T>(this.predicate, predicate));
     }
 
-    private static final class SelectListAllSatisfyPredicate<T> implements Predicate<T>
+    private static final class SelectListBatchAllSatisfyPredicate<T> implements Predicate<T>
     {
         private final Predicate<? super T> left;
         private final Predicate<? super T> right;
 
-        private SelectListAllSatisfyPredicate(Predicate<? super T> left, Predicate<? super T> right)
+        private SelectListBatchAllSatisfyPredicate(Predicate<? super T> left, Predicate<? super T> right)
         {
             this.left = left;
             this.right = right;

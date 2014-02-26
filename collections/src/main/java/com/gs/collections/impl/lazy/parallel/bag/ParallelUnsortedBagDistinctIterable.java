@@ -16,12 +16,16 @@
 
 package com.gs.collections.impl.lazy.parallel.bag;
 
+import java.util.concurrent.ExecutorService;
+
+import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.impl.lazy.parallel.set.AbstractParallelUnsortedSetIterable;
+import com.gs.collections.impl.lazy.parallel.set.UnsortedSetBatch;
 import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 
 @Beta
@@ -32,6 +36,18 @@ class ParallelUnsortedBagDistinctIterable<T> extends AbstractParallelUnsortedSet
     ParallelUnsortedBagDistinctIterable(AbstractParallelUnsortedBag<T> parallelBagIterable)
     {
         this.parallelBagIterable = parallelBagIterable;
+    }
+
+    @Override
+    public ExecutorService getExecutorService()
+    {
+        return this.parallelBagIterable.getExecutorService();
+    }
+
+    @Override
+    public LazyIterable<UnsortedSetBatch<T>> split()
+    {
+        throw new UnsupportedOperationException();
     }
 
     public ParallelUnsortedSetIterable<T> asUnique()

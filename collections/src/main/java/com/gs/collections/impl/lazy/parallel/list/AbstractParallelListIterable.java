@@ -21,16 +21,46 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.api.multimap.list.ListMultimap;
 import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
+import com.gs.collections.impl.lazy.parallel.Batch;
+import com.gs.collections.impl.list.mutable.CompositeFastList;
+import com.gs.collections.impl.list.mutable.FastList;
 
 @Beta
-public abstract class AbstractParallelListIterable<T> extends AbstractParallelIterable<T> implements ParallelListIterable<T>
+public abstract class AbstractParallelListIterable<T> extends AbstractParallelIterable<T, ListBatch<T>> implements ParallelListIterable<T>
 {
+    @Override
+    public MutableList<T> toList()
+    {
+        Function<Batch<T>, FastList<T>> map = new Function<Batch<T>, FastList<T>>()
+        {
+            public FastList<T> valueOf(Batch<T> batch)
+            {
+                FastList<T> list = FastList.newList();
+                batch.forEach(CollectionAddProcedure.on(list));
+                return list;
+            }
+        };
+        Procedure2<MutableList<T>, FastList<T>> reduce = new Procedure2<MutableList<T>, FastList<T>>()
+        {
+            public void value(MutableList<T> accumulator, FastList<T> each)
+            {
+                accumulator.addAll(each);
+            }
+        };
+        MutableList<T> state = new CompositeFastList<T>().asSynchronized();
+        this.collectCombine(map, reduce, state);
+        return state;
+    }
+
     public ParallelUnsortedSetIterable<T> asUnique()
     {
         return new ParallelListDistinctIterable<T>(this);
@@ -41,25 +71,21 @@ public abstract class AbstractParallelListIterable<T> extends AbstractParallelIt
         return new ParallelSelectListIterable<T>(this, predicate);
     }
 
-    @Override
     public <P> ParallelListIterable<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         return this.select(Predicates.bind(predicate, parameter));
     }
 
-    @Override
     public <S> ParallelListIterable<S> selectInstancesOf(Class<S> clazz)
     {
         throw new UnsupportedOperationException();
     }
 
-    @Override
     public ParallelListIterable<T> reject(Predicate<? super T> predicate)
     {
         return this.select(Predicates.not(predicate));
     }
 
-    @Override
     public <P> ParallelListIterable<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         return this.reject(Predicates.bind(predicate, parameter));
@@ -70,19 +96,16 @@ public abstract class AbstractParallelListIterable<T> extends AbstractParallelIt
         return new ParallelCollectListIterable<T, V>(this, function);
     }
 
-    @Override
     public <P, V> ParallelListIterable<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter)
     {
         return this.collect(Functions.bind(function, parameter));
     }
 
-    @Override
     public <V> ParallelListIterable<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function)
     {
         return this.select(predicate).collect(function);
     }
 
-    @Override
     public <V> ParallelListIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
         throw new UnsupportedOperationException();
