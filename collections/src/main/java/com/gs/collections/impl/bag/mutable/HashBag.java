@@ -1547,12 +1547,37 @@ public class HashBag<T>
             return null;
         }
 
-        private class HashBagParallelBatchLazyIterable
-                extends AbstractLazyIterable<UnsortedBagBatch<T>>
+        private class HashBagParallelBatchIterator
                 implements Iterator<UnsortedBagBatch<T>>
         {
             protected int chunkIndex;
 
+            public boolean hasNext()
+            {
+                return this.chunkIndex * HashBagParallelIterable.this.batchSize < HashBag.this.items.size();
+            }
+
+            public UnsortedBagBatch<T> next()
+            {
+                throw new UnsupportedOperationException();
+                /*
+                int chunkStartIndex = this.chunkIndex * HashBagParallelIterable.this.batchSize;
+                int chunkEndIndex = (this.chunkIndex + 1) * HashBagParallelIterable.this.batchSize;
+                int truncatedChunkEndIndex = Math.min(chunkEndIndex, HashBag.this.items.keys.length);
+                this.chunkIndex++;
+                return new HashBagBatch(chunkStartIndex, truncatedChunkEndIndex);
+                */
+            }
+
+            public void remove()
+            {
+                throw new UnsupportedOperationException();
+            }
+        }
+
+        private class HashBagParallelBatchLazyIterable
+                extends AbstractLazyIterable<UnsortedBagBatch<T>>
+        {
             public void forEach(Procedure<? super UnsortedBagBatch<T>> procedure)
             {
                 for (UnsortedBagBatch<T> chunk : this)
@@ -1576,29 +1601,7 @@ public class HashBag<T>
 
             public Iterator<UnsortedBagBatch<T>> iterator()
             {
-                return this;
-            }
-
-            public void remove()
-            {
-                throw new UnsupportedOperationException();
-            }
-
-            public boolean hasNext()
-            {
-                return this.chunkIndex * HashBagParallelIterable.this.batchSize < HashBag.this.items.size();
-            }
-
-            public UnsortedBagBatch<T> next()
-            {
-                throw new UnsupportedOperationException();
-                /*
-                int chunkStartIndex = this.chunkIndex * HashBagParallelIterable.this.batchSize;
-                int chunkEndIndex = (this.chunkIndex + 1) * HashBagParallelIterable.this.batchSize;
-                int truncatedChunkEndIndex = Math.min(chunkEndIndex, HashBag.this.items.keys.length);
-                this.chunkIndex++;
-                return new HashBagBatch(chunkStartIndex, truncatedChunkEndIndex);
-                */
+                return new HashBagParallelBatchIterator();
             }
         }
     }

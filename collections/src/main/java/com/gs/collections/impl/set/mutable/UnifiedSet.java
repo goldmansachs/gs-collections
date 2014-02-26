@@ -3158,12 +3158,34 @@ public class UnifiedSet<K>
             return null;
         }
 
-        private class UnifiedSetParallelSplitLazyIterable
-                extends AbstractLazyIterable<UnsortedSetBatch<K>>
-                implements Iterator<UnsortedSetBatch<K>>
+        private class UnifiedSetParallelSplitIterator
+        implements Iterator<UnsortedSetBatch<K>>
         {
             protected int chunkIndex;
 
+            public boolean hasNext()
+            {
+                return this.chunkIndex * UnifiedSetParallelUnsortedIterable.this.batchSize < UnifiedSet.this.table.length;
+            }
+
+            public UnsortedSetBatch<K> next()
+            {
+                int chunkStartIndex = this.chunkIndex * UnifiedSetParallelUnsortedIterable.this.batchSize;
+                int chunkEndIndex = (this.chunkIndex + 1) * UnifiedSetParallelUnsortedIterable.this.batchSize;
+                int truncatedChunkEndIndex = Math.min(chunkEndIndex, UnifiedSet.this.table.length);
+                this.chunkIndex++;
+                return new UnifiedUnsortedSetBatch(chunkStartIndex, truncatedChunkEndIndex);
+            }
+
+            public void remove()
+            {
+                throw new UnsupportedOperationException();
+            }
+        }
+
+        private class UnifiedSetParallelSplitLazyIterable
+                extends AbstractLazyIterable<UnsortedSetBatch<K>>
+        {
             public void forEach(Procedure<? super UnsortedSetBatch<K>> procedure)
             {
                 for (UnsortedSetBatch<K> chunk : this)
@@ -3187,26 +3209,7 @@ public class UnifiedSet<K>
 
             public Iterator<UnsortedSetBatch<K>> iterator()
             {
-                return this;
-            }
-
-            public void remove()
-            {
-                throw new UnsupportedOperationException();
-            }
-
-            public boolean hasNext()
-            {
-                return this.chunkIndex * UnifiedSetParallelUnsortedIterable.this.batchSize < UnifiedSet.this.table.length;
-            }
-
-            public UnsortedSetBatch<K> next()
-            {
-                int chunkStartIndex = this.chunkIndex * UnifiedSetParallelUnsortedIterable.this.batchSize;
-                int chunkEndIndex = (this.chunkIndex + 1) * UnifiedSetParallelUnsortedIterable.this.batchSize;
-                int truncatedChunkEndIndex = Math.min(chunkEndIndex, UnifiedSet.this.table.length);
-                this.chunkIndex++;
-                return new UnifiedUnsortedSetBatch(chunkStartIndex, truncatedChunkEndIndex);
+                return new UnifiedSetParallelSplitIterator();
             }
         }
     }

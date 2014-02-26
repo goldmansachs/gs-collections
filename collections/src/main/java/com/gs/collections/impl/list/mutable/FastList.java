@@ -1943,12 +1943,34 @@ public class FastList<T>
             return null;
         }
 
-        private class FastListParallelBatchLazyIterable
-                extends AbstractLazyIterable<ListBatch<T>>
-                implements Iterator<ListBatch<T>>
+        private class FastListParallelBatchIterator
+        implements Iterator<ListBatch<T>>
         {
             protected int chunkIndex;
 
+            public boolean hasNext()
+            {
+                return this.chunkIndex * FastListParallelIterable.this.batchSize < FastList.this.size;
+            }
+
+            public ListBatch<T> next()
+            {
+                int chunkStartIndex = this.chunkIndex * FastListParallelIterable.this.batchSize;
+                int chunkEndIndex = (this.chunkIndex + 1) * FastListParallelIterable.this.batchSize;
+                int truncatedChunkEndIndex = Math.min(chunkEndIndex, FastList.this.size);
+                this.chunkIndex++;
+                return new FastListBatch(chunkStartIndex, truncatedChunkEndIndex);
+            }
+
+            public void remove()
+            {
+                throw new UnsupportedOperationException();
+            }
+        }
+
+        private class FastListParallelBatchLazyIterable
+                extends AbstractLazyIterable<ListBatch<T>>
+        {
             public void forEach(Procedure<? super ListBatch<T>> procedure)
             {
                 for (ListBatch<T> chunk : this)
@@ -1972,26 +1994,7 @@ public class FastList<T>
 
             public Iterator<ListBatch<T>> iterator()
             {
-                return this;
-            }
-
-            public void remove()
-            {
-                throw new UnsupportedOperationException();
-            }
-
-            public boolean hasNext()
-            {
-                return this.chunkIndex * FastListParallelIterable.this.batchSize < FastList.this.size;
-            }
-
-            public ListBatch<T> next()
-            {
-                int chunkStartIndex = this.chunkIndex * FastListParallelIterable.this.batchSize;
-                int chunkEndIndex = (this.chunkIndex + 1) * FastListParallelIterable.this.batchSize;
-                int truncatedChunkEndIndex = Math.min(chunkEndIndex, FastList.this.size);
-                this.chunkIndex++;
-                return new FastListBatch(chunkStartIndex, truncatedChunkEndIndex);
+                return new FastListParallelBatchIterator();
             }
         }
     }
