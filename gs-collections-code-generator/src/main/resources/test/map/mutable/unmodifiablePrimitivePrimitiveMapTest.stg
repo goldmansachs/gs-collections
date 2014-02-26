@@ -119,6 +119,13 @@ public class Unmodifiable<name1><name2>MapTest extends AbstractMutable<name1><na
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
+    public void addToValue()
+    {
+        this.map.addToValue(<(literal.(type1))("0")>, <(literal.(type2))("1")>);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
     public void withKeysValues()
     {
         this.map.withKeyValue(<(literal.(type1))("1")>, <(literal.(type2))("1")>);

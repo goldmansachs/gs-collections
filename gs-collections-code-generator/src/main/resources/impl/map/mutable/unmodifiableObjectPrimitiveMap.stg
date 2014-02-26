@@ -133,6 +133,11 @@ public final class UnmodifiableObject<name>Map\<K>
         throw new UnsupportedOperationException("Cannot call updateValue() on " + this.getClass().getSimpleName());
     }
 
+    public <type> addToValue(K key, <type> toBeAdded)
+    {
+        throw new UnsupportedOperationException("Cannot call addToValue() on " + this.getClass().getSimpleName());
+    }
+
     public <type> get(Object key)
     {
         return this.map.get(key);

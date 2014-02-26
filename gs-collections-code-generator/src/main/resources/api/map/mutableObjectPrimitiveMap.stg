@@ -70,6 +70,25 @@ public interface MutableObject<name>Map\<K> extends Object<name>Map\<K>
     MutableObject<name>Map\<K> asUnmodifiable();
 
     MutableObject<name>Map\<K> asSynchronized();
+
+    <(arithmeticMethods.(type))(type)>
 }
 
 >>
+
+arithmeticMethods ::= [
+    "byte": "allMethods",
+    "short": "allMethods",
+    "char": "allMethods",
+    "int": "allMethods",
+    "long": "allMethods",
+    "float": "allMethods",
+    "double": "allMethods",
+    "boolean": "noMethods"
+    ]
+
+allMethods(type) ::= <<
+<type> addToValue(K key, <type> toBeAdded);
+>>
+
+noMethods(type) ::= ""

@@ -76,6 +76,25 @@ public interface Mutable<name1><name2>Map extends <name1><name2>Map
     Mutable<name1><name2>Map asUnmodifiable();
 
     Mutable<name1><name2>Map asSynchronized();
+
+    <(arithmeticMethods.(type2))(type1, type2)>
 }
 
 >>
+
+arithmeticMethods ::= [
+    "byte": "allMethods",
+    "short": "allMethods",
+    "char": "allMethods",
+    "int": "allMethods",
+    "long": "allMethods",
+    "float": "allMethods",
+    "double": "allMethods",
+    "boolean": "noMethods"
+    ]
+
+allMethods(type1, type2) ::= <<
+<type2> addToValue(<type1> key, <type2> toBeAdded);
+>>
+
+noMethods(type1, type2) ::= ""

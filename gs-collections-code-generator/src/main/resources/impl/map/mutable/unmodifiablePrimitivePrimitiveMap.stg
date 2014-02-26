@@ -452,6 +452,11 @@ public double median()
     return this.map.median();
 }
 
+public <type2> addToValue(<type1> key, <type2> toBeAdded)
+{
+    throw new UnsupportedOperationException("Cannot call addToValue() on " + this.getClass().getSimpleName());
+}
+
 public <type2>[] toSortedArray()
 {
     return this.map.toSortedArray();

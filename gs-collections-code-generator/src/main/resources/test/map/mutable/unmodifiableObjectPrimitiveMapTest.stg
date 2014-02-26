@@ -261,6 +261,13 @@ public class UnmodifiableObject<name>MapTest extends AbstractMutableObject<name>
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
+    public void addToValue()
+    {
+        this.\<Integer>getEmptyMap().addToValue(10, <(literal.(type))("2")>);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
     public void updateValue()
     {
         <name>To<name>Function incrementFunction = new <name>To<name>Function()

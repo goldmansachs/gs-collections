@@ -485,6 +485,26 @@ public abstract class AbstractMutableObject<name>MapTestCase extends AbstractObj
         Assert.assertEquals(Object<name>HashMap.newWithKeysValues(null, <(literal.(type))("2")>), map3);
     }
 
+    @Test
+    public void addToValue()
+    {
+        MutableObject<name>Map\<Integer> map1 = this.getEmptyMap();
+        Assert.assertEquals(<(literal.(type))("1")>, map1.addToValue(0, <(literal.(type))("1")>)<delta.(type)>);
+        Assert.assertEquals(Object<name>HashMap.newWithKeysValues(0, <(literal.(type))("1")>), map1);
+        Assert.assertEquals(<(literal.(type))("5")>, map1.addToValue(0, <(literal.(type))("4")>)<delta.(type)>);
+        Assert.assertEquals(Object<name>HashMap.newWithKeysValues(0, <(literal.(type))("5")>), map1);
+        Assert.assertEquals(<(literal.(type))("2")>, map1.addToValue(1, <(literal.(type))("2")>)<delta.(type)>);
+        Assert.assertEquals(Object<name>HashMap.newWithKeysValues(0, <(literal.(type))("5")>, 1, <(literal.(type))("2")>), map1);
+        Assert.assertEquals(<(literal.(type))("10")>, map1.addToValue(1, <(literal.(type))("8")>)<delta.(type)>);
+        Assert.assertEquals(Object<name>HashMap.newWithKeysValues(0, <(literal.(type))("5")>, 1, <(literal.(type))("10")>), map1);
+
+        MutableObject<name>Map\<Integer> map2 = this.getEmptyMap();
+        Assert.assertEquals(<(literal.(type))("1")>, map2.addToValue(null, <(literal.(type))("1")>)<delta.(type)>);
+        Assert.assertEquals(Object<name>HashMap.newWithKeysValues(null, <(literal.(type))("1")>), map2);
+        Assert.assertEquals(<(literal.(type))("5")>, map2.addToValue(null, <(literal.(type))("4")>)<delta.(type)>);
+        Assert.assertEquals(Object<name>HashMap.newWithKeysValues(null, <(literal.(type))("5")>), map2);
+    }
+
     @Override
     @Test
     public void containsKey()

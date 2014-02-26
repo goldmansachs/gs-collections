@@ -597,6 +597,14 @@ public <wideType.(type)> sum()
     }
 }
 
+public <type> addToValue(K key, <type> toBeAdded)
+{
+    synchronized (this.lock)
+    {
+        return this.map.addToValue(key, toBeAdded);
+    }
+}
+
 public <type> max()
 {
     synchronized (this.lock)

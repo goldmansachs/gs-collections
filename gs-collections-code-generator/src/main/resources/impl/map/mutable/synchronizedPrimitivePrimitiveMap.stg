@@ -653,6 +653,15 @@ public double median()
     }
 }
 
+
+public <type2> addToValue(<type1> key, <type2> toBeAdded)
+{
+    synchronized (this.lock)
+    {
+        return this.map.addToValue(key, toBeAdded);
+    }
+}
+
 public <type2>[] toSortedArray()
 {
     synchronized (this.lock)

@@ -572,8 +572,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             {
                 this.sentinelValues = new SentinelValues();
             }
-            this.sentinelValues.containsZeroKey = true;
-            this.sentinelValues.zeroValue = value;
+            this.addEmptyKeyValue(value);
             return;
         }
 
@@ -583,8 +582,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             {
                 this.sentinelValues = new SentinelValues();
             }
-            this.sentinelValues.containsOneKey = true;
-            this.sentinelValues.oneValue = value;
+            this.addRemovedKeyValue(value);
             return;
         }
 
@@ -597,17 +595,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             return;
         }
 
-        if (<(equals.(type1))("this.keys[index]", "REMOVED_KEY")>)
-        {
-            --this.occupiedWithSentinels;
-        }
-        this.keys[index] = key;
-        this.values[index] = value;
-        ++this.occupiedWithData;
-        if (this.occupiedWithData > this.maxOccupiedWithData())
-        {
-            this.rehashAndGrow();
-        }
+        this.addKeyValueAtIndex(key, value, index);
     }
 
     public void putAll(<name1><name2>Map map)
@@ -629,15 +617,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             {
                 return;
             }
-            if (this.sentinelValues.containsOneKey)
-            {
-                this.sentinelValues.containsZeroKey = false;
-                this.sentinelValues.zeroValue = EMPTY_VALUE;
-            }
-            else
-            {
-                this.sentinelValues = null;
-            }
+            this.removeEmptyKey();
             return;
         }
         if (isRemovedKey(key))
@@ -646,15 +626,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             {
                 return;
             }
-            if (this.sentinelValues.containsZeroKey)
-            {
-                this.sentinelValues.containsOneKey = false;
-                this.sentinelValues.oneValue = EMPTY_VALUE;
-            }
-            else
-            {
-                this.sentinelValues = null;
-            }
+            this.removeRemovedKey();
             return;
         }
         int index = this.probe(key);
@@ -685,15 +657,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                 return value;
             }
             <type2> oldValue = this.sentinelValues.zeroValue;
-            if (this.sentinelValues.containsOneKey)
-            {
-                this.sentinelValues.containsZeroKey = false;
-                this.sentinelValues.zeroValue = EMPTY_VALUE;
-            }
-            else
-            {
-                this.sentinelValues = null;
-            }
+            this.removeEmptyKey();
             return oldValue;
         }
         if (isRemovedKey(key))
@@ -703,15 +667,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
                 return value;
             }
             <type2> oldValue = this.sentinelValues.oneValue;
-            if (this.sentinelValues.containsZeroKey)
-            {
-                this.sentinelValues.containsOneKey = false;
-                this.sentinelValues.oneValue = EMPTY_VALUE;
-            }
-            else
-            {
-                this.sentinelValues = null;
-            }
+            this.removeRemovedKey();
             return oldValue;
         }
         int index = this.probe(key);
@@ -752,24 +708,22 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
         <getIfAbsentPut({<type2> value = function.valueOf(key);})>
     }
 
-    public <type2> updateValue(<type1> key, <type2> initialValueIfAbsent, <name2>To<name2>Function function)
+    public <type2> addToValue(<type1> key, <type2> toBeAdded)
     {
         if (isEmptyKey(key))
         {
             if (this.sentinelValues == null)
             {
                 this.sentinelValues = new SentinelValues();
-                this.sentinelValues.containsZeroKey = true;
-                this.sentinelValues.zeroValue = function.valueOf(initialValueIfAbsent);
+                this.addEmptyKeyValue(toBeAdded);
             }
             else if (this.sentinelValues.containsZeroKey)
             {
-                this.sentinelValues.zeroValue = function.valueOf(this.sentinelValues.zeroValue);
+                this.sentinelValues.zeroValue += toBeAdded;
             }
             else
             {
-                this.sentinelValues.containsZeroKey = true;
-                this.sentinelValues.zeroValue = function.valueOf(initialValueIfAbsent);
+                this.addEmptyKeyValue(toBeAdded);
             }
             return this.sentinelValues.zeroValue;
         }
@@ -778,8 +732,106 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             if (this.sentinelValues == null)
             {
                 this.sentinelValues = new SentinelValues();
-                this.sentinelValues.containsOneKey = true;
-                this.sentinelValues.oneValue = function.valueOf(initialValueIfAbsent);
+                this.addRemovedKeyValue(toBeAdded);
+            }
+            else if (this.sentinelValues.containsOneKey)
+            {
+                this.sentinelValues.oneValue += toBeAdded;
+            }
+            else
+            {
+                this.addRemovedKeyValue(toBeAdded);
+            }
+            return this.sentinelValues.oneValue;
+        }
+        int index = this.probe(key);
+        if (<(equals.(type1))("this.keys[index]", "key")>)
+        {
+            this.values[index] += toBeAdded;
+            return this.values[index];
+        }
+        this.addKeyValueAtIndex(key, toBeAdded, index);
+        return this.values[index];
+    }
+
+    private void addKeyValueAtIndex(<type1> key, <type2> value, int index)
+    {
+        if (<(equals.(type1))("this.keys[index]", "REMOVED_KEY")>)
+        {
+            this.occupiedWithSentinels--;
+        }
+        this.keys[index] = key;
+        this.values[index] = value;
+        this.occupiedWithData++;
+        if (this.occupiedWithData > this.maxOccupiedWithData())
+        {
+            this.rehashAndGrow();
+        }
+    }
+
+    private void addEmptyKeyValue(<type2> value)
+    {
+        this.sentinelValues.containsZeroKey = true;
+        this.sentinelValues.zeroValue = value;
+    }
+
+    private void removeEmptyKey()
+    {
+        if (this.sentinelValues.containsOneKey)
+        {
+            this.sentinelValues.containsZeroKey = false;
+            this.sentinelValues.zeroValue = EMPTY_VALUE;
+        }
+        else
+        {
+            this.sentinelValues = null;
+        }
+    }
+
+    private void addRemovedKeyValue(<type2> value)
+    {
+        this.sentinelValues.containsOneKey = true;
+        this.sentinelValues.oneValue = value;
+    }
+
+    private void removeRemovedKey()
+    {
+        if (this.sentinelValues.containsZeroKey)
+        {
+            this.sentinelValues.containsOneKey = false;
+            this.sentinelValues.oneValue = EMPTY_VALUE;
+        }
+        else
+        {
+            this.sentinelValues = null;
+        }
+    }
+
+    public <type2> updateValue(<type1> key, <type2> initialValueIfAbsent, <name2>To<name2>Function function)
+    {
+        if (isEmptyKey(key))
+        {
+            if (this.sentinelValues == null)
+            {
+                this.sentinelValues = new SentinelValues();
+                this.addEmptyKeyValue(function.valueOf(initialValueIfAbsent));
+            }
+            else if (this.sentinelValues.containsZeroKey)
+            {
+                this.sentinelValues.zeroValue = function.valueOf(this.sentinelValues.zeroValue);
+            }
+            else
+            {
+                this.addEmptyKeyValue(function.valueOf(initialValueIfAbsent));
+            }
+            return this.sentinelValues.zeroValue;
+        }
+        if (isRemovedKey(key))
+        {
+            if (this.sentinelValues == null)
+            {
+                this.sentinelValues = new SentinelValues();
+                this.addRemovedKeyValue(function.valueOf(initialValueIfAbsent));
             }
             else if (this.sentinelValues.containsOneKey)
             {
@@ -787,8 +839,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             }
             else
             {
-                this.sentinelValues.containsOneKey = true;
-                this.sentinelValues.oneValue = function.valueOf(initialValueIfAbsent);
+                this.addRemovedKeyValue(function.valueOf(initialValueIfAbsent));
             }
             return this.sentinelValues.oneValue;
         }
@@ -798,18 +849,8 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
             this.values[index] = function.valueOf(this.values[index]);
             return this.values[index];
         }
-        if (<(equals.(type1))("this.keys[index]", "REMOVED_KEY")>)
-        {
-            --this.occupiedWithSentinels;
-        }
-        this.keys[index] = key;
         <type2> value = function.valueOf(initialValueIfAbsent);
-        this.values[index] = value;
-        ++this.occupiedWithData;
-        if (this.occupiedWithData > this.maxOccupiedWithData())
-        {
-            this.rehashAndGrow();
-        }
+        this.addKeyValueAtIndex(key, value, index);
         return value;
     }
 
@@ -2706,8 +2747,7 @@ if (isEmptyKey(key))
     {
         <function>
         this.sentinelValues = new SentinelValues();
-        this.sentinelValues.containsZeroKey = true;
-        this.sentinelValues.zeroValue = value;
+        this.addEmptyKeyValue(value);
         return value;
     }
     if (this.sentinelValues.containsZeroKey)
@@ -2715,8 +2755,7 @@ if (isEmptyKey(key))
         return this.sentinelValues.zeroValue;
     }
     <function>
-    this.sentinelValues.containsZeroKey = true;
-    this.sentinelValues.zeroValue = value;
+    this.addEmptyKeyValue(value);
     return value;
 }
 if (isRemovedKey(key))
@@ -2725,8 +2764,7 @@ if (isRemovedKey(key))
     {
         <function>
         this.sentinelValues = new SentinelValues();
-        this.sentinelValues.containsOneKey = true;
-        this.sentinelValues.oneValue = value;
+        this.addRemovedKeyValue(value);
         return value;
     }
     if (this.sentinelValues.containsOneKey)
@@ -2734,8 +2772,7 @@ if (isRemovedKey(key))
         return this.sentinelValues.oneValue;
     }
     <function>
-    this.sentinelValues.containsOneKey = true;
-    this.sentinelValues.oneValue = value;
+    this.addRemovedKeyValue(value);
     return value;
 }
 int index = this.probe(key);
@@ -2743,18 +2780,8 @@ if (<(equals.(type1))("this.keys[index]", "key")>)
 {
     return this.values[index];
 }
-if (<(equals.(type1))("this.keys[index]", "REMOVED_KEY")>)
-{
-    this.occupiedWithSentinels--;
-}
-this.keys[index] = key;
 <function>
-this.values[index] = value;
-++this.occupiedWithData;
-if (this.occupiedWithData > this.maxOccupiedWithData())
-{
-    this.rehashAndGrow();
-}
+this.addKeyValueAtIndex(key, value, index);
 return value;
 >>
 

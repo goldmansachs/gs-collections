@@ -397,17 +397,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
             return;
         }
 
-        if (this.keys[index] == REMOVED_KEY)
-        {
-            --this.occupiedWithSentinels;
-        }
-        this.keys[index] = toSentinelIfNull(key);
-        this.values[index] = value;
-        ++this.occupiedWithData;
-        if (this.occupiedWithData > this.maxOccupiedWithData())
-        {
-            this.rehashAndGrow();
-        }
+        this.addKeyValueAtIndex(key, value, index);
     }
 
     public void putAll(Object<name>Map\<? extends K> map)
@@ -469,17 +459,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         {
             return this.values[index];
         }
-        if (this.keys[index] == REMOVED_KEY)
-        {
-            --this.occupiedWithSentinels;
-        }
-        this.keys[index] = toSentinelIfNull(key);
-        this.values[index] = value;
-        ++this.occupiedWithData;
-        if (this.occupiedWithData > this.maxOccupiedWithData())
-        {
-            this.rehashAndGrow();
-        }
+        this.addKeyValueAtIndex(key, value, index);
         return value;
     }
 
@@ -490,18 +470,8 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         {
             return this.values[index];
         }
-        if (this.keys[index] == REMOVED_KEY)
-        {
-            --this.occupiedWithSentinels;
-        }
-        this.keys[index] = toSentinelIfNull(key);
         <type> value = function.value();
-        this.values[index] = value;
-        ++this.occupiedWithData;
-        if (this.occupiedWithData > this.maxOccupiedWithData())
-        {
-            this.rehashAndGrow();
-        }
+        this.addKeyValueAtIndex(key, value, index);
         return value;
     }
 
@@ -512,18 +482,8 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         {
             return this.values[index];
         }
-        if (this.keys[index] == REMOVED_KEY)
-        {
-            --this.occupiedWithSentinels;
-        }
-        this.keys[index] = toSentinelIfNull(key);
         <type> value = function.<type>ValueOf(parameter);
-        this.values[index] = value;
-        ++this.occupiedWithData;
-        if (this.occupiedWithData > this.maxOccupiedWithData())
-        {
-            this.rehashAndGrow();
-        }
+        this.addKeyValueAtIndex(key, value, index);
         return value;
     }
 
@@ -534,18 +494,8 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
         {
             return this.values[index];
         }
-        if (this.keys[index] == REMOVED_KEY)
-        {
-            --this.occupiedWithSentinels;
-        }
-        this.keys[index] = toSentinelIfNull(key);
         <type> value = function.<type>ValueOf(key);
-        this.values[index] = value;
-        ++this.occupiedWithData;
-        if (this.occupiedWithData > this.maxOccupiedWithData())
-        {
-            this.rehashAndGrow();
-        }
+        this.addKeyValueAtIndex(key, value, index);
         return value;
     }
 
@@ -557,19 +507,36 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
             this.values[index] = function.valueOf(this.values[index]);
             return this.values[index];
         }
+        <type> value = function.valueOf(initialValueIfAbsent);
+        this.addKeyValueAtIndex(key, value, index);
+        return value;
+    }
+
+    private void addKeyValueAtIndex(K key, <type> value, int index)
+    {
         if (this.keys[index] == REMOVED_KEY)
         {
             --this.occupiedWithSentinels;
         }
         this.keys[index] = toSentinelIfNull(key);
-        <type> value = function.valueOf(initialValueIfAbsent);
         this.values[index] = value;
         ++this.occupiedWithData;
         if (this.occupiedWithData > this.maxOccupiedWithData())
         {
             this.rehashAndGrow();
         }
-        return value;
+    }
+
+    public <type> addToValue(K key, <type> toBeAdded)
+    {
+        int index = this.probe(key);
+        if (isNonSentinel(this.keys[index]) && nullSafeEquals(this.toNonSentinel(this.keys[index]), key))
+        {
+            this.values[index] += toBeAdded;
+            return this.values[index];
+        }
+        this.addKeyValueAtIndex(key, toBeAdded, index);
+        return this.values[index];
     }
 
     public Object<name>HashMap\<K> withKeyValue(K key1, <type> value1)
