@@ -92,7 +92,8 @@ import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
 import com.gs.collections.impl.lazy.parallel.Batch;
 import com.gs.collections.impl.lazy.parallel.bag.AbstractParallelUnsortedBag;
-import com.gs.collections.impl.lazy.parallel.bag.AbstractUnsortedBagBatch;
+import com.gs.collections.impl.lazy.parallel.bag.CollectUnsortedBagBatch;
+import com.gs.collections.impl.lazy.parallel.bag.SelectUnsortedBagBatch;
 import com.gs.collections.impl.lazy.parallel.bag.UnsortedBagBatch;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
@@ -1239,7 +1240,7 @@ public class HashBag<T>
         return new HashBagParallelIterable(executorService, batchSize);
     }
 
-    private final class HashUnsortedBagBatch extends AbstractUnsortedBagBatch<T>
+    private final class HashUnsortedBagBatch implements UnsortedBagBatch<T>
     {
         private final int chunkStartIndex;
         private final int chunkEndIndex;
@@ -1293,6 +1294,21 @@ public class HashBag<T>
         public boolean allSatisfy(Predicate<? super T> predicate)
         {
             throw new UnsupportedOperationException();
+        }
+
+        public T detect(Predicate<? super T> predicate)
+        {
+            throw new UnsupportedOperationException();
+        }
+
+        public UnsortedBagBatch<T> select(Predicate<? super T> predicate)
+        {
+            return new SelectUnsortedBagBatch<T>(this, predicate);
+        }
+
+        public <V> UnsortedBagBatch<V> collect(Function<? super T, ? extends V> function)
+        {
+            return new CollectUnsortedBagBatch<T, V>(this, function);
         }
     }
 
@@ -1483,6 +1499,52 @@ public class HashBag<T>
                 }
             }
             return true;
+        }
+
+        @Override
+        public T detect(final Predicate<? super T> predicate)
+        {
+            LazyIterable<? extends Batch<T>> chunks = this.split();
+            LazyIterable<Future<T>> futures = chunks.collect(new Function<Batch<T>, Future<T>>()
+            {
+                public Future<T> valueOf(final Batch<T> chunk)
+                {
+                    return HashBagParallelIterable.this.executorService.submit(new Callable<T>()
+                    {
+                        public T call()
+                        {
+                            return chunk.detect(predicate);
+                        }
+                    });
+                }
+            });
+            // The call to to toList() is important to stop the lazy evaluation and force all the Runnables to start executing.
+            MutableList<Future<T>> futuresList = futures.toList();
+            for (Future<T> future : futuresList)
+            {
+                try
+                {
+                    T eachResult = future.get();
+                    if (eachResult != null)
+                    {
+                        for (Future<T> eachFutureToCancel : futuresList)
+                        {
+                            eachFutureToCancel.cancel(true);
+                        }
+                        return eachResult;
+                    }
+                }
+                catch (InterruptedException e)
+                {
+                    Thread.currentThread().interrupt();
+                    throw new RuntimeException(e);
+                }
+                catch (ExecutionException e)
+                {
+                    throw new RuntimeException(e);
+                }
+            }
+            return null;
         }
 
         private class HashBagParallelBatchLazyIterable

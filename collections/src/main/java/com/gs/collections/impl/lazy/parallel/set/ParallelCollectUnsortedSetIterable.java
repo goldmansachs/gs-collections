@@ -72,4 +72,11 @@ class ParallelCollectUnsortedSetIterable<T, V> extends AbstractParallelUnsortedS
     {
         return this.parallelSetIterable.allSatisfy(Predicates.attributePredicate(this.function, predicate));
     }
+
+    @Override
+    public V detect(Predicate<? super V> predicate)
+    {
+        T resultItem = this.parallelSetIterable.detect(Predicates.attributePredicate(this.function, predicate));
+        return resultItem == null ? null : this.function.valueOf(resultItem);
+    }
 }

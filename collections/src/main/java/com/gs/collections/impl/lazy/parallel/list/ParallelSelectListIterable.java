@@ -73,6 +73,12 @@ class ParallelSelectListIterable<T> extends AbstractParallelListIterable<T>
         return this.parallelListIterable.allSatisfy(new SelectListAllSatisfyPredicate<T>(this.predicate, predicate));
     }
 
+    @Override
+    public T detect(Predicate<? super T> predicate)
+    {
+        return this.parallelListIterable.detect(Predicates.and(this.predicate, predicate));
+    }
+
     private static final class SelectListAllSatisfyPredicate<T> implements Predicate<T>
     {
         private final Predicate<? super T> left;

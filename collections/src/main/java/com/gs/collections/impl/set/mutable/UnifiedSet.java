@@ -121,7 +121,8 @@ import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
 import com.gs.collections.impl.lazy.parallel.Batch;
 import com.gs.collections.impl.lazy.parallel.set.AbstractParallelUnsortedSetIterable;
-import com.gs.collections.impl.lazy.parallel.set.AbstractUnsortedSetBatch;
+import com.gs.collections.impl.lazy.parallel.set.CollectUnsortedSetBatch;
+import com.gs.collections.impl.lazy.parallel.set.SelectUnsortedSetBatch;
 import com.gs.collections.impl.lazy.parallel.set.UnsortedSetBatch;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
@@ -989,7 +990,69 @@ public class UnifiedSet<K>
 
     public K detect(Predicate<? super K> predicate)
     {
-        return IterableIterate.detect(this, predicate);
+        for (int i = 0; i < this.table.length; i++)
+        {
+            Object cur = this.table[i];
+            if (cur instanceof ChainedBucket)
+            {
+                Object chainedDetect = this.chainedDetect((ChainedBucket) cur, predicate);
+                if (chainedDetect != null)
+                {
+                    return this.nonSentinel(chainedDetect);
+                }
+            }
+            else if (cur != null)
+            {
+                K each = this.nonSentinel(cur);
+                if (predicate.accept(each))
+                {
+                    return each;
+                }
+            }
+        }
+        return null;
+    }
+
+    private Object chainedDetect(ChainedBucket bucket, Predicate<? super K> predicate)
+    {
+        do
+        {
+            if (predicate.accept(this.nonSentinel(bucket.zero)))
+            {
+                return bucket.zero;
+            }
+            if (bucket.one == null)
+            {
+                return null;
+            }
+            if (predicate.accept(this.nonSentinel(bucket.one)))
+            {
+                return bucket.one;
+            }
+            if (bucket.two == null)
+            {
+                return null;
+            }
+            if (predicate.accept(this.nonSentinel(bucket.two)))
+            {
+                return bucket.two;
+            }
+            if (bucket.three == null)
+            {
+                return null;
+            }
+            if (bucket.three instanceof ChainedBucket)
+            {
+                bucket = (ChainedBucket) bucket.three;
+                continue;
+            }
+            if (predicate.accept(this.nonSentinel(bucket.three)))
+            {
+                return bucket.three;
+            }
+            return null;
+        }
+        while (true);
     }
 
     public K min(Comparator<? super K> comparator)
@@ -2785,7 +2848,7 @@ public class UnifiedSet<K>
         return new UnifiedSetParallelUnsortedIterable(executorService, batchSize);
     }
 
-    private final class UnifiedUnsortedSetBatch extends AbstractUnsortedSetBatch<K>
+    private final class UnifiedUnsortedSetBatch implements UnsortedSetBatch<K>
     {
         private final int chunkStartIndex;
         private final int chunkEndIndex;
@@ -2850,6 +2913,41 @@ public class UnifiedSet<K>
                 }
             }
             return true;
+        }
+
+        public K detect(Predicate<? super K> predicate)
+        {
+            for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
+            {
+                Object cur = UnifiedSet.this.table[i];
+                if (cur instanceof ChainedBucket)
+                {
+                    Object chainedDetect = UnifiedSet.this.chainedDetect((ChainedBucket) cur, predicate);
+                    if (chainedDetect != null)
+                    {
+                        return UnifiedSet.this.nonSentinel(chainedDetect);
+                    }
+                }
+                else if (cur != null)
+                {
+                    K each = UnifiedSet.this.nonSentinel(cur);
+                    if (predicate.accept(each))
+                    {
+                        return each;
+                    }
+                }
+            }
+            return null;
+        }
+
+        public UnsortedSetBatch<K> select(Predicate<? super K> predicate)
+        {
+            return new SelectUnsortedSetBatch<K>(this, predicate);
+        }
+
+        public <V> UnsortedSetBatch<V> collect(Function<? super K, ? extends V> function)
+        {
+            return new CollectUnsortedSetBatch<K, V>(this, function);
         }
     }
 
@@ -3012,6 +3110,52 @@ public class UnifiedSet<K>
                 }
             }
             return true;
+        }
+
+        @Override
+        public K detect(final Predicate<? super K> predicate)
+        {
+            LazyIterable<? extends Batch<K>> chunks = this.split();
+            LazyIterable<Future<K>> futures = chunks.collect(new Function<Batch<K>, Future<K>>()
+            {
+                public Future<K> valueOf(final Batch<K> chunk)
+                {
+                    return UnifiedSetParallelUnsortedIterable.this.executorService.submit(new Callable<K>()
+                    {
+                        public K call()
+                        {
+                            return chunk.detect(predicate);
+                        }
+                    });
+                }
+            });
+            // The call to to toList() is important to stop the lazy evaluation and force all the Runnables to start executing.
+            MutableList<Future<K>> futuresList = futures.toList();
+            for (Future<K> future : futuresList)
+            {
+                try
+                {
+                    K eachResult = future.get();
+                    if (eachResult != null)
+                    {
+                        for (Future<K> eachFutureToCancel : futuresList)
+                        {
+                            eachFutureToCancel.cancel(true);
+                        }
+                        return eachResult;
+                    }
+                }
+                catch (InterruptedException e)
+                {
+                    Thread.currentThread().interrupt();
+                    throw new RuntimeException(e);
+                }
+                catch (ExecutionException e)
+                {
+                    throw new RuntimeException(e);
+                }
+            }
+            return null;
         }
 
         private class UnifiedSetParallelSplitLazyIterable

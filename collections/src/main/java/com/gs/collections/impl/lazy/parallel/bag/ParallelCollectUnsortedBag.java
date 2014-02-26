@@ -84,4 +84,11 @@ class ParallelCollectUnsortedBag<T, V> extends AbstractParallelUnsortedBag<V>
     {
         return this.parallelUnsortedBag.allSatisfy(Predicates.attributePredicate(this.function, predicate));
     }
+
+    @Override
+    public V detect(Predicate<? super V> predicate)
+    {
+        T resultItem = this.parallelUnsortedBag.detect(Predicates.attributePredicate(this.function, predicate));
+        return resultItem == null ? null : this.function.valueOf(resultItem);
+    }
 }

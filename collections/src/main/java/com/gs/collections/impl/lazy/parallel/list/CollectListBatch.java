@@ -22,14 +22,16 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.lazy.parallel.set.UnsortedSetBatch;
+import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 
 @Beta
-class CollectListBatch<T, V> extends AbstractListBatch<V>
+public class CollectListBatch<T, V> implements ListBatch<V>
 {
     private final ListBatch<T> listBatch;
     private final Function<? super T, ? extends V> function;
 
-    CollectListBatch(ListBatch<T> listBatch, Function<? super T, ? extends V> function)
+    public CollectListBatch(ListBatch<T> listBatch, Function<? super T, ? extends V> function)
     {
         this.listBatch = listBatch;
         this.function = function;
@@ -40,13 +42,6 @@ class CollectListBatch<T, V> extends AbstractListBatch<V>
         this.listBatch.forEach(Functions.bind(procedure, this.function));
     }
 
-    /*
-    public <VV> ListBatch<VV> collect(Function<? super V, ? extends VV> function)
-    {
-        return new CollectListBatch<T, VV>(this.listBatch, Functions.chain(this.function, function));
-    }
-    */
-
     public boolean anySatisfy(Predicate<? super V> predicate)
     {
         return this.listBatch.anySatisfy(Predicates.attributePredicate(this.function, predicate));
@@ -55,5 +50,27 @@ class CollectListBatch<T, V> extends AbstractListBatch<V>
     public boolean allSatisfy(Predicate<? super V> predicate)
     {
         return this.listBatch.allSatisfy(Predicates.attributePredicate(this.function, predicate));
+    }
+
+    public V detect(Predicate<? super V> predicate)
+    {
+        T resultItem = this.listBatch.detect(Predicates.attributePredicate(this.function, predicate));
+        return resultItem == null ? null : this.function.valueOf(resultItem);
+    }
+
+    public ListBatch<V> select(Predicate<? super V> predicate)
+    {
+        return new SelectListBatch<V>(this, predicate);
+    }
+
+    public <VV> ListBatch<VV> collect(Function<? super V, ? extends VV> function)
+    {
+        // return new CollectListBatch<T, VV>(this.listBatch, Functions.chain(this.function, function));
+        return new CollectListBatch<V, VV>(this, function);
+    }
+
+    public UnsortedSetBatch<V> distinct(ConcurrentHashMap<V, Boolean> distinct)
+    {
+        return new DistinctBatch<V>(this, distinct);
     }
 }

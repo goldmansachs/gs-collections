@@ -1333,9 +1333,9 @@ public class FastListTest extends AbstractListTestCase
     @Test
     public void asParallel_anySatisfy()
     {
-        Assert.assertTrue(this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+        Assert.assertTrue(this.newWith(Interval.from(-17).to(17).toArray())
                 .asParallel(Executors.newFixedThreadPool(10), 2)
-                .select(IntegerPredicates.isOdd())
+                .select(IntegerPredicates.isPositive())
                 .collect(Functions.getToString())
                 .anySatisfy(Predicates.greaterThan("5")));
 
@@ -1404,30 +1404,43 @@ public class FastListTest extends AbstractListTestCase
                 .select(IntegerPredicates.isOdd())
                 .allSatisfy(Predicates.greaterThan(10)));
 
-        Assert.assertFalse(this.<Integer>newWith(1)
+        Assert.assertFalse(this.newWith(1)
                 .asParallel(Executors.newFixedThreadPool(10), 2)
                 .select(IntegerPredicates.isOdd())
                 .allSatisfy(Predicates.greaterThan(10)));
 
-        Assert.assertTrue(this.<Integer>newWith(1)
+        Assert.assertTrue(this.newWith(1)
                 .asParallel(Executors.newFixedThreadPool(10), 2)
                 .select(IntegerPredicates.isEven())
                 .allSatisfy(Predicates.greaterThan(10)));
+
+        Assert.assertTrue(this.newWith(Interval.from(-17).to(17).toArray())
+                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .select(IntegerPredicates.isPositive())
+                .collect(Functions.getToString())
+                .allSatisfy(Predicates.notNull()));
     }
 
     @Test
-    public void asParallel_toList()
+    public void asParallel_detect()
     {
-        FastList<Integer> integers = this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10);
         Assert.assertEquals(
-                this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10),
-                integers.asParallel(Executors.newFixedThreadPool(10), 2)
-                        .toList());
-        Assert.assertEquals(
-                this.newWith("1", "3", "5", "7", "9"),
-                integers.asParallel(Executors.newFixedThreadPool(10), 2)
+                "7",
+                this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+                        .asParallel(Executors.newFixedThreadPool(10), 2)
                         .select(IntegerPredicates.isOdd())
                         .collect(Functions.getToString())
-                        .toList());
+                        .detect(Predicates.greaterThan("5")));
+
+        Assert.assertNull(this.newWith(Interval.from(-17).to(17).toArray())
+                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .select(IntegerPredicates.isPositive())
+                .collect(Functions.getToString())
+                .detect(Predicates.greaterThan("99")));
+
+        Assert.assertNull(this.<Integer>newWith()
+                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .select(IntegerPredicates.isOdd())
+                .detect(Predicates.greaterThan(10)));
     }
 }

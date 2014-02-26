@@ -72,4 +72,11 @@ class ParallelCollectListIterable<T, V> extends AbstractParallelListIterable<V>
     {
         return this.parallelListIterable.allSatisfy(Predicates.attributePredicate(this.function, predicate));
     }
+
+    @Override
+    public V detect(Predicate<? super V> predicate)
+    {
+        T resultItem = this.parallelListIterable.detect(Predicates.attributePredicate(this.function, predicate));
+        return resultItem == null ? null : this.function.valueOf(resultItem);
+    }
 }

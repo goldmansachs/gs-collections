@@ -24,12 +24,12 @@ import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 
 @Beta
-class CollectUnsortedSetBatch<T, V> extends AbstractUnsortedSetBatch<V>
+public class CollectUnsortedSetBatch<T, V> implements UnsortedSetBatch<V>
 {
     private final UnsortedSetBatch<T> unsortedSetBatch;
     private final Function<? super T, ? extends V> function;
 
-    CollectUnsortedSetBatch(UnsortedSetBatch<T> unsortedSetBatch, Function<? super T, ? extends V> function)
+    public CollectUnsortedSetBatch(UnsortedSetBatch<T> unsortedSetBatch, Function<? super T, ? extends V> function)
     {
         this.unsortedSetBatch = unsortedSetBatch;
         this.function = function;
@@ -55,5 +55,21 @@ class CollectUnsortedSetBatch<T, V> extends AbstractUnsortedSetBatch<V>
     public boolean allSatisfy(Predicate<? super V> predicate)
     {
         return this.unsortedSetBatch.allSatisfy(Predicates.attributePredicate(this.function, predicate));
+    }
+
+    public V detect(Predicate<? super V> predicate)
+    {
+        T resultItem = this.unsortedSetBatch.detect(Predicates.attributePredicate(this.function, predicate));
+        return resultItem == null ? null : this.function.valueOf(resultItem);
+    }
+
+    public UnsortedSetBatch<V> select(Predicate<? super V> predicate)
+    {
+        return new SelectUnsortedSetBatch<V>(this, predicate);
+    }
+
+    public <VV> UnsortedSetBatch<VV> collect(Function<? super V, ? extends VV> function)
+    {
+        return new CollectUnsortedSetBatch<V, VV>(this, function);
     }
 }

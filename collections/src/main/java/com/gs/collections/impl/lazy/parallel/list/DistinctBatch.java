@@ -17,18 +17,21 @@
 package com.gs.collections.impl.lazy.parallel.list;
 
 import com.gs.collections.api.annotation.Beta;
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.impl.lazy.parallel.set.AbstractUnsortedSetBatch;
+import com.gs.collections.impl.lazy.parallel.set.CollectUnsortedSetBatch;
+import com.gs.collections.impl.lazy.parallel.set.SelectUnsortedSetBatch;
+import com.gs.collections.impl.lazy.parallel.set.UnsortedSetBatch;
 import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 
 @Beta
-class DistinctBatch<T> extends AbstractUnsortedSetBatch<T>
+public class DistinctBatch<T> implements UnsortedSetBatch<T>
 {
     private final ListBatch<T> listBatch;
     private final ConcurrentHashMap<T, Boolean> distinct;
 
-    DistinctBatch(ListBatch<T> listBatch, ConcurrentHashMap<T, Boolean> distinct)
+    public DistinctBatch(ListBatch<T> listBatch, ConcurrentHashMap<T, Boolean> distinct)
     {
         this.listBatch = listBatch;
         this.distinct = distinct;
@@ -65,9 +68,29 @@ class DistinctBatch<T> extends AbstractUnsortedSetBatch<T>
         {
             public boolean accept(T each)
             {
-                boolean leftResult = DistinctBatch.this.distinct.put(each, true) == null;
-                return !leftResult || predicate.accept(each);
+                return DistinctBatch.this.distinct.put(each, true) != null || predicate.accept(each);
             }
         });
+    }
+
+    public T detect(final Predicate<? super T> predicate)
+    {
+        return this.listBatch.detect(new Predicate<T>()
+        {
+            public boolean accept(T each)
+            {
+                return DistinctBatch.this.distinct.put(each, true) == null && predicate.accept(each);
+            }
+        });
+    }
+
+    public UnsortedSetBatch<T> select(Predicate<? super T> predicate)
+    {
+        return new SelectUnsortedSetBatch<T>(this, predicate);
+    }
+
+    public <V> UnsortedSetBatch<V> collect(Function<? super T, ? extends V> function)
+    {
+        return new CollectUnsortedSetBatch<T, V>(this, function);
     }
 }

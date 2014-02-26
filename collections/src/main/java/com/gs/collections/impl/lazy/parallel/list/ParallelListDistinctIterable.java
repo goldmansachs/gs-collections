@@ -58,6 +58,7 @@ class ParallelListDistinctIterable<T> extends AbstractParallelUnsortedSetIterabl
         });
     }
 
+    @Override
     public ParallelUnsortedSetIterable<T> asUnique()
     {
         return this;
@@ -80,16 +81,37 @@ class ParallelListDistinctIterable<T> extends AbstractParallelUnsortedSetIterabl
     }
 
     @Override
-    public boolean anySatisfy(final Predicate<? super T> predicate)
+    public boolean anySatisfy(Predicate<? super T> predicate)
+    {
+        return this.parallelListIterable.anySatisfy(new DistinctPredicate<T>(predicate));
+    }
+
+    @Override
+    public boolean allSatisfy(Predicate<? super T> predicate)
+    {
+        return this.parallelListIterable.allSatisfy(new DistinctPredicate<T>(predicate));
+    }
+
+    @Override
+    public T detect(Predicate<? super T> predicate)
+    {
+        return this.parallelListIterable.detect(new DistinctPredicate<T>(predicate));
+    }
+
+    private static final class DistinctPredicate<T> implements Predicate<T>
     {
         // TODO: Replace the map with a concurrent set once it's implemented
-        final ConcurrentHashMap<T, Boolean> distinct = new ConcurrentHashMap<T, Boolean>();
-        return this.parallelListIterable.anySatisfy(new Predicate<T>()
+        private final ConcurrentHashMap<T, Boolean> distinct = new ConcurrentHashMap<T, Boolean>();
+        private final Predicate<? super T> predicate;
+
+        private DistinctPredicate(Predicate<? super T> predicate)
         {
-            public boolean accept(T each)
-            {
-                return distinct.put(each, true) == null && predicate.accept(each);
-            }
-        });
+            this.predicate = predicate;
+        }
+
+        public boolean accept(T each)
+        {
+            return this.distinct.put(each, true) == null && this.predicate.accept(each);
+        }
     }
 }

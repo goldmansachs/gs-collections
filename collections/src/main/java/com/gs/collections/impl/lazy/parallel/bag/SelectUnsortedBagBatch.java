@@ -17,6 +17,7 @@
 package com.gs.collections.impl.lazy.parallel.bag;
 
 import com.gs.collections.api.annotation.Beta;
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
@@ -24,12 +25,12 @@ import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.IfProcedure;
 
 @Beta
-class SelectUnsortedBagBatch<T> extends AbstractUnsortedBagBatch<T>
+public class SelectUnsortedBagBatch<T> implements UnsortedBagBatch<T>
 {
     private final UnsortedBagBatch<T> unsortedBagBatch;
     private final Predicate<? super T> predicate;
 
-    SelectUnsortedBagBatch(UnsortedBagBatch<T> unsortedBagBatch, Predicate<? super T> predicate)
+    public SelectUnsortedBagBatch(UnsortedBagBatch<T> unsortedBagBatch, Predicate<? super T> predicate)
     {
         this.unsortedBagBatch = unsortedBagBatch;
         this.predicate = predicate;
@@ -43,6 +44,16 @@ class SelectUnsortedBagBatch<T> extends AbstractUnsortedBagBatch<T>
     public void forEachWithOccurrences(ObjectIntProcedure<? super T> procedure)
     {
         this.unsortedBagBatch.forEachWithOccurrences(new IfProcedureWithOccurrences<T>(this.predicate, procedure));
+    }
+
+    public UnsortedBagBatch<T> select(Predicate<? super T> predicate)
+    {
+        return new SelectUnsortedBagBatch<T>(this, predicate);
+    }
+
+    public <V> UnsortedBagBatch<V> collect(Function<? super T, ? extends V> function)
+    {
+        return new CollectUnsortedBagBatch<T, V>(this, function);
     }
 
     /*
@@ -80,5 +91,10 @@ class SelectUnsortedBagBatch<T> extends AbstractUnsortedBagBatch<T>
     public boolean allSatisfy(Predicate<? super T> predicate)
     {
         return this.unsortedBagBatch.allSatisfy(Predicates.and(this.predicate, predicate));
+    }
+
+    public T detect(Predicate<? super T> predicate)
+    {
+        return this.unsortedBagBatch.detect(Predicates.and(this.predicate, predicate));
     }
 }

@@ -88,6 +88,12 @@ class ParallelSelectUnsortedBag<T> extends AbstractParallelUnsortedBag<T>
         });
     }
 
+    @Override
+    public T detect(Predicate<? super T> predicate)
+    {
+        return this.parallelUnsortedBag.detect(Predicates.and(this.predicate, predicate));
+    }
+
     private static final class SelectUnsortedBagAllSatisfyPredicate<T> implements Predicate<T>
     {
         private final Predicate<? super T> left;

@@ -33,5 +33,7 @@ public interface Batch<T>
     boolean anySatisfy(Predicate<? super T> predicate);
 
     boolean allSatisfy(Predicate<? super T> predicate);
+
+    T detect(Predicate<? super T> predicate);
 }
 

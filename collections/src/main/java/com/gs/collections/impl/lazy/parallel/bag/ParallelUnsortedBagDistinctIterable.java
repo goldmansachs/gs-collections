@@ -26,7 +26,6 @@ import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.impl.lazy.parallel.set.AbstractParallelUnsortedSetIterable;
 import com.gs.collections.impl.lazy.parallel.set.UnsortedSetBatch;
-import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 
 @Beta
 class ParallelUnsortedBagDistinctIterable<T> extends AbstractParallelUnsortedSetIterable<T>
@@ -57,31 +56,30 @@ class ParallelUnsortedBagDistinctIterable<T> extends AbstractParallelUnsortedSet
 
     public void forEach(final Procedure<? super T> procedure)
     {
-        // TODO: Replace the map with a concurrent set once it's implemented
-        final ConcurrentHashMap<T, Boolean> distinct = new ConcurrentHashMap<T, Boolean>();
         this.parallelBagIterable.forEachWithOccurrences(new ObjectIntProcedure<T>()
         {
             public void value(T each, int occurrences)
             {
-                if (distinct.put(each, true))
-                {
-                    procedure.value(each);
-                }
+                procedure.value(each);
             }
         });
     }
 
     @Override
-    public boolean anySatisfy(final Predicate<? super T> predicate)
+    public boolean anySatisfy(Predicate<? super T> predicate)
     {
-        // TODO: Replace the map with a concurrent set once it's implemented
-        final ConcurrentHashMap<T, Boolean> distinct = new ConcurrentHashMap<T, Boolean>();
-        return this.parallelBagIterable.anySatisfy(new Predicate<T>()
-        {
-            public boolean accept(T each)
-            {
-                return distinct.put(each, true) && predicate.accept(each);
-            }
-        });
+        return this.parallelBagIterable.anySatisfy(predicate);
+    }
+
+    @Override
+    public boolean allSatisfy(Predicate<? super T> predicate)
+    {
+        return this.parallelBagIterable.allSatisfy(predicate);
+    }
+
+    @Override
+    public T detect(Predicate<? super T> predicate)
+    {
+        return this.parallelBagIterable.detect(predicate);
     }
 }

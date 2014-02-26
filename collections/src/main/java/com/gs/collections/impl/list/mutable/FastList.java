@@ -90,9 +90,12 @@ import com.gs.collections.impl.block.procedure.FastListSelectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
 import com.gs.collections.impl.lazy.parallel.Batch;
-import com.gs.collections.impl.lazy.parallel.list.AbstractListBatch;
 import com.gs.collections.impl.lazy.parallel.list.AbstractParallelListIterable;
+import com.gs.collections.impl.lazy.parallel.list.CollectListBatch;
+import com.gs.collections.impl.lazy.parallel.list.DistinctBatch;
 import com.gs.collections.impl.lazy.parallel.list.ListBatch;
+import com.gs.collections.impl.lazy.parallel.list.SelectListBatch;
+import com.gs.collections.impl.lazy.parallel.set.UnsortedSetBatch;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
 import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
@@ -101,6 +104,7 @@ import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
+import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 import com.gs.collections.impl.parallel.BatchIterable;
 import com.gs.collections.impl.partition.list.PartitionFastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -1661,7 +1665,7 @@ public class FastList<T>
         return new FastListParallelIterable(executorService, batchSize);
     }
 
-    private final class FastListBatch extends AbstractListBatch<T>
+    private final class FastListBatch implements ListBatch<T>
     {
         private final int chunkStartIndex;
         private final int chunkEndIndex;
@@ -1702,6 +1706,33 @@ public class FastList<T>
                 }
             }
             return true;
+        }
+
+        public T detect(Predicate<? super T> predicate)
+        {
+            for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
+            {
+                if (predicate.accept(FastList.this.items[i]))
+                {
+                    return FastList.this.items[i];
+                }
+            }
+            return null;
+        }
+
+        public ListBatch<T> select(Predicate<? super T> predicate)
+        {
+            return new SelectListBatch<T>(this, predicate);
+        }
+
+        public <V> ListBatch<V> collect(Function<? super T, ? extends V> function)
+        {
+            return new CollectListBatch<T, V>(this, function);
+        }
+
+        public UnsortedSetBatch<T> distinct(ConcurrentHashMap<T, Boolean> distinct)
+        {
+            return new DistinctBatch<T>(this, distinct);
         }
     }
 
@@ -1864,6 +1895,52 @@ public class FastList<T>
                 }
             }
             return true;
+        }
+
+        @Override
+        public T detect(final Predicate<? super T> predicate)
+        {
+            LazyIterable<? extends Batch<T>> chunks = this.split();
+            LazyIterable<Future<T>> futures = chunks.collect(new Function<Batch<T>, Future<T>>()
+            {
+                public Future<T> valueOf(final Batch<T> chunk)
+                {
+                    return FastListParallelIterable.this.executorService.submit(new Callable<T>()
+                    {
+                        public T call()
+                        {
+                            return chunk.detect(predicate);
+                        }
+                    });
+                }
+            });
+            // The call to to toList() is important to stop the lazy evaluation and force all the Runnables to start executing.
+            MutableList<Future<T>> futuresList = futures.toList();
+            for (Future<T> future : futuresList)
+            {
+                try
+                {
+                    T eachResult = future.get();
+                    if (eachResult != null)
+                    {
+                        for (Future<T> eachFutureToCancel : futuresList)
+                        {
+                            eachFutureToCancel.cancel(true);
+                        }
+                        return eachResult;
+                    }
+                }
+                catch (InterruptedException e)
+                {
+                    Thread.currentThread().interrupt();
+                    throw new RuntimeException(e);
+                }
+                catch (ExecutionException e)
+                {
+                    throw new RuntimeException(e);
+                }
+            }
+            return null;
         }
 
         private class FastListParallelBatchLazyIterable
