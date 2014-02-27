@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.list.mutable.primitive;
+package com.gs.collections.impl.lazy.primitive;
 
 import java.util.NoSuchElementException;
 
@@ -25,11 +25,15 @@ import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * JUnit test for {@link ReverseBooleanIterable}.
+ */
 public class ReverseBooleanIterableTest
 {
     @Test

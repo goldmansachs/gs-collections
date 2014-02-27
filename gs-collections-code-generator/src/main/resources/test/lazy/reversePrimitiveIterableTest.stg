@@ -4,7 +4,7 @@ import "primitiveLiteral.stg"
 
 isTest() ::= "true"
 
-targetPath() ::= "com/gs/collections/impl/list/mutable/primitive"
+targetPath() ::= "com/gs/collections/impl/lazy/primitive"
 
 fileName(primitive) ::= "Reverse<primitive.name>IterableTest"
 
@@ -15,7 +15,7 @@ class(primitive) ::= <<
 body(type, wrapperName, name) ::= <<
 <copyright()>
 
-package com.gs.collections.impl.list.mutable.primitive;
+package com.gs.collections.impl.lazy.primitive;
 
 import java.util.NoSuchElementException;
 
@@ -26,13 +26,14 @@ import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
 import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * JUnit test for {@link <name>ArrayList.Reverse<name>Iterable}.
+ * JUnit test for {@link Reverse<name>Iterable}.
  * This file was automatically generated from template file reversePrimitiveIterableTest.stg.
  */
 public class Reverse<name>IterableTest
