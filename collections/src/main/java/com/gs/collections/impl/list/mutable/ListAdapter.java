@@ -173,6 +173,12 @@ public final class ListAdapter<T>
     }
 
     @Override
+    public boolean noneSatisfy(Predicate<? super T> predicate)
+    {
+        return ListIterate.noneSatisfy(this.delegate, predicate);
+    }
+
+    @Override
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
         return ListIterate.injectInto(injectedValue, this.delegate, function);

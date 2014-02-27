@@ -227,6 +227,13 @@ public class ArrayAdapterTest extends AbstractListTestCase
     }
 
     @Test
+    public void testNoneSatisfy()
+    {
+        Assert.assertTrue(this.newWith(1, 2, 3).noneSatisfy(Predicates.instanceOf(String.class)));
+        Assert.assertFalse(this.newWith(1, 2, 3).noneSatisfy(Predicates.equal(1)));
+    }
+
+    @Test
     public void testCount()
     {
         Assert.assertEquals(3, this.newWith(1, 2, 3).count(Predicates.instanceOf(Integer.class)));
@@ -502,6 +509,14 @@ public class ArrayAdapterTest extends AbstractListTestCase
                 String.class));
         Assert.assertTrue(ArrayAdapter.newArrayWith(1, 2, 3).anySatisfyWith(Predicates2.instanceOf(),
                 Integer.class));
+    }
+
+    @Test
+    public void testNoneSatisfyWith()
+    {
+        Assert.assertTrue(ArrayAdapter.newArrayWith(1, 2, 3).noneSatisfyWith(Predicates2.instanceOf(),
+                String.class));
+        Assert.assertFalse(ArrayAdapter.newArrayWith(1, 2, 3).noneSatisfyWith(Predicates2.equal(), 1));
     }
 
     @Test

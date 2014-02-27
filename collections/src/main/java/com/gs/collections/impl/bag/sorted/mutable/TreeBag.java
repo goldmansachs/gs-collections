@@ -698,6 +698,18 @@ public class TreeBag<T>
         });
     }
 
+    @Override
+    public <P> boolean noneSatisfyWith(final Predicate2<? super T, ? super P> predicate, final P parameter)
+    {
+        return this.items.keysView().noneSatisfy(new Predicate<T>()
+        {
+            public boolean accept(T each)
+            {
+                return predicate.accept(each, parameter);
+            }
+        });
+    }
+
     public UnmodifiableSortedBag<T> asUnmodifiable()
     {
         return UnmodifiableSortedBag.of(this);
@@ -1123,6 +1135,12 @@ public class TreeBag<T>
     public boolean allSatisfy(Predicate<? super T> predicate)
     {
         return this.items.keysView().allSatisfy(predicate);
+    }
+
+    @Override
+    public boolean noneSatisfy(Predicate<? super T> predicate)
+    {
+        return this.items.keysView().noneSatisfy(predicate);
     }
 
     @Override

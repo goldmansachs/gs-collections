@@ -411,6 +411,12 @@ public class ImmutableHashBag<T>
     }
 
     @Override
+    public boolean noneSatisfy(Predicate<? super T> predicate)
+    {
+        return this.delegate.noneSatisfy(predicate);
+    }
+
+    @Override
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
         return this.delegate.injectInto(injectedValue, function);

@@ -332,6 +332,12 @@ final class ImmutableArrayList<T>
     }
 
     @Override
+    public boolean noneSatisfy(Predicate<? super T> predicate)
+    {
+        return ArrayIterate.noneSatisfy(this.items, predicate);
+    }
+
+    @Override
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
         return ArrayIterate.injectInto(injectedValue, this.items, function);
@@ -410,7 +416,6 @@ final class ImmutableArrayList<T>
         return Iterate.allSatisfy(collection, Predicates.in(this.items));
     }
 
-    @Override
     public T get(int index)
     {
         return this.items[index];

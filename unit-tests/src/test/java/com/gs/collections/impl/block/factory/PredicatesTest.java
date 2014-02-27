@@ -472,6 +472,21 @@ public class PredicatesTest
     }
 
     @Test
+    public void attributeNoneSatisfy()
+    {
+        Function<Address, String> stateAbbreviation = new Function<Address, String>()
+        {
+            public String valueOf(Address address)
+            {
+                return address.getState().getAbbreviation();
+            }
+        };
+        Predicates<Address> inAlabama = Predicates.attributeEqual(stateAbbreviation, "AL");
+        MutableCollection<Employee> notAlResidents = this.employees.select(Predicates.attributeNoneSatisfy(Employee.TO_ADDRESSES, inAlabama));
+        Assert.assertEquals(FastList.newListWith(this.alice, this.bob, this.charlie, this.diane), notAlResidents);
+    }
+
+    @Test
     public void allSatisfy()
     {
         Predicate<Iterable<Object>> allIntegers = Predicates.allSatisfy(Predicates.instanceOf(Integer.class));
@@ -858,7 +873,8 @@ public class PredicatesTest
     public enum State
     {
         ARIZONA("AZ"),
-        ALASKA("AK");
+        ALASKA("AK"),
+        ALABAMA("AL");
 
         private final String abbreviation;
 

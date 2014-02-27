@@ -579,6 +579,18 @@ public class HashBag<T>
         });
     }
 
+    @Override
+    public <P> boolean noneSatisfyWith(final Predicate2<? super T, ? super P> predicate, final P parameter)
+    {
+        return this.items.keysView().noneSatisfy(new Predicate<T>()
+        {
+            public boolean accept(T each)
+            {
+                return predicate.accept(each, parameter);
+            }
+        });
+    }
+
     public UnmodifiableBag<T> asUnmodifiable()
     {
         return UnmodifiableBag.of(this);
@@ -1003,6 +1015,12 @@ public class HashBag<T>
     public boolean allSatisfy(Predicate<? super T> predicate)
     {
         return this.items.keysView().allSatisfy(predicate);
+    }
+
+    @Override
+    public boolean noneSatisfy(Predicate<? super T> predicate)
+    {
+        return this.items.keysView().noneSatisfy(predicate);
     }
 
     @Override

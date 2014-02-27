@@ -458,6 +458,20 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
     }
 
     @Override
+    public boolean noneSatisfy(Predicate<? super T> predicate)
+    {
+        int size = this.size();
+        for (int i = 0; i < size; i++)
+        {
+            if (predicate.accept(this.get(i)))
+            {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    @Override
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
         return ListIterate.injectInto(injectedValue, this, function);

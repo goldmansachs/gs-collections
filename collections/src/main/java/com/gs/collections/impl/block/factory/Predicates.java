@@ -344,6 +344,13 @@ public abstract class Predicates<T>
         return Predicates.attributePredicate(function, Predicates.allSatisfy(predicate));
     }
 
+    public static <T, V> Predicates<T> attributeNoneSatisfy(
+            Function<? super T, ? extends Iterable<V>> function,
+            Predicate<? super V> predicate)
+    {
+        return Predicates.attributePredicate(function, Predicates.noneSatisfy(predicate));
+    }
+
     public static Predicates<Object> notEqual(Object object)
     {
         if (object == null)

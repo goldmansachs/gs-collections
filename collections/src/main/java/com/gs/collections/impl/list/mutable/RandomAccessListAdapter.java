@@ -203,6 +203,12 @@ public final class RandomAccessListAdapter<T>
     }
 
     @Override
+    public boolean noneSatisfy(Predicate<? super T> predicate)
+    {
+        return RandomAccessListIterate.noneSatisfy(this.delegate, predicate);
+    }
+
+    @Override
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
         return RandomAccessListIterate.injectInto(injectedValue, this.delegate, function);
