@@ -60,6 +60,13 @@ public class ImmutableBooleanSingletonListTest extends AbstractImmutableBooleanL
 
     @Override
     @Test
+    public void toReversed()
+    {
+        Assert.assertEquals(this.classUnderTest(), this.classUnderTest().toReversed());
+    }
+
+    @Override
+    @Test
     public void forEachWithIndex()
     {
         final String[] sum = new String[2];

@@ -201,6 +201,14 @@ public abstract class AbstractImmutableBooleanListTestCase extends AbstractImmut
         Assert.assertEquals("", sum[1]);
     }
 
+    @Test
+    public void toReversed()
+    {
+        Assert.assertEquals(BooleanArrayList.newListWith(true, true, false, false), this.newWith(false, false, true, true).toReversed());
+        ImmutableBooleanList originalList = this.newWith(true, true, false, false);
+        Assert.assertNotSame(originalList, originalList.toReversed());
+    }
+
     @Override
     @Test
     public void toArray()

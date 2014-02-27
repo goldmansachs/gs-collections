@@ -99,6 +99,13 @@ public class ImmutableBooleanEmptyListTest extends AbstractImmutableBooleanListT
 
     @Override
     @Test
+    public void toReversed()
+    {
+        Assert.assertEquals(this.classUnderTest(), this.classUnderTest().toReversed());
+    }
+
+    @Override
+    @Test
     public void isEmpty()
     {
         Verify.assertEmpty(this.classUnderTest());
