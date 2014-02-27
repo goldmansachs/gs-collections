@@ -88,7 +88,7 @@
 
         <slf4j.version>1.7.6</slf4j.version>
         <clover.version>3.2.0</clover.version>
-        <checkstyle.version>2.11</checkstyle.version>
+        <checkstyle.version>2.10</checkstyle.version>
         <!--Sonar settings-->
         <sonar.language>java</sonar.language>
         <sonar.dynamicAnalysis>reuseReports</sonar.dynamicAnalysis>
