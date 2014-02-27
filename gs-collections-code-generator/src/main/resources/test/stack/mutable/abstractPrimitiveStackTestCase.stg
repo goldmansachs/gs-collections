@@ -20,6 +20,7 @@ body(type, wrapperName, name) ::= <<
 package com.gs.collections.impl.stack.primitive;
 
 import com.gs.collections.api.<name>Iterable;
+import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.iterator.<name>Iterator;
 import com.gs.collections.api.stack.primitive.<name>Stack;
@@ -27,6 +28,8 @@ import com.gs.collections.api.stack.primitive.Immutable<name>Stack;
 import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
 import com.gs.collections.impl.collection.mutable.primitive.Abstract<name>IterableTestCase;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
+import com.gs.collections.impl.stack.mutable.ArrayStack;
+import com.gs.collections.impl.stack.mutable.primitive.<name>ArrayStack;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -44,7 +47,16 @@ public abstract class Abstract<name>StackTestCase extends Abstract<name>Iterable
     protected abstract <name>Stack newWith(<type>... elements);
 
     @Override
-    protected abstract <name>Stack newMutableCollectionWith(<type>... elements);
+    protected <name>Stack newMutableCollectionWith(<type>... elements)
+    {
+        return <name>ArrayStack.newStackWith(elements);
+    }
+
+    @Override
+    protected RichIterable\<<wrapperName>\> newObjectCollectionWith(<wrapperName>... elements)
+    {
+        return ArrayStack.newStackWith(elements);
+    }
 
     protected abstract <name>Stack newWithTopToBottom(<type>... elements);
 
@@ -185,20 +197,6 @@ public abstract class Abstract<name>StackTestCase extends Abstract<name>Iterable
     {
         Assert.assertEquals(this.classUnderTest(), this.classUnderTest().toImmutable());
         Verify.assertInstanceOf(Immutable<name>Stack.class, this.classUnderTest().toImmutable());
-    }
-
-    @Test
-    public void injectInto()
-    {
-        <name>Iterable stack = this.newWithTopToBottom(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">);
-        <wrapperName> sum = stack.injectInto(<wrapperName>.valueOf(<(literal.(type))("1")>), new Object<name>ToObjectFunction\<<wrapperName>, <wrapperName>\>()
-        {
-            public <wrapperName> valueOf(<wrapperName> result, <type> value)
-            {
-                return <wrapperName>.valueOf((<type>) (result + value));
-            }
-        });
-        Assert.assertEquals(<wrapperName>.valueOf(<(literal.(type))("16")>), sum);
     }
 }
 

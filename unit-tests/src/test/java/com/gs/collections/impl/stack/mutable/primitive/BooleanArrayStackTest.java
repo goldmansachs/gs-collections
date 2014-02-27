@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package com.gs.collections.impl.stack.mutable.primitive;
 
 import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
 import com.gs.collections.api.stack.primitive.MutableBooleanStack;
 import com.gs.collections.impl.collection.mutable.primitive.AbstractMutableBooleanStackTestCase;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
@@ -110,24 +109,5 @@ public class BooleanArrayStackTest extends AbstractMutableBooleanStackTestCase
         BooleanArrayStack stack9 = BooleanArrayStack.newStackFromTopToBottom();
         Assert.assertEquals(new BooleanArrayList(), stack9.pop(0));
         Assert.assertEquals(new BooleanArrayList(), stack9.peek(0));
-    }
-
-    @Test
-    public void injectInto()
-    {
-        BooleanArrayStack stack = BooleanArrayStack.newStackFromTopToBottom(true, true, false, true, false);
-        Integer total = stack.injectInto(Integer.valueOf(0), new ObjectBooleanToObjectFunction<Integer, Integer>()
-        {
-            public Integer valueOf(Integer result, boolean value)
-            {
-                if (value)
-                {
-                    return result += 2;
-                }
-
-                return result;
-            }
-        });
-        Assert.assertEquals(Integer.valueOf(6), total);
     }
 }

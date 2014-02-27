@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,14 @@
 
 package com.gs.collections.impl.stack.primitive;
 
+import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.stack.primitive.BooleanStack;
 import com.gs.collections.api.stack.primitive.ImmutableBooleanStack;
 import com.gs.collections.impl.collection.mutable.primitive.AbstractBooleanIterableTestCase;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.stack.mutable.ArrayStack;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -38,6 +41,12 @@ public abstract class AbstractBooleanStackTestCase extends AbstractBooleanIterab
 
     @Override
     protected abstract BooleanStack newMutableCollectionWith(boolean... elements);
+
+    @Override
+    protected RichIterable<Object> newObjectCollectionWith(Object... elements)
+    {
+        return ArrayStack.newStackWith(elements);
+    }
 
     protected abstract BooleanStack newWithTopToBottom(boolean... elements);
 
@@ -160,6 +169,25 @@ public abstract class AbstractBooleanStackTestCase extends AbstractBooleanIterab
         StringBuilder appendable3 = new StringBuilder();
         this.classUnderTest().appendString(appendable3, "{", "|", "}");
         Assert.assertEquals(this.createExpectedString("{", "|", "}"), appendable3.toString());
+    }
+
+    @Test
+    public void injectInto()
+    {
+        BooleanStack stack = this.newWithTopToBottom(true, true, false, true, false);
+        Integer total = stack.injectInto(Integer.valueOf(0), new ObjectBooleanToObjectFunction<Integer, Integer>()
+        {
+            public Integer valueOf(Integer result, boolean value)
+            {
+                if (value)
+                {
+                    return result += 2;
+                }
+
+                return result;
+            }
+        });
+        Assert.assertEquals(Integer.valueOf(6), total);
     }
 
     @Test
