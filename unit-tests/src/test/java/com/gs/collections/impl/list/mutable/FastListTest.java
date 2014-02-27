@@ -25,6 +25,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -1308,55 +1309,69 @@ public class FastListTest extends AbstractListTestCase
     @Test
     public void asParallel_select()
     {
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+
         MutableList<Integer> result = this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .asParallel(executorService, 2)
                 .select(IntegerPredicates.isOdd())
                 .toList();
         Assert.assertEquals(
                 FastList.newListWith(1, 3, 5, 7, 9),
                 result);
+
+        executorService.shutdown();
     }
 
     @Test
     public void asParallel_forEach()
     {
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+
         MutableSet<String> result = UnifiedSet.<String>newSet().asSynchronized();
         this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .asParallel(executorService, 2)
                 .select(IntegerPredicates.isOdd())
                 .collect(Functions.getToString())
                 .forEach(CollectionAddProcedure.on(result));
         Assert.assertEquals(
                 UnifiedSet.newSetWith("1", "3", "5", "7", "9"),
                 result);
+
+        executorService.shutdown();
     }
 
     @Test
     public void asParallel_anySatisfy()
     {
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+
         Assert.assertTrue(this.newWith(Interval.from(-17).to(17).toArray())
-                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .asParallel(executorService, 2)
                 .select(IntegerPredicates.isPositive())
                 .collect(Functions.getToString())
                 .anySatisfy(Predicates.greaterThan("5")));
 
         Assert.assertFalse(this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .asParallel(executorService, 2)
                 .select(IntegerPredicates.isOdd())
                 .anySatisfy(Predicates.greaterThan(10)));
 
         Assert.assertFalse(this.<Integer>newWith()
-                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .asParallel(executorService, 2)
                 .select(IntegerPredicates.isOdd())
                 .anySatisfy(Predicates.greaterThan(10)));
+
+        executorService.shutdown();
     }
 
     @Test
     public void asParallel_asUnique()
     {
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+
         final AtomicInteger atomicInteger = new AtomicInteger();
         this.newWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4)
-                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .asParallel(executorService, 2)
                 .asUnique()
                 .forEach(new Procedure<Integer>()
                 {
@@ -1367,81 +1382,91 @@ public class FastListTest extends AbstractListTestCase
                 });
         Assert.assertEquals(4, atomicInteger.get());
         MutableList<Integer> list = this.newWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4)
-                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .asParallel(executorService, 2)
                 .asUnique()
                 .toList();
         Verify.assertSize(4, list);
         Verify.assertContainsAll(list, 1, 2, 3, 4);
+
+        executorService.shutdown();
     }
 
     @Test
     public void asParallel_allSatisfy()
     {
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+
         Assert.assertTrue(this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .asParallel(executorService, 2)
                 .select(IntegerPredicates.isOdd())
                 .collect(Functions.getToString())
                 .allSatisfy(Predicates.in(Lists.mutable.of("1", "3", "5", "7", "9"))));
 
         Assert.assertFalse(this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .asParallel(executorService, 2)
                 .select(IntegerPredicates.isOdd())
                 .collect(Functions.getToString())
                 .allSatisfy(Predicates.in(Lists.mutable.of("1", "3", "7"))));
 
         Assert.assertTrue(this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .asParallel(executorService, 2)
                 .select(IntegerPredicates.isOdd())
                 .collect(Functions.<Integer>getPassThru())
                 .allSatisfy(IntegerPredicates.isPositive()));
 
         Assert.assertFalse(this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .asParallel(executorService, 2)
                 .select(IntegerPredicates.isOdd())
                 .allSatisfy(Predicates.lessThan(7)));
 
         Assert.assertTrue(this.<Integer>newWith()
-                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .asParallel(executorService, 2)
                 .select(IntegerPredicates.isOdd())
                 .allSatisfy(Predicates.greaterThan(10)));
 
         Assert.assertFalse(this.newWith(1)
-                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .asParallel(executorService, 2)
                 .select(IntegerPredicates.isOdd())
                 .allSatisfy(Predicates.greaterThan(10)));
 
         Assert.assertTrue(this.newWith(1)
-                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .asParallel(executorService, 2)
                 .select(IntegerPredicates.isEven())
                 .allSatisfy(Predicates.greaterThan(10)));
 
         Assert.assertTrue(this.newWith(Interval.from(-17).to(17).toArray())
-                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .asParallel(executorService, 2)
                 .select(IntegerPredicates.isPositive())
                 .collect(Functions.getToString())
                 .allSatisfy(Predicates.notNull()));
+
+        executorService.shutdown();
     }
 
     @Test
     public void asParallel_detect()
     {
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+
         Assert.assertEquals(
                 "7",
                 this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
-                        .asParallel(Executors.newFixedThreadPool(10), 2)
+                        .asParallel(executorService, 2)
                         .select(IntegerPredicates.isOdd())
                         .collect(Functions.getToString())
                         .detect(Predicates.greaterThan("5")));
 
         Assert.assertNull(this.newWith(Interval.from(-17).to(17).toArray())
-                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .asParallel(executorService, 2)
                 .select(IntegerPredicates.isPositive())
                 .collect(Functions.getToString())
                 .detect(Predicates.greaterThan("99")));
 
         Assert.assertNull(this.<Integer>newWith()
-                .asParallel(Executors.newFixedThreadPool(10), 2)
+                .asParallel(executorService, 2)
                 .select(IntegerPredicates.isOdd())
                 .detect(Predicates.greaterThan(10)));
+
+        executorService.shutdown();
     }
 }
