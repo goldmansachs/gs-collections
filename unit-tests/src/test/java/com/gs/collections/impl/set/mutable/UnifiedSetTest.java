@@ -599,17 +599,11 @@ public class UnifiedSetTest extends AbstractMutableSetTestCase
                 .select(IntegerPredicates.isOdd())
                 .anySatisfy(Predicates.greaterThan(10)));
 
-        UnifiedSet<Integer> integers = this.newWith(COLLISION_1, COLLISION_2, COLLISION_3, COLLISION_4);
-        integers.remove(COLLISION_4);
-        // increase the occupied count to the threshold
-        integers.add(Integer.valueOf(1));
-        integers.add(Integer.valueOf(2));
-        integers.add(Integer.valueOf(3));
-        integers.add(Integer.valueOf(4));
-
-        // add the colliding value back and force the rehash
-        integers.add(COLLISION_4);
-        Assert.assertTrue(integers.asParallel(Executors.newFixedThreadPool(4), 2).anySatisfy(Predicates.lessThan(COLLISION_4)));
+        Assert.assertFalse(this.newWith(Interval.from(-17).to(17).toArray())
+                .asParallel(executorService, 2)
+                .select(IntegerPredicates.isPositive())
+                .collect(Functions.getToString())
+                .anySatisfy(Predicates.isNull()));
 
         executorService.shutdown();
     }
@@ -662,18 +656,6 @@ public class UnifiedSetTest extends AbstractMutableSetTestCase
                 .select(IntegerPredicates.isPositive())
                 .collect(Functions.getToString())
                 .allSatisfy(Predicates.notNull()));
-
-        UnifiedSet<Integer> integers = this.newWith(COLLISION_1, COLLISION_2, COLLISION_3, COLLISION_4);
-        integers.remove(COLLISION_4);
-        // increase the occupied count to the threshold
-        integers.add(Integer.valueOf(1));
-        integers.add(Integer.valueOf(2));
-        integers.add(Integer.valueOf(3));
-        integers.add(Integer.valueOf(4));
-
-        // add the colliding value back and force the rehash
-        integers.add(COLLISION_4);
-        Assert.assertTrue(integers.asParallel(Executors.newFixedThreadPool(4), 2).allSatisfy(Predicates.lessThanOrEqualTo(COLLISION_4)));
 
         executorService.shutdown();
     }
