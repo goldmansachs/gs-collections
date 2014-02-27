@@ -22,10 +22,41 @@ package com.gs.collections.impl.map.immutable.primitive;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
+import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.predicate.primitive.<name>ObjectPredicate;
+import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.block.procedure.primitive.<name>ObjectProcedure;
+import com.gs.collections.api.block.procedure.primitive.<name>Procedure;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.map.primitive.Immutable<name>ObjectMap;
+import com.gs.collections.api.partition.PartitionIterable;
+import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.block.factory.Functions;
+import com.gs.collections.impl.block.factory.Functions0;
+import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.Predicates2;
+import com.gs.collections.impl.block.factory.StringFunctions;
+import com.gs.collections.impl.block.factory.StringPredicates;
+import com.gs.collections.impl.block.factory.StringPredicates2;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
+import com.gs.collections.impl.list.mutable.primitive.CharArrayList;
+import com.gs.collections.impl.list.mutable.primitive.DoubleArrayList;
+import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
+import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
+import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
+import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
+import com.gs.collections.impl.utility.StringIterate;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -171,6 +202,543 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     public void notEmpty()
     {
         Assert.assertFalse(this.classUnderTest().notEmpty());
+    }
+
+    @Override
+    @Test
+    public void getFirst()
+    {
+        Assert.assertNull(this.classUnderTest().getFirst());
+    }
+
+    @Override
+    @Test
+    public void getLast()
+    {
+        Assert.assertNull(this.classUnderTest().getLast());
+    }
+
+    @Override
+    @Test
+    public void forEach()
+    {
+        this.classUnderTest().forEach(new Procedure\<String>()
+        {
+            public void value(String each)
+            {
+                Assert.fail();
+            }
+        });
+    }
+
+    @Override
+    @Test
+    public void forEachWithIndex()
+    {
+        this.classUnderTest().forEachWithIndex(new ObjectIntProcedure\<String>()
+        {
+            public void value(String each, int param)
+            {
+                Assert.fail();
+            }
+        });
+    }
+
+    @Override
+    @Test
+    public void forEachWith()
+    {
+        this.classUnderTest().forEachWith(new Procedure2\<String, String>()
+        {
+            public void value(String each, String param)
+            {
+                Assert.fail();
+            }
+        }, "");
+    }
+
+    @Override
+    @Test
+    public void forEachKey()
+    {
+        this.classUnderTest().forEachKey(new <name>Procedure()
+        {
+            public void value(<primitive.type> each)
+            {
+                Assert.fail();
+            }
+        });
+    }
+
+    @Override
+    @Test
+    public void forEachValue()
+    {
+        this.classUnderTest().forEachValue(new Procedure\<String>()
+        {
+            public void value(String each)
+            {
+                Assert.fail();
+            }
+        });
+    }
+
+    @Override
+    @Test
+    public void forEachKeyValue()
+    {
+        this.classUnderTest().forEachKeyValue(new <name>ObjectProcedure\<String>()
+        {
+            public void value(<primitive.type> eachKey, String eachValue)
+            {
+                Assert.fail();
+            }
+        });
+    }
+
+    @Override
+    @Test
+    public void select()
+    {
+        Verify.assertIterableEmpty(this.classUnderTest().select(Predicates.alwaysTrue()));
+        Verify.assertIterableEmpty(this.classUnderTest().select(new <name>ObjectPredicate\<String>()
+        {
+            public boolean accept(<primitive.type> value, String object)
+            {
+                return true;
+            }
+        }));
+
+        FastList\<String> target = FastList.newList();
+        Assert.assertSame(target, this.classUnderTest().select(Predicates.alwaysTrue(), target));
+        Verify.assertEmpty(target);
+    }
+
+    @Override
+    @Test
+    public void selectWith()
+    {
+        Verify.assertIterableEmpty(this.classUnderTest().selectWith(Predicates2.alwaysTrue(), ""));
+    }
+
+    @Override
+    @Test
+    public void selectWith_withTarget()
+    {
+        FastList\<String> target = FastList.newList();
+        Assert.assertSame(target, this.classUnderTest().selectWith(Predicates2.alwaysTrue(), "", target));
+        Verify.assertEmpty(target);
+    }
+
+    @Override
+    @Test
+    public void selectInstancesOf()
+    {
+        Verify.assertIterableEmpty(this.classUnderTest().selectInstancesOf(Object.class));
+    }
+
+    @Override
+    @Test
+    public void reject()
+    {
+        Verify.assertIterableEmpty(this.classUnderTest().reject(Predicates.alwaysFalse()));
+        Verify.assertIterableEmpty(this.classUnderTest().reject(new <name>ObjectPredicate\<String>()
+        {
+            public boolean accept(<primitive.type> value, String object)
+            {
+                return false;
+            }
+        }));
+
+        FastList\<String> target = FastList.newList();
+        Assert.assertSame(target, this.classUnderTest().reject(Predicates.alwaysFalse(), target));
+        Verify.assertEmpty(target);
+    }
+
+    @Override
+    @Test
+    public void rejectWith()
+    {
+        Verify.assertIterableEmpty(this.classUnderTest().rejectWith(Predicates2.alwaysFalse(), ""));
+    }
+
+    @Override
+    @Test
+    public void rejectWith_withTarget()
+    {
+        FastList\<String> target = FastList.newList();
+        Assert.assertSame(target, this.classUnderTest().rejectWith(Predicates2.alwaysFalse(), "", target));
+        Verify.assertEmpty(target);
+    }
+
+    @Override
+    @Test
+    public void detect()
+    {
+        Assert.assertNull(this.classUnderTest().detect(Predicates.alwaysTrue()));
+    }
+
+    @Override
+    @Test
+    public void detectWith()
+    {
+        Assert.assertNull(this.classUnderTest().detectWith(Predicates2.alwaysTrue(), ""));
+    }
+
+    @Override
+    @Test
+    public void detectIfNone()
+    {
+        Assert.assertEquals("default", this.classUnderTest().detectIfNone(Predicates.alwaysTrue(), Functions0.value("default")));
+    }
+
+    @Override
+    @Test
+    public void detectWithIfNone()
+    {
+        Assert.assertEquals("default", this.classUnderTest().detectWithIfNone(Predicates2.alwaysTrue(), "", Functions0.value("default")));
+    }
+
+    @Override
+    @Test
+    public void count()
+    {
+        Assert.assertEquals(0, this.classUnderTest().count(Predicates.alwaysTrue()));
+    }
+
+    @Override
+    @Test
+    public void countWith()
+    {
+        Assert.assertEquals(0, this.classUnderTest().countWith(Predicates2.alwaysTrue(), ""));
+    }
+
+    @Override
+    @Test
+    public void partition()
+    {
+        PartitionIterable\<String> result = this.classUnderTest().partition(StringPredicates.endsWith("ne"));
+        Verify.assertIterableEmpty(result.getSelected());
+        Verify.assertIterableEmpty(result.getRejected());
+    }
+
+    @Override
+    @Test
+    public void partitionWith()
+    {
+        PartitionIterable\<String> result = this.classUnderTest().partitionWith(StringPredicates2.endsWith(), "ne");
+        Verify.assertIterableEmpty(result.getSelected());
+        Verify.assertIterableEmpty(result.getRejected());
+    }
+
+    @Test
+    public void min_withComparator()
+    {
+        Verify.assertThrows(NoSuchElementException.class, new Runnable()
+        {
+            public void run()
+            {
+                Immutable<name>ObjectEmptyMapTest.this.classUnderTest().min(Comparators.naturalOrder());
+            }
+        });
+    }
+
+    @Test
+    public void max_withComparator()
+    {
+        Verify.assertThrows(NoSuchElementException.class, new Runnable()
+        {
+            public void run()
+            {
+                Immutable<name>ObjectEmptyMapTest.this.classUnderTest().max(Comparators.naturalOrder());
+            }
+        });
+    }
+
+    @Override
+    @Test
+    public void minBy()
+    {
+        Verify.assertThrows(NoSuchElementException.class, new Runnable()
+        {
+            public void run()
+            {
+                Immutable<name>ObjectEmptyMapTest.this.classUnderTest().minBy(Functions.getToString());
+            }
+        });
+    }
+
+    @Override
+    @Test
+    public void maxBy()
+    {
+        Verify.assertThrows(NoSuchElementException.class, new Runnable()
+        {
+            public void run()
+            {
+                Immutable<name>ObjectEmptyMapTest.this.classUnderTest().maxBy(Functions.getToString());
+            }
+        });
+    }
+
+    @Override
+    @Test
+    public void min()
+    {
+        Verify.assertThrows(NoSuchElementException.class, new Runnable()
+        {
+            public void run()
+            {
+                Immutable<name>ObjectEmptyMapTest.this.classUnderTest().min();
+            }
+        });
+    }
+
+    @Override
+    @Test
+    public void max()
+    {
+        Verify.assertThrows(NoSuchElementException.class, new Runnable()
+        {
+            public void run()
+            {
+                Immutable<name>ObjectEmptyMapTest.this.classUnderTest().max();
+            }
+        });
+    }
+
+    @Override
+    @Test
+    public void sumOfInt()
+    {
+        Assert.assertEquals(0L, this.classUnderTest().sumOfInt(new IntFunction\<String>()
+        {
+            public int intValueOf(String value)
+            {
+                return value.length();
+            }
+        }));
+    }
+
+    @Override
+    @Test
+    public void sumOfFloat()
+    {
+        Assert.assertEquals(0.0d, this.classUnderTest().sumOfFloat(new FloatFunction\<String>()
+        {
+            public float floatValueOf(String value)
+            {
+                return (float) value.length();
+            }
+        }), 0.0d);
+    }
+
+    @Override
+    @Test
+    public void sumOfLong()
+    {
+        Assert.assertEquals(0L, this.classUnderTest().sumOfLong(new LongFunction\<String>()
+        {
+            public long longValueOf(String value)
+            {
+                return (long) value.length();
+            }
+        }));
+    }
+
+    @Override
+    @Test
+    public void sumOfDouble()
+    {
+        Assert.assertEquals(0.0d, this.classUnderTest().sumOfDouble(new DoubleFunction\<String>()
+        {
+            public double doubleValueOf(String value)
+            {
+                return (double) value.length();
+            }
+        }), 0.0d);
+    }
+
+    @Override
+    @Test
+    public void collectIf()
+    {
+        Verify.assertIterableEmpty(this.classUnderTest().collectIf(Predicates.alwaysTrue(), StringFunctions.toUpperCase()));
+        Verify.assertIterableEmpty(this.classUnderTest().collectIf(Predicates.alwaysFalse(), StringFunctions.toUpperCase()));
+    }
+
+    @Override
+    @Test
+    public void flatCollect()
+    {
+        Function\<String, Iterable\<Character>\> function = new Function\<String, Iterable\<Character>\>()
+        {
+            public Iterable\<Character> valueOf(String value)
+            {
+                return StringIterate.toSet(value);
+            }
+        };
+        Verify.assertIterableEmpty(this.classUnderTest().flatCollect(function));
+        UnifiedSet\<Character> target = UnifiedSet.newSet();
+        Assert.assertSame(target, this.classUnderTest().flatCollect(function, target));
+        Verify.assertIterableEmpty(target);
+    }
+
+    @Override
+    @Test
+    public void collect()
+    {
+        Verify.assertIterableEmpty(this.classUnderTest().collect(StringFunctions.toUpperCase()));
+
+        FastList\<String> target = FastList.newList();
+        Assert.assertSame(target, this.classUnderTest().collect(StringFunctions.toUpperCase(), target));
+        Verify.assertEmpty(target);
+    }
+
+    @Override
+    @Test
+    public void collectWith()
+    {
+        Function2\<String, String, String> function = new Function2\<String, String, String>()
+        {
+            public String value(String each, String param)
+            {
+                return each.toUpperCase() + param;
+            }
+        };
+        Verify.assertIterableEmpty(this.classUnderTest().collectWith(function, "!"));
+
+        FastList\<String> target = FastList.newList();
+        Assert.assertSame(target, this.classUnderTest().collectWith(function, "!", target));
+        Verify.assertEmpty(target);
+    }
+
+    @Override
+    @Test
+    public void collectBoolean()
+    {
+        Verify.assertEmpty(this.classUnderTest().collectBoolean(StringFunctions.toPrimitiveBoolean()));
+    }
+
+    @Override
+    @Test
+    public void collectBoolean_withTarget()
+    {
+        BooleanArrayList target = new BooleanArrayList();
+        Assert.assertSame(target, this.classUnderTest().collectBoolean(StringFunctions.toPrimitiveBoolean(), target));
+        Verify.assertEmpty(target);
+    }
+
+    @Override
+    @Test
+    public void collectByte()
+    {
+        Verify.assertEmpty(this.classUnderTest().collectByte(StringFunctions.toPrimitiveByte()));
+    }
+
+    @Override
+    @Test
+    public void collectByte_withTarget()
+    {
+        ByteArrayList target = new ByteArrayList();
+        Assert.assertSame(target, this.classUnderTest().collectByte(StringFunctions.toPrimitiveByte(), target));
+        Verify.assertEmpty(target);
+    }
+
+    @Override
+    @Test
+    public void collectChar()
+    {
+        Verify.assertEmpty(this.classUnderTest().collectChar(StringFunctions.toPrimitiveChar()));
+    }
+
+    @Override
+    @Test
+    public void collectChar_withTarget()
+    {
+        CharArrayList target = new CharArrayList();
+        Assert.assertSame(target, this.classUnderTest().collectChar(StringFunctions.toPrimitiveChar(), target));
+        Verify.assertEmpty(target);
+    }
+
+    @Override
+    @Test
+    public void collectDouble()
+    {
+        Verify.assertEmpty(this.classUnderTest().collectDouble(StringFunctions.toPrimitiveDouble()));
+    }
+
+    @Override
+    @Test
+    public void collectDouble_withTarget()
+    {
+        DoubleArrayList target = new DoubleArrayList();
+        Assert.assertSame(target, this.classUnderTest().collectDouble(StringFunctions.toPrimitiveDouble(), target));
+        Verify.assertEmpty(target);
+    }
+
+    @Override
+    @Test
+    public void collectFloat()
+    {
+        Verify.assertEmpty(this.classUnderTest().collectFloat(StringFunctions.toPrimitiveFloat()));
+    }
+
+    @Override
+    @Test
+    public void collectFloat_withTarget()
+    {
+        FloatArrayList target = new FloatArrayList();
+        Assert.assertSame(target, this.classUnderTest().collectFloat(StringFunctions.toPrimitiveFloat(), target));
+        Verify.assertEmpty(target);
+    }
+
+    @Override
+    @Test
+    public void collectInt()
+    {
+        Verify.assertEmpty(this.classUnderTest().collectInt(StringFunctions.toPrimitiveInt()));
+    }
+
+    @Override
+    @Test
+    public void collectInt_withTarget()
+    {
+        IntArrayList target = new IntArrayList();
+        Assert.assertSame(target, this.classUnderTest().collectInt(StringFunctions.toPrimitiveInt(), target));
+        Verify.assertEmpty(target);
+    }
+
+    @Override
+    @Test
+    public void collectLong()
+    {
+        Verify.assertEmpty(this.classUnderTest().collectLong(StringFunctions.toPrimitiveLong()));
+    }
+
+    @Override
+    @Test
+    public void collectLong_withTarget()
+    {
+        LongArrayList target = new LongArrayList();
+        Assert.assertSame(target, this.classUnderTest().collectLong(StringFunctions.toPrimitiveLong(), target));
+        Verify.assertEmpty(target);
+    }
+
+    @Override
+    @Test
+    public void collectShort()
+    {
+        Verify.assertEmpty(this.classUnderTest().collectShort(StringFunctions.toPrimitiveShort()));
+    }
+
+    @Override
+    @Test
+    public void collectShort_withTarget()
+    {
+        ShortArrayList target = new ShortArrayList();
+        Assert.assertSame(target, this.classUnderTest().collectShort(StringFunctions.toPrimitiveShort(), target));
+        Verify.assertEmpty(target);
     }
 }
 

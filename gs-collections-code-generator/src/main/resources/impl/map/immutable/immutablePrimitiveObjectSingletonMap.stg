@@ -359,7 +359,7 @@ final class Immutable<name>ObjectSingletonMap\<V> extends AbstractImmutable<name
 
     public \<R extends Collection\<V>\> R reject(Predicate\<? super V> predicate, R target)
     {
-        if (predicate.accept(this.value1))
+        if (!predicate.accept(this.value1))
         {
             target.add(this.value1);
         }
@@ -396,11 +396,7 @@ final class Immutable<name>ObjectSingletonMap\<V> extends AbstractImmutable<name
 
     public \<S> RichIterable\<S> selectInstancesOf(Class\<S> clazz)
     {
-        if (clazz.isInstance(this.value1))
-        {
-            Lists.immutable.with(this.value1);
-        }
-        return Lists.immutable.with();
+        return clazz.isInstance(this.value1) ? Lists.immutable.with(clazz.cast(this.value1)) : Lists.immutable.\<S>with();
     }
 
     public \<VV> ImmutableCollection\<VV> collect(Function\<? super V, ? extends VV> function)
@@ -805,7 +801,7 @@ final class Immutable<name>ObjectSingletonMap\<V> extends AbstractImmutable<name
 
     public void forEachWithIndex(ObjectIntProcedure\<? super V> objectIntProcedure)
     {
-        objectIntProcedure.value(this.value1, 1);
+        objectIntProcedure.value(this.value1, 0);
     }
 
     public \<P> void forEachWith(Procedure2\<? super V, ? super P> procedure, P parameter)

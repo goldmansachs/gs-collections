@@ -168,7 +168,7 @@ public abstract class Abstract<name>ObjectMapTestCase
     }
 
     @Test
-    public void selectWithTarget()
+    public void selectWith_withTarget()
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
 
@@ -206,11 +206,29 @@ public abstract class Abstract<name>ObjectMapTestCase
     }
 
     @Test
+    public void collectBoolean_withTarget()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "true", <(literal.(type))("1")>, "false", <(literal.(type))("2")>, "nah");
+        BooleanArrayList target = new BooleanArrayList();
+        Assert.assertSame(target, map1.collectBoolean(StringFunctions.toPrimitiveBoolean(), target));
+        Assert.assertEquals(BooleanArrayList.newListWith(true, false, false), target);
+    }
+
+    @Test
     public void collectByte()
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "0", <(literal.(type))("1")>, "1", <(literal.(type))("2")>, "9");
 
         Assert.assertEquals(ByteArrayList.newListWith((byte) 0, (byte) 1, (byte) 9), map1.collectByte(StringFunctions.toPrimitiveByte()));
+    }
+
+    @Test
+    public void collectByte_withTarget()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "0", <(literal.(type))("1")>, "1", <(literal.(type))("2")>, "9");
+        ByteArrayList target = new ByteArrayList();
+        Assert.assertSame(target, map1.collectByte(StringFunctions.toPrimitiveByte(), target));
+        Assert.assertEquals(ByteArrayList.newListWith((byte) 0, (byte) 1, (byte) 9), target);
     }
 
     @Test
@@ -222,11 +240,29 @@ public abstract class Abstract<name>ObjectMapTestCase
     }
 
     @Test
+    public void collectChar_withTarget()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "0", <(literal.(type))("1")>, "1", <(literal.(type))("2")>, "9");
+        CharArrayList target = new CharArrayList();
+        Assert.assertSame(target, map1.collectChar(StringFunctions.toPrimitiveChar(), target));
+        Assert.assertEquals(CharArrayList.newListWith((char) 0, (char) 1, (char) 9), target);
+    }
+
+    @Test
     public void collectDouble()
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "0", <(literal.(type))("1")>, "1", <(literal.(type))("2")>, "9");
 
         Assert.assertEquals(DoubleArrayList.newListWith(0.0d, 1.0d, 9.0d), map1.collectDouble(StringFunctions.toPrimitiveDouble()));
+    }
+
+    @Test
+    public void collectDouble_withTarget()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "0", <(literal.(type))("1")>, "1", <(literal.(type))("2")>, "9");
+        DoubleArrayList target = new DoubleArrayList();
+        Assert.assertSame(target, map1.collectDouble(StringFunctions.toPrimitiveDouble(), target));
+        Assert.assertEquals(DoubleArrayList.newListWith(0.0d, 1.0d, 9.0d), target);
     }
 
     @Test
@@ -238,11 +274,29 @@ public abstract class Abstract<name>ObjectMapTestCase
     }
 
     @Test
+    public void collectFloat_withTarget()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "0", <(literal.(type))("1")>, "1", <(literal.(type))("2")>, "9");
+        FloatArrayList target = new FloatArrayList();
+        Assert.assertSame(target, map1.collectFloat(StringFunctions.toPrimitiveFloat(), target));
+        Assert.assertEquals(FloatArrayList.newListWith(0.0f, 1.0f, 9.0f), target);
+    }
+
+    @Test
     public void collectInt()
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "0", <(literal.(type))("1")>, "1", <(literal.(type))("2")>, "9");
 
         Assert.assertEquals(IntArrayList.newListWith(0, 1, 9), map1.collectInt(StringFunctions.toPrimitiveInt()));
+    }
+
+    @Test
+    public void collectInt_withTarget()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "0", <(literal.(type))("1")>, "1", <(literal.(type))("2")>, "9");
+        IntArrayList target = new IntArrayList();
+        Assert.assertSame(target, map1.collectInt(StringFunctions.toPrimitiveInt(), target));
+        Assert.assertEquals(IntArrayList.newListWith(0, 1, 9), target);
     }
 
     @Test
@@ -254,11 +308,29 @@ public abstract class Abstract<name>ObjectMapTestCase
     }
 
     @Test
+    public void collectLong_withTarget()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "0", <(literal.(type))("1")>, "1", <(literal.(type))("2")>, "9");
+        LongArrayList target = new LongArrayList();
+        Assert.assertSame(target, map1.collectLong(StringFunctions.toPrimitiveLong(), target));
+        Assert.assertEquals(LongArrayList.newListWith(0L, 1L, 9L), target);
+    }
+
+    @Test
     public void collectShort()
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "0", <(literal.(type))("1")>, "1", <(literal.(type))("2")>, "9");
 
         Assert.assertEquals(ShortArrayList.newListWith((short) 0, (short) 1, (short) 9), map1.collectShort(StringFunctions.toPrimitiveShort()));
+    }
+
+    @Test
+    public void collectShort_withTarget()
+    {
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "0", <(literal.(type))("1")>, "1", <(literal.(type))("2")>, "9");
+        ShortArrayList target = new ShortArrayList();
+        Assert.assertSame(target, map1.collectShort(StringFunctions.toPrimitiveShort(), target));
+        Assert.assertEquals(ShortArrayList.newListWith((short) 0, (short) 1, (short) 9), target);
     }
 
     @Test
@@ -994,7 +1066,7 @@ public abstract class Abstract<name>ObjectMapTestCase
     }
 
     @Test
-    public void rejectWithTarget()
+    public void rejectWith_withTarget()
     {
         <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
 
