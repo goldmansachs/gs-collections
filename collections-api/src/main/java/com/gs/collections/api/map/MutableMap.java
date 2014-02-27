@@ -208,6 +208,13 @@ public interface MutableMap<K, V>
     MutableCollection<Pair<V, Integer>> zipWithIndex();
 
     /**
+     * This method allows mutable map the ability to add an element in the form of Pair<K,V>.
+     *
+     * @see #put(Object, Object)
+     */
+    V add(Pair<K, V> keyValuePair);
+
+    /**
      * This method allows mutable, fixed size, and immutable maps the ability to add elements to their existing
      * elements.  In order to support fixed size maps, a new instance of a map would have to be returned including the
      * keys and values of the original plus the additional key and value.  In the case of mutable maps, the original map

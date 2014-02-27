@@ -231,6 +231,11 @@ public class UnmodifiableMutableMap<K, V>
         return this.getMutableMap().ifPresentApply(key, function);
     }
 
+    public V add(Pair<K, V> keyValuePair)
+    {
+        throw new UnsupportedOperationException("Cannot call add() on " + this.getClass().getSimpleName());
+    }
+
     public MutableMap<K, V> withKeyValue(K key, V value)
     {
         throw new UnsupportedOperationException("Cannot call withKeyValue() on " + this.getClass().getSimpleName());

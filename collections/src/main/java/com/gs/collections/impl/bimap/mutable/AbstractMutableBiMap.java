@@ -979,6 +979,11 @@ abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
         return newValue;
     }
 
+    public V add(Pair<K, V> keyValuePair)
+    {
+        return this.put(keyValuePair.getOne(), keyValuePair.getTwo());
+    }
+
     public MutableBiMap<K, V> withKeyValue(K key, V value)
     {
         this.put(key, value);

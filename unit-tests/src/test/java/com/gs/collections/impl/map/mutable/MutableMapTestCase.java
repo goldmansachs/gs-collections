@@ -725,6 +725,16 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
     }
 
     @Test
+    public void add()
+    {
+        MutableMap<String, Integer> map = this.newMapWithKeyValue("A", 1);
+
+        Assert.assertEquals(Integer.valueOf(1), map.add(Tuples.pair("A", 3)));
+        Assert.assertNull(map.add(Tuples.pair("B", 2)));
+        Verify.assertMapsEqual(UnifiedMap.newWithKeysValues("A", 3, "B", 2), map);
+    }
+
+    @Test
     public void withKeyValue()
     {
         MutableMap<String, Integer> map = this.newMapWithKeyValue("A", 1);

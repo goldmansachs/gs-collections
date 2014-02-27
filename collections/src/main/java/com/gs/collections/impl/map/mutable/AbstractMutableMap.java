@@ -349,6 +349,11 @@ public abstract class AbstractMutableMap<K, V> extends AbstractMapIterable<K, V>
         return this.zipWithIndex(FastList.<Pair<V, Integer>>newList(this.size()));
     }
 
+    public V add(Pair<K, V> keyValuePair)
+    {
+        return this.put(keyValuePair.getOne(), keyValuePair.getTwo());
+    }
+
     public MutableMap<K, V> withKeyValue(K key, V value)
     {
         this.put(key, value);

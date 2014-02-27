@@ -493,10 +493,21 @@ public class SynchronizedMutableMap<K, V>
         }
     }
 
+    public V add(Pair<K, V> keyValuePair)
+    {
+        synchronized (this.lock)
+        {
+            return this.put(keyValuePair.getOne(), keyValuePair.getTwo());
+        }
+    }
+
     public MutableMap<K, V> withKeyValue(K key, V value)
     {
-        this.put(key, value);
-        return this;
+        synchronized (this.lock)
+        {
+            this.put(key, value);
+            return this;
+        }
     }
 
     public MutableMap<K, V> withAllKeyValueArguments(Pair<? extends K, ? extends V>... keyValuePairs)

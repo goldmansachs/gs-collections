@@ -376,6 +376,13 @@ public class UnmodifiableMutableMapTest extends MutableMapTestCase
 
     @Override
     @Test(expected = UnsupportedOperationException.class)
+    public void add()
+    {
+        this.newMapWithKeysValues(1, "One", 2, "Two").add(null);
+    }
+
+    @Override
+    @Test(expected = UnsupportedOperationException.class)
     public void withKeyValue()
     {
         this.newMapWithKeysValues(1, "One", 2, "2").withKeyValue(null, null);
