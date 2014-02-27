@@ -111,6 +111,7 @@ delta ::= [
 ]
 
 wideDelta ::= [
+    "boolean": "",
     "byte": "",
     "short": "",
     "char": "",
