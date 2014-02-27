@@ -625,8 +625,7 @@ public abstract class StackIterableTestCase
                 Tuples.pair("4", 4),
                 Tuples.pair("3", 5),
                 Tuples.pair("2", 6),
-                Tuples.pair("1", 7)
-        );
+                Tuples.pair("1", 7));
 
         Assert.assertEquals(expected, stack.zip(interval));
 
@@ -1022,7 +1021,8 @@ public abstract class StackIterableTestCase
         SetIterable<Integer> expected = UnifiedSet.newSetWith(10, 9, 8, 7, 6, 5, 4, 3, 2, 1);
 
         StackIterable<Integer> stack = this.newStackWith(5, 2, 4, 3, 1, 6, 7, 8, 9, 10);
-        Assert.assertEquals(expected,
+        Assert.assertEquals(
+                expected,
                 stack.toSortedSetBy(Functions.getToString()));
         Assert.assertEquals(
                 FastList.newListWith(1, 10, 2, 3, 4, 5, 6, 7, 8, 9),
@@ -1109,7 +1109,8 @@ public abstract class StackIterableTestCase
         StackIterable<Integer> stack2 = this.newStackWith(1, 2, 3, 4);
         Assert.assertNotEquals(stack1.hashCode(), stack2.hashCode());
 
-        Assert.assertEquals(31 * 31 * 31 * 31 + 1 * 31 * 31 * 31 + 2 * 31 * 31 + 3 * 31 + 4,
+        Assert.assertEquals(
+                31 * 31 * 31 * 31 + 1 * 31 * 31 * 31 + 2 * 31 * 31 + 3 * 31 + 4,
                 this.newStackFromTopToBottom(1, 2, 3, 4).hashCode());
         Assert.assertEquals(31 * 31 * 31, this.newStackFromTopToBottom(null, null, null).hashCode());
 

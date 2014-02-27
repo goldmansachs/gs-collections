@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -63,7 +63,8 @@ final class SextupletonList<T>
     @Override
     public ArrayAdapter<T> with(T value)
     {
-        return ArrayAdapter.newArrayWith(this.element1,
+        return ArrayAdapter.newArrayWith(
+                this.element1,
                 this.element2,
                 this.element3,
                 this.element4,

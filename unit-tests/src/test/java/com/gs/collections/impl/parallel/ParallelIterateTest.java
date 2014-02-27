@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -147,8 +147,7 @@ public class ParallelIterateTest
                 UnifiedSetWithHashingStrategy.<Integer>newSet(HashingStrategies.defaultStrategy()).withAll(interval),
                 UnifiedSetWithHashingStrategy.<Integer>newSet(HashingStrategies.defaultStrategy()).withAll(interval).asUnmodifiable(),
                 UnifiedSetWithHashingStrategy.<Integer>newSet(HashingStrategies.defaultStrategy()).withAll(interval).asSynchronized(),
-                UnifiedSetWithHashingStrategy.<Integer>newSet(HashingStrategies.defaultStrategy()).withAll(interval).toImmutable()
-        );
+                UnifiedSetWithHashingStrategy.<Integer>newSet(HashingStrategies.defaultStrategy()).withAll(interval).toImmutable());
     }
 
     @After
@@ -741,16 +740,19 @@ public class ParallelIterateTest
             this.sum = newSum;
         }
 
+        @Override
         public SumProcedure create()
         {
             return new SumProcedure(new IntegerSum(0));
         }
 
+        @Override
         public IntegerSum value(IntegerSum s1, Integer s2)
         {
             return s1.add(s2);
         }
 
+        @Override
         public void value(Integer object)
         {
             this.sum.add(object);
@@ -773,6 +775,7 @@ public class ParallelIterateTest
             this.sum = initialSum;
         }
 
+        @Override
         public void combineOne(SumProcedure sumProcedure)
         {
             this.sum.add(sumProcedure.getSum());

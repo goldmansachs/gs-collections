@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -2153,7 +2153,8 @@ public class ConcurrentHashMapUnsafe<K, V>
     }
 
     @Override
-    public <P> V getIfAbsentWith(K key,
+    public <P> V getIfAbsentWith(
+            K key,
             Function<? super P, ? extends V> function,
             P parameter)
     {
@@ -2200,8 +2201,7 @@ public class ConcurrentHashMapUnsafe<K, V>
             }
             catch (PrivilegedActionException e)
             {
-                throw new RuntimeException("Could not initialize intrinsics",
-                        e.getCause());
+                throw new RuntimeException("Could not initialize intrinsics", e.getCause());
             }
         }
     }

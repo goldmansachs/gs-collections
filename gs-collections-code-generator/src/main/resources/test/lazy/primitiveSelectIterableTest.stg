@@ -168,18 +168,18 @@ public class Select<name>IterableTest
     public void minIfEmpty()
     {
         Assert.assertEquals(<(literal.(type))("1")>, this.iterable.minIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
-        Assert.assertEquals(<(literal.(type))("0")>,
-            this.iterable.select(<name>Predicates.lessThan(<(literal.(type))("0")>))
-                .minIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
+        Assert.assertEquals(
+                <(literal.(type))("0")>,
+                this.iterable.select(<name>Predicates.lessThan(<(literal.(type))("0")>)).minIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
     }
 
     @Test
     public void maxIfEmpty()
     {
         Assert.assertEquals(<(literal.(type))("2")>, this.iterable.maxIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
-        Assert.assertEquals(<(literal.(type))("0")>,
-            this.iterable.select(<name>Predicates.lessThan(<(literal.(type))("0")>))
-                .maxIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
+        Assert.assertEquals(
+                <(literal.(type))("0")>,
+                this.iterable.select(<name>Predicates.lessThan(<(literal.(type))("0")>)).maxIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
     }
 
     @Test(expected = NoSuchElementException.class)

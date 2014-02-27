@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -810,7 +810,8 @@ public class UnifiedSetWithHashingStrategyTest extends AbstractUnifiedSetTestCas
     public void constructor_from_UnifiedSet()
     {
         Verify.assertEqualsAndHashCode(new HashSet<Integer>(MORE_COLLISIONS),
-                UnifiedSetWithHashingStrategy.newSet(INTEGER_HASHING_STRATEGY,
+                UnifiedSetWithHashingStrategy.newSet(
+                        INTEGER_HASHING_STRATEGY,
                         MORE_COLLISIONS));
     }
 

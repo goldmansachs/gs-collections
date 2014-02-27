@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -73,8 +73,10 @@ public final class TreeSortedMap<K, V>
     public TreeSortedMap(Pair<K, V>... pairs)
     {
         this.treeMap = new TreeMap<K, V>();
-        ArrayIterate.forEach(pairs, new MapCollectProcedure<Pair<K, V>, K, V>(this.treeMap,
-                Functions.<K>firstOfPair(), Functions.<V>secondOfPair()));
+        ArrayIterate.forEach(pairs, new MapCollectProcedure<Pair<K, V>, K, V>(
+                this.treeMap,
+                Functions.<K>firstOfPair(),
+                Functions.<V>secondOfPair()));
     }
 
     public static <K, V> TreeSortedMap<K, V> newMap()

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -479,7 +479,8 @@ public class SingletonSetTest extends AbstractMemoryEfficientMutableSetTestCase
     public void injectIntoWith()
     {
         Integer result =
-                this.intSet.injectIntoWith(1,
+                this.intSet.injectIntoWith(
+                        1,
                         new Function3<Integer, Integer, Integer, Integer>()
                         {
                             public Integer value(Integer injectedValued, Integer item, Integer parameter)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -227,7 +227,8 @@ public class FunctionsTest
     @Test
     public void bind_function2_parameter()
     {
-        Verify.assertSerializedForm(1L,
+        Verify.assertSerializedForm(
+                1L,
                 "rO0ABXNyAD1jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9ucyRC\n"
                         + "aW5kRnVuY3Rpb24yAAAAAAAAAAECAAJMAAhkZWxlZ2F0ZXQAMUxjb20vZ3MvY29sbGVjdGlvbnMv\n"
                         + "YXBpL2Jsb2NrL2Z1bmN0aW9uL0Z1bmN0aW9uMjtMAAlwYXJhbWV0ZXJ0ABJMamF2YS9sYW5nL09i\n"

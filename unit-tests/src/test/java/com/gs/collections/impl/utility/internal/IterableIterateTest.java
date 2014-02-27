@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -251,7 +251,8 @@ public class IterableIterateTest
     {
         Iterable<Integer> iterable = new IterableAdapter<Integer>(this.getIntegerList());
         Verify.assertSize(5, Iterate.reject(iterable, Predicates.instanceOf(String.class)));
-        Verify.assertSize(5,
+        Verify.assertSize(
+                5,
                 Iterate.reject(iterable, Predicates.instanceOf(String.class), FastList.<Integer>newList()));
     }
 
@@ -272,7 +273,8 @@ public class IterableIterateTest
     {
         Iterable<Integer> iterable = new IterableAdapter<Integer>(this.getIntegerList());
         Verify.assertSize(5, Iterate.selectWith(iterable, Predicates2.instanceOf(), Integer.class));
-        Verify.assertSize(5,
+        Verify.assertSize(
+                5,
                 Iterate.selectWith(iterable, Predicates2.instanceOf(), Integer.class, FastList.<Integer>newList()));
     }
 
@@ -281,7 +283,8 @@ public class IterableIterateTest
     {
         Iterable<Integer> iterable = new IterableAdapter<Integer>(this.getIntegerList());
         Verify.assertEmpty(Iterate.rejectWith(iterable, Predicates2.instanceOf(), Integer.class));
-        Verify.assertEmpty(Iterate.rejectWith(iterable,
+        Verify.assertEmpty(Iterate.rejectWith(
+                iterable,
                 Predicates2.instanceOf(),
                 Integer.class,
                 FastList.<Integer>newList()));

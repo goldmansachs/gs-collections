@@ -142,7 +142,7 @@ final class Immutable<name>SingletonBag implements Immutable<name>Bag, Serializa
 
     public \<V> ImmutableBag\<V> collect(<name>ToObjectFunction\<? extends V> function)
     {
-        return HashBag.\<V>newBagWith(function.valueOf(this.element1)).toImmutable();
+        return HashBag.newBagWith(function.valueOf(this.element1)).toImmutable();
     }
 
     public Mutable<name>List toList()

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,9 +56,11 @@ public class ImmutableArrayBagTest extends ImmutableBagTestCase
     {
         super.newWith();
         int maximumUsefulArrayBagSize = ImmutableArrayBag.MAXIMUM_USEFUL_ARRAY_BAG_SIZE;
-        Verify.assertInstanceOf(ImmutableArrayBag.class,
+        Verify.assertInstanceOf(
+                ImmutableArrayBag.class,
                 Bags.immutable.ofAll(Interval.oneTo(maximumUsefulArrayBagSize - 1)).newWith(maximumUsefulArrayBagSize));
-        Verify.assertInstanceOf(ImmutableHashBag.class,
+        Verify.assertInstanceOf(
+                ImmutableHashBag.class,
                 Bags.immutable.ofAll(Interval.oneTo(maximumUsefulArrayBagSize)).newWith(maximumUsefulArrayBagSize + 1));
     }
 

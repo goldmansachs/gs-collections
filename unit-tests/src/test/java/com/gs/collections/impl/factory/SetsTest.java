@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -396,7 +396,8 @@ public class SetsTest
     {
         MutableSet<String> names = Sets.differenceAll(this.uniqueSets.get(0), this.uniqueSets.get(1), this.uniqueSets.get(2));
         Assert.assertEquals(UnifiedSet.newSetWith("Harry", "Tom", "Dick", null), names);
-        Verify.assertSetsEqual(names,
+        Verify.assertSetsEqual(
+                names,
                 Sets.difference(Sets.difference(this.uniqueSets.get(0), this.uniqueSets.get(1)), this.uniqueSets.get(2)));
     }
 
@@ -405,7 +406,8 @@ public class SetsTest
     {
         MutableSet<String> names = Sets.differenceAll(this.overlappingSets.get(0), this.overlappingSets.get(1), this.overlappingSets.get(2));
         Assert.assertEquals(UnifiedSet.newSetWith("Harry"), names);
-        Verify.assertSetsEqual(names,
+        Verify.assertSetsEqual(
+                names,
                 Sets.difference(Sets.difference(this.overlappingSets.get(0), this.overlappingSets.get(1)), this.overlappingSets.get(2)));
     }
 
@@ -414,7 +416,8 @@ public class SetsTest
     {
         MutableSet<String> names = Sets.differenceAll(this.identicalSets.get(0), this.identicalSets.get(1), this.identicalSets.get(2));
         Assert.assertEquals(UnifiedSet.newSetWith(), names);
-        Verify.assertSetsEqual(names,
+        Verify.assertSetsEqual(
+                names,
                 Sets.difference(Sets.difference(this.identicalSets.get(0), this.identicalSets.get(1)), this.identicalSets.get(2)));
     }
 

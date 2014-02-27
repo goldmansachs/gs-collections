@@ -125,7 +125,7 @@ final class Immutable<name1><name2>SingletonMap implements Immutable<name1><name
 
     public RichIterable\<<name1><name2>Pair> keyValuesView()
     {
-        return Lists.immutable.\<<name1><name2>Pair>of(PrimitiveTuples.pair(this.key1, this.value1)).asLazy();
+        return Lists.immutable.of(PrimitiveTuples.pair(this.key1, this.value1)).asLazy();
     }
 
     public Immutable<name1><name2>Map select(<name1><name2>Predicate predicate)

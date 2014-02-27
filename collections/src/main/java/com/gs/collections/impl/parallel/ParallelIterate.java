@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -124,7 +124,8 @@ public final class ParallelIterate
             BT procedure,
             Executor executor)
     {
-        ParallelIterate.forEachWithIndex(iterable,
+        ParallelIterate.forEachWithIndex(
+                iterable,
                 new PassThruObjectIntProcedureFactory<BT>(procedure),
                 new PassThruCombiner<BT>(), executor);
     }
@@ -526,7 +527,7 @@ public final class ParallelIterate
      * Same effect as {@link Iterate#select(Iterable, Predicate)}, but executed in parallel batches.
      *
      * @return The selected elements. The Collection will be of the same type as the input (List or Set)
-     *         and will be in the same order as the input (if it is an ordered collection).
+     * and will be in the same order as the input (if it is an ordered collection).
      * @see ParallelIterate#select(Iterable, Predicate, boolean)
      */
     public static <T> Collection<T> select(
@@ -628,7 +629,7 @@ public final class ParallelIterate
      * Same effect as {@link Iterate#reject(Iterable, Predicate)}, but executed in parallel batches.
      *
      * @return The rejected elements. The Collection will be of the same type as the input (List or Set)
-     *         and will be in the same order as the input (if it is an ordered collection).
+     * and will be in the same order as the input (if it is an ordered collection).
      * @see ParallelIterate#reject(Iterable, Predicate, boolean)
      */
     public static <T> Collection<T> reject(
@@ -731,7 +732,7 @@ public final class ParallelIterate
      * but executed in parallel batches.
      *
      * @return The collected elements. The Collection will be of the same type as the input (List or Set)
-     *         and will be in the same order as the input (if it is an ordered collection).
+     * and will be in the same order as the input (if it is an ordered collection).
      * @see ParallelIterate#collect(Iterable, Function, boolean)
      */
     public static <T, V> Collection<V> collect(
@@ -748,7 +749,7 @@ public final class ParallelIterate
      * @param allowReorderedResult If the result can be in a different order.
      *                             Allowing reordering may yield faster execution.
      * @return The collected elements. The Collection will be of the same type
-     *         (List or Set) as the input.
+     * (List or Set) as the input.
      */
     public static <T, V> Collection<V> collect(
             Iterable<T> iterable,
@@ -862,7 +863,7 @@ public final class ParallelIterate
      * but executed in parallel batches.
      *
      * @return The collected elements. The Collection will be of the same type as the input (List or Set)
-     *         and will be in the same order as the input (if it is an ordered collection).
+     * and will be in the same order as the input (if it is an ordered collection).
      * @see ParallelIterate#collectIf(Iterable, Predicate, Function, boolean)
      */
     public static <T, V> Collection<V> collectIf(
@@ -880,7 +881,7 @@ public final class ParallelIterate
      * @param allowReorderedResult If the result can be in a different order.
      *                             Allowing reordering may yield faster execution.
      * @return The collected elements. The Collection will be of the same type
-     *         as the input (List or Set)
+     * as the input (List or Set)
      */
     public static <T, V> Collection<V> collectIf(
             Iterable<T> iterable,

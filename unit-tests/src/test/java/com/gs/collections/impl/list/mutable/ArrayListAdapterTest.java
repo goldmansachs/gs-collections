@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -323,8 +323,7 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
     {
         MutableList<Integer> result2 = Lists.mutable.of();
         // Requires list of 100+ elements to engage commando pattern optimization
-        ArrayListAdapter.adapt(new ArrayList<Integer>(Interval.oneTo(200))).forEachWithIndex(99, 199, new AddToList(result2)
-        );
+        ArrayListAdapter.adapt(new ArrayList<Integer>(Interval.oneTo(200))).forEachWithIndex(99, 199, new AddToList(result2));
         Verify.assertSize(101, result2);
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -207,7 +207,8 @@ public abstract class MapIterableTestCase
             }
         });
         Verify.assertSize(8, result);
-        Verify.assertContainsAll(result,
+        Verify.assertContainsAll(
+                result,
                 "One", "Two", "Three", "Four", // Map values
                 "0", "1", "2", "3");  // Stringified index values
     }
@@ -971,8 +972,7 @@ public abstract class MapIterableTestCase
 
         final Multimap<Boolean, Integer> expected = FastListMultimap.newMultimap(
                 Tuples.pair(Boolean.TRUE, 1), Tuples.pair(Boolean.TRUE, 3),
-                Tuples.pair(Boolean.FALSE, 2), Tuples.pair(Boolean.FALSE, 4)
-        );
+                Tuples.pair(Boolean.FALSE, 2), Tuples.pair(Boolean.FALSE, 4));
 
         final Multimap<Boolean, Integer> actual = map.groupBy(isOddFunction);
         expected.forEachKey(new Procedure<Boolean>()

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -52,10 +52,7 @@ class SynchronizedMutableMapScalaTest extends SynchronizedMapIterableTestTrait
     {
         this.assertSynchronized
         {
-            this.classUnderTest.getIfAbsentPut("Nine",
-            {
-                () => "foo"
-            })
+            this.classUnderTest.getIfAbsentPut("Nine", () => "foo")
         }
     }
 

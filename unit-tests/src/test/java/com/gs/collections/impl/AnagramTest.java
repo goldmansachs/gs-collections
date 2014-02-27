@@ -79,8 +79,7 @@ public class AnagramTest
     {
         return FastList.newListWith(
                 "alerts", "alters", "artels", "estral", "laster", "ratels", "salter", "slater", "staler", "stelar", "talers",
-                "least", "setal", "slate", "stale", "steal", "stela", "taels", "tales", "teals", "tesla"
-        );
+                "least", "setal", "slate", "stale", "steal", "stela", "taels", "tales", "teals", "tesla");
     }
 
     @Test
@@ -185,6 +184,7 @@ public class AnagramTest
     {
         private static final long serialVersionUID = 1L;
 
+        @Override
         public String valueOf(RichIterable<T> list)
         {
             return list.size() + ": " + list;
@@ -195,6 +195,7 @@ public class AnagramTest
     {
         private static final long serialVersionUID = 1L;
 
+        @Override
         public int intValueOf(RichIterable<T> list)
         {
             return list.size();
@@ -205,6 +206,7 @@ public class AnagramTest
     {
         private static final long serialVersionUID = 1L;
 
+        @Override
         public Alphagram valueOf(String string)
         {
             return new Alphagram(string);

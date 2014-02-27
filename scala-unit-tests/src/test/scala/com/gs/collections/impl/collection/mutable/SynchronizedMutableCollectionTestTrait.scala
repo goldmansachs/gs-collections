@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -223,10 +223,7 @@ trait SynchronizedMutableCollectionTestTrait
     {
         this.assertSynchronized
         {
-            this.classUnderTest.injectIntoWith[String, String]("",
-            {
-                (_: String, _: String, _: String) => ""
-            }, "")
+            this.classUnderTest.injectIntoWith[String, String]("", (_: String, _: String, _: String) => "", "")
         }
     }
 

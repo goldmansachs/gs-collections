@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -593,7 +593,8 @@ public class UnifiedSetTest
         {
             if (i % removeStride != 0)
             {
-                Verify.assertContains("set contains " + i + "for shift " + shift + " and remove stride " + removeStride,
+                Verify.assertContains(
+                        "set contains " + i + "for shift " + shift + " and remove stride " + removeStride,
                         new CollidingInt(i, shift),
                         set);
             }
@@ -639,7 +640,8 @@ public class UnifiedSetTest
         {
             if (i % removeStride == 0)
             {
-                Verify.assertContains("set contains " + i + "for shift " + shift + " and remove stride " + removeStride,
+                Verify.assertContains(
+                        "set contains " + i + "for shift " + shift + " and remove stride " + removeStride,
                         new CollidingInt(i, shift),
                         set);
             }

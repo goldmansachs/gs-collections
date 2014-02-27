@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -296,11 +296,17 @@ class MultiReaderFastListScalaTest extends MultiReaderFastListTestTrait
         val reverseIterable = this.classUnderTest.asReversed()
         this.assertWritersBlocked
         {
-            reverseIterable.forEach{_: Int => ()}
+            reverseIterable.forEach
+            {
+                _: Int => ()
+            }
         }
         this.assertReadersNotBlocked
         {
-            reverseIterable.forEach{_: Int => ()}
+            reverseIterable.forEach
+            {
+                _: Int => ()
+            }
         }
     }
 
@@ -1933,17 +1939,11 @@ class MultiReaderFastListScalaTest extends MultiReaderFastListTestTrait
     {
         this.assertWritersBlocked
         {
-            this.classUnderTest.injectInto[Int](0,
-            {
-                (inject: Int, value: Int) => value + inject
-            })
+            this.classUnderTest.injectInto[Int](0, (inject: Int, value: Int) => value + inject)
         }
         this.assertReadersNotBlocked
         {
-            this.classUnderTest.injectInto[Int](0,
-            {
-                (inject: Int, value: Int) => value + inject
-            })
+            this.classUnderTest.injectInto[Int](0, (inject: Int, value: Int) => value + inject)
         }
     }
 
@@ -1952,19 +1952,11 @@ class MultiReaderFastListScalaTest extends MultiReaderFastListTestTrait
     {
         this.assertWritersBlocked
         {
-            this.classUnderTest.injectIntoWith[Int, Int](0,
-            {
-                (_: Int, value: Int, _: Int) => value
-            },
-            0)
+            this.classUnderTest.injectIntoWith[Int, Int](0, (_: Int, value: Int, _: Int) => value, 0)
         }
         this.assertReadersNotBlocked
         {
-            this.classUnderTest.injectIntoWith[Int, Int](0,
-            {
-                (injected: Int, value: Int, _: Int) => value + injected
-            },
-            0)
+            this.classUnderTest.injectIntoWith[Int, Int](0, (injected: Int, value: Int, _: Int) => value + injected, 0)
         }
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,9 +44,8 @@ import com.gs.collections.impl.utility.Iterate;
  * instance of this class with the existing contents plus the new item.
  * <p/>
  * To create a wrapper around an existing array, use the {@link #adapt(Object[])} factory method.  To wrap the contents
- * of an existing Collection instance, use the {@link #newArray(Iterable)} or {@link #newArrayWithItem(Iterable,
- * Object)} factory methods.  To wrap existing objects in a new array, use one of the {@link #newArrayWith(Object)}
- * factory methods.
+ * of an existing Collection instance, use the {@link #newArray(Iterable)} or {@link #newArrayWithItem(Iterable, Object)}
+ * factory methods.  To wrap existing objects in a new array, use one of the {@link #newArrayWith(Object)} factory methods.
  */
 public final class ArrayAdapter<T>
         extends AbstractArrayAdapter<T>

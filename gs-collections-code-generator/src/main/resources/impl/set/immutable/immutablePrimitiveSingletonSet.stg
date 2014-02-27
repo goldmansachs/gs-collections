@@ -144,7 +144,7 @@ final class Immutable<name>SingletonSet implements Immutable<name>Set, Serializa
 
     public \<V> ImmutableSet\<V> collect(<name>ToObjectFunction\<? extends V> function)
     {
-        return UnifiedSet.\<V>newSetWith(function.valueOf(this.element)).toImmutable();
+        return UnifiedSet.newSetWith(function.valueOf(this.element)).toImmutable();
     }
 
     public Mutable<name>List toList()

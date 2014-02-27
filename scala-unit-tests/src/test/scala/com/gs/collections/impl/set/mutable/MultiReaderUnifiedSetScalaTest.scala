@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -532,15 +532,11 @@ class MultiReaderUnifiedSetScalaTest extends MultiReaderUnifiedSetTestTrait
     {
         this.assertWritersBlocked
         {
-            this.classUnderTest.selectInstancesOf(
-                Int.getClass
-            )
+            this.classUnderTest.selectInstancesOf(Int.getClass)
         }
         this.assertReadersNotBlocked
         {
-            this.classUnderTest.selectInstancesOf(
-                Int.getClass
-            )
+            this.classUnderTest.selectInstancesOf(Int.getClass)
         }
     }
 
@@ -730,16 +726,14 @@ class MultiReaderUnifiedSetScalaTest extends MultiReaderUnifiedSetTestTrait
             this.classUnderTest.selectAndRejectWith(
             {
                 (_: Int, _: Int) => true
-            }, 1
-            )
+            }, 1)
         }
         this.assertReadersNotBlocked
         {
             this.classUnderTest.selectAndRejectWith(
             {
                 (_: Int, _: Int) => true
-            }, 1
-            )
+            }, 1)
         }
     }
 
@@ -776,8 +770,7 @@ class MultiReaderUnifiedSetScalaTest extends MultiReaderUnifiedSetTestTrait
             {
                 num: Int => "" + num
             },
-            FastList.newList[String]
-            )
+            FastList.newList[String])
         }
         this.assertReadersNotBlocked
         {
@@ -788,8 +781,7 @@ class MultiReaderUnifiedSetScalaTest extends MultiReaderUnifiedSetTestTrait
             {
                 num: Int => "" + num
             },
-            FastList.newList[String]
-            )
+            FastList.newList[String])
         }
     }
 
@@ -1734,17 +1726,11 @@ class MultiReaderUnifiedSetScalaTest extends MultiReaderUnifiedSetTestTrait
     {
         this.assertWritersBlocked
         {
-            this.classUnderTest.injectInto[Int](0,
-            {
-                (inject: Int, value: Int) => value + inject
-            })
+            this.classUnderTest.injectInto[Int](0, (inject: Int, value: Int) => value + inject)
         }
         this.assertReadersNotBlocked
         {
-            this.classUnderTest.injectInto[Int](0,
-            {
-                (inject: Int, value: Int) => value + inject
-            })
+            this.classUnderTest.injectInto[Int](0, (inject: Int, value: Int) => value + inject)
         }
     }
 
@@ -1753,19 +1739,11 @@ class MultiReaderUnifiedSetScalaTest extends MultiReaderUnifiedSetTestTrait
     {
         this.assertWritersBlocked
         {
-            this.classUnderTest.injectIntoWith[Int, Int](0,
-            {
-                (_: Int, value: Int, _: Int) => value
-            },
-            0)
+            this.classUnderTest.injectIntoWith[Int, Int](0, (_: Int, value: Int, _: Int) => value, 0)
         }
         this.assertReadersNotBlocked
         {
-            this.classUnderTest.injectIntoWith[Int, Int](0,
-            {
-                (injected: Int, value: Int, _: Int) => value + injected
-            },
-            0)
+            this.classUnderTest.injectIntoWith[Int, Int](0, (injected: Int, value: Int, _: Int) => value + injected, 0)
         }
     }
 

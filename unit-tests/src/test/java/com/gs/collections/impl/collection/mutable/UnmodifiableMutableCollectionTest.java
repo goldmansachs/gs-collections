@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -99,20 +99,24 @@ public class UnmodifiableMutableCollectionTest
         Verify.assertSize(4, this.unmodifiableCollection.select(Predicates.alwaysTrue()));
         Verify.assertSize(4, this.unmodifiableCollection.select(Predicates.alwaysTrue(), FastList.<String>newList()));
         Verify.assertSize(1, this.unmodifiableCollection.selectWith(Predicates2.equal(), METALLICA));
-        Verify.assertSize(1,
+        Verify.assertSize(
+                1,
                 this.unmodifiableCollection.selectWith(Predicates2.equal(),
                         METALLICA,
                         FastList.<String>newList()));
         Verify.assertSize(2, this.unmodifiableCollection.reject(StringPredicates.contains("p")));
-        Verify.assertSize(2,
+        Verify.assertSize(
+                2,
                 this.unmodifiableCollection.reject(StringPredicates.contains("p"), FastList.<String>newList()));
         Verify.assertSize(3, this.unmodifiableCollection.rejectWith(Predicates2.equal(), METALLICA));
-        Verify.assertSize(3,
+        Verify.assertSize(
+                3,
                 this.unmodifiableCollection.rejectWith(Predicates2.equal(),
                         METALLICA,
                         FastList.<String>newList()));
         Verify.assertSize(4, this.unmodifiableCollection.collect(Functions.getStringPassThru()));
-        Verify.assertSize(4,
+        Verify.assertSize(
+                4,
                 this.unmodifiableCollection.collect(Functions.getStringPassThru(),
                         FastList.<String>newList()));
 
@@ -127,7 +131,8 @@ public class UnmodifiableMutableCollectionTest
         Verify.assertSize(8, this.unmodifiableCollection.flatCollect(flattenFunction, FastList.<String>newList()));
 
         Verify.assertSize(4, this.unmodifiableCollection.collectIf(Predicates.alwaysTrue(), Functions.getStringPassThru()));
-        Verify.assertSize(4,
+        Verify.assertSize(
+                4,
                 this.unmodifiableCollection.collectIf(Predicates.alwaysTrue(),
                         Functions.getStringPassThru(),
                         FastList.<String>newList()));

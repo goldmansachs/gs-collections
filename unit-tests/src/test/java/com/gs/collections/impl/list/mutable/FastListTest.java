@@ -1219,7 +1219,8 @@ public class FastListTest extends AbstractListTestCase
     {
         FastList<Integer> list = (FastList<Integer>) Interval.oneTo(5).toList();
         LazyIterable<String> select =
-                LazyIterate.flatCollect(list,
+                LazyIterate.flatCollect(
+                        list,
                         new Function<Integer, MutableList<String>>()
                         {
                             public MutableList<String> valueOf(Integer object)

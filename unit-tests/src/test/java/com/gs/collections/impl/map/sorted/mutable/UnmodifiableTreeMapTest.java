@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -88,16 +88,27 @@ public class UnmodifiableTreeMapTest extends MutableSortedMapTestCase
     @Override
     public <K, V> MutableSortedMap<K, V> newMapWithKeysValues(Comparator<? super K> comparator, K key1, V value1, K key2, V value2, K key3, V value3)
     {
-        return new UnmodifiableTreeMap<K, V>(TreeSortedMap.newMapWith(comparator,
-                key1, value1, key2, value2, key3, value3));
+        return new UnmodifiableTreeMap<K, V>(TreeSortedMap.newMapWith(
+                comparator,
+                key1, value1,
+                key2, value2,
+                key3, value3));
     }
 
     @Override
-    public <K, V> MutableSortedMap<K, V> newMapWithKeysValues(Comparator<? super K> comparator,
-            K key1, V value1, K key2, V value2, K key3, V value3, K key4, V value4)
+    public <K, V> MutableSortedMap<K, V> newMapWithKeysValues(
+            Comparator<? super K> comparator,
+            K key1, V value1,
+            K key2, V value2,
+            K key3, V value3,
+            K key4, V value4)
     {
-        return new UnmodifiableTreeMap<K, V>(TreeSortedMap.newMapWith(comparator,
-                key1, value1, key2, value2, key3, value3, key4, value4));
+        return new UnmodifiableTreeMap<K, V>(TreeSortedMap.newMapWith(
+                comparator,
+                key1, value1,
+                key2, value2,
+                key3, value3,
+                key4, value4));
     }
 
     @Override

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -522,7 +522,6 @@ public class ArrayListIterateTest
         Assert.assertSame("Target sent as parameter was not returned as result", target, actual);
     }
 
-
     @Test
     public void collectDouble()
     {
@@ -568,7 +567,6 @@ public class ArrayListIterateTest
         Assert.assertEquals(expected, actual);
         Assert.assertSame("Target sent as parameter was not returned as result", target, actual);
     }
-
 
     @Test
     public void collectFloat()
@@ -669,6 +667,7 @@ public class ArrayListIterateTest
         MutableLongList actual = ArrayListIterate.collectLong(list, PrimitiveFunctions.unboxIntegerToLong());
         Assert.assertEquals(LongArrayList.newListWith(-1L, 0L, 4L), actual);
     }
+
     @Test
     public void collectLongWithTarget()
     {
@@ -835,7 +834,8 @@ public class ArrayListIterateTest
         ArrayList<Integer> list = this.getIntegerList();
         Iterate.sortThis(list);
         MutableList<Integer> result = Lists.mutable.of();
-        ArrayListIterate.forEachWith(list,
+        ArrayListIterate.forEachWith(
+                list,
                 Procedures2.fromProcedure(CollectionAddProcedure.on(result)),
                 null);
         Verify.assertListsEqual(list, result);
@@ -847,7 +847,8 @@ public class ArrayListIterateTest
         ArrayList<Integer> list = new ArrayList<Integer>(Interval.oneTo(101));
         Iterate.sortThis(list);
         MutableList<Integer> result = FastList.newList(101);
-        ArrayListIterate.forEachWith(list,
+        ArrayListIterate.forEachWith(
+                list,
                 Procedures2.fromProcedure(CollectionAddProcedure.on(result)),
                 null);
         Verify.assertListsEqual(list, result);

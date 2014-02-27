@@ -236,7 +236,7 @@ final class Immutable<name>ObjectSingletonMap\<V> extends AbstractImmutable<name
 
     public RichIterable\<<name>ObjectPair\<V>\> keyValuesView()
     {
-        return Lists.immutable.\<<name>ObjectPair\<V>\>of(PrimitiveTuples.pair(this.key1, this.value1)).asLazy();
+        return Lists.immutable.of(PrimitiveTuples.pair(this.key1, this.value1)).asLazy();
     }
 
     @Override

@@ -1655,8 +1655,7 @@ public abstract class AbstractSortedBagTestCase extends AbstractCollectionTestCa
                         TreeBag.newBagWith(Comparators.reverseNaturalOrder(), "6", "5"),
                         TreeBag.newBagWith(Comparators.reverseNaturalOrder(), "4", "3"),
                         TreeBag.newBagWith(Comparators.reverseNaturalOrder(), "2", "1"),
-                        TreeBag.newBagWith(Comparators.reverseNaturalOrder(), "1")
-                ),
+                        TreeBag.newBagWith(Comparators.reverseNaturalOrder(), "1")),
                 groups);
     }
 

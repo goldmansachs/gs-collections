@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -422,7 +422,8 @@ public class MultiReaderFastListTest extends AbstractListTestCase
                 };
         Verify.assertContainsAll(MultiReaderFastList.newListWith(1, 2, 3).collectWith(addZeroFunction, 0), 1, 2, 3);
         Verify.assertContainsAll(
-                MultiReaderFastList.newListWith(1, 2, 3).collectWith(addZeroFunction,
+                MultiReaderFastList.newListWith(1, 2, 3).collectWith(
+                        addZeroFunction,
                         0,
                         FastList.<Integer>newList()), 1, 2, 3);
     }

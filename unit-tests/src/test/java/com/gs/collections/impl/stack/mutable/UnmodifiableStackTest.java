@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -165,7 +165,8 @@ public class UnmodifiableStackTest extends StackIterableTestCase
     @Test
     public void testSelectWith()
     {
-        Verify.assertSize(1,
+        Verify.assertSize(
+                1,
                 this.unmodifiableStackString.selectWith(Predicates2.equal(),
                         "2",
                         FastList.<String>newList()));
@@ -182,7 +183,8 @@ public class UnmodifiableStackTest extends StackIterableTestCase
     @Test
     public void testRejectWith()
     {
-        Verify.assertSize(3,
+        Verify.assertSize(
+                3,
                 this.unmodifiableStackString.rejectWith(Predicates2.equal(),
                         3,
                         FastList.<String>newList()));

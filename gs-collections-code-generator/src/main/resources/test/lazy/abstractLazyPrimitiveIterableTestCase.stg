@@ -239,9 +239,9 @@ public abstract class AbstractLazy<name>IterableTestCase
     {
         Assert.assertEquals(<(literal.(type))("5")>, this.getEmptyIterable().minIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
         Assert.assertEquals(<(literal.(type))("1")>, this.classUnderTest().minIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
-        Assert.assertEquals(<(literal.(type))("0")>,
-                this.classUnderTest().select(<name>Predicates.lessThan(<(literal.(type))("0")>))
-                        .minIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
+        Assert.assertEquals(
+                <(literal.(type))("0")>,
+                this.classUnderTest().select(<name>Predicates.lessThan(<(literal.(type))("0")>)).minIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
     }
 
     @Test
@@ -249,9 +249,9 @@ public abstract class AbstractLazy<name>IterableTestCase
     {
         Assert.assertEquals(<(literal.(type))("5")>, this.getEmptyIterable().maxIfEmpty(<(literal.(type))("5")>)<(wideDelta.(type))>);
         Assert.assertEquals(<(literal.(type))("3")>, this.classUnderTest().maxIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
-        Assert.assertEquals(<(literal.(type))("0")>,
-                this.classUnderTest().select(<name>Predicates.lessThan(<(literal.(type))("0")>))
-                        .maxIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
+        Assert.assertEquals(
+                <(literal.(type))("0")>,
+                this.classUnderTest().select(<name>Predicates.lessThan(<(literal.(type))("0")>)).maxIfEmpty(<(literal.(type))("0")>)<(wideDelta.(type))>);
     }
 
     @Test(expected = NoSuchElementException.class)

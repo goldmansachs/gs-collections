@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -490,8 +490,7 @@ public class PredicatesTest
                         + "U3ViY2xhc3NQcmVkaWNhdGUAAAAAAAAAAQIAAUwABmFDbGFzc3QAEUxqYXZhL2xhbmcvQ2xhc3M7\n"
                         + "eHIAMGNvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLmJsb2NrLmZhY3RvcnkuUHJlZGljYXRlcwAAAAAA\n"
                         + "AAABAgAAeHB2cgAQamF2YS5sYW5nLk9iamVjdAAAAAAAAAAAAAAAeHA=",
-                Predicates.subClass(Object.class)
-        );
+                Predicates.subClass(Object.class));
     }
 
     @Test
@@ -503,8 +502,7 @@ public class PredicatesTest
                         + "U3VwZXJjbGFzc1ByZWRpY2F0ZQAAAAAAAAABAgABTAAGYUNsYXNzdAARTGphdmEvbGFuZy9DbGFz\n"
                         + "czt4cgAwY29tLmdzLmNvbGxlY3Rpb25zLmltcGwuYmxvY2suZmFjdG9yeS5QcmVkaWNhdGVzAAAA\n"
                         + "AAAAAAECAAB4cHZyABBqYXZhLmxhbmcuT2JqZWN0AAAAAAAAAAAAAAB4cA==",
-                Predicates.superClass(Object.class)
-        );
+                Predicates.superClass(Object.class));
     }
 
     @Test
