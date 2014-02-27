@@ -579,6 +579,76 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         Assert.assertEquals(1, counter.getCount());
     }
 
+    @Override
+    @Test
+    public void anySatisfy()
+    {
+        super.anySatisfy();
+
+        int size = MORE_COLLISIONS.size();
+        for (int i = 1; i < size; i++)
+        {
+            MutableSet<Integer> set = this.newWith();
+            set.addAll(MORE_COLLISIONS.subList(0, i));
+            Assert.assertTrue(set.anySatisfy(Predicates.equal(MORE_COLLISIONS.subList(0, i).getLast())));
+            Assert.assertFalse(set.anySatisfy(Predicates.greaterThan(MORE_COLLISIONS.subList(0, i).getLast())));
+        }
+
+        // test anySatisfy on a bucket with only one element
+        MutableSet<Integer> set = this.newWith(COLLISION_1, COLLISION_2);
+        set.remove(COLLISION_2);
+        Assert.assertTrue(set.anySatisfy(Predicates.equal(COLLISION_1)));
+        Assert.assertFalse(set.anySatisfy(Predicates.equal(COLLISION_2)));
+
+        // Rehashing Case A: a bucket with only one entry and a low capacity forcing a rehash, where the triggering element goes in the bucket
+        // set up a chained bucket
+        MutableSet<Integer> caseA = this.newWith(COLLISION_1, COLLISION_2);
+        // clear the bucket to one element
+        caseA.remove(COLLISION_2);
+        // increase the occupied count to the threshold
+        caseA.add(Integer.valueOf(1));
+        caseA.add(Integer.valueOf(2));
+
+        // add the colliding value back and force the rehash
+        caseA.add(COLLISION_2);
+        Assert.assertTrue(caseA.anySatisfy(Predicates.equal(COLLISION_2)));
+    }
+
+    @Override
+    @Test
+    public void allSatisfy()
+    {
+        super.allSatisfy();
+
+        int size = MORE_COLLISIONS.size();
+        for (int i = 1; i < size; i++)
+        {
+            MutableSet<Integer> set = this.newWith();
+            set.addAll(MORE_COLLISIONS.subList(0, i));
+            Assert.assertTrue(set.allSatisfy(Predicates.greaterThanOrEqualTo(MORE_COLLISIONS.subList(0, i).getFirst())));
+            Assert.assertFalse(set.allSatisfy(Predicates.lessThan(MORE_COLLISIONS.subList(0, i).get(i - 1))));
+        }
+
+        // test allSatisfy on a bucket with only one element
+        MutableSet<Integer> set = this.newWith(COLLISION_1, COLLISION_2);
+        set.remove(COLLISION_2);
+        Assert.assertTrue(set.allSatisfy(Predicates.equal(COLLISION_1)));
+        Assert.assertFalse(set.allSatisfy(Predicates.equal(COLLISION_2)));
+
+        // Rehashing Case A: a bucket with only one entry and a low capacity forcing a rehash, where the triggering element goes in the bucket
+        // set up a chained bucket
+        MutableSet<Integer> caseA = this.newWith(COLLISION_1, COLLISION_2);
+        // clear the bucket to one element
+        caseA.remove(COLLISION_2);
+        // increase the occupied count to the threshold
+        caseA.add(Integer.valueOf(1));
+        caseA.add(Integer.valueOf(2));
+
+        // add the colliding value back and force the rehash
+        caseA.add(COLLISION_2);
+        Assert.assertTrue(caseA.allSatisfy(Predicates.lessThanOrEqualTo(COLLISION_2)));
+    }
+
     @Test(expected = NoSuchElementException.class)
     public void iterator_increment_past_end()
     {
