@@ -89,6 +89,7 @@ import com.gs.collections.impl.block.procedure.FastListRejectProcedure;
 import com.gs.collections.impl.block.procedure.FastListSelectProcedure;
 import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
+import com.gs.collections.impl.lazy.parallel.AbstractBatch;
 import com.gs.collections.impl.lazy.parallel.Batch;
 import com.gs.collections.impl.lazy.parallel.list.AbstractParallelListIterable;
 import com.gs.collections.impl.lazy.parallel.list.CollectListBatch;
@@ -1678,7 +1679,7 @@ public class FastList<T>
         return new FastListParallelIterable(executorService, batchSize);
     }
 
-    private final class FastListBatch implements ListBatch<T>
+    private final class FastListBatch extends AbstractBatch<T> implements ListBatch<T>
     {
         private final int chunkStartIndex;
         private final int chunkEndIndex;
@@ -1957,7 +1958,7 @@ public class FastList<T>
         }
 
         private class FastListParallelBatchIterator
-        implements Iterator<ListBatch<T>>
+                implements Iterator<ListBatch<T>>
         {
             protected int chunkIndex;
 

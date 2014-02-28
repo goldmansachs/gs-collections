@@ -119,6 +119,7 @@ import com.gs.collections.impl.block.procedure.primitive.CollectShortProcedure;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
+import com.gs.collections.impl.lazy.parallel.AbstractBatch;
 import com.gs.collections.impl.lazy.parallel.Batch;
 import com.gs.collections.impl.lazy.parallel.set.AbstractParallelUnsortedSetIterable;
 import com.gs.collections.impl.lazy.parallel.set.CollectUnsortedSetBatch;
@@ -2848,7 +2849,7 @@ public class UnifiedSet<K>
         return new UnifiedSetParallelUnsortedIterable(executorService, batchSize);
     }
 
-    private final class UnifiedUnsortedSetBatch implements UnsortedSetBatch<K>
+    private final class UnifiedUnsortedSetBatch extends AbstractBatch<K> implements UnsortedSetBatch<K>
     {
         private final int chunkStartIndex;
         private final int chunkEndIndex;
@@ -3159,7 +3160,7 @@ public class UnifiedSet<K>
         }
 
         private class UnifiedSetParallelSplitIterator
-        implements Iterator<UnsortedSetBatch<K>>
+                implements Iterator<UnsortedSetBatch<K>>
         {
             protected int chunkIndex;
 

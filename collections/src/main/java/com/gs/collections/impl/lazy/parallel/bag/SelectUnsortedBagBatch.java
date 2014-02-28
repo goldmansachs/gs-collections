@@ -23,9 +23,10 @@ import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.IfProcedure;
+import com.gs.collections.impl.lazy.parallel.AbstractBatch;
 
 @Beta
-public class SelectUnsortedBagBatch<T> implements UnsortedBagBatch<T>
+public class SelectUnsortedBagBatch<T> extends AbstractBatch<T> implements UnsortedBagBatch<T>
 {
     private final UnsortedBagBatch<T> unsortedBagBatch;
     private final Predicate<? super T> predicate;

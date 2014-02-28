@@ -22,11 +22,12 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.IfProcedure;
+import com.gs.collections.impl.lazy.parallel.AbstractBatch;
 import com.gs.collections.impl.lazy.parallel.set.UnsortedSetBatch;
 import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 
 @Beta
-public class SelectListBatch<T> implements ListBatch<T>
+public class SelectListBatch<T> extends AbstractBatch<T> implements ListBatch<T>
 {
     private final ListBatch<T> listBatch;
     private final Predicate<? super T> predicate;

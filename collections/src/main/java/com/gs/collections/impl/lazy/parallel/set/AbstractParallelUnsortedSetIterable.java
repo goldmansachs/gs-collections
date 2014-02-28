@@ -22,45 +22,21 @@ import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.block.procedure.Procedure2;
-import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.multimap.set.UnsortedSetMultimap;
 import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
-import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
-import com.gs.collections.impl.lazy.parallel.Batch;
-import com.gs.collections.impl.list.mutable.CompositeFastList;
-import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.multimap.set.SynchronizedPutUnifiedSetMultimap;
 
 @Beta
 public abstract class AbstractParallelUnsortedSetIterable<T> extends AbstractParallelIterable<T, UnsortedSetBatch<T>> implements ParallelUnsortedSetIterable<T>
 {
     @Override
-    public MutableList<T> toList()
+    protected boolean isOrdered()
     {
-        Function<Batch<T>, FastList<T>> map = new Function<Batch<T>, FastList<T>>()
-        {
-            public FastList<T> valueOf(Batch<T> batch)
-            {
-                FastList<T> list = FastList.newList();
-                batch.forEach(CollectionAddProcedure.on(list));
-                return list;
-            }
-        };
-        Procedure2<MutableList<T>, FastList<T>> reduce = new Procedure2<MutableList<T>, FastList<T>>()
-        {
-            public void value(MutableList<T> accumulator, FastList<T> each)
-            {
-                accumulator.addAll(each);
-            }
-        };
-        MutableList<T> state = new CompositeFastList<T>().asSynchronized();
-        this.collectCombineUnordered(map, reduce, state);
-        return state;
+        return false;
     }
 
     public ParallelUnsortedSetIterable<T> asUnique()

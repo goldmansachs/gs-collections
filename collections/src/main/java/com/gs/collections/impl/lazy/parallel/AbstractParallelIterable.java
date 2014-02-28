@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.lazy.parallel;
 
+import java.io.IOException;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
@@ -68,6 +69,9 @@ import com.gs.collections.impl.AbstractRichIterable;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
+import com.gs.collections.impl.block.procedure.checked.CheckedProcedure2;
+import com.gs.collections.impl.list.mutable.CompositeFastList;
+import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 
@@ -78,7 +82,21 @@ public abstract class AbstractParallelIterable<T, B extends Batch<T>> extends Ab
 
     public abstract LazyIterable<B> split();
 
-    protected <S, V> void collectCombine(final Function<Batch<T>, V> function, Procedure2<S, V> combineProcedure, S state)
+    protected abstract boolean isOrdered();
+
+    protected <S, V> void collectCombine(Function<Batch<T>, V> function, Procedure2<S, V> combineProcedure, S state)
+    {
+        if (this.isOrdered())
+        {
+            this.collectCombineOrdered(function, combineProcedure, state);
+        }
+        else
+        {
+            this.collectCombineUnordered(function, combineProcedure, state);
+        }
+    }
+
+    protected <S, V> void collectCombineOrdered(final Function<Batch<T>, V> function, Procedure2<S, V> combineProcedure, S state)
     {
         LazyIterable<? extends Batch<T>> chunks = this.split();
         LazyIterable<Future<V>> futures = chunks.collect(new Function<Batch<T>, Future<V>>()
@@ -161,6 +179,74 @@ public abstract class AbstractParallelIterable<T, B extends Batch<T>> extends Ab
         }
     }
 
+    @Override
+    public MutableList<T> toList()
+    {
+        Function<Batch<T>, FastList<T>> map = new Function<Batch<T>, FastList<T>>()
+        {
+            public FastList<T> valueOf(Batch<T> batch)
+            {
+                FastList<T> list = FastList.newList();
+                batch.forEach(CollectionAddProcedure.on(list));
+                return list;
+            }
+        };
+        Procedure2<MutableList<T>, FastList<T>> reduce = new Procedure2<MutableList<T>, FastList<T>>()
+        {
+            public void value(MutableList<T> accumulator, FastList<T> each)
+            {
+                accumulator.addAll(each);
+            }
+        };
+        MutableList<T> state = new CompositeFastList<T>();
+        this.collectCombine(map, reduce, state);
+        return state;
+    }
+
+    @Override
+    public void appendString(final Appendable appendable, String start, final String separator, String end)
+    {
+        try
+        {
+            appendable.append(start);
+            Function<Batch<T>, String> map = new Function<Batch<T>, String>()
+            {
+                public String valueOf(Batch<T> batch)
+                {
+                    return batch.makeString(separator);
+                }
+            };
+            Procedure2<Appendable, String> reduce = new CheckedProcedure2<Appendable, String>()
+            {
+                private boolean first = true;
+
+                public void safeValue(Appendable accumulator, String each) throws IOException
+                {
+                    if ("".equals(each))
+                    {
+                        return;
+                    }
+                    if (this.first)
+                    {
+                        this.first = false;
+                    }
+                    else
+                    {
+                        appendable.append(separator);
+                    }
+                    appendable.append(each);
+                }
+            };
+            this.collectCombine(map, reduce, appendable);
+
+            appendable.append(end);
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException(e);
+        }
+    }
+
     public Iterator<T> iterator()
     {
         throw new UnsupportedOperationException();
@@ -185,12 +271,6 @@ public abstract class AbstractParallelIterable<T, B extends Batch<T>> extends Ab
 
     @Override
     public <E> E[] toArray(E[] array)
-    {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public String toString()
     {
         throw new UnsupportedOperationException();
     }
@@ -371,9 +451,6 @@ public abstract class AbstractParallelIterable<T, B extends Batch<T>> extends Ab
     {
         return this.noneSatisfy(Predicates.bind(predicate, parameter));
     }
-
-    @Override
-    public abstract MutableList<T> toList();
 
     @Override
     public MutableSet<T> toSet()

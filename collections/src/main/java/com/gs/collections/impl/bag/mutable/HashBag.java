@@ -90,6 +90,7 @@ import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.collection.AbstractMutableBag;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
+import com.gs.collections.impl.lazy.parallel.AbstractBatch;
 import com.gs.collections.impl.lazy.parallel.Batch;
 import com.gs.collections.impl.lazy.parallel.bag.AbstractParallelUnsortedBag;
 import com.gs.collections.impl.lazy.parallel.bag.CollectUnsortedBagBatch;
@@ -1258,7 +1259,7 @@ public class HashBag<T>
         return new HashBagParallelIterable(executorService, batchSize);
     }
 
-    private final class HashUnsortedBagBatch implements UnsortedBagBatch<T>
+    private final class HashUnsortedBagBatch extends AbstractBatch<T> implements UnsortedBagBatch<T>
     {
         private final int chunkStartIndex;
         private final int chunkEndIndex;

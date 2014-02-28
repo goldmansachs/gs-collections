@@ -1469,4 +1469,32 @@ public class FastListTest extends AbstractListTestCase
 
         executorService.shutdown();
     }
+
+    @Test
+    public void testToString_asParallel()
+    {
+        Assert.assertEquals(
+                "[1, 3, 5, 7, 9]",
+                this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+                        .asParallel(Executors.newFixedThreadPool(10), 3)
+                        .select(IntegerPredicates.isOdd())
+                        .collect(Functions.getToString())
+                        .toString());
+
+        Assert.assertEquals(
+                "[1, 3, 5, 7, 9]",
+                this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+                        .asParallel(Executors.newFixedThreadPool(10), 1)
+                        .select(IntegerPredicates.isOdd())
+                        .collect(Functions.getToString())
+                        .toString());
+
+        Assert.assertEquals(
+                "[1, 3, 5, 7, 9]",
+                this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10)
+                        .asParallel(Executors.newFixedThreadPool(10), 11)
+                        .select(IntegerPredicates.isOdd())
+                        .collect(Functions.getToString())
+                        .toString());
+    }
 }

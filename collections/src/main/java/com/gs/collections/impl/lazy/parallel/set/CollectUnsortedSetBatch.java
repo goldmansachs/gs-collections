@@ -22,9 +22,10 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.lazy.parallel.AbstractBatch;
 
 @Beta
-public class CollectUnsortedSetBatch<T, V> implements UnsortedSetBatch<V>
+public class CollectUnsortedSetBatch<T, V> extends AbstractBatch<V> implements UnsortedSetBatch<V>
 {
     private final UnsortedSetBatch<T> unsortedSetBatch;
     private final Function<? super T, ? extends V> function;

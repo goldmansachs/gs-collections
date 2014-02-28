@@ -20,13 +20,14 @@ import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.impl.lazy.parallel.AbstractBatch;
 import com.gs.collections.impl.lazy.parallel.set.CollectUnsortedSetBatch;
 import com.gs.collections.impl.lazy.parallel.set.SelectUnsortedSetBatch;
 import com.gs.collections.impl.lazy.parallel.set.UnsortedSetBatch;
 import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 
 @Beta
-public class DistinctBatch<T> implements UnsortedSetBatch<T>
+public class DistinctBatch<T> extends AbstractBatch<T> implements UnsortedSetBatch<T>
 {
     private final ListBatch<T> listBatch;
     private final ConcurrentHashMap<T, Boolean> distinct;

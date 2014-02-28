@@ -16,26 +16,24 @@
 
 package com.gs.collections.impl.lazy.parallel;
 
-import com.gs.collections.api.annotation.Beta;
-import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 
-@Beta
-public interface Batch<T>
+public abstract class AbstractBatch<T> implements Batch<T>
 {
-    void forEach(Procedure<? super T> procedure);
-
-    Batch<T> select(Predicate<? super T> predicate);
-
-    <V> Batch<V> collect(Function<? super T, ? extends V> function);
-
-    boolean anySatisfy(Predicate<? super T> predicate);
-
-    boolean allSatisfy(Predicate<? super T> predicate);
-
-    T detect(Predicate<? super T> predicate);
-
-    String makeString(String separator);
+    public String makeString(final String separator)
+    {
+        final StringBuilder stringBuilder = new StringBuilder();
+        this.forEach(new Procedure<T>()
+        {
+            public void value(T each)
+            {
+                if (stringBuilder.length() != 0)
+                {
+                    stringBuilder.append(separator);
+                }
+                stringBuilder.append(each);
+            }
+        });
+        return stringBuilder.toString();
+    }
 }
-
