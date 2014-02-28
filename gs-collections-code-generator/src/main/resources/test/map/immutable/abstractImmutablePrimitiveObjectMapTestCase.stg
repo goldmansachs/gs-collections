@@ -86,6 +86,33 @@ public abstract class AbstractImmutable<name>ObjectMapTestCase extends Abstract<
             }
         });
     }
+
+    @Override
+    @Test
+    public void keySet()
+    {
+        super.keySet();
+        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
+        {
+            public void run()
+            {
+                AbstractImmutable<name>ObjectMapTestCase.this.classUnderTest().keySet().remove(<(literal.(type))("0")>);
+            }
+        });
+    }
+
+    @Override
+    public void values()
+    {
+        super.values();
+        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
+        {
+            public void run()
+            {
+                AbstractImmutable<name>ObjectMapTestCase.this.classUnderTest().values().remove("zero");
+            }
+        });
+    }
 }
 
 >>

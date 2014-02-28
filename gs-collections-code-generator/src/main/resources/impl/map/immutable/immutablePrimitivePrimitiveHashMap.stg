@@ -52,7 +52,9 @@ import com.gs.collections.api.set.primitive.Mutable<name2>Set;
 import com.gs.collections.api.tuple.primitive.<name1><name2>Pair;
 <if(!sameTwoPrimitives)>import com.gs.collections.api.set.primitive.Mutable<name1>Set;<endif>
 import com.gs.collections.impl.block.procedure.checked.primitive.Checked<name1><name2>Procedure;
+import com.gs.collections.impl.collection.mutable.primitive.Unmodifiable<name2>Collection;
 import com.gs.collections.impl.map.mutable.primitive.<name1><name2>HashMap;
+import com.gs.collections.impl.set.mutable.primitive.Unmodifiable<name1>Set;
 
 /**
  * Immutable<name1><name2>HashMap is the non-modifiable equivalent of {@link <name1><name2>HashMap}.
@@ -305,12 +307,12 @@ final class Immutable<name1><name2>HashMap implements Immutable<name1><name2>Map
 
     public Mutable<name1>Set keySet()
     {
-        throw new UnsupportedOperationException("keySet is not implemented yet!");
+        return Unmodifiable<name1>Set.of(this.delegate.keySet());
     }
 
     public Mutable<name2>Collection values()
     {
-        throw new UnsupportedOperationException("values is not implemented yet!");
+        return Unmodifiable<name2>Collection.of(this.delegate.values());
     }
 
     @Override

@@ -23,6 +23,7 @@ package com.gs.collections.impl.map.immutable.primitive;
 import com.gs.collections.api.map.primitive.ImmutableObject<name>Map;
 import com.gs.collections.impl.map.mutable.primitive.Object<name>HashMap;
 import com.gs.collections.impl.map.primitive.AbstractObject<name>MapTestCase;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -72,6 +73,33 @@ public abstract class AbstractImmutableObject<name>MapTestCase extends AbstractO
         super.toImmutable();
         ImmutableObject<name>Map\<String> map = this.classUnderTest();
         Assert.assertSame(map, map.toImmutable());
+    }
+
+    @Override
+    @Test
+    public void keySet()
+    {
+        super.keySet();
+        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
+        {
+            public void run()
+            {
+                AbstractImmutableObject<name>MapTestCase.this.classUnderTest().keySet().remove("0");
+            }
+        });
+    }
+
+    @Override
+    public void values()
+    {
+        super.values();
+        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
+        {
+            public void run()
+            {
+                AbstractImmutableObject<name>MapTestCase.this.classUnderTest().values().remove(<(literal.(type))("0")>);
+            }
+        });
     }
 }
 

@@ -47,6 +47,7 @@ import com.gs.collections.api.map.primitive.Immutable<name1><name2>Map;
 import com.gs.collections.api.set.primitive.Mutable<name2>Set;
 import com.gs.collections.api.tuple.primitive.<name1><name2>Pair;
 import com.gs.collections.impl.bag.mutable.primitive.<name2>HashBag;
+import com.gs.collections.impl.collection.mutable.primitive.Unmodifiable<name2>Collection;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.primitive.<name1><name2>Maps;
 import com.gs.collections.impl.factory.primitive.<name1>Lists;
@@ -54,6 +55,8 @@ import com.gs.collections.impl.lazy.primitive.Lazy<name2>IterableAdapter;
 import com.gs.collections.impl.list.mutable.primitive.<name2>ArrayList;
 import com.gs.collections.impl.map.mutable.primitive.<name1><name2>HashMap;
 import com.gs.collections.impl.set.mutable.primitive.<name2>HashSet;
+<if(!sameTwoPrimitives)>import com.gs.collections.impl.set.mutable.primitive.<name1>HashSet;<endif>
+import com.gs.collections.impl.set.mutable.primitive.Unmodifiable<name1>Set;
 import com.gs.collections.impl.tuple.primitive.PrimitiveTuples;
 
 /**
@@ -287,12 +290,12 @@ final class Immutable<name1><name2>SingletonMap implements Immutable<name1><name
 
     public Mutable<name1>Set keySet()
     {
-        throw new UnsupportedOperationException("keySet is not implemented yet!");
+        return Unmodifiable<name1>Set.of(<name1>HashSet.newSetWith(this.key1));
     }
 
     public Mutable<name2>Collection values()
     {
-        throw new UnsupportedOperationException("values is not implemented yet!");
+        return Unmodifiable<name2>Collection.of(<name2>ArrayList.newListWith(this.value1));
     }
 
     @Override

@@ -90,6 +90,7 @@ import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.primitive.<name>ObjectPair;
 import com.gs.collections.impl.UnmodifiableIteratorAdapter;
+import com.gs.collections.impl.collection.mutable.UnmodifiableMutableCollection;
 import com.gs.collections.impl.map.mutable.primitive.<name>ObjectHashMap;
 import com.gs.collections.api.collection.primitive.MutableBooleanCollection;
 import com.gs.collections.api.collection.primitive.MutableByteCollection;
@@ -99,6 +100,7 @@ import com.gs.collections.api.collection.primitive.MutableFloatCollection;
 import com.gs.collections.api.collection.primitive.MutableIntCollection;
 import com.gs.collections.api.collection.primitive.MutableLongCollection;
 import com.gs.collections.api.collection.primitive.MutableShortCollection;
+import com.gs.collections.impl.set.mutable.primitive.Unmodifiable<name>Set;
 
 /**
  * Immutable<name>ObjectHashMap is the non-modifiable equivalent of {@link <name>ObjectHashMap}.
@@ -664,12 +666,12 @@ final class Immutable<name>ObjectHashMap\<V> extends AbstractImmutable<name>Obje
 
     public Mutable<name>Set keySet()
     {
-        throw new UnsupportedOperationException("keySet is not implemented yet!");
+        return Unmodifiable<name>Set.of(this.delegate.keySet());
     }
 
     public Collection\<V> values()
     {
-        throw new UnsupportedOperationException("values is not implemented yet!");
+        return UnmodifiableMutableCollection.of(this.delegate.values());
     }
 
     public Lazy<name>Iterable keysView()

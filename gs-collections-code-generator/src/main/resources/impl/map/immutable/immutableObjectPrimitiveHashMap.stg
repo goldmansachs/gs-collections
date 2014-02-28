@@ -42,7 +42,9 @@ import com.gs.collections.api.map.primitive.ImmutableObject<name>Map;
 import com.gs.collections.api.map.primitive.MutableObject<name>Map;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.api.tuple.primitive.Object<name>Pair;
+import com.gs.collections.impl.collection.mutable.primitive.Unmodifiable<name>Collection;
 import com.gs.collections.impl.map.mutable.primitive.Object<name>HashMap;
+import com.gs.collections.impl.set.mutable.UnmodifiableMutableSet;
 
 /**
  * ImmutableObject<name>HashMap is the non-modifiable equivalent of {@link Object<name>HashMap}.
@@ -256,12 +258,12 @@ final class ImmutableObject<name>HashMap\<K> extends AbstractImmutableObject<nam
 
     public Set\<K> keySet()
     {
-        throw new UnsupportedOperationException("keySet is not implemented yet!");
+        return UnmodifiableMutableSet.of(this.delegate.keySet());
     }
 
     public Mutable<name>Collection values()
     {
-        throw new UnsupportedOperationException("values is not implemented yet!");
+        return Unmodifiable<name>Collection.of(this.delegate.values());
     }
 
     public LazyIterable\<K> keysView()

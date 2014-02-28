@@ -49,6 +49,7 @@ import com.gs.collections.impl.list.mutable.primitive.<name1>ArrayList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.mutable.primitive.<name1><name2>HashMap;
 import com.gs.collections.impl.set.mutable.primitive.<name2>HashSet;
+<if(!sameTwoPrimitives)>import com.gs.collections.impl.set.mutable.primitive.<name1>HashSet;<endif>
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.primitive.PrimitiveTuples;
 import org.junit.Assert;
@@ -72,6 +73,31 @@ public abstract class Abstract<name1><name2>MapTestCase
     protected abstract <name1><name2>Map newWithKeysValues(<type1> key1, <type2> value1, <type1> key2, <type2> value2, <type1> key3, <type2> value3, <type1> key4, <type2> value4);
 
     protected abstract <name1><name2>Map getEmptyMap();
+
+    @Test
+    public void keySet()
+    {
+        Verify.assertEmpty(this.getEmptyMap().keySet());
+        Assert.assertEquals(<name1>HashSet.newSetWith(<(literal.(type1))("0")>), this.newWithKeysValues(<["0"]:keyValue(); separator=", ">).keySet());
+        Assert.assertEquals(<name1>HashSet.newSetWith(<["0", "31", "32"]:(literal.(type1))(); separator=", ">),
+                this.newWithKeysValues(<["0", "31", "32"]:keyValue(); separator=", ">).keySet());
+    }
+
+    @Test
+    public void values()
+    {
+        Verify.assertEmpty(this.getEmptyMap().values());
+
+        <name1><name2>Map map = this.newWithKeysValues(<["0"]:keyValue(); separator=", ">);
+        Verify.assertSize(1, map.values());
+        Assert.assertTrue(map.values().contains(<(literal.(type2))("0")>));
+
+        <name1><name2>Map map1 = this.newWithKeysValues(<["0", "31", "32"]:keyValue(); separator=", ">);
+        Verify.assertSize(3, map1.values());
+        Assert.assertTrue(map1.values().contains(<(literal.(type2))("0")>));
+        Assert.assertTrue(map1.values().contains(<(literal.(type2))("31")>));
+        Assert.assertTrue(map1.values().contains(<(literal.(type2))("32")>));
+    }
 
     @Test
     public void get()

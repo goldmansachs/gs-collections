@@ -42,7 +42,9 @@ import com.gs.collections.api.map.primitive.Object<name>Map;
 import com.gs.collections.api.set.primitive.Mutable<name>Set;
 import com.gs.collections.api.tuple.primitive.Object<name>Pair;
 import com.gs.collections.impl.bag.mutable.primitive.<name>HashBag;
+import com.gs.collections.impl.collection.mutable.primitive.Unmodifiable<name>Collection;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.factory.primitive.<name>Lists;
 import com.gs.collections.impl.factory.primitive.Object<name>Maps;
 import com.gs.collections.impl.lazy.primitive.Lazy<name>IterableAdapter;
@@ -294,12 +296,12 @@ final class ImmutableObject<name>SingletonMap\<K> extends AbstractImmutableObjec
 
     public Set\<K> keySet()
     {
-        throw new UnsupportedOperationException("keySet is not implemented yet!");
+        return Sets.immutable.of(this.key1).castToSet();
     }
 
     public Mutable<name>Collection values()
     {
-        throw new UnsupportedOperationException("values is not implemented yet!");
+        return Unmodifiable<name>Collection.of(<name>ArrayList.newListWith(this.value1));
     }
 
     public LazyIterable\<K> keysView()

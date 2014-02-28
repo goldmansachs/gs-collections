@@ -81,6 +81,7 @@ import com.gs.collections.impl.map.mutable.primitive.<name>ObjectHashMap;
 import com.gs.collections.impl.map.mutable.primitive.<name>ObjectHashMapTest;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
@@ -101,6 +102,29 @@ public abstract class Abstract<name>ObjectMapTestCase
     protected abstract \<T> <name>ObjectMap\<T> newWithKeysValues(<type> key1, T value1, <type> key2, T value2, <type> key3, T value3);
 
     protected abstract \<T> <name>ObjectMap\<T> getEmptyMap();
+
+    @Test
+    public void keySet()
+    {
+        Verify.assertEmpty(this.getEmptyMap().keySet());
+        Assert.assertEquals(<name>HashSet.newSetWith(<(literal.(type))("0")>), this.newWithKeysValues(<(literal.(type))("0")>, "zero").keySet());
+        Assert.assertEquals(<name>HashSet.newSetWith(<(literal.(type))("0")>, <(literal.(type))("1")>, <(literal.(type))("9")>),
+                this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine").keySet());
+    }
+
+    @Test
+    public void values()
+    {
+        Verify.assertEmpty(this.getEmptyMap().values());
+
+        <name>ObjectMap\<String> map = this.newWithKeysValues(<(literal.(type))("0")>, "zero");
+        Verify.assertSize(1, map.values());
+        Verify.assertContains("zero", map.values());
+
+        <name>ObjectMap\<String> map1 = this.newWithKeysValues(<(literal.(type))("0")>, "zero", <(literal.(type))("1")>, "one", <(literal.(type))("9")>, "nine");
+        Verify.assertSize(3, map1.values());
+        Verify.assertContainsAll(map1.values(), "zero", "one", "nine");
+    }
 
     @Test
     public void select()

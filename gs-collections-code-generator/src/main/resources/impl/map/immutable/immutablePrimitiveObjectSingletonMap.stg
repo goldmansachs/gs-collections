@@ -115,6 +115,8 @@ import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.mutable.primitive.<name>ObjectHashMap;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
 import com.gs.collections.impl.partition.list.PartitionFastList;
+import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
+import com.gs.collections.impl.set.mutable.primitive.Unmodifiable<name>Set;
 import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.tuple.primitive.PrimitiveTuples;
 import com.gs.collections.impl.utility.Iterate;
@@ -221,12 +223,12 @@ final class Immutable<name>ObjectSingletonMap\<V> extends AbstractImmutable<name
 
     public Mutable<name>Set keySet()
     {
-        throw new UnsupportedOperationException("keySet is not implemented yet!");
+        return Unmodifiable<name>Set.of(<name>HashSet.newSetWith(this.key1));
     }
 
     public Collection\<V> values()
     {
-        throw new UnsupportedOperationException("values is not implemented yet!");
+        return Lists.immutable.of(this.value1).castToList();
     }
 
     public Lazy<name>Iterable keysView()

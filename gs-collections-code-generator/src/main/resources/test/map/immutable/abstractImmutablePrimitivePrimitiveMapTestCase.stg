@@ -98,6 +98,33 @@ public abstract class AbstractImmutable<name1><name2>MapTestCase extends Abstrac
         Assert.assertNotEquals(map7, map6);
         Assert.assertNotEquals(map7, map8);
     }
+
+    @Override
+    @Test
+    public void keySet()
+    {
+        super.keySet();
+        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
+        {
+            public void run()
+            {
+                AbstractImmutable<name1><name2>MapTestCase.this.classUnderTest().keySet().remove(<(literal.(type1))("0")>);
+            }
+        });
+    }
+
+    @Override
+    public void values()
+    {
+        super.values();
+        Verify.assertThrows(UnsupportedOperationException.class, new Runnable()
+        {
+            public void run()
+            {
+                AbstractImmutable<name1><name2>MapTestCase.this.classUnderTest().values().remove(<(literal.(type2))("0")>);
+            }
+        });
+    }
 }
 
 >>
