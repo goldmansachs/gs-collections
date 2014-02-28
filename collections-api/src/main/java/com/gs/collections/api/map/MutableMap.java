@@ -42,6 +42,7 @@ import com.gs.collections.api.collection.primitive.MutableIntCollection;
 import com.gs.collections.api.collection.primitive.MutableLongCollection;
 import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.api.tuple.Pair;
 
@@ -162,6 +163,8 @@ public interface MutableMap<K, V>
      * <p>The returned map will be serializable if the specified map is serializable.
      */
     MutableMap<K, V> asSynchronized();
+
+    MutableSetMultimap<V, K> flip();
 
     MutableMap<K, V> select(Predicate2<? super K, ? super V> predicate);
 

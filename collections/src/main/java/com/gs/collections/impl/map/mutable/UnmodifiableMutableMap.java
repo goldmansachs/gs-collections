@@ -58,6 +58,7 @@ import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
@@ -259,6 +260,11 @@ public class UnmodifiableMutableMap<K, V>
     public MutableMap<K, V> withoutAllKeys(Iterable<? extends K> keys)
     {
         throw new UnsupportedOperationException("Cannot call withoutAllKeys() on " + this.getClass().getSimpleName());
+    }
+
+    public MutableSetMultimap<V, K> flip()
+    {
+        return this.getMutableMap().flip();
     }
 
     @Override

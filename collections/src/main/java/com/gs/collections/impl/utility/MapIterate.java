@@ -49,6 +49,9 @@ import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.UnsortedMapIterable;
+import com.gs.collections.api.map.sorted.SortedMapIterable;
+import com.gs.collections.api.multimap.set.MutableSetMultimap;
+import com.gs.collections.api.multimap.sortedset.MutableSortedSetMultimap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.CollectProcedure;
@@ -66,6 +69,7 @@ import com.gs.collections.impl.block.procedure.primitive.CollectFloatProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectIntProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectLongProcedure;
 import com.gs.collections.impl.block.procedure.primitive.CollectShortProcedure;
+import com.gs.collections.impl.factory.Multimaps;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
@@ -77,6 +81,7 @@ import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.map.mutable.MapAdapter;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.gs.collections.impl.multimap.set.sorted.TreeSortedSetMultimap;
 import com.gs.collections.impl.tuple.AbstractImmutableEntry;
 import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.internal.IterableIterate;
@@ -1003,5 +1008,35 @@ public final class MapIterate
             A object)
     {
         return Iterate.count(map.values(), Predicates.attributeEqual(function, object));
+    }
+
+    public static <K, V> MutableSetMultimap<V, K> flip(
+            MapIterable<K, V> iMap
+    )
+    {
+        final MutableSetMultimap<V, K> result = Multimaps.mutable.set.with();
+        iMap.forEachKeyValue(new Procedure2<K, V>()
+        {
+            public void value(K key, V val)
+            {
+                result.put(val, key);
+            }
+        });
+        return result;
+    }
+
+    public static <K, V> MutableSortedSetMultimap<V, K> flip(
+            SortedMapIterable<K, V> iMap
+    )
+    {
+        final MutableSortedSetMultimap<V, K> result = new TreeSortedSetMultimap<V, K>(iMap.comparator());
+        iMap.forEachKeyValue(new Procedure2<K, V>()
+        {
+            public void value(K key, V val)
+            {
+                result.put(val, key);
+            }
+        });
+        return result;
     }
 }

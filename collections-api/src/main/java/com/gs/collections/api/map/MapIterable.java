@@ -25,6 +25,7 @@ import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.tuple.Pair;
 
 /**
@@ -124,6 +125,18 @@ public interface MapIterable<K, V> extends RichIterable<V>
      * Returns an unmodifiable lazy iterable of key/value pairs wrapped around the entrySet for the map
      */
     RichIterable<Pair<K, V>> keyValuesView();
+
+    /**
+     * Given a map from Domain->Range return a multimap from Range->Domain. We chose the name 'flip'
+     * rather than 'invert' or 'transpose' since this method does not have the property of applying twice
+     * returns the original.
+     * <p/>
+     * Since the keys in the input are unique, the values in the output are unique, so the return type should
+     * be a SetMultimap. However since SetMultimap and SortedSetMultimap don't inherit from one another, SetMultimap
+     * here does not allow SortedMapIterable to have a SortedSetMultimap return. Thus we compromise and call this
+     * Multimap, even though all implementations will be a SetMultimap or SortedSetMultimap.
+     */
+    Multimap<V, K> flip();
 
     /**
      * For each key and value of the map the predicate is evaluated, if the result of the evaluation is true,

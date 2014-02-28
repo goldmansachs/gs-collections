@@ -42,6 +42,7 @@ import com.gs.collections.api.collection.primitive.ImmutableIntCollection;
 import com.gs.collections.api.collection.primitive.ImmutableLongCollection;
 import com.gs.collections.api.collection.primitive.ImmutableShortCollection;
 import com.gs.collections.api.multimap.ImmutableMultimap;
+import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
 import com.gs.collections.api.partition.PartitionImmutableCollection;
 import com.gs.collections.api.tuple.Pair;
 import net.jcip.annotations.Immutable;
@@ -75,6 +76,8 @@ public interface ImmutableMap<K, V>
     ImmutableMap<K, V> newWithoutAllKeys(Iterable<? extends K> keys);
 
     MutableMap<K, V> toMap();
+
+    ImmutableSetMultimap<V, K> flip();
 
     <R> ImmutableCollection<R> collect(Function<? super V, ? extends R> function);
 

@@ -44,6 +44,7 @@ import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
+import com.gs.collections.api.multimap.sortedset.MutableSortedSetMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
@@ -164,6 +165,8 @@ public interface MutableSortedMap<K, V>
      * serializable.
      */
     MutableSortedMap<K, V> asSynchronized();
+
+    MutableSortedSetMultimap<V, K> flip();
 
     MutableSortedMap<K, V> select(Predicate2<? super K, ? super V> predicate);
 

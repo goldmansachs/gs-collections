@@ -18,6 +18,7 @@ package com.gs.collections.api.map;
 
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.multimap.set.SetMultimap;
 import com.gs.collections.api.tuple.Pair;
 
 /**
@@ -26,6 +27,8 @@ import com.gs.collections.api.tuple.Pair;
 public interface UnsortedMapIterable<K, V>
         extends MapIterable<K, V>
 {
+    SetMultimap<V, K> flip();
+
     UnsortedMapIterable<K, V> select(Predicate2<? super K, ? super V> predicate);
 
     UnsortedMapIterable<K, V> reject(Predicate2<? super K, ? super V> predicate);

@@ -27,6 +27,7 @@ import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.multimap.list.ImmutableListMultimap;
+import com.gs.collections.api.multimap.sortedset.ImmutableSortedSetMultimap;
 import com.gs.collections.api.partition.list.PartitionImmutableList;
 import com.gs.collections.api.tuple.Pair;
 import net.jcip.annotations.Immutable;
@@ -40,6 +41,8 @@ public interface ImmutableSortedMap<K, V>
         extends SortedMapIterable<K, V>
 {
     SortedMap<K, V> castToSortedMap();
+
+    ImmutableSortedSetMultimap<V, K> flip();
 
     ImmutableSortedMap<K, V> newWithKeyValue(K key, V value);
 

@@ -46,6 +46,7 @@ import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Functions;
@@ -150,6 +151,11 @@ public abstract class AbstractMutableMap<K, V> extends AbstractMapIterable<K, V>
             this.put(key, result);
         }
         return result;
+    }
+
+    public MutableSetMultimap<V, K> flip()
+    {
+        return MapIterate.flip(this);
     }
 
     public V getIfAbsentPut(K key, V value)

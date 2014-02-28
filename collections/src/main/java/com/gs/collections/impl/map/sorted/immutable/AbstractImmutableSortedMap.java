@@ -49,6 +49,7 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.ImmutableSortedMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.list.ImmutableListMultimap;
+import com.gs.collections.api.multimap.sortedset.ImmutableSortedSetMultimap;
 import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.api.partition.list.PartitionImmutableList;
 import com.gs.collections.api.partition.list.PartitionMutableList;
@@ -188,6 +189,11 @@ public abstract class AbstractImmutableSortedMap<K, V>
     public V remove(Object key)
     {
         throw new UnsupportedOperationException("ImmutableSortedMap");
+    }
+
+    public ImmutableSortedSetMultimap<V, K> flip()
+    {
+        return MapIterate.flip(this).toImmutable();
     }
 
     @Override

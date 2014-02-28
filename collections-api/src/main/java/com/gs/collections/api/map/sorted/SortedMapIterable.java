@@ -25,6 +25,7 @@ import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.multimap.list.ListMultimap;
+import com.gs.collections.api.multimap.sortedset.SortedSetMultimap;
 import com.gs.collections.api.partition.list.PartitionList;
 import com.gs.collections.api.tuple.Pair;
 
@@ -35,6 +36,8 @@ public interface SortedMapIterable<K, V>
         extends MapIterable<K, V>
 {
     Comparator<? super K> comparator();
+
+    SortedSetMultimap<V, K> flip();
 
     SortedMapIterable<K, V> select(Predicate2<? super K, ? super V> predicate);
 

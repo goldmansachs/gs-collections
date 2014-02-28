@@ -65,6 +65,7 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
@@ -73,6 +74,7 @@ import com.gs.collections.impl.block.procedure.MapCollectProcedure;
 import com.gs.collections.impl.list.fixed.ArrayAdapter;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.utility.Iterate;
+import com.gs.collections.impl.utility.MapIterate;
 
 abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
 {
@@ -130,6 +132,12 @@ abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
             return true;
         }
         return false;
+    }
+
+    public MutableSetMultimap<V, K> flip()
+    {
+        // TODO: We could optimize this since we know the values are unique
+        return MapIterate.flip(this);
     }
 
     @Override

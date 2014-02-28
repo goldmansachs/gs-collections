@@ -48,6 +48,7 @@ import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.collection.mutable.SynchronizedMutableCollection;
@@ -92,6 +93,14 @@ public class SynchronizedMutableMap<K, V>
             throw new IllegalArgumentException("cannot create a SynchronizedMutableMap for null");
         }
         return new SynchronizedMutableMap<K, V>(MapAdapter.adapt(map));
+    }
+
+    public MutableSetMultimap<V, K> flip()
+    {
+        synchronized (this.lock)
+        {
+            return this.getMutableMap().flip();
+        }
     }
 
     public MutableMap<K, V> getMutableMap()

@@ -49,6 +49,7 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.ImmutableSortedMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
+import com.gs.collections.api.multimap.sortedset.MutableSortedSetMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
@@ -311,6 +312,14 @@ public class SynchronizedSortedMap<K, V>
         synchronized (this.lock)
         {
             return this.getSortedMap().equals(obj);
+        }
+    }
+
+    public MutableSortedSetMultimap<V, K> flip()
+    {
+        synchronized (this.lock)
+        {
+            return this.getSortedMap().flip();
         }
     }
 

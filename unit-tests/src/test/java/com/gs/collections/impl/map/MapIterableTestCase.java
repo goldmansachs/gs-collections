@@ -489,6 +489,17 @@ public abstract class MapIterableTestCase
     }
 
     @Test
+    public void flip()
+    {
+        MapIterable<String, Integer> eMap = this.newMap();
+        Multimap<Integer, String> eMapFlip = eMap.flip();
+        Verify.assertZero(eMapFlip.size());
+
+        // TODO: Complete this test
+        MapIterable<String, Integer> map = this.newMapWithKeysValues("One", 1, "Two", 2, "Three", 3);
+    }
+
+    @Test
     public void detect()
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");

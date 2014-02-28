@@ -46,6 +46,7 @@ import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.ImmutableSortedMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
+import com.gs.collections.api.multimap.sortedset.MutableSortedSetMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.block.factory.Functions;
@@ -110,6 +111,11 @@ public abstract class AbstractMutableSortedMap<K, V> extends AbstractMapIterable
             this.put(key, result);
         }
         return result;
+    }
+
+    public MutableSortedSetMultimap<V, K> flip()
+    {
+        return MapIterate.flip(this);
     }
 
     public V getIfAbsentPutWithKey(K key, Function<? super K, ? extends V> function)

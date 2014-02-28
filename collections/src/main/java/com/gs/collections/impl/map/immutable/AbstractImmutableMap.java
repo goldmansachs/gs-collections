@@ -46,6 +46,7 @@ import com.gs.collections.api.collection.primitive.ImmutableShortCollection;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.ImmutableMultimap;
+import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
 import com.gs.collections.api.partition.PartitionImmutableCollection;
 import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.api.set.MutableSet;
@@ -128,6 +129,11 @@ public abstract class AbstractImmutableMap<K, V>
     public void clear()
     {
         throw new UnsupportedOperationException("ImmutableMap");
+    }
+
+    public ImmutableSetMultimap<V, K> flip()
+    {
+        return MapIterate.flip(this).toImmutable();
     }
 
     public Set<Entry<K, V>> entrySet()

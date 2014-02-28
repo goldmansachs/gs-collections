@@ -29,10 +29,12 @@ import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.map.FixedSizeMap;
 import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Maps;
+import com.gs.collections.impl.factory.Multimaps;
 import com.gs.collections.impl.factory.Sets;
 import net.jcip.annotations.Immutable;
 
@@ -76,6 +78,11 @@ final class EmptyMap<K, V>
     public ImmutableMap<K, V> toImmutable()
     {
         return Maps.immutable.of();
+    }
+
+    public MutableSetMultimap<V, K> flip()
+    {
+        return Multimaps.mutable.set.with();
     }
 
     public boolean containsKey(Object key)

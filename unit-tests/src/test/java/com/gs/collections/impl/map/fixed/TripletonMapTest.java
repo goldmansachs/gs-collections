@@ -24,6 +24,7 @@ import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.FixedSizeMap;
 import com.gs.collections.api.map.MutableMap;
+import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.api.tuple.Twin;
 import com.gs.collections.impl.block.factory.Functions;
@@ -32,6 +33,7 @@ import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.factory.Multimaps;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.test.Verify;
@@ -48,6 +50,39 @@ public class TripletonMapTest extends AbstractMemoryEfficientMutableMapTest
     protected MutableMap<String, String> classUnderTest()
     {
         return new TripletonMap<String, String>("1", "One", "2", "Two", "3", "Three");
+    }
+
+    @Override
+    protected MutableMap<String, Integer> mixedTypeClassUnderTest()
+    {
+        return new TripletonMap<String, Integer>("1", 1, "2", 2, "3", 3);
+    }
+
+    @Override
+    public void flip()
+    {
+        super.flip();
+        MutableMap<String, Integer> degenerateZero = new TripletonMap<String, Integer>("A", 1, "B", 2, "C", 3);
+        MutableMap<String, Integer> degenerateOne = new TripletonMap<String, Integer>("A", 1, "B", 1, "C", 3);
+        MutableMap<String, Integer> degenerateTwo = new TripletonMap<String, Integer>("A", 1, "B", 1, "C", 1);
+
+        MutableSetMultimap<Integer, String> flipZero = degenerateZero.flip();
+        MutableSetMultimap<Integer, String> flipOne = degenerateOne.flip();
+        MutableSetMultimap<Integer, String> flipTwo = degenerateTwo.flip();
+
+        Assert.assertEquals(Multimaps.immutable.set.with(1, "A", 2, "B", 3, "C"), flipZero);
+        Assert.assertEquals(Multimaps.immutable.set.with(1, "A", 1, "B", 3, "C"), flipOne);
+        Assert.assertEquals(Multimaps.immutable.set.with(1, "A", 1, "B", 1, "C"), flipTwo);
+
+        MutableMap<String, Integer> nullValue = new TripletonMap<String, Integer>("A", 1, "B", 1, "C", null);
+        MutableSetMultimap<Integer, String> flipNull = nullValue.flip();
+
+        Assert.assertEquals(Multimaps.immutable.set.with(1, "A", 1, "B", null, "C"), flipNull);
+
+        MutableMap<String, Integer> nullValueAllNull = new TripletonMap<String, Integer>("A", null, "B", null, "C", null);
+        MutableSetMultimap<Integer, String> flipNullAllNull = nullValueAllNull.flip();
+
+        Assert.assertEquals(Multimaps.immutable.set.with(null, "A", null, "B", null, "C"), flipNullAllNull);
     }
 
     @Override

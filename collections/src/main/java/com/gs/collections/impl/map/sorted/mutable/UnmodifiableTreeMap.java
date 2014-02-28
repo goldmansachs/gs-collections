@@ -67,6 +67,7 @@ import com.gs.collections.api.map.sorted.ImmutableSortedMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
+import com.gs.collections.api.multimap.sortedset.MutableSortedSetMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
@@ -193,6 +194,11 @@ public class UnmodifiableTreeMap<K, V>
             return function.valueOf(parameter);
         }
         return result;
+    }
+
+    public MutableSortedSetMultimap<V, K> flip()
+    {
+        return this.getMutableSortedMap().flip();
     }
 
     @Override

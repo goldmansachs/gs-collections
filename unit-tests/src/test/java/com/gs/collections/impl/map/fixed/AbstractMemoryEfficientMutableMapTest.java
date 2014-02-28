@@ -16,8 +16,10 @@
 
 package com.gs.collections.impl.map.fixed;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
@@ -71,6 +73,8 @@ import static com.gs.collections.impl.factory.Iterables.*;
 public abstract class AbstractMemoryEfficientMutableMapTest
 {
     protected abstract MutableMap<String, String> classUnderTest();
+
+    protected abstract MutableMap<String, Integer> mixedTypeClassUnderTest();
 
     public abstract void containsValue();
 
@@ -357,6 +361,39 @@ public abstract class AbstractMemoryEfficientMutableMapTest
                 Verify.assertEmpty(bag);
                 break;
         }
+    }
+
+    @Test
+    public void flip()
+    {
+        MutableMap<String, String> map = this.classUnderTest();
+        MutableMultimap<String, String> multi = map.flip();
+
+        final Set<String> keySet = map.keySet();
+        multi.forEachValue(new Procedure<String>()
+        {
+            public void value(String each)
+            {
+                Verify.assertContains(each, keySet);
+            }
+        });
+
+        final Collection<String> values = map.values();
+        multi.forEachKey(new Procedure<String>()
+        {
+            public void value(String each)
+            {
+                Verify.assertContains(each, values);
+            }
+        });
+
+        Assert.assertEquals(multi.size(), map.size());
+        Assert.assertTrue(multi.sizeDistinct() <= map.size()); // should be the same or less since values are degenerate
+
+        MutableMap<String, Integer> siMap = this.mixedTypeClassUnderTest();
+        MutableMultimap<Integer, String> siMulti = siMap.flip();
+        Assert.assertEquals(siMulti.size(), siMap.size());
+        Assert.assertTrue(siMulti.sizeDistinct() <= siMap.size());
     }
 
     @Test

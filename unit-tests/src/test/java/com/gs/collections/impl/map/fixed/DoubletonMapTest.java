@@ -51,6 +51,12 @@ public class DoubletonMapTest extends AbstractMemoryEfficientMutableMapTest
     }
 
     @Override
+    protected MutableMap<String, Integer> mixedTypeClassUnderTest()
+    {
+        return new DoubletonMap<String, Integer>("1", 1, "Two", 2);
+    }
+
+    @Override
     @Test
     public void containsValue()
     {

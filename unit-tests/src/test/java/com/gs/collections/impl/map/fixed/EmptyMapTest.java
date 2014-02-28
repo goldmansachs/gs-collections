@@ -50,6 +50,12 @@ public class EmptyMapTest extends AbstractMemoryEfficientMutableMapTest
     }
 
     @Override
+    protected MutableMap<String, Integer> mixedTypeClassUnderTest()
+    {
+        return new EmptyMap<String, Integer>();
+    }
+
+    @Override
     @Test
     public void containsValue()
     {

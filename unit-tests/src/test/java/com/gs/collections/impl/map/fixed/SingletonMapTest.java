@@ -50,6 +50,12 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     }
 
     @Override
+    protected MutableMap<String, Integer> mixedTypeClassUnderTest()
+    {
+        return new SingletonMap<String, Integer>("1", 1);
+    }
+
+    @Override
     @Test
     public void containsValue()
     {
