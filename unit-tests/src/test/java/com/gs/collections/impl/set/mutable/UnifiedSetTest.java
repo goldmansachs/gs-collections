@@ -544,6 +544,26 @@ public class UnifiedSetTest extends AbstractMutableSetTestCase
         Assert.assertEquals(UnifiedSet.newSetWith((Object) null), setWithNull);
     }
 
+    @Test(expected = NullPointerException.class)
+    public void asParallelNullExecutorService()
+    {
+        this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).asParallel(null, 2);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void asParallelLessThanOneBatchSize()
+    {
+        this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).asParallel(Executors.newFixedThreadPool(10), 0);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void asParallelExecutorServiceShutdown()
+    {
+        ExecutorService executorService = Executors.newFixedThreadPool(10);
+        executorService.shutdown();
+        this.newWith(1, 2, 3, 4, 5, 6, 7, 8, 9, 10).asParallel(executorService, 2);
+    }
+
     @Test
     public void asParallel()
     {
@@ -559,6 +579,13 @@ public class UnifiedSetTest extends AbstractMutableSetTestCase
         Assert.assertEquals(
                 UnifiedSet.newSetWith("1", "3", "5", "7", "9"),
                 result);
+
+        Sum sum = new IntegerSum(0);
+        this.newWith(Interval.from(-17).to(17).toArray())
+                .asParallel(executorService, 2)
+                .select(IntegerPredicates.isPositive())
+                .forEach(new SumProcedure<Integer>(sum));
+        Assert.assertEquals(153, sum.getValue().intValue());
 
         executorService.shutdown();
     }
@@ -683,6 +710,14 @@ public class UnifiedSetTest extends AbstractMutableSetTestCase
                 .asParallel(executorService, 2)
                 .select(IntegerPredicates.isOdd())
                 .detect(Predicates.greaterThan(10)));
+
+        Assert.assertEquals(
+                "1",
+                this.newWith(Interval.from(-17).to(17).toArray())
+                        .asParallel(executorService, 2)
+                        .select(IntegerPredicates.isPositive())
+                        .collect(Functions.getToString())
+                        .detect(Predicates.lessThan("2")));
 
         executorService.shutdown();
     }

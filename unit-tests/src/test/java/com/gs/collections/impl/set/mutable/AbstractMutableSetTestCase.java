@@ -649,6 +649,45 @@ public abstract class AbstractMutableSetTestCase extends AbstractCollectionTestC
         Assert.assertTrue(caseA.allSatisfy(Predicates.lessThanOrEqualTo(COLLISION_2)));
     }
 
+    @Override
+    @Test
+    public void detect()
+    {
+        super.detect();
+
+        int size = MORE_COLLISIONS.size();
+        for (int i = 1; i < size; i++)
+        {
+            MutableSet<Integer> set = this.newWith();
+            set.addAll(MORE_COLLISIONS.subList(0, i));
+            Verify.assertItemAtIndex(set.detect(Predicates.equal(MORE_COLLISIONS.get(i - 1))), i - 1, MORE_COLLISIONS);
+        }
+
+        // test detect on a bucket with only one element
+        MutableSet<Integer> set = this.newWith(COLLISION_1, COLLISION_2);
+        set.remove(COLLISION_2);
+        Assert.assertEquals(COLLISION_1, set.detect(Predicates.equal(COLLISION_1)));
+        Assert.assertNull(set.detect(Predicates.equal(COLLISION_2)));
+
+        for (int i = 0; i < COLLISIONS.size(); i++)
+        {
+            MutableSet<Integer> rehashingSet = this.newWith();
+            rehashingSet.addAll(COLLISIONS.subList(0, i));
+            Integer last = COLLISIONS.subList(0, i).getLast();
+            rehashingSet.remove(last);
+
+            int rehashingSetSize = rehashingSet.size();
+            for (int j = 0; j < rehashingSetSize; j++)
+            {
+                rehashingSet.add(Integer.valueOf(j + 1));
+            }
+
+            rehashingSet.add(last);
+            Assert.assertEquals(last, rehashingSet.detect(Predicates.equal(last)));
+            Assert.assertNull(rehashingSet.detect(Predicates.equal(Integer.valueOf(5))));
+        }
+    }
+
     @Test(expected = NoSuchElementException.class)
     public void iterator_increment_past_end()
     {
