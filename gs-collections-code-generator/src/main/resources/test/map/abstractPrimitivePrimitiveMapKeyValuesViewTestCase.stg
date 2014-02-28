@@ -152,6 +152,12 @@ public abstract class Abstract<name1><name2>MapKeyValuesViewTestCase
         collection.forEach(CollectionAddProcedure.on(result));
         Verify.assertSize(3, result);
         Verify.assertContainsAll(result, PrimitiveTuples.pair(<(literal.(type1))("1")>, <(literal.(type2))("2")>), PrimitiveTuples.pair(<(literal.(type1))("2")>, <(literal.(type2))("3")>), PrimitiveTuples.pair(<(literal.(type1))("3")>, <(literal.(type2))("4")>));
+
+        MutableList\<<name1><name2>Pair> result2 = Lists.mutable.of();
+        RichIterable\<<name1><name2>Pair> collection2 = this.newWith(<(literal.(type1))("0")>, <(literal.(type2))("2")>, <(literal.(type1))("2")>, <(literal.(type2))("3")>, <(literal.(type1))("3")>, <(literal.(type2))("4")>);
+        collection2.forEach(CollectionAddProcedure.on(result2));
+        Verify.assertSize(3, result2);
+        Verify.assertContainsAll(result2, PrimitiveTuples.pair(<(literal.(type1))("0")>, <(literal.(type2))("2")>), PrimitiveTuples.pair(<(literal.(type1))("2")>, <(literal.(type2))("3")>), PrimitiveTuples.pair(<(literal.(type1))("3")>, <(literal.(type2))("4")>));
     }
 
     @Test
@@ -189,6 +195,20 @@ public abstract class Abstract<name1><name2>MapKeyValuesViewTestCase
         });
         Assert.assertEquals(Bags.mutable.of(PrimitiveTuples.pair(<(literal.(type1))("1")>, <(literal.(type2))("2")>), PrimitiveTuples.pair(<(literal.(type1))("2")>, <(literal.(type2))("3")>), PrimitiveTuples.pair(<(literal.(type1))("3")>, <(literal.(type2))("4")>)), elements);
         Assert.assertEquals(Bags.mutable.of(0, 1, 2), indexes);
+
+        final MutableBag\<<name1><name2>Pair> elements2 = Bags.mutable.of();
+        final MutableBag\<Integer> indexes2 = Bags.mutable.of();
+        RichIterable\<<name1><name2>Pair> collection2 = this.newWith(<(literal.(type1))("0")>, <(literal.(type2))("2")>, <(literal.(type1))("2")>, <(literal.(type2))("3")>, <(literal.(type1))("3")>, <(literal.(type2))("4")>);
+        collection2.forEachWithIndex(new ObjectIntProcedure\<<name1><name2>Pair>()
+        {
+            public void value(<name1><name2>Pair object, int index)
+            {
+                elements2.add(object);
+                indexes2.add(index);
+            }
+        });
+        Assert.assertEquals(Bags.mutable.of(PrimitiveTuples.pair(<(literal.(type1))("0")>, <(literal.(type2))("2")>), PrimitiveTuples.pair(<(literal.(type1))("2")>, <(literal.(type2))("3")>), PrimitiveTuples.pair(<(literal.(type1))("3")>, <(literal.(type2))("4")>)), elements2);
+        Assert.assertEquals(Bags.mutable.of(0, 1, 2), indexes2);
     }
 
     @Test
@@ -623,7 +643,7 @@ public abstract class Abstract<name1><name2>MapKeyValuesViewTestCase
     @Test
     public void iterator()
     {
-        RichIterable\<<name1><name2>Pair> objects = this.newWith(<(literal.(type1))("1")>, <(literal.(type2))("2")>, <(literal.(type1))("2")>, <(literal.(type2))("3")>, <(literal.(type1))("3")>, <(literal.(type2))("4")>);
+        RichIterable\<<name1><name2>Pair> objects = this.newWith(<(literal.(type1))("1")>, <(literal.(type2))("2")>, <(literal.(type1))("0")>, <(literal.(type2))("3")>, <(literal.(type1))("3")>, <(literal.(type2))("4")>);
         MutableBag\<<name1><name2>Pair> actual = Bags.mutable.of();
         Iterator\<<name1><name2>Pair> iterator = objects.iterator();
         for (int i = objects.size(); i-- > 0; )
@@ -636,7 +656,7 @@ public abstract class Abstract<name1><name2>MapKeyValuesViewTestCase
     }
 
     @Test(expected = NoSuchElementException.class)
-    public void iterator_throws()
+    public void iterator_next_throws()
     {
         RichIterable\<<name1><name2>Pair> objects = this.newWith(<(literal.(type1))("1")>, <(literal.(type2))("2")>, <(literal.(type1))("2")>, <(literal.(type2))("3")>, <(literal.(type1))("3")>, <(literal.(type2))("4")>);
         Iterator\<<name1><name2>Pair> iterator = objects.iterator();
@@ -647,6 +667,14 @@ public abstract class Abstract<name1><name2>MapKeyValuesViewTestCase
         }
         Assert.assertFalse(iterator.hasNext());
         iterator.next();
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void iterator_remove_throws()
+    {
+        RichIterable\<<name1><name2>Pair> objects = this.newWith(<(literal.(type1))("1")>, <(literal.(type2))("2")>, <(literal.(type1))("2")>, <(literal.(type2))("3")>, <(literal.(type1))("3")>, <(literal.(type2))("4")>);
+        Iterator\<<name1><name2>Pair> iterator = objects.iterator();
+        iterator.remove();
     }
 
     @Test

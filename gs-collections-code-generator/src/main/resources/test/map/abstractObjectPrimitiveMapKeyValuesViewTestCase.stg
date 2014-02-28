@@ -123,7 +123,8 @@ public abstract class AbstractObject<name>MapKeyValuesViewTestCase
     {
         return this.newWithKeysValues(key1, value1, key2, value2, key3, value3).keyValuesView();
     }
-@Test
+
+    @Test
     public void containsAllIterable()
     {
         RichIterable\<Object<name>Pair\<Integer>\> collection = this.newWith(1, <(literal.(type))("2")>, 2, <(literal.(type))("3")>, 3, <(literal.(type))("4")>);
@@ -254,6 +255,8 @@ public abstract class AbstractObject<name>MapKeyValuesViewTestCase
                 return (int) object.getTwo();
             }
         });
+
+        Assert.assertEquals(FastList.newListWith(2, 3, 4), result1.toList());
     }
 
     @Test

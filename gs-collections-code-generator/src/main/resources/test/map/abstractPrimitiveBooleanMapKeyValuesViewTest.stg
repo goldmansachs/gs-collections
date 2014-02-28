@@ -149,6 +149,12 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
         collection.forEach(CollectionAddProcedure.on(result));
         Verify.assertSize(3, result);
         Verify.assertContainsAll(result, PrimitiveTuples.pair(<(literal.(type))("1")>, false), PrimitiveTuples.pair(<(literal.(type))("2")>, true), PrimitiveTuples.pair(<(literal.(type))("3")>, false));
+
+        MutableList\<<name>BooleanPair> result2 = Lists.mutable.of();
+        RichIterable\<<name>BooleanPair> collection2 = this.newWith(<(literal.(type))("0")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false);
+        collection2.forEach(CollectionAddProcedure.on(result2));
+        Verify.assertSize(3, result2);
+        Verify.assertContainsAll(result2, PrimitiveTuples.pair(<(literal.(type))("0")>, false), PrimitiveTuples.pair(<(literal.(type))("2")>, true), PrimitiveTuples.pair(<(literal.(type))("3")>, false));
     }
 
     @Test
@@ -175,7 +181,7 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
     {
         final MutableBag\<<name>BooleanPair> elements = Bags.mutable.of();
         final MutableBag\<Integer> indexes = Bags.mutable.of();
-        RichIterable\<<name>BooleanPair> collection = this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false);
+        RichIterable\<<name>BooleanPair> collection = this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("0")>, true, <(literal.(type))("3")>, false);
         collection.forEachWithIndex(new ObjectIntProcedure\<<name>BooleanPair>()
         {
             public void value(<name>BooleanPair object, int index)
@@ -184,7 +190,7 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
                 indexes.add(index);
             }
         });
-        Assert.assertEquals(Bags.mutable.of(PrimitiveTuples.pair(<(literal.(type))("1")>, false), PrimitiveTuples.pair(<(literal.(type))("2")>, true), PrimitiveTuples.pair(<(literal.(type))("3")>, false)), elements);
+        Assert.assertEquals(Bags.mutable.of(PrimitiveTuples.pair(<(literal.(type))("1")>, false), PrimitiveTuples.pair(<(literal.(type))("0")>, true), PrimitiveTuples.pair(<(literal.(type))("3")>, false)), elements);
         Assert.assertEquals(Bags.mutable.of(0, 1, 2), indexes);
     }
 
@@ -621,7 +627,7 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
     @Test
     public void iterator()
     {
-        RichIterable\<<name>BooleanPair> objects = this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false);
+        RichIterable\<<name>BooleanPair> objects = this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("0")>, true, <(literal.(type))("3")>, false);
         MutableBag\<<name>BooleanPair> actual = Bags.mutable.of();
         Iterator\<<name>BooleanPair> iterator = objects.iterator();
         for (int i = objects.size(); i-- > 0; )
@@ -634,7 +640,7 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
     }
 
     @Test(expected = NoSuchElementException.class)
-    public void iterator_throws()
+    public void iterator_next_throws()
     {
         RichIterable\<<name>BooleanPair> objects = this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false);
         Iterator\<<name>BooleanPair> iterator = objects.iterator();
@@ -645,6 +651,14 @@ public abstract class Abstract<name>BooleanMapKeyValuesViewTestCase
         }
         Assert.assertFalse(iterator.hasNext());
         iterator.next();
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void iterator_remove_throws()
+    {
+        RichIterable\<<name>BooleanPair> objects = this.newWith(<(literal.(type))("1")>, false, <(literal.(type))("2")>, true, <(literal.(type))("3")>, false);
+        Iterator\<<name>BooleanPair> iterator = objects.iterator();
+        iterator.remove();
     }
 
     @Test
