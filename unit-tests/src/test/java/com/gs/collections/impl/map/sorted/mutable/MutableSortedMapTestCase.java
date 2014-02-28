@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -31,6 +31,7 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.ImmutableSortedMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
+import com.gs.collections.api.multimap.sortedset.MutableSortedSetMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.tuple.Pair;
@@ -47,6 +48,7 @@ import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.MapIterableTestCase;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.map.sorted.immutable.ImmutableTreeMap;
+import com.gs.collections.impl.multimap.set.sorted.TreeSortedSetMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.test.SerializeTestHelper;
@@ -470,6 +472,26 @@ public abstract class MutableSortedMapTestCase extends MapIterableTestCase
         });
         Verify.assertMapsEqual(UnifiedMap.newWithKeysValues("2", 3, "3", 2), select);
         Verify.assertListsEqual(FastList.newListWith("3", "2"), select.keySet().toList());
+    }
+
+    @Override
+    @Test
+    public void flip()
+    {
+        super.flip();
+
+        MutableSortedSetMultimap<String, String> expected = TreeSortedSetMultimap.newMultimap(Comparators.reverseNaturalOrder());
+        expected.put("odd", "One");
+        expected.put("even", "Two");
+        expected.put("odd", "Three");
+        expected.put("even", "Four");
+
+        MutableSortedMap<String, String> map = this.newMapWithKeysValues(Comparators.reverseNaturalOrder(), "One", "odd", "Two", "even", "Three", "odd", "Four", "even");
+        MutableSortedSetMultimap<String, String> flip = map.flip();
+        Assert.assertEquals(expected, flip);
+        Verify.assertSortedSetsEqual(
+                TreeSortedSet.newSetWith(Comparators.reverseNaturalOrder(), "Two", "Four"),
+                flip.get("even"));
     }
 
     @Override

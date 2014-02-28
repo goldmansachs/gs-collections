@@ -50,6 +50,7 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
@@ -86,6 +87,7 @@ import com.gs.collections.impl.math.IntegerSum;
 import com.gs.collections.impl.math.Sum;
 import com.gs.collections.impl.math.SumProcedure;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
+import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.test.Verify;
@@ -491,12 +493,17 @@ public abstract class MapIterableTestCase
     @Test
     public void flip()
     {
-        MapIterable<String, Integer> eMap = this.newMap();
-        Multimap<Integer, String> eMapFlip = eMap.flip();
-        Verify.assertZero(eMapFlip.size());
+        Verify.assertEmpty(this.newMap().flip());
 
-        // TODO: Complete this test
-        MapIterable<String, Integer> map = this.newMapWithKeysValues("One", 1, "Two", 2, "Three", 3);
+        MutableSetMultimap<String, String> expected = UnifiedSetMultimap.newMultimap();
+        expected.put("odd", "One");
+        expected.put("even", "Two");
+        expected.put("odd", "Three");
+        expected.put("even", "Four");
+
+        Assert.assertEquals(
+                expected,
+                this.newMapWithKeysValues("One", "odd", "Two", "even", "Three", "odd", "Four", "even").flip());
     }
 
     @Test

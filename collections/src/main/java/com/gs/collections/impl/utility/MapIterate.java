@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -450,7 +450,7 @@ public final class MapIterate
             Map<K, V> map,
             BooleanFunction<? super V> booleanFunction)
     {
-        return collectBoolean(map, booleanFunction,  new BooleanArrayList(map.size()));
+        return collectBoolean(map, booleanFunction, new BooleanArrayList(map.size()));
     }
 
     /**
@@ -472,7 +472,7 @@ public final class MapIterate
             Map<K, V> map,
             ByteFunction<? super V> byteFunction)
     {
-        return collectByte(map, byteFunction,  new ByteArrayList(map.size()));
+        return collectByte(map, byteFunction, new ByteArrayList(map.size()));
     }
 
     /**
@@ -486,6 +486,7 @@ public final class MapIterate
         MapIterate.forEachValue(map, new CollectByteProcedure<V>(byteFunction, target));
         return target;
     }
+
     /**
      * @see RichIterable#collectChar(CharFunction)
      */
@@ -493,7 +494,7 @@ public final class MapIterate
             Map<K, V> map,
             CharFunction<? super V> charFunction)
     {
-        return collectChar(map, charFunction,  new CharArrayList(map.size()));
+        return collectChar(map, charFunction, new CharArrayList(map.size()));
     }
 
     /**
@@ -507,6 +508,7 @@ public final class MapIterate
         MapIterate.forEachValue(map, new CollectCharProcedure<V>(charFunction, target));
         return target;
     }
+
     /**
      * @see RichIterable#collectDouble(DoubleFunction)
      */
@@ -514,7 +516,7 @@ public final class MapIterate
             Map<K, V> map,
             DoubleFunction<? super V> doubleFunction)
     {
-        return collectDouble(map, doubleFunction,  new DoubleArrayList(map.size()));
+        return collectDouble(map, doubleFunction, new DoubleArrayList(map.size()));
     }
 
     /**
@@ -528,6 +530,7 @@ public final class MapIterate
         MapIterate.forEachValue(map, new CollectDoubleProcedure<V>(doubleFunction, target));
         return target;
     }
+
     /**
      * @see RichIterable#collectFloat(FloatFunction)
      */
@@ -535,7 +538,7 @@ public final class MapIterate
             Map<K, V> map,
             FloatFunction<? super V> floatFunction)
     {
-        return collectFloat(map, floatFunction,  new FloatArrayList(map.size()));
+        return collectFloat(map, floatFunction, new FloatArrayList(map.size()));
     }
 
     /**
@@ -549,6 +552,7 @@ public final class MapIterate
         MapIterate.forEachValue(map, new CollectFloatProcedure<V>(floatFunction, target));
         return target;
     }
+
     /**
      * @see RichIterable#collectInt(IntFunction)
      */
@@ -556,7 +560,7 @@ public final class MapIterate
             Map<K, V> map,
             IntFunction<? super V> intFunction)
     {
-        return collectInt(map, intFunction,  new IntArrayList(map.size()));
+        return collectInt(map, intFunction, new IntArrayList(map.size()));
     }
 
     /**
@@ -578,7 +582,7 @@ public final class MapIterate
             Map<K, V> map,
             LongFunction<? super V> longFunction)
     {
-        return collectLong(map, longFunction,  new LongArrayList(map.size()));
+        return collectLong(map, longFunction, new LongArrayList(map.size()));
     }
 
     /**
@@ -592,6 +596,7 @@ public final class MapIterate
         MapIterate.forEachValue(map, new CollectLongProcedure<V>(longFunction, target));
         return target;
     }
+
     /**
      * @see RichIterable#collectShort(ShortFunction)
      */
@@ -599,7 +604,7 @@ public final class MapIterate
             Map<K, V> map,
             ShortFunction<? super V> shortFunction)
     {
-        return collectShort(map, shortFunction,  new ShortArrayList(map.size()));
+        return collectShort(map, shortFunction, new ShortArrayList(map.size()));
     }
 
     /**
@@ -613,7 +618,6 @@ public final class MapIterate
         MapIterate.forEachValue(map, new CollectShortProcedure<V>(shortFunction, target));
         return target;
     }
-
 
     /**
      * For each value of the map, the function is evaluated with the key and value as the parameter.
@@ -1010,9 +1014,7 @@ public final class MapIterate
         return Iterate.count(map.values(), Predicates.attributeEqual(function, object));
     }
 
-    public static <K, V> MutableSetMultimap<V, K> flip(
-            MapIterable<K, V> iMap
-    )
+    public static <K, V> MutableSetMultimap<V, K> flip(UnsortedMapIterable<K, V> iMap)
     {
         final MutableSetMultimap<V, K> result = Multimaps.mutable.set.with();
         iMap.forEachKeyValue(new Procedure2<K, V>()
@@ -1025,9 +1027,7 @@ public final class MapIterate
         return result;
     }
 
-    public static <K, V> MutableSortedSetMultimap<V, K> flip(
-            SortedMapIterable<K, V> iMap
-    )
+    public static <K, V> MutableSortedSetMultimap<V, K> flip(SortedMapIterable<K, V> iMap)
     {
         final MutableSortedSetMultimap<V, K> result = new TreeSortedSetMultimap<V, K>(iMap.comparator());
         iMap.forEachKeyValue(new Procedure2<K, V>()

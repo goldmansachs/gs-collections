@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,11 +23,13 @@ import com.gs.collections.api.bimap.BiMap;
 import com.gs.collections.api.bimap.MutableBiMap;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.IntegerWithCast;
 import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.map.mutable.MutableMapTestCase;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
+import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -41,6 +43,23 @@ public abstract class AbstractMutableBiMapTestCase extends MutableMapTestCase
 
     @Override
     protected abstract <K, V> MutableBiMap<K, V> newMap();
+
+    @Test
+    @Override
+    public void flip()
+    {
+        Verify.assertEmpty(this.newMap().flip());
+
+        MutableSetMultimap<Integer, String> expected = UnifiedSetMultimap.newMultimap();
+        expected.put(1, "One");
+        expected.put(2, "Two");
+        expected.put(3, "Three");
+        expected.put(4, "Four");
+
+        Assert.assertEquals(
+                expected,
+                this.newMapWithKeysValues("One", 1, "Two", 2, "Three", 3, "Four", 4).flip());
+    }
 
     public static void assertBiMapsEqual(BiMap<?, ?> expected, BiMap<?, ?> actual)
     {
