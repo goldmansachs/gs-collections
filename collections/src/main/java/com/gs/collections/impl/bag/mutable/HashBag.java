@@ -403,6 +403,33 @@ public class HashBag<T>
         return true;
     }
 
+    public boolean setOccurrences(T item, int occurrences)
+    {
+        if (occurrences < 0)
+        {
+            throw new IllegalArgumentException("Cannot set a negative number of occurrences");
+        }
+
+        int originalOccurrences = this.items.get(item);
+
+        if (originalOccurrences == occurrences)
+        {
+            return false;
+        }
+
+        if (occurrences == 0)
+        {
+            this.items.remove(item);
+        }
+        else
+        {
+            this.items.put(item, occurrences);
+        }
+
+        this.size -= originalOccurrences - occurrences;
+        return true;
+    }
+
     public HashBag<T> without(T element)
     {
         this.remove(element);

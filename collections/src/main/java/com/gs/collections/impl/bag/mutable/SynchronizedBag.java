@@ -352,6 +352,14 @@ public class SynchronizedBag<T>
         }
     }
 
+    public boolean setOccurrences(T item, int occurrences)
+    {
+        synchronized (this.getLock())
+        {
+            return this.getMutableBag().setOccurrences(item, occurrences);
+        }
+    }
+
     public int sizeDistinct()
     {
         synchronized (this.getLock())

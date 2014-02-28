@@ -263,6 +263,34 @@ public abstract class MutableBagTestCase extends AbstractCollectionTestCase
         this.newWith().removeOccurrences(new Object(), -1);
     }
 
+    @Test
+    public void setOccurrences()
+    {
+        MutableBag<String> bag = HashBag.newBag();
+        MutableBag<String> expected = this.newWith("betamax-tape", "betamax-tape");
+
+        Assert.assertTrue(bag.setOccurrences("betamax-tape", 2));
+        assertBagsEqual(expected, bag);
+
+        Assert.assertFalse(bag.setOccurrences("betamax-tape", 2));
+        assertBagsEqual(expected, bag);
+
+        Assert.assertFalse(bag.setOccurrences("dvd", 0));
+        assertBagsEqual(expected, bag);
+
+        Assert.assertTrue(bag.setOccurrences("betamax-tape", 3));
+        assertBagsEqual(expected.with("betamax-tape"), bag);
+
+        Assert.assertTrue(bag.setOccurrences("betamax-tape", 0));
+        assertBagsEqual(HashBag.<String>newBag(), bag);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void setOccurrences_throws()
+    {
+        this.newWith().setOccurrences(new Object(), -1);
+    }
+
     protected static void assertBagsEqual(Bag<?> expected, Bag<?> actual)
     {
         Assert.assertEquals(expected.toMapOfItemToCount(), actual.toMapOfItemToCount());

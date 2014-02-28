@@ -243,6 +243,19 @@ public final class MultiReaderHashBag<T>
         }
     }
 
+    public boolean setOccurrences(T item, int occurrences)
+    {
+        this.acquireWriteLock();
+        try
+        {
+            return this.delegate.setOccurrences(item, occurrences);
+        }
+        finally
+        {
+            this.unlockWriteLock();
+        }
+    }
+
     public int occurrencesOf(Object item)
     {
         this.acquireReadLock();
@@ -802,6 +815,11 @@ public final class MultiReaderHashBag<T>
         public boolean removeOccurrences(Object item, int occurrences)
         {
             return this.getDelegate().removeOccurrences(item, occurrences);
+        }
+
+        public boolean setOccurrences(T item, int occurrences)
+        {
+            return this.getDelegate().setOccurrences(item, occurrences);
         }
 
         public int occurrencesOf(Object item)

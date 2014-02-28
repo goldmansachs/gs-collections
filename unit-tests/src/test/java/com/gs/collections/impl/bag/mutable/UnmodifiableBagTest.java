@@ -69,6 +69,12 @@ public class UnmodifiableBagTest
         this.getCollection().removeOccurrences(null, 1);
     }
 
+    @Test(expected = UnsupportedOperationException.class)
+    public void setOccurrences()
+    {
+        this.getCollection().setOccurrences(null, 1);
+    }
+
     @Test
     public void asUnmodifiable()
     {

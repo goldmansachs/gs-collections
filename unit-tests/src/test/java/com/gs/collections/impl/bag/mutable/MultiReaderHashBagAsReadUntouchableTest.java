@@ -43,6 +43,12 @@ public class MultiReaderHashBagAsReadUntouchableTest extends UnmodifiableMutable
         this.getCollection().removeOccurrences(1, 1);
     }
 
+    @Test(expected = UnsupportedOperationException.class)
+    public void setOccurrences()
+    {
+        this.getCollection().setOccurrences(1, 1);
+    }
+
     @Test
     public void occurrencesOf()
     {

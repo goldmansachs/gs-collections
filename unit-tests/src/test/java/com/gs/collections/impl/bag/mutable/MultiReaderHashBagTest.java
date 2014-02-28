@@ -123,6 +123,18 @@ public class MultiReaderHashBagTest extends MultiReaderMutableCollectionTestCase
     }
 
     @Test
+    public void setOccurrences()
+    {
+        MultiReaderHashBag<Integer> bag = MultiReaderHashBag.newBagWith(1, 1, 2);
+
+        Assert.assertFalse(bag.setOccurrences(1, 2));
+        Assert.assertTrue(bag.setOccurrences(3, 3));
+        MutableBagTestCase.assertBagsEqual(HashBag.newBagWith(1, 1, 2, 3, 3, 3), bag);
+        Assert.assertTrue(bag.setOccurrences(2, 0));
+        MutableBagTestCase.assertBagsEqual(HashBag.newBagWith(1, 1, 3, 3, 3), bag);
+    }
+
+    @Test
     public void occurrencesOf()
     {
         MultiReaderHashBag<Integer> bag = MultiReaderHashBag.newBagWith(1, 1, 2);

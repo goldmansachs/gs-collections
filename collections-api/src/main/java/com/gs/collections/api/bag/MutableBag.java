@@ -118,4 +118,6 @@ public interface MutableBag<T>
     void addOccurrences(T item, int occurrences);
 
     boolean removeOccurrences(Object item, int occurrences);
+
+    boolean setOccurrences(T item, int occurrences);
 }

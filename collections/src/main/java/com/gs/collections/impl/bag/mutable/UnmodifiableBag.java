@@ -270,6 +270,11 @@ public class UnmodifiableBag<T>
         throw new UnsupportedOperationException();
     }
 
+    public boolean setOccurrences(T item, int occurrences)
+    {
+        throw new UnsupportedOperationException();
+    }
+
     public int sizeDistinct()
     {
         return this.getMutableBag().sizeDistinct();
