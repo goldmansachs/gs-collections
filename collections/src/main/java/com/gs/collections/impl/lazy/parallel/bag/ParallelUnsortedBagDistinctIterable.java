@@ -28,11 +28,11 @@ import com.gs.collections.impl.lazy.parallel.set.AbstractParallelUnsortedSetIter
 import com.gs.collections.impl.lazy.parallel.set.UnsortedSetBatch;
 
 @Beta
-class ParallelUnsortedBagDistinctIterable<T> extends AbstractParallelUnsortedSetIterable<T>
+class ParallelUnsortedBagDistinctIterable<T> extends AbstractParallelUnsortedSetIterable<T, UnsortedSetBatch<T>>
 {
-    private final AbstractParallelUnsortedBag<T> parallelBagIterable;
+    private final AbstractParallelUnsortedBag<T, UnsortedBagBatch<T>> parallelBagIterable;
 
-    ParallelUnsortedBagDistinctIterable(AbstractParallelUnsortedBag<T> parallelBagIterable)
+    ParallelUnsortedBagDistinctIterable(AbstractParallelUnsortedBag<T, UnsortedBagBatch<T>> parallelBagIterable)
     {
         this.parallelBagIterable = parallelBagIterable;
     }

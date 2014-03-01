@@ -92,8 +92,10 @@ import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
 import com.gs.collections.impl.lazy.parallel.AbstractBatch;
 import com.gs.collections.impl.lazy.parallel.Batch;
+import com.gs.collections.impl.lazy.parallel.RootBatch;
 import com.gs.collections.impl.lazy.parallel.bag.AbstractParallelUnsortedBag;
 import com.gs.collections.impl.lazy.parallel.bag.CollectUnsortedBagBatch;
+import com.gs.collections.impl.lazy.parallel.bag.RootUnsortedBagBatch;
 import com.gs.collections.impl.lazy.parallel.bag.SelectUnsortedBagBatch;
 import com.gs.collections.impl.lazy.parallel.bag.UnsortedBagBatch;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -1275,14 +1277,6 @@ public class HashBag<T>
         {
             throw new IllegalArgumentException();
         }
-        if (executorService.isShutdown())
-        {
-            throw new IllegalArgumentException();
-        }
-        if (executorService.isTerminated())
-        {
-            throw new IllegalArgumentException();
-        }
         return new HashBagParallelIterable(executorService, batchSize);
     }
 
@@ -1358,7 +1352,7 @@ public class HashBag<T>
         }
     }
 
-    private final class HashBagParallelIterable extends AbstractParallelUnsortedBag<T>
+    private final class HashBagParallelIterable extends AbstractParallelUnsortedBag<T, RootUnsortedBagBatch<T>>
     {
         private final ExecutorService executorService;
         private final int batchSize;
@@ -1376,7 +1370,7 @@ public class HashBag<T>
         }
 
         @Override
-        public LazyIterable<UnsortedBagBatch<T>> split()
+        public LazyIterable<RootUnsortedBagBatch<T>> split()
         {
             return new HashBagParallelBatchLazyIterable();
         }
@@ -1419,7 +1413,7 @@ public class HashBag<T>
 
         public void forEachWithOccurrences(final ObjectIntProcedure<? super T> procedure)
         {
-            LazyIterable<UnsortedBagBatch<T>> chunks = this.split();
+            LazyIterable<RootUnsortedBagBatch<T>> chunks = this.split();
             LazyIterable<Callable<Void>> callables = chunks.collect(new Function<UnsortedBagBatch<T>, Callable<Void>>()
             {
                 public Callable<Void> valueOf(final UnsortedBagBatch<T> chunk)
@@ -1452,10 +1446,10 @@ public class HashBag<T>
             MutableSet<Future<Boolean>> futures = UnifiedSet.newSet();
             CompletionService<Boolean> completionService = new ExecutorCompletionService<Boolean>(this.executorService);
 
-            LazyIterable<? extends Batch<T>> chunks = this.split();
-            LazyIterable<Callable<Boolean>> callables = chunks.collect(new Function<Batch<T>, Callable<Boolean>>()
+            LazyIterable<? extends RootBatch<T>> chunks = this.split();
+            LazyIterable<Callable<Boolean>> callables = chunks.collect(new Function<RootBatch<T>, Callable<Boolean>>()
             {
-                public Callable<Boolean> valueOf(final Batch<T> batch)
+                public Callable<Boolean> valueOf(final RootBatch<T> batch)
                 {
                     return new Callable<Boolean>()
                     {
@@ -1505,9 +1499,9 @@ public class HashBag<T>
         public boolean allSatisfy(final Predicate<? super T> predicate)
         {
             final CompletionService<Boolean> completionService = new ExecutorCompletionService<Boolean>(this.executorService);
-            MutableSet<Future<Boolean>> futures = this.split().collect(new Function<Batch<T>, Future<Boolean>>()
+            MutableSet<Future<Boolean>> futures = this.split().collect(new Function<RootBatch<T>, Future<Boolean>>()
             {
-                public Future<Boolean> valueOf(final Batch<T> batch)
+                public Future<Boolean> valueOf(final RootBatch<T> batch)
                 {
                     return completionService.submit(new Callable<Boolean>()
                     {
@@ -1550,12 +1544,12 @@ public class HashBag<T>
         @Override
         public T detect(final Predicate<? super T> predicate)
         {
-            LazyIterable<? extends Batch<T>> chunks = this.split();
-            LazyIterable<Future<T>> futures = chunks.collect(new Function<Batch<T>, Future<T>>()
+            LazyIterable<? extends RootBatch<T>> chunks = this.split();
+            LazyIterable<Future<T>> futures = chunks.collect(new Function<RootBatch<T>, Future<T>>()
             {
-                public Future<T> valueOf(final Batch<T> chunk)
+                public Future<T> valueOf(final RootBatch<T> chunk)
                 {
-                    return HashBagParallelIterable.this.executorService.submit(new Callable<T>()
+                    return HashBagParallelIterable.this.getExecutorService().submit(new Callable<T>()
                     {
                         public T call()
                         {
@@ -1594,7 +1588,7 @@ public class HashBag<T>
         }
 
         private class HashBagParallelBatchIterator
-                implements Iterator<UnsortedBagBatch<T>>
+                implements Iterator<RootUnsortedBagBatch<T>>
         {
             protected int chunkIndex;
 
@@ -1603,7 +1597,7 @@ public class HashBag<T>
                 return this.chunkIndex * HashBagParallelIterable.this.batchSize < HashBag.this.items.size();
             }
 
-            public UnsortedBagBatch<T> next()
+            public RootUnsortedBagBatch<T> next()
             {
                 throw new UnsupportedOperationException();
                 /*
@@ -1622,30 +1616,30 @@ public class HashBag<T>
         }
 
         private class HashBagParallelBatchLazyIterable
-                extends AbstractLazyIterable<UnsortedBagBatch<T>>
+                extends AbstractLazyIterable<RootUnsortedBagBatch<T>>
         {
-            public void forEach(Procedure<? super UnsortedBagBatch<T>> procedure)
+            public void forEach(Procedure<? super RootUnsortedBagBatch<T>> procedure)
             {
-                for (UnsortedBagBatch<T> chunk : this)
+                for (RootUnsortedBagBatch<T> chunk : this)
                 {
                     procedure.value(chunk);
                 }
             }
 
-            public <P> void forEachWith(Procedure2<? super UnsortedBagBatch<T>, ? super P> procedure, P parameter)
+            public <P> void forEachWith(Procedure2<? super RootUnsortedBagBatch<T>, ? super P> procedure, P parameter)
             {
-                for (UnsortedBagBatch<T> chunk : this)
+                for (RootUnsortedBagBatch<T> chunk : this)
                 {
                     procedure.value(chunk, parameter);
                 }
             }
 
-            public void forEachWithIndex(ObjectIntProcedure<? super UnsortedBagBatch<T>> objectIntProcedure)
+            public void forEachWithIndex(ObjectIntProcedure<? super RootUnsortedBagBatch<T>> objectIntProcedure)
             {
                 throw new UnsupportedOperationException();
             }
 
-            public Iterator<UnsortedBagBatch<T>> iterator()
+            public Iterator<RootUnsortedBagBatch<T>> iterator()
             {
                 return new HashBagParallelBatchIterator();
             }

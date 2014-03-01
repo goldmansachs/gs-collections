@@ -21,7 +21,6 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
-import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.IfProcedure;
 import com.gs.collections.impl.lazy.parallel.AbstractBatch;
 
@@ -82,20 +81,5 @@ public class SelectUnsortedBagBatch<T> extends AbstractBatch<T> implements Unsor
                 this.procedure.value(each, parameter);
             }
         }
-    }
-
-    public boolean anySatisfy(Predicate<? super T> predicate)
-    {
-        return this.unsortedBagBatch.anySatisfy(Predicates.and(this.predicate, predicate));
-    }
-
-    public boolean allSatisfy(Predicate<? super T> predicate)
-    {
-        return this.unsortedBagBatch.allSatisfy(Predicates.and(this.predicate, predicate));
-    }
-
-    public T detect(Predicate<? super T> predicate)
-    {
-        return this.unsortedBagBatch.detect(Predicates.and(this.predicate, predicate));
     }
 }

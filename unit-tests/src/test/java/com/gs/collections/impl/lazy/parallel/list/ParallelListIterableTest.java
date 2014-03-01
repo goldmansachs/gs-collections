@@ -14,22 +14,16 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.lazy.parallel;
+package com.gs.collections.impl.lazy.parallel.list;
 
-import com.gs.collections.api.annotation.Beta;
-import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.predicate.Predicate;
-import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.list.ParallelListIterable;
+import com.gs.collections.impl.list.mutable.FastList;
 
-@Beta
-public interface Batch<T>
+public class ParallelListIterableTest extends AbstractParallelListIterableTestCase
 {
-    void forEach(Procedure<? super T> procedure);
-
-    Batch<T> select(Predicate<? super T> predicate);
-
-    <V> Batch<V> collect(Function<? super T, ? extends V> function);
-
-    String makeString(String separator);
+    @Override
+    protected ParallelListIterable<Integer> classUnderTest()
+    {
+        return FastList.newListWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4).asParallel(this.executorService, 2);
+    }
 }
-

@@ -27,12 +27,12 @@ import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.IfProcedure;
 
 @Beta
-class ParallelSelectListIterable<T> extends AbstractParallelListIterable<T>
+class ParallelSelectListIterable<T> extends AbstractParallelListIterable<T, ListBatch<T>>
 {
-    private final AbstractParallelListIterable<T> parallelListIterable;
+    private final AbstractParallelListIterable<T, ? extends ListBatch<T>> parallelListIterable;
     private final Predicate<? super T> predicate;
 
-    ParallelSelectListIterable(AbstractParallelListIterable<T> parallelListIterable, Predicate<? super T> predicate)
+    ParallelSelectListIterable(AbstractParallelListIterable<T, ? extends ListBatch<T>> parallelListIterable, Predicate<? super T> predicate)
     {
         this.parallelListIterable = parallelListIterable;
         this.predicate = predicate;

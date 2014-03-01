@@ -91,10 +91,12 @@ import com.gs.collections.impl.block.procedure.MultimapPutProcedure;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
 import com.gs.collections.impl.lazy.parallel.AbstractBatch;
 import com.gs.collections.impl.lazy.parallel.Batch;
+import com.gs.collections.impl.lazy.parallel.RootBatch;
 import com.gs.collections.impl.lazy.parallel.list.AbstractParallelListIterable;
 import com.gs.collections.impl.lazy.parallel.list.CollectListBatch;
 import com.gs.collections.impl.lazy.parallel.list.DistinctBatch;
 import com.gs.collections.impl.lazy.parallel.list.ListBatch;
+import com.gs.collections.impl.lazy.parallel.list.RootListBatch;
 import com.gs.collections.impl.lazy.parallel.list.SelectListBatch;
 import com.gs.collections.impl.lazy.parallel.set.UnsortedSetBatch;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
@@ -1668,18 +1670,10 @@ public class FastList<T>
         {
             throw new IllegalArgumentException();
         }
-        if (executorService.isShutdown())
-        {
-            throw new IllegalArgumentException();
-        }
-        if (executorService.isTerminated())
-        {
-            throw new IllegalArgumentException();
-        }
         return new FastListParallelIterable(executorService, batchSize);
     }
 
-    private final class FastListBatch extends AbstractBatch<T> implements ListBatch<T>
+    private final class FastListBatch extends AbstractBatch<T> implements RootListBatch<T>
     {
         private final int chunkStartIndex;
         private final int chunkEndIndex;
@@ -1750,7 +1744,7 @@ public class FastList<T>
         }
     }
 
-    private final class FastListParallelIterable extends AbstractParallelListIterable<T>
+    private final class FastListParallelIterable extends AbstractParallelListIterable<T, RootListBatch<T>>
     {
         private final ExecutorService executorService;
         private final int batchSize;
@@ -1768,7 +1762,7 @@ public class FastList<T>
         }
 
         @Override
-        public LazyIterable<ListBatch<T>> split()
+        public LazyIterable<RootListBatch<T>> split()
         {
             return new FastListParallelBatchLazyIterable();
         }
@@ -1816,10 +1810,10 @@ public class FastList<T>
             MutableSet<Future<Boolean>> futures = UnifiedSet.newSet();
             CompletionService<Boolean> completionService = new ExecutorCompletionService<Boolean>(this.executorService);
 
-            LazyIterable<? extends Batch<T>> chunks = this.split();
-            LazyIterable<Callable<Boolean>> callables = chunks.collect(new Function<Batch<T>, Callable<Boolean>>()
+            LazyIterable<? extends RootBatch<T>> chunks = this.split();
+            LazyIterable<Callable<Boolean>> callables = chunks.collect(new Function<RootBatch<T>, Callable<Boolean>>()
             {
-                public Callable<Boolean> valueOf(final Batch<T> batch)
+                public Callable<Boolean> valueOf(final RootBatch<T> batch)
                 {
                     return new Callable<Boolean>()
                     {
@@ -1869,9 +1863,9 @@ public class FastList<T>
         public boolean allSatisfy(final Predicate<? super T> predicate)
         {
             final CompletionService<Boolean> completionService = new ExecutorCompletionService<Boolean>(this.executorService);
-            MutableSet<Future<Boolean>> futures = this.split().collect(new Function<Batch<T>, Future<Boolean>>()
+            MutableSet<Future<Boolean>> futures = this.split().collect(new Function<RootBatch<T>, Future<Boolean>>()
             {
-                public Future<Boolean> valueOf(final Batch<T> batch)
+                public Future<Boolean> valueOf(final RootBatch<T> batch)
                 {
                     return completionService.submit(new Callable<Boolean>()
                     {
@@ -1914,12 +1908,12 @@ public class FastList<T>
         @Override
         public T detect(final Predicate<? super T> predicate)
         {
-            LazyIterable<? extends Batch<T>> chunks = this.split();
-            LazyIterable<Future<T>> futures = chunks.collect(new Function<Batch<T>, Future<T>>()
+            LazyIterable<? extends RootBatch<T>> chunks = this.split();
+            LazyIterable<Future<T>> futures = chunks.collect(new Function<RootBatch<T>, Future<T>>()
             {
-                public Future<T> valueOf(final Batch<T> chunk)
+                public Future<T> valueOf(final RootBatch<T> chunk)
                 {
-                    return FastListParallelIterable.this.executorService.submit(new Callable<T>()
+                    return FastListParallelIterable.this.getExecutorService().submit(new Callable<T>()
                     {
                         public T call()
                         {
@@ -1958,7 +1952,7 @@ public class FastList<T>
         }
 
         private class FastListParallelBatchIterator
-                implements Iterator<ListBatch<T>>
+                implements Iterator<RootListBatch<T>>
         {
             protected int chunkIndex;
 
@@ -1967,7 +1961,7 @@ public class FastList<T>
                 return this.chunkIndex * FastListParallelIterable.this.batchSize < FastList.this.size;
             }
 
-            public ListBatch<T> next()
+            public RootListBatch<T> next()
             {
                 int chunkStartIndex = this.chunkIndex * FastListParallelIterable.this.batchSize;
                 int chunkEndIndex = (this.chunkIndex + 1) * FastListParallelIterable.this.batchSize;
@@ -1983,30 +1977,30 @@ public class FastList<T>
         }
 
         private class FastListParallelBatchLazyIterable
-                extends AbstractLazyIterable<ListBatch<T>>
+                extends AbstractLazyIterable<RootListBatch<T>>
         {
-            public void forEach(Procedure<? super ListBatch<T>> procedure)
+            public void forEach(Procedure<? super RootListBatch<T>> procedure)
             {
-                for (ListBatch<T> chunk : this)
+                for (RootListBatch<T> chunk : this)
                 {
                     procedure.value(chunk);
                 }
             }
 
-            public <P> void forEachWith(Procedure2<? super ListBatch<T>, ? super P> procedure, P parameter)
+            public <P> void forEachWith(Procedure2<? super RootListBatch<T>, ? super P> procedure, P parameter)
             {
-                for (ListBatch<T> chunk : this)
+                for (RootListBatch<T> chunk : this)
                 {
                     procedure.value(chunk, parameter);
                 }
             }
 
-            public void forEachWithIndex(ObjectIntProcedure<? super ListBatch<T>> objectIntProcedure)
+            public void forEachWithIndex(ObjectIntProcedure<? super RootListBatch<T>> objectIntProcedure)
             {
                 throw new UnsupportedOperationException();
             }
 
-            public Iterator<ListBatch<T>> iterator()
+            public Iterator<RootListBatch<T>> iterator()
             {
                 return new FastListParallelBatchIterator();
             }

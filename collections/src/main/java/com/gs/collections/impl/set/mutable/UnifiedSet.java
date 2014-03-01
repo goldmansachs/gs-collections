@@ -121,8 +121,10 @@ import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
 import com.gs.collections.impl.lazy.parallel.AbstractBatch;
 import com.gs.collections.impl.lazy.parallel.Batch;
+import com.gs.collections.impl.lazy.parallel.RootBatch;
 import com.gs.collections.impl.lazy.parallel.set.AbstractParallelUnsortedSetIterable;
 import com.gs.collections.impl.lazy.parallel.set.CollectUnsortedSetBatch;
+import com.gs.collections.impl.lazy.parallel.set.RootUnsortedSetBatch;
 import com.gs.collections.impl.lazy.parallel.set.SelectUnsortedSetBatch;
 import com.gs.collections.impl.lazy.parallel.set.UnsortedSetBatch;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -150,8 +152,8 @@ import com.gs.collections.impl.utility.internal.SetIterables;
 import net.jcip.annotations.NotThreadSafe;
 
 @NotThreadSafe
-public class UnifiedSet<K>
-        implements MutableSet<K>, Externalizable, Pool<K>, BatchIterable<K>
+public class UnifiedSet<T>
+        implements MutableSet<T>, Externalizable, Pool<T>, BatchIterable<T>
 {
     protected static final Object NULL_KEY = new Object()
     {
@@ -208,13 +210,13 @@ public class UnifiedSet<K>
         this.init(this.fastCeil(initialCapacity / loadFactor));
     }
 
-    public UnifiedSet(Collection<? extends K> collection)
+    public UnifiedSet(Collection<? extends T> collection)
     {
         this(Math.max(collection.size(), DEFAULT_INITIAL_CAPACITY), DEFAULT_LOAD_FACTOR);
         this.addAll(collection);
     }
 
-    public UnifiedSet(UnifiedSet<K> set)
+    public UnifiedSet(UnifiedSet<T> set)
     {
         this.maxSize = set.maxSize;
         this.loadFactor = set.loadFactor;
@@ -342,7 +344,7 @@ public class UnifiedSet<K>
         }
     }
 
-    public boolean add(K key)
+    public boolean add(T key)
     {
         int index = this.index(key);
         Object cur = this.table[index];
@@ -362,7 +364,7 @@ public class UnifiedSet<K>
         return false;
     }
 
-    private boolean chainedAdd(K key, int index)
+    private boolean chainedAdd(T key, int index)
     {
         Object realKey = toSentinelIfNull(key);
         if (this.table[index] instanceof ChainedBucket)
@@ -500,12 +502,12 @@ public class UnifiedSet<K>
         }
         if (cur instanceof ChainedBucket)
         {
-            return this.chainContains((ChainedBucket) cur, (K) key);
+            return this.chainContains((ChainedBucket) cur, (T) key);
         }
-        return this.nonNullTableObjectEquals(cur, (K) key);
+        return this.nonNullTableObjectEquals(cur, (T) key);
     }
 
-    private boolean chainContains(ChainedBucket bucket, K key)
+    private boolean chainContains(ChainedBucket bucket, T key)
     {
         do
         {
@@ -548,7 +550,7 @@ public class UnifiedSet<K>
         return Math.max(1, this.table.length / batchSize);
     }
 
-    public void batchForEach(Procedure<? super K> procedure, int sectionIndex, int sectionCount)
+    public void batchForEach(Procedure<? super T> procedure, int sectionIndex, int sectionCount)
     {
         Object[] set = this.table;
         int sectionSize = set.length / sectionCount;
@@ -571,7 +573,7 @@ public class UnifiedSet<K>
         }
     }
 
-    public void forEach(Procedure<? super K> procedure)
+    public void forEach(Procedure<? super T> procedure)
     {
         for (int i = 0; i < this.table.length; i++)
         {
@@ -587,7 +589,7 @@ public class UnifiedSet<K>
         }
     }
 
-    private void chainedForEach(ChainedBucket bucket, Procedure<? super K> procedure)
+    private void chainedForEach(ChainedBucket bucket, Procedure<? super T> procedure)
     {
         do
         {
@@ -617,7 +619,7 @@ public class UnifiedSet<K>
         while (true);
     }
 
-    public <P> void forEachWith(Procedure2<? super K, ? super P> procedure, P parameter)
+    public <P> void forEachWith(Procedure2<? super T, ? super P> procedure, P parameter)
     {
         for (int i = 0; i < this.table.length; i++)
         {
@@ -635,7 +637,7 @@ public class UnifiedSet<K>
 
     private <P> void chainedForEachWith(
             ChainedBucket bucket,
-            Procedure2<? super K, ? super P> procedure,
+            Procedure2<? super T, ? super P> procedure,
             P parameter)
     {
         do
@@ -666,7 +668,7 @@ public class UnifiedSet<K>
         while (true);
     }
 
-    public void forEachWithIndex(ObjectIntProcedure<? super K> objectIntProcedure)
+    public void forEachWithIndex(ObjectIntProcedure<? super T> objectIntProcedure)
     {
         int count = 0;
         for (int i = 0; i < this.table.length; i++)
@@ -683,7 +685,7 @@ public class UnifiedSet<K>
         }
     }
 
-    private int chainedForEachWithIndex(ChainedBucket bucket, ObjectIntProcedure<? super K> procedure, int count)
+    private int chainedForEachWithIndex(ChainedBucket bucket, ObjectIntProcedure<? super T> procedure, int count)
     {
         do
         {
@@ -713,47 +715,47 @@ public class UnifiedSet<K>
         while (true);
     }
 
-    public UnifiedSet<K> newEmpty()
+    public UnifiedSet<T> newEmpty()
     {
         return UnifiedSet.newSet();
     }
 
-    public K getFirst()
+    public T getFirst()
     {
         return this.isEmpty() ? null : this.iterator().next();
     }
 
-    public K getLast()
+    public T getLast()
     {
         return this.getFirst();
     }
 
-    public UnifiedSet<K> select(Predicate<? super K> predicate)
+    public UnifiedSet<T> select(Predicate<? super T> predicate)
     {
         return this.select(predicate, this.newEmpty());
     }
 
-    public <R extends Collection<K>> R select(Predicate<? super K> predicate, R target)
+    public <R extends Collection<T>> R select(Predicate<? super T> predicate, R target)
     {
-        this.forEach(new SelectProcedure<K>(predicate, target));
+        this.forEach(new SelectProcedure<T>(predicate, target));
         return target;
     }
 
-    public <P> UnifiedSet<K> selectWith(
-            Predicate2<? super K, ? super P> predicate,
+    public <P> UnifiedSet<T> selectWith(
+            Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
         return this.selectWith(predicate, parameter, this.newEmpty());
     }
 
-    public <P, R extends Collection<K>> R selectWith(
-            final Predicate2<? super K, ? super P> predicate,
+    public <P, R extends Collection<T>> R selectWith(
+            final Predicate2<? super T, ? super P> predicate,
             P parameter,
             final R targetCollection)
     {
-        this.forEachWith(new Procedure2<K, P>()
+        this.forEachWith(new Procedure2<T, P>()
         {
-            public void value(K each, P parm)
+            public void value(T each, P parm)
             {
                 if (predicate.accept(each, parm))
                 {
@@ -764,32 +766,32 @@ public class UnifiedSet<K>
         return targetCollection;
     }
 
-    public UnifiedSet<K> reject(Predicate<? super K> predicate)
+    public UnifiedSet<T> reject(Predicate<? super T> predicate)
     {
         return this.reject(predicate, this.newEmpty());
     }
 
-    public <R extends Collection<K>> R reject(Predicate<? super K> predicate, R target)
+    public <R extends Collection<T>> R reject(Predicate<? super T> predicate, R target)
     {
-        this.forEach(new RejectProcedure<K>(predicate, target));
+        this.forEach(new RejectProcedure<T>(predicate, target));
         return target;
     }
 
-    public <P> UnifiedSet<K> rejectWith(
-            Predicate2<? super K, ? super P> predicate,
+    public <P> UnifiedSet<T> rejectWith(
+            Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
         return this.rejectWith(predicate, parameter, this.newEmpty());
     }
 
-    public <P, R extends Collection<K>> R rejectWith(
-            final Predicate2<? super K, ? super P> predicate,
+    public <P, R extends Collection<T>> R rejectWith(
+            final Predicate2<? super T, ? super P> predicate,
             P parameter,
             final R targetCollection)
     {
-        this.forEachWith(new Procedure2<K, P>()
+        this.forEachWith(new Procedure2<T, P>()
         {
-            public void value(K each, P parm)
+            public void value(T each, P parm)
             {
                 if (!predicate.accept(each, parm))
                 {
@@ -800,15 +802,15 @@ public class UnifiedSet<K>
         return targetCollection;
     }
 
-    public <P> Twin<MutableList<K>> selectAndRejectWith(
-            final Predicate2<? super K, ? super P> predicate,
+    public <P> Twin<MutableList<T>> selectAndRejectWith(
+            final Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
-        final MutableList<K> positiveResult = Lists.mutable.of();
-        final MutableList<K> negativeResult = Lists.mutable.of();
-        this.forEachWith(new Procedure2<K, P>()
+        final MutableList<T> positiveResult = Lists.mutable.of();
+        final MutableList<T> negativeResult = Lists.mutable.of();
+        this.forEachWith(new Procedure2<T, P>()
         {
-            public void value(K each, P parm)
+            public void value(T each, P parm)
             {
                 (predicate.accept(each, parm) ? positiveResult : negativeResult).add(each);
             }
@@ -816,17 +818,17 @@ public class UnifiedSet<K>
         return Tuples.twin(positiveResult, negativeResult);
     }
 
-    public PartitionMutableSet<K> partition(Predicate<? super K> predicate)
+    public PartitionMutableSet<T> partition(Predicate<? super T> predicate)
     {
-        PartitionMutableSet<K> partitionUnifiedSet = new PartitionUnifiedSet<K>();
-        this.forEach(new PartitionProcedure<K>(predicate, partitionUnifiedSet));
+        PartitionMutableSet<T> partitionUnifiedSet = new PartitionUnifiedSet<T>();
+        this.forEach(new PartitionProcedure<T>(predicate, partitionUnifiedSet));
         return partitionUnifiedSet;
     }
 
-    public <P> PartitionMutableSet<K> partitionWith(Predicate2<? super K, ? super P> predicate, P parameter)
+    public <P> PartitionMutableSet<T> partitionWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        PartitionMutableSet<K> partitionUnifiedSet = new PartitionUnifiedSet<K>();
-        this.forEach(new PartitionPredicate2Procedure<K, P>(predicate, parameter, partitionUnifiedSet));
+        PartitionMutableSet<T> partitionUnifiedSet = new PartitionUnifiedSet<T>();
+        this.forEach(new PartitionPredicate2Procedure<T, P>(predicate, parameter, partitionUnifiedSet));
         return partitionUnifiedSet;
     }
 
@@ -837,138 +839,138 @@ public class UnifiedSet<K>
         return result;
     }
 
-    public void removeIf(Predicate<? super K> predicate)
+    public void removeIf(Predicate<? super T> predicate)
     {
         IterableIterate.removeIf(this, predicate);
     }
 
-    public <P> void removeIfWith(Predicate2<? super K, ? super P> predicate, P parameter)
+    public <P> void removeIfWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         IterableIterate.removeIfWith(this, predicate, parameter);
     }
 
-    public <V> UnifiedSet<V> collect(Function<? super K, ? extends V> function)
+    public <V> UnifiedSet<V> collect(Function<? super T, ? extends V> function)
     {
         return this.collect(function, UnifiedSet.<V>newSet());
     }
 
-    public MutableBooleanSet collectBoolean(BooleanFunction<? super K> booleanFunction)
+    public MutableBooleanSet collectBoolean(BooleanFunction<? super T> booleanFunction)
     {
         return this.collectBoolean(booleanFunction, new BooleanHashSet());
     }
 
-    public <R extends MutableBooleanCollection> R collectBoolean(BooleanFunction<? super K> booleanFunction, R target)
+    public <R extends MutableBooleanCollection> R collectBoolean(BooleanFunction<? super T> booleanFunction, R target)
     {
-        this.forEach(new CollectBooleanProcedure<K>(booleanFunction, target));
+        this.forEach(new CollectBooleanProcedure<T>(booleanFunction, target));
         return target;
     }
 
-    public MutableByteSet collectByte(ByteFunction<? super K> byteFunction)
+    public MutableByteSet collectByte(ByteFunction<? super T> byteFunction)
     {
         return this.collectByte(byteFunction, new ByteHashSet());
     }
 
-    public <R extends MutableByteCollection> R collectByte(ByteFunction<? super K> byteFunction, R target)
+    public <R extends MutableByteCollection> R collectByte(ByteFunction<? super T> byteFunction, R target)
     {
-        this.forEach(new CollectByteProcedure<K>(byteFunction, target));
+        this.forEach(new CollectByteProcedure<T>(byteFunction, target));
         return target;
     }
 
-    public MutableCharSet collectChar(CharFunction<? super K> charFunction)
+    public MutableCharSet collectChar(CharFunction<? super T> charFunction)
     {
         return this.collectChar(charFunction, new CharHashSet());
     }
 
-    public <R extends MutableCharCollection> R collectChar(CharFunction<? super K> charFunction, R target)
+    public <R extends MutableCharCollection> R collectChar(CharFunction<? super T> charFunction, R target)
     {
-        this.forEach(new CollectCharProcedure<K>(charFunction, target));
+        this.forEach(new CollectCharProcedure<T>(charFunction, target));
         return target;
     }
 
-    public MutableDoubleSet collectDouble(DoubleFunction<? super K> doubleFunction)
+    public MutableDoubleSet collectDouble(DoubleFunction<? super T> doubleFunction)
     {
         return this.collectDouble(doubleFunction, new DoubleHashSet());
     }
 
-    public <R extends MutableDoubleCollection> R collectDouble(DoubleFunction<? super K> doubleFunction, R target)
+    public <R extends MutableDoubleCollection> R collectDouble(DoubleFunction<? super T> doubleFunction, R target)
     {
-        this.forEach(new CollectDoubleProcedure<K>(doubleFunction, target));
+        this.forEach(new CollectDoubleProcedure<T>(doubleFunction, target));
         return target;
     }
 
-    public MutableFloatSet collectFloat(FloatFunction<? super K> floatFunction)
+    public MutableFloatSet collectFloat(FloatFunction<? super T> floatFunction)
     {
         return this.collectFloat(floatFunction, new FloatHashSet());
     }
 
-    public <R extends MutableFloatCollection> R collectFloat(FloatFunction<? super K> floatFunction, R target)
+    public <R extends MutableFloatCollection> R collectFloat(FloatFunction<? super T> floatFunction, R target)
     {
-        this.forEach(new CollectFloatProcedure<K>(floatFunction, target));
+        this.forEach(new CollectFloatProcedure<T>(floatFunction, target));
         return target;
     }
 
-    public MutableIntSet collectInt(IntFunction<? super K> intFunction)
+    public MutableIntSet collectInt(IntFunction<? super T> intFunction)
     {
         return this.collectInt(intFunction, new IntHashSet());
     }
 
-    public <R extends MutableIntCollection> R collectInt(IntFunction<? super K> intFunction, R target)
+    public <R extends MutableIntCollection> R collectInt(IntFunction<? super T> intFunction, R target)
     {
-        this.forEach(new CollectIntProcedure<K>(intFunction, target));
+        this.forEach(new CollectIntProcedure<T>(intFunction, target));
         return target;
     }
 
-    public MutableLongSet collectLong(LongFunction<? super K> longFunction)
+    public MutableLongSet collectLong(LongFunction<? super T> longFunction)
     {
         return this.collectLong(longFunction, new LongHashSet());
     }
 
-    public <R extends MutableLongCollection> R collectLong(LongFunction<? super K> longFunction, R target)
+    public <R extends MutableLongCollection> R collectLong(LongFunction<? super T> longFunction, R target)
     {
-        this.forEach(new CollectLongProcedure<K>(longFunction, target));
+        this.forEach(new CollectLongProcedure<T>(longFunction, target));
         return target;
     }
 
-    public MutableShortSet collectShort(ShortFunction<? super K> shortFunction)
+    public MutableShortSet collectShort(ShortFunction<? super T> shortFunction)
     {
         return this.collectShort(shortFunction, new ShortHashSet());
     }
 
-    public <R extends MutableShortCollection> R collectShort(ShortFunction<? super K> shortFunction, R target)
+    public <R extends MutableShortCollection> R collectShort(ShortFunction<? super T> shortFunction, R target)
     {
-        this.forEach(new CollectShortProcedure<K>(shortFunction, target));
+        this.forEach(new CollectShortProcedure<T>(shortFunction, target));
         return target;
     }
 
-    public <V, R extends Collection<V>> R collect(Function<? super K, ? extends V> function, R target)
+    public <V, R extends Collection<V>> R collect(Function<? super T, ? extends V> function, R target)
     {
-        this.forEach(new CollectProcedure<K, V>(function, target));
+        this.forEach(new CollectProcedure<T, V>(function, target));
         return target;
     }
 
-    public <V> UnifiedSet<V> flatCollect(Function<? super K, ? extends Iterable<V>> function)
+    public <V> UnifiedSet<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
         return this.flatCollect(function, UnifiedSet.<V>newSet());
     }
 
     public <V, R extends Collection<V>> R flatCollect(
-            Function<? super K, ? extends Iterable<V>> function, R target)
+            Function<? super T, ? extends Iterable<V>> function, R target)
     {
-        this.forEach(new FlatCollectProcedure<K, V>(function, target));
+        this.forEach(new FlatCollectProcedure<T, V>(function, target));
         return target;
     }
 
-    public <P, A> UnifiedSet<A> collectWith(Function2<? super K, ? super P, ? extends A> function, P parameter)
+    public <P, A> UnifiedSet<A> collectWith(Function2<? super T, ? super P, ? extends A> function, P parameter)
     {
         return this.collectWith(function, parameter, UnifiedSet.<A>newSet());
     }
 
     public <P, A, R extends Collection<A>> R collectWith(
-            final Function2<? super K, ? super P, ? extends A> function, P parameter, final R targetCollection)
+            final Function2<? super T, ? super P, ? extends A> function, P parameter, final R targetCollection)
     {
-        this.forEachWith(new Procedure2<K, P>()
+        this.forEachWith(new Procedure2<T, P>()
         {
-            public void value(K each, P parm)
+            public void value(T each, P parm)
             {
                 targetCollection.add(function.value(each, parm));
             }
@@ -977,19 +979,19 @@ public class UnifiedSet<K>
     }
 
     public <V> UnifiedSet<V> collectIf(
-            Predicate<? super K> predicate, Function<? super K, ? extends V> function)
+            Predicate<? super T> predicate, Function<? super T, ? extends V> function)
     {
         return this.collectIf(predicate, function, UnifiedSet.<V>newSet());
     }
 
     public <V, R extends Collection<V>> R collectIf(
-            Predicate<? super K> predicate, Function<? super K, ? extends V> function, R target)
+            Predicate<? super T> predicate, Function<? super T, ? extends V> function, R target)
     {
-        this.forEach(new CollectIfProcedure<K, V>(target, function, predicate));
+        this.forEach(new CollectIfProcedure<T, V>(target, function, predicate));
         return target;
     }
 
-    public K detect(Predicate<? super K> predicate)
+    public T detect(Predicate<? super T> predicate)
     {
         for (int i = 0; i < this.table.length; i++)
         {
@@ -1004,7 +1006,7 @@ public class UnifiedSet<K>
             }
             else if (cur != null)
             {
-                K each = this.nonSentinel(cur);
+                T each = this.nonSentinel(cur);
                 if (predicate.accept(each))
                 {
                     return each;
@@ -1014,7 +1016,7 @@ public class UnifiedSet<K>
         return null;
     }
 
-    private Object chainedDetect(ChainedBucket bucket, Predicate<? super K> predicate)
+    private Object chainedDetect(ChainedBucket bucket, Predicate<? super T> predicate)
     {
         do
         {
@@ -1056,69 +1058,69 @@ public class UnifiedSet<K>
         while (true);
     }
 
-    public K min(Comparator<? super K> comparator)
+    public T min(Comparator<? super T> comparator)
     {
         return Iterate.min(this, comparator);
     }
 
-    public K max(Comparator<? super K> comparator)
+    public T max(Comparator<? super T> comparator)
     {
         return Iterate.max(this, comparator);
     }
 
-    public K min()
+    public T min()
     {
         return Iterate.min(this);
     }
 
-    public K max()
+    public T max()
     {
         return Iterate.max(this);
     }
 
-    public <V extends Comparable<? super V>> K minBy(Function<? super K, ? extends V> function)
+    public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
     {
         return IterableIterate.minBy(this, function);
     }
 
-    public <V extends Comparable<? super V>> K maxBy(Function<? super K, ? extends V> function)
+    public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
     {
         return IterableIterate.maxBy(this, function);
     }
 
-    public K detectIfNone(Predicate<? super K> predicate, Function0<? extends K> function)
+    public T detectIfNone(Predicate<? super T> predicate, Function0<? extends T> function)
     {
-        K result = this.detect(predicate);
+        T result = this.detect(predicate);
         return result == null ? function.value() : result;
     }
 
-    public <P> K detectWith(Predicate2<? super K, ? super P> predicate, P parameter)
+    public <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         return IterableIterate.detectWith(this, predicate, parameter);
     }
 
-    public <P> K detectWithIfNone(
-            Predicate2<? super K, ? super P> predicate,
+    public <P> T detectWithIfNone(
+            Predicate2<? super T, ? super P> predicate,
             P parameter,
-            Function0<? extends K> function)
+            Function0<? extends T> function)
     {
-        K result = this.detectWith(predicate, parameter);
+        T result = this.detectWith(predicate, parameter);
         return result == null ? function.value() : result;
     }
 
-    public int count(Predicate<? super K> predicate)
+    public int count(Predicate<? super T> predicate)
     {
-        CountProcedure<K> procedure = new CountProcedure<K>(predicate);
+        CountProcedure<T> procedure = new CountProcedure<T>(predicate);
         this.forEach(procedure);
         return procedure.getCount();
     }
 
-    public <P> int countWith(final Predicate2<? super K, ? super P> predicate, P parameter)
+    public <P> int countWith(final Predicate2<? super T, ? super P> predicate, P parameter)
     {
         final Counter count = new Counter();
-        this.forEachWith(new Procedure2<K, P>()
+        this.forEachWith(new Procedure2<T, P>()
         {
-            public void value(K each, P parm)
+            public void value(T each, P parm)
             {
                 if (predicate.accept(each, parm))
                 {
@@ -1129,7 +1131,7 @@ public class UnifiedSet<K>
         return count.getCount();
     }
 
-    public boolean anySatisfy(Predicate<? super K> predicate)
+    public boolean anySatisfy(Predicate<? super T> predicate)
     {
         for (int i = 0; i < this.table.length; i++)
         {
@@ -1152,7 +1154,7 @@ public class UnifiedSet<K>
         return false;
     }
 
-    private boolean chainedAnySatisfy(ChainedBucket bucket, Predicate<? super K> predicate)
+    private boolean chainedAnySatisfy(ChainedBucket bucket, Predicate<? super T> predicate)
     {
         do
         {
@@ -1191,13 +1193,13 @@ public class UnifiedSet<K>
     }
 
     public <P> boolean anySatisfyWith(
-            Predicate2<? super K, ? super P> predicate,
+            Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
         return IterableIterate.anySatisfyWith(this, predicate, parameter);
     }
 
-    public boolean allSatisfy(Predicate<? super K> predicate)
+    public boolean allSatisfy(Predicate<? super T> predicate)
     {
         for (int i = 0; i < this.table.length; i++)
         {
@@ -1220,7 +1222,7 @@ public class UnifiedSet<K>
         return true;
     }
 
-    private boolean chainedAllSatisfy(ChainedBucket bucket, Predicate<? super K> predicate)
+    private boolean chainedAllSatisfy(ChainedBucket bucket, Predicate<? super T> predicate)
     {
         do
         {
@@ -1259,161 +1261,161 @@ public class UnifiedSet<K>
     }
 
     public <P> boolean allSatisfyWith(
-            Predicate2<? super K, ? super P> predicate,
+            Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
         return IterableIterate.allSatisfyWith(this, predicate, parameter);
     }
 
-    public boolean noneSatisfy(Predicate<? super K> predicate)
+    public boolean noneSatisfy(Predicate<? super T> predicate)
     {
         return IterableIterate.noneSatisfy(this, predicate);
     }
 
     public <P> boolean noneSatisfyWith(
-            Predicate2<? super K, ? super P> predicate,
+            Predicate2<? super T, ? super P> predicate,
             P parameter)
     {
         return IterableIterate.noneSatisfyWith(this, predicate, parameter);
     }
 
-    public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super K, ? extends IV> function)
+    public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super T, ? extends IV> function)
     {
         return IterableIterate.injectInto(injectedValue, this, function);
     }
 
-    public int injectInto(int injectedValue, IntObjectToIntFunction<? super K> function)
+    public int injectInto(int injectedValue, IntObjectToIntFunction<? super T> function)
     {
         return IterableIterate.injectInto(injectedValue, this, function);
     }
 
-    public long injectInto(long injectedValue, LongObjectToLongFunction<? super K> function)
+    public long injectInto(long injectedValue, LongObjectToLongFunction<? super T> function)
     {
         return IterableIterate.injectInto(injectedValue, this, function);
     }
 
-    public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super K> function)
+    public double injectInto(double injectedValue, DoubleObjectToDoubleFunction<? super T> function)
     {
         return IterableIterate.injectInto(injectedValue, this, function);
     }
 
-    public float injectInto(float injectedValue, FloatObjectToFloatFunction<? super K> function)
+    public float injectInto(float injectedValue, FloatObjectToFloatFunction<? super T> function)
     {
         return IterableIterate.injectInto(injectedValue, this, function);
     }
 
-    public long sumOfInt(IntFunction<? super K> function)
+    public long sumOfInt(IntFunction<? super T> function)
     {
         return IterableIterate.sumOfInt(this, function);
     }
 
-    public double sumOfFloat(FloatFunction<? super K> function)
+    public double sumOfFloat(FloatFunction<? super T> function)
     {
         return IterableIterate.sumOfFloat(this, function);
     }
 
-    public long sumOfLong(LongFunction<? super K> function)
+    public long sumOfLong(LongFunction<? super T> function)
     {
         return IterableIterate.sumOfLong(this, function);
     }
 
-    public double sumOfDouble(DoubleFunction<? super K> function)
+    public double sumOfDouble(DoubleFunction<? super T> function)
     {
         return IterableIterate.sumOfDouble(this, function);
     }
 
     public <IV, P> IV injectIntoWith(
             IV injectValue,
-            Function3<? super IV, ? super K, ? super P, ? extends IV> function,
+            Function3<? super IV, ? super T, ? super P, ? extends IV> function,
             P parameter)
     {
         return IterableIterate.injectIntoWith(injectValue, this, function, parameter);
     }
 
-    public MutableList<K> toList()
+    public MutableList<T> toList()
     {
         return FastList.newList(this);
     }
 
-    public MutableList<K> toSortedList()
+    public MutableList<T> toSortedList()
     {
         return FastList.newList(this).sortThis();
     }
 
-    public MutableList<K> toSortedList(Comparator<? super K> comparator)
+    public MutableList<T> toSortedList(Comparator<? super T> comparator)
     {
         return FastList.newList(this).sortThis(comparator);
     }
 
-    public <V extends Comparable<? super V>> MutableList<K> toSortedListBy(
-            Function<? super K, ? extends V> function)
+    public <V extends Comparable<? super V>> MutableList<T> toSortedListBy(
+            Function<? super T, ? extends V> function)
     {
         return this.toSortedList(Comparators.byFunction(function));
     }
 
-    public MutableSortedSet<K> toSortedSet()
+    public MutableSortedSet<T> toSortedSet()
     {
         return TreeSortedSet.newSet(null, this);
     }
 
-    public MutableSortedSet<K> toSortedSet(Comparator<? super K> comparator)
+    public MutableSortedSet<T> toSortedSet(Comparator<? super T> comparator)
     {
         return TreeSortedSet.newSet(comparator, this);
     }
 
-    public <V extends Comparable<? super V>> MutableSortedSet<K> toSortedSetBy(Function<? super K, ? extends V> function)
+    public <V extends Comparable<? super V>> MutableSortedSet<T> toSortedSetBy(Function<? super T, ? extends V> function)
     {
         return this.toSortedSet(Comparators.byFunction(function));
     }
 
-    public UnifiedSet<K> toSet()
+    public UnifiedSet<T> toSet()
     {
         return UnifiedSet.newSet(this);
     }
 
-    public MutableBag<K> toBag()
+    public MutableBag<T> toBag()
     {
         return HashBag.newBag(this);
     }
 
     public <NK, NV> MutableMap<NK, NV> toMap(
-            Function<? super K, ? extends NK> keyFunction,
-            Function<? super K, ? extends NV> valueFunction)
+            Function<? super T, ? extends NK> keyFunction,
+            Function<? super T, ? extends NV> valueFunction)
     {
         return UnifiedMap.<NK, NV>newMap(this.size()).collectKeysAndValues(this, keyFunction, valueFunction);
     }
 
     public <NK, NV> MutableSortedMap<NK, NV> toSortedMap(
-            Function<? super K, ? extends NK> keyFunction,
-            Function<? super K, ? extends NV> valueFunction)
+            Function<? super T, ? extends NK> keyFunction,
+            Function<? super T, ? extends NV> valueFunction)
     {
         return TreeSortedMap.<NK, NV>newMap().collectKeysAndValues(this, keyFunction, valueFunction);
     }
 
     public <NK, NV> MutableSortedMap<NK, NV> toSortedMap(
             Comparator<? super NK> comparator,
-            Function<? super K, ? extends NK> keyFunction,
-            Function<? super K, ? extends NV> valueFunction)
+            Function<? super T, ? extends NK> keyFunction,
+            Function<? super T, ? extends NV> valueFunction)
     {
         return TreeSortedMap.<NK, NV>newMap(comparator).collectKeysAndValues(this, keyFunction, valueFunction);
     }
 
-    public LazyIterable<K> asLazy()
+    public LazyIterable<T> asLazy()
     {
         return LazyIterate.adapt(this);
     }
 
-    public MutableSet<K> asUnmodifiable()
+    public MutableSet<T> asUnmodifiable()
     {
         return UnmodifiableMutableSet.of(this);
     }
 
-    public MutableSet<K> asSynchronized()
+    public MutableSet<T> asSynchronized()
     {
         return SynchronizedMutableSet.of(this);
     }
 
-    public ImmutableSet<K> toImmutable()
+    public ImmutableSet<T> toImmutable()
     {
         return Sets.immutable.ofAll(this);
     }
@@ -1428,20 +1430,20 @@ public class UnifiedSet<K>
         return this.occupied == 0;
     }
 
-    public UnifiedSet<K> with(K element)
+    public UnifiedSet<T> with(T element)
     {
         this.add(element);
         return this;
     }
 
-    public UnifiedSet<K> with(K element1, K element2)
+    public UnifiedSet<T> with(T element1, T element2)
     {
         this.add(element1);
         this.add(element2);
         return this;
     }
 
-    public UnifiedSet<K> with(K element1, K element2, K element3)
+    public UnifiedSet<T> with(T element1, T element2, T element3)
     {
         this.add(element1);
         this.add(element2);
@@ -1449,36 +1451,36 @@ public class UnifiedSet<K>
         return this;
     }
 
-    public UnifiedSet<K> with(K... elements)
+    public UnifiedSet<T> with(T... elements)
     {
         this.addAll(Arrays.asList(elements));
         return this;
     }
 
-    public UnifiedSet<K> withAll(Iterable<? extends K> iterable)
+    public UnifiedSet<T> withAll(Iterable<? extends T> iterable)
     {
         this.addAllIterable(iterable);
         return this;
     }
 
-    public UnifiedSet<K> without(K element)
+    public UnifiedSet<T> without(T element)
     {
         this.remove(element);
         return this;
     }
 
-    public UnifiedSet<K> withoutAll(Iterable<? extends K> elements)
+    public UnifiedSet<T> withoutAll(Iterable<? extends T> elements)
     {
         this.removeAllIterable(elements);
         return this;
     }
 
-    public boolean addAll(Collection<? extends K> collection)
+    public boolean addAll(Collection<? extends T> collection)
     {
         return this.addAllIterable(collection);
     }
 
-    public boolean addAllIterable(Iterable<? extends K> iterable)
+    public boolean addAllIterable(Iterable<? extends T> iterable)
     {
         if (iterable instanceof UnifiedSet)
         {
@@ -1487,7 +1489,7 @@ public class UnifiedSet<K>
         int size = Iterate.sizeOf(iterable);
         this.ensureCapacity(size);
         int oldSize = this.size();
-        Iterate.forEachWith(iterable, Procedures2.<K>addToCollection(), this);
+        Iterate.forEachWith(iterable, Procedures2.<T>addToCollection(), this);
         return this.size() != oldSize;
     }
 
@@ -1566,9 +1568,9 @@ public class UnifiedSet<K>
         }
         if (cur instanceof ChainedBucket)
         {
-            return this.removeFromChain((ChainedBucket) cur, (K) key, index);
+            return this.removeFromChain((ChainedBucket) cur, (T) key, index);
         }
-        if (this.nonNullTableObjectEquals(cur, (K) key))
+        if (this.nonNullTableObjectEquals(cur, (T) key))
         {
             this.table[index] = null;
             this.occupied--;
@@ -1577,7 +1579,7 @@ public class UnifiedSet<K>
         return false;
     }
 
-    private boolean removeFromChain(ChainedBucket bucket, K key, int index)
+    private boolean removeFromChain(ChainedBucket bucket, T key, int index)
     {
         if (this.nonNullTableObjectEquals(bucket.zero, key))
         {
@@ -1626,7 +1628,7 @@ public class UnifiedSet<K>
         return false;
     }
 
-    private boolean removeDeepChain(ChainedBucket oldBucket, K key)
+    private boolean removeDeepChain(ChainedBucket oldBucket, T key)
     {
         do
         {
@@ -1766,7 +1768,7 @@ public class UnifiedSet<K>
         this.init(Math.max((int) (size / this.loadFactor) + 1, DEFAULT_INITIAL_CAPACITY));
         for (int i = 0; i < size; i++)
         {
-            this.add((K) in.readObject());
+            this.add((T) in.readObject());
         }
     }
 
@@ -1851,7 +1853,7 @@ public class UnifiedSet<K>
         return changed;
     }
 
-    private void addIfFound(K key, UnifiedSet<K> other)
+    private void addIfFound(T key, UnifiedSet<T> other)
     {
         int index = this.index(key);
 
@@ -1871,7 +1873,7 @@ public class UnifiedSet<K>
         }
     }
 
-    private void addIfFoundFromChain(ChainedBucket bucket, K key, UnifiedSet<K> other)
+    private void addIfFoundFromChain(ChainedBucket bucket, T key, UnifiedSet<T> other)
     {
         do
         {
@@ -1934,10 +1936,10 @@ public class UnifiedSet<K>
     private boolean retainAllFromNonSet(Iterable<?> iterable)
     {
         int retainedSize = Iterate.sizeOf(iterable);
-        UnifiedSet<K> retainedCopy = new UnifiedSet<K>(retainedSize, this.loadFactor);
+        UnifiedSet<T> retainedCopy = new UnifiedSet<T>(retainedSize, this.loadFactor);
         for (Object key : iterable)
         {
-            this.addIfFound((K) key, retainedCopy);
+            this.addIfFound((T) key, retainedCopy);
         }
         if (retainedCopy.size() < this.size())
         {
@@ -1953,7 +1955,7 @@ public class UnifiedSet<K>
     {
         // TODO: turn iterator into a loop
         boolean result = false;
-        Iterator<K> e = this.iterator();
+        Iterator<T> e = this.iterator();
         while (e.hasNext())
         {
             if (!collection.contains(e.next()))
@@ -1966,9 +1968,9 @@ public class UnifiedSet<K>
     }
 
     @Override
-    public UnifiedSet<K> clone()
+    public UnifiedSet<T> clone()
     {
-        return new UnifiedSet<K>(this);
+        return new UnifiedSet<T>(this);
     }
 
     public Object[] toArray()
@@ -2046,12 +2048,12 @@ public class UnifiedSet<K>
         return result;
     }
 
-    public Iterator<K> iterator()
+    public Iterator<T> iterator()
     {
         return new PositionalIterator();
     }
 
-    protected class PositionalIterator implements Iterator<K>
+    protected class PositionalIterator implements Iterator<T>
     {
         protected int count;
         protected int position;
@@ -2107,7 +2109,7 @@ public class UnifiedSet<K>
             this.lastReturned = false;
         }
 
-        protected K nextFromChain()
+        protected T nextFromChain()
         {
             ChainedBucket bucket = (ChainedBucket) UnifiedSet.this.table[this.position];
             Object cur = bucket.get(this.chainPosition);
@@ -2121,7 +2123,7 @@ public class UnifiedSet<K>
             return UnifiedSet.this.nonSentinel(cur);
         }
 
-        public K next()
+        public T next()
         {
             if (!this.hasNext())
             {
@@ -2384,121 +2386,121 @@ public class UnifiedSet<K>
         IterableIterate.appendString(this, appendable, start, separator, end);
     }
 
-    public <V> UnifiedSetMultimap<V, K> groupBy(
-            Function<? super K, ? extends V> function)
+    public <V> UnifiedSetMultimap<V, T> groupBy(
+            Function<? super T, ? extends V> function)
     {
-        return this.groupBy(function, UnifiedSetMultimap.<V, K>newMultimap());
+        return this.groupBy(function, UnifiedSetMultimap.<V, T>newMultimap());
     }
 
-    public <V, R extends MutableMultimap<V, K>> R groupBy(
-            Function<? super K, ? extends V> function,
+    public <V, R extends MutableMultimap<V, T>> R groupBy(
+            Function<? super T, ? extends V> function,
             R target)
     {
-        this.forEach(new MultimapPutProcedure<V, K>(target, function));
+        this.forEach(new MultimapPutProcedure<V, T>(target, function));
         return target;
     }
 
-    public <V> UnifiedSetMultimap<V, K> groupByEach(
-            Function<? super K, ? extends Iterable<V>> function)
+    public <V> UnifiedSetMultimap<V, T> groupByEach(
+            Function<? super T, ? extends Iterable<V>> function)
     {
-        return this.groupByEach(function, UnifiedSetMultimap.<V, K>newMultimap());
+        return this.groupByEach(function, UnifiedSetMultimap.<V, T>newMultimap());
     }
 
-    public <V, R extends MutableMultimap<V, K>> R groupByEach(
-            Function<? super K, ? extends Iterable<V>> function,
+    public <V, R extends MutableMultimap<V, T>> R groupByEach(
+            Function<? super T, ? extends Iterable<V>> function,
             R target)
     {
-        this.forEach(new MultimapEachPutProcedure<V, K>(target, function));
+        this.forEach(new MultimapEachPutProcedure<V, T>(target, function));
         return target;
     }
 
-    public <S> MutableSet<Pair<K, S>> zip(Iterable<S> that)
+    public <S> MutableSet<Pair<T, S>> zip(Iterable<S> that)
     {
-        return this.zip(that, UnifiedSet.<Pair<K, S>>newSet());
+        return this.zip(that, UnifiedSet.<Pair<T, S>>newSet());
     }
 
-    public <S, R extends Collection<Pair<K, S>>> R zip(Iterable<S> that, R target)
+    public <S, R extends Collection<Pair<T, S>>> R zip(Iterable<S> that, R target)
     {
         return IterableIterate.zip(this, that, target);
     }
 
-    public MutableSet<Pair<K, Integer>> zipWithIndex()
+    public MutableSet<Pair<T, Integer>> zipWithIndex()
     {
-        return this.zipWithIndex(UnifiedSet.<Pair<K, Integer>>newSet());
+        return this.zipWithIndex(UnifiedSet.<Pair<T, Integer>>newSet());
     }
 
-    public <R extends Collection<Pair<K, Integer>>> R zipWithIndex(R target)
+    public <R extends Collection<Pair<T, Integer>>> R zipWithIndex(R target)
     {
         this.forEach(ZipWithIndexProcedure.create(target));
         return target;
     }
 
-    public RichIterable<RichIterable<K>> chunk(int size)
+    public RichIterable<RichIterable<T>> chunk(int size)
     {
         return MutableCollectionIterate.chunk(this, size);
     }
 
-    public MutableSet<K> union(SetIterable<? extends K> set)
+    public MutableSet<T> union(SetIterable<? extends T> set)
     {
         return SetIterables.unionInto(this, set, this.newEmpty());
     }
 
-    public <R extends Set<K>> R unionInto(SetIterable<? extends K> set, R targetSet)
+    public <R extends Set<T>> R unionInto(SetIterable<? extends T> set, R targetSet)
     {
         return SetIterables.unionInto(this, set, targetSet);
     }
 
-    public MutableSet<K> intersect(SetIterable<? extends K> set)
+    public MutableSet<T> intersect(SetIterable<? extends T> set)
     {
         return SetIterables.intersectInto(this, set, this.newEmpty());
     }
 
-    public <R extends Set<K>> R intersectInto(SetIterable<? extends K> set, R targetSet)
+    public <R extends Set<T>> R intersectInto(SetIterable<? extends T> set, R targetSet)
     {
         return SetIterables.intersectInto(this, set, targetSet);
     }
 
-    public MutableSet<K> difference(SetIterable<? extends K> subtrahendSet)
+    public MutableSet<T> difference(SetIterable<? extends T> subtrahendSet)
     {
         return SetIterables.differenceInto(this, subtrahendSet, this.newEmpty());
     }
 
-    public <R extends Set<K>> R differenceInto(SetIterable<? extends K> subtrahendSet, R targetSet)
+    public <R extends Set<T>> R differenceInto(SetIterable<? extends T> subtrahendSet, R targetSet)
     {
         return SetIterables.differenceInto(this, subtrahendSet, targetSet);
     }
 
-    public MutableSet<K> symmetricDifference(SetIterable<? extends K> setB)
+    public MutableSet<T> symmetricDifference(SetIterable<? extends T> setB)
     {
         return SetIterables.symmetricDifferenceInto(this, setB, this.newEmpty());
     }
 
-    public <R extends Set<K>> R symmetricDifferenceInto(SetIterable<? extends K> set, R targetSet)
+    public <R extends Set<T>> R symmetricDifferenceInto(SetIterable<? extends T> set, R targetSet)
     {
         return SetIterables.symmetricDifferenceInto(this, set, targetSet);
     }
 
-    public boolean isSubsetOf(SetIterable<? extends K> candidateSuperset)
+    public boolean isSubsetOf(SetIterable<? extends T> candidateSuperset)
     {
         return SetIterables.isSubsetOf(this, candidateSuperset);
     }
 
-    public boolean isProperSubsetOf(SetIterable<? extends K> candidateSuperset)
+    public boolean isProperSubsetOf(SetIterable<? extends T> candidateSuperset)
     {
         return SetIterables.isProperSubsetOf(this, candidateSuperset);
     }
 
-    public MutableSet<UnsortedSetIterable<K>> powerSet()
+    public MutableSet<UnsortedSetIterable<T>> powerSet()
     {
-        return (MutableSet<UnsortedSetIterable<K>>) (MutableSet<?>) SetIterables.powerSet(this);
+        return (MutableSet<UnsortedSetIterable<T>>) (MutableSet<?>) SetIterables.powerSet(this);
     }
 
-    public <B> LazyIterable<Pair<K, B>> cartesianProduct(SetIterable<B> set)
+    public <B> LazyIterable<Pair<T, B>> cartesianProduct(SetIterable<B> set)
     {
         return SetIterables.cartesianProduct(this, set);
     }
 
-    public K get(K key)
+    public T get(T key)
     {
         int index = this.index(key);
         Object cur = this.table[index];
@@ -2513,12 +2515,12 @@ public class UnifiedSet<K>
         }
         if (this.nonNullTableObjectEquals(cur, key))
         {
-            return (K) cur;
+            return (T) cur;
         }
         return null;
     }
 
-    private K chainedGet(K key, ChainedBucket bucket)
+    private T chainedGet(T key, ChainedBucket bucket)
     {
         do
         {
@@ -2560,7 +2562,7 @@ public class UnifiedSet<K>
         while (true);
     }
 
-    public K put(K key)
+    public T put(T key)
     {
         int index = this.index(key);
         Object cur = this.table[index];
@@ -2582,7 +2584,7 @@ public class UnifiedSet<K>
         return this.nonSentinel(cur);
     }
 
-    private K chainedPut(K key, int index)
+    private T chainedPut(T key, int index)
     {
         if (this.table[index] instanceof ChainedBucket)
         {
@@ -2655,7 +2657,7 @@ public class UnifiedSet<K>
         return key;
     }
 
-    public K removeFromPool(K key)
+    public T removeFromPool(T key)
     {
         int index = this.index(key);
         Object cur = this.table[index];
@@ -2676,7 +2678,7 @@ public class UnifiedSet<K>
         return null;
     }
 
-    private K removeFromChainForPool(ChainedBucket bucket, K key, int index)
+    private T removeFromChainForPool(ChainedBucket bucket, T key, int index)
     {
         if (this.nonNullTableObjectEquals(bucket.zero, key))
         {
@@ -2729,7 +2731,7 @@ public class UnifiedSet<K>
         return null;
     }
 
-    private K removeDeepChainForPool(ChainedBucket oldBucket, K key)
+    private T removeDeepChainForPool(ChainedBucket oldBucket, T key)
     {
         do
         {
@@ -2788,9 +2790,9 @@ public class UnifiedSet<K>
         while (true);
     }
 
-    private K nonSentinel(Object key)
+    private T nonSentinel(Object key)
     {
-        return key == NULL_KEY ? null : (K) key;
+        return key == NULL_KEY ? null : (T) key;
     }
 
     private static Object toSentinelIfNull(Object key)
@@ -2802,33 +2804,33 @@ public class UnifiedSet<K>
         return key;
     }
 
-    private boolean nonNullTableObjectEquals(Object cur, K key)
+    private boolean nonNullTableObjectEquals(Object cur, T key)
     {
         return cur == key || (cur == NULL_KEY ? key == null : cur.equals(key));
     }
 
     public <K2, V> MutableMap<K2, V> aggregateInPlaceBy(
-            Function<? super K, ? extends K2> groupBy,
+            Function<? super T, ? extends K2> groupBy,
             Function0<? extends V> zeroValueFactory,
-            Procedure2<? super V, ? super K> mutatingAggregator)
+            Procedure2<? super V, ? super T> mutatingAggregator)
     {
         MutableMap<K2, V> map = UnifiedMap.newMap();
-        this.forEach(new MutatingAggregationProcedure<K, K2, V>(map, groupBy, zeroValueFactory, mutatingAggregator));
+        this.forEach(new MutatingAggregationProcedure<T, K2, V>(map, groupBy, zeroValueFactory, mutatingAggregator));
         return map;
     }
 
     public <K2, V> MutableMap<K2, V> aggregateBy(
-            Function<? super K, ? extends K2> groupBy,
+            Function<? super T, ? extends K2> groupBy,
             Function0<? extends V> zeroValueFactory,
-            Function2<? super V, ? super K, ? extends V> nonMutatingAggregator)
+            Function2<? super V, ? super T, ? extends V> nonMutatingAggregator)
     {
         MutableMap<K2, V> map = UnifiedMap.newMap();
-        this.forEach(new NonMutatingAggregationProcedure<K, K2, V>(map, groupBy, zeroValueFactory, nonMutatingAggregator));
+        this.forEach(new NonMutatingAggregationProcedure<T, K2, V>(map, groupBy, zeroValueFactory, nonMutatingAggregator));
         return map;
     }
 
     @Beta
-    public ParallelUnsortedSetIterable<K> asParallel(ExecutorService executorService, int batchSize)
+    public ParallelUnsortedSetIterable<T> asParallel(ExecutorService executorService, int batchSize)
     {
         if (executorService == null)
         {
@@ -2838,18 +2840,10 @@ public class UnifiedSet<K>
         {
             throw new IllegalArgumentException();
         }
-        if (executorService.isShutdown())
-        {
-            throw new IllegalArgumentException();
-        }
-        if (executorService.isTerminated())
-        {
-            throw new IllegalArgumentException();
-        }
         return new UnifiedSetParallelUnsortedIterable(executorService, batchSize);
     }
 
-    private final class UnifiedUnsortedSetBatch extends AbstractBatch<K> implements UnsortedSetBatch<K>
+    private final class UnifiedUnsortedSetBatch extends AbstractBatch<T> implements RootUnsortedSetBatch<T>
     {
         private final int chunkStartIndex;
         private final int chunkEndIndex;
@@ -2860,7 +2854,7 @@ public class UnifiedSet<K>
             this.chunkEndIndex = chunkEndIndex;
         }
 
-        public void forEach(Procedure<? super K> procedure)
+        public void forEach(Procedure<? super T> procedure)
         {
             for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
             {
@@ -2876,7 +2870,7 @@ public class UnifiedSet<K>
             }
         }
 
-        public boolean anySatisfy(Predicate<? super K> predicate)
+        public boolean anySatisfy(Predicate<? super T> predicate)
         {
             for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
             {
@@ -2896,7 +2890,7 @@ public class UnifiedSet<K>
             return false;
         }
 
-        public boolean allSatisfy(Predicate<? super K> predicate)
+        public boolean allSatisfy(Predicate<? super T> predicate)
         {
             for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
             {
@@ -2916,7 +2910,7 @@ public class UnifiedSet<K>
             return true;
         }
 
-        public K detect(Predicate<? super K> predicate)
+        public T detect(Predicate<? super T> predicate)
         {
             for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
             {
@@ -2931,7 +2925,7 @@ public class UnifiedSet<K>
                 }
                 else if (cur != null)
                 {
-                    K each = UnifiedSet.this.nonSentinel(cur);
+                    T each = UnifiedSet.this.nonSentinel(cur);
                     if (predicate.accept(each))
                     {
                         return each;
@@ -2941,18 +2935,18 @@ public class UnifiedSet<K>
             return null;
         }
 
-        public UnsortedSetBatch<K> select(Predicate<? super K> predicate)
+        public UnsortedSetBatch<T> select(Predicate<? super T> predicate)
         {
-            return new SelectUnsortedSetBatch<K>(this, predicate);
+            return new SelectUnsortedSetBatch<T>(this, predicate);
         }
 
-        public <V> UnsortedSetBatch<V> collect(Function<? super K, ? extends V> function)
+        public <V> UnsortedSetBatch<V> collect(Function<? super T, ? extends V> function)
         {
-            return new CollectUnsortedSetBatch<K, V>(this, function);
+            return new CollectUnsortedSetBatch<T, V>(this, function);
         }
     }
 
-    private final class UnifiedSetParallelUnsortedIterable extends AbstractParallelUnsortedSetIterable<K>
+    private final class UnifiedSetParallelUnsortedIterable extends AbstractParallelUnsortedSetIterable<T, RootUnsortedSetBatch<T>>
     {
         private final ExecutorService executorService;
         private final int batchSize;
@@ -2970,17 +2964,17 @@ public class UnifiedSet<K>
         }
 
         @Override
-        public LazyIterable<UnsortedSetBatch<K>> split()
+        public LazyIterable<RootUnsortedSetBatch<T>> split()
         {
             return new UnifiedSetParallelSplitLazyIterable();
         }
 
-        public void forEach(final Procedure<? super K> procedure)
+        public void forEach(final Procedure<? super T> procedure)
         {
-            LazyIterable<? extends Batch<K>> chunks = this.split();
-            LazyIterable<Future<?>> futures = chunks.collect(new Function<Batch<K>, Future<?>>()
+            LazyIterable<? extends Batch<T>> chunks = this.split();
+            LazyIterable<Future<?>> futures = chunks.collect(new Function<Batch<T>, Future<?>>()
             {
-                public Future<?> valueOf(final Batch<K> chunk)
+                public Future<?> valueOf(final Batch<T> chunk)
                 {
                     return UnifiedSetParallelUnsortedIterable.this.executorService.submit(new Runnable()
                     {
@@ -3012,16 +3006,16 @@ public class UnifiedSet<K>
         }
 
         @Override
-        public boolean anySatisfy(final Predicate<? super K> predicate)
+        public boolean anySatisfy(final Predicate<? super T> predicate)
         {
             int numBatches = 0;
             MutableSet<Future<Boolean>> futures = UnifiedSet.newSet();
             CompletionService<Boolean> completionService = new ExecutorCompletionService<Boolean>(this.executorService);
 
-            LazyIterable<? extends Batch<K>> chunks = this.split();
-            LazyIterable<Callable<Boolean>> callables = chunks.collect(new Function<Batch<K>, Callable<Boolean>>()
+            LazyIterable<? extends RootBatch<T>> chunks = this.split();
+            LazyIterable<Callable<Boolean>> callables = chunks.collect(new Function<RootBatch<T>, Callable<Boolean>>()
             {
-                public Callable<Boolean> valueOf(final Batch<K> batch)
+                public Callable<Boolean> valueOf(final RootBatch<T> batch)
                 {
                     return new Callable<Boolean>()
                     {
@@ -3068,12 +3062,12 @@ public class UnifiedSet<K>
         }
 
         @Override
-        public boolean allSatisfy(final Predicate<? super K> predicate)
+        public boolean allSatisfy(final Predicate<? super T> predicate)
         {
             final CompletionService<Boolean> completionService = new ExecutorCompletionService<Boolean>(this.executorService);
-            MutableSet<Future<Boolean>> futures = this.split().collect(new Function<Batch<K>, Future<Boolean>>()
+            MutableSet<Future<Boolean>> futures = this.split().collect(new Function<RootBatch<T>, Future<Boolean>>()
             {
-                public Future<Boolean> valueOf(final Batch<K> batch)
+                public Future<Boolean> valueOf(final RootBatch<T> batch)
                 {
                     return completionService.submit(new Callable<Boolean>()
                     {
@@ -3114,16 +3108,16 @@ public class UnifiedSet<K>
         }
 
         @Override
-        public K detect(final Predicate<? super K> predicate)
+        public T detect(final Predicate<? super T> predicate)
         {
-            LazyIterable<? extends Batch<K>> chunks = this.split();
-            LazyIterable<Future<K>> futures = chunks.collect(new Function<Batch<K>, Future<K>>()
+            LazyIterable<? extends RootBatch<T>> chunks = this.split();
+            LazyIterable<Future<T>> futures = chunks.collect(new Function<RootBatch<T>, Future<T>>()
             {
-                public Future<K> valueOf(final Batch<K> chunk)
+                public Future<T> valueOf(final RootBatch<T> chunk)
                 {
-                    return UnifiedSetParallelUnsortedIterable.this.executorService.submit(new Callable<K>()
+                    return UnifiedSetParallelUnsortedIterable.this.getExecutorService().submit(new Callable<T>()
                     {
-                        public K call()
+                        public T call()
                         {
                             return chunk.detect(predicate);
                         }
@@ -3131,15 +3125,15 @@ public class UnifiedSet<K>
                 }
             });
             // The call to to toList() is important to stop the lazy evaluation and force all the Runnables to start executing.
-            MutableList<Future<K>> futuresList = futures.toList();
-            for (Future<K> future : futuresList)
+            MutableList<Future<T>> futuresList = futures.toList();
+            for (Future<T> future : futuresList)
             {
                 try
                 {
-                    K eachResult = future.get();
+                    T eachResult = future.get();
                     if (eachResult != null)
                     {
-                        for (Future<K> eachFutureToCancel : futuresList)
+                        for (Future<T> eachFutureToCancel : futuresList)
                         {
                             eachFutureToCancel.cancel(true);
                         }
@@ -3160,7 +3154,7 @@ public class UnifiedSet<K>
         }
 
         private class UnifiedSetParallelSplitIterator
-                implements Iterator<UnsortedSetBatch<K>>
+                implements Iterator<RootUnsortedSetBatch<T>>
         {
             protected int chunkIndex;
 
@@ -3169,7 +3163,7 @@ public class UnifiedSet<K>
                 return this.chunkIndex * UnifiedSetParallelUnsortedIterable.this.batchSize < UnifiedSet.this.table.length;
             }
 
-            public UnsortedSetBatch<K> next()
+            public RootUnsortedSetBatch<T> next()
             {
                 int chunkStartIndex = this.chunkIndex * UnifiedSetParallelUnsortedIterable.this.batchSize;
                 int chunkEndIndex = (this.chunkIndex + 1) * UnifiedSetParallelUnsortedIterable.this.batchSize;
@@ -3185,30 +3179,30 @@ public class UnifiedSet<K>
         }
 
         private class UnifiedSetParallelSplitLazyIterable
-                extends AbstractLazyIterable<UnsortedSetBatch<K>>
+                extends AbstractLazyIterable<RootUnsortedSetBatch<T>>
         {
-            public void forEach(Procedure<? super UnsortedSetBatch<K>> procedure)
+            public void forEach(Procedure<? super RootUnsortedSetBatch<T>> procedure)
             {
-                for (UnsortedSetBatch<K> chunk : this)
+                for (RootUnsortedSetBatch<T> chunk : this)
                 {
                     procedure.value(chunk);
                 }
             }
 
-            public <P> void forEachWith(Procedure2<? super UnsortedSetBatch<K>, ? super P> procedure, P parameter)
+            public <P> void forEachWith(Procedure2<? super RootUnsortedSetBatch<T>, ? super P> procedure, P parameter)
             {
-                for (UnsortedSetBatch<K> chunk : this)
+                for (RootUnsortedSetBatch<T> chunk : this)
                 {
                     procedure.value(chunk, parameter);
                 }
             }
 
-            public void forEachWithIndex(ObjectIntProcedure<? super UnsortedSetBatch<K>> objectIntProcedure)
+            public void forEachWithIndex(ObjectIntProcedure<? super RootUnsortedSetBatch<T>> objectIntProcedure)
             {
                 throw new UnsupportedOperationException();
             }
 
-            public Iterator<UnsortedSetBatch<K>> iterator()
+            public Iterator<RootUnsortedSetBatch<T>> iterator()
             {
                 return new UnifiedSetParallelSplitIterator();
             }

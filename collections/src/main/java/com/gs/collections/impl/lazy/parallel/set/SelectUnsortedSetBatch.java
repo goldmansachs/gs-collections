@@ -20,7 +20,6 @@ import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.IfProcedure;
 import com.gs.collections.impl.lazy.parallel.AbstractBatch;
 
@@ -47,21 +46,6 @@ public class SelectUnsortedSetBatch<T> extends AbstractBatch<T> implements Unsor
         return new SelectSetBatch<T>(this.setBatch, Predicates.and(this.predicate, predicate));
     }
     */
-
-    public boolean anySatisfy(Predicate<? super T> predicate)
-    {
-        return this.unsortedSetBatch.anySatisfy(Predicates.and(this.predicate, predicate));
-    }
-
-    public boolean allSatisfy(Predicate<? super T> predicate)
-    {
-        return this.unsortedSetBatch.allSatisfy(Predicates.and(this.predicate, predicate));
-    }
-
-    public T detect(Predicate<? super T> predicate)
-    {
-        return this.unsortedSetBatch.detect(Predicates.and(this.predicate, predicate));
-    }
 
     public UnsortedSetBatch<T> select(Predicate<? super T> predicate)
     {

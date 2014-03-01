@@ -27,12 +27,12 @@ import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 
 @Beta
-class ParallelCollectListIterable<T, V> extends AbstractParallelListIterable<V>
+class ParallelCollectListIterable<T, V> extends AbstractParallelListIterable<V, ListBatch<V>>
 {
-    private final AbstractParallelListIterable<T> parallelListIterable;
+    private final AbstractParallelListIterable<T, ? extends ListBatch<T>> parallelListIterable;
     private final Function<? super T, ? extends V> function;
 
-    ParallelCollectListIterable(AbstractParallelListIterable<T> parallelListIterable, Function<? super T, ? extends V> function)
+    ParallelCollectListIterable(AbstractParallelListIterable<T, ? extends ListBatch<T>> parallelListIterable, Function<? super T, ? extends V> function)
     {
         this.parallelListIterable = parallelListIterable;
         this.function = function;

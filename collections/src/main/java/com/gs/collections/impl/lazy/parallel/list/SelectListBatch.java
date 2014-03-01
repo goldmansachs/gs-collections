@@ -20,7 +20,6 @@ import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.IfProcedure;
 import com.gs.collections.impl.lazy.parallel.AbstractBatch;
 import com.gs.collections.impl.lazy.parallel.set.UnsortedSetBatch;
@@ -50,21 +49,6 @@ public class SelectListBatch<T> extends AbstractBatch<T> implements ListBatch<T>
     }
     */
 
-    public boolean anySatisfy(Predicate<? super T> predicate)
-    {
-        return this.listBatch.anySatisfy(Predicates.and(this.predicate, predicate));
-    }
-
-    public boolean allSatisfy(Predicate<? super T> predicate)
-    {
-        return this.listBatch.allSatisfy(new SelectListBatchAllSatisfyPredicate<T>(this.predicate, predicate));
-    }
-
-    public T detect(Predicate<? super T> predicate)
-    {
-        return this.listBatch.detect(Predicates.and(this.predicate, predicate));
-    }
-
     public ListBatch<T> select(Predicate<? super T> predicate)
     {
         return new SelectListBatch<T>(this, predicate);
@@ -78,23 +62,5 @@ public class SelectListBatch<T> extends AbstractBatch<T> implements ListBatch<T>
     public UnsortedSetBatch<T> distinct(ConcurrentHashMap<T, Boolean> distinct)
     {
         return new DistinctBatch<T>(this, distinct);
-    }
-
-    private static final class SelectListBatchAllSatisfyPredicate<T> implements Predicate<T>
-    {
-        private final Predicate<? super T> left;
-        private final Predicate<? super T> right;
-
-        private SelectListBatchAllSatisfyPredicate(Predicate<? super T> left, Predicate<? super T> right)
-        {
-            this.left = left;
-            this.right = right;
-        }
-
-        public boolean accept(T each)
-        {
-            boolean leftResult = this.left.accept(each);
-            return !leftResult || this.right.accept(each);
-        }
     }
 }

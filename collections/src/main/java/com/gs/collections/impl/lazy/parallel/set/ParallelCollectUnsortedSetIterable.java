@@ -27,12 +27,12 @@ import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 
 @Beta
-class ParallelCollectUnsortedSetIterable<T, V> extends AbstractParallelUnsortedSetIterable<V>
+class ParallelCollectUnsortedSetIterable<T, V> extends AbstractParallelUnsortedSetIterable<V, UnsortedSetBatch<V>>
 {
-    private final AbstractParallelUnsortedSetIterable<T> parallelSetIterable;
+    private final AbstractParallelUnsortedSetIterable<T, ? extends UnsortedSetBatch<T>> parallelSetIterable;
     private final Function<? super T, ? extends V> function;
 
-    ParallelCollectUnsortedSetIterable(AbstractParallelUnsortedSetIterable<T> parallelSetIterable, Function<? super T, ? extends V> function)
+    ParallelCollectUnsortedSetIterable(AbstractParallelUnsortedSetIterable<T, ? extends UnsortedSetBatch<T>> parallelSetIterable, Function<? super T, ? extends V> function)
     {
         this.parallelSetIterable = parallelSetIterable;
         this.function = function;

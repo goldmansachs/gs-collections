@@ -17,19 +17,18 @@
 package com.gs.collections.impl.lazy.parallel;
 
 import com.gs.collections.api.annotation.Beta;
-import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
-import com.gs.collections.api.block.procedure.Procedure;
 
+/**
+ * A {@link com.gs.collections.impl.lazy.parallel.Batch} that must be at the root of the chain,
+ * not wrapped in other Batches.
+ */
 @Beta
-public interface Batch<T>
+public interface RootBatch<T> extends Batch<T>
 {
-    void forEach(Procedure<? super T> procedure);
+    boolean anySatisfy(Predicate<? super T> predicate);
 
-    Batch<T> select(Predicate<? super T> predicate);
+    boolean allSatisfy(Predicate<? super T> predicate);
 
-    <V> Batch<V> collect(Function<? super T, ? extends V> function);
-
-    String makeString(String separator);
+    T detect(Predicate<? super T> predicate);
 }
-

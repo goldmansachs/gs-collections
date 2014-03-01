@@ -14,22 +14,16 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.lazy.parallel;
+package com.gs.collections.impl.lazy.parallel.bag;
 
-import com.gs.collections.api.annotation.Beta;
-import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.predicate.Predicate;
-import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.bag.ParallelBag;
+import com.gs.collections.impl.bag.mutable.HashBag;
 
-@Beta
-public interface Batch<T>
+public class ParallelBagTest extends AbstractParallelBagTestCase
 {
-    void forEach(Procedure<? super T> procedure);
-
-    Batch<T> select(Predicate<? super T> predicate);
-
-    <V> Batch<V> collect(Function<? super T, ? extends V> function);
-
-    String makeString(String separator);
+    @Override
+    protected ParallelBag<Integer> classUnderTest()
+    {
+        return HashBag.newBagWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4).asParallel(this.executorService, 2);
+    }
 }
-

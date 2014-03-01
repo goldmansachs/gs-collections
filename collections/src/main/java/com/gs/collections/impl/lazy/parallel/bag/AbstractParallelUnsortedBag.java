@@ -35,7 +35,7 @@ import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
 import com.gs.collections.impl.multimap.bag.SynchronizedPutHashBagMultimap;
 
 @Beta
-public abstract class AbstractParallelUnsortedBag<T> extends AbstractParallelIterable<T, UnsortedBagBatch<T>> implements ParallelUnsortedBag<T>
+public abstract class AbstractParallelUnsortedBag<T, B extends UnsortedBagBatch<T>> extends AbstractParallelIterable<T, B> implements ParallelUnsortedBag<T>
 {
     @Override
     protected boolean isOrdered()

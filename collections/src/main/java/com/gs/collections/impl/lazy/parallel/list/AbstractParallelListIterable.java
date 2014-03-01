@@ -29,7 +29,7 @@ import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
 
 @Beta
-public abstract class AbstractParallelListIterable<T> extends AbstractParallelIterable<T, ListBatch<T>> implements ParallelListIterable<T>
+public abstract class AbstractParallelListIterable<T, B extends ListBatch<T>> extends AbstractParallelIterable<T, B> implements ParallelListIterable<T>
 {
     @Override
     protected boolean isOrdered()

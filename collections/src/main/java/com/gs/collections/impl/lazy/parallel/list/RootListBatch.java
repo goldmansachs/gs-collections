@@ -14,22 +14,12 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.lazy.parallel;
+package com.gs.collections.impl.lazy.parallel.list;
 
 import com.gs.collections.api.annotation.Beta;
-import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.predicate.Predicate;
-import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.impl.lazy.parallel.RootBatch;
 
 @Beta
-public interface Batch<T>
+public interface RootListBatch<T> extends ListBatch<T>, RootBatch<T>
 {
-    void forEach(Procedure<? super T> procedure);
-
-    Batch<T> select(Predicate<? super T> predicate);
-
-    <V> Batch<V> collect(Function<? super T, ? extends V> function);
-
-    String makeString(String separator);
 }
-

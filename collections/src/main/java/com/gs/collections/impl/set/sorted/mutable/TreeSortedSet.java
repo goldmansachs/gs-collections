@@ -192,14 +192,6 @@ public final class TreeSortedSet<T>
         {
             throw new IllegalArgumentException();
         }
-        if (executorService.isShutdown())
-        {
-            throw new IllegalArgumentException();
-        }
-        if (executorService.isTerminated())
-        {
-            throw new IllegalArgumentException();
-        }
         throw new UnsupportedOperationException();
     }
 

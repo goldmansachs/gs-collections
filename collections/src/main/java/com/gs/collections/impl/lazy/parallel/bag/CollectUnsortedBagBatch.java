@@ -22,7 +22,6 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.impl.block.factory.Functions;
-import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.lazy.parallel.AbstractBatch;
 
 @Beta
@@ -53,22 +52,6 @@ public class CollectUnsortedBagBatch<T, V> extends AbstractBatch<V> implements U
         return new CollectBagBatch<T, VV>(this.bagBatch, Functions.chain(this.function, function));
     }
     */
-
-    public boolean anySatisfy(Predicate<? super V> predicate)
-    {
-        return this.unsortedBagBatch.anySatisfy(Predicates.attributePredicate(this.function, predicate));
-    }
-
-    public boolean allSatisfy(Predicate<? super V> predicate)
-    {
-        return this.unsortedBagBatch.allSatisfy(Predicates.attributePredicate(this.function, predicate));
-    }
-
-    public V detect(Predicate<? super V> predicate)
-    {
-        T resultItem = this.unsortedBagBatch.detect(Predicates.attributePredicate(this.function, predicate));
-        return resultItem == null ? null : this.function.valueOf(resultItem);
-    }
 
     public UnsortedBagBatch<V> select(Predicate<? super V> predicate)
     {

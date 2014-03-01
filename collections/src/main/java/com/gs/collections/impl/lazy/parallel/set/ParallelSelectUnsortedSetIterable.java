@@ -27,12 +27,12 @@ import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.IfProcedure;
 
 @Beta
-class ParallelSelectUnsortedSetIterable<T> extends AbstractParallelUnsortedSetIterable<T>
+class ParallelSelectUnsortedSetIterable<T> extends AbstractParallelUnsortedSetIterable<T, UnsortedSetBatch<T>>
 {
-    private final AbstractParallelUnsortedSetIterable<T> parallelSetIterable;
+    private final AbstractParallelUnsortedSetIterable<T, ? extends UnsortedSetBatch<T>> parallelSetIterable;
     private final Predicate<? super T> predicate;
 
-    ParallelSelectUnsortedSetIterable(AbstractParallelUnsortedSetIterable<T> parallelSetIterable, Predicate<? super T> predicate)
+    ParallelSelectUnsortedSetIterable(AbstractParallelUnsortedSetIterable<T, ? extends UnsortedSetBatch<T>> parallelSetIterable, Predicate<? super T> predicate)
     {
         this.parallelSetIterable = parallelSetIterable;
         this.predicate = predicate;

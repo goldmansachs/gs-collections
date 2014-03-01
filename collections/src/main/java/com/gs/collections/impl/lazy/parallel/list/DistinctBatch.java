@@ -52,39 +52,6 @@ public class DistinctBatch<T> extends AbstractBatch<T> implements UnsortedSetBat
         });
     }
 
-    public boolean anySatisfy(final Predicate<? super T> predicate)
-    {
-        return this.listBatch.anySatisfy(new Predicate<T>()
-        {
-            public boolean accept(T each)
-            {
-                return DistinctBatch.this.distinct.put(each, true) == null && predicate.accept(each);
-            }
-        });
-    }
-
-    public boolean allSatisfy(final Predicate<? super T> predicate)
-    {
-        return this.listBatch.allSatisfy(new Predicate<T>()
-        {
-            public boolean accept(T each)
-            {
-                return DistinctBatch.this.distinct.put(each, true) != null || predicate.accept(each);
-            }
-        });
-    }
-
-    public T detect(final Predicate<? super T> predicate)
-    {
-        return this.listBatch.detect(new Predicate<T>()
-        {
-            public boolean accept(T each)
-            {
-                return DistinctBatch.this.distinct.put(each, true) == null && predicate.accept(each);
-            }
-        });
-    }
-
     public UnsortedSetBatch<T> select(Predicate<? super T> predicate)
     {
         return new SelectUnsortedSetBatch<T>(this, predicate);

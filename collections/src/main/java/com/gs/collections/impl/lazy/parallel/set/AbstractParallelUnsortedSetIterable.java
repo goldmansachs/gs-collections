@@ -31,7 +31,7 @@ import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
 import com.gs.collections.impl.multimap.set.SynchronizedPutUnifiedSetMultimap;
 
 @Beta
-public abstract class AbstractParallelUnsortedSetIterable<T> extends AbstractParallelIterable<T, UnsortedSetBatch<T>> implements ParallelUnsortedSetIterable<T>
+public abstract class AbstractParallelUnsortedSetIterable<T, B extends UnsortedSetBatch<T>> extends AbstractParallelIterable<T, B> implements ParallelUnsortedSetIterable<T>
 {
     @Override
     protected boolean isOrdered()

@@ -447,9 +447,27 @@ public abstract class AbstractParallelIterable<T, B extends Batch<T>> extends Ab
     }
 
     @Override
+    public boolean noneSatisfy(Predicate<? super T> predicate)
+    {
+        return this.allSatisfy(Predicates.not(predicate));
+    }
+
+    @Override
     public <P> boolean noneSatisfyWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         return this.noneSatisfy(Predicates.bind(predicate, parameter));
+    }
+
+    @Override
+    public <P> T detectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    {
+        return this.detect(Predicates.bind(predicate, parameter));
+    }
+
+    @Override
+    public <P> T detectWithIfNone(Predicate2<? super T, ? super P> predicate, P parameter, Function0<? extends T> function)
+    {
+        return this.detectIfNone(Predicates.bind(predicate, parameter), function);
     }
 
     @Override

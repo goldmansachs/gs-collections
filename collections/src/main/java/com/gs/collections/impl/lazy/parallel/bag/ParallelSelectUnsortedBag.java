@@ -28,12 +28,12 @@ import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.IfProcedure;
 
 @Beta
-class ParallelSelectUnsortedBag<T> extends AbstractParallelUnsortedBag<T>
+class ParallelSelectUnsortedBag<T> extends AbstractParallelUnsortedBag<T, UnsortedBagBatch<T>>
 {
-    private final AbstractParallelUnsortedBag<T> parallelUnsortedBag;
+    private final AbstractParallelUnsortedBag<T, ? extends UnsortedBagBatch<T>> parallelUnsortedBag;
     private final Predicate<? super T> predicate;
 
-    ParallelSelectUnsortedBag(AbstractParallelUnsortedBag<T> parallelUnsortedBag, Predicate<? super T> predicate)
+    ParallelSelectUnsortedBag(AbstractParallelUnsortedBag<T, ? extends UnsortedBagBatch<T>> parallelUnsortedBag, Predicate<? super T> predicate)
     {
         this.parallelUnsortedBag = parallelUnsortedBag;
         this.predicate = predicate;

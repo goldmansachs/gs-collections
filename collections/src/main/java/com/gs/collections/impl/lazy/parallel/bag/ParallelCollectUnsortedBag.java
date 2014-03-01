@@ -28,12 +28,12 @@ import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
 
 @Beta
-class ParallelCollectUnsortedBag<T, V> extends AbstractParallelUnsortedBag<V>
+class ParallelCollectUnsortedBag<T, V> extends AbstractParallelUnsortedBag<V, UnsortedBagBatch<V>>
 {
-    private final AbstractParallelUnsortedBag<T> parallelUnsortedBag;
+    private final AbstractParallelUnsortedBag<T, ? extends UnsortedBagBatch<T>> parallelUnsortedBag;
     private final Function<? super T, ? extends V> function;
 
-    ParallelCollectUnsortedBag(AbstractParallelUnsortedBag<T> parallelUnsortedBag, Function<? super T, ? extends V> function)
+    ParallelCollectUnsortedBag(AbstractParallelUnsortedBag<T, ? extends UnsortedBagBatch<T>> parallelUnsortedBag, Function<? super T, ? extends V> function)
     {
         this.parallelUnsortedBag = parallelUnsortedBag;
         this.function = function;
