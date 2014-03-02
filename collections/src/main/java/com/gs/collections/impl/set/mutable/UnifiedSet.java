@@ -27,12 +27,7 @@ import java.util.Comparator;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Set;
-import java.util.concurrent.Callable;
-import java.util.concurrent.CompletionService;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Future;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.RichIterable;
@@ -120,8 +115,6 @@ import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.lazy.AbstractLazyIterable;
 import com.gs.collections.impl.lazy.parallel.AbstractBatch;
-import com.gs.collections.impl.lazy.parallel.Batch;
-import com.gs.collections.impl.lazy.parallel.RootBatch;
 import com.gs.collections.impl.lazy.parallel.set.AbstractParallelUnsortedSetIterable;
 import com.gs.collections.impl.lazy.parallel.set.CollectUnsortedSetBatch;
 import com.gs.collections.impl.lazy.parallel.set.RootUnsortedSetBatch;
@@ -2969,192 +2962,27 @@ public class UnifiedSet<T>
             return new UnifiedSetParallelSplitLazyIterable();
         }
 
-        public void forEach(final Procedure<? super T> procedure)
+        public void forEach(Procedure<? super T> procedure)
         {
-            LazyIterable<? extends Batch<T>> chunks = this.split();
-            LazyIterable<Future<?>> futures = chunks.collect(new Function<Batch<T>, Future<?>>()
-            {
-                public Future<?> valueOf(final Batch<T> chunk)
-                {
-                    return UnifiedSetParallelUnsortedIterable.this.executorService.submit(new Runnable()
-                    {
-                        public void run()
-                        {
-                            chunk.forEach(procedure);
-                        }
-                    });
-                }
-            });
-            // The call to to toList() is important to stop the lazy evaluation and force all the Runnables to start executing.
-            MutableList<Future<?>> futuresList = futures.toList();
-            for (Future<?> future : futuresList)
-            {
-                try
-                {
-                    future.get();
-                }
-                catch (InterruptedException e)
-                {
-                    Thread.currentThread().interrupt();
-                    throw new RuntimeException(e);
-                }
-                catch (ExecutionException e)
-                {
-                    throw new RuntimeException(e);
-                }
-            }
+            forEach(this, procedure);
         }
 
-        @Override
-        public boolean anySatisfy(final Predicate<? super T> predicate)
+        public boolean anySatisfy(Predicate<? super T> predicate)
         {
-            int numBatches = 0;
-            MutableSet<Future<Boolean>> futures = UnifiedSet.newSet();
-            CompletionService<Boolean> completionService = new ExecutorCompletionService<Boolean>(this.executorService);
-
-            LazyIterable<? extends RootBatch<T>> chunks = this.split();
-            LazyIterable<Callable<Boolean>> callables = chunks.collect(new Function<RootBatch<T>, Callable<Boolean>>()
-            {
-                public Callable<Boolean> valueOf(final RootBatch<T> batch)
-                {
-                    return new Callable<Boolean>()
-                    {
-                        public Boolean call()
-                        {
-                            return batch.anySatisfy(predicate);
-                        }
-                    };
-                }
-            });
-            for (Callable<Boolean> callable : callables)
-            {
-                futures.add(completionService.submit(callable));
-                numBatches++;
-            }
-
-            while (numBatches > 0)
-            {
-                try
-                {
-                    Future<Boolean> future = completionService.take();
-                    if (future.get())
-                    {
-                        for (Future<Boolean> eachFuture : futures)
-                        {
-                            eachFuture.cancel(true);
-                        }
-                        return true;
-                    }
-                    futures.remove(future);
-                    numBatches--;
-                }
-                catch (InterruptedException e)
-                {
-                    Thread.currentThread().interrupt();
-                    throw new RuntimeException(e);
-                }
-                catch (ExecutionException e)
-                {
-                    throw new RuntimeException(e);
-                }
-            }
-            return false;
+            return anySatisfy(this, predicate);
         }
 
-        @Override
-        public boolean allSatisfy(final Predicate<? super T> predicate)
+        public boolean allSatisfy(Predicate<? super T> predicate)
         {
-            final CompletionService<Boolean> completionService = new ExecutorCompletionService<Boolean>(this.executorService);
-            MutableSet<Future<Boolean>> futures = this.split().collect(new Function<RootBatch<T>, Future<Boolean>>()
-            {
-                public Future<Boolean> valueOf(final RootBatch<T> batch)
-                {
-                    return completionService.submit(new Callable<Boolean>()
-                    {
-                        public Boolean call()
-                        {
-                            return batch.allSatisfy(predicate);
-                        }
-                    });
-                }
-            }, UnifiedSet.<Future<Boolean>>newSet());
-
-            while (futures.notEmpty())
-            {
-                try
-                {
-                    Future<Boolean> future = completionService.take();
-                    if (!future.get())
-                    {
-                        for (Future<Boolean> eachFuture : futures)
-                        {
-                            eachFuture.cancel(true);
-                        }
-                        return false;
-                    }
-                    futures.remove(future);
-                }
-                catch (InterruptedException e)
-                {
-                    Thread.currentThread().interrupt();
-                    throw new RuntimeException(e);
-                }
-                catch (ExecutionException e)
-                {
-                    throw new RuntimeException(e);
-                }
-            }
-            return true;
+            return allSatisfy(this, predicate);
         }
 
-        @Override
-        public T detect(final Predicate<? super T> predicate)
+        public T detect(Predicate<? super T> predicate)
         {
-            LazyIterable<? extends RootBatch<T>> chunks = this.split();
-            LazyIterable<Future<T>> futures = chunks.collect(new Function<RootBatch<T>, Future<T>>()
-            {
-                public Future<T> valueOf(final RootBatch<T> chunk)
-                {
-                    return UnifiedSetParallelUnsortedIterable.this.getExecutorService().submit(new Callable<T>()
-                    {
-                        public T call()
-                        {
-                            return chunk.detect(predicate);
-                        }
-                    });
-                }
-            });
-            // The call to to toList() is important to stop the lazy evaluation and force all the Runnables to start executing.
-            MutableList<Future<T>> futuresList = futures.toList();
-            for (Future<T> future : futuresList)
-            {
-                try
-                {
-                    T eachResult = future.get();
-                    if (eachResult != null)
-                    {
-                        for (Future<T> eachFutureToCancel : futuresList)
-                        {
-                            eachFutureToCancel.cancel(true);
-                        }
-                        return eachResult;
-                    }
-                }
-                catch (InterruptedException e)
-                {
-                    Thread.currentThread().interrupt();
-                    throw new RuntimeException(e);
-                }
-                catch (ExecutionException e)
-                {
-                    throw new RuntimeException(e);
-                }
-            }
-            return null;
+            return detect(this, predicate);
         }
 
-        private class UnifiedSetParallelSplitIterator
-                implements Iterator<RootUnsortedSetBatch<T>>
+        private class UnifiedSetParallelSplitIterator implements Iterator<RootUnsortedSetBatch<T>>
         {
             protected int chunkIndex;
 

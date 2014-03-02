@@ -19,6 +19,7 @@ package com.gs.collections.impl.lazy.parallel;
 import java.io.IOException;
 import java.util.Comparator;
 import java.util.concurrent.Callable;
+import java.util.concurrent.CompletionService;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorCompletionService;
 import java.util.concurrent.ExecutorService;
@@ -65,6 +66,176 @@ import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 @Beta
 public abstract class AbstractParallelIterable<T, B extends Batch<T>> implements ParallelIterable<T>
 {
+    protected static <T> void forEach(final AbstractParallelIterable<T, ? extends RootBatch<T>> parallelIterable, final Procedure<? super T> procedure)
+    {
+        LazyIterable<Future<?>> futures = parallelIterable.split().collect(new Function<RootBatch<T>, Future<?>>()
+        {
+            public Future<?> valueOf(final RootBatch<T> chunk)
+            {
+                return parallelIterable.getExecutorService().submit(new Runnable()
+                {
+                    public void run()
+                    {
+                        chunk.forEach(procedure);
+                    }
+                });
+            }
+        });
+        // The call to to toList() is important to stop the lazy evaluation and force all the Runnables to start executing.
+        MutableList<Future<?>> futuresList = futures.toList();
+        for (Future<?> future : futuresList)
+        {
+            try
+            {
+                future.get();
+            }
+            catch (InterruptedException e)
+            {
+                Thread.currentThread().interrupt();
+                throw new RuntimeException(e);
+            }
+            catch (ExecutionException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+    }
+
+    protected static <T> boolean anySatisfy(AbstractParallelIterable<T, ? extends RootBatch<T>> parallelIterable, final Predicate<? super T> predicate)
+    {
+        final CompletionService<Boolean> completionService = new ExecutorCompletionService<Boolean>(parallelIterable.getExecutorService());
+        MutableSet<Future<Boolean>> futures = parallelIterable.split().collect(new Function<RootBatch<T>, Future<Boolean>>()
+        {
+            public Future<Boolean> valueOf(final RootBatch<T> batch)
+            {
+                return completionService.submit(new Callable<Boolean>()
+                {
+                    public Boolean call()
+                    {
+                        return batch.anySatisfy(predicate);
+                    }
+                });
+            }
+        }, UnifiedSet.<Future<Boolean>>newSet());
+
+        while (futures.notEmpty())
+        {
+            try
+            {
+                Future<Boolean> future = completionService.take();
+                if (future.get())
+                {
+                    for (Future<Boolean> eachFuture : futures)
+                    {
+                        eachFuture.cancel(true);
+                    }
+                    return true;
+                }
+                futures.remove(future);
+            }
+            catch (InterruptedException e)
+            {
+                Thread.currentThread().interrupt();
+                throw new RuntimeException(e);
+            }
+            catch (ExecutionException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+        return false;
+    }
+
+    protected static <T> boolean allSatisfy(AbstractParallelIterable<T, ? extends RootBatch<T>> parallelIterable, final Predicate<? super T> predicate)
+    {
+        final CompletionService<Boolean> completionService = new ExecutorCompletionService<Boolean>(parallelIterable.getExecutorService());
+        MutableSet<Future<Boolean>> futures = parallelIterable.split().collect(new Function<RootBatch<T>, Future<Boolean>>()
+        {
+            public Future<Boolean> valueOf(final RootBatch<T> batch)
+            {
+                return completionService.submit(new Callable<Boolean>()
+                {
+                    public Boolean call()
+                    {
+                        return batch.allSatisfy(predicate);
+                    }
+                });
+            }
+        }, UnifiedSet.<Future<Boolean>>newSet());
+
+        while (futures.notEmpty())
+        {
+            try
+            {
+                Future<Boolean> future = completionService.take();
+                if (!future.get())
+                {
+                    for (Future<Boolean> eachFuture : futures)
+                    {
+                        eachFuture.cancel(true);
+                    }
+                    return false;
+                }
+                futures.remove(future);
+            }
+            catch (InterruptedException e)
+            {
+                Thread.currentThread().interrupt();
+                throw new RuntimeException(e);
+            }
+            catch (ExecutionException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+        return true;
+    }
+
+    protected static <T> T detect(final AbstractParallelIterable<T, ? extends RootBatch<T>> parallelIterable, final Predicate<? super T> predicate)
+    {
+        LazyIterable<? extends RootBatch<T>> chunks = parallelIterable.split();
+        LazyIterable<Future<T>> futures = chunks.collect(new Function<RootBatch<T>, Future<T>>()
+        {
+            public Future<T> valueOf(final RootBatch<T> chunk)
+            {
+                return parallelIterable.getExecutorService().submit(new Callable<T>()
+                {
+                    public T call()
+                    {
+                        return chunk.detect(predicate);
+                    }
+                });
+            }
+        });
+        // The call to to toList() is important to stop the lazy evaluation and force all the Runnables to start executing.
+        MutableList<Future<T>> futuresList = futures.toList();
+        for (Future<T> future : futuresList)
+        {
+            try
+            {
+                T eachResult = future.get();
+                if (eachResult != null)
+                {
+                    for (Future<T> eachFutureToCancel : futuresList)
+                    {
+                        eachFutureToCancel.cancel(true);
+                    }
+                    return eachResult;
+                }
+            }
+            catch (InterruptedException e)
+            {
+                Thread.currentThread().interrupt();
+                throw new RuntimeException(e);
+            }
+            catch (ExecutionException e)
+            {
+                throw new RuntimeException(e);
+            }
+        }
+        return null;
+    }
+
     public abstract ExecutorService getExecutorService();
 
     public abstract LazyIterable<B> split();

@@ -18,6 +18,7 @@ package com.gs.collections.impl.lazy.parallel.set;
 
 import com.gs.collections.api.set.ParallelSetIterable;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
+import org.junit.Test;
 
 public class ParallelUnsortedSetIterableTest extends AbstractParallelUnsortedSetIterableTestCase
 {
@@ -27,46 +28,15 @@ public class ParallelUnsortedSetIterableTest extends AbstractParallelUnsortedSet
         return UnifiedSet.newSetWith(1, 2, 3, 4).asParallel(this.executorService, 2);
     }
 
-//    @Test
-//    public void groupBy()
-//    {
-//        Function<Integer, Boolean> isOddFunction = new Function<Integer, Boolean>()
-//        {
-//            public Boolean valueOf(Integer object)
-//            {
-//                return IntegerPredicates.isOdd().accept(object);
-//            }
-//        };
-//
-//        MutableMap<Boolean, RichIterable<Integer>> expected =
-//                UnifiedMap.<Boolean, RichIterable<Integer>>newWithKeysValues(
-//                        Boolean.TRUE, UnifiedSet.newSetWith(1, 3, 5, 7),
-//                        Boolean.FALSE, UnifiedSet.newSetWith(2, 4, 6));
-//
-//        Multimap<Boolean, Integer> multimap =
-//                this.newWith(1, 2, 3, 4, 5, 6, 7).groupBy(isOddFunction);
-//        Assert.assertEquals(expected, multimap.toMap());
-//
-//        Multimap<Boolean, Integer> multimap2 =
-//                this.newWith(1, 2, 3, 4, 5, 6, 7).groupBy(isOddFunction, UnifiedSetMultimap.<Boolean, Integer>newMultimap());
-//        Assert.assertEquals(expected, multimap2.toMap());
-//    }
-//
-//    @Test
-//    public void groupByEach()
-//    {
-//        MutableMultimap<Integer, Integer> expected = UnifiedSetMultimap.newMultimap();
-//        for (int i = 1; i < 8; i++)
-//        {
-//            expected.putAll(-i, Interval.fromTo(i, 7));
-//        }
-//
-//        Multimap<Integer, Integer> actual =
-//                this.newWith(1, 2, 3, 4, 5, 6, 7).groupByEach(new NegativeIntervalFunction());
-//        Assert.assertEquals(expected, actual);
-//
-//        Multimap<Integer, Integer> actualWithTarget =
-//                this.newWith(1, 2, 3, 4, 5, 6, 7).groupByEach(new NegativeIntervalFunction(), UnifiedSetMultimap.<Integer, Integer>newMultimap());
-//        Assert.assertEquals(expected, actualWithTarget);
-//    }
+    @Test(expected = IllegalArgumentException.class)
+    public void asParallel_small_batch()
+    {
+        UnifiedSet.newSetWith(1, 2, 3, 4).asParallel(this.executorService, 0);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void asParallel_null_executorService()
+    {
+        UnifiedSet.newSetWith(1, 2, 3, 4).asParallel(null, 2);
+    }
 }

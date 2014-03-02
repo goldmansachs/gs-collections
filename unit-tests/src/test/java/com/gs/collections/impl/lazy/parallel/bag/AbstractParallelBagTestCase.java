@@ -22,8 +22,10 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.bag.ParallelBag;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.lazy.parallel.AbstractParallelIterableTestCase;
+import org.junit.Assert;
 import org.junit.Test;
 
 public abstract class AbstractParallelBagTestCase extends AbstractParallelIterableTestCase
@@ -422,17 +424,117 @@ public abstract class AbstractParallelBagTestCase extends AbstractParallelIterab
 
     @Test(expected = NullPointerException.class)
     @Override
-    public void executionException()
+    public void forEach_executionException()
     {
-        super.executionException();
+        super.forEach_executionException();
+    }
+
+    @Test(expected = NullPointerException.class)
+    @Override
+    public void collect_executionException()
+    {
+        super.collect_executionException();
+    }
+
+    @Test(expected = NullPointerException.class)
+    @Override
+    public void anySatisfy_executionException()
+    {
+        super.anySatisfy_executionException();
+    }
+
+    @Test(expected = NullPointerException.class)
+    @Override
+    public void allSatisfy_executionException()
+    {
+        super.allSatisfy_executionException();
+    }
+
+    @Test(expected = NullPointerException.class)
+    @Override
+    public void detect_executionException()
+    {
+        super.detect_executionException();
     }
 
     @Test(expected = UnsupportedOperationException.class)
     @Override
-    public void interruptedException()
+    public void forEach_interruptedException()
     {
-        Thread.currentThread().interrupt();
-        MutableCollection<Integer> actual = HashBag.<Integer>newBag().asSynchronized();
-        this.classUnderTest().forEach(CollectionAddProcedure.on(actual));
+        try
+        {
+            Thread.currentThread().interrupt();
+            MutableCollection<Integer> actual = HashBag.<Integer>newBag().asSynchronized();
+            this.classUnderTest().forEach(CollectionAddProcedure.on(actual));
+        }
+        finally
+        {
+            Assert.assertTrue(Thread.interrupted());
+            Assert.assertFalse(Thread.interrupted());
+        }
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    @Override
+    public void anySatisfy_interruptedException()
+    {
+        try
+        {
+            Thread.currentThread().interrupt();
+            this.classUnderTest().anySatisfy(Predicates.lessThan(1));
+        }
+        finally
+        {
+            Assert.assertTrue(Thread.interrupted());
+            Assert.assertFalse(Thread.interrupted());
+        }
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    @Override
+    public void allSatisfy_interruptedException()
+    {
+        try
+        {
+            Thread.currentThread().interrupt();
+            this.classUnderTest().anySatisfy(Predicates.lessThan(5));
+        }
+        finally
+        {
+            Assert.assertTrue(Thread.interrupted());
+            Assert.assertFalse(Thread.interrupted());
+        }
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    @Override
+    public void detect_interruptedException()
+    {
+        try
+        {
+            Thread.currentThread().interrupt();
+            this.classUnderTest().detect(Predicates.equal(3));
+        }
+        finally
+        {
+            Assert.assertTrue(Thread.interrupted());
+            Assert.assertFalse(Thread.interrupted());
+        }
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    @Override
+    public void toString_interruptedException()
+    {
+        try
+        {
+            Thread.currentThread().interrupt();
+            this.classUnderTest().toString();
+        }
+        finally
+        {
+            Assert.assertTrue(Thread.interrupted());
+            Assert.assertFalse(Thread.interrupted());
+        }
     }
 }

@@ -51,7 +51,9 @@ import com.gs.collections.impl.block.factory.Procedures2;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.block.function.checked.CheckedFunction;
+import com.gs.collections.impl.block.predicate.checked.CheckedPredicate;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
+import com.gs.collections.impl.block.procedure.checked.CheckedProcedure;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
@@ -820,7 +822,7 @@ public abstract class AbstractParallelIterableTestCase
     }
 
     @Test
-    public void executionException()
+    public void forEach_executionException()
     {
         try
         {
@@ -838,7 +840,11 @@ public abstract class AbstractParallelIterableTestCase
             RuntimeException runtimeException = (RuntimeException) executionException.getCause();
             Assert.assertEquals("Execution exception", runtimeException.getMessage());
         }
+    }
 
+    @Test
+    public void collect_executionException()
+    {
         try
         {
             this.classUnderTest().collect(new Function<Integer, String>()
@@ -858,7 +864,175 @@ public abstract class AbstractParallelIterableTestCase
     }
 
     @Test
-    public void interruptedException()
+    public void anySatisfy_executionException()
+    {
+        try
+        {
+            this.classUnderTest().anySatisfy(new Predicate<Integer>()
+            {
+                public boolean accept(Integer each)
+                {
+                    throw new RuntimeException("Execution exception");
+                }
+            });
+        }
+        catch (RuntimeException e)
+        {
+            ExecutionException executionException = (ExecutionException) e.getCause();
+            RuntimeException runtimeException = (RuntimeException) executionException.getCause();
+            Assert.assertEquals("Execution exception", runtimeException.getMessage());
+        }
+    }
+
+    @Test
+    public void allSatisfy_executionException()
+    {
+        try
+        {
+            this.classUnderTest().allSatisfy(new Predicate<Integer>()
+            {
+                public boolean accept(Integer each)
+                {
+                    throw new RuntimeException("Execution exception");
+                }
+            });
+        }
+        catch (RuntimeException e)
+        {
+            ExecutionException executionException = (ExecutionException) e.getCause();
+            RuntimeException runtimeException = (RuntimeException) executionException.getCause();
+            Assert.assertEquals("Execution exception", runtimeException.getMessage());
+        }
+    }
+
+    @Test
+    public void detect_executionException()
+    {
+        try
+        {
+            this.classUnderTest().detect(new Predicate<Integer>()
+            {
+                public boolean accept(Integer each)
+                {
+                    throw new RuntimeException("Execution exception");
+                }
+            });
+        }
+        catch (RuntimeException e)
+        {
+            ExecutionException executionException = (ExecutionException) e.getCause();
+            RuntimeException runtimeException = (RuntimeException) executionException.getCause();
+            Assert.assertEquals("Execution exception", runtimeException.getMessage());
+        }
+    }
+
+    @Test
+    public void forEach_interruptedException()
+    {
+        final MutableCollection<Integer> actual1 = HashBag.<Integer>newBag().asSynchronized();
+
+        Thread.currentThread().interrupt();
+        Verify.assertThrowsWithCause(RuntimeException.class, InterruptedException.class, new Runnable()
+        {
+            public void run()
+            {
+                AbstractParallelIterableTestCase.this.classUnderTest().forEach(new CheckedProcedure<Integer>()
+                {
+                    @Override
+                    public void safeValue(Integer each) throws InterruptedException
+                    {
+                        Thread.sleep(1000);
+                        actual1.add(each);
+                    }
+                });
+            }
+        });
+        Assert.assertTrue(Thread.interrupted());
+        Assert.assertFalse(Thread.interrupted());
+        Verify.assertEmpty(actual1);
+
+        MutableCollection<Integer> actual2 = HashBag.<Integer>newBag().asSynchronized();
+        this.classUnderTest().forEach(CollectionAddProcedure.on(actual2));
+        Assert.assertEquals(this.getExpected().toBag(), actual2);
+    }
+
+    @Test
+    public void anySatisfy_interruptedException()
+    {
+        Thread.currentThread().interrupt();
+        Verify.assertThrowsWithCause(RuntimeException.class, InterruptedException.class, new Runnable()
+        {
+            public void run()
+            {
+                AbstractParallelIterableTestCase.this.classUnderTest().anySatisfy(new CheckedPredicate<Integer>()
+                {
+                    @Override
+                    public boolean safeAccept(Integer each) throws InterruptedException
+                    {
+                        Thread.sleep(1000);
+                        return each < 1;
+                    }
+                });
+            }
+        });
+        Assert.assertTrue(Thread.interrupted());
+        Assert.assertFalse(Thread.interrupted());
+
+        Assert.assertFalse(this.classUnderTest().anySatisfy(Predicates.lessThan(1)));
+    }
+
+    @Test
+    public void allSatisfy_interruptedException()
+    {
+        Thread.currentThread().interrupt();
+        Verify.assertThrowsWithCause(RuntimeException.class, InterruptedException.class, new Runnable()
+        {
+            public void run()
+            {
+                AbstractParallelIterableTestCase.this.classUnderTest().allSatisfy(new CheckedPredicate<Integer>()
+                {
+                    @Override
+                    public boolean safeAccept(Integer each) throws InterruptedException
+                    {
+                        Thread.sleep(1000);
+                        return each < 5;
+                    }
+                });
+            }
+        });
+        Assert.assertTrue(Thread.interrupted());
+        Assert.assertFalse(Thread.interrupted());
+
+        Assert.assertTrue(this.classUnderTest().allSatisfy(Predicates.lessThan(5)));
+    }
+
+    @Test
+    public void detect_interruptedException()
+    {
+        Thread.currentThread().interrupt();
+        Verify.assertThrowsWithCause(RuntimeException.class, InterruptedException.class, new Runnable()
+        {
+            public void run()
+            {
+                AbstractParallelIterableTestCase.this.classUnderTest().detect(new CheckedPredicate<Integer>()
+                {
+                    @Override
+                    public boolean safeAccept(Integer each) throws InterruptedException
+                    {
+                        Thread.sleep(1000);
+                        return each.intValue() == 3;
+                    }
+                });
+            }
+        });
+        Assert.assertTrue(Thread.interrupted());
+        Assert.assertFalse(Thread.interrupted());
+
+        Assert.assertEquals(Integer.valueOf(3), this.classUnderTest().detect(Predicates.equal(3)));
+    }
+
+    @Test
+    public void toString_interruptedException()
     {
         Thread.currentThread().interrupt();
         Verify.assertThrowsWithCause(RuntimeException.class, InterruptedException.class, new Runnable()

@@ -18,6 +18,7 @@ package com.gs.collections.impl.lazy.parallel.bag;
 
 import com.gs.collections.api.bag.ParallelBag;
 import com.gs.collections.impl.bag.mutable.HashBag;
+import org.junit.Test;
 
 public class ParallelBagTest extends AbstractParallelBagTestCase
 {
@@ -25,5 +26,17 @@ public class ParallelBagTest extends AbstractParallelBagTestCase
     protected ParallelBag<Integer> classUnderTest()
     {
         return HashBag.newBagWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4).asParallel(this.executorService, 2);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void asParallel_small_batch()
+    {
+        HashBag.newBagWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4).asParallel(this.executorService, 0);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void asParallel_null_executorService()
+    {
+        HashBag.newBagWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4).asParallel(null, 2);
     }
 }

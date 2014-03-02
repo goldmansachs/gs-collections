@@ -18,6 +18,7 @@ package com.gs.collections.impl.lazy.parallel.list;
 
 import com.gs.collections.api.list.ParallelListIterable;
 import com.gs.collections.impl.list.mutable.FastList;
+import org.junit.Test;
 
 public class ParallelListIterableTest extends AbstractParallelListIterableTestCase
 {
@@ -25,5 +26,17 @@ public class ParallelListIterableTest extends AbstractParallelListIterableTestCa
     protected ParallelListIterable<Integer> classUnderTest()
     {
         return FastList.newListWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4).asParallel(this.executorService, 2);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void asParallel_small_batch()
+    {
+        FastList.newListWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4).asParallel(this.executorService, 0);
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void asParallel_null_executorService()
+    {
+        FastList.newListWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4).asParallel(null, 2);
     }
 }
