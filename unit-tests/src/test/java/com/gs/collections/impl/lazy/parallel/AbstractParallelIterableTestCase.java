@@ -16,10 +16,11 @@
 
 package com.gs.collections.impl.lazy.parallel;
 
-import java.util.NoSuchElementException;
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.regex.Pattern;
 
 import com.gs.collections.api.ParallelIterable;
@@ -27,19 +28,26 @@ import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
+import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.MutableCollection;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
+import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.bag.mutable.primitive.CharHashBag;
 import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Functions0;
+import com.gs.collections.impl.block.factory.Functions2;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
-import com.gs.collections.impl.block.function.AddFunction;
+import com.gs.collections.impl.block.factory.Procedures2;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.block.function.checked.CheckedFunction;
@@ -51,6 +59,7 @@ import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.test.Verify;
+import com.gs.collections.impl.tuple.Tuples;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -101,33 +110,18 @@ public abstract class AbstractParallelIterableTestCase
     }
 
     @Test
-    public void contains()
-    {
-        Assert.assertTrue(this.classUnderTest().contains(3));
-        Assert.assertFalse(this.classUnderTest().contains(8));
-    }
-
-    @Test
-    public void containsAllIterable()
-    {
-        Assert.assertTrue(this.classUnderTest().containsAllIterable(FastList.newListWith(3, 4)));
-        Assert.assertFalse(this.classUnderTest().containsAllIterable(FastList.newListWith(-1)));
-        Assert.assertFalse(this.classUnderTest().containsAllIterable(FastList.newListWith(1, -1)));
-    }
-
-    @Test
-    public void containsAllArray()
-    {
-        Assert.assertTrue(this.classUnderTest().containsAllArguments(3, 4));
-        Assert.assertFalse(this.classUnderTest().containsAllArguments(-1));
-        Assert.assertFalse(this.classUnderTest().containsAllArguments(1, -1));
-    }
-
-    @Test
     public void forEach()
     {
         MutableCollection<Integer> actual = HashBag.<Integer>newBag().asSynchronized();
         this.classUnderTest().forEach(CollectionAddProcedure.on(actual));
+        Assert.assertEquals(this.getExpected().toBag(), actual);
+    }
+
+    @Test
+    public void forEachWith()
+    {
+        MutableCollection<Integer> actual = HashBag.<Integer>newBag().asSynchronized();
+        this.classUnderTest().forEachWith(Procedures2.<Integer>addToCollection(), actual);
         Assert.assertEquals(this.getExpected().toBag(), actual);
     }
 
@@ -217,18 +211,6 @@ public abstract class AbstractParallelIterableTestCase
         Assert.assertEquals(
                 this.getExpected().selectInstancesOf(Integer.class).toBag(),
                 this.classUnderTest().selectInstancesOf(Integer.class).toBag());
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void partition()
-    {
-        this.classUnderTest().partition(IntegerPredicates.isEven());
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void partitionWith()
-    {
-        this.classUnderTest().partitionWith(Predicates2.in(), this.classUnderTest().select(IntegerPredicates.isEven()));
     }
 
     @Test
@@ -342,25 +324,27 @@ public abstract class AbstractParallelIterableTestCase
         Assert.assertEquals(Integer.valueOf(1000), this.classUnderTest().detectWithIfNone(Predicates2.equal(), Integer.valueOf(8), function));
     }
 
-    @Test(expected = NoSuchElementException.class)
+    // @Test(expected = NoSuchElementException.class)
+    @Test(expected = UnsupportedOperationException.class)
     public void min_empty_throws()
     {
         this.classUnderTest().select(Predicates.alwaysFalse()).min(Comparators.naturalOrder());
     }
 
-    @Test(expected = NoSuchElementException.class)
+    // @Test(expected = NoSuchElementException.class)
+    @Test(expected = UnsupportedOperationException.class)
     public void max_empty_throws()
     {
         this.classUnderTest().select(Predicates.alwaysFalse()).max(Comparators.naturalOrder());
     }
 
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
     public void min()
     {
         Assert.assertEquals(Integer.valueOf(1), this.classUnderTest().min(Comparators.naturalOrder()));
     }
 
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
     public void max()
     {
         Assert.assertEquals(Integer.valueOf(4), this.classUnderTest().max(Comparators.naturalOrder()));
@@ -378,25 +362,27 @@ public abstract class AbstractParallelIterableTestCase
         Assert.assertEquals(Integer.valueOf(4), this.classUnderTest().maxBy(Functions.getToString()));
     }
 
-    @Test(expected = NoSuchElementException.class)
+    // @Test(expected = NoSuchElementException.class)
+    @Test(expected = UnsupportedOperationException.class)
     public void min_empty_throws_without_comparator()
     {
         this.classUnderTest().select(Predicates.alwaysFalse()).min();
     }
 
-    @Test(expected = NoSuchElementException.class)
+    // @Test(expected = NoSuchElementException.class)
+    @Test(expected = UnsupportedOperationException.class)
     public void max_empty_throws_without_comparator()
     {
         this.classUnderTest().select(Predicates.alwaysFalse()).max();
     }
 
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
     public void min_without_comparator()
     {
         Assert.assertEquals(Integer.valueOf(1), this.classUnderTest().min());
     }
 
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
     public void max_without_comparator()
     {
         Assert.assertEquals(Integer.valueOf(4), this.classUnderTest().max());
@@ -456,7 +442,7 @@ public abstract class AbstractParallelIterableTestCase
         Assert.assertFalse(this.classUnderTest().noneSatisfyWith(Predicates2.<Integer>lessThan(), 3));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void count()
     {
         Assert.assertEquals(
@@ -464,66 +450,12 @@ public abstract class AbstractParallelIterableTestCase
                 this.classUnderTest().count(IntegerPredicates.isEven()));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void getFirst()
+    @Test
+    public void countWith()
     {
-        this.classUnderTest().getFirst();
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void getLast()
-    {
-        this.classUnderTest().getLast();
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void isEmpty()
-    {
-        Assert.assertFalse(this.classUnderTest().isEmpty());
-        Assert.assertTrue(this.classUnderTest().select(Predicates.alwaysFalse()).isEmpty());
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void notEmpty()
-    {
-        Assert.assertTrue(this.classUnderTest().notEmpty());
-        Assert.assertFalse(this.classUnderTest().select(Predicates.alwaysFalse()).notEmpty());
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void injectInto()
-    {
-        this.classUnderTest().injectInto(10, AddFunction.INTEGER);
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void injectInto_int()
-    {
-        this.classUnderTest().injectInto(10, AddFunction.INTEGER_TO_INT);
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void injectInto_long()
-    {
-        this.classUnderTest().injectInto(10, AddFunction.INTEGER_TO_LONG);
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void injectInto_float()
-    {
-        this.classUnderTest().injectInto(10, AddFunction.INTEGER_TO_FLOAT);
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void injectInto_double()
-    {
-        this.classUnderTest().injectInto(10, AddFunction.INTEGER_TO_DOUBLE);
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    public void chunk()
-    {
-        this.classUnderTest().chunk(2);
+        Assert.assertEquals(
+                this.getExpected().countWith(Predicates2.<Integer>greaterThan(), 2),
+                this.classUnderTest().countWith(Predicates2.<Integer>greaterThan(), 2));
     }
 
     @Test
@@ -543,7 +475,7 @@ public abstract class AbstractParallelIterableTestCase
         }
     }
 
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
     public void toSortedList()
     {
         Assert.assertEquals(
@@ -551,7 +483,7 @@ public abstract class AbstractParallelIterableTestCase
                 this.classUnderTest().toSortedList());
     }
 
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
     public void toSortedList_comparator()
     {
         Assert.assertEquals(
@@ -559,7 +491,7 @@ public abstract class AbstractParallelIterableTestCase
                 this.classUnderTest().toSortedList(Comparators.reverseNaturalOrder()));
     }
 
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
     public void toSortedListBy()
     {
         Assert.assertEquals(
@@ -597,7 +529,7 @@ public abstract class AbstractParallelIterableTestCase
                 this.classUnderTest().toSortedSetBy(Functions.getToString()));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void toMap()
     {
         Assert.assertEquals(
@@ -698,6 +630,37 @@ public abstract class AbstractParallelIterableTestCase
         this.assertStringsEqual("<\\d(~\\d)*>", expectedString, actualString);
     }
 
+    @Test
+    public void appendString_throws()
+    {
+        try
+        {
+            this.classUnderTest().appendString(new Appendable()
+            {
+                public Appendable append(CharSequence csq) throws IOException
+                {
+                    throw new IOException("Test exception");
+                }
+
+                public Appendable append(CharSequence csq, int start, int end) throws IOException
+                {
+                    throw new IOException("Test exception");
+                }
+
+                public Appendable append(char c) throws IOException
+                {
+                    throw new IOException("Test exception");
+                }
+            });
+            Assert.fail();
+        }
+        catch (RuntimeException e)
+        {
+            IOException cause = (IOException) e.getCause();
+            Assert.assertEquals("Test exception", cause.getMessage());
+        }
+    }
+
     private void assertStringsEqual(String regex, String expectedString, String actualString)
     {
         if (this.isOrdered())
@@ -737,22 +700,116 @@ public abstract class AbstractParallelIterableTestCase
                 this.classUnderTest().groupByEach(new NegativeIntervalFunction()));
     }
 
-    @Test(expected = UnsupportedOperationException.class)
-    public void zip()
+    @Test
+    public void aggregateBy()
     {
-        this.classUnderTest().zip(null);
+        Function<Integer, Boolean> isOddFunction = new Function<Integer, Boolean>()
+        {
+            public Boolean valueOf(Integer object)
+            {
+                return IntegerPredicates.isOdd().accept(object);
+            }
+        };
+
+        Assert.assertEquals(
+                this.getExpected().aggregateBy(isOddFunction, Functions0.value(0), Functions2.integerAddition()),
+                this.classUnderTest().aggregateBy(isOddFunction, Functions0.value(0), Functions2.integerAddition()));
+    }
+
+    @Test
+    public void aggregateInPlaceBy()
+    {
+        Function<Integer, Boolean> isOddFunction = new Function<Integer, Boolean>()
+        {
+            public Boolean valueOf(Integer object)
+            {
+                return IntegerPredicates.isOdd().accept(object);
+            }
+        };
+
+        Procedure2<AtomicInteger, Integer> sumAggregator = new
+
+                Procedure2<AtomicInteger, Integer>()
+                {
+                    public void value(AtomicInteger aggregate, Integer value)
+                    {
+                        aggregate.addAndGet(value);
+                    }
+                };
+
+        Function2<Boolean, AtomicInteger, Pair<Boolean, Integer>> atomicIntToInt = new Function2<Boolean, AtomicInteger, Pair<Boolean, Integer>>()
+        {
+            public Pair<Boolean, Integer> value(Boolean argument1, AtomicInteger argument2)
+            {
+                return Tuples.pair(argument1, argument2.get());
+            }
+        };
+
+        Assert.assertEquals(
+                this.getExpected().aggregateInPlaceBy(isOddFunction, Functions0.zeroAtomicInteger(), sumAggregator).collect(atomicIntToInt),
+                this.classUnderTest().aggregateInPlaceBy(isOddFunction, Functions0.zeroAtomicInteger(), sumAggregator).collect(atomicIntToInt));
     }
 
     @Test(expected = UnsupportedOperationException.class)
-    public void zipWithIndex()
+    public void sumOfInt()
     {
-        this.classUnderTest().zipWithIndex();
+        IntFunction<Integer> intFunction = new IntFunction<Integer>()
+        {
+            public int intValueOf(Integer integer)
+            {
+                return integer.intValue();
+            }
+        };
+        Assert.assertEquals(
+                this.getExpected().sumOfInt(intFunction),
+                this.classUnderTest().sumOfInt(intFunction));
     }
 
     @Test(expected = UnsupportedOperationException.class)
-    public void asLazy()
+    public void sumOfLong()
     {
-        this.classUnderTest().asLazy();
+        LongFunction<Integer> longFunction = new LongFunction<Integer>()
+        {
+            public long longValueOf(Integer integer)
+            {
+                return integer.longValue();
+            }
+        };
+        Assert.assertEquals(
+                this.getExpected().sumOfLong(longFunction),
+                this.classUnderTest().sumOfLong(longFunction));
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void sumOfFloat()
+    {
+        FloatFunction<Integer> floatFunction = new FloatFunction<Integer>()
+        {
+            public float floatValueOf(Integer integer)
+            {
+                return integer.floatValue();
+            }
+        };
+        Assert.assertEquals(
+                this.getExpected().sumOfFloat(floatFunction),
+                this.classUnderTest().sumOfFloat(floatFunction),
+                0.0);
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void sumOfDouble()
+    {
+        DoubleFunction<Integer> doubleFunction = new DoubleFunction<Integer>()
+        {
+            public double doubleValueOf(Integer integer)
+            {
+                return integer.doubleValue();
+            }
+        };
+        Assert.assertEquals(
+                this.getExpected().sumOfDouble(doubleFunction),
+                this.classUnderTest().sumOfDouble(doubleFunction),
+                0.0);
     }
 
     @Test

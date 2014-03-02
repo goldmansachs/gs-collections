@@ -58,13 +58,11 @@ class ParallelSelectUnsortedBag<T> extends AbstractParallelUnsortedBag<T, Unsort
         });
     }
 
-    @Override
     public boolean anySatisfy(Predicate<? super T> predicate)
     {
         return this.parallelUnsortedBag.anySatisfy(Predicates.and(this.predicate, predicate));
     }
 
-    @Override
     public boolean allSatisfy(Predicate<? super T> predicate)
     {
         return this.parallelUnsortedBag.allSatisfy(new SelectUnsortedBagAllSatisfyPredicate<T>(this.predicate, predicate));
@@ -88,7 +86,6 @@ class ParallelSelectUnsortedBag<T> extends AbstractParallelUnsortedBag<T, Unsort
         });
     }
 
-    @Override
     public T detect(Predicate<? super T> predicate)
     {
         return this.parallelUnsortedBag.detect(Predicates.and(this.predicate, predicate));

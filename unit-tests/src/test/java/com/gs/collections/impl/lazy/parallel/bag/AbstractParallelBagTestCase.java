@@ -58,30 +58,16 @@ public abstract class AbstractParallelBagTestCase extends AbstractParallelIterab
 
     @Test(expected = UnsupportedOperationException.class)
     @Override
-    public void contains()
-    {
-        super.contains();
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    @Override
-    public void containsAllIterable()
-    {
-        super.containsAllIterable();
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    @Override
-    public void containsAllArray()
-    {
-        super.containsAllArray();
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    @Override
     public void forEach()
     {
         super.forEach();
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    @Override
+    public void forEachWith()
+    {
+        super.forEachWith();
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -110,20 +96,6 @@ public abstract class AbstractParallelBagTestCase extends AbstractParallelIterab
     public void rejectWith()
     {
         super.rejectWith();
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    @Override
-    public void partition()
-    {
-        super.partition();
-    }
-
-    @Test(expected = UnsupportedOperationException.class)
-    @Override
-    public void partitionWith()
-    {
-        super.partitionWith();
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -191,6 +163,20 @@ public abstract class AbstractParallelBagTestCase extends AbstractParallelIterab
 
     @Test(expected = UnsupportedOperationException.class)
     @Override
+    public void count()
+    {
+        super.count();
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    @Override
+    public void countWith()
+    {
+        super.countWith();
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    @Override
     public void toList()
     {
         super.toList();
@@ -243,6 +229,13 @@ public abstract class AbstractParallelBagTestCase extends AbstractParallelIterab
     public void toSortedSetBy()
     {
         super.toSortedSetBy();
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    @Override
+    public void toMap()
+    {
+        super.toMap();
     }
 
     @Test(expected = UnsupportedOperationException.class)
@@ -404,6 +397,20 @@ public abstract class AbstractParallelBagTestCase extends AbstractParallelIterab
     public void groupByEach()
     {
         super.groupByEach();
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    @Override
+    public void aggregateBy()
+    {
+        super.aggregateBy();
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    @Override
+    public void aggregateInPlaceBy()
+    {
+        super.aggregateInPlaceBy();
     }
 
     @Test(expected = UnsupportedOperationException.class)
