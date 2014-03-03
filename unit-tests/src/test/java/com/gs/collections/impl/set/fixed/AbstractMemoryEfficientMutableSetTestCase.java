@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,6 +41,7 @@ import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.StringFunctions;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.factory.Bags;
@@ -71,109 +72,81 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
         Verify.assertInstanceOf(SynchronizedMutableSet.class, this.classUnderTest().asSynchronized());
     }
 
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
     public void remove_throws()
     {
         MutableSet<String> set = this.classUnderTest();
-        try
-        {
-            set.remove("1");
-            Assert.fail("Should not allow remove");
-        }
-        catch (UnsupportedOperationException ignored)
-        {
-            Assert.assertEquals(this.classUnderTest(), set);
-        }
+        set.remove("1");
     }
 
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
+    public void addAll_throws()
+    {
+        MutableSet<String> set = this.classUnderTest();
+        set.addAll(null);
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void addAllIterable_throws()
+    {
+        MutableSet<String> set = this.classUnderTest();
+        set.addAllIterable(null);
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
     public void add_duplicate_throws()
     {
         MutableSet<String> set = this.classUnderTest();
-        try
-        {
-            set.add("1");
-            Assert.fail("Should not allow adding a duplicate");
-        }
-        catch (UnsupportedOperationException ignored)
-        {
-            Assert.assertEquals(this.classUnderTest(), set);
-        }
+        set.add("1");
     }
 
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
     public void add_throws()
     {
         MutableSet<String> set = this.classUnderTest();
-        try
-        {
-            set.add(null);
-            Assert.fail("Should not allow add");
-        }
-        catch (UnsupportedOperationException ignored)
-        {
-            Assert.assertEquals(this.classUnderTest(), set);
-        }
+        set.add(null);
     }
 
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
     public void removeAll_throws()
     {
         MutableSet<String> set = this.classUnderTest();
-        try
-        {
-            set.removeAll(mList("1", "2"));
-            Assert.fail("Should not allow removeAll");
-        }
-        catch (UnsupportedOperationException ignored)
-        {
-            Assert.assertEquals(this.classUnderTest(), set);
-        }
+        set.removeAll(mList("1", "2"));
     }
 
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
     public void retainAll_throws()
     {
         MutableSet<String> set = this.classUnderTest();
-        try
-        {
-            set.retainAll(mList("1", "2"));
-            Assert.fail("Should not allow retainAll");
-        }
-        catch (UnsupportedOperationException ignored)
-        {
-            Assert.assertEquals(this.classUnderTest(), set);
-        }
+        set.retainAll(mList("1", "2"));
     }
 
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
+    public void retainAllIterable_throws()
+    {
+        MutableSet<String> set = this.classUnderTest();
+        set.retainAllIterable(mList("1", "2"));
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
     public void clear_throws()
     {
         MutableSet<String> set = this.classUnderTest();
-        try
-        {
-            set.clear();
-            Assert.fail("Should not allow clear");
-        }
-        catch (UnsupportedOperationException ignored)
-        {
-            Assert.assertEquals(this.classUnderTest(), set);
-        }
+        set.clear();
     }
 
-    @Test
+    @Test(expected = UnsupportedOperationException.class)
     public void removeIf_throws()
     {
         MutableSet<String> set = this.classUnderTest();
-        try
-        {
-            set.removeIf(Predicates.equal("1"));
-            Assert.fail("Should not allow removeIf");
-        }
-        catch (UnsupportedOperationException ignored)
-        {
-            Assert.assertEquals(this.classUnderTest(), set);
-        }
+        set.removeIf(Predicates.equal("1"));
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void removeIfWith_throws()
+    {
+        MutableSet<String> set = this.classUnderTest();
+        set.removeIfWith(Predicates2.equal(), "1");
     }
 
     @Test
@@ -196,6 +169,13 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
                 iterator.next();
             }
         });
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void iteratorRemove_throws()
+    {
+        MutableSet<String> set = this.classUnderTest();
+        set.iterator().remove();
     }
 
     @Test(expected = NullPointerException.class)
