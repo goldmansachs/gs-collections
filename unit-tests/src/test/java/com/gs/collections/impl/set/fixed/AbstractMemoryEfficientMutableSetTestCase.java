@@ -115,6 +115,13 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
     }
 
     @Test(expected = UnsupportedOperationException.class)
+    public void removeAllIterable_throws()
+    {
+        MutableSet<String> set = this.classUnderTest();
+        set.removeAllIterable(mList("1", "2"));
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
     public void retainAll_throws()
     {
         MutableSet<String> set = this.classUnderTest();
@@ -570,12 +577,18 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
     @Test
     public void without()
     {
-        MutableSet<String> set = this.classUnderTest();
+        final MutableSet<String> set = this.classUnderTest();
         Assert.assertSame(set, set.without("11"));
-        String any = set.getFirst();
-        MutableSet<String> setWithout = set.without(any);
-        Assert.assertFalse(setWithout.contains(any));
-        assertSetType(set, setWithout);
+        MutableList<String> list = set.toList();
+        list.forEach(new Procedure<String>()
+        {
+            public void value(String each)
+            {
+                MutableSet<String> setWithout = set.without(each);
+                Assert.assertFalse(setWithout.contains(each));
+                assertSetType(set, setWithout);
+            }
+        });
     }
 
     @Test
@@ -589,7 +602,7 @@ public abstract class AbstractMemoryEfficientMutableSetTestCase
         Assert.assertSame(setWithout, setWithout.withoutAll(FastList.<String>newList()));
     }
 
-    private static void assertSetType(MutableSet<?> original, MutableSet<?> modified)
+    protected static void assertSetType(MutableSet<?> original, MutableSet<?> modified)
     {
         if (original instanceof FixedSizeSet && modified.size() < 5)
         {
