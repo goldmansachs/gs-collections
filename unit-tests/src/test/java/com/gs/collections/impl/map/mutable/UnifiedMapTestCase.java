@@ -31,6 +31,7 @@ import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.block.factory.Comparators;
+import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
@@ -370,6 +371,18 @@ public abstract class UnifiedMapTestCase extends MutableMapTestCase
         Assert.assertEquals(Integer.valueOf(9), map.getIfAbsentPut(COLLISION_2, 9));
         Assert.assertEquals(Integer.valueOf(10), map.getIfAbsentPut(COLLISION_4, 10));
         Assert.assertEquals(UnifiedMap.newWithKeysValues(COLLISION_1, null, COLLISION_2, 9, COLLISION_3, null, COLLISION_4, 10), map);
+    }
+
+    @Test
+    public void getIfAbsentPutWithWithCollisions()
+    {
+        MutableMap<Integer, Object> map = this.newMapWithKeyValue(COLLISION_1, null);
+        Assert.assertNull(map.getIfAbsentPutWith(COLLISION_1, Functions.getToString(), 5));
+        Assert.assertNull(map.getIfAbsentPutWith(COLLISION_3, Functions.getPassThru(), null));
+        Assert.assertNull(map.getIfAbsentPutWith(COLLISION_3, Functions.getToString(), 7));
+        Assert.assertEquals("9", map.getIfAbsentPutWith(COLLISION_2, Functions.getToString(), 9));
+        Assert.assertEquals(Integer.valueOf(10), map.getIfAbsentPutWith(COLLISION_4, Functions.getIntegerPassThru(), 10));
+        Assert.assertEquals(UnifiedMap.newWithKeysValues(COLLISION_1, null, COLLISION_2, "9", COLLISION_3, null, COLLISION_4, 10), map);
     }
 
     @Override
