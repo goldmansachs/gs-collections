@@ -299,6 +299,11 @@ final class Immutable<name>EmptyList implements Immutable<name>List, Serializabl
         }
     }
 
+    public Immutable<name>List subList(int fromIndex, int toIndex)
+    {
+        throw new UnsupportedOperationException("subList not yet implemented!");
+    }
+
     private static class Internal<name>Iterator implements <name>Iterator
     {
         public boolean hasNext()

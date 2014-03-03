@@ -630,6 +630,11 @@ public final class BooleanArrayList
         return BooleanLists.immutable.with(this.toArray());
     }
 
+    public MutableBooleanList subList(int fromIndex, int toIndex)
+    {
+        throw new UnsupportedOperationException("subList not yet implemented!");
+    }
+
     public BooleanArrayList toReversed()
     {
         return new BooleanArrayList(this.asReversed());

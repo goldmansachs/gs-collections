@@ -527,6 +527,11 @@ final class ImmutableBooleanArrayList
         }
     }
 
+    public ImmutableBooleanList subList(int fromIndex, int toIndex)
+    {
+        throw new UnsupportedOperationException("subList not yet implemented!");
+    }
+
     private Object writeReplace()
     {
         return new ImmutableBooleanListSerializationProxy(this);

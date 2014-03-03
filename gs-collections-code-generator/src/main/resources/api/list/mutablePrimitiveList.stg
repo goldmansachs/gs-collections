@@ -45,9 +45,6 @@ public interface Mutable<name>List extends Mutable<name>Collection, <name>List
 
     Mutable<name>List reverseThis();
 
-    /**
-     * @since 5.0.
-     */
     Mutable<name>List toReversed();
 
     <(arithmeticMethods.(type))(type)>
@@ -59,6 +56,8 @@ public interface Mutable<name>List extends Mutable<name>Collection, <name>List
      * Returns an immutable copy of this list.
      */
     Immutable<name>List toImmutable();
+
+    Mutable<name>List subList(int fromIndex, int toIndex);
 }
 
 >>

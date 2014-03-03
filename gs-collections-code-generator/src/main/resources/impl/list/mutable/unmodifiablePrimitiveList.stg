@@ -222,6 +222,11 @@ public final class Unmodifiable<name>List
     {
         return this.getMutable<name>List().injectIntoWithIndex(injectedValue, function);
     }
+
+    public Mutable<name>List subList(int fromIndex, int toIndex)
+    {
+        throw new UnsupportedOperationException("subList not yet implemented!");
+    }
 }
 
 >>

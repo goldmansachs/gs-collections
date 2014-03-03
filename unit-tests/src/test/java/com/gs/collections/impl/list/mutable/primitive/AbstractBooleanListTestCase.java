@@ -109,6 +109,12 @@ public abstract class AbstractBooleanListTestCase extends AbstractMutableBoolean
         this.newWith().getLast();
     }
 
+    @Test(expected = UnsupportedOperationException.class)
+    public void subList()
+    {
+        this.classUnderTest().subList(0, 1);
+    }
+
     @Test
     public void indexOf()
     {

@@ -63,6 +63,12 @@ public interface <name>List extends Reversible<name>Iterable
      * @since 5.0.
      */
     <name>List toReversed();
+
+    /**
+     * @see {@link List#subList(int fromIndex, int toIndex)}
+     * @since 5.0.
+     */
+    <name>List subList(int fromIndex, int toIndex);
 }
 
 >>

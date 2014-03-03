@@ -240,6 +240,13 @@ public abstract class Abstract<name>ListTestCase extends AbstractMutable<name>Co
         Assert.assertEquals(this.newMutableCollectionWith(<["1", "4", "3"]:(literal.(type))(); separator=", ">), list);
     }
 
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void subList()
+    {
+        this.classUnderTest().subList(0, 1);
+    }
+
     @Override
     @Test
     public void <type>Iterator()

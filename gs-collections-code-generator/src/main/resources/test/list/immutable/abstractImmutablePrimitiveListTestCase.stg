@@ -138,6 +138,12 @@ public abstract class AbstractImmutable<name>ListTestCase extends AbstractImmuta
         Assert.assertFalse(iterator.hasNext());
     }
 
+    @Test(expected = UnsupportedOperationException.class)
+    public void subList()
+    {
+        this.classUnderTest().subList(0, 1);
+    }
+
     @Override
     @Test
     public void toArray()

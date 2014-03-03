@@ -179,6 +179,12 @@ public class IntIntervalTest
         Verify.assertSize(3, this.intInterval);
     }
 
+    @Test(expected = UnsupportedOperationException.class)
+    public void subList()
+    {
+        this.intInterval.subList(0, 1);
+    }
+
     @Test
     public void dotProduct()
     {

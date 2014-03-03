@@ -460,6 +460,11 @@ public final class IntInterval
         return IntInterval.fromToBy(this.to, this.from, -this.step);
     }
 
+    public ImmutableIntList subList(int fromIndex, int toIndex)
+    {
+        throw new UnsupportedOperationException("subList not yet implemented!");
+    }
+
     /**
      * Calculates and returns the size of the interval.
      */

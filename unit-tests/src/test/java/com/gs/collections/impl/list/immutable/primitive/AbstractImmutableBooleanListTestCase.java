@@ -99,6 +99,12 @@ public abstract class AbstractImmutableBooleanListTestCase extends AbstractImmut
         this.classUnderTest().get(-1);
     }
 
+    @Test(expected = UnsupportedOperationException.class)
+    public void subList()
+    {
+        this.classUnderTest().subList(0, 1);
+    }
+
     @Test
     public void getFirst()
     {
