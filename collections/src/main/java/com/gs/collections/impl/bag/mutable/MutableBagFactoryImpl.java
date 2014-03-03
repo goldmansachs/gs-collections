@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ public final class MutableBagFactoryImpl implements MutableBagFactory
 {
     public <T> MutableBag<T> of()
     {
-        return HashBag.newBag();
+        return this.with();
     }
 
     public <T> MutableBag<T> with()
@@ -35,7 +35,7 @@ public final class MutableBagFactoryImpl implements MutableBagFactory
 
     public <T> MutableBag<T> of(T... elements)
     {
-        return HashBag.newBagWith(elements);
+        return this.with(elements);
     }
 
     public <T> MutableBag<T> with(T... elements)

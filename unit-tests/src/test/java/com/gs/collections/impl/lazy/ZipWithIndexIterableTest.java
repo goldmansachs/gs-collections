@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.lazy;
 
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.tuple.Pair;
@@ -38,6 +39,21 @@ public class ZipWithIndexIterableTest
     private void assertBufferContains(String expected)
     {
         Assert.assertEquals(expected, this.buffer.toString());
+    }
+
+    @Test
+    public void forEach()
+    {
+        this.iterableUnderTest.forEach(new Procedure<Pair<Integer, Integer>>()
+        {
+            public void value(Pair<Integer, Integer> argument1)
+            {
+                ZipWithIndexIterableTest.this.buffer.append("(");
+                ZipWithIndexIterableTest.this.buffer.append(argument1.toString());
+                ZipWithIndexIterableTest.this.buffer.append(")");
+            }
+        });
+        this.assertBufferContains("(1:0)(2:1)(3:2)(4:3)");
     }
 
     @Test

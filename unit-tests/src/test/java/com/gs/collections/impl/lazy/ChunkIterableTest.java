@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,6 +17,7 @@
 package com.gs.collections.impl.lazy;
 
 import com.gs.collections.api.RichIterable;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -33,6 +34,19 @@ public class ChunkIterableTest
     public void setUp()
     {
         this.undertest = new ChunkIterable<Integer>(FastList.newListWith(1, 2, 3, 4, 5), 2);
+    }
+
+    @Test
+    public void forEach()
+    {
+        this.undertest.forEach(new Procedure<RichIterable<Integer>>()
+        {
+            public void value(RichIterable<Integer> argument1)
+            {
+                ChunkIterableTest.this.buffer.append(argument1);
+            }
+        });
+        Assert.assertEquals("[1, 2][3, 4][5]", this.buffer.toString());
     }
 
     @Test
