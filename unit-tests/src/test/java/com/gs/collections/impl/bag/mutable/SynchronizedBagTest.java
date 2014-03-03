@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,6 +19,8 @@ package com.gs.collections.impl.bag.mutable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.multimap.Multimap;
 import com.gs.collections.api.partition.PartitionMutableCollection;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
@@ -26,6 +28,7 @@ import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.primitive.IntPredicates;
 import com.gs.collections.impl.collection.mutable.AbstractSynchronizedCollectionTestCase;
 import com.gs.collections.impl.factory.Bags;
+import com.gs.collections.impl.factory.Maps;
 import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -139,5 +142,69 @@ public class SynchronizedBagTest extends AbstractSynchronizedCollectionTestCase
     {
         MutableBag<Integer> integers = this.newWith(1, 1, 1, 1, 2, 2, 2, 3, 3, 4);
         Assert.assertEquals(iBag(1, 1, 1, 1, 3, 3), integers.selectByOccurrences(IntPredicates.isEven()));
+    }
+
+    @Test
+    public void addOccurrences()
+    {
+        MutableBag<Integer> integers = this.newWith(1, 1, 1, 1, 2, 2, 2, 3, 3, 4);
+        Assert.assertEquals(0, integers.occurrencesOf(5));
+        integers.addOccurrences(5, 5);
+        Assert.assertEquals(5, integers.occurrencesOf(5));
+    }
+
+    @Test
+    public void removeOccurrences()
+    {
+        MutableBag<Integer> integers = this.newWith(1, 1, 1, 1, 2, 2, 2, 3, 3, 4);
+        Assert.assertEquals(1, integers.occurrencesOf(4));
+        Assert.assertEquals(3, integers.occurrencesOf(2));
+        integers.removeOccurrences(4, 1);
+        integers.removeOccurrences(2, 2);
+        Assert.assertEquals(0, integers.occurrencesOf(4));
+        Assert.assertEquals(1, integers.occurrencesOf(2));
+    }
+
+    @Test
+    public void setOccurrences()
+    {
+        MutableBag<Integer> integers = this.newWith(1, 1, 1, 1, 2, 2, 2, 3, 3, 4);
+        Assert.assertEquals(0, integers.occurrencesOf(5));
+        Assert.assertEquals(3, integers.occurrencesOf(2));
+        integers.setOccurrences(5, 5);
+        integers.setOccurrences(2, 2);
+        Assert.assertEquals(5, integers.occurrencesOf(5));
+        Assert.assertEquals(2, integers.occurrencesOf(2));
+    }
+
+    @Test
+    public void toMapOfItemWithCount()
+    {
+        MutableBag<Integer> integers = this.newWith(1, 1, 1, 1, 2, 2, 2, 3, 3, 4);
+        MapIterable<Integer, Integer> result = integers.toMapOfItemToCount();
+        Assert.assertEquals(Maps.mutable.with(1, 4, 2, 3, 3, 2, 4, 1), result);
+    }
+
+    @Test
+    public void toStringOfItemWithCount()
+    {
+        MutableBag<Integer> integers = this.newWith(1, 1, 1, 1);
+        String result = integers.toStringOfItemToCount();
+        Assert.assertEquals(Maps.mutable.with(1, 4).toString(), result);
+    }
+
+    @Test
+    public void forEachWithOccurrences()
+    {
+        MutableBag<Integer> integers = this.newWith(1, 1, 1, 1, 2, 2, 2, 3, 3, 4);
+        final MutableBag<Integer> result = HashBag.newBag();
+        integers.forEachWithOccurrences(new ObjectIntProcedure<Integer>()
+        {
+            public void value(Integer each, int parameter)
+            {
+                result.setOccurrences(each, parameter);
+            }
+        });
+        Assert.assertEquals(integers, result);
     }
 }
