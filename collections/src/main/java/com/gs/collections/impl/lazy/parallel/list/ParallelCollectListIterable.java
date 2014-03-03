@@ -29,25 +29,25 @@ import com.gs.collections.impl.block.factory.Predicates;
 @Beta
 class ParallelCollectListIterable<T, V> extends AbstractParallelListIterable<V, ListBatch<V>>
 {
-    private final AbstractParallelListIterable<T, ? extends ListBatch<T>> parallelListIterable;
+    private final AbstractParallelListIterable<T, ? extends ListBatch<T>> parallelIterable;
     private final Function<? super T, ? extends V> function;
 
-    ParallelCollectListIterable(AbstractParallelListIterable<T, ? extends ListBatch<T>> parallelListIterable, Function<? super T, ? extends V> function)
+    ParallelCollectListIterable(AbstractParallelListIterable<T, ? extends ListBatch<T>> parallelIterable, Function<? super T, ? extends V> function)
     {
-        this.parallelListIterable = parallelListIterable;
+        this.parallelIterable = parallelIterable;
         this.function = function;
     }
 
     @Override
     public ExecutorService getExecutorService()
     {
-        return this.parallelListIterable.getExecutorService();
+        return this.parallelIterable.getExecutorService();
     }
 
     @Override
     public LazyIterable<ListBatch<V>> split()
     {
-        return this.parallelListIterable.split().collect(new Function<ListBatch<T>, ListBatch<V>>()
+        return this.parallelIterable.split().collect(new Function<ListBatch<T>, ListBatch<V>>()
         {
             public ListBatch<V> valueOf(ListBatch<T> eachBatch)
             {
@@ -58,25 +58,22 @@ class ParallelCollectListIterable<T, V> extends AbstractParallelListIterable<V, 
 
     public void forEach(Procedure<? super V> procedure)
     {
-        this.parallelListIterable.forEach(Functions.bind(procedure, this.function));
+        this.parallelIterable.forEach(Functions.bind(procedure, this.function));
     }
 
-    @Override
     public boolean anySatisfy(Predicate<? super V> predicate)
     {
-        return this.parallelListIterable.anySatisfy(Predicates.attributePredicate(this.function, predicate));
+        return this.parallelIterable.anySatisfy(Predicates.attributePredicate(this.function, predicate));
     }
 
-    @Override
     public boolean allSatisfy(Predicate<? super V> predicate)
     {
-        return this.parallelListIterable.allSatisfy(Predicates.attributePredicate(this.function, predicate));
+        return this.parallelIterable.allSatisfy(Predicates.attributePredicate(this.function, predicate));
     }
 
-    @Override
     public V detect(Predicate<? super V> predicate)
     {
-        T resultItem = this.parallelListIterable.detect(Predicates.attributePredicate(this.function, predicate));
+        T resultItem = this.parallelIterable.detect(Predicates.attributePredicate(this.function, predicate));
         return resultItem == null ? null : this.function.valueOf(resultItem);
     }
 }

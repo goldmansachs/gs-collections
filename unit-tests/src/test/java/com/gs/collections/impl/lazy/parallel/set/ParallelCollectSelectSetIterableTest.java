@@ -22,18 +22,19 @@ import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
+import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.lazy.parallel.AbstractParallelIterableTestCase;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class ParallelCollectSetIterableTest extends AbstractParallelIterableTestCase
+public class ParallelCollectSelectSetIterableTest extends AbstractParallelIterableTestCase
 {
     @Override
     protected ParallelIterable<Integer> classUnderTest()
     {
-        return UnifiedSet.newSetWith(1.1, 2.1, 2.2, 3.1, 3.2, 3.3, 4.1, 4.2, 4.3, 4.4)
+        return UnifiedSet.newSetWith(0.0, 1.1, 2.1, 2.2, 3.1, 3.2, 3.3, 4.1, 4.2, 4.3, 4.4, 5.0)
                 .asParallel(this.executorService, 2)
                 .collect(new Function<Double, Integer>()
                 {
@@ -41,7 +42,8 @@ public class ParallelCollectSetIterableTest extends AbstractParallelIterableTest
                     {
                         return aDouble.intValue();
                     }
-                });
+                })
+                .select(Predicates.greaterThan(0)).select(Predicates.lessThan(5));
     }
 
     @Override

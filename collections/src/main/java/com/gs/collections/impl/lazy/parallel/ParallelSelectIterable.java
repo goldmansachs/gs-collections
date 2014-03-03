@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.lazy.parallel.set;
+package com.gs.collections.impl.lazy.parallel;
 
 import java.util.concurrent.ExecutorService;
 
@@ -27,12 +27,12 @@ import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.IfProcedure;
 
 @Beta
-class ParallelSelectUnsortedSetIterable<T> extends AbstractParallelUnsortedSetIterable<T, UnsortedSetBatch<T>>
+public class ParallelSelectIterable<T> extends AbstractParallelIterableImpl<T, Batch<T>>
 {
-    private final AbstractParallelUnsortedSetIterable<T, ? extends UnsortedSetBatch<T>> parallelIterable;
+    private final AbstractParallelIterable<T, ? extends Batch<T>> parallelIterable;
     private final Predicate<? super T> predicate;
 
-    ParallelSelectUnsortedSetIterable(AbstractParallelUnsortedSetIterable<T, ? extends UnsortedSetBatch<T>> parallelIterable, Predicate<? super T> predicate)
+    public ParallelSelectIterable(AbstractParallelIterable<T, ? extends Batch<T>> parallelIterable, Predicate<? super T> predicate)
     {
         this.parallelIterable = parallelIterable;
         this.predicate = predicate;
@@ -45,13 +45,13 @@ class ParallelSelectUnsortedSetIterable<T> extends AbstractParallelUnsortedSetIt
     }
 
     @Override
-    public LazyIterable<UnsortedSetBatch<T>> split()
+    public LazyIterable<Batch<T>> split()
     {
-        return this.parallelIterable.split().collect(new Function<UnsortedSetBatch<T>, UnsortedSetBatch<T>>()
+        return this.parallelIterable.split().collect(new Function<Batch<T>, Batch<T>>()
         {
-            public UnsortedSetBatch<T> valueOf(UnsortedSetBatch<T> eachBatch)
+            public Batch<T> valueOf(Batch<T> eachBatch)
             {
-                return eachBatch.select(ParallelSelectUnsortedSetIterable.this.predicate);
+                return eachBatch.select(ParallelSelectIterable.this.predicate);
             }
         });
     }

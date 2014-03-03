@@ -18,7 +18,6 @@ package com.gs.collections.api.set;
 
 import com.gs.collections.api.annotation.Beta;
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.multimap.set.UnsortedSetMultimap;
@@ -50,23 +49,6 @@ public interface ParallelUnsortedSetIterable<T> extends ParallelSetIterable<T>
     <P> ParallelUnsortedSetIterable<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter);
 
     <S> ParallelUnsortedSetIterable<S> selectInstancesOf(Class<S> clazz);
-
-    /**
-     * Creates a parallel iterable for collecting elements from the current iterable.
-     */
-    <V> ParallelUnsortedSetIterable<V> collect(Function<? super T, ? extends V> function);
-
-    <P, V> ParallelUnsortedSetIterable<V> collectWith(Function2<? super T, ? super P, ? extends V> function, P parameter);
-
-    /**
-     * Creates a parallel iterable for selecting and collecting elements from the current iterable.
-     */
-    <V> ParallelUnsortedSetIterable<V> collectIf(Predicate<? super T> predicate, Function<? super T, ? extends V> function);
-
-    /**
-     * Creates a parallel flattening iterable for the current iterable.
-     */
-    <V> ParallelUnsortedSetIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function);
 
     <V> UnsortedSetMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
 

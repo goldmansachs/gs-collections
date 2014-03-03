@@ -21,6 +21,7 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.impl.lazy.parallel.AbstractBatch;
+import com.gs.collections.impl.lazy.parallel.Batch;
 import com.gs.collections.impl.lazy.parallel.set.CollectUnsortedSetBatch;
 import com.gs.collections.impl.lazy.parallel.set.SelectUnsortedSetBatch;
 import com.gs.collections.impl.lazy.parallel.set.UnsortedSetBatch;
@@ -29,18 +30,18 @@ import com.gs.collections.impl.map.mutable.ConcurrentHashMap;
 @Beta
 public class DistinctBatch<T> extends AbstractBatch<T> implements UnsortedSetBatch<T>
 {
-    private final ListBatch<T> listBatch;
+    private final Batch<T> batch;
     private final ConcurrentHashMap<T, Boolean> distinct;
 
-    public DistinctBatch(ListBatch<T> listBatch, ConcurrentHashMap<T, Boolean> distinct)
+    public DistinctBatch(Batch<T> batch, ConcurrentHashMap<T, Boolean> distinct)
     {
-        this.listBatch = listBatch;
+        this.batch = batch;
         this.distinct = distinct;
     }
 
     public void forEach(final Procedure<? super T> procedure)
     {
-        this.listBatch.forEach(new Procedure<T>()
+        this.batch.forEach(new Procedure<T>()
         {
             public void value(T each)
             {

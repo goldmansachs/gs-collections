@@ -19,15 +19,11 @@ package com.gs.collections.impl.lazy.parallel.set;
 import com.gs.collections.api.ParallelIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.set.MutableSet;
-import com.gs.collections.api.set.ParallelSetIterable;
 import com.gs.collections.impl.lazy.parallel.AbstractParallelIterableTestCase;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 
 public abstract class AbstractParallelUnsortedSetIterableTestCase extends AbstractParallelIterableTestCase
 {
-    @Override
-    protected abstract ParallelSetIterable<Integer> classUnderTest();
-
     @Override
     protected MutableSet<Integer> getExpected()
     {

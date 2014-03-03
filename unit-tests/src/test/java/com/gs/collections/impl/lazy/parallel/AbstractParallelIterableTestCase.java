@@ -819,6 +819,14 @@ public abstract class AbstractParallelIterableTestCase
     {
         Assert.assertEquals(UnifiedSet.newSetWith(1, 2, 3, 4), this.classUnderTest().asUnique().toSet());
         Assert.assertEquals(UnifiedSet.newSetWith(1, 2, 3, 4), this.classUnderTest().asUnique().toList().toSet());
+
+        Assert.assertEquals(FastList.newListWith("!"), this.classUnderTest().collect(new Function<Integer, String>()
+        {
+            public String valueOf(Integer each)
+            {
+                return "!";
+            }
+        }).asUnique().toList());
     }
 
     @Test
@@ -949,7 +957,6 @@ public abstract class AbstractParallelIterableTestCase
         });
         Assert.assertTrue(Thread.interrupted());
         Assert.assertFalse(Thread.interrupted());
-        Verify.assertEmpty(actual1);
 
         MutableCollection<Integer> actual2 = HashBag.<Integer>newBag().asSynchronized();
         this.classUnderTest().forEach(CollectionAddProcedure.on(actual2));

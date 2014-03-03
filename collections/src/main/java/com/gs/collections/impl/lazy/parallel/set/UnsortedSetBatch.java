@@ -17,7 +17,6 @@
 package com.gs.collections.impl.lazy.parallel.set;
 
 import com.gs.collections.api.annotation.Beta;
-import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.impl.lazy.parallel.Batch;
 
@@ -25,6 +24,4 @@ import com.gs.collections.impl.lazy.parallel.Batch;
 public interface UnsortedSetBatch<T> extends Batch<T>
 {
     UnsortedSetBatch<T> select(Predicate<? super T> predicate);
-
-    <V> UnsortedSetBatch<V> collect(Function<? super T, ? extends V> function);
 }

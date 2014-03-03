@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.lazy.parallel.set;
+package com.gs.collections.impl.lazy.parallel;
 
 import com.gs.collections.api.ParallelIterable;
 import com.gs.collections.api.annotation.Beta;
@@ -23,16 +23,16 @@ import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.Procedure;
-import com.gs.collections.api.multimap.set.MutableSetMultimap;
-import com.gs.collections.api.multimap.set.UnsortedSetMultimap;
+import com.gs.collections.api.multimap.bag.MutableBagMultimap;
+import com.gs.collections.api.multimap.bag.UnsortedBagMultimap;
 import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
-import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
-import com.gs.collections.impl.multimap.set.SynchronizedPutUnifiedSetMultimap;
+import com.gs.collections.impl.lazy.parallel.set.ParallelCollectIterable;
+import com.gs.collections.impl.multimap.bag.SynchronizedPutHashBagMultimap;
 
 @Beta
-public abstract class AbstractParallelUnsortedSetIterable<T, B extends UnsortedSetBatch<T>> extends AbstractParallelIterable<T, B> implements ParallelUnsortedSetIterable<T>
+public abstract class AbstractParallelIterableImpl<T, B extends Batch<T>> extends AbstractParallelIterable<T, B>
 {
     @Override
     protected boolean isOrdered()
@@ -42,30 +42,30 @@ public abstract class AbstractParallelUnsortedSetIterable<T, B extends UnsortedS
 
     public ParallelUnsortedSetIterable<T> asUnique()
     {
-        return this;
+        return new ParallelDistinctIterable<T>(this);
     }
 
-    public ParallelUnsortedSetIterable<T> select(Predicate<? super T> predicate)
+    public ParallelIterable<T> select(Predicate<? super T> predicate)
     {
-        return new ParallelSelectUnsortedSetIterable<T>(this, predicate);
+        return new ParallelSelectIterable<T>(this, predicate);
     }
 
-    public <P> ParallelUnsortedSetIterable<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> ParallelIterable<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         return this.select(Predicates.bind(predicate, parameter));
     }
 
-    public <S> ParallelUnsortedSetIterable<S> selectInstancesOf(Class<S> clazz)
+    public <S> ParallelIterable<S> selectInstancesOf(Class<S> clazz)
     {
         throw new UnsupportedOperationException();
     }
 
-    public ParallelUnsortedSetIterable<T> reject(Predicate<? super T> predicate)
+    public ParallelIterable<T> reject(Predicate<? super T> predicate)
     {
         return this.select(Predicates.not(predicate));
     }
 
-    public <P> ParallelUnsortedSetIterable<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
+    public <P> ParallelIterable<T> rejectWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
         return this.reject(Predicates.bind(predicate, parameter));
     }
@@ -90,9 +90,9 @@ public abstract class AbstractParallelUnsortedSetIterable<T, B extends UnsortedS
         throw new UnsupportedOperationException();
     }
 
-    public <V> UnsortedSetMultimap<V, T> groupBy(final Function<? super T, ? extends V> function)
+    public <V> UnsortedBagMultimap<V, T> groupBy(final Function<? super T, ? extends V> function)
     {
-        final MutableSetMultimap<V, T> result = SynchronizedPutUnifiedSetMultimap.newMultimap();
+        final MutableBagMultimap<V, T> result = SynchronizedPutHashBagMultimap.newMultimap();
         this.forEach(new Procedure<T>()
         {
             public void value(T each)
@@ -104,9 +104,9 @@ public abstract class AbstractParallelUnsortedSetIterable<T, B extends UnsortedS
         return result;
     }
 
-    public <V> UnsortedSetMultimap<V, T> groupByEach(final Function<? super T, ? extends Iterable<V>> function)
+    public <V> UnsortedBagMultimap<V, T> groupByEach(final Function<? super T, ? extends Iterable<V>> function)
     {
-        final MutableSetMultimap<V, T> result = SynchronizedPutUnifiedSetMultimap.newMultimap();
+        final MutableBagMultimap<V, T> result = SynchronizedPutHashBagMultimap.newMultimap();
         this.forEach(new Procedure<T>()
         {
             public void value(T each)

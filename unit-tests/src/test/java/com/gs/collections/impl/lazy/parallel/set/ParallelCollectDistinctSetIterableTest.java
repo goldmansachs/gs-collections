@@ -18,9 +18,8 @@ package com.gs.collections.impl.lazy.parallel.set;
 
 import com.gs.collections.api.ParallelIterable;
 import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.lazy.parallel.AbstractParallelIterableTestCase;
@@ -28,7 +27,7 @@ import com.gs.collections.impl.set.mutable.UnifiedSet;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class ParallelCollectSetIterableTest extends AbstractParallelIterableTestCase
+public class ParallelCollectDistinctSetIterableTest extends AbstractParallelIterableTestCase
 {
     @Override
     protected ParallelIterable<Integer> classUnderTest()
@@ -41,19 +40,20 @@ public class ParallelCollectSetIterableTest extends AbstractParallelIterableTest
                     {
                         return aDouble.intValue();
                     }
-                });
+                })
+                .asUnique();
     }
 
     @Override
-    protected MutableBag<Integer> getExpected()
+    protected MutableSet<Integer> getExpected()
     {
-        return HashBag.newBagWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4);
+        return UnifiedSet.newSetWith(1, 2, 3, 4);
     }
 
     @Override
     protected <T> RichIterable<T> getActual(ParallelIterable<T> actual)
     {
-        return actual.toBag();
+        return actual.toSet();
     }
 
     @Override
@@ -75,7 +75,7 @@ public class ParallelCollectSetIterableTest extends AbstractParallelIterableTest
         };
 
         Assert.assertEquals(
-                this.getExpected().toBag().groupBy(isOddFunction),
+                this.getExpected().toSet().groupBy(isOddFunction),
                 this.classUnderTest().groupBy(isOddFunction));
     }
 
@@ -84,7 +84,7 @@ public class ParallelCollectSetIterableTest extends AbstractParallelIterableTest
     public void groupByEach()
     {
         Assert.assertEquals(
-                this.getExpected().toBag().groupByEach(new NegativeIntervalFunction()),
+                this.getExpected().toSet().groupByEach(new NegativeIntervalFunction()),
                 this.classUnderTest().groupByEach(new NegativeIntervalFunction()));
     }
 }

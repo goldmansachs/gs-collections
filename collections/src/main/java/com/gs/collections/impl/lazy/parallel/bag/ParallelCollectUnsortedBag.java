@@ -30,25 +30,25 @@ import com.gs.collections.impl.block.factory.Predicates;
 @Beta
 class ParallelCollectUnsortedBag<T, V> extends AbstractParallelUnsortedBag<V, UnsortedBagBatch<V>>
 {
-    private final AbstractParallelUnsortedBag<T, ? extends UnsortedBagBatch<T>> parallelUnsortedBag;
+    private final AbstractParallelUnsortedBag<T, ? extends UnsortedBagBatch<T>> parallelIterable;
     private final Function<? super T, ? extends V> function;
 
-    ParallelCollectUnsortedBag(AbstractParallelUnsortedBag<T, ? extends UnsortedBagBatch<T>> parallelUnsortedBag, Function<? super T, ? extends V> function)
+    ParallelCollectUnsortedBag(AbstractParallelUnsortedBag<T, ? extends UnsortedBagBatch<T>> parallelIterable, Function<? super T, ? extends V> function)
     {
-        this.parallelUnsortedBag = parallelUnsortedBag;
+        this.parallelIterable = parallelIterable;
         this.function = function;
     }
 
     @Override
     public ExecutorService getExecutorService()
     {
-        return this.parallelUnsortedBag.getExecutorService();
+        return this.parallelIterable.getExecutorService();
     }
 
     @Override
     public LazyIterable<UnsortedBagBatch<V>> split()
     {
-        return this.parallelUnsortedBag.split().collect(new Function<UnsortedBagBatch<T>, UnsortedBagBatch<V>>()
+        return this.parallelIterable.split().collect(new Function<UnsortedBagBatch<T>, UnsortedBagBatch<V>>()
         {
             public UnsortedBagBatch<V> valueOf(UnsortedBagBatch<T> eachBatch)
             {
@@ -59,12 +59,12 @@ class ParallelCollectUnsortedBag<T, V> extends AbstractParallelUnsortedBag<V, Un
 
     public void forEach(Procedure<? super V> procedure)
     {
-        this.parallelUnsortedBag.forEach(Functions.bind(procedure, this.function));
+        this.parallelIterable.forEach(Functions.bind(procedure, this.function));
     }
 
     public void forEachWithOccurrences(final ObjectIntProcedure<? super V> procedure)
     {
-        this.parallelUnsortedBag.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        this.parallelIterable.forEachWithOccurrences(new ObjectIntProcedure<T>()
         {
             public void value(T each, int parameter)
             {
@@ -73,22 +73,19 @@ class ParallelCollectUnsortedBag<T, V> extends AbstractParallelUnsortedBag<V, Un
         });
     }
 
-    @Override
     public boolean anySatisfy(Predicate<? super V> predicate)
     {
-        return this.parallelUnsortedBag.anySatisfy(Predicates.attributePredicate(this.function, predicate));
+        return this.parallelIterable.anySatisfy(Predicates.attributePredicate(this.function, predicate));
     }
 
-    @Override
     public boolean allSatisfy(Predicate<? super V> predicate)
     {
-        return this.parallelUnsortedBag.allSatisfy(Predicates.attributePredicate(this.function, predicate));
+        return this.parallelIterable.allSatisfy(Predicates.attributePredicate(this.function, predicate));
     }
 
-    @Override
     public V detect(Predicate<? super V> predicate)
     {
-        T resultItem = this.parallelUnsortedBag.detect(Predicates.attributePredicate(this.function, predicate));
+        T resultItem = this.parallelIterable.detect(Predicates.attributePredicate(this.function, predicate));
         return resultItem == null ? null : this.function.valueOf(resultItem);
     }
 }

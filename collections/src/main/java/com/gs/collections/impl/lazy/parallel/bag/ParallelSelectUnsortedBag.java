@@ -30,23 +30,23 @@ import com.gs.collections.impl.block.procedure.IfProcedure;
 @Beta
 class ParallelSelectUnsortedBag<T> extends AbstractParallelUnsortedBag<T, UnsortedBagBatch<T>>
 {
-    private final AbstractParallelUnsortedBag<T, ? extends UnsortedBagBatch<T>> parallelUnsortedBag;
+    private final AbstractParallelUnsortedBag<T, ? extends UnsortedBagBatch<T>> parallelIterable;
     private final Predicate<? super T> predicate;
 
-    ParallelSelectUnsortedBag(AbstractParallelUnsortedBag<T, ? extends UnsortedBagBatch<T>> parallelUnsortedBag, Predicate<? super T> predicate)
+    ParallelSelectUnsortedBag(AbstractParallelUnsortedBag<T, ? extends UnsortedBagBatch<T>> parallelIterable, Predicate<? super T> predicate)
     {
-        this.parallelUnsortedBag = parallelUnsortedBag;
+        this.parallelIterable = parallelIterable;
         this.predicate = predicate;
     }
 
     public void forEach(Procedure<? super T> procedure)
     {
-        this.parallelUnsortedBag.forEach(new IfProcedure<T>(this.predicate, procedure));
+        this.parallelIterable.forEach(new IfProcedure<T>(this.predicate, procedure));
     }
 
     public void forEachWithOccurrences(final ObjectIntProcedure<? super T> procedure)
     {
-        this.parallelUnsortedBag.forEachWithOccurrences(new ObjectIntProcedure<T>()
+        this.parallelIterable.forEachWithOccurrences(new ObjectIntProcedure<T>()
         {
             public void value(T each, int parameter)
             {
@@ -60,24 +60,24 @@ class ParallelSelectUnsortedBag<T> extends AbstractParallelUnsortedBag<T, Unsort
 
     public boolean anySatisfy(Predicate<? super T> predicate)
     {
-        return this.parallelUnsortedBag.anySatisfy(Predicates.and(this.predicate, predicate));
+        return this.parallelIterable.anySatisfy(Predicates.and(this.predicate, predicate));
     }
 
     public boolean allSatisfy(Predicate<? super T> predicate)
     {
-        return this.parallelUnsortedBag.allSatisfy(new SelectUnsortedBagAllSatisfyPredicate<T>(this.predicate, predicate));
+        return this.parallelIterable.allSatisfy(new SelectAllSatisfyPredicate<T>(this.predicate, predicate));
     }
 
     @Override
     public ExecutorService getExecutorService()
     {
-        return this.parallelUnsortedBag.getExecutorService();
+        return this.parallelIterable.getExecutorService();
     }
 
     @Override
     public LazyIterable<UnsortedBagBatch<T>> split()
     {
-        return this.parallelUnsortedBag.split().collect(new Function<UnsortedBagBatch<T>, UnsortedBagBatch<T>>()
+        return this.parallelIterable.split().collect(new Function<UnsortedBagBatch<T>, UnsortedBagBatch<T>>()
         {
             public UnsortedBagBatch<T> valueOf(UnsortedBagBatch<T> eachBatch)
             {
@@ -88,15 +88,15 @@ class ParallelSelectUnsortedBag<T> extends AbstractParallelUnsortedBag<T, Unsort
 
     public T detect(Predicate<? super T> predicate)
     {
-        return this.parallelUnsortedBag.detect(Predicates.and(this.predicate, predicate));
+        return this.parallelIterable.detect(Predicates.and(this.predicate, predicate));
     }
 
-    private static final class SelectUnsortedBagAllSatisfyPredicate<T> implements Predicate<T>
+    private static final class SelectAllSatisfyPredicate<T> implements Predicate<T>
     {
         private final Predicate<? super T> left;
         private final Predicate<? super T> right;
 
-        private SelectUnsortedBagAllSatisfyPredicate(Predicate<? super T> left, Predicate<? super T> right)
+        private SelectAllSatisfyPredicate(Predicate<? super T> left, Predicate<? super T> right)
         {
             this.left = left;
             this.right = right;

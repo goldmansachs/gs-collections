@@ -25,58 +25,58 @@ import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Predicates;
+import com.gs.collections.impl.lazy.parallel.AbstractParallelIterable;
+import com.gs.collections.impl.lazy.parallel.AbstractParallelIterableImpl;
+import com.gs.collections.impl.lazy.parallel.Batch;
 
 @Beta
-class ParallelCollectUnsortedSetIterable<T, V> extends AbstractParallelUnsortedSetIterable<V, UnsortedSetBatch<V>>
+public class ParallelCollectIterable<T, V> extends AbstractParallelIterableImpl<V, Batch<V>>
 {
-    private final AbstractParallelUnsortedSetIterable<T, ? extends UnsortedSetBatch<T>> parallelSetIterable;
+    private final AbstractParallelIterable<T, ? extends Batch<T>> parallelIterable;
     private final Function<? super T, ? extends V> function;
 
-    ParallelCollectUnsortedSetIterable(AbstractParallelUnsortedSetIterable<T, ? extends UnsortedSetBatch<T>> parallelSetIterable, Function<? super T, ? extends V> function)
+    public ParallelCollectIterable(AbstractParallelIterable<T, ? extends Batch<T>> parallelIterable, Function<? super T, ? extends V> function)
     {
-        this.parallelSetIterable = parallelSetIterable;
+        this.parallelIterable = parallelIterable;
         this.function = function;
     }
 
     @Override
     public ExecutorService getExecutorService()
     {
-        return this.parallelSetIterable.getExecutorService();
+        return this.parallelIterable.getExecutorService();
     }
 
     @Override
-    public LazyIterable<UnsortedSetBatch<V>> split()
+    public LazyIterable<Batch<V>> split()
     {
-        return this.parallelSetIterable.split().collect(new Function<UnsortedSetBatch<T>, UnsortedSetBatch<V>>()
+        return this.parallelIterable.split().collect(new Function<Batch<T>, Batch<V>>()
         {
-            public UnsortedSetBatch<V> valueOf(UnsortedSetBatch<T> eachBatch)
+            public Batch<V> valueOf(Batch<T> eachBatch)
             {
-                return eachBatch.collect(ParallelCollectUnsortedSetIterable.this.function);
+                return eachBatch.collect(ParallelCollectIterable.this.function);
             }
         });
     }
 
     public void forEach(Procedure<? super V> procedure)
     {
-        this.parallelSetIterable.forEach(Functions.bind(procedure, this.function));
+        this.parallelIterable.forEach(Functions.bind(procedure, this.function));
     }
 
-    @Override
     public boolean anySatisfy(Predicate<? super V> predicate)
     {
-        return this.parallelSetIterable.anySatisfy(Predicates.attributePredicate(this.function, predicate));
+        return this.parallelIterable.anySatisfy(Predicates.attributePredicate(this.function, predicate));
     }
 
-    @Override
     public boolean allSatisfy(Predicate<? super V> predicate)
     {
-        return this.parallelSetIterable.allSatisfy(Predicates.attributePredicate(this.function, predicate));
+        return this.parallelIterable.allSatisfy(Predicates.attributePredicate(this.function, predicate));
     }
 
-    @Override
     public V detect(Predicate<? super V> predicate)
     {
-        T resultItem = this.parallelSetIterable.detect(Predicates.attributePredicate(this.function, predicate));
+        T resultItem = this.parallelIterable.detect(Predicates.attributePredicate(this.function, predicate));
         return resultItem == null ? null : this.function.valueOf(resultItem);
     }
 }

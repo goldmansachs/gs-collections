@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1333,6 +1333,12 @@ public abstract class Predicates<T>
         public boolean accept(T each)
         {
             return this.predicate.accept(each, this.parameter);
+        }
+
+        @Override
+        public String toString()
+        {
+            return "Predicates.bind(" + this.predicate + ", " + this.parameter + ")";
         }
     }
 }

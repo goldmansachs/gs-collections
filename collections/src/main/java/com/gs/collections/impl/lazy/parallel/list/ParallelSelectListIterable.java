@@ -29,25 +29,25 @@ import com.gs.collections.impl.block.procedure.IfProcedure;
 @Beta
 class ParallelSelectListIterable<T> extends AbstractParallelListIterable<T, ListBatch<T>>
 {
-    private final AbstractParallelListIterable<T, ? extends ListBatch<T>> parallelListIterable;
+    private final AbstractParallelListIterable<T, ? extends ListBatch<T>> parallelIterable;
     private final Predicate<? super T> predicate;
 
-    ParallelSelectListIterable(AbstractParallelListIterable<T, ? extends ListBatch<T>> parallelListIterable, Predicate<? super T> predicate)
+    ParallelSelectListIterable(AbstractParallelListIterable<T, ? extends ListBatch<T>> parallelIterable, Predicate<? super T> predicate)
     {
-        this.parallelListIterable = parallelListIterable;
+        this.parallelIterable = parallelIterable;
         this.predicate = predicate;
     }
 
     @Override
     public ExecutorService getExecutorService()
     {
-        return this.parallelListIterable.getExecutorService();
+        return this.parallelIterable.getExecutorService();
     }
 
     @Override
     public LazyIterable<ListBatch<T>> split()
     {
-        return this.parallelListIterable.split().collect(new Function<ListBatch<T>, ListBatch<T>>()
+        return this.parallelIterable.split().collect(new Function<ListBatch<T>, ListBatch<T>>()
         {
             public ListBatch<T> valueOf(ListBatch<T> eachBatch)
             {
@@ -58,33 +58,30 @@ class ParallelSelectListIterable<T> extends AbstractParallelListIterable<T, List
 
     public void forEach(Procedure<? super T> procedure)
     {
-        this.parallelListIterable.forEach(new IfProcedure<T>(this.predicate, procedure));
+        this.parallelIterable.forEach(new IfProcedure<T>(this.predicate, procedure));
     }
 
-    @Override
     public boolean anySatisfy(Predicate<? super T> predicate)
     {
-        return this.parallelListIterable.anySatisfy(Predicates.and(this.predicate, predicate));
+        return this.parallelIterable.anySatisfy(Predicates.and(this.predicate, predicate));
     }
 
-    @Override
     public boolean allSatisfy(Predicate<? super T> predicate)
     {
-        return this.parallelListIterable.allSatisfy(new SelectListAllSatisfyPredicate<T>(this.predicate, predicate));
+        return this.parallelIterable.allSatisfy(new SelectAllSatisfyPredicate<T>(this.predicate, predicate));
     }
 
-    @Override
     public T detect(Predicate<? super T> predicate)
     {
-        return this.parallelListIterable.detect(Predicates.and(this.predicate, predicate));
+        return this.parallelIterable.detect(Predicates.and(this.predicate, predicate));
     }
 
-    private static final class SelectListAllSatisfyPredicate<T> implements Predicate<T>
+    private static final class SelectAllSatisfyPredicate<T> implements Predicate<T>
     {
         private final Predicate<? super T> left;
         private final Predicate<? super T> right;
 
-        private SelectListAllSatisfyPredicate(Predicate<? super T> left, Predicate<? super T> right)
+        private SelectAllSatisfyPredicate(Predicate<? super T> left, Predicate<? super T> right)
         {
             this.left = left;
             this.right = right;
