@@ -39,7 +39,7 @@ public final class HashingStrategies
         return new NullSafeHashingStrategy<T>(nonNullSafeStrategy);
     }
 
-    public static <T, V> HashingStrategy<T> fromFunction(Function<T, V> function)
+    public static <T, V> HashingStrategy<T> fromFunction(Function<? super T, ? extends V> function)
     {
         return new FunctionHashingStrategy<T, V>(function);
     }
@@ -57,6 +57,21 @@ public final class HashingStrategies
         }
 
         return new ChainedHashingStrategy<T>(hashingStrategies);
+    }
+
+    public static <T, V1, V2> HashingStrategy<T> fromFunctions(Function<? super T, ? extends V1> one, Function<? super T, ? extends V2> two)
+    {
+        return HashingStrategies.chain(
+                HashingStrategies.fromFunction(one),
+                HashingStrategies.fromFunction(two));
+    }
+
+    public static <T, V1, V2, V3> HashingStrategy<T> fromFunctions(Function<? super T, ? extends V1> one, Function<? super T, ? extends V2> two, Function<? super T, ? extends V3> three)
+    {
+        return HashingStrategies.chain(
+                HashingStrategies.fromFunction(one),
+                HashingStrategies.fromFunction(two),
+                HashingStrategies.fromFunction(three));
     }
 
     private static class DefaultStrategy implements HashingStrategy<Object>
@@ -100,9 +115,9 @@ public final class HashingStrategies
     {
         private static final long serialVersionUID = 1L;
 
-        private final Function<T, V> function;
+        private final Function<? super T, ? extends V> function;
 
-        private FunctionHashingStrategy(Function<T, V> function)
+        private FunctionHashingStrategy(Function<? super T, ? extends V> function)
         {
             this.function = function;
         }

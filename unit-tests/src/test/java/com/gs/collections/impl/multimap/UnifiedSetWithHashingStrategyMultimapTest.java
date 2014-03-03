@@ -28,13 +28,13 @@ import com.gs.collections.impl.block.factory.HashingStrategies;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.factory.Sets;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
-import com.gs.collections.impl.merge.Person;
 import com.gs.collections.impl.multimap.set.UnifiedSetMultimap;
 import com.gs.collections.impl.multimap.set.strategy.UnifiedSetWithHashingStrategyMultimap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.strategy.mutable.UnifiedSetWithHashingStrategy;
 import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
+import com.gs.collections.impl.test.domain.Person;
 import org.junit.Assert;
 import org.junit.Test;
 

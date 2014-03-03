@@ -231,8 +231,8 @@ public class ComparatorsTest
             }
         });
 
-        Comparator<Person> byName = Comparators.byFunction(Person.FIRST);
-        Comparator<Person> byAge = Comparators.byFunction(Person.AGE);
+        Comparator<Person> byName = Comparators.byFunction(Person.TO_FIRST);
+        Comparator<Person> byAge = Comparators.byFunction(Person.TO_AGE);
 
         Person fred10 = new Person("Fred", "Smith", 10);
         Person jim10 = new Person("Jim", "Smith", 10);
@@ -254,7 +254,7 @@ public class ComparatorsTest
     {
         Person raab = new Person(null, "Raab", 0);
         Person white = new Person(null, "White", 0);
-        Comparator<Person> personComparator = Comparators.fromFunctions(Person.LAST);
+        Comparator<Person> personComparator = Comparators.fromFunctions(Person.TO_LAST);
         Verify.assertNegative(personComparator.compare(raab, white));
         Verify.assertPositive(personComparator.compare(white, raab));
         Verify.assertZero(personComparator.compare(raab, raab));
@@ -266,7 +266,7 @@ public class ComparatorsTest
         Person raab = new Person("Don", "Raab", 0);
         Person white = new Person("Barry", "White", 0);
         Person manilow = new Person("Barry", "Manilow", 0);
-        Comparator<Person> personComparator = Comparators.fromFunctions(Person.FIRST, Person.LAST);
+        Comparator<Person> personComparator = Comparators.fromFunctions(Person.TO_FIRST, Person.TO_LAST);
         Verify.assertPositive(personComparator.compare(raab, white));
         Verify.assertNegative(personComparator.compare(white, raab));
         Verify.assertZero(personComparator.compare(raab, raab));
@@ -281,7 +281,7 @@ public class ComparatorsTest
         Person white = new Person("Barry", "White", 16);
         Person manilow = new Person("Barry", "Manilow", 60);
         Person manilow2 = new Person("Barry", "Manilow", 61);
-        Comparator<Person> personComparator = Comparators.fromFunctions(Person.FIRST, Person.LAST, Person.AGE);
+        Comparator<Person> personComparator = Comparators.fromFunctions(Person.TO_FIRST, Person.TO_LAST, Person.TO_AGE);
         Verify.assertPositive(personComparator.compare(raab, white));
         Verify.assertNegative(personComparator.compare(white, raab));
         Verify.assertZero(personComparator.compare(raab, raab));

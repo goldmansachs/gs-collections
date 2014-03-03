@@ -16,48 +16,100 @@
 
 package com.gs.collections.impl.test.domain;
 
+import java.io.Serializable;
+
 import com.gs.collections.api.block.function.Function;
 
-public final class Person
+public final class Person implements Comparable<Person>, Serializable
 {
-    public static final Function<Person, String> FIRST = new Function<Person, String>()
+    public static final Function<Person, String> TO_FIRST = new Function<Person, String>()
     {
         public String valueOf(Person person)
         {
-            return person.first;
+            return person.firstName;
         }
     };
 
-    public static final Function<Person, String> LAST = new Function<Person, String>()
+    public static final Function<Person, String> TO_LAST = new Function<Person, String>()
     {
         public String valueOf(Person person)
         {
-            return person.last;
+            return person.lastName;
         }
     };
 
-    public static final Function<Person, Integer> AGE = new Function<Person, Integer>()
+    public static final Function<Person, Integer> TO_AGE = new Function<Person, Integer>()
     {
         public Integer valueOf(Person person)
         {
             return person.age;
         }
     };
+    private static final long serialVersionUID = 1L;
 
-    private final String first;
-    private final String last;
+    private final String firstName;
+    private final String lastName;
     private final int age;
 
-    public Person(String first, String last, int age)
+    public Person(String firstName, String lastName)
     {
-        this.first = first;
-        this.last = last;
+        this(firstName, lastName, 100);
+    }
+
+    public Person(String firstName, String lastName, int age)
+    {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.age = age;
     }
 
-    public Person(String first, String last)
+    @Override
+    public boolean equals(Object o)
     {
-        this(first, last, 100);
+        if (this == o)
+        {
+            return true;
+        }
+        if (o == null || this.getClass() != o.getClass())
+        {
+            return false;
+        }
+
+        Person person = (Person) o;
+
+        if (this.age != person.age)
+        {
+            return false;
+        }
+        if (!this.firstName.equals(person.firstName))
+        {
+            return false;
+        }
+        if (!this.lastName.equals(person.lastName))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    @Override
+    public int hashCode()
+    {
+        int result = this.firstName.hashCode();
+        result = 31 * result + this.lastName.hashCode();
+        result = 31 * result + this.age;
+        return result;
+    }
+
+    public int compareTo(Person other)
+    {
+        return this.lastName.compareTo(other.lastName);
+    }
+
+    public String getLastName()
+    {
+        return this.lastName;
     }
 
     @Override
@@ -65,8 +117,8 @@ public final class Person
     {
         StringBuilder sb = new StringBuilder();
         sb.append("Person");
-        sb.append("{first='").append(this.first).append('\'');
-        sb.append(", last='").append(this.last).append('\'');
+        sb.append("{first='").append(this.firstName).append('\'');
+        sb.append(", last='").append(this.lastName).append('\'');
         sb.append(", age=").append(this.age);
         sb.append('}');
         return sb.toString();

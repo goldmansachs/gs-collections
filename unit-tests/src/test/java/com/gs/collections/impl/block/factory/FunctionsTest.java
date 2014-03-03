@@ -593,7 +593,7 @@ public class FunctionsTest
         Person jane = new Person("Jane", "Smith");
         Person johnDoe = new Person("John", "Doe");
         MutableList<Person> people = FastList.newListWith(john, jane, johnDoe);
-        MutableList<Person> sorted = people.sortThisBy(Functions.pair(Person.LAST, Person.FIRST));
+        MutableList<Person> sorted = people.sortThisBy(Functions.pair(Person.TO_LAST, Person.TO_FIRST));
         Assert.assertEquals(FastList.newListWith(johnDoe, jane, john), sorted);
     }
 

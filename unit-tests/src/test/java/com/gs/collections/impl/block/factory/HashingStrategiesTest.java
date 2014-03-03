@@ -17,8 +17,8 @@
 package com.gs.collections.impl.block.factory;
 
 import com.gs.collections.api.block.HashingStrategy;
-import com.gs.collections.impl.merge.Person;
 import com.gs.collections.impl.test.Verify;
+import com.gs.collections.impl.test.domain.Person;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -94,13 +94,39 @@ public class HashingStrategiesTest
         HashingStrategy<Person> chainedHashingStrategy = HashingStrategies.chain(
                 HashingStrategies.fromFunction(Person.TO_FIRST),
                 HashingStrategies.fromFunction(Person.TO_LAST));
-        Assert.assertEquals(john1.hashCode(), chainedHashingStrategy.computeHashCode(john1));
         Assert.assertTrue(chainedHashingStrategy.equals(john1, john2));
 
         HashingStrategy<Person> chainedHashingStrategy2 = HashingStrategies.chain(
                 HashingStrategies.fromFunction(Person.TO_FIRST));
         Assert.assertEquals("John".hashCode(), chainedHashingStrategy2.computeHashCode(john1));
         Assert.assertTrue(chainedHashingStrategy2.equals(john1, john3));
+    }
+
+    @Test
+    public void fromFunctionsTwoArgs()
+    {
+        Person john1 = new Person("John", "Smith");
+        Person john2 = new Person("John", "Smith", 10);
+        Person john3 = new Person("John", "Doe");
+
+        HashingStrategy<Person> chainedHashingStrategy = HashingStrategies.fromFunctions(Person.TO_FIRST, Person.TO_LAST);
+        Assert.assertTrue(chainedHashingStrategy.equals(john1, john2));
+        Assert.assertFalse(chainedHashingStrategy.equals(john1, john3));
+    }
+
+    @Test
+    public void fromFunctionsThreeArgs()
+    {
+        Person john1 = new Person("John", "Smith");
+        Person john2 = new Person("John", "Smith");
+        Person john3 = new Person("John", "Doe");
+        Person john4 = new Person("John", "Smith", 10);
+
+        HashingStrategy<Person> chainedHashingStrategy = HashingStrategies.fromFunctions(Person.TO_FIRST, Person.TO_LAST, Person.TO_AGE);
+        Assert.assertEquals(john1.hashCode(), chainedHashingStrategy.computeHashCode(john1));
+        Assert.assertTrue(chainedHashingStrategy.equals(john1, john2));
+        Assert.assertFalse(chainedHashingStrategy.equals(john1, john3));
+        Assert.assertFalse(chainedHashingStrategy.equals(john1, john4));
     }
 }
 
