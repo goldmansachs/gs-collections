@@ -21,16 +21,8 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.Iterator;
 
-import com.gs.collections.api.BooleanIterable;
-import com.gs.collections.api.ByteIterable;
-import com.gs.collections.api.CharIterable;
-import com.gs.collections.api.DoubleIterable;
-import com.gs.collections.api.FloatIterable;
-import com.gs.collections.api.IntIterable;
 import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.LongIterable;
 import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.ShortIterable;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
@@ -793,27 +785,11 @@ public abstract class SynchronizedMapIterable<K, V>
         }
     }
 
-    public BooleanIterable collectBoolean(BooleanFunction<? super V> booleanFunction)
-    {
-        synchronized (this.lock)
-        {
-            return this.mapIterable.collectBoolean(booleanFunction);
-        }
-    }
-
     public <R extends MutableBooleanCollection> R collectBoolean(BooleanFunction<? super V> booleanFunction, R target)
     {
         synchronized (this.lock)
         {
             return this.mapIterable.collectBoolean(booleanFunction, target);
-        }
-    }
-
-    public ByteIterable collectByte(ByteFunction<? super V> byteFunction)
-    {
-        synchronized (this.lock)
-        {
-            return this.mapIterable.collectByte(byteFunction);
         }
     }
 
@@ -825,27 +801,11 @@ public abstract class SynchronizedMapIterable<K, V>
         }
     }
 
-    public CharIterable collectChar(CharFunction<? super V> charFunction)
-    {
-        synchronized (this.lock)
-        {
-            return this.mapIterable.collectChar(charFunction);
-        }
-    }
-
     public <R extends MutableCharCollection> R collectChar(CharFunction<? super V> charFunction, R target)
     {
         synchronized (this.lock)
         {
             return this.mapIterable.collectChar(charFunction, target);
-        }
-    }
-
-    public DoubleIterable collectDouble(DoubleFunction<? super V> doubleFunction)
-    {
-        synchronized (this.lock)
-        {
-            return this.mapIterable.collectDouble(doubleFunction);
         }
     }
 
@@ -857,27 +817,11 @@ public abstract class SynchronizedMapIterable<K, V>
         }
     }
 
-    public FloatIterable collectFloat(FloatFunction<? super V> floatFunction)
-    {
-        synchronized (this.lock)
-        {
-            return this.mapIterable.collectFloat(floatFunction);
-        }
-    }
-
     public <R extends MutableFloatCollection> R collectFloat(FloatFunction<? super V> floatFunction, R target)
     {
         synchronized (this.lock)
         {
             return this.mapIterable.collectFloat(floatFunction, target);
-        }
-    }
-
-    public IntIterable collectInt(IntFunction<? super V> intFunction)
-    {
-        synchronized (this.lock)
-        {
-            return this.mapIterable.collectInt(intFunction);
         }
     }
 
@@ -889,27 +833,11 @@ public abstract class SynchronizedMapIterable<K, V>
         }
     }
 
-    public LongIterable collectLong(LongFunction<? super V> longFunction)
-    {
-        synchronized (this.lock)
-        {
-            return this.mapIterable.collectLong(longFunction);
-        }
-    }
-
     public <R extends MutableLongCollection> R collectLong(LongFunction<? super V> longFunction, R target)
     {
         synchronized (this.lock)
         {
             return this.mapIterable.collectLong(longFunction, target);
-        }
-    }
-
-    public ShortIterable collectShort(ShortFunction<? super V> shortFunction)
-    {
-        synchronized (this.lock)
-        {
-            return this.mapIterable.collectShort(shortFunction);
         }
     }
 
@@ -920,7 +848,6 @@ public abstract class SynchronizedMapIterable<K, V>
             return this.mapIterable.collectShort(shortFunction, target);
         }
     }
-
 
     public void forEach(Procedure<? super V> procedure)
     {

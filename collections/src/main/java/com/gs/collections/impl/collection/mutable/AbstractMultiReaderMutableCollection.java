@@ -656,38 +656,12 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
-    public MutableBooleanCollection collectBoolean(BooleanFunction<? super T> booleanFunction)
-    {
-        this.acquireReadLock();
-        try
-        {
-            return this.getDelegate().collectBoolean(booleanFunction);
-        }
-        finally
-        {
-            this.unlockReadLock();
-        }
-    }
-
     public <R extends MutableBooleanCollection> R collectBoolean(BooleanFunction<? super T> booleanFunction, R target)
     {
         this.acquireReadLock();
         try
         {
             return this.getDelegate().collectBoolean(booleanFunction, target);
-        }
-        finally
-        {
-            this.unlockReadLock();
-        }
-    }
-
-    public MutableByteCollection collectByte(ByteFunction<? super T> byteFunction)
-    {
-        this.acquireReadLock();
-        try
-        {
-            return this.getDelegate().collectByte(byteFunction);
         }
         finally
         {
@@ -708,38 +682,12 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
-    public MutableCharCollection collectChar(CharFunction<? super T> charFunction)
-    {
-        this.acquireReadLock();
-        try
-        {
-            return this.getDelegate().collectChar(charFunction);
-        }
-        finally
-        {
-            this.unlockReadLock();
-        }
-    }
-
     public <R extends MutableCharCollection> R collectChar(CharFunction<? super T> charFunction, R target)
     {
         this.acquireReadLock();
         try
         {
             return this.getDelegate().collectChar(charFunction, target);
-        }
-        finally
-        {
-            this.unlockReadLock();
-        }
-    }
-
-    public MutableDoubleCollection collectDouble(DoubleFunction<? super T> doubleFunction)
-    {
-        this.acquireReadLock();
-        try
-        {
-            return this.getDelegate().collectDouble(doubleFunction);
         }
         finally
         {
@@ -760,38 +708,12 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
-    public MutableFloatCollection collectFloat(FloatFunction<? super T> floatFunction)
-    {
-        this.acquireReadLock();
-        try
-        {
-            return this.getDelegate().collectFloat(floatFunction);
-        }
-        finally
-        {
-            this.unlockReadLock();
-        }
-    }
-
     public <R extends MutableFloatCollection> R collectFloat(FloatFunction<? super T> floatFunction, R target)
     {
         this.acquireReadLock();
         try
         {
             return this.getDelegate().collectFloat(floatFunction, target);
-        }
-        finally
-        {
-            this.unlockReadLock();
-        }
-    }
-
-    public MutableIntCollection collectInt(IntFunction<? super T> intFunction)
-    {
-        this.acquireReadLock();
-        try
-        {
-            return this.getDelegate().collectInt(intFunction);
         }
         finally
         {
@@ -812,38 +734,12 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
         }
     }
 
-    public MutableLongCollection collectLong(LongFunction<? super T> longFunction)
-    {
-        this.acquireReadLock();
-        try
-        {
-            return this.getDelegate().collectLong(longFunction);
-        }
-        finally
-        {
-            this.unlockReadLock();
-        }
-    }
-
     public <R extends MutableLongCollection> R collectLong(LongFunction<? super T> longFunction, R target)
     {
         this.acquireReadLock();
         try
         {
             return this.getDelegate().collectLong(longFunction, target);
-        }
-        finally
-        {
-            this.unlockReadLock();
-        }
-    }
-
-    public MutableShortCollection collectShort(ShortFunction<? super T> shortFunction)
-    {
-        this.acquireReadLock();
-        try
-        {
-            return this.getDelegate().collectShort(shortFunction);
         }
         finally
         {
@@ -1657,46 +1553,6 @@ public abstract class AbstractMultiReaderMutableCollection<T> implements Mutable
                 R target)
         {
             return this.delegate.collect(function, target);
-        }
-
-        public MutableBooleanCollection collectBoolean(BooleanFunction<? super T> booleanFunction)
-        {
-            return this.delegate.collectBoolean(booleanFunction);
-        }
-
-        public MutableByteCollection collectByte(ByteFunction<? super T> byteFunction)
-        {
-            return this.delegate.collectByte(byteFunction);
-        }
-
-        public MutableCharCollection collectChar(CharFunction<? super T> charFunction)
-        {
-            return this.delegate.collectChar(charFunction);
-        }
-
-        public MutableDoubleCollection collectDouble(DoubleFunction<? super T> doubleFunction)
-        {
-            return this.delegate.collectDouble(doubleFunction);
-        }
-
-        public MutableFloatCollection collectFloat(FloatFunction<? super T> floatFunction)
-        {
-            return this.delegate.collectFloat(floatFunction);
-        }
-
-        public MutableIntCollection collectInt(IntFunction<? super T> intFunction)
-        {
-            return this.delegate.collectInt(intFunction);
-        }
-
-        public MutableLongCollection collectLong(LongFunction<? super T> longFunction)
-        {
-            return this.delegate.collectLong(longFunction);
-        }
-
-        public MutableShortCollection collectShort(ShortFunction<? super T> shortFunction)
-        {
-            return this.delegate.collectShort(shortFunction);
         }
 
         public <V, R extends Collection<V>> R flatCollect(

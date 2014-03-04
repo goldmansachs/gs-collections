@@ -21,15 +21,8 @@ import java.util.Comparator;
 import java.util.Map;
 
 import com.gs.collections.api.BooleanIterable;
-import com.gs.collections.api.ByteIterable;
-import com.gs.collections.api.CharIterable;
-import com.gs.collections.api.DoubleIterable;
-import com.gs.collections.api.FloatIterable;
-import com.gs.collections.api.IntIterable;
 import com.gs.collections.api.LazyIterable;
-import com.gs.collections.api.LongIterable;
 import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.ShortIterable;
 import com.gs.collections.api.bag.MutableBag;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
@@ -302,19 +295,9 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
         return this.valuesView().collectBoolean(booleanFunction, target);
     }
 
-    public ByteIterable collectByte(ByteFunction<? super V> byteFunction)
-    {
-        return this.valuesView().collectByte(byteFunction);
-    }
-
     public <R extends MutableByteCollection> R collectByte(ByteFunction<? super V> byteFunction, R target)
     {
         return this.valuesView().collectByte(byteFunction, target);
-    }
-
-    public CharIterable collectChar(CharFunction<? super V> charFunction)
-    {
-        return this.valuesView().collectChar(charFunction);
     }
 
     public <R extends MutableCharCollection> R collectChar(CharFunction<? super V> charFunction, R target)
@@ -322,19 +305,9 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
         return this.valuesView().collectChar(charFunction, target);
     }
 
-    public DoubleIterable collectDouble(DoubleFunction<? super V> doubleFunction)
-    {
-        return this.valuesView().collectDouble(doubleFunction);
-    }
-
     public <R extends MutableDoubleCollection> R collectDouble(DoubleFunction<? super V> doubleFunction, R target)
     {
         return this.valuesView().collectDouble(doubleFunction, target);
-    }
-
-    public FloatIterable collectFloat(FloatFunction<? super V> floatFunction)
-    {
-        return this.valuesView().collectFloat(floatFunction);
     }
 
     public <R extends MutableFloatCollection> R collectFloat(FloatFunction<? super V> floatFunction, R target)
@@ -342,19 +315,9 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
         return this.valuesView().collectFloat(floatFunction, target);
     }
 
-    public IntIterable collectInt(IntFunction<? super V> intFunction)
-    {
-        return this.valuesView().collectInt(intFunction);
-    }
-
     public <R extends MutableIntCollection> R collectInt(IntFunction<? super V> intFunction, R target)
     {
         return this.valuesView().collectInt(intFunction, target);
-    }
-
-    public LongIterable collectLong(LongFunction<? super V> longFunction)
-    {
-        return this.valuesView().collectLong(longFunction);
     }
 
     public <R extends MutableLongCollection> R collectLong(LongFunction<? super V> longFunction, R target)
@@ -362,25 +325,14 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
         return this.valuesView().collectLong(longFunction, target);
     }
 
-    public ShortIterable collectShort(ShortFunction<? super V> shortFunction)
-    {
-        return this.valuesView().collectShort(shortFunction);
-    }
-
     public <R extends MutableShortCollection> R collectShort(ShortFunction<? super V> shortFunction, R target)
     {
         return this.valuesView().collectShort(shortFunction, target);
     }
 
-
     public <R, C extends Collection<R>> C collect(Function<? super V, ? extends R> function, C target)
     {
         return this.valuesView().collect(function, target);
-    }
-
-    public <R> RichIterable<R> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function)
-    {
-        return this.valuesView().collectIf(predicate, function);
     }
 
     public <R, C extends Collection<R>> C collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function, C target)
@@ -446,11 +398,6 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
     public <P> V detectWithIfNone(Predicate2<? super V, ? super P> predicate, P parameter, Function0<? extends V> function)
     {
         return this.valuesView().detectWithIfNone(predicate, parameter, function);
-    }
-
-    public <R> RichIterable<R> flatCollect(Function<? super V, ? extends Iterable<R>> function)
-    {
-        return this.valuesView().flatCollect(function);
     }
 
     public <R, C extends Collection<R>> C flatCollect(Function<? super V, ? extends Iterable<R>> function, C target)
@@ -568,11 +515,6 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
         return this.valuesView().minBy(function);
     }
 
-    public RichIterable<V> reject(Predicate<? super V> predicate)
-    {
-        return this.valuesView().reject(predicate);
-    }
-
     public <P> RichIterable<V> rejectWith(Predicate2<? super V, ? super P> predicate, P parameter)
     {
         return this.valuesView().rejectWith(predicate, parameter);
@@ -586,11 +528,6 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
     public <P, R extends Collection<V>> R rejectWith(Predicate2<? super V, ? super P> predicate, P parameter, R targetCollection)
     {
         return this.valuesView().rejectWith(predicate, parameter, targetCollection);
-    }
-
-    public RichIterable<V> select(Predicate<? super V> predicate)
-    {
-        return this.valuesView().select(predicate);
     }
 
     public <P> RichIterable<V> selectWith(Predicate2<? super V, ? super P> predicate, P parameter)
@@ -618,19 +555,9 @@ public abstract class AbstractMapIterable<K, V> implements MapIterable<K, V>
         return this.valuesView().toArray(a);
     }
 
-    public <S> RichIterable<Pair<V, S>> zip(Iterable<S> that)
-    {
-        return this.valuesView().zip(that);
-    }
-
     public <S, R extends Collection<Pair<V, S>>> R zip(Iterable<S> that, R target)
     {
         return this.valuesView().zip(that, target);
-    }
-
-    public RichIterable<Pair<V, Integer>> zipWithIndex()
-    {
-        return this.valuesView().zipWithIndex();
     }
 
     public <R extends Collection<Pair<V, Integer>>> R zipWithIndex(R target)
