@@ -69,6 +69,12 @@ public class UnifiedMapTest extends UnifiedMapTestCase
         return UnifiedMap.newWithKeysValues(key1, value1, key2, value2, key3, value3, key4, value4);
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void newMapWithNegativeInitialCapacity()
+    {
+        new UnifiedMap<Integer, Integer>(-1, 0.5f);
+    }
+
     @Test
     public void constructorOfPairs()
     {
@@ -260,6 +266,134 @@ public class UnifiedMapTest extends UnifiedMapTestCase
     }
 
     @Test
+    public void batchIterable_forEach()
+    {
+        UnifiedMap<String, Integer> map = UnifiedMap.<String, Integer>newMap(5).withKeysValues("1", 1, "2", 2, "3", 3, "4", 4);
+        this.batchIterable_forEach(map, 10);
+
+        UnifiedMap<Integer, Integer> collisions = UnifiedMap.<Integer, Integer>newMap(5).withKeysValues(COLLISION_1, 1, COLLISION_2, 2, COLLISION_3, 3, 1, 4).withKeysValues(2, 5, 3, 6);
+        this.batchIterable_forEach(collisions, 21);
+
+        UnifiedMap<Integer, Integer> nulls = UnifiedMap.<Integer, Integer>newMap(100).withKeysValues(null, 10, 1, null, 2, 11, 3, 12).withKeysValues(4, null, 5, null);
+        this.batchIterable_forEachNullHandling(nulls, 33);
+
+        this.batchIterable_forEachEmptyBatchIterable(UnifiedMap.<Integer, Integer>newMap());
+    }
+
+    @Test
+    public void batchIterable_forEachKey()
+    {
+        Set<Integer> keys = UnifiedMap.<Integer, String>newMap(5).withKeysValues(1, "1", 2, "2", 3, "3", 4, "4").keySet();
+        this.batchIterable_forEach((BatchIterable<Integer>) keys, 10);
+
+        Set<Integer> collisions = UnifiedMap.<Integer, Integer>newMap(5).withKeysValues(COLLISION_1, 1, COLLISION_2, 2, COLLISION_3, 3, 1, 4).withKeysValues(2, 5, 3, 6).keySet();
+        this.batchIterable_forEach((BatchIterable<Integer>) collisions, 57);
+
+        Set<Integer> nulls = UnifiedMap.<Integer, Integer>newMap(100).withKeysValues(null, 10, 1, null, 2, 11, 3, 12).withKeysValues(4, null, 5, null).keySet();
+        this.batchIterable_forEachNullHandling((BatchIterable<Integer>) nulls, 15);
+
+        this.batchIterable_forEachEmptyBatchIterable((BatchIterable<Integer>) UnifiedMap.<Integer, Integer>newMap().keySet());
+    }
+
+    @Test
+    public void batchIterable_forEachValue()
+    {
+        Collection<Integer> values = UnifiedMap.<String, Integer>newMap(5).withKeysValues("1", 1, "2", 2, "3", 3, "4", 4).values();
+        this.batchIterable_forEach((BatchIterable<Integer>) values, 10);
+
+        Collection<Integer> collisions = UnifiedMap.<Integer, Integer>newMap(5).withKeysValues(COLLISION_1, 1, COLLISION_2, 2, COLLISION_3, 3, 1, 4).withKeysValues(2, 5, 3, 6).values();
+        this.batchIterable_forEach((BatchIterable<Integer>) collisions, 21);
+
+        Collection<Integer> nulls = UnifiedMap.<Integer, Integer>newMap(100).withKeysValues(null, 10, 1, null, 2, 11, 3, 12).withKeysValues(4, null, 5, null).values();
+        this.batchIterable_forEachNullHandling((BatchIterable<Integer>) nulls, 33);
+
+        this.batchIterable_forEachEmptyBatchIterable((BatchIterable<Integer>) UnifiedMap.<Integer, Integer>newMap().values());
+    }
+
+    @Test
+    public void batchIterable_forEachEntry()
+    {
+        BatchIterable<Map.Entry<Integer, Integer>> entries =
+                (BatchIterable<Map.Entry<Integer, Integer>>) UnifiedMap.newWithKeysValues(1, 1, 2, 2, 3, 3, 4, 4).entrySet();
+        Sum sum = new IntegerSum(0);
+        entries.forEach(new EntrySumProcedure(sum));
+        Assert.assertEquals(20, sum.getValue());
+    }
+
+    @Test
+    public void batchIterable_forEachEntry_chains()
+    {
+        BatchIterable<Map.Entry<Integer, Integer>> collisions =
+                (BatchIterable<Map.Entry<Integer, Integer>>) UnifiedMap.<Integer, Integer>newMap(5).withKeysValues(
+                        COLLISION_1, 1, COLLISION_2, 2, COLLISION_3, 3, 1, 4).withKeysValues(2, 5, 3, 6).entrySet();
+
+        Sum sum = new IntegerSum(0);
+        collisions.forEach(new EntrySumProcedure(sum));
+        Assert.assertEquals(78, sum.getValue());
+    }
+
+    @Test
+    public void batchIterable_forEachEntry_null_handling()
+    {
+        //Testing batchForEach handling null keys and null values
+        final Sum sum = new IntegerSum(0);
+        BatchIterable<Map.Entry<Integer, Integer>> nulls =
+                (BatchIterable<Map.Entry<Integer, Integer>>) UnifiedMap.<Integer, Integer>newMap(100).withKeysValues(
+                        null, 10, 1, null, 2, 11, 3, 12).withKeysValues(4, null, 5, null).entrySet();
+
+        nulls.forEach(new Procedure<Map.Entry<Integer, Integer>>()
+        {
+            public void value(Map.Entry<Integer, Integer> each)
+            {
+                sum.add(each.getKey() == null ? 0 : each.getKey());
+                sum.add(each.getValue() == null ? 0 : each.getValue());
+            }
+        });
+
+        Assert.assertEquals(48, sum.getValue());
+    }
+
+    @Test
+    public void batchIterable_forEachEntry_emptySet()
+    {
+        //Test forEach on empty set, it should simply do nothing and not throw any exceptions
+        Sum sum = new IntegerSum(0);
+        BatchIterable<Map.Entry<Integer, Integer>> empty =
+                (BatchIterable<Map.Entry<Integer, Integer>>) UnifiedMap.newMap().entrySet();
+        empty.forEach(new EntrySumProcedure(sum));
+        Assert.assertEquals(0, sum.getValue());
+    }
+
+    private void batchIterable_forEach(BatchIterable<Integer> batchIterable, int expectedValue)
+    {
+        IntegerSum sum = new IntegerSum(0);
+        batchIterable.forEach(new SumProcedure<Integer>(sum));
+        Assert.assertEquals(expectedValue, sum.getValue());
+    }
+
+    private void batchIterable_forEachNullHandling(BatchIterable<Integer> batchIterable, int expectedValue)
+    {
+        //Testing forEach handling null keys and null values
+        final Sum sum = new IntegerSum(0);
+        batchIterable.forEach(new Procedure<Integer>()
+        {
+            public void value(Integer each)
+            {
+                sum.add(each == null ? 0 : each);
+            }
+        });
+        Assert.assertEquals(expectedValue, sum.getValue());
+    }
+
+    private void batchIterable_forEachEmptyBatchIterable(BatchIterable<Integer> batchIterable)
+    {
+        //Test forEach on empty set, it should simply do nothing and not throw any exceptions
+        Sum sum = new IntegerSum(0);
+        batchIterable.batchForEach(new SumProcedure<Integer>(sum), 0, batchIterable.getBatchCount(1));
+        Assert.assertEquals(0, sum.getValue());
+    }
+
+    @Test
     public void getMapMemoryUsedInWords()
     {
         UnifiedMap<String, String> map = UnifiedMap.newMap();
@@ -304,6 +438,22 @@ public class UnifiedMapTest extends UnifiedMapTestCase
         });
 
         Assert.assertEquals(this.mapWithCollisionsOfSize(5), map);
+
+        //Test getting element present in chain
+        UnifiedMap<Integer, Integer> map2 = UnifiedMap.newWithKeysValues(COLLISION_1, 1, COLLISION_2, 2, COLLISION_3, 3, COLLISION_4, 4);
+        Assert.assertEquals(Integer.valueOf(3), map2.getIfAbsentPut(COLLISION_3, new Function0<Integer>()
+        {
+            public Integer value()
+            {
+                Assert.fail();
+                return null;
+            }
+        }));
+
+        //Test rehashing while creating a new chained key
+        UnifiedMap<Integer, Integer> map3 = UnifiedMap.<Integer, Integer>newMap(2, 0.75f).withKeysValues(1, COLLISION_1, 2, COLLISION_2, 3, COLLISION_3);
+        Assert.assertEquals(COLLISION_4, map3.getIfAbsentPut(4, new PassThruFunction0<Integer>(COLLISION_4)));
+        Assert.assertNull(map3.getIfAbsentPut(5, new PassThruFunction0<Integer>(null)));
     }
 
     @Override
