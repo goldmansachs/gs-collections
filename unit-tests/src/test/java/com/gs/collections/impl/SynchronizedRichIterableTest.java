@@ -19,11 +19,15 @@ package com.gs.collections.impl;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.multimap.Multimap;
+import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.partition.PartitionIterable;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.lazy.LazyIterableAdapter;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.multimap.list.FastListMultimap;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -79,5 +83,38 @@ public class SynchronizedRichIterableTest extends AbstractRichIterableTestCase
 
         Assert.assertEquals(FastList.newListWith(1, 3, 5, 7), multimap.get(Boolean.TRUE));
         Assert.assertEquals(FastList.newListWith(2, 4, 6), multimap.get(Boolean.FALSE));
+    }
+
+    @Test
+    public void groupByWithTarget()
+    {
+        RichIterable<Integer> list = this.newWith(1, 2, 3, 4, 5, 6, 7);
+        MutableMultimap<Boolean, Integer> multimap = new FastListMultimap<Boolean, Integer>();
+        list.groupBy(new Function<Integer, Boolean>()
+        {
+            public Boolean valueOf(Integer object)
+            {
+                return IntegerPredicates.isOdd().accept(object);
+            }
+        }, multimap);
+
+        Assert.assertEquals(FastList.newListWith(1, 3, 5, 7), multimap.get(Boolean.TRUE));
+        Assert.assertEquals(FastList.newListWith(2, 4, 6), multimap.get(Boolean.FALSE));
+    }
+
+    @Test
+    public void asLazy()
+    {
+        RichIterable<Integer> integers = this.newWith(-3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9).asLazy();
+        Verify.assertInstanceOf(LazyIterableAdapter.class, integers);
+        PartitionIterable<Integer> result = integers.partitionWith(Predicates2.in(), FastList.newListWith(-2, 0, 2, 4, 6, 8));
+        Assert.assertEquals(iList(-2, 0, 2, 4, 6, 8), result.getSelected());
+        Assert.assertEquals(iList(-3, -1, 1, 3, 5, 7, 9), result.getRejected());
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void nullCheck()
+    {
+        SynchronizedRichIterable.of(null, null);
     }
 }

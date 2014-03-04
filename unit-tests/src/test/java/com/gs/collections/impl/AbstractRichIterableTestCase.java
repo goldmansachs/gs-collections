@@ -120,6 +120,15 @@ public abstract class AbstractRichIterableTestCase
     }
 
     @Test
+    public void contains()
+    {
+        RichIterable<Integer> collection = this.newWith(1, 2, 3, 4);
+        Assert.assertTrue(collection.contains(1));
+        Assert.assertTrue(collection.contains(4));
+        Assert.assertFalse(collection.contains(5));
+    }
+
+    @Test
     public void containsAllIterable()
     {
         RichIterable<Integer> collection = this.newWith(1, 2, 3, 4);
@@ -133,6 +142,14 @@ public abstract class AbstractRichIterableTestCase
         RichIterable<Integer> collection = this.newWith(1, 2, 3, 4);
         Assert.assertTrue(collection.containsAllArguments(1, 2));
         Assert.assertFalse(collection.containsAllArguments(1, 5));
+    }
+
+    @Test
+    public void containsAllCollection()
+    {
+        RichIterable<Integer> collection = this.newWith(1, 2, 3, 4);
+        Assert.assertTrue(collection.containsAll(FastList.newListWith(1, 2)));
+        Assert.assertFalse(collection.containsAll(FastList.newListWith(1, 5)));
     }
 
     @Test
