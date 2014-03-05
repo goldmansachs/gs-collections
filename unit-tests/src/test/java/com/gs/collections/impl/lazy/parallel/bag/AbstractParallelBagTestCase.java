@@ -102,6 +102,13 @@ public abstract class AbstractParallelBagTestCase extends AbstractParallelIterab
 
     @Test(expected = UnsupportedOperationException.class)
     @Override
+    public void selectInstancesOf()
+    {
+        super.selectInstancesOf();
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    @Override
     public void collect()
     {
         super.collect();

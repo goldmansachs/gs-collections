@@ -195,7 +195,7 @@ public abstract class AbstractParallelIterableTestCase
                 this.classUnderTest().rejectWith(Predicates2.<Integer>lessThanOrEqualTo(), 1).rejectWith(Predicates2.<Integer>greaterThanOrEqualTo(), 4).toBag());
     }
 
-    @Test(expected = UnsupportedOperationException.class)
+    @Test
     public void selectInstancesOf()
     {
         Assert.assertEquals(

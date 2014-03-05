@@ -54,7 +54,7 @@ public abstract class AbstractParallelListIterable<T, B extends ListBatch<T>> ex
 
     public <S> ParallelListIterable<S> selectInstancesOf(Class<S> clazz)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".selectInstancesOf() not implemented yet");
+        return (ParallelListIterable<S>) this.select(Predicates.instanceOf(clazz));
     }
 
     public ParallelListIterable<T> reject(Predicate<? super T> predicate)

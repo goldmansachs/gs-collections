@@ -60,7 +60,7 @@ public abstract class AbstractParallelUnsortedBag<T, B extends UnsortedBagBatch<
 
     public <S> ParallelUnsortedBag<S> selectInstancesOf(Class<S> clazz)
     {
-        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".selectInstancesOf() not implemented yet");
+        return (ParallelUnsortedBag<S>) this.select(Predicates.instanceOf(clazz));
     }
 
     public ParallelUnsortedBag<T> reject(Predicate<? super T> predicate)

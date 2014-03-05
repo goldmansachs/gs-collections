@@ -57,7 +57,7 @@ public abstract class AbstractParallelIterableImpl<T, B extends Batch<T>> extend
 
     public <S> ParallelIterable<S> selectInstancesOf(Class<S> clazz)
     {
-        throw new UnsupportedOperationException();
+        return (ParallelIterable<S>) this.select(Predicates.instanceOf(clazz));
     }
 
     public ParallelIterable<T> reject(Predicate<? super T> predicate)

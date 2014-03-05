@@ -57,7 +57,7 @@ public abstract class AbstractParallelUnsortedSetIterable<T, B extends UnsortedS
 
     public <S> ParallelUnsortedSetIterable<S> selectInstancesOf(Class<S> clazz)
     {
-        throw new UnsupportedOperationException();
+        return (ParallelUnsortedSetIterable<S>) this.select(Predicates.instanceOf(clazz));
     }
 
     public ParallelUnsortedSetIterable<T> reject(Predicate<? super T> predicate)
