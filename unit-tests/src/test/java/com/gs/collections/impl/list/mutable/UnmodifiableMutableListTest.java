@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.list.mutable;
 
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.ListIterator;
 
@@ -330,5 +331,36 @@ public class UnmodifiableMutableListTest
 
         Assert.assertEquals(iList(1, 2, 3), selected);
         Assert.assertEquals(iList(4, 5), rejected);
+    }
+
+    @Test
+    public void binarySearch()
+    {
+        UnmodifiableMutableList<Integer> sortedList = UnmodifiableMutableList.of(FastList.newListWith(1, 2, 3, 4, 5, 7));
+        Assert.assertEquals(1, sortedList.binarySearch(2));
+        Assert.assertEquals(-6, sortedList.binarySearch(6));
+
+        for (Integer integer : sortedList)
+        {
+            Assert.assertEquals(
+                    Collections.binarySearch(sortedList, integer),
+                    sortedList.binarySearch(integer));
+        }
+    }
+
+    @Test
+    public void binarySearchWithComparator()
+    {
+        UnmodifiableMutableList<Integer> sortedList = UnmodifiableMutableList.of(FastList.newListWith(1, 2, 3, 4, 5, 7)
+                .toSortedList(Comparators.reverseNaturalOrder()));
+        Assert.assertEquals(sortedList.size() - 1, sortedList.binarySearch(1, Comparators.reverseNaturalOrder()));
+        Assert.assertEquals(-1 - sortedList.size(), sortedList.binarySearch(-1, Comparators.reverseNaturalOrder()));
+
+        for (Integer integer : sortedList)
+        {
+            Assert.assertEquals(
+                    Collections.binarySearch(sortedList, integer, Comparators.reverseNaturalOrder()),
+                    sortedList.binarySearch(integer, Comparators.reverseNaturalOrder()));
+        }
     }
 }

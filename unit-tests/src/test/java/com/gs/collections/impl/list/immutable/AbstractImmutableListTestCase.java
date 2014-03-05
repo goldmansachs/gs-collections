@@ -40,6 +40,7 @@ import com.gs.collections.api.multimap.list.ImmutableListMultimap;
 import com.gs.collections.api.partition.list.PartitionImmutableList;
 import com.gs.collections.api.stack.MutableStack;
 import com.gs.collections.api.tuple.Pair;
+import com.gs.collections.impl.block.factory.Comparators;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.IntegerPredicates;
@@ -563,5 +564,34 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     public void asReversed()
     {
         Verify.assertIterablesEqual(this.classUnderTest().toList().toReversed(), this.classUnderTest().asReversed());
+    }
+
+    @Test
+    public void binarySearch()
+    {
+        ImmutableList<Integer> sortedList = this.classUnderTest();
+        Assert.assertEquals(0, sortedList.binarySearch(1));
+        Assert.assertEquals(-1, sortedList.binarySearch(-1));
+        for (Integer integer : sortedList)
+        {
+            Assert.assertEquals(
+                    Collections.binarySearch(sortedList.castToList(), integer),
+                    sortedList.binarySearch(integer));
+        }
+    }
+
+    @Test
+    public void binarySearchWithComparator()
+    {
+        ImmutableList<Integer> sortedList = this.classUnderTest().toSortedList(Comparators.reverseNaturalOrder()).toImmutable();
+        Assert.assertEquals(sortedList.size() - 1, sortedList.binarySearch(1, Comparators.reverseNaturalOrder()));
+        Assert.assertEquals(-1 - sortedList.size(), sortedList.binarySearch(-1, Comparators.reverseNaturalOrder()));
+
+        for (Integer integer : sortedList)
+        {
+            Assert.assertEquals(
+                    Collections.binarySearch(sortedList.castToList(), integer, Comparators.reverseNaturalOrder()),
+                    sortedList.binarySearch(integer, Comparators.reverseNaturalOrder()));
+        }
     }
 }

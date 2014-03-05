@@ -21,8 +21,10 @@ import java.io.IOException;
 import java.io.ObjectInput;
 import java.io.ObjectOutput;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.Iterator;
+import java.util.List;
 import java.util.ListIterator;
 import java.util.RandomAccess;
 import java.util.concurrent.locks.ReadWriteLock;
@@ -773,6 +775,32 @@ public final class MultiReaderFastList<T>
         }
     }
 
+    public int binarySearch(T key, Comparator<? super T> comparator)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return Collections.binarySearch(this, key, comparator);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public int binarySearch(T key)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return Collections.binarySearch((List<? extends Comparable<? super T>>) this, key);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
     public void reverseForEach(final Procedure<? super T> procedure)
     {
         this.withReadLockRun(new Runnable()
@@ -1182,6 +1210,16 @@ public final class MultiReaderFastList<T>
         public LazyIterable<T> asReversed()
         {
             return ReverseIterable.adapt(this);
+        }
+
+        public int binarySearch(T key, Comparator<? super T> comparator)
+        {
+            return Collections.binarySearch(this, key, comparator);
+        }
+
+        public int binarySearch(T key)
+        {
+            return Collections.binarySearch((List<? extends Comparable<? super T>>) this, key);
         }
 
         public void becomeUseless()

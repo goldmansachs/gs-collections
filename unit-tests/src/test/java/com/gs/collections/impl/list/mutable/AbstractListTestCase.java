@@ -810,4 +810,32 @@ public abstract class AbstractListTestCase
     {
         Verify.assertIterablesEqual(iList(4, 3, 2, 1), this.newWith(1, 2, 3, 4).asReversed());
     }
+
+    @Test
+    public void binarySearch()
+    {
+        MutableList<Integer> sortedList = this.newWith(1, 2, 3, 4, 5, 7).toList();
+        Assert.assertEquals(1, sortedList.binarySearch(2));
+        Assert.assertEquals(-6, sortedList.binarySearch(6));
+        for (Integer integer : sortedList)
+        {
+            Assert.assertEquals(
+                    Collections.binarySearch(sortedList, integer),
+                    sortedList.binarySearch(integer));
+        }
+    }
+
+    @Test
+    public void binarySearchWithComparator()
+    {
+        MutableList<Integer> sortedList = this.newWith(1, 2, 3, 4, 5, 7).toSortedList(Comparators.reverseNaturalOrder());
+        Assert.assertEquals(4, sortedList.binarySearch(2, Comparators.reverseNaturalOrder()));
+        Assert.assertEquals(-2, sortedList.binarySearch(6, Comparators.reverseNaturalOrder()));
+        for (Integer integer : sortedList)
+        {
+            Assert.assertEquals(
+                    Collections.binarySearch(sortedList, integer, Comparators.reverseNaturalOrder()),
+                    sortedList.binarySearch(integer, Comparators.reverseNaturalOrder()));
+        }
+    }
 }

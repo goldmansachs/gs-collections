@@ -24,6 +24,7 @@ import java.util.NoSuchElementException;
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.list.ImmutableList;
+import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.partition.list.PartitionImmutableList;
 import com.gs.collections.api.tuple.Pair;
@@ -472,5 +473,21 @@ public class ImmutableEmptyListTest extends AbstractImmutableListTestCase
         }, 1, targetCollection);
         Assert.assertEquals(targetCollection, actual);
         Assert.assertSame(targetCollection, actual);
+    }
+
+    @Override
+    @Test
+    public void binarySearch()
+    {
+        ListIterable<Integer> sortedList = this.classUnderTest();
+        Assert.assertEquals(-1, sortedList.binarySearch(1));
+    }
+
+    @Override
+    @Test
+    public void binarySearchWithComparator()
+    {
+        ListIterable<Integer> sortedList = this.classUnderTest();
+        Assert.assertEquals(-1, sortedList.binarySearch(1, Comparators.naturalOrder()));
     }
 }

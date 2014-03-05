@@ -588,6 +588,22 @@ public class SynchronizedMutableList<T>
         }
     }
 
+    public int binarySearch(T key, Comparator<? super T> comparator)
+    {
+        synchronized (this.getLock())
+        {
+            return Collections.binarySearch(this, key, comparator);
+        }
+    }
+
+    public int binarySearch(T key)
+    {
+        synchronized (this.getLock())
+        {
+            return Collections.binarySearch((List<? extends Comparable<? super T>>) this, key);
+        }
+    }
+
     @Override
     public MutableList<T> with(T element)
     {

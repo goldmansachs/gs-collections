@@ -1101,6 +1101,16 @@ public abstract class AbstractMutableList<T>
         return ReverseIterable.adapt(this);
     }
 
+    public int binarySearch(T key, Comparator<? super T> comparator)
+    {
+        return Collections.binarySearch(this, key, comparator);
+    }
+
+    public int binarySearch(T key)
+    {
+        return Collections.binarySearch((List<? extends Comparable<? super T>>) this, key);
+    }
+
     public MutableList<T> takeWhile(Predicate<? super T> predicate)
     {
         return ListIterate.takeWhile(this, predicate);

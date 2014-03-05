@@ -17,6 +17,8 @@
 package com.gs.collections.impl.list.mutable;
 
 import java.util.Collection;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -162,6 +164,16 @@ public abstract class AbstractListAdapter<T>
     public ReverseIterable<T> asReversed()
     {
         return ReverseIterable.adapt(this);
+    }
+
+    public int binarySearch(T key, Comparator<? super T> comparator)
+    {
+        return Collections.binarySearch(this, key, comparator);
+    }
+
+    public int binarySearch(T key)
+    {
+        return Collections.binarySearch((List<? extends Comparable<? super T>>) this, key);
     }
 
     @Override

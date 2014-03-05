@@ -16,6 +16,7 @@
 
 package com.gs.collections.api.list;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.ListIterator;
 
@@ -235,6 +236,22 @@ public interface ListIterable<T>
      * @since 3.0
      */
     LazyIterable<T> asReversed();
+
+    /**
+     * Searches for the specified object using the binary search algorithm. The list must be sorted into ascending
+     * order according to the specified comparator.
+     *
+     * @see java.util.Collections#binarySearch(java.util.List, Object, java.util.Comparator)
+     */
+    int binarySearch(T key, Comparator<? super T> comparator);
+
+    /**
+     * Searches for the specified object using the binary search algorithm. The elements in this list must implement
+     * Comparable and the list must be sorted into ascending order.
+     *
+     * @see java.util.Collections#binarySearch(java.util.List, Object)
+     */
+    int binarySearch(T key);
 
     /**
      * Follows the same general contract as {@link List#equals(Object)}.
