@@ -17,6 +17,8 @@
 package com.gs.collections.impl.block.factory;
 
 import com.gs.collections.api.block.HashingStrategy;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.test.domain.Person;
 import org.junit.Assert;
@@ -127,6 +129,113 @@ public class HashingStrategiesTest
         Assert.assertTrue(chainedHashingStrategy.equals(john1, john2));
         Assert.assertFalse(chainedHashingStrategy.equals(john1, john3));
         Assert.assertFalse(chainedHashingStrategy.equals(john1, john4));
+    }
+
+    @Test
+    public void fromBooleanFunction()
+    {
+        HashingStrategy<Integer> isEvenHashingStrategy = HashingStrategies.fromBooleanFunction(IntegerFunctions.TO_IS_EVEN);
+
+        Assert.assertEquals(Boolean.TRUE.hashCode(), isEvenHashingStrategy.computeHashCode(Integer.valueOf(2)));
+        Assert.assertEquals(Boolean.FALSE.hashCode(), isEvenHashingStrategy.computeHashCode(Integer.valueOf(1)));
+        Assert.assertTrue(isEvenHashingStrategy.equals(Integer.valueOf(2), Integer.valueOf(4)));
+        Assert.assertFalse(isEvenHashingStrategy.equals(Integer.valueOf(2), Integer.valueOf(1)));
+    }
+
+    @Test
+    public void fromByteFunction()
+    {
+        HashingStrategy<Integer> byteFunctionHashingStrategy = HashingStrategies.fromByteFunction(IntegerFunctions.TO_BYTE);
+
+        Assert.assertEquals(100, byteFunctionHashingStrategy.computeHashCode(Integer.valueOf(100)));
+        Assert.assertTrue(byteFunctionHashingStrategy.equals(Integer.valueOf(2), Integer.valueOf(2)));
+        Assert.assertFalse(byteFunctionHashingStrategy.equals(Integer.valueOf(2), Integer.valueOf(1)));
+    }
+
+    @Test
+    public void fromCharFunction()
+    {
+        HashingStrategy<Integer> charFunctionHashingStrategy = HashingStrategies.fromCharFunction(IntegerFunctions.TO_CHAR);
+
+        Assert.assertEquals(100, charFunctionHashingStrategy.computeHashCode(Integer.valueOf(100)));
+        Assert.assertTrue(charFunctionHashingStrategy.equals(Integer.valueOf(2), Integer.valueOf(2)));
+        Assert.assertFalse(charFunctionHashingStrategy.equals(Integer.valueOf(2), Integer.valueOf(1)));
+    }
+
+    @Test
+    public void fromDoubleFunction()
+    {
+        HashingStrategy<Integer> doubleFunctionHashingStrategy = HashingStrategies.fromDoubleFunction(IntegerFunctions.TO_DOUBLE);
+
+        Assert.assertEquals(Double.valueOf(100).hashCode(), doubleFunctionHashingStrategy.computeHashCode(Integer.valueOf(100)));
+        Assert.assertTrue(doubleFunctionHashingStrategy.equals(Integer.valueOf(2), Integer.valueOf(2)));
+        Assert.assertFalse(doubleFunctionHashingStrategy.equals(Integer.valueOf(2), Integer.valueOf(1)));
+
+        HashingStrategy<Double> doublePassThruFunction = HashingStrategies.fromDoubleFunction(new DoubleFunction<Double>()
+        {
+            public double doubleValueOf(Double anObject)
+            {
+                return anObject.doubleValue();
+            }
+        });
+        Assert.assertEquals(Double.valueOf(Double.NaN).hashCode(), doublePassThruFunction.computeHashCode(Double.NaN));
+        Assert.assertNotEquals(Double.valueOf(Double.POSITIVE_INFINITY).hashCode(), doublePassThruFunction.computeHashCode(Double.NaN));
+        Assert.assertEquals(Double.valueOf(Double.POSITIVE_INFINITY).hashCode(), doublePassThruFunction.computeHashCode(Double.POSITIVE_INFINITY));
+        Assert.assertTrue(doublePassThruFunction.equals(Double.NaN, Double.NaN));
+        Assert.assertFalse(doublePassThruFunction.equals(Double.NaN, Double.POSITIVE_INFINITY));
+    }
+
+    @Test
+    public void fromFloatFunction()
+    {
+        HashingStrategy<Integer> floatFunctionHashingStrategy = HashingStrategies.fromFloatFunction(IntegerFunctions.TO_FLOAT);
+
+        Assert.assertEquals(Float.valueOf(100).hashCode(), floatFunctionHashingStrategy.computeHashCode(Integer.valueOf(100)));
+        Assert.assertTrue(floatFunctionHashingStrategy.equals(Integer.valueOf(2), Integer.valueOf(2)));
+        Assert.assertFalse(floatFunctionHashingStrategy.equals(Integer.valueOf(2), Integer.valueOf(1)));
+
+        HashingStrategy<Float> floatPassThruFunction = HashingStrategies.fromFloatFunction(new FloatFunction<Float>()
+        {
+            public float floatValueOf(Float anObject)
+            {
+                return anObject.floatValue();
+            }
+        });
+        Assert.assertEquals(Float.valueOf(Float.NaN).hashCode(), floatPassThruFunction.computeHashCode(Float.NaN));
+        Assert.assertNotEquals(Float.valueOf(Float.POSITIVE_INFINITY).hashCode(), floatPassThruFunction.computeHashCode(Float.NaN));
+        Assert.assertEquals(Float.valueOf(Float.POSITIVE_INFINITY).hashCode(), floatPassThruFunction.computeHashCode(Float.POSITIVE_INFINITY));
+        Assert.assertTrue(floatPassThruFunction.equals(Float.NaN, Float.NaN));
+        Assert.assertFalse(floatPassThruFunction.equals(Float.NaN, Float.POSITIVE_INFINITY));
+    }
+
+    @Test
+    public void fromIntFunction()
+    {
+        HashingStrategy<Integer> intFunctionHashingStrategy = HashingStrategies.fromIntFunction(IntegerFunctions.TO_INT);
+
+        Assert.assertEquals(100, intFunctionHashingStrategy.computeHashCode(Integer.valueOf(100)));
+        Assert.assertTrue(intFunctionHashingStrategy.equals(Integer.valueOf(2), Integer.valueOf(2)));
+        Assert.assertFalse(intFunctionHashingStrategy.equals(Integer.valueOf(2), Integer.valueOf(1)));
+    }
+
+    @Test
+    public void fromLongFunction()
+    {
+        HashingStrategy<Integer> longFunctionHashingStrategy = HashingStrategies.fromLongFunction(IntegerFunctions.TO_LONG);
+
+        Assert.assertEquals(Long.valueOf(100).hashCode(), longFunctionHashingStrategy.computeHashCode(Integer.valueOf(100)));
+        Assert.assertTrue(longFunctionHashingStrategy.equals(Integer.valueOf(2), Integer.valueOf(2)));
+        Assert.assertFalse(longFunctionHashingStrategy.equals(Integer.valueOf(2), Integer.valueOf(1)));
+    }
+
+    @Test
+    public void fromShortFunction()
+    {
+        HashingStrategy<Integer> shortFunctionHashingStrategy = HashingStrategies.fromShortFunction(IntegerFunctions.TO_SHORT);
+
+        Assert.assertEquals(100, shortFunctionHashingStrategy.computeHashCode(Integer.valueOf(100)));
+        Assert.assertTrue(shortFunctionHashingStrategy.equals(Integer.valueOf(2), Integer.valueOf(2)));
+        Assert.assertFalse(shortFunctionHashingStrategy.equals(Integer.valueOf(2), Integer.valueOf(1)));
     }
 }
 

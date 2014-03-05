@@ -26,14 +26,6 @@ import java.util.List;
 
 import com.gs.collections.api.block.SerializableComparator;
 import com.gs.collections.api.block.function.Function;
-import com.gs.collections.api.block.function.primitive.BooleanFunction;
-import com.gs.collections.api.block.function.primitive.ByteFunction;
-import com.gs.collections.api.block.function.primitive.CharFunction;
-import com.gs.collections.api.block.function.primitive.DoubleFunction;
-import com.gs.collections.api.block.function.primitive.FloatFunction;
-import com.gs.collections.api.block.function.primitive.IntFunction;
-import com.gs.collections.api.block.function.primitive.LongFunction;
-import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.list.Interval;
@@ -102,13 +94,7 @@ public class ComparatorsTest
     @Test
     public void byBooleanFunction()
     {
-        SerializableComparator<Integer> comparator = Comparators.byBooleanFunction(new BooleanFunction<Integer>()
-        {
-            public boolean booleanValueOf(Integer anObject)
-            {
-                return anObject.intValue() % 2 == 0;
-            }
-        });
+        SerializableComparator<Integer> comparator = Comparators.byBooleanFunction(IntegerFunctions.TO_IS_EVEN);
         Verify.assertPositive(comparator.compare(2, 1));
         Verify.assertZero(comparator.compare(1, 1));
         Verify.assertZero(comparator.compare(2, 2));
@@ -118,85 +104,43 @@ public class ComparatorsTest
     @Test
     public void byByteFunction()
     {
-        this.assertScalarFunctionParameter(Comparators.byByteFunction(new ByteFunction<Integer>()
-        {
-            public byte byteValueOf(Integer anObject)
-            {
-                return anObject.byteValue();
-            }
-        }));
+        this.assertScalarFunctionParameter(Comparators.byByteFunction(IntegerFunctions.TO_BYTE));
     }
 
     @Test
     public void byCharFunction()
     {
-        this.assertScalarFunctionParameter(Comparators.byCharFunction(new CharFunction<Integer>()
-        {
-            public char charValueOf(Integer anObject)
-            {
-                return (char) anObject.intValue();
-            }
-        }));
+        this.assertScalarFunctionParameter(Comparators.byCharFunction(IntegerFunctions.TO_CHAR));
     }
 
     @Test
     public void byDoubleFunction()
     {
-        this.assertScalarFunctionParameter(Comparators.byDoubleFunction(new DoubleFunction<Integer>()
-        {
-            public double doubleValueOf(Integer anObject)
-            {
-                return anObject.doubleValue();
-            }
-        }));
+        this.assertScalarFunctionParameter(Comparators.byDoubleFunction(IntegerFunctions.TO_DOUBLE));
     }
 
     @Test
     public void byFloatFunction()
     {
-        this.assertScalarFunctionParameter(Comparators.byFloatFunction(new FloatFunction<Integer>()
-        {
-            public float floatValueOf(Integer anObject)
-            {
-                return anObject.floatValue();
-            }
-        }));
+        this.assertScalarFunctionParameter(Comparators.byFloatFunction(IntegerFunctions.TO_FLOAT));
     }
 
     @Test
     public void byIntFunction()
     {
-        this.assertScalarFunctionParameter(Comparators.byIntFunction(new IntFunction<Integer>()
-        {
-            public int intValueOf(Integer anObject)
-            {
-                return anObject.intValue();
-            }
-        }));
+        this.assertScalarFunctionParameter(Comparators.byIntFunction(IntegerFunctions.TO_INT));
     }
 
     @Test
     public void byLongFunction()
     {
-        this.assertScalarFunctionParameter(Comparators.byLongFunction(new LongFunction<Integer>()
-        {
-            public long longValueOf(Integer anObject)
-            {
-                return anObject.longValue();
-            }
-        }));
+        this.assertScalarFunctionParameter(Comparators.byLongFunction(IntegerFunctions.TO_LONG));
     }
 
     @Test
     public void byShortFunction()
     {
-        this.assertScalarFunctionParameter(Comparators.byShortFunction(new ShortFunction<Integer>()
-        {
-            public short shortValueOf(Integer anObject)
-            {
-                return anObject.shortValue();
-            }
-        }));
+        this.assertScalarFunctionParameter(Comparators.byShortFunction(IntegerFunctions.TO_SHORT));
     }
 
     private void assertScalarFunctionParameter(SerializableComparator<Integer> comparator)

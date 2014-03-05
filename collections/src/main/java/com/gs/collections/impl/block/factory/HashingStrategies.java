@@ -18,6 +18,14 @@ package com.gs.collections.impl.block.factory;
 
 import com.gs.collections.api.block.HashingStrategy;
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.function.primitive.ByteFunction;
+import com.gs.collections.api.block.function.primitive.CharFunction;
+import com.gs.collections.api.block.function.primitive.DoubleFunction;
+import com.gs.collections.api.block.function.primitive.FloatFunction;
+import com.gs.collections.api.block.function.primitive.IntFunction;
+import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.function.primitive.ShortFunction;
 
 public final class HashingStrategies
 {
@@ -72,6 +80,46 @@ public final class HashingStrategies
                 HashingStrategies.fromFunction(one),
                 HashingStrategies.fromFunction(two),
                 HashingStrategies.fromFunction(three));
+    }
+
+    public static <T> HashingStrategy<T> fromBooleanFunction(BooleanFunction<? super T> function)
+    {
+        return new BooleanFunctionHashingStrategy<T>(function);
+    }
+
+    public static <T> HashingStrategy<T> fromByteFunction(ByteFunction<? super T> function)
+    {
+        return new ByteFunctionHashingStrategy<T>(function);
+    }
+
+    public static <T> HashingStrategy<T> fromCharFunction(CharFunction<? super T> function)
+    {
+        return new CharFunctionHashingStrategy<T>(function);
+    }
+
+    public static <T> HashingStrategy<T> fromDoubleFunction(DoubleFunction<? super T> function)
+    {
+        return new DoubleFunctionHashingStrategy<T>(function);
+    }
+
+    public static <T> HashingStrategy<T> fromFloatFunction(FloatFunction<? super T> function)
+    {
+        return new FloatFunctionHashingStrategy<T>(function);
+    }
+
+    public static <T> HashingStrategy<T> fromIntFunction(IntFunction<? super T> function)
+    {
+        return new IntFunctionHashingStrategy<T>(function);
+    }
+
+    public static <T> HashingStrategy<T> fromLongFunction(LongFunction<? super T> function)
+    {
+        return new LongFunctionHashingStrategy<T>(function);
+    }
+
+    public static <T> HashingStrategy<T> fromShortFunction(ShortFunction<? super T> function)
+    {
+        return new ShortFunctionHashingStrategy<T>(function);
     }
 
     private static class DefaultStrategy implements HashingStrategy<Object>
@@ -133,6 +181,182 @@ public final class HashingStrategies
         }
     }
 
+    private static final class BooleanFunctionHashingStrategy<T> implements HashingStrategy<T>
+    {
+        private static final long serialVersionUID = 1L;
+
+        private final BooleanFunction<? super T> function;
+
+        private BooleanFunctionHashingStrategy(BooleanFunction<? super T> function)
+        {
+            this.function = function;
+        }
+
+        public int computeHashCode(T object)
+        {
+            return this.function.booleanValueOf(object) ? Boolean.TRUE.hashCode() : Boolean.FALSE.hashCode();
+        }
+
+        public boolean equals(T object1, T object2)
+        {
+            return this.function.booleanValueOf(object1) == this.function.booleanValueOf(object2);
+        }
+    }
+
+    private static final class ByteFunctionHashingStrategy<T> implements HashingStrategy<T>
+    {
+        private static final long serialVersionUID = 1L;
+
+        private final ByteFunction<? super T> function;
+
+        private ByteFunctionHashingStrategy(ByteFunction<? super T> function)
+        {
+            this.function = function;
+        }
+
+        public int computeHashCode(T object)
+        {
+            return this.function.byteValueOf(object);
+        }
+
+        public boolean equals(T object1, T object2)
+        {
+            return this.function.byteValueOf(object1) == this.function.byteValueOf(object2);
+        }
+    }
+
+    private static final class CharFunctionHashingStrategy<T> implements HashingStrategy<T>
+    {
+        private static final long serialVersionUID = 1L;
+
+        private final CharFunction<? super T> function;
+
+        private CharFunctionHashingStrategy(CharFunction<? super T> function)
+        {
+            this.function = function;
+        }
+
+        public int computeHashCode(T object)
+        {
+            return this.function.charValueOf(object);
+        }
+
+        public boolean equals(T object1, T object2)
+        {
+            return this.function.charValueOf(object1) == this.function.charValueOf(object2);
+        }
+    }
+
+    private static final class DoubleFunctionHashingStrategy<T> implements HashingStrategy<T>
+    {
+        private static final long serialVersionUID = 1L;
+
+        private final DoubleFunction<? super T> function;
+
+        private DoubleFunctionHashingStrategy(DoubleFunction<? super T> function)
+        {
+            this.function = function;
+        }
+
+        public int computeHashCode(T object)
+        {
+            return HashingStrategies.longHashCode(Double.doubleToLongBits(this.function.doubleValueOf(object)));
+        }
+
+        public boolean equals(T object1, T object2)
+        {
+            return Double.compare(this.function.doubleValueOf(object1), this.function.doubleValueOf(object2)) == 0;
+        }
+    }
+
+    private static final class FloatFunctionHashingStrategy<T> implements HashingStrategy<T>
+    {
+        private static final long serialVersionUID = 1L;
+
+        private final FloatFunction<? super T> function;
+
+        private FloatFunctionHashingStrategy(FloatFunction<? super T> function)
+        {
+            this.function = function;
+        }
+
+        public int computeHashCode(T object)
+        {
+            return Float.floatToIntBits(this.function.floatValueOf(object));
+        }
+
+        public boolean equals(T object1, T object2)
+        {
+            return Float.compare(this.function.floatValueOf(object1), this.function.floatValueOf(object2)) == 0;
+        }
+    }
+
+    private static final class IntFunctionHashingStrategy<T> implements HashingStrategy<T>
+    {
+        private static final long serialVersionUID = 1L;
+
+        private final IntFunction<? super T> function;
+
+        private IntFunctionHashingStrategy(IntFunction<? super T> function)
+        {
+            this.function = function;
+        }
+
+        public int computeHashCode(T object)
+        {
+            return this.function.intValueOf(object);
+        }
+
+        public boolean equals(T object1, T object2)
+        {
+            return this.function.intValueOf(object1) == this.function.intValueOf(object2);
+        }
+    }
+
+    private static final class LongFunctionHashingStrategy<T> implements HashingStrategy<T>
+    {
+        private static final long serialVersionUID = 1L;
+
+        private final LongFunction<? super T> function;
+
+        private LongFunctionHashingStrategy(LongFunction<? super T> function)
+        {
+            this.function = function;
+        }
+
+        public int computeHashCode(T object)
+        {
+            return HashingStrategies.longHashCode(this.function.longValueOf(object));
+        }
+
+        public boolean equals(T object1, T object2)
+        {
+            return this.function.longValueOf(object1) == this.function.longValueOf(object2);
+        }
+    }
+
+    private static final class ShortFunctionHashingStrategy<T> implements HashingStrategy<T>
+    {
+        private static final long serialVersionUID = 1L;
+
+        private final ShortFunction<? super T> function;
+
+        private ShortFunctionHashingStrategy(ShortFunction<? super T> function)
+        {
+            this.function = function;
+        }
+
+        public int computeHashCode(T object)
+        {
+            return this.function.shortValueOf(object);
+        }
+
+        public boolean equals(T object1, T object2)
+        {
+            return this.function.shortValueOf(object1) == this.function.shortValueOf(object2);
+        }
+    }
+
     private static final class IdentityHashingStrategy implements HashingStrategy<Object>
     {
         private static final long serialVersionUID = 1L;
@@ -179,5 +403,17 @@ public final class HashingStrategies
             }
             return true;
         }
+    }
+
+    /**
+     * This implementation is equivalent to the JDK Long hashcode because there is no public static hashCode(long value) method on Long.
+     * This method will be introduced in Java 1.8, at which point this can be replaced.
+     *
+     * @param value the long value to hash
+     * @return hashcode for long, based on the {@link Long#hashCode()}
+     */
+    private static int longHashCode(long value)
+    {
+        return (int) (value ^ (value >>> 32));
     }
 }
