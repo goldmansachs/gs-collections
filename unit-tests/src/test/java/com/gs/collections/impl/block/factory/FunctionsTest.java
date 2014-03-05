@@ -152,6 +152,14 @@ public class FunctionsTest
     }
 
     @Test
+    public void getDefaultToString()
+    {
+        Function<Object, String> function = Functions.getNullSafeToString("N/A");
+        Assert.assertEquals("1", function.valueOf(1));
+        Assert.assertEquals("N/A", function.valueOf(null));
+    }
+
+    @Test
     public void getStringToInteger()
     {
         Function<String, Integer> function = Functions.getStringToInteger();
@@ -641,6 +649,16 @@ public class FunctionsTest
     }
 
     @Test
+    public void nullSafe()
+    {
+        Object expected = new Object();
+        Function<Object, Object> throwsFunction = new ThrowsFunction();
+        Assert.assertSame(expected, Functions.nullSafe(throwsFunction, expected).valueOf(null));
+        Assert.assertSame(expected, Functions.nullSafe(Functions.getFixedValue(expected)).valueOf(new Object()));
+        Assert.assertNull(Functions.nullSafe(throwsFunction).valueOf(null));
+    }
+
+    @Test
     public void classForName()
     {
         Class<?> objectClass = Functions.classForName().valueOf("java.lang.Object");
@@ -658,5 +676,13 @@ public class FunctionsTest
             }
         }, 2));
         Verify.assertContainsAll(multiplied, 2, 4, 6, 8, 10);
+    }
+
+    private static class ThrowsFunction implements Function<Object, Object>
+    {
+        public Object valueOf(Object object)
+        {
+            throw new RuntimeException();
+        }
     }
 }

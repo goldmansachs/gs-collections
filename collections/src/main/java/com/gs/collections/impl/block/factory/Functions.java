@@ -240,6 +240,11 @@ public final class Functions
         return TO_STRING_FUNCTION;
     }
 
+    public static Function<Object, String> getNullSafeToString(String defaultValue)
+    {
+        return Functions.nullSafe(TO_STRING_FUNCTION, defaultValue);
+    }
+
     public static <T> SerializableComparator<T> toBooleanComparator(BooleanFunction<T> function)
     {
         return new BooleanFunctionComparator<T>(function);
@@ -285,9 +290,19 @@ public final class Functions
         return STRING_TO_INTEGER_FUNCTION;
     }
 
-    public static <T, V> Function<T, V> withDefault(Function<T, V> function, V defaultValue)
+    public static <T, V> Function<T, V> withDefault(Function<? super T, ? extends V> function, V defaultValue)
     {
         return new DefaultFunction<T, V>(function, defaultValue);
+    }
+
+    public static <T, V> Function<T, V> nullSafe(Function<? super T, ? extends V> function)
+    {
+        return new NullSafeFunction<T, V>(function, null);
+    }
+
+    public static <T, V> Function<T, V> nullSafe(Function<? super T, ? extends V> function, V nullValue)
+    {
+        return new NullSafeFunction<T, V>(function, nullValue);
     }
 
     public static <V1> Function<Pair<V1, ?>, V1> firstOfPair()
@@ -620,10 +635,10 @@ public final class Functions
     private static final class DefaultFunction<T, V> implements Function<T, V>
     {
         private static final long serialVersionUID = 1L;
-        private final Function<T, V> function;
+        private final Function<? super T, ? extends V> function;
         private final V defaultValue;
 
-        private DefaultFunction(Function<T, V> newFunction, V newDefaultValue)
+        private DefaultFunction(Function<? super T, ? extends V> newFunction, V newDefaultValue)
         {
             this.function = newFunction;
             this.defaultValue = newDefaultValue;
@@ -637,6 +652,24 @@ public final class Functions
                 return this.defaultValue;
             }
             return returnValue;
+        }
+    }
+
+    private static final class NullSafeFunction<T, V> implements Function<T, V>
+    {
+        private static final long serialVersionUID = 1L;
+        private final Function<? super T, ? extends V> function;
+        private final V nullValue;
+
+        private NullSafeFunction(Function<? super T, ? extends V> function, V nullValue)
+        {
+            this.function = function;
+            this.nullValue = nullValue;
+        }
+
+        public V valueOf(T object)
+        {
+            return object == null ? this.nullValue : this.function.valueOf(object);
         }
     }
 

@@ -139,6 +139,32 @@ public class FunctionsTest
     }
 
     @Test
+    public void withDefault()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAD9jb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9ucyRE\n"
+                        + "ZWZhdWx0RnVuY3Rpb24AAAAAAAAAAQIAAkwADGRlZmF1bHRWYWx1ZXQAEkxqYXZhL2xhbmcvT2Jq\n"
+                        + "ZWN0O0wACGZ1bmN0aW9udAAwTGNvbS9ncy9jb2xsZWN0aW9ucy9hcGkvYmxvY2svZnVuY3Rpb24v\n"
+                        + "RnVuY3Rpb247eHBwc3IAQGNvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLmJsb2NrLmZhY3RvcnkuRnVu\n"
+                        + "Y3Rpb25zJFBhc3NUaHJ1RnVuY3Rpb24AAAAAAAAAAQIAAHhw",
+                Functions.withDefault(Functions.getPassThru(), null));
+    }
+
+    @Test
+    public void nullSafe()
+    {
+        Verify.assertSerializedForm(
+                1L,
+                "rO0ABXNyAEBjb20uZ3MuY29sbGVjdGlvbnMuaW1wbC5ibG9jay5mYWN0b3J5LkZ1bmN0aW9ucyRO\n"
+                        + "dWxsU2FmZUZ1bmN0aW9uAAAAAAAAAAECAAJMAAhmdW5jdGlvbnQAMExjb20vZ3MvY29sbGVjdGlv\n"
+                        + "bnMvYXBpL2Jsb2NrL2Z1bmN0aW9uL0Z1bmN0aW9uO0wACW51bGxWYWx1ZXQAEkxqYXZhL2xhbmcv\n"
+                        + "T2JqZWN0O3hwc3IAQGNvbS5ncy5jb2xsZWN0aW9ucy5pbXBsLmJsb2NrLmZhY3RvcnkuRnVuY3Rp\n"
+                        + "b25zJFBhc3NUaHJ1RnVuY3Rpb24AAAAAAAAAAQIAAHhwcA==",
+                Functions.nullSafe(Functions.getPassThru()));
+    }
+
+    @Test
     public void firstNotNullValue()
     {
         Verify.assertSerializedForm(
