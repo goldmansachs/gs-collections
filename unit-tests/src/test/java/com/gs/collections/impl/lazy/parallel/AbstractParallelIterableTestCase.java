@@ -213,6 +213,22 @@ public abstract class AbstractParallelIterableTestCase
         Assert.assertEquals(
                 this.getExpected().selectInstancesOf(Integer.class).toBag(),
                 this.classUnderTest().selectInstancesOf(Integer.class).toBag());
+
+        Function<Integer, Number> numberFunction = new Function<Integer, Number>()
+        {
+            public Number valueOf(Integer integer)
+            {
+                if (IntegerPredicates.isEven().accept(integer))
+                {
+                    return Double.valueOf(integer.doubleValue());
+                }
+                return integer;
+            }
+        };
+
+        Assert.assertEquals(
+                this.getExpected().collect(numberFunction).selectInstancesOf(Integer.class),
+                this.getActual(this.classUnderTest().collect(numberFunction).selectInstancesOf(Integer.class)));
     }
 
     @Test
