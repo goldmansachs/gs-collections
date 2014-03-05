@@ -735,4 +735,10 @@ public class ListIterateTest
         ListIterate.removeIfWith(objects, Predicates2.<Integer>lessThan(), 3);
         Assert.assertEquals(FastList.newListWith(3, 4), objects);
     }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(ListIterate.class);
+    }
 }

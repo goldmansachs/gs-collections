@@ -207,4 +207,10 @@ public class ProceduresTest
     {
         private static final long serialVersionUID = 1L;
     }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(Procedures.class);
+    }
 }

@@ -781,4 +781,10 @@ public class ParallelIterateTest
             this.sum.add(sumProcedure.getSum());
         }
     }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(ParallelIterate.class);
+    }
 }

@@ -324,4 +324,10 @@ public class IterablesTest
         Verify.assertEqualsAndHashCode(expected, actual);
         Verify.assertInstanceOf(clazz, actual);
     }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(Iterables.class);
+    }
 }

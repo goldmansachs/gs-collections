@@ -67,4 +67,10 @@ public class SortedSetsTest
         Assert.assertEquals(TreeSortedSet.newSetWith(8, 7, 6, 5, 4, 3, 2, 1), factory.ofAll(Comparators.reverseNaturalOrder(), FastList.newListWith(1, 2, 3, 4, 5, 6, 7, 8)));
         Verify.assertInstanceOf(MutableSortedSet.class, factory.ofAll(Comparators.reverseNaturalOrder(), FastList.newListWith(1, 2, 3, 4, 5, 6, 7, 8)));
     }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(SortedSets.class);
+    }
 }

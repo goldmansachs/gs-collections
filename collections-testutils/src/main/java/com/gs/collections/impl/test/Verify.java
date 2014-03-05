@@ -23,6 +23,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.ObjectStreamClass;
 import java.io.Serializable;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Collection;
@@ -3032,6 +3033,64 @@ public final class Verify extends Assert
         catch (AssertionError e)
         {
             Verify.throwMangledException(e);
+        }
+    }
+
+    public static <T> void assertClassNonInstantiable(Class<T> aClass)
+    {
+        try
+        {
+            try
+            {
+                aClass.newInstance();
+                Assert.fail("Expected class '" + aClass + "' to be non-instantiable");
+            }
+            catch (InstantiationException e)
+            {
+                // pass
+            }
+            catch (IllegalAccessException e)
+            {
+                if (Verify.canInstantiateThroughReflection(aClass))
+                {
+                    Assert.fail("Expected constructor of non-instantiable class '" + aClass + "' to throw an exception, but didn't");
+                }
+            }
+        }
+        catch (AssertionError e)
+        {
+            Verify.throwMangledException(e);
+        }
+    }
+
+    private static <T> boolean canInstantiateThroughReflection(Class<T> aClass)
+    {
+        try
+        {
+            Constructor<T> declaredConstructor = aClass.getDeclaredConstructor();
+            declaredConstructor.setAccessible(true);
+            declaredConstructor.newInstance();
+            return true;
+        }
+        catch (NoSuchMethodException e)
+        {
+            return false;
+        }
+        catch (InvocationTargetException e)
+        {
+            return false;
+        }
+        catch (InstantiationException e)
+        {
+            return false;
+        }
+        catch (IllegalAccessException e)
+        {
+            return false;
+        }
+        catch (AssertionError e)
+        {
+            return false;
         }
     }
 

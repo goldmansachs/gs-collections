@@ -625,4 +625,10 @@ public class StringIterateTest
         Assert.assertEquals(1, bag.occurrencesOf(Character.valueOf('c')));
         Assert.assertEquals(1, bag.occurrencesOf(Character.valueOf('a')));
     }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(StringIterate.class);
+    }
 }

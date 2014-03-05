@@ -117,4 +117,10 @@ public class ParallelMapIterateTest
         }, 5, 3);
         Verify.assertMapsEqual(concurrentMap, map);
     }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(ParallelMapIterate.class);
+    }
 }

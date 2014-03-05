@@ -1435,4 +1435,21 @@ public class VerifyTest
             Verify.assertContains(VerifyTest.class.getName(), ex.getStackTrace()[0].toString());
         }
     }
+
+    @Test
+    public void assertClassNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(SerializeTestHelper.class);
+
+        try
+        {
+            Verify.assertClassNonInstantiable(VerifyTest.class);
+            Assert.fail();
+        }
+        catch (AssertionError ex)
+        {
+            Verify.assertContains("to be non-instantiable", ex.getMessage());
+            Verify.assertContains(VerifyTest.class.getName(), ex.getStackTrace()[0].toString());
+        }
+    }
 }

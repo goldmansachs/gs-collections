@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.block.function;
 
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -37,5 +38,11 @@ public class MultiplyFunctionTest
     public void longBlock()
     {
         Assert.assertEquals(Long.valueOf(20), MultiplyFunction.LONG.value(2L, 10L));
+    }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(MultiplyFunction.class);
     }
 }

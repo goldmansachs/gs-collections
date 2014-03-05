@@ -61,4 +61,10 @@ public class SerializeTestHelperTest
 
         Assert.fail();
     }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(SerializeTestHelper.class);
+    }
 }

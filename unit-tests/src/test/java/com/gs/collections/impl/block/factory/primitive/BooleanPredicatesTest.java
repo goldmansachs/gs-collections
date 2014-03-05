@@ -17,6 +17,7 @@
 package com.gs.collections.impl.block.factory.primitive;
 
 import com.gs.collections.api.block.predicate.primitive.BooleanPredicate;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -98,5 +99,11 @@ public final class BooleanPredicatesTest
     {
         Assert.assertTrue(BooleanPredicates.not(BooleanPredicates.isTrue()).accept(false));
         Assert.assertFalse(BooleanPredicates.not(BooleanPredicates.isTrue()).accept(true));
+    }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(BooleanPredicates.class);
     }
 }

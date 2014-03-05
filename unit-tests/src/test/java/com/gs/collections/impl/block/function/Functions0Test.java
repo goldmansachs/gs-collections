@@ -79,4 +79,10 @@ public class Functions0Test
         Verify.assertInstanceOf(AtomicLong.class, Functions0.zeroAtomicLong().value());
         Assert.assertEquals(0, Functions0.zeroAtomicLong().value().get());
     }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(Functions0.class);
+    }
 }

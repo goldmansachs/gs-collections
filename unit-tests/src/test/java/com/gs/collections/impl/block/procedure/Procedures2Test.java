@@ -19,6 +19,7 @@ package com.gs.collections.impl.block.procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.impl.block.factory.Procedures2;
 import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -31,5 +32,11 @@ public class Procedures2Test
         Procedure2<Integer, Object> procedure2 = Procedures2.fromProcedure(procedure);
         procedure2.value(1, null);
         Assert.assertEquals(FastList.newListWith(1), procedure.getResult());
+    }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(Procedures2.class);
     }
 }

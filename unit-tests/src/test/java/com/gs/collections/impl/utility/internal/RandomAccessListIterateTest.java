@@ -469,4 +469,10 @@ public class RandomAccessListIterateTest
             Assert.fail();
         }
     }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(RandomAccessListIterate.class);
+    }
 }

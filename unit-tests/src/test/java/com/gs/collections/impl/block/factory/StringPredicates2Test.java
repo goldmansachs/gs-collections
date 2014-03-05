@@ -16,6 +16,7 @@
 
 package com.gs.collections.impl.block.factory;
 
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -91,5 +92,11 @@ public class StringPredicates2Test
         Assert.assertTrue(StringPredicates2.matches().accept("aaaaabbbbb", "a*b*"));
         Assert.assertFalse(StringPredicates2.matches().accept("ba", "a*b"));
         Assert.assertEquals("StringPredicates2.matches()", StringPredicates2.matches().toString());
+    }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(StringPredicates2.class);
     }
 }

@@ -685,4 +685,10 @@ public class FunctionsTest
             throw new RuntimeException();
         }
     }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(Functions.class);
+    }
 }

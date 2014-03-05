@@ -17,6 +17,7 @@
 package com.gs.collections.impl.block.function;
 
 import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -31,5 +32,11 @@ public class AddFunctionTest
         Function2<String, String, String> undertest = AddFunction.STRING;
         Assert.assertEquals("two", undertest.value(null, "two"));
         Assert.assertEquals("one", undertest.value("one", null));
+    }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(AddFunction.class);
     }
 }

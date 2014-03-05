@@ -19,7 +19,9 @@ package com.gs.collections.impl.set.mutable.primitive;
 import java.lang.reflect.Field;
 
 import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
+import com.gs.collections.impl.factory.primitive.<name>Sets;
 import com.gs.collections.impl.list.mutable.primitive.<name>ArrayList;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -285,6 +287,11 @@ public class <name>HashSetTest extends Abstract<name>SetTestCase
 
         Assert.assertEquals(new <name>HashSet(), hashSet);
     }
-}
 
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(<name>Sets.class);
+    }
+}
 >>

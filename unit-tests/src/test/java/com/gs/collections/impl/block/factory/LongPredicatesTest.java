@@ -17,6 +17,7 @@
 package com.gs.collections.impl.block.factory;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -82,5 +83,11 @@ public class LongPredicatesTest
         Assert.assertFalse(LongPredicates.isNegative().accept(0L));
         Assert.assertFalse(LongPredicates.isNegative().accept(1L));
         Assert.assertTrue(LongPredicates.isNegative().accept(-1L));
+    }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(LongPredicates.class);
     }
 }

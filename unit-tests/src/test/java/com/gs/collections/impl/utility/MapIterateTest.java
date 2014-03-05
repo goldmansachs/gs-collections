@@ -816,4 +816,10 @@ public class MapIterateTest
         Assert.assertEquals(FastList.newListWith("1", "2").toBag(), result.toBag());
         Assert.assertSame(target, result);
     }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(MapIterate.class);
+    }
 }

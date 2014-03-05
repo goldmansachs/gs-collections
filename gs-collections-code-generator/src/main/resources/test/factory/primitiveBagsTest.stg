@@ -125,6 +125,12 @@ public class <name>BagsTest
         hashBag.add(<(literal.(type))("10")>);
         Assert.assertEquals(bag = bag.newWith(<(literal.(type))("10")>), hashBag.toImmutable());
     }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(<name>Bags.class);
+    }
 }
 
 >>

@@ -1128,4 +1128,10 @@ public class ArrayIterateTest
             }
         });
     }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(ArrayIterate.class);
+    }
 }

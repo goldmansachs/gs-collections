@@ -28,6 +28,7 @@ import com.gs.collections.api.block.function.primitive.<name>Function0;
 import com.gs.collections.api.block.function.primitive.<name>To<name>Function;
 import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunction;
 import com.gs.collections.api.map.primitive.MutableObject<name>Map;
+import com.gs.collections.impl.factory.primitive.Object<name>Maps;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -688,6 +689,12 @@ public class Object<name>HashMapTest extends AbstractMutableObject<name>MapTestC
             Assert.assertEquals(each + 1, hashMap.updateValue(String.valueOf(each), each, incrementFunction)<delta.(type)>);
             Assert.assertEquals(each + 1, hashMap.get(String.valueOf(each))<delta.(type)>);
         }
+    }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(Object<name>Maps.class);
     }
 }
 

@@ -958,4 +958,10 @@ public class SetsTest
         Verify.assertContains(key, set6);
         Assert.assertSame(key, set6.detect(Predicates.equal(key)));
     }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(Sets.class);
+    }
 }

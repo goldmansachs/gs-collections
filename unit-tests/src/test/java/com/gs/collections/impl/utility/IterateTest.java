@@ -2709,4 +2709,10 @@ public class IterateTest
     {
         Iterate.maxBy(null, null);
     }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(Iterate.class);
+    }
 }

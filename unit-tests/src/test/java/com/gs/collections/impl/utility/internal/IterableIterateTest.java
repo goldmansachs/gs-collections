@@ -761,4 +761,10 @@ public class IterableIterateTest
             }
         });
     }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(IterableIterate.class);
+    }
 }

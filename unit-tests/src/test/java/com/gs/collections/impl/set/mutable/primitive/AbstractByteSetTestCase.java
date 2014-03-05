@@ -27,6 +27,7 @@ import com.gs.collections.api.set.primitive.MutableByteSet;
 import com.gs.collections.impl.bag.mutable.primitive.ByteHashBag;
 import com.gs.collections.impl.block.factory.primitive.BytePredicates;
 import com.gs.collections.impl.collection.mutable.primitive.AbstractMutableByteCollectionTestCase;
+import com.gs.collections.impl.factory.primitive.ByteSets;
 import com.gs.collections.impl.list.mutable.primitive.ByteArrayList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
@@ -407,5 +408,11 @@ public abstract class AbstractByteSetTestCase extends AbstractMutableByteCollect
         MutableByteSet set = this.newWith((byte) 0, (byte) 1, (byte) 31, (byte) -1, (byte) -31, (byte) -24);
         Verify.assertInstanceOf(UnmodifiableByteSet.class, set.asUnmodifiable());
         Assert.assertEquals(new UnmodifiableByteSet(set), set.asUnmodifiable());
+    }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(ByteSets.class);
     }
 }

@@ -21,6 +21,7 @@ import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.multimap.list.FastListMultimap;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -42,5 +43,11 @@ public class MultimapFunctionsTest
                         FastList.newListWith("T", "W", "O"),
                         FastList.newListWith("T", "H", "R", "E", "E")),
                 FastList.newListWith("One", "Two", "Three").collect(getFunction));
+    }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(MultimapFunctions.class);
     }
 }

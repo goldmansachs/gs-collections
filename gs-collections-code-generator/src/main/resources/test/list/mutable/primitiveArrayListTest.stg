@@ -24,6 +24,8 @@ import com.gs.collections.api.block.function.primitive.Object<name>ToObjectFunct
 import com.gs.collections.api.block.procedure.primitive.<name>IntProcedure;
 import com.gs.collections.impl.math.Mutable<wrapperName>;
 import com.gs.collections.impl.test.Verify;
+import com.gs.collections.impl.utility.internal.primitive.<name>IterableIterate;
+import com.gs.collections.impl.utility.internal.primitive.<name>IteratorIterate;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -147,6 +149,13 @@ public class <name>ArrayListTest extends Abstract<name>ListTestCase
         Assert.assertEquals(this.list, arrayList1);
         Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3", "4"]:(literal.(type))(); separator=", ">), arrayList2);
         Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3", "4", "5"]:(literal.(type))(); separator=", ">), arrayList3);
+    }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(<name>IterableIterate.class);
+        Verify.assertClassNonInstantiable(<name>IteratorIterate.class);
     }
 }
 

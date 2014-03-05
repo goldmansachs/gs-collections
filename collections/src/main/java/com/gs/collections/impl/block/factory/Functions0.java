@@ -43,7 +43,7 @@ public final class Functions0
 
     private Functions0()
     {
-        // Utility Class
+        throw new AssertionError("Suppress default constructor for noninstantiability");
     }
 
     public static <T> Function0<MutableList<T>> newFastList()

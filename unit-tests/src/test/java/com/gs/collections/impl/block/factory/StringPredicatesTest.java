@@ -17,6 +17,7 @@
 package com.gs.collections.impl.block.factory;
 
 import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -249,5 +250,11 @@ public class StringPredicatesTest
         Assert.assertTrue(predicate.accept(" "));
         Assert.assertFalse(predicate.accept("aaa"));
         Assert.assertEquals("StringPredicates.hasSpaces()", predicate.toString());
+    }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(StringPredicates.class);
     }
 }

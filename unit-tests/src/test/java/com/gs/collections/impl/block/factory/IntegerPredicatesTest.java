@@ -17,6 +17,7 @@
 package com.gs.collections.impl.block.factory;
 
 import com.gs.collections.api.block.function.Function;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -106,5 +107,11 @@ public class IntegerPredicatesTest
         Assert.assertFalse(IntegerPredicates.isNegative().accept(0));
         Assert.assertFalse(IntegerPredicates.isNegative().accept(1));
         Assert.assertTrue(IntegerPredicates.isNegative().accept(-1));
+    }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(IntegerPredicates.class);
     }
 }

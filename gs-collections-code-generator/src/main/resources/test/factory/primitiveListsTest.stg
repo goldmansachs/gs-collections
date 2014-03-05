@@ -131,6 +131,12 @@ public class <name>ListsTest
         Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2"]:(literal.(type))(); separator=", ">), <name>Lists.immutable.ofAll(<name>ArrayList.newListWith(<["1", "2"]:(literal.(type))(); separator=", ">)));
         Assert.assertEquals(<name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">), <name>Lists.immutable.ofAll(<name>ArrayList.newListWith(<["1", "2", "3"]:(literal.(type))(); separator=", ">)));
     }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(<name>Lists.class);
+    }
 }
 
 >>

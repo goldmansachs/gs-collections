@@ -30,6 +30,7 @@ import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.math.IntegerSum;
 import com.gs.collections.impl.math.Sum;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -210,5 +211,11 @@ public class LazyIterateTest
         Assert.assertEquals(expected, actual5);
         Assert.assertEquals(expected, actual6);
         Assert.assertEquals(expected, actual7);
+    }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(LazyIterate.class);
     }
 }

@@ -1550,4 +1550,10 @@ public class ArrayListIterateTest
             return FastList.newListWith(value);
         }
     }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(ArrayListIterate.class);
+    }
 }

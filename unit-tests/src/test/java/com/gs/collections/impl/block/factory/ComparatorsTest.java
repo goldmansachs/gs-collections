@@ -41,6 +41,12 @@ import static com.gs.collections.impl.factory.Iterables.*;
 public class ComparatorsTest
 {
     @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(Comparators.class);
+    }
+
+    @Test
     public void naturalOrder()
     {
         MutableList<String> list = FastList.newListWith("1", "4", "2", "3");

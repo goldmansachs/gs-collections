@@ -175,4 +175,10 @@ public class ParallelArrayIterateTest
     {
         ArrayIterate.forEach(array, new SumProcedure<Object>(linearSum));
     }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(ParallelArrayIterate.class);
+    }
 }

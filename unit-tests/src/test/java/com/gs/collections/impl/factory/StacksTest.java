@@ -136,4 +136,10 @@ public class StacksTest
         expected.push(2);
         Assert.assertEquals(ArrayStack.newStackWith(2, 1), Stacks.mutable.ofAll(expected));
     }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(Stacks.class);
+    }
 }

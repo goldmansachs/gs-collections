@@ -19,6 +19,7 @@ package com.gs.collections.impl.block.function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Functions2;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -36,5 +37,11 @@ public class Functions2Test
     {
         Function2<Integer, Integer, Integer> plusInteger = Functions2.integerAddition();
         Assert.assertEquals(Integer.valueOf(5), plusInteger.value(2, 3));
+    }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(Functions2.class);
     }
 }

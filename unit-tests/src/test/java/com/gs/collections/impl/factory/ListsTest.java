@@ -191,4 +191,10 @@ public class ListsTest
             Assert.assertEquals(list, Lists.immutable.ofAll(list));
         }
     }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(Lists.class);
+    }
 }

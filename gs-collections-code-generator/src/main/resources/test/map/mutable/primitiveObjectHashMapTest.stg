@@ -30,6 +30,8 @@ import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.block.factory.Functions0;
 import com.gs.collections.impl.block.factory.Functions2;
 import com.gs.collections.impl.block.function.AddFunction;
+import com.gs.collections.impl.factory.primitive.<name>ObjectMaps;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -578,6 +580,12 @@ public class <name>ObjectHashMapTest extends AbstractMutable<name>ObjectMapTestC
             Assert.assertNull(hashMap.get(each));
             Assert.assertEquals(1L, hashMap.updateValueWith(each, Functions0.value(0), incrementFunction, 1).longValue());
         }
+    }
+
+    @Test
+    public void classIsNonInstantiable()
+    {
+        Verify.assertClassNonInstantiable(<name>ObjectMaps.class);
     }
 }
 
