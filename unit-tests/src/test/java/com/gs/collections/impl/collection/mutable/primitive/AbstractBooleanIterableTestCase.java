@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,12 +23,14 @@ import com.gs.collections.api.BooleanIterable;
 import com.gs.collections.api.LazyBooleanIterable;
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.function.primitive.BooleanToObjectFunction;
+import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.BooleanProcedure;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.impl.bag.mutable.primitive.BooleanHashBag;
 import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
+import com.gs.collections.impl.math.MutableInteger;
 import com.gs.collections.impl.set.mutable.primitive.BooleanHashSet;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -297,8 +299,8 @@ public abstract class AbstractBooleanIterableTestCase
         Verify.assertSize(halfSize, iterable.select(BooleanPredicates.isFalse()));
 
         BooleanIterable iterable1 = this.newWith(false, true, false, false, true, true, true);
-        Assert.assertEquals(this.newWith(true, true, true, true), iterable1.select(BooleanPredicates.isTrue()));
-        Assert.assertEquals(this.newWith(false, false, false), iterable1.select(BooleanPredicates.isFalse()));
+        Assert.assertEquals(this.newMutableCollectionWith(true, true, true, true), iterable1.select(BooleanPredicates.isTrue()));
+        Assert.assertEquals(this.newMutableCollectionWith(false, false, false), iterable1.select(BooleanPredicates.isFalse()));
     }
 
     @Test
@@ -311,8 +313,8 @@ public abstract class AbstractBooleanIterableTestCase
         Verify.assertSize((size & 1) == 1 ? halfSize + 1 : halfSize, iterable.reject(BooleanPredicates.isFalse()));
 
         BooleanIterable iterable1 = this.newWith(false, true, false, false, true, true, true);
-        Assert.assertEquals(this.newWith(false, false, false), iterable1.reject(BooleanPredicates.isTrue()));
-        Assert.assertEquals(this.newWith(true, true, true, true), iterable1.reject(BooleanPredicates.isFalse()));
+        Assert.assertEquals(this.newMutableCollectionWith(false, false, false), iterable1.reject(BooleanPredicates.isTrue()));
+        Assert.assertEquals(this.newMutableCollectionWith(true, true, true, true), iterable1.reject(BooleanPredicates.isFalse()));
     }
 
     @Test
@@ -363,6 +365,20 @@ public abstract class AbstractBooleanIterableTestCase
         Assert.assertEquals(this.newObjectCollectionWith(false, true, false), this.newWith(true, false, true).collect(booleanToObjectFunction));
         Assert.assertEquals(this.newObjectCollectionWith(), this.newWith().collect(booleanToObjectFunction));
         Assert.assertEquals(this.newObjectCollectionWith(true), this.newWith(false).collect(booleanToObjectFunction));
+    }
+
+    @Test
+    public void injectInto()
+    {
+        BooleanIterable iterable = this.newWith(true, false, true);
+        MutableInteger result = iterable.injectInto(new MutableInteger(0), new ObjectBooleanToObjectFunction<MutableInteger, MutableInteger>()
+        {
+            public MutableInteger valueOf(MutableInteger object, boolean value)
+            {
+                return object.add(value ? 1 : 0);
+            }
+        });
+        Assert.assertEquals(new MutableInteger(2), result);
     }
 
     @Test

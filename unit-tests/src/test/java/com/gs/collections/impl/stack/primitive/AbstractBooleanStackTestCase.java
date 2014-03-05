@@ -17,7 +17,6 @@
 package com.gs.collections.impl.stack.primitive;
 
 import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.stack.primitive.BooleanStack;
 import com.gs.collections.api.stack.primitive.ImmutableBooleanStack;
@@ -169,25 +168,6 @@ public abstract class AbstractBooleanStackTestCase extends AbstractBooleanIterab
         StringBuilder appendable3 = new StringBuilder();
         this.classUnderTest().appendString(appendable3, "{", "|", "}");
         Assert.assertEquals(this.createExpectedString("{", "|", "}"), appendable3.toString());
-    }
-
-    @Test
-    public void injectInto()
-    {
-        BooleanStack stack = this.newWithTopToBottom(true, true, false, true, false);
-        Integer total = stack.injectInto(Integer.valueOf(0), new ObjectBooleanToObjectFunction<Integer, Integer>()
-        {
-            public Integer valueOf(Integer result, boolean value)
-            {
-                if (value)
-                {
-                    return result += 2;
-                }
-
-                return result;
-            }
-        });
-        Assert.assertEquals(Integer.valueOf(6), total);
     }
 
     @Test

@@ -17,7 +17,6 @@
 package com.gs.collections.impl.list.immutable.primitive;
 
 import com.gs.collections.api.BooleanIterable;
-import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.BooleanIntProcedure;
 import com.gs.collections.api.list.primitive.ImmutableBooleanList;
 import com.gs.collections.impl.block.factory.primitive.BooleanPredicates;
@@ -150,24 +149,5 @@ public class ImmutableBooleanEmptyListTest extends AbstractImmutableBooleanListT
         Verify.assertPostSerializedIdentity(this.newWith());
         Assert.assertNotEquals(this.classUnderTest(), this.newWith(false, false, false, true));
         Assert.assertNotEquals(this.classUnderTest(), this.newWith(true));
-    }
-
-    @Test
-    public void injectInto()
-    {
-        ImmutableBooleanEmptyList stack = new ImmutableBooleanEmptyList();
-        Integer total = stack.injectInto(Integer.valueOf(0), new ObjectBooleanToObjectFunction<Integer, Integer>()
-        {
-            public Integer valueOf(Integer result, boolean value)
-            {
-                if (value)
-                {
-                    return result += 2;
-                }
-
-                return result;
-            }
-        });
-        Assert.assertEquals(Integer.valueOf(0), total);
     }
 }

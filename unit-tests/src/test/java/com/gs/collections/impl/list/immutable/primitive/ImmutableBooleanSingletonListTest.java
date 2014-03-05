@@ -16,7 +16,6 @@
 
 package com.gs.collections.impl.list.immutable.primitive;
 
-import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.BooleanIntProcedure;
 import com.gs.collections.api.list.primitive.ImmutableBooleanList;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
@@ -37,25 +36,6 @@ public class ImmutableBooleanSingletonListTest extends AbstractImmutableBooleanL
     {
         super.testEquals();
         Assert.assertNotEquals(this.newWith(true), this.newWith());
-    }
-
-    @Test
-    public void injectInto()
-    {
-        ImmutableBooleanSingletonList stack = new ImmutableBooleanSingletonList(true);
-        Integer total = stack.injectInto(Integer.valueOf(0), new ObjectBooleanToObjectFunction<Integer, Integer>()
-        {
-            public Integer valueOf(Integer result, boolean value)
-            {
-                if (value)
-                {
-                    return result += 2;
-                }
-
-                return result;
-            }
-        });
-        Assert.assertEquals(Integer.valueOf(2), total);
     }
 
     @Override

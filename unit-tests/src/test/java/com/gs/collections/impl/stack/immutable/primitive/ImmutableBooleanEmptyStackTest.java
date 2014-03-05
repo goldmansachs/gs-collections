@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@ package com.gs.collections.impl.stack.immutable.primitive;
 
 import java.util.EmptyStackException;
 
-import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
 import com.gs.collections.api.iterator.BooleanIterator;
 import com.gs.collections.api.stack.primitive.ImmutableBooleanStack;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
@@ -122,24 +121,5 @@ public class ImmutableBooleanEmptyStackTest extends AbstractImmutableBooleanStac
     {
         super.testEquals();
         Verify.assertPostSerializedIdentity(this.classUnderTest());
-    }
-
-    @Test
-    public void injectInto()
-    {
-        ImmutableBooleanEmptyStack stack = new ImmutableBooleanEmptyStack();
-        Integer total = stack.injectInto(Integer.valueOf(0), new ObjectBooleanToObjectFunction<Integer, Integer>()
-        {
-            public Integer valueOf(Integer result, boolean value)
-            {
-                if (value)
-                {
-                    return result += 2;
-                }
-
-                return result;
-            }
-        });
-        Assert.assertEquals(Integer.valueOf(0), total);
     }
 }

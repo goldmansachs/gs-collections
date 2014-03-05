@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,6 @@
 package com.gs.collections.impl.bag.immutable.primitive;
 
 import com.gs.collections.api.bag.primitive.ImmutableBooleanBag;
-import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
 import com.gs.collections.api.block.procedure.primitive.BooleanIntProcedure;
 import com.gs.collections.impl.factory.primitive.BooleanBags;
 import com.gs.collections.impl.test.Verify;
@@ -77,24 +76,5 @@ public class ImmutableBooleanEmptyBagTest extends AbstractImmutableBooleanBagTes
     {
         Assert.assertEquals(0, this.classUnderTest().occurrencesOf(true));
         Assert.assertEquals(0, this.classUnderTest().occurrencesOf(false));
-    }
-
-    @Test
-    public void injectInto()
-    {
-        ImmutableBooleanEmptyBag hashBag = new ImmutableBooleanEmptyBag();
-        Integer total = hashBag.injectInto(Integer.valueOf(0), new ObjectBooleanToObjectFunction<Integer, Integer>()
-        {
-            public Integer valueOf(Integer result, boolean value)
-            {
-                if (value)
-                {
-                    return result += 2;
-                }
-
-                return result;
-            }
-        });
-        Assert.assertEquals(Integer.valueOf(0), total);
     }
 }

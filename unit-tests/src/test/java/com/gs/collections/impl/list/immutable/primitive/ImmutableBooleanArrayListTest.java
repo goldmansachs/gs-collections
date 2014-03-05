@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,11 +16,9 @@
 
 package com.gs.collections.impl.list.immutable.primitive;
 
-import com.gs.collections.api.block.function.primitive.ObjectBooleanToObjectFunction;
 import com.gs.collections.api.list.primitive.ImmutableBooleanList;
 import com.gs.collections.impl.factory.primitive.BooleanLists;
 import com.gs.collections.impl.list.mutable.primitive.BooleanArrayList;
-import com.gs.collections.impl.math.MutableInteger;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -63,19 +61,5 @@ public class ImmutableBooleanArrayListTest extends AbstractImmutableBooleanListT
         super.size();
         Verify.assertSize(3, ImmutableBooleanArrayList.newList(BooleanArrayList.newListWith(true, false, true)));
         Verify.assertSize(3, BooleanLists.immutable.ofAll(ImmutableBooleanArrayList.newList(BooleanArrayList.newListWith(true, false, true))));
-    }
-
-    @Test
-    public void injectInto()
-    {
-        ImmutableBooleanArrayList list = ImmutableBooleanArrayList.newListWith(true, false, true);
-        MutableInteger result = list.injectInto(new MutableInteger(0), new ObjectBooleanToObjectFunction<MutableInteger, MutableInteger>()
-        {
-            public MutableInteger valueOf(MutableInteger object, boolean value)
-            {
-                return object.add(value ? 1 : 0);
-            }
-        });
-        Assert.assertEquals(new MutableInteger(2), result);
     }
 }
