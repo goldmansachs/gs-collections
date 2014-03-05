@@ -539,6 +539,15 @@ public abstract class StackIterableTestCase
     }
 
     @Test
+    public void rejectWith()
+    {
+        StackIterable<Integer> stack = this.newStackFromTopToBottom(3, 2, 1);
+        Assert.assertEquals(
+                this.newStackFromTopToBottom(2, 1),
+                stack.rejectWith(Predicates2.<Integer>greaterThan(), 2));
+    }
+
+    @Test
     public void rejectWithTarget()
     {
         Assert.assertEquals(

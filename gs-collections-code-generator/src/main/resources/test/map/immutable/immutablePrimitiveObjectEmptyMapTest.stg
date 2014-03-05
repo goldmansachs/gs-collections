@@ -29,6 +29,7 @@ import com.gs.collections.api.block.function.primitive.DoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
 import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
+import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.primitive.<name>ObjectPredicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
@@ -62,10 +63,26 @@ import org.junit.Test;
 
 /**
  * JUnit test for {@link Immutable<name>ObjectEmptyMap}.
- * This file was automatically generated from template file primitiveObjectEmptyMapTest.stg.
+ * This file was automatically generated from template file immutablePrimitiveObjectEmptyMapTest.stg.
  */
 public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>ObjectMapTestCase
 {
+    public static final Predicates2\<String, String> ERROR_THROWING_PREDICATE_2 = new Predicates2\<String, String>()
+    {
+        public boolean accept(String argument1, String argument2)
+        {
+            throw new AssertionError();
+        }
+    };
+
+    public static final Predicate\<String> ERROR_THROWING_PREDICATE = new Predicate\<String>()
+    {
+        public boolean accept(String each)
+        {
+            throw new AssertionError();
+        }
+    };
+
     @Override
     protected Immutable<name>ObjectMap\<String> classUnderTest()
     {
@@ -411,6 +428,48 @@ public class Immutable<name>ObjectEmptyMapTest extends AbstractImmutable<name>Ob
     public void countWith()
     {
         Assert.assertEquals(0, this.classUnderTest().countWith(Predicates2.alwaysTrue(), ""));
+    }
+
+    @Override
+    @Test
+    public void anySatisfy()
+    {
+        Assert.assertFalse(this.classUnderTest().anySatisfy(ERROR_THROWING_PREDICATE));
+    }
+
+    @Override
+    @Test
+    public void anySatisfyWith()
+    {
+        Assert.assertFalse(this.classUnderTest().anySatisfyWith(ERROR_THROWING_PREDICATE_2, "e"));
+    }
+
+    @Override
+    @Test
+    public void allSatisfy()
+    {
+        Assert.assertTrue(this.classUnderTest().allSatisfy(ERROR_THROWING_PREDICATE));
+    }
+
+    @Override
+    @Test
+    public void allSatisfyWith()
+    {
+        Assert.assertTrue(this.classUnderTest().allSatisfyWith(ERROR_THROWING_PREDICATE_2, "e"));
+    }
+
+    @Override
+    @Test
+    public void noneSatisfy()
+    {
+        Assert.assertTrue(this.classUnderTest().noneSatisfy(ERROR_THROWING_PREDICATE));
+    }
+
+    @Override
+    @Test
+    public void noneSatisfyWith()
+    {
+        Assert.assertTrue(this.classUnderTest().noneSatisfyWith(ERROR_THROWING_PREDICATE_2, "e"));
     }
 
     @Override

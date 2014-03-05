@@ -234,6 +234,14 @@ public class ImmutableArrayListTest
     }
 
     @Test
+    public void collectWith()
+    {
+        Assert.assertEquals(
+                this.newListWith(2, 3, 4),
+                this.newListWith(1, 2, 3).collectWith(AddFunction.INTEGER, 1));
+    }
+
+    @Test
     public void detect()
     {
         Assert.assertEquals(Integer.valueOf(3), this.newListWith(1, 2, 3, 4, 5).detect(Predicates.equal(3)));

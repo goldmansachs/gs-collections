@@ -555,19 +555,25 @@ public abstract class ImmutableBagTestCase
     }
 
     @Test
-    public void collectWithToTarget()
+    public void collectWith_target()
     {
         ImmutableBag<String> strings = this.newBag();
 
         String argument = "thing";
-        Assert.assertEquals(strings, strings.collectWith(this.generateAssertingPassThroughFunction2(argument), argument, HashBag.<String>newBag()));
+        HashBag<String> targetCollection = HashBag.<String>newBag();
+        HashBag<String> actual = strings.collectWith(this.generateAssertingPassThroughFunction2(argument), argument, targetCollection);
+        Assert.assertEquals(strings, actual);
+        Assert.assertSame(targetCollection, actual);
     }
 
     @Test
-    public void collectWithTarget()
+    public void collect_target()
     {
         ImmutableBag<String> strings = this.newBag();
-        Assert.assertEquals(strings, strings.collect(Functions.getStringPassThru(), HashBag.<String>newBag()));
+        HashBag<String> target = HashBag.<String>newBag();
+        HashBag<String> actual = strings.collect(Functions.getStringPassThru(), target);
+        Assert.assertEquals(strings, actual);
+        Assert.assertSame(target, actual);
         Assert.assertEquals(strings, strings.collect(Functions.getStringPassThru(), FastList.<String>newList()).toBag());
     }
 

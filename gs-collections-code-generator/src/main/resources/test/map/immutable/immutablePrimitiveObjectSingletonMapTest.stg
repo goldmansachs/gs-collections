@@ -214,7 +214,7 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     @Test
     public void forEach()
     {
-        final String[] concat = { "" };
+        final String[] concat = {""};
 
         this.classUnderTest().forEach(new Procedure\<String>()
         {
@@ -231,7 +231,7 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     @Test
     public void forEachWithIndex()
     {
-        final String[] concat = { "" };
+        final String[] concat = {""};
 
         this.classUnderTest().forEachWithIndex(new ObjectIntProcedure\<String>()
         {
@@ -249,7 +249,7 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     @Test
     public void forEachWith()
     {
-        final String[] concat = { "" };
+        final String[] concat = {""};
 
         this.classUnderTest().forEachWith(new Procedure2\<String, String>()
         {
@@ -267,7 +267,7 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     @Test
     public void forEachValue()
     {
-        final String[] concat = { "" };
+        final String[] concat = {""};
 
         this.classUnderTest().forEachValue(new Procedure\<String>()
         {
@@ -301,7 +301,7 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     @Test
     public void forEachKeyValue()
     {
-        final String[] concat = { "" };
+        final String[] concat = {""};
 
         this.classUnderTest().forEachKeyValue(new <name>ObjectProcedure\<String>()
         {
@@ -320,14 +320,14 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     public void select()
     {
         Assert.assertEquals(
-            <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero"),
-            this.classUnderTest().select(new <name>ObjectPredicate\<String>()
-        {
-            public boolean accept(<type> value, String object)
-            {
-                return value == 0;
-            }
-        }));
+                <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero"),
+                this.classUnderTest().select(new <name>ObjectPredicate\<String>()
+                {
+                    public boolean accept(<type> value, String object)
+                    {
+                        return value == 0;
+                    }
+                }));
 
         Verify.assertIterableEmpty(this.classUnderTest().select(new <name>ObjectPredicate\<String>()
         {
@@ -368,14 +368,14 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     public void reject()
     {
         Assert.assertEquals(
-            <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero"),
-            this.classUnderTest().reject(new <name>ObjectPredicate\<String>()
-        {
-            public boolean accept(<type> value, String object)
-            {
-                return value != 0;
-            }
-        }));
+                <name>ObjectHashMap.newWithKeysValues(<(literal.(type))("0")>, "zero"),
+                this.classUnderTest().reject(new <name>ObjectPredicate\<String>()
+                {
+                    public boolean accept(<type> value, String object)
+                    {
+                        return value != 0;
+                    }
+                }));
 
         Verify.assertIterableEmpty(this.classUnderTest().reject(new <name>ObjectPredicate\<String>()
         {
@@ -451,6 +451,54 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     {
         Assert.assertEquals(1, this.classUnderTest().countWith(Predicates2.equal(), "zero"));
         Assert.assertEquals(0, this.classUnderTest().countWith(Predicates2.equal(), "one"));
+    }
+
+    @Override
+    @Test
+    public void anySatisfy()
+    {
+        Verify.assertAnySatisfy(this.classUnderTest(), StringPredicates.endsWith("o"));
+        Assert.assertFalse(this.classUnderTest().anySatisfy(Predicates.equal("ten")));
+    }
+
+    @Override
+    @Test
+    public void anySatisfyWith()
+    {
+        Assert.assertTrue(this.classUnderTest().anySatisfyWith(StringPredicates2.endsWith(), "o"));
+        Assert.assertFalse(this.classUnderTest().anySatisfyWith(Predicates2.equal(), "ten"));
+    }
+
+    @Override
+    @Test
+    public void allSatisfy()
+    {
+        Assert.assertTrue(this.classUnderTest().allSatisfy(StringPredicates.endsWith("o")));
+        Assert.assertFalse(this.classUnderTest().allSatisfy(Predicates.equal("nine")));
+    }
+
+    @Override
+    @Test
+    public void allSatisfyWith()
+    {
+        Assert.assertTrue(this.classUnderTest().allSatisfyWith(StringPredicates2.contains(), "o"));
+        Assert.assertFalse(this.classUnderTest().allSatisfyWith(Predicates2.equal(), "nine"));
+    }
+
+    @Override
+    @Test
+    public void noneSatisfy()
+    {
+        Assert.assertFalse(this.classUnderTest().noneSatisfy(StringPredicates.endsWith("o")));
+        Assert.assertTrue(this.classUnderTest().noneSatisfy(Predicates.equal("ten")));
+    }
+
+    @Override
+    @Test
+    public void noneSatisfyWith()
+    {
+        Assert.assertTrue(this.classUnderTest().noneSatisfyWith(StringPredicates2.notContains(), "e"));
+        Assert.assertFalse(this.classUnderTest().noneSatisfyWith(StringPredicates2.endsWith(), "o"));
     }
 
     @Override
@@ -568,13 +616,13 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     public void collectIf()
     {
         Assert.assertEquals(
-            FastList.newListWith("ZERO"),
-            this.classUnderTest().collectIf(StringPredicates.endsWith("ro"), StringFunctions.toUpperCase()));
+                FastList.newListWith("ZERO"),
+                this.classUnderTest().collectIf(StringPredicates.endsWith("ro"), StringFunctions.toUpperCase()));
         Verify.assertIterableEmpty(this.classUnderTest().collectIf(StringPredicates.endsWith("ne"), StringFunctions.toUpperCase()));
         FastList\<String> target = FastList.newList();
         Assert.assertSame(
-            target,
-            this.classUnderTest().collectIf(StringPredicates.endsWith("ro"), StringFunctions.toUpperCase(), target));
+                target,
+                this.classUnderTest().collectIf(StringPredicates.endsWith("ro"), StringFunctions.toUpperCase(), target));
         Assert.assertEquals(FastList.newListWith("ZERO"), target);
     }
 
@@ -629,8 +677,8 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     public void collectBoolean()
     {
         Assert.assertEquals(
-            BooleanArrayList.newListWith(true),
-            this.newWithKeysValues(<(literal.(type))("0")>, "true").collectBoolean(StringFunctions.toPrimitiveBoolean()));
+                BooleanArrayList.newListWith(true),
+                this.newWithKeysValues(<(literal.(type))("0")>, "true").collectBoolean(StringFunctions.toPrimitiveBoolean()));
     }
 
     @Override
@@ -647,8 +695,8 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     public void collectByte()
     {
         Assert.assertEquals(
-            ByteArrayList.newListWith((byte) 0),
-            this.newWithKeysValues(<(literal.(type))("0")>, "0").collectByte(StringFunctions.toPrimitiveByte()));
+                ByteArrayList.newListWith((byte) 0),
+                this.newWithKeysValues(<(literal.(type))("0")>, "0").collectByte(StringFunctions.toPrimitiveByte()));
     }
 
     @Override
@@ -660,14 +708,13 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
         Assert.assertEquals(ByteArrayList.newListWith((byte) 0), target);
     }
 
-
     @Override
     @Test
     public void collectChar()
     {
         Assert.assertEquals(
-            CharArrayList.newListWith((char) 0),
-            this.newWithKeysValues(<(literal.(type))("0")>, "0").collectChar(StringFunctions.toPrimitiveChar()));
+                CharArrayList.newListWith((char) 0),
+                this.newWithKeysValues(<(literal.(type))("0")>, "0").collectChar(StringFunctions.toPrimitiveChar()));
     }
 
     @Override
@@ -684,8 +731,8 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     public void collectDouble()
     {
         Assert.assertEquals(
-            DoubleArrayList.newListWith((double) 0),
-            this.newWithKeysValues(<(literal.(type))("0")>, "0").collectDouble(StringFunctions.toPrimitiveDouble()));
+                DoubleArrayList.newListWith((double) 0),
+                this.newWithKeysValues(<(literal.(type))("0")>, "0").collectDouble(StringFunctions.toPrimitiveDouble()));
     }
 
     @Override
@@ -702,8 +749,8 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     public void collectFloat()
     {
         Assert.assertEquals(
-            FloatArrayList.newListWith((float) 0),
-            this.newWithKeysValues(<(literal.(type))("0")>, "0").collectFloat(StringFunctions.toPrimitiveFloat()));
+                FloatArrayList.newListWith((float) 0),
+                this.newWithKeysValues(<(literal.(type))("0")>, "0").collectFloat(StringFunctions.toPrimitiveFloat()));
     }
 
     @Override
@@ -720,8 +767,8 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     public void collectInt()
     {
         Assert.assertEquals(
-            IntArrayList.newListWith((int) 0),
-            this.newWithKeysValues(<(literal.(type))("0")>, "0").collectInt(StringFunctions.toPrimitiveInt()));
+                IntArrayList.newListWith((int) 0),
+                this.newWithKeysValues(<(literal.(type))("0")>, "0").collectInt(StringFunctions.toPrimitiveInt()));
     }
 
     @Override
@@ -738,8 +785,8 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     public void collectLong()
     {
         Assert.assertEquals(
-            LongArrayList.newListWith((long) 0),
-            this.newWithKeysValues(<(literal.(type))("0")>, "0").collectLong(StringFunctions.toPrimitiveLong()));
+                LongArrayList.newListWith((long) 0),
+                this.newWithKeysValues(<(literal.(type))("0")>, "0").collectLong(StringFunctions.toPrimitiveLong()));
     }
 
     @Override
@@ -756,8 +803,8 @@ public class Immutable<name>ObjectSingletonMapTest extends AbstractImmutable<nam
     public void collectShort()
     {
         Assert.assertEquals(
-            ShortArrayList.newListWith((short) 0),
-            this.newWithKeysValues(<(literal.(type))("0")>, "0").collectShort(StringFunctions.toPrimitiveShort()));
+                ShortArrayList.newListWith((short) 0),
+                this.newWithKeysValues(<(literal.(type))("0")>, "0").collectShort(StringFunctions.toPrimitiveShort()));
     }
 
     @Override

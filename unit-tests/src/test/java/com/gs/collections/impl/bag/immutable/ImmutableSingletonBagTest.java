@@ -345,9 +345,9 @@ public class ImmutableSingletonBagTest extends ImmutableBagTestCase
 
     @Override
     @Test
-    public void collectWithTarget()
+    public void collect_target()
     {
-        super.collectWithTarget();
+        super.collect_target();
         MutableList<Class<?>> target = Lists.mutable.of();
         this.newBag().collect(Functions.getToClass(), target);
         Verify.assertContains(String.class, target);

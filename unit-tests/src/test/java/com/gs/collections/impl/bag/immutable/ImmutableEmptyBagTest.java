@@ -22,7 +22,11 @@ import java.util.NoSuchElementException;
 
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.primitive.ImmutableBooleanBag;
+import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.partition.bag.PartitionImmutableBag;
 import com.gs.collections.api.set.ImmutableSet;
@@ -35,6 +39,7 @@ import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.factory.Bags;
+import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
@@ -45,6 +50,22 @@ import static com.gs.collections.impl.factory.Iterables.*;
 
 public class ImmutableEmptyBagTest extends ImmutableBagTestCase
 {
+    public static final Predicate<String> ERROR_THROWING_PREDICATE = new Predicate<String>()
+    {
+        public boolean accept(String each)
+        {
+            throw new AssertionError();
+        }
+    };
+
+    public static final Predicates2<String, Class<Integer>> ERROR_THROWING_PREDICATE_2 = new Predicates2<String, Class<Integer>>()
+    {
+        public boolean accept(String argument1, Class<Integer> argument2)
+        {
+            throw new AssertionError();
+        }
+    };
+
     @Override
     protected ImmutableBag<String> newBag()
     {
@@ -180,7 +201,7 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
     public void allSatisfy()
     {
         ImmutableBag<String> strings = this.newBag();
-        Assert.assertTrue(strings.allSatisfy(Predicates.instanceOf(String.class)));
+        Assert.assertTrue(strings.allSatisfy(ERROR_THROWING_PREDICATE));
     }
 
     @Override
@@ -188,7 +209,7 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
     public void anySatisfy()
     {
         ImmutableBag<String> strings = this.newBag();
-        Assert.assertFalse(strings.anySatisfy(Predicates.instanceOf(Integer.class)));
+        Assert.assertFalse(strings.anySatisfy(ERROR_THROWING_PREDICATE));
     }
 
     @Override
@@ -196,7 +217,28 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
     public void noneSatisfy()
     {
         ImmutableBag<String> strings = this.newBag();
-        Assert.assertTrue(strings.noneSatisfy(Predicates.instanceOf(Integer.class)));
+        Assert.assertTrue(strings.noneSatisfy(ERROR_THROWING_PREDICATE));
+    }
+
+    @Test
+    public void allSatisfyWith()
+    {
+        ImmutableBag<String> strings = this.newBag();
+        Assert.assertTrue(strings.allSatisfyWith(ERROR_THROWING_PREDICATE_2, Integer.class));
+    }
+
+    @Test
+    public void anySatisfyWith()
+    {
+        ImmutableBag<String> strings = this.newBag();
+        Assert.assertFalse(strings.anySatisfyWith(ERROR_THROWING_PREDICATE_2, Integer.class));
+    }
+
+    @Test
+    public void noneSatisfyWith()
+    {
+        ImmutableBag<String> strings = this.newBag();
+        Assert.assertTrue(strings.noneSatisfyWith(ERROR_THROWING_PREDICATE_2, Integer.class));
     }
 
     @Override
@@ -415,5 +457,37 @@ public class ImmutableEmptyBagTest extends ImmutableBagTestCase
         Assert.assertEquals(0, result.sizeDistinct());
         Assert.assertEquals(0, result.occurrencesOf(true));
         Assert.assertEquals(0, result.occurrencesOf(false));
+    }
+
+    @Override
+    @Test
+    public void collect_target()
+    {
+        MutableList<Integer> targetCollection = FastList.newList();
+        MutableList<Integer> actual = this.newBag().collect(new Function<String, Integer>()
+        {
+            public Integer valueOf(String object)
+            {
+                throw new AssertionError();
+            }
+        }, targetCollection);
+        Assert.assertEquals(targetCollection, actual);
+        Assert.assertSame(targetCollection, actual);
+    }
+
+    @Override
+    @Test
+    public void collectWith_target()
+    {
+        MutableList<Integer> targetCollection = FastList.newList();
+        MutableList<Integer> actual = this.newBag().collectWith(new Function2<String, Integer, Integer>()
+        {
+            public Integer value(String argument1, Integer argument2)
+            {
+                throw new AssertionError();
+            }
+        }, 1, targetCollection);
+        Assert.assertEquals(targetCollection, actual);
+        Assert.assertSame(targetCollection, actual);
     }
 }

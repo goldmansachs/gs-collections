@@ -36,6 +36,8 @@ import com.gs.collections.api.block.function.primitive.IntToObjectFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.LongToObjectFunction;
 import com.gs.collections.api.block.function.primitive.ShortToObjectFunction;
+import com.gs.collections.api.block.predicate.Predicate;
+import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.collection.ImmutableCollection;
 import com.gs.collections.api.collection.MutableCollection;
@@ -74,6 +76,22 @@ import static com.gs.collections.impl.factory.Iterables.*;
 
 public abstract class AbstractImmutableCollectionTestCase
 {
+    public static final Predicate<Integer> ERROR_THROWING_PREDICATE = new Predicate<Integer>()
+    {
+        public boolean accept(Integer each)
+        {
+            throw new AssertionError();
+        }
+    };
+
+    public static final Predicates2<Integer, Class<Integer>> ERROR_THROWING_PREDICATE_2 = new Predicates2<Integer, Class<Integer>>()
+    {
+        public boolean accept(Integer argument1, Class<Integer> argument2)
+        {
+            throw new AssertionError();
+        }
+    };
+
     protected abstract ImmutableCollection<Integer> classUnderTest();
 
     protected abstract <T> MutableCollection<T> newMutable();
@@ -149,19 +167,39 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
-    public void collectWithTarget()
+    public void collect_target()
+    {
+        ImmutableCollection<Integer> integers = this.classUnderTest();
+        final MutableCollection<String> strings = this.<String>newMutable();
+        integers.forEach(new Procedure<Integer>()
+        {
+            public void value(Integer each)
+            {
+                strings.add(each.toString());
+            }
+        });
+        MutableCollection<String> target = this.<String>newMutable();
+        MutableCollection<String> actual = integers.collect(Functions.getToString(), target);
+        Assert.assertEquals(strings, actual);
+        Assert.assertSame(target, actual);
+    }
+
+    @Test
+    public void collectWith_target()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
         MutableCollection<String> expected = this.<String>newMutable().with("?").withAll(integers.collect(Functions.chain(Functions.getToString(), StringFunctions.append("!"))));
+        MutableCollection<String> targetCollection = this.<String>newMutable().with("?");
         MutableCollection<String> actual = integers.collectWith(new Function2<Integer, String, String>()
         {
             public String value(Integer argument1, String argument2)
             {
                 return argument1 + argument2;
             }
-        }, "!", this.<String>newMutable().with("?"));
+        }, "!", targetCollection);
 
         Assert.assertEquals(expected, actual);
+        Assert.assertSame(targetCollection, actual);
     }
 
     @Test

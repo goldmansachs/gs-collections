@@ -21,6 +21,9 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+import com.gs.collections.api.block.function.Function;
+import com.gs.collections.api.block.function.Function2;
+import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.set.ImmutableSet;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.primitive.ImmutableBooleanSet;
@@ -31,6 +34,7 @@ import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.PrimitiveFunctions;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -74,14 +78,14 @@ public abstract class AbstractImmutableEmptySetTestCase extends AbstractImmutabl
     public void anySatisfy()
     {
         ImmutableSet<Integer> integers = this.classUnderTest();
-        Assert.assertFalse(integers.anySatisfy(Predicates.instanceOf(Integer.class)));
+        Assert.assertFalse(integers.anySatisfy(ERROR_THROWING_PREDICATE));
     }
 
     @Override
     public void anySatisfyWith()
     {
         ImmutableSet<Integer> integers = this.classUnderTest();
-        Assert.assertFalse(integers.anySatisfyWith(Predicates2.instanceOf(), Integer.class));
+        Assert.assertFalse(integers.anySatisfyWith(ERROR_THROWING_PREDICATE_2, Integer.class));
     }
 
     @Override
@@ -89,28 +93,28 @@ public abstract class AbstractImmutableEmptySetTestCase extends AbstractImmutabl
     public void allSatisfy()
     {
         ImmutableSet<Integer> integers = this.classUnderTest();
-        Assert.assertTrue(integers.allSatisfy(Predicates.instanceOf(Integer.class)));
+        Assert.assertTrue(integers.allSatisfy(ERROR_THROWING_PREDICATE));
     }
 
     @Override
     public void allSatisfyWith()
     {
         ImmutableSet<Integer> integers = this.classUnderTest();
-        Assert.assertTrue(integers.allSatisfyWith(Predicates2.instanceOf(), Integer.class));
+        Assert.assertTrue(integers.allSatisfyWith(ERROR_THROWING_PREDICATE_2, Integer.class));
     }
 
     @Override
     public void noneSatisfy()
     {
         ImmutableSet<Integer> integers = this.classUnderTest();
-        Assert.assertTrue(integers.noneSatisfy(Predicates.instanceOf(Integer.class)));
+        Assert.assertTrue(integers.noneSatisfy(ERROR_THROWING_PREDICATE));
     }
 
     @Override
     public void noneSatisfyWith()
     {
         ImmutableSet<Integer> integers = this.classUnderTest();
-        Assert.assertTrue(integers.noneSatisfyWith(Predicates2.instanceOf(), Integer.class));
+        Assert.assertTrue(integers.noneSatisfyWith(ERROR_THROWING_PREDICATE_2, Integer.class));
     }
 
     @Override
@@ -349,5 +353,37 @@ public abstract class AbstractImmutableEmptySetTestCase extends AbstractImmutabl
         ImmutableSet<Integer> integers = this.classUnderTest();
         ImmutableBooleanSet actual = integers.collectBoolean(PrimitiveFunctions.integerIsPositive());
         Verify.assertEmpty(actual);
+    }
+
+    @Override
+    @Test
+    public void collect_target()
+    {
+        MutableList<Integer> targetCollection = FastList.newList();
+        MutableList<Integer> actual = this.classUnderTest().collect(new Function<Integer, Integer>()
+        {
+            public Integer valueOf(Integer object)
+            {
+                throw new AssertionError();
+            }
+        }, targetCollection);
+        Assert.assertEquals(targetCollection, actual);
+        Assert.assertSame(targetCollection, actual);
+    }
+
+    @Override
+    @Test
+    public void collectWith_target()
+    {
+        MutableList<Integer> targetCollection = FastList.newList();
+        MutableList<Integer> actual = this.classUnderTest().collectWith(new Function2<Integer, Integer, Integer>()
+        {
+            public Integer value(Integer argument1, Integer argument2)
+            {
+                throw new AssertionError();
+            }
+        }, 1, targetCollection);
+        Assert.assertEquals(targetCollection, actual);
+        Assert.assertSame(targetCollection, actual);
     }
 }

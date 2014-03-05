@@ -183,13 +183,6 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
     }
 
     @Test
-    public void collectWithTarget()
-    {
-        ImmutableCollection<Integer> integers = this.classUnderTest();
-        Assert.assertEquals(integers, integers.collect(Functions.getIntegerPassThru(), UnifiedSet.<Integer>newSet()));
-    }
-
-    @Test
     public void flatCollectWithTarget()
     {
         MutableCollection<String> actual = this.classUnderTest().flatCollect(new Function<Integer, MutableList<String>>()
