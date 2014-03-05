@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,17 +22,17 @@ import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.impl.IntegerWithCast;
 import com.gs.collections.impl.list.mutable.FastList;
 import org.junit.Assert;
-import org.junit.Assume;
 import org.junit.Test;
-
-import static org.hamcrest.CoreMatchers.*;
 
 public abstract class AbstractUnifiedSetTestCase extends AbstractMutableSetTestCase
 {
     @Test
     public void addOnObjectWithCastInEquals()
     {
-        Assume.assumeThat(this.newWith(), not(instanceOf(SortedSet.class)));
+        if (this.newWith() instanceof SortedSet)
+        {
+            return;
+        }
         MutableSet<IntegerWithCast> mutableSet = this.newWith(new IntegerWithCast(0));
         Assert.assertFalse(mutableSet.add(new IntegerWithCast(0)));
         Assert.assertTrue(mutableSet.add(null));

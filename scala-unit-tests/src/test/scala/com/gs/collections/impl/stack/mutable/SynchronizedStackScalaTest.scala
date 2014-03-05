@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,7 +17,7 @@
 package com.gs.collections.impl.stack.mutable
 
 import com.gs.collections.impl.SynchronizedRichIterableTestTrait
-import org.junit.{Ignore, Test}
+import org.junit.Test
 
 class SynchronizedStackScalaTest extends SynchronizedRichIterableTestTrait
 {
@@ -95,7 +95,6 @@ class SynchronizedStackScalaTest extends SynchronizedRichIterableTestTrait
         }
     }
 
-    @Ignore
     @Test
     def to_immutable
     {

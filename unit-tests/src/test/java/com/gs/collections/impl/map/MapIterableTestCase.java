@@ -93,11 +93,9 @@ import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;
 import com.gs.collections.impl.test.Verify;
 import com.gs.collections.impl.tuple.Tuples;
 import org.junit.Assert;
-import org.junit.Assume;
 import org.junit.Test;
 
 import static com.gs.collections.impl.factory.Iterables.*;
-import static org.hamcrest.CoreMatchers.*;
 
 public abstract class MapIterableTestCase
 {
@@ -1389,8 +1387,10 @@ public abstract class MapIterableTestCase
     @Test
     public void nullCollisionWithCastInEquals()
     {
-        Assume.assumeThat(this.newMap(), not(instanceOf(SortedMap.class)));
-        Assume.assumeThat(this.newMap(), not(instanceOf(ConcurrentMap.class)));
+        if (this.newMap() instanceof SortedMap || this.newMap() instanceof ConcurrentMap)
+        {
+            return;
+        }
         MapIterable<IntegerWithCast, String> mutableMap = this.newMapWithKeysValues(
                 new IntegerWithCast(0), "Test 2",
                 new IntegerWithCast(0), "Test 3",

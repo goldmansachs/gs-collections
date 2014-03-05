@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,11 +56,9 @@ import com.gs.collections.impl.tuple.ImmutableEntry;
 import com.gs.collections.impl.tuple.Tuples;
 import com.gs.collections.impl.utility.Iterate;
 import org.junit.Assert;
-import org.junit.Assume;
 import org.junit.Test;
 
 import static com.gs.collections.impl.factory.Iterables.*;
-import static org.hamcrest.CoreMatchers.*;
 
 /**
  * Abstract JUnit TestCase for {@link MutableMap}s.
@@ -787,7 +785,10 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
     @Test
     public void retainAllFromKeySet_null_collision()
     {
-        Assume.assumeThat(this.newMap(), not(instanceOf(ConcurrentMap.class)));
+        if (this.newMap() instanceof ConcurrentMap)
+        {
+            return;
+        }
 
         IntegerWithCast key = new IntegerWithCast(0);
         MutableMap<IntegerWithCast, String> mutableMap = this.newMapWithKeysValues(
@@ -806,7 +807,10 @@ public abstract class MutableMapTestCase extends MapIterableTestCase
     @Test
     public void rehash_null_collision()
     {
-        Assume.assumeThat(this.newMap(), not(instanceOf(ConcurrentMap.class)));
+        if (this.newMap() instanceof ConcurrentMap)
+        {
+            return;
+        }
         MutableMap<IntegerWithCast, String> mutableMap = this.newMapWithKeyValue(null, null);
 
         for (int i = 0; i < 256; i++)
