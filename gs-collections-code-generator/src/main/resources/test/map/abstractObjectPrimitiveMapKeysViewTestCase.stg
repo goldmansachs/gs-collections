@@ -33,7 +33,7 @@ import org.junit.Test;
 
 /**
  * Abstract JUnit test for {@link Object<name>Map#keysView()}.
- * This file was automatically generated from template file abstractObjectPrimitiveMapKeysViewTest.stg.
+ * This file was automatically generated from template file abstractObjectPrimitiveMapKeysViewTestCase.stg.
  */
 public abstract class AbstractObject<name>MapKeysViewTestCase extends AbstractLazyIterableTestCase
 {

@@ -26,8 +26,8 @@ import com.gs.collections.impl.set.mutable.primitive.AbstractImmutable<name>Hash
 import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
 
 /**
- * JUnit test for {@link Immutable<name>Set}.
- * This file was automatically generated from template file immutablePrimitiveSetTest.stg.
+ * JUnit test for {@link Immutable<name>HashSet}.
+ * This file was automatically generated from template file immutablePrimitiveHashSetTest.stg.
  */
 public class Immutable<name>HashSetTest extends AbstractImmutable<name>HashSetTestCase
 {

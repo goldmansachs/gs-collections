@@ -35,8 +35,8 @@ import org.junit.Assert;
 import org.junit.Test;
 
 /**
- * JUnit test for {@link <name>HashBag}.
- * This file was automatically generated from template file abstractPrimitiveBagTestCase.stg.
+ * JUnit test for {@link Mutable<name>Bag}.
+ * This file was automatically generated from template file abstractMutablePrimitiveBagTestCase.stg.
  */
 public abstract class AbstractMutable<name>BagTestCase extends AbstractMutable<name>CollectionTestCase
 {

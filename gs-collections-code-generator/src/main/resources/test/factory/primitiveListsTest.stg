@@ -24,6 +24,10 @@ import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * JUnit test for {@link <name>Lists}.
+ * This file was automatically generated from template file primitiveListsTest.stg.
+ */
 public class <name>ListsTest
 {
     @Test

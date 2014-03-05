@@ -25,7 +25,7 @@ import org.junit.Test;
 
 /**
  * JUnit test for {@link SynchronizedObject<name>Map}.
- * This file was automatically generated from template file synchronizedObjectPrimitiveHashMapTest.stg.
+ * This file was automatically generated from template file synchronizedObjectPrimitiveMapTest.stg.
  */
 public class SynchronizedObject<name>MapTest extends AbstractMutableObject<name>MapTestCase
 {

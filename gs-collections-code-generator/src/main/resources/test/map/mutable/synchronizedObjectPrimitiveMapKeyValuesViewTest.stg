@@ -22,7 +22,7 @@ import com.gs.collections.impl.map.primitive.AbstractObject<name>MapKeyValuesVie
 
 /**
  * JUnit test for {@link SynchronizedObject<name>Map#keyValuesView()}.
- * This file was automatically generated from template file synchronizedObjectPrimitiveHashMapKeyValuesViewTest.stg.
+ * This file was automatically generated from template file synchronizedObjectPrimitiveMapKeyValuesViewTest.stg.
  */
 public class SynchronizedObject<name>MapKeyValuesViewTest extends AbstractObject<name>MapKeyValuesViewTestCase
 {

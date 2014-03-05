@@ -32,7 +32,7 @@ import org.junit.Test;
 
 /**
  * Abstract JUnit test for {@link Immutable<name>BooleanMap}.
- * This file was automatically generated from template file abstractImmutablePrimitivePrimitiveMapTestCase.stg.
+ * This file was automatically generated from template file abstractImmutablePrimitiveBooleanMapTestCase.stg.
  */
 public abstract class AbstractImmutable<name>BooleanMapTestCase extends Abstract<name>BooleanMapTestCase
 {

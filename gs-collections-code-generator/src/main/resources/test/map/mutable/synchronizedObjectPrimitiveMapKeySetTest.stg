@@ -31,6 +31,10 @@ import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
+/**
+ * JUnit test for {@link SynchronizedObject<name>Map#keySet()}.
+ * This file was automatically generated from template file synchronizedObjectPrimitiveMapKeySetTest.stg.
+ */
 public class SynchronizedObject<name>MapKeySetTest
 {
     private SynchronizedObject<name>Map\<String> newMapWithKeysValues(String key1, <type> value1, String key2, <type> value2, String key3, <type> value3)

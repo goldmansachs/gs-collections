@@ -22,7 +22,7 @@ import com.gs.collections.impl.map.primitive.AbstractObject<name>MapKeyValuesVie
 
 /**
  * JUnit test for {@link UnmodifiableObject<name>Map#keyValuesView()}.
- * This file was automatically generated from template file unmodifiableObjectPrimitiveHashMapKeyValuesViewTest.stg.
+ * This file was automatically generated from template file unmodifiableObjectPrimitiveMapKeyValuesViewTest.stg.
  */
 public class UnmodifiableObject<name>MapKeyValuesViewTest extends AbstractObject<name>MapKeyValuesViewTestCase
 {

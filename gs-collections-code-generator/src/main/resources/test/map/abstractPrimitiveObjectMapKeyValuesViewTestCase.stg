@@ -91,7 +91,7 @@ import org.junit.Test;
 
 /**
  * Abstract JUnit test for {@link <name>ObjectMap#keyValuesView()}.
- * This file was automatically generated from template file abstractPrimitiveObjectMapKeyValuesViewTest.stg.
+ * This file was automatically generated from template file abstractPrimitiveObjectMapKeyValuesViewTestCase.stg.
  */
 public abstract class Abstract<name>ObjectMapKeyValuesViewTestCase
 {
