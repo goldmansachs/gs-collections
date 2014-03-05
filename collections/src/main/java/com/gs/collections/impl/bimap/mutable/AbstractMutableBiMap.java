@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -908,17 +908,17 @@ abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
 
     public ImmutableBiMap<K, V> toImmutable()
     {
-        throw new UnsupportedOperationException("toImmutable not implemented yet!");
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".toImmutable() not implemented yet");
     }
 
     public MutableBiMap<K, V> asSynchronized()
     {
-        throw new UnsupportedOperationException("asSynchronized not implemented yet!");
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".asSynchronized() not implemented yet");
     }
 
     public MutableBiMap<K, V> asUnmodifiable()
     {
-        throw new UnsupportedOperationException("asUnmodifiable not implemented yet!");
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".asUnmodifiable() not implemented yet");
     }
 
     public <E> MutableMap<K, V> collectKeysAndValues(Iterable<E> iterable, Function<? super E, ? extends K> keyFunction, Function<? super E, ? extends V> valueFunction)
@@ -1170,7 +1170,7 @@ abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
 
         public boolean add(K key)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call add() on " + this.getClass().getSimpleName());
         }
 
         public boolean remove(Object key)
@@ -1194,7 +1194,7 @@ abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
 
         public boolean addAll(Collection<? extends K> source)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
         }
 
         public boolean retainAll(Collection<?> collection)
@@ -1268,7 +1268,7 @@ abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
 
         public boolean add(V v)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call add() on " + this.getClass().getSimpleName());
         }
 
         public boolean remove(Object value)
@@ -1292,7 +1292,7 @@ abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
 
         public boolean addAll(Collection<? extends V> collection)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
         }
 
         public boolean removeAll(Collection<?> collection)
@@ -1453,7 +1453,7 @@ abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
 
         public boolean addAll(Collection<? extends Map.Entry<K, V>> collection)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
         }
 
         public boolean retainAll(Collection<?> collection)

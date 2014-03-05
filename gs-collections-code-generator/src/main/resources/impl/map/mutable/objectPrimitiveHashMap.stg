@@ -1299,7 +1299,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
 
         public boolean add(K key)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call add() on " + this.getClass().getSimpleName());
         }
 
         public boolean remove(Object key)
@@ -1323,7 +1323,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
 
         public boolean addAll(Collection\<? extends K> collection)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
         }
 
         public boolean retainAll(Collection\<?> collection)
@@ -1509,17 +1509,17 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
 
         public boolean add(<type> element)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call add() on " + this.getClass().getSimpleName());
         }
 
         public boolean addAll(<type>... source)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
         }
 
         public boolean addAll(<name>Iterable source)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
         }
 
         public boolean remove(<type> item)
@@ -1593,22 +1593,22 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
 
         public Mutable<name>Collection with(<type> element)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call with() on " + this.getClass().getSimpleName());
         }
 
         public Mutable<name>Collection without(<type> element)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call without() on " + this.getClass().getSimpleName());
         }
 
         public Mutable<name>Collection withAll(<name>Iterable elements)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call withAll() on " + this.getClass().getSimpleName());
         }
 
         public Mutable<name>Collection withoutAll(<name>Iterable elements)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call withoutAll() on " + this.getClass().getSimpleName());
         }
 
         public Mutable<name>Collection asUnmodifiable()
@@ -1828,7 +1828,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
 
             public void remove()
             {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException("Cannot call remove() on " + this.getClass().getSimpleName());
             }
 
             public boolean hasNext()
@@ -1905,7 +1905,7 @@ public class Object<name>HashMap\<K> implements MutableObject<name>Map\<K>, Exte
 
             public void remove()
             {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException("Cannot call remove() on " + this.getClass().getSimpleName());
             }
 
             public boolean hasNext()

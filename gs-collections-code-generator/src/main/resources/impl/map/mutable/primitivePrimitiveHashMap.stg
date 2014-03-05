@@ -1519,17 +1519,17 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
 
         public boolean add(<type1> element)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call add() on " + this.getClass().getSimpleName());
         }
 
         public boolean addAll(<type1>... source)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
         }
 
         public boolean addAll(<name1>Iterable source)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
         }
 
         public boolean remove(<type1> key)
@@ -1643,22 +1643,22 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
 
         public Mutable<name1>Set with(<type1> element)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call with() on " + this.getClass().getSimpleName());
         }
 
         public Mutable<name1>Set without(<type1> element)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call without() on " + this.getClass().getSimpleName());
         }
 
         public Mutable<name1>Set withAll(<name1>Iterable elements)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call withAll() on " + this.getClass().getSimpleName());
         }
 
         public Mutable<name1>Set withoutAll(<name1>Iterable elements)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call withoutAll() on " + this.getClass().getSimpleName());
         }
 
         public <type1> detectIfNone(<name1>Predicate predicate, <type1> ifNone)
@@ -1961,7 +1961,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
 
         public <name1>Set freeze()
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".freeze() not implemented yet");
         }
 
         public Immutable<name1>Set toImmutable()
@@ -2189,22 +2189,22 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
 
         public Mutable<name2>Collection with(<type2> element)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call with() on " + this.getClass().getSimpleName());
         }
 
         public Mutable<name2>Collection without(<type2> element)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call without() on " + this.getClass().getSimpleName());
         }
 
         public Mutable<name2>Collection withAll(<name2>Iterable elements)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call withAll() on " + this.getClass().getSimpleName());
         }
 
         public Mutable<name2>Collection withoutAll(<name2>Iterable elements)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call withoutAll() on " + this.getClass().getSimpleName());
         }
 
         public Mutable<name2>Collection asUnmodifiable()
@@ -2372,17 +2372,17 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
 
         public boolean add(<type2> element)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call add() on " + this.getClass().getSimpleName());
         }
 
         public boolean addAll(<type2>... source)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
         }
 
         public boolean addAll(<name2>Iterable source)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
         }
 
         public boolean remove(<type2> item)
@@ -2539,7 +2539,7 @@ public class <name1><name2>HashMap implements Mutable<name1><name2>Map, External
 
             public void remove()
             {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException("Cannot call remove() on " + this.getClass().getSimpleName());
             }
 
             public boolean hasNext()

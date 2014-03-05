@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -985,54 +985,54 @@ public final class Interval
 
     public boolean add(Integer integer)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call add() on " + this.getClass().getSimpleName());
     }
 
     public boolean remove(Object o)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call remove() on " + this.getClass().getSimpleName());
     }
 
     @SuppressWarnings("TypeParameterExtendsFinalClass")
     public boolean addAll(Collection<? extends Integer> collection)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
     }
 
     @SuppressWarnings("TypeParameterExtendsFinalClass")
     public boolean addAll(int index, Collection<? extends Integer> collection)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
     }
 
     public boolean removeAll(Collection<?> collection)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call removeAll() on " + this.getClass().getSimpleName());
     }
 
     public boolean retainAll(Collection<?> collection)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call retainAll() on " + this.getClass().getSimpleName());
     }
 
     public void clear()
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call clear() on " + this.getClass().getSimpleName());
     }
 
     public Integer set(int index, Integer element)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call set() on " + this.getClass().getSimpleName());
     }
 
     public void add(int index, Integer element)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call add() on " + this.getClass().getSimpleName());
     }
 
     public Integer remove(int index)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call remove() on " + this.getClass().getSimpleName());
     }
 
     public ListIterator<Integer> listIterator()

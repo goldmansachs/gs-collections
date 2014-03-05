@@ -82,51 +82,51 @@ public final class Unmodifiable<name>List
 
     public void addAtIndex(int index, <type> element)
     {
-        throw new UnsupportedOperationException("Cannot call addAtIndex on an unmodifiable collection");
+        throw new UnsupportedOperationException("Cannot call addAtIndex() on " + this.getClass().getSimpleName());
     }
 
     public boolean addAllAtIndex(int index, <type>... source)
     {
-        throw new UnsupportedOperationException("Cannot call addAllAtIndex on an unmodifiable collection");
+        throw new UnsupportedOperationException("Cannot call addAllAtIndex() on " + this.getClass().getSimpleName());
     }
 
     public boolean addAllAtIndex(int index, <name>Iterable source)
     {
-        throw new UnsupportedOperationException("Cannot call addAllAtIndex on an unmodifiable collection");
+        throw new UnsupportedOperationException("Cannot call addAllAtIndex() on " + this.getClass().getSimpleName());
     }
 
     public <type> removeAtIndex(int index)
     {
-        throw new UnsupportedOperationException("Cannot call removeAtIndex on an unmodifiable collection");
+        throw new UnsupportedOperationException("Cannot call removeAtIndex() on " + this.getClass().getSimpleName());
     }
 
     public <type> set(int index, <type> element)
     {
-        throw new UnsupportedOperationException("Cannot call set on an unmodifiable collection");
+        throw new UnsupportedOperationException("Cannot call set() on " + this.getClass().getSimpleName());
     }
 
     @Override
     public Unmodifiable<name>List with(<type> element)
     {
-        throw new UnsupportedOperationException("Cannot call with on an unmodifiable collection");
+        throw new UnsupportedOperationException("Cannot call with() on " + this.getClass().getSimpleName());
     }
 
     @Override
     public Unmodifiable<name>List without(<type> element)
     {
-        throw new UnsupportedOperationException("Cannot call without on an unmodifiable collection");
+        throw new UnsupportedOperationException("Cannot call without() on " + this.getClass().getSimpleName());
     }
 
     @Override
     public Unmodifiable<name>List withAll(<name>Iterable elements)
     {
-        throw new UnsupportedOperationException("Cannot call withAll on an unmodifiable collection");
+        throw new UnsupportedOperationException("Cannot call withAll() on " + this.getClass().getSimpleName());
     }
 
     @Override
     public Unmodifiable<name>List withoutAll(<name>Iterable elements)
     {
-        throw new UnsupportedOperationException("Cannot call withoutAll on an unmodifiable collection");
+        throw new UnsupportedOperationException("Cannot call withoutAll() on " + this.getClass().getSimpleName());
     }
 
     @Override
@@ -195,7 +195,7 @@ public final class Unmodifiable<name>List
 
     public Mutable<name>List reverseThis()
     {
-        throw new UnsupportedOperationException("Cannot call reverseThis on an unmodifiable collection");
+        throw new UnsupportedOperationException("Cannot call reverseThis() on " + this.getClass().getSimpleName());
     }
 
     public Mutable<name>List toReversed()
@@ -245,7 +245,7 @@ arithmeticMethods ::= [
 allMethods(name, type) ::=<<
 public Mutable<name>List sortThis()
 {
-    throw new UnsupportedOperationException("Cannot call sortThis on an unmodifiable collection");
+    throw new UnsupportedOperationException("Cannot call sortThis() on " + this.getClass().getSimpleName());
 }
 
 public <wideType.(type)> dotProduct(<name>List list)

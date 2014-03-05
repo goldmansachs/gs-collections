@@ -55,35 +55,35 @@ public final class Unmodifiable<name>Bag
     @Override
     public Unmodifiable<name>Bag with(<type> element)
     {
-        throw new UnsupportedOperationException("Cannot use with on an Unmodifiable<name>Bag");
+        throw new UnsupportedOperationException("Cannot call with() on " + this.getClass().getSimpleName());
     }
 
     @Override
     public Unmodifiable<name>Bag without(<type> element)
     {
-        throw new UnsupportedOperationException("Cannot use without on an Unmodifiable<name>Bag");
+        throw new UnsupportedOperationException("Cannot call without() on " + this.getClass().getSimpleName());
     }
 
     @Override
     public Unmodifiable<name>Bag withAll(<name>Iterable elements)
     {
-        throw new UnsupportedOperationException("Cannot use withAll on an Unmodifiable<name>Bag");
+        throw new UnsupportedOperationException("Cannot call withAll() on " + this.getClass().getSimpleName());
     }
 
     @Override
     public Unmodifiable<name>Bag withoutAll(<name>Iterable elements)
     {
-        throw new UnsupportedOperationException("Cannot use withoutAll on an Unmodifiable<name>Bag");
+        throw new UnsupportedOperationException("Cannot call withoutAll() on " + this.getClass().getSimpleName());
     }
 
     public void addOccurrences(<type> item, int occurrences)
     {
-        throw new UnsupportedOperationException("Cannot use addOccurrences on an Unmodifiable<name>Bag");
+        throw new UnsupportedOperationException("Cannot call addOccurrences() on " + this.getClass().getSimpleName());
     }
 
     public boolean removeOccurrences(<type> item, int occurrences)
     {
-        throw new UnsupportedOperationException("Cannot use removeOccurrences on an Unmodifiable<name>Bag");
+        throw new UnsupportedOperationException("Cannot call removeOccurrences() on " + this.getClass().getSimpleName());
     }
 
     public int sizeDistinct()

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,22 +67,22 @@ public class UnmodifiableMap<K, V> implements Map<K, V>, Serializable
 
     public V put(K key, V value)
     {
-        throw new UnsupportedOperationException("Cannot add to an UnmodifiableMap.");
+        throw new UnsupportedOperationException("Cannot call put() on " + this.getClass().getSimpleName());
     }
 
     public V remove(Object key)
     {
-        throw new UnsupportedOperationException("Cannot remove from an UnmodifiableMap.");
+        throw new UnsupportedOperationException("Cannot call remove() on " + this.getClass().getSimpleName());
     }
 
     public void putAll(Map<? extends K, ? extends V> t)
     {
-        throw new UnsupportedOperationException("Cannot add to an UnmodifiableMap.");
+        throw new UnsupportedOperationException("Cannot call putAll() on " + this.getClass().getSimpleName());
     }
 
     public void clear()
     {
-        throw new UnsupportedOperationException("Cannot remove from an UnmodifiableMap.");
+        throw new UnsupportedOperationException("Cannot call clear() on " + this.getClass().getSimpleName());
     }
 
     public Set<K> keySet()

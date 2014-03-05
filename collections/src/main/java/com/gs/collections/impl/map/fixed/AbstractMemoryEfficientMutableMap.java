@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -38,27 +38,27 @@ abstract class AbstractMemoryEfficientMutableMap<K, V>
 
     public V put(K key, V value)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call put() on " + this.getClass().getSimpleName());
     }
 
     public V remove(Object key)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call remove() on " + this.getClass().getSimpleName());
     }
 
     public void putAll(Map<? extends K, ? extends V> map)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call putAll() on " + this.getClass().getSimpleName());
     }
 
     public void clear()
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call clear() on " + this.getClass().getSimpleName());
     }
 
     public V removeKey(K key)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call removeKey() on " + this.getClass().getSimpleName());
     }
 
     public <E> MutableMap<K, V> collectKeysAndValues(
@@ -66,19 +66,19 @@ abstract class AbstractMemoryEfficientMutableMap<K, V>
             Function<? super E, ? extends K> keyFunction,
             Function<? super E, ? extends V> valueFunction)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call collectKeysAndValues() on " + this.getClass().getSimpleName());
     }
 
     @Override
     public V updateValue(K key, Function0<? extends V> factory, Function<? super V, ? extends V> function)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".updateValue() not implemented yet");
     }
 
     @Override
     public <P> V updateValueWith(K key, Function0<? extends V> factory, Function2<? super V, ? super P, ? extends V> function, P parameter)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".updateValueWith() not implemented yet");
     }
 
     public MutableMap<K, V> newEmpty()

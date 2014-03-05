@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -403,12 +403,12 @@ public abstract class AbstractMutableMap<K, V> extends AbstractMapIterable<K, V>
     {
         public boolean add(V v)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call add() on " + this.getClass().getSimpleName());
         }
 
         public boolean addAll(Collection<? extends V> collection)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
         }
     }
 

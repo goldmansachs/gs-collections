@@ -289,7 +289,7 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
 
     public T getLast()
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call getLast() on " + this.getClass().getSimpleName());
     }
 
     public boolean contains(Object object)

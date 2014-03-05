@@ -56,17 +56,17 @@ public final class Unmodifiable<name>Stack
 
     public void push(<type> item)
     {
-        throw new UnsupportedOperationException("Cannot push on an Unmodifiable<name>Stack");
+        throw new UnsupportedOperationException("Cannot call push() on " + this.getClass().getSimpleName());
     }
 
     public <type> pop()
     {
-        throw new UnsupportedOperationException("Cannot pop from an Unmodifiable<name>Stack");
+        throw new UnsupportedOperationException("Cannot call pop() on " + this.getClass().getSimpleName());
     }
 
     public <name>List pop(int count)
     {
-        throw new UnsupportedOperationException("Cannot pop from an Unmodifiable<name>Stack");
+        throw new UnsupportedOperationException("Cannot call pop() on " + this.getClass().getSimpleName());
     }
 
     public <type> peek()
@@ -101,7 +101,7 @@ public final class Unmodifiable<name>Stack
 
     public void clear()
     {
-        throw new UnsupportedOperationException("Cannot clear an Unmodifiable<name>Stack");
+        throw new UnsupportedOperationException("Cannot call clear() on " + this.getClass().getSimpleName());
     }
 
     public boolean contains(<type> value)

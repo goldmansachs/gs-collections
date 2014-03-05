@@ -735,7 +735,7 @@ final class Immutable<name>ObjectEmptyMap\<V> implements Immutable<name>ObjectMa
 
         public void remove()
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call remove() on " + this.getClass().getSimpleName());
         }
     }
 }

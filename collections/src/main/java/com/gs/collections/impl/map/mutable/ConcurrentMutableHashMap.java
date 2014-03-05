@@ -337,7 +337,7 @@ public final class ConcurrentMutableHashMap<K, V>
 
     public V getIfAbsentPut(K key, Function<? super K, ? extends V> factory)
     {
-        throw new UnsupportedOperationException("not implemented");
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".getIfAbsentPut() not implemented yet");
     }
 
     @Override

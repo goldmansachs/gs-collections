@@ -192,7 +192,7 @@ public final class TreeSortedSet<T>
         {
             throw new IllegalArgumentException();
         }
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".asParallel() not implemented yet");
     }
 
     public ImmutableSortedSet<T> toImmutable()

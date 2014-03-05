@@ -116,12 +116,12 @@ public abstract class AbstractImmutableSortedMap<K, V>
 
     public void putAll(Map<? extends K, ? extends V> map)
     {
-        throw new UnsupportedOperationException("ImmutableSortedMap");
+        throw new UnsupportedOperationException("Cannot call putAll() on " + this.getClass().getSimpleName());
     }
 
     public void clear()
     {
-        throw new UnsupportedOperationException("ImmutableSortedMap");
+        throw new UnsupportedOperationException("Cannot call clear() on " + this.getClass().getSimpleName());
     }
 
     public Set<Entry<K, V>> entrySet()
@@ -183,12 +183,12 @@ public abstract class AbstractImmutableSortedMap<K, V>
 
     public V put(K key, V value)
     {
-        throw new UnsupportedOperationException("ImmutableSortedMap");
+        throw new UnsupportedOperationException("Cannot call put() on " + this.getClass().getSimpleName());
     }
 
     public V remove(Object key)
     {
-        throw new UnsupportedOperationException("ImmutableSortedMap");
+        throw new UnsupportedOperationException("Cannot call remove() on " + this.getClass().getSimpleName());
     }
 
     public ImmutableSortedSetMultimap<V, K> flip()
@@ -380,17 +380,17 @@ public abstract class AbstractImmutableSortedMap<K, V>
 
     public SortedMap<K, V> subMap(K fromKey, K toKey)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".subMap() not implemented yet");
     }
 
     public SortedMap<K, V> headMap(K toKey)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".headMap() not implemented yet");
     }
 
     public SortedMap<K, V> tailMap(K fromKey)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".tailMap() not implemented yet");
     }
 
     public <R> ImmutableListMultimap<R, V> groupBy(Function<? super V, ? extends R> function)

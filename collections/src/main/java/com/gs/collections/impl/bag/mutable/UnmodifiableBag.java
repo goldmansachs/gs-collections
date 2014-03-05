@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -262,17 +262,17 @@ public class UnmodifiableBag<T>
 
     public void addOccurrences(T item, int occurrences)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call addOccurrences() on " + this.getClass().getSimpleName());
     }
 
     public boolean removeOccurrences(Object item, int occurrences)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call removeOccurrences() on " + this.getClass().getSimpleName());
     }
 
     public boolean setOccurrences(T item, int occurrences)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call setOccurrences() on " + this.getClass().getSimpleName());
     }
 
     public int sizeDistinct()

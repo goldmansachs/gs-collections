@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -92,7 +92,7 @@ public class CollectByteToObjectIterable<V>
 
             public void remove()
             {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException("Cannot call remove() on " + this.getClass().getSimpleName());
             }
         };
     }

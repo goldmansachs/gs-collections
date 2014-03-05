@@ -1800,7 +1800,7 @@ public class FastList<T>
 
             public void remove()
             {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException("Cannot call remove() on " + this.getClass().getSimpleName());
             }
         }
 
@@ -1825,7 +1825,7 @@ public class FastList<T>
 
             public void forEachWithIndex(ObjectIntProcedure<? super RootListBatch<T>> objectIntProcedure)
             {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".forEachWithIndex() not implemented yet");
             }
 
             public Iterator<RootListBatch<T>> iterator()

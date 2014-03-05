@@ -399,17 +399,17 @@ abstract class AbstractImmutableSortedSet<T> extends AbstractImmutableCollection
 
     public SortedSet<T> subSet(T fromElement, T toElement)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".subSet() not implemented yet");
     }
 
     public SortedSet<T> headSet(T toElement)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".headSet() not implemented yet");
     }
 
     public SortedSet<T> tailSet(T fromElement)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".tailSet() not implemented yet");
     }
 
     public ImmutableSortedSet<T> toImmutable()

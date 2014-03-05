@@ -535,7 +535,7 @@ public class TreeBag<T>
 
     public ImmutableSortedBag<T> toImmutable()
     {
-        throw new UnsupportedOperationException("toImmutable not implemented yet!");
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".toImmutable() not implemented yet");
     }
 
     public <P, V> MutableList<V> collectWith(
@@ -717,7 +717,7 @@ public class TreeBag<T>
 
     public MutableSortedBag<T> asSynchronized()
     {
-        throw new UnsupportedOperationException("asSynchronized not implemented yet!");
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".asSynchronized() not implemented yet");
     }
 
     @Beta
@@ -731,7 +731,7 @@ public class TreeBag<T>
         {
             throw new IllegalArgumentException();
         }
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".asParallel() not implemented yet");
     }
 
     @Override

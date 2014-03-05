@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -132,7 +132,7 @@ abstract class AbstractMemoryEfficientMutableSet<T>
 
         public void remove()
         {
-            throw new UnsupportedOperationException("Cannot remove from a non-resizable Set");
+            throw new UnsupportedOperationException("Cannot remove from a fixed size set: " + this.getClass());
         }
     }
 }

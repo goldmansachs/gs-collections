@@ -1031,12 +1031,12 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
     {
         public boolean add(K key)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call add() on " + this.getClass().getSimpleName());
         }
 
         public boolean addAll(Collection<? extends K> collection)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
         }
 
         public void clear()
@@ -1264,22 +1264,22 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
 
         public MutableBooleanCollection with(boolean element)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call with() on " + this.getClass().getSimpleName());
         }
 
         public MutableBooleanCollection without(boolean element)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call without() on " + this.getClass().getSimpleName());
         }
 
         public MutableBooleanCollection withAll(BooleanIterable elements)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call withAll() on " + this.getClass().getSimpleName());
         }
 
         public MutableBooleanCollection withoutAll(BooleanIterable elements)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call withoutAll() on " + this.getClass().getSimpleName());
         }
 
         public MutableBooleanCollection asUnmodifiable()
@@ -1430,17 +1430,17 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
 
         public boolean add(boolean element)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call add() on " + this.getClass().getSimpleName());
         }
 
         public boolean addAll(boolean... source)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
         }
 
         public boolean addAll(BooleanIterable source)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
         }
 
         public boolean remove(boolean element)
@@ -1608,7 +1608,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
 
             public void remove()
             {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException("Cannot call remove() on " + this.getClass().getSimpleName());
             }
 
             public boolean hasNext()
@@ -1685,7 +1685,7 @@ public class ObjectBooleanHashMap<K> implements MutableObjectBooleanMap<K>, Exte
 
             public void remove()
             {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException("Cannot call remove() on " + this.getClass().getSimpleName());
             }
 
             public boolean hasNext()

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -154,12 +154,12 @@ public class UnmodifiableMutableList<T>
 
     public UnmodifiableMutableList<T> sortThis(Comparator<? super T> comparator)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call sortThis() on " + this.getClass().getSimpleName());
     }
 
     public UnmodifiableMutableList<T> sortThis()
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call sortThis() on " + this.getClass().getSimpleName());
     }
 
     public MutableList<T> toReversed()
@@ -169,7 +169,7 @@ public class UnmodifiableMutableList<T>
 
     public MutableList<T> reverseThis()
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call reverseThis() on " + this.getClass().getSimpleName());
     }
 
     public MutableStack<T> toStack()
@@ -179,12 +179,12 @@ public class UnmodifiableMutableList<T>
 
     public <V extends Comparable<? super V>> MutableList<T> sortThisBy(Function<? super T, ? extends V> function)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call sortThisBy() on " + this.getClass().getSimpleName());
     }
 
     public boolean addAll(int index, Collection<? extends T> collection)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
     }
 
     public T get(int index)
@@ -194,17 +194,17 @@ public class UnmodifiableMutableList<T>
 
     public T set(int index, T element)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call set() on " + this.getClass().getSimpleName());
     }
 
     public void add(int index, T element)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call add() on " + this.getClass().getSimpleName());
     }
 
     public T remove(int index)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call remove() on " + this.getClass().getSimpleName());
     }
 
     public int indexOf(Object o)

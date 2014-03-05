@@ -45,7 +45,7 @@ public abstract class AbstractParallelUnsortedBag<T, B extends UnsortedBagBatch<
 
     public ParallelUnsortedSetIterable<T> asUnique()
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".asUnique() not implemented yet");
     }
 
     public ParallelUnsortedBag<T> select(Predicate<? super T> predicate)
@@ -60,7 +60,7 @@ public abstract class AbstractParallelUnsortedBag<T, B extends UnsortedBagBatch<
 
     public <S> ParallelUnsortedBag<S> selectInstancesOf(Class<S> clazz)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".selectInstancesOf() not implemented yet");
     }
 
     public ParallelUnsortedBag<T> reject(Predicate<? super T> predicate)
@@ -90,7 +90,7 @@ public abstract class AbstractParallelUnsortedBag<T, B extends UnsortedBagBatch<
 
     public <V> ParallelUnsortedBag<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".flatCollect() not implemented yet");
     }
 
     @Override

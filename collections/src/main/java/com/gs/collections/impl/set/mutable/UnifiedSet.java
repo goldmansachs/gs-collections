@@ -3002,7 +3002,7 @@ public class UnifiedSet<T>
 
             public void remove()
             {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException("Cannot call remove() on " + this.getClass().getSimpleName());
             }
         }
 
@@ -3027,7 +3027,7 @@ public class UnifiedSet<T>
 
             public void forEachWithIndex(ObjectIntProcedure<? super RootUnsortedSetBatch<T>> objectIntProcedure)
             {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".forEachWithIndex() not implemented yet");
             }
 
             public Iterator<RootUnsortedSetBatch<T>> iterator()

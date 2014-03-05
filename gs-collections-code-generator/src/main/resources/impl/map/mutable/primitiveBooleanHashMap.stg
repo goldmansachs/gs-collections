@@ -2117,17 +2117,17 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
 
         public boolean add(<type> element)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call add() on " + this.getClass().getSimpleName());
         }
 
         public boolean addAll(<type>... source)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
         }
 
         public boolean addAll(<name>Iterable source)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
         }
 
         public boolean remove(<type> key)
@@ -2241,22 +2241,22 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
 
         public Mutable<name>Set with(<type> element)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call with() on " + this.getClass().getSimpleName());
         }
 
         public Mutable<name>Set without(<type> element)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call without() on " + this.getClass().getSimpleName());
         }
 
         public Mutable<name>Set withAll(<name>Iterable elements)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call withAll() on " + this.getClass().getSimpleName());
         }
 
         public Mutable<name>Set withoutAll(<name>Iterable elements)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call withoutAll() on " + this.getClass().getSimpleName());
         }
 
         public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
@@ -2559,7 +2559,7 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
 
         public <name>Set freeze()
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".freeze() not implemented yet");
         }
 
         public Immutable<name>Set toImmutable()
@@ -2737,22 +2737,22 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
 
         public MutableBooleanCollection with(boolean element)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call with() on " + this.getClass().getSimpleName());
         }
 
         public MutableBooleanCollection without(boolean element)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call without() on " + this.getClass().getSimpleName());
         }
 
         public MutableBooleanCollection withAll(BooleanIterable elements)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call withAll() on " + this.getClass().getSimpleName());
         }
 
         public MutableBooleanCollection withoutAll(BooleanIterable elements)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call withoutAll() on " + this.getClass().getSimpleName());
         }
 
         public MutableBooleanCollection asSynchronized()
@@ -2925,17 +2925,17 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
 
         public boolean add(boolean element)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call add() on " + this.getClass().getSimpleName());
         }
 
         public boolean addAll(boolean... source)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
         }
 
         public boolean addAll(BooleanIterable source)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
         }
 
         public boolean remove(boolean item)
@@ -3194,7 +3194,7 @@ public class <name>BooleanHashMap implements Mutable<name>BooleanMap, Externaliz
 
             public void remove()
             {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException("Cannot call remove() on " + this.getClass().getSimpleName());
             }
 
             public boolean hasNext()

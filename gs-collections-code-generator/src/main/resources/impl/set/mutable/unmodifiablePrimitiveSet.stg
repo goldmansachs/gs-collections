@@ -66,25 +66,25 @@ public final class Unmodifiable<name>Set
     @Override
     public Unmodifiable<name>Set with(<type> element)
     {
-        throw new UnsupportedOperationException("Cannot call with on an Unmodifiable<name>Set");
+        throw new UnsupportedOperationException("Cannot call with() on " + this.getClass().getSimpleName());
     }
 
     @Override
     public Unmodifiable<name>Set without(<type> element)
     {
-        throw new UnsupportedOperationException("Cannot call without on an Unmodifiable<name>Set");
+        throw new UnsupportedOperationException("Cannot call without() on " + this.getClass().getSimpleName());
     }
 
     @Override
     public Unmodifiable<name>Set withAll(<name>Iterable elements)
     {
-        throw new UnsupportedOperationException("Cannot call withAll on an Unmodifiable<name>Set");
+        throw new UnsupportedOperationException("Cannot call withAll() on " + this.getClass().getSimpleName());
     }
 
     @Override
     public Unmodifiable<name>Set withoutAll(<name>Iterable elements)
     {
-        throw new UnsupportedOperationException("Cannot call withoutAll on an Unmodifiable<name>Set");
+        throw new UnsupportedOperationException("Cannot call withoutAll() on " + this.getClass().getSimpleName());
     }
 
     @Override

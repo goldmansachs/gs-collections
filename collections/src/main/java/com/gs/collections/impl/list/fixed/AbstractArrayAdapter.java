@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -110,13 +110,13 @@ public abstract class AbstractArrayAdapter<T>
     @Override
     public void removeIf(Predicate<? super T> predicate)
     {
-        throw new UnsupportedOperationException("Cannot remove from an array");
+        throw new UnsupportedOperationException("Cannot call removeIf() on " + this.getClass().getSimpleName());
     }
 
     @Override
     public <P> void removeIfWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        throw new UnsupportedOperationException("Cannot remove from an array");
+        throw new UnsupportedOperationException("Cannot call removeIfWith() on " + this.getClass().getSimpleName());
     }
 
     @Override
@@ -281,13 +281,13 @@ public abstract class AbstractArrayAdapter<T>
     @Override
     public boolean add(T item)
     {
-        throw new UnsupportedOperationException("cannot add to an ArrayAdapter");
+        throw new UnsupportedOperationException("Cannot call add() on " + this.getClass().getSimpleName());
     }
 
     @Override
     public boolean remove(Object o)
     {
-        throw new UnsupportedOperationException("Cannot remove from an ArrayAdapter");
+        throw new UnsupportedOperationException("Cannot call remove() on " + this.getClass().getSimpleName());
     }
 
     @Override
@@ -299,47 +299,47 @@ public abstract class AbstractArrayAdapter<T>
     @Override
     public boolean addAll(Collection<? extends T> collection)
     {
-        throw new UnsupportedOperationException("cannot addAll to an ArrayAdapter");
+        throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
     }
 
     @Override
     public boolean addAllIterable(Iterable<? extends T> iterable)
     {
-        throw new UnsupportedOperationException("cannot addAll to an ArrayAdapter");
+        throw new UnsupportedOperationException("Cannot call addAllIterable() on " + this.getClass().getSimpleName());
     }
 
     @Override
     public boolean removeAll(Collection<?> collection)
     {
-        throw new UnsupportedOperationException("Cannot removeAll from an ArrayAdapter");
+        throw new UnsupportedOperationException("Cannot call removeAll() on " + this.getClass().getSimpleName());
     }
 
     @Override
     public boolean removeAllIterable(Iterable<?> iterable)
     {
-        throw new UnsupportedOperationException("Cannot removeAll from an ArrayAdapter");
+        throw new UnsupportedOperationException("Cannot call removeAllIterable() on " + this.getClass().getSimpleName());
     }
 
     @Override
     public boolean retainAll(Collection<?> collection)
     {
-        throw new UnsupportedOperationException("Cannot remove from an ArrayAdapter");
+        throw new UnsupportedOperationException("Cannot call retainAll() on " + this.getClass().getSimpleName());
     }
 
     @Override
     public boolean retainAllIterable(Iterable<?> iterable)
     {
-        throw new UnsupportedOperationException("Cannot remove from an ArrayAdapter");
+        throw new UnsupportedOperationException("Cannot call retainAllIterable() on " + this.getClass().getSimpleName());
     }
 
     public void clear()
     {
-        throw new UnsupportedOperationException("Cannot clear an ArrayAdapter");
+        throw new UnsupportedOperationException("Cannot call clear() on " + this.getClass().getSimpleName());
     }
 
     public boolean addAll(int index, Collection<? extends T> collection)
     {
-        throw new UnsupportedOperationException("Cannot add all to an array from a specific index");
+        throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
     }
 
     public T get(int index)
@@ -354,12 +354,12 @@ public abstract class AbstractArrayAdapter<T>
 
     public void add(int index, T element)
     {
-        throw new UnsupportedOperationException("Cannot add to an ArrayAdapter at a specific index");
+        throw new UnsupportedOperationException("Cannot call add() on " + this.getClass().getSimpleName());
     }
 
     public T remove(int index)
     {
-        throw new UnsupportedOperationException("Cannot remove from an ArrayAdapter");
+        throw new UnsupportedOperationException("Cannot call remove() on " + this.getClass().getSimpleName());
     }
 
     @Override

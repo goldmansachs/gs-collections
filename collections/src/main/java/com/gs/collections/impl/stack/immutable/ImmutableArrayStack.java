@@ -249,7 +249,7 @@ final class ImmutableArrayStack<T> implements ImmutableStack<T>, Serializable
 
     public T getLast()
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call getLast() on " + this.getClass().getSimpleName());
     }
 
     public boolean contains(Object object)

@@ -123,12 +123,12 @@ public abstract class AbstractImmutableMap<K, V>
 
     public void putAll(Map<? extends K, ? extends V> map)
     {
-        throw new UnsupportedOperationException("ImmutableMap");
+        throw new UnsupportedOperationException("Cannot call putAll() on " + this.getClass().getSimpleName());
     }
 
     public void clear()
     {
-        throw new UnsupportedOperationException("ImmutableMap");
+        throw new UnsupportedOperationException("Cannot call clear() on " + this.getClass().getSimpleName());
     }
 
     public ImmutableSetMultimap<V, K> flip()
@@ -195,12 +195,12 @@ public abstract class AbstractImmutableMap<K, V>
 
     public V put(K key, V value)
     {
-        throw new UnsupportedOperationException("ImmutableMap");
+        throw new UnsupportedOperationException("Cannot call put() on " + this.getClass().getSimpleName());
     }
 
     public V remove(Object key)
     {
-        throw new UnsupportedOperationException("ImmutableMap");
+        throw new UnsupportedOperationException("Cannot call remove() on " + this.getClass().getSimpleName());
     }
 
     public <K2, V2> ImmutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function)

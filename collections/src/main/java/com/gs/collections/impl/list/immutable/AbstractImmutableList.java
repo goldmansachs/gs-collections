@@ -660,22 +660,22 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
 
     public boolean addAll(int index, Collection<? extends T> collection)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
     }
 
     public T set(int index, T element)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call set() on " + this.getClass().getSimpleName());
     }
 
     public void add(int index, T element)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call add() on " + this.getClass().getSimpleName());
     }
 
     public T remove(int index)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call remove() on " + this.getClass().getSimpleName());
     }
 
     public ListIterator<T> listIterator()
@@ -695,7 +695,7 @@ abstract class AbstractImmutableList<T> extends AbstractImmutableCollection<T>
 
     public List<T> subList(int fromIndex, int toIndex)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".subList() not implemented yet");
     }
 
     public ImmutableList<T> distinct()

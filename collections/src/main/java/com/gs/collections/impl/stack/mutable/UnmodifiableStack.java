@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -99,32 +99,32 @@ public final class UnmodifiableStack<T> implements MutableStack<T>, Serializable
 
     public T pop()
     {
-        throw new UnsupportedOperationException("Cannot pop an UnmodifiableStack.");
+        throw new UnsupportedOperationException("Cannot call pop() on " + this.getClass().getSimpleName());
     }
 
     public ListIterable<T> pop(int count)
     {
-        throw new UnsupportedOperationException("Cannot pop an UnmodifiableStack.");
+        throw new UnsupportedOperationException("Cannot call pop() on " + this.getClass().getSimpleName());
     }
 
     public <R extends Collection<T>> R pop(int count, R targetCollection)
     {
-        throw new UnsupportedOperationException("Cannot pop an UnmodifiableStack.");
+        throw new UnsupportedOperationException("Cannot call pop() on " + this.getClass().getSimpleName());
     }
 
     public <R extends MutableStack<T>> R pop(int count, R targetStack)
     {
-        throw new UnsupportedOperationException("Cannot pop an UnmodifiableStack.");
+        throw new UnsupportedOperationException("Cannot call pop() on " + this.getClass().getSimpleName());
     }
 
     public void clear()
     {
-        throw new UnsupportedOperationException("Cannot clear an UnmodifiableStack");
+        throw new UnsupportedOperationException("Cannot call clear() on " + this.getClass().getSimpleName());
     }
 
     public void push(T item)
     {
-        throw new UnsupportedOperationException("Cannot push to an UnmodifiableStack.");
+        throw new UnsupportedOperationException("Cannot call push() on " + this.getClass().getSimpleName());
     }
 
     public Iterator<T> iterator()

@@ -1287,7 +1287,7 @@ public class HashBag<T>
 
         public void forEach(Procedure<? super T> procedure)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("not implemented yet");
             /*
             for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
             {
@@ -1306,7 +1306,7 @@ public class HashBag<T>
 
         public void forEachWithOccurrences(ObjectIntProcedure<? super T> procedure)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("not implemented yet");
             /*
             for (int i = this.chunkStartIndex; i < this.chunkEndIndex; i++)
             {
@@ -1322,17 +1322,17 @@ public class HashBag<T>
 
         public boolean anySatisfy(Predicate<? super T> predicate)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("not implemented yet");
         }
 
         public boolean allSatisfy(Predicate<? super T> predicate)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("not implemented yet");
         }
 
         public T detect(Predicate<? super T> predicate)
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("not implemented yet");
         }
 
         public UnsortedBagBatch<T> select(Predicate<? super T> predicate)
@@ -1428,7 +1428,7 @@ public class HashBag<T>
 
             public RootUnsortedBagBatch<T> next()
             {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException("not implemented yet");
                 /*
                 int chunkStartIndex = this.chunkIndex * HashBagParallelIterable.this.batchSize;
                 int chunkEndIndex = (this.chunkIndex + 1) * HashBagParallelIterable.this.batchSize;
@@ -1440,7 +1440,7 @@ public class HashBag<T>
 
             public void remove()
             {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException("cannot remove from a ParallelIterable");
             }
         }
 
@@ -1465,7 +1465,7 @@ public class HashBag<T>
 
             public void forEachWithIndex(ObjectIntProcedure<? super RootUnsortedBagBatch<T>> objectIntProcedure)
             {
-                throw new UnsupportedOperationException();
+                throw new UnsupportedOperationException("not implemented yet");
             }
 
             public Iterator<RootUnsortedBagBatch<T>> iterator()

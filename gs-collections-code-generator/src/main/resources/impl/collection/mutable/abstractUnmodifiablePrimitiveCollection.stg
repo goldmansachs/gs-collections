@@ -74,7 +74,7 @@ public abstract class AbstractUnmodifiable<name>Collection
 
     public void clear()
     {
-        throw new UnsupportedOperationException("Cannot call clear on an unmodifiable collection");
+        throw new UnsupportedOperationException("Cannot call clear() on " + this.getClass().getSimpleName());
     }
 
     public boolean contains(<type> value)
@@ -94,42 +94,42 @@ public abstract class AbstractUnmodifiable<name>Collection
 
     public boolean add(<type> newItem)
     {
-        throw new UnsupportedOperationException("Cannot call add on an unmodifiable collection");
+        throw new UnsupportedOperationException("Cannot call add() on " + this.getClass().getSimpleName());
     }
 
     public boolean addAll(<type>... source)
     {
-        throw new UnsupportedOperationException("Cannot call addAll on an unmodifiable collection");
+        throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
     }
 
     public boolean addAll(<name>Iterable source)
     {
-        throw new UnsupportedOperationException("Cannot call addAll on an unmodifiable collection");
+        throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
     }
 
     public boolean remove(<type> value)
     {
-        throw new UnsupportedOperationException("Cannot call remove on an unmodifiable collection");
+        throw new UnsupportedOperationException("Cannot call remove() on " + this.getClass().getSimpleName());
     }
 
     public boolean removeAll(<name>Iterable source)
     {
-        throw new UnsupportedOperationException("Cannot call removeAll on an unmodifiable collection");
+        throw new UnsupportedOperationException("Cannot call removeAll() on " + this.getClass().getSimpleName());
     }
 
     public boolean removeAll(<type>... source)
     {
-        throw new UnsupportedOperationException("Cannot call removeAll on an unmodifiable collection");
+        throw new UnsupportedOperationException("Cannot call removeAll() on " + this.getClass().getSimpleName());
     }
 
     public boolean retainAll(<name>Iterable source)
     {
-        throw new UnsupportedOperationException("Cannot call retainAll on an unmodifiable collection");
+        throw new UnsupportedOperationException("Cannot call retainAll() on " + this.getClass().getSimpleName());
     }
 
     public boolean retainAll(<type>... source)
     {
-        throw new UnsupportedOperationException("Cannot call retainAll on an unmodifiable collection");
+        throw new UnsupportedOperationException("Cannot call retainAll() on " + this.getClass().getSimpleName());
     }
 
     public <name>Iterator <type>Iterator()

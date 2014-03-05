@@ -456,12 +456,12 @@ public abstract class AbstractParallelIterable<T, B extends Batch<T>> implements
 
     public Object[] toArray()
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".toArray() not implemented yet");
     }
 
     public <E> E[] toArray(E[] array)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".toArray() not implemented yet");
     }
 
     public MutableList<T> toList()
@@ -489,12 +489,12 @@ public abstract class AbstractParallelIterable<T, B extends Batch<T>> implements
 
     public MutableList<T> toSortedList()
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".toSortedList() not implemented yet");
     }
 
     public MutableList<T> toSortedList(Comparator<? super T> comparator)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".toSortedList() not implemented yet");
     }
 
     public <V extends Comparable<? super V>> MutableList<T> toSortedListBy(Function<? super T, ? extends V> function)
@@ -596,51 +596,51 @@ public abstract class AbstractParallelIterable<T, B extends Batch<T>> implements
 
     public T min(Comparator<? super T> comparator)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".min() not implemented yet");
     }
 
     public T max(Comparator<? super T> comparator)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".max() not implemented yet");
     }
 
     public T min()
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".min() not implemented yet");
     }
 
     public T max()
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".max() not implemented yet");
     }
 
     public <V extends Comparable<? super V>> T minBy(Function<? super T, ? extends V> function)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".minBy() not implemented yet");
     }
 
     public <V extends Comparable<? super V>> T maxBy(Function<? super T, ? extends V> function)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".maxBy() not implemented yet");
     }
 
     public long sumOfInt(IntFunction<? super T> function)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".sumOfInt() not implemented yet");
     }
 
     public double sumOfFloat(FloatFunction<? super T> function)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".sumOfFloat() not implemented yet");
     }
 
     public long sumOfLong(LongFunction<? super T> function)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".sumOfLong() not implemented yet");
     }
 
     public double sumOfDouble(DoubleFunction<? super T> function)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".sumOfDouble() not implemented yet");
     }
 }

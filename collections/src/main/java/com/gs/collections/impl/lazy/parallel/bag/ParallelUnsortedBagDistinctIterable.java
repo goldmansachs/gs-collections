@@ -46,7 +46,7 @@ class ParallelUnsortedBagDistinctIterable<T> extends AbstractParallelUnsortedSet
     @Override
     public LazyIterable<UnsortedSetBatch<T>> split()
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".split() not implemented yet");
     }
 
     public ParallelUnsortedSetIterable<T> asUnique()

@@ -96,13 +96,13 @@ public class UnmodifiableSortedBag<T>
     @Override
     public MutableSortedBag<T> asSynchronized()
     {
-        throw new UnsupportedOperationException("asSynchronized not implemented yet!");
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".asSynchronized() not implemented yet");
     }
 
     @Override
     public ImmutableSortedBag<T> toImmutable()
     {
-        throw new UnsupportedOperationException("toImmutable not implemented yet!");
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".toImmutable() not implemented yet");
     }
 
     @Override

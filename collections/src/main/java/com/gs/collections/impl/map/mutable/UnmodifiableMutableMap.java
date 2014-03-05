@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -129,17 +129,17 @@ public class UnmodifiableMutableMap<K, V>
             Function<? super E, ? extends K> keyFunction,
             Function<? super E, ? extends V> valueFunction)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call collectKeysAndValues() on " + this.getClass().getSimpleName());
     }
 
     public V removeKey(K key)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call removeKey() on " + this.getClass().getSimpleName());
     }
 
     public V updateValue(K key, Function0<? extends V> factory, Function<? super V, ? extends V> function)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call updateValue() on " + this.getClass().getSimpleName());
     }
 
     public <P> V updateValueWith(
@@ -148,7 +148,7 @@ public class UnmodifiableMutableMap<K, V>
             Function2<? super V, ? super P, ? extends V> function,
             P parameter)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call updateValueWith() on " + this.getClass().getSimpleName());
     }
 
     public V getIfAbsentPut(K key, Function0<? extends V> function)
@@ -156,7 +156,7 @@ public class UnmodifiableMutableMap<K, V>
         V result = this.get(key);
         if (this.isAbsent(result, key))
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot mutate " + this.getClass().getSimpleName());
         }
         return result;
     }
@@ -166,7 +166,7 @@ public class UnmodifiableMutableMap<K, V>
         V result = this.get(key);
         if (this.isAbsent(result, key))
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot mutate " + this.getClass().getSimpleName());
         }
         return result;
     }
@@ -184,7 +184,7 @@ public class UnmodifiableMutableMap<K, V>
         V result = this.get(key);
         if (this.isAbsent(result, key))
         {
-            throw new UnsupportedOperationException();
+            throw new UnsupportedOperationException("Cannot mutate " + this.getClass().getSimpleName());
         }
         return result;
     }

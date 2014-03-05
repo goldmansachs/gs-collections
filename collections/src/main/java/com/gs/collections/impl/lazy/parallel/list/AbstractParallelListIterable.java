@@ -54,7 +54,7 @@ public abstract class AbstractParallelListIterable<T, B extends ListBatch<T>> ex
 
     public <S> ParallelListIterable<S> selectInstancesOf(Class<S> clazz)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".selectInstancesOf() not implemented yet");
     }
 
     public ParallelListIterable<T> reject(Predicate<? super T> predicate)
@@ -84,16 +84,16 @@ public abstract class AbstractParallelListIterable<T, B extends ListBatch<T>> ex
 
     public <V> ParallelListIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".flatCollect() not implemented yet");
     }
 
     public <V> ListMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupBy() not implemented yet");
     }
 
     public <V> ListMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByEach() not implemented yet");
     }
 }

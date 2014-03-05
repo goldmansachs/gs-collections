@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -115,12 +115,12 @@ public class AbstractUnmodifiableMutableCollection<T> implements MutableCollecti
 
     public boolean add(T o)
     {
-        throw new UnsupportedOperationException("Cannot add to an UnmodifiableMutableCollection.");
+        throw new UnsupportedOperationException("Cannot call add() on " + this.getClass().getSimpleName());
     }
 
     public boolean remove(Object o)
     {
-        throw new UnsupportedOperationException("Cannot remove from an UnmodifiableMutableCollection.");
+        throw new UnsupportedOperationException("Cannot call remove() on " + this.getClass().getSimpleName());
     }
 
     public boolean containsAll(Collection<?> c)
@@ -130,22 +130,22 @@ public class AbstractUnmodifiableMutableCollection<T> implements MutableCollecti
 
     public boolean addAll(Collection<? extends T> c)
     {
-        throw new UnsupportedOperationException("Cannot add to a UnmodifiableMutableCollection.");
+        throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
     }
 
     public boolean retainAll(Collection<?> c)
     {
-        throw new UnsupportedOperationException("Cannot remove from UnmodifiableMutableCollection.");
+        throw new UnsupportedOperationException("Cannot call retainAll() on " + this.getClass().getSimpleName());
     }
 
     public boolean removeAll(Collection<?> c)
     {
-        throw new UnsupportedOperationException("Cannot remove from an UnmodifiableMutableCollection.");
+        throw new UnsupportedOperationException("Cannot call removeAll() on " + this.getClass().getSimpleName());
     }
 
     public void clear()
     {
-        throw new UnsupportedOperationException("Cannot clear an UnmodifiableMutableCollection.");
+        throw new UnsupportedOperationException("Cannot call clear() on " + this.getClass().getSimpleName());
     }
 
     protected MutableCollection<T> getMutableCollection()
@@ -155,17 +155,17 @@ public class AbstractUnmodifiableMutableCollection<T> implements MutableCollecti
 
     public boolean addAllIterable(Iterable<? extends T> iterable)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call addAllIterable() on " + this.getClass().getSimpleName());
     }
 
     public boolean removeAllIterable(Iterable<?> iterable)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call removeAllIterable() on " + this.getClass().getSimpleName());
     }
 
     public boolean retainAllIterable(Iterable<?> iterable)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call retainAllIterable() on " + this.getClass().getSimpleName());
     }
 
     public MutableCollection<T> asUnmodifiable()
@@ -303,12 +303,12 @@ public class AbstractUnmodifiableMutableCollection<T> implements MutableCollecti
 
     public void removeIf(Predicate<? super T> predicate)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call removeIf() on " + this.getClass().getSimpleName());
     }
 
     public <P> void removeIfWith(Predicate2<? super T, ? super P> predicate, P parameter)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call removeIfWith() on " + this.getClass().getSimpleName());
     }
 
     public <V> MutableCollection<V> collect(Function<? super T, ? extends V> function)

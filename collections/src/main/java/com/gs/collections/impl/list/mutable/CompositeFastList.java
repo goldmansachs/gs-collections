@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -74,8 +74,7 @@ public final class CompositeFastList<E>
     @Override
     public MutableList<E> clone()
     {
-        // TODO: need to implement this at some point
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".clone() not implemented yet");
     }
 
     public int size()
@@ -317,7 +316,7 @@ public final class CompositeFastList<E>
 
     public boolean addAll(int index, Collection<? extends E> collection)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".addAll() not implemented yet");
     }
 
     public void clear()

@@ -64,32 +64,32 @@ public abstract class AbstractImmutableCollection<T> extends AbstractRichIterabl
 
     public boolean add(T t)
     {
-        throw new UnsupportedOperationException("Cannot add to an Immutable Collection");
+        throw new UnsupportedOperationException("Cannot call add() on " + this.getClass().getSimpleName());
     }
 
     public boolean remove(Object o)
     {
-        throw new UnsupportedOperationException("Cannot add to an Immutable Collection");
+        throw new UnsupportedOperationException("Cannot call remove() on " + this.getClass().getSimpleName());
     }
 
     public boolean addAll(Collection<? extends T> collection)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call addAll() on " + this.getClass().getSimpleName());
     }
 
     public boolean removeAll(Collection<?> collection)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call removeAll() on " + this.getClass().getSimpleName());
     }
 
     public boolean retainAll(Collection<?> collection)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call retainAll() on " + this.getClass().getSimpleName());
     }
 
     public void clear()
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException("Cannot call clear() on " + this.getClass().getSimpleName());
     }
 
     protected void removeAllFrom(Iterable<? extends T> elements, MutableCollection<T> result)

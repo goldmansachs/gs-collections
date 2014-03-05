@@ -87,7 +87,7 @@ public abstract class AbstractParallelUnsortedSetIterable<T, B extends UnsortedS
 
     public <V> ParallelIterable<V> flatCollect(Function<? super T, ? extends Iterable<V>> function)
     {
-        throw new UnsupportedOperationException();
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".flatCollect() not implemented yet");
     }
 
     public <V> UnsortedSetMultimap<V, T> groupBy(final Function<? super T, ? extends V> function)
