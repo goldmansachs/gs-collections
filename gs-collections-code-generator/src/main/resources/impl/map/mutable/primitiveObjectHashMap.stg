@@ -1485,6 +1485,11 @@ public class <name>ObjectHashMap\<V> implements Mutable<name>ObjectMap\<V>, Exte
         return IterableIterate.groupByEach(this, function, target);
     }
 
+    public \<VV> MutableMap\<VV, V> groupByUniqueKey(Function\<? super V, ? extends VV> function)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
+    }
+
     public V getFirst()
     {
         if (this.sentinelValues != null)

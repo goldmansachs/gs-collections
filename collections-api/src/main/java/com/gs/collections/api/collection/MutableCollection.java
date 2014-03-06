@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -365,6 +365,8 @@ public interface MutableCollection<T>
     <V> MutableMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
 
     <V> MutableMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
+
+    <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function);
 
     <S> MutableCollection<Pair<T, S>> zip(Iterable<S> that);
 

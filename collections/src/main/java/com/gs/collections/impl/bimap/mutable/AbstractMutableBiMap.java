@@ -757,6 +757,11 @@ abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
         return this.delegate.groupByEach(function, target);
     }
 
+    public <VV> MutableMap<VV, V> groupByUniqueKey(Function<? super V, ? extends VV> function)
+    {
+        return this.delegate.groupByUniqueKey(function);
+    }
+
     public <S> MutableCollection<Pair<V, S>> zip(Iterable<S> that)
     {
         return this.delegate.zip(that);

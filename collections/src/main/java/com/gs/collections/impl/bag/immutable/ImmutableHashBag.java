@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,6 +36,7 @@ import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
@@ -128,6 +129,7 @@ public class ImmutableHashBag<T>
         return this.delegate.groupBy(function).toImmutable();
     }
 
+    @Override
     public <V, R extends MutableMultimap<V, T>> R groupBy(
             Function<? super T, ? extends V> function, R target)
     {
@@ -139,10 +141,16 @@ public class ImmutableHashBag<T>
         return this.delegate.groupByEach(function).toImmutable();
     }
 
+    @Override
     public <V, R extends MutableMultimap<V, T>> R groupByEach(
             Function<? super T, ? extends Iterable<V>> function, R target)
     {
         return this.delegate.groupByEach(function, target);
+    }
+
+    public <V> ImmutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
+    {
+        return this.delegate.groupByUniqueKey(function).toImmutable();
     }
 
     @Override

@@ -1243,4 +1243,10 @@ public abstract class AbstractRichIterableTestCase
             Assert.assertEquals(3, aggregation.get("3").intValue());
         }
     }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void groupByUniqueKey()
+    {
+        this.newWith(1, 2, 3).groupByUniqueKey(Functions.getPassThru());
+    }
 }

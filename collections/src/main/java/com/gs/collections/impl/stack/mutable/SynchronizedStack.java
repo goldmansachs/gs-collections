@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,7 +60,6 @@ import com.gs.collections.api.map.sorted.MutableSortedMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.api.partition.stack.PartitionMutableStack;
-import com.gs.collections.api.partition.stack.PartitionStack;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.set.sorted.MutableSortedSet;
 import com.gs.collections.api.stack.ImmutableStack;
@@ -996,6 +995,14 @@ public final class SynchronizedStack<T> implements MutableStack<T>, Serializable
         synchronized (this.lock)
         {
             return this.delegate.groupByEach(function, target);
+        }
+    }
+
+    public <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.delegate.groupByUniqueKey(function);
         }
     }
 

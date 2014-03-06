@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -969,6 +969,12 @@ public abstract class AbstractImmutableSortedSetTestCase
     {
         ImmutableSortedSet<Integer> set = this.classUnderTest(Comparators.reverseNaturalOrder());
         Assert.assertEquals(ArrayStack.newStackWith(4, 3, 2, 1), set.toStack());
+    }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void groupByUniqueKey()
+    {
+        this.classUnderTest().groupByUniqueKey(Functions.getPassThru());
     }
 
     @Test

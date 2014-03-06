@@ -323,7 +323,7 @@ public final class SynchronizedObject<name>Map\<K>
         }
     }
 
-    public \<V1 extends Object> MutableCollection\<V1> collect(<name>ToObjectFunction\<? extends V1> function)
+    public \<V1> MutableCollection\<V1> collect(<name>ToObjectFunction\<? extends V1> function)
     {
         synchronized (this.lock)
         {

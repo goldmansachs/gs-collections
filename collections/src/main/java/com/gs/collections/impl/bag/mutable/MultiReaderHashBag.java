@@ -61,6 +61,7 @@ import com.gs.collections.api.collection.primitive.MutableLongCollection;
 import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
+import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.partition.bag.PartitionMutableBag;
 import com.gs.collections.api.set.MutableSet;
@@ -295,7 +296,6 @@ public final class MultiReaderHashBag<T>
         }
     }
 
-    @Override
     public MutableBooleanBag collectBoolean(BooleanFunction<? super T> booleanFunction)
     {
         this.acquireReadLock();
@@ -309,7 +309,6 @@ public final class MultiReaderHashBag<T>
         }
     }
 
-    @Override
     public MutableByteBag collectByte(ByteFunction<? super T> byteFunction)
     {
         this.acquireReadLock();
@@ -323,7 +322,6 @@ public final class MultiReaderHashBag<T>
         }
     }
 
-    @Override
     public MutableCharBag collectChar(CharFunction<? super T> charFunction)
     {
         this.acquireReadLock();
@@ -337,7 +335,6 @@ public final class MultiReaderHashBag<T>
         }
     }
 
-    @Override
     public MutableDoubleBag collectDouble(DoubleFunction<? super T> doubleFunction)
     {
         this.acquireReadLock();
@@ -351,7 +348,6 @@ public final class MultiReaderHashBag<T>
         }
     }
 
-    @Override
     public MutableFloatBag collectFloat(FloatFunction<? super T> floatFunction)
     {
         this.acquireReadLock();
@@ -365,7 +361,6 @@ public final class MultiReaderHashBag<T>
         }
     }
 
-    @Override
     public MutableIntBag collectInt(IntFunction<? super T> intFunction)
     {
         this.acquireReadLock();
@@ -379,7 +374,6 @@ public final class MultiReaderHashBag<T>
         }
     }
 
-    @Override
     public MutableLongBag collectLong(LongFunction<? super T> longFunction)
     {
         this.acquireReadLock();
@@ -393,7 +387,6 @@ public final class MultiReaderHashBag<T>
         }
     }
 
-    @Override
     public MutableShortBag collectShort(ShortFunction<? super T> shortFunction)
     {
         this.acquireReadLock();
@@ -640,6 +633,19 @@ public final class MultiReaderHashBag<T>
         }
     }
 
+    public <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.groupByUniqueKey(function);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
     public <S> MutableBag<Pair<T, S>> zip(Iterable<S> that)
     {
         this.acquireReadLock();
@@ -837,7 +843,6 @@ public final class MultiReaderHashBag<T>
             return this.getDelegate().collect(function);
         }
 
-        @Override
         public MutableBooleanBag collectBoolean(BooleanFunction<? super T> booleanFunction)
         {
             return this.getDelegate().collectBoolean(booleanFunction);
@@ -848,7 +853,6 @@ public final class MultiReaderHashBag<T>
             return this.getDelegate().collectBoolean(booleanFunction, target);
         }
 
-        @Override
         public MutableByteBag collectByte(ByteFunction<? super T> byteFunction)
         {
             return this.getDelegate().collectByte(byteFunction);
@@ -859,7 +863,6 @@ public final class MultiReaderHashBag<T>
             return this.getDelegate().collectByte(byteFunction, target);
         }
 
-        @Override
         public MutableCharBag collectChar(CharFunction<? super T> charFunction)
         {
             return this.getDelegate().collectChar(charFunction);
@@ -870,7 +873,6 @@ public final class MultiReaderHashBag<T>
             return this.getDelegate().collectChar(charFunction, target);
         }
 
-        @Override
         public MutableDoubleBag collectDouble(DoubleFunction<? super T> doubleFunction)
         {
             return this.getDelegate().collectDouble(doubleFunction);
@@ -881,7 +883,6 @@ public final class MultiReaderHashBag<T>
             return this.getDelegate().collectDouble(doubleFunction, target);
         }
 
-        @Override
         public MutableFloatBag collectFloat(FloatFunction<? super T> floatFunction)
         {
             return this.getDelegate().collectFloat(floatFunction);
@@ -892,7 +893,6 @@ public final class MultiReaderHashBag<T>
             return this.getDelegate().collectFloat(floatFunction, target);
         }
 
-        @Override
         public MutableIntBag collectInt(IntFunction<? super T> intFunction)
         {
             return this.getDelegate().collectInt(intFunction);
@@ -903,7 +903,6 @@ public final class MultiReaderHashBag<T>
             return this.getDelegate().collectInt(intFunction, target);
         }
 
-        @Override
         public MutableLongBag collectLong(LongFunction<? super T> longFunction)
         {
             return this.getDelegate().collectLong(longFunction);
@@ -914,7 +913,6 @@ public final class MultiReaderHashBag<T>
             return this.getDelegate().collectLong(longFunction, target);
         }
 
-        @Override
         public MutableShortBag collectShort(ShortFunction<? super T> shortFunction)
         {
             return this.getDelegate().collectShort(shortFunction);
@@ -952,6 +950,11 @@ public final class MultiReaderHashBag<T>
         public <V> MutableBagMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
         {
             return this.getDelegate().groupByEach(function);
+        }
+
+        public <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
+        {
+            return this.getDelegate().groupByUniqueKey(function);
         }
 
         public MutableBag<T> newEmpty()

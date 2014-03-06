@@ -216,6 +216,8 @@ public interface ParallelIterable<T>
 
     <V> Multimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
 
+    <V> MapIterable<V, T> groupByUniqueKey(Function<? super T, ? extends V> function);
+
     <K, V> MapIterable<K, V> aggregateInPlaceBy(Function<? super T, ? extends K> groupBy, Function0<? extends V> zeroValueFactory, Procedure2<? super V, ? super T> mutatingAggregator);
 
     <K, V> MapIterable<K, V> aggregateBy(Function<? super T, ? extends K> groupBy, Function0<? extends V> zeroValueFactory, Function2<? super V, ? super T, ? extends V> nonMutatingAggregator);

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -241,6 +241,8 @@ public interface MutableSortedMap<K, V>
     <VV> MutableListMultimap<VV, V> groupBy(Function<? super V, ? extends VV> function);
 
     <VV> MutableListMultimap<VV, V> groupByEach(Function<? super V, ? extends Iterable<VV>> function);
+
+    <VV> MutableMap<VV, V> groupByUniqueKey(Function<? super V, ? extends VV> function);
 
     <K2, V2> MutableMap<K2, V2> aggregateInPlaceBy(
             Function<? super V, ? extends K2> groupBy,

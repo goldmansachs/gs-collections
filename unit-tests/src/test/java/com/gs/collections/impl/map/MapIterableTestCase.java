@@ -1419,4 +1419,10 @@ public abstract class MapIterableTestCase
         Assert.assertEquals("Test 3", mutableMap.get(new IntegerWithCast(0)));
         Assert.assertEquals("Test 1", mutableMap.get(null));
     }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void groupByUniqueKey()
+    {
+        this.newMap().groupByUniqueKey(Functions.getPassThru());
+    }
 }

@@ -50,6 +50,7 @@ import com.gs.collections.api.collection.primitive.MutableIntCollection;
 import com.gs.collections.api.collection.primitive.MutableLongCollection;
 import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.set.MutableSetMultimap;
 import com.gs.collections.api.partition.set.PartitionMutableSet;
 import com.gs.collections.api.set.ImmutableSet;
@@ -249,7 +250,6 @@ public final class MultiReaderUnifiedSet<T>
         }
     }
 
-    @Override
     public MutableBooleanSet collectBoolean(BooleanFunction<? super T> booleanFunction)
     {
         this.acquireReadLock();
@@ -263,7 +263,6 @@ public final class MultiReaderUnifiedSet<T>
         }
     }
 
-    @Override
     public MutableByteSet collectByte(ByteFunction<? super T> byteFunction)
     {
         this.acquireReadLock();
@@ -277,7 +276,6 @@ public final class MultiReaderUnifiedSet<T>
         }
     }
 
-    @Override
     public MutableCharSet collectChar(CharFunction<? super T> charFunction)
     {
         this.acquireReadLock();
@@ -291,7 +289,6 @@ public final class MultiReaderUnifiedSet<T>
         }
     }
 
-    @Override
     public MutableDoubleSet collectDouble(DoubleFunction<? super T> doubleFunction)
     {
         this.acquireReadLock();
@@ -305,7 +302,6 @@ public final class MultiReaderUnifiedSet<T>
         }
     }
 
-    @Override
     public MutableFloatSet collectFloat(FloatFunction<? super T> floatFunction)
     {
         this.acquireReadLock();
@@ -319,7 +315,6 @@ public final class MultiReaderUnifiedSet<T>
         }
     }
 
-    @Override
     public MutableIntSet collectInt(IntFunction<? super T> intFunction)
     {
         this.acquireReadLock();
@@ -333,7 +328,6 @@ public final class MultiReaderUnifiedSet<T>
         }
     }
 
-    @Override
     public MutableLongSet collectLong(LongFunction<? super T> longFunction)
     {
         this.acquireReadLock();
@@ -347,7 +341,6 @@ public final class MultiReaderUnifiedSet<T>
         }
     }
 
-    @Override
     public MutableShortSet collectShort(ShortFunction<? super T> shortFunction)
     {
         this.acquireReadLock();
@@ -650,7 +643,6 @@ public final class MultiReaderUnifiedSet<T>
             return this.getDelegate().collect(function);
         }
 
-        @Override
         public MutableBooleanSet collectBoolean(BooleanFunction<? super T> booleanFunction)
         {
             return this.getDelegate().collectBoolean(booleanFunction);
@@ -661,7 +653,6 @@ public final class MultiReaderUnifiedSet<T>
             return this.getDelegate().collectBoolean(booleanFunction, target);
         }
 
-        @Override
         public MutableByteSet collectByte(ByteFunction<? super T> byteFunction)
         {
             return this.getDelegate().collectByte(byteFunction);
@@ -672,7 +663,6 @@ public final class MultiReaderUnifiedSet<T>
             return this.getDelegate().collectByte(byteFunction, target);
         }
 
-        @Override
         public MutableCharSet collectChar(CharFunction<? super T> charFunction)
         {
             return this.getDelegate().collectChar(charFunction);
@@ -683,7 +673,6 @@ public final class MultiReaderUnifiedSet<T>
             return this.getDelegate().collectChar(charFunction, target);
         }
 
-        @Override
         public MutableDoubleSet collectDouble(DoubleFunction<? super T> doubleFunction)
         {
             return this.getDelegate().collectDouble(doubleFunction);
@@ -694,7 +683,6 @@ public final class MultiReaderUnifiedSet<T>
             return this.getDelegate().collectDouble(doubleFunction, target);
         }
 
-        @Override
         public MutableFloatSet collectFloat(FloatFunction<? super T> floatFunction)
         {
             return this.getDelegate().collectFloat(floatFunction);
@@ -705,7 +693,6 @@ public final class MultiReaderUnifiedSet<T>
             return this.getDelegate().collectFloat(floatFunction, target);
         }
 
-        @Override
         public MutableIntSet collectInt(IntFunction<? super T> intFunction)
         {
             return this.getDelegate().collectInt(intFunction);
@@ -716,7 +703,6 @@ public final class MultiReaderUnifiedSet<T>
             return this.getDelegate().collectInt(intFunction, target);
         }
 
-        @Override
         public MutableLongSet collectLong(LongFunction<? super T> longFunction)
         {
             return this.getDelegate().collectLong(longFunction);
@@ -727,7 +713,6 @@ public final class MultiReaderUnifiedSet<T>
             return this.getDelegate().collectLong(longFunction, target);
         }
 
-        @Override
         public MutableShortSet collectShort(ShortFunction<? super T> shortFunction)
         {
             return this.getDelegate().collectShort(shortFunction);
@@ -767,6 +752,11 @@ public final class MultiReaderUnifiedSet<T>
                 Function<? super T, ? extends Iterable<V>> function)
         {
             return this.getDelegate().groupByEach(function);
+        }
+
+        public <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
+        {
+            return this.getDelegate().groupByUniqueKey(function);
         }
 
         public MutableSet<T> newEmpty()
@@ -946,6 +936,19 @@ public final class MultiReaderUnifiedSet<T>
         try
         {
             return this.delegate.groupByEach(function);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.groupByUniqueKey(function);
         }
         finally
         {

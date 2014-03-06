@@ -1291,6 +1291,17 @@ public interface
             R target);
 
     /**
+     * For each element of the iterable, the function is evaluated and he results of these evaluations are collected
+     * into a new map, where the transformed value is the key. The generated keys must each be unique, or else an
+     * exception is thrown.
+     *
+     * @throws IllegalStateException if the keys returned by the function are not unique
+     * @see #groupBy(Function)
+     * @since 5.0
+     */
+    <V> MapIterable<V, T> groupByUniqueKey(Function<? super T, ? extends V> function);
+
+    /**
      * Returns a string representation of this RichIterable.  The string representation consists of a list of the
      * RichIterable's elements in the order they are returned by its iterator, enclosed in square brackets
      * (<tt>"[]"</tt>).  Adjacent elements are separated by the characters <tt>", "</tt> (comma and space).  Elements
@@ -1310,8 +1321,8 @@ public interface
      * @param that The {@code RichIterable} providing the second half of each result pair
      * @param <S>  the type of the second half of the returned pairs
      * @return A new {@code RichIterable} containing pairs consisting of corresponding elements of this {@code
-     *         RichIterable} and that. The length of the returned {@code RichIterable} is the minimum of the lengths of
-     *         this {@code RichIterable} and that.
+     * RichIterable} and that. The length of the returned {@code RichIterable} is the minimum of the lengths of
+     * this {@code RichIterable} and that.
      * @since 1.0
      */
     <S> RichIterable<Pair<T, S>> zip(Iterable<S> that);
@@ -1327,7 +1338,7 @@ public interface
      * Zips this {@code RichIterable} with its indices.
      *
      * @return A new {@code RichIterable} containing pairs consisting of all elements of this {@code RichIterable}
-     *         paired with their index. Indices start at 0.
+     * paired with their index. Indices start at 0.
      * @see #zip(Iterable)
      * @since 1.0
      */
@@ -1345,7 +1356,7 @@ public interface
      *
      * @param size the number of elements per chunk
      * @return A {@code RichIterable} containing {@code RichIterable}s of size {@code size}, except the last will be
-     *         truncated if the elements don't divide evenly.
+     * truncated if the elements don't divide evenly.
      * @since 1.0
      */
     RichIterable<RichIterable<T>> chunk(int size);

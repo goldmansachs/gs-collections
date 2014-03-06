@@ -33,6 +33,7 @@ import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.collection.MutableCollection;
+import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.set.ImmutableSetMultimap;
 import com.gs.collections.api.partition.set.PartitionImmutableSet;
@@ -321,6 +322,11 @@ public abstract class AbstractImmutableSet<T> extends AbstractImmutableCollectio
     {
         this.forEach(MultimapEachPutProcedure.on(target, function));
         return target;
+    }
+
+    public <V> ImmutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
     }
 
     public <S> ImmutableSet<Pair<T, S>> zip(Iterable<S> that)

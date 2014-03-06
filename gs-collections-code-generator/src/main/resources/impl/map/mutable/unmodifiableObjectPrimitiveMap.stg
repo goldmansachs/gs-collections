@@ -233,7 +233,7 @@ public final class UnmodifiableObject<name>Map\<K>
         return this.map.detectIfNone(predicate, ifNone);
     }
 
-    public \<V1 extends Object> MutableCollection\<V1> collect(<name>ToObjectFunction\<? extends V1> function)
+    public \<V1> MutableCollection\<V1> collect(<name>ToObjectFunction\<? extends V1> function)
     {
         return this.map.collect(function);
     }

@@ -741,10 +741,14 @@ public class HashBag<T>
         return this.items.keysView().getFirst();
     }
 
-    public <V> HashBagMultimap<V, T> groupBy(
-            Function<? super T, ? extends V> function)
+    public <V> HashBagMultimap<V, T> groupBy(Function<? super T, ? extends V> function)
     {
         return this.groupBy(function, HashBagMultimap.<V, T>newMultimap());
+    }
+
+    public <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
     }
 
     public MutableSet<Pair<T, Integer>> zipWithIndex()
@@ -943,8 +947,7 @@ public class HashBag<T>
         return target;
     }
 
-    public <V> HashBagMultimap<V, T> groupByEach(
-            Function<? super T, ? extends Iterable<V>> function)
+    public <V> HashBagMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
     {
         return this.groupByEach(function, HashBagMultimap.<V, T>newMultimap());
     }

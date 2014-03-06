@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -56,6 +56,7 @@ import com.gs.collections.api.list.primitive.MutableFloatList;
 import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
+import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.set.MutableSet;
 import com.gs.collections.api.stack.MutableStack;
@@ -1060,6 +1061,11 @@ public abstract class AbstractMutableList<T>
     public <V> FastListMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
     {
         return ListIterate.groupByEach(this, function);
+    }
+
+    public <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
     }
 
     public <S> MutableList<Pair<T, S>> zip(Iterable<S> that)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,6 +28,7 @@ import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
+import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.multimap.list.ImmutableListMultimap;
 import com.gs.collections.api.partition.stack.PartitionImmutableStack;
 import com.gs.collections.api.stack.primitive.ImmutableBooleanStack;
@@ -87,6 +88,8 @@ public interface ImmutableStack<T> extends StackIterable<T>
     <V> ImmutableListMultimap<V, T> groupBy(Function<? super T, ? extends V> function);
 
     <V> ImmutableListMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function);
+
+    <V> ImmutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function);
 
     <S> ImmutableStack<Pair<T, S>> zip(Iterable<S> that);
 

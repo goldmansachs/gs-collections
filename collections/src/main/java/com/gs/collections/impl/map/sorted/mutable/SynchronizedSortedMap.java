@@ -441,7 +441,6 @@ public class SynchronizedSortedMap<K, V>
         }
     }
 
-    @Override
     public MutableBooleanList collectBoolean(BooleanFunction<? super V> booleanFunction)
     {
         synchronized (this.lock)
@@ -450,7 +449,6 @@ public class SynchronizedSortedMap<K, V>
         }
     }
 
-    @Override
     public MutableByteList collectByte(ByteFunction<? super V> byteFunction)
     {
         synchronized (this.lock)
@@ -459,7 +457,6 @@ public class SynchronizedSortedMap<K, V>
         }
     }
 
-    @Override
     public MutableCharList collectChar(CharFunction<? super V> charFunction)
     {
         synchronized (this.lock)
@@ -468,7 +465,6 @@ public class SynchronizedSortedMap<K, V>
         }
     }
 
-    @Override
     public MutableDoubleList collectDouble(DoubleFunction<? super V> doubleFunction)
     {
         synchronized (this.lock)
@@ -477,7 +473,6 @@ public class SynchronizedSortedMap<K, V>
         }
     }
 
-    @Override
     public MutableFloatList collectFloat(FloatFunction<? super V> floatFunction)
     {
         synchronized (this.lock)
@@ -486,7 +481,6 @@ public class SynchronizedSortedMap<K, V>
         }
     }
 
-    @Override
     public MutableIntList collectInt(IntFunction<? super V> intFunction)
     {
         synchronized (this.lock)
@@ -495,7 +489,6 @@ public class SynchronizedSortedMap<K, V>
         }
     }
 
-    @Override
     public MutableLongList collectLong(LongFunction<? super V> longFunction)
     {
         synchronized (this.lock)
@@ -504,7 +497,6 @@ public class SynchronizedSortedMap<K, V>
         }
     }
 
-    @Override
     public MutableShortList collectShort(ShortFunction<? super V> shortFunction)
     {
         synchronized (this.lock)
@@ -611,6 +603,14 @@ public class SynchronizedSortedMap<K, V>
         synchronized (this.lock)
         {
             return this.getSortedMap().groupByEach(function);
+        }
+    }
+
+    public <VV> MutableMap<VV, V> groupByUniqueKey(Function<? super V, ? extends VV> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.getSortedMap().groupByUniqueKey(function);
         }
     }
 

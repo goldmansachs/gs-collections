@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -709,6 +709,11 @@ public abstract class AbstractCollectionAdapter<T>
             Function<? super T, ? extends Iterable<V>> function)
     {
         return Iterate.groupByEach(this.getDelegate(), function);
+    }
+
+    public <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
     }
 
     public <V, R extends MutableMultimap<V, T>> R groupByEach(

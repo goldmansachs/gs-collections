@@ -562,6 +562,11 @@ public class UnmodifiableTreeMap<K, V>
         return this.getMutableSortedMap().groupByEach(function, target);
     }
 
+    public <VV> MutableMap<VV, V> groupByUniqueKey(Function<? super V, ? extends VV> function)
+    {
+        return this.getMutableSortedMap().groupByUniqueKey(function);
+    }
+
     public <IV> IV injectInto(IV injectedValue, Function2<? super IV, ? super V, ? extends IV> function)
     {
         return this.getMutableSortedMap().injectInto(injectedValue, function);

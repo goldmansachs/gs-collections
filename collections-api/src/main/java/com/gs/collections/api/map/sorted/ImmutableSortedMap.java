@@ -96,6 +96,8 @@ public interface ImmutableSortedMap<K, V>
 
     <VV> ImmutableListMultimap<VV, V> groupByEach(Function<? super V, ? extends Iterable<VV>> function);
 
+    <VV> ImmutableMap<VV, V> groupByUniqueKey(Function<? super V, ? extends VV> function);
+
     <K2, V2> ImmutableMap<K2, V2> aggregateInPlaceBy(
             Function<? super V, ? extends K2> groupBy,
             Function0<? extends V2> zeroValueFactory,

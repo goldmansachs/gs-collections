@@ -763,6 +763,11 @@ public class ArrayStack<T> implements MutableStack<T>, Externalizable
         return this.delegate.asReversed().groupByEach(function, target);
     }
 
+    public <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
+    }
+
     public RichIterable<RichIterable<T>> chunk(int size)
     {
         return this.delegate.asReversed().chunk(size);

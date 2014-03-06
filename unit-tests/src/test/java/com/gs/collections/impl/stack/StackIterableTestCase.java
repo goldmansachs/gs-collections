@@ -1230,4 +1230,10 @@ public abstract class StackIterableTestCase
             return this.function.valueOf(object);
         }
     }
+
+    @Test(expected = UnsupportedOperationException.class)
+    public void groupByUniqueKey()
+    {
+        this.newStackWith(1, 2, 3).groupByUniqueKey(Functions.getPassThru());
+    }
 }

@@ -24,6 +24,7 @@ import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.multimap.bag.MutableBagMultimap;
 import com.gs.collections.api.multimap.bag.UnsortedBagMultimap;
 import com.gs.collections.api.set.ParallelUnsortedSetIterable;
@@ -136,5 +137,10 @@ public abstract class AbstractParallelUnsortedBag<T, B extends UnsortedBagBatch<
             }
         });
         return result;
+    }
+
+    public <V> MapIterable<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
     }
 }

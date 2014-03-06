@@ -306,6 +306,8 @@ public interface MutableMap<K, V>
 
     <VV> MutableMultimap<VV, V> groupByEach(Function<? super V, ? extends Iterable<VV>> function);
 
+    <V1> MutableMap<V1, V> groupByUniqueKey(Function<? super V, ? extends V1> function);
+
     <K2, V2> MutableMap<K2, V2> aggregateInPlaceBy(
             Function<? super V, ? extends K2> groupBy,
             Function0<? extends V2> zeroValueFactory,

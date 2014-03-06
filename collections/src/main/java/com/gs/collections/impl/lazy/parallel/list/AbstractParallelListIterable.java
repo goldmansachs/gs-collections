@@ -22,6 +22,7 @@ import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
 import com.gs.collections.api.list.ParallelListIterable;
+import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.multimap.list.ListMultimap;
 import com.gs.collections.api.set.ParallelUnsortedSetIterable;
 import com.gs.collections.impl.block.factory.Functions;
@@ -95,5 +96,10 @@ public abstract class AbstractParallelListIterable<T, B extends ListBatch<T>> ex
     public <V> ListMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
     {
         throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByEach() not implemented yet");
+    }
+
+    public <V> MapIterable<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
     }
 }

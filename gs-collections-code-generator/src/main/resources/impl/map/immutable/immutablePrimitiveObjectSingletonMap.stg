@@ -673,6 +673,11 @@ final class Immutable<name>ObjectSingletonMap\<V> extends AbstractImmutable<name
         return this.groupByEach(function, FastListMultimap.\<VV, V>newMultimap());
     }
 
+    public \<VV> MapIterable\<VV, V> groupByUniqueKey(Function\<? super V, ? extends VV> function)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
+    }
+
     public \<S> RichIterable\<Pair\<V, S>\> zip(Iterable\<S> that)
     {
         return this.zip(that, FastList.\<Pair\<V, S>\>newList());

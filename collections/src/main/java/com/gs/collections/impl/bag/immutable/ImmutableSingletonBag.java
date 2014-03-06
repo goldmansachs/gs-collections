@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,6 +33,7 @@ import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.Procedure;
 import com.gs.collections.api.block.procedure.Procedure2;
 import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
@@ -327,8 +328,8 @@ final class ImmutableSingletonBag<T>
         return this.groupBy(function, HashBagMultimap.<V, T>newMultimap()).toImmutable();
     }
 
-    public <V, R extends MutableMultimap<V, T>> R groupBy(
-            Function<? super T, ? extends V> function, R target)
+    @Override
+    public <V, R extends MutableMultimap<V, T>> R groupBy(Function<? super T, ? extends V> function, R target)
     {
         target.putAll(function.valueOf(this.value), this);
         return target;
@@ -339,11 +340,16 @@ final class ImmutableSingletonBag<T>
         return this.groupByEach(function, HashBagMultimap.<V, T>newMultimap()).toImmutable();
     }
 
-    public <V, R extends MutableMultimap<V, T>> R groupByEach(
-            Function<? super T, ? extends Iterable<V>> function, R target)
+    @Override
+    public <V, R extends MutableMultimap<V, T>> R groupByEach(Function<? super T, ? extends Iterable<V>> function, R target)
     {
         this.forEach(MultimapEachPutProcedure.on(target, function));
         return target;
+    }
+
+    public <V> ImmutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
     }
 
     public int sizeDistinct()

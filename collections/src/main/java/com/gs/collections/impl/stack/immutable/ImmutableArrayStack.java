@@ -59,6 +59,7 @@ import com.gs.collections.api.collection.primitive.MutableLongCollection;
 import com.gs.collections.api.collection.primitive.MutableShortCollection;
 import com.gs.collections.api.list.ListIterable;
 import com.gs.collections.api.list.MutableList;
+import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
@@ -778,6 +779,11 @@ final class ImmutableArrayStack<T> implements ImmutableStack<T>, Serializable
     public <V, R extends MutableMultimap<V, T>> R groupByEach(Function<? super T, ? extends Iterable<V>> function, R target)
     {
         return this.delegate.asReversed().groupByEach(function, target);
+    }
+
+    public <V> ImmutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
     }
 
     public <S> ImmutableStack<Pair<T, S>> zip(Iterable<S> that)

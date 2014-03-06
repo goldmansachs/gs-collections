@@ -597,6 +597,11 @@ final class Immutable<name>ObjectEmptyMap\<V> implements Immutable<name>ObjectMa
         return FastListMultimap.newMultimap();
     }
 
+    public \<VV> MapIterable\<VV, V> groupByUniqueKey(Function\<? super V, ? extends VV> function)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
+    }
+
     public \<S> RichIterable\<Pair\<V, S>\> zip(Iterable\<S> that)
     {
         return Lists.immutable.of();

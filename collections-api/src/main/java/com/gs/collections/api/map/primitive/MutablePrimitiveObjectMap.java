@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,6 +55,8 @@ public interface MutablePrimitiveObjectMap<V>
     <VV> MutableMultimap<VV, V> groupByEach(Function<? super V, ? extends Iterable<VV>> function);
 
     <VV> MutableMultimap<VV, V> groupBy(Function<? super V, ? extends VV> function);
+
+    <VV> MutableMap<VV, V> groupByUniqueKey(Function<? super V, ? extends VV> function);
 
     <VV> MutableCollection<VV> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends VV> function);
 

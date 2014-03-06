@@ -52,6 +52,7 @@ import com.gs.collections.api.list.primitive.MutableFloatList;
 import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
+import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.partition.set.sorted.PartitionMutableSortedSet;
 import com.gs.collections.api.set.SetIterable;
 import com.gs.collections.api.set.sorted.ImmutableSortedSet;
@@ -450,6 +451,11 @@ public final class TreeSortedSet<T>
     public <V> TreeSortedSetMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
     {
         return Iterate.groupByEach(this.treeSet, function, TreeSortedSetMultimap.<V, T>newMultimap(this.comparator()));
+    }
+
+    public <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
     }
 
     public <P> TreeSortedSet<T> selectWith(Predicate2<? super T, ? super P> predicate, P parameter)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -460,6 +460,11 @@ final class ImmutableEmptyBag<T>
             Function<? super T, ? extends Iterable<V>> function, R target)
     {
         return target;
+    }
+
+    public <V> ImmutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
     }
 
     public T detect(Predicate<? super T> predicate)

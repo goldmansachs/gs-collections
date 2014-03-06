@@ -172,7 +172,6 @@ public abstract class AbstractMutableSortedMap<K, V> extends AbstractMapIterable
         return result;
     }
 
-    @Override
     public MutableByteList collectByte(ByteFunction<? super V> byteFunction)
     {
         ByteArrayList result = new ByteArrayList(this.size());
@@ -180,7 +179,6 @@ public abstract class AbstractMutableSortedMap<K, V> extends AbstractMapIterable
         return result;
     }
 
-    @Override
     public MutableCharList collectChar(CharFunction<? super V> charFunction)
     {
         CharArrayList result = new CharArrayList(this.size());
@@ -188,7 +186,6 @@ public abstract class AbstractMutableSortedMap<K, V> extends AbstractMapIterable
         return result;
     }
 
-    @Override
     public MutableDoubleList collectDouble(DoubleFunction<? super V> doubleFunction)
     {
         DoubleArrayList result = new DoubleArrayList(this.size());
@@ -196,7 +193,6 @@ public abstract class AbstractMutableSortedMap<K, V> extends AbstractMapIterable
         return result;
     }
 
-    @Override
     public MutableFloatList collectFloat(FloatFunction<? super V> floatFunction)
     {
         FloatArrayList result = new FloatArrayList(this.size());
@@ -204,7 +200,6 @@ public abstract class AbstractMutableSortedMap<K, V> extends AbstractMapIterable
         return result;
     }
 
-    @Override
     public MutableIntList collectInt(IntFunction<? super V> intFunction)
     {
         IntArrayList result = new IntArrayList(this.size());
@@ -212,7 +207,6 @@ public abstract class AbstractMutableSortedMap<K, V> extends AbstractMapIterable
         return result;
     }
 
-    @Override
     public MutableLongList collectLong(LongFunction<? super V> longFunction)
     {
         LongArrayList result = new LongArrayList(this.size());
@@ -220,7 +214,6 @@ public abstract class AbstractMutableSortedMap<K, V> extends AbstractMapIterable
         return result;
     }
 
-    @Override
     public MutableShortList collectShort(ShortFunction<? super V> shortFunction)
     {
         ShortArrayList result = new ShortArrayList(this.size());
@@ -269,19 +262,16 @@ public abstract class AbstractMutableSortedMap<K, V> extends AbstractMapIterable
         return this.collect(Functions.bind(function, parameter));
     }
 
-    @Override
     public <R> MutableList<R> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function)
     {
         return this.collectIf(predicate, function, FastList.<R>newList(this.size()));
     }
 
-    @Override
     public <R> MutableList<R> flatCollect(Function<? super V, ? extends Iterable<R>> function)
     {
         return this.flatCollect(function, FastList.<R>newList(this.size()));
     }
 
-    @Override
     public MutableList<V> reject(Predicate<? super V> predicate)
     {
         return this.reject(predicate, FastList.<V>newList(this.size()));
@@ -299,7 +289,6 @@ public abstract class AbstractMutableSortedMap<K, V> extends AbstractMapIterable
         return this.reject(Predicates.bind(predicate, parameter));
     }
 
-    @Override
     public MutableList<V> select(Predicate<? super V> predicate)
     {
         return this.select(predicate, FastList.<V>newList(this.size()));
@@ -327,13 +316,11 @@ public abstract class AbstractMutableSortedMap<K, V> extends AbstractMapIterable
         return result;
     }
 
-    @Override
     public <S> MutableList<Pair<V, S>> zip(Iterable<S> that)
     {
         return this.zip(that, FastList.<Pair<V, S>>newList(this.size()));
     }
 
-    @Override
     public MutableList<Pair<V, Integer>> zipWithIndex()
     {
         return this.zipWithIndex(FastList.<Pair<V, Integer>>newList(this.size()));
@@ -360,6 +347,11 @@ public abstract class AbstractMutableSortedMap<K, V> extends AbstractMapIterable
     public <VV> MutableListMultimap<VV, V> groupByEach(Function<? super V, ? extends Iterable<VV>> function)
     {
         return this.groupByEach(function, FastListMultimap.<VV, V>newMultimap());
+    }
+
+    public <V1> MutableMap<V1, V> groupByUniqueKey(Function<? super V, ? extends V1> function)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
     }
 
     public <K2, V2> MutableMap<K2, V2> aggregateInPlaceBy(

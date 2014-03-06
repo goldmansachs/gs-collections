@@ -196,7 +196,6 @@ public abstract class AbstractImmutableSortedMap<K, V>
         return MapIterate.flip(this).toImmutable();
     }
 
-    @Override
     public ImmutableList<V> select(Predicate<? super V> predicate)
     {
         return this.select(predicate, FastList.<V>newList(this.size())).toImmutable();
@@ -213,7 +212,6 @@ public abstract class AbstractImmutableSortedMap<K, V>
         return MapIterate.selectMapOnEntry(this, predicate, TreeSortedMap.<K, V>newMap(this.comparator())).toImmutable();
     }
 
-    @Override
     public ImmutableList<V> reject(Predicate<? super V> predicate)
     {
         return this.reject(predicate, FastList.<V>newList(this.size())).toImmutable();
@@ -265,7 +263,6 @@ public abstract class AbstractImmutableSortedMap<K, V>
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableByteList collectByte(ByteFunction<? super V> byteFunction)
     {
         ByteArrayList result = new ByteArrayList(this.size());
@@ -273,7 +270,6 @@ public abstract class AbstractImmutableSortedMap<K, V>
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableCharList collectChar(CharFunction<? super V> charFunction)
     {
         CharArrayList result = new CharArrayList(this.size());
@@ -281,7 +277,6 @@ public abstract class AbstractImmutableSortedMap<K, V>
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableDoubleList collectDouble(DoubleFunction<? super V> doubleFunction)
     {
         DoubleArrayList result = new DoubleArrayList(this.size());
@@ -289,7 +284,6 @@ public abstract class AbstractImmutableSortedMap<K, V>
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableFloatList collectFloat(FloatFunction<? super V> floatFunction)
     {
         FloatArrayList result = new FloatArrayList(this.size());
@@ -297,7 +291,6 @@ public abstract class AbstractImmutableSortedMap<K, V>
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableIntList collectInt(IntFunction<? super V> intFunction)
     {
         IntArrayList result = new IntArrayList(this.size());
@@ -305,7 +298,6 @@ public abstract class AbstractImmutableSortedMap<K, V>
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableLongList collectLong(LongFunction<? super V> longFunction)
     {
         LongArrayList result = new LongArrayList(this.size());
@@ -313,7 +305,6 @@ public abstract class AbstractImmutableSortedMap<K, V>
         return result.toImmutable();
     }
 
-    @Override
     public ImmutableShortList collectShort(ShortFunction<? super V> shortFunction)
     {
         ShortArrayList result = new ShortArrayList(this.size());
@@ -332,7 +323,6 @@ public abstract class AbstractImmutableSortedMap<K, V>
         return this.collect(Functions.bind(function, parameter));
     }
 
-    @Override
     public <R> ImmutableList<R> collectIf(Predicate<? super V> predicate, Function<? super V, ? extends R> function)
     {
         return this.collectIf(predicate, function, FastList.<R>newList(this.size())).toImmutable();
@@ -360,19 +350,16 @@ public abstract class AbstractImmutableSortedMap<K, V>
         return this.detectIfNone(Predicates.bind(predicate, parameter), function);
     }
 
-    @Override
     public <R> ImmutableList<R> flatCollect(Function<? super V, ? extends Iterable<R>> function)
     {
         return this.flatCollect(function, FastList.<R>newList(this.size())).toImmutable();
     }
 
-    @Override
     public <S> ImmutableList<Pair<V, S>> zip(Iterable<S> that)
     {
         return this.zip(that, FastList.<Pair<V, S>>newList(this.size())).toImmutable();
     }
 
-    @Override
     public ImmutableList<Pair<V, Integer>> zipWithIndex()
     {
         return this.zipWithIndex(FastList.<Pair<V, Integer>>newList(this.size())).toImmutable();
@@ -401,6 +388,11 @@ public abstract class AbstractImmutableSortedMap<K, V>
     public <R> ImmutableListMultimap<R, V> groupByEach(Function<? super V, ? extends Iterable<R>> function)
     {
         return this.groupByEach(function, FastListMultimap.<R, V>newMultimap()).toImmutable();
+    }
+
+    public <V1> ImmutableMap<V1, V> groupByUniqueKey(Function<? super V, ? extends V1> function)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
     }
 
     public <K2, V2> ImmutableMap<K2, V2> aggregateInPlaceBy(

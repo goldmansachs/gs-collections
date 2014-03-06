@@ -64,6 +64,7 @@ import com.gs.collections.api.list.primitive.MutableFloatList;
 import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
+import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.multimap.list.MutableListMultimap;
 import com.gs.collections.api.partition.list.PartitionMutableList;
 import com.gs.collections.api.stack.MutableStack;
@@ -250,7 +251,6 @@ public final class MultiReaderFastList<T>
         }
     }
 
-    @Override
     public MutableBooleanList collectBoolean(BooleanFunction<? super T> booleanFunction)
     {
         this.acquireReadLock();
@@ -264,7 +264,6 @@ public final class MultiReaderFastList<T>
         }
     }
 
-    @Override
     public MutableByteList collectByte(ByteFunction<? super T> byteFunction)
     {
         this.acquireReadLock();
@@ -278,7 +277,6 @@ public final class MultiReaderFastList<T>
         }
     }
 
-    @Override
     public MutableCharList collectChar(CharFunction<? super T> charFunction)
     {
         this.acquireReadLock();
@@ -292,7 +290,6 @@ public final class MultiReaderFastList<T>
         }
     }
 
-    @Override
     public MutableDoubleList collectDouble(DoubleFunction<? super T> doubleFunction)
     {
         this.acquireReadLock();
@@ -306,7 +303,6 @@ public final class MultiReaderFastList<T>
         }
     }
 
-    @Override
     public MutableFloatList collectFloat(FloatFunction<? super T> floatFunction)
     {
         this.acquireReadLock();
@@ -320,7 +316,6 @@ public final class MultiReaderFastList<T>
         }
     }
 
-    @Override
     public MutableIntList collectInt(IntFunction<? super T> intFunction)
     {
         this.acquireReadLock();
@@ -334,7 +329,6 @@ public final class MultiReaderFastList<T>
         }
     }
 
-    @Override
     public MutableLongList collectLong(LongFunction<? super T> longFunction)
     {
         this.acquireReadLock();
@@ -348,7 +342,6 @@ public final class MultiReaderFastList<T>
         }
     }
 
-    @Override
     public MutableShortList collectShort(ShortFunction<? super T> shortFunction)
     {
         this.acquireReadLock();
@@ -903,7 +896,6 @@ public final class MultiReaderFastList<T>
             return this.getDelegate().collect(function);
         }
 
-        @Override
         public MutableBooleanList collectBoolean(BooleanFunction<? super T> booleanFunction)
         {
             return this.getDelegate().collectBoolean(booleanFunction);
@@ -914,7 +906,6 @@ public final class MultiReaderFastList<T>
             return this.getDelegate().collectBoolean(booleanFunction, target);
         }
 
-        @Override
         public MutableByteList collectByte(ByteFunction<? super T> byteFunction)
         {
             return this.getDelegate().collectByte(byteFunction);
@@ -925,7 +916,6 @@ public final class MultiReaderFastList<T>
             return this.getDelegate().collectByte(byteFunction, target);
         }
 
-        @Override
         public MutableCharList collectChar(CharFunction<? super T> charFunction)
         {
             return this.getDelegate().collectChar(charFunction);
@@ -936,7 +926,6 @@ public final class MultiReaderFastList<T>
             return this.getDelegate().collectChar(charFunction, target);
         }
 
-        @Override
         public MutableDoubleList collectDouble(DoubleFunction<? super T> doubleFunction)
         {
             return this.getDelegate().collectDouble(doubleFunction);
@@ -947,7 +936,6 @@ public final class MultiReaderFastList<T>
             return this.getDelegate().collectDouble(doubleFunction, target);
         }
 
-        @Override
         public MutableFloatList collectFloat(FloatFunction<? super T> floatFunction)
         {
             return this.getDelegate().collectFloat(floatFunction);
@@ -958,7 +946,6 @@ public final class MultiReaderFastList<T>
             return this.getDelegate().collectFloat(floatFunction, target);
         }
 
-        @Override
         public MutableIntList collectInt(IntFunction<? super T> intFunction)
         {
             return this.getDelegate().collectInt(intFunction);
@@ -969,7 +956,6 @@ public final class MultiReaderFastList<T>
             return this.getDelegate().collectInt(intFunction, target);
         }
 
-        @Override
         public MutableLongList collectLong(LongFunction<? super T> longFunction)
         {
             return this.getDelegate().collectLong(longFunction);
@@ -980,7 +966,6 @@ public final class MultiReaderFastList<T>
             return this.getDelegate().collectLong(longFunction, target);
         }
 
-        @Override
         public MutableShortList collectShort(ShortFunction<? super T> shortFunction)
         {
             return this.getDelegate().collectShort(shortFunction);
@@ -1018,6 +1003,11 @@ public final class MultiReaderFastList<T>
         public <V> MutableListMultimap<V, T> groupByEach(Function<? super T, ? extends Iterable<V>> function)
         {
             return this.getDelegate().groupByEach(function);
+        }
+
+        public <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
+        {
+            return this.getDelegate().groupByUniqueKey(function);
         }
 
         public void forEach(int fromIndex, int toIndex, Procedure<? super T> procedure)
@@ -1327,6 +1317,19 @@ public final class MultiReaderFastList<T>
         try
         {
             return this.delegate.groupByEach(function);
+        }
+        finally
+        {
+            this.unlockReadLock();
+        }
+    }
+
+    public <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
+    {
+        this.acquireReadLock();
+        try
+        {
+            return this.delegate.groupByUniqueKey(function);
         }
         finally
         {

@@ -886,6 +886,14 @@ public class SynchronizedRichIterable<T>
         }
     }
 
+    public <V> MapIterable<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.iterable.groupByUniqueKey(function);
+        }
+    }
+
     @Override
     public String toString()
     {

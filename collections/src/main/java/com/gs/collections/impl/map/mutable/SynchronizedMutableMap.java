@@ -220,7 +220,6 @@ public class SynchronizedMutableMap<K, V>
         }
     }
 
-    @Override
     public MutableBooleanCollection collectBoolean(BooleanFunction<? super V> booleanFunction)
     {
         synchronized (this.lock)
@@ -229,7 +228,6 @@ public class SynchronizedMutableMap<K, V>
         }
     }
 
-    @Override
     public MutableByteCollection collectByte(ByteFunction<? super V> byteFunction)
     {
         synchronized (this.lock)
@@ -238,7 +236,6 @@ public class SynchronizedMutableMap<K, V>
         }
     }
 
-    @Override
     public MutableCharCollection collectChar(CharFunction<? super V> charFunction)
     {
         synchronized (this.lock)
@@ -247,7 +244,6 @@ public class SynchronizedMutableMap<K, V>
         }
     }
 
-    @Override
     public MutableDoubleCollection collectDouble(DoubleFunction<? super V> doubleFunction)
     {
         synchronized (this.lock)
@@ -256,7 +252,6 @@ public class SynchronizedMutableMap<K, V>
         }
     }
 
-    @Override
     public MutableFloatCollection collectFloat(FloatFunction<? super V> floatFunction)
     {
         synchronized (this.lock)
@@ -265,7 +260,6 @@ public class SynchronizedMutableMap<K, V>
         }
     }
 
-    @Override
     public MutableIntCollection collectInt(IntFunction<? super V> intFunction)
     {
         synchronized (this.lock)
@@ -274,7 +268,6 @@ public class SynchronizedMutableMap<K, V>
         }
     }
 
-    @Override
     public MutableLongCollection collectLong(LongFunction<? super V> longFunction)
     {
         synchronized (this.lock)
@@ -283,7 +276,6 @@ public class SynchronizedMutableMap<K, V>
         }
     }
 
-    @Override
     public MutableShortCollection collectShort(ShortFunction<? super V> shortFunction)
     {
         synchronized (this.lock)
@@ -305,6 +297,14 @@ public class SynchronizedMutableMap<K, V>
         synchronized (this.lock)
         {
             return this.getMutableMap().groupByEach(function);
+        }
+    }
+
+    public <VV> MutableMap<VV, V> groupByUniqueKey(Function<? super V, ? extends VV> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.getMutableMap().groupByUniqueKey(function);
         }
     }
 

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -180,7 +180,7 @@ public class UnifiedSetWithHashingStrategy<K>
 
     /**
      * @deprecated No argument default constructor used for serialization. Instantiating an UnifiedSetWithHashingStrategyMultimap with
-     *             this constructor will have a null hashingStrategy and throw NullPointerException when used.
+     * this constructor will have a null hashingStrategy and throw NullPointerException when used.
      */
     @Deprecated
     public UnifiedSetWithHashingStrategy()
@@ -2280,6 +2280,11 @@ public class UnifiedSetWithHashingStrategy<K>
     {
         this.forEach(new MultimapEachPutProcedure<V, K>(target, function));
         return target;
+    }
+
+    public <V> MutableMap<V, K> groupByUniqueKey(Function<? super K, ? extends V> function)
+    {
+        throw new UnsupportedOperationException(this.getClass().getSimpleName() + ".groupByUniqueKey() not implemented yet");
     }
 
     public <S> MutableSet<Pair<K, S>> zip(Iterable<S> that)

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -1041,6 +1041,14 @@ public class AbstractSynchronizedMutableCollection<T>
         synchronized (this.lock)
         {
             return this.collection.groupByEach(function, target);
+        }
+    }
+
+    public <V> MutableMap<V, T> groupByUniqueKey(Function<? super T, ? extends V> function)
+    {
+        synchronized (this.lock)
+        {
+            return this.collection.groupByUniqueKey(function);
         }
     }
 
