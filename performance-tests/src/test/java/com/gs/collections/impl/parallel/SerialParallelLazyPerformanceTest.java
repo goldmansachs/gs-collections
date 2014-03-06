@@ -19,12 +19,14 @@ package com.gs.collections.impl.parallel;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 
 import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function0;
@@ -35,7 +37,6 @@ import com.gs.collections.api.block.procedure.primitive.IntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.ParallelTests;
-import com.gs.collections.impl.block.factory.IntegerPredicates;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.mutable.FastList;
@@ -54,47 +55,18 @@ import org.slf4j.LoggerFactory;
 
 public class SerialParallelLazyPerformanceTest
 {
-    public static final Predicate<Integer> PREDICATE_1 = Predicates.greaterThan(0).and(IntegerPredicates.isOdd());
-    public static final Predicate<Integer> PREDICATE_2 = IntegerPredicates.isPositive().and(IntegerPredicates.isEven());
-    public static final Predicate<Integer> PREDICATE_3 = IntegerPredicates.isOdd().and(IntegerPredicates.isNegative());
+    public static final Predicate<Integer> PREDICATE_1 = item -> item > 0 && (item & 1) != 0;
+    public static final Predicate<Integer> PREDICATE_2 = item -> item > 0 && (item & 1) == 0;
+    public static final Predicate<Integer> PREDICATE_3 = item -> item < 0 && (item & 1) != 0;
     public static final MutableList<Predicate<Integer>> PREDICATES = FastList.newListWith(PREDICATE_1, PREDICATE_2, PREDICATE_3);
 
-    private static final Function<Integer, Pair<Integer, Integer>> PAIR_FUNCTION =
-            new Function<Integer, Pair<Integer, Integer>>()
-            {
-                public Pair<Integer, Integer> valueOf(Integer value)
-                {
-                    return Tuples.pair(value, value);
-                }
-            };
+    private static final Function<Integer, Pair<Integer, Integer>> PAIR_FUNCTION = value -> Tuples.pair(value, value);
 
-    private static final Function<Integer, Long> LONG_FUNCTION =
-            new Function<Integer, Long>()
-            {
-                public Long valueOf(Integer value)
-                {
-                    return value.longValue();
-                }
-            };
+    private static final Function<Integer, Long> LONG_FUNCTION = value -> value.longValue();
 
-    private static final Function<Integer, Short> SHORT_FUNCTION =
-            new Function<Integer, Short>()
-            {
-                public Short valueOf(Integer value)
-                {
-                    return value.shortValue();
-                }
-            };
+    private static final Function<Integer, Short> SHORT_FUNCTION = value -> value.shortValue();
 
-    private static final Function<String, Alphagram> ALPHAGRAM_FUNCTION =
-            new Function<String, Alphagram>()
-            {
-                @SuppressWarnings("ClassEscapesDefinedScope")
-                public Alphagram valueOf(String value)
-                {
-                    return new Alphagram(value);
-                }
-            };
+    private static final Function<String, Alphagram> ALPHAGRAM_FUNCTION = value -> new Alphagram(value);
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SerialParallelLazyPerformanceTest.class);
 
@@ -149,15 +121,41 @@ public class SerialParallelLazyPerformanceTest
 
     @Test
     @Category(ParallelTests.class)
-    public void anySatisfy()
+    public void anySatisfyShortCircuitInBeginning()
     {
-        this.measureAlgorithmForIntegerIterable("Reject", new Procedure<Function0<FastList<Integer>>>()
+        this.measureAlgorithmForIntegerIterable("AnySatisfy Short Circuit In The Beginning", new Procedure<Function0<FastList<Integer>>>()
         {
             public void value(Function0<FastList<Integer>> each)
             {
-                SerialParallelLazyPerformanceTest.this.anySatisfy(each.value());
+                SerialParallelLazyPerformanceTest.this.anySatisfy(each.value(), PREDICATES.get(3), true);
             }
-        }, true);
+        }, false);
+    }
+
+    @Test
+    @Category(ParallelTests.class)
+    public void anySatisfyShortCircuitInMiddle()
+    {
+        this.measureAlgorithmForIntegerIterable("AnySatisfy Short Circuit In The Middle", new Procedure<Function0<FastList<Integer>>>()
+        {
+            public void value(Function0<FastList<Integer>> each)
+            {
+                SerialParallelLazyPerformanceTest.this.anySatisfy(each.value(), PREDICATES.get(0), true);
+            }
+        }, false);
+    }
+
+    @Test
+    @Category(ParallelTests.class)
+    public void anySatisfyShortCircuitInEnd()
+    {
+        this.measureAlgorithmForIntegerIterable("AnySatisfy Short Circuit In The End", new Procedure<Function0<FastList<Integer>>>()
+        {
+            public void value(Function0<FastList<Integer>> each)
+            {
+                SerialParallelLazyPerformanceTest.this.anySatisfy(each.value(), Predicates.greaterThan(1000000), false);
+            }
+        }, false);
     }
 
     @Test
@@ -417,14 +415,14 @@ public class SerialParallelLazyPerformanceTest
         }
     }
 
-    private void anySatisfy(final FastList<Integer> collection)
+    private void anySatisfy(final FastList<Integer> collection, Predicate<? super Integer> predicate, boolean expectedResult)
     {
         MutableList<Runnable> runnables = FastList.newList();
         runnables.add(new Runnable()
         {
             public void run()
             {
-                SerialParallelLazyPerformanceTest.this.basicSerialAnySatisfyPerformance(collection, PREDICATES, SERIAL_RUN_COUNT);
+                SerialParallelLazyPerformanceTest.this.basicSerialAnySatisfyPerformance(collection, predicate, expectedResult, SERIAL_RUN_COUNT);
             }
         });
         final int cores = Runtime.getRuntime().availableProcessors();
@@ -433,7 +431,7 @@ public class SerialParallelLazyPerformanceTest
         {
             public void run()
             {
-                SerialParallelLazyPerformanceTest.this.basicParallelLazyAnySatisfyPerformance(collection, PREDICATES, PARALLEL_RUN_COUNT, cores, service);
+                SerialParallelLazyPerformanceTest.this.basicParallelLazyAnySatisfyPerformance(collection, predicate, expectedResult, PARALLEL_RUN_COUNT, cores, service);
             }
         });
         this.shuffleAndRun(runnables);
@@ -566,7 +564,8 @@ public class SerialParallelLazyPerformanceTest
 
     private double basicSerialAnySatisfyPerformance(
             final FastList<Integer> iterable,
-            final MutableList<Predicate<Integer>> predicateList,
+            final Predicate<? super Integer> predicate,
+            boolean expectedResult,
             int count)
     {
         return TimeKeeper.logAverageMillisecondsToRun("Serial******* AnySatisfy: "
@@ -576,10 +575,7 @@ public class SerialParallelLazyPerformanceTest
         {
             public void run()
             {
-                Assert.assertTrue(iterable.anySatisfy(predicateList.get(0)));
-                Assert.assertTrue(iterable.anySatisfy(predicateList.get(1)));
-                Assert.assertTrue(iterable.anySatisfy(predicateList.get(2)));
-                Assert.assertFalse(iterable.anySatisfy(Predicates.alwaysFalse()));
+                Assert.assertEquals(expectedResult, iterable.anySatisfy(predicate));
             }
         }, count, WARM_UP_COUNT);
     }
@@ -623,6 +619,11 @@ public class SerialParallelLazyPerformanceTest
         return NumberFormat.getInstance().format(Iterate.sizeOf(iterable));
     }
 
+    private static int getBatchSizeFor(Collection<?> iterable)
+    {
+        return iterable.size() == 1000000 ? 10000 : 1000;
+    }
+
     private double basicParallelLazyToListPerformance(
             final FastList<Integer> iterable,
             int count,
@@ -652,9 +653,9 @@ public class SerialParallelLazyPerformanceTest
         {
             public void run()
             {
-                iterable.parallelStream().filter(item -> item > 0 && (item & 1) != 0).toArray();
-                iterable.parallelStream().filter(item -> item > 0 && (item & 1) == 0).toArray();
-                iterable.parallelStream().filter(item -> item < 0 && (item & 1) != 0).toArray();
+                iterable.parallelStream().filter(item -> item > 0 && (item & 1) != 0).collect(Collectors.toList());
+                iterable.parallelStream().filter(item -> item > 0 && (item & 1) == 0).collect(Collectors.toList());
+                iterable.parallelStream().filter(item -> item < 0 && (item & 1) != 0).collect(Collectors.toList());
             }
         }, count, WARM_UP_COUNT);
     }
@@ -663,9 +664,10 @@ public class SerialParallelLazyPerformanceTest
             final FastList<Integer> iterable,
             final MutableList<Predicate<Integer>> predicateList,
             int count,
-            final int cores,
+            int cores,
             final ExecutorService service)
     {
+        int batchSize = SerialParallelLazyPerformanceTest.getBatchSizeFor(iterable);
         return TimeKeeper.logAverageMillisecondsToRun("Parallel Lazy Select: "
                 + this.getSimpleName(iterable)
                 + " size: "
@@ -673,9 +675,9 @@ public class SerialParallelLazyPerformanceTest
         {
             public void run()
             {
-                iterable.asParallel(service, iterable.size() / (cores * 3)).select(predicateList.get(0)).toList();
-                iterable.asParallel(service, iterable.size() / (cores * 3)).select(predicateList.get(1)).toList();
-                iterable.asParallel(service, iterable.size() / (cores * 3)).select(predicateList.get(2)).toList();
+                iterable.asParallel(service, batchSize).select(predicateList.get(0)).toList();
+                iterable.asParallel(service, batchSize).select(predicateList.get(1)).toList();
+                iterable.asParallel(service, batchSize).select(predicateList.get(2)).toList();
             }
         }, count, WARM_UP_COUNT);
     }
@@ -684,9 +686,10 @@ public class SerialParallelLazyPerformanceTest
             final FastList<Integer> iterable,
             final MutableList<Predicate<Integer>> predicateList,
             int count,
-            final int cores,
+            int cores,
             final ExecutorService service)
     {
+        int batchSize = SerialParallelLazyPerformanceTest.getBatchSizeFor(iterable);
         return TimeKeeper.logAverageMillisecondsToRun("Parallel Lazy Reject: "
                 + this.getSimpleName(iterable)
                 + " size: "
@@ -694,20 +697,22 @@ public class SerialParallelLazyPerformanceTest
         {
             public void run()
             {
-                Verify.assertNotEmpty(iterable.asParallel(service, iterable.size() / (cores * 3)).reject(predicateList.get(0)).toList());
-                Verify.assertNotEmpty(iterable.asParallel(service, iterable.size() / (cores * 3)).reject(predicateList.get(1)).toList());
-                Verify.assertNotEmpty(iterable.asParallel(service, iterable.size() / (cores * 3)).reject(predicateList.get(2)).toList());
+                Verify.assertNotEmpty(iterable.asParallel(service, batchSize).reject(predicateList.get(0)).toList());
+                Verify.assertNotEmpty(iterable.asParallel(service, batchSize).reject(predicateList.get(1)).toList());
+                Verify.assertNotEmpty(iterable.asParallel(service, batchSize).reject(predicateList.get(2)).toList());
             }
         }, count, WARM_UP_COUNT);
     }
 
     private double basicParallelLazyAnySatisfyPerformance(
             final FastList<Integer> iterable,
-            final MutableList<Predicate<Integer>> predicateList,
+            final Predicate<? super Integer> predicate,
+            boolean expectedResult,
             int count,
-            final int cores,
+            int cores,
             final ExecutorService service)
     {
+        int batchSize = SerialParallelLazyPerformanceTest.getBatchSizeFor(iterable);
         return TimeKeeper.logAverageMillisecondsToRun("Parallel Lazy AnySatisfy: "
                 + this.getSimpleName(iterable)
                 + " size: "
@@ -715,10 +720,7 @@ public class SerialParallelLazyPerformanceTest
         {
             public void run()
             {
-                Assert.assertTrue(iterable.asParallel(service, iterable.size() / (cores * 3)).anySatisfy(predicateList.get(0)));
-                Assert.assertTrue(iterable.asParallel(service, iterable.size() / (cores * 3)).anySatisfy(predicateList.get(1)));
-                Assert.assertTrue(iterable.asParallel(service, iterable.size() / (cores * 3)).anySatisfy(predicateList.get(2)));
-                Assert.assertFalse(iterable.asParallel(service, iterable.size() / (cores * 3)).anySatisfy(Predicates.alwaysFalse()));
+                Assert.assertEquals(expectedResult, iterable.asParallel(service, batchSize).anySatisfy(predicate));
             }
         }, count, WARM_UP_COUNT);
     }
@@ -726,9 +728,11 @@ public class SerialParallelLazyPerformanceTest
     private double basicParallelLazyCollectPerformance(
             final FastList<Integer> iterable,
             int count,
-            final int cores,
+            int cores,
             final ExecutorService service)
     {
+        int batchSize = SerialParallelLazyPerformanceTest.getBatchSizeFor(iterable);
+
         return TimeKeeper.logAverageMillisecondsToRun("Parallel Lazy Collect: "
                 + this.getSimpleName(iterable)
                 + " size: "
@@ -736,18 +740,19 @@ public class SerialParallelLazyPerformanceTest
         {
             public void run()
             {
-                Verify.assertNotEmpty(iterable.asParallel(service, iterable.size() / (cores * 3)).collect(PAIR_FUNCTION).toList());
-                Verify.assertNotEmpty(iterable.asParallel(service, iterable.size() / (cores * 3)).collect(LONG_FUNCTION).toList());
-                Verify.assertNotEmpty(iterable.asParallel(service, iterable.size() / (cores * 3)).collect(SHORT_FUNCTION).toList());
+                Verify.assertNotEmpty(iterable.asParallel(service, batchSize).collect(PAIR_FUNCTION).toList());
+                Verify.assertNotEmpty(iterable.asParallel(service, batchSize).collect(LONG_FUNCTION).toList());
+                Verify.assertNotEmpty(iterable.asParallel(service, batchSize).collect(SHORT_FUNCTION).toList());
             }
         }, count, 10);
     }
 
     private double basicParallelGroupByPerformance(final UnifiedSet<String> iterable,
             int count,
-            final int cores,
+            int cores,
             final ExecutorService service)
     {
+        int batchSize = SerialParallelLazyPerformanceTest.getBatchSizeFor(iterable);
         return TimeKeeper.logAverageMillisecondsToRun("Parallel Lazy GroupBy: "
                 + this.getSimpleName(iterable)
                 + " size: "
@@ -755,7 +760,7 @@ public class SerialParallelLazyPerformanceTest
         {
             public void run()
             {
-                Verify.assertNotEmpty(iterable.asParallel(service, iterable.size() / (cores * 3)).groupBy(ALPHAGRAM_FUNCTION));
+                Verify.assertNotEmpty(iterable.asParallel(service, batchSize).groupBy(ALPHAGRAM_FUNCTION));
             }
         }, count, WARM_UP_COUNT);
     }

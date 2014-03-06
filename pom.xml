@@ -443,24 +443,6 @@
         </profile>
 
         <profile>
-            <id>findbugs</id>
-
-            <modules>
-                <module>gs-collections-code-generator</module>
-                <module>gs-collections-code-generator-ant</module>
-                <module>gs-collections-code-generator-maven-plugin</module>
-                <module>collections-api</module>
-                <module>collections</module>
-                <module>collections-testutils</module>
-                <module>gs-collections-forkjoin</module>
-                <module>unit-tests</module>
-                <module>scala-unit-tests</module>
-                <module>serialization-tests</module>
-                <module>acceptance-tests</module>
-            </modules>
-        </profile>
-
-        <profile>
             <id>clover</id>
 
             <modules>
