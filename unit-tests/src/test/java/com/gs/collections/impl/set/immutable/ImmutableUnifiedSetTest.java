@@ -21,6 +21,8 @@ import com.gs.collections.impl.math.IntegerSum;
 import com.gs.collections.impl.math.Sum;
 import com.gs.collections.impl.math.SumProcedure;
 import com.gs.collections.impl.parallel.BatchIterable;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
+import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -56,6 +58,16 @@ public class ImmutableUnifiedSetTest extends AbstractImmutableUnifiedSetTestCase
             bigElements[i] = littleElements[i];
         }
         return ImmutableUnifiedSet.newSetWith(bigElements);
+    }
+
+    @Override
+    @Test
+    public void newCollection()
+    {
+        super.newCollection();
+        ImmutableSet<Integer> set = ImmutableUnifiedSet.newSet(UnifiedSet.<Integer>newSet());
+        Assert.assertTrue(set.isEmpty());
+        Verify.assertSize(0, set);
     }
 
     @Test

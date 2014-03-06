@@ -41,10 +41,14 @@ import com.gs.collections.api.block.function.primitive.FloatFunction;
 import com.gs.collections.api.block.function.primitive.IntFunction;
 import com.gs.collections.api.block.function.primitive.LongFunction;
 import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.block.procedure.primitive.IntProcedure;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
+import com.gs.collections.api.multimap.Multimap;
+import com.gs.collections.api.multimap.MutableMultimap;
 import com.gs.collections.api.multimap.bag.ImmutableBagMultimap;
 import com.gs.collections.api.partition.bag.PartitionImmutableBag;
 import com.gs.collections.api.set.ImmutableSet;
@@ -68,6 +72,7 @@ import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.block.factory.StringFunctions;
 import com.gs.collections.impl.block.factory.primitive.IntPredicates;
 import com.gs.collections.impl.block.function.AddFunction;
+import com.gs.collections.impl.block.function.NegativeIntervalFunction;
 import com.gs.collections.impl.block.function.PassThruFunction0;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.factory.Bags;
@@ -104,6 +109,7 @@ public abstract class ImmutableBagTestCase
         Verify.assertEqualsAndHashCode(immutable, mutable);
         Assert.assertNotEquals(immutable, FastList.newList(mutable));
         Assert.assertEquals(this.newBag().toMapOfItemToCount().hashCode(), this.newBag().hashCode());
+        Assert.assertNotEquals(immutable, mutable.with("5").without("1"));
     }
 
     @Test
@@ -877,6 +883,15 @@ public abstract class ImmutableBagTestCase
         ImmutableBag<Integer> integers = this.newBag().collect(StringFunctions.toInteger());
         Integer result = integers.injectInto(0, AddFunction.INTEGER);
         Assert.assertEquals(FastList.newList(integers).injectInto(0, AddFunction.INTEGER_TO_INT), result.intValue());
+        Function2<String, String, String> function2 = new Function2<String, String, String>()
+        {
+            public String value(String argument1, String argument2)
+            {
+                return argument1 + argument2;
+            }
+        };
+        String result1 = this.newBag().injectInto("0", function2);
+        Assert.assertEquals(FastList.newList(this.newBag()).injectInto("0", function2), result1);
     }
 
     @Test
@@ -1102,6 +1117,37 @@ public abstract class ImmutableBagTestCase
         }, new HashBagMultimap<Boolean, String>()).toImmutable();
 
         this.groupByAssertions(multimap);
+    }
+
+    @Test
+    public void groupByEach()
+    {
+        ImmutableBag<Integer> immutableBag = this.newBag().collect(StringFunctions.toInteger());
+
+        final MutableMultimap<Integer, Integer> expected = HashBagMultimap.newMultimap();
+        final int keys = this.numKeys();
+        immutableBag.forEachWithOccurrences(new ObjectIntProcedure<Integer>()
+        {
+            public void value(Integer each, int parameter)
+            {
+                final HashBag<Integer> bag = HashBag.newBag();
+                Interval.fromTo(each, keys).forEach(new IntProcedure()
+                {
+                    public void value(int each)
+                    {
+                        bag.addOccurrences(each, each);
+                    }
+                });
+                expected.putAll(-each, bag);
+            }
+        });
+        Multimap<Integer, Integer> actual =
+                immutableBag.groupByEach(new NegativeIntervalFunction());
+        Assert.assertEquals(expected, actual);
+
+        Multimap<Integer, Integer> actualWithTarget =
+                immutableBag.groupByEach(new NegativeIntervalFunction(), HashBagMultimap.<Integer, Integer>newMultimap());
+        Assert.assertEquals(expected, actualWithTarget);
     }
 
     private void groupByAssertions(ImmutableBagMultimap<Boolean, String> multimap)

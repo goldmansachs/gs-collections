@@ -62,6 +62,10 @@ public class ImmutableArrayBagTest extends ImmutableBagTestCase
         Verify.assertInstanceOf(
                 ImmutableHashBag.class,
                 Bags.immutable.ofAll(Interval.oneTo(maximumUsefulArrayBagSize)).newWith(maximumUsefulArrayBagSize + 1));
+        Interval items = Interval.oneTo(maximumUsefulArrayBagSize);
+        Verify.assertInstanceOf(
+                ImmutableHashBag.class,
+                new ImmutableArrayBag<Integer>(items.toArray(), items.toIntArray()).newWith(maximumUsefulArrayBagSize + 1));
     }
 
     @Override
@@ -112,6 +116,14 @@ public class ImmutableArrayBagTest extends ImmutableBagTestCase
             Interval interval = Interval.oneTo(i);
             Verify.assertEqualsAndHashCode(HashBag.newBag(interval), Bags.immutable.ofAll(interval));
         }
+
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                new ImmutableArrayBag<Integer>(new Integer[]{2, 3}, new int[]{2});
+            }
+        });
     }
 
     @Test

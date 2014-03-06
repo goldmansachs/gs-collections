@@ -17,8 +17,10 @@
 package com.gs.collections.impl.bag.immutable;
 
 import com.gs.collections.api.bag.Bag;
+import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.impl.factory.Bags;
 import com.gs.collections.impl.test.Verify;
+import org.junit.Assert;
 import org.junit.Test;
 
 public class ImmutableBagFactoryTest
@@ -26,8 +28,12 @@ public class ImmutableBagFactoryTest
     @Test
     public void immutables()
     {
-        Verify.assertIterableSize(0, Bags.immutable.of());
+        ImmutableBag<Object> immutableBag = Bags.immutable.of();
+        Verify.assertIterableSize(0, immutableBag);
         Verify.assertIterableSize(4, Bags.immutable.of(1, 2, 2, 3));
+        ImmutableBag<Object> actual = Bags.immutable.ofAll(immutableBag);
+        Assert.assertSame(immutableBag, actual);
+        Assert.assertEquals(immutableBag, actual);
     }
 
     @Test

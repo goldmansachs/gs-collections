@@ -443,4 +443,13 @@ public abstract class AbstractImmutableSetTestCase extends AbstractImmutableColl
                         .select(Predicates.attributeEqual(Functions.<String>secondOfPair(), "One"))
                         .collect(Functions.<String>firstOfPair()).toSet());
     }
+
+    @Test
+    public void toImmutable()
+    {
+        ImmutableSet<Integer> integers = this.classUnderTest();
+        ImmutableSet<Integer> actual = integers.toImmutable();
+        Assert.assertEquals(integers, actual);
+        Assert.assertSame(integers, actual);
+    }
 }

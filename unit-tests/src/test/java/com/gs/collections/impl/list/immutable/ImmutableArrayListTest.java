@@ -20,6 +20,7 @@ import com.gs.collections.api.list.ImmutableList;
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.set.MutableSet;
+import com.gs.collections.impl.bag.mutable.HashBag;
 import com.gs.collections.impl.block.factory.Functions;
 import com.gs.collections.impl.factory.Lists;
 import com.gs.collections.impl.list.Interval;
@@ -81,6 +82,7 @@ public class ImmutableArrayListTest extends AbstractImmutableListTestCase
         ImmutableList<Integer> withoutAll = list.newWithoutAll(FastList.newListWith(4, 5));
         Assert.assertNotEquals(list, withoutAll);
         Assert.assertEquals(FastList.newListWith(1, 2, 3), withoutAll);
+        Assert.assertEquals(FastList.newListWith(1, 2, 3), list.newWithoutAll(HashBag.newBagWith(4, 4, 5)));
         ImmutableList<Integer> largeList = this.newList(Interval.oneTo(20).toArray());
         ImmutableList<Integer> largeWithoutAll = largeList.newWithoutAll(FastList.newList(Interval.oneTo(10)));
         Assert.assertEquals(FastList.newList(Interval.fromTo(11, 20)), largeWithoutAll);

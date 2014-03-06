@@ -19,6 +19,15 @@ package com.gs.collections.impl.bag.immutable;
 import com.gs.collections.api.bag.ImmutableBag;
 import com.gs.collections.api.bag.primitive.ImmutableBooleanBag;
 import com.gs.collections.api.block.function.primitive.BooleanFunction;
+import com.gs.collections.api.block.procedure.primitive.IntProcedure;
+import com.gs.collections.api.block.procedure.primitive.ObjectIntProcedure;
+import com.gs.collections.api.multimap.Multimap;
+import com.gs.collections.api.multimap.MutableMultimap;
+import com.gs.collections.impl.bag.mutable.HashBag;
+import com.gs.collections.impl.block.function.NegativeIntervalFunction;
+import com.gs.collections.impl.list.Interval;
+import com.gs.collections.impl.list.mutable.FastList;
+import com.gs.collections.impl.multimap.bag.HashBagMultimap;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
 import org.junit.Test;
@@ -77,5 +86,45 @@ public class ImmutableHashBagTest extends ImmutableBagTestCase
         Assert.assertEquals(2, result.sizeDistinct());
         Assert.assertEquals(4, result.occurrencesOf(true));
         Assert.assertEquals(6, result.occurrencesOf(false));
+    }
+
+    @Test
+    public void testNewBag()
+    {
+        ImmutableHashBag<Object> immutableHashBag = ImmutableHashBag.newBagWith(HashBag.newBag().with(1, 2, 3, 4));
+        Verify.assertSize(4, immutableHashBag);
+        Assert.assertEquals(FastList.newListWith(1, 2, 3, 4), immutableHashBag.toSortedList());
+    }
+
+    @Override
+    @Test
+    public void groupByEach()
+    {
+        ImmutableBag<Integer> immutableBag = ImmutableHashBag.newBagWith(1, 2, 2, 3, 3, 3, 4, 4, 4, 4);
+
+        final MutableMultimap<Integer, Integer> expected = HashBagMultimap.newMultimap();
+        final int keys = this.numKeys();
+        immutableBag.forEachWithOccurrences(new ObjectIntProcedure<Integer>()
+        {
+            public void value(Integer each, int parameter)
+            {
+                final HashBag<Integer> bag = HashBag.newBag();
+                Interval.fromTo(each, keys).forEach(new IntProcedure()
+                {
+                    public void value(int each)
+                    {
+                        bag.addOccurrences(each, each);
+                    }
+                });
+                expected.putAll(-each, bag);
+            }
+        });
+        Multimap<Integer, Integer> actual =
+                immutableBag.groupByEach(new NegativeIntervalFunction());
+        Assert.assertEquals(expected, actual);
+
+        Multimap<Integer, Integer> actualWithTarget =
+                immutableBag.groupByEach(new NegativeIntervalFunction(), HashBagMultimap.<Integer, Integer>newMultimap());
+        Assert.assertEquals(expected, actualWithTarget);
     }
 }

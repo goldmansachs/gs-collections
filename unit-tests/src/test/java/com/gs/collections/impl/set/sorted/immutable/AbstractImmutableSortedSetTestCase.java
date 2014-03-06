@@ -972,6 +972,15 @@ public abstract class AbstractImmutableSortedSetTestCase
     }
 
     @Test
+    public void toImmutable()
+    {
+        ImmutableSortedSet<Integer> set = this.classUnderTest();
+        ImmutableSortedSet<Integer> actual = set.toImmutable();
+        Assert.assertEquals(set, actual);
+        Assert.assertSame(set, actual);
+    }
+
+    @Test
     public abstract void subSet();
 
     @Test

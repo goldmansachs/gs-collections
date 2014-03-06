@@ -61,7 +61,7 @@ public abstract class AbstractImmutableUnifiedSetTestCase
     public abstract ImmutableSet<Integer> newSetWith(int... littleElements);
 
     @Test
-    public void newList()
+    public void newCollection()
     {
         ImmutableSet<Integer> set = this.newSet();
         Assert.assertTrue(set.isEmpty());

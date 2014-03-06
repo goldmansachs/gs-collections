@@ -24,6 +24,7 @@ import com.gs.collections.impl.math.Sum;
 import com.gs.collections.impl.math.SumProcedure;
 import com.gs.collections.impl.parallel.BatchIterable;
 import com.gs.collections.impl.set.immutable.AbstractImmutableUnifiedSetTestCase;
+import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.test.SerializeTestHelper;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -75,6 +76,16 @@ public class ImmutableUnifiedSetWithHashingStrategyTest extends AbstractImmutabl
             bigElements[i] = littleElements[i];
         }
         return ImmutableUnifiedSetWithHashingStrategy.newSetWith(HASHING_STRATEGY, bigElements);
+    }
+
+    @Override
+    @Test
+    public void newCollection()
+    {
+        super.newCollection();
+        ImmutableSet<Integer> set = ImmutableUnifiedSetWithHashingStrategy.newSet(HASHING_STRATEGY, UnifiedSet.<Integer>newSet());
+        Assert.assertTrue(set.isEmpty());
+        Verify.assertSize(0, set);
     }
 
     @Test

@@ -571,4 +571,13 @@ public abstract class AbstractImmutableListTestCase extends AbstractImmutableCol
     {
         Verify.assertIterablesEqual(this.classUnderTest().toList().toReversed(), this.classUnderTest().asReversed());
     }
+
+    @Test
+    public void toImmutable()
+    {
+        ImmutableList<Integer> integers = this.classUnderTest();
+        ImmutableList<Integer> actual = integers.toImmutable();
+        Assert.assertEquals(integers, actual);
+        Assert.assertSame(integers, actual);
+    }
 }
