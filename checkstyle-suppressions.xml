@@ -65,4 +65,7 @@
 
     <suppress checks="RegexpHeader" files="MemoryTestBench.java" />
 
+    <!--suppress lambda expression-->
+    <suppress checks="[a-zA-Z0-0]*" files="SerialParallelLazyPerformanceTest.java" />
+
 </suppressions>
