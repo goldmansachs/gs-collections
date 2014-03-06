@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,14 @@
 
 package com.gs.collections.impl.lazy.primitive;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.LazyShortIterable;
 import com.gs.collections.api.ShortIterable;
 import com.gs.collections.api.bag.primitive.MutableShortBag;
-import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
-import com.gs.collections.api.block.function.primitive.ObjectShortToObjectFunction;
 import com.gs.collections.api.block.function.primitive.ShortFunction;
-import com.gs.collections.api.block.function.primitive.ShortToObjectFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.primitive.ShortPredicate;
 import com.gs.collections.api.block.procedure.Procedure2;
@@ -38,7 +33,6 @@ import com.gs.collections.api.iterator.ShortIterator;
 import com.gs.collections.api.list.primitive.MutableShortList;
 import com.gs.collections.api.set.primitive.MutableShortSet;
 import com.gs.collections.impl.bag.mutable.primitive.ShortHashBag;
-import com.gs.collections.impl.block.factory.primitive.ShortPredicates;
 import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.set.mutable.primitive.ShortHashSet;
 import net.jcip.annotations.Immutable;
@@ -48,7 +42,7 @@ import net.jcip.annotations.Immutable;
  */
 @Immutable
 public class CollectShortIterable<T>
-        implements LazyShortIterable
+        extends AbstractLazyShortIterable
 {
     private final LazyIterable<T> iterable;
     private final ShortFunction<? super T> function;
@@ -83,21 +77,25 @@ public class CollectShortIterable<T>
         this.iterable.forEachWith(this.shortFunctionToProcedure, procedure);
     }
 
+    @Override
     public int size()
     {
         return this.iterable.size();
     }
 
+    @Override
     public boolean isEmpty()
     {
         return this.iterable.isEmpty();
     }
 
+    @Override
     public boolean notEmpty()
     {
         return this.iterable.notEmpty();
     }
 
+    @Override
     public int count(final ShortPredicate predicate)
     {
         return this.iterable.count(new Predicate<T>()
@@ -109,6 +107,7 @@ public class CollectShortIterable<T>
         });
     }
 
+    @Override
     public boolean anySatisfy(final ShortPredicate predicate)
     {
         return this.iterable.anySatisfy(new Predicate<T>()
@@ -120,6 +119,7 @@ public class CollectShortIterable<T>
         });
     }
 
+    @Override
     public boolean allSatisfy(final ShortPredicate predicate)
     {
         return this.iterable.allSatisfy(new Predicate<T>()
@@ -131,6 +131,7 @@ public class CollectShortIterable<T>
         });
     }
 
+    @Override
     public boolean noneSatisfy(final ShortPredicate predicate)
     {
         return this.iterable.allSatisfy(new Predicate<T>()
@@ -142,120 +143,7 @@ public class CollectShortIterable<T>
         });
     }
 
-    public LazyShortIterable select(ShortPredicate predicate)
-    {
-        return new SelectShortIterable(this, predicate);
-    }
-
-    public LazyShortIterable reject(ShortPredicate predicate)
-    {
-        return new SelectShortIterable(this, ShortPredicates.not(predicate));
-    }
-
-    public short detectIfNone(ShortPredicate predicate, short ifNone)
-    {
-        ShortIterator iterator = this.shortIterator();
-        while (iterator.hasNext())
-        {
-            short next = iterator.next();
-            if (predicate.accept(next))
-            {
-                return next;
-            }
-        }
-        return ifNone;
-    }
-
-    public <V> LazyIterable<V> collect(ShortToObjectFunction<? extends V> function)
-    {
-        return new CollectShortToObjectIterable<V>(this, function);
-    }
-
-    public long sum()
-    {
-        return this.iterable.injectInto(0, new LongObjectToLongFunction<T>()
-        {
-            public long longValueOf(long longValue, T each)
-            {
-                return longValue + (long) CollectShortIterable.this.function.shortValueOf(each);
-            }
-        });
-    }
-
-    public short max()
-    {
-        ShortIterator iterator = this.shortIterator();
-        short max = iterator.next();
-        while (iterator.hasNext())
-        {
-            short next = iterator.next();
-            max = next > max ? next : max;
-        }
-        return max;
-    }
-
-    public short min()
-    {
-        ShortIterator iterator = this.shortIterator();
-        short min = iterator.next();
-        while (iterator.hasNext())
-        {
-            short next = iterator.next();
-            min = min < next ? min : next;
-        }
-        return min;
-    }
-
-    public short minIfEmpty(short defaultValue)
-    {
-        try
-        {
-            return this.min();
-        }
-        catch (NoSuchElementException ex)
-        {
-        }
-        return defaultValue;
-    }
-
-    public short maxIfEmpty(short defaultValue)
-    {
-        try
-        {
-            return this.max();
-        }
-        catch (NoSuchElementException ex)
-        {
-        }
-        return defaultValue;
-    }
-
-    public double average()
-    {
-        if (this.isEmpty())
-        {
-            throw new ArithmeticException();
-        }
-        return (double) this.sum() / (double) this.size();
-    }
-
-    public double median()
-    {
-        if (this.isEmpty())
-        {
-            throw new ArithmeticException();
-        }
-        short[] sortedArray = this.toSortedArray();
-        int i = sortedArray.length >> 1;
-        if (sortedArray.length > 1 && (sortedArray.length & 1) == 0)
-        {
-            int first = sortedArray[i];
-            int second = sortedArray[i - 1];
-            return ((double) first + (double) second) / 2.0d;
-        }
-        return (double) sortedArray[i];
-    }
-
+    @Override
     public short[] toArray()
     {
         final short[] array = new short[this.size()];
@@ -269,6 +157,7 @@ public class CollectShortIterable<T>
         return array;
     }
 
+    @Override
     public short[] toSortedArray()
     {
         short[] array = this.toArray();
@@ -276,104 +165,37 @@ public class CollectShortIterable<T>
         return array;
     }
 
-    public <T> T injectInto(T injectedValue, ObjectShortToObjectFunction<? super T, ? extends T> function)
-    {
-        T result = injectedValue;
-        for (ShortIterator iterator = this.shortIterator(); iterator.hasNext(); )
-        {
-            result = function.valueOf(result, iterator.next());
-        }
-        return result;
-    }
-
     @Override
-    public String toString()
-    {
-        return this.makeString("[", ", ", "]");
-    }
-
-    public String makeString()
-    {
-        return this.makeString(", ");
-    }
-
-    public String makeString(String separator)
-    {
-        return this.makeString("", separator, "");
-    }
-
-    public String makeString(String start, String separator, String end)
-    {
-        Appendable stringBuilder = new StringBuilder();
-        this.appendString(stringBuilder, start, separator, end);
-        return stringBuilder.toString();
-    }
-
-    public void appendString(Appendable appendable)
-    {
-        this.appendString(appendable, ", ");
-    }
-
-    public void appendString(Appendable appendable, String separator)
-    {
-        this.appendString(appendable, "", separator, "");
-    }
-
-    public void appendString(Appendable appendable, String start, String separator, String end)
-    {
-        try
-        {
-            appendable.append(start);
-
-            ShortIterator iterator = this.shortIterator();
-            if (iterator.hasNext())
-            {
-                appendable.append(String.valueOf(iterator.next()));
-                while (iterator.hasNext())
-                {
-                    appendable.append(separator);
-                    appendable.append(String.valueOf(iterator.next()));
-                }
-            }
-
-            appendable.append(end);
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
-
     public MutableShortList toList()
     {
         return ShortArrayList.newList(this);
     }
 
+    @Override
     public MutableShortList toSortedList()
     {
         return ShortArrayList.newList(this).sortThis();
     }
 
+    @Override
     public MutableShortSet toSet()
     {
         return ShortHashSet.newSet(this);
     }
 
+    @Override
     public MutableShortBag toBag()
     {
         return ShortHashBag.newBag(this);
     }
 
+    @Override
     public LazyShortIterable asLazy()
     {
         return this;
     }
 
-    public boolean contains(short value)
-    {
-        return this.anySatisfy(ShortPredicates.equal(value));
-    }
-
+    @Override
     public boolean containsAll(short... source)
     {
         for (short value : source)
@@ -386,6 +208,7 @@ public class CollectShortIterable<T>
         return true;
     }
 
+    @Override
     public boolean containsAll(ShortIterable source)
     {
         for (ShortIterator iterator = source.shortIterator(); iterator.hasNext(); )

@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,13 @@
 
 package com.gs.collections.impl.lazy.primitive;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 import com.gs.collections.api.IntIterable;
-import com.gs.collections.api.LazyIntIterable;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.bag.primitive.MutableIntBag;
 import com.gs.collections.api.block.function.primitive.IntFunction;
-import com.gs.collections.api.block.function.primitive.IntToObjectFunction;
-import com.gs.collections.api.block.function.primitive.LongObjectToLongFunction;
-import com.gs.collections.api.block.function.primitive.ObjectIntToObjectFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.primitive.IntPredicate;
 import com.gs.collections.api.block.procedure.Procedure2;
@@ -38,7 +32,6 @@ import com.gs.collections.api.iterator.IntIterator;
 import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.set.primitive.MutableIntSet;
 import com.gs.collections.impl.bag.mutable.primitive.IntHashBag;
-import com.gs.collections.impl.block.factory.primitive.IntPredicates;
 import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.set.mutable.primitive.IntHashSet;
 import net.jcip.annotations.Immutable;
@@ -47,8 +40,7 @@ import net.jcip.annotations.Immutable;
  * A CollectIntIterable is an iterable that transforms a source iterable using an IntFunction as it iterates.
  */
 @Immutable
-public class CollectIntIterable<T>
-        implements LazyIntIterable
+public class CollectIntIterable<T> extends AbstractLazyIntIterable
 {
     private final LazyIterable<T> iterable;
     private final IntFunction<? super T> function;
@@ -83,21 +75,25 @@ public class CollectIntIterable<T>
         this.iterable.forEachWith(this.intFunctionToProcedure, procedure);
     }
 
+    @Override
     public int size()
     {
         return this.iterable.size();
     }
 
+    @Override
     public boolean isEmpty()
     {
         return this.iterable.isEmpty();
     }
 
+    @Override
     public boolean notEmpty()
     {
         return this.iterable.notEmpty();
     }
 
+    @Override
     public int count(final IntPredicate predicate)
     {
         return this.iterable.count(new Predicate<T>()
@@ -109,6 +105,7 @@ public class CollectIntIterable<T>
         });
     }
 
+    @Override
     public boolean anySatisfy(final IntPredicate predicate)
     {
         return this.iterable.anySatisfy(new Predicate<T>()
@@ -120,6 +117,7 @@ public class CollectIntIterable<T>
         });
     }
 
+    @Override
     public boolean allSatisfy(final IntPredicate predicate)
     {
         return this.iterable.allSatisfy(new Predicate<T>()
@@ -131,6 +129,7 @@ public class CollectIntIterable<T>
         });
     }
 
+    @Override
     public boolean noneSatisfy(final IntPredicate predicate)
     {
         return this.iterable.allSatisfy(new Predicate<T>()
@@ -142,118 +141,7 @@ public class CollectIntIterable<T>
         });
     }
 
-    public LazyIntIterable select(IntPredicate predicate)
-    {
-        return new SelectIntIterable(this, predicate);
-    }
-
-    public LazyIntIterable reject(IntPredicate predicate)
-    {
-        return new SelectIntIterable(this, IntPredicates.not(predicate));
-    }
-
-    public int detectIfNone(IntPredicate predicate, int ifNone)
-    {
-        IntIterator iterator = this.intIterator();
-        while (iterator.hasNext())
-        {
-            int next = iterator.next();
-            if (predicate.accept(next))
-            {
-                return next;
-            }
-        }
-        return ifNone;
-    }
-
-    public <V> LazyIterable<V> collect(IntToObjectFunction<? extends V> function)
-    {
-        return new CollectIntToObjectIterable<V>(this, function);
-    }
-
-    public long sum()
-    {
-        return this.iterable.injectInto(0, new LongObjectToLongFunction<T>()
-        {
-            public long longValueOf(long longValue, T each)
-            {
-                return longValue + (long) CollectIntIterable.this.function.intValueOf(each);
-            }
-        });
-    }
-
-    public int max()
-    {
-        IntIterator iterator = this.intIterator();
-        int max = iterator.next();
-        while (iterator.hasNext())
-        {
-            max = Math.max(max, iterator.next());
-        }
-        return max;
-    }
-
-    public int min()
-    {
-        IntIterator iterator = this.intIterator();
-        int min = iterator.next();
-        while (iterator.hasNext())
-        {
-            min = Math.min(min, iterator.next());
-        }
-        return min;
-    }
-
-    public int minIfEmpty(int defaultValue)
-    {
-        try
-        {
-            return this.min();
-        }
-        catch (NoSuchElementException ex)
-        {
-        }
-        return defaultValue;
-    }
-
-    public int maxIfEmpty(int defaultValue)
-    {
-        try
-        {
-            return this.max();
-        }
-        catch (NoSuchElementException ex)
-        {
-        }
-        return defaultValue;
-    }
-
-    public double average()
-    {
-        if (this.isEmpty())
-        {
-            throw new ArithmeticException();
-        }
-        return (double) this.sum() / (double) this.size();
-    }
-
-    public double median()
-    {
-        if (this.isEmpty())
-        {
-            throw new ArithmeticException();
-        }
-        int[] sortedArray = this.toSortedArray();
-        int i = sortedArray.length >> 1;
-        if (sortedArray.length > 1 && (sortedArray.length & 1) == 0)
-        {
-            int first = sortedArray[i];
-            int second = sortedArray[i - 1];
-            return ((double) first + (double) second) / 2.0d;
-        }
-        return (double) sortedArray[i];
-    }
-
+    @Override
     public int[] toArray()
     {
         final int[] array = new int[this.size()];
@@ -267,6 +155,7 @@ public class CollectIntIterable<T>
         return array;
     }
 
+    @Override
     public int[] toSortedArray()
     {
         int[] array = this.toArray();
@@ -274,104 +163,31 @@ public class CollectIntIterable<T>
         return array;
     }
 
-    public <T> T injectInto(T injectedValue, ObjectIntToObjectFunction<? super T, ? extends T> function)
-    {
-        T result = injectedValue;
-        for (IntIterator iterator = this.intIterator(); iterator.hasNext(); )
-        {
-            result = function.valueOf(result, iterator.next());
-        }
-        return result;
-    }
-
     @Override
-    public String toString()
-    {
-        return this.makeString("[", ", ", "]");
-    }
-
-    public String makeString()
-    {
-        return this.makeString(", ");
-    }
-
-    public String makeString(String separator)
-    {
-        return this.makeString("", separator, "");
-    }
-
-    public String makeString(String start, String separator, String end)
-    {
-        Appendable stringBuilder = new StringBuilder();
-        this.appendString(stringBuilder, start, separator, end);
-        return stringBuilder.toString();
-    }
-
-    public void appendString(Appendable appendable)
-    {
-        this.appendString(appendable, ", ");
-    }
-
-    public void appendString(Appendable appendable, String separator)
-    {
-        this.appendString(appendable, "", separator, "");
-    }
-
-    public void appendString(Appendable appendable, String start, String separator, String end)
-    {
-        try
-        {
-            appendable.append(start);
-
-            IntIterator iterator = this.intIterator();
-            if (iterator.hasNext())
-            {
-                appendable.append(String.valueOf(iterator.next()));
-                while (iterator.hasNext())
-                {
-                    appendable.append(separator);
-                    appendable.append(String.valueOf(iterator.next()));
-                }
-            }
-
-            appendable.append(end);
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
-
     public MutableIntList toList()
     {
         return IntArrayList.newList(this);
     }
 
+    @Override
     public MutableIntList toSortedList()
     {
         return IntArrayList.newList(this).sortThis();
     }
 
+    @Override
     public MutableIntSet toSet()
     {
         return IntHashSet.newSet(this);
     }
 
+    @Override
     public MutableIntBag toBag()
     {
         return IntHashBag.newBag(this);
     }
 
-    public LazyIntIterable asLazy()
-    {
-        return this;
-    }
-
-    public boolean contains(int value)
-    {
-        return this.anySatisfy(IntPredicates.equal(value));
-    }
-
+    @Override
     public boolean containsAll(int... source)
     {
         for (int value : source)
@@ -384,6 +200,7 @@ public class CollectIntIterable<T>
         return true;
     }
 
+    @Override
     public boolean containsAll(IntIterable source)
     {
         for (IntIterator iterator = source.intIterator(); iterator.hasNext(); )

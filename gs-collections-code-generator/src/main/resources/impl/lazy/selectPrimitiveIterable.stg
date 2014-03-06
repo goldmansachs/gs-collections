@@ -40,7 +40,7 @@ import com.gs.collections.impl.block.factory.primitive.<name>Predicates;
  * This file was automatically generated from template file selectPrimitiveIterable.stg.
  */
 public class Select<name>Iterable
-    implements Lazy<name>Iterable
+    extends AbstractLazy<name>Iterable
 {
     private final <name>Iterable delegate;
     private final <name>Predicate predicate;
@@ -61,21 +61,25 @@ public class Select<name>Iterable
         this.delegate.forEach(new If<name>Procedure(procedure));
     }
 
+    @Override
     public int size()
     {
         return this.delegate.count(this.predicate);
     }
 
+    @Override
     public boolean isEmpty()
     {
         return !this.<type>Iterator().hasNext();
     }
 
+    @Override
     public boolean notEmpty()
     {
         return this.<type>Iterator().hasNext();
     }
 
+    @Override
     public int count(<name>Predicate predicate)
     {
         Count<name>Procedure count<name>Procedure = new Count<name>Procedure(predicate);
@@ -83,50 +87,26 @@ public class Select<name>Iterable
         return count<name>Procedure.getCount();
     }
 
+    @Override
     public boolean anySatisfy(<name>Predicate predicate)
     {
         return this.delegate.anySatisfy(<name>Predicates.and(this.predicate, predicate));
     }
 
+    @Override
     public boolean allSatisfy(<name>Predicate predicate)
     {
         return this.noneSatisfy(<name>Predicates.not(predicate));
     }
 
+    @Override
     public boolean noneSatisfy(<name>Predicate predicate)
     {
         return !this.anySatisfy(predicate);
     }
 
-    public Lazy<name>Iterable select(<name>Predicate predicate)
-    {
-        return new Select<name>Iterable(this, predicate);
-    }
-
-    public Lazy<name>Iterable reject(<name>Predicate predicate)
-    {
-        return new Select<name>Iterable(this, <name>Predicates.not(predicate));
-    }
-
-    public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
-    {
-        for (<name>Iterator <type>Iterator = this.<type>Iterator(); <type>Iterator.hasNext() ;)
-        {
-            <type> item = <type>Iterator.next();
-            if (predicate.accept(item))
-            {
-                return item;
-            }
-        }
-        return ifNone;
-    }
-
-    public \<V> LazyIterable\<V> collect(<name>ToObjectFunction\<? extends V> function)
-    {
-        return new Collect<name>ToObjectIterable\<V>(this, function);
-    }
-
     <(arithmeticMethods.(type))(name, type)>
+    @Override
     public <type>[] toArray()
     {
         final <type>[] array = new <type>[this.size()];
@@ -142,79 +122,7 @@ public class Select<name>Iterable
         return array;
     }
 
-    public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
-    {
-        T result = injectedValue;
-        for (<name>Iterator iterator = this.<type>Iterator(); iterator.hasNext(); )
-        {
-            result = function.valueOf(result, iterator.next());
-        }
-        return result;
-    }
-
     @Override
-    public String toString()
-    {
-        return this.makeString("[", ", ", "]");
-    }
-
-    public String makeString()
-    {
-        return this.makeString(", ");
-    }
-
-    public String makeString(String separator)
-    {
-        return this.makeString("", separator, "");
-    }
-
-    public String makeString(String start, String separator, String end)
-    {
-        Appendable stringBuilder = new StringBuilder();
-        this.appendString(stringBuilder, start, separator, end);
-        return stringBuilder.toString();
-    }
-
-    public void appendString(Appendable appendable)
-    {
-        this.appendString(appendable, ", ");
-    }
-
-    public void appendString(Appendable appendable, String separator)
-    {
-        this.appendString(appendable, "", separator, "");
-    }
-
-    public void appendString(Appendable appendable, String start, String separator, String end)
-    {
-        try
-        {
-            appendable.append(start);
-
-            <name>Iterator iterator = this.<type>Iterator();
-            if (iterator.hasNext())
-            {
-                appendable.append(String.valueOf(iterator.next()));
-                while (iterator.hasNext())
-                {
-                    appendable.append(separator);
-                    appendable.append(String.valueOf(iterator.next()));
-                }
-            }
-
-            appendable.append(end);
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
-
-    public boolean contains(<type> value)
-    {
-        return this.anySatisfy(<name>Predicates.equal(value));
-    }
-
     public boolean containsAll(<type>... source)
     {
         for (<type> value : source)
@@ -227,6 +135,7 @@ public class Select<name>Iterable
         return true;
     }
 
+    @Override
     public boolean containsAll(<name>Iterable source)
     {
         for (<name>Iterator iterator = source.<type>Iterator(); iterator.hasNext(); )
@@ -239,24 +148,22 @@ public class Select<name>Iterable
         return true;
     }
 
+    @Override
     public Mutable<name>List toList()
     {
         return <name>ArrayList.newList(this);
     }
 
+    @Override
     public Mutable<name>Set toSet()
     {
         return <name>HashSet.newSet(this);
     }
 
+    @Override
     public Mutable<name>Bag toBag()
     {
         return <name>HashBag.newBag(this);
-    }
-
-    public Lazy<name>Iterable asLazy()
-    {
-        return this;
     }
 
     private static final class Count<name>Procedure implements <name>Procedure

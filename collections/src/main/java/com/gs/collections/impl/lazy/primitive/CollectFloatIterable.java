@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +16,13 @@
 
 package com.gs.collections.impl.lazy.primitive;
 
-import java.io.IOException;
 import java.util.Arrays;
 import java.util.Iterator;
-import java.util.NoSuchElementException;
 
 import com.gs.collections.api.FloatIterable;
-import com.gs.collections.api.LazyFloatIterable;
 import com.gs.collections.api.LazyIterable;
 import com.gs.collections.api.bag.primitive.MutableFloatBag;
-import com.gs.collections.api.block.function.primitive.DoubleObjectToDoubleFunction;
 import com.gs.collections.api.block.function.primitive.FloatFunction;
-import com.gs.collections.api.block.function.primitive.FloatToObjectFunction;
-import com.gs.collections.api.block.function.primitive.ObjectFloatToObjectFunction;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.primitive.FloatPredicate;
 import com.gs.collections.api.block.procedure.Procedure2;
@@ -38,7 +32,6 @@ import com.gs.collections.api.iterator.FloatIterator;
 import com.gs.collections.api.list.primitive.MutableFloatList;
 import com.gs.collections.api.set.primitive.MutableFloatSet;
 import com.gs.collections.impl.bag.mutable.primitive.FloatHashBag;
-import com.gs.collections.impl.block.factory.primitive.FloatPredicates;
 import com.gs.collections.impl.list.mutable.primitive.FloatArrayList;
 import com.gs.collections.impl.set.mutable.primitive.FloatHashSet;
 import net.jcip.annotations.Immutable;
@@ -48,7 +41,7 @@ import net.jcip.annotations.Immutable;
  */
 @Immutable
 public class CollectFloatIterable<T>
-        implements LazyFloatIterable
+        extends AbstractLazyFloatIterable
 {
     private final LazyIterable<T> iterable;
     private final FloatFunction<? super T> function;
@@ -83,21 +76,25 @@ public class CollectFloatIterable<T>
         this.iterable.forEachWith(this.floatFunctionToProcedure, procedure);
     }
 
+    @Override
     public int size()
     {
         return this.iterable.size();
     }
 
+    @Override
     public boolean isEmpty()
     {
         return this.iterable.isEmpty();
     }
 
+    @Override
     public boolean notEmpty()
     {
         return this.iterable.notEmpty();
     }
 
+    @Override
     public int count(final FloatPredicate predicate)
     {
         return this.iterable.count(new Predicate<T>()
@@ -109,6 +106,7 @@ public class CollectFloatIterable<T>
         });
     }
 
+    @Override
     public boolean anySatisfy(final FloatPredicate predicate)
     {
         return this.iterable.anySatisfy(new Predicate<T>()
@@ -120,6 +118,7 @@ public class CollectFloatIterable<T>
         });
     }
 
+    @Override
     public boolean allSatisfy(final FloatPredicate predicate)
     {
         return this.iterable.allSatisfy(new Predicate<T>()
@@ -131,6 +130,7 @@ public class CollectFloatIterable<T>
         });
     }
 
+    @Override
     public boolean noneSatisfy(final FloatPredicate predicate)
     {
         return this.iterable.allSatisfy(new Predicate<T>()
@@ -142,118 +142,7 @@ public class CollectFloatIterable<T>
         });
     }
 
-    public LazyFloatIterable select(FloatPredicate predicate)
-    {
-        return new SelectFloatIterable(this, predicate);
-    }
-
-    public LazyFloatIterable reject(FloatPredicate predicate)
-    {
-        return new SelectFloatIterable(this, FloatPredicates.not(predicate));
-    }
-
-    public float detectIfNone(FloatPredicate predicate, float ifNone)
-    {
-        FloatIterator iterator = this.floatIterator();
-        while (iterator.hasNext())
-        {
-            float next = iterator.next();
-            if (predicate.accept(next))
-            {
-                return next;
-            }
-        }
-        return ifNone;
-    }
-
-    public <V> LazyIterable<V> collect(FloatToObjectFunction<? extends V> function)
-    {
-        return new CollectFloatToObjectIterable<V>(this, function);
-    }
-
-    public double sum()
-    {
-        return this.iterable.injectInto(0.0d, new DoubleObjectToDoubleFunction<T>()
-        {
-            public double doubleValueOf(double doubleValue, T each)
-            {
-                return doubleValue + (double) CollectFloatIterable.this.function.floatValueOf(each);
-            }
-        });
-    }
-
-    public float max()
-    {
-        FloatIterator iterator = this.floatIterator();
-        float max = iterator.next();
-        while (iterator.hasNext())
-        {
-            max = Math.max(max, iterator.next());
-        }
-        return max;
-    }
-
-    public float min()
-    {
-        FloatIterator iterator = this.floatIterator();
-        float min = iterator.next();
-        while (iterator.hasNext())
-        {
-            min = Math.min(min, iterator.next());
-        }
-        return min;
-    }
-
-    public float minIfEmpty(float defaultValue)
-    {
-        try
-        {
-            return this.min();
-        }
-        catch (NoSuchElementException ex)
-        {
-        }
-        return defaultValue;
-    }
-
-    public float maxIfEmpty(float defaultValue)
-    {
-        try
-        {
-            return this.max();
-        }
-        catch (NoSuchElementException ex)
-        {
-        }
-        return defaultValue;
-    }
-
-    public double average()
-    {
-        if (this.isEmpty())
-        {
-            throw new ArithmeticException();
-        }
-        return this.sum() / (double) this.size();
-    }
-
-    public double median()
-    {
-        if (this.isEmpty())
-        {
-            throw new ArithmeticException();
-        }
-        float[] sortedArray = this.toSortedArray();
-        int i = sortedArray.length >> 1;
-        if (sortedArray.length > 1 && (sortedArray.length & 1) == 0)
-        {
-            float first = sortedArray[i];
-            float second = sortedArray[i - 1];
-            return ((double) first + (double) second) / 2.0d;
-        }
-        return (double) sortedArray[i];
-    }
-
+    @Override
     public float[] toArray()
     {
         final float[] array = new float[this.size()];
@@ -267,6 +156,7 @@ public class CollectFloatIterable<T>
         return array;
     }
 
+    @Override
     public float[] toSortedArray()
     {
         float[] array = this.toArray();
@@ -274,104 +164,31 @@ public class CollectFloatIterable<T>
         return array;
     }
 
-    public <T> T injectInto(T injectedValue, ObjectFloatToObjectFunction<? super T, ? extends T> function)
-    {
-        T result = injectedValue;
-        for (FloatIterator iterator = this.floatIterator(); iterator.hasNext(); )
-        {
-            result = function.valueOf(result, iterator.next());
-        }
-        return result;
-    }
-
     @Override
-    public String toString()
-    {
-        return this.makeString("[", ", ", "]");
-    }
-
-    public String makeString()
-    {
-        return this.makeString(", ");
-    }
-
-    public String makeString(String separator)
-    {
-        return this.makeString("", separator, "");
-    }
-
-    public String makeString(String start, String separator, String end)
-    {
-        Appendable stringBuilder = new StringBuilder();
-        this.appendString(stringBuilder, start, separator, end);
-        return stringBuilder.toString();
-    }
-
-    public void appendString(Appendable appendable)
-    {
-        this.appendString(appendable, ", ");
-    }
-
-    public void appendString(Appendable appendable, String separator)
-    {
-        this.appendString(appendable, "", separator, "");
-    }
-
-    public void appendString(Appendable appendable, String start, String separator, String end)
-    {
-        try
-        {
-            appendable.append(start);
-
-            FloatIterator iterator = this.floatIterator();
-            if (iterator.hasNext())
-            {
-                appendable.append(String.valueOf(iterator.next()));
-                while (iterator.hasNext())
-                {
-                    appendable.append(separator);
-                    appendable.append(String.valueOf(iterator.next()));
-                }
-            }
-
-            appendable.append(end);
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
-
     public MutableFloatList toList()
     {
         return FloatArrayList.newList(this);
     }
 
+    @Override
     public MutableFloatList toSortedList()
     {
         return FloatArrayList.newList(this).sortThis();
     }
 
+    @Override
     public MutableFloatSet toSet()
     {
         return FloatHashSet.newSet(this);
     }
 
+    @Override
     public MutableFloatBag toBag()
     {
         return FloatHashBag.newBag(this);
     }
 
-    public LazyFloatIterable asLazy()
-    {
-        return this;
-    }
-
-    public boolean contains(float value)
-    {
-        return this.anySatisfy(FloatPredicates.equal(value));
-    }
-
+    @Override
     public boolean containsAll(float... source)
     {
         for (float value : source)
@@ -384,6 +201,7 @@ public class CollectFloatIterable<T>
         return true;
     }
 
+    @Override
     public boolean containsAll(FloatIterable source)
     {
         for (FloatIterator iterator = source.floatIterator(); iterator.hasNext(); )

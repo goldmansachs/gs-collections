@@ -43,7 +43,7 @@ import com.gs.collections.impl.set.mutable.primitive.<name>HashSet;
  * @see ReverseIterable
  * @since 5.0.
  */
-public class Reverse<name>Iterable implements Lazy<name>Iterable
+public class Reverse<name>Iterable extends AbstractLazy<name>Iterable
 {
     private final <name>List adapted;
 
@@ -71,117 +71,9 @@ public class Reverse<name>Iterable implements Lazy<name>Iterable
         }
     }
 
-    public int count(<name>Predicate predicate)
-    {
-        int count = 0;
-        <name>Iterator iterator = this.<type>Iterator();
-        while (iterator.hasNext())
-        {
-            if (predicate.accept(iterator.next()))
-            {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    public boolean anySatisfy(<name>Predicate predicate)
-    {
-        <name>Iterator iterator = this.<type>Iterator();
-        while (iterator.hasNext())
-        {
-            if (predicate.accept(iterator.next()))
-            {
-                return true;
-            }
-        }
-        return false;
-    }
-
-    public boolean allSatisfy(<name>Predicate predicate)
-    {
-        <name>Iterator iterator = this.<type>Iterator();
-        while (iterator.hasNext())
-        {
-            if (!predicate.accept(iterator.next()))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public boolean noneSatisfy(<name>Predicate predicate)
-    {
-        <name>Iterator iterator = this.<type>Iterator();
-        while (iterator.hasNext())
-        {
-            if (predicate.accept(iterator.next()))
-            {
-                return false;
-            }
-        }
-        return true;
-    }
-
-    public Lazy<name>Iterable select(<name>Predicate predicate)
-    {
-        <name>ArrayList result = new <name>ArrayList(this.size());
-        <name>Iterator iterator = this.<type>Iterator();
-        while (iterator.hasNext())
-        {
-            <type> value = iterator.next();
-            if (predicate.accept(value))
-            {
-                result.add(value);
-            }
-        }
-        return result.asLazy();
-    }
-
-    public Lazy<name>Iterable reject(<name>Predicate predicate)
-    {
-        <name>ArrayList result = new <name>ArrayList(this.size());
-        <name>Iterator iterator = this.<type>Iterator();
-        while (iterator.hasNext())
-        {
-            <type> value = iterator.next();
-            if (!predicate.accept(value))
-            {
-                result.add(value);
-            }
-        }
-        return result.asLazy();
-    }
-
-    public <type> detectIfNone(<name>Predicate predicate, <type> ifNone)
-    {
-        <name>Iterator iterator = this.<type>Iterator();
-        while (iterator.hasNext())
-        {
-            <type> value = iterator.next();
-            if (predicate.accept(value))
-            {
-                return value;
-            }
-        }
-        return ifNone;
-    }
-
-    public \<V> LazyIterable\<V> collect(<name>ToObjectFunction\<? extends V> function)
-    {
-        FastList\<V> results = FastList.newList(this.adapted.size());
-        <name>Iterator iterator = this.<type>Iterator();
-        while (iterator.hasNext())
-        {
-            results.add(function.valueOf(iterator.next()));
-        }
-        return results.asLazy();
-    }
-
     <(arithmeticMethods.(type))(name, type)>
 
-
+    @Override
     public <type>[] toArray()
     {
         <type>[] results = new <type>[this.adapted.size()];
@@ -195,123 +87,64 @@ public class Reverse<name>Iterable implements Lazy<name>Iterable
         return results;
     }
 
+    @Override
     public boolean contains(<type> value)
     {
         return this.adapted.contains(value);
     }
 
+    @Override
     public boolean containsAll(<type>... source)
     {
         return this.adapted.containsAll(source);
     }
 
+    @Override
     public boolean containsAll(<name>Iterable source)
     {
         return this.adapted.containsAll(source);
     }
 
+    @Override
     public int size()
     {
         return this.adapted.size();
     }
 
+    @Override
     public boolean isEmpty()
     {
         return this.adapted.isEmpty();
     }
 
+    @Override
     public boolean notEmpty()
     {
         return this.adapted.notEmpty();
     }
 
     @Override
-    public String toString()
-    {
-        return this.makeString("[", ", ", "]");
-    }
-
-    public String makeString()
-    {
-        return this.makeString(", ");
-    }
-
-    public String makeString(String separator)
-    {
-        return this.makeString("", separator, "");
-    }
-
-    public String makeString(String start, String separator, String end)
-    {
-        Appendable stringBuilder = new StringBuilder();
-        this.appendString(stringBuilder, start, separator, end);
-        return stringBuilder.toString();
-    }
-
-    public void appendString(Appendable appendable)
-    {
-        this.appendString(appendable, ", ");
-    }
-
-    public void appendString(Appendable appendable, String separator)
-    {
-        this.appendString(appendable, "", separator, "");
-    }
-
-    public void appendString(Appendable appendable, String start, String separator, String end)
-    {
-        try
-        {
-            appendable.append(start);
-            <name>Iterator iterator = this.<type>Iterator();
-            boolean appendSeparator = false;
-            while (iterator.hasNext())
-            {
-                if (appendSeparator)
-                {
-                    appendable.append(separator);
-                }
-                appendable.append(String.valueOf(iterator.next()));
-                appendSeparator = true;
-            }
-            appendable.append(end);
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException(e);
-        }
-    }
-
     public Mutable<name>List toList()
     {
         return <name>ArrayList.newList(this);
     }
 
+    @Override
     public Mutable<name>Set toSet()
     {
         return <name>HashSet.newSet(this);
     }
 
+    @Override
     public Mutable<name>Bag toBag()
     {
         return <name>HashBag.newBag(this);
     }
 
+    @Override
     public Lazy<name>Iterable asLazy()
     {
         return new Lazy<name>IterableAdapter(this);
-    }
-
-    public \<T> T injectInto(T injectedValue, Object<name>ToObjectFunction\<? super T, ? extends T> function)
-    {
-        T result = injectedValue;
-
-        <name>Iterator iterator = this.<type>Iterator();
-        while (iterator.hasNext())
-        {
-            result = function.valueOf(result, iterator.next());
-        }
-        return result;
     }
 
     private class Reverse<name>Iterator implements <name>Iterator
