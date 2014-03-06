@@ -291,12 +291,26 @@ final class ImmutableArrayList<T>
     }
 
     @Override
-    public void forEachWithIndex(int fromIndex, int toIndex, ObjectIntProcedure<? super T> objectIntProcedure)
+    public void forEachWithIndex(int from, int to, ObjectIntProcedure<? super T> objectIntProcedure)
     {
-        T[] localItems = this.items;
-        for (int i = fromIndex; i <= toIndex; i++)
+        if (from < 0 || to < 0)
         {
-            objectIntProcedure.value(localItems[i], i);
+            throw new IllegalArgumentException("Neither from nor to may be negative.");
+        }
+        T[] localItems = this.items;
+        if (from <= to)
+        {
+            for (int i = from; i <= to; i++)
+            {
+                objectIntProcedure.value(localItems[i], i);
+            }
+        }
+        else
+        {
+            for (int i = from; i >= to; i--)
+            {
+                objectIntProcedure.value(localItems[i], i);
+            }
         }
     }
 

@@ -475,7 +475,6 @@ public class ImmutableEmptyListTest extends AbstractImmutableListTestCase
         Assert.assertSame(targetCollection, actual);
     }
 
-    @Override
     @Test
     public void binarySearch()
     {
@@ -483,7 +482,6 @@ public class ImmutableEmptyListTest extends AbstractImmutableListTestCase
         Assert.assertEquals(-1, sortedList.binarySearch(1));
     }
 
-    @Override
     @Test
     public void binarySearchWithComparator()
     {

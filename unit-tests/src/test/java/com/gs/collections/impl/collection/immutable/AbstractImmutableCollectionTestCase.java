@@ -341,6 +341,14 @@ public abstract class AbstractImmutableCollectionTestCase
     }
 
     @Test
+    public void selectInstancesOf()
+    {
+        ImmutableCollection<Integer> integers = this.classUnderTest();
+        ImmutableCollection<Integer> result = integers.selectInstancesOf(Integer.class);
+        Assert.assertEquals(integers, result);
+    }
+
+    @Test
     public void reject()
     {
         ImmutableCollection<Integer> integers = this.classUnderTest();
