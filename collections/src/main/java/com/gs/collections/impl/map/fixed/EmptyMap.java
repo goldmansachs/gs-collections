@@ -139,6 +139,12 @@ final class EmptyMap<K, V>
         return that.size() == this.size();
     }
 
+    @Override
+    public MutableMap<V, K> flipUniqueValues()
+    {
+        return Maps.fixedSize.with();
+    }
+
     public void forEachKeyValue(Procedure2<? super K, ? super V> procedure)
     {
     }

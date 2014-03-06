@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ import java.util.SortedMap;
 
 import com.gs.collections.api.RichIterable;
 import com.gs.collections.api.block.procedure.Procedure2;
+import com.gs.collections.api.map.ImmutableMap;
 import com.gs.collections.api.map.sorted.ImmutableSortedMap;
 import com.gs.collections.api.tuple.Pair;
 import com.gs.collections.impl.collection.mutable.UnmodifiableMutableCollection;
@@ -90,6 +91,11 @@ public class ImmutableTreeMap<K, V>
     public void forEachKeyValue(Procedure2<? super K, ? super V> procedure)
     {
         this.delegate.forEachKeyValue(procedure);
+    }
+
+    public ImmutableMap<V, K> flipUniqueValues()
+    {
+        return this.delegate.flipUniqueValues().toImmutable();
     }
 
     public RichIterable<K> keysView()

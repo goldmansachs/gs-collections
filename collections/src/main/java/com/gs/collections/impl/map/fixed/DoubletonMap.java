@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -193,6 +193,16 @@ final class DoubletonMap<K, V>
         return "{"
                 + this.key1 + '=' + this.value1 + ", "
                 + this.key2 + '=' + this.value2 + '}';
+    }
+
+    @Override
+    public MutableMap<V, K> flipUniqueValues()
+    {
+        if (Comparators.nullSafeEquals(this.value1, this.value2))
+        {
+            throw new IllegalStateException("Duplicate value: " + this.value1 + " found at key: " + this.key1 + " and key: " + this.key2);
+        }
+        return new DoubletonMap<V, K>(this.value1, this.key1, this.value2, this.key2);
     }
 
     public void forEachKeyValue(Procedure2<? super K, ? super V> procedure)

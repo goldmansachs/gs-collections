@@ -247,6 +247,22 @@ public abstract class MapIterableTestCase
     }
 
     @Test
+    public void flipUniqueValues()
+    {
+        MapIterable<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
+        MapIterable<String, Integer> result = map.flipUniqueValues();
+        Assert.assertEquals(UnifiedMap.newWithKeysValues("1", 1, "2", 2, "3", 3), result);
+
+        Verify.assertThrows(IllegalStateException.class, new Runnable()
+        {
+            public void run()
+            {
+                MapIterableTestCase.this.newMapWithKeysValues(1, "2", 2, "2").flipUniqueValues();
+            }
+        });
+    }
+
+    @Test
     public void collectMap()
     {
         MapIterable<String, String> map = this.newMapWithKeysValues("1", "One", "2", "Two", "3", "Three");

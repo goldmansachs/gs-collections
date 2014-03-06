@@ -1,5 +1,5 @@
 /*
- * Copyright 2012 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -209,6 +209,8 @@ public interface MutableMap<K, V>
     <S> MutableCollection<Pair<V, S>> zip(Iterable<S> that);
 
     MutableCollection<Pair<V, Integer>> zipWithIndex();
+
+    MutableMap<V, K> flipUniqueValues();
 
     /**
      * This method allows mutable map the ability to add an element in the form of Pair<K,V>.

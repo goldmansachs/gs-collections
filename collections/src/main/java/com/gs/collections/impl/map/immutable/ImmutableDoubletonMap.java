@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -135,6 +135,12 @@ final class ImmutableDoubletonMap<K, V>
         return "{"
                 + this.key1 + '=' + this.value1 + ", "
                 + this.key2 + '=' + this.value2 + '}';
+    }
+
+    @Override
+    public ImmutableMap<V, K> flipUniqueValues()
+    {
+        return Maps.immutable.with(this.value1, this.key1, this.value2, this.key2);
     }
 
     public void forEachKeyValue(Procedure2<? super K, ? super V> procedure)

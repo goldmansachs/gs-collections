@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -55,6 +55,8 @@ public interface ImmutableSortedMap<K, V>
     ImmutableSortedMap<K, V> newWithoutAllKeys(Iterable<? extends K> keys);
 
     MutableSortedMap<K, V> toSortedMap();
+
+    ImmutableMap<V, K> flipUniqueValues();
 
     ImmutableSortedMap<K, V> select(Predicate2<? super K, ? super V> predicate);
 

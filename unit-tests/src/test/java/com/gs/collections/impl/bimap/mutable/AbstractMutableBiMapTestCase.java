@@ -161,6 +161,18 @@ public abstract class AbstractMutableBiMapTestCase extends MutableMapTestCase
         Verify.assertSize(1, actual.inverse());
     }
 
+    @Override
+    @Test
+    public void flipUniqueValues()
+    {
+        MutableBiMap<Integer, Character> map = this.classUnderTest();
+        MutableBiMap<Character, Integer> result = map.flipUniqueValues();
+        Assert.assertEquals(map.inverse(), result);
+        Assert.assertNotSame(map.inverse(), result);
+        result.put('d', 4);
+        Assert.assertEquals(this.classUnderTest(), map);
+    }
+
     @Test
     public void get()
     {

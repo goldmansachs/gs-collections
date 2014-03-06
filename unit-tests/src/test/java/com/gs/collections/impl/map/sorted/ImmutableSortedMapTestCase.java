@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,7 +24,6 @@ import java.util.Map;
 import java.util.SortedMap;
 
 import com.gs.collections.api.RichIterable;
-import com.gs.collections.api.block.function.Function;
 import com.gs.collections.api.block.function.Function2;
 import com.gs.collections.api.block.predicate.Predicate;
 import com.gs.collections.api.block.predicate.Predicate2;
@@ -83,6 +82,14 @@ public abstract class ImmutableSortedMapTestCase
         SortedMap<Integer, String> revMap = revImmutable.castToSortedMap();
         Assert.assertSame(revImmutable, revMap);
         Assert.assertEquals(revImmutable, new HashMap<Integer, String>(revMap));
+    }
+
+    @Test
+    public void flipUniqueValues()
+    {
+        ImmutableSortedMap<Integer, String> immutableMap = this.classUnderTest();
+        Assert.assertEquals(Interval.oneTo(this.size()).toMap(Functions.getToString(), Functions.getIntegerPassThru()),
+                immutableMap.flipUniqueValues());
     }
 
     @Test

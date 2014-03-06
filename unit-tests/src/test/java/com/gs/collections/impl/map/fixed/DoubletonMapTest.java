@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -77,6 +77,23 @@ public class DoubletonMapTest extends AbstractMemoryEfficientMutableMapTest
             }
         });
         Assert.assertEquals(FastList.newListWith("1One", "2Two"), collection);
+    }
+
+    @Test
+    public void flipUniqueValues()
+    {
+        MutableMap<Integer, String> map = new DoubletonMap<Integer, String>(1, "One", 2, "Two");
+        MutableMap<String, Integer> flip = map.flipUniqueValues();
+        Verify.assertInstanceOf(DoubletonMap.class, flip);
+        Assert.assertEquals(UnifiedMap.newWithKeysValues("One", 1, "Two", 2), flip);
+
+        Verify.assertThrows(IllegalStateException.class, new Runnable()
+        {
+            public void run()
+            {
+                new DoubletonMap<Integer, String>(1, "One", 2, "One").flipUniqueValues();
+            }
+        });
     }
 
     @Override

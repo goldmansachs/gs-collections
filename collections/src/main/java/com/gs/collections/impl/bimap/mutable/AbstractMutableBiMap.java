@@ -866,6 +866,11 @@ abstract class AbstractMutableBiMap<K, V> implements MutableBiMap<K, V>
         this.delegate.forEachKeyValue(procedure);
     }
 
+    public MutableBiMap<V, K> flipUniqueValues()
+    {
+        return new HashBiMap<V, K>(this.inverse());
+    }
+
     public V getIfAbsent(K key, Function0<? extends V> function)
     {
         return this.delegate.getIfAbsent(key, function);

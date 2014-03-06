@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -120,6 +120,14 @@ public abstract class ImmutableMapTestCase
         MutableSet<String> actualValues = UnifiedSet.newSet();
         this.classUnderTest().forEach(CollectionAddProcedure.on(actualValues));
         Assert.assertEquals(this.expectedValues(), actualValues);
+    }
+
+    @Test
+    public void flipUniqueValues()
+    {
+        ImmutableMap<Integer, String> immutableMap = this.classUnderTest();
+        Assert.assertEquals(Interval.oneTo(this.size()).toMap(Functions.getToString(), Functions.getIntegerPassThru()),
+                immutableMap.flipUniqueValues());
     }
 
     @Test

@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -128,4 +128,6 @@ public interface ImmutableMap<K, V>
             Function<? super V, ? extends K2> groupBy,
             Function0<? extends V2> zeroValueFactory,
             Function2<? super V2, ? super V, ? extends V2> nonMutatingAggregator);
+
+    ImmutableMap<V, K> flipUniqueValues();
 }

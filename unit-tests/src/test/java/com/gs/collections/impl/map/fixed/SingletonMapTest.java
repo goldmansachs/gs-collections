@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -91,6 +91,7 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     }
 
     @Override
+    @Test
     public void withKeyValue()
     {
         MutableMap<Integer, String> map1 = new SingletonMap<Integer, String>(1, "A").withKeyValue(2, "B");
@@ -104,6 +105,7 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     }
 
     @Override
+    @Test
     public void withAllKeyValueArguments()
     {
         MutableMap<Integer, String> map1 = new SingletonMap<Integer, String>(1, "A").withAllKeyValueArguments(
@@ -118,6 +120,7 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     }
 
     @Override
+    @Test
     public void withoutKey()
     {
         MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "A");
@@ -129,6 +132,7 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
     }
 
     @Override
+    @Test
     public void withoutAllKeys()
     {
         MutableMap<Integer, String> map = new SingletonMap<Integer, String>(1, "A");
@@ -405,6 +409,14 @@ public class SingletonMapTest extends AbstractMemoryEfficientMutableMapTest
         Assert.assertEquals(Tuples.pair("1", "One"), actual);
 
         Assert.assertNull(map.detect(Predicates2.alwaysFalse()));
+    }
+
+    @Test
+    public void flipUniqueValues()
+    {
+        MutableMap<String, String> flip = new SingletonMap<String, String>("1", "One").flipUniqueValues();
+        Verify.assertInstanceOf(SingletonMap.class, flip);
+        Assert.assertEquals(UnifiedMap.newWithKeysValues("One", "1"), flip);
     }
 
     @Override

@@ -142,6 +142,11 @@ public abstract class AbstractMutableMap<K, V> extends AbstractMapIterable<K, V>
         return LazyIterate.adapt(this.entrySet()).collect(AbstractImmutableEntry.<K, V>getPairFunction());
     }
 
+    public MutableMap<V, K> flipUniqueValues()
+    {
+        return MapIterate.flipUniqueValues(this);
+    }
+
     public V getIfAbsentPut(K key, Function0<? extends V> function)
     {
         V result = this.get(key);

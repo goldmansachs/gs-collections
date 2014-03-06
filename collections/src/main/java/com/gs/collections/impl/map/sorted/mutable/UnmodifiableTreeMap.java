@@ -62,6 +62,7 @@ import com.gs.collections.api.list.primitive.MutableFloatList;
 import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
+import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.ImmutableSortedMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
@@ -282,6 +283,11 @@ public class UnmodifiableTreeMap<K, V>
     public void forEachKeyValue(Procedure2<? super K, ? super V> procedure)
     {
         this.getMutableSortedMap().forEachKeyValue(procedure);
+    }
+
+    public MapIterable<V, K> flipUniqueValues()
+    {
+        return this.getMutableSortedMap().flipUniqueValues();
     }
 
     public <A> A ifPresentApply(K key, Function<? super V, ? extends A> function)

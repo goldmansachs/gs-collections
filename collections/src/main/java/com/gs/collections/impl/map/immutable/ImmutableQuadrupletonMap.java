@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -166,6 +166,12 @@ final class ImmutableQuadrupletonMap<K, V>
                 + this.key2 + '=' + this.value2 + ", "
                 + this.key3 + '=' + this.value3 + ", "
                 + this.key4 + '=' + this.value4 + '}';
+    }
+
+    @Override
+    public ImmutableMap<V, K> flipUniqueValues()
+    {
+        return Maps.immutable.with(this.value1, this.key1, this.value2, this.key2, this.value3, this.key3, this.value4, this.key4);
     }
 
     public void forEachKeyValue(Procedure2<? super K, ? super V> procedure)

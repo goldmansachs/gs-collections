@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -233,6 +233,24 @@ final class TripletonMap<K, V>
                 + this.key1 + '=' + this.value1 + ", "
                 + this.key2 + '=' + this.value2 + ", "
                 + this.key3 + '=' + this.value3 + '}';
+    }
+
+    @Override
+    public MutableMap<V, K> flipUniqueValues()
+    {
+        if (Comparators.nullSafeEquals(this.value1, this.value2))
+        {
+            throw new IllegalStateException("Duplicate value: " + this.value1 + " found at key: " + this.key1 + " and key: " + this.key2);
+        }
+        if (Comparators.nullSafeEquals(this.value2, this.value3))
+        {
+            throw new IllegalStateException("Duplicate value: " + this.value2 + " found at key: " + this.key2 + " and key: " + this.key3);
+        }
+        if (Comparators.nullSafeEquals(this.value3, this.value1))
+        {
+            throw new IllegalStateException("Duplicate value: " + this.value3 + " found at key: " + this.key3 + " and key: " + this.key3);
+        }
+        return new TripletonMap<V, K>(this.value1, this.key1, this.value2, this.key2, this.value3, this.key3);
     }
 
     public void forEachKeyValue(Procedure2<? super K, ? super V> procedure)

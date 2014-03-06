@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,4 +39,6 @@ public interface ImmutableBiMap<K, V> extends BiMap<K, V>, ImmutableMap<K, V>
     <K2, V2> ImmutableBiMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function);
 
     ImmutableBiMap<K, V> reject(Predicate2<? super K, ? super V> predicate);
+
+    ImmutableBiMap<V, K> flipUniqueValues();
 }

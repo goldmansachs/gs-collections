@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -119,6 +119,12 @@ final class ImmutableEmptyMap<K, V>
 
     public void forEachKeyValue(Procedure2<? super K, ? super V> procedure)
     {
+    }
+
+    @Override
+    public ImmutableMap<V, K> flipUniqueValues()
+    {
+        return Maps.immutable.with();
     }
 
     @Override

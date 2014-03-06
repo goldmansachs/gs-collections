@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -123,6 +123,12 @@ final class ImmutableEmptyMapWithHashingStrategy<K, V>
     public int hashCode()
     {
         return 0;
+    }
+
+    @Override
+    public ImmutableMap<V, K> flipUniqueValues()
+    {
+        return Maps.immutable.with();
     }
 
     public void forEachKeyValue(Procedure2<? super K, ? super V> procedure)

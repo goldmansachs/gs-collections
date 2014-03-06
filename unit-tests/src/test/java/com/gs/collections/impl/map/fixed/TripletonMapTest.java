@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -106,6 +106,37 @@ public class TripletonMapTest extends AbstractMemoryEfficientMutableMapTest
             }
         });
         Assert.assertEquals(FastList.newListWith("1One", "2Two", "3Three"), collection);
+    }
+
+    @Test
+    public void flipUniqueValues()
+    {
+        MutableMap<Integer, String> map = new TripletonMap<Integer, String>(1, "One", 2, "Two", 3, "Three");
+        MutableMap<String, Integer> flip = map.flipUniqueValues();
+        Verify.assertInstanceOf(TripletonMap.class, flip);
+        Assert.assertEquals(UnifiedMap.newWithKeysValues("One", 1, "Two", 2, "Three", 3), flip);
+
+        Verify.assertThrows(IllegalStateException.class, new Runnable()
+        {
+            public void run()
+            {
+                new TripletonMap<Integer, String>(1, "One", 2, "One", 3, "Three").flipUniqueValues();
+            }
+        });
+        Verify.assertThrows(IllegalStateException.class, new Runnable()
+        {
+            public void run()
+            {
+                new TripletonMap<Integer, String>(1, "One", 2, "Three", 3, "Three").flipUniqueValues();
+            }
+        });
+        Verify.assertThrows(IllegalStateException.class, new Runnable()
+        {
+            public void run()
+            {
+                new TripletonMap<Integer, String>(1, "One", 2, "Two", 3, "One").flipUniqueValues();
+            }
+        });
     }
 
     @Override

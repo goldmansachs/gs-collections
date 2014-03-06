@@ -124,6 +124,11 @@ public class UnmodifiableMutableMap<K, V>
         this.getMutableMap().forEachKeyValue(procedure);
     }
 
+    public MutableMap<V, K> flipUniqueValues()
+    {
+        return this.getMutableMap().flipUniqueValues();
+    }
+
     public <E> MutableMap<K, V> collectKeysAndValues(
             Iterable<E> iterable,
             Function<? super E, ? extends K> keyFunction,

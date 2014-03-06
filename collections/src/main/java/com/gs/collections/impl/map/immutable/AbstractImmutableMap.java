@@ -203,6 +203,11 @@ public abstract class AbstractImmutableMap<K, V>
         throw new UnsupportedOperationException("Cannot call remove() on " + this.getClass().getSimpleName());
     }
 
+    public ImmutableMap<V, K> flipUniqueValues()
+    {
+        return MapIterate.flipUniqueValues(this).toImmutable();
+    }
+
     public <K2, V2> ImmutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function)
     {
         UnifiedMap<K2, V2> result = MapIterate.collect(this, function, UnifiedMap.<K2, V2>newMap());

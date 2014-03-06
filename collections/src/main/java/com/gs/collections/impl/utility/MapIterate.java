@@ -833,6 +833,27 @@ public final class MapIterate
         }
     }
 
+    /**
+     * @see MapIterable#flipUniqueValues()
+     */
+    public static <K, V> MutableMap<V, K> flipUniqueValues(MapIterable<K, V> mapIterable)
+    {
+        final MutableMap<V, K> result = UnifiedMap.newMap();
+
+        mapIterable.forEachKeyValue(new Procedure2<K, V>()
+        {
+            public void value(K key, V value)
+            {
+                K oldKey = result.put(value, key);
+                if (oldKey != null)
+                {
+                    throw new IllegalStateException("Duplicate value: " + value + " found at key: " + oldKey + " and key: " + key);
+                }
+            }
+        });
+        return result;
+    }
+
     public static <K, V> Pair<K, V> detect(
             Map<K, V> map,
             final Predicate2<? super K, ? super V> predicate)

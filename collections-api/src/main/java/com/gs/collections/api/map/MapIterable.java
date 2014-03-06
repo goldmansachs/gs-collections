@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -87,6 +87,20 @@ public interface MapIterable<K, V> extends RichIterable<V>
      * </pre>
      */
     void forEachKeyValue(Procedure2<? super K, ? super V> procedure);
+
+    /**
+     * Return the MapIterable that is obtained by flipping the direction of this map and making the associations
+     * from value to key.
+     * <pre>
+     *     MapIterable<Integer, String> map = this.newMapWithKeysValues(1, "1", 2, "2", 3, "3");
+     *     MapIterable<String, Integer> result = map.flipUniqueValues();
+     *     Assert.assertTrue(result.equals(UnifiedMap.newWithKeysValues("1", 1, "2", 2, "3", 3)));
+     * </pre>
+     *
+     * @throws IllegalStateException if the MapIterable contains duplicate values.
+     * @since 5.0
+     */
+    MapIterable<V, K> flipUniqueValues();
 
     /**
      * Return the value in the Map that corresponds to the specified key, or if there is no value at the key, return the

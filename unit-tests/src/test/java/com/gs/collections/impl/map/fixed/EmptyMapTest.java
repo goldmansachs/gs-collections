@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -85,6 +85,14 @@ public class EmptyMapTest extends AbstractMemoryEfficientMutableMapTest
         Verify.assertEmpty(new EmptyMap<Object, Object>().entrySet());
         Verify.assertEmpty(new EmptyMap<Object, Object>().values());
         Verify.assertEmpty(new EmptyMap<Object, Object>().keySet());
+    }
+
+    @Test
+    public void flipUniqueValues()
+    {
+        MutableMap<Object, Object> flip = new EmptyMap<Object, Object>().flipUniqueValues();
+        Verify.assertEmpty(flip);
+        Verify.assertInstanceOf(EmptyMap.class, flip);
     }
 
     @Test

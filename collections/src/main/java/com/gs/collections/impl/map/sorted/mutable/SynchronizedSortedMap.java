@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,6 +45,7 @@ import com.gs.collections.api.list.primitive.MutableFloatList;
 import com.gs.collections.api.list.primitive.MutableIntList;
 import com.gs.collections.api.list.primitive.MutableLongList;
 import com.gs.collections.api.list.primitive.MutableShortList;
+import com.gs.collections.api.map.MapIterable;
 import com.gs.collections.api.map.MutableMap;
 import com.gs.collections.api.map.sorted.ImmutableSortedMap;
 import com.gs.collections.api.map.sorted.MutableSortedMap;
@@ -119,6 +120,14 @@ public class SynchronizedSortedMap<K, V>
         synchronized (this.lock)
         {
             return this.getSortedMap().collectKeysAndValues(iterable, keyFunction, function);
+        }
+    }
+
+    public MapIterable<V, K> flipUniqueValues()
+    {
+        synchronized (this.lock)
+        {
+            return this.getSortedMap().flipUniqueValues();
         }
     }
 

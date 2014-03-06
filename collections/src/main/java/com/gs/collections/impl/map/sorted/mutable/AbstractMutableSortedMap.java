@@ -1,5 +1,5 @@
 /*
- * Copyright 2013 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -152,6 +152,11 @@ public abstract class AbstractMutableSortedMap<K, V> extends AbstractMapIterable
     public Iterator<V> iterator()
     {
         return this.values().iterator();
+    }
+
+    public MutableMap<V, K> flipUniqueValues()
+    {
+        return MapIterate.flipUniqueValues(this);
     }
 
     public <K2, V2> MutableMap<K2, V2> collect(Function2<? super K, ? super V, Pair<K2, V2>> function)
