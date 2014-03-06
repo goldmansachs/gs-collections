@@ -185,9 +185,10 @@ public class ListAdapterTest extends AbstractListTestCase
     public void testWithMethods()
     {
         Verify.assertContainsAll(this.newWith(1), 1);
-        Verify.assertContainsAll(this.newWith(1, 2), 1, 2);
-        Verify.assertContainsAll(this.newWith(1, 2, 3), 1, 2, 3);
-        Verify.assertContainsAll(this.newWith(1, 2, 3, 4), 1, 2, 3, 4);
+        Verify.assertContainsAll(this.newWith(1).with(2), 1, 2);
+        Verify.assertContainsAll(this.newWith(1).with(2, 3), 1, 2, 3);
+        Verify.assertContainsAll(this.newWith(1).with(2, 3, 4), 1, 2, 3, 4);
+        Verify.assertContainsAll(this.newWith(1).with(2, 3, 4, 5), 1, 2, 3, 4, 5);
     }
 
     @Override

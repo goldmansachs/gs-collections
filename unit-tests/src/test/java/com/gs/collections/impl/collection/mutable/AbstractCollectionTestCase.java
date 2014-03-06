@@ -25,6 +25,7 @@ import com.gs.collections.impl.AbstractRichIterableTestCase;
 import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.factory.Predicates2;
 import com.gs.collections.impl.factory.Bags;
+import com.gs.collections.impl.lazy.LazyIterableAdapter;
 import com.gs.collections.impl.list.mutable.FastList;
 import com.gs.collections.impl.test.Verify;
 import org.junit.Assert;
@@ -281,6 +282,12 @@ public abstract class AbstractCollectionTestCase extends AbstractRichIterableTes
         MutableCollection<Integer> collWithout = coll.withoutAll(FastList.newListWith(2, 4));
         Assert.assertSame(coll, collWithout);
         Assert.assertEquals(this.newWith(1, 3, 5), collWithout);
+    }
+
+    @Test
+    public void asLazy()
+    {
+        Verify.assertInstanceOf(LazyIterableAdapter.class, this.newWith().asLazy());
     }
 
     @Test

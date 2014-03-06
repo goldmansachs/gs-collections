@@ -29,6 +29,7 @@ import com.gs.collections.impl.block.factory.Predicates;
 import com.gs.collections.impl.block.procedure.CollectionAddProcedure;
 import com.gs.collections.impl.collection.mutable.AbstractCollectionTestCase;
 import com.gs.collections.impl.factory.Lists;
+import com.gs.collections.impl.lazy.ReverseIterable;
 import com.gs.collections.impl.list.Interval;
 import com.gs.collections.impl.list.fixed.ArrayAdapter;
 import com.gs.collections.impl.test.SerializeTestHelper;
@@ -106,6 +107,12 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
     public void asUnmodifiable()
     {
         Verify.assertInstanceOf(UnmodifiableMutableList.class, this.newWith().asUnmodifiable());
+    }
+
+    @Test
+    public void asReversed()
+    {
+        Verify.assertInstanceOf(ReverseIterable.class, this.newWith().asReversed());
     }
 
     @Test
@@ -352,5 +359,14 @@ public class ArrayListAdapterTest extends AbstractCollectionTestCase
 
         Assert.assertEquals(iList(1, 2, 3), selected);
         Assert.assertEquals(iList(4, 5), rejected);
+    }
+
+    @Test
+    public void reverseForEach()
+    {
+        MutableList<Integer> result = Lists.mutable.of();
+        MutableList<Integer> collection = this.newWith(1, 2, 3, 4);
+        collection.reverseForEach(CollectionAddProcedure.on(result));
+        Assert.assertEquals(FastList.newListWith(4, 3, 2, 1), result);
     }
 }

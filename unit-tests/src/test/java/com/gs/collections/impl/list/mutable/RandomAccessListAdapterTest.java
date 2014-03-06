@@ -19,6 +19,7 @@ package com.gs.collections.impl.list.mutable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.LinkedList;
 
 import com.gs.collections.api.list.MutableList;
 import com.gs.collections.impl.block.factory.Predicates;
@@ -100,6 +101,13 @@ public class RandomAccessListAdapterTest extends AbstractListTestCase
     {
         MutableList<Integer> collection = this.newWith(1, 2, 3);
         Verify.assertContainsAll(collection, 1, 2, 3);
+        Verify.assertThrows(IllegalArgumentException.class, new Runnable()
+        {
+            public void run()
+            {
+                new RandomAccessListAdapter<Integer>(new LinkedList<Integer>());
+            }
+        });
     }
 
     @Test
@@ -185,9 +193,10 @@ public class RandomAccessListAdapterTest extends AbstractListTestCase
     public void testWithMethods()
     {
         Verify.assertContainsAll(this.newWith(1), 1);
-        Verify.assertContainsAll(this.newWith(1, 2), 1, 2);
-        Verify.assertContainsAll(this.newWith(1, 2, 3), 1, 2, 3);
-        Verify.assertContainsAll(this.newWith(1, 2, 3, 4), 1, 2, 3, 4);
+        Verify.assertContainsAll(this.newWith(1).with(2), 1, 2);
+        Verify.assertContainsAll(this.newWith(1).with(2, 3), 1, 2, 3);
+        Verify.assertContainsAll(this.newWith(1).with(2, 3, 4), 1, 2, 3, 4);
+        Verify.assertContainsAll(this.newWith(1).with(2, 3, 4, 5), 1, 2, 3, 4, 5);
     }
 
     @Override
@@ -228,5 +237,11 @@ public class RandomAccessListAdapterTest extends AbstractListTestCase
                         RandomAccessListAdapter.adapt(null);
                     }
                 });
+    }
+
+    @Test
+    public void adapt()
+    {
+        Verify.assertInstanceOf(ArrayListAdapter.class, RandomAccessListAdapter.adapt(new ArrayList<Integer>()));
     }
 }

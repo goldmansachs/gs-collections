@@ -69,6 +69,9 @@ public class ArrayAdapterTest extends AbstractListTestCase
         MutableList<Integer> collection = this.newArray();
         Verify.assertEmpty(collection);
         Verify.assertSize(0, collection);
+        MutableList<Integer> collection1 = ArrayAdapter.newArrayWith(1, 2, 3, 4, 5, 6);
+        Verify.assertSize(6, collection1);
+        Verify.assertInstanceOf(ArrayAdapter.class, collection1);
     }
 
     private MutableList<Integer> newArray()
@@ -428,6 +431,7 @@ public class ArrayAdapterTest extends AbstractListTestCase
         ArrayAdapter<Integer> array1 = ArrayAdapter.newArrayWith(1, 2, 3, 4);
         ArrayAdapter<Integer> array2 = ArrayAdapter.newArrayWith(1, 2, 3, 4);
         ArrayAdapter<Integer> array3 = ArrayAdapter.newArrayWith(2, 3, 4);
+        ArrayAdapter<Integer> array4 = ArrayAdapter.newArrayWith(1, 2, 3, 5);
         Assert.assertNotEquals(array1, null);
         Verify.assertEqualsAndHashCode(array1, array1);
         Verify.assertEqualsAndHashCode(array1, array2);
@@ -436,6 +440,7 @@ public class ArrayAdapterTest extends AbstractListTestCase
         Verify.assertEqualsAndHashCode(array1, new LinkedList<Integer>(array1));
         Verify.assertEqualsAndHashCode(array1, ArrayListAdapter.<Integer>newList().with(1, 2, 3, 4));
         Verify.assertEqualsAndHashCode(array1, FastList.<Integer>newList().with(1, 2, 3, 4));
+        Assert.assertNotEquals(array1, new LinkedList<Integer>(array4));
     }
 
     @Test

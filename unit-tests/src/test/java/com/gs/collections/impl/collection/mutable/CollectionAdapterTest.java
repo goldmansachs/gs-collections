@@ -275,6 +275,7 @@ public class CollectionAdapterTest extends AbstractCollectionTestCase
     {
         Verify.assertInstanceOf(ArrayListAdapter.class, CollectionAdapter.wrapList(new ArrayList<Object>()));
         Verify.assertInstanceOf(FastList.class, CollectionAdapter.wrapList(new HashSet<Object>()));
+        Verify.assertInstanceOf(FastList.class, CollectionAdapter.wrapList(FastList.newList()));
     }
 
     @Test
