@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 Goldman Sachs.
+ * Copyright 2014 Goldman Sachs.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -109,10 +109,13 @@ public abstract class AbstractMutableMultimapTestCase extends AbstractMultimapTe
     {
         MutableMultimap<Integer, String> multimap = this.newMultimapWithKeysValues(1, "One", 2, "2");
         Multimap<Integer, String> toAdd = this.newMultimapWithKeysValues(2, "Two", 3, "Three");
-        Multimap<Integer, String> toAddImmutable = this.newMultimapWithKeysValues(4, "Four", 5, "Five").toImmutable();
+        Multimap<Integer, String> toAddImmutable = this.newMultimapWithKeysValues(4, "Four", 5, "Five");
         Assert.assertTrue(multimap.putAll(toAdd));
         Assert.assertTrue(multimap.putAll(toAddImmutable));
-        Assert.assertEquals(this.newMultimapWithKeysValues(1, "One", 2, "2", 2, "Two", 3, "Three").toImmutable().newWith(4, "Four").newWith(5, "Five"), multimap);
+        MutableMultimap<Integer, String> expected = this.newMultimapWithKeysValues(1, "One", 2, "2", 2, "Two", 3, "Three");
+        expected.put(4, "Four");
+        expected.put(5, "Five");
+        Assert.assertEquals(expected, multimap);
     }
 
     @Test

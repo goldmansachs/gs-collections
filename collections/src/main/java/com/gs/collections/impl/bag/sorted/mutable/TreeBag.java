@@ -88,7 +88,7 @@ import com.gs.collections.impl.list.mutable.primitive.IntArrayList;
 import com.gs.collections.impl.list.mutable.primitive.LongArrayList;
 import com.gs.collections.impl.list.mutable.primitive.ShortArrayList;
 import com.gs.collections.impl.map.sorted.mutable.TreeSortedMap;
-import com.gs.collections.impl.multimap.bag.TreeBagMultimap;
+import com.gs.collections.impl.multimap.bag.sorted.TreeBagMultimap;
 import com.gs.collections.impl.partition.bag.sorted.PartitionTreeBag;
 import com.gs.collections.impl.set.mutable.UnifiedSet;
 import com.gs.collections.impl.set.sorted.mutable.TreeSortedSet;

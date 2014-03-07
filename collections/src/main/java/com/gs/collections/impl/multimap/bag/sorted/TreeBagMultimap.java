@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.gs.collections.impl.multimap.bag;
+package com.gs.collections.impl.multimap.bag.sorted;
 
 import java.io.Externalizable;
 import java.io.IOException;
@@ -33,10 +33,6 @@ import com.gs.collections.impl.bag.sorted.mutable.TreeBag;
 import com.gs.collections.impl.map.mutable.UnifiedMap;
 import com.gs.collections.impl.multimap.AbstractMutableMultimap;
 
-/**
- * @deprecated in 5.0. Use {@link com.gs.collections.impl.multimap.bag.sorted.TreeBagMultimap} instead.
- */
-@Deprecated
 public final class TreeBagMultimap<K, V>
         extends AbstractMutableMultimap<K, V, MutableSortedBag<V>>
         implements MutableSortedBagMultimap<K, V>, Externalizable
@@ -107,7 +103,7 @@ public final class TreeBagMultimap<K, V>
 
     public TreeBagMultimap<K, V> newEmpty()
     {
-        return new TreeBagMultimap<K, V>();
+        return new TreeBagMultimap<K, V>(this.comparator);
     }
 
     public Comparator<? super V> comparator()
