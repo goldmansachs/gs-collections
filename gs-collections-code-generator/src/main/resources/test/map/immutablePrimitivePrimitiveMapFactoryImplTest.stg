@@ -1,0 +1,56 @@
+import "copyright.stg"
+import "primitiveEquals.stg"
+import "primitiveHashCode.stg"
+import "primitiveLiteral.stg"
+
+isTest() ::= "true"
+
+hasTwoPrimitives() ::= "true"
+
+skipBoolean() ::= "true"
+
+targetPath() ::= "com/gs/collections/impl/map/primitive"
+
+fileName(primitive1, primitive2, sameTwoPrimitives) ::= "Immutable<primitive1.name><primitive2.name>MapFactoryImplTest"
+
+class(primitive1, primitive2, sameTwoPrimitives) ::= <<
+<body(primitive1.type, primitive2.type, primitive1.name, primitive2.name)>
+>>
+
+body(type1, type2, name1, name2) ::= <<
+<copyright()>
+
+package com.gs.collections.impl.map.primitive;
+
+import com.gs.collections.api.map.primitive.Immutable<name1><name2>Map;
+import com.gs.collections.impl.factory.primitive.<name1><name2>Maps;
+import com.gs.collections.impl.map.mutable.primitive.<name1><name2>HashMap;
+import com.gs.collections.impl.test.Verify;
+import org.junit.Assert;
+import org.junit.Test;
+
+/**
+ * This file was automatically generated from template file immutablePrimitivePrimitiveMapFactoryImplTest.stg.
+ */
+public class Immutable<name1><name2>MapFactoryImplTest
+{
+    @Test
+    public void of()
+    {
+        Verify.assertEmpty(<name1><name2>Maps.immutable.of());
+        Assert.assertEquals(<name1><name2>HashMap.newWithKeysValues(<(literal.(type1))("1")>, <(literal.(type2))("1")>).toImmutable(), <name1><name2>Maps.immutable.of(<(literal.(type1))("1")>, <(literal.(type2))("1")>));
+    }
+
+    @Test
+    public void withAll()
+    {
+        Immutable<name1><name2>Map map = <name1><name2>Maps.immutable.of();
+
+        Assert.assertEquals(new <name1><name2>HashMap().toImmutable(), <name1><name2>Maps.immutable.withAll(map));
+    }
+}
+>>
+
+keyValue(value) ::= <<
+<(literal.(type1))(value)>, <(literal.(type2))(value)>
+>>
